@@ -42,6 +42,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -138,21 +139,16 @@ extends ScalarPanelAbstract {
         }
         return CompactFragment.LABEL
                     .createFragment(id, this, scalarValueId->
-                        Wkt.label(scalarValueId, obtainOutputFormatModel()));
+                        new MarkupComponent(scalarValueId, obtainOutputFormatModel()));
     }
 
     /**
      * Model for any non editing scenario.
      */
     protected IModel<String> obtainOutputFormatModel() {
-        return ()->{
-            val propertyNegotiationModel = scalarModel().proposedValue();
-            return _Strings.nullToEmpty(
-                    propertyNegotiationModel
-                        .getValueAsHtml().getValue()
-                        //.getValueAsParsableText().getValue()
-                        );
-        };
+        return ()->
+            _Strings.nullToEmpty(
+                    scalarModel().proposedValue().getValueAsHtml().getValue());
     }
 
     /**

@@ -141,10 +141,8 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     @Override
     protected final IModel<String> obtainOutputFormatModel() {
-        val converter = getConverter(scalarModel());
-        return converter!=null
-                ? new ToStringConvertingModel<>(converter)
-                : super.obtainOutputFormatModel();
+        // conversion does not affect the output format
+        return super.obtainOutputFormatModel();
     }
 
     protected class ToStringConvertingModel<X> extends Model<String> {
