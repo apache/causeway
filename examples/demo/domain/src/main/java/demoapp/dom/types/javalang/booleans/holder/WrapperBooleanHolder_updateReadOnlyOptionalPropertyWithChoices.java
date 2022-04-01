@@ -26,6 +26,8 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
@@ -40,20 +42,22 @@ import demoapp.dom.types.Samples;
 @ActionLayout(
         promptStyle = PromptStyle.INLINE
         , named = "Update with choices"
-        , associateWith = "readOnlyProperty"
+        , associateWith = "readOnlyOptionalProperty"
         , sequence = "2")
 @RequiredArgsConstructor
-public class WrapperBooleanHolder_updateReadOnlyPropertyWithChoices {
+public class WrapperBooleanHolder_updateReadOnlyOptionalPropertyWithChoices {
 
     private final WrapperBooleanHolder holder;
 
-    @MemberSupport public WrapperBooleanHolder act(final Boolean newValue) {
-        holder.setReadOnlyProperty(newValue);
+    @MemberSupport public WrapperBooleanHolder act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final Boolean newValue) {
+        holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
     @MemberSupport public Boolean default0Act() {
-        return holder.getReadOnlyProperty();
+        return holder.getReadOnlyOptionalProperty();
     }
 
     @MemberSupport public List<Boolean> choices0Act() {
