@@ -88,7 +88,10 @@ implements
     }
 
     private String toHtmlLink(final java.net.URL url) {
-        return String.format("<a target=\"_blank\" href=\"%s\">%s</a>", url.toString(), url.toString());
+        return String.format("<a "
+                + "target=\"_blank\" "
+                + "class=\"no-click-bubbling\" "
+                + "href=\"%s\">%s</a>", url.toString(), url.toString());
     }
 
     // -- PARSER

@@ -36,6 +36,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.render.ScalarRenderMode;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
@@ -108,7 +109,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     protected IModel<String> obtainOutputFormatModel() {
         return ()->getBlobOrClobFromModel()
                 .map(NamedWithMimeType::getName)
-                .orElse("");
+                .orElse(translate(ValueSemanticsAbstract.NULL_REPRESENTATION));
     }
 
     @Override
@@ -126,7 +127,10 @@ extends ScalarPanelFormFieldAbstract<T> {
                 .map(peek(downloadLink->{
                     WktTooltips.addTooltip(downloadLink, translate("Download file"));
                 }))
-                .orElseGet(()->Wkt.container(id)); // fallback to an inactive (no link) container
+                .orElseGet(()->{
+                    // fallback to an inactive (no link) container, with secondary color
+                    return Wkt.cssAppend(Wkt.container(id), "link-secondary");
+                });
         Wkt.labelAdd(linkContainer, CompactFragment.ID_LINK_LABEL, labelModel);
         return linkContainer;
     }
