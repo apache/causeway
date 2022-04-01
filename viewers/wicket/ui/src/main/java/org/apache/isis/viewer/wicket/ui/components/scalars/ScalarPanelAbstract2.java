@@ -179,7 +179,7 @@ extends ScalarPanelAbstract {
         if(condition) {
             val editProperty = Wkt.containerAdd(fieldFrame, editLinkId);
             Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
-            WktTooltips.addTooltip(editProperty, "Click to edit");
+            WktTooltips.addTooltip(editProperty, translate("Click to edit"));
             return editProperty;
         } else {
             WktComponents.permanentlyHide(fieldFrame, editLinkId);

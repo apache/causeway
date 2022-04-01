@@ -124,7 +124,7 @@ extends ScalarPanelFormFieldAbstract<T> {
                 .map(this::newResource)
                 .map(resource->(MarkupContainer)Wkt.downloadLinkNoCache(id, resource))
                 .map(peek(downloadLink->{
-                    WktTooltips.addTooltip(downloadLink, "Download " + labelModel); //XXX i18n
+                    WktTooltips.addTooltip(downloadLink, translate("Download file"));
                 }))
                 .orElseGet(()->Wkt.container(id)); // fallback to an inactive (no link) container
         Wkt.labelAdd(linkContainer, CompactFragment.ID_LINK_LABEL, labelModel);
