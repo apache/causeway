@@ -50,7 +50,7 @@ public class JaxbServiceDefault extends JaxbService.Simple {
                 // go around the loop again, so can properly deserialize the contents
                 DomainObjectList list = (DomainObjectList) pojo;
                 JAXBContext jaxbContextForList = jaxbContextFor(list);
-                
+
                 return internalFromXml(jaxbContextForList, xml, unmarshallerProperties);
             }
 
@@ -88,6 +88,15 @@ public class JaxbServiceDefault extends JaxbService.Simple {
                 serviceRegistry.injectServicesInto(new PersistentEntityAdapter()));
         unmarshaller.setAdapter(PersistentEntitiesAdapter.class,
                 serviceRegistry.injectServicesInto(new PersistentEntitiesAdapter()));
+
+        org.apache.isis.applib.jaxb.PersistentEntityAdapter pe = new org.apache.isis.applib.jaxb.PersistentEntityAdapter();
+        serviceRegistry.injectServicesInto(pe);
+        unmarshaller.setAdapter(org.apache.isis.applib.jaxb.PersistentEntityAdapter.class, pe);
+
+        org.apache.isis.applib.jaxb.PersistentEntitiesAdapter pes = new org.apache.isis.applib.jaxb.PersistentEntitiesAdapter();
+        serviceRegistry.injectServicesInto(pes);
+        unmarshaller.setAdapter(org.apache.isis.applib.jaxb.PersistentEntitiesAdapter.class, pes);
+
     }
 
     @Override
@@ -96,6 +105,15 @@ public class JaxbServiceDefault extends JaxbService.Simple {
                 serviceRegistry.injectServicesInto(new PersistentEntityAdapter()));
         marshaller.setAdapter(PersistentEntitiesAdapter.class,
                 serviceRegistry.injectServicesInto(new PersistentEntitiesAdapter()));
+
+        org.apache.isis.applib.jaxb.PersistentEntityAdapter pe = new org.apache.isis.applib.jaxb.PersistentEntityAdapter();
+        serviceRegistry.injectServicesInto(pe);
+        marshaller.setAdapter(org.apache.isis.applib.jaxb.PersistentEntityAdapter.class, pe);
+
+        org.apache.isis.applib.jaxb.PersistentEntitiesAdapter pes = new org.apache.isis.applib.jaxb.PersistentEntitiesAdapter();
+        serviceRegistry.injectServicesInto(pes);
+        marshaller.setAdapter(org.apache.isis.applib.jaxb.PersistentEntitiesAdapter.class, pes);
+
     }
 
 
