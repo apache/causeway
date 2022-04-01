@@ -26,6 +26,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.wicket.model.models.BooleanModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
@@ -87,9 +88,7 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
 
     @Override
     protected IModel<String> obtainOutputFormatModel() {
-        //XXX not localized yet - maybe can be done at a more fundamental level - or replace with universal symbols
-        return BooleanModel.forScalarModel(scalarModel())
-                .asStringModel("(not set)", "Yes", "No");
+        throw _Exceptions.unexpectedCodeReach(); // not used in createComponentForOutput(...)
     }
 
     @Override
