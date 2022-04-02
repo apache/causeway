@@ -1054,6 +1054,12 @@ div.scalarValueInlinePromptLink.form-control:hover {
 	cursor: pointer;
 	background-color: rgba(0, 0, 0, 0.08);
 }
+div.scalarValueInlinePromptLink.form-control .btn-group {
+    display: none;
+}
+div.scalarValueInlinePromptLink.form-control:hover .btn-group {
+	display: inherit;
+}
 
 .entityUrlSource {
 	cursor: pointer;
