@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
-import java.util.EnumSet;
-
 import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -41,14 +39,9 @@ public class ScalarTitleBadgePanel<T> extends ScalarPanelTextFieldWithValueSeman
     }
 
     @Override
-    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
-        //modifiers.add(FormatModifier.MARKUP);
-    }
-
-    @Override
     protected Component createComponentForOutput(final String id) {
         return CompactFragment.BADGE.createFragment(id, this, scalarValueId->
-            Wkt.label(scalarValueId, obtainOutputFormatModel()));
+            Wkt.label(scalarValueId, this::obtainOutputFormat));
     }
 
 }

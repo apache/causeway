@@ -18,24 +18,20 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.util.Locale;
 import java.util.Optional;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
@@ -100,7 +96,6 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     protected final IModel<T> unwrappedModel() {
-
         _Assert.assertTrue(scalarModel().getScalarTypeSpec().isAssignableFrom(type), ()->
             String.format("[%s] cannot possibly unwrap model of type %s into target type %s",
                     this.getClass().getSimpleName(),
@@ -140,31 +135,31 @@ extends ScalarPanelFormFieldAbstract<T> {
     // -- CONVERSION
 
     @Override
-    protected final IModel<String> obtainOutputFormatModel() {
-        // conversion does not affect the output format
-        return super.obtainOutputFormatModel();
+    protected final String obtainOutputFormat() {
+        // conversion does not affect the output format (usually HTML)
+        return super.obtainOutputFormat();
     }
 
-    protected class ToStringConvertingModel<X> extends Model<String> {
-        private static final long serialVersionUID = 1L;
-
-        @NonNull private final IConverter<X> converter;
-
-        private ToStringConvertingModel(final @NonNull IConverter<X> converter) {
-            this.converter = converter;
-        }
-
-        @Override public String getObject() {
-            val adapter = scalarModel().getObject();
-            val value = ManagedObjects.UnwrapUtil.single(adapter);
-            final String str = value != null
-                    ? converter.convertToString(
-                            _Casts.uncheckedCast(value),
-                            getLanguageProvider().getPreferredLanguage().orElseGet(Locale::getDefault))
-                    : null;
-            return str;
-        }
-    }
+//    protected class ToStringConvertingModel<X> extends Model<String> {
+//        private static final long serialVersionUID = 1L;
+//
+//        @NonNull private final IConverter<X> converter;
+//
+//        private ToStringConvertingModel(final @NonNull IConverter<X> converter) {
+//            this.converter = converter;
+//        }
+//
+//        @Override public String getObject() {
+//            val adapter = scalarModel().getObject();
+//            val value = ManagedObjects.UnwrapUtil.single(adapter);
+//            final String str = value != null
+//                    ? converter.convertToString(
+//                            _Casts.uncheckedCast(value),
+//                            getLanguageProvider().getPreferredLanguage().orElseGet(Locale::getDefault))
+//                    : null;
+//            return str;
+//        }
+//    }
 
     // -- HELPER
 
@@ -197,7 +192,6 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     void setFormComponentAttributes(final FormComponent<?> formComponent) {
-
         val scalarModel = scalarModel();
 
         if(formComponent instanceof TextArea) {

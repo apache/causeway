@@ -23,7 +23,6 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.commons.internal.base._Strings;
@@ -76,8 +75,8 @@ extends ScalarPanelSelectAbstract {
     // --
 
     @Override
-    protected IModel<String> obtainOutputFormatModel() {
-        return select2.obtainInlinePromptModel2();
+    protected String obtainOutputFormat() {
+        return select2.obtainInlinePromptModel2().getObject();
     }
 
     // --

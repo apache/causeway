@@ -106,8 +106,8 @@ extends ScalarPanelFormFieldAbstract<T> {
     // //////////////////////////////////////
 
     @Override
-    protected IModel<String> obtainOutputFormatModel() {
-        return ()->getBlobOrClobFromModel()
+    protected String obtainOutputFormat() {
+        return getBlobOrClobFromModel()
                 .map(NamedWithMimeType::getName)
                 .orElse(translate(ValueSemanticsAbstract.NULL_REPRESENTATION));
     }
@@ -116,7 +116,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     protected Component createComponentForOutput(final String id) {
         val link = CompactFragment.LINK
                 .createFragment(id, this, scalarValueId->
-                    createDownloadLink(scalarValueId, obtainOutputFormatModel()));
+                    createDownloadLink(scalarValueId, this::obtainOutputFormat));
         return link;
     }
 

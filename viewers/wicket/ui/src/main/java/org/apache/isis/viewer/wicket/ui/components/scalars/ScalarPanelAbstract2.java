@@ -23,11 +23,11 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.common.model.components.ComponentType;
@@ -130,7 +130,7 @@ extends ScalarPanelAbstract {
                 && !getRenderScenario().isCompact()) {
             return PromptFragment.TEXTAREA
                     .createFragment(id, this, scalarValueId->{
-                        val textArea = Wkt.textAreaNoTab(scalarValueId, obtainOutputFormatModel());
+                        val textArea = Wkt.textAreaNoTab(scalarValueId, this::obtainOutputFormat);
                         if(this instanceof ScalarPanelTextFieldAbstract) {
                             ((ScalarPanelTextFieldAbstract)this).setFormComponentAttributes(textArea);
                         }
@@ -139,16 +139,16 @@ extends ScalarPanelAbstract {
         }
         return CompactFragment.LABEL
                     .createFragment(id, this, scalarValueId->
-                        new MarkupComponent(scalarValueId, obtainOutputFormatModel()));
+                        new MarkupComponent(scalarValueId, this::obtainOutputFormat));
     }
 
     /**
-     * Model for any non editing scenario.
+     * Output format (usually HTML) as String, for any non editing scenario.
      */
-    protected IModel<String> obtainOutputFormatModel() {
-        return ()->
-            _Strings.nullToEmpty(
-                    scalarModel().proposedValue().getValueAsHtml().getValue());
+    protected String obtainOutputFormat() {
+        return _Strings.nonEmpty(
+                    scalarModel().proposedValue().getValueAsHtml().getValue())
+                .orElseGet(()->translate(ValueSemanticsAbstract.NULL_REPRESENTATION));
     }
 
     /**

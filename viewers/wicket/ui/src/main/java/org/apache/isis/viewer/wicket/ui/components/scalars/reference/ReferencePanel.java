@@ -25,7 +25,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
@@ -75,8 +74,8 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     }
 
     @Override
-    protected IModel<String> obtainOutputFormatModel() {
-        return select2.obtainInlinePromptModel();
+    protected String obtainOutputFormat() {
+        return select2.obtainInlinePromptModel().getObject();
     }
 
     @Override
