@@ -24,32 +24,24 @@ import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.IResource;
-import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
-import org.apache.isis.core.metamodel.render.ScalarRenderMode;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.image.WicketImageUtil;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import static org.apache.isis.commons.internal.functions._Functions.peek;
 
-import lombok.NonNull;
 import lombok.val;
 
 public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType>
@@ -57,14 +49,7 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_SCALAR_IF_REGULAR_DOWNLOAD = "scalarIfRegularDownload";
-    private static final String ID_FILE_NAME = "fileName";
-    private static final String ID_SCALAR_IF_REGULAR_CLEAR = "scalarIfRegularClear";
-    private static final String ID_IMAGE = "scalarImage";
-    private static final String ID_SCALAR_IF_COMPACT_DOWNLOAD = "scalarIfCompactDownload";
-
-    private Image wicketImage;
-    private Label fileNameLabel;
+    /** Model that maps to either {@link Blob} or {@link Clob} */
     private IModel<T> unwrapped;
 
     protected IsisBlobOrClobPanelAbstract(final String id, final ScalarModel scalarModel, final Class<T> type) {
@@ -72,10 +57,16 @@ extends ScalarPanelFormFieldAbstract<T> {
         this.unwrapped = scalarModel.unwrapped(type);
     }
 
+    protected abstract IModel<List<FileUpload>> fileUploadModel();
+    protected abstract IResource newResource(final T namedWithMimeType);
+
+
     @Override
     protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
         modifiers.add(FormatModifier.BLOB);
     }
+
+    // -- INPUT FORMAT
 
     @Override
     protected Optional<InputFragment> getInputFragmentType() {
@@ -87,23 +78,11 @@ extends ScalarPanelFormFieldAbstract<T> {
     @Override
     protected FormComponent createFormComponent(final String id, final ScalarModel scalarModel) {
         val fileUploadField = Wkt.fileUploadField(id, fileUploadModel());
+        addAcceptFilterTo(fileUploadField);
         return fileUploadField;
     }
 
-    //    @Override
-    //    protected void onFormGroupCreated(final FormGroup formGroup) {
-    //        super.onFormGroupCreated(formGroup);
-    //        wicketImage = asWicketImage(ID_IMAGE);
-    //        if(wicketImage != null) {
-    //            formGroup.addOrReplace(wicketImage);
-    //        } else {
-    //            WktComponents.permanentlyHide(formGroup, ID_IMAGE);
-    //        }
-    //        createFileNameLabel(ID_FILE_NAME, formGroup);
-    //        createDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formGroup);
-    //    }
-
-    // //////////////////////////////////////
+    // -- OUTPUT FORMAT
 
     @Override
     protected String obtainOutputFormat() {
@@ -118,6 +97,16 @@ extends ScalarPanelFormFieldAbstract<T> {
                 .createFragment(id, this, scalarValueId->
                     createDownloadLink(scalarValueId, this::obtainOutputFormat));
         return link;
+    }
+
+    // -- HELPER
+
+    private void addAcceptFilterTo(final Component component){
+        Wkt.attributeReplace(component, "accept", scalarModel().getFileAccept());
+    }
+
+    private Optional<T> getBlobOrClobFromModel() {
+        return Optional.ofNullable(unwrapped.getObject());
     }
 
     private Component createDownloadLink(final String id, final IModel<String> labelModel) {
@@ -135,48 +124,29 @@ extends ScalarPanelFormFieldAbstract<T> {
         return linkContainer;
     }
 
-    //    @Override
-    //    protected Component createComponentForOutput(final String id) {
-    //        final MarkupContainer scalarIfCompact = new WebMarkupContainer(id);
-    //        createDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
-    ////        if(downloadLink != null) {
-    ////            updateFileNameLabel(ID_FILE_NAME_IF_COMPACT, downloadLink);
-    ////            Components.permanentlyHide(downloadLink, ID_FILE_NAME_IF_COMPACT);
-    ////        }
-    //        return scalarIfCompact;
-    //    }
+    // -- LEGACY
 
-    // //////////////////////////////////////
+//    private static final String ID_SCALAR_IF_REGULAR_DOWNLOAD = "scalarIfRegularDownload";
+//    private static final String ID_FILE_NAME = "fileName";
+//    private static final String ID_SCALAR_IF_REGULAR_CLEAR = "scalarIfRegularClear";
+//    private static final String ID_IMAGE = "scalarImage";
+//    private static final String ID_SCALAR_IF_COMPACT_DOWNLOAD = "scalarIfCompactDownload";
+//
+//    private Image wicketImage;
+//    private Label fileNameLabel;
 
-    //    @Override
-    //    protected void onInitializeNotEditable() {
-    //        updateRegularFormComponents(ScalarRenderMode.VIEWING, null, Optional.empty());
-    //    }
-    //
-    //    @Override
-    //    protected void onInitializeReadonly(final String disableReason) {
-    //        updateRegularFormComponents(ScalarRenderMode.VIEWING, null, Optional.empty());
-    //    }
-    //
-    //    @Override
-    //    protected void onInitializeEditable() {
-    //        updateRegularFormComponents(ScalarRenderMode.EDITING, null, Optional.empty());
-    //    }
-    //
-    //    @Override
-    //    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
-    //        updateRegularFormComponents(ScalarRenderMode.VIEWING, disableReason, target);
-    //    }
-    //
-    //    @Override
-    //    protected void onEditable(final Optional<AjaxRequestTarget> target) {
-    //        updateRegularFormComponents(ScalarRenderMode.VIEWING, null, target);
-    //    }
-
-    protected abstract IModel<List<FileUpload>> fileUploadModel();
-    protected abstract IResource newResource(final T namedWithMimeType);
-
-    // -- HELPER
+//  @Override
+//  protected void onFormGroupCreated(final FormGroup formGroup) {
+//      super.onFormGroupCreated(formGroup);
+//      wicketImage = asWicketImage(ID_IMAGE);
+//      if(wicketImage != null) {
+//          formGroup.addOrReplace(wicketImage);
+//      } else {
+//          WktComponents.permanentlyHide(formGroup, ID_IMAGE);
+//      }
+//      createFileNameLabel(ID_FILE_NAME, formGroup);
+//      createDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formGroup);
+//  }
 
 //    private void updateRegularFormComponents(
 //            final ScalarRenderMode renderMode,
@@ -205,61 +175,57 @@ extends ScalarPanelFormFieldAbstract<T> {
 //        setRenderModeOn(wicketImage, renderMode, disabledReason, target);
 //    }
 
-    private void setRenderModeOn(
-            final @Nullable Component component,
-            final @NonNull  ScalarRenderMode renderMode,
-            final @Nullable String disabledReason,
-            final @NonNull  Optional<AjaxRequestTarget> target) {
+//    private void setRenderModeOn(
+//            final @Nullable Component component,
+//            final @NonNull  ScalarRenderMode renderMode,
+//            final @Nullable String disabledReason,
+//            final @NonNull  Optional<AjaxRequestTarget> target) {
+//
+//        if(component==null) return;
+//
+//        component.setOutputMarkupId(true); // enable ajax link
+//        component.setVisible(renderMode.isVisible());
+//        target.ifPresent(ajax->{
+//            WktComponents.addToAjaxRequest(ajax, component);
+//        });
+//    }
 
-        if(component==null) return;
+//    private Label createFileNameLabel(final String idFileName, final MarkupContainer formComponent) {
+//        val fileNameLabel = Wkt.labelAdd(formComponent, idFileName, ()->
+//        getBlobOrClobFromModel()
+//        .map(NamedWithMimeType::getName)
+//        .orElse(""));
+//
+//        fileNameLabel.setOutputMarkupId(true);
+//        return fileNameLabel;
+//    }
 
-        component.setOutputMarkupId(true); // enable ajax link
-        component.setVisible(renderMode.isVisible());
-        target.ifPresent(ajax->{
-            WktComponents.addToAjaxRequest(ajax, component);
-        });
-    }
-
-    private void addAcceptFilterTo(final Component component){
-        Wkt.attributeReplace(component, "accept", scalarModel().getFileAccept());
-    }
-
-    private Label createFileNameLabel(final String idFileName, final MarkupContainer formComponent) {
-        val fileNameLabel = Wkt.labelAdd(formComponent, idFileName, ()->
-        getBlobOrClobFromModel()
-        .map(NamedWithMimeType::getName)
-        .orElse(""));
-
-        fileNameLabel.setOutputMarkupId(true);
-        return fileNameLabel;
-    }
-
-    private void createClearLink(
-            final ScalarRenderMode renderMode,
-            final Optional<AjaxRequestTarget> target) {
-
-        final MarkupContainer formComponent = getRegularFrame();
-
-        final AjaxLink<Void> ajaxLink = Wkt.linkAdd(formComponent, ID_SCALAR_IF_REGULAR_CLEAR, ajaxTarget->{
-            setEnabled(false);
-            ScalarModel model = IsisBlobOrClobPanelAbstract.this.getModel();
-            model.setObject(null);
-            ajaxTarget.add(formComponent);
-            ajaxTarget.add(fileNameLabel);
-        });
-        ajaxLink.setOutputMarkupId(true);
-
-        final Optional<T> blobOrClob = getBlobOrClobFromModel();
-        final Component clearButton = formComponent.get(ID_SCALAR_IF_REGULAR_CLEAR);
-        clearButton.setVisible(blobOrClob.isPresent() && renderMode.isVisible());
-        clearButton.setEnabled(blobOrClob.isPresent());
-
-        target.ifPresent(ajax->{
-            ajax.add(formComponent);
-            ajax.add(clearButton);
-            ajax.add(ajaxLink);
-        });
-    }
+//    private void createClearLink(
+//            final ScalarRenderMode renderMode,
+//            final Optional<AjaxRequestTarget> target) {
+//
+//        final MarkupContainer formComponent = getRegularFrame();
+//
+//        final AjaxLink<Void> ajaxLink = Wkt.linkAdd(formComponent, ID_SCALAR_IF_REGULAR_CLEAR, ajaxTarget->{
+//            setEnabled(false);
+//            ScalarModel model = IsisBlobOrClobPanelAbstract.this.getModel();
+//            model.setObject(null);
+//            ajaxTarget.add(formComponent);
+//            ajaxTarget.add(fileNameLabel);
+//        });
+//        ajaxLink.setOutputMarkupId(true);
+//
+//        final Optional<T> blobOrClob = getBlobOrClobFromModel();
+//        final Component clearButton = formComponent.get(ID_SCALAR_IF_REGULAR_CLEAR);
+//        clearButton.setVisible(blobOrClob.isPresent() && renderMode.isVisible());
+//        clearButton.setEnabled(blobOrClob.isPresent());
+//
+//        target.ifPresent(ajax->{
+//            ajax.add(formComponent);
+//            ajax.add(clearButton);
+//            ajax.add(ajaxLink);
+//        });
+//    }
 
 //    private MarkupContainer createDownloadLink(final String id, final MarkupContainer parent) {
 //        return getBlobOrClobFromModel()
@@ -275,13 +241,11 @@ extends ScalarPanelFormFieldAbstract<T> {
 //                });
 //    }
 
-    private Optional<T> getBlobOrClobFromModel() {
-        return Optional.ofNullable(unwrapped.getObject());
-    }
 
-    private Image asWicketImage(final String id) {
-        val blob = scalarModel().unwrapped(Blob.class).getObject();
-        return WicketImageUtil.asWicketImage(id, blob).orElse(null);
-    }
+
+//    private Image asWicketImage(final String id) {
+//        val blob = scalarModel().unwrapped(Blob.class).getObject();
+//        return WicketImageUtil.asWicketImage(id, blob).orElse(null);
+//    }
 
 }

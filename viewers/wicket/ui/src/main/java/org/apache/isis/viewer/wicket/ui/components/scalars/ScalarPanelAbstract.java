@@ -63,12 +63,13 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.Accessors;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 
 public abstract class ScalarPanelAbstract
@@ -88,7 +89,8 @@ implements ScalarModelSubscriber {
         MULITLINE,
         COMPOSITE,
         TRISTATE,
-        FLEX, BLOB,
+        FLEX,
+        BLOB,
     }
 
     public enum Repaint {
