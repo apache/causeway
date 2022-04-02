@@ -63,36 +63,28 @@
 
 		<wicket:fragment wicket:id="fragment-fieldFrame-withLink">
 			<span class="scalarValueInput">
-				<span class="editing">
+				<div wicket:id="scalarValueInlinePromptLink"
+					class="scalarValueInlinePromptLink">
+					<!-- output format -->
+					<wicket:container 
+						wicket:id="container-scalarValue"
+						class="no-event-prop" /> 
+				</div> 
 				
-					<div wicket:id="scalarValueInlinePromptLink"
-						class="scalarValueInlinePromptLink">
-						<!-- output format -->
-						<wicket:container 
-							wicket:id="container-scalarValue"
-							class="no-event-prop" /> 
-					</div> 
-					
-					<a wicket:id="editProperty"
-						href="##" class="edit btn btn-sm btn-link"> 
-						<span class="editIcon fa fa-edit"/>
-					</a>
-							  
-				</span>
+				<a wicket:id="editProperty"
+					href="##" class="edit btn btn-sm btn-link"> 
+					<span class="editIcon fa fa-edit"/>
+				</a>
 			</span> 
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink">
 			<span class="scalarValueInput">
-				<span class="editing">
-				
-					<!-- input format (when editing or action dialog or read-only) -->
-					<div>
-						<wicket:container 
-							wicket:id="container-scalarValue" />
-					</div>
-							  
-				</span>
+				<!-- input format (when editing or action dialog or read-only) -->
+				<div>
+					<wicket:container 
+						wicket:id="container-scalarValue" />
+				</div>
 			</span> 
 		</wicket:fragment>
 
