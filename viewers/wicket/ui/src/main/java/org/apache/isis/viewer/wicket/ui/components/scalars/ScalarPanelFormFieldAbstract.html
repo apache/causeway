@@ -62,19 +62,21 @@
 		<!-- FIELD FRAME FRAGMENTS -->
 
 		<wicket:fragment wicket:id="fragment-fieldFrame-withLink">
-			<span class="scalarValueInput">
+			<span class="scalarValueInput input-group">
 				<div wicket:id="scalarValueInlinePromptLink"
 					class="scalarValueInlinePromptLink">
 					<!-- output format -->
 					<wicket:container 
 						wicket:id="container-scalarValue"
-						class="no-event-prop" /> 
+						class="no-event-prop" />
+						
+					<span class="position-absolute top-0 end-0">
+              			<div class="btn-group btn-group-sm shadow" role="group">
+	                		<button type="button" class="btn btn-primary">
+	                			<i class="fa-solid fa-edit"></i></button>
+	             		</div>
+	            	</span>
 				</div> 
-				
-				<a wicket:id="editProperty"
-					href="##" class="edit btn btn-sm btn-link"> 
-					<span class="editIcon fa fa-edit"/>
-				</a>
 			</span> 
 		</wicket:fragment>
 		

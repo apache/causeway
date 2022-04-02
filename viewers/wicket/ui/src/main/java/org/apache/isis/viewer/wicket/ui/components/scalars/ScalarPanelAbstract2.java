@@ -25,27 +25,16 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
-import org.apache.isis.viewer.wicket.ui.components.propertyheader.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
-import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -100,20 +89,12 @@ extends ScalarPanelAbstract {
             addOnClickBehaviorTo(inlinePromptLink);
         }
 
-        addEditPropertyIf(
-                scalarModel.canEnterEditMode()
-                && (scalarModel.getPromptStyle().isDialogAny()
-                        || fieldFrame==null),
-                fieldFrame);
-
         //XXX support for legacy panels, remove eventually
         {
             if(fieldFrame!=null
                 && fieldFrame.get(ID_SCALAR_VALUE)==null) {
                 Wkt.labelAdd(fieldFrame, ID_SCALAR_VALUE, "∅");
             }
-            FieldFrame.EDIT_PROPERTY
-                .addComponentIfMissing(regularFrame, id->Wkt.label(id, "∅"));
         }
     }
 
@@ -168,47 +149,6 @@ extends ScalarPanelAbstract {
     }
 
     // -- HELPER
-
-    private WebMarkupContainer addEditPropertyIf(final boolean condition, final MarkupContainer fieldFrame) {
-        if(fieldFrame==null) return null;
-        val editLinkId = FieldFrame.EDIT_PROPERTY.getContainerId();
-        if(condition) {
-            val editProperty = Wkt.containerAdd(fieldFrame, editLinkId);
-            Wkt.behaviorAddOnClick(editProperty, this::onPropertyEditClick);
-            WktTooltips.addTooltip(editProperty, translate("Click to edit"));
-            return editProperty;
-        } else {
-            WktComponents.permanentlyHide(fieldFrame, editLinkId);
-            return null;
-        }
-    }
-
-    private void onPropertyEditClick(final AjaxRequestTarget target) {
-        val scalarModel = scalarModel();
-        final ObjectSpecification specification = scalarModel.getScalarTypeSpec();
-        final MetaModelService metaModelService = getServiceRegistry()
-                .lookupServiceElseFail(MetaModelService.class);
-        final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
-
-        final ActionPrompt prompt = ActionPromptProvider
-                .getFrom(ScalarPanelAbstract2.this).getActionPrompt(scalarModel.getPromptStyle(), sort);
-
-        PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(
-                prompt.getTitleId(),
-                (ScalarPropertyModel)ScalarPanelAbstract2.this.scalarModel());
-
-        final PropertyEditPanel propertyEditPanel =
-                (PropertyEditPanel) getComponentFactoryRegistry().createComponent(
-                        prompt.getContentId(),
-                        ComponentType.PROPERTY_EDIT_PROMPT,
-                        ScalarPanelAbstract2.this.scalarModel());
-
-        propertyEditPanel.setShowHeader(false);
-
-        prompt.setTitle(titlePanel, target);
-        prompt.setPanel(propertyEditPanel, target);
-        prompt.showPrompt(target);
-    }
 
     private void addOnClickBehaviorTo(
             final @Nullable MarkupContainer clickReceiver) {
