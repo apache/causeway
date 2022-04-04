@@ -97,11 +97,9 @@ extends ScalarPanelAbstract {
                 addAdditionalClickBehaviorTo(additionalButtonContainer);
             }
 
-        } else if(FieldFragement.NO_LINK.isMatching(fieldFrame)) {
-            val additionalButtonContainer = FieldFragement.NO_LINK.createButtonContainer(fieldFrame);
-            if(scalarModel().isEditMode()) {
-                addAdditionalClickBehaviorTo(additionalButtonContainer);
-            }
+        } else if(FieldFragement.NO_LINK_EDITING.isMatching(fieldFrame)) {
+            val additionalButtonContainer = FieldFragement.NO_LINK_EDITING.createButtonContainer(fieldFrame);
+            addAdditionalClickBehaviorTo(additionalButtonContainer);
         }
 
         //XXX support for legacy panels, remove eventually

@@ -86,9 +86,17 @@
 			</span> 
 		</wicket:fragment>
 		
-		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink">
+		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink-viewing">
+			<span class="scalarValueInput">
+				<!-- input format (when read-only) -->
+				<wicket:container 
+					wicket:id="container-scalarValue" />
+			</span> 
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink-editing">
 			<span class="scalarValueInput input-group">
-				<!-- input format (when editing or action dialog or read-only) -->
+				<!-- input format (when editing or action dialog) -->
 				<wicket:container 
 					wicket:id="container-scalarValue" />
 			

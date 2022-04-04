@@ -111,7 +111,8 @@ public class ScalarFragmentFactory {
                 return Wkt.repeatingViewAdd(container, "scalarValueInlinePromptLink-buttons");
             }
         },
-        NO_LINK("fragment-fieldFrame-withoutLink") {
+        NO_LINK_VIEWING("fragment-fieldFrame-withoutLink-viewing"),
+        NO_LINK_EDITING("fragment-fieldFrame-withoutLink-editing") {
             @Override
             public RepeatingView createButtonContainer(
                     final MarkupContainer container) {

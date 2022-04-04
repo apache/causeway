@@ -71,7 +71,7 @@ extends ScalarPanelAbstract2 {
         switch (renderScenario) {
         case READONLY:
             // setup as output-format (no links)
-            fieldFragement = FieldFragement.NO_LINK;
+            fieldFragement = FieldFragement.NO_LINK_VIEWING;
             break;
         case CAN_EDIT:
         case CAN_EDIT_INLINE:
@@ -81,7 +81,10 @@ extends ScalarPanelAbstract2 {
             fieldFragement = FieldFragement.LINK;
             break;
         case EDITING:
-            fieldFragement = FieldFragement.NO_LINK; // setup as input-format
+            // setup as input-format
+            fieldFragement = scalarModel().isEditMode()
+                ? FieldFragement.NO_LINK_EDITING // supports additional buttons (clear, ...)
+                : FieldFragement.NO_LINK_VIEWING;
             break;
 
         default:
