@@ -24,6 +24,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.EventPropagation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.springframework.lang.Nullable;
 
@@ -43,6 +44,8 @@ import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 /**
  *  Adds inline prompt logic.
@@ -244,6 +247,7 @@ extends ScalarPanelAbstract {
         scalarModel().proposedValue().clear();
         scalarModel().getSpecialization().accept(
                 param->{
+                    clearBootstrapFileInputField();
                     this.setupInlinePrompt(); // recreate the param field
                     target.add(this);
                 },
@@ -252,5 +256,22 @@ extends ScalarPanelAbstract {
                         .executeAndProcessResults(target, null, prop);
                 });
     }
+
+    /**
+     * Workaround {@link BootstrapFileInputField} not reacting to clearing of underlying model.
+     * @implNote recreates the entire {@link FormComponent}.
+     */
+    private void clearBootstrapFileInputField() {
+        if(this instanceof ScalarPanelFormFieldAbstract) {
+            val formContainer = ((ScalarPanelFormFieldAbstract<?>)this);
+            val formComponent = formContainer.getFormComponent();
+            if(formComponent instanceof BootstrapFileInputField) {
+                // recreate from scratch
+                val replacement = formContainer.createFormComponent(formComponent.getId(), scalarModel());
+                formComponent.replaceWith(replacement);
+            }
+        }
+    }
+
 
 }
