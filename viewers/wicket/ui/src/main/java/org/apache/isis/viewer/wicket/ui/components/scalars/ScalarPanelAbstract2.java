@@ -90,6 +90,18 @@ extends ScalarPanelAbstract {
 
             // needs InlinePromptContext to properly initialize
             addOnClickBehaviorTo(inlinePromptLink);
+
+            val additionalButtonContainer = FieldFragement.LINK.createButtonContainer(inlinePromptLink);
+
+            if(getRenderScenario()!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION) {
+                addAdditionalClickBehaviorTo(additionalButtonContainer);
+            }
+
+        } else if(FieldFragement.NO_LINK.isMatching(fieldFrame)) {
+            val additionalButtonContainer = FieldFragement.NO_LINK.createButtonContainer(fieldFrame);
+            if(scalarModel().isEditMode()) {
+                addAdditionalClickBehaviorTo(additionalButtonContainer);
+            }
         }
 
         //XXX support for legacy panels, remove eventually
@@ -159,7 +171,6 @@ extends ScalarPanelAbstract {
         if(clickReceiver==null) return;
 
         val scalarModel = scalarModel();
-        val additionalButtonContainer = FieldFragement.LINK.createButtonContainer(clickReceiver);
 
         if (_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
 
@@ -171,8 +182,6 @@ extends ScalarPanelAbstract {
                 // we configure the prompt link if _this_ property is configured for inline edits...
                 Wkt.behaviorAddOnClick(clickReceiver, this::onPropertyInlineEditClick);
             });
-
-            addAdditionalClickBehaviorTo(additionalButtonContainer);
 
         } else {
 

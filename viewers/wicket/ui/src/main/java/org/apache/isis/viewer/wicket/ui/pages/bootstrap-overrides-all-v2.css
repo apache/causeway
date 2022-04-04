@@ -1054,10 +1054,12 @@ div.scalarValueInlinePromptLink.form-control:hover {
 	cursor: pointer;
 	background-color: rgba(0, 0, 0, 0.08);
 }
-div.scalarValueInlinePromptLink.form-control .btn-group {
+div.scalarValueInlinePromptLink.form-control .btn-group,
+span.scalarValueInput.input-group div.btn-group {
     display: none;
 }
-div.scalarValueInlinePromptLink.form-control:hover .btn-group {
+div.scalarValueInlinePromptLink.form-control:hover .btn-group,
+span.scalarValueInput.input-group:hover div.btn-group {
 	display: inherit;
 }
 

@@ -111,7 +111,13 @@ public class ScalarFragmentFactory {
                 return Wkt.repeatingViewAdd(container, "scalarValueInlinePromptLink-buttons");
             }
         },
-        NO_LINK("fragment-fieldFrame-withoutLink"),
+        NO_LINK("fragment-fieldFrame-withoutLink") {
+            @Override
+            public RepeatingView createButtonContainer(
+                    final MarkupContainer container) {
+                return Wkt.repeatingViewAdd(container, "scalarValueInput-buttons");
+            }
+        },
         ;
         @Getter private final String fragmentId;
         @Getter private final String containerId = "container-fieldFrame";

@@ -87,12 +87,19 @@
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink">
-			<span class="scalarValueInput">
+			<span class="scalarValueInput input-group">
 				<!-- input format (when editing or action dialog or read-only) -->
-				<div>
-					<wicket:container 
-						wicket:id="container-scalarValue" />
-				</div>
+				<wicket:container 
+					wicket:id="container-scalarValue" />
+			
+				<span class="position-absolute top-0 end-0" style="z-index: 20;">
+           			<div class="btn-group btn-group-sm shadow" role="group">
+           				<!-- additional buttons -->
+         				<button wicket:id="scalarValueInput-buttons" 
+         					class="btn" type="button">
+						</button>
+           			</div>
+            	</span>
 			</span> 
 		</wicket:fragment>
 
