@@ -194,11 +194,11 @@ extends ScalarPanelAbstract {
         val buttonContainer = FieldFragement.LINK.createButtonContainer(inlinePromptLink);
 
         // add clear-field-button (only if feature is not required and not already cleared)
-        val isClearFieldButtonVisisble =
+        val isClearFieldButtonVisible =
                 scalarModel().proposedValue().isPresent()
                     && !scalarModel().isRequired();
 
-        if(isClearFieldButtonVisisble) {
+        if(isClearFieldButtonVisible) {
             val clearFieldButton = Wkt.linkAddWithBody(buttonContainer,
                     Wkt.faIcon("fa-regular fa-trash-can"), this::onClearFieldButtonClick);
 
