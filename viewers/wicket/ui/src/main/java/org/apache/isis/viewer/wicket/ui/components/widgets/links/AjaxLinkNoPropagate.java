@@ -29,9 +29,11 @@ import org.danekja.java.util.function.serializable.SerializableConsumer;
 
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
- * Stops the propagation of the JavaScript event to the parent of its target and all other
- * event listeners registered on the same target.
+ * Stops the propagation of the JavaScript event to the parent of its target.
  */
 public class AjaxLinkNoPropagate extends AjaxLink<Void> {
 
@@ -39,17 +41,29 @@ public class AjaxLinkNoPropagate extends AjaxLink<Void> {
 
     private final SerializableConsumer<AjaxRequestTarget> onClick;
 
+    @Getter @Setter
+    private EventPropagation eventPropagation;
+
+
     public AjaxLinkNoPropagate(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
+        this(id, EventPropagation.STOP, onClick);
+    }
+
+    public AjaxLinkNoPropagate(
+            final String id,
+            final EventPropagation eventPropagation,
+            final SerializableConsumer<AjaxRequestTarget> onClick) {
         super(id);
         this.onClick = onClick;
+        this.eventPropagation = eventPropagation;
     }
+
 
     @Override
     public final void onClick(final AjaxRequestTarget target) {
         onClick.accept(target);
     }
 
-    // special behavior: STOP event propagation!
     @Override
     protected final AjaxEventBehavior newAjaxEventBehavior(final String event) {
         return new AjaxEventBehavior(event) {
@@ -61,7 +75,7 @@ public class AjaxLinkNoPropagate extends AjaxLink<Void> {
 
             @Override  protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
                 attributes.setPreventDefault(true);
-                attributes.setEventPropagation(EventPropagation.STOP_IMMEDIATE);
+                attributes.setEventPropagation(eventPropagation);
                 super.updateAjaxAttributes(attributes);
             }
 
@@ -76,7 +90,4 @@ public class AjaxLinkNoPropagate extends AjaxLink<Void> {
 
         };
     }
-
-
-
 }

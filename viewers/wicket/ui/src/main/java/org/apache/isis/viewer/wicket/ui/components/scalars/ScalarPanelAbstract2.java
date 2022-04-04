@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.EventPropagation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -204,6 +205,12 @@ extends ScalarPanelAbstract {
 
             Wkt.cssAppend(clearFieldButton, "btn-warning");
             WktTooltips.addTooltip(clearFieldButton, translate("Click to clear the field"));
+
+            if(scalarModel().isParameter()) {
+                // allow the client-side popover cleaner to kick in
+                clearFieldButton.setEventPropagation(EventPropagation.BUBBLE);
+            } // properties otherwise do recreate the entire page anyway
+
         }
     }
 
