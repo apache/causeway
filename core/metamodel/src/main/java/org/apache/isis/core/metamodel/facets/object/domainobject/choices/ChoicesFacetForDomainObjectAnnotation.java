@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.choices;
 
+import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -40,11 +41,25 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
             return null;
         }
 
-        final boolean bounded = domainObject.bounded();
-        return bounded
-                ? new ChoicesFacetForDomainObjectAnnotation(
-                    facetHolder, deploymentCategory, authenticationSessionProvider, persistenceSessionServiceInternal)
-                : null;
+        // check v2 first.
+        final Bounding bounding = domainObject.bounding();
+        switch (bounding) {
+            case BOUNDED:
+                return new ChoicesFacetForDomainObjectAnnotation(
+                        facetHolder, deploymentCategory, authenticationSessionProvider, persistenceSessionServiceInternal);
+            case UNBOUNDED:
+                return null;
+
+            case NOT_SPECIFIED:
+            default:
+                // fallback to v1
+                final boolean bounded = domainObject.bounded();
+                return bounded
+                        ? new ChoicesFacetForDomainObjectAnnotation(
+                            facetHolder, deploymentCategory, authenticationSessionProvider, persistenceSessionServiceInternal)
+                        : null;
+        }
+
     }
 
     private ChoicesFacetForDomainObjectAnnotation(

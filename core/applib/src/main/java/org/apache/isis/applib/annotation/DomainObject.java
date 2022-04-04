@@ -108,12 +108,28 @@ public @interface DomainObject {
 
     /**
      * Indicates that the class has a bounded, or finite, set of instances.
-     * 
+     *
      * <p>
      *     Takes precedence over auto-complete.
      * </p>
      */
     boolean bounded() default false;
+
+
+    /**
+     * Indicates that the class has a bounded, or finite, set of instances.
+     *
+     * <p>
+     *     Takes precedence over auto-complete.
+     * </p>
+     *
+     * <p>
+     *     Note: this replaces bounded=true|false prior to v2.x
+     * </p>
+     *
+     */
+    Bounding bounding()
+            default Bounding.NOT_SPECIFIED;
 
 
     // //////////////////////////////////////
