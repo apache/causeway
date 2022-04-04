@@ -23,6 +23,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
@@ -158,6 +159,7 @@ extends ScalarPanelAbstract {
         if(clickReceiver==null) return;
 
         val scalarModel = scalarModel();
+        val additionalButtonContainer = FieldFragement.LINK.createButtonContainer(clickReceiver);
 
         if (_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
 
@@ -170,6 +172,8 @@ extends ScalarPanelAbstract {
                 Wkt.behaviorAddOnClick(clickReceiver, this::onPropertyInlineEditClick);
             });
 
+            addAdditionalClickBehaviorTo(additionalButtonContainer);
+
         } else {
 
             _Util.lookupPropertyActionForInlineEdit(scalarModel)
@@ -179,20 +183,8 @@ extends ScalarPanelAbstract {
         }
     }
 
-    private WebMarkupContainer createInlinePromptLink() {
-
-        final WebMarkupContainer inlinePromptLink =
-                FieldFrame.SCALAR_VALUE_INLINE_PROMPT_LINK
-                    .createComponent(WebMarkupContainer::new);
-
-        inlinePromptLink.setOutputMarkupId(true);
-        inlinePromptLink.setOutputMarkupPlaceholderTag(true);
-        configureInlinePromptLink(inlinePromptLink);
-
-        Wkt.add(inlinePromptLink, FieldFrame.SCALAR_VALUE_CONTAINER
-                .createComponent(id->createComponentForOutput(id)));
-
-        val buttonContainer = FieldFragement.LINK.createButtonContainer(inlinePromptLink);
+    private void addAdditionalClickBehaviorTo(
+            final @Nullable RepeatingView buttonContainer) {
 
         // add clear-field-button (only if feature is not required and not already cleared)
         val isClearFieldButtonVisible =
@@ -206,6 +198,19 @@ extends ScalarPanelAbstract {
             Wkt.cssAppend(clearFieldButton, "btn-warning");
             WktTooltips.addTooltip(clearFieldButton, translate("Click to clear the field"));
         }
+    }
+
+    private WebMarkupContainer createInlinePromptLink() {
+        final WebMarkupContainer inlinePromptLink =
+                FieldFrame.SCALAR_VALUE_INLINE_PROMPT_LINK
+                    .createComponent(WebMarkupContainer::new);
+
+        inlinePromptLink.setOutputMarkupId(true);
+        inlinePromptLink.setOutputMarkupPlaceholderTag(true);
+        configureInlinePromptLink(inlinePromptLink);
+
+        Wkt.add(inlinePromptLink, FieldFrame.SCALAR_VALUE_CONTAINER
+                .createComponent(id->createComponentForOutput(id)));
 
         return inlinePromptLink;
     }

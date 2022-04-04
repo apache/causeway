@@ -452,10 +452,11 @@ public class Wkt {
         val fileUploadField = new BootstrapFileInputField(id, model);
         fileUploadField.getConfig()
             .maxFileCount(1)
+            .mainClass("input-group-sm")
             .initialCaption(initialCaption)
             .captionClass("form-control-sm")
             .showUpload(false)
-            .mainClass("input-group-sm");
+            ;
         return fileUploadField;
     }
 
