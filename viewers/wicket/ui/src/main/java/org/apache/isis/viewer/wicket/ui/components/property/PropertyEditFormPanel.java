@@ -24,6 +24,8 @@ import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormP
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 
+import lombok.val;
+
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
@@ -44,8 +46,12 @@ extends PromptFormPanelAbstract<ManagedObject, ScalarPropertyModel> {
     }
 
     private void buildGui() {
-        ScalarPropertyModel model = getModel();
-        add(new PropertyEditForm(ID_INPUT_FORM, this, this.getWicketViewerSettings(), model));
+        val scalarPropertyModel = scalarPropertyModel();
+        add(new PropertyEditForm(ID_INPUT_FORM, this, this.getWicketViewerSettings(), scalarPropertyModel));
+    }
+
+    private ScalarPropertyModel scalarPropertyModel() {
+        return getModel();
     }
 
 }

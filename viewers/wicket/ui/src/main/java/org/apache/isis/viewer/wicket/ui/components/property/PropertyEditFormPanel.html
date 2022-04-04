@@ -27,10 +27,19 @@
                           <div wicket:id="scalarNameAndValue">[scalar]</div>
                         </div>
                         <span wicket:id="feedback"></span>
-                        <div class="buttons">
-                            <input type="submit" wicket:id="okButton" value="OK" class="ok btn btn-sm btn-primary"/>
-                            <input type="submit" wicket:id="cancelButton" value="Cancel" class="cancel btn btn-sm btn-secondary"/>
-                        </div>
+                        
+                        <div class="buttons d-flex justify-content-between">
+						      <div class="buttons-left">
+								    <input wicket:id="okButton" 
+		                            	type="submit" value="OK" class="ok btn btn-sm btn-primary"/>
+		                            <input wicket:id="cancelButton" 
+		                            	type="submit" value="Cancel" class="cancel btn btn-sm btn-secondary"/>     
+						      </div>
+						      <div class="buttons-right">
+		                            <!--  reserved for future use -->
+						      </div>  
+						</div>
+                       
                     </fieldset>
                 </form>
             </div>

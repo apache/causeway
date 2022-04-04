@@ -47,13 +47,13 @@ class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
         super(id, parentPanel, settings, propertyModel);
     }
 
-    private ScalarPropertyModel getScalarModel() {
+    private ScalarPropertyModel scalarPropertyModel() {
         return (ScalarPropertyModel) super.getModel();
     }
 
     @Override
     protected void addParameters() {
-        val scalarModel = getScalarModel();
+        val scalarModel = scalarPropertyModel();
         val container = Wkt.containerAdd(this, PropertyEditFormPanel.ID_PROPERTY);
 
         val component = getComponentFactoryRegistry()
@@ -66,7 +66,7 @@ class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
 
     @Override
     protected Object newCompletedEvent(final AjaxRequestTarget target, final Form<?> form) {
-        return new IsisPropertyEditCompletedEvent(getScalarModel(), target, form);
+        return new IsisPropertyEditCompletedEvent(scalarPropertyModel(), target, form);
     }
 
     @Override
@@ -76,7 +76,7 @@ class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
 
     @Override
     protected _Either<ActionModel, ScalarPropertyModel> getMemberModel() {
-        return _Either.right(getScalarModel());
+        return _Either.right(scalarPropertyModel());
     }
 
 }

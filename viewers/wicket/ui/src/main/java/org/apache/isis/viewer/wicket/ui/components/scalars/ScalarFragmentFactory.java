@@ -26,10 +26,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
@@ -47,8 +49,7 @@ public class ScalarFragmentFactory {
         REGULAR("scalarIfRegular"),
         INLINE_PROMPT_FORM("scalarIfRegularInlinePromptForm"),
         ;
-        @Getter
-        private final String containerId;
+        @Getter private final String containerId;
         public <T extends Component> T createComponent(final Function<String, T> factory) {
             return factory.apply(containerId);
         }
@@ -63,8 +64,7 @@ public class ScalarFragmentFactory {
         ASSOCIATED_ACTION_LINKS_BELOW("associatedActionLinksBelow"),
         ASSOCIATED_ACTION_LINKS_RIGHT("associatedActionLinksRight"),
         ;
-        @Getter
-        private final String containerId;
+        @Getter private final String containerId;
         public <T extends Component> T createComponent(final Function<String, T> factory) {
             return factory.apply(containerId);
         }
@@ -85,8 +85,7 @@ public class ScalarFragmentFactory {
         SCALAR_VALUE_INLINE_PROMPT_LINK("scalarValueInlinePromptLink"),
         SCALAR_VALUE_CONTAINER("container-scalarValue"),
         ;
-        @Getter
-        private final String containerId;
+        @Getter private final String containerId;
         public <T extends Component> T createComponent(final Function<String, T> factory) {
             return factory.apply(containerId);
         }
@@ -105,18 +104,25 @@ public class ScalarFragmentFactory {
 
     @RequiredArgsConstructor
     public static enum FieldFragement {
-        LINK("fragment-fieldFrame-withLink"),
+        LINK("fragment-fieldFrame-withLink"){
+            @Override
+            public RepeatingView createButtonContainer(
+                    final MarkupContainer container) {
+                return Wkt.repeatingViewAdd(container, "scalarValueInlinePromptLink-buttons");
+            }
+        },
         NO_LINK("fragment-fieldFrame-withoutLink"),
         ;
-        @Getter
-        private final String fragmentId;
-        @Getter
-        private final String containerId = "container-fieldFrame";
+        @Getter private final String fragmentId;
+        @Getter private final String containerId = "container-fieldFrame";
         public boolean isMatching(final @Nullable MarkupContainer container) {
             if(container instanceof Fragment) {
                 return fragmentId.equals(((Fragment)container).getAssociatedMarkupId());
             }
             return false;
+        }
+        public RepeatingView createButtonContainer(final MarkupContainer container) {
+            throw _Exceptions.unsupportedOperation("not supported by %s", this);
         }
     }
 

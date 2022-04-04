@@ -27,12 +27,12 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -49,8 +49,10 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -68,6 +70,7 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.commons.internal.functions._Functions.SerializableFunction;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 import lombok.NonNull;
@@ -442,10 +445,24 @@ public class Wkt {
 
     // -- FILE UPLOAD
 
-    public FileUploadField fileUploadField(final String id, final IModel<List<FileUpload>> model) {
+    public FileUploadField fileUploadField(
+            final String id,
+            final String initialCaption,
+            final IModel<List<FileUpload>> model) {
         val fileUploadField = new BootstrapFileInputField(id, model);
-        fileUploadField.getConfig().showUpload(false).mainClass("input-group-sm");
+        fileUploadField.getConfig()
+            .maxFileCount(1)
+            .initialCaption(initialCaption)
+            .captionClass("form-control-sm")
+            .showUpload(false)
+            .mainClass("input-group-sm");
         return fileUploadField;
+    }
+
+    // -- FONT AWESOME
+
+    public String faIcon(final String faClasses) {
+        return String.format("<i class=\"%s\"></i>", faClasses);
     }
 
     // -- FRAGMENT
@@ -576,75 +593,43 @@ public class Wkt {
 
     // -- LINK
 
-    public AjaxLink<Void> link(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
-        return new AjaxLink<Void>(id) {
-            private static final long serialVersionUID = 1L;
-            @Override public void onClick(final AjaxRequestTarget target) {
-                onClick.accept(target);
-            }
-            @Override protected void onComponentTag(final ComponentTag tag) {
-                super.onComponentTag(tag);
-                fixDisabledState(this, tag);
-            }
-        };
+    public AjaxLinkNoPropagate link(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return new AjaxLinkNoPropagate(id, onClick);
     }
 
-    /**
-     * MOVED over from Wicket 8 - potentially no longer required
-     * <p>
-     * HACK issue #79: wicket changes tag name if component wasn't enabled
-     *
-     * @param component the component to fix
-     * @param tag       the component tag
-     * @deprecated since Wicket 7.0: doesn't mangle the link/button's markup anymore
-     */
-    @Deprecated
-    public static void fixDisabledState(final Component component, final ComponentTag tag) {
-        if (!component.isEnabledInHierarchy()) {
-            if (component instanceof AbstractLink) {
-                tag.setName("a");
-            } else if (component instanceof Button) {
-                tag.setName("button");
-            } else {
-                if (tag.getAttribute("value") != null) {
-                    tag.setName("input");
-                } else {
-                    tag.setName("button");
-                }
-            }
-
-            tag.put("disabled", "disabled");
-        }
-    }
-
-    public AjaxLink<Void> linkAdd(
+    public AjaxLinkNoPropagate linkAdd(
             final MarkupContainer container,
             final String id,
             final SerializableConsumer<AjaxRequestTarget> onClick) {
         return add(container, link(id, onClick));
     }
 
-    //    public ActionLink linkAdd(final MarkupContainer container, final String id, final LinkAndLabel linkAndLabel) {
-    //        val component = linkAndLabel.getUiComponent();
-    //        container.addOrReplace(component);
-    //        return (ActionLink) component;
-    //    }
-    //
-    //    public Link<Void> linkAdd(
-    //            final MarkupContainer container,
-    //            final String linkId,
-    //            final String labelId,
-    //            final String linkName) {
-    //        val link = new Link<Void>(linkId) {
-    //            private static final long serialVersionUID = 1L;
-    //            @Override
-    //            public void onClick() {
-    //            }
-    //        };
-    //        container.addOrReplace(link);
-    //        Wkt.labelAdd(link, labelId, linkName);
-    //        return link;
-    //    }
+    /** renders plain HTML; useful in combination with font-awesome icons */
+    public AjaxLinkNoPropagate linkWithBody(final String id, final String bodyHtml,
+            final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return new AjaxLinkNoPropagate(id, onClick) {
+            private static final long serialVersionUID = 1L;
+            @Override public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
+                replaceComponentTagBody(markupStream, openTag, bodyHtml); }
+            @Override protected void onComponentTag(final ComponentTag tag)   {
+                super.onComponentTag(tag);
+                tag.setType(TagType.OPEN); }
+        };
+    }
+
+    /** renders plain HTML; useful in combination with font-awesome icons */
+    public AjaxLinkNoPropagate linkAddWithBody(
+            final MarkupContainer container,
+            final String id, final String bodyHtml,
+            final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return add(container, linkWithBody(id, bodyHtml, onClick));
+    }
+
+    /** renders plain HTML; useful in combination with font-awesome icons */
+    public AjaxLinkNoPropagate linkAddWithBody(final RepeatingView rv, final String bodyHtml,
+            final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return linkAddWithBody(rv, rv.newChildId(), bodyHtml, onClick);
+    }
 
     // -- LIST VIEW
 
@@ -686,6 +671,16 @@ public class Wkt {
             final IModel<? extends List<T>> listModel,
                     final SerializableConsumer<ListItem<T>> itemPopulator) {
         return add(container, listView(id, listModel, itemPopulator));
+    }
+
+    // -- REPEATING VIEW
+
+    public RepeatingView repeatingView(final String id) {
+        return new RepeatingView(id);
+    }
+
+    public RepeatingView repeatingViewAdd(final MarkupContainer container, final String id) {
+        return add(container, repeatingView(id));
     }
 
     // -- TABLES
@@ -869,7 +864,34 @@ public class Wkt {
         }
     }
 
+    // -- DISABLE WORKAROUND
 
+    /**
+     * MOVED over from Wicket 8 - potentially no longer required
+     * <p>
+     * HACK issue #79: wicket changes tag name if component wasn't enabled
+     *
+     * @param component the component to fix
+     * @param tag       the component tag
+     * @deprecated since Wicket 7.0: doesn't mangle the link/button's markup anymore
+     */
+    @Deprecated
+    public static void fixDisabledState(final Component component, final ComponentTag tag) {
+        if (!component.isEnabledInHierarchy()) {
+            if (component instanceof AbstractLink) {
+                tag.setName("a");
+            } else if (component instanceof Button) {
+                tag.setName("button");
+            } else {
+                if (tag.getAttribute("value") != null) {
+                    tag.setName("input");
+                } else {
+                    tag.setName("button");
+                }
+            }
+            tag.put("disabled", "disabled");
+        }
+    }
 
 
 }

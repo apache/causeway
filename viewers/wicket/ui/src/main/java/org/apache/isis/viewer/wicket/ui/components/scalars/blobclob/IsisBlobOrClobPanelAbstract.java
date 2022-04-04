@@ -77,7 +77,8 @@ extends ScalarPanelFormFieldAbstract<T> {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     protected FormComponent createFormComponent(final String id, final ScalarModel scalarModel) {
-        val fileUploadField = Wkt.fileUploadField(id, fileUploadModel());
+        val initialCaption = obtainOutputFormat();
+        val fileUploadField = Wkt.fileUploadField(id, initialCaption, fileUploadModel());
         addAcceptFilterTo(fileUploadField);
         return fileUploadField;
     }

@@ -35,6 +35,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -185,13 +186,25 @@ extends ScalarPanelAbstract {
 
         inlinePromptLink.setOutputMarkupId(true);
         inlinePromptLink.setOutputMarkupPlaceholderTag(true);
-
         configureInlinePromptLink(inlinePromptLink);
 
-        final Component editInlineLinkLabel = FieldFrame.SCALAR_VALUE_CONTAINER
-                .createComponent(id->createComponentForOutput(id));
+        Wkt.add(inlinePromptLink, FieldFrame.SCALAR_VALUE_CONTAINER
+                .createComponent(id->createComponentForOutput(id)));
 
-        inlinePromptLink.add(editInlineLinkLabel);
+        val buttonContainer = FieldFragement.LINK.createButtonContainer(inlinePromptLink);
+
+        // add clear-field-button (only if feature is not required and not already cleared)
+        val isClearFieldButtonVisisble =
+                scalarModel().proposedValue().isPresent()
+                    && !scalarModel().isRequired();
+
+        if(isClearFieldButtonVisisble) {
+            val clearFieldButton = Wkt.linkAddWithBody(buttonContainer,
+                    Wkt.faIcon("fa-regular fa-trash-can"), this::onClearFieldButtonClick);
+
+            Wkt.cssAppend(clearFieldButton, "btn-warning");
+            WktTooltips.addTooltip(clearFieldButton, translate("Click to clear the field"));
+        }
 
         return inlinePromptLink;
     }
@@ -205,6 +218,20 @@ extends ScalarPanelAbstract {
         target.add(getScalarFrameContainer());
 
         Wkt.focusOnMarkerAttribute(getFormFrame(), target);
+    }
+
+    //XXX WIP
+    private void onClearFieldButtonClick(final AjaxRequestTarget target) {
+        scalarModel().proposedValue().clear();
+        scalarModel().getSpecialization().accept(
+                param->{
+                    System.err.printf("clear param %s%n", param.getFriendlyName());
+                },
+                prop->{
+                    System.err.printf("clear prop %s%n", prop.getFriendlyName());
+                    prop.applyValueThenReturnOwner(); //TODO re-route
+                });
+        target.add(this);
     }
 
 }
