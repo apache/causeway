@@ -34,6 +34,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
@@ -84,7 +85,7 @@ extends ScalarPanelAbstract {
         if(FieldFragement.LINK.isMatching(fieldFrame)) {
 
             fieldFrame
-                .add(inlinePromptLink = createInlinePromptLink());
+                .addOrReplace(inlinePromptLink = createInlinePromptLink());
 
             // needs InlinePromptContext to properly initialize
             addOnClickBehaviorTo(inlinePromptLink);
@@ -226,12 +227,14 @@ extends ScalarPanelAbstract {
         scalarModel().getSpecialization().accept(
                 param->{
                     System.err.printf("clear param %s%n", param.getFriendlyName());
+                    this.setupInlinePrompt(); // recreate the param field
+                    target.add(this);
                 },
                 prop->{
-                    System.err.printf("clear prop %s%n", prop.getFriendlyName());
-                    prop.applyValueThenReturnOwner(); //TODO re-route
+                    //System.err.printf("clear prop %s%n", prop.getFriendlyName());
+                    FormExecutorDefault.forProperty(prop)
+                        .executeAndProcessResults(target, null, prop);
                 });
-        target.add(this);
     }
 
 }
