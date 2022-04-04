@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.viewers.jdo.wkt;
+package org.apache.isis.testdomain.viewers.jpa.wkt;
 
 import javax.inject.Inject;
 
@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.debug.xray.XrayEnable;
+import org.apache.isis.commons.internal.os._OsUtil;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket;
@@ -65,6 +66,9 @@ public class TestAppJpaWkt extends SpringBootServletInitializer {
      */
     public static void main(final String[] args) {
         IsisPresets.prototyping();
+
+        _OsUtil.thereCanBeOnlyOne();
+
         SpringApplication.run(new Class[] { TestAppJpaWkt.class }, args);
     }
 

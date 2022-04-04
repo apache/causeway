@@ -101,13 +101,17 @@ public final class ManagedObjects {
     }
 
     /**
-     * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
+     * whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
      * that is, the type is 'identifiable' (aka 'referencable' or 'bookmarkable')
+     * <p>
+     * returns <code>false</code> for non-scalar objects
      */
     public static boolean isIdentifiable(final @Nullable ManagedObject managedObject) {
-        return spec(managedObject)
-                .map(ObjectSpecification::isIdentifiable)
-                .orElse(false);
+        return (managedObject instanceof PackedManagedObject)
+                ? false
+                : spec(managedObject)
+                    .map(ObjectSpecification::isIdentifiable)
+                    .orElse(false);
     }
 
     public static boolean isEntity(final ManagedObject managedObject) {
@@ -296,6 +300,15 @@ public final class ManagedObjects {
             return adapter;
         }
         return ManagedObject.empty(elementSpec);
+    }
+
+    public static ManagedObject nullOrEmptyToDefault(
+            final @NonNull ObjectSpecification elementSpec,
+            final @Nullable ManagedObject adapter,
+            final @NonNull Supplier<Object> pojoDefaultSupplier) {
+        return isNullOrUnspecifiedOrEmpty(adapter)
+            ? ManagedObject.of(elementSpec, Objects.requireNonNull(pojoDefaultSupplier.get()))
+            : adapter;
     }
 
     public static ManagedObject emptyToDefault(

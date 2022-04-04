@@ -38,7 +38,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -78,7 +77,6 @@ extends PanelAbstract<Void, IModel<Void>> {
                 return model.getManagedObject().titleString();
             }
 
-
             @Override
             public String getIdValue(final EntityModel choice) {
                 try {
@@ -97,7 +95,6 @@ extends PanelAbstract<Void, IModel<Void>> {
                     return null;
                 }
             }
-
 
             @Override
             public void query(final String term, final int page, final Response<EntityModel> response) {
@@ -119,14 +116,13 @@ extends PanelAbstract<Void, IModel<Void>> {
             }
 
         };
-        final Select2Choice<EntityModel> breadcrumbChoice = new Select2Choice<>(ID_BREADCRUMBS, entityModel, choiceProvider);
+        final Select2Choice<EntityModel> breadcrumbChoice =
+                new Select2Choice<>(ID_BREADCRUMBS, entityModel, choiceProvider);
 
         breadcrumbChoice.add(
                 new AjaxFormComponentUpdatingBehavior("change"){
 
                     private static final long serialVersionUID = 1L;
-
-                    private transient IsisAppCommonContext commonContext;
 
                     @Override
                     protected void onUpdate(final AjaxRequestTarget target) {
@@ -147,7 +143,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                     }
 
                     private IsisAppCommonContext getCommonContext() {
-                        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+                        return BreadcrumbPanel.this.getCommonContext();
                     }
 
                 });

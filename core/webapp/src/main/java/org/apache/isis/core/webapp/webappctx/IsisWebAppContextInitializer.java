@@ -71,7 +71,7 @@ public class IsisWebAppContextInitializer implements ServletContextInitializer {
     public void onStartup(ServletContext servletContext) throws ServletException {
 
         // onStartup(...) must be a one shot, otherwise ignore with warning
-        if(!oneshot.shoot()) {
+        if(!oneshot.trigger()) {
             log.warn("Spring tries to startup this initializer more than once."
                     + " This is most likely a Spring configuration issue, check your bootstrapping setup.");
             return;

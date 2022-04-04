@@ -24,7 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.string.ScalarTitlePanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.string.ScalarTitleBadgePanel;
 
 import lombok.val;
 
@@ -41,24 +41,25 @@ public class ValueChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
         if (!(model instanceof ScalarModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final ScalarModel scalarModel = (ScalarModel) model;
-        final boolean hasChoices = scalarModel.hasChoices();
+        val scalarModel = (ScalarModel) model;
 
         // autoComplete not supported on values, only references
         // this is because there is no easy way in the ChoiceProvider to convert the list of Ids (strings)
         // into corresponding ObjectAdapterMemento's.
         // see subclasses of ObjectAdapterMementoProviderAbstract
 
-        // final boolean hasAutoComplete = scalarModel.hasAutoComplete();
-        return appliesIf(hasChoices /* || hasAutoComplete */);
+        return appliesIf(scalarModel.getScalarTypeSpec().isValue()
+                && (scalarModel.hasChoices()
+                /* || scalarModel.hasAutoComplete() */
+                        ));
     }
 
     @Override
     public final Component createComponent(final String id, final IModel<?> model) {
-        final ScalarModel scalarModel = (ScalarModel) model;
+        val scalarModel = (ScalarModel) model;
         if(scalarModel.isViewMode()) {
             val valueType = scalarModel.getScalarTypeSpec().getCorrespondingClass();
-            return new ScalarTitlePanel<>(id, scalarModel, valueType);
+            return new ScalarTitleBadgePanel<>(id, scalarModel, valueType);
         } else {
             return new ValueChoicesSelect2Panel(id, scalarModel);
         }

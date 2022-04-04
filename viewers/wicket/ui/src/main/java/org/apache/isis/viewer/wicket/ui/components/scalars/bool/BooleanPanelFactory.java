@@ -16,21 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.string;
+package org.apache.isis.viewer.wicket.ui.components.scalars.bool;
+
+import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
 /**
- * Panel for rendering titles for scalars of any type.
+ * {@link ComponentFactory} for {@link BooleanPanel}.
  */
-public class ScalarTitlePanel<T> extends ScalarPanelTextFieldWithValueSemantics<T> {
+public class BooleanPanelFactory extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ScalarTitlePanel(final String id, final ScalarModel scalarModel, final Class<T> type) {
-        super(id, scalarModel, type);
+    public BooleanPanelFactory() {
+        super(BooleanPanel.class, boolean.class, Boolean.class);
     }
 
+    @Override
+    public Component createComponent(final String id, final ScalarModel scalarModel) {
+        return new BooleanPanel(id, scalarModel);
+    }
 
 }

@@ -34,7 +34,7 @@ extends
     InlinePromptContext getInlinePromptContext();
 
     default boolean isWithinInlinePrompt() {
-        return getPromptStyle().isInlineOrInlineAsIfEdit()
+        return getPromptStyle().isInlineAny()
                 && getInlinePromptContext() != null;
     }
 

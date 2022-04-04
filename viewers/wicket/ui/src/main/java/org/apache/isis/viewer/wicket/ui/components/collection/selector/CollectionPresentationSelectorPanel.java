@@ -28,7 +28,6 @@ import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.common.model.PlacementDirection;
@@ -211,11 +210,6 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         final IsisSelectorEvent selectorEvent =
                 new IsisSelectorEvent(component, CollectionPresentationSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target);
         send(getPage(), Broadcast.EXACT, selectorEvent);
-    }
-
-    private String translate(final String raw) {
-        return getCommonContext().getTranslationService()
-            .translate(TranslationContext.empty(), raw);
     }
 
 }

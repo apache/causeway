@@ -34,8 +34,17 @@ implements ActionPositionFacet {
 
     private final ActionLayout.Position position;
 
-    public ActionPositionFacetAbstract(final ActionLayout.Position position, final FacetHolder holder) {
-        super(type(), holder);
+    protected ActionPositionFacetAbstract(
+            final ActionLayout.Position position,
+            final FacetHolder holder) {
+        this(position, holder, Precedence.DEFAULT);
+    }
+
+    protected ActionPositionFacetAbstract(
+            final ActionLayout.Position position,
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(type(), holder, precedence);
         this.position = position;
     }
 

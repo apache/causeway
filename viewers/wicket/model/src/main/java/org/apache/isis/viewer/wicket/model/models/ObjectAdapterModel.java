@@ -23,12 +23,16 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 
 public interface ObjectAdapterModel
-extends HasRenderingHints, IModel<ManagedObject> {
+extends
+    HasCommonContext,
+    HasRenderingHints,
+    IModel<ManagedObject> {
 
     /**
      * Used as a hint when the {@link #getRenderingHint()} is {@link RenderingHint#PARENTED_TITLE_COLUMN}.

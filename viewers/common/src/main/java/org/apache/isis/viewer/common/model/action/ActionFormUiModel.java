@@ -56,6 +56,11 @@ extends HasTitle, HasActionInteraction {
             return Veto.DEFAULT; // veto, so we don't render the action
         }
 
+        // check whether action owner type is hidden
+        if (getActionOwner().getSpecification().isHidden()) {
+            return Veto.DEFAULT;
+        }
+
         return getAction().isVisible(
                 actionOwner,
                 InteractionInitiatedBy.USER,

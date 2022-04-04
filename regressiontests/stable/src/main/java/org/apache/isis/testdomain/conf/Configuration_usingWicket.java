@@ -63,6 +63,7 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -115,18 +116,11 @@ public class Configuration_usingWicket {
                 + ":scalarName";
 
         public static final String FAVORITE_BOOK_ENTITY_LINK = FAVORITE_BOOK_SCALAR
+                + ":container-fieldFrame:scalarValueInlinePromptLink:container-scalarValue:entityLink"
                 + ":entityIconAndTitle:entityLinkWrapper:entityLink";
 
         public static final String FAVORITE_BOOK_ENTITY_LINK_TITLE = FAVORITE_BOOK_ENTITY_LINK
                 + ":entityTitle";
-
-        //property:scalarTypeContainer:scalarIfRegular:scalarValueContainer]: [Fragment [Component id = scalarValueContainer]] ->
-        //property:scalarTypeContainer:scalarIfRegular:scalarValueContainer:scalarValue]: [TextField [Component id = scalarValue]] -> Bookstore
-        //property:scalarTypeContainer:scalarIfRegular:scalarName]: [Component id = scalarName] -> Name
-        //property:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink]: [WebMarkupContainer [Component id = scalarValueInlinePromptLink]] ->
-        //property:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink:scalarValueInlinePromptLabel]: [Fragment [Component id = scalarValueInlinePromptLabel]] ->
-        //property:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink:scalarValueInlinePromptLabel:scalarValue]: [Component id = scalarValue] -> Bookstore
-        //property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueContainer:scalarValue
 
         public static final String INVENTORY_NAME_PROPERTY = "theme:entityPageContainer:entity:rows:2"
                 + ":rowContents:1"
@@ -135,43 +129,26 @@ public class Configuration_usingWicket {
                 + ":property";
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_LINK = INVENTORY_NAME_PROPERTY
-                + ":scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink";
+                + ":scalarTypeContainer:scalarIfRegular:container-fieldFrame:scalarValueInlinePromptLink";
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_FORM = INVENTORY_NAME_PROPERTY
                 + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_FORM_TEXTFIELD = INVENTORY_NAME_PROPERTY
                 + ":property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
-                + RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId() + ":scalarValue";
+                + RegularFrame.FIELD.getContainerId() + ":"
+                + FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
 
         public static final String INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM = INVENTORY_NAME_PROPERTY
                 + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
 
         public static final String INLINE_PROMPT_FORM_FIELD = ""
                 + "property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
-                + RegularFrame.INPUT_FORMAT_CONTAINER.getContainerId() + ":scalarValue";
+                + RegularFrame.FIELD.getContainerId() + ":"
+                + FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
 
         public static final String INLINE_PROMPT_FORM_OK = INVENTORY_NAME_PROPERTY_EDIT_INLINE_PROMPT_FORM
                 + ":okButton";
-
-
-        //inputForm:property:scalarNameAndValue]: [StringPanel [Component id = scalarNameAndValue]] -> StringPanel: ManagedObject.SimpleManagedObject(specification=ObjectSpecificationDefault@44e816ad[class=java.lang.String,type=VALUE,superclass=Object], pojo=Bookstore)
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer]: [WebMarkupContainer [Component id = scalarTypeContainer]] -> WebMarkupContainer:
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfCompact]: [Component id = scalarIfCompact] -> Label: Bookstore
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular]: [FormGroup [Component id = scalarIfRegular]] -> FormGroup:
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueContainer]: [Fragment [Component id = scalarValueContainer]] -> Fragment:
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueContainer:scalarValue]: [TextField [Component id = scalarValue]] -> TextField: Bookstore
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarName]: [Component id = scalarName] -> Label: Name
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink]: [WebMarkupContainer [Component id = scalarValueInlinePromptLink]] -> WebMarkupContainer:
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink:scalarValueInlinePromptLabel]: [Fragment [Component id = scalarValueInlinePromptLabel]] -> :
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:scalarValueInlinePromptLink:scalarValueInlinePromptLabel:scalarValue]: [Component id = scalarValue] -> Label: Bookstore
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:associatedActionLinksBelow]: [WebMarkupContainer [Component id = associatedActionLinksBelow]] -> WebMarkupContainer:
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:associatedActionLinksRight]: [WebMarkupContainer [Component id = associatedActionLinksRight]] -> WebMarkupContainer:
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:editProperty]: [WebMarkupContainer [Component id = editProperty]] -> WebMarkupContainer:
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:feedback]: [NotificationPanel [Component id = feedback]] -> NotificationPanel:
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:feedback:feedbackul]: [WebMarkupContainer [Component id = feedbackul]] -> :
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:feedback:feedbackul:messages]: [MessageListView [Component id = messages]] -> MessageListView: []
-        //inputForm:property:scalarNameAndValue:scalarTypeContainer:scalarIfRegularInlinePromptForm]: [WebMarkupContainer [Component id = scalarIfRegularInlinePromptForm]] -> WebMarkupContainer:
 
         // --
 
@@ -334,8 +311,10 @@ public class Configuration_usingWicket {
             final IBootstrapSettings settings = new BootstrapSettings();
             settings.setDeferJavascript(false);
             Bootstrap.install(this, settings);
-            setHeaderResponseDecorator(response ->
+            getHeaderResponseDecorators().add(response ->
                 new ResourceAggregator(new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS")));
+            //XXX set to false for less strict testing
+            getDebugSettings().setComponentUseCheck(false);
         }
 
         @Getter

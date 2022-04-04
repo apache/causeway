@@ -31,11 +31,10 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-import lombok.SneakyThrows;
-import lombok.val;
-
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
+import lombok.SneakyThrows;
+import lombok.val;
 
 //tag::class[]
 public class WhereInTheWorldPanel
@@ -106,7 +105,7 @@ extends PanelAbstract<ManagedObject, EntityModel>  {
                     property, ScalarRepresentation.VIEWING,
                     ObjectUiModel.RenderingHint.REGULAR);
         return getComponentFactoryRegistry().createComponent(                      // <.>
-                ComponentType.SCALAR_NAME_AND_VALUE, propertyId, scalarModel);
+                propertyId, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
     }
 //end::createPropertyComponent[]
 

@@ -23,24 +23,16 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -65,6 +57,42 @@ extends ScalarPanelAbstract2 {
     @Override
     protected final Component getValidationFeedbackReceiver() {
         return getFormComponent();
+    }
+
+    // -- FIELD FRAME
+
+    /**
+     * Builds the field frame when in REGULAR format.
+     * <p>Is added to {@link #getRegularFrame()}.
+     */
+    protected MarkupContainer createFieldFrame() {
+        val renderScenario = getRenderScenario();
+        final FieldFragement fieldFragement;
+        switch (renderScenario) {
+        case READONLY:
+            // setup as output-format (no links)
+            fieldFragement = FieldFragement.NO_LINK_VIEWING;
+            break;
+        case CAN_EDIT:
+        case CAN_EDIT_INLINE:
+        case CAN_EDIT_INLINE_VIA_ACTION:
+        case EDITING_WITH_LINK_TO_NESTED:
+            // setup as output-format (with links to edit)
+            fieldFragement = FieldFragement.LINK;
+            break;
+        case EDITING:
+            // setup as input-format
+            fieldFragement = scalarModel().isEditMode()
+                ? FieldFragement.NO_LINK_EDITING // supports additional buttons (clear, ...)
+                : FieldFragement.NO_LINK_VIEWING;
+            break;
+
+        default:
+            throw _Exceptions.unmatchedCase(renderScenario);
+        }
+        return Wkt.fragment(fieldFragement.getContainerId(),
+                fieldFragement.getFragmentId(),
+                this);
     }
 
     // -- FORM COMPONENT
@@ -93,6 +121,8 @@ extends ScalarPanelAbstract2 {
                 .createComponent(id->new FormGroup(id, formComponent));
         formGroup.add(formComponent);
 
+        formGroup.add(fieldFrame = createFieldFrame());
+
         formComponent.setRequired(scalarModel.isRequired());
         if(scalarModel.isRequired()
                 && scalarModel.isEnabled()) {
@@ -101,7 +131,26 @@ extends ScalarPanelAbstract2 {
 
         formGroup.add(createScalarNameLabel(ID_SCALAR_NAME, friendlyNameModel));
 
-        formComponent.add(createValidator(scalarModel));
+        formComponent.add(_Util.createValidatorFor(scalarModel));
+
+        val renderScenario = getRenderScenario();
+
+        //XXX debug
+        Wkt.labelAdd(fieldFrame, "debugLabel", String.format("%s", renderScenario.name()));
+
+        if(renderScenario.isReadonly()) {
+            fieldFrame.add(FieldFrame.SCALAR_VALUE_CONTAINER
+                    .createComponent(this::createComponentForOutput));
+        } else if(renderScenario.isCanEditAny()) {
+
+            // this results in a link created;
+            // link stuff is handled later in ScalarPanelAbstract2.setupInlinePrompt
+
+        } else {
+            getInputFragmentType()
+            .ifPresent(inputFragmentType->
+                fieldFrame.add(inputFragmentType.createFragment(this, formComponent)));
+        }
 
         onFormGroupCreated(formGroup);
 
@@ -116,80 +165,16 @@ extends ScalarPanelAbstract2 {
                 .createComponent(this::createComponentForOutput);
     }
 
-    /**
-     * Builds the component to render the model when in COMPACT format.
-     * <p>
-     * The (textual) default implementation uses a {@link Label}.
-     * However, it may be overridden if required.
-     */
-    protected Component createComponentForOutput(final String id) {
-
-        return Wkt.labelAdd(
-                CompactFragment.LABEL.createFragment(this),
-                id,
-                ()->{
-                    val propertyNegotiationModel = (PropertyNegotiationModel)scalarModel().proposedValue();
-                    return propertyNegotiationModel.isCurrentValueAbsent().booleanValue()
-                            ? ""
-                            : propertyNegotiationModel
-                                .getValueAsHtml().getValue();
-                                //.getValueAsParsableText().getValue();
-                });
-    }
-
-
     // -- HOOKS
 
     protected Optional<InputFragment> getInputFragmentType() {
         return Optional.empty();
     }
 
-    protected void onFormGroupCreated(final FormGroup formGroup) {
-        if(scalarModel().isViewMode()
-                //TODO remove this non intuitive logic
-                && getFormatModifiers().contains(FormatModifier.MARKUP)) {
-            formGroup.add(RegularFrame.INPUT_FORMAT_CONTAINER
-                    .createComponent(this::createComponentForOutput));
-            return;
-        }
-        getInputFragmentType()
-            .ifPresent(inputFragmentType->
-                formGroup.add(inputFragmentType.createFragment(this, getFormComponent())));
-    }
-
-    protected IValidator<Object> createValidator(final ScalarModel scalarModel) {
-        return new IValidator<Object>() {
-            private static final long serialVersionUID = 1L;
-            private transient IsisAppCommonContext commonContext;
-
-            @Override
-            public void validate(final IValidatable<Object> validatable) {
-                final ManagedObject proposedAdapter = objectManager().adapt(validatable.getValue());
-                final String reasonIfAny = scalarModel.validate(proposedAdapter);
-                if (reasonIfAny != null) {
-                    final ValidationError error = new ValidationError();
-                    error.setMessage(reasonIfAny);
-                    validatable.error(error);
-                }
-            }
-
-            private ObjectManager objectManager() {
-                return getCommonContext().getObjectManager();
-            }
-
-            private IsisAppCommonContext getCommonContext() {
-                return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
-            }
-
-        };
-    }
-
-    @Override
-    protected InlinePromptConfig getInlinePromptConfig() {
-        return getFormComponent()!=null
-                ? InlinePromptConfig.supportedAndHide(getFormComponent())
-                : InlinePromptConfig.notSupported();
-    }
+    /**
+     * Optional hook, to eg. add additional components (like Blob which adds preview image)
+     */
+    protected void onFormGroupCreated(final FormGroup formGroup) {};
 
     @Override
     protected void onInitializeNotEditable() {
@@ -261,5 +246,7 @@ extends ScalarPanelAbstract2 {
         WktTooltips.clearTooltip(getFormComponent());
         WktTooltips.clearTooltip(inlinePromptLink);
     }
+
+
 
 }

@@ -33,9 +33,13 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.schema.common.v2.ValueType;
 
 /**
  * Indicates that this class has value semantics.
@@ -70,6 +74,8 @@ extends
 
     /** no qualifiers allowed on the default semantics provider*/
     Optional<DefaultsProvider<T>> selectDefaultDefaultsProvider();
+    Optional<DefaultsProvider<T>> selectDefaultsProviderForParameter(final ObjectActionParameter param);
+    Optional<DefaultsProvider<T>> selectDefaultsProviderForProperty(final OneToOneAssociation prop);
 
     // -- PARSER
 
@@ -140,6 +146,19 @@ extends
     default Renderer<T> selectRendererForPropertyElseFallback(final OneToOneAssociation prop) {
         return selectRendererForProperty(prop)
                 .orElseGet(()->fallbackRenderer(prop.getFeatureIdentifier()));
+    }
+
+    // -- COMPOSITE VALUE SUPPORT
+
+    Optional<ObjectAction> selectCompositeValueMixinForParameter(
+            final ParameterNegotiationModel parameterNegotiationModel,
+            final int paramIndex);
+    Optional<ObjectAction> selectCompositeValueMixinForProperty(final ManagedProperty managedProperty);
+
+    default boolean isCompositeValueType() {
+        return selectDefaultSemantics()
+        .map(valueSemantics->valueSemantics.getSchemaValueType()==ValueType.COMPOSITE)
+        .orElse(false);
     }
 
 }

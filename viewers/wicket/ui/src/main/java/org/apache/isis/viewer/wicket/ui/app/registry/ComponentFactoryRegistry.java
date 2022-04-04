@@ -78,7 +78,7 @@ public interface ComponentFactoryRegistry {
     Component addOrReplaceComponent(MarkupContainer markupContainer, ComponentType componentType, IModel<?> model);
 
     /**
-     * {@link #createComponent(ComponentType, String, IModel) Creates} the
+     * {@link #createComponent(String, ComponentType, IModel) Creates} the
      * relevant {@link Component} for the provided arguments, and adds to the
      * provided {@link MarkupContainer}; the wicket id is as specified.
      *
@@ -103,8 +103,6 @@ public interface ComponentFactoryRegistry {
      * <p>
      * If none can be found, will fail fast.
      */
-    Component createComponent(ComponentType componentType, String id, IModel<?> model);
-
-
+    Component createComponent(String id, ComponentType componentType, IModel<?> model);
 
 }

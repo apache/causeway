@@ -40,6 +40,7 @@ import org.apache.isis.viewer.common.model.PlacementDirection;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
+import org.apache.isis.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
 import lombok.NonNull;
 import lombok.val;
@@ -61,8 +62,11 @@ public final class WktLinks {
         val link = linkAndLabel.getUiComponent();
         val action = linkAndLabel.getManagedAction().getAction();
 
-        WktTooltips.addTooltip(link, link instanceof ActionLink
-                    && _Strings.isNotEmpty(((ActionLink) link).getReasonDisabledIfAny())
+        val hasDisabledReason = link instanceof ActionLink
+                ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
+                : false;
+
+        WktTooltips.addTooltip(link, hasDisabledReason
                 ? ((ActionLink) link).getReasonDisabledIfAny()
                 : linkAndLabel.getDescription().orElse(null));
 
@@ -76,9 +80,6 @@ public final class WktLinks {
 
         if (action.getSemantics().isAreYouSure()) {
             if(action.getParameterCount()==0) {
-                val hasDisabledReason = link instanceof ActionLink
-                        ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
-                        : false;
                 if (!hasDisabledReason) {
                     val translationService = linkAndLabel.getAction().getMetaModelContext()
                             .getTranslationService();
@@ -90,6 +91,10 @@ public final class WktLinks {
             // ensure links receive the danger style
             // don't care if expressed twice
             WktDecorators.getDanger().decorate(link);
+        } else {
+            Wkt.cssAppend(link, linkAndLabel.isRenderOutlined()
+                    ? ButtonSemantics.SECONDARY.buttonOutlineCss()
+                    : ButtonSemantics.SECONDARY.buttonDefaultCss());
         }
 
         linkAndLabel

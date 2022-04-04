@@ -27,6 +27,7 @@ import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -64,34 +65,23 @@ extends PanelAbstract<ManagedObject, ActionModel> {
             throw new IllegalStateException("model has no parameters!");
         }
 
-
-        WebMarkupContainer header = new WebMarkupContainer(ID_HEADER) {
-            private static final long serialVersionUID = 5410724436024228792L;
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(showHeader);
-            }
-        };
+        final WebMarkupContainer header =
+                Wkt.containerWithVisibility(ID_HEADER, ActionParametersPanel.this::isShowHeader);
 
         addOrReplace(header);
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, actionModel);
         getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE,
-                actionModel
-                .getParentUiModel());
+                actionModel.getParentUiModel());
 
         Wkt.labelAdd(header, ID_ACTION_NAME, ()->getActionModel().getFriendlyName());
     }
-
 
     /**
      * Gives a chance to hide the header part of this action panel,
      * e.g. when shown in an action prompt
      */
-    @Setter private boolean showHeader = true;
-
-
+    @Setter @Getter
+    private boolean showHeader = true;
 
 }

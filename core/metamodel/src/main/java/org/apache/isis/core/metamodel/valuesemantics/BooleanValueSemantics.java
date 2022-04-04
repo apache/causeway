@@ -22,9 +22,12 @@ import java.util.function.UnaryOperator;
 
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -49,6 +52,9 @@ implements
     DefaultsProvider<Boolean>,
     Parser<Boolean>,
     Renderer<Boolean> {
+
+    @Autowired(required = false)
+    private TranslationService translationService;
 
     @Override
     public Class<Boolean> getCorrespondingClass() {
@@ -82,7 +88,10 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final Boolean value) {
-        return render(value, v->v.booleanValue() ? "True" : "False");
+        val title = render(value, v->v.booleanValue() ? "True" : "False");
+        return translationService!=null
+                ? translationService.translate(TranslationContext.empty(), title)
+                : title;
     }
 
     // -- PARSER
@@ -121,5 +130,10 @@ implements
     public Can<Boolean> getExamples() {
         return Can.of(Boolean.TRUE, Boolean.FALSE);
     }
+
+    //XXX not localized yet - maybe can be done at a more fundamental level - or replace with universal symbols
+//  return BooleanModel.forScalarModel(scalarModel())
+//          .asStringModel("(not set)", "Yes", "No");
+
 
 }

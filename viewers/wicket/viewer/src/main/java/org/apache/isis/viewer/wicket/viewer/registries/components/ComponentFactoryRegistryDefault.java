@@ -133,7 +133,7 @@ implements ComponentFactoryRegistry {
 
     @Override
     public Component addOrReplaceComponent(final MarkupContainer markupContainer, final String id, final ComponentType componentType, final IModel<?> model) {
-        final Component component = createComponent(componentType, id, model);
+        final Component component = createComponent(id, componentType, model);
         markupContainer.addOrReplace(component);
         return component;
     }
@@ -145,7 +145,7 @@ implements ComponentFactoryRegistry {
     }
 
     @Override
-    public Component createComponent(final ComponentType componentType, final String id, final IModel<?> model) {
+    public Component createComponent(final String id, final ComponentType componentType, final IModel<?> model) {
         return findComponentFactoryElseFail(componentType, model)
                 .createComponent(id, model);
     }

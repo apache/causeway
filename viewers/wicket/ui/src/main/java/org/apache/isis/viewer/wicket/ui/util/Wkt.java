@@ -27,12 +27,12 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -42,13 +42,17 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -66,6 +70,7 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.commons.internal.functions._Functions.SerializableFunction;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 import lombok.NonNull;
@@ -77,6 +82,7 @@ import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.jquery.Key;
 
 /**
@@ -90,9 +96,9 @@ public class Wkt {
         return component;
     }
 
-    public <T extends Behavior> T add(final MarkupContainer container, final T component) {
-        container.add((Behavior)component);
-        return component;
+    public <T extends Behavior> T add(final Component component, final T behavior) {
+        component.add((Behavior)behavior);
+        return behavior;
     }
 
     // -- ATTRIBUTES
@@ -189,15 +195,15 @@ public class Wkt {
     }
 
     public Behavior behaviorAddOnClick(
-            final MarkupContainer markupContainer,
+            final Component component,
             final SerializableConsumer<AjaxRequestTarget> onClick) {
-        return add(markupContainer, behaviorOnClick(onClick));
+        return add(component, behaviorOnClick(onClick));
     }
 
     public Behavior behaviorAddFireOnEscapeKey(
-            final MarkupContainer markupContainer,
+            final Component component,
             final SerializableConsumer<AjaxRequestTarget> onRespond) {
-        return add(markupContainer, behaviorFireOnEscapeKey(onRespond));
+        return add(component, behaviorFireOnEscapeKey(onRespond));
     }
 
     public void behaviorAddReplaceDisabledTagWithReadonlyTag(final @Nullable Component component) {
@@ -278,6 +284,25 @@ public class Wkt {
 
     // -- CHECKBOX
 
+    /**
+     * In correspondence with ScalarPanelFormFieldAbstract.html
+     * <wicket:fragment wicket:id="fragment-prompt-checkboxYes">
+     */
+    final String fragment_prompt_checkboxYes = "<label class=\"fs-4\" style=\"color: green;\">"
+            + "<i class=\"fa-regular fa-check-square\"></i></label>";
+    /**
+     * In correspondence with ScalarPanelFormFieldAbstract.html
+     * <wicket:fragment wicket:id="fragment-prompt-checkboxNo">
+     */
+    final String fragment_prompt_checkboxNo = "<label class=\"fs-4\">"
+            + "<i class=\"fa-regular fa-square\"></i></label>";
+    /**
+     * In correspondence with ScalarPanelFormFieldAbstract.html
+     * <wicket:fragment wicket:id="fragment-prompt-checkboxIntermediate">
+     */
+    final String fragment_prompt_checkboxIntermediate = "<label class=\"fs-4\" style=\"color: silver;\">"
+            + "<i class=\"fa-regular fa-square-minus\"></i></label>";
+
     public static CheckBoxX checkbox(
             final String id,
             final IModel<Boolean> checkedModel,
@@ -294,8 +319,9 @@ public class Wkt {
         }
         .withSize(size)
         .withEnclosedLabel(false)
-        .withIconChecked("<i class='fa fa-fw fa-check'></i>")
-        .withIconNull("<i class='fa-solid fa-square-question'></i>")
+        .withIconChecked(fragment_prompt_checkboxYes)
+        .withIconNull(fragment_prompt_checkboxIntermediate)
+        .withIconUnchecked(fragment_prompt_checkboxNo)
         .withThreeState(!required);
 
         final CheckBoxX checkBox = new CheckBoxX(id, checkedModel) {
@@ -417,30 +443,90 @@ public class Wkt {
         return new ResourceLinkVolatile(id, resourceModel);
     }
 
+    // -- FILE UPLOAD
+
+    public FileUploadField fileUploadField(
+            final String id,
+            final String initialCaption,
+            final IModel<List<FileUpload>> model) {
+        val fileUploadField = new BootstrapFileInputField(id, model);
+        fileUploadField.getConfig()
+            .maxFileCount(1)
+            .mainClass("input-group-sm")
+            .initialCaption(initialCaption)
+            .captionClass("form-control-sm")
+            .showUpload(false)
+            ;
+        return fileUploadField;
+    }
+
+    // -- FONT AWESOME
+
+    public String faIcon(final String faClasses) {
+        return String.format("<i class=\"%s\"></i>", faClasses);
+    }
+
     // -- FRAGMENT
 
     /**
-     * @param container - The component whose markup contains the fragment's markup
      * @param id - The component id
      * @param fragmentId - The id of the associated markup fragment
+     * @param markupProvider - The component whose markup contains the fragment's markup
      */
-    public Fragment fragmentAdd(final MarkupContainer container, final String id, final String fragmentId) {
-        return new Fragment(id, fragmentId, container);
+    public Fragment fragment(final String id, final String fragmentId, final MarkupContainer markupProvider) {
+        return new Fragment(id, fragmentId, markupProvider);
+    }
+
+    public Fragment fragmentDebug(final String id, final String fragmentId, final MarkupContainer markupProvider) {
+        return new Fragment(id, fragmentId, markupProvider) {
+            private static final long serialVersionUID = 1L;
+            @Override public MarkupContainer add(final Component... children) {
+                for(var child:children) {
+
+                    System.err.printf("add %s -> %s %n", this.getId(), child.getId());
+                }
+                return super.add(children); }
+            @Override public MarkupContainer addOrReplace(final Component... children) {
+                for(var child:children) {
+                    System.err.printf("addOrReplace %s -> %s %n", this.getId(), child.getId());
+                }
+                return super.addOrReplace(children); }
+        };
     }
 
     /**
-     * @param container - The component whose markup contains the fragment's markup
      * @param id - The component id
      * @param fragmentId - The id of the associated markup fragment
+     * @param markupProvider - The component whose markup contains the fragment's markup
      */
-    public Fragment fragmentAddNoTab(final MarkupContainer container, final String id, final String fragmentId) {
-        return new Fragment(id, fragmentId, container) {
+    public Fragment fragmentNoTab(final String id, final String fragmentId, final MarkupContainer markupProvider) {
+        return new Fragment(id, fragmentId, markupProvider) {
             private static final long serialVersionUID = 1L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
-                tag.put("tabindex", "-1");
-            }
-        };
+                tag.put("tabindex", "-1");}};
+    }
+
+    /**
+     * @param container - The component to add the fragment to
+     * @param id - The component id
+     * @param fragmentId - The id of the associated markup fragment
+     * @param markupProvider - The component whose markup contains the fragment's markup
+     */
+    public Fragment fragmentAdd(final MarkupContainer container,
+            final String id, final String fragmentId, final MarkupContainer markupProvider) {
+        return add(container, fragment(id, fragmentId, markupProvider));
+    }
+
+    /**
+     * @param container - The component to add the fragment to
+     * @param id - The component id
+     * @param fragmentId - The id of the associated markup fragment
+     * @param markupProvider - The component whose markup contains the fragment's markup
+     */
+    public Fragment fragmentAddNoTab(final MarkupContainer container,
+            final String id, final String fragmentId, final MarkupContainer markupProvider) {
+        return add(container, fragmentNoTab(id, fragmentId, markupProvider));
     }
 
     // -- IMAGE
@@ -508,75 +594,43 @@ public class Wkt {
 
     // -- LINK
 
-    public AjaxLink<Void> link(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
-        return new AjaxLink<Void>(id) {
-            private static final long serialVersionUID = 1L;
-            @Override public void onClick(final AjaxRequestTarget target) {
-                onClick.accept(target);
-            }
-            @Override protected void onComponentTag(final ComponentTag tag) {
-                super.onComponentTag(tag);
-                fixDisabledState(this, tag);
-            }
-        };
+    public AjaxLinkNoPropagate link(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return new AjaxLinkNoPropagate(id, onClick);
     }
 
-    /**
-     * MOVED over from Wicket 8 - potentially no longer required
-     * <p>
-     * HACK issue #79: wicket changes tag name if component wasn't enabled
-     *
-     * @param component the component to fix
-     * @param tag       the component tag
-     * @deprecated since Wicket 7.0: doesn't mangle the link/button's markup anymore
-     */
-    @Deprecated
-    public static void fixDisabledState(final Component component, final ComponentTag tag) {
-        if (!component.isEnabledInHierarchy()) {
-            if (component instanceof AbstractLink) {
-                tag.setName("a");
-            } else if (component instanceof Button) {
-                tag.setName("button");
-            } else {
-                if (tag.getAttribute("value") != null) {
-                    tag.setName("input");
-                } else {
-                    tag.setName("button");
-                }
-            }
-
-            tag.put("disabled", "disabled");
-        }
-    }
-
-    public AjaxLink<Void> linkAdd(
+    public AjaxLinkNoPropagate linkAdd(
             final MarkupContainer container,
             final String id,
             final SerializableConsumer<AjaxRequestTarget> onClick) {
         return add(container, link(id, onClick));
     }
 
-    //    public ActionLink linkAdd(final MarkupContainer container, final String id, final LinkAndLabel linkAndLabel) {
-    //        val component = linkAndLabel.getUiComponent();
-    //        container.addOrReplace(component);
-    //        return (ActionLink) component;
-    //    }
-    //
-    //    public Link<Void> linkAdd(
-    //            final MarkupContainer container,
-    //            final String linkId,
-    //            final String labelId,
-    //            final String linkName) {
-    //        val link = new Link<Void>(linkId) {
-    //            private static final long serialVersionUID = 1L;
-    //            @Override
-    //            public void onClick() {
-    //            }
-    //        };
-    //        container.addOrReplace(link);
-    //        Wkt.labelAdd(link, labelId, linkName);
-    //        return link;
-    //    }
+    /** renders plain HTML; useful in combination with font-awesome icons */
+    public AjaxLinkNoPropagate linkWithBody(final String id, final String bodyHtml,
+            final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return new AjaxLinkNoPropagate(id, onClick) {
+            private static final long serialVersionUID = 1L;
+            @Override public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
+                replaceComponentTagBody(markupStream, openTag, bodyHtml); }
+            @Override protected void onComponentTag(final ComponentTag tag)   {
+                super.onComponentTag(tag);
+                tag.setType(TagType.OPEN); }
+        };
+    }
+
+    /** renders plain HTML; useful in combination with font-awesome icons */
+    public AjaxLinkNoPropagate linkAddWithBody(
+            final MarkupContainer container,
+            final String id, final String bodyHtml,
+            final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return add(container, linkWithBody(id, bodyHtml, onClick));
+    }
+
+    /** renders plain HTML; useful in combination with font-awesome icons */
+    public AjaxLinkNoPropagate linkAddWithBody(final RepeatingView rv, final String bodyHtml,
+            final SerializableConsumer<AjaxRequestTarget> onClick) {
+        return linkAddWithBody(rv, rv.newChildId(), bodyHtml, onClick);
+    }
 
     // -- LIST VIEW
 
@@ -618,6 +672,16 @@ public class Wkt {
             final IModel<? extends List<T>> listModel,
                     final SerializableConsumer<ListItem<T>> itemPopulator) {
         return add(container, listView(id, listModel, itemPopulator));
+    }
+
+    // -- REPEATING VIEW
+
+    public RepeatingView repeatingView(final String id) {
+        return new RepeatingView(id);
+    }
+
+    public RepeatingView repeatingViewAdd(final MarkupContainer container, final String id) {
+        return add(container, repeatingView(id));
     }
 
     // -- TABLES
@@ -800,5 +864,35 @@ public class Wkt {
             formComponent.error(error);
         }
     }
+
+    // -- DISABLE WORKAROUND
+
+    /**
+     * MOVED over from Wicket 8 - potentially no longer required
+     * <p>
+     * HACK issue #79: wicket changes tag name if component wasn't enabled
+     *
+     * @param component the component to fix
+     * @param tag       the component tag
+     * @deprecated since Wicket 7.0: doesn't mangle the link/button's markup anymore
+     */
+    @Deprecated
+    public static void fixDisabledState(final Component component, final ComponentTag tag) {
+        if (!component.isEnabledInHierarchy()) {
+            if (component instanceof AbstractLink) {
+                tag.setName("a");
+            } else if (component instanceof Button) {
+                tag.setName("button");
+            } else {
+                if (tag.getAttribute("value") != null) {
+                    tag.setName("input");
+                } else {
+                    tag.setName("button");
+                }
+            }
+            tag.put("disabled", "disabled");
+        }
+    }
+
 
 }

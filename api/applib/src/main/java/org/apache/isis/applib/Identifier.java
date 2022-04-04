@@ -238,17 +238,20 @@ implements
     public boolean isEqualTo(final Identifier other) {
         return Objects.equals(this.className, other.className)
                 && Objects.equals(this.memberLogicalName, other.memberLogicalName)
-                && this.memberParameterClassNames.equals(other.memberParameterClassNames);
+                && this.memberParameterClassNames.equals(other.memberParameterClassNames)
+                && this.parameterIndex == other.parameterIndex;
     }
 
     @Override
     public int hashCode() {
-        return toString().hashCode();
+        return fullIdentityString.hashCode();
     }
 
     @Override
     public String toString() {
-        return fullIdentityString;
+        return parameterIndex>=0
+                ? String.format("%s[%d]", fullIdentityString, parameterIndex)
+                : fullIdentityString;
     }
 
     // -- HELPER
@@ -310,9 +313,6 @@ implements
     private static Can<String> naturalNames(final Can<String> names) {
         return names.map(Identifier::naturalName);
     }
-
-
-
 
 }
 

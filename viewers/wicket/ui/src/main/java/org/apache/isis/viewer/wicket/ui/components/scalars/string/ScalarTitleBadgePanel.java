@@ -16,36 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars;
-
-import java.util.EnumSet;
+package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
 import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-public class ScalarPanelTextFieldWithComposite<T>
-extends ScalarPanelTextFieldWithValueSemantics<T> {
+/**
+ * Panel for rendering titles for scalars of any type.
+ * <p>
+ * Most prominently this is used for {@link Enum} values.
+ */
+public class ScalarTitleBadgePanel<T> extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;
 
-    public ScalarPanelTextFieldWithComposite(
-            final String id,
-            final ScalarModel scalarModel,
-            final Class<T> valueType) {
-
-        super(id, scalarModel, valueType);
-    }
-
-    @Override
-    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
-        modifiers.add(FormatModifier.COMPOSITE);
+    public ScalarTitleBadgePanel(final String id, final ScalarModel scalarModel, final Class<T> type) {
+        super(id, scalarModel, type);
     }
 
     @Override
     protected Component createComponentForOutput(final String id) {
-        return new MarkupComponent(id, scalarModel());
+        return CompactFragment.BADGE.createFragment(id, this, scalarValueId->
+            Wkt.label(scalarValueId, this::obtainOutputFormat));
     }
 
 }

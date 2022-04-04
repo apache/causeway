@@ -21,22 +21,30 @@ package org.apache.isis.viewer.wicket.ui.validation;
 import org.apache.wicket.validation.IValidator;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-
-import lombok.Getter;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
 
 /**
- * Provides the <em>common context</em> for all implementing sub-classes.
+ * Provides the <em>common context</em> for implementing sub-classes.
  * @since 2.0
  *
  */
-public abstract class ValidatorBase<T> implements IValidator<T> {
+public abstract class ValidatorBase<T>
+implements
+    HasCommonContext,
+    IValidator<T> {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter protected final transient IsisAppCommonContext commonContext;
+    private transient IsisAppCommonContext commonContext;
 
-    protected ValidatorBase(IsisAppCommonContext commonContext) {
+    protected ValidatorBase(final IsisAppCommonContext commonContext) {
         this.commonContext = commonContext;
+    }
+
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
 
 }

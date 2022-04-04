@@ -53,7 +53,6 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.config.viewer.web.DialogMode;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
@@ -78,14 +77,13 @@ import org.apache.isis.viewer.wicket.ui.util.FontAwesomeCssReferenceWkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 import de.agilecoders.wicket.core.Bootstrap;
 // import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
@@ -216,7 +214,7 @@ implements ActionPromptProvider {
      * @return The container that should be used as a page header/navigation bar
      */
     protected MarkupContainer createPageHeader(final String id) {
-        Component header = getComponentFactoryRegistry().createComponent(ComponentType.HEADER, id, null);
+        Component header = getComponentFactoryRegistry().createComponent(id, ComponentType.HEADER, null);
         return (MarkupContainer) header;
     }
 
@@ -227,7 +225,7 @@ implements ActionPromptProvider {
      * @return The container that should be used as a page header/navigation bar
      */
     protected MarkupContainer createPageFooter(final String id) {
-        Component footer = getComponentFactoryRegistry().createComponent(ComponentType.FOOTER, id, null);
+        Component footer = getComponentFactoryRegistry().createComponent(id, ComponentType.FOOTER, null);
         return (MarkupContainer) footer;
     }
 
@@ -372,7 +370,7 @@ implements ActionPromptProvider {
 
         final Component bookmarks = getBookmarkedPagesModel()
             .map(bm->getComponentFactoryRegistry()
-                            .createComponent(ComponentType.BOOKMARKED_PAGES, ID_BOOKMARKED_PAGES, bm))
+                            .createComponent(ID_BOOKMARKED_PAGES, ComponentType.BOOKMARKED_PAGES, bm))
             .orElseGet(()->new EmptyPanel(ID_BOOKMARKED_PAGES).setVisible(false));
 
         container.add(bookmarks);
@@ -437,28 +435,25 @@ implements ActionPromptProvider {
             final BeanSort sort) {
 
         switch (promptStyle) {
-        case AS_CONFIGURED:
-        case DIALOG:
-        case INLINE:
-        case INLINE_AS_IF_EDIT:
-        default:
-            final DialogMode dialogMode =
-                    sort.isManagedBean()
-                            ? getCommonContext().getConfiguration().getViewer().getWicket().getDialogModeForMenu()
-                            : getCommonContext().getConfiguration().getViewer().getWicket().getDialogMode();
-            switch (dialogMode) {
-            case SIDEBAR:
-                return actionPromptSidebar;
-            case MODAL:
-            default:
-                return actionPromptModalWindow;
-            }
         case DIALOG_SIDEBAR:
             return actionPromptSidebar;
         case DIALOG_MODAL:
             return actionPromptModalWindow;
+        default:
+            // fall through
         }
 
+        val dialogMode =
+                sort.isManagedBean()
+                        ? getCommonContext().getConfiguration().getViewer().getWicket().getDialogModeForMenu()
+                        : getCommonContext().getConfiguration().getViewer().getWicket().getDialogMode();
+        switch (dialogMode) {
+        case SIDEBAR:
+            return actionPromptSidebar;
+        case MODAL:
+        default:
+            return actionPromptModalWindow;
+        }
     }
 
     @Override

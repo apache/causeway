@@ -22,7 +22,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -49,8 +48,8 @@ extends FormAbstract<ManagedObject>{
     protected OkCancelForm(final String id, final WicketViewerSettings settings, final IModel<ManagedObject> model) {
         super(id, model);
         this.settings = settings;
-        okButton = Wkt.buttonAddOk(this, ID_OK_BUTTON, new ResourceModel("okLabel"), settings, this::onOkSubmitted);
-        cancelButton = Wkt.buttonAdd(this, ID_CANCEL_BUTTON, new ResourceModel("cancelLabel"), (button, target)->{
+        okButton = Wkt.buttonAddOk(this, ID_OK_BUTTON, ()->translate("OK"), settings, this::onOkSubmitted);
+        cancelButton = Wkt.buttonAdd(this, ID_CANCEL_BUTTON, ()->translate("Cancel"), (button, target)->{
             onCancelSubmitted(target);
         });
         configureOkButton(okButton);

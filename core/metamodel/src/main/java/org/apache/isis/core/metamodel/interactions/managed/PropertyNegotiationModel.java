@@ -62,7 +62,9 @@ public class PropertyNegotiationModel implements ManagedValue {
 
         val currentValue = managedProperty.getPropertyValue();
         val defaultValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(currentValue)
-            ? propMeta.getDefault(managedProperty.getOwner())
+            ? propMeta.isMandatory()
+                    ? propMeta.getDefault(managedProperty.getOwner())
+                    : ManagedObjects.nullToEmpty(getElementType(), currentValue)
             : currentValue;
 
         proposedValue = _Bindables.forValue(defaultValue);

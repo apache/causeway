@@ -39,7 +39,6 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_HEADER = "header";
-
     private static final String ID_PROPERTY_NAME = "propertyName";
 
     /**
@@ -62,14 +61,14 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
     protected void onConfigure() {
         super.onConfigure();
 
-        buildGui(getScalarModel());
+        buildGui(scalarModel());
     }
 
     private void buildGui(final ScalarModel scalarModel) {
         buildGuiForParameters(scalarModel);
     }
 
-    ScalarPropertyModel getScalarModel() {
+    ScalarPropertyModel scalarModel() {
         return super.getModel();
     }
 
@@ -82,10 +81,10 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
 
         WebMarkupContainer header = addHeader();
 
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, getScalarModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, scalarModel());
         getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentUiModel());
 
-        Wkt.labelAdd(header, ID_PROPERTY_NAME, getScalarModel()::getFriendlyName)
+        Wkt.labelAdd(header, ID_PROPERTY_NAME, scalarModel()::getFriendlyName)
             .setEscapeModelStrings(true);
     }
 

@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class ActionPositionFacetFallback extends ActionPositionFacetAbstract {
 
     public ActionPositionFacetFallback(final FacetHolder holder) {
-        super(ActionLayout.Position.BELOW, holder);
+        super(ActionLayout.Position.BELOW, holder, Precedence.FALLBACK);
     }
 
 }

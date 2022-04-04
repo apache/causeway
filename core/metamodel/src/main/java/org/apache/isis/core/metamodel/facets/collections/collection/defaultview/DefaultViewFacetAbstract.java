@@ -21,13 +21,22 @@ package org.apache.isis.core.metamodel.facets.collections.collection.defaultview
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
-public class DefaultViewFacetAbstract extends SingleStringValueFacetAbstract implements DefaultViewFacet {
+public class DefaultViewFacetAbstract
+extends SingleStringValueFacetAbstract
+implements DefaultViewFacet {
 
     public static final Class<DefaultViewFacet> type() {
         return DefaultViewFacet.class;
     }
 
-    public DefaultViewFacetAbstract(final String value, final FacetHolder holder) {
-        super(type(), holder, value);
+    protected DefaultViewFacetAbstract(final String value, final FacetHolder holder) {
+        this(value, holder, Precedence.DEFAULT);
+    }
+
+    protected DefaultViewFacetAbstract(
+            final String value,
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(type(), holder, value, precedence);
     }
 }

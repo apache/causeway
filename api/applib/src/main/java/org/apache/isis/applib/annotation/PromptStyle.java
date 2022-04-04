@@ -71,7 +71,7 @@ public enum PromptStyle {
      *     If the property is editable, then this attribute is ignored (and the action is treated as having a prompt style of {@link #INLINE}).
      * </li>
      * <li>
-     *     If applied to a property, then is the property's prompt style is simply treated as {@link #INLINE}.
+     *     If applied to a property, then the property's prompt style is simply treated as {@link #INLINE}.
      * </li>
      * </ul>
      * </p>
@@ -83,9 +83,9 @@ public enum PromptStyle {
      * annotations or superclasses/interfaces).
      */
     NOT_SPECIFIED;
-    public boolean isDialog() { return this == DIALOG || this == DIALOG_MODAL || this == DIALOG_SIDEBAR; }
+    public boolean isDialogAny() { return this == DIALOG || this == DIALOG_MODAL || this == DIALOG_SIDEBAR; }
     public boolean isInline() { return this == INLINE; }
     public boolean isInlineAsIfEdit() { return this == INLINE_AS_IF_EDIT; }
-    public boolean isInlineOrInlineAsIfEdit() { return this == INLINE || this == INLINE_AS_IF_EDIT; }
+    public boolean isInlineAny() { return this == INLINE || this == INLINE_AS_IF_EDIT; }
 
 }

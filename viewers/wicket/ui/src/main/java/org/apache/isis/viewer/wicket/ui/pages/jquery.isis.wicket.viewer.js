@@ -207,6 +207,11 @@ $(function() {
 	    });
 	}
 	$(document, '.wkt-component-with-tooltip').on('click', hidePopover);
+	
+	/* stop event bubbling on html links that have a container with onClick event already */
+	$('.no-click-bubbling').click(function(event){
+	    event.stopImmediatePropagation();
+	});
 
 /*
     $('.editing .editable').parent().hover(function () {
