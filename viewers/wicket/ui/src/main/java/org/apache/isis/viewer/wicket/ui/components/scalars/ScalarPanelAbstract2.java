@@ -221,17 +221,14 @@ extends ScalarPanelAbstract {
         Wkt.focusOnMarkerAttribute(getFormFrame(), target);
     }
 
-    //XXX WIP
     private void onClearFieldButtonClick(final AjaxRequestTarget target) {
         scalarModel().proposedValue().clear();
         scalarModel().getSpecialization().accept(
                 param->{
-                    System.err.printf("clear param %s%n", param.getFriendlyName());
                     this.setupInlinePrompt(); // recreate the param field
                     target.add(this);
                 },
                 prop->{
-                    //System.err.printf("clear prop %s%n", prop.getFriendlyName());
                     FormExecutorDefault.forProperty(prop)
                         .executeAndProcessResults(target, null, prop);
                 });

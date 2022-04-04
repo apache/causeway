@@ -125,9 +125,11 @@ extends SchemaValueMarshallerAbstract {
     }
 
     private <T> TypedTupleDto toTypedTuple(final Context<T> context, final T valuePojo) {
-        return context.getSemantics()
-                .decompose(valuePojo)
-                .rightIfAny();
+        return valuePojo!=null
+                ? context.getSemantics()
+                        .decompose(valuePojo)
+                        .rightIfAny()
+                : null;
     }
 
     // -- RECOVER VALUES FROM DTO

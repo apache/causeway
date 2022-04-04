@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.validation.IValidatable;
@@ -30,7 +29,6 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -38,7 +36,6 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -132,7 +129,7 @@ class _Util {
             final ScalarModel scalarModel){
 
         //XXX debug
-        System.err.printf("RECOVERPROPOSEDVALUE %s%n", validatable.getValue());
+        //System.err.printf("RECOVERPROPOSEDVALUE %s%n", validatable.getValue());
 
         return Optional.ofNullable(scalarModel.getObjectManager()
                 .adapt(validatable.getValue()));
@@ -140,31 +137,31 @@ class _Util {
 
     // -- PROBABLY NO LONGER NEEDED
 
-    private Optional<ManagedObject> recoverProposedValue2(
-            final IValidatable<Object> validatable,
-            final ScalarModel scalarModel){
-        return mementoForProposedValue(validatable, scalarModel)
-                .map(scalarModel.getCommonContext()::reconstructObject);
-    }
-
-    private Optional<ObjectMemento> mementoForProposedValue(
-            final IValidatable<Object> validatable,
-            final ScalarModel scalarModel) {
-        final Object proposedValueObj = validatable.getValue();
-
-        if (proposedValueObj instanceof List) {
-            @SuppressWarnings("unchecked")
-            val proposedValueObjAsList = (List<ObjectMemento>) proposedValueObj;
-            if (proposedValueObjAsList.isEmpty()) {
-                return Optional.empty();
-            }
-            val memento = proposedValueObjAsList.get(0);
-            val logicalType = memento.getLogicalType();
-            return Optional.of(ObjectMemento.pack(proposedValueObjAsList, logicalType));
-        } else {
-            return Optional.of((ObjectMemento) proposedValueObj);
-        }
-
-    }
+//    private Optional<ManagedObject> recoverProposedValue2(
+//            final IValidatable<Object> validatable,
+//            final ScalarModel scalarModel){
+//        return mementoForProposedValue(validatable, scalarModel)
+//                .map(scalarModel.getCommonContext()::reconstructObject);
+//    }
+//
+//    private Optional<ObjectMemento> mementoForProposedValue(
+//            final IValidatable<Object> validatable,
+//            final ScalarModel scalarModel) {
+//        final Object proposedValueObj = validatable.getValue();
+//
+//        if (proposedValueObj instanceof List) {
+//            @SuppressWarnings("unchecked")
+//            val proposedValueObjAsList = (List<ObjectMemento>) proposedValueObj;
+//            if (proposedValueObjAsList.isEmpty()) {
+//                return Optional.empty();
+//            }
+//            val memento = proposedValueObjAsList.get(0);
+//            val logicalType = memento.getLogicalType();
+//            return Optional.of(ObjectMemento.pack(proposedValueObjAsList, logicalType));
+//        } else {
+//            return Optional.of((ObjectMemento) proposedValueObj);
+//        }
+//
+//    }
 
 }
