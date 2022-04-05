@@ -20,6 +20,7 @@
 package org.apache.isis.client.kroviz.ui.panel
 
 import io.kvision.utils.obj
+import org.apache.isis.client.kroviz.core.event.EventLogStatistics
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.ViewManager
@@ -56,11 +57,18 @@ class DynamicMenuBuilder {
         })
         menu.add(download)
 
-        val bubbleTitle = "Bubble Chart"
+        val bubbleTitle = "Event Bubble Chart"
         val bubble = buildMenuEntry(bubbleTitle, bubbleTitle, {
             ViewManager.add(bubbleTitle, EventBubbleChart())
         })
         menu.add(bubble)
+
+        val statsTitle = "Event Statistics"
+        val stats = buildMenuEntry(statsTitle, statsTitle, {
+//            ViewManager.add(statsTitle, EventBubbleChart())
+            logStatistics()
+        })
+        menu.add(stats)
 
         return menu.toTypedArray().asDynamic()
     }
@@ -76,6 +84,12 @@ class DynamicMenuBuilder {
 
     private fun downLoadCsv(table: EventLogTable) {
         table.tabulator.downloadCSV("data.csv")
+    }
+
+    private fun logStatistics() {
+        console.log("Event Log Statisctics:")
+        val stats = EventLogStatistics()
+        console.log(stats)
     }
 
 }

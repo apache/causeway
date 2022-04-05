@@ -265,17 +265,6 @@ data class LogEntry(
         return url == reSpec.url && subType.equals(reSpec.subType)
     }
 
-    fun selfHref(): String {
-        if (selfLink() != null) {
-            return selfLink()!!.href
-        } else return ""
-    }
-
-    fun selfLink(): Link? {
-        getLinks().forEach { if (it.relation() == Relation.SELF) return it }
-        return null
-    }
-
     fun getLinks(): List<Link> {
         return if (obj is WithLinks) {
             (obj as WithLinks).getLinks()

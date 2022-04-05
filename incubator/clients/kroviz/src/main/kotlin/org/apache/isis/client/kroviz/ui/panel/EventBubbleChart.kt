@@ -112,6 +112,7 @@ class EventBubbleChart : SimplePanel() {
         }
 
         return ChartOptions(
+            maintainAspectRatio = true,
             plugins = PluginsOptions(
                 title = TitleOptions(
                     text = listOf("Request Duration over Time by Request Parallelism and Response Size"),
@@ -197,7 +198,7 @@ class EventBubbleChart : SimplePanel() {
 
     private fun LogEntry.calculateBubbleSize(): Int {
         val i = responseLength
-        return i.toDouble().pow(1 / 3.toDouble()).toInt()
+        return i.toDouble().pow(1 / 4.toDouble()).toInt()
     }
 
     private fun LogEntry.determineBubbleColor(): Color {
@@ -218,7 +219,7 @@ class EventBubbleChart : SimplePanel() {
         if (updatedAt != null) {
             time = updatedAt!!.getTime()
         }
-        val relativeTimeMs = time -logStart
+        val relativeTimeMs = time - logStart
         val bubbleSize = calculateBubbleSize()
         val data = obj {
             x = relativeTimeMs
