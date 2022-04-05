@@ -44,8 +44,7 @@ extends ChainingModel<List<LinkAndLabel>> {
 
     public boolean hasAnyVisibleLink() {
         for (val linkAndLabel : getObject()) {
-            val link = linkAndLabel.getUiComponent();
-            if(link.isVisible()) {
+            if(linkAndLabel.getUiComponent().isVisible()) {
                 return true;
             }
         }

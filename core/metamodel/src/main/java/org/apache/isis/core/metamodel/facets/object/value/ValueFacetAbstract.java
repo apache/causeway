@@ -43,9 +43,15 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.valuesemantics.ValueSemanticsSelectingFacet;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -145,6 +151,17 @@ implements ValueFacet<T> {
                 .map(rel->(OrderRelation<T, ?>)rel);
     }
 
+    // -- DEFAULT SEMANTICS
+
+    @Override
+    public Optional<ValueSemanticsProvider<T>> selectDefaultSemantics() {
+        return getAllValueSemantics()
+                .stream()
+                .filter(isMatchingAnyOf(Can.empty()))
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
+
     // -- DEFAULTS PROVIDER
 
     @Override
@@ -157,13 +174,18 @@ implements ValueFacet<T> {
                 .findFirst();
     }
 
-    // -- DEFAULT SEMANTICS
+    @Override
+    public Optional<DefaultsProvider<T>> selectDefaultsProviderForParameter(final ObjectActionParameter param) {
+        return streamValueSemanticsHonoringQualifiers(param)
+                .map(ValueSemanticsProvider::getDefaultsProvider)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
 
     @Override
-    public Optional<ValueSemanticsProvider<T>> selectDefaultSemantics() {
-        return getAllValueSemantics()
-                .stream()
-                .filter(isMatchingAnyOf(Can.empty()))
+    public Optional<DefaultsProvider<T>> selectDefaultsProviderForProperty(final OneToOneAssociation prop) {
+        return streamValueSemanticsHonoringQualifiers(prop)
+                .map(ValueSemanticsProvider::getDefaultsProvider)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
     }
@@ -234,6 +256,31 @@ implements ValueFacet<T> {
         return fallbackRenderer(getLogicalType(), featureIdentifier);
     }
 
+    // -- COMPOSITE VALUE SUPPORT
+
+    @Override
+    public Optional<ObjectAction> selectCompositeValueMixinForParameter(
+            final ParameterNegotiationModel parameterNegotiationModel,
+            final int paramIndex) {
+        if(!isCompositeValueType()) {
+            return Optional.empty();
+        }
+        //feed the action's invocation result back into the parameter negotiation model of the parent edit dialog
+        return resolveCompositeValueMixinForFeature(parameterNegotiationModel.getParamMetamodel(paramIndex))
+                .map(m->CompositeValueUpdaterForParameter
+                        .createProxy(parameterNegotiationModel, paramIndex, (ObjectActionMixedIn) m));
+    }
+
+    @Override
+    public Optional<ObjectAction> selectCompositeValueMixinForProperty(final ManagedProperty managedProperty) {
+        if(!isCompositeValueType()) {
+            return Optional.empty();
+        }
+        //feed the action's invocation result back into the scalarModel's proposed value, then submit
+        return resolveCompositeValueMixinForFeature(managedProperty.getProperty())
+                .map(m->CompositeValueUpdaterForProperty.createProxy(managedProperty, (ObjectActionMixedIn) m));
+    }
+
     // -- UTILITY
 
     public static <X> Parser<X> fallbackParser(
@@ -302,6 +349,22 @@ implements ValueFacet<T> {
 
             return false;
         };
+    }
+
+    /**
+     * Composite-value mixins are collected with the value-type's {@link ObjectSpecification}.
+     * By convention, mixed in action names must correspond to the qualifier name,
+     * which they are associated to. In the default case (no qualifier), the name 'default' is used.
+     *
+     * @param feature - optionally provides (custom) qualifier
+     */
+    protected Optional<ObjectAction> resolveCompositeValueMixinForFeature(final ObjectFeature feature) {
+        return qualifiersAccepted(feature).add("default")
+        .stream()
+        .map(qualifier->feature.getElementType().getAction(qualifier, MixedIn.ONLY))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .findFirst();
     }
 
     @RequiredArgsConstructor

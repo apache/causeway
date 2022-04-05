@@ -22,7 +22,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 
 import lombok.val;
 
@@ -30,7 +31,7 @@ import lombok.val;
  * Immutable tree, hooks into the ScalarPanelTextField without actually using its text field.
  */
 public class ParentedTreePanel
-extends ScalarPanelAbstract {
+extends ScalarPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,18 +40,15 @@ extends ScalarPanelAbstract {
     }
 
     @Override
-    protected MarkupContainer createComponentForRegular() {
-        return createTreeComponent(getScalarTypeContainer(), ID_SCALAR_IF_REGULAR);
+    protected MarkupContainer createRegularFrame() {
+        return FrameFragment.REGULAR
+                .createComponent(this::createTreeComponent);
     }
 
     @Override
-    protected MarkupContainer createComponentForCompact() {
-        return createTreeComponent(getScalarTypeContainer(), ID_SCALAR_IF_COMPACT);
-    }
-
-    @Override
-    protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.notSupported();
+    protected MarkupContainer createCompactFrame() {
+        return FrameFragment.COMPACT
+                .createComponent(this::createTreeComponent);
     }
 
     @Override
@@ -60,12 +58,13 @@ extends ScalarPanelAbstract {
 
     // -- HELPER
 
-    private MarkupContainer createTreeComponent(final MarkupContainer parent, final String id) {
+    private MarkupContainer createTreeComponent(final String id) {
+        val container = getScalarFrameContainer();
         val scalarModel = scalarModel();
         val tree = IsisToWicketTreeAdapter.adapt(id, scalarModel);
-        parent.add(tree);
+        container.add(tree);
         // adds the tree-theme behavior to the tree's parent
-        parent.add(getTreeThemeProvider().treeThemeFor(scalarModel));
+        container.add(getTreeThemeProvider().treeThemeFor(scalarModel));
         return (MarkupContainer) tree;
     }
 

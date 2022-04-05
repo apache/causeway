@@ -25,13 +25,13 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
+import lombok.val;
+
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
- *
  * <p>
- *     corresponding panel for property edits is {@link PropertyEditFormPanel}.
- * </p>
+ * Corresponding panel for property edits is {@link PropertyEditFormPanel}.
  */
 public class ActionParametersFormPanel
 extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
@@ -39,17 +39,24 @@ extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
     private static final long serialVersionUID = 1L;
 
     static final String ID_ACTION_PARAMETERS = "parameters";
+    static final String ID_INPUT_FORM = "inputForm";
+    public static final String ID_SCALAR_NAME_AND_VALUE = "scalarNameAndValue";
 
-    public ActionParametersFormPanel(final String id, final ActionModel model) {
-        super(id, model);
+    public ActionParametersFormPanel(final String id, final ActionModel actionModel) {
+        super(id, actionModel);
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
         buildGui();
     }
 
     private void buildGui() {
-        ActionModel actionModel = getModel();
+        val actionModel = getModel();
         actionModel.clearArguments();  // in case previously used, eg prompt displayed then cancelled
         final ActionParametersForm inputForm =
-                new ActionParametersForm("inputForm", this, this.getWicketViewerSettings(), actionModel);
+                new ActionParametersForm(ID_INPUT_FORM, this, this.getWicketViewerSettings(), actionModel);
 
         Wkt.cssAppend(inputForm, actionModel.getAction().getFeatureIdentifier());
         add(inputForm);

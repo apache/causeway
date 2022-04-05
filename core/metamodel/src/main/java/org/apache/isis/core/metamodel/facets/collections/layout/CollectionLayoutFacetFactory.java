@@ -53,7 +53,8 @@ extends FacetFactoryAbstract {
 
         addFacet(
                 DefaultViewFacetForCollectionLayoutAnnotation
-                .create(collectionLayoutIfAny, getConfiguration(), facetHolder));
+                .create(collectionLayoutIfAny, facetHolder)
+                .orElseGet(()->DefaultViewFacetAsConfigured.create(facetHolder)));
 
         addFacetIfPresent(
                 MemberDescribedFacetForCollectionLayoutAnnotation

@@ -38,6 +38,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.cookies.CookieUtils;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -125,10 +126,9 @@ implements HasCommonContext {
     protected void onConfigure() {
         // logged in already?
         if (isSignedIn() == false) {
-            IAuthenticationStrategy authenticationStrategy = getApplication().getSecuritySettings()
-                .getAuthenticationStrategy();
+            val authenticationStrategy = authenticationStrategy();
             // get username, password and zoneID from persistence store
-            String[] data = authenticationStrategy.load();
+            final String[] data = authenticationStrategy.load();
 
             if ((data != null) && (data.length > 1)) {
                 // try to sign in the user
@@ -136,11 +136,12 @@ implements HasCommonContext {
                     username = data[0];
                     password = data[1];
 
-                    if(data.length > 2
-                            && _Strings.isNotEmpty(data[2])) {
+                    val tzMememnto = recoverTimezone();
+                    if(_Strings.isNotEmpty(tzMememnto)) {
                         try {
-                            timezone = ZoneId.of(data[2]);
+                            timezone = ZoneId.of(tzMememnto);
                         } catch (Exception e) {
+                            timezone = null;
                             e.printStackTrace();
                         }
                     }
@@ -219,6 +220,31 @@ implements HasCommonContext {
             new JavaScriptResourceReference(SignInPanelAbstract.class,
                     "js/client-side-timezone-select.js");
 
+    private IAuthenticationStrategy authenticationStrategy() {
+        return getApplication().getSecuritySettings()
+            .getAuthenticationStrategy();
+    }
+
+    // -- TIME ZONE COOKIES
+
+    private void rememberTimezone(final String tzMemento) {
+        new CookieUtils().save(timezoneCookieName(), tzMemento);
+    }
+
+    private String recoverTimezone() {
+        val cookie = new CookieUtils().getCookie(timezoneCookieName());
+        return cookie!=null
+                ? cookie.getValue()
+                : null;
+    }
+
+    private String timezoneCookieName() {
+        val rememberMe = getConfiguration().getViewer().getWicket().getRememberMe();
+        val cookieName = rememberMe.getCookieKey()+"_tz";
+        return cookieName;
+    }
+
+
     /**
      * Sign in form.
      */
@@ -273,25 +299,26 @@ implements HasCommonContext {
          */
         @Override
         public final void onSubmit() {
-            IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
-                .getAuthenticationStrategy();
+            val authenticationStrategy = authenticationStrategy();
 
-            if (signIn(getUsername(), getPassword())) {
-                if (rememberMe == true) {
-                    strategy.save(
+            if (signIn(username, password)) {
+                if (rememberMe) {
+                    authenticationStrategy.save(
                             username,
-                            password,
-                            timezone!=null
-                                ? timezone.getId()
-                                : "");
+                            password);
+
+                    // remember time-zone selection
+                    rememberTimezone(timezone!=null
+                          ? timezone.getId()
+                          : "");
                 } else {
-                    strategy.remove();
+                    authenticationStrategy.remove();
                 }
 
                 onSignInSucceeded();
             } else {
                 onSignInFailed();
-                strategy.remove();
+                authenticationStrategy.remove();
             }
         }
 

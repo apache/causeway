@@ -46,9 +46,9 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
@@ -96,7 +96,7 @@ implements ScalarModelSubscriber {
     @Override
     protected final void configureCancelButton(final AjaxButton cancelButton) {
         super.configureCancelButton(cancelButton);
-        if (formExecutorContext().getPromptStyle().isInlineOrInlineAsIfEdit()) {
+        if (formExecutorContext().getPromptStyle().isInlineAny()) {
             Wkt.behaviorAddFireOnEscapeKey(cancelButton, this::onCancelSubmitted);
         }
     }

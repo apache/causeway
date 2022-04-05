@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.panels;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -52,6 +53,13 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
 
     public final IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+    }
+
+    /**
+     * Translate without context: Tooltips, Button-Labels, etc.
+     */
+    public final String translate(final String input) {
+        return getTranslationService().translate(TranslationContext.empty(), input);
     }
 
     @Override

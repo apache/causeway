@@ -35,6 +35,7 @@ import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -259,6 +260,42 @@ public interface ObjectAction extends ObjectMember {
         return ActionMemento.forAction(this);
     }
 
+    default PromptStyle getPromptStyle() {
+        val promptStyle = lookupFacet(PromptStyleFacet.class)
+                .map(PromptStyleFacet::value);
+        if(getDeclaringType().isManagedBean() // <-- menu actions
+                // no-arg DIALOG is correctly handled,
+                // whereas for INLINE it would render a form with no fields
+                || getParameterCount() == 0) {
+            if (promptStyle.isPresent()) {
+                if (promptStyle.get().isDialogAny()) {
+                    // preserve dialog specialization
+                    return promptStyle.get();
+                }
+            }
+            // fallback to generic dialog
+            return PromptStyle.DIALOG;
+        }
+
+        val needsFallback = promptStyle.isEmpty()
+                || promptStyle.get() == PromptStyle.AS_CONFIGURED;
+
+        if(needsFallback) {
+            // modal vs side-bar
+            val dialogModeAsConfigured = Optional.ofNullable(
+                    getMetaModelContext().getConfiguration().getViewer().getWicket().getDialogMode())
+                    .orElseGet(()->new Wicket().getDialogMode());
+            switch (dialogModeAsConfigured) {
+            case SIDEBAR:
+                return PromptStyle.DIALOG_SIDEBAR;
+            case MODAL:
+            default:
+                return PromptStyle.DIALOG_MODAL;
+            }
+        }
+        return promptStyle.get();
+    }
+
     // -- UTIL
 
     public static final class Util {
@@ -279,10 +316,33 @@ public interface ObjectAction extends ObjectMember {
             return false;
         }
 
-        public static ActionLayout.Position actionLayoutPositionOf(final ObjectAction action) {
-            return action.lookupFacet(ActionPositionFacet.class)
+        public static boolean isDirectlyAssociatedWithAnyProperty(
+                final ObjectAction action) {
+
+            val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+            if (layoutGroupFacet == null) {
+                return false;
+            }
+            val layoutGroupId = layoutGroupFacet.getGroupId();
+            if (_Strings.isNullOrEmpty(layoutGroupId)) {
+                return false;
+            }
+            val prop = action.getDeclaringType().getProperty(layoutGroupId, MixedIn.INCLUDED)
+                    .orElse(null);
+            if (prop == null) {
+                return false;
+            }
+            return true;
+        }
+
+        public static ActionLayout.Position actionLayoutPositionOf(
+                final ObjectAction action) {
+            return action.lookupNonFallbackFacet(ActionPositionFacet.class)
             .map(ActionPositionFacet::position)
-            .orElse(ActionLayout.Position.BELOW);
+            .orElseGet(()->
+                isDirectlyAssociatedWithAnyProperty(action)
+                        ? ActionLayout.Position.BELOW
+                        : ActionLayout.Position.PANEL);
         }
 
         public static Optional<CssClassFaFactory> cssClassFaFactoryFor(
@@ -376,7 +436,7 @@ public interface ObjectAction extends ObjectMember {
         public static Predicate<ObjectAction> isSameLayoutGroupAs(
                 final @NonNull ObjectAssociation association) {
 
-            final String assocIdLower = association.getId();
+            final String memberId = association.getId();
 
             return (final ObjectAction objectAction) -> {
 
@@ -388,7 +448,7 @@ public interface ObjectAction extends ObjectMember {
                 if (_Strings.isNullOrEmpty(layoutGroupId)) {
                     return false;
                 }
-                return layoutGroupId.equals(assocIdLower);
+                return layoutGroupId.equals(memberId);
             };
         }
 
@@ -479,7 +539,5 @@ public interface ObjectAction extends ObjectMember {
         }
 
     }
-
-
 
 }

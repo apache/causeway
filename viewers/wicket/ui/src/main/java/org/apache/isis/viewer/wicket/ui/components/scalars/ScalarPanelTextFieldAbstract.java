@@ -18,34 +18,26 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.util.Locale;
 import java.util.Optional;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.validator.StringValidator;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.InputFragment;
-import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.PromptFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -66,23 +58,11 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     private AbstractTextComponent<T> formField;
 
-    @Getter(value = AccessLevel.PROTECTED)
-    private TextFieldVariant textFieldVariant;
-
     protected ScalarPanelTextFieldAbstract(
             final String id,
             final ScalarModel scalarModel,
             final Class<T> type) {
-        this(id, scalarModel, type, TextFieldVariant.SINGLE_LINE);
-    }
-
-    protected ScalarPanelTextFieldAbstract(
-            final String id,
-            final ScalarModel scalarModel,
-            final Class<T> type,
-            final TextFieldVariant textFieldVariant) {
         super(id, scalarModel, type);
-        this.textFieldVariant = textFieldVariant;
     }
 
     // -- CONVERSION
@@ -108,15 +88,20 @@ extends ScalarPanelFormFieldAbstract<T> {
      */
     protected AbstractTextComponent<T> createTextField(final String id) {
         val converter = getConverter(scalarModel());
-        val formFieldComponent = getTextFieldVariant().isSingleLine()
-                ? Wkt.textFieldWithConverter(
+        return getFormatModifiers().contains(FormatModifier.MULITLINE)
+                ? Wkt.textAreaWithConverter(
                         id, unwrappedModel(), type, converter)
-                : Wkt.textAreaWithConverter(
+                : Wkt.textFieldWithConverter(
                         id, unwrappedModel(), type, converter);
-        return formFieldComponent;
     }
 
     protected final IModel<T> unwrappedModel() {
+        _Assert.assertTrue(scalarModel().getScalarTypeSpec().isAssignableFrom(type), ()->
+            String.format("[%s] cannot possibly unwrap model of type %s into target type %s",
+                    this.getClass().getSimpleName(),
+                    scalarModel().getScalarTypeSpec().getCorrespondingClass(),
+                    type));
+
         return scalarModel().unwrapped(type);
     }
 
@@ -132,14 +117,14 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     @Override
     protected Optional<InputFragment> getInputFragmentType() {
-        return Optional.of(getTextFieldVariant().isSingleLine()
-                ? InputFragment.TEXT
-                : InputFragment.TEXTAREA);
+        return Optional.of(getFormatModifiers().contains(FormatModifier.MULITLINE)
+                ? InputFragment.TEXTAREA
+                : InputFragment.TEXT);
     }
 
     @Override
     protected String obtainInlinePromptLinkCssIfAny() {
-        return getTextFieldVariant().isSingleLine()
+        return !getFormatModifiers().contains(FormatModifier.MULITLINE)
                 ? super.obtainInlinePromptLinkCssIfAny()
                 /* Most other components require 'form-control form-control-sm' on the owning inline prompt link.
                  * For TextArea, however, this instead appears on the TextArea itself.
@@ -147,59 +132,34 @@ extends ScalarPanelFormFieldAbstract<T> {
                 : null;
     }
 
-    /**
-     * Overrides default to use a fragment, allowing the inner rendering to switch between a simple span
-     * or a text-area.
-     */
-    @Override
-    protected final Component createInlinePromptComponent(
-            final String id,
-            final IModel<String> inlinePromptLabelModel) {
-
-        if(getInlinePromptConfig().isUseEditIconWithLink()) {
-            return PromptFragment.EDIT_ICON.createFragment(this, inlinePromptLabelModel, null);
-        }
-
-        switch(getTextFieldVariant()) {
-        case SINGLE_LINE:
-            return PromptFragment.LABEL.createFragment(this, inlinePromptLabelModel, null);
-        case MULTI_LINE:
-            return PromptFragment.TEXTAREA.createFragment(this, inlinePromptLabelModel, this::setFormComponentAttributes);
-        default:
-            throw _Exceptions.unmatchedCase(getTextFieldVariant());
-        }
-    }
-
     // -- CONVERSION
 
     @Override
-    protected final IModel<String> obtainInlinePromptModel() {
-        val converter = getConverter(scalarModel());
-        return converter!=null
-                ? new ToStringConvertingModel<>(converter)
-                :  _Casts.uncheckedCast(getFormComponent().getModel());
+    protected final String obtainOutputFormat() {
+        // conversion does not affect the output format (usually HTML)
+        return super.obtainOutputFormat();
     }
 
-    protected class ToStringConvertingModel<X> extends Model<String> {
-        private static final long serialVersionUID = 1L;
-
-        @NonNull private final IConverter<X> converter;
-
-        private ToStringConvertingModel(final @NonNull IConverter<X> converter) {
-            this.converter = converter;
-        }
-
-        @Override public String getObject() {
-            val adapter = scalarModel().getObject();
-            val value = ManagedObjects.UnwrapUtil.single(adapter);
-            final String str = value != null
-                    ? converter.convertToString(
-                            _Casts.uncheckedCast(value),
-                            getLanguageProvider().getPreferredLanguage().orElseGet(Locale::getDefault))
-                    : null;
-            return str;
-        }
-    }
+//    protected class ToStringConvertingModel<X> extends Model<String> {
+//        private static final long serialVersionUID = 1L;
+//
+//        @NonNull private final IConverter<X> converter;
+//
+//        private ToStringConvertingModel(final @NonNull IConverter<X> converter) {
+//            this.converter = converter;
+//        }
+//
+//        @Override public String getObject() {
+//            val adapter = scalarModel().getObject();
+//            val value = ManagedObjects.UnwrapUtil.single(adapter);
+//            final String str = value != null
+//                    ? converter.convertToString(
+//                            _Casts.uncheckedCast(value),
+//                            getLanguageProvider().getPreferredLanguage().orElseGet(Locale::getDefault))
+//                    : null;
+//            return str;
+//        }
+//    }
 
     // -- HELPER
 
@@ -231,8 +191,7 @@ extends ScalarPanelFormFieldAbstract<T> {
                 .orElse(null);
     }
 
-    private void setFormComponentAttributes(final FormComponent<?> formComponent) {
-
+    void setFormComponentAttributes(final FormComponent<?> formComponent) {
         val scalarModel = scalarModel();
 
         if(formComponent instanceof TextArea) {

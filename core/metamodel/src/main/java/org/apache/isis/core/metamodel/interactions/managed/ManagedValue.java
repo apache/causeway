@@ -26,6 +26,7 @@ import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
@@ -59,6 +60,20 @@ public interface ManagedValue {
         val oldValue = valueHolder.getValue();
         val newValue = updater.apply(oldValue);
         valueHolder.setValue(newValue);
+    }
+
+    /**
+     * Clears the pending value to an empty value.
+     */
+    default void clear() {
+        update(oldValue->ManagedObject.empty(getElementType()));
+    }
+
+    /**
+     * Whether the pending value is present (not absent, null or empty).
+     */
+    default boolean isPresent() {
+        return !ManagedObjects.isNullOrUnspecifiedOrEmpty(getValue().getValue());
     }
 
 }

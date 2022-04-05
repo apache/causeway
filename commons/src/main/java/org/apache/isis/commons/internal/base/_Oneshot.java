@@ -23,13 +23,11 @@ import java.io.Serializable;
 /**
  * <h1>- internal use only -</h1>
  * <p>
- * One-shot idiom helper utility, thread-safe and serializable
+ * One-shot utility, thread-safe and serializable
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
- *
  * @since 2.0
- *
  */
 public final class _Oneshot implements Serializable {
 
@@ -37,15 +35,15 @@ public final class _Oneshot implements Serializable {
 
     private final Object $lock = new Object[0]; // serializable lock
 
-    private int shotCount = 0;
+    private volatile int triggerCount = 0;
 
     /**
-     * @return whether the shot actually happened (was allowed)
+     * Returns whether the trigger was accepted.
      */
-    public boolean shoot() {
+    public boolean trigger() {
         synchronized ($lock) {
-            if(shotCount==0) {
-                ++ shotCount;
+            if(triggerCount==0) {
+                ++ triggerCount;
                 return true;
             }
             return false;
@@ -53,11 +51,27 @@ public final class _Oneshot implements Serializable {
     }
 
     /**
-     * resets to initial condition, that is it allows one more shot
+     * Returns whether the {@link Runnable} was actually executed
+     * (indifferent to whether completing with or without success).
+     * If the {@link Runnable} throws an {@link Exception}, this one-shot will be exhausted regardless.
+     */
+    public boolean trigger(final Runnable runnable) {
+        synchronized ($lock) {
+            if(triggerCount==0) {
+                ++ triggerCount;
+                runnable.run();
+            }
+            return false;
+        }
+    }
+
+
+    /**
+     * resets to initial condition, that is it allows one more trigger
      */
     public void reset() {
         synchronized ($lock) {
-            shotCount = 0;
+            triggerCount = 0;
         }
     }
 

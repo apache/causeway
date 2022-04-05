@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
@@ -51,26 +52,19 @@ implements CancelHintRequired  {
         super(id, model);
         _Assert.assertTrue(model instanceof HasCommonContext);
         setType(ManagedObject.class);
-        buildGui();
-    }
-
-    private boolean isEmpty() {
-        return ManagedObjects.isNullOrUnspecifiedOrEmpty(getModel().getObject());
-    }
-
-    private void buildGui() {
-        syncWithInput();
     }
 
     @Override
-    protected void onBeforeRender() {
-        syncWithInput();
-        super.onBeforeRender();
+    protected void onInitialize() {
+        super.onInitialize();
+        buildGui();
     }
 
-    private void syncWithInput() {
+    private void buildGui() {
 
-        if(isEmpty()) {
+        val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(getModel().getObject());
+
+        if(isEmpty) {
             // represent no object by a simple label displaying '(none)'
             Wkt.labelAdd(this, ID_ENTITY_TITLE_NULL, ValueSemanticsAbstract.NULL_REPRESENTATION);
             permanentlyHide(ID_ENTITY_TITLE_NULL);
@@ -90,7 +84,19 @@ implements CancelHintRequired  {
     }
 
     @Override
+    public FormComponent<ManagedObject> setModelObject(final ManagedObject object) {
+        // no-op since immutable
+        return this;
+    }
+
+    @Override
+    public void updateModel() {
+        // no-op since immutable
+    }
+
+    @Override
     public void onCancel() {
+     // no-op since immutable
     }
 
     @Override

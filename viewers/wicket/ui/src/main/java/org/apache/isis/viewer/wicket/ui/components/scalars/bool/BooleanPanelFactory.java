@@ -16,11 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars;
+package org.apache.isis.viewer.wicket.ui.components.scalars.bool;
 
-public enum TextFieldVariant {
-    SINGLE_LINE,
-    MULTI_LINE;
-    public boolean isSingleLine() { return this==SINGLE_LINE; }
-    public boolean isMultiLine() { return this==MULTI_LINE; }
+import org.apache.wicket.Component;
+
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+
+/**
+ * {@link ComponentFactory} for {@link BooleanPanel}.
+ */
+public class BooleanPanelFactory extends ComponentFactoryScalarAbstract {
+
+    private static final long serialVersionUID = 1L;
+
+    public BooleanPanelFactory() {
+        super(BooleanPanel.class, boolean.class, Boolean.class);
+    }
+
+    @Override
+    public Component createComponent(final String id, final ScalarModel scalarModel) {
+        return new BooleanPanel(id, scalarModel);
+    }
+
 }

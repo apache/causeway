@@ -16,28 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
+package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
 import org.apache.wicket.Component;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 /**
- * {@link ComponentFactory} for {@link BooleanPanel}.
+ * Panel for rendering titles for scalars of any type.
+ * <p>
+ * Most prominently this is used for {@link Enum} values.
  */
-public class BooleanPanelFactory extends ComponentFactoryScalarAbstract {
+public class ScalarTitleBadgePanel<T> extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;
 
-    public BooleanPanelFactory() {
-        super(BooleanPanel.class, boolean.class, Boolean.class);
+    public ScalarTitleBadgePanel(final String id, final ScalarModel scalarModel, final Class<T> type) {
+        super(id, scalarModel, type);
     }
 
     @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new BooleanPanel(id, scalarModel);
+    protected Component createComponentForOutput(final String id) {
+        return CompactFragment.BADGE.createFragment(id, this, scalarValueId->
+            Wkt.label(scalarValueId, this::obtainOutputFormat));
     }
 
 }

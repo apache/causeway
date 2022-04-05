@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.value.semantics;
 
+import org.apache.isis.commons.internal.memento._Mementos.EncoderDecoder;
+
 /**
  * Provides forth and back conversion between 2 types.
  *

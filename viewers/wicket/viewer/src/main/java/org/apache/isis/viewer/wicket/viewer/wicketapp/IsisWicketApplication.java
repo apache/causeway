@@ -336,17 +336,18 @@ implements
         val rememberMe = configuration.getViewer().getWicket().getRememberMe();
         val cookieKey = rememberMe.getCookieKey();
         val encryptionKey = rememberMe.getEncryptionKey().orElse(defaultEncryptionKey());
-        return new DefaultAuthenticationStrategy(cookieKey, encryptionKey);
+        return new DefaultAuthenticationStrategy(cookieKey, _CryptFactory.sunJceCrypt(encryptionKey));
     }
 
     /**
-     * As called by {@link #newAuthenticationStrategy(IsisConfiguration)}; if an encryption key for the 'rememberMe'
-     * cookie hasn't been configured, then use a different encryption key for the 'rememberMe' cookie each time the
-     * app is restarted.
+     * As called by {@link #newAuthenticationStrategy(IsisConfiguration)}.
+     * If an encryption key for the 'rememberMe' cookie hasn't been configured,
+     * then use a different encryption key for the 'rememberMe'
+     * cookie each time the app is restarted.
      */
     String defaultEncryptionKey() {
         return systemEnvironment.isPrototyping()
-                ? "PrototypingEncryptionKey"
+                ? _CryptFactory.FIXED_SALT_FOR_PROTOTYPING
                 : UUID.randomUUID().toString();
     }
 

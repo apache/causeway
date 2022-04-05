@@ -18,13 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import org.apache.wicket.Component;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars._FragmentFactory.CompactFragment;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
-
-import lombok.val;
 
 /**
  * Panel for rendering numeric scalars.
@@ -39,15 +33,6 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
             final ScalarModel scalarModel,
             final Class<T> type) {
         super(id, scalarModel, type);
-    }
-
-    @Override
-    protected final Component createComponentForCompact(final String id) {
-        val label = Wkt.labelAddWithConverter(
-                CompactFragment.LABEL.createFragment(this),
-                id, unwrappedModel(), type, getConverter(scalarModel()));
-        label.setEnabled(false);
-        return label;
     }
 
 }

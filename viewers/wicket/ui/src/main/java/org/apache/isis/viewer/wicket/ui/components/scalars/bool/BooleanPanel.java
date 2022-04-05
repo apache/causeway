@@ -16,23 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
+package org.apache.isis.viewer.wicket.ui.components.scalars.bool;
 
+import java.util.EnumSet;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.wicket.model.models.BooleanModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
-
-import lombok.val;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
@@ -52,64 +52,69 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     }
 
     @Override
+    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
+        if(!scalarModel().isRequired()) {
+            modifiers.add(FormatModifier.TRISTATE);
+        }
+    }
+
+    @Override
+    protected Optional<InputFragment> getInputFragmentType() {
+        return Optional.of(InputFragment.CHECKBOX);
+    }
+
+    @Override
     protected FormComponent<Boolean> createFormComponent(final String id, final ScalarModel scalarModel) {
         checkBox = Wkt.checkbox(
                 id,
                 BooleanModel.forScalarModel(scalarModel),
                 scalarModel.isRequired(),
-                CheckBoxXConfig.Sizes.lg);
+                CheckBoxXConfig.Sizes.xl);
         return checkBox;
     }
 
     @Override
-    protected Component createComponentForCompact(final String id) {
-        checkBox = Wkt.checkbox(
-                id,
-                BooleanModel.forScalarModel(scalarModel()),
-                scalarModel().isRequired(),
-                CheckBoxXConfig.Sizes.sm);
-        checkBox.setEnabled(false); // will be enabled before rendering if required
-        return checkBox;
+    protected Component createComponentForOutput(final String id) {
+        Boolean b = (Boolean) scalarModel().getObject().getPojo();
+        if(b==null
+                && scalarModel().isRequired()) {
+            b = false;
+        }
+        return getRenderScenario().isCompact()
+                ? CompactFragment.createCheckboxFragment(id, this, b)
+                : PromptFragment.createCheckboxFragment(id, this, b);
     }
 
     @Override
-    protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.supportedAndHide(
-                // TODO: not sure why this is needed when the other subtypes have no similar guard...
-                scalarModel().mustBeEditable()
-                    ? this.checkBox
-                    : null
-                );
-    }
-
-    @Override
-    protected IModel<String> obtainInlinePromptModel() {
-        //XXX not localized yet - maybe can be done at a more fundamental level - or replace with universal symbols
-        return BooleanModel.forScalarModel(scalarModel())
-                .asStringModel("(not set)", "Yes", "No");
+    protected String obtainOutputFormat() {
+        throw _Exceptions.unexpectedCodeReach(); // not used in createComponentForOutput(...)
     }
 
     @Override
     protected void onInitializeEditable() {
         super.onInitializeEditable();
+        if(checkBox==null) return;
         checkBox.setEnabled(true);
     }
 
     @Override
     protected void onInitializeNotEditable() {
         super.onInitializeNotEditable();
+        if(checkBox==null) return;
         checkBox.setEnabled(false);
     }
 
     @Override
     protected void onInitializeReadonly(final String disableReason) {
         super.onInitializeReadonly(disableReason);
+        if(checkBox==null) return;
         checkBox.setEnabled(false);
         Wkt.attributeReplace(checkBox, "title", disableReason);
     }
 
     @Override
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+        if(checkBox==null) return;
         checkBox.setEnabled(false);
         Wkt.attributeReplace(checkBox, "title", disableReason);
         target.ifPresent(ajax->{
@@ -119,16 +124,18 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
 
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
+        if(checkBox==null) return;
         checkBox.setEnabled(true);
     }
 
     @Override
     public String getVariation() {
-        val labelAtFacet = getModel().getFacet(LabelAtFacet.class);
-        return labelAtFacet != null
-                && labelAtFacet.label() == LabelPosition.RIGHT
-            ? "labelRightPosition"
-            : super.getVariation();
+//        val labelAtFacet = getModel().getFacet(LabelAtFacet.class);
+//        return labelAtFacet != null
+//                && labelAtFacet.label() == LabelPosition.RIGHT
+//            ? "labelRightPosition"
+//            : super.getVariation();
+        return super.getVariation();
     }
 
 }

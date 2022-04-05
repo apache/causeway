@@ -35,6 +35,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -229,8 +230,8 @@ class PoReader extends PoAbstract {
         }
 
         for (final String candidate : candidates) {
-            final List<String> lines = readUrl(candidate);
-            if(lines != null) {
+            val lines = readUrl(candidate);
+            if(!lines.isEmpty()) {
                 return lines;
             }
         }

@@ -28,7 +28,6 @@ public class StringPanel extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;
 
-
     public StringPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }

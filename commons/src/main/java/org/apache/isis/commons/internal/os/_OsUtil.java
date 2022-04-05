@@ -20,10 +20,14 @@ package org.apache.isis.commons.internal.os;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.net.NetworkInterface;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.OptionalLong;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -101,6 +105,20 @@ public class _OsUtil {
         }
     }
 
+    /**
+     * Terminates an instance of this application,
+     * if there is an already running one found.
+     * <p>
+     * Use in conjunction with system environment variable
+     * {@code THERE_CAN_BE_ONLY_ONE=true}, in order to switch this feature on.
+     * @see #thereCanBeOnlyOne(File)
+     */
+    public void thereCanBeOnlyOne() {
+        if("true".equalsIgnoreCase(System.getenv("THERE_CAN_BE_ONLY_ONE"))) {
+            _OsUtil.thereCanBeOnlyOne(new File("pid.log"));
+        }
+    }
+
     @SneakyThrows
     public void terminateProcessByPid(final @Nullable String pid) {
         val pidTrimmed = _Strings.blankToNullOrTrim(pid);
@@ -122,6 +140,41 @@ public class _OsUtil {
             throw _Exceptions.unsupportedOperation("OS " + os + " not (yet) supported");
         }
         rt.exec(cmd);
+    }
+
+    /**
+     * Optionally returns a machine specific unique number, based on whether
+     * the algorithm was able to generate one.
+     * <p>
+     * Should at least be stable until machine reboot.
+     */
+    public OptionalLong machineId() {
+        try {
+
+            long hash = 5381L;
+            boolean valid = false;
+
+            for (NetworkInterface netint : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                val hwAddr = netint.getHardwareAddress();
+                if(_NullSafe.size(hwAddr)<6) {
+                    continue;
+                }
+                for(byte b:hwAddr) {
+                    hash = hash*33L + b;
+                }
+                valid = true;
+            }
+
+            if(valid) {
+                return OptionalLong.of(hash);
+            }
+
+            // fallback to empty
+
+        } catch (Throwable e) {
+            // fallback to empty
+        }
+        return OptionalLong.empty();
     }
 
 }

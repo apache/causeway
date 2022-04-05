@@ -18,22 +18,45 @@
  */
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.function.Predicate;
+
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
 public enum MixedIn {
-    INCLUDED,
-    EXCLUDED;
+    /** Member search scope including mixed in members.*/
+    INCLUDED {
 
-    public boolean isIncluded() {
-        return this == INCLUDED;
-    }
+        @Override
+        public Predicate<? super ObjectMember> toFilter() {
+            return member->true;
+        }
 
-    public boolean isExcluded() {
-        return this == EXCLUDED;
-    }
+    },
 
-    public static boolean isNotMixedIn(final ObjectMember member) {
-        return !(member instanceof MixedInMember);
-    }
+    /** Member search scope excluding mixed in members.*/
+    EXCLUDED {
+
+        @Override
+        public Predicate<? super ObjectMember> toFilter() {
+            return member->!(member instanceof MixedInMember);
+        }
+
+    },
+
+    /** Member search scope only considering mixed in members.*/
+    ONLY {
+
+        @Override
+        public Predicate<? super ObjectMember> toFilter() {
+            return member->(member instanceof MixedInMember);
+        }
+
+    };
+
+    public boolean isIncluded() { return this == INCLUDED; }
+    public boolean isExcluded() { return this == EXCLUDED; }
+    public boolean isOnly() { return this == ONLY; }
+
+    public abstract Predicate<? super ObjectMember> toFilter();
 
 }

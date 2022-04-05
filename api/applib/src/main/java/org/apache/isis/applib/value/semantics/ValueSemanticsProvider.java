@@ -81,13 +81,6 @@ public interface ValueSemanticsProvider<T> {
      */
     T compose(ValueDecomposition decomposition);
 
-
-    // -- EXPERIMENTAL
-
-    default Object getValueMixin(final T value) {
-        return null;
-    }
-
     // --
 
 
@@ -120,6 +113,10 @@ public interface ValueSemanticsProvider<T> {
     DefaultsProvider<T> getDefaultsProvider();
 
     // -- CATEGORIZATION
+
+    default boolean isEnumType() {
+        return getSchemaValueType()==ValueType.ENUM;
+    }
 
     default boolean isNumberType() {
         return getSchemaValueType()==ValueType.BIG_DECIMAL

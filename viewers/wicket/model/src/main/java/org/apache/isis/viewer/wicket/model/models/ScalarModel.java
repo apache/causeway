@@ -26,13 +26,16 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -125,6 +128,20 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         this.parentEntityModel = parentEntityModel;
         this.mode = viewOrEdit;
         this.renderingHint = renderingHint;
+    }
+
+    /**
+     * This instance is either a {@link ScalarParameterModel} or a {@link ScalarPropertyModel}.
+     * <p>
+     * Corresponds to the enum {@link #getParamOrProp()}.
+     */
+    public final _Either<ScalarParameterModel, ScalarPropertyModel> getSpecialization() {
+        switch(getParamOrProp()) {
+        case PARAMETER: return _Either.left((ScalarParameterModel) this);
+        case PROPERTY: return _Either.right((ScalarPropertyModel) this);
+        default:
+            throw _Exceptions.unmatchedCase(getParamOrProp());
+        }
     }
 
 
@@ -342,10 +359,26 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
     }
 
-    public void clearPending() {
-        //TODO[ISIS-2871] is this really needed? - remove once we are sure
-        // was used to state that pending value is in sync with current value
-        //getPendingPropertyModel().getValue().setValue(null);
+    @SuppressWarnings("unchecked")
+    public Optional<ObjectAction> lookupCompositeValueMixinForFeature() {
+        val spec = getScalarTypeSpec();
+        if(!spec.isValue()) {
+            return Optional.empty();
+        }
+        return getSpecialization().<Optional<ObjectAction>>fold(
+                param->{
+                    return spec.lookupFacet(ValueFacet.class)
+                            .<ObjectAction>flatMap(valueFacet->
+                                valueFacet.selectCompositeValueMixinForParameter(
+                                        param.getParameterNegotiationModel(), param.getParameterIndex()));
+
+
+                },
+                prop->{
+                    return spec.lookupFacet(ValueFacet.class)
+                            .<ObjectAction>flatMap(valueFacet->
+                                valueFacet.selectCompositeValueMixinForProperty(prop.getManagedProperty()));
+                });
     }
 
 }

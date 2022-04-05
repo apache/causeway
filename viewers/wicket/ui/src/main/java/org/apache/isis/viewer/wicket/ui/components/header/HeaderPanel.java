@@ -35,8 +35,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
@@ -126,7 +126,7 @@ extends PanelAbstract<String, Model<String>> {
         final MarkupContainer container = this;
         val menuModel = new ServiceActionsModel(super.getCommonContext(), menuUiModel);
         val menuBarComponent = getComponentFactoryRegistry()
-                .createComponent(ComponentType.SERVICE_ACTIONS, id, menuModel);
+                .createComponent(id, ComponentType.SERVICE_ACTIONS, menuModel);
         Wkt.cssAppend(menuBarComponent, menuUiModel.getCssClass());
         container.add(menuBarComponent);
     }

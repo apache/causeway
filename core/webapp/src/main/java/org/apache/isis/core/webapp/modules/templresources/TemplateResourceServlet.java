@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._StringInterpolation;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
@@ -51,18 +52,18 @@ import lombok.extern.log4j.Log4j2;
 public class TemplateResourceServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private TemplateResourceServlet_HtmlTemplateVariables templateVariables;
+    private _StringInterpolation templateVariables;
 
     @Autowired private RestEasyConfiguration restEasyConfiguration;
     @Autowired private WebAppContextPath webAppContextPath;
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(final ServletConfig config) throws ServletException {
         super.init(config);
 
         final String restfulPath = this.restEasyConfiguration.getJaxrs().getDefaultPath();
         final String restfulBase = webAppContextPath.prependContextPath(restfulPath);
-        templateVariables = new TemplateResourceServlet_HtmlTemplateVariables(pair("restful-base", restfulBase));
+        templateVariables = new _StringInterpolation(pair("restful-base", restfulBase));
     }
 
     @Override
@@ -104,7 +105,7 @@ public class TemplateResourceServlet extends HttpServlet {
         log.warn("failed to load resource from classpath or file system: {}", servletPath);
     }
 
-    private InputStream loadFromFileSystem(HttpServletRequest request) {
+    private InputStream loadFromFileSystem(final HttpServletRequest request) {
         val inputStream = ResourceUtil.getResourceAsStream(request);
 
         if(log.isDebugEnabled()) {
@@ -119,7 +120,7 @@ public class TemplateResourceServlet extends HttpServlet {
         return inputStream;
     }
 
-    private InputStream loadFromClassPath(String path) {
+    private InputStream loadFromClassPath(final String path) {
         val inputStream = ResourceUtil.getResourceAsStream(path);
         if(log.isDebugEnabled()) {
             if(inputStream!=null) {
@@ -157,7 +158,7 @@ public class TemplateResourceServlet extends HttpServlet {
         }
     }
 
-    private static String guessContentType(String servletPath) {
+    private static String guessContentType(final String servletPath) {
         if(servletPath.endsWith(".html")) {
             return "text/html";
         }

@@ -20,12 +20,12 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.i18n.LanguageProvider;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
@@ -76,11 +76,11 @@ implements HasCommonContext {
     private transient PageNavigationService pageNavigationService;
     private transient HeaderUiModelProvider headerUiModelProvider;
 
-    protected PanelBase(String id) {
+    protected PanelBase(final String id) {
         this(id, null);
     }
 
-    public PanelBase(String id, @Nullable IModel<T> model) {
+    public PanelBase(final String id, @Nullable final IModel<T> model) {
         super(id, model);
     }
 
@@ -152,6 +152,15 @@ implements HasCommonContext {
         return headerUiModelProvider.getHeader();
     }
 
+    // -- TRANSLATION
+
+    /**
+     * Translate without context: Tooltips, Button-Labels, etc.
+     */
+    public final String translate(final String input) {
+        return getTranslationService().translate(TranslationContext.empty(), input);
+    }
+
     // Hint support
 
     public UiHintContainer getUiHintContainer() {
@@ -166,13 +175,13 @@ implements HasCommonContext {
 
     // -- HELPER
 
-    private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
+    private <X> X computeIfAbsent(final Class<X> type, final X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
                         : getCommonContext().lookupServiceElseFail(type);
     }
 
-    private <X> X computeIfAbsentOrFallback(Class<X> type, X existingIfAny, Supplier<X> fallback) {
+    private <X> X computeIfAbsentOrFallback(final Class<X> type, final X existingIfAny, final Supplier<X> fallback) {
         return existingIfAny!=null
                 ? existingIfAny
                         : getCommonContext().lookupServiceElseFallback(type, fallback);

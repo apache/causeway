@@ -25,9 +25,13 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
 import lombok.Getter;
@@ -188,5 +192,90 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
         return getManagedActionElseThrow(veto->
             _Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
     }
+
+    /** Supports composite-value-types via mixin (in case detected). */
+    public static ActionInteraction startAsBoundToProperty(
+            final ManagedProperty associatedWithProperty,
+            final String memberId,
+            final Where where) {
+        val propertyOwner = associatedWithProperty.getOwner();
+        val prop = associatedWithProperty.getMetaModel();
+        val elementType = prop.getElementType();
+
+        val valueFacet = elementType.isValue()
+                ? (ValueFacet<?>) elementType.getFacet(ValueFacet.class)
+                : null;
+
+        if(valueFacet!=null
+                && valueFacet.isCompositeValueType()
+                //XXX guard against memberId collision,
+                // such that if there is a conflict, the conventional member wins
+                // (maybe improve programming model so this cannot happen)
+                && propertyOwner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
+
+            val compositeValueNullable = prop.get(propertyOwner);
+            val compositeValue =
+                    ManagedObjects.nullOrEmptyToDefault(elementType, compositeValueNullable, ()->
+                        valueFacet.selectDefaultsProviderForProperty(prop)
+                            .orElseThrow(()->onMissingDefaultsProvider(prop))
+                            .getDefaultValue());
+
+            val mixinAction = valueFacet.selectCompositeValueMixinForProperty(associatedWithProperty);
+            if(mixinAction.isPresent()) {
+                val managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
+                return ActionInteraction.wrap(managedAction);
+            }
+        }
+        // fallback if not a composite value
+        return ActionInteraction.start(propertyOwner, memberId, where);
+    }
+
+    /** Supports composite-value-types via mixin (in case detected). */
+    public static ActionInteraction startAsBoundToParameter(
+            final ParameterNegotiationModel parameterNegotiationModel,
+            final int paramIndex,
+            final String memberId,
+            final Where where) {
+
+        val actionOwner = parameterNegotiationModel.getActionTarget();
+        val param = parameterNegotiationModel.getParamModels().getElseFail(paramIndex);
+        val elementType = param.getMetaModel().getElementType();
+
+        val valueFacet = elementType.isValue()
+                ? (ValueFacet<?>) elementType.getFacet(ValueFacet.class)
+                : null;
+        if(valueFacet!=null
+                && valueFacet.isCompositeValueType()
+                //XXX guard against memberId collision,
+                // such that if there is a conflict, the conventional member wins
+                // (maybe improve programming model so this cannot happen)
+                && actionOwner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
+
+            val compositeValueNullable = parameterNegotiationModel.getParamValue(paramIndex);
+            val compositeValue =
+                    ManagedObjects.nullOrEmptyToDefault(elementType, compositeValueNullable, ()->
+                        valueFacet.selectDefaultsProviderForParameter(param.getMetaModel())
+                            .orElseThrow(()->onMissingDefaultsProvider(param.getMetaModel()))
+                            .getDefaultValue());
+
+            val mixinAction = valueFacet.selectCompositeValueMixinForParameter(parameterNegotiationModel, paramIndex);
+            if(mixinAction.isPresent()) {
+                val managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
+                return ActionInteraction.wrap(managedAction);
+            }
+        }
+
+        // fallback if not a composite value
+        val paramValue = parameterNegotiationModel.getParamValue(paramIndex);
+        return ActionInteraction.start(paramValue, memberId, where);
+    }
+
+    // -- HELPER
+
+    private static RuntimeException onMissingDefaultsProvider(final ObjectFeature feature) {
+        return _Exceptions.unrecoverableFormatted("Could not find a DefaultsProvider for ObjectFeature %s",
+                feature.getFeatureIdentifier());
+    }
+
 
 }

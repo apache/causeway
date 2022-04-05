@@ -56,12 +56,16 @@ extends TemporalSemanticsAdapter<Date, LocalDate> {
 
     @Override
     public Date fromDelegateValue(final LocalDate delegateValue) {
-        return java.sql.Date.valueOf(delegateValue);
+        return delegateValue!=null
+                ? java.sql.Date.valueOf(delegateValue)
+                : null;
     }
 
     @Override
     public LocalDate toDelegateValue(final java.sql.Date value) {
-        return value.toLocalDate();
+        return value!=null
+                ? value.toLocalDate()
+                : null;
     }
 
     @Override

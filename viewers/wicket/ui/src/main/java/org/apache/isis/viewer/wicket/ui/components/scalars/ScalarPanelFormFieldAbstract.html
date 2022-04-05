@@ -22,40 +22,22 @@
 	xmlns:wicket="http://wicket.apache.org" xml:lang="en" lang="en">
 <body>
 	<wicket:panel>
-		<div class="scalarNameAndValueComponentType"
-			wicket:id="scalarTypeContainer">
+		<div wicket:id="scalarTypeContainer"
+			class="scalarNameAndValueComponentType">
 
+			<!-- regular frame -->
 			<div class="form-group" wicket:id="scalarIfRegular">
 
-				<label class="scalarName col-form-label" wicket:id="scalarName">[Label text]</label> 
+				<label wicket:id="scalarName"
+					class="scalarName col-form-label">[Label text]</label> 
 				<span class="scalarValueWrapper">
 					<div class="scalarPlaceholder">
-						<span class="scalarValueInput"> 
-							<span class="editing">
-
-								<a href="##" name="scalarValueInlinePromptLink"
-									class="scalarValueInlinePromptLink"
-									wicket:id="scalarValueInlinePromptLink">
-									
-									<!-- populated from fragments --> 
-									<wicket:container 
-										wicket:id="scalarValueInlinePromptLabel"/> 
-										 
-								</a> 
-							
-								<!-- populated from fragments -->
-								<wicket:container 
-										wicket:id="scalarValueContainer" />
-								
-								<a href="##" class="edit btn btn-sm btn-link"
-									wicket:id="editProperty"> 
-									<span class="editIcon fa fa-edit"/>
-								</a>
-										  
-							</span>
-						</span> 
-						<span class="associatedActionLinksRight"
-							wicket:id="associatedActionLinksRight">[drop down]</span>
+					
+						<wicket:container 
+							wicket:id="container-fieldFrame" />
+						
+						<span wicket:id="associatedActionLinksRight"
+							class="associatedActionLinksRight">[drop down]</span>
 					</div> 
 					<span wicket:id="feedback" class="form-text"/> 
 					<span wicket:id="associatedActionLinksBelow"/>
@@ -63,25 +45,78 @@
 				<div class="clearfix"/>
 			</div>
 
-			<div class="inlinePromptForm"
-				wicket:id="scalarIfRegularInlinePromptForm">
+			<!-- prompt form frame -->
+			<div wicket:id="scalarIfRegularInlinePromptForm"
+				class="inlinePromptForm">
 				<div>
-					<span>[property edit form]</span>
+					<span>[inline edit form]</span>
 				</div>
 			</div>
 
-			<!-- populated from fragments -->
+			<!-- compact frame -->
 			<wicket:container 
 				wicket:id="scalarIfCompact"/>
 				  
 		</div>
 
+		<!-- FIELD FRAME FRAGMENTS -->
+
+		<wicket:fragment wicket:id="fragment-fieldFrame-withLink">
+			<span class="scalarValueInput input-group">
+				<div wicket:id="scalarValueInlinePromptLink"
+					class="scalarValueInlinePromptLink">
+					<!-- output format -->
+					<wicket:container 
+						wicket:id="container-scalarValue"
+						class="no-event-prop" />
+						
+					<span class="position-absolute top-0 end-0">
+              			<div class="btn-group btn-group-sm shadow" role="group">
+	                		<button type="button" class="btn btn-primary">
+	                			<i class="fa-solid fa-edit"></i></button>
+                			
+	                		<!-- additional buttons -->	
+            				<button wicket:id="scalarValueInlinePromptLink-buttons" 
+            					class="btn" type="button">
+							</button>
+	                			
+	             		</div>
+	            	</span>
+				</div> 
+			</span> 
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink-viewing">
+			<span class="scalarValueInput">
+				<!-- input format (when read-only) -->
+				<wicket:container 
+					wicket:id="container-scalarValue" />
+			</span> 
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink-editing">
+			<span class="scalarValueInput input-group">
+				<!-- input format (when editing or action dialog) -->
+				<wicket:container 
+					wicket:id="container-scalarValue" />
+			
+				<span class="position-absolute top-0 end-0" style="z-index: 20;">
+           			<div class="btn-group btn-group-sm shadow" role="group">
+           				<!-- additional buttons -->
+         				<button wicket:id="scalarValueInput-buttons" 
+         					class="btn" type="button">
+						</button>
+           			</div>
+            	</span>
+			</span> 
+		</wicket:fragment>
+
 		<!-- INPUT FRAGMENTS -->
 
 		<wicket:fragment wicket:id="fragment-input-text">
-			<input type="text" name="scalarValue"
-				class="form-control form-control-sm scalarValue"
-				wicket:id="scalarValue" />
+			<input wicket:id="scalarValue"
+				type="text" name="scalarValue"
+				class="form-control form-control-sm scalarValue"/>
 		</wicket:fragment>
 
 		<wicket:fragment wicket:id="fragment-input-textarea">
@@ -91,29 +126,40 @@
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-input-checkbox">
-	        <input type="checkbox" name="scalarValue"
-	        	class="scalarValue"
-				wicket:id="scalarValue" />
+	        <input wicket:id="scalarValue" type="checkbox" name="scalarValue"
+	        	class="scalarValue"/>
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-input-file">
 			<span class="uploadFile form-text">
-      			<input type="file" name="scalarValue" wicket:id="scalarValue" />
+      			<input wicket:id="scalarValue" type="file" name="scalarValue"/>
          	</span>
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-input-date">
 			<div class="date">
-				<input type="text" name="scalarValue"
-					class="form-control form-control-sm scalarValue"
-					wicket:id="scalarValue" />
+				<input wicket:id="scalarValue"
+					type="text" name="scalarValue"
+					class="form-control form-control-sm scalarValue"/>
 			</div>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-input-select">
+			<select wicket:id="scalarValue"
+				class="choices form-control-sm select2-remote"/>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-input-select2">
+           <span class="autoCompletePlaceholder">
+               <span wicket:id="entityLink">link or drop down</span>
+           </span>
+           <span wicket:id="entityTitleIfNull">(none)</span>
 		</wicket:fragment>
 
 		<!-- PROMPT FRAGMENTS -->
 
 		<wicket:fragment wicket:id="fragment-prompt-editicon">
-			<button class="edit btn btn-sm btn-link" wicket:id="scalarValue">
+			<button wicket:id="scalarValue" class="edit btn btn-sm btn-link">
 				<span class="editIcon fa fa-edit"/>
 			</button>
 		</wicket:fragment>
@@ -126,17 +172,63 @@
 			<textarea wicket:id="scalarValue"
 				class="form-control form-control-sm scalarPrompt" readonly="true"/>
 		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-prompt-checkboxYes">
+			<label class="fs-4" style="color: green;"><i
+				class="fa-regular fa-check-square"></i></label>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-prompt-checkboxNo">
+			<label class="fs-4"><i
+				class="fa-regular fa-square"></i></label>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-prompt-checkboxIntermediate">
+			<label class="fs-4" style="color: silver;"><i
+				class="fa-regular fa-square-minus"></i></label>
+		</wicket:fragment>
 
 		<!-- COMPACT FRAGMENTS -->
 		
-		<wicket:fragment wicket:id="fragment-compact-checkbox">
-			<input wicket:id="scalarIfCompact" type="checkbox"
-				class="form-control" />
+		<wicket:fragment wicket:id="fragment-compact-checkboxYes">
+			<label class="fs-5" style="color: green;"><i
+				class="fa-regular fa-check-square"></i></label>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-compact-checkboxNo">
+			<label class="fs-5"><i
+				class="fa-regular fa-square"></i></label>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-compact-checkboxIntermediate">
+			<label class="fs-5" style="color: silver;"><i
+				class="fa-regular fa-square-minus"></i></label>
 		</wicket:fragment>
 
 		<wicket:fragment wicket:id="fragment-compact-label">
-			<span wicket:id="scalarIfCompact"/>
+			<span wicket:id="scalarValue"/>
 		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-compact-link">
+			<a wicket:id="scalarValue" class="no-click-bubbling link-primary">
+				<span wicket:id="linkLabel" />
+			</a>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-compact-badge">
+			<div class="badge bg-light">
+				<span wicket:id="scalarValue"></span>	
+			</div>
+		</wicket:fragment>
+		
+		<wicket:fragment wicket:id="fragment-compact-entityLink">
+			<div class="scalarValue">
+                <div class="entityLink"
+                     wicket:id="entityLink"
+                >[property or parameter value]</div>
+            </div>
+		</wicket:fragment>
+		
 
 	</wicket:panel>
 </body>

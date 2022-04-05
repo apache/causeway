@@ -63,15 +63,15 @@ import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPane
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithComposite;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPicker;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisBlobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.blobclob.IsisClobPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.bool.BooleanPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.composite.CompositeValuePanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 import org.apache.isis.viewer.wicket.ui.components.scalars.passwd.IsisPasswordPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.value.fallback.ValueFallbackPanelFactory;
@@ -368,14 +368,14 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
 
         return new ComponentFactoryScalarAbstract(
-                ScalarPanelTextFieldWithComposite.class,
+                CompositeValuePanel.class,
                 valueTypeClasses) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             public Component createComponent(final String id, final ScalarModel scalarModel) {
-                return new ScalarPanelTextFieldWithComposite<T>(id, scalarModel, valueTypeClass);
+                return new CompositeValuePanel<T>(id, scalarModel, valueTypeClass);
             }
 
         };

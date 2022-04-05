@@ -27,6 +27,8 @@ import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -46,8 +48,7 @@ extends ChoiceProvider<ObjectMemento> {
 
     private static final long serialVersionUID = 1L;
 
-    protected static final String NULL_PLACEHOLDER = "$$_isis_null_$$";
-    private static final String NULL_DISPLAY_TEXT = "";
+    protected static final String NULL_PLACEHOLDER = "VGN6r6zKTiLhUsA0WkdQ17LvMU1IYdb0";
 
     @Getter private final ScalarModel scalarModel;
     private transient IsisAppCommonContext commonContext;
@@ -61,13 +62,13 @@ extends ChoiceProvider<ObjectMemento> {
     public String getDisplayValue(final ObjectMemento choiceMemento) {
         if (choiceMemento == null
                 || choiceMemento instanceof ObjectMementoForEmpty) {
-            return NULL_DISPLAY_TEXT;
+            return translate(ValueSemanticsAbstract.NULL_REPRESENTATION);
         }
         val choice = getCommonContext().reconstructObject(choiceMemento);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(choice)) {
             return "Internal error: broken memento " + choiceMemento;
         }
-        return choice.titleString();
+        return translate(choice.titleString());
     }
 
     @Override
@@ -171,6 +172,13 @@ extends ChoiceProvider<ObjectMemento> {
                 .map(getCommonContext()::mementoForBookmark)
                 .orElse(null);
         return memento;
+    }
+
+    /**
+     * Translate without context: Tooltips, Button-Labels, etc.
+     */
+    private final String translate(final String input) {
+        return getCommonContext().getTranslationService().translate(TranslationContext.empty(), input);
     }
 
 

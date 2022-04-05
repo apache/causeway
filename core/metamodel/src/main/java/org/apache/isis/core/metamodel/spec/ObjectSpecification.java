@@ -517,6 +517,15 @@ extends
         }
     }
 
+    default public boolean isAssignableFrom(final Class<?> actualType) {
+        val expectedType = getCorrespondingClass();
+        if(expectedType.isAssignableFrom(actualType)
+                || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
+            return true;
+        }
+        return false;
+    }
+
     default public boolean isPojoCompatible(final Object pojo) {
 
         if(pojo==null) {

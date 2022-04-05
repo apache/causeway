@@ -42,8 +42,6 @@ import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
-import lombok.val;
-
 /**
  * The parent (container) model of multiple <i>parameter models</i> which implement
  * {@link ChainingModel}.
@@ -114,14 +112,23 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
         if(associatedWithParameterIfAny!=null) {
             final int paramIndex = associatedWithParameterIfAny.getParameterIndex();
-            val paramValue = associatedWithParameterIfAny.getParameterNegotiationModel().getParamValue(paramIndex);
-            return ActionInteraction.start(paramValue, memberId, where);
+            // supports composite-value-types via mixin
+            return ActionInteraction.startAsBoundToParameter(
+                    associatedWithParameterIfAny.getParameterNegotiationModel(), paramIndex, memberId, where);
         }
 
-        return associatedWithCollectionIfAny!=null
-                ? ActionInteraction.startWithMultiselect(getBookmarkedOwner(), memberId, where,
-                        associatedWithCollectionIfAny.getDataTableModel())
-                : ActionInteraction.start(getBookmarkedOwner(), memberId, where);
+        if(associatedWithCollectionIfAny!=null) {
+            return ActionInteraction.startWithMultiselect(getBookmarkedOwner(), memberId, where,
+                    associatedWithCollectionIfAny.getDataTableModel());
+        }
+
+        if(associatedWithPropertyIfAny!=null) {
+            // supports composite-value-types via mixin
+            return ActionInteraction.startAsBoundToProperty(
+                    associatedWithPropertyIfAny.getManagedProperty(), memberId, where);
+        }
+
+        return ActionInteraction.start(getBookmarkedOwner(), memberId, where);
     }
 
     public final ActionInteraction actionInteraction() {
@@ -174,7 +181,9 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     public InlinePromptContext getInlinePromptContext() {
         return associatedWithPropertyIfAny != null
                 ? associatedWithPropertyIfAny.getInlinePromptContext()
-                : null;
+                : associatedWithParameterIfAny!=null
+                    ? associatedWithParameterIfAny.getInlinePromptContext()
+                    : null;
     }
 
 }

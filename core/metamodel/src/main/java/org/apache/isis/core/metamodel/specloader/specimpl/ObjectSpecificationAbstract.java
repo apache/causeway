@@ -38,6 +38,7 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Oneshot;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
@@ -45,7 +46,6 @@ import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -387,15 +387,12 @@ implements ObjectSpecification {
         }
     }
 
-
     private void updateFromFacetValues() {
-
         titleFacet = getFacet(TitleFacet.class);
         iconFacet = getFacet(IconFacet.class);
         navigableParentFacet = getFacet(NavigableParentFacet.class);
         cssClassFacet = getFacet(CssClassFacet.class);
     }
-
 
     protected void postProcess() {
         postProcessor.postProcess(this);
@@ -644,18 +641,12 @@ implements ObjectSpecification {
     public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        if(mixedIn.isIncluded()) {
-            createMixedInAssociations(); // only if not already
-            synchronized(unmodifiableAssociations) {
-                return stream(unmodifiableAssociations.get());
-            }
-        }
+        createMixedInAssociations(); // only if not already
 
         synchronized(unmodifiableAssociations) {
             return stream(unmodifiableAssociations.get())
-                    .filter(MixedIn::isNotMixedIn);
+                    .filter(mixedIn.toFilter());
         }
-
     }
 
     @Override
@@ -693,15 +684,11 @@ implements ObjectSpecification {
             final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        if(mixedIn.isIncluded()) { // conditional not strictly required, could instead always go this code path
-            createMixedInActions(); // only if not already
-        }
+        createMixedInActions(); // only if not already
 
         return actionScopes.stream()
                 .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
-                .filter(mixedIn.isIncluded()
-                        ? _Predicates.alwaysTrue()
-                        : MixedIn::isNotMixedIn);
+                .filter(mixedIn.toFilter());
     }
 
     // -- mixin associations (properties and collections)
@@ -855,44 +842,38 @@ implements ObjectSpecification {
         return containsFacet(ParentedCollectionFacet.class);
     }
 
-    // -- GUARDS
+    // -- MIXIN ADDER ONESHOTs
 
-    private boolean mixedInAssociationsAdded;
-    private boolean mixedInActionsAdded;
+    private final _Oneshot mixedInAssociationAdder = new _Oneshot();
+    private final _Oneshot mixedInActionAdder = new _Oneshot();
 
+    /**
+     * one-shot: ignored if already created
+     */
     private void createMixedInActions() {
-        // update our list of actions if requesting for contributed actions
-        // and they have not yet been added
-        // the "contributed.isIncluded()" guard is required because we cannot do this too early;
-        // there must be a session available
-        synchronized (unmodifiableActions) {
-            if(!mixedInActionsAdded) {
-                val actions = _Lists.newArrayList(this.objectActions);
-                if (isEntityOrViewModelOrAbstract()
-                        || getBeanSort().isManagedBeanContributing()
-                        // in support of value-type constructor mixins
-                        || getBeanSort().isValue()) {
-                    createMixedInActions(actions::add);
-                }
-                sortCacheAndUpdateActions(actions);
-                mixedInActionsAdded = true;
+        mixedInAssociationAdder.trigger(()->{
+            val actions = _Lists.newArrayList(this.objectActions);
+            if (isEntityOrViewModelOrAbstract()
+                    || getBeanSort().isManagedBeanContributing()
+                    // in support of composite value-type constructor mixins
+                    || getBeanSort().isValue()) {
+                createMixedInActions(actions::add);
             }
-        }
+            sortCacheAndUpdateActions(actions);
+        });
     }
 
+    /**
+     * one-shot: ignored if already created
+     */
     private void createMixedInAssociations() {
-        // the "contributed.isIncluded()" guard is required because we cannot do this too early;
-        // there must be a session available
-        synchronized (unmodifiableAssociations) {
-            if(!mixedInAssociationsAdded) {
-                val associations = _Lists.newArrayList(this.associations);
-                if(isEntityOrViewModelOrAbstract()) {
-                    createMixedInAssociations(associations::add);
-                }
-                sortAndUpdateAssociations(associations);
-                mixedInAssociationsAdded = true;
+        mixedInActionAdder.trigger(()->{
+            val associations = _Lists.newArrayList(this.associations);
+            if(isEntityOrViewModelOrAbstract()) {
+                createMixedInAssociations(associations::add);
             }
-        }
+            sortAndUpdateAssociations(associations);
+        });
     }
 
     protected IsisBeanTypeRegistry getIsisBeanTypeRegistry() {

@@ -21,17 +21,16 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -43,41 +42,41 @@ extends ScalarPanelSelectAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private boolean isOutputFormat = false;
+    private final boolean isCompactFormat;
 
     public ValueChoicesSelect2Panel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
+        this.isCompactFormat = !scalarModel.getRenderingHint().isRegular();
     }
 
     // --
 
     @Override
-    protected Component createComponentForCompact() {
-        isOutputFormat = true;
-        return Wkt.label(ID_SCALAR_IF_COMPACT, "placeholder");
+    protected Component createComponentForOutput(final String id) {
+        return Wkt.label(id, "placeholder");
     }
 
     @Override
-    protected MarkupContainer createComponentForRegular() {
+    protected Optional<InputFragment> getInputFragmentType() {
+        return Optional.of(InputFragment.SELECT);
+    }
+
+    @Override
+    protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
         if(select2 == null) {
-            this.select2 = createSelect2(ID_SCALAR_VALUE);
+            this.select2 = createSelect2(id);
         } else {
             select2.clearInput();
         }
-        FormComponent<?> formComponent = select2.asComponent();
-        return createFormGroup(formComponent);
+        FormComponent formComponent = select2.asComponent();
+        return formComponent;
     }
 
     // --
 
     @Override
-    protected InlinePromptConfig getInlinePromptConfig() {
-        return InlinePromptConfig.supportedAndHide(select2.asComponent());
-    }
-
-    @Override
-    protected IModel<String> obtainInlinePromptModel() {
-        return select2.obtainInlinePromptModel2();
+    protected String obtainOutputFormat() {
+        return select2.obtainInlinePromptModel2().getObject();
     }
 
     // --
@@ -85,7 +84,7 @@ extends ScalarPanelSelectAbstract {
     @Override
     protected void onInitializeNotEditable() {
         super.onInitializeNotEditable();
-        if(isOutputFormat) return;
+        if(isCompactFormat) return;
         // View: Read only
         select2.setEnabled(false);
     }
@@ -93,7 +92,7 @@ extends ScalarPanelSelectAbstract {
     @Override
     protected void onInitializeEditable() {
         super.onInitializeEditable();
-        if(isOutputFormat) return;
+        if(isCompactFormat) return;
         // Edit: read/write
         select2.setEnabled(true);
         clearTitleAttribute();
@@ -102,13 +101,13 @@ extends ScalarPanelSelectAbstract {
     @Override
     protected void onInitializeReadonly(final String disableReason) {
         super.onInitializeReadonly(disableReason);
-        if(isOutputFormat) return;
+        if(isCompactFormat) return;
         setTitleAttribute(disableReason);
         select2.setEnabled(false);
     }
 
     private void clearTitleAttribute() {
-        val target = getComponentForRegular();
+        val target = getRegularFrame();
         WktTooltips.clearTooltip(target);
     }
 
@@ -117,14 +116,14 @@ extends ScalarPanelSelectAbstract {
             clearTitleAttribute();
             return;
         }
-        val target = getComponentForRegular();
+        val target = getRegularFrame();
         WktTooltips.addTooltip(target, titleAttribute);
     }
 
     @Override
     protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
         super.onNotEditable(disableReason, target);
-        if(isOutputFormat) return;
+        if(isCompactFormat) return;
         setTitleAttribute(disableReason);
         select2.setEnabled(false);
     }
@@ -132,7 +131,7 @@ extends ScalarPanelSelectAbstract {
     @Override
     protected void onEditable(final Optional<AjaxRequestTarget> target) {
         super.onEditable(target);
-        if(isOutputFormat) return;
+        if(isCompactFormat) return;
         setTitleAttribute("");
         select2.setEnabled(true);
     }
@@ -146,11 +145,6 @@ extends ScalarPanelSelectAbstract {
         return new ObjectAdapterMementoProviderForValueChoices(scalarModel());
     }
 
-    @Override
-    protected void syncIfNull(final Select2 select2) {
-        if(scalarModel().isEmpty()) {
-            select2.clear();
-        }
-    }
+
 
 }

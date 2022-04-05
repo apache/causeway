@@ -41,11 +41,6 @@ extends ScalarPanelTextFieldAbstract<String> {
         super(id, scalarModel, String.class);
     }
 
-    protected ScalarPanelTextFieldTextualAbstract(
-            final String id, final ScalarModel scalarModel, final TextFieldVariant textFieldVariant) {
-        super(id, scalarModel, String.class, textFieldVariant);
-    }
-
     @Override
     protected final IConverter<String> getConverter(
             final @NonNull ObjectFeature propOrParam,

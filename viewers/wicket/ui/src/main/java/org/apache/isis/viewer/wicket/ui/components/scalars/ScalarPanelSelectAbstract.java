@@ -18,111 +18,56 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
+import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.ChoiceProvider;
 
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
 public abstract class ScalarPanelSelectAbstract
-extends ScalarPanelAbstract {
+extends ScalarPanelFormFieldAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
+    @Getter
     protected Select2 select2;
 
     public ScalarPanelSelectAbstract(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+        super(id, scalarModel, ManagedObject.class);
+        setOutputMarkupId(true);
     }
 
-    @Override
-    protected Component getValidationFeedbackReceiver() {
-        return select2!=null
-                ? select2.asComponent()
-                : null;
-    }
+    protected final Select2 createSelect2(final String id) {
+        val scalarModel = scalarModel();
 
-    protected Select2 createSelect2(final String id) {
-        final Select2 select2 = Select2.createSelect2(id, scalarModel());
-        setProviderAndCurrAndPending(select2);
-        select2.setRequired(scalarModel().isRequired());
+        val select2 = Select2.createSelect2(id, scalarModel());
+        select2.setLabel(Model.of(scalarModel.getFriendlyName()));
+
+        updateChoices(select2);
         return select2;
     }
 
-    protected FormGroup createFormGroup(final FormComponent<?> formComponent) {
-        val scalarModel = scalarModel();
-        val friendlyNameModel = Model.of(scalarModel.getFriendlyName());
-
-        setOutputMarkupId(true);
-        select2.asComponent().setOutputMarkupId(true);
-        select2.setLabel(friendlyNameModel);
-
-        final FormGroup formGroup = new FormGroup(ID_SCALAR_IF_REGULAR, formComponent);
-        formGroup.add(formComponent);
-        formGroup.addOrReplace(createScalarNameLabel(ID_SCALAR_NAME, friendlyNameModel));
-
-        addStandardSemantics();
-
-        if(scalarModel.isRequired() && scalarModel.isEnabled()) {
-            Wkt.cssAppend(formGroup, "mandatory");
-        }
-        return formGroup;
-    }
-
-    protected void addStandardSemantics() {
-        select2.setRequired(getModel().isRequired());
-        select2.add(new Select2Validator(scalarModel()));
-    }
-
-
     /**
-     * sets up the choices, also ensuring that any currently held value is compatible.
-     */
-    private void setProviderAndCurrAndPending(
-            final Select2 select2) {
-
-        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider();
-
-        select2.setProvider(choiceProvider);
-        getModel().clearPending();
-
-        val dependsOnPreviousArgs = (choiceProvider instanceof ObjectAdapterMementoProviderAbstract)
-                && ((ObjectAdapterMementoProviderAbstract) choiceProvider).dependsOnPreviousArgs();
-
-        if(dependsOnPreviousArgs) {
-            syncIfNull(select2);
-        }
-
-    }
-
-    /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2)})
+     * Mandatory hook (is called by {@link #createSelect2(String)})
      */
     protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider();
-
-    /**
-     * Mandatory hook (is called by {@link #setProviderAndCurrAndPending(Select2)})
-     */
-    protected abstract void syncIfNull(Select2 select2);
 
     // //////////////////////////////////////
 
@@ -134,16 +79,6 @@ extends ScalarPanelAbstract {
             final WebMarkupContainer inlinePromptForm,
             final AjaxRequestTarget target) {
         Wkt.javaScriptAdd(target, EventTopic.OPEN_SELECT2, inlinePromptForm.getMarkupId());
-    }
-
-    @Override
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
-        setEnabled(false);
-    }
-
-    @Override
-    protected void onEditable(final Optional<AjaxRequestTarget> target) {
-        setEnabled(true);
     }
 
     // //////////////////////////////////////
@@ -160,7 +95,7 @@ extends ScalarPanelAbstract {
             final @NonNull Optional<AjaxRequestTarget> target) {
 
         val repaint = super.updateIfNecessary(paramModel, target);
-        final boolean choicesUpdated = updateChoices();
+        final boolean choicesUpdated = updateChoices(this.select2);
 
         if (repaint == Repaint.NOTHING) {
             if (choicesUpdated) {
@@ -173,11 +108,41 @@ extends ScalarPanelAbstract {
         }
     }
 
-    private boolean updateChoices() {
+    private boolean updateChoices(final @Nullable Select2 select2) {
         if (select2 == null) {
             return false;
         }
-        setProviderAndCurrAndPending(select2);
+
+        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider();
+        select2.setProvider(choiceProvider);
+
+        //sets up the choices, also ensuring that any currently held value is compatible.
+
+        _Casts.castTo(ObjectAdapterMementoProviderAbstract.class, choiceProvider)
+        .ifPresent(mementoProvider->{
+            if(mementoProvider.dependsOnPreviousArgs()){
+
+                _Debug.log("ChoiceProvider with DependsOnPreviousArgs while scalarModel() %s",
+                        scalarModel().isEmpty()? "is empty" : "is not empty");
+
+                System.err.printf("ChoiceProvider with DependsOnPreviousArgs while scalarModel() %s%n",
+                        scalarModel().isEmpty()? "is empty" : "is not empty");
+
+                //XXX what to do?
+//                if(scalarModel().isScalar()) {
+//                    if(select2.isEmpty()) {
+//                        select2.clear(); // why?
+//                        getModel().setObject(null);
+//                    }
+//                }
+//
+//                if(scalarModel().isEmpty()) {
+//                    select2.clear();
+//                }
+
+            }
+        });
+
         return true;
     }
 
@@ -188,47 +153,7 @@ extends ScalarPanelAbstract {
      */
     @Override
     public void repaint(final AjaxRequestTarget target) {
-        //target.add(select2.component());
         target.add(this);
     }
 
-    static class Select2Validator implements IValidator<Object> {
-        private static final long serialVersionUID = 1L;
-
-        private final ScalarModel scalarModel;
-
-        public Select2Validator(final ScalarModel scalarModel) {
-
-            this.scalarModel = scalarModel;
-        }
-
-        @Override
-        public void validate(final IValidatable<Object> validatable) {
-            final Object proposedValueObj = validatable.getValue();
-
-            final ObjectMemento proposedValue;
-
-            if (proposedValueObj instanceof List) {
-                @SuppressWarnings("unchecked")
-                val proposedValueObjAsList = (List<ObjectMemento>) proposedValueObj;
-                if (proposedValueObjAsList.isEmpty()) {
-                    return;
-                }
-                val memento = proposedValueObjAsList.get(0);
-                val logicalType = memento.getLogicalType();
-                proposedValue = ObjectMemento.pack(proposedValueObjAsList, logicalType);
-            } else {
-                proposedValue = (ObjectMemento) proposedValueObj;
-            }
-
-            val proposedAdapter = scalarModel.getCommonContext().reconstructObject(proposedValue);
-            final String reasonIfAny = scalarModel.validate(proposedAdapter);
-            if (reasonIfAny != null) {
-                final ValidationError error = new ValidationError();
-                error.setMessage(reasonIfAny);
-                validatable.error(error);
-            }
-        }
-
-    }
 }

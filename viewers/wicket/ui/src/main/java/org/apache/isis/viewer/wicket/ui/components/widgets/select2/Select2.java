@@ -69,6 +69,7 @@ implements
 
     private Select2(final @NonNull _Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice) {
         this.select2Choice = select2Choice;
+        asComponent().setOutputMarkupId(true);
     }
 
     public void setProvider(final ChoiceProvider<ObjectMemento> providerForChoices) {

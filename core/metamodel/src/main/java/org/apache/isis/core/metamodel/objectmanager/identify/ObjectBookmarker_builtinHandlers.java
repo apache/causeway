@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker.Handler;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -111,10 +112,10 @@ class ObjectBookmarker_builtinHandlers {
                 });
 
                 val msg = String.format(
-                        "The persistence layer does not recognize given object of type %s, "
+                        "The persistence layer does not recognize given object %s, "
                         + "meaning the object has no identifier that associates it with the persistence layer. "
                         + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
-                        entityPojo.getClass().getName());
+                        managedObject);
 
                 // in case of the exception getting swallowed, also write a log
                 log.error(msg);
@@ -138,24 +139,11 @@ class ObjectBookmarker_builtinHandlers {
         @SneakyThrows
         @Override
         public Bookmark handle(final ManagedObject managedObject) {
-//            throw _Exceptions.illegalArgument("cannot 'identify' the value type %s, "
-//                    + "as values have no identifier",
-//                    managedObject.getSpecification().getCorrespondingClass().getName());
-
             val spec = managedObject.getSpecification();
-
-//            if(java.io.Serializable.class.isAssignableFrom(spec.getCorrespondingClass())) {
-//
-//                val baos = new ByteArrayOutputStream();
-//                try(val oos = new ObjectOutputStream(baos)) {
-//                    oos.writeObject(managedObject.getPojo());
-//                    val identifier = _Strings.ofBytes(
-//                            _Bytes.asUrlBase64.apply(baos.toByteArray()),
-//                            StandardCharsets.UTF_8);
-//                    return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
-//                }
-//
-//            }
+            val valuePojo = managedObject.getPojo();
+            if(valuePojo==null) {
+                return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), "{}");
+            }
 
             val valueFacet = spec.getFacet(ValueFacet.class);
             ValueSemanticsProvider<Object> composer = (ValueSemanticsProvider) valueFacet.selectDefaultSemantics()
@@ -180,7 +168,9 @@ class ObjectBookmarker_builtinHandlers {
 
         @Override
         public boolean isHandling(final ManagedObject managedObject) {
-            return managedObject.getSpecification().containsFacet(ViewModelFacet.class);
+            return (managedObject instanceof PackedManagedObject)
+                    ? false
+                    : managedObject.getSpecification().containsFacet(ViewModelFacet.class);
         }
 
         @Override

@@ -39,11 +39,13 @@ import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
+import org.apache.isis.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
 import lombok.Getter;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
@@ -105,8 +107,8 @@ public class WktDecorators {
                     .withTitle(confirmUiModel.getTitle())
                     .withBtnOkLabel(confirmUiModel.getOkLabel())
                     .withBtnCancelLabel(confirmUiModel.getCancelLabel())
-                    .withBtnOkClass("btn btn-danger")
-                    .withBtnCancelClass("btn btn-secondary")
+                    .withBtnOkClass(ButtonSemantics.DANGER.fullButtonCss())
+                    .withBtnCancelClass(ButtonSemantics.SECONDARY.fullButtonCss())
                     .withPlacement(Placement.valueOf(confirmUiModel.getPlacement().name().toLowerCase()));
 
             uiComponent.add(new ConfirmationBehavior(confirmationConfig));
@@ -121,11 +123,16 @@ public class WktDecorators {
     }
 
     public final static class Danger implements DangerDecorator<Component> {
+
+        private final CssClassNameRemover cssButtonSemanticsRemover =
+                ButtonSemantics.createButtonSemanticsRemover();
+
         @Override
         public void decorate(final Component uiComponent) {
-            //if(uiComponent instanceof Button) {
-            Wkt.cssAppend(uiComponent, "btn-danger");
-            //}
+
+            uiComponent.add(cssButtonSemanticsRemover);
+
+            Wkt.cssAppend(uiComponent, ButtonSemantics.DANGER.buttonDefaultCss());
         }
     }
 

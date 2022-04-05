@@ -22,26 +22,26 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
 
-public class DefaultViewFacetForCollectionLayoutAnnotation extends DefaultViewFacetAbstract {
+public class DefaultViewFacetForCollectionLayoutAnnotation
+extends DefaultViewFacetAbstract {
 
-    public static DefaultViewFacet create(
+    public static Optional<DefaultViewFacet> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
-            final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final String defaultView = collectionLayoutIfAny
+        return collectionLayoutIfAny
                 .map(CollectionLayout::defaultView)
                 .filter(_Strings::isNotEmpty)
-                .orElseGet(()->configuration.getApplib().getAnnotation().getCollectionLayout().getDefaultView().toNameLower());
-        return new DefaultViewFacetForCollectionLayoutAnnotation(defaultView, holder);
+                .map((final String defaultView)->
+                    new DefaultViewFacetForCollectionLayoutAnnotation(defaultView, holder));
     }
 
     private DefaultViewFacetForCollectionLayoutAnnotation(final String value, final FacetHolder holder) {
         super(value, holder);
     }
+
 }

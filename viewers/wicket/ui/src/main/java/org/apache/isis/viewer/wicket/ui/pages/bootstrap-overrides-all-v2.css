@@ -41,7 +41,6 @@ body {
 .card {
 	margin-bottom: 21px;
 }
-
 .card .card-header {
 	padding: 3px 15px;
 	display: flex;
@@ -49,9 +48,24 @@ body {
 	justify-content: space-between;
 	min-height: 3em; /* for card-headers that contain no buttons, to make them same height */
 }
-
 .card .card-header .card-title {
 	margin-bottom: 0rem;
+}
+
+.card .mini-card {
+  font-size: 0.7rem;
+}
+.card .mini-card h5 {
+  font-size: 0.8rem;
+}
+.card .mini-card h6 {
+  font-size: 0.7rem;
+}
+.card .mini-card .card-header,
+.card .mini-card .card-body,
+.card .mini-card .card-footer {
+  padding: 0.2rem 0.4rem;
+  min-height: inherit;
 }
 
 .table .form-control:disabled {
@@ -517,8 +531,8 @@ span.containedButtonPanel {
 }
 
 /* add some space between an FA icon and the text on the right */
-.btn .additionalLinkItem {
-	margin-left: 3px;
+.additionalLinkItem .fa {
+	margin-right: 2px;
 }
 
 /* from additionalLinksPanel.css */
@@ -1011,6 +1025,10 @@ li.select2-results__option {
     min-height: 30px;
 }
 
+.scalarName {
+	opacity: 0.8;
+}
+
 .scalarNameAndValueComponentType .inlinePromptForm {
     border: 2px solid;
     padding: 10px;
@@ -1028,9 +1046,26 @@ li.select2-results__option {
     width: 85%;
 }
 
-a.form-control.scalarValueInlinePromptLink {
+div.scalarValueInlinePromptLink.form-control {
     text-decoration: none;
     overflow: hidden;
+}
+div.scalarValueInlinePromptLink.form-control:hover {
+	cursor: pointer;
+	background-color: rgba(0, 0, 0, 0.08);
+}
+div.scalarValueInlinePromptLink.form-control .btn-group,
+span.scalarValueInput.input-group div.btn-group {
+    display: none;
+}
+div.scalarValueInlinePromptLink.form-control:hover .btn-group,
+span.scalarValueInput.input-group:hover div.btn-group {
+	display: inherit;
+}
+
+.entityUrlSource {
+	cursor: pointer;
+	display: inline;
 }
 
 .booleanPanel div.label-left .scalarValueWrapper .form-control.scalarValueInlinePromptLink,
@@ -1043,29 +1078,18 @@ a.form-control.scalarValueInlinePromptLink {
 }
 
 .referencePanel .inlinePrompt .entityIconAndTitlePanel .entityImage {
-    margin-right: 10px;
-}
-.referencePanel .inlinePrompt .entityIconAndTitlePanel .entityTitle {
-    display: none;
+    width: 1.3em;
+	height: 1.3em;
 }
 
-/*
-instead of this CSS (which would force this highlighting everywhere, instead suggest use a browser extension
-such as https://chrome.google.com/webstore/detail/focus-indicator/heeoeadndnhebmfebjccbhmccmaoedlf
-
-#container  a:focus,
-#container  .btn:focus,
-#container  input:focus,
-#container  :focus {
-    outline-color: maroon;
-    outline-style: solid;
-    outline-width: 2px;
+.entityTitle {
+    text-decoration: none;
+    color: var(--bs-success);
 }
-
-#container  a.edit:focus {
-    padding: 3px;
+.entityTitle:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
-*/
 
 #container.page #wicketDebugBar {
     padding-top: 60px;

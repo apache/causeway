@@ -81,13 +81,17 @@ public abstract class _ConcurrentTask<T> implements Runnable {
     @Override
     public final void run() {
 
-        preCall();
-        try {
-            val completedWith = innerCall();
-            postCall(completedWith, /*failedWith*/ null);
-        } catch (Throwable e) {
-            postCall(/*completedWith*/ null, e);
-        }
+        runWithContextClassLoader(getClass().getClassLoader(), ()->{
+
+            preCall();
+            try {
+                val completedWith = innerCall();
+                postCall(completedWith, /*failedWith*/ null);
+            } catch (Throwable e) {
+                postCall(/*completedWith*/ null, e);
+            }
+
+        });
 
     }
 
@@ -175,5 +179,22 @@ public abstract class _ConcurrentTask<T> implements Runnable {
 
         };
     }
+
+    // -- HELPER
+
+    /**
+     * [ISIS-2978]
+     * see https://stackoverflow.com/a/36228195/9269480
+     */
+    private void runWithContextClassLoader(final ClassLoader classLoader, final Runnable runnable) {
+        val originalContextClassLoader = Thread.currentThread().getContextClassLoader();
+        try {
+            Thread.currentThread().setContextClassLoader(classLoader);
+            runnable.run();
+        } finally {
+            Thread.currentThread().setContextClassLoader(originalContextClassLoader);
+        }
+    }
+
 
 }
