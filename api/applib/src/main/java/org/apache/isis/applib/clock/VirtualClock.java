@@ -86,11 +86,11 @@ public interface VirtualClock extends Serializable {
      * Returns a ticking clock set to virtual time.
      */
     static VirtualClock nowAt(@NonNull final java.time.LocalDate virtualNow) {
-        return nowAt(Instant.from(virtualNow));
+        return nowAt(Instant.from(virtualNow.atStartOfDay().atZone(localTimeZone())));
     }
 
     static VirtualClock nowAt(@NonNull final java.time.LocalDateTime virtualNow) {
-        return nowAt(Instant.from(virtualNow));
+        return nowAt(Instant.from(virtualNow.atZone(localTimeZone())));
     }
 
     static VirtualClock nowAt(@NonNull final java.time.OffsetDateTime virtualNow) {
@@ -138,11 +138,11 @@ public interface VirtualClock extends Serializable {
     }
 
     static VirtualClock frozenAt(@NonNull final java.time.LocalDate frozenAt) {
-        return frozenAt(Instant.from(frozenAt));
+        return frozenAt(Instant.from(frozenAt.atStartOfDay(localTimeZone())));
     }
 
     static VirtualClock frozenAt(@NonNull final java.time.LocalDateTime frozenAt) {
-        return frozenAt(Instant.from(frozenAt.atZone(ZoneId.systemDefault())));
+        return frozenAt(Instant.from(frozenAt.atZone(localTimeZone())));
     }
 
     static VirtualClock frozenAt(@NonNull final java.time.OffsetDateTime frozenAt) {
@@ -191,6 +191,17 @@ public interface VirtualClock extends Serializable {
         return frozenAt(frozenAt);
     }
 
+    // -- TIME ZONE
+
+    /**
+     * Used to interpret local time.
+     * <p>
+     * Returns {@link ZoneId#systemDefault()} .
+     */
+    static ZoneId localTimeZone() {
+        return ZoneId.systemDefault();
+    }
+
     // -- UTILITY
 
     /**
@@ -223,7 +234,7 @@ public interface VirtualClock extends Serializable {
      * @see #nowAsLocalDate(ZoneId)
      */
     default LocalDate nowAsLocalDate() {
-        return nowAsLocalDate(ZoneId.systemDefault());
+        return nowAsLocalDate(localTimeZone());
     }
 
     /**
@@ -243,7 +254,7 @@ public interface VirtualClock extends Serializable {
      * @see #nowAsLocalDateTime(ZoneId)
      */
     default LocalDateTime nowAsLocalDateTime() {
-        return nowAsLocalDateTime(ZoneId.systemDefault());
+        return nowAsLocalDateTime(localTimeZone());
     }
 
     /**
@@ -262,7 +273,7 @@ public interface VirtualClock extends Serializable {
      * @see #nowAsOffsetDateTime(ZoneId)
      */
     default OffsetDateTime nowAsOffsetDateTime() {
-        return nowAsOffsetDateTime(ZoneId.systemDefault());
+        return nowAsOffsetDateTime(localTimeZone());
     }
 
     /**
@@ -310,7 +321,7 @@ public interface VirtualClock extends Serializable {
      */
     @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     default org.joda.time.DateTime nowAsJodaDateTime() {
-        return nowAsJodaDateTime(ZoneId.systemDefault());
+        return nowAsJodaDateTime(localTimeZone());
     }
 
     /**
@@ -363,7 +374,7 @@ public interface VirtualClock extends Serializable {
      */
     @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     default org.joda.time.LocalDate nowAsJodaLocalDate() {
-        val zoneId = ZoneId.systemDefault();
+        val zoneId = localTimeZone();
         return nowAsJodaLocalDate(zoneId);
     }
 
