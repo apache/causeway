@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.functional.Either;
+import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -39,19 +39,19 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
 
         val managedProperty = ManagedProperty.lookupProperty(owner, memberId, where);
 
-        final Either<ManagedProperty, InteractionVeto> chain = managedProperty.isPresent()
-                ? Either.left(managedProperty.get())
-                : Either.right(InteractionVeto.notFound(MemberType.PROPERTY, memberId));
+        final Railway<InteractionVeto, ManagedProperty> railway = managedProperty.isPresent()
+                ? Railway.success(managedProperty.get())
+                : Railway.failure(InteractionVeto.notFound(MemberType.PROPERTY, memberId));
 
-        return new PropertyInteraction(chain);
+        return new PropertyInteraction(railway);
     }
 
     public static PropertyInteraction wrap(final @NonNull ManagedProperty managedProperty) {
-        return new PropertyInteraction(Either.left(managedProperty));
+        return new PropertyInteraction(Railway.success(managedProperty));
     }
 
-    PropertyInteraction(@NonNull final Either<ManagedProperty, InteractionVeto> chain) {
-        super(chain);
+    PropertyInteraction(@NonNull final Railway<InteractionVeto, ManagedProperty> railway) {
+        super(railway);
     }
 
     public Optional<PropertyNegotiationModel> startPropertyNegotiation() {
@@ -62,11 +62,11 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
     public PropertyInteraction modifyProperty(
             final @NonNull Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
 
-        chain = chain.mapIfLeft(property->{
+        railway = railway.mapIfSuccess(property->{
             val validityVeto = property.modifyProperty(newProperyValueProvider.apply(property));
             return validityVeto.isPresent()
-                ? Either.right(validityVeto.get())
-                : Either.left(property);
+                ? Railway.failure(validityVeto.get())
+                : Railway.success(property);
         });
         return this;
     }

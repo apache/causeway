@@ -187,7 +187,7 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
         assertTrue(pendingArgs.getObservableValidationFeedbackActive().getValue());
 
         // unless all validations give green light, submission must be vetoed
-        assertEquals(null, uiSubmit.getResult().getSuccessElseFail());
+        assertEquals(null, uiSubmit.getResult().getSuccess().orElse(null));
         assertEquals("invalid, sum must be zero, got -3", ""+uiSubmit.getResult().getFailureElseFail());
 
         // verify that changing paramA triggers validation change listeners on the 'action'

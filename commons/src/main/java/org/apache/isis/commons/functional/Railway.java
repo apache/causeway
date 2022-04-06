@@ -27,6 +27,8 @@ import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.val;
 
 /**
  * The {@link Railway} type represents a value of one of two possible types (a disjoint union)
@@ -64,6 +66,14 @@ public interface Railway<F, S> {
      */
     Optional<S> getSuccess();
     default S getSuccessElseFail() { return getSuccess().orElseThrow(); }
+    @SneakyThrows
+    default S getSuccessElseFail(final Function<F, ? extends Throwable> toThrowable) {
+        val successIfAny = getSuccess();
+        if(successIfAny.isPresent()) {
+            return successIfAny.get();
+        }
+        throw toThrowable.apply(getFailureElseFail());
+    }
     /**
      * Optionally returns the contained {@code failure} based on presence,
      * that is, if its a {@link Failure}.
@@ -95,7 +105,6 @@ public interface Railway<F, S> {
      */
     <R> Railway<R, S> mapFailure(final @NonNull Function<F, R> failureMapper);
 
-
     // -- FOLDING
 
     /**
@@ -116,6 +125,11 @@ public interface Railway<F, S> {
      * In other words: if once failed stays failed
      */
     Railway<F, S> concatenate(final @NonNull Railway<F, S> other);
+
+    //TODO how is this called in the functional world?
+    Railway<F, S> mapIfFailure(@NonNull Function<F, Railway<F, S>> remapper);
+    //TODO how is this called in the functional world?
+    Railway<F, S> mapIfSuccess(@NonNull Function<S, Railway<F, S>> remapper);
 
     // -- SUCCESS
 
@@ -163,6 +177,16 @@ public interface Railway<F, S> {
         @Override
         public Railway<F, S> concatenate(final @NonNull Railway<F, S> other) {
             return other;
+        }
+
+        @Override
+        public Railway<F, S> mapIfSuccess(final @NonNull Function<S, Railway<F, S>> remapper){
+            return remapper.apply(success);
+        }
+
+        @Override
+        public Railway<F, S> mapIfFailure(final @NonNull Function<F, Railway<F, S>> remapper){
+            return this;
         }
 
     }
@@ -213,6 +237,16 @@ public interface Railway<F, S> {
         @Override
         public Failure<F, S> concatenate(final @NonNull Railway<F, S> callable) {
             return this;
+        }
+
+        @Override
+        public Railway<F, S> mapIfSuccess(final @NonNull Function<S, Railway<F, S>> remapper){
+            return this;
+        }
+
+        @Override
+        public Railway<F, S> mapIfFailure(final @NonNull Function<F, Railway<F, S>> remapper){
+            return remapper.apply(failure);
         }
 
     }

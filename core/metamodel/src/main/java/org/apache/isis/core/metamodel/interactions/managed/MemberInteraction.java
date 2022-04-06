@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.apache.isis.commons.functional.Either;
+import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.commons.internal.base._Casts;
 
 import lombok.NonNull;
@@ -37,28 +37,28 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         }
     }
 
-    @NonNull protected Either<T, InteractionVeto> chain;
+    @NonNull protected Railway<InteractionVeto, T> railway;
 
-    protected MemberInteraction(@NonNull Either<T, InteractionVeto> chain) {
-        this.chain = chain;
+    protected MemberInteraction(@NonNull final Railway<InteractionVeto, T> railway) {
+        this.railway = railway;
     }
 
     public H checkVisibility() {
-        chain = chain.mapIfLeft(property->{
+        railway = railway.mapIfSuccess(property->{
             val visibilityVeto = property.checkVisibility();
             return visibilityVeto.isPresent()
-                ? Either.right(visibilityVeto.get())
-                : Either.left(property);
+                ? Railway.failure(visibilityVeto.get())
+                : Railway.success(property);
         });
         return _Casts.uncheckedCast(this);
     }
 
     public H checkUsability() {
-        chain = chain.mapIfLeft(property->{
+        railway = railway.mapIfSuccess(property->{
             val usablitiyVeto = property.checkUsability();
             return usablitiyVeto.isPresent()
-                ? Either.right(usablitiyVeto.get())
-                : Either.left(property);
+                ? Railway.failure(usablitiyVeto.get())
+                : Railway.success(property);
         });
         return _Casts.uncheckedCast(this);
     }
@@ -76,8 +76,8 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
     }
 
     public <X extends Throwable>
-    H validateElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
-        val veto = chain.rightIfAny();
+    H validateElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
+        val veto = railway.getFailure().orElse(null);
         if (veto == null) {
             return _Casts.uncheckedCast(this);
         } else {
@@ -90,7 +90,7 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
      * was no interaction veto within the originating chain
      */
     protected Optional<T> getManagedMember() {
-        return chain.left();
+        return railway.getSuccess();
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
      * was any interaction veto within the originating chain
      */
     public Optional<InteractionVeto> getInteractionVeto() {
-        return chain.right();
+        return railway.getFailure();
     }
 
     /**
@@ -106,16 +106,9 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
      * @throws X if there was any interaction veto within the originating chain
      */
     protected <X extends Throwable>
-    T getManagedMemberElseThrow(Function<InteractionVeto, ? extends X> onFailure) throws X {
-        val value = chain.leftIfAny();
-        if (value != null) {
-            return value;
-        } else {
-            throw onFailure.apply(chain.rightIfAny());
-        }
+    T getManagedMemberElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
+        return railway.getSuccessElseFail(onFailure);
     }
-
-
 
 
 }
