@@ -155,11 +155,9 @@ public interface Either<L, R>  {
         @Override public final boolean isRight() { return true; }
 
         @Override public final <T> Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper){
-            return Either.right(right);
-        }
+            return Either.right(right); }
         @Override public final <T> Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper){
-            return Either.right(rightMapper.apply(right));
-        }
+            return Either.right(rightMapper.apply(right)); }
 
         @Override
         public final <X, Y> Either<X, Y> map(
@@ -225,7 +223,7 @@ public interface Either<L, R>  {
             return getEither().fold(leftMapper, rightMapper);
         }
 
-        @Override  default void accept(
+        @Override default void accept(
                 final @NonNull Consumer<L> leftConsumer,
                 final @NonNull Consumer<R> rightConsumer) {
             getEither().accept(leftConsumer, rightConsumer);

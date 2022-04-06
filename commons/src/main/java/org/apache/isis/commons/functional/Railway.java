@@ -87,7 +87,7 @@ public interface Railway<F, S> {
     /**
      * Peeks into the contained {@code success} if this is a {@link Success}.
      */
-    Railway<F, S> ifSuccess(final @NonNull Consumer<S> valueConsumer);
+    Railway<F, S> ifSuccess(final @NonNull Consumer<S> successConsumer);
     /**
      * Peeks into the contained {@code failure} if this is a {@link Failure}.
      */
@@ -145,8 +145,8 @@ public interface Railway<F, S> {
         @Override public Optional<F> getFailure() { return Optional.empty(); }
 
         @Override
-        public Success<F, S> ifSuccess(final @NonNull Consumer<S> valueConsumer) {
-            valueConsumer.accept(success);
+        public Success<F, S> ifSuccess(final @NonNull Consumer<S> successConsumer) {
+            successConsumer.accept(success);
             return this;
         }
 
@@ -195,7 +195,7 @@ public interface Railway<F, S> {
         @Override public Optional<F> getFailure() { return Optional.of(failure); }
 
         @Override
-        public Failure<F, S> ifSuccess(final @NonNull Consumer<S> valueConsumer) {
+        public Failure<F, S> ifSuccess(final @NonNull Consumer<S> successConsumer) {
             return this;
         }
 
@@ -228,5 +228,39 @@ public interface Railway<F, S> {
         }
 
     }
+
+    // -- TYPE COMPOSITION
+
+    public static interface HasRailway<F, S> extends Railway<F, S> {
+
+        Railway<F, S> getRailway();
+
+        @Override default boolean isSuccess() { return getRailway().isSuccess(); }
+        @Override default boolean isFailure() { return getRailway().isFailure(); }
+
+        @Override default Optional<S> getSuccess() { return getRailway().getSuccess(); }
+        @Override default Optional<F> getFailure() { return getRailway().getFailure(); }
+
+        @Override default Railway<F, S> ifSuccess(final @NonNull Consumer<S> successConsumer) {
+            return getRailway().ifSuccess(successConsumer); }
+        @Override default Railway<F, S> ifFailure(final @NonNull Consumer<F> failureConsumer) {
+            return getRailway().ifFailure(failureConsumer); }
+
+        @Override default <R> Railway<F, R> mapSuccess(final @NonNull Function<S, R> successMapper) {
+            return getRailway().mapSuccess(successMapper); }
+        @Override default <R> Railway<R, S> mapFailure(final @NonNull Function<F, R> failureMapper) {
+            return getRailway().mapFailure(failureMapper); }
+
+        @Override default <R> R fold(
+                final @NonNull Function<F, R> failureMapper,
+                final @NonNull Function<S, R> successMapper) {
+            return getRailway().fold(failureMapper, successMapper);
+        }
+
+        @Override default public Railway<F, S> chain(final @NonNull Function<S, Railway<F, S>> chainingFunction){
+            return getRailway().chain(chainingFunction);
+        }
+    }
+
 
 }
