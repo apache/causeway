@@ -44,22 +44,18 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
     }
 
     public H checkVisibility() {
-        railway = railway.mapIfSuccess(property->{
-            val visibilityVeto = property.checkVisibility();
-            return visibilityVeto.isPresent()
-                ? Railway.failure(visibilityVeto.get())
-                : Railway.success(property);
-        });
+        railway = railway.chain(property->
+            property.checkVisibility()
+            .map(this::vetoRailway)
+            .orElse(railway));
         return _Casts.uncheckedCast(this);
     }
 
     public H checkUsability() {
-        railway = railway.mapIfSuccess(property->{
-            val usablitiyVeto = property.checkUsability();
-            return usablitiyVeto.isPresent()
-                ? Railway.failure(usablitiyVeto.get())
-                : Railway.success(property);
-        });
+        railway = railway.chain(property->
+            property.checkUsability()
+            .map(this::vetoRailway)
+            .orElse(railway));
         return _Casts.uncheckedCast(this);
     }
 
@@ -108,6 +104,10 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
     protected <X extends Throwable>
     T getManagedMemberElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
         return railway.getSuccessElseFail(onFailure);
+    }
+
+    protected Railway<InteractionVeto, T> vetoRailway(final InteractionVeto veto) {
+        return Railway.failure(veto);
     }
 
 

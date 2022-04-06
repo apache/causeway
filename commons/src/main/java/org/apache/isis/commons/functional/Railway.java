@@ -96,12 +96,12 @@ public interface Railway<F, S> {
 
     /**
      * Maps this {@link Railway} to another if its a {@link Success}.
-     * Otherwise if its a {@link Failure} acts as identity operator.
+     * Otherwise if this is a {@link Failure} acts as identity operator.
      */
     <R> Railway<F, R> mapSuccess(final @NonNull Function<S, R> successMapper);
     /**
      * Maps this {@link Railway} to another if its a {@link Failure}.
-     * Otherwise if its a {@link Success} acts as identity operator.
+     * Otherwise if this is a {@link Success} acts as identity operator.
      */
     <R> Railway<R, S> mapFailure(final @NonNull Function<F, R> failureMapper);
 
@@ -115,21 +115,18 @@ public interface Railway<F, S> {
             final @NonNull Function<F, R> failureMapper,
             final @NonNull Function<S, R> successMapper);
 
-    // -- CONCATENATION
+    // -- CHAINING
 
     /**
      * <h1>Railway Pattern</h1>
-     * If this is a {@link Success}, the result is {@code other}.
-     * Otherwise if this is a {@link Failure} returns this.
+     * If this is a {@link Success}, returns a new {@link Railway} as produced by the
+     * chainingFunction, that receives the current success value as input.
+     * Otherwise if this is a {@link Failure} acts as identity operator and
+     * the chainingFunction is not executed.
      * <p>
      * In other words: if once failed stays failed
      */
-    Railway<F, S> concatenate(final @NonNull Railway<F, S> other);
-
-    //TODO how is this called in the functional world?
-    Railway<F, S> mapIfFailure(@NonNull Function<F, Railway<F, S>> remapper);
-    //TODO how is this called in the functional world?
-    Railway<F, S> mapIfSuccess(@NonNull Function<S, Railway<F, S>> remapper);
+    Railway<F, S> chain(@NonNull Function<S, Railway<F, S>> chainingFunction);
 
     // -- SUCCESS
 
@@ -175,18 +172,8 @@ public interface Railway<F, S> {
         }
 
         @Override
-        public Railway<F, S> concatenate(final @NonNull Railway<F, S> other) {
-            return other;
-        }
-
-        @Override
-        public Railway<F, S> mapIfSuccess(final @NonNull Function<S, Railway<F, S>> remapper){
-            return remapper.apply(success);
-        }
-
-        @Override
-        public Railway<F, S> mapIfFailure(final @NonNull Function<F, Railway<F, S>> remapper){
-            return this;
+        public Railway<F, S> chain(final @NonNull Function<S, Railway<F, S>> chainingFunction){
+            return chainingFunction.apply(success);
         }
 
     }
@@ -235,18 +222,8 @@ public interface Railway<F, S> {
         }
 
         @Override
-        public Failure<F, S> concatenate(final @NonNull Railway<F, S> callable) {
+        public Railway<F, S> chain(final @NonNull Function<S, Railway<F, S>> chainingFunction){
             return this;
-        }
-
-        @Override
-        public Railway<F, S> mapIfSuccess(final @NonNull Function<S, Railway<F, S>> remapper){
-            return this;
-        }
-
-        @Override
-        public Railway<F, S> mapIfFailure(final @NonNull Function<F, Railway<F, S>> remapper){
-            return remapper.apply(failure);
         }
 
     }

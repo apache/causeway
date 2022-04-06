@@ -62,12 +62,11 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
     public PropertyInteraction modifyProperty(
             final @NonNull Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
 
-        railway = railway.mapIfSuccess(property->{
-            val validityVeto = property.modifyProperty(newProperyValueProvider.apply(property));
-            return validityVeto.isPresent()
-                ? Railway.failure(validityVeto.get())
-                : Railway.success(property);
-        });
+        railway = railway.chain(property->
+            property.modifyProperty(newProperyValueProvider.apply(property))
+            .map(super::vetoRailway)
+            .orElse(railway));
+
         return this;
     }
 

@@ -106,22 +106,22 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
 
     public ActionInteraction checkSemanticConstraint(@NonNull final SemanticConstraint semanticConstraint) {
 
-        railway = railway.mapIfSuccess(action->{
+        railway = railway.chain(action->{
 
             val actionSemantics = action.getAction().getSemantics();
 
             switch(semanticConstraint) {
             case NONE:
-                return Railway.success(action);
+                return railway;
 
             case IDEMPOTENT:
                 return actionSemantics.isIdempotentInNature()
-                        ? Railway.success(action)
-                        : Railway.failure(InteractionVeto.actionNotIdempotent(action)) ;
+                        ? railway
+                        : vetoRailway(InteractionVeto.actionNotIdempotent(action)) ;
             case SAFE:
                 return actionSemantics.isSafeInNature()
-                        ? Railway.success(action)
-                        : Railway.failure(InteractionVeto.actionNotSafe(action));
+                        ? railway
+                        : vetoRailway(InteractionVeto.actionNotSafe(action));
             default:
                 throw _Exceptions.unmatchedCase(semanticConstraint); // unexpected code reach
             }

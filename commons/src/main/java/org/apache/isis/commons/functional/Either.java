@@ -108,20 +108,6 @@ public class Either<L, R> implements Serializable {
                 : right(rightMapper.apply(right));
     }
 
-    //TODO how is this called in the functional world?
-    public final Either<L, R> mapIfLeft(final @NonNull Function<L, Either<L, R>> leftRemapper){
-        return isLeft()
-                ? leftRemapper.apply(left)
-                : this;
-    }
-
-    //TODO how is this called in the functional world?
-    public final Either<L, R> mapIfRight(final @NonNull Function<R, Either<L, R>> rightRemapper){
-        return isLeft()
-                ? this
-                : rightRemapper.apply(right);
-    }
-
     // -- FOLDING
 
     public final <T> T fold(final @NonNull BiFunction<L, R, T> biMapper){
