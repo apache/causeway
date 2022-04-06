@@ -41,9 +41,6 @@ implements
     Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Getter
-    private final Either<ValueWithTypeDto, TypedTupleDto> either;
-
     public static ValueDecomposition ofFundamental(final ValueWithTypeDto valueWithTypeDto) {
         return new ValueDecomposition(Either.left(valueWithTypeDto));
     }
@@ -51,6 +48,8 @@ implements
     public static ValueDecomposition ofComposite(final TypedTupleDto typedTupleDto) {
         return new ValueDecomposition(Either.right(typedTupleDto));
     }
+
+    @Getter private final Either<ValueWithTypeDto, TypedTupleDto> either;
 
     // used by RO-Viewer to render values
     public String toJson() {

@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -39,14 +38,14 @@ extends MemberInteraction<ManagedCollection, CollectionInteraction> {
 
         val managedCollection = ManagedCollection.lookupCollection(owner, memberId, where);
 
-        final Railway<InteractionVeto, ManagedCollection> railway = managedCollection.isPresent()
-                ? Railway.success(managedCollection.get())
-                : Railway.failure(InteractionVeto.notFound(MemberType.COLLECTION, memberId));
+        final InteractionRailway<ManagedCollection> railway = managedCollection.isPresent()
+                ? InteractionRailway.success(managedCollection.get())
+                : InteractionRailway.veto(InteractionVeto.notFound(MemberType.COLLECTION, memberId));
 
         return new CollectionInteraction(railway);
     }
 
-    CollectionInteraction(@NonNull final Railway<InteractionVeto, ManagedCollection> railway) {
+    CollectionInteraction(@NonNull final InteractionRailway<ManagedCollection> railway) {
         super(railway);
     }
 

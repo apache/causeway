@@ -189,6 +189,7 @@ public interface Either<L, R>  {
 
     // -- TYPE COMPOSITION
 
+    @FunctionalInterface
     public static interface HasEither<L, R> extends Either<L, R> {
 
         Either<L, R> getEither();

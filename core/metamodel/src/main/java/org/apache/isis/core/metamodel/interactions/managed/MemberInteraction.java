@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.commons.internal.base._Casts;
 
 import lombok.NonNull;
@@ -37,9 +36,9 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         }
     }
 
-    @NonNull protected Railway<InteractionVeto, T> railway;
+    @NonNull protected InteractionRailway<T> railway;
 
-    protected MemberInteraction(@NonNull final Railway<InteractionVeto, T> railway) {
+    protected MemberInteraction(@NonNull final InteractionRailway<T> railway) {
         this.railway = railway;
     }
 
@@ -106,8 +105,8 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         return railway.getSuccessElseFail(onFailure);
     }
 
-    protected Railway<InteractionVeto, T> vetoRailway(final InteractionVeto veto) {
-        return Railway.failure(veto);
+    protected InteractionRailway<T> vetoRailway(final InteractionVeto veto) {
+        return InteractionRailway.veto(veto);
     }
 
 

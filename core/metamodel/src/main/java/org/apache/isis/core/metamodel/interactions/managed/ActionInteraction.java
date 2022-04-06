@@ -70,9 +70,9 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
 
         val managedAction = ManagedAction.lookupActionWithMultiselect(owner, memberId, where, multiselectChoices);
 
-        final Railway<InteractionVeto, ManagedAction> railway = managedAction.isPresent()
-                ? Railway.success(managedAction.get())
-                : Railway.failure(InteractionVeto.notFound(MemberType.ACTION, memberId));
+        final InteractionRailway<ManagedAction> railway = managedAction.isPresent()
+                ? InteractionRailway.success(managedAction.get())
+                : InteractionRailway.veto(InteractionVeto.notFound(MemberType.ACTION, memberId));
 
         return new ActionInteraction(
                 managedAction.map(ManagedAction::getAction),
@@ -82,18 +82,18 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
     public static ActionInteraction wrap(final @NonNull ManagedAction managedAction) {
         return new ActionInteraction(
                 Optional.of(managedAction.getAction()),
-                Railway.success(managedAction));
+                InteractionRailway.success(managedAction));
     }
 
     public static ActionInteraction empty(final String actionId) {
         return new ActionInteraction(
                 Optional.empty(),
-                Railway.failure(InteractionVeto.notFound(MemberType.ACTION, actionId)));
+                InteractionRailway.veto(InteractionVeto.notFound(MemberType.ACTION, actionId)));
     }
 
     ActionInteraction(
             final @NonNull Optional<ObjectAction> metamodel,
-            final @NonNull Railway<InteractionVeto, ManagedAction> railway) {
+            final @NonNull InteractionRailway<ManagedAction> railway) {
         super(railway);
         this.metamodel = metamodel;
     }

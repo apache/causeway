@@ -231,6 +231,7 @@ public interface Railway<F, S> {
 
     // -- TYPE COMPOSITION
 
+    @FunctionalInterface
     public static interface HasRailway<F, S> extends Railway<F, S> {
 
         Railway<F, S> getRailway();

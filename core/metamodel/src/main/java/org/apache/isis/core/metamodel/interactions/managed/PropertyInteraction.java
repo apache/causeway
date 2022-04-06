@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -39,18 +38,18 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
 
         val managedProperty = ManagedProperty.lookupProperty(owner, memberId, where);
 
-        final Railway<InteractionVeto, ManagedProperty> railway = managedProperty.isPresent()
-                ? Railway.success(managedProperty.get())
-                : Railway.failure(InteractionVeto.notFound(MemberType.PROPERTY, memberId));
+        final InteractionRailway<ManagedProperty> railway = managedProperty.isPresent()
+                ? InteractionRailway.success(managedProperty.get())
+                : InteractionRailway.veto(InteractionVeto.notFound(MemberType.PROPERTY, memberId));
 
         return new PropertyInteraction(railway);
     }
 
     public static PropertyInteraction wrap(final @NonNull ManagedProperty managedProperty) {
-        return new PropertyInteraction(Railway.success(managedProperty));
+        return new PropertyInteraction(InteractionRailway.success(managedProperty));
     }
 
-    PropertyInteraction(@NonNull final Railway<InteractionVeto, ManagedProperty> railway) {
+    PropertyInteraction(@NonNull final InteractionRailway<ManagedProperty> railway) {
         super(railway);
     }
 
