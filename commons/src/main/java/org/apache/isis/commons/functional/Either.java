@@ -25,10 +25,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 /**
  * The {@link Either} type represents a value of one of two possible types (a disjoint union),
@@ -39,98 +37,200 @@ import lombok.ToString;
  *
  * @since 2.0 {@index}
  */
-@RequiredArgsConstructor(access=AccessLevel.PROTECTED)
-@ToString @EqualsAndHashCode
-public class Either<L, R> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    private final L left;
-    private final R right;
+public interface Either<L, R>  {
 
     // -- FACTORIES
 
     public static <L, R> Either<L, R> left(final @NonNull L left) {
-        return new Either<>(left, null);
+        return new Left<>(left);
     }
 
     public static <L, R> Either<L, R> right(final @NonNull R right) {
-        return new Either<>(null, right);
+        return new Right<>(right);
     }
 
     // -- ACCESSORS
 
-    public final Optional<L> left() {
-        return Optional.ofNullable(left);
-    }
+    Optional<L> left();
+    Optional<R> right();
 
-    public final Optional<R> right() {
-        return Optional.ofNullable(right);
-    }
-
-    public final L leftIfAny() {
-        return left;
-    }
-
-    public final R rightIfAny() {
-        return right;
-    }
+    L leftIfAny();
+    R rightIfAny();
 
     // -- PREDICATES
 
-    public final boolean isLeft() {
-        return left!=null;
-    }
-
-    public final  boolean isRight() {
-        return right!=null;
-    }
+    boolean isLeft();
+    boolean isRight();
 
     // -- MAPPING
 
-    public final <T> Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper){
-        return isLeft()
-                ? Either.left(leftMapper.apply(left))
-                : Either.right(right);
-    }
+    <T> Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper);
+    <T> Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper);
 
-    public final <T> Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper){
-        return isLeft()
-                ? Either.left(left)
-                : Either.right(rightMapper.apply(right));
-    }
-
-    public final <X, Y> Either<X, Y> map(
+    <X, Y> Either<X, Y> map(
             final @NonNull Function<L, X> leftMapper,
-            final @NonNull Function<R, Y> rightMapper){
-        return isLeft()
-                ? left(leftMapper.apply(left))
-                : right(rightMapper.apply(right));
-    }
+            final @NonNull Function<R, Y> rightMapper);
 
     // -- FOLDING
 
-    public final <T> T fold(final @NonNull BiFunction<L, R, T> biMapper){
-        return biMapper.apply(left, right);
-    }
+    <T> T fold(@NonNull BiFunction<L, R, T> biMapper);
 
-    public final <T> T fold(
-            final @NonNull Function<L, T> leftMapper,
-            final @NonNull Function<R, T> rightMapper){
-        return isLeft()
-                ? leftMapper.apply(left)
-                : rightMapper.apply(right);
-    }
+    <T> T fold(
+            @NonNull Function<L, T> leftMapper,
+            @NonNull Function<R, T> rightMapper);
 
     // -- TERMINALS
 
-    public final void accept(final Consumer<L> leftConsumer, final Consumer<R> rightConsumer) {
-        if(isLeft()) {
-            leftConsumer.accept(left);
-        } else {
-            rightConsumer.accept(right);
+    void accept(
+            @NonNull Consumer<L> leftConsumer,
+            @NonNull Consumer<R> rightConsumer);
+
+    // -- LEFT
+
+    @lombok.Value
+    @RequiredArgsConstructor(access=AccessLevel.PROTECTED)
+    static final class Left<L, R> implements Either<L, R>, Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private final L left;
+
+        @Override public Optional<L> left() { return Optional.ofNullable(left); }
+        @Override public Optional<R> right() { return Optional.empty(); }
+
+        @Override public L leftIfAny() { return left; }
+        @Override public R rightIfAny() { return null; }
+
+        @Override public final boolean isLeft() { return true; }
+        @Override public final boolean isRight() { return false; }
+
+        @Override public final <T> Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper){
+            return Either.left(leftMapper.apply(left)); }
+        @Override public final <T> Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper){
+            return Either.left(left); }
+
+        @Override
+        public final <X, Y> Either<X, Y> map(
+                final @NonNull Function<L, X> leftMapper,
+                final @NonNull Function<R, Y> rightMapper){
+            return Either.left(leftMapper.apply(left));
         }
+
+        @Override
+        public final <T> T fold(final @NonNull BiFunction<L, R, T> biMapper){
+            return biMapper.apply(left, null);
+        }
+
+        @Override
+        public final <T> T fold(
+                final @NonNull Function<L, T> leftMapper,
+                final @NonNull Function<R, T> rightMapper){
+            return leftMapper.apply(left);
+        }
+
+        @Override
+        public final void accept(
+                final @NonNull Consumer<L> leftConsumer,
+                final @NonNull Consumer<R> rightConsumer) {
+            leftConsumer.accept(left);
+        }
+
     }
 
+    // -- RIGHT
+
+    @lombok.Value
+    @RequiredArgsConstructor(access=AccessLevel.PROTECTED)
+    static final class Right<L, R> implements Either<L, R>, Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private final R right;
+
+        @Override public Optional<L> left() { return Optional.empty(); }
+        @Override public Optional<R> right() { return Optional.ofNullable(right); }
+
+        @Override public L leftIfAny() { return null; }
+        @Override public R rightIfAny() { return right; }
+
+        @Override public final boolean isLeft() { return false; }
+        @Override public final boolean isRight() { return true; }
+
+        @Override public final <T> Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper){
+            return Either.right(right);
+        }
+        @Override public final <T> Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper){
+            return Either.right(rightMapper.apply(right));
+        }
+
+        @Override
+        public final <X, Y> Either<X, Y> map(
+                final @NonNull Function<L, X> leftMapper,
+                final @NonNull Function<R, Y> rightMapper){
+            return Either.right(rightMapper.apply(right));
+        }
+
+        @Override
+        public final <T> T fold(final @NonNull BiFunction<L, R, T> biMapper){
+            return biMapper.apply(null, right);
+        }
+
+        @Override
+        public final <T> T fold(
+                final @NonNull Function<L, T> leftMapper,
+                final @NonNull Function<R, T> rightMapper){
+            return rightMapper.apply(right);
+        }
+
+        @Override
+        public final void accept(
+                final @NonNull Consumer<L> leftConsumer,
+                final @NonNull Consumer<R> rightConsumer) {
+            rightConsumer.accept(right);
+        }
+
+    }
+
+    // -- TYPE COMPOSITION
+
+    public static interface HasEither<L, R> extends Either<L, R> {
+
+        Either<L, R> getEither();
+
+        @Override default Optional<L> left() { return getEither().left(); }
+        @Override default Optional<R> right() { return getEither().right(); }
+
+        @Override default L leftIfAny() { return getEither().leftIfAny(); }
+        @Override default R rightIfAny() { return getEither().rightIfAny(); }
+
+        @Override default boolean isLeft() { return getEither().isLeft(); }
+        @Override default boolean isRight() { return getEither().isRight(); }
+
+        @Override default <T> Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper){
+            return getEither().mapLeft(leftMapper); }
+        @Override default <T> Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper){
+            return getEither().mapRight(rightMapper); }
+
+        @Override default <X, Y> Either<X, Y> map(
+                final @NonNull Function<L, X> leftMapper,
+                final @NonNull Function<R, Y> rightMapper){
+            return getEither().map(leftMapper, rightMapper);
+        }
+
+        @Override default <T> T fold(final @NonNull BiFunction<L, R, T> biMapper){
+            return getEither().fold(biMapper);
+        }
+
+        @Override default <T> T fold(
+                final @NonNull Function<L, T> leftMapper,
+                final @NonNull Function<R, T> rightMapper){
+            return getEither().fold(leftMapper, rightMapper);
+        }
+
+        @Override  default void accept(
+                final @NonNull Consumer<L> leftConsumer,
+                final @NonNull Consumer<R> rightConsumer) {
+            getEither().accept(leftConsumer, rightConsumer);
+        }
+
+    }
 
 }
