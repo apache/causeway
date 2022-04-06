@@ -20,6 +20,7 @@ interface MessageService {
   void raiseError(String message)     // <.>
   String raiseError(TranslatableString message, Class<?> contextClass, String contextMethod)     // <.>
   String raiseError(TranslatableString message, TranslationContext translationContext)     // <.>
+  void setError(String message)     // <.>
 }
 ----
 
@@ -67,6 +68,11 @@ As _#raiseError(String)_ , but with the message translated (if possible) to user
 +
 --
 Override of _MessageService#raiseError(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
+--
+<.> xref:#setError__String[setError(String)]
++
+--
+Sets a new application error message. Similar to _#raiseError(String)_ , but without throwing a xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException] .
 --
 
 == Members
@@ -131,6 +137,11 @@ More precisely, the locale is as provided by the configured _org.apache.isis.app
 === raiseError(TranslatableString, TranslationContext)
 
 Override of _MessageService#raiseError(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
+
+[#setError__String]
+=== setError(String)
+
+Sets a new application error message. Similar to _#raiseError(String)_ , but without throwing a xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException] .
 
 include::hooks/MessageService_010-implementation.adoc[]
 

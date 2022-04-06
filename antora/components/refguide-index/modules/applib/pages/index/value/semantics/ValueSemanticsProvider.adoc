@@ -17,14 +17,15 @@ interface ValueSemanticsProvider<T> {
   ValueType getSchemaValueType()     // <.>
   ValueDecomposition decompose(T value)     // <.>
   T compose(ValueDecomposition decomposition)     // <.>
-  Object getValueMixin(T value)
   OrderRelation<T, ?> getOrderRelation()     // <.>
   Converter<T, ?> getConverter()     // <.>
   Renderer<T> getRenderer()     // <.>
   Parser<T> getParser()     // <.>
   DefaultsProvider<T> getDefaultsProvider()     // <.>
+  boolean isEnumType()
   boolean isNumberType()
   boolean isTemporalType()
+  boolean isCompositeType()
 }
 ----
 

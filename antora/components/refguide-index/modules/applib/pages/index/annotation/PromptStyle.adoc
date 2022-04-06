@@ -16,10 +16,10 @@ enum PromptStyle {
   INLINE     // <.>
   INLINE_AS_IF_EDIT     // <.>
   NOT_SPECIFIED     // <.>
-  boolean isDialog()
+  boolean isDialogAny()
   boolean isInline()
   boolean isInlineAsIfEdit()
-  boolean isInlineOrInlineAsIfEdit()
+  boolean isInlineAny()
 }
 ----
 
@@ -73,7 +73,7 @@ If no style is configured, then _#INLINE_ is assumed.
 
 Use a dialog for the prompt.
 
-This will be either modal dialog (same as if _#DIALOG_MODAL_ was selected) or sidebar (same as if _#DIALOG_SIDEBAR_ was selected) depending on the value of the `isis.viweer.wicket.dialogMode` configuration property.
+This will be either modal dialog (same as if _#DIALOG_MODAL_ was selected) or sidebar (same as if _#DIALOG_SIDEBAR_ was selected) depending on the value of the `isis.viewer.wicket.dialogMode` configuration property.
 
 [#DIALOG_SIDEBAR]
 === DIALOG_SIDEBAR
@@ -99,7 +99,7 @@ Note that:
 
 * Only one such action should have this attribute set per property. If there are multiple actions, then the first one discovered with the attribute is used.
 * If the property is editable, then this attribute is ignored (and the action is treated as having a prompt style of _#INLINE_ ).
-* If applied to a property, then is the property's prompt style is simply treated as _#INLINE_ .
+* If applied to a property, then the property's prompt style is simply treated as _#INLINE_ .
 
 [#NOT_SPECIFIED]
 === NOT_SPECIFIED
