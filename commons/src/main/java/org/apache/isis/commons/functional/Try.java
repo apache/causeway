@@ -40,6 +40,9 @@ import lombok.SneakyThrows;
  * <p>
  * Factory methods {@link Try#success(Object)} and {@link Try#failure(Throwable)}
  * correspond to the two possible values.
+ * <p>
+ * Follows the <em>Railway Pattern</em>, that is, once failed, stays failed.
+ * @see Railway
  *
  * @since 2.0 {@index}
  */
@@ -148,12 +151,12 @@ public interface Try<T> {
     // -- CONCATENATION
 
     /**
-     * If this is a {@link Success}, maps it to another based on given {@link Callable}.
+     * If this is a {@link Success}, maps it to a new {@link Try} based on given {@link Callable}.
      * Otherwise if its a {@link Failure} acts as identity operator.
      */
     <R> Try<R> thenCall(final @NonNull Callable<R> callable);
     /**
-     * If this is a {@link Success}, maps it to another based on given {@link ThrowingRunnable}.
+     * If this is a {@link Success}, maps it to new {@link Try} based on given {@link ThrowingRunnable}.
      * Otherwise if its a {@link Failure} acts as identity operator.
      */
     Try<Void> thenRun(final @NonNull ThrowingRunnable runnable);

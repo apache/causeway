@@ -5,6 +5,8 @@ The xref:refguide:commons:index/functional/Try.adoc[Try] type represents a value
 
 Factory methods _Try#success(Object)_ and _Try#failure(Throwable)_ correspond to the two possible values.
 
+Follows the *Railway Pattern* , that is, once failed, stays failed.
+
 == API
 
 [source,java]
@@ -91,12 +93,12 @@ Maps the contained _value_ or _failure_ to a new value of type _R_ using accordi
 <.> xref:#thenCall__Callable[thenCall(Callable)]
 +
 --
-If this is a _Success_ , maps it to another based on given _Callable_ . Otherwise if its a _Failure_ acts as identity operator.
+If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Callable_ . Otherwise if its a _Failure_ acts as identity operator.
 --
 <.> xref:#thenRun__ThrowingRunnable[thenRun(ThrowingRunnable)]
 +
 --
-If this is a _Success_ , maps it to another based on given _ThrowingRunnable_ . Otherwise if its a _Failure_ acts as identity operator.
+If this is a _Success_ , maps it to new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _ThrowingRunnable_ . Otherwise if its a _Failure_ acts as identity operator.
 --
 
 == Members
@@ -159,9 +161,9 @@ Maps the contained _value_ or _failure_ to a new value of type _R_ using accordi
 [#thenCall__Callable]
 === thenCall(Callable)
 
-If this is a _Success_ , maps it to another based on given _Callable_ . Otherwise if its a _Failure_ acts as identity operator.
+If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Callable_ . Otherwise if its a _Failure_ acts as identity operator.
 
 [#thenRun__ThrowingRunnable]
 === thenRun(ThrowingRunnable)
 
-If this is a _Success_ , maps it to another based on given _ThrowingRunnable_ . Otherwise if its a _Failure_ acts as identity operator.
+If this is a _Success_ , maps it to new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _ThrowingRunnable_ . Otherwise if its a _Failure_ acts as identity operator.
