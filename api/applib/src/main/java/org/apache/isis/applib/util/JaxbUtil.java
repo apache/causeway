@@ -27,7 +27,7 @@ import java.io.Writer;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.commons.internal.resources._Xml;
 import org.apache.isis.commons.internal.resources._Xml.ReadOptions;
@@ -55,17 +55,17 @@ public class JaxbUtil {
     private static <T> T _fromXml(
             final @NonNull Reader reader,
             final @NonNull Class<T> dtoClass) {
-        
+
         return _Xml._readXml(dtoClass, reader, ReadOptions.builder()
                 .useContextCache(true)
                 .build());
     }
-    
-    public static <T> Result<T> fromXml(
+
+    public static <T> Try<T> fromXml(
             final @NonNull Reader reader,
             final @NonNull Class<T> dtoClass) {
-        
-        return Result.of(()->_fromXml(reader, dtoClass));
+
+        return Try.call(()->_fromXml(reader, dtoClass));
     }
 
     private static <T> T _fromXml(
@@ -76,36 +76,36 @@ public class JaxbUtil {
         val xmlString = _Resources.loadAsStringUtf8(contextClass, resourceName);
         return _fromXml(new StringReader(xmlString), dtoClass);
     }
-    
-    public static <T> Result<T> fromXml(
+
+    public static <T> Try<T> fromXml(
             final @NonNull Class<?> contextClass,
             final @NonNull String resourceName,
             final @NonNull Class<T> dtoClass) throws IOException {
 
-        return Result.of(()->_fromXml(contextClass, resourceName, dtoClass));
+        return Try.call(()->_fromXml(contextClass, resourceName, dtoClass));
     }
 
     // -- WRITE
 
-    public static Result<String> toXml(final @NonNull Object dto) {
-        return Result.of(()->{
+    public static Try<String> toXml(final @NonNull Object dto) {
+        return Try.call(()->{
             val caw = new CharArrayWriter();
             toXml(dto, caw);
-            return caw.toString();    
+            return caw.toString();
         });
     }
 
     public static <T> void toXml(
-            final @NonNull T dto, 
+            final @NonNull T dto,
             final @NonNull Writer writer) throws JAXBException {
         _Xml.writeXml(dto, writer, WriteOptions.builder()
                 .useContextCache(true)
                 .formattedOutput(true)
                 .build());
     }
-    
+
     // -- CACHING
-    
+
     public static JAXBContext jaxbContextFor(final @NonNull Class<?> dtoClass) {
         val useCache = true;
         return _Xml.jaxbContextFor(dtoClass, useCache);

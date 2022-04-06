@@ -21,7 +21,7 @@ package org.apache.isis.applib.services.command;
 import java.sql.Timestamp;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 
 /**
  * Used by {@link CommandExecutorService}, to update a {@link Command} after it has been executed.
@@ -32,9 +32,9 @@ public interface CommandOutcomeHandler {
 
     CommandOutcomeHandler NULL = new CommandOutcomeHandler() {
         @Override public Timestamp getStartedAt() { return null; }
-        @Override public void setStartedAt(Timestamp startedAt) { }
-        @Override public void setCompletedAt(Timestamp completedAt) { }
-        @Override public void setResult(Result<Bookmark> resultBookmark) { }
+        @Override public void setStartedAt(final Timestamp startedAt) { }
+        @Override public void setCompletedAt(final Timestamp completedAt) { }
+        @Override public void setResult(final Try<Bookmark> resultBookmark) { }
     };
 
     /**
@@ -66,6 +66,6 @@ public interface CommandOutcomeHandler {
     /**
      * Sets the result of the execute, represented as a {@link Bookmark}, on the underlying {@link Command} (or persistent equivalent).
      */
-    void setResult(Result<Bookmark> resultBookmark);
+    void setResult(Try<Bookmark> resultBookmark);
 
 }

@@ -99,7 +99,7 @@ extends RegressionTestAbstract {
                 .ifSuccess(__->fail("expected to fail, but did not"))
                 //.mapFailure(ex->_JdoExceptionTranslator.translate(ex, txManager))
                 .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
-                .optionalElseFail();
+                .ifFailureFail();
 
             });
 

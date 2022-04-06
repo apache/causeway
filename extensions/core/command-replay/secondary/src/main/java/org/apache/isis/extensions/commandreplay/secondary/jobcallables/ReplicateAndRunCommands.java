@@ -112,8 +112,8 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
                         .map(dto ->
                                 transactionService.callWithinCurrentTransactionElseCreateNew(
                                     () -> commandModelRepository.saveForReplay(dto))
-                                .optionalElseFail()
-                                .orElse(null)
+                                .ifFailureFail()
+                                .getValue().orElse(null)
                         )
                         .collect(Collectors.toList());
 
@@ -131,7 +131,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
      * @param commandsToReplay
      * @apiNote could return, whether there was a command to process (and so continue)
      */
-    private void replay(List<? extends CommandModel> commandsToReplay) {
+    private void replay(final List<? extends CommandModel> commandsToReplay) {
 
         commandsToReplay.forEach(commandModel -> {
 
@@ -155,8 +155,8 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
             val childCommands =
                     transactionService.callWithinCurrentTransactionElseCreateNew(
                             () -> commandModelRepository.findByParent(parent))
-                    .optionalElseFail()
-                    .orElse(Collections.emptyList());
+                    .ifFailureFail()
+                    .getValue().orElse(Collections.emptyList());
             for (val childCommand : childCommands) {
                 val childReplayState = executeCommandInTranAndAnalyse(childCommand);
                 if(childReplayState.isFailed()) {
@@ -189,8 +189,8 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
         return controller
                 .map( control -> transactionService
                         .callWithinCurrentTransactionElseCreateNew(control::getState)
-                        .optionalElseFail()
-                        .orElse(null))
+                        .ifFailureFail()
+                        .getValue().orElse(null))
                 .map(state -> state == ReplayCommandExecutionController.State.RUNNING)
             // if no controller implementation provided, then just continue
             .orElse(true);

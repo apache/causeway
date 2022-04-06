@@ -50,7 +50,7 @@ import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderForCollectionTypeAbstract;
 import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogJpa;
@@ -598,7 +598,7 @@ implements
             }
 
             @Override
-            public void setResult(final Result<Bookmark> resultBookmark) {
+            public void setResult(final Try<Bookmark> resultBookmark) {
                 CommandJpa.this.setResult(resultBookmark.getValue().orElse(null));
                 CommandJpa.this.setException(resultBookmark.getFailure().orElse(null));
             }

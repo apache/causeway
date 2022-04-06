@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -279,7 +279,7 @@ implements MemberExecutorService {
         if(entityState.isAttached()) {
             resultAdapter.getBookmark()
             .ifPresent(bookmark->
-                command.updater().setResult(Result.success(bookmark))
+                command.updater().setResult(Try.success(bookmark))
             );
         } else {
             if(entityState.isPersistable()) {

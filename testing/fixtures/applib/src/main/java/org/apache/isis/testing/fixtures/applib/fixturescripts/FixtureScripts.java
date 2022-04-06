@@ -458,8 +458,8 @@ public class FixtureScripts {
                 runBuilderScriptNonTransactional(builderScript)
             )
         )
-        .optionalElseFail()
-        .orElse(null);
+        .ifFailureFail()
+        .getValue().orElse(null);
     }
 
     /**

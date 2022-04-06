@@ -600,8 +600,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         private R updateDomainObjectHonoringTransactionalPropagation() {
             return transactionService.callTransactional(propagation, this::updateDomainObject)
-                    .optionalElseFail()
-                    .orElse(null);
+                    .ifFailureFail()
+                    .getValue().orElse(null);
         }
 
         private R updateDomainObject() {

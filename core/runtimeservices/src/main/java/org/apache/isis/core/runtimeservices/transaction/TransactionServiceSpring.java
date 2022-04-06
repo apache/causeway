@@ -46,6 +46,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
@@ -95,17 +96,17 @@ implements
     // -- SPRING INTEGRATION
 
     @Override
-    public <T> Result<T> callTransactional(final TransactionDefinition def, final Callable<T> callable) {
+    public <T> Try<T> callTransactional(final TransactionDefinition def, final Callable<T> callable) {
 
         val txManager = transactionManagerForElseFail(def); // always throws if configuration is wrong
 
-        Result<T> result = null;
+        Try<T> result = null;
 
         try {
 
             val tx = txManager.getTransaction(def);
 
-            result = Result.of(callable)
+            result = Try.call(callable)
                     .mapFailure(ex->translateExceptionIfPossible(ex, txManager));
 
             if(result.isFailure()) {
@@ -124,7 +125,7 @@ implements
                     ? result
 
                     // return the failure we just catched
-                    : Result.failure(translateExceptionIfPossible(ex, txManager));
+                    : Try.failure(translateExceptionIfPossible(ex, txManager));
 
         }
 

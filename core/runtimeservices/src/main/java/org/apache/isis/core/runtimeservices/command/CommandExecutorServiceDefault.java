@@ -47,7 +47,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.IndexedFunction;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -252,7 +252,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private Bookmark handleOutcomeAndSetCompletedAt(
             final CommandOutcomeHandler outcomeHandler,
-            final Result<Bookmark> result) {
+            final Try<Bookmark> result) {
 
 
         //

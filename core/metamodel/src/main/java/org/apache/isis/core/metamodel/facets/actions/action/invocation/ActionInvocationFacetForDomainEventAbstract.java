@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
@@ -93,7 +93,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val executionResult = interactionInitiatedBy.isPassThrough()
-                ? Result.of(()->
+                ? Try.call(()->
                     doInvoke(owningAction, head, argumentAdapters, interactionInitiatedBy))
                 : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
                     doInvoke(owningAction, head, argumentAdapters, interactionInitiatedBy));
@@ -101,8 +101,8 @@ implements ImperativeFacet {
         //PersistableTypeGuard.instate(executionResult);
 
         return executionResult
-                .optionalElseFail()
-                .orElse(null);
+                .ifFailureFail()
+                .getValue().orElse(null);
     }
 
     @Override

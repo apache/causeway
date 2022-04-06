@@ -43,6 +43,7 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
+@Deprecated(forRemoval = true, since = "2.0.0-M7")
 @RequiredArgsConstructor(access=AccessLevel.PRIVATE, staticName="of")
 @ToString @EqualsAndHashCode
 public final class Result<L> {

@@ -49,7 +49,7 @@ public class CommandSubscriberForJdo implements CommandSubscriber {
     @Inject final CommandJdoRepository commandJdoRepository;
 
     @Override
-    public void onCompleted(Command command) {
+    public void onCompleted(final Command command) {
 
         if(!command.isSystemStateChanged()) {
             return;
@@ -62,8 +62,10 @@ public class CommandSubscriberForJdo implements CommandSubscriber {
                 // this isn't expected to happen ... we just log the fact if it does
                 val existingCommandDto = existingCommandJdoIfAny.get().getCommandDto();
 
-                val existingCommandDtoXml = JaxbUtil.toXml(existingCommandDto).presentElse("Dto to Xml failure");
-                val commandDtoXml = JaxbUtil.toXml(command.getCommandDto()).presentElse("Dto to Xml failure");
+                val existingCommandDtoXml = JaxbUtil.toXml(existingCommandDto)
+                        .getValue().orElse("Dto to Xml failure");
+                val commandDtoXml = JaxbUtil.toXml(command.getCommandDto())
+                        .getValue().orElse("Dto to Xml failure");
 
                 log.debug("existing: \n{}", existingCommandDtoXml);
                 log.debug("proposed: \n{}", commandDtoXml);

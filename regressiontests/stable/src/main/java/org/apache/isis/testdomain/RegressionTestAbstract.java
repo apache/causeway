@@ -42,13 +42,13 @@ public abstract class RegressionTestAbstract {
     protected void run(final ThrowingRunnable runnable) {
         transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->
             interactionService.runAnonymous(runnable))
-        .optionalElseFail();
+        .ifFailureFail();
     }
 
     protected <T> T call(final Callable<T> callable) {
         return transactionService.callTransactional(Propagation.REQUIRES_NEW, ()->
             interactionService.callAnonymous(callable))
-        .presentElseFail();
+        .getValue().orElseThrow(); //XXX assuming return value of callable is not nullable
     }
 
     // -- ASSERTIONS
