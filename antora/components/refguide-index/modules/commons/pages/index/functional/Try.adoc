@@ -26,7 +26,8 @@ interface Try<T> {
   Try<R> mapSuccess(Function<T, R> successMapper)     // <.>
   Try<T> mapFailure(UnaryOperator<Throwable> failureMapper)     // <.>
   Try<T> mapEmptyToFailure()     // <.>
-  R fold(Function<Optional<T>, R> successMapper, Function<Throwable, R> failureMapper)     // <.>
+  Either<L, R> map(Function<Throwable, L> failureMapper, Function<Optional<T>, R> successMapper)     // <.>
+  R fold(Function<Throwable, R> failureMapper, Function<Optional<T>, R> successMapper)     // <.>
   Try<R> thenCall(Callable<R> callable)     // <.>
   Try<Void> thenRun(ThrowingRunnable runnable)     // <.>
 }
@@ -35,12 +36,12 @@ interface Try<T> {
 <.> xref:#getValue__[getValue()]
 +
 --
-Optionally returns the contained _value_ based on presence, this is, if its a _Success_ and the value is not _null_ .
+Optionally returns the contained _value_ based on presence, that is, if its a _Success_ and the value is not _null_ .
 --
 <.> xref:#getFailure__[getFailure()]
 +
 --
-Optionally returns the contained _failure_ based on presence, this is, if its a _Failure_ .
+Optionally returns the contained _failure_ based on presence, that is, if its a _Failure_ .
 --
 <.> xref:#ifSuccess__Consumer[ifSuccess(Consumer)]
 +
@@ -77,6 +78,11 @@ Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if its
 --
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if its a _Success_ with an empty _value_ . Otherwise acts as identity operator.
 --
+<.> xref:#map__Function_Function[map(Function, Function)]
++
+--
+Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to xref:refguide:commons:index/functional/Either.adoc[Either] using according mapping function _successMapper_ or _failureMapper_ .
+--
 <.> xref:#fold__Function_Function[fold(Function, Function)]
 +
 --
@@ -98,12 +104,12 @@ If its a _Success_ , maps it to another based on given _ThrowingRunnable_ . Othe
 [#getValue__]
 === getValue()
 
-Optionally returns the contained _value_ based on presence, this is, if its a _Success_ and the value is not _null_ .
+Optionally returns the contained _value_ based on presence, that is, if its a _Success_ and the value is not _null_ .
 
 [#getFailure__]
 === getFailure()
 
-Optionally returns the contained _failure_ based on presence, this is, if its a _Failure_ .
+Optionally returns the contained _failure_ based on presence, that is, if its a _Failure_ .
 
 [#ifSuccess__Consumer]
 === ifSuccess(Consumer)
@@ -139,6 +145,11 @@ Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if its
 === mapEmptyToFailure()
 
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if its a _Success_ with an empty _value_ . Otherwise acts as identity operator.
+
+[#map__Function_Function]
+=== map(Function, Function)
+
+Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to xref:refguide:commons:index/functional/Either.adoc[Either] using according mapping function _successMapper_ or _failureMapper_ .
 
 [#fold__Function_Function]
 === fold(Function, Function)

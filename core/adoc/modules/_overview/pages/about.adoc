@@ -1322,7 +1322,7 @@ org.yaml:snakeyaml:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:commons:index/btree/Compound.adoc[Compound], xref:refguide:commons:index/btree/FunCompound.adoc[FunCompound], xref:refguide:commons:index/collections/Can.adoc[Can], xref:refguide:commons:index/collections/Cardinality.adoc[Cardinality], xref:refguide:commons:index/functional/Try.adoc[Try], xref:refguide:commons:index/resource/ResourceCoordinates.adoc[ResourceCoordinates]
+xref:refguide:commons:index/collections/Can.adoc[Can], xref:refguide:commons:index/collections/Cardinality.adoc[Cardinality], xref:refguide:commons:index/functional/Either.adoc[Either], xref:refguide:commons:index/functional/Railway.adoc[Railway], xref:refguide:commons:index/functional/Try.adoc[Try], xref:refguide:commons:index/resource/ResourceCoordinates.adoc[ResourceCoordinates]
 ****
 |===
 
