@@ -83,7 +83,7 @@ public class CanonicalInvoker {
         // supports effective private constructors as well
         return _Reflect.invokeConstructor(constructionRequest.getConstructor(), adaptedExecutionParameters)
         .mapFailure(ex->toVerboseException(constructionRequest.getConstructor(), adaptedExecutionParameters, ex))
-        .presentElseFail();
+        .getValue().orElseThrow();
     }
 
     // -- INVOKE
@@ -125,8 +125,8 @@ public class CanonicalInvoker {
                 invocationRequest.getMethod(),
                 adaptedExecutionParameters,
                 ex))
-        .optionalElseFail()
-        .orElse(null);
+        .ifFailureFail()
+        .getValue().orElse(null);
     }
 
     // -- HELPER

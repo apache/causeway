@@ -31,7 +31,7 @@ import org.yaml.snakeyaml.DumperOptions.LineBreak;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -63,8 +63,8 @@ public class _Yaml {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readYaml(final Class<T> clazz, final InputStream content) {
-        return Result.of(()->_readYaml(clazz, content));
+    public static <T> Try<T> readYaml(final Class<T> clazz, final InputStream content) {
+        return Try.call(()->_readYaml(clazz, content));
     }
 
     // -- FROM STRING
@@ -81,8 +81,8 @@ public class _Yaml {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readYaml(final Class<T> clazz, final String content) {
-        return Result.of(()->_readYaml(clazz, content));
+    public static <T> Try<T> readYaml(final Class<T> clazz, final String content) {
+        return Try.call(()->_readYaml(clazz, content));
     }
 
     // -- FROM FILE
@@ -101,8 +101,8 @@ public class _Yaml {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readYaml(final Class<T> clazz, final File content) {
-        return Result.of(()->_readYaml(clazz, content));
+    public static <T> Try<T> readYaml(final Class<T> clazz, final File content) {
+        return Try.call(()->_readYaml(clazz, content));
     }
 
     // -- FROM BYTE ARRAY
@@ -121,8 +121,8 @@ public class _Yaml {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readYaml(final Class<T> clazz, final byte[] content) {
-        return Result.of(()->_readYaml(clazz, content));
+    public static <T> Try<T> readYaml(final Class<T> clazz, final byte[] content) {
+        return Try.call(()->_readYaml(clazz, content));
     }
 
     // -- WRITING
@@ -141,8 +141,8 @@ public class _Yaml {
         }
     }
 
-    public static Result<String> toString(final Object pojo) {
-        return Result.of(()->_toString(pojo));
+    public static Try<String> toString(final Object pojo) {
+        return Try.call(()->_toString(pojo));
     }
 
 }

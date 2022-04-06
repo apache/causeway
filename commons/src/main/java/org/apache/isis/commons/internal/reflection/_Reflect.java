@@ -44,7 +44,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
@@ -541,13 +541,13 @@ public final class _Reflect {
     }
 
 
-    public static Result<Object> invokeMethodOn(
+    public static Try<Object> invokeMethodOn(
             final @NonNull Method method,
             final @NonNull Object target,
             final Object... args) {
 
         /*sonar-ignore-on*/
-        return Result.of(()->{
+        return Try.call(()->{
             if(method.isAccessible()) {
                 return method.invoke(target, args);
             }
@@ -561,12 +561,12 @@ public final class _Reflect {
         /*sonar-ignore-off*/
     }
 
-    public static <T> Result<T> invokeConstructor(
+    public static <T> Try<T> invokeConstructor(
             final @NonNull Constructor<T> constructor,
             final Object... args) {
 
         /*sonar-ignore-on*/
-        return Result.of(()->{
+        return Try.call(()->{
             if(constructor.isAccessible()) {
                 return constructor.newInstance(args);
             }

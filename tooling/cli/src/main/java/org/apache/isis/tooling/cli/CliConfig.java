@@ -115,7 +115,7 @@ public class CliConfig {
 
                 @Getter
                 private final Class<? extends UnitFormatter> unitFormatterClass;
-                Formatter(Class<? extends UnitFormatter> unitFormatterClass) {
+                Formatter(final Class<? extends UnitFormatter> unitFormatterClass) {
                     this.unitFormatterClass = unitFormatterClass;
                 }
             }
@@ -139,7 +139,7 @@ public class CliConfig {
                 throw new RuntimeException(String.format("config file '%s' not readable\n%s", file.getAbsolutePath(), e));
             }
         })
-        .presentElseGet(CliConfig::new);
+        .getValue().orElseGet(CliConfig::new);
     }
 
 

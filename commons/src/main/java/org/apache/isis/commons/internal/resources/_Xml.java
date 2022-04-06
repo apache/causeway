@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -35,7 +34,9 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
 
-import org.apache.isis.commons.functional.Result;
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.codec._DocumentFactories;
@@ -114,10 +115,10 @@ public final class _Xml {
         return writer.toString();
     }
 
-    public static <T> Result<String> writeXml(
+    public static <T> Try<String> writeXml(
             final @NonNull T dto,
             final @NonNull WriteOptions writeOptions) {
-        return Result.of(()->_writeXml(dto, writeOptions));
+        return Try.call(()->_writeXml(dto, writeOptions));
     }
 
     public static <T> void writeXml(
@@ -160,14 +161,14 @@ public final class _Xml {
                 .build());
     }
 
-    public static <T> Result<T> clone(final @Nullable T dto) {
-        return Result.of(()->_clone(dto));
+    public static <T> Try<T> clone(final @Nullable T dto) {
+        return Try.call(()->_clone(dto));
     }
 
 
     // -- ENHANCE EXCEPTION MESSAGE IF POSSIBLE
 
-    public static Exception verboseException(String doingWhat, @Nullable Class<?> dtoClass, Exception e) {
+    public static Exception verboseException(final String doingWhat, @Nullable final Class<?> dtoClass, final Exception e) {
 
         val dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
 
@@ -202,7 +203,7 @@ public final class _Xml {
                 + "object class is '%s'", doingWhat, dtoClassName), e);
     }
 
-    private static boolean isIllegalAnnotationsException(Exception e) {
+    private static boolean isIllegalAnnotationsException(final Exception e) {
         /*sonar-ignore-on*/
         return "com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(e.getClass().getName());
         /*sonar-ignore-off*/

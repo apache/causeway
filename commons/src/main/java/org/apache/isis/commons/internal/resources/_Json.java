@@ -33,7 +33,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -66,8 +66,8 @@ public class _Json {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readJson(final Class<T> clazz, final InputStream content) {
-        return Result.of(()->_readJson(clazz, content));
+    public static <T> Try<T> readJson(final Class<T> clazz, final InputStream content) {
+        return Try.call(()->_readJson(clazz, content));
     }
 
     private static <T> List<T> _readJsonList(final Class<T> elementType, final InputStream content)
@@ -85,8 +85,8 @@ public class _Json {
      * @param clazz
      * @param content
      */
-    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final InputStream content) {
-        return Result.of(()->_readJsonList(clazz, content));
+    public static <T> Try<List<T>> readJsonList(final Class<T> clazz, final InputStream content) {
+        return Try.call(()->_readJsonList(clazz, content));
     }
 
 
@@ -99,11 +99,11 @@ public class _Json {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readJson(
+    public static <T> Try<T> readJson(
             final Class<T> clazz,
             final String content,
             final JsonCustomizer ... customizers) {
-        return Result.of(()->mapper(customizers).readValue(content, clazz));
+        return Try.call(()->mapper(customizers).readValue(content, clazz));
     }
 
     private static <T> List<T> _readJsonList(final Class<T> elementType, final String content)
@@ -121,8 +121,8 @@ public class _Json {
      * @param clazz
      * @param content
      */
-    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final String content) {
-        return Result.of(()->_readJsonList(clazz, content));
+    public static <T> Try<List<T>> readJsonList(final Class<T> clazz, final String content) {
+        return Try.call(()->_readJsonList(clazz, content));
     }
 
 
@@ -141,8 +141,8 @@ public class _Json {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readJson(final Class<T> clazz, final File content) {
-        return Result.of(()->_readJson(clazz, content));
+    public static <T> Try<T> readJson(final Class<T> clazz, final File content) {
+        return Try.call(()->_readJson(clazz, content));
     }
 
     private static <T> List<T> _readJsonList(final Class<T> elementType, final File content)
@@ -160,8 +160,8 @@ public class _Json {
      * @param clazz
      * @param content
      */
-    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final File content) {
-        return Result.of(()->_readJsonList(clazz, content));
+    public static <T> Try<List<T>> readJsonList(final Class<T> clazz, final File content) {
+        return Try.call(()->_readJsonList(clazz, content));
     }
 
     // -- BYTE CONTENT
@@ -179,8 +179,8 @@ public class _Json {
      * @param clazz
      * @param content
      */
-    public static <T> Result<T> readJson(final Class<T> clazz, final byte[] content) {
-        return Result.of(()->_readJson(clazz, content));
+    public static <T> Try<T> readJson(final Class<T> clazz, final byte[] content) {
+        return Try.call(()->_readJson(clazz, content));
     }
 
     private static <T> List<T> _readJsonList(final Class<T> elementType, final byte[] content)
@@ -198,8 +198,8 @@ public class _Json {
      * @param clazz
      * @param content
      */
-    public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final byte[] content) {
-        return Result.of(()->_readJsonList(clazz, content));
+    public static <T> Try<List<T>> readJsonList(final Class<T> clazz, final byte[] content) {
+        return Try.call(()->_readJsonList(clazz, content));
     }
 
     // -- WRITING

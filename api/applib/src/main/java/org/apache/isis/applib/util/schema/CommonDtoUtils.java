@@ -161,17 +161,17 @@ public final class CommonDtoUtils {
             return valueDto;
         }
         case ENUM: {
-            final EnumDto enumDto = _Json.readJson(EnumDto.class, json).presentElseFail();
+            final EnumDto enumDto = _Json.readJson(EnumDto.class, json).getValue().orElseThrow();
             valueDto.setEnum(enumDto);
             return valueDto;
         }
         case BLOB: {
-            final BlobDto blobDto = _Json.readJson(BlobDto.class, json).presentElseFail();
+            final BlobDto blobDto = _Json.readJson(BlobDto.class, json).getValue().orElseThrow();
             valueDto.setBlob(blobDto);
             return valueDto;
         }
         case CLOB: {
-            final ClobDto clobDto = _Json.readJson(ClobDto.class, json).presentElseFail();
+            final ClobDto clobDto = _Json.readJson(ClobDto.class, json).getValue().orElseThrow();
             valueDto.setClob(clobDto);
             return valueDto;
         }
@@ -269,7 +269,7 @@ public final class CommonDtoUtils {
     public TypedTupleDto getCompositeValueFromJson(final @Nullable String json) {
         return _Strings.isNotEmpty(json)
                 ? _Json.readJson(TypedTupleDto.class, json, _Json::jaxbAnnotationSupport)
-                        .presentElseFail()
+                        .getValue().orElseThrow()
                 : null;
     }
 

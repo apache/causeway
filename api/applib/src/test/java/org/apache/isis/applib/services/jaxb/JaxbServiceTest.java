@@ -55,7 +55,7 @@ class JaxbServiceTest {
     @Test
     void clone_usingUtility() {
         val dto = getSample();
-        assertDtoEquals(dto, _Xml.clone(dto).presentElseFail());
+        assertDtoEquals(dto, _Xml.clone(dto).getValue().orElseThrow());
     }
 
     // -- HELPER
@@ -67,7 +67,7 @@ class JaxbServiceTest {
         return dto;
     }
 
-    private void assertDtoEquals(ActionInvocationDto a, ActionInvocationDto b) {
+    private void assertDtoEquals(final ActionInvocationDto a, final ActionInvocationDto b) {
         assertEquals(a.getTitle(), b.getTitle());
         assertEquals(a.getUser(), b.getUser());
     }
