@@ -24,15 +24,15 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.jpa.JpaTransactionManager;
 
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 final class _JpaExceptionTranslator {
 
     // not used, but maybe keep for debugging purposes
-    static DataAccessException translate(Throwable failure, JpaTransactionManager txManager) {
+    static DataAccessException translate(final Throwable failure, final JpaTransactionManager txManager) {
 
-        return (DataAccessException) Result.failure(failure)
+        return (DataAccessException) Try.failure(failure)
 
         .mapFailure(ex-> _Exceptions.streamCausalChain(ex)
                 .filter(e->e instanceof RuntimeException)

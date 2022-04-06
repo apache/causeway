@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
@@ -59,13 +59,13 @@ public class ObjectActionArgHelper {
             val paramMeta = parameters.getElseFail(argIndex);
             val paramSpec = paramMeta.getElementType();
 
-            val objectOrVeto = Result.of(()->
+            val objectOrVeto = Try.call(()->
                     (paramMeta.isOptional() && argRepr == null)
                     ? ManagedObject.empty(paramSpec)
                     : new JsonParserHelper(resourceContext, paramSpec)
                             .objectAdapterFor(argRepr))
             .<_Either<ManagedObject, InteractionVeto>>fold(
-                    _Either::left,
+                    success->_Either.left(success.orElseThrow()),
                     exception->_Either.right(
                             InteractionVeto.actionParamInvalid(
                                     String.format("exception when parsing paramNr %d [%s]: %s",

@@ -125,6 +125,16 @@ public interface Try<T> {
      */
     Try<T> mapEmptyToFailure();
 
+    // -- FOLDING
+
+    /**
+     * Folds the contained {@code value} or {@code failure} to a new value of type {@code R}
+     * using according mapping function {@code successMapper} or {@code failureMapper}.
+     */
+    <R> R fold(
+            final @NonNull Function<Optional<T>, R> successMapper,
+            final @NonNull Function<Throwable, R> failureMapper);
+
     // -- CONCATENATION
 
     /**
@@ -201,6 +211,13 @@ public interface Try<T> {
             return Try.run(runnable);
         }
 
+        @Override
+        public <R> R fold(
+                final @NonNull Function<Optional<T>, R> successMapper,
+                final @NonNull Function<Throwable, R> failureMapper) {
+            return successMapper.apply(getValue());
+        }
+
     }
 
     // -- FAILURE
@@ -265,6 +282,13 @@ public interface Try<T> {
         @Override
         public Try<Void> thenRun(final @NonNull ThrowingRunnable runnable) {
             return new Failure<>(throwable);
+        }
+
+        @Override
+        public <R> R fold(
+                final @NonNull Function<Optional<T>, R> successMapper,
+                final @NonNull Function<Throwable, R> failureMapper) {
+            return failureMapper.apply(throwable);
         }
 
     }

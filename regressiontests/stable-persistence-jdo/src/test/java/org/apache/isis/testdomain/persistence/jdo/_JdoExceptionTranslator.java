@@ -29,7 +29,7 @@ import org.springframework.dao.DataAccessException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 
 final class _JdoExceptionTranslator {
@@ -37,7 +37,7 @@ final class _JdoExceptionTranslator {
     // not used, but maybe keep for debugging purposes
     static DataAccessException translate(final Throwable failure, final JdoTransactionManager txManager) {
 
-        return (DataAccessException) Result.failure(failure)
+        return (DataAccessException) Try.failure(failure)
 
         //XXX seems like a bug in DN, why do we need to unwrap this?
         .mapFailure(ex->ex instanceof IllegalArgumentException
