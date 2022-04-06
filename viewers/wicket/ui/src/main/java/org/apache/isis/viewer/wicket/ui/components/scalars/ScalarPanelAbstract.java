@@ -611,6 +611,7 @@ implements ScalarModelSubscriber {
     public void repaint(final AjaxRequestTarget target) {
         target.add(this);
     }
+
     /**
     *
     * @param paramModel - the action being invoked
@@ -618,7 +619,6 @@ implements ScalarModelSubscriber {
     *
     * @return - true if changed as a result of these pending arguments.
     */
-
    public Repaint updateIfNecessary(
            final @NonNull ParameterUiModel paramModel,
            final @NonNull Optional<AjaxRequestTarget> target) {
@@ -650,7 +650,6 @@ implements ScalarModelSubscriber {
            }
        }
 
-
        // repaint the entire form if visibility has changed
        if (!visibilityBefore || !visibilityAfter) {
            return Repaint.ENTIRE_FORM;
@@ -666,7 +665,5 @@ implements ScalarModelSubscriber {
                ? Repaint.PARAM_ONLY
                : Repaint.NOTHING;
    }
-
-
 
 }
