@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._Either;
 
 import lombok.NonNull;
 import lombok.val;
@@ -37,9 +37,9 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         }
     }
 
-    @NonNull protected _Either<T, InteractionVeto> chain;
+    @NonNull protected Either<T, InteractionVeto> chain;
 
-    protected MemberInteraction(@NonNull _Either<T, InteractionVeto> chain) {
+    protected MemberInteraction(@NonNull Either<T, InteractionVeto> chain) {
         this.chain = chain;
     }
 
@@ -47,8 +47,8 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         chain = chain.mapIfLeft(property->{
             val visibilityVeto = property.checkVisibility();
             return visibilityVeto.isPresent()
-                ? _Either.right(visibilityVeto.get())
-                : _Either.left(property);
+                ? Either.right(visibilityVeto.get())
+                : Either.left(property);
         });
         return _Casts.uncheckedCast(this);
     }
@@ -57,8 +57,8 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         chain = chain.mapIfLeft(property->{
             val usablitiyVeto = property.checkUsability();
             return usablitiyVeto.isPresent()
-                ? _Either.right(usablitiyVeto.get())
-                : _Either.left(property);
+                ? Either.right(usablitiyVeto.get())
+                : Either.left(property);
         });
         return _Casts.uncheckedCast(this);
     }

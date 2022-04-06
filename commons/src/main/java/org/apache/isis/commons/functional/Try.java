@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.functional;
 
+import java.io.Serializable;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -80,12 +81,12 @@ public interface Try<T> {
 
     /**
      * Optionally returns the contained {@code value} based on presence,
-     * this is, if its a {@link Success} and the value is not {@code null}.
+     * that is, if its a {@link Success} and the value is not {@code null}.
      */
     Optional<T> getValue();
     /**
      * Optionally returns the contained {@code failure} based on presence,
-     * this is, if its a {@link Failure}.
+     * that is, if its a {@link Failure}.
      */
     Optional<Throwable> getFailure();
 
@@ -124,16 +125,25 @@ public interface Try<T> {
      * Otherwise acts as identity operator.
      */
     Try<T> mapEmptyToFailure();
+    /**
+     * Maps this {@link Try} to {@link Either}
+     * using according mapping function {@code successMapper} or {@code failureMapper}.
+     * @apiNote It is a common functional programming convention, to map the success value <i>right</i>.
+     */
+    <L, R> Either<L, R> map(
+            final @NonNull Function<Throwable, L> failureMapper,
+            final @NonNull Function<Optional<T>, R> successMapper);
 
     // -- FOLDING
 
     /**
      * Maps the contained {@code value} or {@code failure} to a new value of type {@code R}
      * using according mapping function {@code successMapper} or {@code failureMapper}.
+     * @apiNote Order of arguments conforms to {@link #map(Function, Function)}
      */
     <R> R fold(
-            final @NonNull Function<Optional<T>, R> successMapper,
-            final @NonNull Function<Throwable, R> failureMapper);
+            final @NonNull Function<Throwable, R> failureMapper,
+            final @NonNull Function<Optional<T>, R> successMapper);
 
     // -- CONCATENATION
 
@@ -152,7 +162,8 @@ public interface Try<T> {
 
     @lombok.Value
     @RequiredArgsConstructor
-    final class Success<T> implements Try<T> {
+    final class Success<T> implements Try<T>, Serializable {
+        private static final long serialVersionUID = 1L;
 
         private final @Nullable T value;
 
@@ -213,9 +224,16 @@ public interface Try<T> {
 
         @Override
         public <R> R fold(
-                final @NonNull Function<Optional<T>, R> successMapper,
-                final @NonNull Function<Throwable, R> failureMapper) {
+                final @NonNull Function<Throwable, R> failureMapper,
+                final @NonNull Function<Optional<T>, R> successMapper) {
             return successMapper.apply(getValue());
+        }
+
+        @Override
+        public <L, R> Either<L, R> map(
+                final @NonNull Function<Throwable, L> failureMapper,
+                final @NonNull Function<Optional<T>, R> successMapper) {
+            return Either.right(successMapper.apply(getValue()));
         }
 
     }
@@ -224,7 +242,8 @@ public interface Try<T> {
 
     @lombok.Value
     @RequiredArgsConstructor
-    final class Failure<T> implements Try<T> {
+    final class Failure<T> implements Try<T>, Serializable {
+        private static final long serialVersionUID = 1L;
 
         private final @NonNull Throwable throwable;
 
@@ -286,9 +305,16 @@ public interface Try<T> {
 
         @Override
         public <R> R fold(
-                final @NonNull Function<Optional<T>, R> successMapper,
-                final @NonNull Function<Throwable, R> failureMapper) {
+                final @NonNull Function<Throwable, R> failureMapper,
+                final @NonNull Function<Optional<T>, R> successMapper) {
             return failureMapper.apply(throwable);
+        }
+
+        @Override
+        public <L, R> Either<L, R> map(
+                final @NonNull Function<Throwable, L> failureMapper,
+                final @NonNull Function<Optional<T>, R> successMapper) {
+            return Either.left(failureMapper.apply(throwable));
         }
 
     }

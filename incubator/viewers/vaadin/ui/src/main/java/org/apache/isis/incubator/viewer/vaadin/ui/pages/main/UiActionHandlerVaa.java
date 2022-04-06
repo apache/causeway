@@ -43,7 +43,7 @@ public class UiActionHandlerVaa {
     private final InteractionService interactionService;
     private final UiComponentFactoryVaa uiComponentFactory;
 
-    public void handleActionLinkClicked(ManagedAction managedAction) {
+    public void handleActionLinkClicked(final ManagedAction managedAction) {
 
         log.info("about to build an action prompt for {}", managedAction.getIdentifier());
 
@@ -71,8 +71,8 @@ public class UiActionHandlerVaa {
     }
 
     private void invoke(
-            ManagedAction managedAction,
-            Can<ManagedObject> params) {
+            final ManagedAction managedAction,
+            final Can<ManagedObject> params) {
 
         interactionService.runAnonymous(()->{
 
@@ -80,7 +80,7 @@ public class UiActionHandlerVaa {
 
             val actionResultOrVeto = managedAction.invoke(params);
 
-            actionResultOrVeto.left()
+            actionResultOrVeto.getSuccess()
             .ifPresent(actionResult->uiContext.route(actionResult));
 
         });

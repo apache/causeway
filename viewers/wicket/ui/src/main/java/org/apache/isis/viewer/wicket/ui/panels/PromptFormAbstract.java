@@ -31,7 +31,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
@@ -84,7 +84,7 @@ implements ScalarModelSubscriber {
     // -- SETUP
 
     protected abstract void addParameters();
-    protected abstract _Either<ActionModel, ScalarPropertyModel> getMemberModel();
+    protected abstract Either<ActionModel, ScalarPropertyModel> getMemberModel();
     protected abstract Object newCompletedEvent(AjaxRequestTarget target, Form<?> form);
 
     @Override

@@ -313,9 +313,9 @@ public class DomainObjectTesterFactory {
                 //pendingArgs.validateParameterSetForParameters();
 
                 val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-                assertTrue(resultOrVeto.isLeft()); // assert action did not throw
+                assertTrue(resultOrVeto.isSuccess()); // assert action did not throw
 
-                val actionResultAsPojo = resultOrVeto.leftIfAny().getPojo();
+                val actionResultAsPojo = resultOrVeto.getSuccessElseFail().getPojo();
                 assertEquals(expectedResult, actionResultAsPojo);
 
                 captureCommand();
@@ -345,11 +345,11 @@ public class DomainObjectTesterFactory {
                 //pendingArgs.validateParameterSetForParameters();
 
                 val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-                assertTrue(resultOrVeto.isLeft()); // assert action did not throw
+                assertTrue(resultOrVeto.isSuccess()); // assert action did not throw
 
                 captureCommand();
 
-                return resultOrVeto.leftIfAny().getPojo();
+                return resultOrVeto.getSuccessElseFail().getPojo();
             });
         }
 
@@ -379,9 +379,9 @@ public class DomainObjectTesterFactory {
                 // spawns its own transactional boundary, or reuses an existing one if available
                 val either = managedAction.invoke(pendingArgs.getParamValues());
 
-                assertTrue(either.isLeft()); // assert action did not throw
+                assertTrue(either.isSuccess()); // assert action did not throw
 
-                val actionResultAsPojo = either.leftIfAny().getPojo();
+                val actionResultAsPojo = either.getSuccessElseFail().getPojo();
 
                 assertEquals(expectedResult, actionResultAsPojo);
 
@@ -561,9 +561,9 @@ public class DomainObjectTesterFactory {
                 //pendingArgs.validateParameterSetForParameters();
 
                 val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-                assertTrue(resultOrVeto.isLeft()); // assert action did not throw
+                assertTrue(resultOrVeto.isSuccess()); // assert action did not throw
 
-                val actionResult = resultOrVeto.leftIfAny();
+                val actionResult = resultOrVeto.getSuccessElseFail();
 
                 val table = DataTableModel
                         .forAction(managedAction, pendingArgs.getParamValues(), actionResult);

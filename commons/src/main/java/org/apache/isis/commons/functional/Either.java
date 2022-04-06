@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.internal.base;
+package org.apache.isis.commons.functional;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -31,20 +31,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 /**
- * <h1>- internal use only -</h1>
+ * The {@link Either} type represents a value of one of two possible types (a disjoint union),
+ * referred to by {@code left} or {@code right}.
  * <p>
- *      A holder of either a left or right reference, only one of both can be present.
- * </p>
- * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
- * These may be changed or removed without notice!
- * </p>
+ * Factory methods {@link Either#left(Object)} and {@link Either#right(Object)}
+ * correspond to the two possible values.
  *
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @RequiredArgsConstructor(access=AccessLevel.PROTECTED)
 @ToString @EqualsAndHashCode
-public class _Either<L, R> implements Serializable {
+public class Either<L, R> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,12 +50,12 @@ public class _Either<L, R> implements Serializable {
 
     // -- FACTORIES
 
-    public static <L, R> _Either<L, R> left(final @NonNull L left) {
-        return new _Either<>(left, null);
+    public static <L, R> Either<L, R> left(final @NonNull L left) {
+        return new Either<>(left, null);
     }
 
-    public static <L, R> _Either<L, R> right(final @NonNull R right) {
-        return new _Either<>(null, right);
+    public static <L, R> Either<L, R> right(final @NonNull R right) {
+        return new Either<>(null, right);
     }
 
     // -- ACCESSORS
@@ -91,19 +88,19 @@ public class _Either<L, R> implements Serializable {
 
     // -- MAPPING
 
-    public final <T> _Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper){
+    public final <T> Either<T, R> mapLeft(final @NonNull Function<L, T> leftMapper){
         return isLeft()
-                ? _Either.left(leftMapper.apply(left))
-                : _Either.right(right);
+                ? Either.left(leftMapper.apply(left))
+                : Either.right(right);
     }
 
-    public final <T> _Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper){
+    public final <T> Either<L, T> mapRight(final @NonNull Function<R, T> rightMapper){
         return isLeft()
-                ? _Either.left(left)
-                : _Either.right(rightMapper.apply(right));
+                ? Either.left(left)
+                : Either.right(rightMapper.apply(right));
     }
 
-    public final <X, Y> _Either<X, Y> map(
+    public final <X, Y> Either<X, Y> map(
             final @NonNull Function<L, X> leftMapper,
             final @NonNull Function<R, Y> rightMapper){
         return isLeft()
@@ -111,13 +108,13 @@ public class _Either<L, R> implements Serializable {
                 : right(rightMapper.apply(right));
     }
 
-    public final _Either<L, R> mapIfLeft(final @NonNull Function<L, _Either<L, R>> leftRemapper){
+    public final Either<L, R> mapIfLeft(final @NonNull Function<L, Either<L, R>> leftRemapper){
         return isLeft()
                 ? leftRemapper.apply(left)
                 : this;
     }
 
-    public final _Either<L, R> mapIfRight(final @NonNull Function<R, _Either<L, R>> rightRemapper){
+    public final Either<L, R> mapIfRight(final @NonNull Function<R, Either<L, R>> rightRemapper){
         return isLeft()
                 ? this
                 : rightRemapper.apply(right);

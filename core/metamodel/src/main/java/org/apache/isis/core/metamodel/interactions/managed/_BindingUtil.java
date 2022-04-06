@@ -22,7 +22,7 @@ import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.isis.commons.binding.Observable;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -66,8 +66,8 @@ class _BindingUtil {
         return spec.lookupFacet(ValueFacet.class)
         .map(valueFacet->{
             val eitherRendererOrParser = format.requiresRenderer()
-                ? _Either.<Renderer, Parser>left(valueFacet.selectRendererForPropertyElseFallback(prop))
-                : _Either.<Renderer, Parser>right(valueFacet.selectParserForPropertyElseFallback(prop));
+                ? Either.<Renderer, Parser>left(valueFacet.selectRendererForPropertyElseFallback(prop))
+                : Either.<Renderer, Parser>right(valueFacet.selectParserForPropertyElseFallback(prop));
             val ctx = valueFacet.createValueSemanticsContext(prop);
 
             return bindAsFormated(format, spec, bindablePropertyValue, eitherRendererOrParser, ctx);
@@ -95,8 +95,8 @@ class _BindingUtil {
         return spec.lookupFacet(ValueFacet.class)
         .map(valueFacet->{
             val eitherRendererOrParser = format.requiresRenderer()
-                ? _Either.<Renderer, Parser>left(valueFacet.selectRendererForParameterElseFallback(param))
-                : _Either.<Renderer, Parser>right(valueFacet.selectParserForParameterElseFallback(param));
+                ? Either.<Renderer, Parser>left(valueFacet.selectRendererForParameterElseFallback(param))
+                : Either.<Renderer, Parser>right(valueFacet.selectParserForParameterElseFallback(param));
             val ctx = valueFacet.createValueSemanticsContext(param);
 
             return bindAsFormated(format, spec, bindableParamValue, eitherRendererOrParser, ctx);
@@ -147,7 +147,7 @@ class _BindingUtil {
             final @NonNull TargetFormat format,
             final @NonNull ObjectSpecification spec,
             final @NonNull _BindableAbstract<ManagedObject> bindableValue,
-            final @NonNull _Either<Renderer, Parser> eitherRendererOrParser,
+            final @NonNull Either<Renderer, Parser> eitherRendererOrParser,
             final @NonNull Context context) {
 
         switch (format) {

@@ -24,7 +24,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction.Result;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
@@ -53,14 +53,14 @@ class _DomainResourceHelper {
     private final TransactionService transactionService;
 
     public static _DomainResourceHelper ofObjectResource(
-            IResourceContext resourceContext,
-            ManagedObject objectAdapter) {
+            final IResourceContext resourceContext,
+            final ManagedObject objectAdapter) {
         return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainObjectLinkTo());
     }
 
     public static _DomainResourceHelper ofServiceResource(
-            IResourceContext resourceContext,
-            ManagedObject objectAdapter) {
+            final IResourceContext resourceContext,
+            final ManagedObject objectAdapter) {
         return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainServiceLinkTo());
     }
 
@@ -205,7 +205,7 @@ class _DomainResourceHelper {
         val where = resourceContext.getWhere();
 
         // lombok issue, needs explicit cast here
-        val actionInteraction = (ActionInteraction) ActionInteraction.start(objectAdapter, actionId, where)
+        val actionInteraction = ActionInteraction.start(objectAdapter, actionId, where)
         .checkVisibility()
         .checkUsability(intent)
         .checkSemanticConstraint(semanticConstraint);
@@ -233,11 +233,13 @@ class _DomainResourceHelper {
                     .parseArguments(resourceContext, action, arguments);
 
             pendingArgs.getParamModels().zip(paramsOrVetos, (managedParam, paramOrVeto)->{
-                if(paramOrVeto.isRight()) {
-                    val veto = paramOrVeto.rightIfAny();
-                    InteractionFailureHandler.collectParameterInvalid(managedParam.getMetaModel(), veto, arguments);
+
+                paramOrVeto.ifFailure(veto->{
+                    InteractionFailureHandler
+                        .collectParameterInvalid(managedParam.getMetaModel(), veto, arguments);
                     vetoCount.increment();
-                }
+                });
+
             });
 
             if(vetoCount.intValue()>0) {
@@ -245,7 +247,7 @@ class _DomainResourceHelper {
                         InteractionVeto.actionParamInvalid("error parsing arguments"), arguments);
             }
 
-            val argAdapters = paramsOrVetos.map(_Either::leftIfAny);
+            val argAdapters = paramsOrVetos.map(Railway::getSuccessElseFail);
             pendingArgs.setParamValues(argAdapters);
 
             // validate parameters ...
@@ -282,14 +284,14 @@ class _DomainResourceHelper {
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
 
-        if(resultOrVeto.isRight()) {
-            throw InteractionFailureHandler.onFailure(resultOrVeto.rightIfAny());
-        }
+        resultOrVeto.ifFailure(veto->{
+            throw InteractionFailureHandler.onFailure(veto);
+        });
 
         val actionInteractionResult = Result.of(
                 actionInteraction.getManagedAction().orElse(null),
                 pendingArgs.getParamValues(),
-                resultOrVeto.leftIfAny());
+                resultOrVeto.getSuccessElseFail());
 
         val objectAndActionInvocation = ObjectAndActionInvocation.of(actionInteractionResult, arguments, selfLink);
 
@@ -303,7 +305,7 @@ class _DomainResourceHelper {
     // dependencies (from context)
     // //////////////////////////////////////
 
-    private <T> T lookupService(Class<T> serviceType) {
+    private <T> T lookupService(final Class<T> serviceType) {
         return resourceContext.getMetaModelContext().getServiceRegistry().lookupServiceElseFail(serviceType);
     }
 

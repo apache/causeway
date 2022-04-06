@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.commons.functional.Try;
-import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -44,14 +44,14 @@ import lombok.val;
 @RequiredArgsConstructor(staticName = "of")
 public class ObjectActionArgHelper {
 
-    public static Can<_Either<ManagedObject, InteractionVeto>> parseArguments(
+    public static Can<Railway<InteractionVeto, ManagedObject>> parseArguments(
             final IResourceContext resourceContext,
             final ObjectAction action,
             final JsonRepresentation arguments) {
 
         val jsonArgList = argListFor(action, arguments);
 
-        final List<_Either<ManagedObject, InteractionVeto>> argAdapters = _Lists.newArrayList();
+        final List<Railway<InteractionVeto, ManagedObject>> argAdapters = _Lists.newArrayList();
         val parameters = action.getParameters();
         for (int i = 0; i < jsonArgList.size(); i++) {
             final JsonRepresentation argRepr = jsonArgList.get(i);
@@ -64,12 +64,13 @@ public class ObjectActionArgHelper {
                     ? ManagedObject.empty(paramSpec)
                     : new JsonParserHelper(resourceContext, paramSpec)
                             .objectAdapterFor(argRepr))
-            .<_Either<ManagedObject, InteractionVeto>>fold(
-                    success->_Either.left(success.orElseThrow()),
-                    exception->_Either.right(
+            .<Railway<InteractionVeto, ManagedObject>>fold(
+                    exception->Railway.failure(
                             InteractionVeto.actionParamInvalid(
                                     String.format("exception when parsing paramNr %d [%s]: %s",
-                                            argIndex, argRepr, exception))));
+                                            argIndex, argRepr, exception))),
+                    success->Railway.success(success.orElseThrow()))
+            ;
 
             argAdapters.add(objectOrVeto);
         }

@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.objects;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.MetaModelTestAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
@@ -58,7 +58,7 @@ extends MetaModelTestAbstract {
         when(mockHasStaticText.translated()).thenReturn("My name");
 
         val mockNamedFacet = mock(MemberNamedFacet.class);
-        when(mockNamedFacet.getSpecialization()).thenReturn(_Either.left(mockHasStaticText));
+        when(mockNamedFacet.getSpecialization()).thenReturn(Either.left(mockHasStaticText));
 
         val mockPeer = mock(FacetedMethod.class);
         doReturn(COLLECTION_TYPE).when(mockPeer).getType();

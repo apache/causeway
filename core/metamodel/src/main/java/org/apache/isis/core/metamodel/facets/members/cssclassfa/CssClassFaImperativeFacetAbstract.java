@@ -18,7 +18,7 @@ package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
 import java.util.function.BiConsumer;
 
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,7 +40,7 @@ implements CssClassFaImperativeFacet {
     }
 
     @Getter(onMethod_ = {@Override})
-    private final _Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> specialization = _Either.right(this);
+    private final Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> specialization = Either.right(this);
 
     protected CssClassFaImperativeFacetAbstract(
             final FacetHolder holder) {

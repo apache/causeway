@@ -19,12 +19,12 @@
 package org.apache.isis.applib.value.semantics;
 
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
-public final class ValueDecomposition extends _Either<ValueWithTypeDto, TypedTupleDto> {
+public final class ValueDecomposition extends Either<ValueWithTypeDto, TypedTupleDto> {
     private static final long serialVersionUID = 1L;
 
     public static ValueDecomposition ofFundamental(final ValueWithTypeDto valueWithTypeDto) {

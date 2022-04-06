@@ -22,8 +22,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -75,8 +75,8 @@ class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
     }
 
     @Override
-    protected _Either<ActionModel, ScalarPropertyModel> getMemberModel() {
-        return _Either.right(scalarPropertyModel());
+    protected Either<ActionModel, ScalarPropertyModel> getMemberModel() {
+        return Either.right(scalarPropertyModel());
     }
 
 }

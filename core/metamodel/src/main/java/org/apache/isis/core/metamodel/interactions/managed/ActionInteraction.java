@@ -23,7 +23,8 @@ import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
+import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
@@ -70,9 +71,9 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
 
         val managedAction = ManagedAction.lookupActionWithMultiselect(owner, memberId, where, multiselectChoices);
 
-        final _Either<ManagedAction, InteractionVeto> chain = managedAction.isPresent()
-                ? _Either.left(managedAction.get())
-                : _Either.right(InteractionVeto.notFound(MemberType.ACTION, memberId));
+        final Either<ManagedAction, InteractionVeto> chain = managedAction.isPresent()
+                ? Either.left(managedAction.get())
+                : Either.right(InteractionVeto.notFound(MemberType.ACTION, memberId));
 
         return new ActionInteraction(
                 managedAction.map(ManagedAction::getAction),
@@ -82,18 +83,18 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
     public static ActionInteraction wrap(final @NonNull ManagedAction managedAction) {
         return new ActionInteraction(
                 Optional.of(managedAction.getAction()),
-                _Either.left(managedAction));
+                Either.left(managedAction));
     }
 
     public static ActionInteraction empty(final String actionId) {
         return new ActionInteraction(
                 Optional.empty(),
-                _Either.right(InteractionVeto.notFound(MemberType.ACTION, actionId)));
+                Either.right(InteractionVeto.notFound(MemberType.ACTION, actionId)));
     }
 
     ActionInteraction(
             final @NonNull Optional<ObjectAction> metamodel,
-            final @NonNull _Either<ManagedAction, InteractionVeto> chain) {
+            final @NonNull Either<ManagedAction, InteractionVeto> chain) {
         super(chain);
         this.metamodel = metamodel;
     }
@@ -112,16 +113,16 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
 
             switch(semanticConstraint) {
             case NONE:
-                return _Either.left(action);
+                return Either.left(action);
 
             case IDEMPOTENT:
                 return actionSemantics.isIdempotentInNature()
-                        ? _Either.left(action)
-                        : _Either.right(InteractionVeto.actionNotIdempotent(action)) ;
+                        ? Either.left(action)
+                        : Either.right(InteractionVeto.actionNotIdempotent(action)) ;
             case SAFE:
                 return actionSemantics.isSafeInNature()
-                        ? _Either.left(action)
-                        : _Either.right(InteractionVeto.actionNotSafe(action));
+                        ? Either.left(action)
+                        : Either.right(InteractionVeto.actionNotSafe(action));
             default:
                 throw _Exceptions.unmatchedCase(semanticConstraint); // unexpected code reach
             }
@@ -140,11 +141,11 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
         void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
     }
 
-    public _Either<ManagedObject, InteractionVeto> invokeWith(final ParameterNegotiationModel pendingArgs) {
+    public Railway<InteractionVeto, ManagedObject> invokeWith(final ParameterNegotiationModel pendingArgs) {
         pendingArgs.activateValidationFeedback();
         val veto = validate(pendingArgs);
         if(veto.isPresent()) {
-            return _Either.right(veto.get());
+            return Railway.failure(veto.get());
         }
         val action = chain.leftIfAny();
         val actionResultOrVeto = action.invoke(pendingArgs.getParamValues());

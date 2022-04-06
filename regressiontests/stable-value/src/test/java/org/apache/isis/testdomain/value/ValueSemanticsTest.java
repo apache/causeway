@@ -176,7 +176,7 @@ class ValueSemanticsTest {
 
                                 val recoveredValue = managedAction
                                         .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
-                                        .leftIfAny()
+                                        .getSuccessElseFail()
                                         .getPojo();
 
                                 tester.assertValueEquals(

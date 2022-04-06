@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface CssClassFaFacet extends Facet {
 
-    _Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> getSpecialization();
+    Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> getSpecialization();
 
 
 }

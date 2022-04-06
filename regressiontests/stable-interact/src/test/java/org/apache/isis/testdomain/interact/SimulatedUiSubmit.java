@@ -20,7 +20,7 @@ package org.apache.isis.testdomain.interact;
 
 import java.util.function.Supplier;
 
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -31,16 +31,16 @@ import lombok.Getter;
 public class SimulatedUiSubmit extends HasActionValidation {
 
     // might require a weak reference when actually implementing
-    private Supplier<_Either<ManagedObject, InteractionVeto>> doSubmit; 
-    @Getter private _Either<ManagedObject, InteractionVeto> result;
-    
+    private Supplier<Railway<InteractionVeto, ManagedObject>> doSubmit;
+    @Getter private Railway<InteractionVeto, ManagedObject> result;
+
     public void bind(final ActionInteraction interaction, final ParameterNegotiationModel pendingArgs) {
         super.bind(pendingArgs);
         doSubmit = ()->interaction.invokeWith(pendingArgs);
     }
-    
+
     public void simulateSubmit() {
         result = doSubmit.get();
     }
-    
+
 }

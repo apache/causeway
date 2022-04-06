@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -39,18 +39,18 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
 
         val managedProperty = ManagedProperty.lookupProperty(owner, memberId, where);
 
-        final _Either<ManagedProperty, InteractionVeto> chain = managedProperty.isPresent()
-                ? _Either.left(managedProperty.get())
-                : _Either.right(InteractionVeto.notFound(MemberType.PROPERTY, memberId));
+        final Either<ManagedProperty, InteractionVeto> chain = managedProperty.isPresent()
+                ? Either.left(managedProperty.get())
+                : Either.right(InteractionVeto.notFound(MemberType.PROPERTY, memberId));
 
         return new PropertyInteraction(chain);
     }
 
     public static PropertyInteraction wrap(final @NonNull ManagedProperty managedProperty) {
-        return new PropertyInteraction(_Either.left(managedProperty));
+        return new PropertyInteraction(Either.left(managedProperty));
     }
 
-    PropertyInteraction(@NonNull final _Either<ManagedProperty, InteractionVeto> chain) {
+    PropertyInteraction(@NonNull final Either<ManagedProperty, InteractionVeto> chain) {
         super(chain);
     }
 
@@ -65,8 +65,8 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
         chain = chain.mapIfLeft(property->{
             val validityVeto = property.modifyProperty(newProperyValueProvider.apply(property));
             return validityVeto.isPresent()
-                ? _Either.right(validityVeto.get())
-                : _Either.left(property);
+                ? Either.right(validityVeto.get())
+                : Either.left(property);
         });
         return this;
     }

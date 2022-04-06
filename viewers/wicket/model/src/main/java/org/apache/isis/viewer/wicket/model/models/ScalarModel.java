@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Debug;
@@ -135,10 +135,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * <p>
      * Corresponds to the enum {@link #getParamOrProp()}.
      */
-    public final _Either<ScalarParameterModel, ScalarPropertyModel> getSpecialization() {
+    public final Either<ScalarParameterModel, ScalarPropertyModel> getSpecialization() {
         switch(getParamOrProp()) {
-        case PARAMETER: return _Either.left((ScalarParameterModel) this);
-        case PROPERTY: return _Either.right((ScalarPropertyModel) this);
+        case PARAMETER: return Either.left((ScalarParameterModel) this);
+        case PROPERTY: return Either.right((ScalarPropertyModel) this);
         default:
             throw _Exceptions.unmatchedCase(getParamOrProp());
         }

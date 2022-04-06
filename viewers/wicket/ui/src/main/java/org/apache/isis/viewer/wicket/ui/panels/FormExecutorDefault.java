@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
@@ -55,24 +55,24 @@ implements FormExecutor {
     // -- FACTORIES
 
     public static FormExecutor forAction(final ActionModel actionModel) {
-        return new FormExecutorDefault(_Either.left(actionModel));
+        return new FormExecutorDefault(Either.left(actionModel));
     }
 
     public static FormExecutor forProperty(final ScalarPropertyModel propertyModel) {
-        return new FormExecutorDefault(_Either.right(propertyModel));
+        return new FormExecutorDefault(Either.right(propertyModel));
     }
 
-    public static FormExecutor forMember(final _Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel) {
+    public static FormExecutor forMember(final Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel) {
         return new FormExecutorDefault(actionOrPropertyModel);
     }
 
     // -- CONSTRUCTION
 
     protected final WicketViewerSettings settings;
-    private final _Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel;
+    private final Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel;
 
     private FormExecutorDefault(
-            final _Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel) {
+            final Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel) {
         this.actionOrPropertyModel = actionOrPropertyModel;
         this.settings = getSettings();
     }
