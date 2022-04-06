@@ -81,23 +81,23 @@ public interface Try<T> {
 
     /**
      * Optionally returns the contained {@code value} based on presence,
-     * that is, if its a {@link Success} and the value is not {@code null}.
+     * that is, if this is a {@link Success} and the value is not {@code null}.
      */
     Optional<T> getValue();
     /**
      * Optionally returns the contained {@code failure} based on presence,
-     * that is, if its a {@link Failure}.
+     * that is, if this is a {@link Failure}.
      */
     Optional<Throwable> getFailure();
 
     // -- PEEKING
 
     /**
-     * Peeks into the {@code value} if its a {@link Success}.
+     * Peeks into the {@code value} if this is a {@link Success}.
      */
     Try<T> ifSuccess(final @NonNull Consumer<Optional<T>> valueConsumer);
     /**
-     * Peeks into the {@code failure} if its a {@link Failure}.
+     * Peeks into the {@code failure} if this is a {@link Failure}.
      */
     Try<T> ifFailure(final @NonNull Consumer<Throwable> exceptionConsumer);
 
@@ -111,17 +111,17 @@ public interface Try<T> {
     // -- MAPPING
 
     /**
-     * Maps this {@link Try} to another if its a {@link Success}.
-     * Otherwise if its a {@link Failure} acts as identity operator.
+     * Maps this {@link Try} to another if this is a {@link Success}.
+     * Otherwise if this is a {@link Failure} acts as identity operator.
      */
     <R> Try<R> mapSuccess(final @NonNull Function<T, R> successMapper);
     /**
      * Maps this {@link Try} to another if its a {@link Failure}.
-     * Otherwise if its a {@link Success} acts as identity operator.
+     * Otherwise if this is a {@link Success} acts as identity operator.
      */
     Try<T> mapFailure(final @NonNull UnaryOperator<Throwable> failureMapper);
     /**
-     * Maps this {@link Try} to {@link Failure} if its a {@link Success} with an empty {@code value}.
+     * Maps this {@link Try} to {@link Failure} if this is a {@link Success} with an empty {@code value}.
      * Otherwise acts as identity operator.
      */
     Try<T> mapEmptyToFailure();
@@ -148,12 +148,12 @@ public interface Try<T> {
     // -- CONCATENATION
 
     /**
-     * If its a {@link Success}, maps it to another based on given {@link Callable}.
+     * If this is a {@link Success}, maps it to another based on given {@link Callable}.
      * Otherwise if its a {@link Failure} acts as identity operator.
      */
     <R> Try<R> thenCall(final @NonNull Callable<R> callable);
     /**
-     * If its a {@link Success}, maps it to another based on given {@link ThrowingRunnable}.
+     * If this is a {@link Success}, maps it to another based on given {@link ThrowingRunnable}.
      * Otherwise if its a {@link Failure} acts as identity operator.
      */
     Try<Void> thenRun(final @NonNull ThrowingRunnable runnable);

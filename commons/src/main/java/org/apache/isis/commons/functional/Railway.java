@@ -32,7 +32,8 @@ import lombok.val;
 
 /**
  * The {@link Railway} type represents a value of one of two possible types (a disjoint union)
- * of {@link Success} or {@link Failure}.
+ * of {@link Success} or {@link Failure}, where chaining follows the <em>Railway Pattern</em>,
+ * that is, once failed, stays failed.
  * <p>
  * Factory methods {@link Railway#success(Object)} and {@link Railway#failure(Object)}
  * correspond to the two possible values.
@@ -62,7 +63,7 @@ public interface Railway<F, S> {
 
     /**
      * Optionally returns the contained {@code value} based on presence,
-     * that is, if its a {@link Success}.
+     * that is, if this is a {@link Success}.
      */
     Optional<S> getSuccess();
     default S getSuccessElseFail() { return getSuccess().orElseThrow(); }
@@ -76,7 +77,7 @@ public interface Railway<F, S> {
     }
     /**
      * Optionally returns the contained {@code failure} based on presence,
-     * that is, if its a {@link Failure}.
+     * that is, if this is a {@link Failure}.
      */
     Optional<F> getFailure();
     default F getFailureElseFail() { return getFailure().orElseThrow(); }
@@ -84,23 +85,23 @@ public interface Railway<F, S> {
     // -- PEEKING
 
     /**
-     * Peeks into the contained {@code success} if its a {@link Success}.
+     * Peeks into the contained {@code success} if this is a {@link Success}.
      */
     Railway<F, S> ifSuccess(final @NonNull Consumer<S> valueConsumer);
     /**
-     * Peeks into the contained {@code failure} if its a {@link Failure}.
+     * Peeks into the contained {@code failure} if this is a {@link Failure}.
      */
     Railway<F, S> ifFailure(final @NonNull Consumer<F> failureConsumer);
 
     // -- MAPPING
 
     /**
-     * Maps this {@link Railway} to another if its a {@link Success}.
+     * Maps this {@link Railway} to another if this is a {@link Success}.
      * Otherwise if this is a {@link Failure} acts as identity operator.
      */
     <R> Railway<F, R> mapSuccess(final @NonNull Function<S, R> successMapper);
     /**
-     * Maps this {@link Railway} to another if its a {@link Failure}.
+     * Maps this {@link Railway} to another if this is a {@link Failure}.
      * Otherwise if this is a {@link Success} acts as identity operator.
      */
     <R> Railway<R, S> mapFailure(final @NonNull Function<F, R> failureMapper);
@@ -118,7 +119,7 @@ public interface Railway<F, S> {
     // -- CHAINING
 
     /**
-     * <h1>Railway Pattern</h1>
+     * <em>Railway Pattern</em>
      * If this is a {@link Success}, returns a new {@link Railway} as produced by the
      * chainingFunction, that receives the current success value as input.
      * Otherwise if this is a {@link Failure} acts as identity operator and
