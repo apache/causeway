@@ -45,7 +45,6 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -292,7 +291,7 @@ implements
         }
 
         // get current transaction else throw an exception
-        return Result.of(()->
+        return Try.call(()->
                 //XXX creating stack-traces is expensive
                 txManager.getTransaction(txTemplate))
                 .getValue();

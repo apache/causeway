@@ -24,7 +24,7 @@ import org.datanucleus.api.jdo.JDOAdapter;
 import org.datanucleus.exceptions.NucleusException;
 import org.springframework.dao.DataAccessException;
 
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.persistence.jdo.spring.integration.DefaultJdoDialect;
 import org.apache.isis.persistence.jdo.spring.integration.JdoDialect;
 
@@ -48,7 +48,7 @@ public class DnJdoDialect extends DefaultJdoDialect {
 
         val translatedException =
 
-        Result.failure(cause)
+        Try.failure(cause)
 
         //XXX seems like a bug in DN, why do we need to unwrap this?
         .mapFailure(ex->ex instanceof IllegalArgumentException

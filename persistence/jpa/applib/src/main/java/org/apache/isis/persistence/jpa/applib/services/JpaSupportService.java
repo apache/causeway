@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jpa.applib.services;
 
 import javax.persistence.EntityManager;
 
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 
 import lombok.NonNull;
 
@@ -39,7 +39,7 @@ public interface JpaSupportService {
      * @param entityType - (non-null)
      * @throws NullPointerException when given {@code entityType} is {@code null}
      */
-    Result<EntityManager> getEntityManager(@NonNull Class<?> entityType);
+    Try<EntityManager> getEntityManager(@NonNull Class<?> entityType);
 
     /**
      * Returns the current interaction's {@link EntityManager} that is managing the given domain type
@@ -51,12 +51,26 @@ public interface JpaSupportService {
      * JPA managed or no unique {@link EntityManager} managing this type can be resolved.
      */
     default EntityManager getEntityManagerElseFail(final @NonNull Class<?> entityType) {
-
         return getEntityManager(entityType)
-                .presentElseThrow(cause->new IllegalStateException(
-                        String.format(
-                        "Current thread either has no open interaction"
-                        + " or no unique EntityManager managing type %s can be resolved.", entityType), cause));
+                .mapFailure(cause->failureFor(entityType, cause))
+                .getValue()
+                .orElseThrow(()->failureFor(entityType));
+    }
+
+    // -- HELPER
+
+    private static IllegalStateException failureFor(final @NonNull Class<?> entityType, final Throwable cause) {
+        return new IllegalStateException(failureMessage(entityType), cause);
+    }
+
+    private static IllegalStateException failureFor(final @NonNull Class<?> entityType) {
+        return new IllegalStateException(failureMessage(entityType));
+    }
+
+    private static String failureMessage(final @NonNull Class<?> entityType) {
+        return String.format(
+                "Current thread either has no open interaction"
+                + " or no unique EntityManager managing type %s can be resolved.", entityType);
     }
 
 }
