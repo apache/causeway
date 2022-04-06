@@ -128,7 +128,7 @@ public interface Try<T> {
     // -- FOLDING
 
     /**
-     * Folds the contained {@code value} or {@code failure} to a new value of type {@code R}
+     * Maps the contained {@code value} or {@code failure} to a new value of type {@code R}
      * using according mapping function {@code successMapper} or {@code failureMapper}.
      */
     <R> R fold(

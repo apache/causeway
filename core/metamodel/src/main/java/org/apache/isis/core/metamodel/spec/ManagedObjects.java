@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Objects;
@@ -433,18 +433,18 @@ public final class ManagedObjects {
 
     // -- IMPERATIVE TEXT UTILITY
 
-    public static Result<String> imperativeText(
+    public static Try<String> imperativeText(
             final @Nullable ManagedObject object,
             final @NonNull Method method,
             final @Nullable TranslationContext translationContext) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(object)) {
-            return Result.success(null);
+            return Try.success(null);
         }
 
         val mmc = object.getSpecification().getMetaModelContext();
 
-        val result =  Result.of(()->{
+        val result =  Try.call(()->{
             final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, object);
             if(returnValue instanceof String) {
                 return (String) returnValue;

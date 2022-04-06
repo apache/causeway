@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.reflection._ClassCache;
 import org.apache.isis.commons.internal.reflection._Reflect;
@@ -126,7 +126,7 @@ public final class Evaluators  {
     implements Evaluator {
 
         @Getter(lazy = true, value = AccessLevel.PRIVATE)
-        private final Result<MethodHandle> methodHandleRef = Result.of(this::createMethodHandle);
+        private final Try<MethodHandle> methodHandleRef = Try.call(this::createMethodHandle);
 
         protected abstract MethodHandle createMethodHandle() throws IllegalAccessException;
 
@@ -135,13 +135,10 @@ public final class Evaluators  {
         public Object value(final Object obj) {
 
             val mh = getMethodHandleRef()
-            .optionalElseThrow(ex->
-                new MetaModelException("failed to create a method handle for " + name(), ex))
-            .orElse(null);
-
-            if(mh==null) {
-                return null;
-            }
+            .mapFailure(this::failure)
+            .ifFailureFail()
+            .getValue()
+            .orElseThrow(this::failure);
 
             try {
                 return mh.invoke(obj);
@@ -149,6 +146,20 @@ public final class Evaluators  {
                 throw ThrowableExtensions.handleInvocationException(e, name());
             }
 
+        }
+
+        // -- HELPER
+
+        private String failureMessage() {
+            return "failed to create a method handle for " + name();
+        }
+
+        private MetaModelException failure(final Throwable cause) {
+            return new MetaModelException(failureMessage(), cause);
+        }
+
+        private MetaModelException failure() {
+            return new MetaModelException(failureMessage());
         }
 
     }
