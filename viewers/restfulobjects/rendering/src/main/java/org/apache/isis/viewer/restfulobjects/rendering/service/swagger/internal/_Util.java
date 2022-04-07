@@ -28,7 +28,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -36,6 +35,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.util.Facets;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -53,11 +53,7 @@ final class _Util {
     }
 
     private boolean isTypeOfVisibleForPublic(final ObjectAction objectAction) {
-        final TypeOfFacet typeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-        if (typeOfFacet == null) {
-            return false;
-        }
-        return isVisibleForPublic(typeOfFacet.valueSpec());
+        return isVisibleForPublic(objectAction.getElementType());
     }
 
     private boolean isVisibleForPublic(final Can<ObjectSpecification> parameterTypes) {
@@ -91,15 +87,14 @@ final class _Util {
             return true;
         }
         if(specification.isNonScalar()) {
-            TypeOfFacet typeOfFacet = specification.getFacet(TypeOfFacet.class);
-            if(typeOfFacet != null) {
-                ObjectSpecification elementSpec = typeOfFacet.valueSpec();
+            val elementSpec = Facets.typeOf(specification).orElse(null);
+            if(elementSpec != null) {
                 return isVisibleForPublic(elementSpec);
             }
         }
 
         final Class<?> correspondingClass = specification.getCorrespondingClass();
-        return  Collection.class.isAssignableFrom(correspondingClass) ||
+        return Collection.class.isAssignableFrom(correspondingClass) ||
                 correspondingClass.isArray() ||
                 correspondingClass == void.class ||
                 correspondingClass == Void.class;

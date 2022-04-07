@@ -36,10 +36,10 @@ import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -154,8 +154,7 @@ implements DomainTypeResource {
         val serializationStrategy = resourceContext.getSerializationStrategy();
 
         val responseBuilder = getSpecificationLoader().specForLogicalTypeName(domainType)
-                .map(spec -> spec.getFacet(GridFacet.class))
-                .map(gridFacet -> gridFacet.getGrid(null))
+                .map(Facets::bootstrapGrid)
                 .map(grid ->
                         Response.status(Response.Status.OK)
                                 .entity(serializationStrategy.entity(grid))

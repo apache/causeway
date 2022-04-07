@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -59,6 +58,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
@@ -112,9 +112,7 @@ implements ObjectAction {
             return;
         }
 
-        elementType = getFacetedMethod()
-                .lookupFacet(TypeOfFacet.class)
-                .map(TypeOfFacet::valueSpec)
+        elementType = Facets.typeOf(getFacetedMethod())
                 .orElseGet(()->{
                     val returnType = getReturnType();
                     if(!returnType.isScalar()) {

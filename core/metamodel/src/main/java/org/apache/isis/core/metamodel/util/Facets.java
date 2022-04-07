@@ -35,14 +35,17 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -97,15 +100,27 @@ public final class Facets {
     }
 
     public Optional<BSGrid> bootstrapGrid(
-            final ObjectSpecification objectSpec, final ManagedObject objectAdapter) {
+            final ObjectSpecification objectSpec, final @Nullable ManagedObject objectAdapter) {
         return objectSpec.lookupFacet(GridFacet.class)
         .map(gridFacet->gridFacet.getGrid(objectAdapter))
         .flatMap(grid->_Casts.castTo(BSGrid.class, grid));
     }
 
+    public Optional<BSGrid> bootstrapGrid(final ObjectSpecification objectSpec) {
+        return bootstrapGrid(objectSpec, null);
+    }
+
     //XXX could be moved to ManagedObject directly, there be an utility already under a different name
     public Stream<ManagedObject> collectionStream(final @Nullable ManagedObject collection) {
         return CollectionFacet.streamAdapters(collection);
+    }
+
+    // used for non-scalar action return
+    public Stream<ManagedObject> collectionStream(
+            final ObjectSpecification objectSpec, final @Nullable ManagedObject collection) {
+        return objectSpec.lookupFacet(CollectionFacet.class)
+        .map(collectionFacet->collectionFacet.stream(collection))
+        .orElseGet(Stream::empty);
     }
 
     public Optional<String> cssClassFor(
@@ -228,6 +243,11 @@ public final class Facets {
         .orElse(fallback);
     }
 
+    public Optional<ObjectSpecification> typeOf(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(TypeOfFacet.class)
+        .map(TypeOfFacet::valueSpec);
+    }
+
     public OptionalInt typicalLength(
             final ObjectSpecification objectSpec, final OptionalInt maxLength) {
         val typicalLength = objectSpec
@@ -249,6 +269,13 @@ public final class Facets {
         return objectSpec.containsFacet(ValueFacet.class);
     }
 
+    public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {
+        return objectSpec.containsFacet(DomainServiceFacet.class);
+    }
+
+    public boolean mixinIsPresent(final ObjectSpecification objectSpec) {
+        return objectSpec.containsFacet(MixinFacet.class);
+    }
 
 
 }

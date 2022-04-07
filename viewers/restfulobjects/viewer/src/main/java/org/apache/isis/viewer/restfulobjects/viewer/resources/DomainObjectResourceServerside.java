@@ -50,13 +50,13 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -336,19 +336,13 @@ implements DomainObjectResource {
             final String domainType,
             final String instanceId) {
 
-        val gridFacet = getSpecificationLoader().specForLogicalTypeName(domainType)
-        .map(spec->spec.getFacet(GridFacet.class))
-        .orElse(null);
-
-        if(gridFacet == null) {
-            return Optional.empty();
-        }
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
-                roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/object-layout", domainType, instanceId, roEx));
-        val grid = gridFacet.getGrid(objectAdapter);
-        return Optional.of(grid);
+        return getSpecificationLoader().specForLogicalTypeName(domainType)
+            .flatMap(spec->Facets.bootstrapGrid(
+                    spec,
+                    getObjectAdapterElseThrowNotFound(domainType, instanceId,
+                            roEx->_EndpointLogging
+                                .error(log, "GET /objects/{}/{}/object-layout", domainType, instanceId, roEx))));
     }
-
 
     // public ... for testing
     public static void addLinks(

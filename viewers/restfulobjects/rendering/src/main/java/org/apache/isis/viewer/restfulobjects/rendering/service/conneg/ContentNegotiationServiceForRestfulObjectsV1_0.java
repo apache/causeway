@@ -36,14 +36,13 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
@@ -208,7 +207,8 @@ implements ContentNegotiationService {
             final Collection<ManagedObject> collectionAdapters = objectAdaptersFrom(objectAndActionInvocation);
 
             if(collectionAdapters != null) {
-                final ObjectSpecification elementSpec = elementSpecFrom(objectAndActionInvocation);
+                final ObjectSpecification elementSpec =
+                        objectAndActionInvocation.getAction().getElementType();
                 final ObjectSpecification actionOwnerSpec = actionOwnerSpecFrom(objectAndActionInvocation);
                 final String actionId = actionIdFrom(objectAndActionInvocation);
                 final String actionArguments = actionArgumentsFrom(objectAndActionInvocation);
@@ -334,21 +334,12 @@ implements ContentNegotiationService {
         return title;
     }
 
-    private ObjectSpecification elementSpecFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
-        final TypeOfFacet typeOfFacet = objectAndActionInvocation.getAction().getFacet(TypeOfFacet.class);
-        return typeOfFacet != null
-                ? typeOfFacet.valueSpec()
-                : specificationLoader.specForType(Object.class).orElse(null);
-    }
-
     private Collection<ManagedObject> objectAdaptersFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
-        final ManagedObject returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
-        final ObjectSpecification returnType = objectAndActionInvocation.getAction().getReturnType();
+        val returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
+        val returnTypeSpec = objectAndActionInvocation.getAction().getReturnType();
 
-        final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
-        return collectionFacet != null
-                ? collectionFacet.stream(returnedAdapter).collect(Collectors.toList())
-                : null;
+        return Facets.collectionStream(returnTypeSpec, returnedAdapter)
+                .collect(Collectors.toList());
     }
 
     /**
