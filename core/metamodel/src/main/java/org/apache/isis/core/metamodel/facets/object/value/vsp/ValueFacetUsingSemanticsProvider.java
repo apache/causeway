@@ -26,11 +26,18 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
 public class ValueFacetUsingSemanticsProvider<T>
 extends ValueFacetAbstract<T> {
 
-    public ValueFacetUsingSemanticsProvider(
+    public static <T> ValueFacetUsingSemanticsProvider<T> create(
+            final Class<T> valueClass,
             final Can<ValueSemanticsProvider<T>> valueSemantics,
             final FacetHolder holder) {
+        return new ValueFacetUsingSemanticsProvider<T>(valueClass, valueSemantics, holder);
+    }
 
-        super(valueSemantics, holder, Precedence.DEFAULT);
+    protected ValueFacetUsingSemanticsProvider(
+            final Class<T> valueClass,
+            final Can<ValueSemanticsProvider<T>> valueSemantics,
+            final FacetHolder holder) {
+        super(valueClass, valueSemantics, holder, Precedence.DEFAULT);
     }
 
 }

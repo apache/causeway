@@ -55,6 +55,8 @@ extends
     ValueSerializer<T>,
     Facet {
 
+    Class<T> getValueClass();
+
     LogicalType getLogicalType();
 
     Can<ValueSemanticsProvider<T>> getAllValueSemantics();

@@ -67,15 +67,20 @@ implements ValueFacet<T> {
     }
 
     @Getter(onMethod_ = {@Override})
+    private final Class<T> valueClass;
+
+    @Getter(onMethod_ = {@Override})
     private final Can<ValueSemanticsProvider<T>> allValueSemantics;
     private final ValueSerializer<T> valueSerializer;
 
     protected ValueFacetAbstract(
+            final Class<T> valueClass,
             final Can<ValueSemanticsProvider<T>> allValueSemantics,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
 
         super(type(), holder, precedence);
+        this.valueClass = valueClass;
         this.allValueSemantics = allValueSemantics;
         this.valueSerializer = selectDefaultSemantics()
                 .map(ValueSerializerDefault::forSemantics)

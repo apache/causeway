@@ -34,7 +34,6 @@ import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -343,28 +342,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     public final boolean hasAssociatedActionWithInlineAsIfEdit() {
         return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
-    }
-
-    @SuppressWarnings("unchecked")
-    public Optional<ObjectAction> lookupCompositeValueMixinForFeature() {
-        val spec = getScalarTypeSpec();
-        if(!spec.isValue()) {
-            return Optional.empty();
-        }
-        return getSpecialization().<Optional<ObjectAction>>fold(
-                param->{
-                    return spec.lookupFacet(ValueFacet.class)
-                            .<ObjectAction>flatMap(valueFacet->
-                                valueFacet.selectCompositeValueMixinForParameter(
-                                        param.getParameterNegotiationModel(), param.getParameterIndex()));
-
-
-                },
-                prop->{
-                    return spec.lookupFacet(ValueFacet.class)
-                            .<ObjectAction>flatMap(valueFacet->
-                                valueFacet.selectCompositeValueMixinForProperty(prop.getManagedProperty()));
-                });
     }
 
 }

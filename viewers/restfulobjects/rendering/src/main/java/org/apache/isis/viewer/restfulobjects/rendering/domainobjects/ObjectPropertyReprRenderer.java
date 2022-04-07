@@ -26,8 +26,8 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.Facets;
@@ -81,23 +81,22 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     // ///////////////////////////////////////////////////
 
     private Object addValue(final LinkFollowSpecs linkFollower) {
-        val valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
+        val valueAdapterIfAny2 = objectMember.get(objectAdapter, getInteractionInitiatedBy());
 
-        // use the runtime type if we have a value, otherwise the compile time type of the member
-        val spec = ManagedObjects.isSpecified(valueAdapterIfAny)
-                ? valueAdapterIfAny.getSpecification()
-                : objectMember.getElementType();
+        // use the runtime type if we have a value, otherwise fallback to the compile time type of the member
+        val valueAdapter = ManagedObjects.isSpecified(valueAdapterIfAny2)
+                ? valueAdapterIfAny2
+                : ManagedObject.empty(objectMember.getElementType());
 
-        val valueFacet = spec.getFacet(ValueFacet.class);
-        if (valueFacet != null) {
+        val spec = valueAdapter.getSpecification();
+
+        if (Facets.valueIsPresent(objectAdapter.getSpecification())) {
             String format = null;
             final Class<?> valueType = spec.getCorrespondingClass();
             if(valueType == java.math.BigDecimal.class) {
                 // look for facet on member, else on the value's spec
 
-                val facetHolders = Can.<FacetHolder>of(
-                        objectMember,
-                        valueAdapterIfAny != null ? valueAdapterIfAny.getSpecification() : null);
+                val facetHolders = Can.<FacetHolder>of(objectMember, spec);
 
                 final int totalDigits = Facets.maxTotalDigits(facetHolders).orElse(-1);
                 final int scale = Facets.maxFractionalDigits(facetHolders).orElse(-1);
@@ -110,8 +109,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
             }
             return jsonValueEncoder
                     .appendValueAndFormat(
-                            valueAdapterIfAny,
-                            spec,
+                            valueAdapter,
                             representation,
                             format,
                             resourceContext.suppressMemberExtensions());
@@ -119,22 +117,20 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
 
         final boolean eagerlyRender =
                 (Facets.defaultViewIsTable(objectMember)
-                        && resourceContext.canEagerlyRender(valueAdapterIfAny))
+                        && resourceContext.canEagerlyRender(valueAdapter))
                 || (linkFollower != null
                         && !linkFollower.isTerminated());
 
-        if(valueAdapterIfAny == null) {
+        if(valueAdapter.getPojo() == null) {
             final NullNode value = NullNode.getInstance();
             representation.mapPut("value", value);
             return value;
         }
 
-        val valueAdapter = valueAdapterIfAny;
-
         final String title = valueAdapter.getTitle();
 
         final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer
-                .newLinkToBuilder(resourceContext, Rel.VALUE, valueAdapterIfAny).withTitle(title);
+                .newLinkToBuilder(resourceContext, Rel.VALUE, valueAdapter).withTitle(title);
         if(eagerlyRender) {
             final DomainObjectReprRenderer renderer =
                     new DomainObjectReprRenderer(resourceContext, linkFollower, JsonRepresentation.newMap());

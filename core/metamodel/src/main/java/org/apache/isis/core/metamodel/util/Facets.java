@@ -30,10 +30,13 @@ import org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -52,6 +55,7 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
@@ -60,8 +64,11 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.val;
@@ -321,10 +328,79 @@ public final class Facets {
                 .orElseGet(OptionalInt::empty);
     }
 
+    // -- VALUE FACET
+
     public boolean valueIsPresent(final ObjectSpecification objectSpec) {
         return objectSpec.containsFacet(ValueFacet.class);
     }
 
+    public static Predicate<ObjectSpecification> valueTypeMatches(final Predicate<Class<?>> typeMatcher) {
+        return spec->
+            spec.lookupFacet(ValueFacet.class)
+            .map(ValueFacet::getLogicalType)
+            .map(LogicalType::getCorrespondingClass)
+            .map(typeMatcher::test)
+            .orElse(false);
+    }
 
+    @SuppressWarnings("unchecked")
+    public Optional<ObjectAction> valueCompositeMixinForParameter(
+            final ObjectFeature param,
+            final ParameterNegotiationModel parameterNegotiationModel,
+            final int paramIndex) {
+        val objectSpec = param.getElementType();
+        //if(!objectSpec.isValue()) return Optional.empty(); // optimization
+        return objectSpec.lookupFacet(ValueFacet.class)
+        .<ObjectAction>flatMap(valueFacet->
+            valueFacet.selectCompositeValueMixinForParameter(
+                    parameterNegotiationModel,paramIndex));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Optional<ObjectAction> valueCompositeMixinForProperty(
+            final ObjectFeature prop,
+            final ManagedProperty managedProperty) {
+        val objectSpec = prop.getElementType();
+        //if(!objectSpec.isValue()) return Optional.empty(); // optimization
+        return objectSpec.lookupFacet(ValueFacet.class)
+        .<ObjectAction>flatMap(valueFacet->
+            valueFacet.selectCompositeValueMixinForProperty(managedProperty));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <X> Stream<X> valueStreamSemantics(
+            final ObjectSpecification objectSpec, final Class<X> requiredType) {
+        //if(!objectSpec.isValue()) return Stream.empty(); // optimization
+        return objectSpec.lookupFacet(ValueFacet.class)
+        .map(valueFacet->valueFacet.streamValueSemantics(requiredType))
+        .orElseGet(Stream::empty);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <X> Optional<ValueSemanticsProvider<X>> valueDefaultSemantics(
+            final ObjectSpecification objectSpec,
+            final Class<X> requiredType) {
+        return objectSpec.lookupFacet(ValueFacet.class)
+        .filter(valueFacet->valueFacet.getValueClass().equals(requiredType))
+        .flatMap(ValueFacet::selectDefaultSemantics);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <X> Optional<ValueSerializer<X>> valueSerializer(
+            final ObjectSpecification objectSpec,
+            final Class<X> requiredType) {
+        return objectSpec.lookupFacet(ValueFacet.class)
+        .filter(valueFacet->valueFacet.getValueClass().equals(requiredType))
+        .map(valueFacet->(ValueSerializer<X>)valueFacet);
+    }
+
+    public <X> ValueSerializer<X> valueSerializerElseFail(
+            final ObjectSpecification objectSpec,
+            final Class<X> requiredType) {
+        return valueSerializer(objectSpec, requiredType)
+        .orElseThrow(()->_Exceptions.illegalArgument(
+                "ObjectSpec is expected to have a ValueFacet<%s>",
+                objectSpec.getCorrespondingClass().getName()));
+    }
 
 }

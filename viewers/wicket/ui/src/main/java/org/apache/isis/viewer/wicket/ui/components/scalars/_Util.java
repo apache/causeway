@@ -31,11 +31,13 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -49,11 +51,11 @@ class _Util {
     boolean canParameterEnterNestedEdit(final ScalarModel scalarModel) {
         return scalarModel.isParameter()
                 && !scalarModel.hasChoices() // handled by select2 panels instead
-                && scalarModel.lookupCompositeValueMixinForFeature().isPresent();
+                && lookupCompositeValueMixinForFeature(scalarModel).isPresent();
     }
 
     Optional<LinkAndLabel> lookupMixinForCompositeValueUpdate(final ScalarModel scalarModel) {
-        return scalarModel.lookupCompositeValueMixinForFeature()
+        return lookupCompositeValueMixinForFeature(scalarModel)
             .flatMap(compositeValueMixinForFeature->
                 toLinkAndLabelWithRuleChecking(compositeValueMixinForFeature, scalarModel))
             .filter(_Util::guardAgainstInvalidCompositeMixinScenarios);
@@ -133,6 +135,24 @@ class _Util {
 
         return Optional.ofNullable(scalarModel.getObjectManager()
                 .adapt(validatable.getValue()));
+    }
+
+    // -- HELPER
+
+    private Optional<ObjectAction> lookupCompositeValueMixinForFeature(final ScalarModel scalarModel) {
+        val spec = scalarModel.getScalarTypeSpec();
+        if(!spec.isValue()) {
+            return Optional.empty();
+        }
+        return scalarModel.getSpecialization().<Optional<ObjectAction>>fold(
+                param->
+                    Facets.valueCompositeMixinForParameter(
+                            scalarModel.getMetaModel(),
+                            param.getParameterNegotiationModel(), param.getParameterIndex()),
+                prop->
+                    Facets.valueCompositeMixinForProperty(
+                            scalarModel.getMetaModel(),
+                            prop.getManagedProperty()));
     }
 
     // -- PROBABLY NO LONGER NEEDED
