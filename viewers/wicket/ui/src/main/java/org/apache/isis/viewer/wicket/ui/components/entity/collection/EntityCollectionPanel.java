@@ -32,8 +32,8 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -45,9 +45,9 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -120,14 +120,11 @@ implements HasDynamicallyVisibleContent {
 
             visible = true;
 
-            collectionMetaModel.lookupFacet(CssClassFacet.class)
-            .ifPresent(facet->
-                Wkt.cssAppend(div, facet.cssClass(objectAdapter)));
-
+            Facets.cssClassFor(collectionMetaModel, objectAdapter)
+            .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
             final CollectionPanel collectionPanel = newCollectionModel(ID_COLLECTION, collectionModel);
             div.addOrReplace(collectionPanel);
-
 
             final Label labelComponent = collectionPanel
                     .createLabel(

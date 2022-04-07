@@ -19,9 +19,8 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
@@ -37,12 +36,9 @@ extends ObjectAdapterMementoProviderAbstract {
 
     @Override
     protected Can<ObjectMemento> obtainMementos(final String term) {
-        val typeOfSpecification = getScalarModel().getScalarTypeSpec();
-        val autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-        val autoCompleteAdapters = autoCompleteFacet.execute(term, InteractionInitiatedBy.USER);
-        val commonContext = super.getCommonContext();
-
-        return autoCompleteAdapters.map(commonContext::mementoFor);
+        val scalarTypeSpec = getScalarModel().getScalarTypeSpec();
+        val autoCompleteAdapters = Facets.autoCompleteExecute(scalarTypeSpec, term);
+        return autoCompleteAdapters.map(getCommonContext()::mementoFor);
     }
 
 

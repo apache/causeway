@@ -31,10 +31,9 @@ import org.apache.wicket.util.convert.IConverter;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
@@ -133,10 +132,8 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             settings.setPlaceholder(scalarModel.getFriendlyName());
 
         } else if(hasObjectAutoComplete()) {
-            val typeOfSpecification = scalarModel.getScalarTypeSpec();
-            val autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-            final int minLength = autoCompleteFacet.getMinLength();
-            settings.setMinimumInputLength(minLength);
+            Facets.autoCompleteMinLength(scalarModel.getScalarTypeSpec())
+            .ifPresent(settings::setMinimumInputLength);
         }
     }
 
@@ -328,10 +325,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     }
 
     private boolean hasObjectAutoComplete() {
-        final ObjectSpecification typeOfSpecification = getModel().getScalarTypeSpec();
-        final AutoCompleteFacet autoCompleteFacet =
-                (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
-                return autoCompleteFacet != null;
+        return Facets.autoCompleteIsPresent(scalarModel().getScalarTypeSpec());
     }
 
 }

@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.entity;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -70,7 +70,8 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
         }
         final ObjectSpecification specification = entityModel.getTypeOfSpecification();
         final boolean isScalar = specification.isScalar();
-        final boolean isValue = specification.containsFacet(ValueFacet.class);
+
+        final boolean isValue = Facets.valueIsPresent(specification);
         if (isScalar && !isValue) {
             return doAppliesTo(entityModel);
         }

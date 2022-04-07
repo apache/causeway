@@ -34,10 +34,10 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -47,8 +47,8 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Link
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
@@ -170,17 +170,13 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
             .orElse(null)
         )
         .filter(_NullSafe::isPresent)
-        .filter(property -> {
-            val hiddenFacet = property.getFacet(HiddenFacet.class);
-            if(hiddenFacet != null) {
+        .filter(
+            Facets.hiddenWhereMatches(where->
                 // static invisible.
-                if(hiddenFacet.where().isAlways()
-                        || hiddenFacet.where() == Where.OBJECT_FORMS) {
-                    return false;
-                }
-            }
-            return true;
-        })
+                where.isAlways()
+                        || where == Where.OBJECT_FORMS)
+            .negate()
+        )
         .collect(Can.toCan());
     }
 

@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.value.fallback;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
@@ -44,8 +44,7 @@ extends ComponentFactoryScalarAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ScalarModel scalarModel = (ScalarModel) model;
-        final ValueFacet<?> valueFacet = scalarModel.getScalarTypeSpec().getFacet(ValueFacet.class);
-        if(valueFacet == null) {
+        if(!Facets.valueIsPresent(scalarModel.getScalarTypeSpec())) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final boolean hasChoices = scalarModel.hasChoices();

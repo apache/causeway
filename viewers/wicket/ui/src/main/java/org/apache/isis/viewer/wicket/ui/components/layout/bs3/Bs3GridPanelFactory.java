@@ -21,10 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.layout.grid.Grid;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
-import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -47,11 +44,11 @@ public class Bs3GridPanelFactory extends EntityComponentFactoryAbstract {
         final EntityModel entityModel = (EntityModel) model;
 
         val objectAdapter = entityModel.getObject();
-        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
-        final GridFacet facet = specification.getFacet(GridFacet.class);
+        val objectSpec = entityModel.getTypeOfSpecification();
 
-        final Grid grid = facet.getGrid(objectAdapter);
-        return ApplicationAdvice.appliesIf(grid instanceof BS3Grid);
+        return ApplicationAdvice.appliesIf(
+                Facets.bootstrapGrid(objectSpec, objectAdapter)
+                .isPresent());
     }
 
     @Override
@@ -59,10 +56,10 @@ public class Bs3GridPanelFactory extends EntityComponentFactoryAbstract {
         final EntityModel entityModel = (EntityModel) model;
 
         val objectAdapter = entityModel.getObject();
-        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
-        final GridFacet facet = specification.getFacet(GridFacet.class);
+        val objectSpec = entityModel.getTypeOfSpecification();
 
-        val grid = (BS3Grid) facet.getGrid(objectAdapter);
-        return new BS3GridPanel(id, entityModel, grid);
+        return Facets.bootstrapGrid(objectSpec, objectAdapter)
+                .map(grid->new BS3GridPanel(id, entityModel, grid))
+                .orElseThrow(); // empty case guarded against by appliesTo(...) above
     }
 }

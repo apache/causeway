@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -32,8 +31,7 @@ import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -46,7 +44,6 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.C
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
 
 import lombok.Getter;
-import lombok.val;
 
 public class CollectionPresentationSelectorHelper implements Serializable {
 
@@ -152,10 +149,12 @@ public class CollectionPresentationSelectorHelper implements Serializable {
 
         // else @CollectionLayout#defaultView attribute
         if (hasDefaultViewFacet(collectionModel)) {
-            DefaultViewFacet defaultViewFacet = collectionModel.getMetaModel().getFacet(DefaultViewFacet.class);
+
+            final String viewName = Facets.defaultViewName(collectionModel.getMetaModel())
+                    .orElseThrow(); // null case guarded by if clause
+
             for (ComponentFactory componentFactory : componentFactories) {
                 final String componentName = componentFactory.getName();
-                final String viewName = defaultViewFacet.value();
                 if (componentName.equalsIgnoreCase(viewName)) {
                     return componentName;
                 }
@@ -163,7 +162,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         }
 
         // else honour @CollectionLayout#renderEagerly
-        return hasRenderEagerlyFacet(collectionModel)
+        return hasRenderEagerlySemantics(collectionModel)
                 || collectionModel.getVariant().isStandalone()
                     ? CollectionContentsAsAjaxTablePanelFactory.NAME
                     : CollectionContentsHiddenPanelFactory.NAME;
@@ -174,27 +173,18 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         return UiHintContainer.Util.hintContainerOf(component, EntityCollectionModelParented.class);
     }
 
-    private static boolean hasRenderEagerlyFacet(final IModel<?> model) {
+    private static boolean hasRenderEagerlySemantics(final IModel<?> model) {
         return toParentedEntityCollectionModel(model)
         .map(EntityCollectionModelParented::getMetaModel)
-        .map(CollectionPresentationSelectorHelper::isRenderEagerly)
+        .map(Facets::defaultViewIsTable)
         .orElse(false);
     }
 
-    private static boolean isRenderEagerly(final OneToManyAssociation collectionMetaModel) {
-        final DefaultViewFacet defaultViewFacet = collectionMetaModel.getFacet(DefaultViewFacet.class);
-        return defaultViewFacet != null && Objects.equals(defaultViewFacet.value(), "table");
-    }
-
-
     private static boolean hasDefaultViewFacet(final IModel<?> model) {
-        val entityCollectionModel = toParentedEntityCollectionModel(model).orElse(null);
-        if (entityCollectionModel == null) {
-            return false;
-        }
-        final OneToManyAssociation collection = entityCollectionModel.getMetaModel();
-        DefaultViewFacet defaultViewFacet = collection.getFacet(DefaultViewFacet.class);
-        return defaultViewFacet != null;
+        return toParentedEntityCollectionModel(model)
+        .map(EntityCollectionModelParented::getMetaModel)
+        .map(Facets::defaultViewIsPresent)
+        .orElse(false);
     }
 
     public ComponentFactory find(final String selected) {
