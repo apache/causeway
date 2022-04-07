@@ -21,19 +21,31 @@ package org.apache.isis.client.kroviz.core.event
 import org.apache.isis.client.kroviz.ui.core.SessionManager
 
 class EventLogStatistics {
-    var numberOfEntries = 0
-    var totalDuration = 0.0
-    var averageDuration = 0.0
-    var averageResponseLength = 0.0
+    var numberOfRequests = 0
+    var totalDurationMs = 0.0
+    var totalResponseBytes = 0
+    var averageDurationMs = 0.0
+    var averageResponseBytes = 0.0
     var averageRunningAtStart = 0.0
+    var requestsPerSec = 0.0
 
     init {
         val logEntries = SessionManager.getEventStore().log.filter { !it.isView() }
-        numberOfEntries = logEntries.size
-        totalDuration = calculateTotalDuration(logEntries)
-        averageDuration = calculateAverageDuration(logEntries)
-        averageResponseLength = calculateAverageResponseLength(logEntries)
-        averageRunningAtStart = calculateAverageRunningAtStart(logEntries)
+        numberOfRequests = logEntries.size
+        totalDurationMs = calculateTotalDuration(logEntries)
+        totalResponseBytes = calculateTotalResponseLength(logEntries)
+        averageDurationMs = totalDurationMs / numberOfRequests
+        averageResponseBytes = (totalResponseBytes / numberOfRequests).toDouble()
+        averageRunningAtStart = calculateTotalRunningAtStart(logEntries) / numberOfRequests
+        requestsPerSec = numberOfRequests / totalDurationMs * 1000
+    }
+
+    private fun calculateTotalResponseLength(logEntries: List<LogEntry>): Int {
+        var sum = 0
+        logEntries.forEach {
+            sum += it.responseLength
+        }
+        return sum
     }
 
     private fun calculateTotalDuration(logEntries: List<LogEntry>): Double {
@@ -45,28 +57,12 @@ class EventLogStatistics {
         return 0.0
     }
 
-    private fun calculateAverageDuration(logEntries: List<LogEntry>): Double {
-        var sum = 0.0
-        logEntries.forEach {
-            sum += it.duration
-        }
-        return sum / logEntries.size
-    }
-
-    private fun calculateAverageResponseLength(logEntries: List<LogEntry>): Double {
-        var sum = 0.0
-        logEntries.forEach {
-            sum += it.responseLength
-        }
-        return sum / logEntries.size
-    }
-
-    private fun calculateAverageRunningAtStart(logEntries: List<LogEntry>): Double {
+    private fun calculateTotalRunningAtStart(logEntries: List<LogEntry>): Double {
         var sum = 0.0
         logEntries.forEach {
             sum += it.runningAtStart
         }
-        return sum / logEntries.size
+        return sum
     }
 
 }

@@ -87,7 +87,6 @@ class DynamicMenuBuilder {
     }
 
     private fun logStatistics() {
-        console.log("Event Log Statisctics:")
         val stats = EventLogStatistics()
         console.log(stats)
     }

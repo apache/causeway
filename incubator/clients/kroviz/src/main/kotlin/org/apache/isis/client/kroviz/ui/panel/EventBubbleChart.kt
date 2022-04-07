@@ -93,7 +93,7 @@ class EventBubbleChart : SimplePanel() {
                 }
                 legendLabelList.add(running as LegendItem)
                 val size = obj {
-                    text = "bubble size ^= response size"
+                    text = "bubble size ^= response bytes"
                     fillStyle = TRANSPARENT
                     strokeStyle = TRANSPARENT
                 }
@@ -115,7 +115,7 @@ class EventBubbleChart : SimplePanel() {
             maintainAspectRatio = true,
             plugins = PluginsOptions(
                 title = TitleOptions(
-                    text = listOf("Request Duration over Time by Request Parallelism and Response Size"),
+                    text = listOf("Request Duration over Time by Request Parallelism and Response Bytes"),
                     display = true
                 ),
                 tooltip = TooltipOptions(
