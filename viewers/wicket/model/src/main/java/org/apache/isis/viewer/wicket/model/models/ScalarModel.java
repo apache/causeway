@@ -34,13 +34,13 @@ import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
@@ -242,23 +242,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     @Override
     public final PromptStyle getPromptStyle() {
-        return getPromptStyleOrElse(PromptStyle.INLINE);
-    }
-
-    private final PromptStyle getPromptStyleOrElse(final PromptStyle fallback) {
-        final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
-        if(facet == null) {
-            // don't think this can happen actually, see PromptStyleFacetFallback
-            return fallback;
-        }
-        val promptStyle = facet.value();
-        if (promptStyle == PromptStyle.AS_CONFIGURED) {
-            // I don't think this can happen, actually...
-            // when the metamodel is built, it should replace AS_CONFIGURED with one of the other prompts
-            // (see PromptStyleConfiguration and PromptStyleFacetFallback)
-            return fallback;
-        }
-        return promptStyle;
+        return Facets.promptStyleOrElse(getMetaModel(), PromptStyle.INLINE);
     }
 
     public boolean canEnterEditMode() {

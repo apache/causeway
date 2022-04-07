@@ -35,13 +35,13 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
@@ -138,18 +138,16 @@ public class PageParameterUtils {
     public static PageParameters createPageParametersForBookmarkablePageLink(
             final @NonNull ObjectAdapterModel callingEntityModel,
             final ManagedObject adapter) {
+
         return
                 ManagedObjects.isIdentifiable(adapter)
                     && !ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? EntityModel.ofAdapter(
                     callingEntityModel.getCommonContext(),
-                    adapter.getSpecification().lookupFacet(ProjectionFacet.class)
-                    .map(projectionFacet->projectionFacet.projected(adapter))
-                    .orElse(adapter))
+                    Facets.projected(adapter))
                     .getPageParametersWithoutUiHints()
                 : callingEntityModel.getPageParametersWithoutUiHints();
     }
-
 
     public static PageParameters createPageParametersForAction(
             final ManagedObject adapter,

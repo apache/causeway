@@ -20,9 +20,9 @@ package org.apache.isis.viewer.wicket.model.models.interaction;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 import lombok.RequiredArgsConstructor;
@@ -54,24 +54,18 @@ implements
     // -- SHORTCUTS
 
     public final boolean hasAsRootPolicy() {
-        return hasBookmarkPolicy(BookmarkPolicy.AS_ROOT);
+        return Facets.bookmarkPolicyMatches(BookmarkPolicy.AS_ROOT::equals)
+                .test(getTypeOfSpecification());
     }
 
     public final boolean hasAsChildPolicy() {
-        return hasBookmarkPolicy(BookmarkPolicy.AS_CHILD);
+        return Facets.bookmarkPolicyMatches(BookmarkPolicy.AS_CHILD::equals)
+                .test(getTypeOfSpecification());
     }
 
     public final ObjectSpecification getTypeOfSpecification() {
         //return getBookmarkedOwner().getSpecification();
         return bookmarkedObject.getObject().getSpecification(); // serving this from an unattached entity seems safe
-    }
-
-    // -- HELPER
-
-    private boolean hasBookmarkPolicy(final BookmarkPolicy policy) {
-        return getTypeOfSpecification().lookupFacet(BookmarkPolicyFacet.class)
-                .map(facet->facet.value() == policy)
-                .orElse(false);
     }
 
 }

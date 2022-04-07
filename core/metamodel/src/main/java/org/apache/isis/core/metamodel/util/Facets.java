@@ -21,8 +21,13 @@ package org.apache.isis.core.metamodel.util;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.isis.commons.collections.Can;
@@ -31,11 +36,15 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
+import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
@@ -75,11 +84,28 @@ public final class Facets {
         .orElseGet(OptionalInt::empty);
     }
 
+    public Optional<BookmarkPolicy> bookmarkPolicy(final @Nullable ObjectSpecification objectSpec) {
+        return Optional.ofNullable(objectSpec)
+        .flatMap(spec->spec.lookupFacet(BookmarkPolicyFacet.class))
+        .map(BookmarkPolicyFacet::value);
+    }
+
+    public Predicate<ObjectSpecification> bookmarkPolicyMatches(final Predicate<BookmarkPolicy> matcher) {
+        return feature->Facets.bookmarkPolicy(feature)
+        .map(matcher::test)
+        .orElse(false);
+    }
+
     public Optional<BSGrid> bootstrapGrid(
             final ObjectSpecification objectSpec, final ManagedObject objectAdapter) {
         return objectSpec.lookupFacet(GridFacet.class)
         .map(gridFacet->gridFacet.getGrid(objectAdapter))
         .flatMap(grid->_Casts.castTo(BSGrid.class, grid));
+    }
+
+    //XXX could be moved to ManagedObject directly, there be an utility already under a different name
+    public Stream<ManagedObject> collectionStream(final @Nullable ManagedObject collection) {
+        return CollectionFacet.streamAdapters(collection);
     }
 
     public Optional<String> cssClassFor(
@@ -181,6 +207,27 @@ public final class Facets {
                 .orElseGet(OptionalInt::empty);
     }
 
+    //XXX could be moved to ManagedObject directly
+    public ManagedObject projected(final ManagedObject objectAdapter) {
+        return objectAdapter.getSpecification().lookupFacet(ProjectionFacet.class)
+        .map(projectionFacet->projectionFacet.projected(objectAdapter))
+        .orElse(objectAdapter);
+    }
+
+    public Optional<PromptStyle> promptStyle(final ObjectFeature feature) {
+        return feature.lookupFacet(PromptStyleFacet.class)
+        .map(PromptStyleFacet::value);
+    }
+
+    public PromptStyle promptStyleOrElse(final ObjectFeature feature, final PromptStyle fallback) {
+        return Facets.promptStyle(feature)
+        .map(promptStyle->
+            promptStyle == PromptStyle.AS_CONFIGURED
+            ? fallback
+            : promptStyle)
+        .orElse(fallback);
+    }
+
     public OptionalInt typicalLength(
             final ObjectSpecification objectSpec, final OptionalInt maxLength) {
         val typicalLength = objectSpec
@@ -201,6 +248,7 @@ public final class Facets {
     public boolean valueIsPresent(final ObjectSpecification objectSpec) {
         return objectSpec.containsFacet(ValueFacet.class);
     }
+
 
 
 }
