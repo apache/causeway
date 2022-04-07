@@ -42,10 +42,10 @@ import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.sitemap.SitemapService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.util.Facets;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -183,10 +183,8 @@ public class SitemapServiceDefault implements SitemapService {
     private Grid toGrid(final Class<?> domainClass, final Style style) {
 
         if (style == Style.CURRENT) {
-
             return specificationLoader.specForType(domainClass)
-                    .flatMap(spec->spec.lookupFacet(GridFacet.class))
-                    .map(gridFacet->gridFacet.getGrid(null))
+                    .flatMap(Facets::bootstrapGrid)
                     .orElse(null);
         }
 

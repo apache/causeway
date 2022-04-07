@@ -81,16 +81,16 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     // ///////////////////////////////////////////////////
 
     private Object addValue(final LinkFollowSpecs linkFollower) {
-        val valueAdapterIfAny2 = objectMember.get(objectAdapter, getInteractionInitiatedBy());
+        val valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
 
         // use the runtime type if we have a value, otherwise fallback to the compile time type of the member
-        val valueAdapter = ManagedObjects.isSpecified(valueAdapterIfAny2)
-                ? valueAdapterIfAny2
+        val valueAdapter = ManagedObjects.isSpecified(valueAdapterIfAny)
+                ? valueAdapterIfAny
                 : ManagedObject.empty(objectMember.getElementType());
 
         val spec = valueAdapter.getSpecification();
 
-        if (Facets.valueIsPresent(objectAdapter.getSpecification())) {
+        if (Facets.valueIsPresent(spec)) {
             String format = null;
             final Class<?> valueType = spec.getCorrespondingClass();
             if(valueType == java.math.BigDecimal.class) {
@@ -115,17 +115,17 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
                             resourceContext.suppressMemberExtensions());
         }
 
-        final boolean eagerlyRender =
-                (Facets.defaultViewIsTable(objectMember)
-                        && resourceContext.canEagerlyRender(valueAdapter))
-                || (linkFollower != null
-                        && !linkFollower.isTerminated());
-
         if(valueAdapter.getPojo() == null) {
             final NullNode value = NullNode.getInstance();
             representation.mapPut("value", value);
             return value;
         }
+
+        final boolean eagerlyRender =
+                (Facets.defaultViewIsTable(objectMember)
+                        && resourceContext.canEagerlyRender(valueAdapter))
+                || (linkFollower != null
+                        && !linkFollower.isTerminated());
 
         final String title = valueAdapter.getTitle();
 

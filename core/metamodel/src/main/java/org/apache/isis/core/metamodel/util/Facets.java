@@ -381,7 +381,7 @@ public final class Facets {
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
         return objectSpec.lookupFacet(ValueFacet.class)
-        .filter(valueFacet->valueFacet.getValueClass().equals(requiredType))
+        .filter(valueFacet->requiredType.isAssignableFrom(valueFacet.getValueClass()))
         .flatMap(ValueFacet::selectDefaultSemantics);
     }
 
@@ -390,7 +390,7 @@ public final class Facets {
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
         return objectSpec.lookupFacet(ValueFacet.class)
-        .filter(valueFacet->valueFacet.getValueClass().equals(requiredType))
+        .filter(valueFacet->requiredType.isAssignableFrom(valueFacet.getValueClass()))
         .map(valueFacet->(ValueSerializer<X>)valueFacet);
     }
 

@@ -352,7 +352,8 @@ extends
      * In effect, means has got {@link ValueFacet}.
      */
     default boolean isValue() {
-        return getBeanSort().isValue();
+        return getBeanSort().isValue()
+                || containsFacet(ValueFacet.class);
     }
 
     /**

@@ -33,10 +33,10 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -213,8 +213,8 @@ public class PageParameterUtils {
 
         final ObjectSpecification objSpec = adapter.getSpecification();
         if(objSpec.isValue()) {
-            val valueFacet = objSpec.getFacet(ValueFacet.class);
-            return valueFacet.toEncodedString(ValueSerializer.Format.JSON, adapter.getPojo());
+            return Facets.valueSerializerElseFail(objSpec, objSpec.getCorrespondingClass())
+            .toEncodedString(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
         }
 
         return ManagedObjects.stringify(adapter).orElse(null);
@@ -229,9 +229,9 @@ public class PageParameterUtils {
         }
 
         if(objSpec.isValue()) {
-            val valueFacet = objSpec.getFacet(ValueFacet.class);
             return ManagedObject.of(objSpec,
-                    valueFacet.fromEncodedString(ValueSerializer.Format.JSON, encoded));
+                    Facets.valueSerializerElseFail(objSpec, objSpec.getCorrespondingClass())
+                        .fromEncodedString(Format.JSON, encoded));
         }
 
         try {

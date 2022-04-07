@@ -32,6 +32,7 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.applib.services.hint.HintIdProvider;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -42,6 +43,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.util.Facets;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -179,14 +181,14 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                     final _ObjectMemento memento,
                     final MetaModelContext mmc) {
 
-                val valueFacet = mmc.getSpecificationLoader()
+                val valueSerializer = mmc.getSpecificationLoader()
                         .specForLogicalType(memento.logicalType)
-                        .map(spec->spec.getFacet(ValueFacet.class))
+                        .flatMap(spec->Facets.valueSerializer(spec, spec.getCorrespondingClass()))
                         .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                                 "logical type %s is expected to have a ValueFacet", memento.logicalType));
 
                 return mmc.getObjectManager().adapt(
-                        valueFacet.fromEncodedString(Format.JSON, memento.encodableValue));
+                        valueSerializer.fromEncodedString(Format.JSON, memento.encodableValue));
             }
 
             @Override
@@ -454,10 +456,11 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
             return;
         }
 
-        val valueFacet = spec.getFacet(ValueFacet.class);
-        val isEncodable = valueFacet != null;
+        val valueSerializer = Facets.valueSerializer(spec, spec.getCorrespondingClass())
+                .orElse(null);
+        val isEncodable = valueSerializer != null;
         if (isEncodable) {
-            encodableValue = valueFacet.toEncodedString(Format.JSON, adapter.getPojo());
+            encodableValue = valueSerializer.toEncodedString(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
             recreateStrategy = RecreateStrategy.VALUE;
             return;
         }

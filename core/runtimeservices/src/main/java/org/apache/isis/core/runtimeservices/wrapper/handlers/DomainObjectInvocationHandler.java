@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -64,6 +63,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
+import org.apache.isis.core.metamodel.util.Facets;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -221,10 +221,7 @@ extends DelegatingInvocationHandlerDefault<T> {
 
             val objectAction = (ObjectAction) objectMember;
 
-
-            val mixinFacet = targetSpec.getFacet(MixinFacet.class);
-            if(mixinFacet != null) {
-
+            if(Facets.mixinIsPresent(targetSpec)) {
                 if (mixeeAdapter == null) {
                     throw _Exceptions.illegalState(
                             "Missing the required mixeeAdapter for action '%s'",
