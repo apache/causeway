@@ -26,12 +26,14 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -43,6 +45,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
+import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
@@ -50,6 +53,9 @@ import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
@@ -87,14 +93,14 @@ public final class Facets {
         .orElseGet(OptionalInt::empty);
     }
 
-    public Optional<BookmarkPolicy> bookmarkPolicy(final @Nullable ObjectSpecification objectSpec) {
-        return Optional.ofNullable(objectSpec)
+    public Optional<BookmarkPolicy> bookmarkPolicy(final @Nullable FacetHolder facetHolder) {
+        return Optional.ofNullable(facetHolder)
         .flatMap(spec->spec.lookupFacet(BookmarkPolicyFacet.class))
         .map(BookmarkPolicyFacet::value);
     }
 
-    public Predicate<ObjectSpecification> bookmarkPolicyMatches(final Predicate<BookmarkPolicy> matcher) {
-        return feature->Facets.bookmarkPolicy(feature)
+    public Predicate<FacetHolder> bookmarkPolicyMatches(final Predicate<BookmarkPolicy> matcher) {
+        return facetHolder->Facets.bookmarkPolicy(facetHolder)
         .map(matcher::test)
         .orElse(false);
     }
@@ -110,6 +116,10 @@ public final class Facets {
         return bootstrapGrid(objectSpec, null);
     }
 
+    public boolean collectionIsPresent(final ObjectSpecification objectSpec) {
+        return objectSpec.containsFacet(CollectionFacet.class);
+    }
+
     //XXX could be moved to ManagedObject directly, there be an utility already under a different name
     public Stream<ManagedObject> collectionStream(final @Nullable ManagedObject collection) {
         return CollectionFacet.streamAdapters(collection);
@@ -123,9 +133,9 @@ public final class Facets {
         .orElseGet(Stream::empty);
     }
 
-    public Optional<String> cssClassFor(
-            final FacetHolder objectSpec, final ManagedObject objectAdapter) {
-        return objectSpec.lookupFacet(CssClassFacet.class)
+    public Optional<String> cssClass(
+            final FacetHolder facetHolder, final ManagedObject objectAdapter) {
+        return facetHolder.lookupFacet(CssClassFacet.class)
         .map(cssClassFacet->cssClassFacet.cssClass(objectAdapter));
     }
 
@@ -148,6 +158,20 @@ public final class Facets {
     public Optional<String> defaultViewName(final ObjectFeature feature) {
         return feature.lookupFacet(DefaultViewFacet.class)
         .map(DefaultViewFacet::value);
+    }
+
+    public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {
+        return objectSpec.containsFacet(DomainServiceFacet.class);
+    }
+
+    public Optional<MenuBar> domainServiceLayoutMenuBar(final ObjectSpecification objectSpec) {
+        return objectSpec.lookupFacet(DomainServiceLayoutFacet.class)
+        .map(DomainServiceLayoutFacet::getMenuBar);
+    }
+
+    public Optional<String> fileAccept(final ObjectFeature feature) {
+        return feature.lookupFacet(FileAcceptFacet.class)
+        .map(FileAcceptFacet::value);
     }
 
     public void gridPreload(
@@ -201,12 +225,44 @@ public final class Facets {
         .orElse("label-left");
     }
 
-    public OptionalInt maxLength(final ObjectSpecification objectSpec) {
-        return objectSpec
+    public OptionalInt maxFractionalDigits(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(MaxFractionalDigitsFacet.class)
+        .map(MaxFractionalDigitsFacet::getMaxFractionalDigits)
+        .map(OptionalInt::of)
+        .orElseGet(OptionalInt::empty);
+    }
+
+    public OptionalInt maxFractionalDigits(final @Nullable Iterable<FacetHolder> facetHolders) {
+        return _NullSafe.stream(facetHolders)
+                .map(Facets::maxFractionalDigits)
+                .findFirst()
+                .orElseGet(OptionalInt::empty);
+    }
+
+    public OptionalInt maxLength(final FacetHolder facetHolder) {
+        return facetHolder
                 .lookupFacet(MaxLengthFacet.class)
                 .map(MaxLengthFacet::value)
                 .map(OptionalInt::of)
                 .orElseGet(OptionalInt::empty);
+    }
+
+    public OptionalInt maxTotalDigits(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(MaxTotalDigitsFacet.class)
+        .map(MaxTotalDigitsFacet::getMaxTotalDigits)
+        .map(OptionalInt::of)
+        .orElseGet(OptionalInt::empty);
+    }
+
+    public OptionalInt maxTotalDigits(final @Nullable Iterable<FacetHolder> facetHolders) {
+        return _NullSafe.stream(facetHolders)
+                .map(Facets::maxTotalDigits)
+                .findFirst()
+                .orElseGet(OptionalInt::empty);
+    }
+
+    public boolean mixinIsPresent(final ObjectSpecification objectSpec) {
+        return objectSpec.containsFacet(MixinFacet.class);
     }
 
     public boolean multilineIsPresent(final ObjectFeature feature) {
@@ -269,13 +325,6 @@ public final class Facets {
         return objectSpec.containsFacet(ValueFacet.class);
     }
 
-    public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {
-        return objectSpec.containsFacet(DomainServiceFacet.class);
-    }
-
-    public boolean mixinIsPresent(final ObjectSpecification objectSpec) {
-        return objectSpec.containsFacet(MixinFacet.class);
-    }
 
 
 }

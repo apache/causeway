@@ -24,12 +24,12 @@ import java.util.function.Predicate;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
 
@@ -79,11 +79,10 @@ public interface HasManagedAction {
      */
     default boolean isBookmarkable() {
         val action = getAction();
+
         return action.getSemantics().isSafeInNature()
-                && action.lookupFacet(BookmarkPolicyFacet.class)
-                    .map(BookmarkPolicyFacet::value)
-                    .map(bookmarkPolicy -> bookmarkPolicy == BookmarkPolicy.AS_ROOT)
-                    .orElse(false);
+                && Facets.bookmarkPolicyMatches(BookmarkPolicy.AS_ROOT::equals)
+                    .test(action);
     }
 
     default Identifier getFeatureIdentifier() {
@@ -100,8 +99,7 @@ public interface HasManagedAction {
     }
 
     default Optional<String> getAdditionalCssClass() {
-        return getAction().lookupFacet(CssClassFacet.class)
-                .map(cssClassFacet->cssClassFacet.cssClass(getManagedAction().getOwner()));
+        return Facets.cssClass(getAction(), getActionOwner());
     }
 
     default ActionLayout.Position getPosition() {

@@ -18,7 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import java.util.Optional;
+
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -81,9 +82,7 @@ extends AbstractTypeMemberReprRenderer<ObjectAction> {
     }
 
     private void addLinkToElementTypeIfAny() {
-        getObjectFeature()
-        .lookupFacet(TypeOfFacet.class)
-        .map(TypeOfFacet::valueSpec)
+        Optional.ofNullable(getObjectFeature().getElementType())
         .ifPresent(typeOfSpec->
             getLinks().arrayAdd(
                 DomainTypeReprRenderer

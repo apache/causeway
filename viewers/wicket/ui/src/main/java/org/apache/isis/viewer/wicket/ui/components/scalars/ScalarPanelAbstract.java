@@ -411,7 +411,7 @@ implements ScalarModelSubscriber {
 
         Wkt.cssAppend(this, scalarModel.getCssClass());
 
-        Facets.cssClassFor(scalarModel.getMetaModel(), scalarModel.getParentUiModel().getManagedObject())
+        Facets.cssClass(scalarModel.getMetaModel(), scalarModel.getParentUiModel().getManagedObject())
         .ifPresent(cssClass->
             Wkt.cssAppend(this, cssClass));
     }

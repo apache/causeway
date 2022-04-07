@@ -23,21 +23,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -224,15 +222,11 @@ extends ReprRendererAbstract<ManagedObject> {
             getExtensions().mapPut("isService", isService);
             getExtensions().mapPut("isPersistent", ManagedObjects.isIdentifiable(objectAdapter));
             if(isService) {
-                final ObjectSpecification objectSpec = objectAdapter.getSpecification();
-                final DomainServiceLayoutFacet layoutFacet =
-                        objectSpec.getFacet(DomainServiceLayoutFacet.class);
-                if(layoutFacet != null) {
-                    final DomainServiceLayout.MenuBar menuBar = layoutFacet.getMenuBar();
-                    if(menuBar != null) {
-                        getExtensions().mapPut("menuBar", menuBar);
-                    }
-                }
+
+                Facets.domainServiceLayoutMenuBar(objectAdapter.getSpecification())
+                .ifPresent(menuBar->
+                        getExtensions().mapPut("menuBar", menuBar));
+
             }
         }
 
@@ -244,9 +238,9 @@ extends ReprRendererAbstract<ManagedObject> {
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
-            final DomainObjectReprRenderer renderer =
-                    new DomainObjectReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            renderer.with(objectAdapter);
+            val renderer =
+                    new DomainObjectReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap())
+                    .with(objectAdapter);
             link.mapPut("value", renderer.render());
         }
 

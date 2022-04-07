@@ -18,9 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -59,9 +59,8 @@ extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
     @Override
     protected void addPropertiesSpecificToFeature() {
         representation.mapPut("optional", !getObjectFeature().isMandatory());
-        getObjectFeature()
-            .lookupNonFallbackFacet(MaxLengthFacet.class)
-            .ifPresent(maxLengthFacet->representation.mapPut("maxLength", maxLengthFacet.value()));
+        Facets.maxLength(getObjectFeature())
+            .ifPresent(maxLength->representation.mapPut("maxLength", maxLength));
     }
 
 

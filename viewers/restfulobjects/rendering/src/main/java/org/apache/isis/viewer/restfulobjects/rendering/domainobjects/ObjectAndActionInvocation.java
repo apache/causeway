@@ -22,13 +22,12 @@ import java.util.stream.Stream;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 
@@ -128,16 +127,16 @@ public class ObjectAndActionInvocation {
 
     private final _Lazy<Can<ManagedObject>> elementAdapters = _Lazy.threadSafe(this::initElementAdapters);
     private Can<ManagedObject> initElementAdapters() {
-        return CollectionFacet.streamAdapters(returnedAdapter).collect(Can.toCan());
+        return Facets.collectionStream(returnedAdapter).collect(Can.toCan());
     }
 
     //TODO[2449] need to check whether that strategy holds consistently
     private static boolean isScalarValue(final @NonNull ObjectSpecification spec) {
-        return spec.containsFacet(ValueFacet.class);
+        return Facets.valueIsPresent(spec);
     }
 
     private static boolean isVector(final @NonNull ObjectSpecification spec) {
-        return spec.containsFacet(CollectionFacet.class);
+        return Facets.collectionIsPresent(spec);
     }
 
 

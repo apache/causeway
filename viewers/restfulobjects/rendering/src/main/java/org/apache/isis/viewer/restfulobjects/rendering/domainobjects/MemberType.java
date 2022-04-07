@@ -24,10 +24,8 @@ import java.util.Map;
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -43,8 +41,8 @@ public enum MemberType {
 
     PROPERTY("properties/", RepresentationType.OBJECT_PROPERTY,
             _Maps.unmodifiable(
-                    "modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, RestfulHttpMethod.PUT, BodyArgs.ONE),
-                    "clear", MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, RestfulHttpMethod.DELETE, BodyArgs.NONE))),
+                    "modify", MutatorSpec.of(Rel.MODIFY, PropertySetterFacet.class, RestfulHttpMethod.PUT, BodyArgs.ONE),
+                    "clear", MutatorSpec.of(Rel.CLEAR, PropertyClearFacet.class, RestfulHttpMethod.DELETE, BodyArgs.NONE))),
     /**
      * {@link #getMutators()} are empty}
      */
@@ -56,9 +54,9 @@ public enum MemberType {
      */
     ACTION("actions/", RepresentationType.OBJECT_ACTION,
             _Maps.unmodifiable(
-                    "invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.GET, BodyArgs.MANY, "invoke"),
-                    "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.PUT, BodyArgs.MANY, "invoke"),
-                    "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.POST, BodyArgs.MANY, "invoke")));
+                    "invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionInvocationFacet.class, RestfulHttpMethod.GET, BodyArgs.MANY, "invoke"),
+                    "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionInvocationFacet.class, RestfulHttpMethod.PUT, BodyArgs.MANY, "invoke"),
+                    "invoke", MutatorSpec.of(Rel.INVOKE, ActionInvocationFacet.class, RestfulHttpMethod.POST, BodyArgs.MANY, "invoke")));
 
     @Getter private final String urlPart;
     @Getter private final String name;

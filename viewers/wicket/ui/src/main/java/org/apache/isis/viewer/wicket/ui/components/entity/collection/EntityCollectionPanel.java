@@ -120,7 +120,7 @@ implements HasDynamicallyVisibleContent {
 
             visible = true;
 
-            Facets.cssClassFor(collectionMetaModel, objectAdapter)
+            Facets.cssClass(collectionMetaModel, objectAdapter)
             .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
             final CollectionPanel collectionPanel = newCollectionModel(ID_COLLECTION, collectionModel);

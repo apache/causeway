@@ -185,7 +185,7 @@ public class EntityPage extends PageAbstract {
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
         Wkt.cssAppend(entityPageContainer, objectSpec.getFeatureIdentifier());
 
-        Facets.cssClassFor(objectSpec, objectAdapter)
+        Facets.cssClass(objectSpec, objectAdapter)
         .ifPresent(cssClass->
             Wkt.cssAppend(entityPageContainer, cssClass)
         );

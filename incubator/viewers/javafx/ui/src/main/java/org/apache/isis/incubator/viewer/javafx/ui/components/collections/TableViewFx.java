@@ -28,7 +28,6 @@ import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -36,18 +35,20 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Log4j2
@@ -69,10 +70,7 @@ public class TableViewFx extends VBox {
             final @NonNull ManagedObject collection,
             final @NonNull Where where) {
 
-        val collectionFacet = collection.getSpecification()
-                .getFacet(CollectionFacet.class);
-
-        val objects = collectionFacet.stream(collection)
+        val objects = Facets.collectionStream(collection)
                 .collect(Can.toCan());
 
         return ManagedObjects.commonSpecification(objects)

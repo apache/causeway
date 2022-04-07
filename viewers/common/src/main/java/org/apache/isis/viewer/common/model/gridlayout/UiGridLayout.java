@@ -35,10 +35,10 @@ import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.util.Facets;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -80,12 +80,8 @@ public class UiGridLayout {
     }
 
     private Optional<BSGrid> initGridData() {
-        return managedObject.getSpecification().lookupFacet(GridFacet.class)
-        .map(gridFacet->gridFacet.getGrid(managedObject))
-        .filter(grid->grid instanceof BSGrid)
-        .map(BSGrid.class::cast)
-        .map(this::attachAssociatedActions)
-        ;
+        return Facets.bootstrapGrid(managedObject.getSpecification(), managedObject)
+        .map(this::attachAssociatedActions);
     }
 
     //TODO[refactor] this should not be necessary here, the GridFacet should already have done that for us
