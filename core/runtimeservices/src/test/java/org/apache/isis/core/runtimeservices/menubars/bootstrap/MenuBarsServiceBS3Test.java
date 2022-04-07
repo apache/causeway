@@ -23,6 +23,11 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ByteArrayResource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
@@ -31,12 +36,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.runtimeservices.RuntimeServicesTestAbstract;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
-import org.apache.isis.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBS;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -48,7 +47,7 @@ extends RuntimeServicesTestAbstract {
     private LayoutService layoutService;
 
     @Override
-    protected void onSetUp(MetaModelContext_forTestingBuilder mmcBuilder) {
+    protected void onSetUp(final MetaModelContext_forTestingBuilder mmcBuilder) {
         mmcBuilder.singleton(new Bar()); // install the menu-entry contributing domain service
     }
 

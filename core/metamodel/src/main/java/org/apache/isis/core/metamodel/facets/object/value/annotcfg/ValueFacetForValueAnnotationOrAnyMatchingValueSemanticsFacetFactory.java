@@ -110,6 +110,9 @@ extends FacetFactoryAbstract {
             if(valueIfAny.isPresent()) {
                 log.warn("could not find a ValueSemanticsProvider for value type {}; "
                         + "the type was found to be annotated with @Value", valueClass);
+                // fall through, so gets a ValueFacet
+            } else {
+                return;
             }
         } else {
             log.debug("found {} ValueSemanticsProvider(s) for value type {}", semanticsProviders.size(), valueClass);
