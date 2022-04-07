@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 import org.apache.isis.commons.internal.resources._Resources;
 
-public class BS3MenuBarsTest {
+public class BSMenuBarsTest {
 
     private JaxbService jaxbService;
 

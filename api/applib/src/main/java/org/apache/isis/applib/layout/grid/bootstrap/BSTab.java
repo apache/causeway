@@ -106,8 +106,8 @@ public class BSTab extends BSElementAbstract implements BSRowOwner {
 
             return new Predicate<BSTab>() {
                 @Override
-                public boolean test(final BSTab thisBs3Tab) {
-                    final BSGrid owningGrid = thisBs3Tab.getGrid();
+                public boolean test(final BSTab thisBsTab) {
+                    final BSGrid owningGrid = thisBsTab.getGrid();
                     owningGrid.visit(new BSGrid.VisitorAdapter() {
 
                         /**
@@ -118,14 +118,14 @@ public class BSTab extends BSElementAbstract implements BSRowOwner {
                          */
                         @Override
                         public void preVisit(final BSTab bsTab) {
-                            if(bsTab == thisBs3Tab) {
+                            if(bsTab == thisBsTab) {
                                 foundContent.set(false);
                                 visitingTheNode.set(true);
                             }
                         }
 
                         @Override public void postVisit(final BSTab bsTab) {
-                            if(bsTab == thisBs3Tab) {
+                            if(bsTab == thisBsTab) {
                                 visitingTheNode.set(false);
                             }
                         }

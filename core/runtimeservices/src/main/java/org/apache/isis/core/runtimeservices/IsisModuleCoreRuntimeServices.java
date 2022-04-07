@@ -46,7 +46,7 @@ import org.apache.isis.core.runtimeservices.locale.LocaleChoiceProviderDefault;
 import org.apache.isis.core.runtimeservices.locale.LanguageProviderDefault;
 import org.apache.isis.core.runtimeservices.memento.ObjectMementoServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
-import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
+import org.apache.isis.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBS;
 import org.apache.isis.core.runtimeservices.message.MessageServiceDefault;
 import org.apache.isis.core.runtimeservices.publish.CommandPublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.EntityChangesPublisherDefault;
@@ -100,7 +100,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         TranslationServicePo.class,
         MemberExecutorServiceDefault.class,
         MenuBarsLoaderServiceDefault.class,
-        MenuBarsServiceBS3.class,
+        MenuBarsServiceBS.class,
         MessageServiceDefault.class,
         ObjectIconServiceDefault.class,
         ScratchpadDefault.class,

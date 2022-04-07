@@ -50,8 +50,8 @@ public interface DomainTypeResource {
     @GET
     @Path("/{domainType}/layout")
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS3
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS
     })
     public abstract Response layout(@PathParam("domainType") final String domainType);
 

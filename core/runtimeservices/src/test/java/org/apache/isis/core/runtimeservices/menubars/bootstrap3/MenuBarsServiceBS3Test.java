@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.runtimeservices.RuntimeServicesTestAbstract;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
+import org.apache.isis.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBS;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,10 +40,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
-class MenuBarsServiceBS3Test
+class MenuBarsServiceBSTest
 extends RuntimeServicesTestAbstract {
 
-    private MenuBarsServiceBS3 menuBarsService;
+    private MenuBarsServiceBS menuBarsService;
     private MenuBarsLoaderServiceDefault menuBarsLoaderService;
     private LayoutService layoutService;
 
@@ -57,7 +58,7 @@ extends RuntimeServicesTestAbstract {
         getConfiguration().getCore().getMetaModel().getIntrospector().setValidateIncrementally(false);
 
         layoutService = getServiceRegistry().lookupServiceElseFail(LayoutService.class);
-        menuBarsService = (MenuBarsServiceBS3) getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
+        menuBarsService = (MenuBarsServiceBS) getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
         menuBarsLoaderService = (MenuBarsLoaderServiceDefault) getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
 
         // double check, we are all set

@@ -170,9 +170,9 @@ public class UiGridLayout {
 
     }
 
-    private <C, T> void visitTabGroup(final BSTabGroup bS3ColTabGroup, final C container, final Visitor<C, T> visitor) {
-        val uiTabGroup = visitor.newTabGroup(container, bS3ColTabGroup);
-        for(val bsTab: bS3ColTabGroup.getTabs()) {
+    private <C, T> void visitTabGroup(final BSTabGroup BSColTabGroup, final C container, final Visitor<C, T> visitor) {
+        val uiTabGroup = visitor.newTabGroup(container, BSColTabGroup);
+        for(val bsTab: BSColTabGroup.getTabs()) {
             visitTab(bsTab, uiTabGroup, visitor);
         }
     }

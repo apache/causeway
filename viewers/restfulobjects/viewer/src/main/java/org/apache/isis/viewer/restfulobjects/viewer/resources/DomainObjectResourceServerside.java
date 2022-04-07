@@ -306,8 +306,8 @@ implements DomainObjectResource {
     @Path("/{domainType}/{instanceId}/object-layout")
     @Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS3,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS3
+        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS,
+        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS
     })
     public Response layout(
             @PathParam("domainType") final String domainType,

@@ -158,7 +158,7 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
 
     @Override
     public void visit(final Grid.Visitor visitor) {
-        final BSGrid.Visitor bsVisitor = asBs3Visitor(visitor);
+        final BSGrid.Visitor bsVisitor = asBsVisitor(visitor);
         bsVisitor.preVisit(this);
         bsVisitor.visit(this);
         traverseRows(this, visitor);
@@ -166,7 +166,7 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
     }
 
     protected void traverseRows(final BSRowOwner rowOwner, final Grid.Visitor visitor) {
-        final BSGrid.Visitor bsVisitor = asBs3Visitor(visitor);
+        final BSGrid.Visitor bsVisitor = asBsVisitor(visitor);
         final List<BSRow> rows = rowOwner.getRows();
         for (BSRow bsRow : new ArrayList<>(rows)) {
             bsRow.setOwner(this);
@@ -178,7 +178,7 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
     }
 
     private void traverseCols(final Grid.Visitor visitor, final BSRow bsRow) {
-        final BSGrid.Visitor bsVisitor = asBs3Visitor(visitor);
+        final BSGrid.Visitor bsVisitor = asBsVisitor(visitor);
         final List<BSRowContent> cols = bsRow.getCols();
         for (BSRowContent rowContent : new ArrayList<>(cols)) {
             rowContent.setOwner(bsRow);
@@ -215,7 +215,7 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
     private void traverseTabGroups(
             final BSTabGroupOwner bsTabGroupOwner,
             final Grid.Visitor visitor) {
-        final BSGrid.Visitor bsVisitor = asBs3Visitor(visitor);
+        final BSGrid.Visitor bsVisitor = asBsVisitor(visitor);
         final List<BSTabGroup> tabGroups = bsTabGroupOwner.getTabGroups();
         for (BSTabGroup bsTabGroup : new ArrayList<>(tabGroups)) {
             bsTabGroup.setOwner(bsTabGroupOwner);
@@ -229,7 +229,7 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
     private void traverseTabs(
             final BSTabOwner bsTabOwner,
             final Grid.Visitor visitor) {
-        final BSGrid.Visitor bsVisitor = asBs3Visitor(visitor);
+        final BSGrid.Visitor bsVisitor = asBsVisitor(visitor);
         final List<BSTab> tabs = bsTabOwner.getTabs();
         for (BSTab tab : new ArrayList<>(tabs)) {
             tab.setOwner(bsTabOwner);
@@ -240,7 +240,7 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
         }
     }
 
-    private static Visitor asBs3Visitor(final Grid.Visitor visitor) {
+    private static Visitor asBsVisitor(final Grid.Visitor visitor) {
         return visitor instanceof Visitor? (Visitor) visitor : new BSGrid.VisitorAdapter() {
             @Override public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
                 visitor.visit(domainObjectLayoutData);

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.menubars.bootstrap3;
+package org.apache.isis.core.runtimeservices.menubars.bootstrap;
 
 import java.util.List;
 import java.util.Map;
@@ -80,12 +80,12 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.runtimeservices.MenuBarsServiceBS3")
+@Named("isis.runtimeservices.MenuBarsServiceBS")
 @Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("BS3")
+@Qualifier("BS")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class MenuBarsServiceBS3
+public class MenuBarsServiceBS
 implements MenuBarsService {
 
     public static final String MB3_TNS = "http://isis.apache.org/applib/layout/menubars/bootstrap3";

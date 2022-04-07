@@ -101,12 +101,12 @@ public enum RepresentationType {
             null,
             DomainTypeRepresentation.class),
     LAYOUT(
-            RestfulMediaType.APPLICATION_JSON_LAYOUT_BS3,
-            RestfulMediaType.APPLICATION_XML_LAYOUT_BS3,
+            RestfulMediaType.APPLICATION_JSON_LAYOUT_BS,
+            RestfulMediaType.APPLICATION_XML_LAYOUT_BS,
             null),
     OBJECT_LAYOUT(
-            RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS3,
-            RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS3,
+            RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS,
+            RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS,
             null),
     IMAGE(
             "image/*",

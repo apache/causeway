@@ -151,7 +151,7 @@ implements
     }
 
     /**
-     * @implNote this is a copy of the original logic from GridSystemServiceBS3
+     * @implNote this is a copy of the original logic from GridSystemServiceBS
      */
     private static @NonNull String inferIdFromName(final @NonNull String name) {
         if(name.isEmpty()) {
