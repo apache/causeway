@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.grid.bootstrap3;
+package org.apache.isis.core.metamodel.services.grid.bootstrap;
 
 import java.util.Arrays;
 import java.util.Collection;

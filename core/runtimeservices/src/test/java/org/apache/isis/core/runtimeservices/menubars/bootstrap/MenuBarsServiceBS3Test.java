@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.menubars.bootstrap3;
+package org.apache.isis.core.runtimeservices.menubars.bootstrap;
 
 import java.nio.charset.StandardCharsets;
 
