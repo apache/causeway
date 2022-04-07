@@ -23,8 +23,8 @@ import java.util.Optional;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
+import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -45,7 +45,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final String ID_ROWS = "rows";
 
-    private final BS3Grid bs3Page;
+    private final BSGrid bs3Page;
 
     public static Optional<BS3GridPanel> extraContentForMixin(final String id, final ActionModel actionModel) {
         final ObjectAction action = actionModel.getAction();
@@ -70,7 +70,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
     }
 
 
-    public BS3GridPanel(final String id, final EntityModel entityModel, final BS3Grid bs3Grid) {
+    public BS3GridPanel(final String id, final EntityModel entityModel, final BSGrid bs3Grid) {
         super(id, entityModel);
         this.bs3Page = bs3Grid;
         buildGui();
@@ -82,7 +82,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
         final RepeatingView rv = new RepeatingView(ID_ROWS);
 
-        for(final BS3Row bs3Row: this.bs3Page.getRows()) {
+        for(final BSRow bs3Row: this.bs3Page.getRows()) {
             final String id = rv.newChildId();
             final WebMarkupContainer row = new Row(id, getModel(), bs3Row);
             rv.add(row);

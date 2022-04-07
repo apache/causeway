@@ -16,15 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
-import org.apache.isis.applib.annotation.Programmatic;
+import javax.xml.bind.annotation.XmlAttribute;
 
 /**
+ * Superclass for all layout classes, factoring out the common {@link #getCssClass()} attribute.
+ *
  * @since 1.x {@index}
  */
-public interface WithinGrid {
+public abstract class BSElementAbstract implements BSElement {
 
-    @Programmatic
-    BS3Grid getGrid();
+    private static final long serialVersionUID = 1L;
+
+    private String cssClass;
+
+    /**
+     * Any additional CSS classes to render on the page element corresponding to this object,
+     * eg as per the <a href="http://getbootstrap.com/css/#grid-less">Bootstrap mixins</a> or just for
+     * custom styling.
+     */
+    @Override
+    @XmlAttribute(required = false)
+    public String getCssClass() {
+        return cssClass;
+    }
+
+    @Override
+    public void setCssClass(final String cssClass) {
+        this.cssClass = cssClass;
+    }
+
+
+
 }

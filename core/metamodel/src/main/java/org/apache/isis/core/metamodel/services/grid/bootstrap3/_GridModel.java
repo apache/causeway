@@ -24,10 +24,10 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 
 import org.apache.isis.applib.layout.component.FieldSet;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
+import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
@@ -44,15 +44,15 @@ import lombok.val;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class _GridModel {
         private final LinkedHashSet<String> allIds = _Sets.newLinkedHashSet();
-        private final LinkedHashMap<String, BS3Row> rows = _Maps.newLinkedHashMap();
-        private final LinkedHashMap<String, BS3Col> cols = _Maps.newLinkedHashMap();
+        private final LinkedHashMap<String, BSRow> rows = _Maps.newLinkedHashMap();
+        private final LinkedHashMap<String, BSCol> cols = _Maps.newLinkedHashMap();
         private final LinkedHashMap<String, FieldSet> fieldSets = _Maps.newLinkedHashMap();
 
-        @Getter private BS3Col colForUnreferencedActionsRef;
-        @Getter private BS3Col colForUnreferencedCollectionsRef;
+        @Getter private BSCol colForUnreferencedActionsRef;
+        @Getter private BSCol colForUnreferencedCollectionsRef;
         @Getter private FieldSet fieldSetForUnreferencedActionsRef;
         @Getter private FieldSet fieldSetForUnreferencedPropertiesRef;
-        @Getter private BS3TabGroup tabGroupForUnreferencedCollectionsRef;
+        @Getter private BSTabGroup tabGroupForUnreferencedCollectionsRef;
 
         private boolean gridErrorsDetected = false;
 
@@ -78,13 +78,13 @@ final class _GridModel {
          * @param bs3Grid
          * @return empty if not valid
          */
-        public static Optional<_GridModel> createFrom(BS3Grid bs3Grid) {
+        public static Optional<_GridModel> createFrom(BSGrid bs3Grid) {
 
             val gridModel = new _GridModel();
 
-            bs3Grid.visit(new BS3Grid.VisitorAdapter(){
+            bs3Grid.visit(new BSGrid.VisitorAdapter(){
                 @Override
-                public void visit(final BS3Row bs3Row) {
+                public void visit(final BSRow bs3Row) {
                     final String id = bs3Row.getId();
                     if(id == null) {
                         return;
@@ -98,7 +98,7 @@ final class _GridModel {
                 }
 
                 @Override
-                public void visit(final BS3Col bs3Col) {
+                public void visit(final BSCol bs3Col) {
                     final String id = bs3Col.getId();
                     if(id == null) {
                         return;
@@ -133,10 +133,10 @@ final class _GridModel {
                 return Optional.empty();
             }
 
-            bs3Grid.visit(new BS3Grid.VisitorAdapter(){
+            bs3Grid.visit(new BSGrid.VisitorAdapter(){
 
                 @Override
-                public void visit(final BS3Col bs3Col) {
+                public void visit(final BSCol bs3Col) {
                     if(isSet(bs3Col.isUnreferencedActions())) {
                         if(gridModel.colForUnreferencedActionsRef != null) {
                             bs3Col.setMetadataError("More than one col with 'unreferencedActions' attribute set");
@@ -178,7 +178,7 @@ final class _GridModel {
                 }
 
                 @Override
-                public void visit(final BS3TabGroup bs3TabGroup) {
+                public void visit(final BSTabGroup bs3TabGroup) {
                     if(isSet(bs3TabGroup.isUnreferencedCollections())) {
                         if(gridModel.tabGroupForUnreferencedCollectionsRef != null) {
                             bs3TabGroup.setMetadataError("More than one tabgroup with 'unreferencedCollections' attribute set");
@@ -212,11 +212,11 @@ final class _GridModel {
 
         }
 
-        private void putRow(String id, BS3Row bs3Row) {
+        private void putRow(String id, BSRow bs3Row) {
             rows.put(id, bs3Row);
             allIds.add(id);
         }
-        private void putCol(String id, BS3Col bs3Col) {
+        private void putCol(String id, BSCol bs3Col) {
             cols.put(id, bs3Col);
             allIds.add(id);
         }

@@ -29,10 +29,10 @@ import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
+import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -65,11 +65,11 @@ implements HasDynamicallyVisibleContent {
     private static final String ID_FIELD_SETS = "fieldSets";
     private static final String ID_COLLECTIONS = "collections";
 
-    private final BS3Col bs3Col;
+    private final BSCol bs3Col;
 
     public Col(
             final String id,
-            final EntityModel entityModel, final BS3Col bs3Col) {
+            final EntityModel entityModel, final BSCol bs3Col) {
 
         super(id, entityModel);
 
@@ -144,7 +144,7 @@ implements HasDynamicallyVisibleContent {
 
 
         // rows
-        final List<BS3Row> rows = _Lists.newArrayList(this.bs3Col.getRows());
+        final List<BSRow> rows = _Lists.newArrayList(this.bs3Col.getRows());
         if(!rows.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(ID_ROWS, rows);
             div.add(rowsRv);
@@ -155,12 +155,12 @@ implements HasDynamicallyVisibleContent {
 
 
         // tab groups
-        final List<BS3TabGroup> tabGroupsWithNonEmptyTabs =
+        final List<BSTabGroup> tabGroupsWithNonEmptyTabs =
                 _NullSafe.stream(bs3Col.getTabGroups())
                 .filter(_NullSafe::isPresent)
                 .filter(bs3TabGroup ->
                         _NullSafe.stream(bs3TabGroup.getTabs())
-                                .anyMatch(BS3Tab.Predicates.notEmpty())
+                                .anyMatch(BSTab.Predicates.notEmpty())
                 )
                 .collect(Collectors.toList());
 
@@ -168,11 +168,11 @@ implements HasDynamicallyVisibleContent {
             final RepeatingViewWithDynamicallyVisibleContent tabGroupRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_TAB_GROUPS);
 
-            for (BS3TabGroup bs3TabGroup : tabGroupsWithNonEmptyTabs) {
+            for (BSTabGroup bs3TabGroup : tabGroupsWithNonEmptyTabs) {
 
                 final String id = tabGroupRv.newChildId();
-                final List<BS3Tab> tabs = _NullSafe.stream(bs3TabGroup.getTabs())
-                        .filter(BS3Tab.Predicates.notEmpty())
+                final List<BSTab> tabs = _NullSafe.stream(bs3TabGroup.getTabs())
+                        .filter(BSTab.Predicates.notEmpty())
                         .collect(Collectors.toList());
 
                 switch (tabs.size()) {
@@ -181,9 +181,9 @@ implements HasDynamicallyVisibleContent {
                     throw new IllegalStateException("Cannot render tabGroup with no tabs");
                 case 1:
                     if(bs3TabGroup.isCollapseIfOne() == null || bs3TabGroup.isCollapseIfOne()) {
-                        final BS3Tab bs3Tab = tabs.get(0);
+                        final BSTab bs3Tab = tabs.get(0);
                         // render the rows of the one-and-only tab of this tab group.
-                        final List<BS3Row> tabRows = bs3Tab.getRows();
+                        final List<BSRow> tabRows = bs3Tab.getRows();
                         final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(id, tabRows);
                         tabGroupRv.add(rowsRv);
                         break;
@@ -282,11 +282,11 @@ implements HasDynamicallyVisibleContent {
 
     }
 
-    private RepeatingViewWithDynamicallyVisibleContent buildRows(final String owningId, final List<BS3Row> rows) {
+    private RepeatingViewWithDynamicallyVisibleContent buildRows(final String owningId, final List<BSRow> rows) {
         final RepeatingViewWithDynamicallyVisibleContent rowRv =
                 new RepeatingViewWithDynamicallyVisibleContent(owningId);
 
-        for(final BS3Row bs3Row: rows) {
+        for(final BSRow bs3Row: rows) {
             final String id = rowRv.newChildId();
             final Row row = new Row(id, getModel(), bs3Row);
             rowRv.add(row);

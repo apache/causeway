@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
 /**
  * @since 1.x {@index}
  */
-public abstract class BS3ClearFix extends BS3RowContent {
+public abstract class BSClearFix extends BSRowContent {
 
     private static final long serialVersionUID = 1L;
 

@@ -28,8 +28,8 @@ import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
@@ -51,11 +51,11 @@ implements HasDynamicallyVisibleContent {
     private final ComponentHintKey selectedTabHintKey;
     private final EntityModel entityModel;
 
-    private static List<ITab> tabsFor(final EntityModel entityModel, final BS3TabGroup bs3TabGroup) {
+    private static List<ITab> tabsFor(final EntityModel entityModel, final BSTabGroup bs3TabGroup) {
         final List<ITab> tabs = new ArrayList<>();
 
-        final List<BS3Tab> tablist = _NullSafe.stream(bs3TabGroup.getTabs())
-                .filter(BS3Tab.Predicates.notEmpty())
+        final List<BSTab> tablist = _NullSafe.stream(bs3TabGroup.getTabs())
+                .filter(BSTab.Predicates.notEmpty())
                 .collect(Collectors.toList());
 
         for (val bs3Tab : tablist) {
@@ -78,7 +78,7 @@ implements HasDynamicallyVisibleContent {
         return tabs;
     }
 
-    public TabGroupPanel(final String id, final EntityModel entityModel, final BS3TabGroup bs3TabGroup) {
+    public TabGroupPanel(final String id, final EntityModel entityModel, final BSTabGroup bs3TabGroup) {
         super(id, tabsFor(entityModel, bs3TabGroup));
         this.entityModel = entityModel;
 

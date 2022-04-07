@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.menubars.bootstrap3;
+package org.apache.isis.applib.layout.menubars.bootstrap;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,39 +25,54 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.layout.menubars.MenuBar;
+import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
+import org.apache.isis.applib.layout.component.ServiceActionLayoutDataOwner;
+import org.apache.isis.applib.layout.menubars.MenuSection;
 
 
 /**
- * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link org.apache.isis.applib.annotation.DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
+ * Corresponds to a domain service that contributes its serviceActions under a particular {@link BSMenuBar}.
  *
  * @since 1.x {@index}
  */
 @XmlType(
-        name = "menuBar"
+        name = "section"
         , propOrder = {
-                "menus"
+                "named",
+                "serviceActions"
         }
         )
-public class BS3MenuBar implements MenuBar, Serializable {
+public class BSMenuSection implements MenuSection, Serializable, ServiceActionLayoutDataOwner {
 
     private static final long serialVersionUID = 1L;
 
-    public BS3MenuBar() {
+    public BSMenuSection() {
     }
 
+    private String named;
 
-    private List<BS3Menu> menus = new ArrayList<>();
+    @Override
+    @XmlElement(required = false)
+    public String getNamed() {
+        return named;
+    }
+
+    public void setNamed(String named) {
+        this.named = named;
+    }
+
+    private List<ServiceActionLayoutData> serviceActions = new ArrayList<>();
 
     // no wrapper
-    @XmlElement(name = "menu", required = true)
-    public List<BS3Menu> getMenus() {
-        return menus;
+    @Override
+    @XmlElement(name = "serviceAction", required = true)
+    public List<ServiceActionLayoutData> getServiceActions() {
+        return serviceActions;
     }
 
-    public void setMenus(List<BS3Menu> menus) {
-        this.menus = menus;
+    @Override
+    public void setServiceActions(List<ServiceActionLayoutData> actionLayoutDatas) {
+        this.serviceActions = actionLayoutDatas;
     }
 
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,8 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * Contains a row of content, either on the top-level {@link BS3Grid page} or at any other lower-level element that can
- * contain rows, eg {@link BS3Tab tabs}.
+ * Contains a row of content, either on the top-level {@link BSGrid page} or at any other lower-level element that can
+ * contain rows, eg {@link BSTab tabs}.
  *
  * <p>
  *     It is rendered as a &lt;div class=&quot;row ...&quot;&gt;
@@ -47,7 +47,7 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "metadataError"
         }
         )
-public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowContentOwner {
+public class BSRow extends BSElementAbstract implements HasCssId, BSRowContentOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -69,19 +69,19 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
 
 
 
-    private List<BS3RowContent> cols = new ArrayList<>();
+    private List<BSRowContent> cols = new ArrayList<>();
 
     // no wrapper
     @XmlElementRefs({
-        @XmlElementRef(type = BS3Col.class, name="col", required = true),
-        @XmlElementRef(type = BS3ClearFixVisible.class,  name="clearFixVisible", required = false),
-        @XmlElementRef(type = BS3ClearFixHidden.class,  name="clearFixHidden", required = false)
+        @XmlElementRef(type = BSCol.class, name="col", required = true),
+        @XmlElementRef(type = BSClearFixVisible.class,  name="clearFixVisible", required = false),
+        @XmlElementRef(type = BSClearFixHidden.class,  name="clearFixHidden", required = false)
     })
-    public List<BS3RowContent> getCols() {
+    public List<BSRowContent> getCols() {
         return cols;
     }
 
-    public void setCols(final List<BS3RowContent> cols) {
+    public void setCols(final List<BSRowContent> cols) {
         this.cols = cols;
     }
 
@@ -103,7 +103,7 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
     }
 
 
-    private BS3RowOwner owner;
+    private BSRowOwner owner;
 
 
     /**
@@ -114,11 +114,11 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
      * </p>
      */
     @XmlTransient
-    public BS3RowOwner getOwner() {
+    public BSRowOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final BS3RowOwner owner) {
+    public void setOwner(final BSRowOwner owner) {
         this.owner = owner;
     }
 
@@ -127,13 +127,13 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
     @Override
     @XmlTransient
     @Programmatic
-    public BS3Grid getGrid() {
+    public BSGrid getGrid() {
         return getOwner().getGrid();
     }
 
 
     @Override public String toString() {
-        return "BS3Row{" +
+        return "BSRow{" +
                 "id='" + id + '\'' +
                 '}';
     }

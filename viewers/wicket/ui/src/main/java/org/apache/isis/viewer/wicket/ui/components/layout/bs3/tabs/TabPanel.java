@@ -20,8 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
+import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.HasUiHintDisambiguator;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -41,13 +41,13 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
     private static final String ID_TAB_PANEL = "tabPanel";
     private static final String ID_ROWS = "rows";
 
-    private final BS3Tab bs3Tab;
+    private final BSTab bs3Tab;
 
-    public TabPanel(final String id, final EntityModel model, final BS3Tab bs3Tab) {
+    public TabPanel(final String id, final EntityModel model, final BSTab bs3Tab) {
         this(id, model, bs3Tab, null);
     }
 
-    public TabPanel(final String id, final EntityModel model, final BS3Tab bs3Tab, final RepeatingViewWithDynamicallyVisibleContent repeatingViewWithDynamicallyVisibleContent) {
+    public TabPanel(final String id, final EntityModel model, final BSTab bs3Tab, final RepeatingViewWithDynamicallyVisibleContent repeatingViewWithDynamicallyVisibleContent) {
         super(id);
 
         this.bs3Tab = bs3Tab;
@@ -63,7 +63,7 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
         return bs3Tab.getName();
     }
 
-    protected void buildGui(final EntityModel model, final BS3Tab bs3Tab, final RepeatingViewWithDynamicallyVisibleContent rvIfAny) {
+    protected void buildGui(final EntityModel model, final BSTab bs3Tab, final RepeatingViewWithDynamicallyVisibleContent rvIfAny) {
 
         final WebMarkupContainer div = new WebMarkupContainer(ID_TAB_PANEL);
 
@@ -81,10 +81,10 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
     }
 
-    public static RepeatingViewWithDynamicallyVisibleContent newRows(final EntityModel model, final BS3Tab bs3Tab) {
+    public static RepeatingViewWithDynamicallyVisibleContent newRows(final EntityModel model, final BSTab bs3Tab) {
         final RepeatingViewWithDynamicallyVisibleContent rv = new RepeatingViewWithDynamicallyVisibleContent(ID_ROWS);
 
-        for(final BS3Row bs3Row: bs3Tab.getRows()) {
+        for(final BSRow bs3Row: bs3Tab.getRows()) {
             final String newChildId = rv.newChildId();
             final Row row = new Row(newChildId, model, bs3Row);
             rv.add(row);

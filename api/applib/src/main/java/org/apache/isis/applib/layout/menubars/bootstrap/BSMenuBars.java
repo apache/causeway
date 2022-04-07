@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.menubars.bootstrap3;
+package org.apache.isis.applib.layout.menubars.bootstrap;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -46,45 +46,45 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
                 "metadataError"
         }
         )
-public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBarsAbstract {
+public class BSMenuBars extends org.apache.isis.applib.layout.menubars.MenuBarsAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public BS3MenuBars() {
+    public BSMenuBars() {
     }
 
-    private BS3MenuBar primary = new BS3MenuBar();
+    private BSMenuBar primary = new BSMenuBar();
 
-    public BS3MenuBar getPrimary() {
+    public BSMenuBar getPrimary() {
         return primary;
     }
 
-    public void setPrimary(final BS3MenuBar primary) {
+    public void setPrimary(final BSMenuBar primary) {
         this.primary = primary;
     }
 
-    private BS3MenuBar secondary = new BS3MenuBar();
+    private BSMenuBar secondary = new BSMenuBar();
 
-    public BS3MenuBar getSecondary() {
+    public BSMenuBar getSecondary() {
         return secondary;
     }
 
-    public void setSecondary(final BS3MenuBar secondary) {
+    public void setSecondary(final BSMenuBar secondary) {
         this.secondary = secondary;
     }
 
-    private BS3MenuBar tertiary = new BS3MenuBar();
+    private BSMenuBar tertiary = new BSMenuBar();
 
-    public BS3MenuBar getTertiary() {
+    public BSMenuBar getTertiary() {
         return tertiary;
     }
 
-    public void setTertiary(final BS3MenuBar tertiary) {
+    public void setTertiary(final BSMenuBar tertiary) {
         this.tertiary = tertiary;
     }
 
     @Override
-    public BS3MenuBar menuBarFor(final DomainServiceLayout.MenuBar menuBar) {
+    public BSMenuBar menuBarFor(final DomainServiceLayout.MenuBar menuBar) {
         switch (menuBar) {
         case PRIMARY:
             return getPrimary();
@@ -101,47 +101,47 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
     }
 
     public interface Visitor extends Consumer<ServiceActionLayoutData> {
-        void preVisit(final BS3MenuBar menuBar);
-        void visit(final BS3MenuBar menuBar);
-        void postVisit(final BS3MenuBar menuBar);
+        void preVisit(final BSMenuBar menuBar);
+        void visit(final BSMenuBar menuBar);
+        void postVisit(final BSMenuBar menuBar);
 
-        void preVisit(final BS3Menu menu);
-        void visit(final BS3Menu menu);
-        void postVisit(final BS3Menu menu);
+        void preVisit(final BSMenu menu);
+        void visit(final BSMenu menu);
+        void postVisit(final BSMenu menu);
 
-        void preVisit(final BS3MenuSection menuSection);
-        void visit(final BS3MenuSection section);
-        void postVisit(final BS3MenuSection menuSection);
+        void preVisit(final BSMenuSection menuSection);
+        void visit(final BSMenuSection section);
+        void postVisit(final BSMenuSection menuSection);
     }
 
-    public static class VisitorAdapter implements BS3MenuBars.Visitor {
-        @Override public void preVisit(final BS3MenuBar menuBar) { }
-        @Override public void visit(final BS3MenuBar menuBar) { }
-        @Override public void postVisit(final BS3MenuBar menuBar) { }
+    public static class VisitorAdapter implements BSMenuBars.Visitor {
+        @Override public void preVisit(final BSMenuBar menuBar) { }
+        @Override public void visit(final BSMenuBar menuBar) { }
+        @Override public void postVisit(final BSMenuBar menuBar) { }
 
-        @Override public void preVisit(final BS3Menu menu) { }
-        @Override public void visit(final BS3Menu menu) { }
-        @Override public void postVisit(final BS3Menu menu) { }
+        @Override public void preVisit(final BSMenu menu) { }
+        @Override public void visit(final BSMenu menu) { }
+        @Override public void postVisit(final BSMenu menu) { }
 
-        @Override public void preVisit(final BS3MenuSection menuSection) { }
-        @Override public void visit(final BS3MenuSection section) { }
-        @Override public void postVisit(final BS3MenuSection menuSection) { }
+        @Override public void preVisit(final BSMenuSection menuSection) { }
+        @Override public void visit(final BSMenuSection section) { }
+        @Override public void postVisit(final BSMenuSection menuSection) { }
 
         @Override public void accept(final ServiceActionLayoutData serviceActionLayoutData) { }
 
         // -- PREDEFINED SHORTCUTS
 
-        public static VisitorAdapter visitingMenuSections(Consumer<BS3MenuSection> onVisit) {
+        public static VisitorAdapter visitingMenuSections(Consumer<BSMenuSection> onVisit) {
             return new VisitorAdapter() {
-                @Override public void visit(final BS3MenuSection section) {
+                @Override public void visit(final BSMenuSection section) {
                     onVisit.accept(section);
                 }
             };
         }
 
-        public static VisitorAdapter visitingMenus(Consumer<BS3Menu> onVisit) {
+        public static VisitorAdapter visitingMenus(Consumer<BSMenu> onVisit) {
             return new VisitorAdapter() {
-                @Override public void visit(final BS3Menu menu) {
+                @Override public void visit(final BSMenu menu) {
                     onVisit.accept(menu);
                 }
             };
@@ -156,7 +156,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
         traverseMenuBar(getTertiary(), visitor);
     }
 
-    private void traverseMenuBar(final BS3MenuBar menuBar, final Consumer<ServiceActionLayoutData> visitor) {
+    private void traverseMenuBar(final BSMenuBar menuBar, final Consumer<ServiceActionLayoutData> visitor) {
 
         final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
 
@@ -165,7 +165,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
             bs3Visitor.visit(menuBar);
         }
 
-        for (BS3Menu menu : menuBar.getMenus()) {
+        for (BSMenu menu : menuBar.getMenus()) {
             traverseMenu(menu, visitor);
         }
 
@@ -174,7 +174,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
         }
     }
 
-    private void traverseMenu(final BS3Menu menu, final Consumer<ServiceActionLayoutData> visitor) {
+    private void traverseMenu(final BSMenu menu, final Consumer<ServiceActionLayoutData> visitor) {
 
         final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
 
@@ -183,8 +183,8 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
             bs3Visitor.visit(menu);
         }
 
-        final List<BS3MenuSection> sections = menu.getSections();
-        for (BS3MenuSection section : sections) {
+        final List<BSMenuSection> sections = menu.getSections();
+        for (BSMenuSection section : sections) {
             traverseSection(section, visitor);
         }
 
@@ -193,7 +193,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
         }
     }
 
-    private void traverseSection(final BS3MenuSection section, final Consumer<ServiceActionLayoutData> visitor) {
+    private void traverseSection(final BSMenuSection section, final Consumer<ServiceActionLayoutData> visitor) {
 
         final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
         if(bs3Visitor != null) {

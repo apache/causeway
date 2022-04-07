@@ -16,16 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
+
+import java.util.List;
+
+import org.apache.isis.applib.layout.component.Owner;
 
 /**
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
-public interface HasCssId {
+public interface BSRowOwner extends Owner, WithinGrid {
 
-    /**
-     * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
-     */
-    String getId();
-
+    List<BSRow> getRows();
 }

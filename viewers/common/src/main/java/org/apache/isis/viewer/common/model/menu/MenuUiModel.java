@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBar;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.Getter;
@@ -50,7 +50,7 @@ public class MenuUiModel implements Serializable {
             final MenuVisitor menuBuilder) {
 
         val menuBars = commonContext.getMenuBarsService().menuBars();
-        val menuBar = (BS3MenuBar) menuBars.menuBarFor(getMenuBarSelect());
+        val menuBar = (BSMenuBar) menuBars.menuBarFor(getMenuBarSelect());
 
         MenuUiModel_buildMenuItems.buildMenuItems(
                 commonContext,

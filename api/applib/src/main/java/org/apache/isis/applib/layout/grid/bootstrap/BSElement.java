@@ -16,16 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
-import java.util.List;
-
-import org.apache.isis.applib.layout.component.Owner;
+import java.io.Serializable;
 
 /**
  * @since 1.x {@index}
  */
-public interface BS3TabOwner extends Owner, WithinGrid {
+public interface BSElement extends WithinGrid, Serializable {
 
-    List<BS3Tab> getTabs();
+    /**
+     * Any additional CSS classes to render on the page element corresponding to this object,
+     * eg as per the <a href="http://getbootstrap.com/css/#grid-less">Bootstrap mixins</a> or just for
+     * custom styling.
+     */
+    String getCssClass();
+
+    void setCssClass(final String cssClass);
+
+
 }

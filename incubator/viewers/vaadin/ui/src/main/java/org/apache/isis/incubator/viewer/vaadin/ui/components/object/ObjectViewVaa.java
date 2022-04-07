@@ -38,11 +38,11 @@ import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.layout.grid.bootstrap.BSClearFix;
+import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
+import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
@@ -106,7 +106,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newRow(final HasComponents container, final BS3Row bs3Row) {
+            protected HasComponents newRow(final HasComponents container, final BSRow bs3Row) {
                 val uiRow = _vaa.add(container, new FlexLayout());
 
                 uiRow.setWidthFull();
@@ -123,7 +123,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newCol(final HasComponents container, final BS3Col bs3col) {
+            protected HasComponents newCol(final HasComponents container, final BSCol bs3col) {
 
                 val uiCol = _vaa.add(container, new VerticalLayout());
 
@@ -146,7 +146,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected Tabs newTabGroup(final HasComponents container, final BS3TabGroup tabGroupData) {
+            protected Tabs newTabGroup(final HasComponents container, final BSTabGroup tabGroupData) {
                 val uiTabGroup = _vaa.add(container, new Tabs());
 
                 uiTabGroup.setOrientation(Tabs.Orientation.HORIZONTAL);
@@ -154,7 +154,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newTab(final Tabs container, final BS3Tab tabData) {
+            protected HasComponents newTab(final Tabs container, final BSTab tabData) {
                 val uiTab = _vaa.add(container, new Tab(tabData.getName()));
                 return uiTab;
             }
@@ -180,7 +180,7 @@ public class ObjectViewVaa extends VerticalLayout {
 
 
             @Override
-            protected void onClearfix(final HasComponents container, final BS3ClearFix clearFixData) {
+            protected void onClearfix(final HasComponents container, final BSClearFix clearFixData) {
                 // TODO Auto-generated method stub
             }
 

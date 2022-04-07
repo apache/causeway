@@ -20,10 +20,10 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3.row;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3RowContent;
+import org.apache.isis.applib.layout.grid.bootstrap.BSClearFix;
+import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
+import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
+import org.apache.isis.applib.layout.grid.bootstrap.BSRowContent;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.clearfix.ClearFix;
@@ -42,12 +42,12 @@ implements HasDynamicallyVisibleContent {
 
     private static final String ID_ROW_CONTENTS = "rowContents";
 
-    private final BS3Row bs3Row;
+    private final BSRow bs3Row;
 
     public Row(
             final String id,
             final EntityModel entityModel,
-            final BS3Row bs3Row) {
+            final BSRow bs3Row) {
 
         super(id, entityModel);
 
@@ -61,24 +61,24 @@ implements HasDynamicallyVisibleContent {
         final RepeatingViewWithDynamicallyVisibleContent rv =
                 new RepeatingViewWithDynamicallyVisibleContent(ID_ROW_CONTENTS);
 
-        for(final BS3RowContent bs3RowContent: bs3Row.getCols()) {
+        for(final BSRowContent bs3RowContent: bs3Row.getCols()) {
 
             final String id = rv.newChildId();
 
             final WebMarkupContainer rowContent;
-            if(bs3RowContent instanceof BS3Col) {
+            if(bs3RowContent instanceof BSCol) {
 
-                final BS3Col bs3Col = (BS3Col) bs3RowContent;
+                final BSCol bs3Col = (BSCol) bs3RowContent;
                 final Col col = new Col(id, getModel(), bs3Col);
 
                 visible = visible || col.isVisible();
                 rowContent = col;
 
-            } else if (bs3RowContent instanceof BS3ClearFix) {
-                final BS3ClearFix bs3ClearFix = (BS3ClearFix) bs3RowContent;
+            } else if (bs3RowContent instanceof BSClearFix) {
+                final BSClearFix bs3ClearFix = (BSClearFix) bs3RowContent;
                 rowContent = new ClearFix(id, getModel(), bs3ClearFix);
             } else {
-                throw new IllegalStateException("Unrecognized implementation of BS3RowContent");
+                throw new IllegalStateException("Unrecognized implementation of BSRowContent");
             }
 
             rv.add(rowContent);

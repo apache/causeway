@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +35,10 @@ import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 
 /**
- * Represents a tab within a {@link BS3TabGroup tab group}.
+ * Represents a tab within a {@link BSTabGroup tab group}.
  *
  * <p>
- *     They simply contain one or more {@link BS3Row row}s.
+ *     They simply contain one or more {@link BSRow row}s.
  * </p>
  *
  * @since 1.x {@index}
@@ -50,7 +50,7 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
                 "rows"
         }
         )
-public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
+public class BSTab extends BSElementAbstract implements BSRowOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -65,22 +65,22 @@ public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
     }
 
 
-    private List<BS3Row> rows = new ArrayList<>();
+    private List<BSRow> rows = new ArrayList<>();
 
     // no wrapper
     @Override
     @XmlElement(name = "row", required = true)
-    public List<BS3Row> getRows() {
+    public List<BSRow> getRows() {
         return rows;
     }
 
-    public void setRows(final List<BS3Row> rows) {
+    public void setRows(final List<BSRow> rows) {
         this.rows = rows;
     }
 
 
 
-    private BS3TabOwner owner;
+    private BSTabOwner owner;
 
     /**
      * Owner.
@@ -90,25 +90,25 @@ public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
      * </p>
      */
     @XmlTransient
-    public BS3TabOwner getOwner() {
+    public BSTabOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final BS3TabOwner owner) {
+    public void setOwner(final BSTabOwner owner) {
         this.owner = owner;
     }
 
 
     public static class Predicates {
-        public static Predicate<BS3Tab> notEmpty() {
+        public static Predicate<BSTab> notEmpty() {
             final AtomicBoolean visitingTheNode = new AtomicBoolean(false);
             final AtomicBoolean foundContent = new AtomicBoolean(false);
 
-            return new Predicate<BS3Tab>() {
+            return new Predicate<BSTab>() {
                 @Override
-                public boolean test(final BS3Tab thisBs3Tab) {
-                    final BS3Grid owningGrid = thisBs3Tab.getGrid();
-                    owningGrid.visit(new BS3Grid.VisitorAdapter() {
+                public boolean test(final BSTab thisBs3Tab) {
+                    final BSGrid owningGrid = thisBs3Tab.getGrid();
+                    owningGrid.visit(new BSGrid.VisitorAdapter() {
 
                         /**
                          * if found the tab, then reset 'foundContent' to false, and then use 'visitingTheNode' as
@@ -117,14 +117,14 @@ public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
                          * 'foundContent' flag.
                          */
                         @Override
-                        public void preVisit(final BS3Tab bs3Tab) {
+                        public void preVisit(final BSTab bs3Tab) {
                             if(bs3Tab == thisBs3Tab) {
                                 foundContent.set(false);
                                 visitingTheNode.set(true);
                             }
                         }
 
-                        @Override public void postVisit(final BS3Tab bs3Tab) {
+                        @Override public void postVisit(final BSTab bs3Tab) {
                             if(bs3Tab == thisBs3Tab) {
                                 visitingTheNode.set(false);
                             }
@@ -167,12 +167,12 @@ public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
     @Override
     @XmlTransient
     @Programmatic
-    public BS3Grid getGrid() {
+    public BSGrid getGrid() {
         return getOwner().getGrid();
     }
 
     @Override public String toString() {
-        return "BS3Tab{" +
+        return "BSTab{" +
                 "name='" + name + '\'' +
                 '}';
     }

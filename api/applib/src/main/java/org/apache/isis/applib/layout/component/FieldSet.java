@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
+import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
 
 /**
  * A {@link MemberRegion region} of the page containing a set of
@@ -88,7 +88,7 @@ Serializable {
      * Whether this fieldset should be used to hold any unreferenced actions (contributed or &quot;native&quot;).
      *
      * <p>
-     *     Any layout must have precisely one fieldset or {@link BS3Col col} that has this attribute set.
+     *     Any layout must have precisely one fieldset or {@link BSCol col} that has this attribute set.
      * </p>
      */
     @XmlAttribute(required = false)

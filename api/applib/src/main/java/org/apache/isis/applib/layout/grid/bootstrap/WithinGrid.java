@@ -16,16 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
-import java.util.List;
-
-import org.apache.isis.applib.layout.component.Owner;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * @since 1.x {@index}
  */
-public interface BS3TabGroupOwner extends Owner, WithinGrid {
+public interface WithinGrid {
 
-    List<BS3TabGroup> getTabGroups();
+    @Programmatic
+    BSGrid getGrid();
 }

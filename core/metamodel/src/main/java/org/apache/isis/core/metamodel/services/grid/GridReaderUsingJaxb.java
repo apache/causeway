@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.layout.grid.Grid;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
+import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -82,7 +82,7 @@ public class GridReaderUsingJaxb {
     private void initForTesting() {
         if(jaxbContext==null) {
             try {
-                jaxbContext = JAXBContext.newInstance(BS3Grid.class);
+                jaxbContext = JAXBContext.newInstance(BSGrid.class);
             } catch (JAXBException e) {
                 // leave as null
             }

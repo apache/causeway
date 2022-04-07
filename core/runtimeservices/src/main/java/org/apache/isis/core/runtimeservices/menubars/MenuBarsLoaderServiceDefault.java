@@ -33,7 +33,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.commons.internal.base._Strings;
@@ -91,14 +91,14 @@ implements MenuBarsLoaderService {
     }
 
     @Override
-    public BS3MenuBars menuBars() {
+    public BSMenuBars menuBars() {
         return loadMenuBars(loadMenubarsLayoutResource());
     }
 
     // public, in support of JUnit testing
-    public BS3MenuBars loadMenuBars(String xmlString) {
+    public BSMenuBars loadMenuBars(String xmlString) {
         try {
-            return jaxbService.fromXml(BS3MenuBars.class, xmlString);
+            return jaxbService.fromXml(BSMenuBars.class, xmlString);
         } catch (Exception e) {
             severeCannotLoad(menubarsLayoutXmlResourceRef.get(), e);
             return null;

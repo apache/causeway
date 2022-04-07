@@ -35,7 +35,7 @@ import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.applib.services.menu.MenuBarsService;
@@ -71,7 +71,7 @@ public class SitemapServiceDefault implements SitemapService {
 
         val menuBars = menuBarsService.menuBars(MenuBarsService.Type.DEFAULT);
 
-        menuBars.visit(BS3MenuBars.VisitorAdapter.visitingMenus(menu->{
+        menuBars.visit(BSMenuBars.VisitorAdapter.visitingMenus(menu->{
             val menuName = _Strings.isNotEmpty(menu.getNamed())
                 ? menu.getNamed()
                 : "Unnamed Menu";

@@ -16,34 +16,49 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.menubars.bootstrap;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.layout.menubars.MenuBar;
+
+
 /**
- * One of the <a href="http://getbootstrap.com/css/#responsive-utilities">Responsive utility classes</a>.
- *
- *
- * <p>
- *     It is rendered as a (eg) &lt;div class=&quot;clearfix hidden-xs ...&quot;&gt;
- * </p>
+ * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link org.apache.isis.applib.annotation.DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
  *
  * @since 1.x {@index}
  */
-@XmlRootElement(
-        name = "clearFixHidden"
-        )
 @XmlType(
-        name = "clearFixHidden"
+        name = "menuBar"
+        , propOrder = {
+                "menus"
+        }
         )
-public class BS3ClearFixHidden extends BS3ClearFix {
+public class BSMenuBar implements MenuBar, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Override
-    public String toCssClass() {
-        return "clearfix " + getDisplayFragment(CssDisplay.NONE, getSize())
-                + (getCssClass() != null? " " + getCssClass(): "");
+    public BSMenuBar() {
     }
+
+
+    private List<BSMenu> menus = new ArrayList<>();
+
+    // no wrapper
+    @XmlElement(name = "menu", required = true)
+    public List<BSMenu> getMenus() {
+        return menus;
+    }
+
+    public void setMenus(List<BSMenu> menus) {
+        this.menus = menus;
+    }
+
+
 }

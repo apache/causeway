@@ -35,4 +35,4 @@
                         namespaceURI = "http://isis.apache.org/applib/layout/menubars/bootstrap3", prefix = "mb3")
         }
         )
-package org.apache.isis.applib.layout.menubars.bootstrap3;
+package org.apache.isis.applib.layout.menubars.bootstrap;

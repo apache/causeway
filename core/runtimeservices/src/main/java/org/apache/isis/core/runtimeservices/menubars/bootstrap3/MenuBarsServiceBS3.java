@@ -37,10 +37,10 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuSection;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenu;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBar;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuSection;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
@@ -103,12 +103,12 @@ implements MenuBarsService {
     private final IsisSystemEnvironment isisSystemEnvironment;
     private final MetaModelContext metaModelContext;
 
-    private final _Lazy<BS3MenuBars> menuBarsFromAnnotationsOnly = _Lazy.threadSafe(this::menuBarsFromAnnotationsOnly);
+    private final _Lazy<BSMenuBars> menuBarsFromAnnotationsOnly = _Lazy.threadSafe(this::menuBarsFromAnnotationsOnly);
 
-    BS3MenuBars menuBars;
+    BSMenuBars menuBars;
 
     @Override
-    public BS3MenuBars menuBars(final Type type) {
+    public BSMenuBars menuBars(final Type type) {
 
         val menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
 
@@ -121,7 +121,7 @@ implements MenuBarsService {
 
     // -- HELPER
 
-    private BS3MenuBars menuBarsDefault() {
+    private BSMenuBars menuBarsDefault() {
 
         val menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
 
@@ -133,7 +133,7 @@ implements MenuBarsService {
         return menuBars;
     }
 
-    private BS3MenuBars loadOrElse(final BS3MenuBars menuBarsFromAnnotationsOnly) {
+    private BSMenuBars loadOrElse(final BSMenuBars menuBarsFromAnnotationsOnly) {
 
         val menuBars = Optional.ofNullable(menuBarsLoaderService.menuBars())
                 .map(this::updateFacetsFromActionLayoutXml)
@@ -149,12 +149,12 @@ implements MenuBarsService {
         // add in any missing actions from the fallback
         val referencedActionsByObjectTypeAndId = menuBars.getAllServiceActionsByObjectTypeAndId();
 
-        menuBarsFromAnnotationsOnly.visit(BS3MenuBars.VisitorAdapter.visitingMenuSections(menuSection->{
+        menuBarsFromAnnotationsOnly.visit(BSMenuBars.VisitorAdapter.visitingMenuSections(menuSection->{
 
             // created only if required to collect unreferenced actions
             // for this menuSection into a new section within the designated
             // unreferencedActionsMenu
-            BS3MenuSection section = null;
+            BSMenuSection section = null;
 
             for (val serviceActionLayout : menuSection.getServiceActions()) {
                 val logicalTypeNameAndId = serviceActionLayout.getLogicalTypeNameAndId();
@@ -176,7 +176,7 @@ implements MenuBarsService {
         return menuBars;
     }
 
-    private BS3MenuBars updateFacetsFromActionLayoutXml(final BS3MenuBars menuBarsFromXml) {
+    private BSMenuBars updateFacetsFromActionLayoutXml(final BSMenuBars menuBarsFromXml) {
         final Map<String, ServiceActionLayoutData> serviceActionLayoutDataByActionId = _Maps.newHashMap();
         menuBarsFromXml.visit(serviceActionLayoutData->
             serviceActionLayoutDataByActionId.put(
@@ -230,34 +230,34 @@ implements MenuBarsService {
         return menuBarsFromXml;
     }
 
-    private BS3MenuBars addTnsAndSchemaLocation(final BS3MenuBars menuBars) {
+    private BSMenuBars addTnsAndSchemaLocation(final BSMenuBars menuBars) {
         menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
         return menuBars;
     }
 
-    private static BS3MenuSection addSectionToMenu(final BS3Menu menu) {
-        val section = new BS3MenuSection();
+    private static BSMenuSection addSectionToMenu(final BSMenu menu) {
+        val section = new BSMenuSection();
         menu.getSections().add(section);
         return section;
     }
 
     private static void bindActionToSection(
             final ServiceActionLayoutData serviceAction,
-            final BS3MenuSection section) {
+            final BSMenuSection section) {
 
         // detach from fallback, attach to this section
         serviceAction.setOwner(section);
         section.getServiceActions().add(serviceAction);
     }
 
-    private BS3Menu validateAndGetUnreferencedActionMenu(final BS3MenuBars menuBars) {
+    private BSMenu validateAndGetUnreferencedActionMenu(final BSMenuBars menuBars) {
 
         if (menuBars == null) {
             return null;
         }
 
-        val menusWithUnreferencedActionsFlagSet = _Lists.<BS3Menu>newArrayList();
-        menuBars.visit(BS3MenuBars.VisitorAdapter.visitingMenus(menu->{
+        val menusWithUnreferencedActionsFlagSet = _Lists.<BSMenu>newArrayList();
+        menuBars.visit(BSMenuBars.VisitorAdapter.visitingMenus(menu->{
             if(Boolean.TRUE.equals(menu.isUnreferencedActions())) {
                 menusWithUnreferencedActionsFlagSet.add(menu);
             }
@@ -278,8 +278,8 @@ implements MenuBarsService {
         return null;
     }
 
-    private BS3MenuBars menuBarsFromAnnotationsOnly() {
-        final BS3MenuBars menuBars = new BS3MenuBars();
+    private BSMenuBars menuBarsFromAnnotationsOnly() {
+        final BSMenuBars menuBars = new BSMenuBars();
 
         val visibleServiceAdapters = metaModelContext.streamServiceAdapters()
                 .filter(this::isVisibleAdapterForMenu)
@@ -291,7 +291,7 @@ implements MenuBarsService {
 
         menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
 
-        final BS3Menu otherMenu = new BS3Menu();
+        final BSMenu otherMenu = new BSMenu();
         otherMenu.setNamed("Other");
         otherMenu.setUnreferencedActions(true);
         menuBars.getPrimary().getMenus().add(otherMenu);
@@ -314,7 +314,7 @@ implements MenuBarsService {
 
     private void appendFromAnnotationsOnly(
             final Can<ManagedObject> serviceAdapters,
-            final BS3MenuBar menuBar,
+            final BSMenuBar menuBar,
             final DomainServiceLayout.MenuBar menuBarPos) {
 
         val serviceActions = _Lists.<ServiceAndAction>newArrayList();
@@ -335,27 +335,27 @@ implements MenuBarsService {
         // prune any service names that have no service actions
         serviceNamesInOrder.retainAll(serviceActionsByName.keySet());
 
-        List<BS3Menu> menus = buildMenuItemsFromAnnotationsOnly(serviceNamesInOrder, serviceActionsByName);
+        List<BSMenu> menus = buildMenuItemsFromAnnotationsOnly(serviceNamesInOrder, serviceActionsByName);
         menuBar.getMenus().addAll(menus);
     }
 
-    private static List<BS3Menu> buildMenuItemsFromAnnotationsOnly(
+    private static List<BSMenu> buildMenuItemsFromAnnotationsOnly(
             final Set<String> serviceNamesInOrder,
             final Map<String, List<ServiceAndAction>> serviceActionsByName) {
 
-        final List<BS3Menu> menus = _Lists.newArrayList();
+        final List<BSMenu> menus = _Lists.newArrayList();
         for (String serviceName : serviceNamesInOrder) {
 
-            BS3Menu menu = new BS3Menu(serviceName);
+            BSMenu menu = new BSMenu(serviceName);
             menus.add(menu);
 
-            BS3MenuSection menuSection = new BS3MenuSection();
+            BSMenuSection menuSection = new BSMenuSection();
             final List<ServiceAndAction> serviceActionsForName = serviceActionsByName.get(serviceName);
             for (ServiceAndAction serviceAndAction : serviceActionsForName) {
 
                 if(serviceAndAction.isPrependSeparator() && !menuSection.getServiceActions().isEmpty()) {
                     menu.getSections().add(menuSection);
-                    menuSection = new BS3MenuSection();
+                    menuSection = new BSMenuSection();
                 }
 
                 val objectAction = serviceAndAction.getObjectAction();

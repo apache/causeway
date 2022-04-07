@@ -25,12 +25,16 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
+import org.apache.isis.applib.layout.grid.bootstrap.Size;
+import org.apache.isis.applib.layout.grid.bootstrap.SizeSpan;
+
 public class BS3ColTest {
 
-    BS3Col bs3Col;
+    BSCol bs3Col;
     @Before
     public void setUp() throws Exception {
-        bs3Col = new BS3Col();
+        bs3Col = new BSCol();
     }
 
     @Test

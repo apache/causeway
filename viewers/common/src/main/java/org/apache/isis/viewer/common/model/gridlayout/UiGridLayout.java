@@ -26,12 +26,12 @@ import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.layout.grid.bootstrap.BSClearFix;
+import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
+import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -51,13 +51,13 @@ public class UiGridLayout {
     public static abstract class Visitor<C, T> {
         private final C rootContainer;
         protected abstract C newActionPanel(C container);
-        protected abstract C newRow(C container, BS3Row rowData);
-        protected abstract C newCol(C container, BS3Col colData);
-        protected abstract T newTabGroup(C container, BS3TabGroup tabGroupData);
-        protected abstract C newTab(T tabGroup, BS3Tab tabData);
+        protected abstract C newRow(C container, BSRow rowData);
+        protected abstract C newCol(C container, BSCol colData);
+        protected abstract T newTabGroup(C container, BSTabGroup tabGroupData);
+        protected abstract C newTab(T tabGroup, BSTab tabData);
         protected abstract C newFieldSet(C container, FieldSet fieldSetData);
         protected abstract void onObjectTitle(C container, DomainObjectLayoutData domainObjectData);
-        protected abstract void onClearfix(C container, BS3ClearFix clearFixData);
+        protected abstract void onClearfix(C container, BSClearFix clearFixData);
         protected abstract void onAction(C container, ActionLayoutData actionData);
         protected abstract void onProperty(C container, PropertyLayoutData propertyData);
         protected abstract void onCollection(C container, CollectionLayoutData collectionData);
@@ -65,7 +65,7 @@ public class UiGridLayout {
     }
 
     @NonNull private final ManagedObject managedObject;
-    private _Lazy<Optional<BS3Grid>> gridData = _Lazy.threadSafe(this::initGridData);
+    private _Lazy<Optional<BSGrid>> gridData = _Lazy.threadSafe(this::initGridData);
 
     public <C, T> void visit(final Visitor<C, T> visitor) {
 
@@ -79,25 +79,25 @@ public class UiGridLayout {
 
     }
 
-    private Optional<BS3Grid> initGridData() {
+    private Optional<BSGrid> initGridData() {
         return managedObject.getSpecification().lookupFacet(GridFacet.class)
         .map(gridFacet->gridFacet.getGrid(managedObject))
-        .filter(grid->grid instanceof BS3Grid)
-        .map(BS3Grid.class::cast)
+        .filter(grid->grid instanceof BSGrid)
+        .map(BSGrid.class::cast)
         .map(this::attachAssociatedActions)
         ;
     }
 
     //TODO[refactor] this should not be necessary here, the GridFacet should already have done that for us
-    private BS3Grid attachAssociatedActions(final BS3Grid bS3Grid) {
+    private BSGrid attachAssociatedActions(final BSGrid bSGrid) {
 
-        val primedActions = bS3Grid.getAllActionsById();
+        val primedActions = bSGrid.getAllActionsById();
         final Set<String> actionIdsAlreadyAdded = _Sets.newHashSet(primedActions.keySet());
 
         managedObject.getSpecification().streamProperties(MixedIn.INCLUDED)
         .forEach(property->{
             Optional.ofNullable(
-                    bS3Grid.getAllPropertiesById().get(property.getId()))
+                    bSGrid.getAllPropertiesById().get(property.getId()))
             .ifPresent(pl->{
 
                 ObjectAction.Util.findForAssociation(managedObject, property)
@@ -111,75 +111,75 @@ public class UiGridLayout {
 
 
         });
-        return bS3Grid;
+        return bSGrid;
     }
 
-    private <C, T> void visitRow(final BS3Row bs3Row, final C container, final Visitor<C, T> visitor) {
+    private <C, T> void visitRow(final BSRow bs3Row, final C container, final Visitor<C, T> visitor) {
 
         val uiRow = visitor.newRow(container, bs3Row);
 
         for(val bs3RowContent: bs3Row.getCols()) {
-            if(bs3RowContent instanceof BS3Col) {
+            if(bs3RowContent instanceof BSCol) {
 
-                visitCol((BS3Col) bs3RowContent, uiRow, visitor);
+                visitCol((BSCol) bs3RowContent, uiRow, visitor);
 
-            } else if (bs3RowContent instanceof BS3ClearFix) {
-                visitor.onClearfix(uiRow, (BS3ClearFix) bs3RowContent);
+            } else if (bs3RowContent instanceof BSClearFix) {
+                visitor.onClearfix(uiRow, (BSClearFix) bs3RowContent);
             } else {
-                throw new IllegalStateException("Unrecognized implementation of BS3RowContent");
+                throw new IllegalStateException("Unrecognized implementation of BSRowContent");
             }
         }
     }
 
-    private <C, T> void visitCol(final BS3Col bS3Col, final C container, final Visitor<C, T> visitor) {
-        val uiCol = visitor.newCol(container, bS3Col);
+    private <C, T> void visitCol(final BSCol bSCol, final C container, final Visitor<C, T> visitor) {
+        val uiCol = visitor.newCol(container, bSCol);
 
-        val hasDomainObject = bS3Col.getDomainObject()!=null;
-        val hasActions = _NullSafe.size(bS3Col.getActions())>0;
-        val hasRows = _NullSafe.size(bS3Col.getRows())>0;
+        val hasDomainObject = bSCol.getDomainObject()!=null;
+        val hasActions = _NullSafe.size(bSCol.getActions())>0;
+        val hasRows = _NullSafe.size(bSCol.getRows())>0;
 
         if(hasDomainObject || hasActions) {
             val uiActionPanel = visitor.newActionPanel(uiCol);
             if(hasDomainObject) {
-                visitor.onObjectTitle(uiActionPanel, bS3Col.getDomainObject());
+                visitor.onObjectTitle(uiActionPanel, bSCol.getDomainObject());
             }
             if(hasActions) {
-                for(val action : bS3Col.getActions()) {
+                for(val action : bSCol.getActions()) {
                     visitor.onAction(uiActionPanel, action);
                 }
             }
         }
 
-        for(val fieldSet : bS3Col.getFieldSets()) {
+        for(val fieldSet : bSCol.getFieldSets()) {
             visitFieldSet(fieldSet, uiCol, visitor);
         }
 
-        for(val tabGroup : bS3Col.getTabGroups()) {
+        for(val tabGroup : bSCol.getTabGroups()) {
             visitTabGroup(tabGroup, uiCol, visitor);
         }
 
         if(hasRows) {
-            for(val bs3Row: bS3Col.getRows()) {
+            for(val bs3Row: bSCol.getRows()) {
                 visitRow(bs3Row, uiCol, visitor);
             }
         }
 
-        for(val collectionData : bS3Col.getCollections()) {
+        for(val collectionData : bSCol.getCollections()) {
             visitor.onCollection(uiCol, collectionData);
         }
 
     }
 
-    private <C, T> void visitTabGroup(final BS3TabGroup bS3ColTabGroup, final C container, final Visitor<C, T> visitor) {
+    private <C, T> void visitTabGroup(final BSTabGroup bS3ColTabGroup, final C container, final Visitor<C, T> visitor) {
         val uiTabGroup = visitor.newTabGroup(container, bS3ColTabGroup);
         for(val bs3Tab: bS3ColTabGroup.getTabs()) {
             visitTab(bs3Tab, uiTabGroup, visitor);
         }
     }
 
-    private <C, T> void visitTab(final BS3Tab bS3Tab, final T container, final Visitor<C, T> visitor) {
-        val uiTab = visitor.newTab(container, bS3Tab);
-        for(val bs3Row: bS3Tab.getRows()) {
+    private <C, T> void visitTab(final BSTab bSTab, final T container, final Visitor<C, T> visitor) {
+        val uiTab = visitor.newTab(container, bSTab);
+        for(val bs3Row: bSTab.getRows()) {
             visitRow(bs3Row, uiTab, visitor);
         }
     }

@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
+import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -75,11 +75,11 @@ public final class Facets {
         .orElseGet(OptionalInt::empty);
     }
 
-    public Optional<BS3Grid> bootstrapGrid(
+    public Optional<BSGrid> bootstrapGrid(
             final ObjectSpecification objectSpec, final ManagedObject objectAdapter) {
         return objectSpec.lookupFacet(GridFacet.class)
         .map(gridFacet->gridFacet.getGrid(objectAdapter))
-        .flatMap(grid->_Casts.castTo(BS3Grid.class, grid));
+        .flatMap(grid->_Casts.castTo(BSGrid.class, grid));
     }
 
     public Optional<String> cssClassFor(

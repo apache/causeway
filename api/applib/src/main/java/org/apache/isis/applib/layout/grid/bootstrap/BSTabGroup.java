@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * Represents a tab group containing one or more {@link BS3Tab tab}s.
+ * Represents a tab group containing one or more {@link BSTab tab}s.
  *
  * @since 1.x {@index}
  */
@@ -40,7 +40,7 @@ import org.apache.isis.applib.annotation.Programmatic;
                 "metadataError"
         }
         )
-public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
+public class BSTabGroup extends BSElementAbstract implements BSTabOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,7 +51,7 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
      * Whether this tab group should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
      *
      * <p>
-     *     Any layout must have precisely one tab group or {@link BS3Col col} that has this attribute set.
+     *     Any layout must have precisely one tab group or {@link BSCol col} that has this attribute set.
      * </p>
      */
     @XmlAttribute(required = false)
@@ -81,21 +81,21 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
 
 
 
-    private List<BS3Tab> tabs = new ArrayList<>();
+    private List<BSTab> tabs = new ArrayList<>();
 
     // no wrapper; required=false because may be auto-generated
     @Override
     @XmlElement(name = "tab", required = false)
-    public List<BS3Tab> getTabs() {
+    public List<BSTab> getTabs() {
         return tabs;
     }
 
-    public void setTabs(final List<BS3Tab> tabs) {
+    public void setTabs(final List<BSTab> tabs) {
         this.tabs = tabs;
     }
 
 
-    private BS3TabGroupOwner owner;
+    private BSTabGroupOwner owner;
 
     /**
      * Owner.
@@ -105,11 +105,11 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
      * </p>
      */
     @XmlTransient
-    public BS3TabGroupOwner getOwner() {
+    public BSTabGroupOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final BS3TabGroupOwner owner) {
+    public void setOwner(final BSTabGroupOwner owner) {
         this.owner = owner;
     }
 
@@ -132,7 +132,7 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
     @Override
     @XmlTransient
     @Programmatic
-    public BS3Grid getGrid() {
+    public BSGrid getGrid() {
         return getOwner().getGrid();
     }
 

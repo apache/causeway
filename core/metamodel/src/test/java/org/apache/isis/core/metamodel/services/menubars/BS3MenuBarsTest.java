@@ -25,7 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.isis.applib.services.jaxb.IsisSchemas;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
@@ -47,7 +47,7 @@ public class BS3MenuBarsTest {
     @Test
     public void happy_case() throws Exception {
 
-        BS3MenuBars menuBars = jaxbService.fromXml(BS3MenuBars.class,
+        BSMenuBars menuBars = jaxbService.fromXml(BSMenuBars.class,
                 _Resources.loadAsString(getClass(), "menubars.layout.xml", StandardCharsets.UTF_8));
 
         Map<String, String> schemas = jaxbService.toXsd(menuBars, IsisSchemas.INCLUDE);

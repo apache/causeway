@@ -16,22 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
 /**
- * As per <a href="https://getbootstrap.com/docs/4.6/layout/grid/#grid-options">grid options</a>
- *
- * @since 1.x {@index}
+ * @since 2.0 {@index}
  */
-public enum Size {
-    XS,
-    SM,
-    MD,
-    LG,
-    XL;
-	
-    public String toCssClassFragment() {
-        return name().toLowerCase();
-    }
-	
+public interface HasCssId {
+
+    /**
+     * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
+     */
+    String getId();
+
 }

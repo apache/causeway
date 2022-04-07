@@ -18,10 +18,10 @@
  */
 package org.apache.isis.applib.services.menu;
 
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBars;
 
 /**
- * Returns the {@link BS3MenuBars} instance (bootstrap3-specific subtype of
+ * Returns the {@link BSMenuBars} instance (bootstrap3-specific subtype of
  * {@link org.apache.isis.applib.layout.menubars.MenuBars}, for the UI.
  *
  * <p>
@@ -49,9 +49,9 @@ public interface MenuBarsLoaderService {
     boolean supportsReloading();
 
     /**
-     * Returns a new instance of a {@link BS3MenuBars} if possible,
+     * Returns a new instance of a {@link BSMenuBars} if possible,
      * else <tt>null</tt>.
      */
-    BS3MenuBars menuBars();
+    BSMenuBars menuBars();
 
 }

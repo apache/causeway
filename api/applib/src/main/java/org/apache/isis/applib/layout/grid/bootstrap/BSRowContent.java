@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
@@ -27,13 +27,13 @@ import org.apache.isis.applib.annotation.Programmatic;
  * Common superclass for any content of a row.
  *
  * <p>
- *     Most commonly the content of a row is {@link BS3Col col}umns, but it may be either of the
- *     {@link BS3ClearFix clearfix} classes.
+ *     Most commonly the content of a row is {@link BSCol col}umns, but it may be either of the
+ *     {@link BSClearFix clearfix} classes.
  * </p>
  *
  * @since 1.x {@index}
  */
-public abstract class BS3RowContent extends BS3ElementAbstract {
+public abstract class BSRowContent extends BSElementAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -52,7 +52,7 @@ public abstract class BS3RowContent extends BS3ElementAbstract {
     }
 
 
-    private BS3RowContentOwner owner;
+    private BSRowContentOwner owner;
 
     /**
      * Owner.
@@ -62,18 +62,18 @@ public abstract class BS3RowContent extends BS3ElementAbstract {
      * </p>
      */
     @XmlTransient
-    public BS3RowContentOwner getOwner() {
+    public BSRowContentOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final BS3RowContentOwner owner) {
+    public void setOwner(final BSRowContentOwner owner) {
         this.owner = owner;
     }
 
     @Override
     @XmlTransient
     @Programmatic
-    public BS3Grid getGrid() {
+    public BSGrid getGrid() {
         return getOwner().getGrid();
     }
 

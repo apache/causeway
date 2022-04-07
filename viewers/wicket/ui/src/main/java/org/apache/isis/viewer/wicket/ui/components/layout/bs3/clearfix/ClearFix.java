@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3.clearfix;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
+import org.apache.isis.applib.layout.grid.bootstrap.BSClearFix;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -33,12 +33,12 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final String ID_COL = "clearfix";
 
-    private final BS3ClearFix bs3ClearFix;
+    private final BSClearFix bs3ClearFix;
 
     public ClearFix(
             final String id,
             final EntityModel entityModel,
-            final BS3ClearFix bs3ClearFix) {
+            final BSClearFix bs3ClearFix) {
 
         super(id, entityModel);
         this.bs3ClearFix = bs3ClearFix;

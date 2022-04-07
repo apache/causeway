@@ -44,12 +44,12 @@ import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
-import org.apache.isis.applib.layout.grid.bootstrap3.Size;
+import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
+import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
+import org.apache.isis.applib.layout.grid.bootstrap.Size;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -89,7 +89,7 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Bootstrap")
 @Log4j2
 public class GridSystemServiceBootstrap
-extends GridSystemServiceAbstract<BS3Grid> {
+extends GridSystemServiceAbstract<BSGrid> {
 
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
     public static final String SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
@@ -109,8 +109,8 @@ extends GridSystemServiceAbstract<BS3Grid> {
     }
 
     @Override
-    public Class<BS3Grid> gridImplementation() {
-        return BS3Grid.class;
+    public Class<BSGrid> gridImplementation() {
+        return BSGrid.class;
     }
 
     @Override
@@ -125,14 +125,14 @@ extends GridSystemServiceAbstract<BS3Grid> {
 
 
     @Override
-    public BS3Grid defaultGrid(final Class<?> domainClass) {
+    public BSGrid defaultGrid(final Class<?> domainClass) {
 
         try {
             final String content = _Resources.loadAsStringUtf8(getClass(), "GridFallbackLayout.xml");
             return Optional.ofNullable(content)
                     .map(xml -> gridReader.loadGrid(xml))
-                    .filter(BS3Grid.class::isInstance)
-                    .map(BS3Grid.class::cast)
+                    .filter(BSGrid.class::isInstance)
+                    .map(BSGrid.class::cast)
                     .map(bs3Grid -> withDomainClass(bs3Grid, domainClass))
                     .orElseGet(() -> fallback(domainClass))
                     ;
@@ -145,24 +145,24 @@ extends GridSystemServiceAbstract<BS3Grid> {
     // only ever called if fail to load DefaultGrid.layout.xml,
     // which *really* shouldn't happen
     //
-    private BS3Grid fallback(final Class<?> domainClass) {
-        final BS3Grid bs3Grid = withDomainClass(new BS3Grid(), domainClass);
+    private BSGrid fallback(final Class<?> domainClass) {
+        final BSGrid bs3Grid = withDomainClass(new BSGrid(), domainClass);
 
-        final BS3Row headerRow = new BS3Row();
+        final BSRow headerRow = new BSRow();
         bs3Grid.getRows().add(headerRow);
-        final BS3Col headerRowCol = new BS3Col();
+        final BSCol headerRowCol = new BSCol();
         headerRowCol.setSpan(12);
         headerRowCol.setUnreferencedActions(true);
         headerRowCol.setDomainObject(new DomainObjectLayoutData());
         headerRow.getCols().add(headerRowCol);
 
-        final BS3Row propsRow = new BS3Row();
+        final BSRow propsRow = new BSRow();
         bs3Grid.getRows().add(propsRow);
 
         // if no layout hints
         addFieldSetsToColumn(propsRow, 4, Arrays.asList("General"), true);
 
-        final BS3Col col = new BS3Col();
+        final BSCol col = new BSCol();
         col.setUnreferencedCollections(true);
         col.setSpan(12);
         propsRow.getCols().add(col);
@@ -170,19 +170,19 @@ extends GridSystemServiceAbstract<BS3Grid> {
         return bs3Grid;
     }
 
-    private static BS3Grid withDomainClass(final BS3Grid bs3Grid, final Class<?> domainClass) {
+    private static BSGrid withDomainClass(final BSGrid bs3Grid, final Class<?> domainClass) {
         bs3Grid.setDomainClass(domainClass);
         return bs3Grid;
     }
 
     static void addFieldSetsToColumn(
-            final BS3Row propsRow,
+            final BSRow propsRow,
             final int span,
             final List<String> memberGroupNames,
             final boolean unreferencedProperties) {
 
         if(span > 0 || unreferencedProperties) {
-            final BS3Col col = new BS3Col();
+            final BSCol col = new BSCol();
             col.setSpan(span); // in case we are here because of 'unreferencedProperties' needs setting
             propsRow.getCols().add(col);
             final List<String> leftMemberGroups = memberGroupNames;
@@ -204,7 +204,7 @@ extends GridSystemServiceAbstract<BS3Grid> {
             final Grid grid,
             final Class<?> domainClass) {
 
-        val bs3Grid = (BS3Grid) grid;
+        val bs3Grid = (BSGrid) grid;
         val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
 
         val oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
@@ -335,7 +335,7 @@ extends GridSystemServiceAbstract<BS3Grid> {
             final List<String> sortedMissingCollectionIds =
                     _Lists.map(sortedCollections, ObjectAssociation::getId);
 
-            final BS3TabGroup bs3TabGroup = gridModel.getTabGroupForUnreferencedCollectionsRef();
+            final BSTabGroup bs3TabGroup = gridModel.getTabGroupForUnreferencedCollectionsRef();
             if(bs3TabGroup != null) {
                 addCollectionsTo(
                         bs3TabGroup,
@@ -343,7 +343,7 @@ extends GridSystemServiceAbstract<BS3Grid> {
                         objectSpec,
                         layoutDataFactory::createCollectionLayoutData);
             } else {
-                final BS3Col bs3Col = gridModel.getColForUnreferencedCollectionsRef();
+                final BSCol bs3Col = gridModel.getColForUnreferencedCollectionsRef();
                 if(bs3Col != null) {
                     addCollectionsTo(
                         bs3Col,
@@ -451,7 +451,7 @@ extends GridSystemServiceAbstract<BS3Grid> {
         }
 
         if(!missingActionIds.isEmpty()) {
-            final BS3Col bs3Col = gridModel.getColForUnreferencedActionsRef();
+            final BSCol bs3Col = gridModel.getColForUnreferencedActionsRef();
             if(bs3Col != null) {
                 addActionsTo(
                         bs3Col,
@@ -496,7 +496,7 @@ extends GridSystemServiceAbstract<BS3Grid> {
     }
 
     private void addCollectionsTo(
-            final BS3Col tabRowCol,
+            final BSCol tabRowCol,
             final Collection<String> collectionIds,
             final Function<String, CollectionLayoutData> layoutFactory,
             final BiConsumer<String, CollectionLayoutData> onNewLayoutData) {
@@ -509,13 +509,13 @@ extends GridSystemServiceAbstract<BS3Grid> {
     }
 
     private void addCollectionsTo(
-            final BS3TabGroup tabGroup,
+            final BSTabGroup tabGroup,
             final Collection<String> collectionIds,
             final ObjectSpecification objectSpec,
             final Function<String, CollectionLayoutData> layoutFactory) {
 
         for (final String collectionId : collectionIds) {
-            final BS3Tab bs3Tab = new BS3Tab();
+            final BSTab bs3Tab = new BSTab();
 
             val feature = objectSpec.getCollectionElseFail(collectionId);
             val featureCanonicalFriendlyName = feature.getCanonicalFriendlyName();
@@ -524,11 +524,11 @@ extends GridSystemServiceAbstract<BS3Grid> {
             tabGroup.getTabs().add(bs3Tab);
             bs3Tab.setOwner(tabGroup);
 
-            final BS3Row tabRow = new BS3Row();
+            final BSRow tabRow = new BSRow();
             tabRow.setOwner(bs3Tab);
             bs3Tab.getRows().add(tabRow);
 
-            final BS3Col tabRowCol = new BS3Col();
+            final BSCol tabRowCol = new BSCol();
             tabRowCol.setSpan(12);
             tabRowCol.setSize(Size.MD);
             tabRowCol.setOwner(tabRow);
@@ -540,7 +540,7 @@ extends GridSystemServiceAbstract<BS3Grid> {
     }
 
     protected void addActionsTo(
-            final BS3Col bs3Col,
+            final BSCol bs3Col,
             final Collection<String> actionIds,
             final Function<String, ActionLayoutData> layoutFactory,
             final BiConsumer<String, ActionLayoutData> onNewLayoutData) {

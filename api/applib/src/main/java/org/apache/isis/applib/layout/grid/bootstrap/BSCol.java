@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ import org.apache.isis.commons.internal.primitives._Ints.Bound;
  * <p>
  *     Pretty much other content can be contained within a column, though most commonly it will be {@link FieldSet fieldset}s
  *     (a group of properties) or {@link CollectionLayoutData collection}s.  However, columns can also be used to
- *     contain further {@link BS3Row row}s (creating a nested grid of rows/cols/rows/cols) and {@link BS3TabGroup tabgroup}s.
+ *     contain further {@link BSRow row}s (creating a nested grid of rows/cols/rows/cols) and {@link BSTabGroup tabgroup}s.
  * </p>
  *
  * <p>
@@ -69,8 +69,8 @@ import org.apache.isis.commons.internal.primitives._Ints.Bound;
                 "metadataError"
         }
         )
-public class BS3Col extends BS3RowContent
-implements ActionLayoutDataOwner, BS3TabGroupOwner, BS3RowOwner, FieldSetOwner, HasCssId,
+public class BSCol extends BSRowContent
+implements ActionLayoutDataOwner, BSTabGroupOwner, BSRowOwner, FieldSetOwner, HasCssId,
 CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
 
     private static final long serialVersionUID = 1L;
@@ -129,7 +129,7 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
      * Whether this column should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
      *
      * <p>
-     *     Any layout must have precisely one column or {@link BS3TabGroup tabgroup} that has this attribute set.
+     *     Any layout must have precisely one column or {@link BSTabGroup tabgroup} that has this attribute set.
      * </p>
      */
     @XmlAttribute(required = false)
@@ -192,31 +192,31 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
 
 
 
-    private List<BS3Row> rows = new ArrayList<>();
+    private List<BSRow> rows = new ArrayList<>();
 
     // no wrapper
     @Override
     @XmlElement(name = "row", required = false)
-    public List<BS3Row> getRows() {
+    public List<BSRow> getRows() {
         return rows;
     }
 
-    public void setRows(final List<BS3Row> rows) {
+    public void setRows(final List<BSRow> rows) {
         this.rows = rows;
     }
 
 
 
-    private List<BS3TabGroup> tabGroups = new ArrayList<>();
+    private List<BSTabGroup> tabGroups = new ArrayList<>();
 
     // no wrapper
     @Override
     @XmlElement(name = "tabGroup", required = false)
-    public List<BS3TabGroup> getTabGroups() {
+    public List<BSTabGroup> getTabGroups() {
         return tabGroups;
     }
 
-    public void setTabGroups(final List<BS3TabGroup> tabGroups) {
+    public void setTabGroups(final List<BSTabGroup> tabGroups) {
         this.tabGroups = tabGroups;
     }
 

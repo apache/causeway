@@ -16,9 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -27,39 +26,24 @@ import javax.xml.bind.annotation.XmlType;
  *
  *
  * <p>
- *     It is rendered as a (eg) &lt;div class=&quot;clearfix visible-xs-block ...&quot;&gt;
+ *     It is rendered as a (eg) &lt;div class=&quot;clearfix hidden-xs ...&quot;&gt;
  * </p>
  *
  * @since 1.x {@index}
  */
 @XmlRootElement(
-        name = "clearFixVisible"
+        name = "clearFixHidden"
         )
 @XmlType(
-        name = "clearFixVisible"
+        name = "clearFixHidden"
         )
-public class BS3ClearFixVisible extends BS3ClearFix {
+public class BSClearFixHidden extends BSClearFix {
 
     private static final long serialVersionUID = 1L;
 
-    private CssDisplay cssDisplay;
-
-
-    @XmlAttribute(required = true)
-    public CssDisplay getCssDisplay() {
-        return cssDisplay;
-    }
-
-    public void setCssDisplay(final CssDisplay cssDisplay) {
-        this.cssDisplay = cssDisplay;
-    }
-
-
     @Override
     public String toCssClass() {
-        return "clearfix "
-        		+ getDisplayFragment(getCssDisplay(), getSize())
+        return "clearfix " + getDisplayFragment(CssDisplay.NONE, getSize())
                 + (getCssClass() != null? " " + getCssClass(): "");
     }
-
 }

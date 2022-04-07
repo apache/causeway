@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.menubars.bootstrap3;
+package org.apache.isis.applib.layout.menubars.bootstrap;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -45,14 +45,14 @@ import lombok.ToString;
         }
         )
 @ToString(of = "named")
-public class BS3Menu implements Menu, Serializable {
+public class BSMenu implements Menu, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public BS3Menu() {
+    public BSMenu() {
     }
 
-    public BS3Menu(String named) {
+    public BSMenu(String named) {
         this.named = named;
     }
 
@@ -84,11 +84,11 @@ public class BS3Menu implements Menu, Serializable {
 
 
 
-    private List<BS3MenuSection> sections = new ArrayList<>();
+    private List<BSMenuSection> sections = new ArrayList<>();
 
     // no wrapper
     @XmlElement(name = "section", required = true)
-    public List<BS3MenuSection> getSections() {
+    public List<BSMenuSection> getSections() {
         return sections;
     }
 
