@@ -133,7 +133,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                     .map(xml -> gridReader.loadGrid(xml))
                     .filter(BSGrid.class::isInstance)
                     .map(BSGrid.class::cast)
-                    .map(bs3Grid -> withDomainClass(bs3Grid, domainClass))
+                    .map(bsGrid -> withDomainClass(bsGrid, domainClass))
                     .orElseGet(() -> fallback(domainClass))
                     ;
         } catch (final Exception e) {
@@ -146,10 +146,10 @@ extends GridSystemServiceAbstract<BSGrid> {
     // which *really* shouldn't happen
     //
     private BSGrid fallback(final Class<?> domainClass) {
-        final BSGrid bs3Grid = withDomainClass(new BSGrid(), domainClass);
+        final BSGrid bsGrid = withDomainClass(new BSGrid(), domainClass);
 
         final BSRow headerRow = new BSRow();
-        bs3Grid.getRows().add(headerRow);
+        bsGrid.getRows().add(headerRow);
         final BSCol headerRowCol = new BSCol();
         headerRowCol.setSpan(12);
         headerRowCol.setUnreferencedActions(true);
@@ -157,7 +157,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         headerRow.getCols().add(headerRowCol);
 
         final BSRow propsRow = new BSRow();
-        bs3Grid.getRows().add(propsRow);
+        bsGrid.getRows().add(propsRow);
 
         // if no layout hints
         addFieldSetsToColumn(propsRow, 4, Arrays.asList("General"), true);
@@ -167,12 +167,12 @@ extends GridSystemServiceAbstract<BSGrid> {
         col.setSpan(12);
         propsRow.getCols().add(col);
 
-        return bs3Grid;
+        return bsGrid;
     }
 
-    private static BSGrid withDomainClass(final BSGrid bs3Grid, final Class<?> domainClass) {
-        bs3Grid.setDomainClass(domainClass);
-        return bs3Grid;
+    private static BSGrid withDomainClass(final BSGrid bsGrid, final Class<?> domainClass) {
+        bsGrid.setDomainClass(domainClass);
+        return bsGrid;
     }
 
     static void addFieldSetsToColumn(
@@ -204,18 +204,18 @@ extends GridSystemServiceAbstract<BSGrid> {
             final Grid grid,
             final Class<?> domainClass) {
 
-        val bs3Grid = (BSGrid) grid;
+        val bsGrid = (BSGrid) grid;
         val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
 
         val oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
         val oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
         val objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
 
-        val propertyLayoutDataById = bs3Grid.getAllPropertiesById();
-        val collectionLayoutDataById = bs3Grid.getAllCollectionsById();
-        val actionLayoutDataById = bs3Grid.getAllActionsById();
+        val propertyLayoutDataById = bsGrid.getAllPropertiesById();
+        val collectionLayoutDataById = bsGrid.getAllCollectionsById();
+        val actionLayoutDataById = bsGrid.getAllActionsById();
 
-        val gridModelIfValid = _GridModel.createFrom(bs3Grid);
+        val gridModelIfValid = _GridModel.createFrom(bsGrid);
         if(!gridModelIfValid.isPresent()) { // only present if valid
             return false;
         }
@@ -335,18 +335,18 @@ extends GridSystemServiceAbstract<BSGrid> {
             final List<String> sortedMissingCollectionIds =
                     _Lists.map(sortedCollections, ObjectAssociation::getId);
 
-            final BSTabGroup bs3TabGroup = gridModel.getTabGroupForUnreferencedCollectionsRef();
-            if(bs3TabGroup != null) {
+            final BSTabGroup bsTabGroup = gridModel.getTabGroupForUnreferencedCollectionsRef();
+            if(bsTabGroup != null) {
                 addCollectionsTo(
-                        bs3TabGroup,
+                        bsTabGroup,
                         sortedMissingCollectionIds,
                         objectSpec,
                         layoutDataFactory::createCollectionLayoutData);
             } else {
-                final BSCol bs3Col = gridModel.getColForUnreferencedCollectionsRef();
-                if(bs3Col != null) {
+                final BSCol bsCol = gridModel.getColForUnreferencedCollectionsRef();
+                if(bsCol != null) {
                     addCollectionsTo(
-                        bs3Col,
+                        bsCol,
                         sortedMissingCollectionIds,
                         layoutDataFactory::createCollectionLayoutData,
                         collectionLayoutDataById::put);
@@ -451,10 +451,10 @@ extends GridSystemServiceAbstract<BSGrid> {
         }
 
         if(!missingActionIds.isEmpty()) {
-            final BSCol bs3Col = gridModel.getColForUnreferencedActionsRef();
-            if(bs3Col != null) {
+            final BSCol bsCol = gridModel.getColForUnreferencedActionsRef();
+            if(bsCol != null) {
                 addActionsTo(
-                        bs3Col,
+                        bsCol,
                         missingActionIds,
                         layoutDataFactory::createActionLayoutData,
                         actionLayoutDataById::put);
@@ -515,18 +515,18 @@ extends GridSystemServiceAbstract<BSGrid> {
             final Function<String, CollectionLayoutData> layoutFactory) {
 
         for (final String collectionId : collectionIds) {
-            final BSTab bs3Tab = new BSTab();
+            final BSTab bsTab = new BSTab();
 
             val feature = objectSpec.getCollectionElseFail(collectionId);
             val featureCanonicalFriendlyName = feature.getCanonicalFriendlyName();
 
-            bs3Tab.setName(featureCanonicalFriendlyName);
-            tabGroup.getTabs().add(bs3Tab);
-            bs3Tab.setOwner(tabGroup);
+            bsTab.setName(featureCanonicalFriendlyName);
+            tabGroup.getTabs().add(bsTab);
+            bsTab.setOwner(tabGroup);
 
             final BSRow tabRow = new BSRow();
-            tabRow.setOwner(bs3Tab);
-            bs3Tab.getRows().add(tabRow);
+            tabRow.setOwner(bsTab);
+            bsTab.getRows().add(tabRow);
 
             final BSCol tabRowCol = new BSCol();
             tabRowCol.setSpan(12);
@@ -540,14 +540,14 @@ extends GridSystemServiceAbstract<BSGrid> {
     }
 
     protected void addActionsTo(
-            final BSCol bs3Col,
+            final BSCol bsCol,
             final Collection<String> actionIds,
             final Function<String, ActionLayoutData> layoutFactory,
             final BiConsumer<String, ActionLayoutData> onNewLayoutData) {
 
         for (String actionId : actionIds) {
             val actionLayoutData = layoutFactory.apply(actionId);
-            addActionTo(bs3Col, actionLayoutData);
+            addActionTo(bsCol, actionLayoutData);
             onNewLayoutData.accept(actionId, actionLayoutData);
         }
     }

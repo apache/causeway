@@ -32,6 +32,6 @@
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED,
         xmlns = {
                 @javax.xml.bind.annotation.XmlNs(
-                        namespaceURI = "http://isis.apache.org/applib/layout/grid/bootstrap3", prefix = "bs3")
+                        namespaceURI = "http://isis.apache.org/applib/layout/grid/bootstrap3", prefix = "bs")
         })
 package org.apache.isis.applib.layout.grid.bootstrap;

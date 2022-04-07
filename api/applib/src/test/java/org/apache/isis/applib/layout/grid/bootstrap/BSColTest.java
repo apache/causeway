@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.grid.bootstrap3;
+package org.apache.isis.applib.layout.grid.bootstrap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,41 +25,43 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
 import org.apache.isis.applib.layout.grid.bootstrap.Size;
 import org.apache.isis.applib.layout.grid.bootstrap.SizeSpan;
 
-public class SizeSpanTest {
+public class BSColTest {
 
-    SizeSpan ss;
-
+    BSCol bsCol;
     @Before
     public void setUp() throws Exception {
-        ss = new SizeSpan();
+        bsCol = new BSCol();
     }
 
     @Test
-    public void with_no_offset() throws Exception {
+    public void size_and_span() throws Exception {
+        bsCol.setSize(Size.MD);
+        bsCol.setSpan(4);
 
-        ss.setSize(Size.MD);
-        ss.setSpan(4);
-
-        final String s = ss.toCssClassFragment();
-
-        assertThat(s, is(equalTo("col-md-4")));
-
+        assertThat(bsCol.toCssClass(), is(equalTo("col-md-4")));
     }
 
     @Test
-    public void with_offset() throws Exception {
+    public void extra_css_class() throws Exception {
+        bsCol.setSize(Size.SM);
+        bsCol.setSpan(8);
+        bsCol.setCssClass("foobar");
 
-        ss.setSize(Size.SM);
-        ss.setSpan(0);
-        ss.setOffset(true);
-
-        final String s = ss.toCssClassFragment();
-
-        assertThat(s, is(equalTo("offset-0")));
-
+        assertThat(bsCol.toCssClass(), is(equalTo("col-sm-8 foobar")));
     }
 
+    @Test
+    public void with_additional_classes() throws Exception {
+        bsCol.setSize(Size.SM);
+        bsCol.setSpan(6);
+
+        bsCol.getSizeSpans().add(SizeSpan.with(Size.MD, 5));
+        bsCol.getSizeSpans().add(SizeSpan.offset(Size.MD, 2));
+
+        assertThat(bsCol.toCssClass(), is(equalTo("col-sm-6 col-md-5 offset-2")));
+    }
 }

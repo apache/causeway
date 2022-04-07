@@ -42,16 +42,16 @@ implements HasDynamicallyVisibleContent {
 
     private static final String ID_ROW_CONTENTS = "rowContents";
 
-    private final BSRow bs3Row;
+    private final BSRow bsRow;
 
     public Row(
             final String id,
             final EntityModel entityModel,
-            final BSRow bs3Row) {
+            final BSRow bsRow) {
 
         super(id, entityModel);
 
-        this.bs3Row = bs3Row;
+        this.bsRow = bsRow;
 
         buildGui();
     }
@@ -61,22 +61,22 @@ implements HasDynamicallyVisibleContent {
         final RepeatingViewWithDynamicallyVisibleContent rv =
                 new RepeatingViewWithDynamicallyVisibleContent(ID_ROW_CONTENTS);
 
-        for(final BSRowContent bs3RowContent: bs3Row.getCols()) {
+        for(final BSRowContent bsRowContent: bsRow.getCols()) {
 
             final String id = rv.newChildId();
 
             final WebMarkupContainer rowContent;
-            if(bs3RowContent instanceof BSCol) {
+            if(bsRowContent instanceof BSCol) {
 
-                final BSCol bs3Col = (BSCol) bs3RowContent;
-                final Col col = new Col(id, getModel(), bs3Col);
+                final BSCol bsCol = (BSCol) bsRowContent;
+                final Col col = new Col(id, getModel(), bsCol);
 
                 visible = visible || col.isVisible();
                 rowContent = col;
 
-            } else if (bs3RowContent instanceof BSClearFix) {
-                final BSClearFix bs3ClearFix = (BSClearFix) bs3RowContent;
-                rowContent = new ClearFix(id, getModel(), bs3ClearFix);
+            } else if (bsRowContent instanceof BSClearFix) {
+                final BSClearFix bsClearFix = (BSClearFix) bsRowContent;
+                rowContent = new ClearFix(id, getModel(), bsClearFix);
             } else {
                 throw new IllegalStateException("Unrecognized implementation of BSRowContent");
             }
@@ -87,7 +87,7 @@ implements HasDynamicallyVisibleContent {
         final WebMarkupContainer panel = this;
         if(visible) {
             Wkt.cssAppend(panel, "row");
-            Wkt.cssAppend(panel, bs3Row.getCssClass());
+            Wkt.cssAppend(panel, bsRow.getCssClass());
             panel.add(rv);
         } else {
             WktComponents.permanentlyHide(panel, rv.getId());

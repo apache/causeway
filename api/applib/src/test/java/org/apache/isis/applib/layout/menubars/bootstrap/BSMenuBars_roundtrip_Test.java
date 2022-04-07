@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.layout.menubars.bootstrap3;
+package org.apache.isis.applib.layout.menubars.bootstrap;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,7 +31,7 @@ import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuSection;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 
-public class BS3MenuBars_roundtrip_Test {
+public class BSMenuBars_roundtrip_Test {
 
     private JaxbService jaxbService;
 

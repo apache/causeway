@@ -99,18 +99,18 @@ public class ObjectViewFx extends VBox {
             }
 
             @Override
-            protected Pane newRow(final Pane container, final BSRow bs3Row) {
+            protected Pane newRow(final Pane container, final BSRow bsRow) {
                 val uiRow = _fx.newFlowPane(container);
                 return uiRow;
             }
 
             @Override
-            protected Pane newCol(final Pane container, final BSCol bs3col) {
+            protected Pane newCol(final Pane container, final BSCol bscol) {
 
                 val uiCol = _fx.newVBox(container);
 
                 // note: also account for insets and padding, assuming that 98% seems reasonable
-                double realtiveWidthWithRespectToContainer = bs3col.getSpan()*0.98/12;
+                double realtiveWidthWithRespectToContainer = bscol.getSpan()*0.98/12;
 
                 uiCol.prefWidthProperty().bind(
                         container.widthProperty().multiply(realtiveWidthWithRespectToContainer));

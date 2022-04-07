@@ -65,15 +65,15 @@ implements HasDynamicallyVisibleContent {
     private static final String ID_FIELD_SETS = "fieldSets";
     private static final String ID_COLLECTIONS = "collections";
 
-    private final BSCol bs3Col;
+    private final BSCol bsCol;
 
     public Col(
             final String id,
-            final EntityModel entityModel, final BSCol bs3Col) {
+            final EntityModel entityModel, final BSCol bsCol) {
 
         super(id, entityModel);
 
-        this.bs3Col = bs3Col;
+        this.bsCol = bsCol;
 
         buildGui();
     }
@@ -82,17 +82,17 @@ implements HasDynamicallyVisibleContent {
 
         setRenderBodyOnly(true);
 
-        if(bs3Col.getSpan() == 0) {
+        if(bsCol.getSpan() == 0) {
             WktComponents.permanentlyHide(this, ID_COL);
             return;
         }
 
         final WebMarkupContainer div = new WebMarkupContainer(ID_COL);
 
-        Wkt.cssAppend(div, bs3Col.toCssClass());
+        Wkt.cssAppend(div, bsCol.toCssClass());
 
         // icon/title
-        final DomainObjectLayoutData domainObject = bs3Col.getDomainObject();
+        final DomainObjectLayoutData domainObject = bsCol.getDomainObject();
 
         final WebMarkupContainer actionOwner;
         final String actionIdToUse;
@@ -120,7 +120,7 @@ implements HasDynamicallyVisibleContent {
 
         // actions
         // (rendering depends on whether also showing the icon/title)
-        final List<ActionLayoutData> actionLayoutDataList = bs3Col.getActions();
+        final List<ActionLayoutData> actionLayoutDataList = bsCol.getActions();
 
         val visibleActions = _NullSafe.stream(actionLayoutDataList)
         .filter(actionLayoutData -> actionLayoutData.getMetadataError() == null)
@@ -144,7 +144,7 @@ implements HasDynamicallyVisibleContent {
 
 
         // rows
-        final List<BSRow> rows = _Lists.newArrayList(this.bs3Col.getRows());
+        final List<BSRow> rows = _Lists.newArrayList(this.bsCol.getRows());
         if(!rows.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(ID_ROWS, rows);
             div.add(rowsRv);
@@ -156,10 +156,10 @@ implements HasDynamicallyVisibleContent {
 
         // tab groups
         final List<BSTabGroup> tabGroupsWithNonEmptyTabs =
-                _NullSafe.stream(bs3Col.getTabGroups())
+                _NullSafe.stream(bsCol.getTabGroups())
                 .filter(_NullSafe::isPresent)
-                .filter(bs3TabGroup ->
-                        _NullSafe.stream(bs3TabGroup.getTabs())
+                .filter(bsTabGroup ->
+                        _NullSafe.stream(bsTabGroup.getTabs())
                                 .anyMatch(BSTab.Predicates.notEmpty())
                 )
                 .collect(Collectors.toList());
@@ -168,10 +168,10 @@ implements HasDynamicallyVisibleContent {
             final RepeatingViewWithDynamicallyVisibleContent tabGroupRv =
                     new RepeatingViewWithDynamicallyVisibleContent(ID_TAB_GROUPS);
 
-            for (BSTabGroup bs3TabGroup : tabGroupsWithNonEmptyTabs) {
+            for (BSTabGroup bsTabGroup : tabGroupsWithNonEmptyTabs) {
 
                 final String id = tabGroupRv.newChildId();
-                final List<BSTab> tabs = _NullSafe.stream(bs3TabGroup.getTabs())
+                final List<BSTab> tabs = _NullSafe.stream(bsTabGroup.getTabs())
                         .filter(BSTab.Predicates.notEmpty())
                         .collect(Collectors.toList());
 
@@ -180,17 +180,17 @@ implements HasDynamicallyVisibleContent {
                     // shouldn't occur; previously have filtered these out
                     throw new IllegalStateException("Cannot render tabGroup with no tabs");
                 case 1:
-                    if(bs3TabGroup.isCollapseIfOne() == null || bs3TabGroup.isCollapseIfOne()) {
-                        final BSTab bs3Tab = tabs.get(0);
+                    if(bsTabGroup.isCollapseIfOne() == null || bsTabGroup.isCollapseIfOne()) {
+                        final BSTab bsTab = tabs.get(0);
                         // render the rows of the one-and-only tab of this tab group.
-                        final List<BSRow> tabRows = bs3Tab.getRows();
+                        final List<BSRow> tabRows = bsTab.getRows();
                         final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(id, tabRows);
                         tabGroupRv.add(rowsRv);
                         break;
                     }
                     // else fall through...
                 default:
-                    final WebMarkupContainer tabGroup = new TabGroupPanel(id, getModel(), bs3TabGroup);
+                    final WebMarkupContainer tabGroup = new TabGroupPanel(id, getModel(), bsTabGroup);
 
                     tabGroupRv.add(tabGroup);
                     break;
@@ -207,7 +207,7 @@ implements HasDynamicallyVisibleContent {
 
         // fieldsets
         final List<FieldSet> fieldSetsWithProperties =
-                _NullSafe.stream(bs3Col.getFieldSets())
+                _NullSafe.stream(bsCol.getFieldSets())
                 .filter(_NullSafe::isPresent)
                 .filter(fieldSet -> ! _NullSafe.isEmpty(fieldSet.getProperties()))
                 .collect(Collectors.toList());
@@ -232,7 +232,7 @@ implements HasDynamicallyVisibleContent {
 
         // collections
         final List<CollectionLayoutData> collections =
-                _NullSafe.stream(bs3Col.getCollections())
+                _NullSafe.stream(bsCol.getCollections())
                 .filter(
                         new Predicate<CollectionLayoutData>() {
                             @Override
@@ -286,9 +286,9 @@ implements HasDynamicallyVisibleContent {
         final RepeatingViewWithDynamicallyVisibleContent rowRv =
                 new RepeatingViewWithDynamicallyVisibleContent(owningId);
 
-        for(final BSRow bs3Row: rows) {
+        for(final BSRow bsRow: rows) {
             final String id = rowRv.newChildId();
-            final Row row = new Row(id, getModel(), bs3Row);
+            final Row row = new Row(id, getModel(), bsRow);
             rowRv.add(row);
         }
         return rowRv;

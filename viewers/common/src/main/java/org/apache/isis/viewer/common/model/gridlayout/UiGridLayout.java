@@ -71,9 +71,9 @@ public class UiGridLayout {
 
         // recursively visit the grid
         gridData.get()
-        .ifPresent(bs3Grid->{
-            for(val bs3Row: bs3Grid.getRows()) {
-                visitRow(bs3Row, visitor.rootContainer, visitor);
+        .ifPresent(bsGrid->{
+            for(val bsRow: bsGrid.getRows()) {
+                visitRow(bsRow, visitor.rootContainer, visitor);
             }
         });
 
@@ -114,17 +114,17 @@ public class UiGridLayout {
         return bSGrid;
     }
 
-    private <C, T> void visitRow(final BSRow bs3Row, final C container, final Visitor<C, T> visitor) {
+    private <C, T> void visitRow(final BSRow bsRow, final C container, final Visitor<C, T> visitor) {
 
-        val uiRow = visitor.newRow(container, bs3Row);
+        val uiRow = visitor.newRow(container, bsRow);
 
-        for(val bs3RowContent: bs3Row.getCols()) {
-            if(bs3RowContent instanceof BSCol) {
+        for(val bsRowContent: bsRow.getCols()) {
+            if(bsRowContent instanceof BSCol) {
 
-                visitCol((BSCol) bs3RowContent, uiRow, visitor);
+                visitCol((BSCol) bsRowContent, uiRow, visitor);
 
-            } else if (bs3RowContent instanceof BSClearFix) {
-                visitor.onClearfix(uiRow, (BSClearFix) bs3RowContent);
+            } else if (bsRowContent instanceof BSClearFix) {
+                visitor.onClearfix(uiRow, (BSClearFix) bsRowContent);
             } else {
                 throw new IllegalStateException("Unrecognized implementation of BSRowContent");
             }
@@ -159,8 +159,8 @@ public class UiGridLayout {
         }
 
         if(hasRows) {
-            for(val bs3Row: bSCol.getRows()) {
-                visitRow(bs3Row, uiCol, visitor);
+            for(val bsRow: bSCol.getRows()) {
+                visitRow(bsRow, uiCol, visitor);
             }
         }
 
@@ -172,15 +172,15 @@ public class UiGridLayout {
 
     private <C, T> void visitTabGroup(final BSTabGroup bS3ColTabGroup, final C container, final Visitor<C, T> visitor) {
         val uiTabGroup = visitor.newTabGroup(container, bS3ColTabGroup);
-        for(val bs3Tab: bS3ColTabGroup.getTabs()) {
-            visitTab(bs3Tab, uiTabGroup, visitor);
+        for(val bsTab: bS3ColTabGroup.getTabs()) {
+            visitTab(bsTab, uiTabGroup, visitor);
         }
     }
 
     private <C, T> void visitTab(final BSTab bSTab, final T container, final Visitor<C, T> visitor) {
         val uiTab = visitor.newTab(container, bSTab);
-        for(val bs3Row: bSTab.getRows()) {
-            visitRow(bs3Row, uiTab, visitor);
+        for(val bsRow: bSTab.getRows()) {
+            visitRow(bsRow, uiTab, visitor);
         }
     }
 

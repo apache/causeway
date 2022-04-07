@@ -117,15 +117,15 @@ public class BSTab extends BSElementAbstract implements BSRowOwner {
                          * 'foundContent' flag.
                          */
                         @Override
-                        public void preVisit(final BSTab bs3Tab) {
-                            if(bs3Tab == thisBs3Tab) {
+                        public void preVisit(final BSTab bsTab) {
+                            if(bsTab == thisBs3Tab) {
                                 foundContent.set(false);
                                 visitingTheNode.set(true);
                             }
                         }
 
-                        @Override public void postVisit(final BSTab bs3Tab) {
-                            if(bs3Tab == thisBs3Tab) {
+                        @Override public void postVisit(final BSTab bsTab) {
+                            if(bsTab == thisBs3Tab) {
                                 visitingTheNode.set(false);
                             }
                         }

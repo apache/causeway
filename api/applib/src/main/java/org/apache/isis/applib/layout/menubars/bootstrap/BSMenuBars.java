@@ -158,29 +158,29 @@ public class BSMenuBars extends org.apache.isis.applib.layout.menubars.MenuBarsA
 
     private void traverseMenuBar(final BSMenuBar menuBar, final Consumer<ServiceActionLayoutData> visitor) {
 
-        final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
+        final Visitor bsVisitor = visitor instanceof Visitor ? (Visitor) visitor : null;
 
-        if(bs3Visitor != null) {
-            bs3Visitor.preVisit(menuBar);
-            bs3Visitor.visit(menuBar);
+        if(bsVisitor != null) {
+            bsVisitor.preVisit(menuBar);
+            bsVisitor.visit(menuBar);
         }
 
         for (BSMenu menu : menuBar.getMenus()) {
             traverseMenu(menu, visitor);
         }
 
-        if(bs3Visitor != null) {
-            bs3Visitor.postVisit(menuBar);
+        if(bsVisitor != null) {
+            bsVisitor.postVisit(menuBar);
         }
     }
 
     private void traverseMenu(final BSMenu menu, final Consumer<ServiceActionLayoutData> visitor) {
 
-        final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
+        final Visitor bsVisitor = visitor instanceof Visitor ? (Visitor) visitor : null;
 
-        if(bs3Visitor != null) {
-            bs3Visitor.preVisit(menu);
-            bs3Visitor.visit(menu);
+        if(bsVisitor != null) {
+            bsVisitor.preVisit(menu);
+            bsVisitor.visit(menu);
         }
 
         final List<BSMenuSection> sections = menu.getSections();
@@ -188,17 +188,17 @@ public class BSMenuBars extends org.apache.isis.applib.layout.menubars.MenuBarsA
             traverseSection(section, visitor);
         }
 
-        if(bs3Visitor != null) {
-            bs3Visitor.postVisit(menu);
+        if(bsVisitor != null) {
+            bsVisitor.postVisit(menu);
         }
     }
 
     private void traverseSection(final BSMenuSection section, final Consumer<ServiceActionLayoutData> visitor) {
 
-        final Visitor bs3Visitor = visitor instanceof Visitor ? (Visitor) visitor : null;
-        if(bs3Visitor != null) {
-            bs3Visitor.preVisit(section);
-            bs3Visitor.visit(section);
+        final Visitor bsVisitor = visitor instanceof Visitor ? (Visitor) visitor : null;
+        if(bsVisitor != null) {
+            bsVisitor.preVisit(section);
+            bsVisitor.visit(section);
         }
 
         final List<ServiceActionLayoutData> actions = section.getServiceActions();
@@ -206,8 +206,8 @@ public class BSMenuBars extends org.apache.isis.applib.layout.menubars.MenuBarsA
             visitor.accept(action);
         }
 
-        if(bs3Visitor != null) {
-            bs3Visitor.postVisit(section);
+        if(bsVisitor != null) {
+            bsVisitor.postVisit(section);
         }
     }
 

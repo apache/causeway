@@ -41,17 +41,17 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
     private static final String ID_TAB_PANEL = "tabPanel";
     private static final String ID_ROWS = "rows";
 
-    private final BSTab bs3Tab;
+    private final BSTab bsTab;
 
-    public TabPanel(final String id, final EntityModel model, final BSTab bs3Tab) {
-        this(id, model, bs3Tab, null);
+    public TabPanel(final String id, final EntityModel model, final BSTab bsTab) {
+        this(id, model, bsTab, null);
     }
 
-    public TabPanel(final String id, final EntityModel model, final BSTab bs3Tab, final RepeatingViewWithDynamicallyVisibleContent repeatingViewWithDynamicallyVisibleContent) {
+    public TabPanel(final String id, final EntityModel model, final BSTab bsTab, final RepeatingViewWithDynamicallyVisibleContent repeatingViewWithDynamicallyVisibleContent) {
         super(id);
 
-        this.bs3Tab = bs3Tab;
-        buildGui(model, bs3Tab, repeatingViewWithDynamicallyVisibleContent);
+        this.bsTab = bsTab;
+        buildGui(model, bsTab, repeatingViewWithDynamicallyVisibleContent);
     }
 
     /**
@@ -60,20 +60,20 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
      */
     @Override
     public String getHintDisambiguator() {
-        return bs3Tab.getName();
+        return bsTab.getName();
     }
 
-    protected void buildGui(final EntityModel model, final BSTab bs3Tab, final RepeatingViewWithDynamicallyVisibleContent rvIfAny) {
+    protected void buildGui(final EntityModel model, final BSTab bsTab, final RepeatingViewWithDynamicallyVisibleContent rvIfAny) {
 
         final WebMarkupContainer div = new WebMarkupContainer(ID_TAB_PANEL);
 
-        final RepeatingViewWithDynamicallyVisibleContent rv = rvIfAny != null ? rvIfAny : newRows(model, bs3Tab);
+        final RepeatingViewWithDynamicallyVisibleContent rv = rvIfAny != null ? rvIfAny : newRows(model, bsTab);
         div.add(rv);
         visible = visible || rv.isVisible();
 
         final WebMarkupContainer panel = this;
         if(visible) {
-            Wkt.cssAppend(panel, bs3Tab.getCssClass());
+            Wkt.cssAppend(panel, bsTab.getCssClass());
             panel.add(div);
         } else {
             WktComponents.permanentlyHide(panel, div.getId());
@@ -81,12 +81,12 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
     }
 
-    public static RepeatingViewWithDynamicallyVisibleContent newRows(final EntityModel model, final BSTab bs3Tab) {
+    public static RepeatingViewWithDynamicallyVisibleContent newRows(final EntityModel model, final BSTab bsTab) {
         final RepeatingViewWithDynamicallyVisibleContent rv = new RepeatingViewWithDynamicallyVisibleContent(ID_ROWS);
 
-        for(final BSRow bs3Row: bs3Tab.getRows()) {
+        for(final BSRow bsRow: bsTab.getRows()) {
             final String newChildId = rv.newChildId();
-            final Row row = new Row(newChildId, model, bs3Row);
+            final Row row = new Row(newChildId, model, bsRow);
             rv.add(row);
         }
         return rv;

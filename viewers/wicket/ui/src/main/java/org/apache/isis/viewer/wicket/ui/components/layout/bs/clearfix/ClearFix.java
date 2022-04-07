@@ -33,15 +33,15 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final String ID_COL = "clearfix";
 
-    private final BSClearFix bs3ClearFix;
+    private final BSClearFix bsClearFix;
 
     public ClearFix(
             final String id,
             final EntityModel entityModel,
-            final BSClearFix bs3ClearFix) {
+            final BSClearFix bsClearFix) {
 
         super(id, entityModel);
-        this.bs3ClearFix = bs3ClearFix;
+        this.bsClearFix = bsClearFix;
 
         buildGui();
     }
@@ -49,10 +49,10 @@ extends PanelAbstract<ManagedObject, EntityModel> {
     private void buildGui() {
 
         setRenderBodyOnly(true);
-        Wkt.cssAppend(this, bs3ClearFix.getCssClass());
+        Wkt.cssAppend(this, bsClearFix.getCssClass());
 
         final WebMarkupContainer div = new WebMarkupContainer(ID_COL);
-        Wkt.cssAppend(div, bs3ClearFix.toCssClass());
+        Wkt.cssAppend(div, bsClearFix.toCssClass());
 
         this.addOrReplace(div);
     }

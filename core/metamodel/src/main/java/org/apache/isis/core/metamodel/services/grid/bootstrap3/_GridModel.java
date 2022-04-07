@@ -75,40 +75,40 @@ final class _GridModel {
          * - ensure that all Ids are different<br>
          * - ensure that there is exactly one col with the
          * unreferencedActions, unreferencedProperties and unreferencedCollections attribute set.
-         * @param bs3Grid
+         * @param bsGrid
          * @return empty if not valid
          */
-        public static Optional<_GridModel> createFrom(BSGrid bs3Grid) {
+        public static Optional<_GridModel> createFrom(BSGrid bsGrid) {
 
             val gridModel = new _GridModel();
 
-            bs3Grid.visit(new BSGrid.VisitorAdapter(){
+            bsGrid.visit(new BSGrid.VisitorAdapter(){
                 @Override
-                public void visit(final BSRow bs3Row) {
-                    final String id = bs3Row.getId();
+                public void visit(final BSRow bsRow) {
+                    final String id = bsRow.getId();
                     if(id == null) {
                         return;
                     }
                     if(gridModel.contains(id)) {
-                        bs3Row.setMetadataError("There is another element in the grid with this id: " + id);
+                        bsRow.setMetadataError("There is another element in the grid with this id: " + id);
                         gridModel.gridErrorsDetected = true;
                         return;
                     }
-                    gridModel.putRow(id, bs3Row);
+                    gridModel.putRow(id, bsRow);
                 }
 
                 @Override
-                public void visit(final BSCol bs3Col) {
-                    final String id = bs3Col.getId();
+                public void visit(final BSCol bsCol) {
+                    final String id = bsCol.getId();
                     if(id == null) {
                         return;
                     }
                     if(gridModel.contains(id)) {
-                        bs3Col.setMetadataError("There is another element in the grid with this id: " + id);
+                        bsCol.setMetadataError("There is another element in the grid with this id: " + id);
                         gridModel.gridErrorsDetected = true;
                         return;
                     }
-                    gridModel.putCol(id, bs3Col);
+                    gridModel.putCol(id, bsCol);
                 }
 
                 @Override
@@ -133,26 +133,26 @@ final class _GridModel {
                 return Optional.empty();
             }
 
-            bs3Grid.visit(new BSGrid.VisitorAdapter(){
+            bsGrid.visit(new BSGrid.VisitorAdapter(){
 
                 @Override
-                public void visit(final BSCol bs3Col) {
-                    if(isSet(bs3Col.isUnreferencedActions())) {
+                public void visit(final BSCol bsCol) {
+                    if(isSet(bsCol.isUnreferencedActions())) {
                         if(gridModel.colForUnreferencedActionsRef != null) {
-                            bs3Col.setMetadataError("More than one col with 'unreferencedActions' attribute set");
+                            bsCol.setMetadataError("More than one col with 'unreferencedActions' attribute set");
                         } else if(gridModel.fieldSetForUnreferencedActionsRef != null) {
-                            bs3Col.setMetadataError("Already found a fieldset with 'unreferencedActions' attribute set");
+                            bsCol.setMetadataError("Already found a fieldset with 'unreferencedActions' attribute set");
                         } else {
-                            gridModel.colForUnreferencedActionsRef=bs3Col;
+                            gridModel.colForUnreferencedActionsRef=bsCol;
                         }
                     }
-                    if(isSet(bs3Col.isUnreferencedCollections())) {
+                    if(isSet(bsCol.isUnreferencedCollections())) {
                         if(gridModel.colForUnreferencedCollectionsRef != null) {
-                            bs3Col.setMetadataError("More than one col with 'unreferencedCollections' attribute set");
+                            bsCol.setMetadataError("More than one col with 'unreferencedCollections' attribute set");
                         } else if(gridModel.tabGroupForUnreferencedCollectionsRef != null) {
-                            bs3Col.setMetadataError("Already found a tabgroup with 'unreferencedCollections' attribute set");
+                            bsCol.setMetadataError("Already found a tabgroup with 'unreferencedCollections' attribute set");
                         } else {
-                            gridModel.colForUnreferencedCollectionsRef = bs3Col;
+                            gridModel.colForUnreferencedCollectionsRef = bsCol;
                         }
                     }
                 }
@@ -178,27 +178,27 @@ final class _GridModel {
                 }
 
                 @Override
-                public void visit(final BSTabGroup bs3TabGroup) {
-                    if(isSet(bs3TabGroup.isUnreferencedCollections())) {
+                public void visit(final BSTabGroup bsTabGroup) {
+                    if(isSet(bsTabGroup.isUnreferencedCollections())) {
                         if(gridModel.tabGroupForUnreferencedCollectionsRef != null) {
-                            bs3TabGroup.setMetadataError("More than one tabgroup with 'unreferencedCollections' attribute set");
+                            bsTabGroup.setMetadataError("More than one tabgroup with 'unreferencedCollections' attribute set");
                         } else if(gridModel.colForUnreferencedCollectionsRef != null) {
-                            bs3TabGroup.setMetadataError("Already found a column with 'unreferencedCollections' attribute set");
+                            bsTabGroup.setMetadataError("Already found a column with 'unreferencedCollections' attribute set");
                         } else {
-                            gridModel.tabGroupForUnreferencedCollectionsRef = bs3TabGroup;
+                            gridModel.tabGroupForUnreferencedCollectionsRef = bsTabGroup;
                         }
                     }
                 }
             });
 
             if(gridModel.colForUnreferencedActionsRef == null && gridModel.fieldSetForUnreferencedActionsRef == null) {
-                bs3Grid.getMetadataErrors().add("No column and also no fieldset found with the 'unreferencedActions' attribute set");
+                bsGrid.getMetadataErrors().add("No column and also no fieldset found with the 'unreferencedActions' attribute set");
             }
             if(gridModel.fieldSetForUnreferencedPropertiesRef == null) {
-                bs3Grid.getMetadataErrors().add("No fieldset found with the 'unreferencedProperties' attribute set");
+                bsGrid.getMetadataErrors().add("No fieldset found with the 'unreferencedProperties' attribute set");
             }
             if(gridModel.colForUnreferencedCollectionsRef == null && gridModel.tabGroupForUnreferencedCollectionsRef == null) {
-                bs3Grid.getMetadataErrors().add("No column and also no tabgroup found with the 'unreferencedCollections' attribute set");
+                bsGrid.getMetadataErrors().add("No column and also no tabgroup found with the 'unreferencedCollections' attribute set");
             }
 
             final boolean hasErrors =
@@ -212,12 +212,12 @@ final class _GridModel {
 
         }
 
-        private void putRow(String id, BSRow bs3Row) {
-            rows.put(id, bs3Row);
+        private void putRow(String id, BSRow bsRow) {
+            rows.put(id, bsRow);
             allIds.add(id);
         }
-        private void putCol(String id, BSCol bs3Col) {
-            cols.put(id, bs3Col);
+        private void putCol(String id, BSCol bsCol) {
+            cols.put(id, bsCol);
             allIds.add(id);
         }
         private void putFieldSet(String id, FieldSet fieldSet) {

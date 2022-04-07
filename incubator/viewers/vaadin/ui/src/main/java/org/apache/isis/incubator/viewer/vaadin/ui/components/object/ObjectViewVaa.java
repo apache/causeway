@@ -106,7 +106,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newRow(final HasComponents container, final BSRow bs3Row) {
+            protected HasComponents newRow(final HasComponents container, final BSRow bsRow) {
                 val uiRow = _vaa.add(container, new FlexLayout());
 
                 uiRow.setWidthFull();
@@ -123,11 +123,11 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newCol(final HasComponents container, final BSCol bs3col) {
+            protected HasComponents newCol(final HasComponents container, final BSCol bscol) {
 
                 val uiCol = _vaa.add(container, new VerticalLayout());
 
-                final int span = bs3col.getSpan();
+                final int span = bscol.getSpan();
                 ((FlexLayout)container).setFlexGrow(span, uiCol);
                 val widthEm = String.format("%dem", span * 3); // 1em ~ 16px
                 uiCol.setWidth(null); // clear preset width style

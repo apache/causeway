@@ -51,22 +51,22 @@ implements HasDynamicallyVisibleContent {
     private final ComponentHintKey selectedTabHintKey;
     private final EntityModel entityModel;
 
-    private static List<ITab> tabsFor(final EntityModel entityModel, final BSTabGroup bs3TabGroup) {
+    private static List<ITab> tabsFor(final EntityModel entityModel, final BSTabGroup bsTabGroup) {
         final List<ITab> tabs = new ArrayList<>();
 
-        final List<BSTab> tablist = _NullSafe.stream(bs3TabGroup.getTabs())
+        final List<BSTab> tablist = _NullSafe.stream(bsTabGroup.getTabs())
                 .filter(BSTab.Predicates.notEmpty())
                 .collect(Collectors.toList());
 
-        for (val bs3Tab : tablist) {
-            val repeatingViewWithDynamicallyVisibleContent = TabPanel.newRows(entityModel, bs3Tab);
-            String tabName = bs3Tab.getName();
+        for (val bsTab : tablist) {
+            val repeatingViewWithDynamicallyVisibleContent = TabPanel.newRows(entityModel, bsTab);
+            String tabName = bsTab.getName();
             tabs.add(new AbstractTab(Model.of(tabName)) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
                 public Panel getPanel(final String panelId) {
-                    return new TabPanel(panelId, entityModel, bs3Tab, repeatingViewWithDynamicallyVisibleContent);
+                    return new TabPanel(panelId, entityModel, bsTab, repeatingViewWithDynamicallyVisibleContent);
                 }
 
                 @Override
@@ -78,8 +78,8 @@ implements HasDynamicallyVisibleContent {
         return tabs;
     }
 
-    public TabGroupPanel(final String id, final EntityModel entityModel, final BSTabGroup bs3TabGroup) {
-        super(id, tabsFor(entityModel, bs3TabGroup));
+    public TabGroupPanel(final String id, final EntityModel entityModel, final BSTabGroup bsTabGroup) {
+        super(id, tabsFor(entityModel, bsTabGroup));
         this.entityModel = entityModel;
 
         this.selectedTabHintKey = ComponentHintKey.create(entityModel.getCommonContext(), this, SESSION_ATTR_SELECTED_TAB);

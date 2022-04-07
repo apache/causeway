@@ -45,7 +45,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final String ID_ROWS = "rows";
 
-    private final BSGrid bs3Page;
+    private final BSGrid bsPage;
 
     public static Optional<BSGridPanel> extraContentForMixin(final String id, final ActionModel actionModel) {
         final ObjectAction action = actionModel.getAction();
@@ -57,11 +57,11 @@ extends PanelAbstract<ManagedObject, EntityModel> {
                 val targetAdapterForMixin = action.realTargetAdapter(actionModel.getActionOwner());
 
                 return Facets.bootstrapGrid(mixinSpec, targetAdapterForMixin)
-                .map(bs3Grid->{
+                .map(bsGrid->{
                     val commonContext = actionModel.getCommonContext();
                     val entityModelForMixin =
                             EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
-                    return new BSGridPanel(id, entityModelForMixin, bs3Grid);
+                    return new BSGridPanel(id, entityModelForMixin, bsGrid);
                 });
 
             }
@@ -70,21 +70,21 @@ extends PanelAbstract<ManagedObject, EntityModel> {
     }
 
 
-    public BSGridPanel(final String id, final EntityModel entityModel, final BSGrid bs3Grid) {
+    public BSGridPanel(final String id, final EntityModel entityModel, final BSGrid bsGrid) {
         super(id, entityModel);
-        this.bs3Page = bs3Grid;
+        this.bsPage = bsGrid;
         buildGui();
     }
 
     private void buildGui() {
 
-        Wkt.cssAppend(this, bs3Page.getCssClass());
+        Wkt.cssAppend(this, bsPage.getCssClass());
 
         final RepeatingView rv = new RepeatingView(ID_ROWS);
 
-        for(final BSRow bs3Row: this.bs3Page.getRows()) {
+        for(final BSRow bsRow: this.bsPage.getRows()) {
             final String id = rv.newChildId();
-            final WebMarkupContainer row = new Row(id, getModel(), bs3Row);
+            final WebMarkupContainer row = new Row(id, getModel(), bsRow);
             rv.add(row);
         }
         add(rv);

@@ -114,88 +114,88 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
 
 
     public interface Visitor extends Grid.Visitor {
-        void preVisit(final BSGrid bs3Grid);
-        void visit(final BSGrid bs3Grid);
-        void postVisit(final BSGrid bs3Grid);
-        void preVisit(final BSRow bs3Row);
-        void visit(final BSRow bs3Row);
-        void postVisit(final BSRow bs3Row);
-        void preVisit(final BSCol bs3Col);
-        void visit(final BSCol bs3Col);
-        void postVisit(final BSCol bs3Col);
-        void visit(final BSClearFix bs3ClearFix);
-        void preVisit(final BSTabGroup bs3TabGroup);
-        void visit(final BSTabGroup bs3TabGroup);
-        void postVisit(final BSTabGroup bs3TabGroup);
-        void preVisit(final BSTab bs3Tab);
-        void visit(final BSTab bs3Tab);
-        void postVisit(final BSTab bs3Tab);
+        void preVisit(final BSGrid bsGrid);
+        void visit(final BSGrid bsGrid);
+        void postVisit(final BSGrid bsGrid);
+        void preVisit(final BSRow bsRow);
+        void visit(final BSRow bsRow);
+        void postVisit(final BSRow bsRow);
+        void preVisit(final BSCol bsCol);
+        void visit(final BSCol bsCol);
+        void postVisit(final BSCol bsCol);
+        void visit(final BSClearFix bsClearFix);
+        void preVisit(final BSTabGroup bsTabGroup);
+        void visit(final BSTabGroup bsTabGroup);
+        void postVisit(final BSTabGroup bsTabGroup);
+        void preVisit(final BSTab bsTab);
+        void visit(final BSTab bsTab);
+        void postVisit(final BSTab bsTab);
     }
 
     public static class VisitorAdapter extends Grid.VisitorAdapter implements Visitor {
-        @Override public void preVisit(final BSGrid bs3Grid) { }
-        @Override public void visit(final BSGrid bs3Grid) { }
-        @Override public void postVisit(final BSGrid bs3Grid) { }
+        @Override public void preVisit(final BSGrid bsGrid) { }
+        @Override public void visit(final BSGrid bsGrid) { }
+        @Override public void postVisit(final BSGrid bsGrid) { }
 
-        @Override public void preVisit(final BSRow bs3Row) { }
-        @Override public void visit(final BSRow bs3Row) { }
-        @Override public void postVisit(final BSRow bs3Row) { }
+        @Override public void preVisit(final BSRow bsRow) { }
+        @Override public void visit(final BSRow bsRow) { }
+        @Override public void postVisit(final BSRow bsRow) { }
 
-        @Override public void preVisit(final BSCol bs3Col) { }
-        @Override public void visit(final BSCol bs3Col) { }
-        @Override public void postVisit(final BSCol bs3Col) { }
+        @Override public void preVisit(final BSCol bsCol) { }
+        @Override public void visit(final BSCol bsCol) { }
+        @Override public void postVisit(final BSCol bsCol) { }
 
-        @Override public void visit(final BSClearFix bs3ClearFix) { }
+        @Override public void visit(final BSClearFix bsClearFix) { }
 
-        @Override public void preVisit(final BSTabGroup bs3TabGroup) { }
-        @Override public void visit(final BSTabGroup bs3TabGroup) { }
-        @Override public void postVisit(final BSTabGroup bs3TabGroup) { }
+        @Override public void preVisit(final BSTabGroup bsTabGroup) { }
+        @Override public void visit(final BSTabGroup bsTabGroup) { }
+        @Override public void postVisit(final BSTabGroup bsTabGroup) { }
 
-        @Override public void preVisit(final BSTab bs3Tab) { }
-        @Override public void visit(final BSTab bs3Tab) { }
-        @Override public void postVisit(final BSTab bs3Tab) { }
+        @Override public void preVisit(final BSTab bsTab) { }
+        @Override public void visit(final BSTab bsTab) { }
+        @Override public void postVisit(final BSTab bsTab) { }
     }
 
     @Override
     public void visit(final Grid.Visitor visitor) {
-        final BSGrid.Visitor bs3Visitor = asBs3Visitor(visitor);
-        bs3Visitor.preVisit(this);
-        bs3Visitor.visit(this);
+        final BSGrid.Visitor bsVisitor = asBs3Visitor(visitor);
+        bsVisitor.preVisit(this);
+        bsVisitor.visit(this);
         traverseRows(this, visitor);
-        bs3Visitor.postVisit(this);
+        bsVisitor.postVisit(this);
     }
 
     protected void traverseRows(final BSRowOwner rowOwner, final Grid.Visitor visitor) {
-        final BSGrid.Visitor bs3Visitor = asBs3Visitor(visitor);
+        final BSGrid.Visitor bsVisitor = asBs3Visitor(visitor);
         final List<BSRow> rows = rowOwner.getRows();
-        for (BSRow bs3Row : new ArrayList<>(rows)) {
-            bs3Row.setOwner(this);
-            bs3Visitor.preVisit(bs3Row);
-            bs3Visitor.visit(bs3Row);
-            traverseCols(visitor, bs3Row);
-            bs3Visitor.postVisit(bs3Row);
+        for (BSRow bsRow : new ArrayList<>(rows)) {
+            bsRow.setOwner(this);
+            bsVisitor.preVisit(bsRow);
+            bsVisitor.visit(bsRow);
+            traverseCols(visitor, bsRow);
+            bsVisitor.postVisit(bsRow);
         }
     }
 
-    private void traverseCols(final Grid.Visitor visitor, final BSRow bs3Row) {
-        final BSGrid.Visitor bs3Visitor = asBs3Visitor(visitor);
-        final List<BSRowContent> cols = bs3Row.getCols();
+    private void traverseCols(final Grid.Visitor visitor, final BSRow bsRow) {
+        final BSGrid.Visitor bsVisitor = asBs3Visitor(visitor);
+        final List<BSRowContent> cols = bsRow.getCols();
         for (BSRowContent rowContent : new ArrayList<>(cols)) {
-            rowContent.setOwner(bs3Row);
+            rowContent.setOwner(bsRow);
             if(rowContent instanceof BSCol) {
-                final BSCol bs3Col = (BSCol) rowContent;
-                bs3Visitor.preVisit(bs3Col);
-                bs3Visitor.visit(bs3Col);
-                traverseDomainObject(bs3Col, visitor);
-                traverseTabGroups(bs3Col, visitor);
-                traverseActions(bs3Col, visitor);
-                traverseFieldSets(bs3Col, visitor);
-                traverseCollections(bs3Col, visitor);
-                traverseRows(bs3Col, visitor);
-                bs3Visitor.postVisit(bs3Col);
+                final BSCol bsCol = (BSCol) rowContent;
+                bsVisitor.preVisit(bsCol);
+                bsVisitor.visit(bsCol);
+                traverseDomainObject(bsCol, visitor);
+                traverseTabGroups(bsCol, visitor);
+                traverseActions(bsCol, visitor);
+                traverseFieldSets(bsCol, visitor);
+                traverseCollections(bsCol, visitor);
+                traverseRows(bsCol, visitor);
+                bsVisitor.postVisit(bsCol);
             } else if (rowContent instanceof BSClearFix) {
-                final BSClearFix bs3ClearFix = (BSClearFix) rowContent;
-                bs3Visitor.visit(bs3ClearFix);
+                final BSClearFix bsClearFix = (BSClearFix) rowContent;
+                bsVisitor.visit(bsClearFix);
             } else {
                 throw new IllegalStateException(
                         "Unrecognized implementation of BSRowContent, " + rowContent);
@@ -203,40 +203,40 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
         }
     }
 
-    private void traverseDomainObject(final BSCol bs3Col, final Grid.Visitor visitor) {
-        final DomainObjectLayoutData domainObject = bs3Col.getDomainObject();
+    private void traverseDomainObject(final BSCol bsCol, final Grid.Visitor visitor) {
+        final DomainObjectLayoutData domainObject = bsCol.getDomainObject();
         if(domainObject == null) {
             return;
         }
-        domainObject.setOwner(bs3Col);
+        domainObject.setOwner(bsCol);
         visitor.visit(domainObject);
     }
 
     private void traverseTabGroups(
-            final BSTabGroupOwner bs3TabGroupOwner,
+            final BSTabGroupOwner bsTabGroupOwner,
             final Grid.Visitor visitor) {
-        final BSGrid.Visitor bs3Visitor = asBs3Visitor(visitor);
-        final List<BSTabGroup> tabGroups = bs3TabGroupOwner.getTabGroups();
-        for (BSTabGroup bs3TabGroup : new ArrayList<>(tabGroups)) {
-            bs3TabGroup.setOwner(bs3TabGroupOwner);
-            bs3Visitor.preVisit(bs3TabGroup);
-            bs3Visitor.visit(bs3TabGroup);
-            traverseTabs(bs3TabGroup, visitor);
-            bs3Visitor.postVisit(bs3TabGroup);
+        final BSGrid.Visitor bsVisitor = asBs3Visitor(visitor);
+        final List<BSTabGroup> tabGroups = bsTabGroupOwner.getTabGroups();
+        for (BSTabGroup bsTabGroup : new ArrayList<>(tabGroups)) {
+            bsTabGroup.setOwner(bsTabGroupOwner);
+            bsVisitor.preVisit(bsTabGroup);
+            bsVisitor.visit(bsTabGroup);
+            traverseTabs(bsTabGroup, visitor);
+            bsVisitor.postVisit(bsTabGroup);
         }
     }
 
     private void traverseTabs(
-            final BSTabOwner bs3TabOwner,
+            final BSTabOwner bsTabOwner,
             final Grid.Visitor visitor) {
-        final BSGrid.Visitor bs3Visitor = asBs3Visitor(visitor);
-        final List<BSTab> tabs = bs3TabOwner.getTabs();
+        final BSGrid.Visitor bsVisitor = asBs3Visitor(visitor);
+        final List<BSTab> tabs = bsTabOwner.getTabs();
         for (BSTab tab : new ArrayList<>(tabs)) {
-            tab.setOwner(bs3TabOwner);
-            bs3Visitor.preVisit(tab);
-            bs3Visitor.visit(tab);
+            tab.setOwner(bsTabOwner);
+            bsVisitor.preVisit(tab);
+            bsVisitor.visit(tab);
             traverseRows(tab, visitor);
-            bs3Visitor.postVisit(tab);
+            bsVisitor.postVisit(tab);
         }
     }
 
@@ -287,9 +287,9 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
 
         visit(new BSGrid.VisitorAdapter() {
             @Override
-            public void visit(final BSRow bs3Row) {
-                final String id = bs3Row.getId();
-                divsByCssId.put(id, bs3Row);
+            public void visit(final BSRow bsRow) {
+                final String id = bsRow.getId();
+                divsByCssId.put(id, bsRow);
             }
         });
         return divsByCssId;
