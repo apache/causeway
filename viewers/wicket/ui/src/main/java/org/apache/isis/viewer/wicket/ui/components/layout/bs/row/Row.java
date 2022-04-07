@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.layout.bs3.row;
+package org.apache.isis.viewer.wicket.ui.components.layout.bs.row;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
@@ -26,9 +26,9 @@ import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
 import org.apache.isis.applib.layout.grid.bootstrap.BSRowContent;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.clearfix.ClearFix;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.Col;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs.clearfix.ClearFix;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs.col.Col;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs.col.RepeatingViewWithDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.layout.bs3.clearfix;
+package org.apache.isis.viewer.wicket.ui.components.layout.bs.clearfix;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 

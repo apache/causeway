@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.layout.bs3.col;
+package org.apache.isis.viewer.wicket.ui.components.layout.bs.col;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -43,8 +43,8 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs.TabGroupPanel;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs.row.Row;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs.tabs.TabGroupPanel;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;

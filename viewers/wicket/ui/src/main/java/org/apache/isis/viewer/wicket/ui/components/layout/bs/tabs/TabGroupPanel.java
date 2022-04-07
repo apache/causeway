@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs;
+package org.apache.isis.viewer.wicket.ui.components.layout.bs.tabs;
 
 import java.util.ArrayList;
 import java.util.List;

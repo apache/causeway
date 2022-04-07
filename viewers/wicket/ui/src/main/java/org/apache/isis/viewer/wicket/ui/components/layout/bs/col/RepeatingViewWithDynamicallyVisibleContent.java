@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.layout.bs3.col;
+package org.apache.isis.viewer.wicket.ui.components.layout.bs.col;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;

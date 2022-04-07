@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.layout.bs3;
+package org.apache.isis.viewer.wicket.ui.components.layout.bs;
 
 import java.util.Optional;
 
@@ -32,13 +32,13 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
-public class BS3GridPanel
+public class BSGridPanel
 extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final long serialVersionUID = 1L;
@@ -47,7 +47,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
 
     private final BSGrid bs3Page;
 
-    public static Optional<BS3GridPanel> extraContentForMixin(final String id, final ActionModel actionModel) {
+    public static Optional<BSGridPanel> extraContentForMixin(final String id, final ActionModel actionModel) {
         final ObjectAction action = actionModel.getAction();
         if(action instanceof ObjectActionMixedIn) {
             final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) action;
@@ -61,7 +61,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
                     val commonContext = actionModel.getCommonContext();
                     val entityModelForMixin =
                             EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
-                    return new BS3GridPanel(id, entityModelForMixin, bs3Grid);
+                    return new BSGridPanel(id, entityModelForMixin, bs3Grid);
                 });
 
             }
@@ -70,7 +70,7 @@ extends PanelAbstract<ManagedObject, EntityModel> {
     }
 
 
-    public BS3GridPanel(final String id, final EntityModel entityModel, final BSGrid bs3Grid) {
+    public BSGridPanel(final String id, final EntityModel entityModel, final BSGrid bs3Grid) {
         super(id, entityModel);
         this.bs3Page = bs3Grid;
         buildGui();

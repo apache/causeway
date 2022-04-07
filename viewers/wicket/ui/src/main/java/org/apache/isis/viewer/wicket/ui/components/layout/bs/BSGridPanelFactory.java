@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.layout.bs3;
+package org.apache.isis.viewer.wicket.ui.components.layout.bs;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -30,14 +30,14 @@ import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactory
 import lombok.val;
 
 /**
- * {@link ComponentFactory} for {@link BS3GridPanel}.
+ * {@link ComponentFactory} for {@link BSGridPanel}.
  */
-public class Bs3GridPanelFactory extends EntityComponentFactoryAbstract {
+public class BSGridPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public Bs3GridPanelFactory() {
-        super(ComponentType.ENTITY, BS3GridPanel.class);
+    public BSGridPanelFactory() {
+        super(ComponentType.ENTITY, BSGridPanel.class);
     }
 
     @Override protected ApplicationAdvice appliesTo(final IModel<?> model) {
@@ -59,7 +59,7 @@ public class Bs3GridPanelFactory extends EntityComponentFactoryAbstract {
         val objectSpec = entityModel.getTypeOfSpecification();
 
         return Facets.bootstrapGrid(objectSpec, objectAdapter)
-                .map(grid->new BS3GridPanel(id, entityModel, grid))
+                .map(grid->new BSGridPanel(id, entityModel, grid))
                 .orElseThrow(); // empty case guarded against by appliesTo(...) above
     }
 }
