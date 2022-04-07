@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -39,8 +40,10 @@ import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetFromV
 import org.apache.isis.core.metamodel.facets.object.value.ImmutableFacetViaValueSemantics;
 import org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
+import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -94,12 +97,14 @@ extends FacetFactoryAbstract {
 
         val identifier = Identifier.classIdentifier(logicalType);
 
-        addAllFacetsForValueSemantics(identifier, valueClass, facetHolder, valueIfAny);
+        val valueFacetIfAny = addAllFacetsForValueSemantics(identifier, valueClass, facetHolder, valueIfAny);
+
+        emitValueFacetProcessed(facetHolder, _Casts.uncheckedCast(valueFacetIfAny));
     }
 
     // -- HELPER
 
-    private <T> void addAllFacetsForValueSemantics(
+    private <T> Optional<ValueFacet<T>> addAllFacetsForValueSemantics(
             final Identifier identifier,
             final Class<T> valueClass,
             final FacetHolder holder,
@@ -112,7 +117,8 @@ extends FacetFactoryAbstract {
                         + "the type was found to be annotated with @Value", valueClass);
                 // fall through, so gets a ValueFacet
             } else {
-                return;
+                // don't install a ValueFacet
+                return Optional.empty();
             }
         } else {
             log.debug("found {} ValueSemanticsProvider(s) for value type {}", semanticsProviders.size(), valueClass);
@@ -128,6 +134,15 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(MaxLengthFacetFromValueFacet.create(valueFacet, holder));
         addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, holder));
 
+        return Optional.of(valueFacet);
+    }
+
+    // optimization
+    private void emitValueFacetProcessed(
+            final FacetHolder holder,
+            final Optional<ValueFacet> valueFacetIfAny) {
+        _Casts.castTo(ObjectSpecificationDefault.class, holder)
+        .ifPresent(receiver->receiver.onValueFacetProcessed(valueFacetIfAny));
     }
 
     // -- DEPENDENCIES

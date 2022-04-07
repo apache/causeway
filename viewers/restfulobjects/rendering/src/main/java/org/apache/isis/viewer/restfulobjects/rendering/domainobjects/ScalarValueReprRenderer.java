@@ -22,7 +22,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
@@ -56,7 +55,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
     @Override
     public ScalarValueReprRenderer with(final ManagedObject objectAdapter) {
-        if (!Facets.valueIsPresent(objectAdapter.getSpecification())) {
+        if (!objectAdapter.getSpecification().isValue()) {
             throw ReprRendererException.create("Not an (encodable) value", objectAdapter.titleString());
         }
         String format = null; // TODO

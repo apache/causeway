@@ -330,13 +330,9 @@ public final class Facets {
 
     // -- VALUE FACET
 
-    public boolean valueIsPresent(final ObjectSpecification objectSpec) {
-        return objectSpec.containsFacet(ValueFacet.class);
-    }
-
     public static Predicate<ObjectSpecification> valueTypeMatches(final Predicate<Class<?>> typeMatcher) {
         return spec->
-            spec.lookupFacet(ValueFacet.class)
+            spec.valueFacet()
             .map(ValueFacet::getLogicalType)
             .map(LogicalType::getCorrespondingClass)
             .map(typeMatcher::test)
@@ -349,8 +345,7 @@ public final class Facets {
             final ParameterNegotiationModel parameterNegotiationModel,
             final int paramIndex) {
         val objectSpec = param.getElementType();
-        //if(!objectSpec.isValue()) return Optional.empty(); // optimization
-        return objectSpec.lookupFacet(ValueFacet.class)
+        return objectSpec.valueFacet()
         .<ObjectAction>flatMap(valueFacet->
             valueFacet.selectCompositeValueMixinForParameter(
                     parameterNegotiationModel,paramIndex));
@@ -361,8 +356,7 @@ public final class Facets {
             final ObjectFeature prop,
             final ManagedProperty managedProperty) {
         val objectSpec = prop.getElementType();
-        //if(!objectSpec.isValue()) return Optional.empty(); // optimization
-        return objectSpec.lookupFacet(ValueFacet.class)
+        return objectSpec.valueFacet()
         .<ObjectAction>flatMap(valueFacet->
             valueFacet.selectCompositeValueMixinForProperty(managedProperty));
     }
@@ -370,26 +364,36 @@ public final class Facets {
     @SuppressWarnings("unchecked")
     public <X> Stream<X> valueStreamSemantics(
             final ObjectSpecification objectSpec, final Class<X> requiredType) {
-        //if(!objectSpec.isValue()) return Stream.empty(); // optimization
-        return objectSpec.lookupFacet(ValueFacet.class)
+        return objectSpec.valueFacet()
         .map(valueFacet->valueFacet.streamValueSemantics(requiredType))
         .orElseGet(Stream::empty);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <X> boolean valueHasSemantics(
+            final ObjectSpecification objectSpec, final Class<X> requiredType) {
+        return objectSpec.valueFacet()
+        .map(valueFacet->valueFacet.streamValueSemantics(requiredType)
+                .findFirst()
+                .isPresent())
+        .orElse(false);
     }
 
     @SuppressWarnings("unchecked")
     public <X> Optional<ValueSemanticsProvider<X>> valueDefaultSemantics(
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
-        return objectSpec.lookupFacet(ValueFacet.class)
+        return objectSpec.valueFacet()
         .filter(valueFacet->requiredType.isAssignableFrom(valueFacet.getValueClass()))
-        .flatMap(ValueFacet::selectDefaultSemantics);
+        .flatMap(ValueFacet::selectDefaultSemantics)
+        .map(_Casts::uncheckedCast);
     }
 
     @SuppressWarnings("unchecked")
     public <X> Optional<ValueSerializer<X>> valueSerializer(
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
-        return objectSpec.lookupFacet(ValueFacet.class)
+        return objectSpec.valueFacet()
         .filter(valueFacet->requiredType.isAssignableFrom(valueFacet.getValueClass()))
         .map(valueFacet->(ValueSerializer<X>)valueFacet);
     }

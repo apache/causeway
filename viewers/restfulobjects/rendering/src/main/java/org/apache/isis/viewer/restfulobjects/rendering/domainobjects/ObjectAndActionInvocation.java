@@ -132,7 +132,7 @@ public class ObjectAndActionInvocation {
 
     //TODO[2449] need to check whether that strategy holds consistently
     private static boolean isScalarValue(final @NonNull ObjectSpecification spec) {
-        return Facets.valueIsPresent(spec);
+        return spec.isValue();
     }
 
     private static boolean isVector(final @NonNull ObjectSpecification spec) {

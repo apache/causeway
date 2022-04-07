@@ -90,7 +90,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
 
         val spec = valueAdapter.getSpecification();
 
-        if (Facets.valueIsPresent(spec)) {
+        if (spec.isValue()) {
             String format = null;
             final Class<?> valueType = spec.getCorrespondingClass();
             if(valueType == java.math.BigDecimal.class) {

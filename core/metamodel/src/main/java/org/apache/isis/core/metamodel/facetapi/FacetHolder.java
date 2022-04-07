@@ -23,10 +23,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 
 import lombok.NonNull;
 import lombok.val;
@@ -66,27 +63,6 @@ public interface FacetHolder extends HasMetaModelContext {
     default <T extends Facet> Optional<T> lookupNonFallbackFacet(
             final @NonNull Class<T> facetType) {
         return lookupFacet(facetType, facet->!facet.getPrecedence().isFallback());
-    }
-
-    // -- VALUE SEMANTICS LOOKUP
-
-    //TODO support qualified selection honoring (@Qualifier) ... all the logic is in ValueFacet
-    default boolean hasValueSemantics(
-            final @NonNull Class<?> requiredType) {
-        return lookupFacet(ValueFacet.class).stream()
-        .map(ValueFacet::getAllValueSemantics)
-        .flatMap(Can<ValueSemanticsProvider<?>>::stream)
-        .anyMatch(valueSemantics->requiredType.isAssignableFrom(valueSemantics.getClass()));
-    }
-
-    //TODO support qualified selection honoring (@Qualifier) ... all the logic is in ValueFacet
-    default <T> Stream<T> streamValueSemantics(
-            final @NonNull Class<T> requiredType) {
-        return lookupFacet(ValueFacet.class).stream()
-        .map(ValueFacet::getAllValueSemantics)
-        .flatMap(Can<ValueSemanticsProvider<?>>::stream)
-        .filter(valueSemantics->requiredType.isAssignableFrom(valueSemantics.getClass()))
-        .map(requiredType::cast);
     }
 
     // -- CONTAINS

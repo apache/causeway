@@ -150,12 +150,12 @@ implements
     private ValueFacet<T> valueFacet() {
         val feature = feature();
         val valueFacet = feature.getElementType()
-                .lookupFacet(ValueFacet.class)
+                .valueFacet()
                 .orElseThrow(()->_Exceptions.noSuchElement(
                         "Value type Property or Parameter %s is missing a ValueFacet",
                         feature.getFeatureIdentifier()));
 
-        return valueFacet;
+        return (ValueFacet<T>) valueFacet;
     }
 
     // -- DEPENDENCIES

@@ -383,6 +383,10 @@ public class JsonValueEncoderTest_asAdapter {
     private void allowingObjectSpecHasValue(final Class<?> valueClass) {
         context.checking(new Expectations() {
             {
+
+                allowing(mockObjectSpec).valueFacet();
+                will(returnValue(Optional.of(mockValueFacet)));
+
                 allowing(mockObjectSpec).getFacet(ValueFacet.class);
                 will(returnValue(mockValueFacet));
 
@@ -399,6 +403,10 @@ public class JsonValueEncoderTest_asAdapter {
     private <T extends Facet> void allowingObjectSpecHas(final Class<T> facetClass, final T facet) {
         context.checking(new Expectations() {
             {
+
+                allowing(mockObjectSpec).valueFacet();
+                will(returnValue(Optional.ofNullable(facet)));
+
                 allowing(mockObjectSpec).getFacet(facetClass);
                 will(returnValue(facet));
 

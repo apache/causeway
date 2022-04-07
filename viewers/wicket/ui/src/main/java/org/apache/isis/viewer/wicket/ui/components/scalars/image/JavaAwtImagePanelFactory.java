@@ -21,11 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.core.metamodel.valuesemantics.ImageValueSemantics;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
+
+import lombok.val;
 
 public class JavaAwtImagePanelFactory extends ComponentFactoryAbstract {
 
@@ -40,15 +42,15 @@ public class JavaAwtImagePanelFactory extends ComponentFactoryAbstract {
         if (!(model instanceof ScalarModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final ScalarModel scalarModel = (ScalarModel) model;
-        final ObjectSpecification specification = scalarModel.getScalarTypeSpec();
-        return appliesIf(specification != null
-                && specification.hasValueSemantics(ImageValueSemantics.class));
+        val scalarModel = (ScalarModel) model;
+        val typeSpec = scalarModel.getScalarTypeSpec();
+        return appliesIf(typeSpec != null
+                && Facets.valueHasSemantics(typeSpec, ImageValueSemantics.class));
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final ScalarModel scalarModel = (ScalarModel) model;
+        val scalarModel = (ScalarModel) model;
         return new JavaAwtImagePanel(id, scalarModel);
     }
 }

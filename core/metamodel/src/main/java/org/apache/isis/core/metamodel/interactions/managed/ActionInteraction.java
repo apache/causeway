@@ -203,7 +203,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
         val elementType = prop.getElementType();
 
         val valueFacet = elementType.isValue()
-                ? (ValueFacet<?>) elementType.getFacet(ValueFacet.class)
+                ? (ValueFacet<?>) elementType.valueFacet().orElse(null)
                 : null;
 
         if(valueFacet!=null
@@ -242,7 +242,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
         val elementType = param.getMetaModel().getElementType();
 
         val valueFacet = elementType.isValue()
-                ? (ValueFacet<?>) elementType.getFacet(ValueFacet.class)
+                ? (ValueFacet<?>) elementType.valueFacet().orElse(null)
                 : null;
         if(valueFacet!=null
                 && valueFacet.isCompositeValueType()

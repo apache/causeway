@@ -35,7 +35,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -157,7 +156,7 @@ public interface ManagedObject {
         }
 
         val spec = getSpecification();
-        val valueFacet = spec.getFacet(ValueFacet.class);
+        val valueFacet = spec.valueFacet().orElse(null);
 
         if(valueFacet==null) {
             return String.format("missing ValueFacet %s", spec.getCorrespondingClass());

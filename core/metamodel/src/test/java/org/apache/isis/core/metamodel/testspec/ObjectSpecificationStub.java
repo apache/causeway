@@ -30,6 +30,7 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -44,6 +45,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ActionScope;
@@ -392,5 +394,9 @@ implements ObjectSpecification {
                         .noneMatch(where -> where.includes(whereContext)));
     }
 
+    @Override
+    public Optional<ValueFacet> valueFacet() {
+        return _Casts.uncheckedCast(lookupFacet(ValueFacet.class));
+    }
 
 }

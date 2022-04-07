@@ -27,7 +27,6 @@ import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -63,7 +62,7 @@ class _BindingUtil {
         val spec = prop.getElementType();
 
         // value types should have associated parsers/formatters via value semantics
-        return spec.lookupFacet(ValueFacet.class)
+        return spec.valueFacet()
         .map(valueFacet->{
             val eitherRendererOrParser = format.requiresRenderer()
                 ? Either.<Renderer, Parser>left(valueFacet.selectRendererForPropertyElseFallback(prop))
@@ -92,7 +91,7 @@ class _BindingUtil {
         val spec = param.getElementType();
 
         // value types should have associated parsers/formatters via value semantics
-        return spec.lookupFacet(ValueFacet.class)
+        return spec.valueFacet()
         .map(valueFacet->{
             val eitherRendererOrParser = format.requiresRenderer()
                 ? Either.<Renderer, Parser>left(valueFacet.selectRendererForParameterElseFallback(param))
@@ -114,7 +113,7 @@ class _BindingUtil {
 
     boolean hasParser(final @NonNull OneToOneAssociation prop) {
         return prop.getElementType()
-                .lookupFacet(ValueFacet.class)
+                .valueFacet()
                 .map(valueFacet->valueFacet.selectRendererForProperty(prop).isPresent())
                 .orElse(false);
     }
@@ -123,7 +122,7 @@ class _BindingUtil {
         return isNonScalarParam(param)
                 ? false
                 : param.getElementType()
-                    .lookupFacet(ValueFacet.class)
+                    .valueFacet()
                     .map(valueFacet->valueFacet.selectRendererForParameter(param).isPresent())
                     .orElse(false);
     }

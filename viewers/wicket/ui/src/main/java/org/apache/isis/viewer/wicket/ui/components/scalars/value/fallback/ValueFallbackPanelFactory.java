@@ -21,10 +21,11 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.value.fallback;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+
+import lombok.val;
 
 /**
  * {@link ComponentFactory} for the {@link ValueFallbackPanel}.
@@ -43,8 +44,8 @@ extends ComponentFactoryScalarAbstract {
         if (!(model instanceof ScalarModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final ScalarModel scalarModel = (ScalarModel) model;
-        if(!Facets.valueIsPresent(scalarModel.getScalarTypeSpec())) {
+        val scalarModel = (ScalarModel) model;
+        if(!scalarModel.getScalarTypeSpec().isValue()) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final boolean hasChoices = scalarModel.hasChoices();
