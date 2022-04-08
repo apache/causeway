@@ -1,29 +1,30 @@
-= BS3MenuBars
+= BSGrid
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information within xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout] .
+This is the top-level for rendering the domain object's properties, collections and actions. It simply consists of a number of rows.
+
+The element is rendered as a <div class="...">
 
 == API
 
 [source,java]
-.BS3MenuBars.java
+.BSGrid.java
 ----
-class BS3MenuBars {
-  BS3MenuBars()
-  BS3MenuBar getPrimary()
-  void setPrimary(BS3MenuBar primary)
-  BS3MenuBar getSecondary()
-  void setSecondary(BS3MenuBar secondary)
-  BS3MenuBar getTertiary()
-  void setTertiary(BS3MenuBar tertiary)
-  BS3MenuBar menuBarFor(DomainServiceLayout.MenuBar menuBar)
-  void visit(Consumer<ServiceActionLayoutData> visitor)
-  String getMetadataError()     // <.>
-  void setMetadataError(String metadataError)
+class BSGrid {
+  String getCssClass()
+  void setCssClass(String cssClass)
+  List<BSRow> getRows()
+  void setRows(List<BSRow> rows)
+  List<String> getMetadataErrors()     // <.>
+  void setMetadataErrors(List<String> metadataErrors)
+  void visit(Grid.Visitor visitor)
+  LinkedHashMap<String, BSTab> getAllTabsByName()
+  LinkedHashMap<String, HasCssId> getAllCssId()
+  BSGrid getGrid()
 }
 ----
 
-<.> xref:#getMetadataError__[getMetadataError()]
+<.> xref:#getMetadataErrors__[getMetadataErrors()]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
@@ -31,7 +32,7 @@ For diagnostics; populated by the framework if and only if a metadata error.
 
 == Members
 
-[#getMetadataError__]
-=== getMetadataError()
+[#getMetadataErrors__]
+=== getMetadataErrors()
 
 For diagnostics; populated by the framework if and only if a metadata error.

@@ -29,10 +29,10 @@ class RestfulMediaType {
   public static final String APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION;
   public static final String APPLICATION_JSON_ERROR;
   public static final String APPLICATION_JSON_TYPE_ACTION_RESULT;
-  public static final String APPLICATION_XML_LAYOUT_BS3;
-  public static final String APPLICATION_JSON_LAYOUT_BS3;
-  public static final String APPLICATION_XML_OBJECT_LAYOUT_BS3;
-  public static final String APPLICATION_JSON_OBJECT_LAYOUT_BS3;
+  public static final String APPLICATION_XML_LAYOUT_BS;
+  public static final String APPLICATION_JSON_LAYOUT_BS;
+  public static final String APPLICATION_XML_OBJECT_LAYOUT_BS;
+  public static final String APPLICATION_JSON_OBJECT_LAYOUT_BS;
   public static final String APPLICATION_JSON_LAYOUT_MENUBARS;
   public static final String APPLICATION_XML_LAYOUT_MENUBARS;
   public static final String APPLICATION_XML_OBJECT;

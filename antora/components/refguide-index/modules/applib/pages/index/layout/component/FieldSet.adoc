@@ -74,7 +74,7 @@ As per <div id="...">...</div> : must be unique across entire page.
 
 Whether this fieldset should be used to hold any unreferenced actions (contributed or "native").
 
-Any layout must have precisely one fieldset or xref:refguide:applib:index/layout/grid/bootstrap3/BS3Col.adoc[BS3Col] that has this attribute set.
+Any layout must have precisely one fieldset or xref:refguide:applib:index/layout/grid/bootstrap/BSCol.adoc[BSCol] that has this attribute set.
 
 [#isUnreferencedProperties__]
 === isUnreferencedProperties()
