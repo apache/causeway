@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.commons.internal.os._OsUtil;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
+import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jpa.IsisModuleValAsciidocPersistenceJpa;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
@@ -45,6 +46,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 @Import({
     // App-Manifest (Configuration)
     DemoAppManifestJpa.class,
+    IsisModuleSecurityBypass.class, // <-- bypass authentication
 
     // Metamodel
     IsisModuleValAsciidocMetaModel.class,

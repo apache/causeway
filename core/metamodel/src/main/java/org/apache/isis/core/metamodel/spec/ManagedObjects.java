@@ -198,6 +198,7 @@ public final class ManagedObjects {
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
 
+
     /**
      *
      * @param managedObject
@@ -218,6 +219,16 @@ public final class ManagedObjects {
         return stringify(managedObject, separator)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
+
+    public static String stringifyElseUnidentified(
+            final @Nullable ManagedObject managedObject,
+            final @NonNull String separator) {
+        return stringify(managedObject, separator)
+                .orElseGet(()->isSpecified(managedObject)
+                        ? managedObject.getSpecification().getLogicalTypeName() + separator +"?"
+                        : "?" + separator + "?");
+    }
+
 
     // -- PACKING
 
@@ -585,25 +596,15 @@ public final class ManagedObjects {
         Optional<Bookmark> bookmark(final @Nullable ManagedObject adapter) {
 
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                    || adapter.getSpecification().isValue()) {
+                    || adapter.getSpecification().isValue()
+                    || !ManagedObjects.isIdentifiable(adapter)) {
                 return Optional.empty();
-            }
-
-            if(!ManagedObjects.isIdentifiable(adapter)) {
-                log.warn("about to create a random UUID bookmark for {}; this is probably an invalid code-path taken (TODO)",
-                        adapter.getSpecification());
             }
 
             return ManagedObjects.spec(adapter)
                     .map(ObjectSpecification::getMetaModelContext)
                     .map(MetaModelContext::getObjectManager)
                     .map(objectManager->objectManager.bookmarkObject(adapter));
-
-    //TODO[2686] strictly forbid dummy UUID bookmark creation
-//            return ManagedObjects.isIdentifiable(adapter)
-//                    ? objectManager(adapter)
-//                            .map(objectManager->objectManager.bookmarkObject(adapter))
-//                    : Optional.empty();
         }
     }
 
@@ -1159,5 +1160,6 @@ public final class ManagedObjects {
             }
         }
     }
+
 
 }

@@ -64,7 +64,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
      * hook method
      */
     protected StringBuilder linkRef(final StringBuilder buf) {
-        String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
+        final String objectRef = ManagedObjects.stringifyElseUnidentified(objectAdapter, "/");
         return buf.append("objects/").append(objectRef);
     }
 
