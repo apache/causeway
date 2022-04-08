@@ -64,9 +64,20 @@ public class JdoInventoryResource {
 
     @Action
     public JdoBook recommendedBookOfTheWeek() {
-        // for this test we do not care if we generate duplicates
-        val book = JdoBook.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
-        return repository.persist(book);
+        return repository.persist(
+                JdoBook.fromDto(recommendedBookOfTheWeekDto()));
+    }
+
+    @Action // REST stress test action
+    public BookDto recommendedBookOfTheWeekDto() {
+        return BookDto.builder()
+                .name("Book of the week")
+                .description("An awesome Book")
+                .price(12)
+                .author("Author")
+                .isbn("ISBN")
+                .publisher("Publisher")
+                .build();
     }
 
     @Action

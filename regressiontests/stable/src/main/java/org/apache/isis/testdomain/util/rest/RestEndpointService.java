@@ -88,7 +88,7 @@ public class RestEndpointService {
                         webAppContextPath.prependContextPath(this.restEasyConfiguration.getJaxrs().getDefaultPath())
                 );
 
-        log.info("new restful client created for {}", restRootPath);
+        log.debug("new restful client created for {}", restRootPath);
 
         val clientConfig = new RestfulClientConfig();
         clientConfig.setRestfulBase(restRootPath);
@@ -125,6 +125,18 @@ public class RestEndpointService {
 
         val response = request.post(args);
         val digest = client.digest(response, JdoBook.class);
+
+        return digest;
+    }
+
+    public ResponseDigest<BookDto> getRecommendedBookOfTheWeekDto(final RestfulClient client) {
+
+        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekDto/invoke");
+        val args = client.arguments()
+                .build();
+
+        val response = request.post(args);
+        val digest = client.digest(response, BookDto.class);
 
         return digest;
     }

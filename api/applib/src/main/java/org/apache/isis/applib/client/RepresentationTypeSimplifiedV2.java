@@ -104,7 +104,7 @@ public enum RepresentationTypeSimplifiedV2 {
 
     // -- HELPER
 
-    private static String trimQuotesIfAny(String s) {
+    private static String trimQuotesIfAny(final String s) {
         if(s.length()<2) {
             return s;
         }
@@ -118,7 +118,7 @@ public enum RepresentationTypeSimplifiedV2 {
 
     private static Optional<String> extractReprType(final @NonNull Stream<String> stringStream) {
         return stringStream
-                .peek(System.out::println)
+                //.peek(System.out::println)//debug
         .map(String::trim)
         .filter(_Strings::isNotEmpty)
         .filter(s->s.startsWith("repr-type"))

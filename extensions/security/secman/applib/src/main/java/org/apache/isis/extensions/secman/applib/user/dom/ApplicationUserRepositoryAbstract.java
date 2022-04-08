@@ -59,7 +59,7 @@ implements ApplicationUserRepository {
     @Inject private EventBusService eventBusService;
     @Inject RegexReplacer regexReplacer;
 
-    //@Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
+    // empty if no candidate is available
     @Autowired(required = false) @Qualifier("secman") PasswordEncoder passwordEncoder;
 
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
