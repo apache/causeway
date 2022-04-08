@@ -55,7 +55,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
@@ -225,7 +224,7 @@ public final class ManagedObjects {
             final @NonNull String separator) {
         return stringify(managedObject, separator)
                 .orElseGet(()->isSpecified(managedObject)
-                        ? managedObject.getSpecification().getLogicalTypeName() + separator +"?"
+                        ? managedObject.getSpecification().getLogicalTypeName() + separator + "?"
                         : "?" + separator + "?");
     }
 
@@ -585,26 +584,6 @@ public final class ManagedObjects {
 
         private String getDefaultTitle(final ManagedObject managedObject) {
             return "A" + (" " + managedObject.getSpecification().getSingularName()).toLowerCase();
-        }
-    }
-
-    // -- BOOKMARK UTILITIES
-
-    @UtilityClass
-    static final class BookmarkUtil {
-
-        Optional<Bookmark> bookmark(final @Nullable ManagedObject adapter) {
-
-            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                    || adapter.getSpecification().isValue()
-                    || !ManagedObjects.isIdentifiable(adapter)) {
-                return Optional.empty();
-            }
-
-            return ManagedObjects.spec(adapter)
-                    .map(ObjectSpecification::getMetaModelContext)
-                    .map(MetaModelContext::getObjectManager)
-                    .map(objectManager->objectManager.bookmarkObject(adapter));
         }
     }
 
