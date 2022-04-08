@@ -20,12 +20,24 @@
 | `ViewModel.viewModelInit(String memento)` removed
 | use a single (String) argument constructor instead; this will allow Java Records to be used as viewmodels (future work)
 
-|
-|
+| `MetamodelEvent` as provided with _metamodel_ moved
+| moved to _applib_; we introduced _interface_ `MetamodelListener` for convenience to maybe use instead
+[source, java]
+.Example
+----
+@Service
+public class SeedService implements MetamodelListener {
+/..
+    @Override
+    public void onMetamodelLoaded() {
+        // seed database entities
+    }
+}
+---- 
 
 |===
 
-== Configuration
+== Commons
 
 Following configuration options changed:
 [cols="2a,3a", options="header"]
@@ -34,6 +46,10 @@ Following configuration options changed:
 
 | previously
 | new
+
+| `Result<T>` removed
+| replaced by `Try<T>`; also promoting `Either<L, R>` to non-internal, 
+and introducing `Railway<F, S>` 
 
 |===
 
