@@ -333,7 +333,7 @@ public interface ManagedObject {
         }
 
         @Override
-        public final  Optional<Bookmark> getBookmarkRefreshed() {
+        public final Optional<Bookmark> getBookmarkRefreshed() {
             // silently ignore invalidation, when the pojo is an entity
             if(!getSpecification().isEntity()) {
                 bookmarkLazy.clear();
@@ -350,7 +350,9 @@ public interface ManagedObject {
             bookmarkLazy.set(Optional.ofNullable(replacer.apply(old)));
         }
 
-        // guards against, non identifiable objects
+        // guards against non-identifiable objects;
+        // historically, we allowed non-identifiable to be handled by the objectManager,
+        // which as a fallback creates 'random' UUIDs
         private Optional<Bookmark> bookmark(final @Nullable ManagedObject adapter) {
 
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
