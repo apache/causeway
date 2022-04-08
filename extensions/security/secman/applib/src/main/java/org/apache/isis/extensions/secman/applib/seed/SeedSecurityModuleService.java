@@ -27,8 +27,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.events.metamodel.MetamodelEvent;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.extensions.secman.applib.seed.scripts.SeedUsersAndRolesFixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 

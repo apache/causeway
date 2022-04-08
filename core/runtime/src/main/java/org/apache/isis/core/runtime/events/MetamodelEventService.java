@@ -27,9 +27,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.events.metamodel.MetamodelEvent;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.metamodel.events.MetamodelEvent;
 
 /**
  *

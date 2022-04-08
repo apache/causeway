@@ -22,11 +22,7 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
-
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.core.metamodel.events.MetamodelEvent;
+import org.apache.isis.applib.events.metamodel.MetamodelListener;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -36,11 +32,14 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom._infra.values.ValueHolderFixtureFactory;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-public abstract class SeedServiceAbstract implements SeedService {
+public abstract class SeedServiceAbstract
+implements
+    SeedService,
+    MetamodelListener {
 
     private final Supplier<FixtureScript> fixtureScriptSupplier;
 
-    protected SeedServiceAbstract(Supplier<FixtureScript> fixtureScriptSupplier) {
+    protected SeedServiceAbstract(final Supplier<FixtureScript> fixtureScriptSupplier) {
         this.fixtureScriptSupplier = fixtureScriptSupplier;
     }
 
@@ -49,21 +48,16 @@ public abstract class SeedServiceAbstract implements SeedService {
         this.fixtureScriptSupplier = ()->ValueHolderFixtureFactory.fixtureScriptFor(entities);
     }
 
-
-    @EventListener(MetamodelEvent.class)
-    @Order(PriorityPrecedence.MIDPOINT)
-    public void onAppLifecycleEvent(MetamodelEvent event) {
-        if (event.isPostMetamodel()) {
-            fixtureScripts.run(fixtureScriptSupplier.get());
-        }
+    @Override
+    public void onMetamodelLoaded() {
+        fixtureScripts.run(fixtureScriptSupplier.get());
     }
 
     @Override
-    public void seed(FixtureScript parentFixtureScript, FixtureScript.ExecutionContext executionContext) {
+    public void seed(final FixtureScript parentFixtureScript, final FixtureScript.ExecutionContext executionContext) {
         executionContext.executeChild(parentFixtureScript, this.fixtureScriptSupplier.get());
     }
 
-    @Inject
-    FixtureScripts fixtureScripts;
+    @Inject FixtureScripts fixtureScripts;
 
 }

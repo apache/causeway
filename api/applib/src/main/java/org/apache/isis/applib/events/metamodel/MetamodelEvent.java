@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.events;
+package org.apache.isis.applib.events.metamodel;
 
 public enum MetamodelEvent {
         BEFORE_METAMODEL_LOADING,

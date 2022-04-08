@@ -24,12 +24,12 @@ import lombok.val;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.events.metamodel.MetamodelEvent;
 import org.apache.isis.applib.services.appfeat.*;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
-import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
