@@ -59,7 +59,7 @@ class JpaTransactionScopeListenerTest {
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
     @Inject private InteractionService interactionService;
-    @Inject private KVStoreForTesting kvStoreForTesting;
+    @Inject private KVStoreForTesting kvStore;
 
     /* Expectations:
      * 1. for each InteractionScope there should be a new InteractionBoundaryProbe instance
@@ -73,7 +73,7 @@ class JpaTransactionScopeListenerTest {
     @BeforeEach
     void setUp() {
 
-        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryRequestLock);
+        kvStore.requestLock(JpaTestDomainPersona.class);
 
         // new IsisInteractionScope with a new transaction (#1)
         interactionService.runAnonymous(()->{
@@ -87,7 +87,7 @@ class JpaTransactionScopeListenerTest {
 
     @AfterEach
     void cleanUp() {
-        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryReleaseLock);
+        kvStore.releaseLock(JpaTestDomainPersona.class);
     }
 
     @Test
@@ -113,12 +113,12 @@ class JpaTransactionScopeListenerTest {
 
         });
 
-        final int expectedIaCount = 3; // 2 + 1 (afterEach)
+        final int expectedIaCount = 2;
 
-        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
-        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
-        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
-        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsStarted(kvStore));
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsEnded(kvStore));
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalTransactionsEnding(kvStore));
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalTransactionsCommitted(kvStore));
 
     }
 

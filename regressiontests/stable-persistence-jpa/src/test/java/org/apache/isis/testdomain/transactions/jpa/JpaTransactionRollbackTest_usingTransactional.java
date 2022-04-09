@@ -37,6 +37,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
@@ -65,11 +66,12 @@ extends IsisIntegrationTestAbstract
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
+    @Inject private KVStoreForTesting kvStore;
 
     @Test @Order(1) @Commit
     void cleanup_justInCase() {
 
-        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryRequestLock);
+        kvStore.requestLock(JpaTestDomainPersona.class);
 
         // cleanup just in case
         fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
@@ -93,8 +95,11 @@ extends IsisIntegrationTestAbstract
 
         // expected condition
         assertEquals(0, repository.allInstances(JpaBook.class).size());
+    }
 
-        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryReleaseLock);
+    @Test @Order(4)
+    void cleanUp() {
+        kvStore.releaseLock(JpaTestDomainPersona.class);
     }
 
 }

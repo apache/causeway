@@ -46,6 +46,7 @@ import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
+import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisInteractionHandler;
 
@@ -72,13 +73,14 @@ class JpaTransactionRollbackTest_usingTransactionService
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
     @Inject private CommitListener commitListener;
+    @Inject private KVStoreForTesting kvStore;
 
     private ObjectReference<TransactionAfterCompletionEvent> transactionAfterCompletionEvent;
 
     @BeforeEach
     void setUp() {
 
-        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryRequestLock);
+        kvStore.requestLock(JpaTestDomainPersona.class);
 
         // cleanup
         fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
@@ -89,7 +91,7 @@ class JpaTransactionRollbackTest_usingTransactionService
 
     @AfterEach
     void cleanUp() {
-        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryReleaseLock);
+        kvStore.releaseLock(JpaTestDomainPersona.class);
     }
 
     @Test

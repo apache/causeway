@@ -33,7 +33,6 @@ import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.util.dto.BookDto;
-import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithResult;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithoutResult;
@@ -43,33 +42,6 @@ import lombok.val;
 
 public enum JpaTestDomainPersona
 implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
-
-    /** support for forked surefire run */
-    InventoryRequestLock {
-        @Override
-        public BuilderScriptWithoutResult builder() {
-            return new BuilderScriptWithoutResult() {
-                @Inject private KVStoreForTesting kvStore;
-                @Override protected void execute(final ExecutionContext ec) {
-                    kvStore.requestLock(JpaTestDomainPersona.class);
-                }
-            };
-        }
-    },
-
-    /** support for forked surefire run */
-    InventoryReleaseLock {
-        @Override
-        public BuilderScriptWithoutResult builder() {
-            return new BuilderScriptWithoutResult() {
-                @Inject private KVStoreForTesting kvStore;
-                @Override protected void execute(final ExecutionContext ec) {
-                    kvStore.releaseLock(JpaTestDomainPersona.class);
-                }
-
-            };
-        }
-    },
 
     InventoryPurgeAll {
         @Override
@@ -156,8 +128,6 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
 
     ;
-
-    private static Object $LOCK = new Object();
 
 
 }
