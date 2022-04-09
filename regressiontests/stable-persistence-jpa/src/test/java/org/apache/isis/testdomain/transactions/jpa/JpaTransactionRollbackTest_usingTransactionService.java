@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -77,11 +78,18 @@ class JpaTransactionRollbackTest_usingTransactionService
     @BeforeEach
     void setUp() {
 
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryRequestLock);
+
         // cleanup
-        fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
 
         transactionAfterCompletionEvent =
                 _Refs.<TransactionAfterCompletionEvent>objectRef(null);
+    }
+
+    @AfterEach
+    void cleanUp() {
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryReleaseLock);
     }
 
     @Test

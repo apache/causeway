@@ -68,8 +68,11 @@ extends IsisIntegrationTestAbstract
 
     @Test @Order(1) @Commit
     void cleanup_justInCase() {
+
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryRequestLock);
+
         // cleanup just in case
-        fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
     }
 
     @Test @Order(2)
@@ -90,6 +93,8 @@ extends IsisIntegrationTestAbstract
 
         // expected condition
         assertEquals(0, repository.allInstances(JpaBook.class).size());
+
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryReleaseLock);
     }
 
 }

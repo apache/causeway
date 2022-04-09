@@ -87,6 +87,11 @@ extends PublishingTestFactoryAbstract {
     // -- TEST SETUP
 
     @Override
+    protected void releaseContext(final PublishingTestContext context) {
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryReleaseLock);
+    }
+
+    @Override
     protected void setupEntity(final PublishingTestContext context) {
         switch(context.getScenario()) {
         case ENTITY_CREATION:
@@ -96,9 +101,9 @@ extends PublishingTestFactoryAbstract {
 
         case ENTITY_PERSISTING:
 
-
             // given
-            fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+            fixtureScripts.runPersona(JpaTestDomainPersona.InventoryRequestLock);
+            fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
             break;
 
         case ENTITY_LOADING:
@@ -398,7 +403,7 @@ extends PublishingTestFactoryAbstract {
         val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
 
         // cleanup
-        fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
 
         // given Inventory with 1 Book
 

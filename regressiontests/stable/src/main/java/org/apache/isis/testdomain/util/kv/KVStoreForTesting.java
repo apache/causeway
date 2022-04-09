@@ -29,10 +29,10 @@ import javax.inject.Singleton;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.concurrent.AwaitableLatch;
 import org.apache.isis.commons.internal.collections._Maps;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -139,10 +139,27 @@ public class KVStoreForTesting {
         @NonNull String keyStr;
     }
 
-    public AwaitableLatch latch(final Class<?> callerType) {
-        val latch = new CountDownLatch(1);
-        latchMap.put(callerType, latch);
-        return AwaitableLatch.of(latch);
+    /** blocks until a new lock becomes available */
+    @SneakyThrows
+    public void requestLock(final Class<?> callerType) {
+        synchronized(this) {
+            val latch = latchMap.get(callerType);
+            if(latch!=null) {
+                latch.await();
+            }
+            val newLatch = new CountDownLatch(1);
+            latchMap.put(callerType, newLatch);
+        }
+    }
+
+    /** unblocks any threads waiting for a new lock */
+    public void releaseLock(final Class<?> callerType) {
+        synchronized(this) {
+            val latch = latchMap.remove(callerType);
+            if(latch!=null) {
+                latch.countDown();
+            }
+        }
     }
 
 }

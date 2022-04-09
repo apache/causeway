@@ -91,6 +91,11 @@ extends PublishingTestFactoryAbstract {
     // -- TEST SETUP
 
     @Override
+    protected void releaseContext(final PublishingTestContext context) {
+
+    }
+
+    @Override
     protected void setupEntity(final PublishingTestContext context) {
         switch(context.getScenario()) {
         case ENTITY_CREATION:

@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.transactions.jpa;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,14 +73,21 @@ class JpaTransactionScopeListenerTest {
     @BeforeEach
     void setUp() {
 
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryRequestLock);
+
         // new IsisInteractionScope with a new transaction (#1)
         interactionService.runAnonymous(()->{
 
             // cleanup
-            fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+            fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
 
         });
 
+    }
+
+    @AfterEach
+    void cleanUp() {
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryReleaseLock);
     }
 
     @Test
@@ -105,10 +113,12 @@ class JpaTransactionScopeListenerTest {
 
         });
 
-        assertEquals(2, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
-        assertEquals(2, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
-        assertEquals(2, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
-        assertEquals(2, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
+        final int expectedIaCount = 3; // 2 + 1 (afterEach)
+
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
 
     }
 

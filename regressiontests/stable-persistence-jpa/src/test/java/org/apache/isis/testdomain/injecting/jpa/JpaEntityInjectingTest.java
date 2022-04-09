@@ -69,8 +69,10 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
     @Test @Order(0) @Rollback(false)
     void init() {
 
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryRequestLock);
+
         // cleanup
-        fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
         kvStore.clear(JpaBook.class);
 
         // given
@@ -122,6 +124,8 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
         //assertInjectCountRange(1, 4);
 
         log.debug("TEST 3 EXITING");
+
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryReleaseLock);
     }
 
     // -- HELPER
