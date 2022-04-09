@@ -141,7 +141,7 @@ public class KVStoreForTesting {
 
     /** blocks until a new lock becomes available */
     @SneakyThrows
-    public void requestLock(final Class<?> callerType) {
+    public void requestLock2(final Class<?> callerType) {
         synchronized(this) {
             val latch = latchMap.get(callerType);
             if(latch!=null) {
@@ -155,7 +155,7 @@ public class KVStoreForTesting {
     }
 
     /** unblocks any threads waiting for a new lock */
-    public void releaseLock(final Class<?> callerType) {
+    public void releaseLock2(final Class<?> callerType) {
         synchronized(this) {
             val latch = latchMap.remove(callerType);
             if(latch!=null) {

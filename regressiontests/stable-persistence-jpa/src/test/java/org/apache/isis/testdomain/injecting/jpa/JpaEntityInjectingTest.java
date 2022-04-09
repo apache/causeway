@@ -24,13 +24,13 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -61,18 +61,12 @@ import lombok.extern.log4j.Log4j2;
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Log4j2
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
     @Inject private KVStoreForTesting kvStore;
-
-    @Test @Order(0)
-    void init() {
-        assertNotNull(fixtureScripts);
-        kvStore.requestLock(JpaTestDomainPersona.class);
-        assertNotNull(fixtureScripts);
-    }
 
     @Test @Order(1) @Rollback(false)
     void setup() {
@@ -131,11 +125,6 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
 
         log.debug("TEST 3 EXITING");
 
-    }
-
-    @Test @Order(5)
-    void cleanUp() {
-        kvStore.releaseLock(JpaTestDomainPersona.class);
     }
 
     // -- HELPER

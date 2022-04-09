@@ -23,13 +23,13 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -54,6 +54,7 @@ import org.apache.isis.testing.integtestsupport.applib.IsisInteractionHandler;
  */
 @DirtiesContext
 @ExtendWith(IsisInteractionHandler.class)
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class JpaTransactionScopeListenerTest {
 
     @Inject private FixtureScripts fixtureScripts;
@@ -74,10 +75,6 @@ class JpaTransactionScopeListenerTest {
     @BeforeEach
     void setUp() {
 
-        assertNotNull(fixtureScripts);
-        kvStore.requestLock(JpaTestDomainPersona.class);
-        assertNotNull(fixtureScripts);
-
         // new IsisInteractionScope with a new transaction (#1)
         interactionService.runAnonymous(()->{
 
@@ -90,7 +87,6 @@ class JpaTransactionScopeListenerTest {
 
     @AfterEach
     void cleanUp() {
-        kvStore.releaseLock(JpaTestDomainPersona.class);
     }
 
     @Test

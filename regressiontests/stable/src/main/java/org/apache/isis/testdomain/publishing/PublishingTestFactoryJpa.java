@@ -52,7 +52,6 @@ import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.CommitListener;
 import org.apache.isis.testdomain.util.dto.BookDto;
-import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
@@ -78,7 +77,6 @@ extends PublishingTestFactoryAbstract {
     private final CommitListener commitListener;
     private final JpaSupportService jpaSupport;
     private final FactoryService factoryService;
-    private final KVStoreForTesting kvStore;
 
     @Getter(onMethod_ = {@Override}, value = AccessLevel.PROTECTED)
     private final InteractionService interactionService;
@@ -90,7 +88,6 @@ extends PublishingTestFactoryAbstract {
 
     @Override
     protected void releaseContext(final PublishingTestContext context) {
-        kvStore.releaseLock(JpaTestDomainPersona.class);
     }
 
     @Override
@@ -104,7 +101,6 @@ extends PublishingTestFactoryAbstract {
         case ENTITY_PERSISTING:
 
             // given
-            kvStore.requestLock(JpaTestDomainPersona.class);
             fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
             break;
 

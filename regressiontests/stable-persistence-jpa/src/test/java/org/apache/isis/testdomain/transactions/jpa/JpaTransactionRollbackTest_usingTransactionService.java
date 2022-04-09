@@ -26,16 +26,15 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -48,7 +47,6 @@ import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
-import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisInteractionHandler;
 
@@ -66,7 +64,8 @@ import lombok.val;
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @ExtendWith({IsisInteractionHandler.class})
-@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@DirtiesContext
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class JpaTransactionRollbackTest_usingTransactionService
 //extends IsisIntegrationTestAbstract
 {
@@ -75,16 +74,11 @@ class JpaTransactionRollbackTest_usingTransactionService
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
     @Inject private CommitListener commitListener;
-    @Inject private KVStoreForTesting kvStore;
 
     private ObjectReference<TransactionAfterCompletionEvent> transactionAfterCompletionEvent;
 
     @BeforeEach
     void setUp() {
-
-        assertNotNull(fixtureScripts);
-        kvStore.requestLock(JpaTestDomainPersona.class);
-        assertNotNull(fixtureScripts);
 
         // cleanup
         fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
@@ -95,7 +89,6 @@ class JpaTransactionRollbackTest_usingTransactionService
 
     @AfterEach
     void cleanUp() {
-        kvStore.releaseLock(JpaTestDomainPersona.class);
     }
 
     @Test
