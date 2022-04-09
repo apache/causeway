@@ -152,10 +152,13 @@ public final class _Reflect {
     /**
      * Whether the caller can access this reflected object.
      * (method, field or constructor)
+     * @param obj
      */
-    public static boolean canAccess(final @Nullable AccessibleObject member) {
+    public static boolean canAccess(
+            final @Nullable AccessibleObject member,
+            final @Nullable Object obj) {
         return member != null
-                && member.canAccess(member);
+                && member.canAccess(obj);
     }
 
     /**
@@ -435,26 +438,10 @@ public final class _Reflect {
     // -- METHOD/FIELD HANDLES
 
     public static MethodHandle handleOf(final Method method) throws IllegalAccessException {
-        if(!canAccess(method)) {
-            /*sonar-ignore-on*/
-            method.setAccessible(true);
-            MethodHandle mh = MethodHandles.publicLookup().unreflect(method);
-            method.setAccessible(false);
-            /*sonar-ignore-off*/
-            return mh;
-        }
-        return MethodHandles.publicLookup().unreflect(method);
+        return MethodHandles.lookup().unreflect(method);
     }
 
     public static MethodHandle handleOfGetterOn(final Field field) throws IllegalAccessException {
-        if(!canAccess(field)) {
-            /*sonar-ignore-on*/
-            field.setAccessible(true);
-            MethodHandle mh = MethodHandles.lookup().unreflectGetter(field);
-            field.setAccessible(false);
-            /*sonar-ignore-off*/
-            return mh;
-        }
         return MethodHandles.lookup().unreflectGetter(field);
     }
 
@@ -519,7 +506,7 @@ public final class _Reflect {
             final @NonNull Object target) throws IllegalArgumentException, IllegalAccessException {
 
         /*sonar-ignore-on*/
-        if(canAccess(field)) {
+        if(canAccess(field, target)) {
             return field.get(target);
         }
         try {
@@ -537,7 +524,7 @@ public final class _Reflect {
             final Object fieldValue) throws IllegalArgumentException, IllegalAccessException {
 
         /*sonar-ignore-on*/
-        if(canAccess(field)) {
+        if(canAccess(field, target)) {
             field.set(target, fieldValue);
             return;
         }
@@ -558,7 +545,7 @@ public final class _Reflect {
 
         /*sonar-ignore-on*/
         return Try.call(()->{
-            if(canAccess(method)) {
+            if(canAccess(method, target)) {
                 return method.invoke(target, args);
             }
             try {
@@ -577,7 +564,7 @@ public final class _Reflect {
 
         /*sonar-ignore-on*/
         return Try.call(()->{
-            if(canAccess(constructor)) {
+            if(canAccess(constructor, null)) {
                 return constructor.newInstance(args);
             }
             try {
