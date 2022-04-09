@@ -25,6 +25,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
@@ -148,14 +149,23 @@ public final class _Reflect {
         return a.getName().compareTo(b.getName());
     }
 
+    /**
+     * Whether the caller can access this reflected object.
+     * (method, field or constructor)
+     */
+    public static boolean canAccess(final @Nullable AccessibleObject member) {
+        return member != null
+                && member.canAccess(member);
+    }
 
     /**
-     * Returns whether a {@link Member} is accessible.
-     * @param m Member to check
-     * @return {@code true} if <code>m</code> is accessible
+     * Returns whether a {@link Member} is public and not synthetic (can be accessed).
+     * @param member Member to check
      */
-    public static boolean isAccessible(final Member m) {
-        return m != null && Modifier.isPublic(m.getModifiers()) && !m.isSynthetic();
+    public static boolean isPublicNonSynthetic(final @Nullable Member member) {
+        return member != null
+                && Modifier.isPublic(member.getModifiers())
+                && !member.isSynthetic();
     }
 
     /**
@@ -375,7 +385,7 @@ public final class _Reflect {
             final boolean searchSupers,
             final boolean ignoreAccess) {
 
-        if (!ignoreAccess && !isAccessible(method)) {
+        if (!ignoreAccess && !isPublicNonSynthetic(method)) {
             return null;
         }
 
@@ -425,7 +435,7 @@ public final class _Reflect {
     // -- METHOD/FIELD HANDLES
 
     public static MethodHandle handleOf(final Method method) throws IllegalAccessException {
-        if(!method.isAccessible()) { // java9+ to replace by canAccess
+        if(!canAccess(method)) {
             /*sonar-ignore-on*/
             method.setAccessible(true);
             MethodHandle mh = MethodHandles.publicLookup().unreflect(method);
@@ -437,7 +447,7 @@ public final class _Reflect {
     }
 
     public static MethodHandle handleOfGetterOn(final Field field) throws IllegalAccessException {
-        if(!field.isAccessible()) { // java9+ to replace by canAccess
+        if(!canAccess(field)) {
             /*sonar-ignore-on*/
             field.setAccessible(true);
             MethodHandle mh = MethodHandles.lookup().unreflectGetter(field);
@@ -509,7 +519,7 @@ public final class _Reflect {
             final @NonNull Object target) throws IllegalArgumentException, IllegalAccessException {
 
         /*sonar-ignore-on*/
-        if(field.isAccessible()) {
+        if(canAccess(field)) {
             return field.get(target);
         }
         try {
@@ -527,7 +537,7 @@ public final class _Reflect {
             final Object fieldValue) throws IllegalArgumentException, IllegalAccessException {
 
         /*sonar-ignore-on*/
-        if(field.isAccessible()) {
+        if(canAccess(field)) {
             field.set(target, fieldValue);
             return;
         }
@@ -548,7 +558,7 @@ public final class _Reflect {
 
         /*sonar-ignore-on*/
         return Try.call(()->{
-            if(method.isAccessible()) {
+            if(canAccess(method)) {
                 return method.invoke(target, args);
             }
             try {
@@ -567,7 +577,7 @@ public final class _Reflect {
 
         /*sonar-ignore-on*/
         return Try.call(()->{
-            if(constructor.isAccessible()) {
+            if(canAccess(constructor)) {
                 return constructor.newInstance(args);
             }
             try {
