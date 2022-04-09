@@ -18,14 +18,30 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
-import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.SortedMap;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.events.metamodel.MetamodelEvent;
-import org.apache.isis.applib.services.appfeat.*;
+import org.apache.isis.applib.events.metamodel.MetamodelListener;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -42,22 +58,16 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
-import org.springframework.lang.Nullable;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
+import lombok.NonNull;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.metamodel.ApplicationFeatureRepositoryDefault")
 @Log4j2
 public class ApplicationFeatureRepositoryDefault
-implements ApplicationFeatureRepository {
+implements ApplicationFeatureRepository, MetamodelListener {
 
     // -- caches
     private Map<String, ApplicationFeatureId> featureIdentifiersByName;
@@ -80,11 +90,9 @@ implements ApplicationFeatureRepository {
     }
 
     // -- init
-    @Order(PriorityPrecedence.MIDPOINT)
-    @EventListener(MetamodelEvent.class)
-    public void onMetamodelEvent(final MetamodelEvent event) {
-        if (event.isPostMetamodel()
-                && isEagerInitialize()) {
+    @Override
+    public void onMetamodelLoaded() {
+        if (isEagerInitialize()) {
             initializeIfRequired();
         }
     }

@@ -47,8 +47,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class InitialFixtureScriptsInstaller {
 
-    @SuppressWarnings("unused")
-
     private final FixtureScripts fixtureScripts;
 
     private FixtureScript initialFixtureScript;
@@ -61,7 +59,8 @@ public class InitialFixtureScriptsInstaller {
         this.fixtureScripts = fixtureScripts;
 
         final Class<?> initialScript = isisConfiguration.getTesting().getFixtures().getInitialScript();
-        if (initialScript != null && FixtureScript.class.isAssignableFrom(initialScript)) {
+        if (initialScript != null
+                && FixtureScript.class.isAssignableFrom(initialScript)) {
             try {
                 initialFixtureScript = (FixtureScript) initialScript.getDeclaredConstructor().newInstance();
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
