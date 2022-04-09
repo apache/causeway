@@ -1,4 +1,4 @@
-name: Build, Test (Java 17)
+name: Build, Test (JDK 18)
 
 on:
   push:
@@ -30,11 +30,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up JDK 17
+    - name: Set up JDK 18
       uses: actions/setup-java@v2
       with:
         distribution: 'zulu'
-        java-version: 17
+        java-version: 18
 
     - name: Print Maven Version
       run: mvn --version
