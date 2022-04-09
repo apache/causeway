@@ -149,6 +149,7 @@
 
 		<maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
+		<maven-war-plugin.version>3.3.2</maven-war-plugin.version>
 
 		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts)
 			versions -->
@@ -474,7 +475,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
-					<version>${maven-war-plugin}</version>
+					<version>${maven-war-plugin.version}</version>
 					<configuration>
 						<warSourceExcludes>
 							WEB-INF/lib/*.jar
