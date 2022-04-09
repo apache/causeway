@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -60,6 +61,7 @@ import lombok.val;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext
+@Disabled("fails to run in surefire fork mode")
 class JpaNonGeneratedStringIdEntityLifecycleTest {
 
     @Inject private RepositoryService repository;
