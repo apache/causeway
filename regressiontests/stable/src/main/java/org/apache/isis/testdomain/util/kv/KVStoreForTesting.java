@@ -145,7 +145,9 @@ public class KVStoreForTesting {
         synchronized(this) {
             val latch = latchMap.get(callerType);
             if(latch!=null) {
+                log.warn("entering WAIT state until lock becomes available");
                 latch.await();
+                log.info("lock has become available");
             }
             val newLatch = new CountDownLatch(1);
             latchMap.put(callerType, newLatch);

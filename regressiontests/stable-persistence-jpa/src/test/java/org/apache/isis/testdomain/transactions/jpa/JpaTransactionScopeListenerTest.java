@@ -29,6 +29,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -73,7 +74,9 @@ class JpaTransactionScopeListenerTest {
     @BeforeEach
     void setUp() {
 
+        assertNotNull(fixtureScripts);
         kvStore.requestLock(JpaTestDomainPersona.class);
+        assertNotNull(fixtureScripts);
 
         // new IsisInteractionScope with a new transaction (#1)
         interactionService.runAnonymous(()->{

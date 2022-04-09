@@ -30,6 +30,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -66,10 +67,15 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
     @Inject private RepositoryService repository;
     @Inject private KVStoreForTesting kvStore;
 
-    @Test @Order(0) @Rollback(false)
+    @Test @Order(0)
     void init() {
-
+        assertNotNull(fixtureScripts);
         kvStore.requestLock(JpaTestDomainPersona.class);
+        assertNotNull(fixtureScripts);
+    }
+
+    @Test @Order(1) @Rollback(false)
+    void setup() {
 
         // cleanup
         fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
@@ -81,7 +87,7 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
     }
 
 
-    @Test @Order(1)
+    @Test @Order(2)
     void sampleBook_shouldHave_injectionPointsResolved() {
         log.debug("TEST 1 ENTERING");
 
@@ -95,7 +101,7 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
         log.debug("TEST 1 EXITING");
     }
 
-    @Test @Order(2)
+    @Test @Order(3)
     void sampleBook_shouldHave_injectionPointsResolved_whenFetchedAgain() {
 
         log.debug("TEST 2 ENTERING");
@@ -111,7 +117,7 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
 
     }
 
-    @Test @Order(3)
+    @Test @Order(4)
     void sampleBook_shouldHave_injectionPointsResolved_whenFetchedAgain2() {
 
         log.debug("TEST 3 ENTERING");
@@ -127,7 +133,7 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
 
     }
 
-    @Test @Order(4)
+    @Test @Order(5)
     void cleanUp() {
         kvStore.releaseLock(JpaTestDomainPersona.class);
     }

@@ -34,6 +34,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
@@ -82,7 +83,9 @@ class JpaTransactionRollbackTest_usingInteractionService
     @BeforeEach
     void setUp() {
 
+        assertNotNull(fixtureScripts);
         kvStore.requestLock(JpaTestDomainPersona.class);
+        assertNotNull(fixtureScripts);
 
         // cleanup
         fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);

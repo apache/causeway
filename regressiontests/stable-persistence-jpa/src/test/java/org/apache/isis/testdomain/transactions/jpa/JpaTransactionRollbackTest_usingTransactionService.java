@@ -31,9 +31,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -64,7 +66,7 @@ import lombok.val;
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @ExtendWith({IsisInteractionHandler.class})
-@DirtiesContext
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 class JpaTransactionRollbackTest_usingTransactionService
 //extends IsisIntegrationTestAbstract
 {
@@ -80,7 +82,9 @@ class JpaTransactionRollbackTest_usingTransactionService
     @BeforeEach
     void setUp() {
 
+        assertNotNull(fixtureScripts);
         kvStore.requestLock(JpaTestDomainPersona.class);
+        assertNotNull(fixtureScripts);
 
         // cleanup
         fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
