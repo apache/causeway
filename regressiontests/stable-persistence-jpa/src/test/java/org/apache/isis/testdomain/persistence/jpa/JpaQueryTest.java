@@ -58,7 +58,6 @@ import lombok.val;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
-@Disabled("fails to run in surefire fork mode")
 class JpaQueryTest extends IsisIntegrationTestAbstract {
 
     @Inject private JpaTestFixtures testFixtures;
@@ -71,8 +70,7 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
         // Util_H2Console.main(null);
     }
 
-    @Inject
-    ConfigurableBeanFactory configurableBeanFactory;
+    @Inject ConfigurableBeanFactory configurableBeanFactory;
 
     @Test @Order(1)
     void sampleInventory_shouldBeSetUpWith3Books() {
