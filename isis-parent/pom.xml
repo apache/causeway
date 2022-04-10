@@ -1147,6 +1147,13 @@ under the License.
 					<name>nightly-stage2</name>
 				</property>
 			</activation>
+			<distributionManagement>
+				<repository>
+			        <id>local.staging.repo</id> 
+			        <name>Temporary Local Filesystem Staging Repository</name> 
+			        <url>file://${project.build.directory}/mvn-artifact</url> 
+			    </repository> 
+			</distributionManagement>
 			<build>
 				<plugins>
 					<plugin>
