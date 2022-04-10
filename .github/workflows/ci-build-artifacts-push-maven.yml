@@ -84,7 +84,7 @@ jobs:
          mvn deploy
          -f isis-parent/pom.xml
          -Dreleased
-         -Dgithub
+         -Dlsrepo
          -Denforcer.failFast=true
          -Djacoco.skip=true
          -Dmaven.source.skip=true

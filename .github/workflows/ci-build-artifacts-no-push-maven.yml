@@ -3,7 +3,7 @@ name: Build, Test (JDK 18)
 on:
   push:
     branches:
-      - master
+      - masterNOOP
   pull_request:
     branches:
       - master

@@ -3,7 +3,7 @@ name: Build Site (w/ Antora)
 on:
   push:
     branches:
-      - master
+      - masterNOOP
   pull_request:
     branches:
       - master
