@@ -107,8 +107,7 @@ jobs:
           -Denforcer.failFast=true
           -Djacoco.skip=true
         MVN_STAGES: deploy
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ github.token }}
 
 #   - name: Build Artifacts (Github March 2022)
 #     run: 'bash scripts/ci/build-artifacts.sh'
