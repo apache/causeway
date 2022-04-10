@@ -538,8 +538,8 @@
 					            <include>**/*</include>
 					        </includes>
 					        <merge>true</merge>
-					        <repositoryName>apache</repositoryName>
-					        <repositoryOwner>isis</repositoryOwner>
+					        <repositoryName>apache-isis-committers</repositoryName>
+					        <repositoryOwner>isis-nightly</repositoryOwner>
 					        <server>github</server>
 					    </configuration>
 					    <executions>
