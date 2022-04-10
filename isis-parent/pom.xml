@@ -1147,13 +1147,6 @@ under the License.
 					<name>nightly-stage2</name>
 				</property>
 			</activation>
-			<distributionManagement>
-				<repository>
-					<id>github</id>
-					<name>Github Releases</name>
-					<url>https://maven.pkg.github.com/apache/isis</url>
-				</repository>
-			</distributionManagement>
 			<build>
 				<plugins>
 					<plugin>
@@ -1178,7 +1171,7 @@ under the License.
 					            <goals>
 					                <goal>site</goal>
 					            </goals>
-					            <phase>deploy</phase>
+					            <phase>site</phase>
 					        </execution>
 					    </executions>
 					</plugin>
