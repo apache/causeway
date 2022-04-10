@@ -93,7 +93,6 @@ jobs:
          -DskipTests
          -DaltReleaseDeploymentRepository=local.staging.repo::default::file://${LOCAL_FS_REPO_PATH}
          -T1C
-         env:
 
     - name: Verify (List) Local Artifacts
       run: 'ls -al ${LOCAL_FS_REPO_PATH}'
