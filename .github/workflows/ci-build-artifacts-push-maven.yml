@@ -14,6 +14,7 @@ jobs:
       # to be shared among all steps of this job
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
+      LOCAL_FS_REPO_PATH: ${{ github.workspace }}/mvn-artifact
 
       # not used, would be nice if we could transform the TIMESTAMP string into the REVISION
       # variable here, but it seems github not yet has any string expression manipulation
@@ -90,10 +91,12 @@ jobs:
          -Dskip.git
          -Dskip.arch
          -DskipTests
-         -DaltReleaseDeploymentRepository=local.staging.repo::default::file://${project.build.directory}/mvn-artifact
+         -DaltReleaseDeploymentRepository=local.staging.repo::default::file://${LOCAL_FS_REPO_PATH}
+         -T1C
+         env:
 
     - name: Verify (List) Local Artifacts
-      run: 'ls -al ${project.build.directory}/mvn-artifact'
+      run: 'ls -al ${LOCAL_FS_REPO_PATH}'
 
 #   - name: Build Artifacts (Github March 2022)
 #     run: 'bash scripts/ci/build-artifacts.sh'
