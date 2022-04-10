@@ -180,7 +180,7 @@ if [ "$JIB_CMD" != "skip"  ]; then
   fi
 fi
 
-if [ ! -z "$REVISION" ]; then
+if [ ! -z "$REVISION" ] && [ "$REV_REVERT_FLAG" != "off" ]; then
   cd $PROJECT_ROOT_PATH
   echo ""
   echo ""
