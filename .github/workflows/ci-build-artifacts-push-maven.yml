@@ -97,6 +97,7 @@ jobs:
         # -T 1C ... 1 build thread per core
       run: >-
         mvn deploy
+        -s $PROJECT_ROOT_PATH/.m2/settings.xml
         -f isis-parent/pom.xml
         -Dreleased
         -Dnightly-stage2
@@ -106,8 +107,8 @@ jobs:
         -Dskip.git
         -Dskip.arch
         -DskipTests
-#     env:
-#       GITHUB_TOKEN: ${{ github.token }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
 
 #   - name: Build Artifacts (Github March 2022)
 #     run: 'bash scripts/ci/build-artifacts.sh'
