@@ -1103,11 +1103,18 @@ under the License.
 				</property>
 			</activation>
 			<distributionManagement>
+<!-- 				<repository> -->
+<!-- 					<id>github</id> -->
+<!-- 					<name>Github Releases</name> -->
+<!-- 					<url>https://maven.pkg.github.com/apache/isis</url> -->
+<!-- 				</repository> -->
+				
 				<repository>
-					<id>github</id>
-					<name>Github Releases</name>
-					<url>https://maven.pkg.github.com/apache/isis</url>
-				</repository>
+			        <id>local.staging.repo</id> 
+			        <name>Temporary Local Filesystem Staging Repository</name> 
+			        <url>file://${project.build.directory}/mvn-artifact</url> 
+			    </repository> 
+				
 			</distributionManagement>
 		</profile>
 

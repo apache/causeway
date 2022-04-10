@@ -74,23 +74,44 @@ jobs:
 #        tag_name: ${{ env.REVISION }}
 #        release_name: Release ${{ env.REVISION }}
 
-    - name: Build Artifacts
-      run: 'bash scripts/ci/build-artifacts.sh'
-      env:
+    - name: Build Artifacts and Deploy to Local Filesystem
         # -Dreleased ... build only the released modules
         # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
         # -Djacoco.skip=true ... no need for the CI build to add test coverage reports
         # -T 1C ... 1 build thread per core
-        MVN_ADDITIONAL_OPTS: >-
-          -f isis-parent/pom.xml
-          -Dreleased
-          -Dgithub
-          -Denforcer.failFast=true
-          -Djacoco.skip=true
-          -DinstallAtEnd=true -DdeployAtEnd=true
-        GITHUB_TOKEN: ${{ github.token }}
-        MVN_STAGES: deploy
-        SOURCE_MODE: attach
+      run: >-
+         mvn deploy
+         -f isis-parent/pom.xml
+         -Dreleased
+         -Dgithub
+         -Denforcer.failFast=true
+         -Djacoco.skip=true
+         -Dmaven.source.skip=true
+         -Dskip.git
+         -Dskip.arch
+         -DskipTests
+         -DaltReleaseDeploymentRepository=local.staging.repo::default::file://${project.build.directory}/mvn-artifact
+
+    - name: Verify (List) Local Artifacts
+      run: 'ls -al ${project.build.directory}/mvn-artifact'
+
+#   - name: Build Artifacts (Github March 2022)
+#     run: 'bash scripts/ci/build-artifacts.sh'
+#     env:
+#       # -Dreleased ... build only the released modules
+#       # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
+#       # -Djacoco.skip=true ... no need for the CI build to add test coverage reports
+#       # -T 1C ... 1 build thread per core
+#       MVN_ADDITIONAL_OPTS: >-
+#         -f isis-parent/pom.xml
+#         -Dreleased
+#         -Dgithub
+#         -Denforcer.failFast=true
+#         -Djacoco.skip=true
+#         -DinstallAtEnd=true -DdeployAtEnd=true
+#       GITHUB_TOKEN: ${{ github.token }}
+#       MVN_STAGES: deploy
+#       SOURCE_MODE: attach
 
 
 # FOR DEBUG USE
