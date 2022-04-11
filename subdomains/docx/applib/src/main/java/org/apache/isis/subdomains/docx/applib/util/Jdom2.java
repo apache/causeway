@@ -29,8 +29,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Text;
-import org.jdom2.input.SAXBuilder;
 
+import org.apache.isis.commons.internal.codec._DocumentFactories;
 import org.apache.isis.subdomains.docx.applib.exceptions.LoadInputException;
 import org.apache.isis.subdomains.docx.applib.exceptions.MergeException;
 
@@ -76,7 +76,7 @@ public final class Jdom2 {
 
     public Document loadInput(final String html) throws LoadInputException {
         try {
-            return new SAXBuilder().build(new StringReader(html));
+            return _DocumentFactories.saxBuilder().build(new StringReader(html));
         } catch (JDOMException e) {
             throw new LoadInputException("Unable to parse input", e);
         } catch (IOException e) {

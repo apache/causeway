@@ -33,8 +33,6 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<jdom2.version>2.0.6.1</jdom2.version>
-
 		<jar-plugin.automaticModuleName>org.apache.isis.subdomains</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/subdomains</git-plugin.propertiesDir>
 	</properties>
@@ -141,11 +139,6 @@
 			</dependency>
 
 			<!-- 3rd party dependencies -->
-			<dependency>
-				<groupId>org.jdom</groupId>
-				<artifactId>jdom2</artifactId>
-				<version>${jdom2.version}</version>
-			</dependency>
 
 			<dependency>
 				<groupId>org.docx4j</groupId>

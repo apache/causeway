@@ -27,6 +27,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 
+import org.jdom2.input.SAXBuilder;
+
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -44,31 +46,31 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class _DocumentFactories {
 
-    public static DocumentBuilderFactory documentBuilderFactory() {
+    public DocumentBuilderFactory documentBuilderFactory() {
         val df = DocumentBuilderFactory.newInstance();
         df.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // XML parsers should not be vulnerable to XXE attacks
         df.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); // XML parsers should not be vulnerable to XXE attacks
         return df;
     }
 
-    public static DocumentBuilder documentBuilder() throws ParserConfigurationException {
+    public DocumentBuilder documentBuilder() throws ParserConfigurationException {
         /*sonar-ignore-on*/
         return documentBuilderFactory().newDocumentBuilder();
         /*sonar-ignore-off*/
     }
 
-    public static TransformerFactory transformerFactory() {
+    public TransformerFactory transformerFactory() {
         val tf = TransformerFactory.newInstance();
         tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // XML transformers should be secured
         tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, ""); // XML transformers should be secured
         return tf;
     }
 
-    public static Transformer transformer() throws TransformerConfigurationException {
+    public Transformer transformer() throws TransformerConfigurationException {
         return transformerFactory().newTransformer();
     }
 
-    public static XMLInputFactory xmlInputFactory() {
+    public XMLInputFactory xmlInputFactory() {
         val xmlInputFactory = XMLInputFactory.newInstance();
 
         // disables DTDs entirely
@@ -78,6 +80,17 @@ public class _DocumentFactories {
 
         return xmlInputFactory;
     }
+
+    public SAXBuilder saxBuilder() {
+        /*sonar-ignore-on*/
+        val builder = new SAXBuilder();
+        /*sonar-ignore-off*/
+        builder.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        builder.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+        return builder;
+    }
+
+
 
 
 }
