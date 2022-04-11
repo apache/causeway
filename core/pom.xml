@@ -158,7 +158,6 @@
 		<objenesis.version>3.2</objenesis.version>
 		<ognl.version>3.3.2</ognl.version>
 
-		<pdfbox.version>2.0.25</pdfbox.version>
 		<picocontainer.version>2.15</picocontainer.version>
 		<poi.version>5.2.1</poi.version>
 
@@ -1108,12 +1107,6 @@
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-rs-client</artifactId>
 				<version>${cxf-rt-rs-client.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.pdfbox</groupId>
-				<artifactId>pdfbox</artifactId>
-				<version>${pdfbox.version}</version>
 			</dependency>
 
 			<dependency>

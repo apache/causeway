@@ -1,6 +1,0 @@
-
-
-
-* xref:subdomains:pdfbox:about.adoc[PDF Box Library]
-
-
