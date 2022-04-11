@@ -73,6 +73,27 @@
 			</modules>
 
 		</profile>
+		
+		<!-- RELEASED MODULES -->
+		
+		<profile>
+			<id>released</id>
+			<activation>
+				<property>
+					<name>released</name>
+				</property>
+			</activation>
+			<modules>
+				<module>core</module>
+				<module>extensions</module>
+				<module>mappings</module>
+				<module>mavendeps</module>
+				<module>starters</module>
+				<module>subdomains</module>
+				<module>testing</module>
+				<module>valuetypes</module>
+			</modules>
+		</profile>
 
 		<!-- ALL MODULES -->
 
