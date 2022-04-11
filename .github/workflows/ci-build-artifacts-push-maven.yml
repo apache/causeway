@@ -77,14 +77,10 @@ jobs:
     - name: Build Artifacts (Github March 2022)
       run: 'bash scripts/ci/build-artifacts.sh'
       env:
-        # -Dgithub ... build only the released modules and deploy to github pakages
-        # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
-        # -T 1C ... 1 build thread per core
+        # -Dgithub ... build only the released modules and deploy to github packages
         MVN_ADDITIONAL_OPTS: >-
           -f bom/pom.xml
           -Dgithub
-          -Denforcer.failFast=true
-          -DinstallAtEnd=true -DdeployAtEnd=true
         GITHUB_TOKEN: ${{ github.token }}
         MVN_STAGES: deploy
         SOURCE_MODE: attach

@@ -236,9 +236,6 @@ content:
       start_path: subdomains/freemarker/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/ognl/adoc # subdomains
-      branches: HEAD
-    - url: .
       start_path: subdomains/pdfbox/adoc # subdomains
       branches: HEAD
     - url: .

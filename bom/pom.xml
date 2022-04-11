@@ -1093,6 +1093,10 @@ under the License.
 					<name>github</name>
 				</property>
 			</activation>
+			<properties>
+				<enforcer.failFast>true</enforcer.failFast>
+				<jacoco.skip>true</jacoco.skip>
+			</properties>
 			<modules>
 				<module>../core</module>
 				<module>../extensions</module>
