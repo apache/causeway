@@ -1122,7 +1122,7 @@ under the License.
 				<repository>
 			        <id>nightly-localfs-repo</id> 
 			        <name>Temporary Local Filesystem Staging Repository</name> 
-			        <url>file://${NIGHTLY_ROOT_PATH}/docs/mvn-snapshots</url> 
+			        <url>file://${NIGHTLY_ROOT_PATH}/mvn-snapshots</url> 
 			    </repository> 
 			</distributionManagement>
 			<build>
@@ -1132,7 +1132,7 @@ under the License.
 					    <version>2.8.2</version>
 					    <configuration>
 					        <altDeploymentRepository>
-					            nightly-localfs-repo::default::file://${NIGHTLY_ROOT_PATH}/docs/mvn-snapshots
+					            nightly-localfs-repo::default::file://${NIGHTLY_ROOT_PATH}/mvn-snapshots
 					        </altDeploymentRepository>
 					    </configuration>
 					</plugin>
