@@ -1100,6 +1100,13 @@ under the License.
 					<name>nightly-localfs-repo</name>
 				</property>
 			</activation>
+			<repositories>
+		        <repository>
+			        <id>nightly-localfs-repo</id> 
+			        <name>Temporary Local Filesystem Staging Repository</name> 
+			        <url>file://${MVN_SNAPSHOTS_PATH}</url> 
+			    </repository>
+    		</repositories>
 			<distributionManagement>
 				<repository>
 			        <id>nightly-localfs-repo</id> 

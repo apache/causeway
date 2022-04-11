@@ -56,12 +56,6 @@
 		<!-- EXTENSIONS -->
 
 		<dependency>
-			<groupId>org.apache.isis.incubator.clients</groupId>
-			<artifactId>isis-client-kroviz</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-pdfjs-applib</artifactId>
 		</dependency>
