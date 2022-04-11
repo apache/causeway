@@ -88,6 +88,7 @@ jobs:
           -Denforcer.failFast=true
           -Djacoco.skip=true
           -DinstallAtEnd=true -DdeployAtEnd=true
+          -X
         GITHUB_TOKEN: ${{ github.token }}
         MVN_STAGES: deploy
         SOURCE_MODE: attach
