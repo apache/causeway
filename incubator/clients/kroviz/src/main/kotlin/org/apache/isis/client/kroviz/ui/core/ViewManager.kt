@@ -39,6 +39,7 @@ import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.builder.RoDisplay
 import org.apache.isis.client.kroviz.ui.kv.override.RoTab
+import org.apache.isis.client.kroviz.ui.menu.ContextMenuBuilder
 import org.apache.isis.client.kroviz.utils.*
 import org.w3c.dom.events.KeyboardEvent
 
@@ -97,7 +98,12 @@ object ViewManager {
     }
 
     fun add(title: String, panel: SimplePanel, aggregator: BaseAggregator = UndefinedDispatcher()) {
-        getRoView().addTab(title, panel)
+        val tObject = aggregator.getObject()
+        var menu: ContextMenu? = null
+        if (tObject != null) {
+            menu = ContextMenuBuilder.buildForObjectWithSaveAndUndo(tObject)
+        }
+        getRoView().addTab(title, panel, menu)
         getEventStore().addView(title, aggregator, panel)
     }
 
@@ -121,7 +127,7 @@ object ViewManager {
         DomUtil.appendTo(uuid, svgCode)
 
         val panel = buildSvgPanel(uuid)
-        getRoView().addTab(title, panel)
+        getRoView().addTab(title, panel, null)
         val tab = getRoView().findActive()!! as RoTab
 
         val svg = ScalableVectorGraphic(svgCode, uuid)

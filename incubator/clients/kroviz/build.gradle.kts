@@ -64,7 +64,7 @@ kotlin {
             }
             webpackTask {
                 outputFileName = "main.bundle.js"
-                output.libraryTarget = "plain"
+//                output.libraryTarget = "plain"
             }
             testTask {
                 useKarma {
@@ -134,6 +134,7 @@ afterEvaluate {
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
             inputs.files(distribution, webDir)
             outputs.file(archiveFile)
+
         }
     }
 

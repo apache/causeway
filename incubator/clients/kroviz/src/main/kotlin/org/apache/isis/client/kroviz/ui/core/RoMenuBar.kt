@@ -38,6 +38,7 @@ import org.apache.isis.client.kroviz.ui.dialog.About
 import org.apache.isis.client.kroviz.ui.dialog.EventDialog
 import org.apache.isis.client.kroviz.ui.dialog.LoginPrompt
 import org.apache.isis.client.kroviz.ui.dialog.SvgInline
+import org.apache.isis.client.kroviz.ui.menu.DropDownMenuBuilder
 import org.apache.isis.client.kroviz.ui.panel.GeoMap
 import org.apache.isis.client.kroviz.ui.panel.ImageSample
 import org.apache.isis.client.kroviz.ui.panel.SvgMap
@@ -214,11 +215,11 @@ class RoMenuBar : SimplePanel() {
     fun amendMenu(menuBars: Menubars) {
         resetMenuBar()
         menuBars.primary.menu.forEach { m ->
-            val dd = MenuFactory.buildForMenu(m)
+            val dd = DropDownMenuBuilder.buildForMenu(m)
             if (dd.getChildren().isNotEmpty()) nav.add(dd)
         }
-        nav.add(MenuFactory.buildForMenu(menuBars.secondary.menu.first()))
-        nav.add(MenuFactory.buildForMenu(menuBars.tertiary.menu.first()))
+        nav.add(DropDownMenuBuilder.buildForMenu(menuBars.secondary.menu.first()))
+        nav.add(DropDownMenuBuilder.buildForMenu(menuBars.tertiary.menu.first()))
     }
 
     // this empties out any existing menuItems (non-system)

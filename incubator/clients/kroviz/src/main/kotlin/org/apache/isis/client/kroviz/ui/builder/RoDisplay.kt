@@ -24,7 +24,7 @@ import io.kvision.panel.VPanel
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Displayable
-import org.apache.isis.client.kroviz.ui.core.MenuFactory
+import org.apache.isis.client.kroviz.ui.menu.DropDownMenuBuilder
 
 class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
 
@@ -47,13 +47,13 @@ class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
             this.fontStyle = FontStyle.ITALIC
             this.fontWeight = FontWeight.BOLD
             if (menu != null) {
-                MenuFactory.enableSaveUndo(menu!!)
+                DropDownMenuBuilder.enableSaveUndo(menu!!)
             }
         } else {
             this.fontStyle = FontStyle.NORMAL
             this.fontWeight = FontWeight.NORMAL
             if (menu != null) {
-                MenuFactory.disableSaveUndo(menu!!)
+                DropDownMenuBuilder.disableSaveUndo(menu!!)
             }
         }
     }

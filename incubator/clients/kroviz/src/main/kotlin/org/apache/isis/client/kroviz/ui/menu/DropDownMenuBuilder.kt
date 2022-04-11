@@ -16,9 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.ui.core
+package org.apache.isis.client.kroviz.ui.menu
 
 import io.kvision.core.Component
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
 import io.kvision.dropdown.DropDown
 import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
@@ -28,16 +30,28 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menu
 import org.apache.isis.client.kroviz.to.mb.MenuEntry
 import org.apache.isis.client.kroviz.to.mb.Menubars
+import org.apache.isis.client.kroviz.ui.core.Constants
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import io.kvision.html.Link as KvisionHtmlLink
 
-object MenuFactory {
+object DropDownMenuBuilder {
+
+    fun buildForObjectWithSaveAndUndo(tObject: TObject): DropDown {
+        val dd = buildForObject(tObject)
+        amendWithSaveUndo(dd, tObject)
+        disableSaveUndo(dd)
+        dd.marginTop = CssSize(Constants.spacing, UNIT.px)
+        dd.marginBottom = CssSize(Constants.spacing, UNIT.px)
+        dd.width = CssSize(100, UNIT.perc)
+        return dd
+    }
 
     fun buildForObject(
         tObject: TObject,
         withText: Boolean = true,
-        iconName: String = "Actions"
+        iconName: String = "Actions",
     )
             : DropDown {
         val type = tObject.domainType
@@ -64,7 +78,7 @@ object MenuFactory {
         menu: Menu,
         style: ButtonStyle = ButtonStyle.LIGHT,
         withText: Boolean = true,
-        className: String? = null
+        className: String? = null,
     )
             : DropDown {
         val menuTitle = menu.named
@@ -116,7 +130,7 @@ object MenuFactory {
 
     fun buildForAction(
         menuTitle: String,
-        actionTitle: String
+        actionTitle: String,
     ): KvisionHtmlLink? {
         val menu = findMenuByTitle(menuTitle)!!
         menu.section.forEachIndexed { _, section ->
@@ -137,7 +151,7 @@ object MenuFactory {
 
     fun buildActionLink(
         label: String,
-        menuTitle: String
+        menuTitle: String,
     ): KvisionHtmlLink {
         val actionTitle = StringUtils.deCamel(label)
         val actionLink: KvisionHtmlLink = ddLink(
@@ -155,7 +169,7 @@ object MenuFactory {
         label: String,
         icon: String? = null,
         className: String? = null,
-        init: (KvisionHtmlLink.() -> Unit)? = null
+        init: (KvisionHtmlLink.() -> Unit)? = null,
     ): KvisionHtmlLink {
         val link = KvisionHtmlLink(
             label = label,
@@ -173,9 +187,9 @@ object MenuFactory {
     }
 
     // initially added items will be enabled
-    fun amendWithSaveUndo(
+    private fun amendWithSaveUndo(
         dd: DropDown,
-        tObject: TObject
+        tObject: TObject,
     ) {
         dd.separator()
 

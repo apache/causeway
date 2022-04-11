@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.isis.client.kroviz.ui.panel
+package org.apache.isis.client.kroviz.ui.menu
 
 import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.core.event.EventLogStatistics
@@ -25,10 +25,12 @@ import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.ui.dialog.EventExportDialog
+import org.apache.isis.client.kroviz.ui.panel.EventBubbleChart
+import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 
-class DynamicMenuBuilder {
+object DynamicMenuBuilder {
 
     fun buildObjectMenu(tObject: TObject): dynamic {
         val menu = mutableListOf<dynamic>()
@@ -65,7 +67,6 @@ class DynamicMenuBuilder {
 
         val statsTitle = "Event Statistics"
         val stats = buildMenuEntry(statsTitle, statsTitle, {
-//            ViewManager.add(statsTitle, EventBubbleChart())
             logStatistics()
         })
         menu.add(stats)

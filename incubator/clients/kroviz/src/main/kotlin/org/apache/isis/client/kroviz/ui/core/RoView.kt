@@ -21,30 +21,33 @@ package org.apache.isis.client.kroviz.ui.core
 import io.kvision.core.BsBorder
 import io.kvision.core.Component
 import io.kvision.core.addBsBorder
+import io.kvision.dropdown.ContextMenu
 import io.kvision.panel.SimplePanel
 import org.apache.isis.client.kroviz.ui.kv.override.RoTab
 import org.apache.isis.client.kroviz.ui.kv.override.RoTabPanel
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.w3c.dom.Element
+import org.w3c.dom.events.MouseEvent
 
 /**
  * Area between menu bar at the top and the status bar at the bottom.
  * Contains:
  * @Item TabPanel with Tabs
  */
-class RoView() {
+class RoView {
     val tabPanel = RoTabPanel()
     private var tabCount = 0
 
     fun addTab(
         title: String,
-        panel: Component
+        panel: Component,
+        contextMenu: ContextMenu?,
     ) {
         panel.addBsBorder(BsBorder.BORDER)
         val index = tabPanel.findTab(title)
         if (index != null) {
             val tabs = tabPanel.getTabs()
-            val tab = tabs.get(index) as SimplePanel
+            val tab = tabs[index] as SimplePanel
             removeTab(tab)
             tabPanel.removeTab(index)
         }
@@ -60,6 +63,8 @@ class RoView() {
         tab.addAfterInsertHook {
             tab.getElement()?.unsafeCast<Element>()?.querySelector("i")?.addEventListener("click", {
                 console.log("icon clicked")
+                it.stopPropagation()
+                contextMenu?.positionMenu(it.unsafeCast<MouseEvent>())
             })
         }
 
@@ -77,7 +82,7 @@ class RoView() {
         val index = tabPanel.activeIndex
         return if (index > 0) {
             val tabs = tabPanel.getTabs()
-            tabs.get(index)
+            tabs[index]
         } else {
             null
         }

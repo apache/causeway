@@ -26,8 +26,8 @@ import io.kvision.panel.SimplePanel
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Col
 import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.ui.core.MenuFactory
 import org.apache.isis.client.kroviz.ui.core.RoTable
+import org.apache.isis.client.kroviz.ui.menu.DropDownMenuBuilder
 import org.apache.isis.client.kroviz.utils.StringUtils
 import kotlin.math.round
 
@@ -50,7 +50,7 @@ class ColBuilder : UiBuilder() {
             if (fs.propertyList.size > 0) {
                 val fsCpt = FieldSetBuilder().create(fs, tObject, dsp)!!
                 var legend = fs.name
-                if (legend.trim().length == 0) {
+                if (legend.trim().isEmpty()) {
                     legend = fs.id
                 }
                 legend = StringUtils.capitalize(legend)
@@ -68,7 +68,7 @@ class ColBuilder : UiBuilder() {
         for (c in col.collectionList) {
             val key = c.id  // entities
             val objectDM = dsp.displayModel
-            val collectionDM = objectDM.collections.get(key)
+            val collectionDM = objectDM.collections[key]
             if (collectionDM != null) {
                 val tblCpt = RoTable(collectionDM)
                 val fsPanel = FieldsetPanel(legend = StringUtils.capitalize(key)).add(tblCpt)
@@ -90,16 +90,11 @@ class ColBuilder : UiBuilder() {
         )
     }
 
-    fun createMenu(tObject: TObject, dsp: RoDisplay): HPanel {
+    private fun createMenu(tObject: TObject, dsp: RoDisplay): HPanel {
         val panel = HPanel()
         style(panel)
 
-        val dd = MenuFactory.buildForObject(tObject)
-        dd.marginTop = CssSize(Constants.spacing, UNIT.px)
-        dd.marginBottom = CssSize(Constants.spacing, UNIT.px)
-        dd.width = CssSize(100, UNIT.perc)
-        MenuFactory.amendWithSaveUndo(dd, tObject)
-        MenuFactory.disableSaveUndo(dd)
+        val dd = DropDownMenuBuilder.buildForObjectWithSaveAndUndo(tObject)
         dsp.menu = dd
         panel.add(dd)
 
