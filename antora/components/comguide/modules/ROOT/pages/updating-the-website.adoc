@@ -27,7 +27,7 @@ This is most easily done by rebuilding all:
 [source,bash,subs="attributes+"]
 ----
 pushd isis-parent
-mvn clean install -DskipTests -Dmodule-all
+mvn clean install -DskipTests -Dreleased
 popd
 ----
 +

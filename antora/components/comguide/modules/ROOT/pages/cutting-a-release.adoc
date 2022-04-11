@@ -73,7 +73,7 @@ To run the RAT tool, use:
 mvn clean
 
 pushd isis-parent
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000 -Dmodule-all
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000 -Dreleased
 popd
 
 for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt
@@ -291,7 +291,7 @@ mvn versions:set -DnewVersion=$ISISREL
 +
 [source,bash,subs="attributes+"]
 ----
-mvn install -o -DskipTests -Dmodule-all
+mvn install -o -DskipTests -Dreleased
 ----
 +
 [NOTE]
@@ -330,7 +330,7 @@ Delete all Isis artifacts from your local Maven repo, then build using the `-o` 
 [source,bash,subs="attributes+"]
 ----
 rm -rf ~/.m2/repository/org/apache/isis
-mvn clean install -o -Dmodule-all
+mvn clean install -o -Dreleased
 git clean -dfx ..
 ----
 
@@ -440,7 +440,7 @@ Therefore (still in the `isis-parent` directory):
 [source,bash,subs="attributes+"]
 ----
 mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
-mvn install -DskipTests -o -Dmodule-all
+mvn install -DskipTests -o -Dreleased
 
 pushd ../starters
 mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
@@ -733,7 +733,7 @@ You'll also need to rebuild all and then regenerate config files and tooling:
 ----
 git checkout $ISISBRANCH
 pushd isis-parent
-mvn clean install -DskipTests -Dmodule-all
+mvn clean install -DskipTests -Dreleased
 popd
 mvn clean install -pl core/config
 mvn -D module-tooling -D skip.essential install -DskipTests

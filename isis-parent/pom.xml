@@ -1050,6 +1050,24 @@ under the License.
 		</profile>
 
 		<!-- APACHE ISIS customisation 15/15: start -->
+		<profile>
+			<id>released</id>
+			<activation>
+				<property>
+					<name>released</name>
+				</property>
+			</activation>
+			<modules>
+				<module>../core</module>
+				<module>../extensions</module>
+				<module>../mappings</module>
+				<module>../mavendeps</module>
+				<module>../starters</module>
+				<module>../subdomains</module>
+				<module>../testing</module>
+				<module>../valuetypes</module>
+			</modules>
+		</profile>
 
 		<profile>
 			<id>sources</id>
