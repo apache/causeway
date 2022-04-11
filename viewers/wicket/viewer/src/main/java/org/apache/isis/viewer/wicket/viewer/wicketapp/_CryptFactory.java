@@ -103,7 +103,9 @@ class _CryptFactory {
             return secureSalt(size);
         }
         val salt = new byte[size];
-        new Random(machineFixedSeed.getAsLong()).nextBytes(salt);
+        /*sonar-ignore-on*/
+        new Random(machineFixedSeed.getAsLong()).nextBytes(salt); // not required to be secure
+        /*sonar-ignore-off*/
         return salt;
     }
 
