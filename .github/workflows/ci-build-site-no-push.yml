@@ -3,7 +3,7 @@ name: Build Site (w/ Antora)
 on:
   push:
     branches:
-      - masterNOOP
+      - master
   pull_request:
     branches:
       - master
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
-      BASELINE: 2.0.0-M6
+      BASELINE: 2.0.0-M7
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
       ANTORA_PLAYBOOKS_PATH: ${{ github.workspace }}/antora/playbooks
@@ -32,11 +32,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up JDK 17
+    - name: Set up JDK 18
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        java-version: 17
+        java-version: 18
 
     - name: Setup Script Environment
       shell: bash
