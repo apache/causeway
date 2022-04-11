@@ -73,9 +73,9 @@
 			</modules>
 
 		</profile>
-		
+
 		<!-- RELEASED MODULES -->
-		
+
 		<profile>
 			<id>released</id>
 			<activation>
@@ -84,6 +84,7 @@
 				</property>
 			</activation>
 			<modules>
+				<module>parent</module>
 				<module>core</module>
 				<module>extensions</module>
 				<module>mappings</module>

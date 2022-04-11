@@ -1099,6 +1099,16 @@ under the License.
 					<name>github</name>
 				</property>
 			</activation>
+			<modules>
+				<module>../core</module>
+				<module>../extensions</module>
+				<module>../mappings</module>
+				<module>../mavendeps</module>
+				<module>../starters</module>
+				<module>../subdomains</module>
+				<module>../testing</module>
+				<module>../valuetypes</module>
+			</modules>
 			<distributionManagement>
 				<repository>
 					<id>github</id>
