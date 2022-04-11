@@ -37,7 +37,7 @@ import org.apache.isis.testing.fixtures.applib.IsisIntegrationTestAbstractWithFi
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @SpringBootTest(
-        classes = FakeDataModuleIntegTestAbstract.AppManifest.class
+        classes = FakeDataModuleIntegTestAbstract.TestManifest.class
 )
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @ContextConfiguration
@@ -56,7 +56,7 @@ public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTes
                 IsisModuleTestingFixturesApplib.class,
                 IsisModuleTestingFakeDataFixtures.class
         })
-        public static class AppManifest {
+        public static class TestManifest {
         }
 
 }
