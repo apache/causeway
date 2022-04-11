@@ -635,9 +635,6 @@ under the License.
 							<exclude>**/_nav.adoc</exclude>
 							<exclude>**/_overview/nav.adoc</exclude>
 
-							<exclude>**/src/test/resources/org/apache/isis/subdomains/docx/applib/*.html</exclude>
-							<exclude>**/adoc/modules/docx/examples/*.html</exclude>
-
 							<exclude>**/application.js</exclude>
 
 							<exclude>**/jquery.zclip.js</exclude>
