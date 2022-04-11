@@ -116,7 +116,7 @@
 						<artifactId>jib-maven-plugin</artifactId>
 						<configuration>
 							<from>
-								<image>openjdk:18-alpine</image>
+								<image>openjdk:18-jdk-slim-bullseye</image>
 							</from>
 							<container>
 								<jvmFlags>
