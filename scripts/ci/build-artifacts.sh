@@ -90,12 +90,13 @@ function buildDockerImage() {
 
 	echo ""
 	echo ""
-	echo ">>> $PROJECT_ROOT_PATH/${dir}: mvn compile jib:$JIB_CMD ..."
+	echo ">>> $PROJECT_ROOT_PATH/${dir}: mvn compile jib:$JIB_CMD $JIB_ADDITIONAL_OPTS ..."
 	echo ""
 	echo ""
 
 	mvn --batch-mode \
     	compile jib:$JIB_CMD \
+    	$JIB_ADDITIONAL_OPTS \
     	-Dmaven.source.skip=true \
     	-Dskip.git \
     	-Dskip.arch \
