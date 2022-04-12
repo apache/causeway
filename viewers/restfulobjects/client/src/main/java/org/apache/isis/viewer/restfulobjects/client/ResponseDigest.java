@@ -96,35 +96,35 @@ class ResponseDigest<T> {
     /**
      * @return whether the REST endpoint replied with a success status code.
      */
-    public boolean isSuccess() {
+    boolean isSuccess() {
         return !isFailure();
     }
 
     /**
      * @return whether the REST endpoint replied with a failure status code.
      */
-    public boolean isFailure() {
+    boolean isFailure() {
         return failureCause!=null;
     }
 
     /**
      * @return (non-null), optionally the result if cardinality is exactly ONE
      */
-    public Optional<T> getEntity() {
+    Optional<T> getEntity() {
         return getEntities().getSingleton();
     }
 
     /**
      * @return (non-null), the entities replied by the REST endpoint supporting any cardinality ZERO, ONE or more.
      */
-    public Can<T> getEntities(){
+    Can<T> getEntities(){
         return entities;
     }
 
     /**
      * @return (nullable), the failure case (if any), when the REST endpoint replied with a failure status code
      */
-    public @Nullable Exception getFailureCause(){
+    @Nullable Exception getFailureCause(){
         return failureCause;
     }
 

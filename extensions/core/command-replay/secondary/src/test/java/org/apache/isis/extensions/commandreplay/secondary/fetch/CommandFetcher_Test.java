@@ -18,34 +18,42 @@
  */
 package org.apache.isis.extensions.commandreplay.secondary.fetch;
 
-import java.net.URI;
-
-import javax.ws.rs.core.UriBuilder;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.util.JaxbUtil;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.extensions.commandreplay.secondary.StatusException;
+import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 import lombok.val;
 
-
-public class CommandFetcher_Test {
+class CommandFetcher_Test {
 
     @Disabled // intended only for manual verification.
     @Test
-    public void testing_the_unmarshalling() {
-        val jaxRsClient = new _LegacyClient.JaxRsClientDefault();
-        final UriBuilder uriBuilder = UriBuilder.fromUri(
-                        String.format(
-                        "%s%s?batchSize=%d",
-                        "http://localhost:8080/restful/", CommandFetcher.URL_SUFFIX, 10)
-        );
-        URI uri = uriBuilder.build();
-        _LegacyClient.JaxRsResponse invoke = jaxRsClient.get(
-                uri, CommandsDto.class, _LegacyClient.JaxRsClient.ReprType.ACTION_RESULT, "sven", "pass");
-        CommandsDto entity = invoke.readEntity(CommandsDto.class);
+    void testing_the_fetcher() throws StatusException {
+
+        // given
+        val mmc = MetaModelContext_forTesting.buildDefault();
+
+        val config = mmc.getConfiguration().getExtensions().getCommandReplay();
+        config.getPrimaryAccess().setUser(Optional.of("sven"));
+        config.getPrimaryAccess().setPassword(Optional.of("pass"));
+        config.getPrimaryAccess().setBaseUrlRestful(Optional.of("http://localhost:8080/restful/"));
+        config.getPrimaryAccess().setBaseUrlWicket(Optional.of("http://localhost:8080/wicket/"));
+        config.setBatchSize(10);
+
+        val fetcher = new CommandFetcher();
+        fetcher.secondaryConfig = new SecondaryConfig(mmc.getConfiguration());
+        fetcher.useRequestDebugLogging = true;
+
+        // when
+        CommandsDto entity = fetcher.callPrimary(null);
+
         System.out.println(JaxbUtil.toXml(entity));
     }
 }

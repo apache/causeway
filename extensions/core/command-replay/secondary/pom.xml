@@ -77,6 +77,12 @@
             <artifactId>isis-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+			<groupId>org.glassfish.jersey.ext</groupId>
+			<artifactId>jersey-spring5</artifactId>
+			<scope>test</scope>
+		</dependency>
 
     </dependencies>
 
