@@ -61,9 +61,9 @@
                 also keep profiles in sync with the site documentation
                 https://github.com/apache/isis/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-isis.adoc
                     -->
+                <module>parent</module>
 				<module>core</module>
 				<module>extensions</module>
-				<module>isis-parent</module>
 				<module>mappings</module>
 				<module>mavendeps</module>
 				<module>starters</module>
