@@ -335,7 +335,7 @@ under the License.
 		<lombok.version>1.18.22</lombok.version> <!-- overriding Spring -->
 		<delombok.output>${project.build.directory}/delombok</delombok.output>
 		<surefire.version>3.0.0-M6</surefire.version>
-		<surefire-plugin.argLine>-Xms512m -Xmx512m</surefire-plugin.argLine>
+		<surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
 		<!-- APACHE ISIS customisation 4/15: end -->
 		
 		<assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
@@ -1146,7 +1146,7 @@ under the License.
 				</property>
 			</activation>
 			<properties>
-				<surefire-plugin.argLine>@{argLine} -Xms512m -Xmx512m</surefire-plugin.argLine>
+				<surefire-plugin.argLine>@{argLine} -Xmx512m</surefire-plugin.argLine>
 			</properties>
 			<build>
 				<plugins>
