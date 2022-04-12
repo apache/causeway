@@ -39,12 +39,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.cors.impl.IsisModuleExtCors;
-import org.apache.isis.extensions.restclient.ResponseDigest;
-import org.apache.isis.extensions.restclient.log.ClientConversationFilter;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.rospec.Configuration_usingRoSpec;
 import org.apache.isis.testdomain.rospec.RoSpecSampler;
 import org.apache.isis.testdomain.util.rest.RestEndpointService;
+import org.apache.isis.viewer.restfulobjects.client.ResponseDigest;
+import org.apache.isis.viewer.restfulobjects.client.log.ClientConversationFilter;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 
 import lombok.val;

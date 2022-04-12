@@ -36,9 +36,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.extensions.restclient.RestfulClient;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.rest.RestEndpointService;
+import org.apache.isis.viewer.restfulobjects.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 
 import lombok.val;

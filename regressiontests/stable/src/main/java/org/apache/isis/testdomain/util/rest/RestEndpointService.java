@@ -32,13 +32,13 @@ import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
-import org.apache.isis.extensions.restclient.ResponseDigest;
-import org.apache.isis.extensions.restclient.RestfulClient;
-import org.apache.isis.extensions.restclient.RestfulClientConfig;
-import org.apache.isis.extensions.restclient.log.ClientConversationFilter;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.util.dto.BookDto;
+import org.apache.isis.viewer.restfulobjects.client.ResponseDigest;
+import org.apache.isis.viewer.restfulobjects.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
+import org.apache.isis.viewer.restfulobjects.client.log.ClientConversationFilter;
 
 import lombok.NonNull;
 import lombok.val;

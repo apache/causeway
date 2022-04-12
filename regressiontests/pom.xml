@@ -211,8 +211,8 @@
 			</dependency>
 			
 			<dependency>
-				<groupId>org.apache.isis.mappings</groupId>
-				<artifactId>isis-mappings-restclient-applib</artifactId>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-viewer-restfulobjects-client</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			
