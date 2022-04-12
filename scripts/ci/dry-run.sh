@@ -90,6 +90,8 @@ echo JIB_ADDITIONAL_OPTS \: $JIB_ADDITIONAL_OPTS
 echo CMD                 \: $CMD 
 echo "=============================================="
             
+read -p "Press [Enter] key to start ..."
+            
 pushd $PROJECT_ROOT_PATH >> /dev/null
 
 bash $CMD

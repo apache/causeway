@@ -140,7 +140,7 @@ if [[ -z "$NEXUSREPONUM" || -z "$VERSION" || -z "$RC" ]]; then
 fi
 
 cat <<EOF >/tmp/url.txt
-http://repository.apache.org/content/repositories/orgapacheisis-$NEXUSREPONUM/org/apache/isis/bom/$VERSION/isis-bom-$VERSION-source-release.zip
+http://repository.apache.org/content/repositories/orgapacheisis-$NEXUSREPONUM/org/apache/isis/isis-bom/$VERSION/isis-bom-$VERSION-source-release.zip
 EOF
 
 # The work starts here
