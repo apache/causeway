@@ -833,28 +833,6 @@ under the License.
 				</executions>
 			</plugin>
 			<!-- APACHE ISIS customisation 8/15: start -->
-			<plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <!-- stopped working with GitHub CI on 2021-03-18,
-				         could not find a way to disable
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                    -->
-                </executions>
-            </plugin>
 			<!-- APACHE ISIS customisation 8/15: end -->
 		</plugins>
 	</build>
@@ -1147,7 +1125,44 @@ under the License.
 			</build>
 		</profile>
 
-
+		<profile>
+			<id>jacoco-report-xml</id>
+			<activation>
+				<property>
+					<name>jacoco-report-xml</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+		                <groupId>org.jacoco</groupId>
+		                <artifactId>jacoco-maven-plugin</artifactId>
+		                <version>0.8.8</version>
+		                <executions>
+		                    <execution>
+		                        <goals>
+		                            <goal>prepare-agent</goal>
+		                        </goals>
+		                    </execution>
+		                    <!-- stopped working with GitHub CI on 2021-03-18,
+						         could not find a way to disable -->
+		                    <execution>
+		                        <id>report</id>
+		                        <phase>prepare-package</phase>
+		                        <goals>
+		                            <goal>report</goal>
+		                        </goals>
+		                        <configuration>
+		                        	<formats>XML</formats>
+		                        </configuration>
+		                    </execution>
+		                    
+		                </executions>
+		            </plugin>
+         		</plugins>
+			</build>
+		</profile>
+            
 
 		<!-- APACHE ISIS customisation 15/15: end -->
 	</profiles>

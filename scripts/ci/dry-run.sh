@@ -41,7 +41,8 @@ if [ -z "$MVN_SNAPSHOTS_PATH" ]; then
 fi
 
 export BASELINE=2.0.0-M7
-export REVISION="$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-dryrun"
+#export REVISION="$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-dryrun"
+export REVISION="$BASELINE-dryrun"
 
 # (used by build-artifacts.sh)
 export MVN_STAGES=deploy
@@ -64,10 +65,11 @@ export SOURCE_MODE=attach
 export MVN_ADDITIONAL_OPTS="\
 -Dmodule-examples-demo-wicket \
 -Dnightly-localfs-repo \
+-Djacoco-report-xml \
 -Dskip-docker=true \
 -Denforcer.failFast=true \
--Djacoco.skip=true \
--DskipTests=true"
+-Djacoco.skip=false \
+-DskipTests=false"
 
 # possible modes are
 # push ... push docker images to dockerhub
