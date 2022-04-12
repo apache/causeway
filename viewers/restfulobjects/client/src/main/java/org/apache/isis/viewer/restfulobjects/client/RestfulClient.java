@@ -21,8 +21,6 @@ package org.apache.isis.viewer.restfulobjects.client;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Client;
@@ -62,7 +60,7 @@ clientConfig.setUseRequestDebugLogging(true); // default = false
 RestfulClient client = RestfulClient.ofConfig(clientConfig);
  * </pre></blockquote>
  *
- * Synchronous example:
+ * Example:
  * <blockquote><pre>{@code
 
 Builder request = client.request(
@@ -84,56 +82,6 @@ if(digest.isSuccess()) {
     digest.getFailureCause().printStackTrace();
 }
  * </pre></blockquote>
- * Asynchronous example:
- * <blockquote><pre>{@code
-Builder request = client.request(
-                "services/myService/actions/lookupMyObjectById/invoke",
-                SuppressionType.RO);
-
-Entity<String> args = client.arguments()
-        .addActionParameter("id", "12345")
-        .build();
-
-Future<Response> asyncResponse = request
-        .async()
-        .post(args);
-
-CompletableFuture<ResponseDigest<MyObject>> digestFuture =
-                client.digest(asyncResponse, MyObject.class);
-
-ResponseDigest<MyObject> digest = digestFuture.get(); // blocking
-}
-
-if(digest.isSuccess()) {
-    System.out.println("result: "+ digest.getEntities().getSingletonOrFail().get$$instanceId());
-} else {
-    digest.getFailureCause().printStackTrace();
-}
- * </pre></blockquote>
- *
- * Maven Setup:
- * <blockquote><pre>{@code
-<dependency>
-    <groupId>org.apache.isis.core</groupId>
-    <artifactId>isis-core-applib</artifactId>
-    <version>2.0.0-M2-SNAPSHOT</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.jersey.ext</groupId>
-    <artifactId>jersey-spring5</artifactId>
-    <version>2.29.1</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish</groupId>
-    <artifactId>javax.json</artifactId>
-    <version>1.1.4</version>
-</dependency>
-<dependency>
-    <groupId>org.eclipse.persistence</groupId>
-    <artifactId>org.eclipse.persistence.moxy</artifactId>
-    <version>2.7.5</version>
-</dependency>
- * }</pre></blockquote>
  *
  * @since 2.0 {@index}
  */
@@ -145,13 +93,13 @@ public class RestfulClient {
     private RestfulClientConfig clientConfig;
     private Client client;
 
-    public static RestfulClient ofConfig(RestfulClientConfig clientConfig) {
+    public static RestfulClient ofConfig(final RestfulClientConfig clientConfig) {
         RestfulClient restClient = new RestfulClient();
         restClient.init(clientConfig);
         return restClient;
     }
 
-    public void init(RestfulClientConfig clientConfig) {
+    public void init(final RestfulClientConfig clientConfig) {
         this.clientConfig = clientConfig;
         client = ClientBuilder.newClient();
 
@@ -170,11 +118,11 @@ public class RestfulClient {
 
     // -- REQUEST BUILDER
 
-    public Builder request(String path, SuppressionType ... suppressionTypes) {
+    public Builder request(final String path, final SuppressionType ... suppressionTypes) {
         return request(path, SuppressionType.setOf(suppressionTypes));
     }
 
-    public Builder request(String path, EnumSet<SuppressionType> suppressionTypes) {
+    public Builder request(final String path, final EnumSet<SuppressionType> suppressionTypes) {
         final String responseContentType = DEFAULT_RESPONSE_CONTENT_TYPE
                 + toSuppressionLiteral(suppressionTypes);
 
@@ -187,57 +135,14 @@ public class RestfulClient {
         return new ActionParameterListBuilder();
     }
 
-    // -- RESPONSE PROCESSING (SYNC)
+    // -- RESPONSE PROCESSING
 
-    public <T> ResponseDigest<T> digest(Response response, Class<T> entityType) {
-        return ResponseDigest.of(response, entityType);
+    public <T> ResponseDigest<T> digest(final Response response, final Class<T> entityType) {
+        return ResponseDigest.wrap(response, entityType);
     }
 
-    public <T> ResponseDigest<T> digestList(Response response, Class<T> entityType, GenericType<List<T>> genericType) {
-        return ResponseDigest.ofList(response, entityType, genericType);
-    }
-
-    // -- RESPONSE PROCESSING (ASYNC)
-
-    public <T> CompletableFuture<ResponseDigest<T>> digest(
-            final Future<Response> asyncResponse,
-            final Class<T> entityType) {
-
-        final CompletableFuture<ResponseDigest<T>> completableFuture = CompletableFuture.supplyAsync(()->{
-            try {
-                Response response = asyncResponse.get();
-                ResponseDigest<T> digest = digest(response, entityType);
-
-                return digest;
-
-            } catch (Exception e) {
-                return ResponseDigest.ofAsyncFailure(asyncResponse, entityType, e);
-            }
-        });
-
-        return completableFuture;
-    }
-
-    public <T> CompletableFuture<ResponseDigest<T>> digestList(
-            final Future<Response> asyncResponse,
-            final Class<T> entityType,
-            GenericType<List<T>> genericType) {
-
-        final CompletableFuture<ResponseDigest<T>> completableFuture = CompletableFuture.supplyAsync(()->{
-            try {
-                Response response = asyncResponse.get();
-                ResponseDigest<T> digest = digestList(response, entityType, genericType);
-
-                return digest;
-
-            } catch (Exception e) {
-
-                return ResponseDigest.ofAsyncFailure(asyncResponse, entityType, e);
-
-            }
-        });
-
-        return completableFuture;
+    public <T> ResponseDigest<T> digestList(final Response response, final Class<T> entityType, final GenericType<List<T>> genericType) {
+        return ResponseDigest.wrapList(response, entityType, genericType);
     }
 
     // -- FILTER
@@ -281,7 +186,7 @@ public class RestfulClient {
         return baseUri + path;
     }
 
-    private String toSuppressionLiteral(EnumSet<SuppressionType> suppressionTypes) {
+    private String toSuppressionLiteral(final EnumSet<SuppressionType> suppressionTypes) {
         final String suppressionSetLiteral = stream(suppressionTypes)
                 .map(SuppressionType::name)
                 .collect(Collectors.joining(","));
