@@ -187,8 +187,6 @@
 		<wicketstuff.version>${wicket.version}</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
 
-		<xdocreport.version>2.0.2</xdocreport.version>
-
 	</properties>
 
 	<pluginRepositories>
@@ -942,32 +940,6 @@
 				<groupId>de.agilecoders.wicket.webjars</groupId>
 				<artifactId>wicket-webjars</artifactId>
 				<version>${wicket-webjars.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>fr.opensagres.xdocreport.document.docx</artifactId>
-				<version>${xdocreport.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>fr.opensagres.xdocreport.template.freemarker</artifactId>
-				<version>${xdocreport.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>fr.opensagres.xdocreport.converter.docx.xwpf</artifactId>
-				<version>${xdocreport.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>org.apache.poi.xwpf.converter.pdf</artifactId>
-				<version>${xdocreport.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>fr.opensagres.xdocreport</groupId>
-				<artifactId>org.apache.poi.xwpf.converter.core</artifactId>
-				<version>${xdocreport.version}</version>
 			</dependency>
 
 			<dependency>

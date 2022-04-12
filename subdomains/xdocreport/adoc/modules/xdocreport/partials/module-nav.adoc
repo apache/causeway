@@ -1,6 +1,0 @@
-
-
-
-* xref:subdomains:xdocreport:about.adoc[XDocReport Library]
-
-

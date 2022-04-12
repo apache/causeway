@@ -58,12 +58,6 @@ content:
     - url: .
       start_path: subdomains/spring/adoc # subdomains
       branches: HEAD
-    - url: .
-      start_path: subdomains/xdocreport/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/zip/adoc # subdomains
-      branches: HEAD
 
 
 
