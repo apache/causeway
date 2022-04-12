@@ -764,7 +764,6 @@ org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jpa:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed> +
-org.apache.isis.incubator.clients:isis-client-kroviz:jar:2.0.0-SNAPSHOT +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jdo:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jpa:jar:<managed> +
@@ -1029,7 +1028,6 @@ org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jpa:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed> +
-org.apache.isis.incubator.clients:isis-client-kroviz:jar:${project.version} +
 org.apache.isis.testing:isis-testing-h2console-ui:jar:<managed> +
 org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed> +
@@ -1224,7 +1222,7 @@ Directory: /
 ----
 |Convenience aggregator POM that references all modules, some explicitely,
 others via profiles, that are not activiated per default.
-The parent POM of the core framework is isis-parent/pom.xml.
+The parent POM of the core framework is bom/pom.xml.
 
 |Apache Isis - Antora
 [source,yaml]
@@ -1240,11 +1238,12 @@ Directory: /antora
 [source,yaml]
 ----
 Group: org.apache.isis
-Artifact: isis-parent
+Artifact: isis-bom
 Type: pom
-Directory: /isis-parent
+Directory: /bom
 ----
-|Parent for the core framework + extensions, starter parent pom for starter apps.
+|Apache Isis Bill of Material (BOM).
+Als the parent POM for the core framework + extensions, starter parent pom for starter apps.
 
 |Apache Isis Supplemental - Legal Info
 [source,yaml]
@@ -1308,6 +1307,7 @@ Directory: /commons
 com.fasterxml.jackson.core:jackson-databind:jar:<managed> +
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
 org.apache.isis.core:isis-jdk-supplemental:pom:<managed> +
+org.jdom:jdom2:jar:<managed> +
 org.junit.jupiter:junit-jupiter-api:jar:<managed> +
 org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
 org.junit.jupiter:junit-jupiter-params:jar:<managed> +
@@ -5311,11 +5311,11 @@ o.a.i.subdomains.docx.applib.service.DocxServiceDefault +
 .Dependencies
 ****
 com.google.guava:guava:jar:<managed> +
+org.apache.isis.commons:isis-commons:jar:<managed> +
 org.apache.isis.core:isis-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed> +
 org.docx4j:docx4j-JAXB-ReferenceImpl:jar:<managed> +
 org.docx4j:docx4j-export-fo:jar:<managed> +
-org.jdom:jdom2:jar:<managed> +
 ****
 
 .Document Index Entries
