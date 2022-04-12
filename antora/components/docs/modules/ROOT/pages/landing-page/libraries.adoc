@@ -17,18 +17,6 @@ Libraries and utilities to be called by the domain logic of the Apache Isis appl
 Implementations of various value types, eg Markdown.
 Each will have an applib submodule (for use within the domain logic) as well as various extension modules to be made available to the framework itself (to teach it how to persist or render the value type).
 
-
-== Integrate between Apps
-
-These libraries are used to integrate between apps, acting as the glue code.
-Some are implementations of SPIs defined by the framework (for example to publish events), others are for use by your application (for example to make REST calls):
-
-* xref:mappings:ROOT:about.adoc[BC Mapping Libraries]
-+
-Libraries and utilities for bounded context (BC) mappings.
-In other words, tools to help integrating system together.
-
-
 == Extending the Framework itself
 
 These libraries extend the capabilities of the framework itself:

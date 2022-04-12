@@ -49,8 +49,6 @@ For the `isis-testing-xxx` modules (fixture scripts, unit test support, integ te
 
 * `o.a.i.subdomains:isis-subdomains`
 
-* `o.a.i.mappings:isis-mappings`
-
 * `o.a.i.valuetypes:isis-valuetypes`
 
 * `o.a.i.incubator:isis-incubator`
