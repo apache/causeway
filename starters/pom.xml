@@ -99,14 +99,6 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.mappings</groupId>
-				<artifactId>isis-mappings</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-
-			<dependency>
 				<groupId>org.apache.isis.subdomains</groupId>
 				<artifactId>isis-subdomains</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
