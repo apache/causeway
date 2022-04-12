@@ -60,7 +60,6 @@ export SOURCE_MODE=attach
 
 # -Dmodule-all ... build all modules
 # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
-# -Djacoco.skip=true ... no need for the CI build to add test coverage reports
 # -T 1C ... 1 build thread per core
 export MVN_ADDITIONAL_OPTS="\
 -Dmodule-examples-demo-wicket \
@@ -68,7 +67,6 @@ export MVN_ADDITIONAL_OPTS="\
 -Djacoco-report-xml \
 -Dskip-docker=true \
 -Denforcer.failFast=true \
--Djacoco.skip=false \
 -DskipTests=false"
 
 # possible modes are
