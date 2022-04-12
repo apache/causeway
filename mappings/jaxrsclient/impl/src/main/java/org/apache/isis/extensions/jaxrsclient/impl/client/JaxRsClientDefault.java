@@ -76,7 +76,11 @@ public class JaxRsClientDefault implements JaxRsClient {
     }
 
     @Override
-    public JaxRsResponse post(final URI uri, final String bodyJson, final String username, final String password) {
+    public JaxRsResponse post(
+            final URI uri,
+            final String bodyJson,
+            final String username,
+            final String password) {
 
         final Client client = this.clientBuilder.build();
 
