@@ -56,9 +56,6 @@ commands:
       Mappings: org.apache.isis.mappings
       #"Outbox Publisher": org.apache.isis.mappings:isis-mappings-jaxrsclient.*
       "JAX-RS Client Library": "org.apache.isis.mappings:isis-mappings-jaxrsclient.*"
-      #Minio: "org.apache.isis.mappings:isis-mappings-minio.*"
-      "REST Client": "org.apache.isis.mappings:isis-mappings-restclient.*"
-      #"Slack Library": "org.apache.isis.mappings:isis-mappings-slack.*"
 
       Extensions: org.apache.isis.extensions
       "Core: Command Log": "org.apache.isis.extensions:isis-extensions-command-log.*"
@@ -76,15 +73,7 @@ commands:
       "Wicket Viewer: Pdf.js": "org.apache.isis.security:isis-extensions-fullcalendar.*"
 
       Subdomains: org.apache.isis.subdomains
-      "Base": "org.apache.isis.subdomains:isis-subdomains-base.*"
-      #"docx": "org.apache.isis.subdomains:isis-subdomains-docx.*"
       "Excel": "org.apache.isis.subdomains:isis-subdomains-excel.*"
-      #"Freemarker": "org.apache.isis.subdomains:isis-subdomains-freemarker.*"
-      #"OGNL": "org.apache.isis.subdomains:isis-subdomains-ognl.*"
-      #"PDF Box": "org.apache.isis.subdomains:isis-subdomains-pdfbox.*"
-      "Spring": "org.apache.isis.subdomains:isis-subdomains-spring.*"
-      "XDocReport": "org.apache.isis.subdomains:isis-subdomains-xdocreport.*"
-      #"Zip": "org.apache.isis.subdomains:isis-subdomains-zip.*"
 
       "Tooling": org.apache.isis.tooling.*
       "Regression Tests": org.apache.isis.regressiontests.*

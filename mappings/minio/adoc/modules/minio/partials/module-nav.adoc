@@ -1,6 +1,0 @@
-
-
-
-* xref:mappings:minio:about.adoc[Minio Library]
-
-
