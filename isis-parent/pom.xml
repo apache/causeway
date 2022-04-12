@@ -1145,6 +1145,9 @@ under the License.
 					<name>jacoco-report-xml</name>
 				</property>
 			</activation>
+			<properties>
+				<surefire-plugin.argLine>@{argLine} -Xms512m -Xmx512m</surefire-plugin.argLine>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
