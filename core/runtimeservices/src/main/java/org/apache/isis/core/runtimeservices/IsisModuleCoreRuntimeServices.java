@@ -42,8 +42,8 @@ import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePoMenu;
 import org.apache.isis.core.runtimeservices.icons.ObjectIconServiceDefault;
 import org.apache.isis.core.runtimeservices.interaction.InteractionDtoFactoryDefault;
 import org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault;
-import org.apache.isis.core.runtimeservices.locale.LocaleChoiceProviderDefault;
 import org.apache.isis.core.runtimeservices.locale.LanguageProviderDefault;
+import org.apache.isis.core.runtimeservices.locale.LocaleChoiceProviderDefault;
 import org.apache.isis.core.runtimeservices.memento.ObjectMementoServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.isis.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBS;
@@ -60,6 +60,7 @@ import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault;
 import org.apache.isis.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.isis.core.runtimeservices.sitemap.SitemapServiceDefault;
+import org.apache.isis.core.runtimeservices.spring.SpringBeansService;
 import org.apache.isis.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.isis.core.runtimeservices.user.ImpersonateMenuAdvisorDefault;
@@ -112,6 +113,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         XmlSnapshotServiceDefault.class,
         ObjectLifecyclePublisherDefault.class,
         SchemaValueMarshallerDefault.class,
+        SpringBeansService.class,
 
         // @Controller
         RoutingServiceDefault.class,
