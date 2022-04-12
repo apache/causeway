@@ -172,16 +172,7 @@ content:
       start_path: mappings/adoc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/jaxrsclient/adoc # mappings
-      branches: HEAD
-    - url: .
-      start_path: mappings/minio/adoc # mappings
-      branches: HEAD
-    - url: .
       start_path: mappings/outbox-publisher/adoc # mappings
-      branches: HEAD
-    - url: .
-      start_path: mappings/slack/adoc # mappings
       branches: HEAD
 
 # mavendeps
