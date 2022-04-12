@@ -181,9 +181,6 @@ content:
       start_path: mappings/outbox-publisher/adoc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/restclient/adoc # mappings
-      branches: HEAD
-    - url: .
       start_path: mappings/slack/adoc # mappings
       branches: HEAD
 
