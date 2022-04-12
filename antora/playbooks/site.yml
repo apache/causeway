@@ -224,9 +224,6 @@ content:
       start_path: subdomains/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/base/adoc # subdomains
-      branches: HEAD
-    - url: .
       start_path: subdomains/excel/adoc # subdomains
       branches: HEAD
 
