@@ -88,7 +88,7 @@ _build(){
 
     echo 'Building'
     # previously there were multiple directories, now just the one.
-    pushd isis*/isis-parent
+    pushd isis*/bom
     _execmustpass mvn clean install -Dskip.git -Preleased,-all
 	popd
 }
@@ -140,7 +140,7 @@ if [[ -z "$NEXUSREPONUM" || -z "$VERSION" || -z "$RC" ]]; then
 fi
 
 cat <<EOF >/tmp/url.txt
-http://repository.apache.org/content/repositories/orgapacheisis-$NEXUSREPONUM/org/apache/isis/isis-parent/$VERSION/isis-parent-$VERSION-source-release.zip
+http://repository.apache.org/content/repositories/orgapacheisis-$NEXUSREPONUM/org/apache/isis/bom/$VERSION/isis-bom-$VERSION-source-release.zip
 EOF
 
 # The work starts here

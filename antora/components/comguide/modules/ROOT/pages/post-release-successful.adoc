@@ -217,14 +217,14 @@ asc="$zip.asc"
 md5="$zip.md5"
 
 
-fullname="isis-parent"
-pushd isis-parent
+fullname="isis-bom"
+pushd bom
 
-curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$asc
+curl -O $repo_root/bom/$new_ver/$fullname-$new_ver-$asc
 svn add $fullname-$new_ver-$asc
-curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$md5
+curl -O $repo_root/bom/$new_ver/$fullname-$new_ver-$md5
 svn add $fullname-$new_ver-$md5
-curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$zip
+curl -O $repo_root/bom/$new_ver/$fullname-$new_ver-$zip
 svn add $fullname-$new_ver-$zip
 
 if [ "Z${old_ver}Z" == "ZZ" ]; then
@@ -375,7 +375,7 @@ We are now in a position to actually generate the Antora website.
 [source,bash,subs="attributes+"]
 ----
 git checkout $ISISBRANCH
-pushd isis-parent
+pushd bom
 mvn clean install -DskipTests -Dreleased
 popd
 mvn clean install -pl core/config

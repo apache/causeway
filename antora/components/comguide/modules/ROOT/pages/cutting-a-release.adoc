@@ -10,7 +10,7 @@ The release process consists of:
 * Members of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote.
 
-Apache Isis itself is released in one go, everything is ultimately a child of `isis-parent/pom.xml` (relative to the link:https://github.com/apache/isis[source code root]).
+Apache Isis itself is released in one go, everything is ultimately a child of `bom/pom.xml` (relative to the link:https://github.com/apache/isis[source code root]).
 This section details the process for formally releasing this module.
 
 The subsequent sections describe how other committers can xref:comguide:ROOT:verifying-releases.adoc[verify a release] and how the release manager can then perform xref:comguide:ROOT:post-release-successful.adoc[post-release] activities and set up for the next development iteration.
@@ -72,7 +72,7 @@ To run the RAT tool, use:
 ----
 mvn clean
 
-pushd isis-parent
+pushd bom
 mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000 -Dreleased
 popd
 
@@ -141,9 +141,9 @@ licenses to remove from supplemental-models.xml (are spurious):
 If any missing entries are listed or are spurious, then update `supplemental-models.xml` and try again.
 
 
-=== Reconcile isis-parent pom
+=== Reconcile isis-bom pom
 
-The `isis-parent/pom.xml` is a customisation of the `org.apache:apache` pom, with each section of customisation clearly identified.
+The `bom/pom.xml` is a customisation of the `org.apache:apache` pom, with each section of customisation clearly identified.
 
 Check to see if there has been a new version of `org.apache:apache`; if so, merge in the changes.
 
@@ -151,7 +151,7 @@ Check to see if there has been a new version of `org.apache:apache`; if so, merg
 
 For link:https://maven.apache.org/guides/mini/guide-reproducible-builds.html[reproducibility], the `project.build.outputTimestamp` property must be updated to a hard-coded value.
 
-Locate this property in `isis-parent/pom.xml` and update to the current date/time.
+Locate this property in `bom/pom.xml` and update to the current date/time.
 
 === Update and preview website
 
@@ -264,13 +264,13 @@ Search through the `.java` files for `{page-isisprev}`, and change to `{page-isi
 At the time of writing there was just one `.java` file that had the release hard-coded (`IsisConfigurationLegacy`).
 
 
-=== Switch to the `isis-parent` directory
+=== Switch to the `bom` directory
 
-The remainder of the release process is performed from the context of the `isis-parent` directory:
+The remainder of the release process is performed from the context of the `bom` directory:
 
 [source,bash,subs="attributes+"]
 ----
-cd isis-parent
+cd bom
 ----
 
 === Bump projects to `$ISISREL`
@@ -278,7 +278,7 @@ cd isis-parent
 We use `mvn versions:set` to manually bump the release version.
 (After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to a `-SNAPSHOT` version).
 
-(Still in the `isis-parent` directory), the steps are:
+(Still in the `bom` directory), the steps are:
 
 * First we bump the framework's `pom.xml` files:
 +
@@ -342,7 +342,7 @@ We activate the (inherited) `apache-release` profile to bring in the `gpg` plugi
 
 The build creates a zip of the directory, so before executing the release we remove any other files.
 
-Still in the `isis-parent` directory, we deploy (upload the artifacts) using:
+Still in the `bom` directory, we deploy (upload the artifacts) using:
 
 [source,bash,subs="attributes+"]
 ----
@@ -435,7 +435,7 @@ With the release now deployed we now need to reset the revision back down to the
 Bumping back to `2.0.0-SNAPSHOT` (rather than the next development snapshot) simplifies CI/CD scripts for teams that want to building Apache Isis from source using git submodules.
 ====
 
-Therefore (still in the `isis-parent` directory):
+Therefore (still in the `bom` directory):
 
 [source,bash,subs="attributes+"]
 ----
@@ -732,7 +732,7 @@ You'll also need to rebuild all and then regenerate config files and tooling:
 [source,bash,subs="attributes+"]
 ----
 git checkout $ISISBRANCH
-pushd isis-parent
+pushd bom
 mvn clean install -DskipTests -Dreleased
 popd
 mvn clean install -pl core/config

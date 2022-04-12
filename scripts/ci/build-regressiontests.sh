@@ -43,7 +43,7 @@ bash $SCRIPT_DIR/_print-environment.sh "build-smoketests"
 # update version (but just for the modules we need to build)
 #
 if [ ! -z "$REVISION" ]; then
-  cd $PROJECT_ROOT_PATH/isis-parent
+  cd $PROJECT_ROOT_PATH/bom
   mvn versions:set -DnewVersion=$REVISION -Dmodule-regressiontests
   cd $PROJECT_ROOT_PATH
 fi
@@ -66,7 +66,7 @@ done
 # finally, revert the version
 #
 if [ ! -z "$REVISION" ]; then
-  cd $PROJECT_ROOT_PATH/isis-parent
+  cd $PROJECT_ROOT_PATH/bom
   mvn versions:revert -Dmodule-regressiontests
   cd $PROJECT_ROOT_PATH
 fi
