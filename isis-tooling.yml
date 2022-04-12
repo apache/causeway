@@ -53,10 +53,6 @@ commands:
       "Markdown": "org.apache.isis.valuetypes:isis-valuetypes-markdown.*"
       "SSE": "org.apache.isis.valuetypes:isis-valuetypes-sse.*"
 
-      Mappings: org.apache.isis.mappings
-      #"Outbox Publisher": org.apache.isis.mappings:isis-mappings-jaxrsclient.*
-      "JAX-RS Client Library": "org.apache.isis.mappings:isis-mappings-jaxrsclient.*"
-
       Extensions: org.apache.isis.extensions
       "Core: Command Log": "org.apache.isis.extensions:isis-extensions-command-log.*"
       "Core: Command Replay": "org.apache.isis.extensions:isis-extensions-command-replay.*"

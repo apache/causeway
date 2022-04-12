@@ -167,14 +167,6 @@ content:
       start_path: incubator/viewers/vaadin/adoc # incubator
       branches: HEAD
 
-# mappings
-    - url: .
-      start_path: mappings/adoc # mappings
-      branches: HEAD
-    - url: .
-      start_path: mappings/outbox-publisher/adoc # mappings
-      branches: HEAD
-
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # starters

@@ -32,15 +32,6 @@ content:
       start_path: examples/demo/domain/src/main/adoc # docs
       branches: HEAD
 
-
-# mappings
-    - url: .
-      start_path: mappings/adoc # mappings
-      branches: HEAD
-    - url: .
-      start_path: mappings/outbox-publisher/adoc # mappings
-      branches: HEAD
-
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
