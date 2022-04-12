@@ -138,7 +138,7 @@
 		<joda-time.version>2.10.14</joda-time.version>
 		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
-		<jquery-ui.version>1.13.0</jquery-ui.version> <!-- org.webjars:jquery-ui -->
+		<jquery-ui.version>1.13.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
 		<jsr305.version>3.0.2</jsr305.version>
 		<junit-jupiter.version>5.8.2</junit-jupiter.version> <!-- overrides spring -->
