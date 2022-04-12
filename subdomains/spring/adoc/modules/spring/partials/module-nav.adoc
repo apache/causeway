@@ -1,6 +1,0 @@
-
-
-
-* xref:subdomains:spring:about.adoc[Spring Library]
-
-

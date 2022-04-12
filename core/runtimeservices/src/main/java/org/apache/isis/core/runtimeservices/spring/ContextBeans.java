@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.subdomains.spring.applib.service;
+package org.apache.isis.core.runtimeservices.spring;
 
 import java.util.Arrays;
 import java.util.Collections;

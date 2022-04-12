@@ -50,13 +50,7 @@ content:
       start_path: subdomains/base/adoc # subdomains
       branches: HEAD
     - url: .
-      start_path: subdomains/docx/adoc # subdomains
-      branches: HEAD
-    - url: .
       start_path: subdomains/excel/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/spring/adoc # subdomains
       branches: HEAD
 
 
