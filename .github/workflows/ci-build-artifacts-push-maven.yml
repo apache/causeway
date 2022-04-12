@@ -81,7 +81,7 @@ jobs:
         # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
-          -f isis-parent/pom.xml
+          -f bom/pom.xml
           -Dgithub
           -Denforcer.failFast=true
           -DinstallAtEnd=true -DdeployAtEnd=true

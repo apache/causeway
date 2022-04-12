@@ -53,3 +53,18 @@ and introducing `Railway<F, S>`
 
 |===
 
+== Maven
+
+Following Maven artifacts changed:
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| `org.apache.isis:isis-parent` renamed
+| renamed to `org.apache.isis:isis-bom` 
+
+|===
+
