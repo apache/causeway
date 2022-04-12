@@ -49,7 +49,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<surefire-plugin.argLine>-Xms1024m -Xmx1024m</surefire-plugin.argLine>
 		<testsToExclude>**/*IntegrationTest.java</testsToExclude>
 
 		<checkstyle.configLocation>${coreBaseDir}/codequality/checkstyle.xml</checkstyle.configLocation>
@@ -282,17 +281,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${maven-surefire-plugin.version}</version>
-					<configuration>
-						<!-- override defaults and include everything unless explicitly excluded -->
-						<includes>
-							<include>**/*.java</include>
-						</includes>
-						<excludes>
-							<exclude>${testsToExclude}</exclude>
-						</excludes>
-						<printSummary>false</printSummary>
-						<argLine>@{argLine} ${surefire-plugin.argLine}</argLine>
-					</configuration>
 					<!-- goal:test binds to phase:test -->
 				</plugin>
 

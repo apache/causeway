@@ -82,7 +82,6 @@ jobs:
           -Dmaven.source.skip=true
           -Denforcer.failFast=true
           -Djacoco.skip=true 
-          -T 1C
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context

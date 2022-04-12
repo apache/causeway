@@ -334,8 +334,10 @@ under the License.
 
 		<lombok.version>1.18.22</lombok.version> <!-- overriding Spring -->
 		<delombok.output>${project.build.directory}/delombok</delombok.output>
+		<surefire.version>3.0.0-M6</surefire.version>
+		<surefire-plugin.argLine>-Xms512m -Xmx512m</surefire-plugin.argLine>
 		<!-- APACHE ISIS customisation 4/15: end -->
-		<surefire.version>2.22.2</surefire.version>
+		
 		<assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
 		<!-- set this property for all derived projects:
         -->
@@ -541,6 +543,17 @@ under the License.
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${surefire.version}</version>
+					<configuration>
+						<!-- override defaults and include everything unless explicitly excluded -->
+						<includes>
+							<include>**/*.java</include>
+						</includes>
+						<excludes>
+							<exclude>${testsToExclude}</exclude>
+						</excludes>
+						<printSummary>false</printSummary>
+						<argLine>${surefire-plugin.argLine}</argLine>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -1144,8 +1157,6 @@ under the License.
 		                            <goal>prepare-agent</goal>
 		                        </goals>
 		                    </execution>
-		                    <!-- stopped working with GitHub CI on 2021-03-18,
-						         could not find a way to disable -->
 		                    <execution>
 		                        <id>report</id>
 		                        <phase>prepare-package</phase>
@@ -1156,7 +1167,6 @@ under the License.
 		                        	<formats>XML</formats>
 		                        </configuration>
 		                    </execution>
-		                    
 		                </executions>
 		            </plugin>
          		</plugins>
