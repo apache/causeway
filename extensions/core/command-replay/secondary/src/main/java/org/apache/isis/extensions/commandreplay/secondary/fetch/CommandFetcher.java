@@ -23,12 +23,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -38,9 +38,8 @@ import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.StatusException;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
-import org.apache.isis.extensions.jaxrsclient.applib.client.JaxRsClient;
-import org.apache.isis.extensions.jaxrsclient.applib.client.JaxRsResponse;
-import org.apache.isis.extensions.jaxrsclient.impl.client.JaxRsClientDefault;
+import org.apache.isis.extensions.commandreplay.secondary.fetch._LegacyClient.JaxRsClient;
+import org.apache.isis.extensions.commandreplay.secondary.fetch._LegacyClient.JaxRsResponse;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 
@@ -92,7 +91,7 @@ public class CommandFetcher {
 
         final URI uri = buildUri(transactionId);
 
-        final JaxRsResponse response = callPrimary(uri);
+        final _LegacyClient.JaxRsResponse response = callPrimary(uri);
 
         final CommandsDto commandsDto = unmarshal(response, uri);
 
@@ -119,9 +118,9 @@ public class CommandFetcher {
         return uri;
     }
 
-    private JaxRsResponse callPrimary(final URI uri) throws StatusException {
-        final JaxRsResponse response;
-        final JaxRsClient jaxRsClient = new JaxRsClientDefault();
+    private _LegacyClient.JaxRsResponse callPrimary(final URI uri) throws StatusException {
+        final _LegacyClient.JaxRsResponse response;
+        final _LegacyClient.JaxRsClient jaxRsClient = new _LegacyClient.JaxRsClientDefault();
         try {
             final String user = secondaryConfig.getPrimaryUser();
             final String password = secondaryConfig.getPrimaryPassword();
