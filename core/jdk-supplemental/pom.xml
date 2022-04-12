@@ -52,7 +52,7 @@
 	<dependencyManagement>
 		<dependencies>
 			<!-- dependency convergence clash with org.apache.cxf:cxf-core:3.4.0 (used 
-				by isis-mappings-jaxrsclient-impl) -->
+				by isis-mappings-jaxrsclient-impl) TODO ... jaxrsclient was removed -->
 			<dependency>
 				<groupId>com.fasterxml.woodstox</groupId>
 				<artifactId>woodstox-core</artifactId>

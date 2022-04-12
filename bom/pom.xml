@@ -1006,7 +1006,6 @@ under the License.
 			<modules>
 				<module>../core</module>
 				<module>../extensions</module>
-				<module>../mappings</module>
 				<module>../mavendeps</module>
 				<module>../starters</module>
 				<module>../subdomains</module>
@@ -1097,7 +1096,6 @@ under the License.
 			<modules>
 				<module>../core</module>
 				<module>../extensions</module>
-				<module>../mappings</module>
 				<module>../mavendeps</module>
 				<module>../starters</module>
 				<module>../subdomains</module>

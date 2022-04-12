@@ -64,7 +64,6 @@
                 <module>bom</module>
 				<module>core</module>
 				<module>extensions</module>
-				<module>mappings</module>
 				<module>mavendeps</module>
 				<module>starters</module>
 				<module>subdomains</module>
@@ -87,7 +86,6 @@
 				<module>bom</module>
 				<module>core</module>
 				<module>extensions</module>
-				<module>mappings</module>
 				<module>mavendeps</module>
 				<module>starters</module>
 				<module>subdomains</module>

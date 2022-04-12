@@ -60,7 +60,7 @@ clientConfig.setUseRequestDebugLogging(true); // default = false
 RestfulClient client = RestfulClient.ofConfig(clientConfig);
  * </pre></blockquote>
  *
- * Example:
+ * Make a Request and then digest the Response:
  * <blockquote><pre>{@code
 
 Builder request = client.request(

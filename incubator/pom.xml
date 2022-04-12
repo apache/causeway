@@ -26,7 +26,7 @@
 
 	<name>Apache Isis Incubator</name>
 	<description>
-        Collection of Apache Isis extensions, subdomains or BC mappings, currently incubating.
+        Collection of Apache Isis artifacts, currently incubating.
     </description>
 
 	<packaging>pom</packaging>
