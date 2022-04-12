@@ -47,11 +47,8 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-/**
- * @since 2.0 {@index}
- */
 @Log4j2
-public class ResponseDigest<T> {
+class ResponseDigest<T> {
 
     /**
      * synchronous response processing (single entity)
@@ -113,7 +110,7 @@ public class ResponseDigest<T> {
     /**
      * @return (non-null), optionally the result if cardinality is exactly ONE
      */
-    public Optional<T> getEntity(){
+    public Optional<T> getEntity() {
         return getEntities().getSingleton();
     }
 

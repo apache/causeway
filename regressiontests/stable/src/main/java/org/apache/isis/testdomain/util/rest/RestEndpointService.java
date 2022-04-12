@@ -30,12 +30,12 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.util.dto.BookDto;
-import org.apache.isis.viewer.restfulobjects.client.ResponseDigest;
 import org.apache.isis.viewer.restfulobjects.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.isis.viewer.restfulobjects.client.log.ClientConversationFilter;
@@ -117,7 +117,7 @@ public class RestEndpointService {
 
     // -- ENDPOINTS
 
-    public ResponseDigest<JdoBook> getRecommendedBookOfTheWeek(final RestfulClient client) {
+    public Try<JdoBook> getRecommendedBookOfTheWeek(final RestfulClient client) {
 
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeek/invoke");
         val args = client.arguments()
@@ -129,7 +129,7 @@ public class RestEndpointService {
         return digest;
     }
 
-    public ResponseDigest<BookDto> getRecommendedBookOfTheWeekDto(final RestfulClient client) {
+    public Try<BookDto> getRecommendedBookOfTheWeekDto(final RestfulClient client) {
 
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekDto/invoke");
         val args = client.arguments()
@@ -141,7 +141,7 @@ public class RestEndpointService {
         return digest;
     }
 
-    public ResponseDigest<JdoBook> getMultipleBooks(final RestfulClient client) throws JAXBException {
+    public Try<Can<JdoBook>> getMultipleBooks(final RestfulClient client) throws JAXBException {
 
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/multipleBooks/invoke");
         val args = client.arguments()
@@ -155,7 +155,7 @@ public class RestEndpointService {
     }
 
 
-    public ResponseDigest<JdoBook> storeBook(final RestfulClient client, final JdoBook newBook) throws JAXBException {
+    public Try<JdoBook> storeBook(final RestfulClient client, final JdoBook newBook) throws JAXBException {
 
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/storeBook/invoke");
         val args = client.arguments()
@@ -168,7 +168,7 @@ public class RestEndpointService {
         return digest;
     }
 
-    public ResponseDigest<BookDto> getRecommendedBookOfTheWeekAsDto(final RestfulClient client) {
+    public Try<BookDto> getRecommendedBookOfTheWeekAsDto(final RestfulClient client) {
 
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekAsDto/invoke");
         val args = client.arguments()
@@ -180,7 +180,7 @@ public class RestEndpointService {
         return digest;
     }
 
-    public ResponseDigest<BookDto> getMultipleBooksAsDto(final RestfulClient client) throws JAXBException {
+    public Try<Can<BookDto>> getMultipleBooksAsDto(final RestfulClient client) throws JAXBException {
 
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/multipleBooksAsDto/invoke");
         val args = client.arguments()
@@ -194,7 +194,7 @@ public class RestEndpointService {
     }
 
 
-    public ResponseDigest<String> getHttpSessionInfo(final RestfulClient client) {
+    public Try<String> getHttpSessionInfo(final RestfulClient client) {
 
         val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/httpSessionInfo/invoke");
         val args = client.arguments()

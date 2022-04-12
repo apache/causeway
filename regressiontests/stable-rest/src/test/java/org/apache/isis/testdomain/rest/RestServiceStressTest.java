@@ -22,6 +22,7 @@ import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +33,6 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -90,13 +90,10 @@ class RestServiceStressTest {
 
     void requestSingleBookOfTheWeek_viaRestEndpoint(final RestfulClient restfulClient) {
 
-        val digest = restService.getRecommendedBookOfTheWeekDto(restfulClient);
+        val digest = restService.getRecommendedBookOfTheWeekDto(restfulClient)
+                .ifFailure(Assertions::fail);
 
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
-        }
-
-        val bookOfTheWeek = digest.getEntities().getSingletonOrFail();
+        val bookOfTheWeek = digest.getValue().orElseThrow();
 
         assertNotNull(bookOfTheWeek);
         assertEquals("Book of the week", bookOfTheWeek.getName());

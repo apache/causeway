@@ -30,6 +30,8 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.client.SuppressionType;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.viewer.restfulobjects.client.auth.BasicAuthFilter;
@@ -38,6 +40,7 @@ import org.apache.isis.viewer.restfulobjects.client.log.ClientConversationLogger
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -73,13 +76,13 @@ Entity<String> args = client.arguments()
 
 Response response = request.post(args);
 
-ResponseDigest<MyObject> digest = client.digest(response, MyObject.class);
+Try<MyObject> digest = client.digest(response, MyObject.class);
 }
 
 if(digest.isSuccess()) {
-    System.out.println("result: "+ digest.getEntities().getSingletonOrFail().get$$instanceId());
+    System.out.println("result: "+ digest.getValue().orElseThrow().get$$instanceId());
 } else {
-    digest.getFailureCause().printStackTrace();
+    digest.getFailure().get().printStackTrace();
 }
  * </pre></blockquote>
  *
@@ -137,12 +140,20 @@ public class RestfulClient {
 
     // -- RESPONSE PROCESSING
 
-    public <T> ResponseDigest<T> digest(final Response response, final Class<T> entityType) {
-        return ResponseDigest.wrap(response, entityType);
+    public <T> Try<T> digest(final Response response, final Class<T> entityType) {
+        val digest = ResponseDigest.wrap(response, entityType);
+        if(digest.isSuccess()) {
+            return Try.success(digest.getEntity().orElse(null));
+        }
+        return Try.failure(digest.getFailureCause());
     }
 
-    public <T> ResponseDigest<T> digestList(final Response response, final Class<T> entityType, final GenericType<List<T>> genericType) {
-        return ResponseDigest.wrapList(response, entityType, genericType);
+    public <T> Try<Can<T>> digestList(final Response response, final Class<T> entityType, final GenericType<List<T>> genericType) {
+        val listDigest = ResponseDigest.wrapList(response, entityType, genericType);
+        if(listDigest.isSuccess()) {
+            return Try.success(listDigest.getEntities());
+        }
+        return Try.failure(listDigest.getFailureCause());
     }
 
     // -- FILTER

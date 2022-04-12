@@ -23,6 +23,7 @@ import static java.time.Duration.ofMillis;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,6 @@ import org.springframework.context.annotation.PropertySources;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -119,12 +119,10 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
         assertTimeout(ofMillis(5000), ()->{
 
             for(int i=0; i<100; ++i) {
-                val digest = restService.getHttpSessionInfo(restfulClient);
-                if(!digest.isSuccess()) {
-                    fail(digest.getFailureCause());
-                }
+                val digest = restService.getHttpSessionInfo(restfulClient)
+                        .ifFailure(Assertions::fail);
 
-                val httpSessionInfo = digest.getEntities();
+                val httpSessionInfo = digest.getValue().orElseThrow();
 
                 assertNotNull(httpSessionInfo);
 

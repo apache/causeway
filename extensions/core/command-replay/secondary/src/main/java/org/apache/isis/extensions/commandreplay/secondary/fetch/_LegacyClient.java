@@ -21,6 +21,7 @@ package org.apache.isis.extensions.commandreplay.secondary.fetch;
 import java.net.URI;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 
 @Deprecated
@@ -33,29 +34,18 @@ class _LegacyClient {
     }
 
     public static interface JaxRsClient {
+        @RequiredArgsConstructor
         public enum ReprType {
-            OBJECT("object"),
             ACTION_RESULT("action-result");
-            @Getter
-            private final String suffix;
-            ReprType(final String suffix) {
-                this.suffix = suffix;
-            }
+            @Getter private final String suffix;
         }
         JaxRsResponse get(URI uri, Class<?> dtoClass, ReprType reprType, String username, String password);
-        JaxRsResponse post(URI uri, String bodyJson, String username, String password);
     }
 
     public static class JaxRsClientDefault implements JaxRsClient {
 
         @Override
         public JaxRsResponse get(final URI uri, final Class<?> dtoClass, final ReprType reprType, final String username, final String password) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public JaxRsResponse post(final URI uri, final String bodyJson, final String username, final String password) {
             // TODO Auto-generated method stub
             return null;
         }
