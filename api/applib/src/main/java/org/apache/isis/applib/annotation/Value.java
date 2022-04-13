@@ -25,6 +25,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.inject.Named;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -48,7 +50,7 @@ public @interface Value {
      * </p>
      *
      * @see DomainObject#logicalTypeName()
-     * @see DomainService#logicalTypeName()
+     * @see Named
      */
     String logicalTypeName()
             default "";
