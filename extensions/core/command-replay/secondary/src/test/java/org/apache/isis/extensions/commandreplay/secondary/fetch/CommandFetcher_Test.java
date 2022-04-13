@@ -21,6 +21,7 @@ package org.apache.isis.extensions.commandreplay.secondary.fetch;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
@@ -30,9 +31,10 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 import lombok.val;
 
+//intended only for manual verification.
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class CommandFetcher_Test {
 
-    //@Disabled // intended only for manual verification.
     @Test
     void testing_the_fetcher() throws StatusException {
 
