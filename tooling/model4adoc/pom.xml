@@ -35,6 +35,7 @@
     </description>
 
 	<properties>
+		<enforcer.skip>true</enforcer.skip>
 	</properties>
 
 	<dependencies>

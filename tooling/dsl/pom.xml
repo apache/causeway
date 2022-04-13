@@ -31,6 +31,7 @@
 		<graphql-java.version>17.3</graphql-java.version>
 		<javapoet.version>1.13.0</javapoet.version>
 		<skipTests>true</skipTests>
+		<enforcer.skip>true</enforcer.skip>
 	</properties>
 
 	<dependencies>

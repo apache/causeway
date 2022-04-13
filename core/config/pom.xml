@@ -70,16 +70,24 @@
         </dependency>
         
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <exclusions>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<exclusions>
 				<exclusion>
-					<!-- version clash -->
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging-processor</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging-annotations</artifactId>
+				</exclusion>
+				<exclusion>
 				    <groupId>org.osgi</groupId>
 				    <artifactId>org.osgi.core</artifactId>
 			    </exclusion>
-			</exclusions>				
-        </dependency>
+			</exclusions>
+		</dependency>
+        
         
 		<!-- IDE support (optional) -->
 		<dependency>

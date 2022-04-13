@@ -80,113 +80,6 @@
 			https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
 			[6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
 
-
-		<!-- LIBRARY DEPENDENCIES -->
-		<archunit.version>0.23.1</archunit.version>
-		<asm.version>9.3</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
-		<approvaltests.version>15.1.2</approvaltests.version>
-
-		<assertj-guava.version>3.4.0</assertj-guava.version>
-
-		<camel.version>3.14.2</camel.version>
-
-		<commons-email.version>1.5</commons-email.version>
-		<commons-httpclient.version>4.5.12</commons-httpclient.version>
-		<commons-io.version>2.11.0</commons-io.version>
-
-		<cucumber.version>7.2.3</cucumber.version>
-
-		<cxf-rt-rs-client.version>3.5.1</cxf-rt-rs-client.version>
-
-		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
-		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
-
-		<datanucleus-api-jdo.version>6.0.0-m4</datanucleus-api-jdo.version>
-		<datanucleus-core.version>6.0.0-m4</datanucleus-core.version>
-		<datanucleus-jdo-api.version>3.2.0-release</datanucleus-jdo-api.version>
-		<datanucleus-jdo-query.version>6.0.0-m1</datanucleus-jdo-query.version>
-		<datanucleus-jodatime.version>6.0.0-m4</datanucleus-jodatime.version>
-		<datanucleus-maven-plugin.version>6.0.0-m1</datanucleus-maven-plugin.version>
-		<datanucleus-rdbms.version>6.0.0-m4</datanucleus-rdbms.version>
-
-		<docx4j.version>11.3.2</docx4j.version>
-
-		<easymock.version>4.3</easymock.version>
-		<error_prone_annotations.version>2.12.1</error_prone_annotations.version>
-
-		<git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
-		<guava.version>31.1-jre</guava.version>
-
-		<htmlparser.version>2.1</htmlparser.version>
-
-		<jakarta.annotation-api.version>2.1.0</jakarta.annotation-api.version>
-		<jakartaee.version>8.0.0</jakartaee.version>
-		<javafaker.version>1.0.2</javafaker.version>
-		<javassist.version>3.28.0-GA</javassist.version>
-		<javax-servlet.version>4.0.1</javax-servlet.version>
-		<jaxb-impl.version>2.3.6</jaxb-impl.version>
-		<jaxws-ri.version>2.3.5</jaxws-ri.version>
-
-		<jbcrypt.version>0.4</jbcrypt.version>
-		<jboss-jaxrs-api_2.0_spec.version>1.0.1.Final</jboss-jaxrs-api_2.0_spec.version>
-
-		<!-- v3.2 not available yet, use datanucleus staging for now -->
-		<!-- <jdo-api.version>3.2</jdo-api.version> -->
-
-		<jdom.version>2.0.6.1</jdom.version>
-		<jmock.version>2.12.0</jmock.version>
-		<joda-time.version>2.10.14</joda-time.version>
-		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
-
-		<jquery-ui.version>1.13.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
-
-		<jsr305.version>3.0.2</jsr305.version>
-		<junit-jupiter.version>5.8.2</junit-jupiter.version> <!-- overrides spring -->
-		<junit-platform.version>1.8.2</junit-platform.version>
-
-		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-
-		<maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
-		<maven-war-plugin.version>3.3.2</maven-war-plugin.version>
-
-		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts)
-			versions -->
-		<node.version>v16.14.0</node.version>
-		<npm.version>8.3.1</npm.version>
-
-		<objenesis.version>3.2</objenesis.version>
-		<ognl.version>3.3.2</ognl.version>
-
-		<picocontainer.version>2.15</picocontainer.version>
-		<poi.version>5.2.1</poi.version>
-
-		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
-
-		<resteasy-spring-boot-starter.version>5.0.0.Final</resteasy-spring-boot-starter.version>
-		<resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
-
-		<select2.version>4.0.13</select2.version>
-		<shiro.version>1.9.0</shiro.version>
-		<simpleslackapi.version>1.3.0</simpleslackapi.version>
-		<slf4j-api.version>1.7.36</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
-		<spring-boot.version>2.6.6</spring-boot.version> <!-- has no effect here, needs to be set in bom/pom.xml -->
-		<summernote.version>0.8.11</summernote.version>
-		<swagger-core.version>1.6.5</swagger-core.version>
-
-		<togglz.version>3.1.1</togglz.version>
-
-		<vaadin.version>23.0.4</vaadin.version>
-
-		<wicket.version>9.8.0</wicket.version>
-		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
-		<wicket-fullcalendar.version>4.2</wicket-fullcalendar.version>
-		<wicket-webjars.version>3.0.4</wicket-webjars.version>
-		<wicket-viewer-jquery.version>3.5.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
-
-		<wicketstuff.version>${wicket.version}</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
-		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
-
 	</properties>
 
 	<pluginRepositories>
@@ -470,38 +363,6 @@
 					<!-- etc; none of the goals has a binding. -->
 				</plugin>
 
-
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-enforcer-plugin</artifactId>
-					<version>${maven-enforcer-plugin.version}</version>
-					<configuration>
-						<rules>
-							<requireMavenVersion>
-								<version>[3.5.0,)</version>
-							</requireMavenVersion>
-							<requireJavaVersion>
-								<version>[11,)</version>
-							</requireJavaVersion>
-							<!-- seemingly not compatible with use of 2.0.0-SNAPSHOT placeholders
-								<requirePluginVersions> <message>All plugin versions must be defined!</message>
-								<banLatest>true</banLatest> <banRelease>true</banRelease> </requirePluginVersions> -->
-							<DependencyConvergence />
-						</rules>
-					</configuration>
-					<!-- goal:enforce supposedly binds to phase:validate, but explicit binding
-						seems to be required -->
-					<executions>
-						<execution>
-							<id>validate-enforce</id>
-							<phase>validate</phase>
-							<goals>
-								<goal>enforce</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-
 				<plugin>
 					<groupId>net.alchim31.maven</groupId>
 					<artifactId>yuicompressor-maven-plugin</artifactId>
@@ -544,10 +405,6 @@
 			and deploy plugins are automatically included because they provide the default
 			bindings. For the 'site' lifecycle, the site plugin is automatically included. -->
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-			</plugin>
 
 			<!-- run using: mvn org.apache.rat:apache-rat-plugin:check -->
 			<plugin>
@@ -822,6 +679,20 @@
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
 				<version>${hibernate-validator.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.jboss.logging</groupId>
+						<artifactId>jboss-logging-processor</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.jboss.logging</groupId>
+						<artifactId>jboss-logging-annotations</artifactId>
+					</exclusion>
+					<exclusion>
+					    <groupId>org.osgi</groupId>
+					    <artifactId>org.osgi.core</artifactId>
+				    </exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
@@ -905,12 +776,6 @@
 				<groupId>com.sun.xml.bind</groupId>
 				<artifactId>jaxb-impl</artifactId>
 				<version>${jaxb-impl.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.xml.ws</groupId>
-				<artifactId>jaxws-ri</artifactId>
-				<version>${jaxws-ri.version}</version>
-				<type>pom</type>
 			</dependency>
 
 			<dependency>

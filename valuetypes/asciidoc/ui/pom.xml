@@ -27,6 +27,7 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.valuetypes.asciidoc.ui</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/valuetypes/asciidoc/ui</git-plugin.propertiesDir>
+		<enforcer.skip>true</enforcer.skip>
 	</properties>
 
 	<dependencies>
