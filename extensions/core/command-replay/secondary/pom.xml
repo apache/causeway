@@ -79,6 +79,12 @@
 			<artifactId>isis-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>isis-viewer-restfulobjects-jaxrsresteasy4</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.glassfish.jersey.ext</groupId>

@@ -112,34 +112,20 @@ public class CommandFetcher {
         return commandsDto;
     }
 
-    //TODO simplify
-    private String buildUri(final UUID interactionId) {
-
-//        val args = client.arguments()
-//                .build();
-
-        val uri =
-                interactionId != null
-                        ? String.format(
-                            "%s?interactionId=%s&batchSize=%d",
-                            URL_SUFFIX, interactionId, secondaryConfig.getBatchSize())
-                        : String.format(
-                            "%s?batchSize=%d",
-                            URL_SUFFIX, secondaryConfig.getBatchSize());
-        log.info("uri = {}", uri);
-        return uri;
-    }
-
     // package private in support of JUnit
-    CommandsDto callPrimary(final UUID transactionId) throws StatusException {
+    CommandsDto callPrimary(final @Nullable UUID interactionId) throws StatusException {
 
-        val endpointUri = buildUri(transactionId);
         val client = newClient(secondaryConfig, useRequestDebugLogging );
         val request = client.request(
-                endpointUri,
+                URL_SUFFIX,
                 SuppressionType.RO);
 
-        final Response response = request.get();
+        val args = client.arguments()
+                .addActionParameter("interactionId", interactionId!=null ? interactionId.toString() : null)
+                .addActionParameter("batchSize", secondaryConfig.getBatchSize())
+                .build();
+
+        final Response response = request.post(args);
         val digest = client.digestList(response, CommandModel.class, new GenericType<List<CommandModel>>(){})
                 .mapFailure(failure->{
                     log.warn("rest call failed", failure);

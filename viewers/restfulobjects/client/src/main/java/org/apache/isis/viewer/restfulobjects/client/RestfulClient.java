@@ -89,24 +89,9 @@ if(digest.isSuccess()) {
  * Maven Setup:
  * <blockquote><pre>{@code
 <dependency>
-    <groupId>org.apache.isis.core</groupId>
-    <artifactId>isis-core-applib</artifactId>
-    <version>2.0.0-M7-SNAPSHOT</version>
-</dependency>
-<dependency>
     <groupId>org.glassfish.jersey.ext</groupId>
     <artifactId>jersey-spring5</artifactId>
-    <version>2.29.1</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish</groupId>
-    <artifactId>javax.json</artifactId>
-    <version>1.1.4</version>
-</dependency>
-<dependency>
-    <groupId>org.eclipse.persistence</groupId>
-    <artifactId>org.eclipse.persistence.moxy</artifactId>
-    <version>2.7.5</version>
+    <version>2.35</version>
 </dependency>
  * }</pre></blockquote>
  *
