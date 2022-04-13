@@ -20,6 +20,7 @@ package org.apache.isis.extensions.commandlog.jdo.ui.rest;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,6 +32,8 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -38,6 +41,7 @@ import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
 import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
+import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
 
@@ -67,6 +71,7 @@ public class CommandRetrievalOnPrimaryService {
     }
 
     /**
+     * TODO: outdated info ...
      * These actions should be called with HTTP Accept Header set to:
      * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"</code>
      *
@@ -77,23 +82,34 @@ public class CommandRetrievalOnPrimaryService {
     @Action(
             domainEvent = FindCommandsOnPrimaryFromDomainEvent.class,
             semantics = SemanticsOf.SAFE,
-            typeOf = CommandJdo.class)
-    public List<CommandJdo> findCommandsOnPrimaryFrom(
-            @Nullable
+            typeOf = CommandDto.class)
+    public List<CommandDto> findCommandsOnPrimaryAsDto(
+
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Interaction Id")
             final UUID interactionId,
-            @Nullable
+
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Batch size")
-            final Integer batchSize)
-            throws NotFoundException {
+            final Integer batchSize) throws NotFoundException {
+
+        return findCommandsOnPrimary(interactionId, batchSize).stream()
+                .map(CommandJdo::getCommandDto)
+                .collect(Collectors.toList());
+    }
+    @MemberSupport public Integer default1FindCommandsOnPrimaryAsDto() {
+        return 25;
+    }
+
+    public List<CommandJdo> findCommandsOnPrimary(
+            final @Nullable UUID interactionId,
+            final @Nullable Integer batchSize) throws NotFoundException {
+
         final List<CommandJdo> commands = commandModelRepository.findSince(interactionId, batchSize);
         if(commands == null) {
             throw new NotFoundException(interactionId);
         }
         return commands;
-    }
-    @MemberSupport public Integer default1FindCommandsOnPrimaryFrom() {
-        return 25;
     }
 
     @Inject CommandModelRepository<CommandJdo> commandModelRepository;

@@ -27,6 +27,7 @@ import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
+import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 public interface CommandModel
 extends
@@ -83,6 +84,10 @@ extends
     @Override
     default int compareTo(final CommandModel other) {
         return this.getTimestamp().compareTo(other.getTimestamp());
+    }
+
+    static CommandsDto toDto(final CommandModel commandModel) {
+        return null;
     }
 
 }

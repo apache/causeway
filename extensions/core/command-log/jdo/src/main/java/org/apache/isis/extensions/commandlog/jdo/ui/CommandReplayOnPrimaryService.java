@@ -111,10 +111,10 @@ public class CommandReplayOnPrimaryService {
                 @ParameterLayout(named="Batch size")
                 final Integer batchSize)
                 throws NotFoundException {
-            return commandRetrievalOnPrimaryService.findCommandsOnPrimaryFrom(interactionId, batchSize);
+            return commandRetrievalOnPrimaryService.findCommandsOnPrimary(interactionId, batchSize);
         }
         @MemberSupport public Integer default1Act() {
-            return commandRetrievalOnPrimaryService.default1FindCommandsOnPrimaryFrom();
+            return commandRetrievalOnPrimaryService.default1FindCommandsOnPrimaryAsDto();
         }
 
     }

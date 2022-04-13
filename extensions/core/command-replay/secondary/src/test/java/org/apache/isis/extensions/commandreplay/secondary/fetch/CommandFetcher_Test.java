@@ -26,12 +26,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.util.JaxbUtil;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.status.StatusException;
-import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -77,8 +77,10 @@ class CommandFetcher_Test {
 
         // when
         log.info("about to call REST endpoint ...");
-        final CommandsDto entity = fetcher.callPrimary(null);
-
-        System.out.println(JaxbUtil.toXml(entity));
+        val commands = fetcher.callPrimary(null);
+        assertNotNull(commands);
+        System.out.println(commands);
     }
+
+
 }
