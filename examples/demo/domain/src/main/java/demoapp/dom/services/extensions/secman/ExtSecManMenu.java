@@ -18,6 +18,8 @@
  */
 package demoapp.dom.services.extensions.secman;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -28,9 +30,9 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom.services.extensions.secman.apptenancy.AppTenancyVm;
 
+@Named("demo.ExtSecManMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.ExtSecManMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="SecMan"

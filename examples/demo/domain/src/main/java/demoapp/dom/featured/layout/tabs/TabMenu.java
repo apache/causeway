@@ -19,6 +19,7 @@
 package demoapp.dom.featured.layout.tabs;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -29,9 +30,9 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
 
+@Named("demo.TabMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.TabMenu"
+        nature=NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })

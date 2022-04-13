@@ -19,6 +19,7 @@
 package demoapp.dom.domain.collections.Collection;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -35,9 +36,9 @@ import lombok.val;
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm_addChild;
 
+@Named("demo.CollectionMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.CollectionMenu"
+        nature=NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

@@ -18,6 +18,8 @@
  */
 package demoapp.dom.domain.objects.other.mixins;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -26,9 +28,9 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 
 import lombok.val;
 
+@Named("demo.MixinMenu")
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = "demo.MixinMenu"
+        nature = NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class MixinMenu {

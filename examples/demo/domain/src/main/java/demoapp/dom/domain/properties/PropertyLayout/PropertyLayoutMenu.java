@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.PropertyLayout;
 import java.time.ZoneId;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -48,9 +49,9 @@ import demoapp.dom.domain.properties.PropertyLayout.repainting.PropertyLayoutRep
 import demoapp.dom.domain.properties.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthVm;
 import demoapp.dom.types.Samples;
 
+@Named("demo.PropertyLayoutMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.PropertyLayoutMenu"
+        nature=NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })

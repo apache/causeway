@@ -19,6 +19,7 @@
 package demoapp.dom.domain.actions.progmodel.assoc;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,9 +29,9 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.factory.FactoryService;
 
+@Named("demo.AssociatedActionMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.AssociatedActionMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="Associated Action"

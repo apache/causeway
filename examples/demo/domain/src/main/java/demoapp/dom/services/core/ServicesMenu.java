@@ -19,6 +19,7 @@
 package demoapp.dom.services.core;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -39,9 +40,9 @@ import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
 import demoapp.dom.services.core.xmlSnapshotService.XmlSnapshotParentVm;
 import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
 
+@Named("demo.ServicesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.ServicesMenu"
+        nature=NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

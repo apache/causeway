@@ -19,6 +19,8 @@
  */
 package demoapp.dom.types.isis;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -33,9 +35,9 @@ import demoapp.dom.types.isis.localresourcepaths.IsisLocalResourcePaths;
 import demoapp.dom.types.isis.markups.IsisMarkups;
 import demoapp.dom.types.isis.passwords.IsisPasswords;
 
+@Named("demo.IsisTypesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.IsisTypesMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="Isis Types"

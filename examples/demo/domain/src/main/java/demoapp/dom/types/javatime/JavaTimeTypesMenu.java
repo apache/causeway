@@ -19,6 +19,8 @@
  */
 package demoapp.dom.types.javatime;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -34,9 +36,9 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.JavaTimeOffsetDateTimes
 import demoapp.dom.types.javatime.javatimeoffsettime.JavaTimeOffsetTimes;
 import demoapp.dom.types.javatime.javatimezoneddatetime.JavaTimeZonedDateTimes;
 
+@Named("demo.JavaTimeTypesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.JavaTimeTypesMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="JavaTimeTypes"

@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -36,9 +37,9 @@ import lombok.val;
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.latlng.Zoom;
 
+@Named("demo.WhereInTheWorldMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.WhereInTheWorldMenu"
+        nature=NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class WhereInTheWorldMenu {

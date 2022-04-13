@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.Property;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -52,9 +53,9 @@ import demoapp.dom.domain.properties.Property.regexPattern.PropertyRegexPatternV
 import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotVm;
 import demoapp.dom.types.Samples;
 
+@Named("demo.PropertyMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.PropertyMenu"
+        nature=NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -184,14 +185,14 @@ public class PropertyMenu {
         return new PropertySnapshotVm("value");
     }
 
-    private void setSampleBlob(String suffix, Consumer<Blob> blobConsumer) {
+    private void setSampleBlob(final String suffix, final Consumer<Blob> blobConsumer) {
         blobSamples.stream()
                 .filter(x -> x.getName().endsWith(suffix))
                 .findFirst()
                 .ifPresent(blobConsumer);
     }
 
-    private void setSampleClob(String suffix, Consumer<Clob> clobConsumer) {
+    private void setSampleClob(final String suffix, final Consumer<Clob> clobConsumer) {
         clobSamples.stream()
                 .filter(x -> x.getName().endsWith(suffix))
                 .findFirst()
