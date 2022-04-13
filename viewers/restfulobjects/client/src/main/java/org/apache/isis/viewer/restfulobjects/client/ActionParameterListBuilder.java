@@ -39,7 +39,7 @@ public class ActionParameterListBuilder {
     public ActionParameterListBuilder addActionParameter(final String parameterName, final String parameterValue) {
         actionParameters.put(parameterName, parameterValue != null
                 ? value("\"" + parameterValue + "\"")
-                        : value(JSON_NULL_LITERAL));
+                : value(JSON_NULL_LITERAL));
         actionParameterTypes.put(parameterName, String.class);
         return this;
     }
