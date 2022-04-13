@@ -556,6 +556,15 @@ under the License.
 						</excludes>
 						<printSummary>false</printSummary>
 						<argLine>${surefire-plugin.argLine}</argLine>
+						<forkCount>1C</forkCount>
+						<reuseForks>true</reuseForks>
+						<systemPropertyVariables>
+							<!-- allows tests to reduce verbosity, or conditionally disable
+								 when run with surefire; e.g.:
+								 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+								 -->
+							<isRunningWithSurefire>true</isRunningWithSurefire>
+						</systemPropertyVariables>
 					</configuration>
 				</plugin>
 				<plugin>

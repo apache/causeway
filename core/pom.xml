@@ -273,14 +273,6 @@
 					<!-- goal:testCompile binds to phase:test-compile -->
 				</plugin>
 
-				<!-- Tests (ignore integration tests) -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>${maven-surefire-plugin.version}</version>
-					<!-- goal:test binds to phase:test -->
-				</plugin>
-
 				<!-- Test Reporting -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
