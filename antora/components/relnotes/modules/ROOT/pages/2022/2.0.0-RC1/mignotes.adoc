@@ -14,6 +14,11 @@
 | previously
 | new
 
+| `@DomainService.logicalTypeName` deprecated for removal
+| use `@Named` or any other semantics supported by Spring
++
+Behavioral change: `@DomainService.logicalTypeName` can now be left empty, which is interpreted as _unspecified/indifferent_ 
+
 | `RecreatableDomainObject` interface removed
 | use `ViewModel` interface instead
 
@@ -64,7 +69,22 @@ Following Maven artifacts changed:
 | new
 
 | `org.apache.isis:isis-parent` renamed
-| renamed to `org.apache.isis:isis-bom` 
+| renamed to `org.apache.isis:isis-bom`
+
+| restclient
+[source, xml]
+----
+<groupId>org.apache.isis.mappings</groupId>
+<artifactId>isis-mappings-restclient-applib</artifactId>
+----
+|
+
+[source, xml]
+----
+<groupId>org.apache.isis.viewer</groupId>
+<artifactId>isis-viewer-restfulobjects-client</artifactId>
+----
+ 
 
 |===
 
