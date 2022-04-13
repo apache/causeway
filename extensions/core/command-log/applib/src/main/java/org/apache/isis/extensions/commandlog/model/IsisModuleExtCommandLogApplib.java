@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.commandlog.model;
 
+import org.apache.isis.core.config.util.SpringProfileUtil;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
 public interface IsisModuleExtCommandLogApplib
@@ -49,5 +50,15 @@ extends ModuleWithFixtures {
 
     public static final String COMMAND_REPLAY_ON_PRIMARY_SERVICE =
             NAMESPACE_PRIMARY + ".CommandReplayOnPrimaryService";
+
+    public static void honorSystemEnvironment() {
+        if("true".equalsIgnoreCase(System.getenv("PRIMARY"))) {
+            SpringProfileUtil.removeActiveProfile("command-replay-secondary"); // just in case
+            SpringProfileUtil.addActiveProfile("command-replay-primary");
+        } else if("true".equalsIgnoreCase(System.getenv("SECONDARY"))) {
+            SpringProfileUtil.removeActiveProfile("command-replay-primary"); // just in case
+            SpringProfileUtil.addActiveProfile("command-replay-secondary");
+        }
+    }
 
 }
