@@ -18,6 +18,8 @@
  */
 package demoapp.web.replay;
 
+import javax.inject.Named;
+
 import org.springframework.context.annotation.Profile;
 
 import org.apache.isis.applib.annotation.Action;
@@ -28,9 +30,9 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.commandreplay.secondary.spi.ReplayCommandExecutionController;
 
+@Named("demo.web.DemoReplayController")
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = "demo.web.DemoReplayController"
+        nature = NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("secondary")

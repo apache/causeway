@@ -21,6 +21,8 @@ package org.apache.isis.testdomain.rospec;
 import java.math.BigInteger;
 import java.util.List;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -28,9 +30,9 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.collections._Lists;
 
+@Named("testdomain.RoSpecSampler")
 @DomainService(
-        nature = NatureOfService.REST,
-        logicalTypeName = "testdomain.RoSpecSampler"
+        nature = NatureOfService.REST
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class RoSpecSampler {
@@ -166,7 +168,7 @@ public class RoSpecSampler {
     }
 
     @Action
-    public BigComplex complexAdd(String are, String aim, String bre, String bim) {
+    public BigComplex complexAdd(final String are, final String aim, final String bre, final String bim) {
         return BigComplex.of(are, aim).add(BigComplex.of(bre, bim));
     }
 

@@ -18,10 +18,13 @@
  */
 package org.apache.isis.extensions.secman.applib.mmm.dom;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 
-@DomainService(logicalTypeName = "mmm.ChaseCatsService")
+@Named("mmm.ChaseCatsService")
+@DomainService
 public class ChaseCatsService {
     @Action
     public void chaseCats() {}

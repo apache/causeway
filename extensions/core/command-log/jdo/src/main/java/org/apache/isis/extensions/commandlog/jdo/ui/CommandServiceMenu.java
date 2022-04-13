@@ -51,21 +51,18 @@ import lombok.RequiredArgsConstructor;
 /**
  * @since 2.0 {@index}
  */
+@Named(IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandServiceMenu")
 @DomainService(
-    nature = NatureOfService.VIEW,
-    logicalTypeName = CommandServiceMenu.LOGICAL_TYPE_NAME
+    nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Named(CommandServiceMenu.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Jdo")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class CommandServiceMenu {
-
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandServiceMenu";
 
     public static abstract class PropertyDomainEvent<T>
             extends IsisModuleExtCommandLogJdo.PropertyDomainEvent<CommandServiceMenu, T> { }

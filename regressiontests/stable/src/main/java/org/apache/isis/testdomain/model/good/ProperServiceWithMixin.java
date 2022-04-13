@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.model.good;
 
+import javax.inject.Named;
+
 import org.joda.time.LocalDateTime;
 
 import org.apache.isis.applib.annotation.Action;
@@ -25,9 +27,8 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 
-@DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = "testdomain.ProperServiceWithMixin")
+@Named("testdomain.ProperServiceWithMixin")
+@DomainService(nature = NatureOfService.VIEW)
 public class ProperServiceWithMixin {
 
     @Action

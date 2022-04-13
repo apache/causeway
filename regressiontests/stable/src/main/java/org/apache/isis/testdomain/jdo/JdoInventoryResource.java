@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.web.context.request.RequestContextHolder;
@@ -42,9 +43,9 @@ import org.apache.isis.testdomain.util.dto.BookDto;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@Named("testdomain.jdo.InventoryResource")
 @DomainService(
-        nature = NatureOfService.REST,
-        logicalTypeName = "testdomain.jdo.InventoryResource"
+        nature = NatureOfService.REST
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })

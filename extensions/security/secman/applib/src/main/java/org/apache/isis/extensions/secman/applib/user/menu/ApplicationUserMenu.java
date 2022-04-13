@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.applib.user.menu;
 import java.util.Collection;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -40,9 +41,9 @@ import org.apache.isis.extensions.secman.applib.user.man.ApplicationUserManager;
 
 import lombok.RequiredArgsConstructor;
 
+@Named(ApplicationUserMenu.LOGICAL_TYPE_NAME)
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = ApplicationUserMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
         named = "Security",

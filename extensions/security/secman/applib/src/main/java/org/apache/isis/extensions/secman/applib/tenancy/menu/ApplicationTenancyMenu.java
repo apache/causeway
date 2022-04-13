@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.applib.tenancy.menu;
 import java.util.Collection;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -41,9 +42,9 @@ import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.isis.extensions.secman.applib.tenancy.man.ApplicationTenancyManager;
 
+@Named(ApplicationTenancyMenu.LOGICAL_TYPE_NAME)
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = ApplicationTenancyMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
         named = "Security",

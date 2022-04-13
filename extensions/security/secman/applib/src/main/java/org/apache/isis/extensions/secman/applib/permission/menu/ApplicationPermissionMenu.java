@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.applib.permission.menu;
 import java.util.Collection;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -38,9 +39,9 @@ import org.apache.isis.extensions.secman.applib.permission.app.ApplicationOrphan
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 
+@Named(ApplicationPermissionMenu.LOGICAL_TYPE_NAME)
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = ApplicationPermissionMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,

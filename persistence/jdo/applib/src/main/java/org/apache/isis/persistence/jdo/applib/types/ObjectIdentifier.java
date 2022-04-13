@@ -23,10 +23,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.inject.Named;
+
 import org.springframework.core.annotation.AliasFor;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -35,8 +36,9 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 
 /**
  * Meta-annotation for a mandatory {@link String} property or parameter representing a
- * the identity of a domain object (with respect to its logical type, as per @{@link DomainObject#logicalTypeName() DomainObject#logicalTypeName}
- * or @{@link DomainService#logicalTypeName() DomainObject#logicalTypeName}).
+ * the identity of a domain object (with respect to its logical type,
+ * as per @{@link DomainObject#logicalTypeName()}
+ * or @{@link Named#value()}) and consorts.
  *
  * @see LogicalTypeName
  *
