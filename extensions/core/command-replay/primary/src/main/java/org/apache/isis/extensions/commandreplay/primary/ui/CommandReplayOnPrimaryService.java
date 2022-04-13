@@ -54,20 +54,17 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @DomainService(
-    nature = NatureOfService.VIEW,
-    logicalTypeName = CommandReplayOnPrimaryService.LOGICAL_TYPE_NAME
+    nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Named(CommandReplayOnPrimaryService.LOGICAL_TYPE_NAME)
+@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandReplayOnPrimaryService")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandReplayOnPrimaryService {
-
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandReplayOnPrimaryService";
 
     @Inject final CommandModelRepository<? extends CommandModel> commandModelRepository;
     @Inject final JaxbService jaxbService;

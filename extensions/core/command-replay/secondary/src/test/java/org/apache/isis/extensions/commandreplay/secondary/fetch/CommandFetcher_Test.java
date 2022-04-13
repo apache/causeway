@@ -20,7 +20,6 @@ package org.apache.isis.extensions.commandreplay.secondary.fetch;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.util.JaxbUtil;
@@ -33,7 +32,7 @@ import lombok.val;
 
 class CommandFetcher_Test {
 
-    @Disabled // intended only for manual verification.
+    //@Disabled // intended only for manual verification.
     @Test
     void testing_the_fetcher() throws StatusException {
 

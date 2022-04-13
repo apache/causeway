@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -57,9 +58,9 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = ImpersonateMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
+@Named(ImpersonateMenu.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.TERTIARY

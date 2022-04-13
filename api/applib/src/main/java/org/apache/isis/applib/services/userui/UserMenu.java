@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.userui;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -38,9 +39,9 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = UserMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
+@Named(UserMenu.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )

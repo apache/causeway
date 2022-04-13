@@ -37,7 +37,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import lombok.RequiredArgsConstructor;
 
 @Named(TranslationServicePoMenu.LOGICAL_TYPE_NAME)
-@DomainService(logicalTypeName = TranslationServicePoMenu.LOGICAL_TYPE_NAME)
+@DomainService()
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

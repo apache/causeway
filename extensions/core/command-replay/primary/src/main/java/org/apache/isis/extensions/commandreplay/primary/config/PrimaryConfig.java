@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 
 import lombok.Getter;
 import lombok.val;
@@ -33,7 +34,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.commandReplayPrimary.PrimaryConfig")
+@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".PrimaryConfig")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 //@Log4j2
 public class PrimaryConfig {

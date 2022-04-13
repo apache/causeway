@@ -18,14 +18,16 @@
  */
 package org.apache.isis.core.runtimeservices.menubars.bootstrap;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = "simple.SimpleMenu"
+        nature = NatureOfService.VIEW
         )
+@Named("simple.SimpleMenu")
 public class Bar {
 
     @Action

@@ -28,6 +28,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.ViewModel;
@@ -73,9 +74,9 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = FixtureScripts.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
+@Named(FixtureScripts.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(
         named="Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

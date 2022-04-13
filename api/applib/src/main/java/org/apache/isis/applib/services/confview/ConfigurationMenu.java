@@ -41,8 +41,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = ConfigurationMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY

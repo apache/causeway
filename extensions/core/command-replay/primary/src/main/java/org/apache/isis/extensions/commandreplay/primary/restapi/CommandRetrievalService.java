@@ -21,11 +21,17 @@ package org.apache.isis.extensions.commandreplay.primary.restapi;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.*;
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
@@ -37,14 +43,11 @@ import lombok.Getter;
  * @since 2.0 {@index}
  */
 @DomainService(
-    nature = NatureOfService.REST,
-    logicalTypeName = CommandRetrievalService.LOGICAL_TYPE_NAME
+    nature = NatureOfService.REST
 )
-@Named(CommandRetrievalService.LOGICAL_TYPE_NAME)
+@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandRetrievalService")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class CommandRetrievalService {
-
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandRetrievalService";
 
     public static abstract class ActionDomainEvent
             extends IsisModuleExtCommandReplayPrimary.ActionDomainEvent<CommandRetrievalService> { }
