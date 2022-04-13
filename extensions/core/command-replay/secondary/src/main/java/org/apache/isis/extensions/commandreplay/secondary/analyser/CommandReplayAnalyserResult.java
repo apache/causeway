@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
+import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.schema.common.v2.InteractionType;
 
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.commandReplaySecondary.CommandReplayAnalyserResult")
+@Named(IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayAnalyserResult")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor
 public class CommandReplayAnalyserResult implements CommandReplayAnalyser {

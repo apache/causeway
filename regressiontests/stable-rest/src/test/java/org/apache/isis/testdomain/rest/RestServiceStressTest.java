@@ -23,8 +23,8 @@ import java.util.stream.IntStream;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
@@ -52,13 +52,14 @@ import lombok.extern.log4j.Log4j2;
     Configuration_usingJdo.class,
     IsisModuleViewerRestfulObjectsJaxrsResteasy4.class
 })
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 @Log4j2
 class RestServiceStressTest {
 
     @LocalServerPort int port; // just for reference (not used)
     @Inject RestEndpointService restService;
 
-    @Test @Disabled("test works, though don't enable when building")
+    @Test
     void bookOfTheWeek_stressTest() {
 
         assertTrue(restService.getPort()>0);

@@ -31,6 +31,7 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
+import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.schema.common.v2.InteractionType;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.commandReplaySecondary.CommandReplayAnalyserException")
+@Named(IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayAnalyserException")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor
 public class CommandReplayAnalyserException implements CommandReplayAnalyser {

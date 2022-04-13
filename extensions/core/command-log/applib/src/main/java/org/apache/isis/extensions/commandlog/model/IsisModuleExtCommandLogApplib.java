@@ -44,4 +44,7 @@ extends ModuleWithFixtures {
     public abstract static class PropertyDomainEvent<S,T>
         extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> { }
 
+    public static final String NAMESPACE_PRIMARY = "isis.ext.commandReplayPrimary";
+    public static final String NAMESPACE_SECONDARY = "isis.ext.commandReplaySecondary";
+
 }

@@ -78,7 +78,7 @@ import lombok.val;
 @Profile("secondary")
 public class IsisModuleExtCommandReplaySecondary {
 
-    public static final String NAMESPACE = "isis.ext.commandReplaySecondary";
+    public static final String NAMESPACE = IsisModuleExtCommandLogApplib.NAMESPACE_SECONDARY;
 
     public abstract static class ActionDomainEvent<S>
             extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> { }
@@ -102,7 +102,7 @@ public class IsisModuleExtCommandReplaySecondary {
     }
 
     @Bean(name = "ReplicateAndReplayTrigger" )
-    public SimpleTriggerFactoryBean replicateAndReplayTriggerFactory(@Qualifier("ReplicateAndReplayJob") JobDetail job) {
+    public SimpleTriggerFactoryBean replicateAndReplayTriggerFactory(@Qualifier("ReplicateAndReplayJob") final JobDetail job) {
         val triggerFactory = new SimpleTriggerFactoryBean();
         triggerFactory.setJobDetail(job);
         val config = isisConfiguration.getExtensions().getCommandReplay().getQuartzReplicateAndReplayJob();

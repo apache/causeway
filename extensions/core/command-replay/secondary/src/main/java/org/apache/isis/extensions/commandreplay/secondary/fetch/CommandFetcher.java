@@ -33,7 +33,9 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
+import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.StatusException;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
@@ -50,15 +52,15 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service()
-@Named("isis.ext.commandReplaySecondary.CommandFetcher")
+@Named(IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandFetcher")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Log4j2
 public class CommandFetcher {
 
     static final String URL_SUFFIX =
-            "services/isisExtensionsCommandReplayPrimary."
-            + "CommandRetrievalService/actions/findCommandsOnPrimaryFrom/invoke";
-
+            "services/"
+            + IsisModuleExtCommandLogApplib.NAMESPACE_PRIMARY
+            + ".CommandRetrievalService/actions/findCommandsOnPrimaryFrom/invoke";
 
     /**
      * Replicates a single command.
@@ -99,8 +101,12 @@ public class CommandFetcher {
         return commandsDto;
     }
 
-
+    //TODO simplify
     private String buildUri(final UUID interactionId) {
+
+//        val args = client.arguments()
+//                .build();
+
         val uri =
                 interactionId != null
                         ? String.format(
@@ -153,7 +159,7 @@ public class CommandFetcher {
             final SecondaryConfig secondaryConfig,
             final boolean useRequestDebugLogging) {
 
-        RestfulClientConfig clientConfig = new RestfulClientConfig();
+        val clientConfig = new RestfulClientConfig();
         clientConfig.setRestfulBase(secondaryConfig.getPrimaryBaseUrlRestful());
         // setup basic-auth
         clientConfig.setUseBasicAuth(true);
@@ -162,8 +168,7 @@ public class CommandFetcher {
         // setup request/response debug logging
         clientConfig.setUseRequestDebugLogging(useRequestDebugLogging);
 
-        RestfulClient client = RestfulClient.ofConfig(clientConfig);
-
+        val client = RestfulClient.ofConfig(clientConfig);
         return client;
     }
 

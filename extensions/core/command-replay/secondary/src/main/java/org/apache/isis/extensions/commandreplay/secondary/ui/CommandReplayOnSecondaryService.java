@@ -24,7 +24,14 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
@@ -40,23 +47,20 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @DomainService(
-    nature = NatureOfService.VIEW,
-    logicalTypeName = CommandReplayOnSecondaryService.LOGICAL_TYPE_NAME
+    nature = NatureOfService.VIEW
 )
+@Named(IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayOnSecondaryService")
 @DomainServiceLayout(
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Named(CommandReplayOnSecondaryService.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandReplayOnSecondaryService {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayOnSecondaryService";
-
     @Inject CommandModelRepository<? extends CommandModel> commandModelRepository;
-    @Inject final JaxbService jaxbService;
+    @Inject JaxbService jaxbService;
 
     public static abstract class ActionDomainEvent<T> extends IsisModuleExtCommandReplaySecondary.ActionDomainEvent<T> { }
 
