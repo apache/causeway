@@ -58,33 +58,69 @@ and introducing `Railway<F, S>`
 
 |===
 
-== Maven
+== Other
 
-Following Maven artifacts changed:
-[cols="2a,3a", options="header"]
+=== Bill of Material / Parent POM
 
-|===
+Folder moved `/isis-parent` -> `/bom` 
 
-| previously
-| new
-
-| `org.apache.isis:isis-parent` renamed
-| renamed to `org.apache.isis:isis-bom`
-
-| restclient
 [source, xml]
+.Bill of Material
 ----
+<!-- renamed
+<groupId>org.apache.isis</groupId>
+<artifactId>isis-parent</artifactId>
+-->
+
+<groupId>org.apache.isis</groupId>
+<artifactId>isis-bom</artifactId>
+----
+
+=== Restclient
+
+[source, java]
+.Restclient Package Names
+----
+//import org.apache.isis.extensions.restclient.RestfulClient;
+//import org.apache.isis.extensions.restclient.RestfulClientConfig;
+import org.apache.isis.viewer.restfulobjects.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
+----
+
+[source, xml]
+.Restclient Artifacts
+----
+<!-- renamed
 <groupId>org.apache.isis.mappings</groupId>
 <artifactId>isis-mappings-restclient-applib</artifactId>
-----
-|
+-->
 
-[source, xml]
-----
 <groupId>org.apache.isis.viewer</groupId>
 <artifactId>isis-viewer-restfulobjects-client</artifactId>
 ----
- 
 
-|===
+[source, java]
+.Restclient Usage
+----
+// DigestResponse is no longer publicly visible, instead returning Try<T>  
+<T> Try<T> digest(Response response, Class<T> entityType);
+
+// DigestResponse is no longer publicly visible, instead returning Try<Can<T>>
+<T> Try<Can<T>> digestList(Response response, Class<T> entityType, GenericType<List<T>> genericType);
+----
+
+
+
+=== Mappings
+
+[source, xml]
+.Mappings
+----
+<!-- all removed
+<groupId>org.apache.isis.mappings</groupId>
+<artifactId>isis-mappings-...</artifactId>
+-->
+----
+
+
 
