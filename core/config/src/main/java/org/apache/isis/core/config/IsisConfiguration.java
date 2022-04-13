@@ -69,6 +69,7 @@ import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.config.IsisConfiguration.Core;
 import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
@@ -2784,18 +2785,18 @@ public class IsisConfiguration {
             @Data
             public static class PrimaryAccess {
                 @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
-                private Optional<String> baseUrlRestful;
-                private Optional<String> user;
-                private Optional<String> password;
+                private Optional<String> baseUrlRestful = Optional.empty();
+                private Optional<String> user = Optional.empty();
+                private Optional<String> password = Optional.empty();
                 @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
-                private Optional<String> baseUrlWicket;
+                private Optional<String> baseUrlWicket = Optional.empty();
             }
 
             private final SecondaryAccess secondaryAccess = new SecondaryAccess();
             @Data
             public static class SecondaryAccess {
                 @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
-                private Optional<String> baseUrlWicket;
+                private Optional<String> baseUrlWicket = Optional.empty();
             }
 
             private Integer batchSize = 10;
