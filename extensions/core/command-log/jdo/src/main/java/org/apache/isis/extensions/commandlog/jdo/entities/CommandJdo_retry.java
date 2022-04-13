@@ -26,11 +26,11 @@ import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.CommandExecutorService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.ReplayState;
 
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,8 @@ public class CommandJdo_retry {
 
     private final CommandJdo commandJdo;
 
-    public static class ActionDomainEvent extends IsisModuleExtCommandLogJdo.ActionDomainEvent<CommandJdo_retry> { }
+    public static class ActionDomainEvent
+        extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandJdo_retry> { }
 
     public CommandJdo act() {
 

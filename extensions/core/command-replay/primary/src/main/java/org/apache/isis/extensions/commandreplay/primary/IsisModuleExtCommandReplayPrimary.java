@@ -22,12 +22,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandreplay.primary.config.PrimaryConfig;
 import org.apache.isis.extensions.commandreplay.primary.mixins.Object_openOnSecondary;
-import org.apache.isis.extensions.commandreplay.primary.restapi.CommandRetrievalService;
 import org.apache.isis.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand;
-import org.apache.isis.extensions.commandreplay.primary.ui.CommandReplayOnPrimaryService;
 
 /**
  * @since 2.0 {@index}
@@ -35,11 +32,8 @@ import org.apache.isis.extensions.commandreplay.primary.ui.CommandReplayOnPrimar
 @Configuration
 @Import({
         // @Configuration's
-        IsisModuleExtCommandLogApplib.class,
 
         // @Service's
-        CommandRetrievalService.class,
-        CommandReplayOnPrimaryService.class,
         CaptureResultOfCommand.class,
         PrimaryConfig.class,
 
@@ -49,8 +43,6 @@ import org.apache.isis.extensions.commandreplay.primary.ui.CommandReplayOnPrimar
 })
 @Profile("primary")
 public class IsisModuleExtCommandReplayPrimary {
-
-    public static final String NAMESPACE = IsisModuleExtCommandLogApplib.NAMESPACE_PRIMARY;
 
     public abstract static class ActionDomainEvent<S>
             extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> { }

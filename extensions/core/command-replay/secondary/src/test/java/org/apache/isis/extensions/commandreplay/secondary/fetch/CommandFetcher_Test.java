@@ -48,12 +48,12 @@ class CommandFetcher_Test {
         config.getPrimaryAccess().setBaseUrlWicket(Optional.of("http://localhost:8080/wicket/"));
         config.setBatchSize(10);
 
-        val fetcher = new CommandFetcher();
-        fetcher.secondaryConfig = new SecondaryConfig(mmc.getConfiguration());
-        fetcher.useRequestDebugLogging = true;
+        val secondaryConfig = new SecondaryConfig(mmc.getConfiguration());
+        val useRequestDebugLogging = true;
+        val fetcher = new CommandFetcher(secondaryConfig, useRequestDebugLogging);
 
         // when
-        CommandsDto entity = fetcher.callPrimary(null);
+        final CommandsDto entity = fetcher.callPrimary(null);
 
         System.out.println(JaxbUtil.toXml(entity));
     }

@@ -47,4 +47,7 @@ extends ModuleWithFixtures {
     public static final String NAMESPACE_PRIMARY = "isis.ext.commandReplayPrimary";
     public static final String NAMESPACE_SECONDARY = "isis.ext.commandReplaySecondary";
 
+    public static final String COMMAND_REPLAY_ON_PRIMARY_SERVICE =
+            NAMESPACE_PRIMARY + ".CommandReplayOnPrimaryService";
+
 }

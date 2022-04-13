@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandreplay.primary.ui;
+package org.apache.isis.extensions.commandlog.jdo.ui;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +24,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
@@ -40,10 +41,10 @@ import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceFo
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.extensions.commandlog.jdo.ui.rest.CommandRetrievalOnPrimaryService;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
-import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
-import org.apache.isis.extensions.commandreplay.primary.restapi.CommandRetrievalService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 
@@ -60,8 +61,9 @@ import lombok.RequiredArgsConstructor;
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandReplayOnPrimaryService")
+@Named(IsisModuleExtCommandLogApplib.COMMAND_REPLAY_ON_PRIMARY_SERVICE)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
+@Profile("primary")
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandReplayOnPrimaryService {
@@ -70,9 +72,10 @@ public class CommandReplayOnPrimaryService {
     @Inject final JaxbService jaxbService;
     @Inject final MessageService messageService;
     @Inject final ContentMappingServiceForCommandsDto contentMappingServiceForCommandsDto;
-    @Inject final CommandRetrievalService commandRetrievalService;
+    @Inject final CommandRetrievalOnPrimaryService commandRetrievalOnPrimaryService;
 
-    public static abstract class ActionDomainEvent<T> extends IsisModuleExtCommandReplayPrimary.ActionDomainEvent<T> { }
+    public static abstract class ActionDomainEvent<T>
+    extends IsisModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
 
     public static class NotFoundException extends RecoverableException {
@@ -107,16 +110,13 @@ public class CommandReplayOnPrimaryService {
                 @ParameterLayout(named="Batch size")
                 final Integer batchSize)
                 throws NotFoundException {
-            return commandRetrievalService.findCommandsOnPrimaryFrom(interactionId, batchSize);
+            return commandRetrievalOnPrimaryService.findCommandsOnPrimaryFrom(interactionId, batchSize);
         }
         @MemberSupport public Integer default1Act() {
-            return commandRetrievalService.default1FindCommandsOnPrimaryFrom();
+            return commandRetrievalOnPrimaryService.default1FindCommandsOnPrimaryFrom();
         }
 
     }
-
-
-
 
     @Action(domainEvent = downloadCommands.ActionEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-download", sequence="50")

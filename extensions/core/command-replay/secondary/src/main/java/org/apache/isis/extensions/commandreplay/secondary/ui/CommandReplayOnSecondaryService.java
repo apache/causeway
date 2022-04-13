@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
@@ -49,7 +50,7 @@ import lombok.val;
 @DomainService(
     nature = NatureOfService.VIEW
 )
-@Named(IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayOnSecondaryService")
+@Named(IsisModuleExtCommandLogApplib.NAMESPACE_SECONDARY + ".CommandReplayOnSecondaryService")
 @DomainServiceLayout(
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY

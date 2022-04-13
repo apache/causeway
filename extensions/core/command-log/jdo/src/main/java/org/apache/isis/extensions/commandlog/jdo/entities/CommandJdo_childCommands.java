@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 public class CommandJdo_childCommands {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandLogJdo.CollectionDomainEvent<CommandJdo_childCommands, CommandModel> { }
+            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandJdo_childCommands, CommandModel> { }
 
     private final CommandJdo commandJdo;
 

@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -39,7 +39,7 @@ import lombok.val;
 public class CommandJdo_openTargetObject {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtCommandLogJdo.ActionDomainEvent<CommandJdo_openTargetObject> { }
+            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandJdo_openTargetObject> { }
 
     private final CommandJdo commandJdo;
 

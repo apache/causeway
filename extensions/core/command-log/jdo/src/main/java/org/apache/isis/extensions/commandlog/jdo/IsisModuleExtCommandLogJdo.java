@@ -24,8 +24,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.jdo.ui.CommandReplayOnPrimaryService;
 import org.apache.isis.extensions.commandlog.jdo.ui.CommandServiceMenu;
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.jdo.ui.rest.CommandRetrievalOnPrimaryService;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
@@ -40,6 +41,8 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
         , CommandServiceMenu.class
 
         // @Service's
+        , CommandReplayOnPrimaryService.class
+        , CommandRetrievalOnPrimaryService.class
         , CommandJdo.TableColumnOrderDefault.class
 
         // entities
@@ -49,8 +52,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
         basePackageClasses= {
                 IsisModuleExtCommandLogJdo.class
         })
-public class IsisModuleExtCommandLogJdo
-implements IsisModuleExtCommandLogApplib {
+public class IsisModuleExtCommandLogJdo {
 
     public static final String NAMESPACE = "isis.ext.commandLog";
 

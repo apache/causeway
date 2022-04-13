@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.lang.Nullable;
@@ -35,7 +36,6 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
-import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.StatusException;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
@@ -44,6 +44,8 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
 import org.apache.isis.viewer.restfulobjects.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -52,15 +54,24 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service()
-@Named(IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandFetcher")
+@Named(IsisModuleExtCommandLogApplib.NAMESPACE_SECONDARY + ".CommandFetcher")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE) // JUnit Support
 @Log4j2
 public class CommandFetcher {
 
     static final String URL_SUFFIX =
             "services/"
-            + IsisModuleExtCommandLogApplib.NAMESPACE_PRIMARY
-            + ".CommandRetrievalService/actions/findCommandsOnPrimaryFrom/invoke";
+            + IsisModuleExtCommandLogApplib.COMMAND_REPLAY_ON_PRIMARY_SERVICE
+            + "/actions/findCommandsOnPrimaryFrom/invoke";
+
+    private final SecondaryConfig secondaryConfig;
+    private final boolean useRequestDebugLogging;
+
+    @Inject
+    public CommandFetcher(final SecondaryConfig secondaryConfig) {
+        this(secondaryConfig, false);
+    }
 
     /**
      * Replicates a single command.
@@ -129,14 +140,16 @@ public class CommandFetcher {
                 SuppressionType.RO);
 
         final Response response = request.get();
-        val digest = client.digest(response, String.class)
+        val digest = client.digestList(response, CommandModel.class, new GenericType<List<CommandModel>>(){})
                 .mapFailure(failure->{
                     log.warn("rest call failed", failure);
                     return new StatusException(SecondaryStatus.REST_CALL_FAILING);
                 })
                 .ifFailureFail();
 
-        return unmarshal(digest.getValue().orElse("<unable to read from response entity>"), endpointUri);
+        System.err.printf("%s%n", digest.getValue());
+
+        return null;//unmarshal(digest.getValue().orElse("<unable to read from response entity>"), endpointUri);
     }
 
     private CommandsDto unmarshal(final String rawValue, final String endpointUri) throws StatusException {
@@ -151,9 +164,6 @@ public class CommandFetcher {
         }
         return commandsDto;
     }
-
-    // package private in support of JUnit
-    boolean useRequestDebugLogging = false;
 
     private static RestfulClient newClient(
             final SecondaryConfig secondaryConfig,
@@ -171,8 +181,5 @@ public class CommandFetcher {
         val client = RestfulClient.ofConfig(clientConfig);
         return client;
     }
-
-    // package private in support of JUnit
-    @Inject SecondaryConfig secondaryConfig;
 
 }

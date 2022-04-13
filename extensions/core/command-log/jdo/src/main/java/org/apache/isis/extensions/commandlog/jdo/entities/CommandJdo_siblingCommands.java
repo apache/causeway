@@ -25,7 +25,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 public class CommandJdo_siblingCommands {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandLogJdo.CollectionDomainEvent<CommandJdo_siblingCommands, CommandJdo> { }
+            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandJdo_siblingCommands, CommandJdo> { }
 
     private final CommandJdo commandJdo;
 

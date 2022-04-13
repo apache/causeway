@@ -27,9 +27,9 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 
 @Collection(
     domainEvent = T_recent.CollectionDomainEvent.class
@@ -40,7 +40,7 @@ import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
 public abstract class T_recent<T> {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandLogJdo.CollectionDomainEvent<T_recent, CommandJdo> { }
+            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<T_recent, CommandJdo> { }
 
     private final T domainObject;
     public T_recent(final T domainObject) {
