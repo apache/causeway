@@ -41,7 +41,7 @@ import org.apache.isis.extensions.commandreplay.primary.spiimpl.CaptureResultOfC
         Object_openOnSecondary.class,
 
 })
-@Profile("primary")
+@Profile("command-replay-primary")
 public class IsisModuleExtCommandReplayPrimary {
 
     public abstract static class ActionDomainEvent<S>

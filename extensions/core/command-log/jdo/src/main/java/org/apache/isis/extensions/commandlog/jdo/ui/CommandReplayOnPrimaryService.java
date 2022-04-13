@@ -63,7 +63,7 @@ import lombok.RequiredArgsConstructor;
 )
 @Named(IsisModuleExtCommandLogApplib.COMMAND_REPLAY_ON_PRIMARY_SERVICE)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Profile("primary")
+@Profile("command-replay-primary")
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandReplayOnPrimaryService {

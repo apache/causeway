@@ -73,7 +73,7 @@ import lombok.val;
         Object_openOnPrimary.class,
 
 })
-@Profile("secondary")
+@Profile("command-replay-secondary")
 public class IsisModuleExtCommandReplaySecondary {
 
     public abstract static class ActionDomainEvent<S>

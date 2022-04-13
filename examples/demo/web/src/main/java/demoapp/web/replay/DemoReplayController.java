@@ -35,7 +35,7 @@ import org.apache.isis.extensions.commandreplay.secondary.spi.ReplayCommandExecu
         nature = NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Profile("secondary")
+@Profile("command-replay-secondary")
 public class DemoReplayController implements ReplayCommandExecutionController {
 
     private State state = State.PAUSED;

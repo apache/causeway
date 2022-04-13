@@ -49,7 +49,7 @@ import lombok.Getter;
 )
 @Named(IsisModuleExtCommandLogApplib.NAMESPACE_PRIMARY + ".CommandRetrievalOnPrimaryService")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Profile("primary")
+@Profile("command-replay-primary")
 public class CommandRetrievalOnPrimaryService {
 
     public static abstract class ActionDomainEvent
