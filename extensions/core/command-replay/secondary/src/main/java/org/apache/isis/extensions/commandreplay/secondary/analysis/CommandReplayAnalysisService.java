@@ -26,8 +26,8 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
+import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyser;
 
 import lombok.extern.log4j.Log4j2;
@@ -36,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleExtCommandLogApplib.NAMESPACE_SECONDARY + ".CommandReplayAnalysisService")
+@Named(IsisModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayAnalysisService")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Log4j2
 public class CommandReplayAnalysisService {

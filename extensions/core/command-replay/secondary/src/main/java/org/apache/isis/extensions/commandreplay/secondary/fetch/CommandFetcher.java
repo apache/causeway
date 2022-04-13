@@ -36,9 +36,9 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
-import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
-import org.apache.isis.extensions.commandreplay.secondary.StatusException;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
+import org.apache.isis.extensions.commandreplay.secondary.status.SecondaryStatus;
+import org.apache.isis.extensions.commandreplay.secondary.status.StatusException;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 import org.apache.isis.viewer.restfulobjects.client.RestfulClient;
@@ -54,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service()
-@Named(IsisModuleExtCommandLogApplib.NAMESPACE_SECONDARY + ".CommandFetcher")
+@Named(IsisModuleExtCommandLogApplib.NAMESPACE_REPLAY_SECONDARY + ".CommandFetcher")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE) // JUnit Support
 @Log4j2
@@ -62,7 +62,7 @@ public class CommandFetcher {
 
     static final String URL_SUFFIX =
             "services/"
-            + IsisModuleExtCommandLogApplib.COMMAND_REPLAY_ON_PRIMARY_SERVICE
+            + IsisModuleExtCommandLogApplib.SERVICE_REPLAY_PRIMARY_COMMAND_RETRIEVAL
             + "/actions/findCommandsOnPrimaryFrom/invoke";
 
     private final SecondaryConfig secondaryConfig;

@@ -47,7 +47,7 @@ import lombok.Getter;
 @DomainService(
     nature = NatureOfService.REST
 )
-@Named(IsisModuleExtCommandLogApplib.NAMESPACE_PRIMARY + ".CommandRetrievalOnPrimaryService")
+@Named(IsisModuleExtCommandLogApplib.NAMESPACE_REPLAY_PRIMARY + ".CommandRetrievalOnPrimaryService")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("command-replay-primary")
 public class CommandRetrievalOnPrimaryService {

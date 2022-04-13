@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo;
+package org.apache.isis.extensions.commandlog.jdo.subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.util.JaxbUtil;
+import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
 
@@ -39,11 +40,11 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.commandLog.CommandCompletionHook")
+@Named(IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandCompletionHook")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
 @Qualifier("Jdo")
-@Log4j2
 @RequiredArgsConstructor
+@Log4j2
 public class CommandSubscriberForJdo implements CommandSubscriber {
 
     @Inject final CommandJdoRepository commandJdoRepository;

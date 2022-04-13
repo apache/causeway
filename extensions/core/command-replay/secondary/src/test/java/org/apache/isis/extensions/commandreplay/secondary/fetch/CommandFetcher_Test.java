@@ -22,18 +22,41 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.util.JaxbUtil;
+import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.isis.extensions.commandreplay.secondary.StatusException;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
+import org.apache.isis.extensions.commandreplay.secondary.status.StatusException;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@SpringBootTest(
+        classes = {
+                CommandFetcher_Test.TestManifest.class
+        },
+        webEnvironment = SpringBootTest.WebEnvironment.NONE,
+        properties = {
+                // "isis.core.meta-model.introspector.parallelize=false",
+                // "logging.level.ObjectSpecificationAbstract=TRACE"
+        })
+@TestPropertySource({
+    IsisPresets.UseLog4j2Test,
+})
 //intended only for manual verification.
 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+@Log4j2
 class CommandFetcher_Test {
+
+    @Configuration
+    static class TestManifest {
+
+    }
 
     @Test
     void testing_the_fetcher() throws StatusException {
@@ -53,6 +76,7 @@ class CommandFetcher_Test {
         val fetcher = new CommandFetcher(secondaryConfig, useRequestDebugLogging);
 
         // when
+        log.info("about to call REST endpoint ...");
         final CommandsDto entity = fetcher.callPrimary(null);
 
         System.out.println(JaxbUtil.toXml(entity));

@@ -28,12 +28,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -45,6 +45,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
 import org.apache.isis.extensions.commandlog.model.command.ReplayState;
@@ -63,7 +64,7 @@ import lombok.val;
  * {@link CommandJdo command} entities.
  */
 @Service
-@Named("isis.ext.commandLog.CommandJdoRepository")
+@Named(IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandJdoRepository")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 @RequiredArgsConstructor

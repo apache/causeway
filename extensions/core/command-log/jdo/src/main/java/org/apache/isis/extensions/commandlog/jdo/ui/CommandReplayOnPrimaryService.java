@@ -41,6 +41,7 @@ import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceFo
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 import org.apache.isis.extensions.commandlog.jdo.ui.rest.CommandRetrievalOnPrimaryService;
 import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
@@ -61,7 +62,7 @@ import lombok.RequiredArgsConstructor;
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Named(IsisModuleExtCommandLogApplib.COMMAND_REPLAY_ON_PRIMARY_SERVICE)
+@Named(IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandReplayOnPrimaryService")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("command-replay-primary")
 @RequiredArgsConstructor

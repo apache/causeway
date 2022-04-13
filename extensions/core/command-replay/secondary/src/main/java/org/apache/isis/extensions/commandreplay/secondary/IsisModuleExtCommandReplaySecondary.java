@@ -38,6 +38,7 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult;
 import org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService;
@@ -75,6 +76,8 @@ import lombok.val;
 })
 @Profile("command-replay-secondary")
 public class IsisModuleExtCommandReplaySecondary {
+
+    public static final String NAMESPACE = IsisModuleExtCommandLogApplib.NAMESPACE_REPLAY_SECONDARY;
 
     public abstract static class ActionDomainEvent<S>
             extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> { }

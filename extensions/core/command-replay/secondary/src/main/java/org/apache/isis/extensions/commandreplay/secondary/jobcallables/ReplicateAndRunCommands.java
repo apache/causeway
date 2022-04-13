@@ -31,11 +31,11 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
 import org.apache.isis.extensions.commandlog.model.command.ReplayState;
-import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
-import org.apache.isis.extensions.commandreplay.secondary.StatusException;
 import org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService;
 import org.apache.isis.extensions.commandreplay.secondary.fetch.CommandFetcher;
 import org.apache.isis.extensions.commandreplay.secondary.spi.ReplayCommandExecutionController;
+import org.apache.isis.extensions.commandreplay.secondary.status.SecondaryStatus;
+import org.apache.isis.extensions.commandreplay.secondary.status.StatusException;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

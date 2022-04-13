@@ -29,8 +29,8 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
+import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.val;
@@ -43,7 +43,7 @@ import lombok.val;
  * Uses the SPI infrastructure to copy over standard properties from {@link Command} to {@link CommandDto}.
  */
 @Service
-@Named(IsisModuleExtCommandLogApplib.NAMESPACE_PRIMARY + ".CaptureResultOfCommand")
+@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CaptureResultOfCommand")
 // specify quite a high priority since custom processors will probably want to run after this one
 // (but can choose to run before if they wish)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)

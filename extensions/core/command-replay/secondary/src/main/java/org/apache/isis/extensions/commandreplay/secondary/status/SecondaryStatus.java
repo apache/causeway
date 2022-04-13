@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandreplay.secondary;
+package org.apache.isis.extensions.commandreplay.secondary.status;
 
 /**
  * @since 2.0 {@index}
