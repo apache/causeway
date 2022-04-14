@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.model.models.interaction.coll;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.wicket.model.ChainingModel;
@@ -55,12 +56,16 @@ extends ChainingModel<DataRow> {
     }
 
     @Override
-    public DataRow getObject() {
+    public final DataRow getObject() {
         if(dataRow==null) {
             dataRow = getDataTableModel().lookupDataRow(uuid)
                     .orElse(null);
         }
         return dataRow;
+    }
+
+    public Optional<DataRow> dataRow() {
+        return Optional.ofNullable(getObject());
     }
 
     // -- HELPER

@@ -18,8 +18,11 @@
  */
 package org.apache.isis.viewer.wicket.model.models.binding;
 
+import java.util.Optional;
+
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 
@@ -38,15 +41,18 @@ extends ChainingModel<Boolean> {
 
     @Override
     public final Boolean getObject() {
-        return getBindable(model()).getValue();
+        return getBindable(model())
+                .map(_BindableAbstract::getValue)
+                .orElse(null);
     }
 
     @Override
     public final void setObject(final Boolean value) {
-        getBindable(model()).setValue(value);
+        getBindable(model())
+        .ifPresent(bindable->bindable.setValue(value));
     }
 
-    protected abstract _BindableAbstract<Boolean> getBindable(T model);
+    protected abstract Optional<_BindableAbstract<Boolean>> getBindable(@Nullable T model);
 
     @SuppressWarnings("unchecked")
     protected T model() {

@@ -18,7 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.model.models.interaction.coll;
 
+import java.util.Optional;
+
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
@@ -39,8 +42,11 @@ extends BooleanBinding<DataRow> {
     }
 
     @Override
-    protected _BindableAbstract<Boolean> getBindable(final DataRow dataRow) {
-        return dataRow.getSelectToggle();
+    protected Optional<_BindableAbstract<Boolean>> getBindable(
+            final @Nullable DataRow dataRow) {
+        return dataRow!=null
+                ? Optional.ofNullable(dataRow.getSelectToggle())
+                : Optional.empty();
     }
 
 }
