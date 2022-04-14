@@ -109,6 +109,9 @@ content:
       branches: HEAD
 
     - url: .
+      start_path: extensions/excel/adoc # extensions
+      branches: HEAD
+    - url: .
       start_path: extensions/core/command-log/adoc # extensions
       branches: HEAD
     - url: .
@@ -202,13 +205,6 @@ content:
       start_path: starters/adoc # toc
       branches: HEAD
 
-# subdomains
-    - url: .
-      start_path: subdomains/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/excel/adoc # subdomains
-      branches: HEAD
 
 # testing
     - url: .
