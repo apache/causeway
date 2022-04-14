@@ -59,7 +59,7 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Responsible for setting up the system (or more likely a part of the system)
- * for the purpose of prototyping/demos or for integraton testing.
+ * for the purpose of prototyping/demos or for integration testing.
  *
  * @since 1.x {@index}
  */
@@ -68,7 +68,7 @@ public abstract class FixtureScript {
 
     public static final FixtureScript NOOP = new FixtureScript() {
         @Override
-        protected void execute(ExecutionContext executionContext) {
+        protected void execute(final ExecutionContext executionContext) {
         }
     };
 
@@ -690,7 +690,7 @@ public abstract class FixtureScript {
         final Class<T> cls = _Casts.uncheckedCast(defaultValue.getClass());
 
         final T value = readParam(parameterName, ec, cls);
-        if(value != null) { return (T) value; }
+        if(value != null) { return value; }
 
         // else default value
         return defaultValue;
@@ -710,7 +710,7 @@ public abstract class FixtureScript {
 
         // read from ExecutionContext
         T value = ec.getParameterAsT(parameterName, cls);
-        if(value != null) { return (T) value; }
+        if(value != null) { return value; }
 
         // else from fixture script
         Method method;
@@ -720,7 +720,7 @@ public abstract class FixtureScript {
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
 
         }
-        if(value != null) { return (T) value; }
+        if(value != null) { return value; }
 
         if (cls == Boolean.class || cls == boolean.class) {
             try {
@@ -729,7 +729,7 @@ public abstract class FixtureScript {
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
 
             }
-            if(value != null) { return (T) value; }
+            if(value != null) { return value; }
         }
 
         return null;

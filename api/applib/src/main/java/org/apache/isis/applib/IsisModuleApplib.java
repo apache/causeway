@@ -47,10 +47,6 @@ import org.apache.isis.applib.services.confview.ConfigurationMenu;
 import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.layout.LayoutServiceMenu;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
-import org.apache.isis.applib.services.publishing.log.CommandLogger;
-import org.apache.isis.applib.services.publishing.log.EntityChangesLogger;
-import org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger;
-import org.apache.isis.applib.services.publishing.log.ExecutionLogger;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
 import org.apache.isis.applib.services.sitemap.SitemapServiceMenu;
@@ -113,17 +109,19 @@ import org.apache.isis.schema.IsisModuleSchema;
 
         // @Service(s)
         CommandDtoProcessorServiceIdentity.class,
-        CommandLogger.class,
         ContentMappingServiceForCommandDto.class,
         ContentMappingServiceForCommandsDto.class,
-        EntityChangesLogger.class,
-        EntityPropertyChangeLogger.class,
-        ExecutionLogger.class,
         SessionLoggingServiceLogging.class,
         SudoService.class,
         UserService.class,
         UserMemento.UiSubscriber.class,
         RoleMemento.UiSubscriber.class,
+
+        // Execution/Change Loggers
+//      CommandLogger.class,
+//      EntityChangesLogger.class,
+//      EntityPropertyChangeLogger.class,
+//      ExecutionLogger.class,
 
 })
 public class IsisModuleApplib {
