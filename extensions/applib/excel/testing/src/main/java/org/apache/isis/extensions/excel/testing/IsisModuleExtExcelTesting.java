@@ -22,13 +22,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.excel.applib.IsisModuleSubdomainsExcelApplib;
+import org.apache.isis.extensions.excel.applib.IsisModuleExtExcelApplib;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
-@Import({IsisModuleSubdomainsExcelApplib.class})
+@Import({IsisModuleExtExcelApplib.class})
 @ComponentScan
-public class IsisModuleSubdomainsExcelTesting {
+public class IsisModuleExtExcelTesting {
 }

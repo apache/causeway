@@ -40,7 +40,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.extensions.excel.applib.IsisModuleSubdomainsExcelApplib;
+import org.apache.isis.extensions.excel.applib.IsisModuleExtExcelApplib;
 import org.apache.isis.extensions.excel.applib.dom.ExcelService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
@@ -61,7 +61,7 @@ import lombok.val;
 )
 public class ExcelFixture extends FixtureScript {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleSubdomainsExcelApplib.NAMESPACE + ".ExcelFixture";
+    public final static String LOGICAL_TYPE_NAME = IsisModuleExtExcelApplib.NAMESPACE + ".ExcelFixture";
 
     @Inject SpecificationLoader specLoader;
     @Inject ExcelService excelService;

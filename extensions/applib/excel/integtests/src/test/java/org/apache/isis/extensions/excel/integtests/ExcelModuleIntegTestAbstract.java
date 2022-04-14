@@ -29,9 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.extensions.excel.fixtures.IsisModuleExtExcelFixtures;
 import org.apache.isis.persistence.jdo.applib.IsisModulePersistenceJdoApplib;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
-import org.apache.isis.extensions.excel.fixtures.IsisModuleSubdomainsExcelFixtures;
 import org.apache.isis.testing.fixtures.applib.IsisIntegrationTestAbstractWithFixtures;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
@@ -54,10 +54,6 @@ public abstract class ExcelModuleIntegTestAbstract extends IsisIntegrationTestAb
             IsisModulePersistenceJdoApplib.class,
             IsisModuleTestingFixturesApplib.class,
 
-            /*
-            new ExcelFixturesModule(),
-            FakeDataModule.class
-             */
             IsisModuleExtExcelFixtures.class
     })
     public static class AppManifest {
