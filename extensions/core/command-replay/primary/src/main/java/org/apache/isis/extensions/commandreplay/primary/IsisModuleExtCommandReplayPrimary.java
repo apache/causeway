@@ -25,7 +25,9 @@ import org.springframework.context.annotation.Profile;
 import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandreplay.primary.config.PrimaryConfig;
 import org.apache.isis.extensions.commandreplay.primary.mixins.Object_openOnSecondary;
+import org.apache.isis.extensions.commandreplay.primary.restapi.CommandRetrievalOnPrimaryService;
 import org.apache.isis.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand;
+import org.apache.isis.extensions.commandreplay.primary.ui.CommandReplayOnPrimaryService;
 
 /**
  * @since 2.0 {@index}
@@ -36,6 +38,8 @@ import org.apache.isis.extensions.commandreplay.primary.spiimpl.CaptureResultOfC
 
         // @Service's
         CaptureResultOfCommand.class,
+        CommandRetrievalOnPrimaryService.class,
+        CommandReplayOnPrimaryService.class,
         PrimaryConfig.class,
 
         // mixins

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.ui;
+package org.apache.isis.extensions.commandreplay.primary.ui;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,20 +36,18 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
-import org.apache.isis.extensions.commandlog.jdo.ui.rest.CommandRetrievalOnPrimaryService;
 import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
+import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository.NotFoundException;
+import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -62,7 +60,7 @@ import lombok.RequiredArgsConstructor;
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Named(IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandReplayOnPrimaryService")
+@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandReplayOnPrimaryService")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("command-replay-primary")
 @RequiredArgsConstructor
@@ -73,21 +71,10 @@ public class CommandReplayOnPrimaryService {
     @Inject final JaxbService jaxbService;
     @Inject final MessageService messageService;
     @Inject final ContentMappingServiceForCommandsDto contentMappingServiceForCommandsDto;
-    @Inject final CommandRetrievalOnPrimaryService commandRetrievalOnPrimaryService;
 
     public static abstract class ActionDomainEvent<T>
     extends IsisModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
-
-    public static class NotFoundException extends RecoverableException {
-        private static final long serialVersionUID = 1L;
-        @Getter
-        private final UUID interactionId;
-        public NotFoundException(final UUID interactionId) {
-            super("Command not found");
-            this.interactionId = interactionId;
-        }
-    }
 
     @Action(domainEvent = findCommands.ActionEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-search", sequence="40")
@@ -111,10 +98,10 @@ public class CommandReplayOnPrimaryService {
                 @ParameterLayout(named="Batch size")
                 final Integer batchSize)
                 throws NotFoundException {
-            return commandRetrievalOnPrimaryService.findCommandsOnPrimary(interactionId, batchSize);
+            return commandModelRepository.findCommandsOnPrimaryElseFail(interactionId, batchSize);
         }
         @MemberSupport public Integer default1Act() {
-            return commandRetrievalOnPrimaryService.default1FindCommandsOnPrimaryAsDto();
+            return 25;
         }
 
     }

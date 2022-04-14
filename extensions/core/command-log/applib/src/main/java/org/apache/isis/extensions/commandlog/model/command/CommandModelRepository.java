@@ -23,9 +23,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
+
+import lombok.Getter;
 
 public interface CommandModelRepository<C extends CommandModel> {
 
@@ -70,7 +75,7 @@ public interface CommandModelRepository<C extends CommandModel> {
      * the primary.
      *
      * @param interactionId - the identifier of the {@link CommandModel command} being
-     *                   the replay hwm (using {@link #findMostRecentReplayed()} on the
+     *                   the replay HWM (using {@link #findMostRecentReplayed()} on the
      *                   secondary), or null if no HWM was found there.
      * @param batchSize - to restrict the number returned (so that replay
      *                   commands can be batched).
@@ -113,6 +118,27 @@ public interface CommandModelRepository<C extends CommandModel> {
 
     void truncateLog();
 
+    // --
 
+    public static class NotFoundException extends RecoverableException {
+        private static final long serialVersionUID = 1L;
+        @Getter
+        private final UUID interactionId;
+        public NotFoundException(final UUID interactionId) {
+            super("Command not found");
+            this.interactionId = interactionId;
+        }
+    }
+
+    default List<C> findCommandsOnPrimaryElseFail(
+            final @Nullable UUID interactionId,
+            final @Nullable Integer batchSize) throws NotFoundException {
+
+        final List<C> commands = findSince(interactionId, batchSize);
+        if(commands == null) {
+            throw new NotFoundException(interactionId);
+        }
+        return commands;
+    }
 
 }

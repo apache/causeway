@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.ui.rest;
+package org.apache.isis.extensions.commandreplay.primary.restapi;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +26,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Profile;
-import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
@@ -37,13 +36,12 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.exceptions.RecoverableException;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
 import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.model.command.CommandModel;
 import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
+import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository.NotFoundException;
+import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-
-import lombok.Getter;
 
 /**
  * @since 2.0 {@index}
@@ -51,7 +49,7 @@ import lombok.Getter;
 @DomainService(
     nature = NatureOfService.REST
 )
-@Named(IsisModuleExtCommandLogApplib.NAMESPACE_REPLAY_PRIMARY + ".CommandRetrievalOnPrimaryService")
+@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandRetrievalOnPrimaryService")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("command-replay-primary")
 public class CommandRetrievalOnPrimaryService {
@@ -60,15 +58,8 @@ public class CommandRetrievalOnPrimaryService {
             extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandRetrievalOnPrimaryService> { }
 
     public static class FindCommandsOnPrimaryFromDomainEvent extends ActionDomainEvent { }
-    public static class NotFoundException extends RecoverableException {
-        private static final long serialVersionUID = 1L;
-        @Getter
-        private final UUID interactionId;
-        public NotFoundException(final UUID interactionId) {
-            super("Command not found");
-            this.interactionId = interactionId;
-        }
-    }
+
+    @Inject CommandModelRepository<? extends CommandModel> commandModelRepository;
 
     /**
      * TODO: outdated info ...
@@ -93,25 +84,14 @@ public class CommandRetrievalOnPrimaryService {
             @ParameterLayout(named="Batch size")
             final Integer batchSize) throws NotFoundException {
 
-        return findCommandsOnPrimary(interactionId, batchSize).stream()
-                .map(CommandJdo::getCommandDto)
+        return commandModelRepository.findCommandsOnPrimaryElseFail(interactionId, batchSize)
+                .stream()
+                .map(CommandModel::getCommandDto)
                 .collect(Collectors.toList());
     }
     @MemberSupport public Integer default1FindCommandsOnPrimaryAsDto() {
         return 25;
     }
 
-    public List<CommandJdo> findCommandsOnPrimary(
-            final @Nullable UUID interactionId,
-            final @Nullable Integer batchSize) throws NotFoundException {
-
-        final List<CommandJdo> commands = commandModelRepository.findSince(interactionId, batchSize);
-        if(commands == null) {
-            throw new NotFoundException(interactionId);
-        }
-        return commands;
-    }
-
-    @Inject CommandModelRepository<CommandJdo> commandModelRepository;
 }
 
