@@ -30,8 +30,8 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.model.command.ReplayState;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
 
 import lombok.RequiredArgsConstructor;
 

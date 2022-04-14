@@ -38,7 +38,7 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult;
 import org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService;
@@ -53,6 +53,7 @@ import org.apache.isis.extensions.quartz.spring.AutowiringSpringBeanJobFactory;
 import lombok.val;
 
 /**
+ * Activates with <i>Spring profile</i> 'command-replay-secondary'.
  * @since 2.0 {@index}
  */
 @Configuration

@@ -16,20 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.model.util;
+package org.apache.isis.extensions.commandlog.applib.command;
 
-import lombok.experimental.UtilityClass;
+public enum ReplayState {
+    /**
+     * As used on primary system.
+     */
+    UNDEFINED,
+    /**
+     * For use on secondary system, indicates that the command has not yet been replayed.
+     */
+    PENDING,
+    /**
+     * For use on secondary system, indicates that the command has been replayed ok
+     */
+    OK,
+    /**
+     * For use on secondary system, indicates that the command has been replayed but encountered an error
+     */
+    FAILED,
+    /**
+     * For use on secondary system, indicates that the command should not be replayed.
+     */
+    EXCLUDED,
+    ;
 
-@UtilityClass
-public class StringUtils {
-
-    public static String trimmed(final String str, final int lengthOfField) {
-        if (str == null) {
-            return null;
-        }
-        if (str.length() > lengthOfField) {
-            return str.substring(0, lengthOfField - 3) + "...";
-        }
-        return str;
-    }
+    public boolean isFailed() { return this == FAILED;}
 }

@@ -25,7 +25,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 
 import lombok.RequiredArgsConstructor;
 

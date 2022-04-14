@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.commandreplay.secondary.analyser;
 
-import org.apache.isis.extensions.commandlog.model.command.CommandModel;
+import org.apache.isis.extensions.commandlog.applib.command.CommandModel;
 
 /**
  * @since 2.0 {@index}

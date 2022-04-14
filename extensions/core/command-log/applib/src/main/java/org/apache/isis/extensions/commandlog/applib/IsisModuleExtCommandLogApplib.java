@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.model;
+package org.apache.isis.extensions.commandlog.applib;
 
 import org.apache.isis.core.config.util.SpringProfileUtil;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;

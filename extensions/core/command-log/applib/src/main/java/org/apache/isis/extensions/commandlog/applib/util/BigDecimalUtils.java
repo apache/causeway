@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.model.util;
+package org.apache.isis.extensions.commandlog.applib.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.model.command;
+package org.apache.isis.extensions.commandlog.applib.command;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 
 public interface CommandModel
 extends
