@@ -69,6 +69,18 @@ under the License.
         </testResources>
     </build>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.isis.testing</groupId>
+                <artifactId>isis-testing</artifactId>
+                <scope>import</scope>
+                <type>pom</type>
+                <version>2.0.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
 
         <dependency>
