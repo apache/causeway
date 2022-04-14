@@ -77,36 +77,36 @@ import lombok.ToString;
     @javax.jdo.annotations.Query(
             name = "todo_all", language = "JDOQL",
             value = "SELECT "
-                    + "FROM org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem "
+                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
                     + "WHERE ownedBy == :ownedBy"),
     @javax.jdo.annotations.Query(
             name = "todo_notYetComplete", language = "JDOQL",
             value = "SELECT "
-                    + "FROM org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem "
+                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
                     + "WHERE ownedBy == :ownedBy "
                     + "   && complete == false"),
     @javax.jdo.annotations.Query(
             name = "findByDescription", language = "JDOQL",
             value = "SELECT "
-                    + "FROM org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem "
+                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
                     + "WHERE ownedBy == :ownedBy "
                     + "   && description == :description"),
     @javax.jdo.annotations.Query(
             name = "todo_complete", language = "JDOQL",
             value = "SELECT "
-                    + "FROM org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem "
+                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
                     + "WHERE ownedBy == :ownedBy "
                     + "&& complete == true"),
     @javax.jdo.annotations.Query(
             name = "todo_similarTo", language = "JDOQL",
             value = "SELECT "
-                    + "FROM org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem "
+                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
                     + "WHERE ownedBy == :ownedBy "
                     + "&& category == :category"),
     @javax.jdo.annotations.Query(
             name = "todo_autoComplete", language = "JDOQL",
             value = "SELECT "
-                    + "FROM org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem "
+                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
                     + "WHERE ownedBy == :ownedBy && "
                     + "description.indexOf(:description) >= 0")
 })
@@ -126,7 +126,8 @@ import lombok.ToString;
 })
 public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, CalendarEventable, Locatable*/ {
 
-    //@Inject private UserService userService;
+    public static final String FQCN = "org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem";
+
     @Inject private MessageService messageService;
     @Inject private RepositoryService repositoryService;
     @Inject private TitleService titleService;

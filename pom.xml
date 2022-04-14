@@ -66,7 +66,6 @@
 				<module>extensions</module>
 				<module>mavendeps</module>
 				<module>starters</module>
-				<module>subdomains</module>
 				<module>testing</module>
 				<module>valuetypes</module>
 			</modules>
@@ -88,7 +87,6 @@
 				<module>extensions</module>
 				<module>mavendeps</module>
 				<module>starters</module>
-				<module>subdomains</module>
 				<module>testing</module>
 				<module>valuetypes</module>
 			</modules>
@@ -175,7 +173,7 @@
 			<modules>
 				<!-- prerequisites ... -->
 				<module>incubator/viewers/javafx</module>
-				
+
 				<module>examples/demo/javafx</module>
 			</modules>
 		</profile>
@@ -192,7 +190,7 @@
 				<module>examples/demo</module>
 				<module>examples/demo/domain</module>
 				<module>examples/demo/web</module>
-				
+
 				<module>examples/demo/wicket/common</module>
 				<module>examples/demo/wicket/jdo</module>
 				<module>examples/demo/wicket/jpa</module>
@@ -214,7 +212,7 @@
 				<module>examples/demo/web</module>
 				<module>examples/demo/wicket/common</module>
 				<module>examples/demo/wicket/jdo</module>
-				
+
 				<module>examples/demo/vaadin</module>
 			</modules>
 		</profile>
@@ -281,7 +279,7 @@
 			<modules>
 				<!-- prerequisites ... -->
 				<module>tooling</module>
-			
+
 				<module>regressiontests</module>
 			</modules>
 		</profile>
