@@ -54,6 +54,7 @@ commands:
       "SSE": "org.apache.isis.valuetypes:isis-valuetypes-sse.*"
 
       Extensions: org.apache.isis.extensions
+      "Applib: Excel": "org.apache.isis.extensions:isis-extensions-excel.*"
       "Core: Command Log": "org.apache.isis.extensions:isis-extensions-command-log.*"
       "Core: Command Replay": "org.apache.isis.extensions:isis-extensions-command-replay.*"
       #"Core: Flyway": "org.apache.isis.extensions:isis-extensions-flyway.*"
@@ -68,24 +69,14 @@ commands:
       #"Wicket Viewer: Gmap3": "org.apache.isis.security:isis-extensions-gmap3.*"
       "Wicket Viewer: Pdf.js": "org.apache.isis.security:isis-extensions-fullcalendar.*"
 
-      Subdomains: org.apache.isis.subdomains
-      "Base": "org.apache.isis.subdomains:isis-subdomains-base.*"
-      #"docx": "org.apache.isis.subdomains:isis-subdomains-docx.*"
-      "Excel": "org.apache.isis.subdomains:isis-subdomains-excel.*"
-      #"Freemarker": "org.apache.isis.subdomains:isis-subdomains-freemarker.*"
-      #"OGNL": "org.apache.isis.subdomains:isis-subdomains-ognl.*"
-      #"PDF Box": "org.apache.isis.subdomains:isis-subdomains-pdfbox.*"
-      "Spring": "org.apache.isis.subdomains:isis-subdomains-spring.*"
-      "XDocReport": "org.apache.isis.subdomains:isis-subdomains-xdocreport.*"
-      #"Zip": "org.apache.isis.subdomains:isis-subdomains-zip.*"
-
       "Tooling": org.apache.isis.tooling.*
       "Regression Tests": org.apache.isis.regressiontests.*
 
       Incubator: org.apache.isis.incubator
       "Kroviz Client": "org.apache.isis.incubator.clients:isis-client-kroviz.*"
-      "JavaFX Viewer": "org.apache.isis.incubator.viewer:isis-viewer-javafx.*"
+      "GraphQL Viewer": "org.apache.isis.incubator.viewer:isis-viewer-graphql.*"
       "Vaadin Viewer": "org.apache.isis.incubator.viewer:isis-viewer-vaadin.*"
+      "JavaFX Viewer": "org.apache.isis.incubator.viewer:isis-viewer-javafx.*"
 
   index:
 

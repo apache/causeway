@@ -1,6 +1,0 @@
-
-
-
-* xref:subdomains:excel:about.adoc[Excel Library]
-
-

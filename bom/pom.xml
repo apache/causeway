@@ -337,12 +337,12 @@ under the License.
 		<surefire.version>3.0.0-M6</surefire.version>
 		<surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
 		<!-- APACHE ISIS customisation 4/15: end -->
-		
+
 		<assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
 		<!-- set this property for all derived projects:
         -->
         <project.build.outputTimestamp>1</project.build.outputTimestamp>
-        
+
         <!-- LIBRARY DEPENDENCIES -->
 		<archunit.version>0.23.1</archunit.version>
 		<asm.version>9.3</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
@@ -448,7 +448,7 @@ under the License.
 
 		<wicketstuff.version>${wicket.version}</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
-        
+
     </properties>
 
 <!-- breaks dependabot run: timeout due to repo not accessible
@@ -1144,7 +1144,6 @@ under the License.
 				<module>../extensions</module>
 				<module>../mavendeps</module>
 				<module>../starters</module>
-				<module>../subdomains</module>
 				<module>../testing</module>
 				<module>../valuetypes</module>
 			</modules>
@@ -1234,7 +1233,6 @@ under the License.
 				<module>../extensions</module>
 				<module>../mavendeps</module>
 				<module>../starters</module>
-				<module>../subdomains</module>
 				<module>../testing</module>
 				<module>../valuetypes</module>
 			</modules>
@@ -1313,7 +1311,7 @@ under the License.
          		</plugins>
 			</build>
 		</profile>
-            
+
 
 		<!-- APACHE ISIS customisation 15/15: end -->
 	</profiles>

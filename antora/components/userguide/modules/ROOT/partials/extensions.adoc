@@ -1,3 +1,4 @@
+include::userguide:excel:partial$module-nav.adoc[]
 include::userguide:command-log:partial$module-nav.adoc[]
 include::userguide:command-replay:partial$module-nav.adoc[]
 include::userguide:flyway:partial$module-nav.adoc[]
