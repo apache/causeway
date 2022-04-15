@@ -2,9 +2,9 @@ name: Apache Isis Nightly Build
 
 on:
   workflow_dispatch:
-  #schedule:
-    ## daily 02:00 (UTC) in the morning
-    #- cron: '0 2 * * *'
+  schedule:
+    # daily 02:00 (UTC) in the morning
+    - cron: '0 2 * * *'
 
 jobs:
   build:
