@@ -373,20 +373,14 @@ implements
      * to persist if using h2 (perhaps would need to be mapped differently).
      * @see <a href="https://www.datanucleus.org/products/accessplatform/jdo/mapping.html#_other_types">www.datanucleus.org</a>
      */
-
-    @Property(domainEvent = InteractionIdDomainEvent.class)
-    @PropertyLayout(named = "Interaction Id")
-    //@Getter
-    @Setter
-    private String interactionIdStr;
-
     @Id
     @Column(nullable=false, name = "interactionId", length = 36)
-    public String getInteractionIdStr() {
-        return interactionIdStr;
-    }
+    @Property(domainEvent = InteractionIdDomainEvent.class)
+    @PropertyLayout(named = "Interaction Id")
+    @Getter @Setter
+    private String interactionIdStr;
 
-
+    @Transient
     @Programmatic
     @Override
     public UUID getInteractionId() {return UUID.fromString(getInteractionIdStr());}
@@ -400,14 +394,13 @@ implements
 
 
     public static class TimestampDomainEvent extends PropertyDomainEvent<Timestamp> { }
-
     @Column(nullable=false)
     @Property(domainEvent = TimestampDomainEvent.class)
     @Getter @Setter
     private Timestamp timestamp;
 
 
-
+    @Transient
     @Override
     public ChangeType getType() {
         return ChangeType.COMMAND;
@@ -439,7 +432,6 @@ implements
 
 
     public static class ParentDomainEvent extends PropertyDomainEvent<Command> { }
-
     @Column(name="parentId", nullable=true)
     @Property(domainEvent = ParentDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES)
@@ -448,22 +440,24 @@ implements
 
 
     public static class TargetDomainEvent extends PropertyDomainEvent<String> { }
-
     @Column(nullable=true, length = 2000, name="target")
     @Property(domainEvent = TargetDomainEvent.class)
     @PropertyLayout(named = "Object")
     @Getter @Setter
     private Bookmark target;
 
+    @Transient
     public String getTargetStr() {
         return Optional.ofNullable(getTarget()).map(Bookmark::toString).orElse(null);
     }
 
+    @Transient
     @Override
     public String getTargetMember() {
         return getCommandDto().getMember().getLogicalMemberIdentifier();
     }
 
+    @Transient
     @Property(domainEvent = TargetDomainEvent.class)
     @PropertyLayout(named = "Member")
     public String getLocalMember() {
@@ -480,7 +474,6 @@ implements
 
 
     public static class CommandDtoDomainEvent extends PropertyDomainEvent<CommandDto> { }
-
     @Lob @Basic(fetch=FetchType.LAZY)
     @Column(nullable=true, columnDefinition="CLOB")
     @Property(domainEvent = CommandDtoDomainEvent.class)
@@ -490,7 +483,6 @@ implements
 
 
     public static class StartedAtDomainEvent extends PropertyDomainEvent<Timestamp> { }
-
     @Column(nullable=true)
     @Property(domainEvent = StartedAtDomainEvent.class)
     @Getter @Setter
@@ -498,7 +490,6 @@ implements
 
 
     public static class CompletedAtDomainEvent extends PropertyDomainEvent<Timestamp> { }
-
     @Column(nullable=true)
     @Property(domainEvent = CompletedAtDomainEvent.class)
     @Getter @Setter
@@ -549,7 +540,6 @@ implements
 
 
     public static class ResultDomainEvent extends PropertyDomainEvent<String> { }
-
     @Column(nullable=true, length = 2000, name="result")
     @Property(domainEvent = ResultDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES, named = "Result Bookmark")
@@ -585,12 +575,13 @@ implements
         return getException() != null;
     }
 
-
+    @Transient
     @Override
     public String getPreValue() {
         return null;
     }
 
+    @Transient
     @Override
     public String getPostValue() {
         return null;
