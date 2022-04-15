@@ -16,45 +16,42 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.entities;
+package org.apache.isis.extensions.commandlog.applib.command.mixins;
 
-import java.util.Collections;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
 
 import lombok.RequiredArgsConstructor;
 
+
 @Collection(
-    domainEvent = CommandJdo_siblingCommands.CollectionDomainEvent.class
+    domainEvent = CommandLog_childCommands.CollectionDomainEvent.class
 )
 @CollectionLayout(
     defaultView = "table",
-    sequence = "100.110"
+    sequence = "100.100"
 )
 @RequiredArgsConstructor
-public class CommandJdo_siblingCommands {
+public class CommandLog_childCommands {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandJdo_siblingCommands, CommandJdo> { }
+            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandLog_childCommands, ICommandLog> { }
 
-    private final CommandJdo commandJdo;
+    private final CommandLog commandLog;
 
-    public List<CommandJdo> coll() {
-        final CommandJdo parentJdo = commandJdo.getParent();
-        if(parentJdo == null) {
-            return Collections.emptyList();
-        }
-        final List<CommandJdo> siblingCommands = commandJdoRepository.findByParent(parentJdo);
-        siblingCommands.remove(commandJdo);
-        return siblingCommands;
+    @MemberSupport
+    public List<CommandLog> coll() {
+        return commandLogRepository.findByParent(commandLog);
     }
 
-
-    @Inject CommandJdoRepository commandJdoRepository;
+    @javax.inject.Inject
+    private CommandLogRepository<CommandLog> commandLogRepository;
 
 }

@@ -45,8 +45,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModel;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModelRepository;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
 import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
 import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
@@ -70,7 +70,7 @@ import lombok.val;
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandJdoRepository
-implements CommandModelRepository<CommandJdo> {
+implements CommandLogRepository<CommandJdo> {
 
     @Inject final Provider<InteractionProvider> interactionProviderProvider;
     @Inject final Provider<RepositoryService> repositoryServiceProvider;
@@ -112,7 +112,7 @@ implements CommandModelRepository<CommandJdo> {
     }
 
     @Override
-    public List<CommandJdo> findByParent(final CommandModel parent) {
+    public List<CommandJdo> findByParent(final ICommandLog parent) {
         return repositoryService().allMatches(
                 Query.named(CommandJdo.class, "findByParent")
                     .withParameter("parent", parent));
@@ -211,13 +211,9 @@ implements CommandModelRepository<CommandJdo> {
 
 
     private CommandJdo findByInteractionIdElseNull(final UUID interactionId) {
-        val tsq = jdoSupport.newTypesafeQuery(CommandJdo.class);
-        val cand = QCommandJdo.candidate();
-        val q = tsq.filter(
-                cand.interactionIdStr.eq(tsq.parameter("interactionIdStr", String.class))
-        );
-        q.setParameter("interactionIdStr", interactionId.toString());
-        return q.executeUnique();
+        val q = Query.named(CommandJdo.class, "findByInteractionIdStr")
+        .withParameter("interactionIdStr", interactionId.toString());
+        return repositoryService().uniqueMatch(q).orElse(null);
     }
 
     private List<CommandJdo> findSince(

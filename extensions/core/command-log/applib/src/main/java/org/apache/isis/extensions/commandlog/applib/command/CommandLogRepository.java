@@ -32,11 +32,11 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 import lombok.Getter;
 
-public interface CommandModelRepository<C extends CommandModel> {
+public interface CommandLogRepository<C extends ICommandLog> {
 
     Optional<C> findByInteractionId(UUID interactionId);
 
-    List<C> findByParent(CommandModel parent);
+    List<C> findByParent(ICommandLog parent);
 
     List<C> findByFromAndTo(LocalDate from, LocalDate to);
 
@@ -54,27 +54,27 @@ public interface CommandModelRepository<C extends CommandModel> {
      * Intended to support the replay of commands on a secondary instance of
      * the application.
      *
-     * This finder returns all (completed) {@link CommandModel}s started after
+     * This finder returns all (completed) {@link ICommandLog}s started after
      * the command with the specified interactionId.  The number of commands
      * returned can be limited so that they can be applied in batches.
      *
      * If the provided interactionId is null, then only a single
-     * {@link CommandModel command} is returned.  This is intended to support
+     * {@link ICommandLog command} is returned.  This is intended to support
      * the case when the secondary does not yet have any
-     * {@link CommandModel command}s replicated.  In practice this is unlikely;
+     * {@link ICommandLog command}s replicated.  In practice this is unlikely;
      * typically we expect that the secondary will be set up to run against a
      * copy of the primary instance's DB (restored from a backup), in which
-     * case there will already be a {@link CommandModel command} representing the
+     * case there will already be a {@link ICommandLog command} representing the
      * current high water mark on the secondary system.
      *
      * If the interactionId is not null but the corresponding
-     * {@link CommandModel command} is not found, then <tt>null</tt> is returned.
+     * {@link ICommandLog command} is not found, then <tt>null</tt> is returned.
      * In the replay scenario the caller will probably interpret this as an
      * error because it means that the high water mark on the secondary is
-     * inaccurate, referring to a non-existent {@link CommandModel command} on
+     * inaccurate, referring to a non-existent {@link ICommandLog command} on
      * the primary.
      *
-     * @param interactionId - the identifier of the {@link CommandModel command} being
+     * @param interactionId - the identifier of the {@link ICommandLog command} being
      *                   the replay HWM (using {@link #findMostRecentReplayed()} on the
      *                   secondary), or null if no HWM was found there.
      * @param batchSize - to restrict the number returned (so that replay

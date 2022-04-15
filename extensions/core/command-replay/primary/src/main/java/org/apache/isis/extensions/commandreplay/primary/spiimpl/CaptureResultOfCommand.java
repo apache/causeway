@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModel;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
@@ -52,16 +52,16 @@ public class CaptureResultOfCommand implements CommandDtoProcessorService {
     @Override
     public CommandDto process(final Object domainObject, CommandDto commandDto) {
 
-        if (!(domainObject instanceof CommandModel)) {
+        if (!(domainObject instanceof CommandLog)) {
             return commandDto;
         }
 
-        val commandModel = (CommandModel) domainObject;
+        val commandLog = (CommandLog) domainObject;
         if(commandDto == null) {
-            commandDto = commandModel.getCommandDto();
+            commandDto = commandLog.getCommandDto();
         }
 
-        final Bookmark result = commandModel.getResult();
+        final Bookmark result = commandLog.getResult();
         CommandDtoUtils.setUserData(commandDto, UserDataKeys.RESULT, result);
 
         // knowing whether there was an exception is on the primary is
@@ -69,11 +69,11 @@ public class CaptureResultOfCommand implements CommandDtoProcessorService {
         // secondary if an exception occurs there also
         CommandDtoUtils.setUserData(commandDto,
                 UserDataKeys.EXCEPTION,
-                commandModel.getException());
+                commandLog.getException());
 
         val timings = CommandDtoUtils.timingsFor(commandDto);
-        timings.setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(commandModel.getStartedAt()));
-        timings.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(commandModel.getCompletedAt()));
+        timings.setStartedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(commandLog.getStartedAt()));
+        timings.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(commandLog.getCompletedAt()));
 
         return commandDto;
     }

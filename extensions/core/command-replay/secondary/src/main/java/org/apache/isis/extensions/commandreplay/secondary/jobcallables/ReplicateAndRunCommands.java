@@ -28,8 +28,8 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModel;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModelRepository;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
 import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
 import org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService;
 import org.apache.isis.extensions.commandreplay.secondary.fetch.CommandFetcher;
@@ -58,7 +58,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
     @Inject CommandExecutorService commandExecutorService;
     @Inject TransactionService transactionService;
     @Inject CommandFetcher commandFetcher;
-    @Inject CommandModelRepository<? extends CommandModel> commandModelRepository;
+    @Inject CommandLogRepository<CommandLog> commandLogRepository;
     @Inject CommandReplayAnalysisService analysisService;
     @Inject Optional<ReplayCommandExecutionController> controller;
 
@@ -79,18 +79,18 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
             return;
         }
 
-        List<? extends CommandModel> commandsToReplay;
+        List<CommandLog> commandsToReplay;
 
         while(isRunning()) {
 
             // is there a pending command already?
             // (we fetch several at a time, so we may not have processed them all yet)
-            commandsToReplay = commandModelRepository.findNotYetReplayed();
+            commandsToReplay = commandLogRepository.findNotYetReplayed();
 
             if(commandsToReplay.isEmpty()) {
 
                 // look for previously replayed on secondary
-                CommandModel hwm = commandModelRepository.findMostRecentReplayed().orElse(null);
+                CommandLog hwm = commandLogRepository.findMostRecentReplayed().orElse(null);
 
                 if (hwm != null) {
                     // give up if there was a failure; admin will need to fix issue and retry
@@ -103,7 +103,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
                     // after a DB restore from primary to secondary, there won't be
                     // any that have been replayed.  So instead we simply use
                     // latest completed (on primary) as the HWM.
-                    hwm = commandModelRepository.findMostRecentCompleted().orElse(null);
+                    hwm = commandLogRepository.findMostRecentCompleted().orElse(null);
                 }
 
                 // fetch next command(s) from primary (if any)
@@ -111,7 +111,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
                 commandsToReplay = commandDtos.stream()
                         .map(dto ->
                                 transactionService.callWithinCurrentTransactionElseCreateNew(
-                                    () -> commandModelRepository.saveForReplay(dto))
+                                    () -> commandLogRepository.saveForReplay(dto))
                                 .ifFailureFail()
                                 .getValue().orElse(null)
                         )
@@ -131,16 +131,16 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
      * @param commandsToReplay
      * @apiNote could return, whether there was a command to process (and so continue)
      */
-    private void replay(final List<? extends CommandModel> commandsToReplay) {
+    private void replay(final List<CommandLog> commandsToReplay) {
 
-        commandsToReplay.forEach(commandModel -> {
+        commandsToReplay.forEach(commandLog -> {
 
-            log.info("replaying {}", commandModel.getInteractionId());
+            log.info("replaying {}", commandLog.getInteractionId());
 
             //
             // run command
             //
-            val replayState = executeCommandInTranAndAnalyse(commandModel);
+            val replayState = executeCommandInTranAndAnalyse(commandLog);
             if(replayState.isFailed()) {
                 // will effectively block the running of any further commands
                 // until the issue is fixed.
@@ -150,11 +150,11 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
             //
             // find child commands, and run them
             //
-            val parent = commandModel;
+            val parent = commandLog;
 
             val childCommands =
                     transactionService.callWithinCurrentTransactionElseCreateNew(
-                            () -> commandModelRepository.findByParent(parent))
+                            () -> commandLogRepository.findByParent(parent))
                     .ifFailureFail()
                     .getValue().orElse(Collections.emptyList());
             for (val childCommand : childCommands) {
@@ -170,18 +170,18 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
 
     }
 
-    private ReplayState executeCommandInTranAndAnalyse(final CommandModel commandJdo) {
+    private ReplayState executeCommandInTranAndAnalyse(final CommandLog commandLog) {
         transactionService.runWithinCurrentTransactionElseCreateNew(
                 () -> {
                     commandExecutorService.executeCommand(
-                        CommandExecutorService.InteractionContextPolicy.SWITCH_USER_AND_TIME, commandJdo.getCommandDto(), commandJdo.outcomeHandler());
+                        CommandExecutorService.InteractionContextPolicy.SWITCH_USER_AND_TIME, commandLog.getCommandDto(), commandLog.outcomeHandler());
                 });
 
         transactionService.runWithinCurrentTransactionElseCreateNew(() -> {
-            analysisService.analyse(commandJdo);
+            analysisService.analyse(commandLog);
         });
 
-        return commandJdo.getReplayState();
+        return commandLog.getReplayState();
 
     }
 

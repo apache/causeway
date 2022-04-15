@@ -41,9 +41,10 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModel;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModelRepository;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModelRepository.NotFoundException;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository.NotFoundException;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
@@ -67,7 +68,7 @@ import lombok.RequiredArgsConstructor;
 //@Log4j2
 public class CommandReplayOnPrimaryService {
 
-    @Inject final CommandModelRepository<? extends CommandModel> commandModelRepository;
+    @Inject final CommandLogRepository<? extends CommandLog> commandLogRepository;
     @Inject final JaxbService jaxbService;
     @Inject final MessageService messageService;
     @Inject final ContentMappingServiceForCommandsDto contentMappingServiceForCommandsDto;
@@ -90,7 +91,7 @@ public class CommandReplayOnPrimaryService {
          * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
          * @throws NotFoundException - if the command with specified transaction cannot be found.
          */
-        @MemberSupport public List<? extends CommandModel> act(
+        @MemberSupport public List<? extends CommandLog> act(
                 @Nullable
                 @ParameterLayout(named="Interaction Id")
                 final UUID interactionId,
@@ -98,7 +99,7 @@ public class CommandReplayOnPrimaryService {
                 @ParameterLayout(named="Batch size")
                 final Integer batchSize)
                 throws NotFoundException {
-            return commandModelRepository.findCommandsOnPrimaryElseFail(interactionId, batchSize);
+            return commandLogRepository.findCommandsOnPrimaryElseFail(interactionId, batchSize);
         }
         @MemberSupport public Integer default1Act() {
             return 25;
@@ -126,7 +127,7 @@ public class CommandReplayOnPrimaryService {
                 @Nullable
                 final Integer batchSize,
                 final String filenamePrefix) {
-            final List<? extends CommandModel> commands = commandModelRepository.findSince(interactionId, batchSize);
+            final List<? extends ICommandLog> commands = commandLogRepository.findSince(interactionId, batchSize);
             if(commands == null) {
                 messageService.informUser("No commands found");
             }
@@ -168,7 +169,7 @@ public class CommandReplayOnPrimaryService {
                 final UUID interactionId,
                 final String filenamePrefix) {
 
-            return commandModelRepository.findByInteractionId(interactionId)
+            return commandLogRepository.findByInteractionId(interactionId)
                     .map(commandJdo -> {
 
                         final CommandDto commandDto = commandJdo.getCommandDto();

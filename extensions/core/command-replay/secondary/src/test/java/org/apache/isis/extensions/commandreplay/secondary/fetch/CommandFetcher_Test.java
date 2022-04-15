@@ -26,15 +26,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.status.StatusException;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(
         classes = {
@@ -50,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
 })
 //intended only for manual verification.
 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
-@Log4j2
+//@Log4j2
 class CommandFetcher_Test {
 
     @Configuration
@@ -76,7 +75,7 @@ class CommandFetcher_Test {
         val fetcher = new CommandFetcher(secondaryConfig, useRequestDebugLogging);
 
         // when
-        log.info("about to call REST endpoint ...");
+        //log.info("about to call REST endpoint ...");
         val commands = fetcher.callPrimary(null);
         assertNotNull(commands);
         System.out.println(commands);

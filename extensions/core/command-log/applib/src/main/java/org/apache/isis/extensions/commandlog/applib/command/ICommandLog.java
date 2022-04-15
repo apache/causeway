@@ -28,19 +28,19 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 
-public interface CommandModel
+public interface ICommandLog
 extends
     HasCommandDto,
-    Comparable<CommandModel> {
+    Comparable<ICommandLog> {
 
-    public static class TitleUiEvent extends IsisModuleExtCommandLogApplib.TitleUiEvent<CommandModel> { }
-    public static class IconUiEvent extends IsisModuleExtCommandLogApplib.IconUiEvent<CommandModel> { }
-    public static class CssClassUiEvent extends IsisModuleExtCommandLogApplib.CssClassUiEvent<CommandModel> { }
-    public static class LayoutUiEvent extends IsisModuleExtCommandLogApplib.LayoutUiEvent<CommandModel> { }
+    public static class TitleUiEvent extends IsisModuleExtCommandLogApplib.TitleUiEvent<ICommandLog> { }
+    public static class IconUiEvent extends IsisModuleExtCommandLogApplib.IconUiEvent<ICommandLog> { }
+    public static class CssClassUiEvent extends IsisModuleExtCommandLogApplib.CssClassUiEvent<ICommandLog> { }
+    public static class LayoutUiEvent extends IsisModuleExtCommandLogApplib.LayoutUiEvent<ICommandLog> { }
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtCommandLogApplib.PropertyDomainEvent<CommandModel, T> { }
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandModel, T> { }
-    public static abstract class ActionDomainEvent extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandModel> { }
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtCommandLogApplib.PropertyDomainEvent<ICommandLog, T> { }
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<ICommandLog, T> { }
+    public static abstract class ActionDomainEvent extends IsisModuleExtCommandLogApplib.ActionDomainEvent<ICommandLog> { }
 
 
     Bookmark getResult();
@@ -67,21 +67,21 @@ extends
 
     void setReplayState(ReplayState excluded);
 
-    static final ToString<CommandModel> stringifier = ObjectContracts
-        .toString("interactionId", CommandModel::getInteractionId)
-        .thenToString("username", CommandModel::getUsername)
-        .thenToString("timestamp", CommandModel::getTimestamp)
-        .thenToString("target", CommandModel::getTarget)
-        .thenToString("logicalMemberIdentifier", CommandModel::getLogicalMemberIdentifier)
-        .thenToStringOmitIfAbsent("startedAt", CommandModel::getStartedAt)
-        .thenToStringOmitIfAbsent("completedAt", CommandModel::getCompletedAt);
+    static final ToString<ICommandLog> stringifier = ObjectContracts
+        .toString("interactionId", ICommandLog::getInteractionId)
+        .thenToString("username", ICommandLog::getUsername)
+        .thenToString("timestamp", ICommandLog::getTimestamp)
+        .thenToString("target", ICommandLog::getTarget)
+        .thenToString("logicalMemberIdentifier", ICommandLog::getLogicalMemberIdentifier)
+        .thenToStringOmitIfAbsent("startedAt", ICommandLog::getStartedAt)
+        .thenToStringOmitIfAbsent("completedAt", ICommandLog::getCompletedAt);
 
     default String toFriendlyString() {
         return stringifier.toString(this);
     }
 
     @Override
-    default int compareTo(final CommandModel other) {
+    default int compareTo(final ICommandLog other) {
         return this.getTimestamp().compareTo(other.getTimestamp());
     }
 

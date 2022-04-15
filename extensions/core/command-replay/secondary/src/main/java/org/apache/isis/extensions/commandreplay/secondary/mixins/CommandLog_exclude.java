@@ -24,9 +24,10 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModel;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
 import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 
@@ -38,29 +39,29 @@ import lombok.RequiredArgsConstructor;
  */
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
-    domainEvent = CommandModel_exclude.ActionDomainEvent.class
+    domainEvent = CommandLog_exclude.ActionDomainEvent.class
 )
 @ActionLayout(associateWith = "executeIn", sequence = "2")
 @RequiredArgsConstructor
 //@Log4j2
-public class CommandModel_exclude {
+public class CommandLog_exclude {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandModel_exclude> { }
+            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLog_exclude> { }
 
-    final CommandModel commandModel;
+    final CommandLog commandLog;
 
-    public CommandModel act() {
-        commandModel.setReplayState(ReplayState.EXCLUDED);
-        return commandModel;
+    @MemberSupport
+    public CommandLog act() {
+        commandLog.setReplayState(ReplayState.EXCLUDED);
+        return commandLog;
     }
-
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return !secondaryConfig.isPresent() || !secondaryConfig.get().isConfigured() ;
     }
-    public String disableAct() {
+    @MemberSupport public String disableAct() {
         final boolean notInError =
-                commandModel.getReplayState() == null || !commandModel.getReplayState().isFailed();
+                commandLog.getReplayState() == null || !commandLog.getReplayState().isFailed();
         return notInError
                 ? "This command is not in error, so cannot be excluded."
                 : null;

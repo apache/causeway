@@ -45,8 +45,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModel;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModelRepository;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
 import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
 import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogJpa;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -63,13 +63,13 @@ import lombok.val;
  * {@link CommandJpa command} entities.
  */
 @Service
-@Named(IsisModuleExtCommandLogJpa.NAMESPACE + ".CommandJdoRepository")
+@Named(IsisModuleExtCommandLogJpa.NAMESPACE + ".CommandJpaRepository")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Jpa")
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandJpaRepository
-implements CommandModelRepository<CommandJpa> {
+implements CommandLogRepository<CommandJpa> {
 
     @Inject final Provider<InteractionProvider> interactionProviderProvider;
     @Inject final Provider<RepositoryService> repositoryServiceProvider;
@@ -111,7 +111,7 @@ implements CommandModelRepository<CommandJpa> {
     }
 
     @Override
-    public List<CommandJpa> findByParent(final CommandModel parent) {
+    public List<CommandJpa> findByParent(final ICommandLog parent) {
         return repositoryService().allMatches(
                 Query.named(CommandJpa.class, "findByParent")
                     .withParameter("parent", parent));

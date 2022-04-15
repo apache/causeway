@@ -16,38 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.entities;
+package org.apache.isis.extensions.commandlog.applib.command.mixins;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModel;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
 
 import lombok.RequiredArgsConstructor;
 
-
 @Collection(
-    domainEvent = CommandJdo_childCommands.CollectionDomainEvent.class
+    domainEvent = CommandLog_siblingCommands.CollectionDomainEvent.class
 )
 @CollectionLayout(
     defaultView = "table",
-    sequence = "100.100"
+    sequence = "100.110"
 )
 @RequiredArgsConstructor
-public class CommandJdo_childCommands {
+public class CommandLog_siblingCommands {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandJdo_childCommands, CommandModel> { }
+            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandLog_siblingCommands, CommandLog> { }
 
-    private final CommandJdo commandJdo;
+    private final CommandLog commandLog;
 
-    public List<CommandJdo> coll() {
-        return commandJdoRepository.findByParent(commandJdo);
+    @MemberSupport
+    public List<CommandLog> coll() {
+        final CommandLog parentJdo = commandLog.getParent();
+        if(parentJdo == null) {
+            return Collections.emptyList();
+        }
+        final List<CommandLog> siblingCommands = commandLogRepository.findByParent(parentJdo);
+        siblingCommands.remove(commandLog);
+        return siblingCommands;
     }
 
+
     @javax.inject.Inject
-    private CommandJdoRepository commandJdoRepository;
+    private CommandLogRepository<CommandLog> commandLogRepository;
 
 }

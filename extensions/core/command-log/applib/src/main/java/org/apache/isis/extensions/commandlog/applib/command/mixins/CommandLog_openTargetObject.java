@@ -16,43 +16,46 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.entities;
+package org.apache.isis.extensions.commandlog.applib.command.mixins;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
     semantics = SemanticsOf.SAFE,
-    domainEvent = CommandJdo_openResultObject.ActionDomainEvent.class
+    domainEvent = CommandLog_openTargetObject.ActionDomainEvent.class
 )
-@ActionLayout(named = "Open", associateWith = "result", sequence="1")
+@ActionLayout(named = "Open", associateWith = "target", sequence="1")
 @RequiredArgsConstructor
-public class CommandJdo_openResultObject {
+public class CommandLog_openTargetObject {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandJdo_openResultObject> { }
+            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLog_openTargetObject> { }
 
-    private final CommandJdo commandJdo;
+    private final CommandLog commandLog;
 
+    @MemberSupport
     public Object act() {
-        val targetBookmark = bookmarkService.lookup(commandJdo.getResult()).orElse(null);
+        val targetBookmark = bookmarkService.lookup(commandLog.getTarget()).orElse(null);
         if(targetBookmark == null) {
             messageService.warnUser("Object not found - has it since been deleted?");
             return null;
         }
         return targetBookmark;
     }
-    public boolean hideAct() {
-        return commandJdo.getResult() == null;
+    @MemberSupport public boolean hideAct() {
+        return commandLog.getTarget() == null;
     }
 
     @Inject BookmarkService bookmarkService;

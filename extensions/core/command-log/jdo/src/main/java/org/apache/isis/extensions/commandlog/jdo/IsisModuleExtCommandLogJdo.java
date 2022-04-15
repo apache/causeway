@@ -22,7 +22,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.commandlog.applib.command.CommandModel;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
 import org.apache.isis.extensions.commandlog.jdo.ui.CommandServiceMenu;
@@ -60,7 +60,7 @@ public class IsisModuleExtCommandLogJdo {
         return new TeardownFixtureJdoAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
-                deleteFrom(CommandModel.class);
+                deleteFrom(ICommandLog.class);
             }
         };
     }

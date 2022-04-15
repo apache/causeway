@@ -16,12 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.entities;
+package org.apache.isis.extensions.commandlog.applib.command.mixins;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -31,33 +32,35 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
 import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
-    domainEvent = CommandJdo_retry.ActionDomainEvent.class,
+    domainEvent = CommandLog_retry.ActionDomainEvent.class,
     commandPublishing = Publishing.DISABLED
 )
 @ActionLayout(associateWith = "executeIn", sequence = "1")
 @RequiredArgsConstructor
-public class CommandJdo_retry {
+public class CommandLog_retry {
 
-    private final CommandJdo commandJdo;
+    private final CommandLog commandLog;
 
     public static class ActionDomainEvent
-        extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandJdo_retry> { }
+        extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLog_retry> { }
 
-    public CommandJdo act() {
+    @MemberSupport
+    public CommandLog act() {
 
-        commandJdo.setReplayState(ReplayState.PENDING);
-        commandJdo.setResult(null);
-        commandJdo.setException((Exception)null);
-        commandJdo.setStartedAt(null);
-        commandJdo.setCompletedAt(null);
+        commandLog.setReplayState(ReplayState.PENDING);
+        commandLog.setResult(null);
+        commandLog.setException((Exception)null);
+        commandLog.setStartedAt(null);
+        commandLog.setCompletedAt(null);
 
-        return commandJdo;
+        return commandLog;
     }
 
     @Inject InteractionService interactionService;

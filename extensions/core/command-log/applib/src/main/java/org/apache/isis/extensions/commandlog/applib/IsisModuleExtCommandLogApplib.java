@@ -24,6 +24,8 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 public interface IsisModuleExtCommandLogApplib
 extends ModuleWithFixtures {
 
+    public static final String NAMESPACE = "isis.ext.commandLog";
+
     public abstract static class TitleUiEvent<S>
         extends org.apache.isis.applib.events.ui.TitleUiEvent<S> { }
 
