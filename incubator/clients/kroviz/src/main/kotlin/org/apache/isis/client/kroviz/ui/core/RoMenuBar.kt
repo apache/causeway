@@ -32,6 +32,7 @@ import io.kvision.panel.SimplePanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.core.Session
+import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.dialog.About
@@ -233,7 +234,7 @@ class RoMenuBar : SimplePanel() {
         menuBars.primary.menu.forEach { m ->
             m.section.forEachIndexed { index, section ->
                 section.serviceAction.forEach { sa ->
-                    ResourceProxy().fetch(sa.link!!)
+                    ResourceProxy().fetch(sa.link!!, ActionDispatcher())
                 }
             }
         }

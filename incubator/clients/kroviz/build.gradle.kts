@@ -64,7 +64,6 @@ kotlin {
             }
             webpackTask {
                 outputFileName = "main.bundle.js"
-//                output.libraryTarget = "plain"
             }
             testTask {
                 useKarma {
@@ -119,6 +118,7 @@ afterEvaluate {
     tasks {
         create("jar", Jar::class) {
             dependsOn("browserProductionWebpack")
+//            manifest.writeTo("$buildDir/mymanifest.mf")
             group = "package"
             destinationDirectory.set(file("$buildDir/libs"))
             val distribution =

@@ -24,6 +24,7 @@ import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.UUID
@@ -111,11 +112,20 @@ class EventStore {
 
     fun end(reSpec: ResourceSpecification, pumlCode: String, response: Any?): LogEntry? {
         val entry: LogEntry? = findBy(reSpec, pumlCode)
+        val credentials: String = SessionManager.getCredentials()!!
+
         if (entry != null) {
             when (response) {
                 is String -> {
                     if (response.isEmpty()) {
-                        throw IllegalStateException("CORS issue while accessing layout xml")
+                        console.log("[ES.end]")
+                        console.log(reSpec)
+                        val rebound = CorsHttpRequest().invoke(reSpec.url, credentials)
+                        if (rebound.isEmpty()) {
+                            throw IllegalStateException("CORS issue while accessing layout xml")
+                        } else {
+                            entry.response = rebound
+                        }
                     } else {
                         entry.response = response
                     }

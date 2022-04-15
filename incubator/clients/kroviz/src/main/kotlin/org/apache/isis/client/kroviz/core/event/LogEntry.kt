@@ -24,7 +24,6 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
-import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.to.WithLinks
@@ -56,7 +55,7 @@ data class LogEntry(
     @Contextual val rs: ResourceSpecification,
     val method: String? = "",
     val request: String = "",
-    @Contextual val createdAt: Date = Date()
+    @Contextual val createdAt: Date = Date(),
 ) {
     val url: String = rs?.url
 
@@ -175,22 +174,35 @@ data class LogEntry(
 
     fun setTransferObject(to: TransferObject) {
         this.obj = to
-        initType()
+        this.type = extractType()
     }
 
-    fun initType() {
+    //TODO this should be moved to a ValueSemanticsProvider
+    private fun extractType(): String {
+        var result = ""
         if (obj != null && obj is WithLinks) {
             val self = (obj as WithLinks).getLinks().firstOrNull() { it.relation() == Relation.SELF }
             if (self != null) {
                 val t = self.type.removePrefix("application/json;profile=\"urn:org.restfulobjects:repr-types/")
-                type = t.removeSuffix("\"")
+                result = t.removeSuffix("\"")
             }
         }
-        if (type == "") {
+        if (result.isEmpty()) {
             val stringList = url.split("/")
-            type = stringList.last()
+            if (stringList.contains("actions")) {
+                result = "object-action"
+            } else {
+                result = stringList.last()
+            }
         }
+        if (result.trim().length == 0) {
+            console.log("[LE.initType]")
+            console.log(obj)
+            console.log(result)
+        }
+        return result
     }
+
 
 // region response
     /**
@@ -244,7 +256,7 @@ data class LogEntry(
         //TODO the last aggt is not always the right one
         // callers need to filter  !!!
         if (aggregators.size == 0) {
-            console.log("[LE.getAggregator]")
+            console.log("[LE.getAggregator] no Aggregator(s) yet")
             console.log(this)
             return null
         } else {
@@ -252,9 +264,9 @@ data class LogEntry(
         }
     }
 
-
     fun addAggregator(aggregator: BaseAggregator) {
         if (aggregator is ActionDispatcher) {
+            console.log("[LE.addAggregator] is ActionDispatcher")
             ViewManager.setBusyCursor()
         }
         aggregators.add(aggregator)
@@ -263,14 +275,6 @@ data class LogEntry(
 
     fun matches(reSpec: ResourceSpecification): Boolean {
         return url == reSpec.url && subType.equals(reSpec.subType)
-    }
-
-    fun getLinks(): List<Link> {
-        return if (obj is WithLinks) {
-            (obj as WithLinks).getLinks()
-        } else {
-            emptyList()
-        }
     }
 
 }

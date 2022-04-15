@@ -37,7 +37,8 @@ class ActionPrompt(val action: Action) : Controller() {
         dialog = RoDialog(
                 caption = buildLabel(),
                 items = formItems,
-                controller = this)
+                controller = this,
+                heightPerc = 50)
         dialog.open(at)
     }
 
