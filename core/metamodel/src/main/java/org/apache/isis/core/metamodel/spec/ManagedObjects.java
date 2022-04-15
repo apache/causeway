@@ -57,7 +57,7 @@ import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStack;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -593,7 +593,7 @@ public final class ManagedObjects {
     public static final class EntityUtil {
 
         @NonNull
-        public static Optional<PersistenceStandard> getPersistenceStandard(final @Nullable ManagedObject adapter) {
+        public static Optional<PersistenceStack> getPersistenceStandard(final @Nullable ManagedObject adapter) {
             if(adapter==null) {
                 return Optional.empty();
             }
@@ -607,7 +607,7 @@ public final class ManagedObjects {
                 return Optional.empty();
             }
 
-            return Optional.of(entityFacet.getPersistenceStandard());
+            return Optional.of(entityFacet.getPersistenceStack());
         }
 
         @NonNull

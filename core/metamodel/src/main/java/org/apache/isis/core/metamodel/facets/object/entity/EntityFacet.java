@@ -56,12 +56,12 @@ public interface EntityFacet extends Facet {
 
     <T> T detach(T pojo);
 
-    PersistenceStandard getPersistenceStandard();
+    PersistenceStack getPersistenceStack();
 
     // -- JUNIT SUPPORT
 
     static EntityFacet forTesting(
-            final PersistenceStandard persistenceStandard,
+            final PersistenceStack persistenceStandard,
             final FacetHolder facetHolder) {
         return new _EntityFacetForTesting(persistenceStandard, facetHolder);
     }

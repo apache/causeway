@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.entity;
 
-public enum PersistenceStandard {
+public enum PersistenceStack {
     JPA,
     JDO,
     OTHER,

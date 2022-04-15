@@ -18,15 +18,15 @@
  */
 package org.apache.isis.testdomain.jdo;
 
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStack;
 import org.apache.isis.testdomain.HasPersistenceStandard;
 
 public interface HasPersistenceStandardJdo
 extends HasPersistenceStandard {
 
     @Override
-    default PersistenceStandard getPersistenceStandard() {
-        return PersistenceStandard.JDO;
+    default PersistenceStack getPersistenceStandard() {
+        return PersistenceStack.JDO;
     }
 
 }
