@@ -18,14 +18,11 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
-import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -34,7 +31,6 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -45,17 +41,15 @@ import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import lombok.val;
 
-
-public class MandatoryFromJdoColumnAnnotationFacetFactory
+public class MandatoryFromColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     private final JdoFacetContext jdoFacetContext;
 
     @Inject
-    public MandatoryFromJdoColumnAnnotationFacetFactory(
+    public MandatoryFromColumnAnnotationFacetFactory(
             final MetaModelContext mmc,
             final JdoFacetContext jdoFacetContext) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
@@ -88,42 +82,20 @@ implements MetaModelRefiner {
             }
         }
 
-        val columnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
-
-        val semantics = inferSemantics(processMethodContext, columnIfAny);
-
-        FacetUtil.addFacet(
-            columnIfAny.isPresent()
-                    ? new MandatoryFacetFromJdoColumnAnnotation(holder, semantics)
-                    : new MandatoryFacetFromAbsenceOfJdoColumnAnnotation(
-                            holder,
-                            semantics,
-                            semantics.isRequired()
-                                ? Precedence.DEFAULT
-                                : Precedence.INFERRED)
-        );
-
-    }
-
-    private static Semantics inferSemantics(
-            final ProcessMethodContext processMethodContext,
-            final Optional<Column> columnIfAny) {
-
-        final String allowsNull = columnIfAny.isPresent()
-                ? columnIfAny.get().allowsNull()
-                : null;
-
-        if(_Strings.isNotEmpty(allowsNull)) {
-            // if miss-spelled, then DN assumes is not-nullable
-            return Semantics.of(!"true".equalsIgnoreCase(allowsNull.trim()));
-        }
-
-        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
-        // per JDO spec
-        return returnType != null
-                && returnType.isPrimitive()
-            ? Semantics.REQUIRED
-            : Semantics.OPTIONAL;
+        _ColumnUtil.inferSemantics(processMethodContext,
+                semanticsWhileColumnPresent->{
+                    FacetUtil.addFacet(
+                            new MandatoryFacetFromColumnAnnotation(holder, semanticsWhileColumnPresent));
+                },
+                semanticsWhileColumnAbsent->{
+                    FacetUtil.addFacet(
+                            new MandatoryFacetFromAbsenceOfColumnAnnotation(
+                                    holder,
+                                    semanticsWhileColumnAbsent,
+                                    semanticsWhileColumnAbsent.isRequired()
+                                        ? Precedence.DEFAULT
+                                        : Precedence.INFERRED));
+                });
 
     }
 

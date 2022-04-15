@@ -36,14 +36,14 @@ import lombok.val;
 public class BigDecimalFromJdoColumnAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
-    private BigDecimalFromJdoColumnAnnotationFacetFactory facetFactory;
+    private BigDecimalFromColumnAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         val mmc = MetaModelContext_forTesting.buildDefault();
-        facetFactory = new BigDecimalFromJdoColumnAnnotationFacetFactory(mmc);
+        facetFactory = new BigDecimalFromColumnAnnotationFacetFactory(mmc);
     }
 
     @Override

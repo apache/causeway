@@ -85,7 +85,7 @@ extends FacetFactoryAbstract {
         }
 
         val facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new JdoNotPersistentFacetFromJpaAnnotation(facetHolder));
+        FacetUtil.addFacet(new JdoNotPersistentFacetFromAnnotation(facetHolder));
 
     }
 

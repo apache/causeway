@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetFromJdoPersistenceCapableAnnotation;
+import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetFromJdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
@@ -80,11 +80,11 @@ implements ObjectTypeFacetFactory {
 
         return FacetUtil.addFacetIfPresent(
                 JdoPersistenceCapableFacetFromAnnotation
-                .create(persistenceCapableIfAny, embeddedOnlyIfAny, cls, facetHolder))
+                .createUsingJdo(persistenceCapableIfAny, embeddedOnlyIfAny, cls, facetHolder))
         .map(jdoPersistenceCapableFacet->{
 
             FacetUtil.addFacetIfPresent(
-                    LogicalTypeFacetFromJdoPersistenceCapableAnnotation
+                    LogicalTypeFacetFromJdoPersistenceCapableFacet
                     .create(jdoPersistenceCapableFacet, cls, facetHolder));
 
             FacetUtil.addFacet(
@@ -108,12 +108,12 @@ implements ObjectTypeFacetFactory {
         val tableIfAny = processClassContext.synthesizeOnType(Table.class);
 
         FacetUtil.addFacetIfPresent(
-                JdoPersistenceCapableFacetFromJpaAnnotations
-                .create(entityIfAny, tableIfAny, cls, facetHolder))
+                JdoPersistenceCapableFacetFromAnnotation
+                .createUsingJpa(entityIfAny, tableIfAny, cls, facetHolder))
         .ifPresent(jdoPersistenceCapableFacet->{
 
             FacetUtil.addFacetIfPresent(
-                    LogicalTypeFacetFromJdoPersistenceCapableAnnotation
+                    LogicalTypeFacetFromJdoPersistenceCapableFacet
                     .create(jdoPersistenceCapableFacet, cls, facetHolder));
 
             FacetUtil.addFacet(

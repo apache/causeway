@@ -21,7 +21,6 @@ package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 import java.math.BigDecimal;
 
 import javax.inject.Inject;
-import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -38,14 +37,12 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import lombok.val;
-
-public class BigDecimalFromJdoColumnAnnotationFacetFactory
+public class BigDecimalFromColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     @Inject
-    public BigDecimalFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+    public BigDecimalFromColumnAnnotationFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
@@ -58,15 +55,25 @@ implements MetaModelRefiner {
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
-        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
+        _ColumnUtil.processColumnAnnotations(processMethodContext,
+                jdoColumnIfAny->{
+                    addFacetIfPresent(
+                            MaxTotalDigitsFacetFromJdoColumnAnnotation
+                            .createJdo(jdoColumnIfAny, holder));
 
-        addFacetIfPresent(
-                MaxTotalDigitsFacetFromJdoColumnAnnotation
-                .create(jdoColumnIfAny, holder));
+                    addFacetIfPresent(
+                            MaxFractionalDigitsFacetFromJdoColumn
+                            .createJdo(jdoColumnIfAny, holder));
+                },
+                jpaColumnIfAny->{
+                    addFacetIfPresent(
+                            MaxTotalDigitsFacetFromJdoColumnAnnotation
+                            .createJpa(jpaColumnIfAny, holder));
 
-        addFacetIfPresent(
-                MaxFractionalDigitsFacetFromJdoColumn
-                .create(jdoColumnIfAny, holder));
+                    addFacetIfPresent(
+                            MaxFractionalDigitsFacetFromJdoColumn
+                            .createJpa(jpaColumnIfAny, holder));
+                });
 
     }
 

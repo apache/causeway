@@ -29,21 +29,31 @@ import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFa
 public class MaxTotalDigitsFacetFromJdoColumnAnnotation
 extends MaxTotalDigitsFacetAbstract {
 
-    public static Optional<MaxTotalDigitsFacet> create(
+    public static Optional<MaxTotalDigitsFacet> createJdo(
             final Optional<Column> jdoColumnIfAny,
             final FacetHolder holder) {
 
         return jdoColumnIfAny
-        .filter(jdoColumn->jdoColumn.length()>=0)
-        .map(jdoColumn->
-            new MaxTotalDigitsFacetFromJdoColumnAnnotation(
-                    jdoColumn.length(), holder));
+                .filter(jdoColumn->jdoColumn.length()>=0)
+                .map(jdoColumn->
+                new MaxTotalDigitsFacetFromJdoColumnAnnotation(
+                        jdoColumn.length(), holder));
+    }
+
+    public static Optional<MaxTotalDigitsFacet> createJpa(
+            final Optional<javax.persistence.Column> jpaColumnIfAny,
+            final FacetHolder holder) {
+
+        return jpaColumnIfAny
+                .filter(jpaColumn->jpaColumn.length()>=0)
+                .map(jpaColumn->
+                new MaxTotalDigitsFacetFromJdoColumnAnnotation(
+                        jpaColumn.length(), holder));
     }
 
     private MaxTotalDigitsFacetFromJdoColumnAnnotation(
             final int maxTotalDigits, final FacetHolder holder) {
         super(maxTotalDigits, holder);
     }
-
 
 }

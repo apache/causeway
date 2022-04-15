@@ -16,15 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.prop.notpersistent;
+package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
+/**
+ * Inferred from presence of an <tt>@Column</tt> method.
+ */
+public class MandatoryFacetFromColumnAnnotation
+extends MandatoryFacetAbstract {
 
-public class JdoNotPersistentFacetFromJpaAnnotation extends JdoNotPersistentFacetAbstract {
-
-    public JdoNotPersistentFacetFromJpaAnnotation(final FacetHolder holder) {
-        super(holder);
+    public MandatoryFacetFromColumnAnnotation(
+            final FacetHolder holder, final Semantics semantics) {
+        super(holder, semantics);
     }
 
 }
