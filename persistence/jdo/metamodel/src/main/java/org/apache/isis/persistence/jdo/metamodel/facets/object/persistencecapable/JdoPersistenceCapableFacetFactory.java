@@ -55,6 +55,14 @@ implements ObjectTypeFacetFactory {
 
     @Override
     public void process(final ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
+
+        val cls = processClassContext.getCls();
+
+        // only applies to JDO entities; ignore non enhanced classes
+        if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
+            return;
+        }
+
         if(!processJdoAnnotations(processClassContext)) {
             processJpaAnnotations(processClassContext);
         }
@@ -64,11 +72,6 @@ implements ObjectTypeFacetFactory {
 
     private boolean processJdoAnnotations(final ProcessObjectTypeContext processClassContext) {
         val cls = processClassContext.getCls();
-
-        // only applies to JDO entities; ignore any view models
-        if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
-            return false;
-        }
 
         val persistenceCapableIfAny = processClassContext.synthesizeOnType(PersistenceCapable.class);
         if (!persistenceCapableIfAny.isPresent()) {

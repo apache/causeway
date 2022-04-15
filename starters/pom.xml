@@ -143,6 +143,7 @@
 
 				<!-- keep in sync with versions used in Apache Isis -->
 				<datanucleus-api-jdo.version>6.0.0-m4</datanucleus-api-jdo.version>
+				<datanucleus-api-jpa.version>6.0.0-m4</datanucleus-api-jpa.version>
 				<datanucleus-core.version>6.0.0-m4</datanucleus-core.version>
 				<datanucleus-jodatime.version>6.0.0-m4</datanucleus-jodatime.version>
 				<datanucleus-maven-plugin.version>6.0.0-m1</datanucleus-maven-plugin.version>
@@ -150,7 +151,6 @@
 				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
 				<datanucleus-maven-plugin.verbose>true</datanucleus-maven-plugin.verbose>
 				<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
-
 			</properties>
 			<build>
 				<plugins>

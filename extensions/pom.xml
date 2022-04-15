@@ -261,7 +261,7 @@
 
 	<profiles>
 		<profile>
-			<id>isis-app-starter-datanucleusenhance</id>
+			<id>isis-extensions-datanucleusenhance</id>
 			<activation>
 				<file>
 					<exists>${basedir}/logging-dn-enhance.properties</exists>
@@ -312,6 +312,11 @@
 								<groupId>org.datanucleus</groupId>
 								<artifactId>datanucleus-api-jdo</artifactId>
 								<version>${datanucleus-api-jdo.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-api-jpa</artifactId>
+								<version>${datanucleus-api-jpa.version}</version>
 							</dependency>
 							<dependency>
 								<groupId>org.datanucleus</groupId>
