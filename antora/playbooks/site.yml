@@ -109,7 +109,7 @@ content:
       branches: HEAD
 
     - url: .
-      start_path: extensions/excel/adoc # extensions
+      start_path: extensions/applib/excel/adoc # extensions
       branches: HEAD
     - url: .
       start_path: extensions/core/command-log/adoc # extensions
