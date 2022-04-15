@@ -119,7 +119,6 @@ implements ObjectTypeFacetFactory {
             FacetUtil.addFacet(
                     jdoFacetContext.createEntityFacet(facetHolder));
 
-
         });
     }
 

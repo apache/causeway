@@ -20,13 +20,15 @@ package org.apache.isis.persistence.jdo.metamodel.facets.prop.notpersistent;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.NotPersistent;
+import javax.persistence.Transient;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
+
+import lombok.val;
 
 public class JdoNotPersistentAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -43,21 +45,49 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+        if(!processJdoAnnotations(processMethodContext)) {
+            processJpaAnnotations(processMethodContext);
+        }
+    }
+
+    // -- HELPER
+
+    private boolean processJdoAnnotations(final ProcessMethodContext processMethodContext) {
 
         // only applies to JDO entities; ignore any view models
         final Class<?> cls = processMethodContext.getCls();
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
-            return;
+            return false;
         }
 
         final NotPersistent annotation = processMethodContext.synthesizeOnMethod(NotPersistent.class)
                 .orElse(null);
 
         if (annotation == null) {
+            return false;
+        }
+
+        val facetHolder = processMethodContext.getFacetHolder();
+        FacetUtil.addFacet(new JdoNotPersistentFacetFromAnnotation(facetHolder));
+        return true;
+    }
+
+
+    private void processJpaAnnotations(final ProcessMethodContext processMethodContext) {
+
+        //XXX ideally we would process JPA annotations only if the type has an @Entity annotation
+
+        final Transient annotation = processMethodContext.synthesizeOnMethod(Transient.class)
+                .orElse(null);
+
+        if (annotation == null) {
             return;
         }
 
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new JdoNotPersistentFacetAnnotation(holder));
+        val facetHolder = processMethodContext.getFacetHolder();
+        FacetUtil.addFacet(new JdoNotPersistentFacetFromJpaAnnotation(facetHolder));
+
     }
+
+
 }

@@ -21,9 +21,9 @@ package org.apache.isis.persistence.jdo.metamodel.facets.prop.notpersistent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
-public class JdoNotPersistentFacetAnnotation extends JdoNotPersistentFacetAbstract {
+public class JdoNotPersistentFacetFromJpaAnnotation extends JdoNotPersistentFacetAbstract {
 
-    public JdoNotPersistentFacetAnnotation(final FacetHolder holder) {
+    public JdoNotPersistentFacetFromJpaAnnotation(final FacetHolder holder) {
         super(holder);
     }
 
