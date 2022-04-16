@@ -183,14 +183,16 @@ implements ICommandLogRepository<CommandJpa> {
     public List<CommandJpa> findRecentByUsername(final String username) {
         return repositoryService().allMatches(
                 Query.named(CommandJpa.class, "findRecentByUsername")
-                    .withParameter("username", username));
+                    .withParameter("username", username)
+                    .withLimit(30));
     }
 
     @Override
     public List<CommandJpa> findRecentByTarget(final Bookmark target) {
         return repositoryService().allMatches(
                 Query.named(CommandJpa.class, "findRecentByTarget")
-                    .withParameter("target", target));
+                    .withParameter("target", target)
+                    .withLimit(30));
     }
 
     @Override
@@ -249,7 +251,6 @@ implements ICommandLogRepository<CommandJpa> {
 
     @Override
     public Optional<CommandJpa> findMostRecentReplayed() {
-
         return repositoryService().firstMatch(
                 Query.named(CommandJpa.class, "findMostRecentReplayed"));
     }

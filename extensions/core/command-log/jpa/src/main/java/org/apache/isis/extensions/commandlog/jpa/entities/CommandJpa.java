@@ -23,10 +23,13 @@ import java.sql.Timestamp;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -39,6 +42,7 @@ import org.apache.isis.applib.types.MemberIdentifierType;
 import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
 import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
 import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogJpa;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
@@ -64,62 +68,61 @@ import lombok.Setter;
     @NamedQuery(
             name="findByParent",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE parent = :parent "),
+                    + "WHERE cl.parent = :parent "),
     @NamedQuery(
             name="findCurrent",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE completedAt is null "
+                    + "WHERE cl.completedAt is null "
                     + "ORDER BY cl.timestamp DESC"),
     @NamedQuery(
             name="findCompleted",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE completedAt is not null "
+                    + "WHERE cl.completedAt is not null "
                     + "ORDER BY cl.timestamp DESC"),
     @NamedQuery(
             name="findRecentByTarget",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE target = :target "
-                    + "ORDER BY cl.timestamp DESC "
-                    + "RANGE 0,30"),
+                    + "WHERE cl.target = :target "
+                    + "ORDER BY cl.timestamp DESC"), // programmatic LIMIT 30
     @NamedQuery(
             name="findByTargetAndTimestampBetween",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE target = :target "
-                    + " AND timestamp >= :from "
-                    + " AND timestamp <= :to "
+                    + "WHERE cl.target = :target "
+                    + " AND cl.timestamp >= :from "
+                    + " AND cl.timestamp <= :to "
                     + "ORDER BY cl.timestamp DESC"),
     @NamedQuery(
             name="findByTargetAndTimestampAfter",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE target = :target "
-                    + " AND timestamp >= :from "
+                    + "WHERE cl.target = :target "
+                    + " AND cl.timestamp >= :from "
                     + "ORDER BY cl.timestamp DESC"),
     @NamedQuery(
             name="findByTargetAndTimestampBefore",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE target = :target "
-                    + " AND timestamp <= :to "
+                    + "WHERE cl.target = :target "
+                    + " AND cl.timestamp <= :to "
                     + "ORDER BY cl.timestamp DESC"),
     @NamedQuery(
             name="findByTarget",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE target = :target "
+                    + "WHERE cl.target = :target "
                     + "ORDER BY cl.timestamp DESC"),
     @NamedQuery(
             name="findByTimestampBetween",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE timestamp >= :from "
-                    + " AND  timestamp <= :to "
+                    + "WHERE cl.timestamp >= :from "
+                    + " AND  cl.timestamp <= :to "
                     + "ORDER BY cl.timestamp DESC"),
     @NamedQuery(
             name="findByTimestampAfter",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE timestamp >= :from "
+                    + "WHERE cl.timestamp >= :from "
                     + "ORDER BY cl.timestamp DESC"),
     @NamedQuery(
             name="findByTimestampBefore",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE timestamp <= :to "
+                    + "WHERE cl.timestamp <= :to "
                     + "ORDER BY cl.timestamp DESC"),
     @NamedQuery(
             name="find",
@@ -128,24 +131,20 @@ import lombok.Setter;
     @NamedQuery(
             name="findRecentByUsername",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE username = :username "
-                    + "ORDER BY cl.timestamp DESC "
-                    + "RANGE 0,30"),
+                    + "WHERE cl.username = :username "
+                    + "ORDER BY cl.timestamp DESC"), // programmatic LIMIT 30
     @NamedQuery(
             name="findFirst",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE startedAt   is not null "
-                    + "   AND completedAt is not null "
-                    + "ORDER BY cl.timestamp ASC "
-                    + "RANGE 0,2"),
-        // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
-        // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
+                    + "WHERE cl.startedAt   is not null "
+                    + "   AND cl.completedAt is not null "
+                    + "ORDER BY cl.timestamp ASC"), // programmatic LIMIT 1
     @NamedQuery(
             name="findSince",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE timestamp > :timestamp "
-                    + "   AND startedAt is not null "
-                    + "   AND completedAt is not null "
+                    + "WHERE cl.timestamp > :timestamp "
+                    + "   AND cl.startedAt is not null "
+                    + "   AND cl.completedAt is not null "
                     + "ORDER BY cl.timestamp ASC"),
     // most recent (replayed) command previously replicated from primary to
     // secondary.  This should always exist except for the very first times
@@ -153,28 +152,19 @@ import lombok.Setter;
     @NamedQuery(
             name="findMostRecentReplayed",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE (replayState == 'OK' || replayState == 'FAILED') "
-                    + "ORDER BY cl.timestamp DESC "
-                    + "RANGE 0,2"), // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
-                                    // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
-    // the most recent completed command, as queried on the
-    // secondary, corresponding to the last command run on primary before the
-    // production database was restored to the secondary
+                    + "WHERE (cl.replayState = 'OK' OR cl.replayState = 'FAILED') "
+                    + "ORDER BY cl.timestamp DESC"), // programmatic LIMIT 1
     @NamedQuery(
             name="findMostRecentCompleted",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE startedAt   is not null "
-                    + "   AND completedAt is not null "
-                    + "ORDER BY cl.timestamp DESC "
-                    + "RANGE 0,2"),
-        // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
-        // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
+                    + "WHERE cl.startedAt   is not null "
+                    + "   AND cl.completedAt is not null "
+                    + "ORDER BY cl.timestamp DESC"), // programmatic LIMIT 1
     @NamedQuery(
             name="findNotYetReplayed",
             query=CommandJpa.SELECT_FROM
-                    + "WHERE replayState = 'PENDING' "
-                    + "ORDER BY cl.timestamp ASC "
-                    + "RANGE 0,10"),    // same as batch size
+                    + "WHERE cl.replayState = 'PENDING' "
+                    + "ORDER BY cl.timestamp ASC"), // programmatic LIMIT 10
 })
 
 //    @javax.jdo.annotations.Query(
@@ -195,6 +185,7 @@ import lombok.Setter;
 @DomainObject(
         logicalTypeName = CommandJpa.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED)
+@EntityListeners(IsisEntityListener.class)
 @NoArgsConstructor
 public class CommandJpa extends CommandLog {
 
@@ -246,9 +237,17 @@ public class CommandJpa extends CommandLog {
     @Getter @Setter
     private String replayStateFailureReason;
 
-    @Column(name="parentId", nullable=true)
-    @Getter @Setter
-    private CommandLog parent;
+    @ManyToOne
+    @JoinColumn(name="parentId", nullable=true)
+    private CommandJpa parent;
+    @Override
+    public CommandJpa getParent() {
+        return parent;
+    }
+    @Override
+    public void setParent(final CommandLog parent) {
+        this.parent = (CommandJpa)parent;
+    }
 
     @Column(nullable=true, length = 2000, name="target")
     @Getter @Setter

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.ui;
+package org.apache.isis.extensions.commandlog.applib.command.ui;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -43,16 +43,15 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
 
 import lombok.RequiredArgsConstructor;
 
 /**
  * @since 2.0 {@index}
  */
-@Named(IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandServiceMenu")
+@Named(IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLogServiceMenu")
 @DomainService(
     nature = NatureOfService.VIEW
 )
@@ -63,44 +62,46 @@ import lombok.RequiredArgsConstructor;
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Jdo")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class CommandServiceMenu {
+public class CommandLogServiceMenu {
 
     public static abstract class PropertyDomainEvent<T>
-            extends IsisModuleExtCommandLogApplib.PropertyDomainEvent<CommandServiceMenu, T> { }
+            extends IsisModuleExtCommandLogApplib.PropertyDomainEvent<CommandLogServiceMenu, T> { }
     public static abstract class CollectionDomainEvent<T>
-            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandServiceMenu, T> { }
+            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandLogServiceMenu, T> { }
     public static abstract class ActionDomainEvent
-            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandServiceMenu> {
+            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLogServiceMenu> {
     }
 
-    final CommandJdoRepository commandServiceRepository;
+    final ICommandLogRepository<? extends CommandLog> commandLogRepository;
     final ClockService clockService;
 
     public static class ActiveCommandsDomainEvent extends ActionDomainEvent { }
-    @Action(domainEvent = ActiveCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(domainEvent = ActiveCommandsDomainEvent.class, semantics = SemanticsOf.SAFE,
+            typeOf = CommandLog.class)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-bolt", sequence="10")
-    public List<CommandJdo> activeCommands() {
-        return commandServiceRepository.findCurrent();
+    public List<? extends CommandLog> activeCommands() {
+        return commandLogRepository.findCurrent();
     }
     @MemberSupport public boolean hideActiveCommands() {
-        return commandServiceRepository == null;
+        return commandLogRepository == null;
     }
 
 
     public static class FindCommandsDomainEvent extends ActionDomainEvent { }
-    @Action(domainEvent = FindCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(domainEvent = FindCommandsDomainEvent.class, semantics = SemanticsOf.SAFE,
+            typeOf = CommandLog.class)
     @ActionLayout(cssClassFa = "fa-search", sequence="20")
-    public List<CommandJdo> findCommands(
+    public List<? extends CommandLog> findCommands(
             @Parameter(optionality= Optionality.OPTIONAL)
             @ParameterLayout(named="From")
             final LocalDate from,
             @Parameter(optionality= Optionality.OPTIONAL)
             @ParameterLayout(named="To")
             final LocalDate to) {
-        return commandServiceRepository.findByFromAndTo(from, to);
+        return commandLogRepository.findByFromAndTo(from, to);
     }
     @MemberSupport public boolean hideFindCommands() {
-        return commandServiceRepository == null;
+        return commandLogRepository == null;
     }
     @MemberSupport public LocalDate default0FindCommands() {
         return now().minusDays(7);
@@ -113,13 +114,13 @@ public class CommandServiceMenu {
     public static class FindCommandByIdDomainEvent extends ActionDomainEvent { }
     @Action(domainEvent = FindCommandByIdDomainEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-crosshairs", sequence="30")
-    public CommandJdo findCommandById(
+    public CommandLog findCommandById(
             @ParameterLayout(named="Transaction Id")
             final UUID transactionId) {
-        return commandServiceRepository.findByInteractionId(transactionId).orElse(null);
+        return commandLogRepository.findByInteractionId(transactionId).orElse(null);
     }
     @MemberSupport public boolean hideFindCommandById() {
-        return commandServiceRepository == null;
+        return commandLogRepository == null;
     }
 
 
@@ -127,7 +128,7 @@ public class CommandServiceMenu {
     @Action(domainEvent = TruncateLogDomainEvent.class, semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE, restrictTo = RestrictTo.PROTOTYPING)
     @ActionLayout(cssClassFa = "fa-trash", sequence="40")
     public void truncateLog() {
-        commandServiceRepository.truncateLog();
+        commandLogRepository.truncateLog();
     }
 
 

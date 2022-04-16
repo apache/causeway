@@ -25,9 +25,9 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
 import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
 import org.apache.isis.extensions.commandlog.applib.command.subscriber.CommandSubscriberForCommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.ui.CommandLogServiceMenu;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
-import org.apache.isis.extensions.commandlog.jdo.ui.CommandServiceMenu;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
@@ -37,7 +37,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 @Configuration
 @Import({
         // @DomainService's
-        CommandServiceMenu.class,
+        CommandLogServiceMenu.class,
 
         // @Service's
         CommandJdoRepository.class,

@@ -259,7 +259,7 @@ implements ICommandLogRepository<CommandJdo> {
     @Override
     public List<CommandJdo> findNotYetReplayed() {
         return repositoryService().allMatches(
-                Query.named(CommandJdo.class, "findNotYetReplayed"));
+                Query.named(CommandJdo.class, "findNotYetReplayed").withLimit(10));
     }
 
     @Override

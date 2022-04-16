@@ -29,7 +29,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import org.springframework.context.event.EventListener;
@@ -75,7 +74,6 @@ import lombok.val;
  * Note that this class doesn't subclass from {@link Command} ({@link Command}
  * is not an interface).
  */
-@MappedSuperclass
 @DomainObject(
         logicalTypeName = CommandLog.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
@@ -256,7 +254,7 @@ implements
     public static class ParentDomainEvent extends PropertyDomainEvent<Command> { }
     @Property(domainEvent = ParentDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES)
-    public abstract CommandLog getParent();
+    public abstract <C extends CommandLog> C getParent();
     public abstract void setParent(CommandLog parent);
 
     public static class TargetDomainEvent extends PropertyDomainEvent<String> { }
