@@ -57,16 +57,6 @@
             <groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
         </dependency>
-        
-        <!-- this dependency must not be transitive, its sole purpose is 
-        to allow the DN enhancer to pick it up in order to process JPA annotations; 
-        and thats only required when building with an IDE (Eclipse) and not with Maven;
-        the Maven build has its own DN enhancer plugin, which also has its own dependencies declared -->
-     	<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-api-jpa</artifactId>
-			<scope>provided</scope>
-		</dependency>
 
         <!-- Testing -->
 

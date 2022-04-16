@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -58,6 +58,6 @@ public class CommandLog_siblingCommands {
 
 
     @javax.inject.Inject
-    private CommandLogRepository<CommandLog> commandLogRepository;
+    private ICommandLogRepository<CommandLog> commandLogRepository;
 
 }

@@ -22,6 +22,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
 import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
@@ -35,14 +36,14 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 @Configuration
 @Import({
         // @DomainService's
-        CommandJdoRepository.class
-        , CommandServiceMenu.class
+        CommandServiceMenu.class,
 
         // @Service's
-        , CommandJdo.TableColumnOrderDefault.class
+        CommandJdoRepository.class,
+        CommandLog.TableColumnOrderDefault.class,
 
         // entities
-        , CommandJdo.class
+        CommandJdo.class
 })
 @ComponentScan(
         basePackageClasses= {

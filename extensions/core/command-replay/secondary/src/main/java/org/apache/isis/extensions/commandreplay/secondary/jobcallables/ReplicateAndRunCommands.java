@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
 import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
 import org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService;
 import org.apache.isis.extensions.commandreplay.secondary.fetch.CommandFetcher;
@@ -58,7 +58,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
     @Inject CommandExecutorService commandExecutorService;
     @Inject TransactionService transactionService;
     @Inject CommandFetcher commandFetcher;
-    @Inject CommandLogRepository<CommandLog> commandLogRepository;
+    @Inject ICommandLogRepository<CommandLog> commandLogRepository;
     @Inject CommandReplayAnalysisService analysisService;
     @Inject Optional<ReplayCommandExecutionController> controller;
 

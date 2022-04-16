@@ -32,7 +32,7 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 import lombok.Getter;
 
-public interface CommandLogRepository<C extends ICommandLog> {
+public interface ICommandLogRepository<C extends ICommandLog> {
 
     Optional<C> findByInteractionId(UUID interactionId);
 

@@ -42,8 +42,8 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository.NotFoundException;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository.NotFoundException;
 import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -68,7 +68,7 @@ import lombok.RequiredArgsConstructor;
 //@Log4j2
 public class CommandReplayOnPrimaryService {
 
-    @Inject final CommandLogRepository<? extends CommandLog> commandLogRepository;
+    @Inject final ICommandLogRepository<? extends CommandLog> commandLogRepository;
     @Inject final JaxbService jaxbService;
     @Inject final MessageService messageService;
     @Inject final ContentMappingServiceForCommandsDto contentMappingServiceForCommandsDto;

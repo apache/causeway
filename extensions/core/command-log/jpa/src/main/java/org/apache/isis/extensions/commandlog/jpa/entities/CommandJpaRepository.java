@@ -45,8 +45,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
 import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
 import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
 import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogJpa;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -69,7 +69,7 @@ import lombok.val;
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandJpaRepository
-implements CommandLogRepository<CommandJpa> {
+implements ICommandLogRepository<CommandJpa> {
 
     @Inject final Provider<InteractionProvider> interactionProviderProvider;
     @Inject final Provider<RepositoryService> repositoryServiceProvider;
@@ -321,5 +321,6 @@ implements CommandLogRepository<CommandJpa> {
     private RepositoryService repositoryService() {
         return repositoryServiceProvider.get();
     }
+
 
 }

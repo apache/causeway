@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
@@ -59,7 +59,7 @@ import lombok.val;
 //@Log4j2
 public class CommandReplayOnSecondaryService {
 
-    @Inject CommandLogRepository<? extends ICommandLog> commandLogRepository;
+    @Inject ICommandLogRepository<? extends ICommandLog> commandLogRepository;
     @Inject JaxbService jaxbService;
 
     public static abstract class ActionDomainEvent<T> extends IsisModuleExtCommandReplaySecondary.ActionDomainEvent<T> { }

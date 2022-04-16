@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 
@@ -57,6 +57,6 @@ public class CommandLog_replayQueue {
     }
 
     @Inject SecondaryConfig secondaryConfig;
-    @Inject CommandLogRepository<CommandLog> commandLogRepository;
+    @Inject ICommandLogRepository<CommandLog> commandLogRepository;
 
 }

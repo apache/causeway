@@ -28,12 +28,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import org.springframework.context.event.EventListener;
@@ -55,7 +51,6 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
 import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderForCollectionTypeAbstract;
-import org.apache.isis.applib.types.MemberIdentifierType;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Strings;
@@ -66,9 +61,7 @@ import org.apache.isis.extensions.commandlog.applib.util.StringUtils;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.val;
 
 /**
@@ -82,172 +75,7 @@ import lombok.val;
  * Note that this class doesn't subclass from {@link Command} ({@link Command}
  * is not an interface).
  */
-/*FIXME convert to JPA
-@javax.jdo.annotations.PersistenceCapable(
-        identityType=IdentityType.APPLICATION,
-        schema = "isisExtensionsCommandLog",
-        table = "Command")
-@javax.jdo.annotations.Queries( {
-    @javax.jdo.annotations.Query(
-            name="findByInteractionIdStr",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE interactionIdStr == :interactionIdStr "),
-    @javax.jdo.annotations.Query(
-            name="findByParent",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE parent == :parent "),
-    @javax.jdo.annotations.Query(
-            name="findCurrent",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE completedAt == null "
-                    + "ORDER BY this.timestamp DESC"),
-    @javax.jdo.annotations.Query(
-            name="findCompleted",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE completedAt != null "
-                    + "ORDER BY this.timestamp DESC"),
-    @javax.jdo.annotations.Query(
-            name="findRecentByTarget",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE target == :target "
-                    + "ORDER BY this.timestamp DESC "
-                    + "RANGE 0,30"),
-    @javax.jdo.annotations.Query(
-            name="findByTargetAndTimestampBetween",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE target == :target "
-                    + "&& timestamp >= :from "
-                    + "&& timestamp <= :to "
-                    + "ORDER BY this.timestamp DESC"),
-    @javax.jdo.annotations.Query(
-            name="findByTargetAndTimestampAfter",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE target == :target "
-                    + "&& timestamp >= :from "
-                    + "ORDER BY this.timestamp DESC"),
-    @javax.jdo.annotations.Query(
-            name="findByTargetAndTimestampBefore",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE target == :target "
-                    + "&& timestamp <= :to "
-                    + "ORDER BY this.timestamp DESC"),
-    @javax.jdo.annotations.Query(
-            name="findByTarget",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE target == :target "
-                    + "ORDER BY this.timestamp DESC"),
-    @javax.jdo.annotations.Query(
-            name="findByTimestampBetween",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE timestamp >= :from "
-                    + "&&    timestamp <= :to "
-                    + "ORDER BY this.timestamp DESC"),
-    @javax.jdo.annotations.Query(
-            name="findByTimestampAfter",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE timestamp >= :from "
-                    + "ORDER BY this.timestamp DESC"),
-    @javax.jdo.annotations.Query(
-            name="findByTimestampBefore",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE timestamp <= :to "
-                    + "ORDER BY this.timestamp DESC"),
-    @javax.jdo.annotations.Query(
-            name="find",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " ORDER BY this.timestamp DESC"),
-    @javax.jdo.annotations.Query(
-            name="findRecentByUsername",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE username == :username "
-                    + "ORDER BY this.timestamp DESC "
-                    + "RANGE 0,30"),
-    @javax.jdo.annotations.Query(
-            name="findFirst",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE startedAt   != null "
-                    + "   && completedAt != null "
-                    + "ORDER BY this.timestamp ASC "
-                    + "RANGE 0,2"),
-        // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
-        // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
-    @javax.jdo.annotations.Query(
-            name="findSince",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE timestamp > :timestamp "
-                    + "   && startedAt != null "
-                    + "   && completedAt != null "
-                    + "ORDER BY this.timestamp ASC"),
-    // most recent (replayed) command previously replicated from primary to
-    // secondary.  This should always exist except for the very first times
-    // (after restored the prod DB to secondary).
-    @javax.jdo.annotations.Query(
-            name="findMostRecentReplayed",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE (replayState == 'OK' || replayState == 'FAILED') "
-                    + "ORDER BY this.timestamp DESC "
-                    + "RANGE 0,2"), // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
-                                    // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
-    // the most recent completed command, as queried on the
-    // secondary, corresponding to the last command run on primary before the
-    // production database was restored to the secondary
-    @javax.jdo.annotations.Query(
-            name="findMostRecentCompleted",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE startedAt   != null "
-                    + "   && completedAt != null "
-                    + "ORDER BY this.timestamp DESC "
-                    + "RANGE 0,2"),
-        // this should be RANGE 0,1 but results in DataNucleus submitting "FETCH NEXT ROW ONLY"
-        // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
-    @javax.jdo.annotations.Query(
-            name="findNotYetReplayed",
-            value="SELECT "
-                    + "FROM " + CommandEntity.FQCN
-                    + " WHERE replayState == 'PENDING' "
-                    + "ORDER BY this.timestamp ASC "
-                    + "RANGE 0,10"),    // same as batch size
-//        @javax.jdo.annotations.Query(
-//                name="findReplayableInErrorMostRecent",
-//                value="SELECT "
-//                        + "FROM " + CommandJdo.FQCN
-//                        + " WHERE replayState == 'FAILED' "
-//                        + "ORDER BY this.timestamp DESC "
-//                        + "RANGE 0,2"),
-//    @javax.jdo.annotations.Query(
-//            name="findReplayableMostRecentStarted",
-//            value="SELECT "
-//                    + "FROM " + CommandJdo.FQCN
-//                    + " WHERE replayState = 'PENDING' "
-//                    + "ORDER BY this.timestamp DESC "
-//                    + "RANGE 0,20"),
-})
-@javax.jdo.annotations.Indices({
-        @javax.jdo.annotations.Index(name = "CommandJdo__startedAt__timestamp__IDX", members = { "startedAt", "timestamp" }),
-        @javax.jdo.annotations.Index(name = "CommandJdo__timestamp__IDX", members = { "timestamp" }),
-//        @javax.jdo.annotations.Index(name = "CommandJdo__replayState__timestamp__startedAt_IDX", members = { "replayState", "timestamp", "startedAt"}),
-//        @javax.jdo.annotations.Index(name = "CommandJdo__replayState__startedAt__completedAt_IDX", members = {"startedAt", "replayState", "completedAt"}),
-})
-*/
-@Entity
+@MappedSuperclass
 @DomainObject(
         logicalTypeName = CommandLog.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
@@ -261,14 +89,12 @@ import lombok.val;
 )
 //@Log4j2
 @NoArgsConstructor
-public class CommandLog
+public abstract class CommandLog
 implements
     ICommandLog,
     DomainChangeRecord {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLogEntity";
-
-    protected final static String FQCN = "org.apache.isis.extensions.commandlog.applib.command.CommandLogEntity";
+    public final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLog";
 
     /**
      * Intended for use on primary system.
@@ -373,49 +199,46 @@ implements
      * to persist if using h2 (perhaps would need to be mapped differently).
      * @see <a href="https://www.datanucleus.org/products/accessplatform/jdo/mapping.html#_other_types">www.datanucleus.org</a>
      */
-    @Id
-    @Column(nullable=false, name = "interactionId", length = 36)
     @Property(domainEvent = InteractionIdDomainEvent.class)
     @PropertyLayout(named = "Interaction Id")
-    @Getter @Setter
-    private String interactionIdStr;
+    public abstract String getInteractionIdStr();
+    public abstract void setInteractionIdStr(String interactionIdStr);
 
     @Transient
+    @javax.jdo.annotations.NotPersistent
     @Programmatic
     @Override
     public UUID getInteractionId() {return UUID.fromString(getInteractionIdStr());}
 
 
     public static class UsernameDomainEvent extends PropertyDomainEvent<String> { }
-    @Column(nullable=false, length = 50)
     @Property(domainEvent = UsernameDomainEvent.class)
-    @Getter @Setter
-    private String username;
+    @Override
+    public abstract String getUsername();
+    public abstract void setUsername(String userName);
 
 
     public static class TimestampDomainEvent extends PropertyDomainEvent<Timestamp> { }
-    @Column(nullable=false)
     @Property(domainEvent = TimestampDomainEvent.class)
-    @Getter @Setter
-    private Timestamp timestamp;
+    @Override
+    public abstract Timestamp getTimestamp();
+    public abstract void setTimestamp(Timestamp timestamp);
 
 
     @Transient
+    @javax.jdo.annotations.NotPersistent
     @Override
     public ChangeType getType() {
         return ChangeType.COMMAND;
     }
 
-
     public static class ReplayStateDomainEvent extends PropertyDomainEvent<ReplayState> { }
     /**
      * For a replayed command, what the outcome was.
      */
-    @Column(nullable=true, length=10)
     @Property(domainEvent = ReplayStateDomainEvent.class)
-    @Getter @Setter
-    private ReplayState replayState;
-
+    @Override
+    public abstract ReplayState getReplayState();
 
     public static class ReplayStateFailureReasonDomainEvent extends PropertyDomainEvent<ReplayState> { }
     /**
@@ -424,40 +247,40 @@ implements
     @Column(nullable=true, length=255)
     @Property(domainEvent = ReplayStateFailureReasonDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES, multiLine = 5)
-    @Getter @Setter
-    private String replayStateFailureReason;
+    public abstract String getReplayStateFailureReason();
+    public abstract void setReplayStateFailureReason(String replayStateFailureReason);
     @MemberSupport public boolean hideReplayStateFailureReason() {
         return getReplayState() == null || !getReplayState().isFailed();
     }
 
-
     public static class ParentDomainEvent extends PropertyDomainEvent<Command> { }
-    @Column(name="parentId", nullable=true)
     @Property(domainEvent = ParentDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES)
-    @Getter @Setter
-    private CommandLog parent;
-
+    public abstract CommandLog getParent();
+    public abstract void setParent(CommandLog parent);
 
     public static class TargetDomainEvent extends PropertyDomainEvent<String> { }
-    @Column(nullable=true, length = 2000, name="target")
+    @Override
     @Property(domainEvent = TargetDomainEvent.class)
     @PropertyLayout(named = "Object")
-    @Getter @Setter
-    private Bookmark target;
+    public abstract Bookmark getTarget();
+    public abstract void setTarget(Bookmark target);
 
     @Transient
+    @javax.jdo.annotations.NotPersistent
     public String getTargetStr() {
         return Optional.ofNullable(getTarget()).map(Bookmark::toString).orElse(null);
     }
 
     @Transient
+    @javax.jdo.annotations.NotPersistent
     @Override
     public String getTargetMember() {
         return getCommandDto().getMember().getLogicalMemberIdentifier();
     }
 
     @Transient
+    @javax.jdo.annotations.NotPersistent
     @Property(domainEvent = TargetDomainEvent.class)
     @PropertyLayout(named = "Member")
     public String getLocalMember() {
@@ -466,35 +289,30 @@ implements
     }
 
     public static class LogicalMemberIdentifierDomainEvent extends PropertyDomainEvent<String> { }
+    @Override
     @Property(domainEvent = LogicalMemberIdentifierDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES)
-    @Column(nullable=false, length = MemberIdentifierType.Meta.MAX_LEN)
-    @Getter @Setter
-    private String logicalMemberIdentifier;
-
+    public abstract String getLogicalMemberIdentifier();
+    public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
 
     public static class CommandDtoDomainEvent extends PropertyDomainEvent<CommandDto> { }
-    @Lob @Basic(fetch=FetchType.LAZY)
-    @Column(nullable=true, columnDefinition="CLOB")
     @Property(domainEvent = CommandDtoDomainEvent.class)
     @PropertyLayout(multiLine = 9)
-    @Getter @Setter
-    private CommandDto commandDto;
-
+    @Override
+    public abstract CommandDto getCommandDto();
+    public abstract void setCommandDto(CommandDto commandDto);
 
     public static class StartedAtDomainEvent extends PropertyDomainEvent<Timestamp> { }
-    @Column(nullable=true)
+    @Override
     @Property(domainEvent = StartedAtDomainEvent.class)
-    @Getter @Setter
-    private Timestamp startedAt;
-
+    public abstract Timestamp getStartedAt();
+    public abstract void setStartedAt(Timestamp startedAt);
 
     public static class CompletedAtDomainEvent extends PropertyDomainEvent<Timestamp> { }
-    @Column(nullable=true)
+    @Override
     @Property(domainEvent = CompletedAtDomainEvent.class)
-    @Getter @Setter
-    private Timestamp completedAt;
-
+    public abstract Timestamp getCompletedAt();
+    public abstract void setCompletedAt(Timestamp completedAt);
 
     public static class DurationDomainEvent extends PropertyDomainEvent<BigDecimal> { }
     /**
@@ -504,6 +322,7 @@ implements
      * Populated only if it has {@link #getCompletedAt() completed}.
      */
     @Transient
+    @javax.jdo.annotations.NotPersistent
     @javax.validation.constraints.Digits(integer=5, fraction=3)
     @Property(domainEvent = DurationDomainEvent.class)
     public BigDecimal getDuration() {
@@ -513,6 +332,7 @@ implements
 
     public static class IsCompleteDomainEvent extends PropertyDomainEvent<Boolean> { }
     @Transient
+    @javax.jdo.annotations.NotPersistent
     @Property(domainEvent = IsCompleteDomainEvent.class)
     @PropertyLayout(hidden = Where.OBJECT_FORMS)
     public boolean isComplete() {
@@ -522,6 +342,7 @@ implements
 
     public static class ResultSummaryDomainEvent extends PropertyDomainEvent<String> { }
     @Transient
+    @javax.jdo.annotations.NotPersistent
     @Property(domainEvent = ResultSummaryDomainEvent.class)
     @PropertyLayout(hidden = Where.OBJECT_FORMS, named = "Result")
     public String getResultSummary() {
@@ -538,13 +359,12 @@ implements
         }
     }
 
-
     public static class ResultDomainEvent extends PropertyDomainEvent<String> { }
-    @Column(nullable=true, length = 2000, name="result")
+    @Override
     @Property(domainEvent = ResultDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES, named = "Result Bookmark")
-    @Getter @Setter
-    private Bookmark result;
+    public abstract Bookmark getResult();
+    public abstract void setResult(Bookmark result);
 
     public static class ExceptionDomainEvent extends PropertyDomainEvent<String> { }
     /**
@@ -554,21 +374,20 @@ implements
      * Not part of the applib API, because the default implementation is not persistent
      * and so there's no object that can be accessed to be annotated.
      */
-    @Lob @Basic(fetch=FetchType.LAZY)
-    @Column(nullable=true, columnDefinition="CLOB")
+    @Override
     @Property(domainEvent = ExceptionDomainEvent.class)
     @PropertyLayout(hidden = Where.ALL_TABLES, multiLine = 5, named = "Exception (if any)")
-    @Getter
-    private String exception;
-    public void setException(final String exception) {
-        this.exception = exception;
-    }
+    public abstract String getException();
+    public abstract void setException(final String exception);
+    @Transient
+    @javax.jdo.annotations.NotPersistent
     public void setException(final Throwable exception) {
         setException(_Exceptions.asStacktrace(exception));
     }
 
     public static class IsCausedExceptionDomainEvent extends PropertyDomainEvent<Boolean> { }
     @Transient
+    @javax.jdo.annotations.NotPersistent
     @Property(domainEvent = IsCausedExceptionDomainEvent.class)
     @PropertyLayout(hidden = Where.OBJECT_FORMS)
     public boolean isCausedException() {
@@ -576,12 +395,14 @@ implements
     }
 
     @Transient
+    @javax.jdo.annotations.NotPersistent
     @Override
     public String getPreValue() {
         return null;
     }
 
     @Transient
+    @javax.jdo.annotations.NotPersistent
     @Override
     public String getPostValue() {
         return null;
@@ -630,6 +451,7 @@ implements
 
         };
     }
+
 
     @Service
     @javax.annotation.Priority(PriorityPrecedence.LATE - 10) // before the framework's own default.

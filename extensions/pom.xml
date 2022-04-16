@@ -315,11 +315,6 @@
 							</dependency>
 							<dependency>
 								<groupId>org.datanucleus</groupId>
-								<artifactId>datanucleus-api-jpa</artifactId>
-								<version>${datanucleus-api-jpa.version}</version>
-							</dependency>
-							<dependency>
-								<groupId>org.datanucleus</groupId>
 								<artifactId>datanucleus-jodatime</artifactId>
 								<version>${datanucleus-jodatime.version}</version>
 							</dependency>

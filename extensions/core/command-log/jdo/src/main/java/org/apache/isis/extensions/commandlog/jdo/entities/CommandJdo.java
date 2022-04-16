@@ -18,33 +18,28 @@
  */
 package org.apache.isis.extensions.commandlog.jdo.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.sql.Timestamp;
+
+import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.types.MemberIdentifierType;
 import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
 import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
 import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-/**
- * @deprecated use {@link CommandLog} instead
- */
-//@javax.jdo.annotations.PersistenceCapable(
-//        identityType = IdentityType.APPLICATION,
-//        schema = "isisExtensionsCommandLog",
-//        table = "Command")
-
-@Entity
-@Table(
+@javax.jdo.annotations.PersistenceCapable(
+        identityType = IdentityType.APPLICATION,
         schema = "isisExtensionsCommandLog",
-        name = "Command"
-)
-
+        table = "Command")
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
             name="findByInteractionIdStr",
@@ -204,18 +199,31 @@ import lombok.NoArgsConstructor;
 //        @javax.jdo.annotations.Index(name = "CommandJdo__replayState__timestamp__startedAt_IDX", members = { "replayState", "timestamp", "startedAt"}),
 //        @javax.jdo.annotations.Index(name = "CommandJdo__replayState__startedAt__completedAt_IDX", members = {"startedAt", "replayState", "completedAt"}),
 })
+
+//    @javax.jdo.annotations.Query(
+//            name="findReplayableInErrorMostRecent",
+//            value="SELECT "
+//                    + "FROM " + CommandJdo.FQCN
+//                    + " WHERE replayState == 'FAILED' "
+//                    + "ORDER BY this.timestamp DESC "
+//                    + "RANGE 0,2"),
+//    @javax.jdo.annotations.Query(
+//            name="findReplayableMostRecentStarted",
+//            value="SELECT "
+//                    + "FROM " + CommandJdo.FQCN
+//                    + " WHERE replayState = 'PENDING' "
+//                    + "ORDER BY this.timestamp DESC "
+//                    + "RANGE 0,20"),
 @DomainObject(
         logicalTypeName = CommandJdo.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
 )
 //@Log4j2
-@Deprecated
 @NoArgsConstructor
 public class CommandJdo
 extends CommandLog {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandJdo";
-
+    protected final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandJdo";
     protected final static String FQCN = "org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo";
 
     /**
@@ -226,7 +234,6 @@ extends CommandLog {
     public CommandJdo(final Command command) {
         super(command);
     }
-
 
     /**
      * Intended for use on secondary (replay) system.
@@ -242,12 +249,69 @@ extends CommandLog {
         super(commandDto, replayState, targetIndex);
     }
 
-//    @Override
-//    @Id
-//    @Column(nullable=false, name = "interactionId", length = 36)
-//    public String getInteractionIdStr() {
-//        return super.getInteractionIdStr();
-//    }
+    @javax.jdo.annotations.PrimaryKey
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="false", name = "interactionId", length = 36)
+    @Getter @Setter
+    private String interactionIdStr;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="false", length = 50)
+    @Getter @Setter
+    private String username;
+
+    @javax.jdo.annotations.Column(allowsNull="false")
+    @Getter @Setter
+    private Timestamp timestamp;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="true", length=10)
+    @Getter @Setter
+    private ReplayState replayState;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="true", length=255)
+    @Getter @Setter
+    private String replayStateFailureReason;
+
+    @javax.jdo.annotations.Column(name="parentId", allowsNull="true")
+    @Getter @Setter
+    private CommandLog parent;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="true", length = 2000, name="target")
+    @Getter @Setter
+    private Bookmark target;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="false", length = MemberIdentifierType.Meta.MAX_LEN)
+    @Getter @Setter
+    private String logicalMemberIdentifier;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="CLOB")
+    @Getter @Setter
+    private CommandDto commandDto;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="true")
+    @Getter @Setter
+    private Timestamp startedAt;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="true")
+    @Getter @Setter
+    private Timestamp completedAt;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="true", length = 2000, name="result")
+    @Getter @Setter
+    private Bookmark result;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="CLOB")
+    @Getter @Setter
+    private String exception;
 
 }
 
