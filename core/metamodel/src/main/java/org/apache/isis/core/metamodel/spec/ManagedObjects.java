@@ -828,7 +828,8 @@ public final class ManagedObjects {
 
 
         /**
-         * @param adapter - an adapter around the domain object whose visibility is being checked
+         * @param adapter - wrapper of domain object whose visibility is being checked,
+         *      must not be a mixin
          * @param interactionInitiatedBy
          */
         public static boolean isVisible(
