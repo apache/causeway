@@ -27,12 +27,16 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 import lombok.Getter;
 
 public interface ICommandLogRepository<C extends ICommandLog> {
+
+    /** Creates a transient (yet not persisted) {@link ICommandLog} instance. */
+    C createCommandLog(Command command);
 
     Optional<C> findByInteractionId(UUID interactionId);
 
@@ -114,7 +118,7 @@ public interface ICommandLogRepository<C extends ICommandLog> {
 
     List<C> saveForReplay(CommandsDto commandsDto);
 
-    void persist(C commandJdo);
+    void persist(C commandLog);
 
     void truncateLog();
 
@@ -140,5 +144,7 @@ public interface ICommandLogRepository<C extends ICommandLog> {
         }
         return commands;
     }
+
+
 
 }

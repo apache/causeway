@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.subscriber.CommandSubscriberForCommandLog;
 import org.apache.isis.extensions.commandlog.jpa.entities.CommandJpaRepository;
 
 /**
@@ -31,11 +32,13 @@ import org.apache.isis.extensions.commandlog.jpa.entities.CommandJpaRepository;
 @Configuration
 @Import({
         // @DomainService's
-        CommandJpaRepository.class
+        CommandJpaRepository.class,
+
 //TODO        , CommandServiceMenu.class
 
         // @Service's
-        , CommandLog.TableColumnOrderDefault.class
+        CommandLog.TableColumnOrderDefault.class,
+        CommandSubscriberForCommandLog.class,
 
 })
 @ComponentScan(

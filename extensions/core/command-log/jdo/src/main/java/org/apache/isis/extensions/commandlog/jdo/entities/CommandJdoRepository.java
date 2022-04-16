@@ -42,6 +42,7 @@ import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
@@ -75,6 +76,11 @@ implements ICommandLogRepository<CommandJdo> {
     @Inject final Provider<InteractionProvider> interactionProviderProvider;
     @Inject final Provider<RepositoryService> repositoryServiceProvider;
     @Inject final JdoSupportService jdoSupport;
+
+    @Override
+    public CommandJdo createCommandLog(final Command command) {
+        return new CommandJdo(command);
+    }
 
     @Override
     public List<CommandJdo> findByFromAndTo(

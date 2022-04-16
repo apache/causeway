@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.subscriber;
+package org.apache.isis.extensions.commandlog.applib.command.subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,9 +28,10 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.util.JaxbUtil;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -40,14 +41,14 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandCompletionHook")
+@Named(IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
 @Qualifier("Jdo")
 @RequiredArgsConstructor
 @Log4j2
-public class CommandSubscriberForJdo implements CommandSubscriber {
+public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
-    @Inject final CommandJdoRepository commandJdoRepository;
+    @Inject final ICommandLogRepository<? extends CommandLog> commandLogRepository;
 
     @Override
     public void onCompleted(final Command command) {
@@ -57,7 +58,7 @@ public class CommandSubscriberForJdo implements CommandSubscriber {
         }
 
         val existingCommandJdoIfAny =
-                commandJdoRepository.findByInteractionId(command.getInteractionId());
+                commandLogRepository.findByInteractionId(command.getInteractionId());
         if(existingCommandJdoIfAny.isPresent()) {
             if(log.isDebugEnabled()) {
                 // this isn't expected to happen ... we just log the fact if it does
@@ -72,16 +73,16 @@ public class CommandSubscriberForJdo implements CommandSubscriber {
                 log.debug("proposed: \n{}", commandDtoXml);
             }
         } else {
-            val commandJdo = new CommandJdo(command);
+            val commandLogInstance = commandLogRepository.createCommandLog(command);
             val parent = command.getParent();
             val parentJdo =
                 parent != null
-                    ? commandJdoRepository
+                    ? commandLogRepository
                         .findByInteractionId(parent.getInteractionId())
                         .orElse(null)
                     : null;
-            commandJdo.setParent(parentJdo);
-            commandJdoRepository.persist(commandJdo);
+            commandLogInstance.setParent(parentJdo);
+            commandLogRepository.persist(_Casts.uncheckedCast(commandLogInstance));
         }
 
 
