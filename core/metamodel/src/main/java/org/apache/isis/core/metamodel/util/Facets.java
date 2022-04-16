@@ -321,7 +321,7 @@ public final class Facets {
         final Integer result = (typicalLength != null
                 && maxLength.isPresent()
                 && typicalLength > maxLength.getAsInt())
-                ? maxLength.getAsInt()
+                ? (Integer)maxLength.getAsInt()
                 : typicalLength;
         return Optional.ofNullable(result)
                 .map(OptionalInt::of)

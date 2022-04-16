@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
@@ -70,7 +71,7 @@ extends IconFacetAbstract {
     @Override
     public String iconName(final ManagedObject owningAdapter) {
 
-        if(owningAdapter == null) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
             return null;
         }
 
