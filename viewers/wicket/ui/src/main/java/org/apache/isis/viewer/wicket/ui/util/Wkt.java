@@ -881,16 +881,16 @@ public class Wkt {
 
         if(formComponent instanceof TextArea) {
             multilineNumberOfLines.get()
-            .ifPresent(numberOfLines->
-                Wkt.attributeReplace(formComponent, "rows", numberOfLines));
-
-            // in conjunction with javascript in jquery.isis.wicket.viewer.js
-            // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
-            //Wkt.attributeReplace(textArea, "maxlength", getMaxLengthOf(scalarModel));
+            .ifPresent(numberOfLines->{
+                System.err.printf("%d%n", numberOfLines);
+                Wkt.attributeReplace(formComponent, "rows", numberOfLines);});
         }
 
         maxLength.get()
         .ifPresent(maxLen->{
+            // for TextArea in conjunction with javascript in jquery.isis.wicket.viewer.js
+            // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
+
             Wkt.attributeReplace(formComponent, "maxlength", maxLen);
             if(formComponent.getType().equals(String.class)) {
                 formComponent.add(StringValidator.maximumLength(maxLen));

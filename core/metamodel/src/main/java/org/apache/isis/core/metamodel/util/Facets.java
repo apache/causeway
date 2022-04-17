@@ -277,8 +277,8 @@ public final class Facets {
                 .isPresent();
     }
 
-    public OptionalInt multilineNumberOfLines(final ObjectSpecification objectSpec) {
-        return objectSpec
+    public OptionalInt multilineNumberOfLines(final ObjectFeature feature) {
+        return feature
                 .lookupFacet(MultiLineFacet.class)
                 .map(MultiLineFacet::numberOfLines)
                 .map(OptionalInt::of)

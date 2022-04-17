@@ -346,7 +346,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     }
 
     public final OptionalInt multilineNumberOfLines() {
-        return Facets.multilineNumberOfLines(getScalarTypeSpec());
+        return Facets.multilineNumberOfLines(getMetaModel());
     }
 
     public final OptionalInt maxLength() {
