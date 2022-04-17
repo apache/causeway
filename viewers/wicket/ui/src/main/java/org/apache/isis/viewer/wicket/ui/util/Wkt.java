@@ -709,15 +709,15 @@ public class Wkt {
         return new TextArea<String>(id, textModel);
     }
 
-//    public TextArea<String> textAreaNoTab(final String id, final IModel<String> textModel) {
-//        return new TextArea<String>(id, textModel) {
-//            private static final long serialVersionUID = 1L;
-//            @Override protected void onComponentTag(final ComponentTag tag) {
-//                super.onComponentTag(tag);
-//                tag.put("tabindex", "-1");
-//            }
-//        };
-//    }
+    public TextArea<String> textAreaNoTab(final String id, final IModel<String> textModel) {
+        return new TextArea<String>(id, textModel) {
+            private static final long serialVersionUID = 1L;
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.put("tabindex", "-1");
+            }
+        };
+    }
 
 //    public TextArea<String> textAreaAddNoTab(
 //            final MarkupContainer container, final String id, final IModel<String> textModel) {

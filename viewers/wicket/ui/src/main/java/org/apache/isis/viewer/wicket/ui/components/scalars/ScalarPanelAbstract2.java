@@ -127,9 +127,7 @@ extends ScalarPanelAbstract {
                 && !getRenderScenario().isCompact()) {
             return PromptFragment.TEXTAREA
                     .createFragment(id, this, scalarValueId->{
-                        //XXX tab or no-tab?
-                        //XXX always full width
-                        val textArea = Wkt.textArea(scalarValueId, this::obtainOutputFormat);
+                        val textArea = Wkt.textAreaNoTab(scalarValueId, this::obtainOutputFormat);
                         val scalarModel = scalarModel();
                         Wkt.setFormComponentAttributes(textArea,
                                 scalarModel::multilineNumberOfLines,

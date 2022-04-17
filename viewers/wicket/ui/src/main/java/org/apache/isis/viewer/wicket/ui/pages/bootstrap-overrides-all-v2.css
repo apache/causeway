@@ -1040,12 +1040,9 @@ li.select2-results__option {
     padding-right: 15px;
 }
 
-.booleanPanel .form-control.scalarValueInlinePromptLink,
-.referencePanel .form-control.scalarValueInlinePromptLink {
-    display: inline-flex;
-    width: 85%;
+div.scalarValueInlinePromptLink {
+	width: 100%;
 }
-
 .scalarValueInlinePromptLink.form-control {
     text-decoration: none;
     overflow: hidden;
