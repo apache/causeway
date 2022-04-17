@@ -1059,7 +1059,8 @@ span.scalarValueInput.input-group div.btn-group {
     display: none;
 }
 div.scalarValueInlinePromptLink.form-control:hover .btn-group,
-span.scalarValueInput.input-group:hover div.btn-group {
+span.scalarValueInput.input-group:hover div.btn-group,
+textarea.form-control:focus +span >.btn-group{
 	display: inherit;
 }
 

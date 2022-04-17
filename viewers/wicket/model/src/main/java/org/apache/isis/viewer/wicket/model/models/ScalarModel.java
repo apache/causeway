@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
@@ -342,6 +343,18 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     public final boolean hasAssociatedActionWithInlineAsIfEdit() {
         return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
+    }
+
+    public final OptionalInt multilineNumberOfLines() {
+        return Facets.multilineNumberOfLines(getScalarTypeSpec());
+    }
+
+    public final OptionalInt maxLength() {
+        return Facets.maxLength(getScalarTypeSpec());
+    }
+
+    public final OptionalInt typicalLength() {
+        return Facets.typicalLength(getScalarTypeSpec(), maxLength());
     }
 
 }
