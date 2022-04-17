@@ -1046,22 +1046,20 @@ li.select2-results__option {
     width: 85%;
 }
 
-div.scalarValueInlinePromptLink.form-control {
+.scalarValueInlinePromptLink.form-control {
     text-decoration: none;
     overflow: hidden;
 }
-div.scalarValueInlinePromptLink.form-control:hover {
+.scalarValueInlinePromptLink.form-control:hover {
 	cursor: pointer;
 	background-color: rgba(0, 0, 0, 0.08);
 }
-div.scalarValueInlinePromptLink.form-control .btn-group,
-span.scalarValueInput.input-group div.btn-group {
-    display: none;
+.scalarValueInlinePromptLink .btn-group > button.btn {
+  opacity: 0.5;
 }
-div.scalarValueInlinePromptLink.form-control:hover .btn-group,
-span.scalarValueInput.input-group:hover div.btn-group,
-textarea.form-control:focus +span >.btn-group{
-	display: inherit;
+.scalarValueInlinePromptLink .btn-group > button.btn:focus,
+.scalarValueInlinePromptLink:hover .btn-group > button.btn {
+  opacity: 1.0;
 }
 
 .entityUrlSource {
