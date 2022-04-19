@@ -1204,7 +1204,7 @@ ul.tertiary li.dropdown ul.dropdown-menu {
 /* header/footer vertical padding fix */
 nav.sticky-top,
 footer > .navbar {
-    padding: 0.5rem 1rem;
+    padding: 0 1rem;
 }
 
 /* enable line wrapping on nav-bar's content, so we don't overflow */
