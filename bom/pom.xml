@@ -332,7 +332,7 @@ under the License.
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<maven.compiler.release>11</maven.compiler.release>
 
-		<lombok.version>1.18.22</lombok.version> <!-- overriding Spring -->
+		<lombok.version>1.18.24</lombok.version> <!-- overriding Spring -->
 		<delombok.output>${project.build.directory}/delombok</delombok.output>
 		<surefire.version>3.0.0-M6</surefire.version>
 		<surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
