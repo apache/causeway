@@ -18,6 +18,7 @@
  */
 package demoapp.webapp.wicket.jdo;
 
+import lombok.val;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -92,6 +93,11 @@ public class DemoAppWicketJdo extends SpringBootServletInitializer {
 
         SpringApplication.run(new Class[] { DemoAppWicketJdo.class }, args);
 
+    }
+
+    private static String preservingAnyExisting(String profile) {
+        val existingProfiles = System.getProperty("spring.profiles.active");
+        return existingProfiles == null ? profile : existingProfiles + "," + profile;
     }
 
 }

@@ -18,7 +18,10 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+
+import lombok.val;
 
 public abstract class MetaModelVisitingValidatorAbstract
 extends MetaModelValidatorAbstract
@@ -35,8 +38,11 @@ implements MetaModelVisitingValidator {
             return;
         }
 
-        super.getMetaModelContext().getSpecificationLoader()
-        .forEach(this::validate);
+        val shouldRunConcurrent =
+                getMetaModelContext().getConfiguration().getCore().getMetaModel().getValidator().isParallelize();
+
+        getMetaModelContext().getSpecificationLoader()
+        .forEach(this::validate, shouldRunConcurrent);
 
         summarize();
 

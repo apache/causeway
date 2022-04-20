@@ -29,7 +29,7 @@
 
     <artifactId>isis-applib</artifactId>
 
-    <name>Apache Isis Core - AppLib</name>
+    <name>Apache Isis Api - AppLib</name>
     <description>
         Isis application library, defining annotations and utilities for the
         default (Java) programming model.
@@ -87,7 +87,7 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-schema</artifactId>
         </dependency>
-        
+
         <!-- marked for deprecation -->
     	<dependency>
 			<groupId>joda-time</groupId>

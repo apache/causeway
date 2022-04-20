@@ -241,13 +241,18 @@ where `module-xxx` and `module-yyy` correspond to profile names, as provided wit
 | Demo Application (Vaadin)
 
 | module-examples-demo-wicket
-| Demo Application (Wicket)
+| Demo Application (Wicket).
+
+Note that this also includes the Restful Objects and GraphQL viewers.
 
 | module-incubator-all
 | All Incubation Modules
 
+| module-incubator-graphql
+| The GraphQL Viewer
+
 | module-incubator-javafx
-| The JavaFx Viewer
+| The JavaFX Viewer
 
 | module-incubator-kroviz
 | The Kroviz Client (standalone viewer)

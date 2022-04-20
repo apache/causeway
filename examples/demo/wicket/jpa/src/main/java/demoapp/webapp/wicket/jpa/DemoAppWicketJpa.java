@@ -37,6 +37,8 @@ import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
+import lombok.val;
+
 import demoapp.web.DemoAppManifestJpa;
 import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 
@@ -98,6 +100,10 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
 
     }
 
+    private static String preservingAnyExisting(String profile) {
+        val existingProfiles = System.getProperty("spring.profiles.active");
+        return existingProfiles == null ? profile : existingProfiles + "," + profile;
+    }
 
 
 }
