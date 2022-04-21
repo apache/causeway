@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStack;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -108,8 +108,8 @@ extends FacetFactoryAbstract {
         // -- ENTITY FACET
 
         @Override
-        public PersistenceStandard getPersistenceStandard() {
-            return PersistenceStandard.JPA;
+        public PersistenceStack getPersistenceStack() {
+            return PersistenceStack.JPA;
         }
 
         @Override

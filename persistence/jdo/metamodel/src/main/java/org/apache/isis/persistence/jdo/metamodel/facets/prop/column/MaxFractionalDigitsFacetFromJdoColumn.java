@@ -29,21 +29,34 @@ import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDig
 public class MaxFractionalDigitsFacetFromJdoColumn
 extends MaxFractionalDigitsFacetAbstract {
 
-     public static Optional<MaxFractionalDigitsFacet> create(
-             final Optional<Column> jdoColumnIfAny,
-             final FacetHolder holder) {
+    public static Optional<MaxFractionalDigitsFacet> createJdo(
+            final Optional<Column> jdoColumnIfAny,
+            final FacetHolder holder) {
 
-         return jdoColumnIfAny
-         .filter(jdoColumn->jdoColumn.scale()>=0)
-         .map(jdoColumn->{
-             return new MaxFractionalDigitsFacetFromJdoColumn(
-                     jdoColumn.scale(), holder);
-         });
+        return jdoColumnIfAny
+                .filter(jdoColumn->jdoColumn.scale()>=0)
+                .map(jdoColumn->{
+                    return new MaxFractionalDigitsFacetFromJdoColumn(
+                            jdoColumn.scale(), holder);
+                });
+    }
+
+    public static Optional<MaxFractionalDigitsFacet> createJpa(
+            final Optional<javax.persistence.Column> jdoColumnIfAny,
+            final FacetHolder holder) {
+
+        return jdoColumnIfAny
+                .filter(jdoColumn->jdoColumn.scale()>=0)
+                .map(jdoColumn->{
+                    return new MaxFractionalDigitsFacetFromJdoColumn(
+                            jdoColumn.scale(), holder);
+                });
     }
 
     private MaxFractionalDigitsFacetFromJdoColumn(
             final int maxFractionalDigits, final FacetHolder holder) {
         super(maxFractionalDigits, holder);
     }
+
 
 }

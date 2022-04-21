@@ -50,7 +50,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStack;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -87,8 +87,8 @@ implements EntityFacet {
     }
 
     @Override
-    public PersistenceStandard getPersistenceStandard() {
-        return PersistenceStandard.JDO;
+    public PersistenceStack getPersistenceStack() {
+        return PersistenceStack.JDO;
     }
 
     @Override

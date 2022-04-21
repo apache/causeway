@@ -24,26 +24,24 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
     associateWith = "propertyUpdatedByAction")
+@RequiredArgsConstructor
 public class DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction
         implements HasAsciiDocDescription {
     // ...
 //end::class[]
     private final DomainObjectEntityChangePublishingEntity domainObjectAuditingEntity;
 
-    public DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction(final DomainObjectEntityChangePublishingEntity domainObjectAuditingEntity) {
-        this.domainObjectAuditingEntity = domainObjectAuditingEntity;
-    }
-
 //tag::class[]
-    @MemberSupport public DomainObjectEntityChangePublishingEntity_updatePropertyUsingAction act(final String value) {
+    @MemberSupport public DomainObjectEntityChangePublishingEntity act(final String value) {
         domainObjectAuditingEntity.setPropertyUpdatedByAction(value);
-        return this;
+        return domainObjectAuditingEntity;
     }
     @MemberSupport public String default0Act() {
         return domainObjectAuditingEntity.getPropertyUpdatedByAction();

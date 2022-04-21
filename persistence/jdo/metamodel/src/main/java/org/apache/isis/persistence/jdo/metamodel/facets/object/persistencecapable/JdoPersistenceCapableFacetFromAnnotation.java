@@ -24,6 +24,8 @@ import java.util.function.BiConsumer;
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -40,7 +42,7 @@ implements JdoPersistenceCapableFacet {
     private final String table;
     private final IdentityType identityType;
 
-    public static Optional<JdoPersistenceCapableFacet> create(
+    public static Optional<JdoPersistenceCapableFacet> createUsingJdo(
             final Optional<PersistenceCapable> persistenceCapableIfAny,
             final Optional<EmbeddedOnly> embeddedOnlyIfAny,
             final Class<?> cls,
@@ -75,6 +77,38 @@ implements JdoPersistenceCapableFacet {
                 identityType,
                 facetHolder));
 
+    }
+
+    public static Optional<JdoPersistenceCapableFacet> createUsingJpa(
+            final Optional<Entity> entityIfAny,
+            final Optional<Table> tableIfAny,
+            final Class<?> cls,
+            final FacetHolder facetHolder) {
+
+        if(!entityIfAny.isPresent()) {
+            return Optional.empty();
+        }
+
+        //val entity = entityIfAny.get(); // optionally has a name, we don't use yet
+
+        val table = tableIfAny
+            .map(tableAnnot->tableAnnot.name())
+            .map(_Strings::emptyToNull)
+            .orElseGet(cls::getSimpleName);
+
+        val schema = tableIfAny
+                .map(tableAnnot->tableAnnot.schema())
+                .map(_Strings::emptyToNull)
+                .orElseGet(cls::getSimpleName);
+
+
+        val identityType = IdentityType.UNSPECIFIED;
+
+        return Optional.of(new JdoPersistenceCapableFacetFromAnnotation(
+                schema,
+                table,
+                identityType,
+                facetHolder));
     }
 
     private JdoPersistenceCapableFacetFromAnnotation(

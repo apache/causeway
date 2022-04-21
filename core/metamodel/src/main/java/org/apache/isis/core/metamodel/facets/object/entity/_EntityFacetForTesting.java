@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class _EntityFacetForTesting implements EntityFacet {
 
-    @Getter private final PersistenceStandard persistenceStandard;
+    @Getter private final PersistenceStack persistenceStack;
     @Getter private final FacetHolder facetHolder;
 
     @Override

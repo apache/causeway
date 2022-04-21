@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -60,6 +61,13 @@ public final class _Lists {
             return null;
         }
         return list.get(list.size()-1);
+    }
+
+    public static <T> Optional<T> lastElement(final @Nullable List<T> list) {
+        if(_NullSafe.isEmpty(list)) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(list.get(list.size()-1));
     }
 
     // -- UNMODIFIABLE LIST

@@ -277,8 +277,8 @@ public final class Facets {
                 .isPresent();
     }
 
-    public OptionalInt multilineNumberOfLines(final ObjectSpecification objectSpec) {
-        return objectSpec
+    public OptionalInt multilineNumberOfLines(final ObjectFeature feature) {
+        return feature
                 .lookupFacet(MultiLineFacet.class)
                 .map(MultiLineFacet::numberOfLines)
                 .map(OptionalInt::of)
@@ -321,7 +321,7 @@ public final class Facets {
         final Integer result = (typicalLength != null
                 && maxLength.isPresent()
                 && typicalLength > maxLength.getAsInt())
-                ? maxLength.getAsInt()
+                ? (Integer)maxLength.getAsInt()
                 : typicalLength;
         return Optional.ofNullable(result)
                 .map(OptionalInt::of)

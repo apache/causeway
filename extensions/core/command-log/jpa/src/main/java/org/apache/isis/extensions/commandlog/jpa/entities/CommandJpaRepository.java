@@ -42,11 +42,12 @@ import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModel;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModelRepository;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
 import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
 import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogJpa;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -63,17 +64,21 @@ import lombok.val;
  * {@link CommandJpa command} entities.
  */
 @Service
-@Named(IsisModuleExtCommandLogJpa.NAMESPACE + ".CommandJdoRepository")
+@Named(IsisModuleExtCommandLogJpa.NAMESPACE + ".CommandJpaRepository")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Jpa")
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandJpaRepository
-implements CommandModelRepository<CommandJpa> {
+implements ICommandLogRepository<CommandJpa> {
 
     @Inject final Provider<InteractionProvider> interactionProviderProvider;
     @Inject final Provider<RepositoryService> repositoryServiceProvider;
 
+    @Override
+    public CommandJpa createCommandLog(final Command command) {
+        return new CommandJpa(command);
+    }
 
     @Override
     public List<CommandJpa> findByFromAndTo(
@@ -111,7 +116,7 @@ implements CommandModelRepository<CommandJpa> {
     }
 
     @Override
-    public List<CommandJpa> findByParent(final CommandModel parent) {
+    public List<CommandJpa> findByParent(final ICommandLog parent) {
         return repositoryService().allMatches(
                 Query.named(CommandJpa.class, "findByParent")
                     .withParameter("parent", parent));
@@ -178,14 +183,16 @@ implements CommandModelRepository<CommandJpa> {
     public List<CommandJpa> findRecentByUsername(final String username) {
         return repositoryService().allMatches(
                 Query.named(CommandJpa.class, "findRecentByUsername")
-                    .withParameter("username", username));
+                    .withParameter("username", username)
+                    .withLimit(30));
     }
 
     @Override
     public List<CommandJpa> findRecentByTarget(final Bookmark target) {
         return repositoryService().allMatches(
                 Query.named(CommandJpa.class, "findRecentByTarget")
-                    .withParameter("target", target));
+                    .withParameter("target", target)
+                    .withLimit(30));
     }
 
     @Override
@@ -244,7 +251,6 @@ implements CommandModelRepository<CommandJpa> {
 
     @Override
     public Optional<CommandJpa> findMostRecentReplayed() {
-
         return repositoryService().firstMatch(
                 Query.named(CommandJpa.class, "findMostRecentReplayed"));
     }
@@ -321,5 +327,6 @@ implements CommandModelRepository<CommandJpa> {
     private RepositoryService repositoryService() {
         return repositoryServiceProvider.get();
     }
+
 
 }

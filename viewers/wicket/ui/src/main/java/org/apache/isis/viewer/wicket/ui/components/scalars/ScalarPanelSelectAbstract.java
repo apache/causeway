@@ -59,6 +59,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
 
         val select2 = Select2.createSelect2(id, scalarModel());
         select2.setLabel(Model.of(scalarModel.getFriendlyName()));
+        select2.getSettings().setWidth("100%");
 
         updateChoices(select2);
         return select2;

@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.extensions.commandlog.applib.command.CommandModel;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.schema.common.v2.InteractionType;
 
@@ -55,12 +55,12 @@ public class CommandReplayAnalyserException implements CommandReplayAnalyser {
     }
 
     @Override
-    public String analyzeReplay(final CommandModel commandModel) {
+    public String analyzeReplay(final ICommandLog commandLog) {
         if(!enabled) {
             return null;
         }
 
-        val dto = commandModel.getCommandDto();
+        val dto = commandLog.getCommandDto();
         if(dto.getMember().getInteractionType() == InteractionType.PROPERTY_EDIT) {
             return null;
         }
@@ -70,7 +70,7 @@ public class CommandReplayAnalyserException implements CommandReplayAnalyser {
             return null;
         }
 
-        val replayedException = commandModel.getException();
+        val replayedException = commandLog.getException();
 
         val primaryExceptionTrimmed = trimmed(primaryException);
         val replayedExceptionTrimmed = trimmed(replayedException);

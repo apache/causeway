@@ -1055,6 +1055,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.datanucleus</groupId>
+				<artifactId>datanucleus-api-jpa</artifactId>
+				<version>${datanucleus-api-jpa.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.datanucleus</groupId>
 				<artifactId>datanucleus-core</artifactId>
 				<version>${datanucleus-core.version}</version>
 			</dependency>

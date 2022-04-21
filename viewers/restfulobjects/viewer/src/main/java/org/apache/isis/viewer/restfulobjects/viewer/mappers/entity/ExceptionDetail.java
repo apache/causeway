@@ -19,8 +19,8 @@
 package org.apache.isis.viewer.restfulobjects.viewer.mappers.entity;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import javax.jdo.JDOException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -28,9 +28,14 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.services.exceprecog.RootCauseFinder;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @XmlRootElement(
         name = "exceptionDetail"
@@ -45,11 +50,8 @@ import lombok.Getter;
         }
         )
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class ExceptionDetail {
-
-    private static String format(final StackTraceElement stackTraceElement) {
-        return stackTraceElement.toString();
-    }
 
     @Getter private String className;
     @Getter private String message;
@@ -60,32 +62,28 @@ public class ExceptionDetail {
 
     @Getter private ExceptionDetail causedBy;
 
-    public ExceptionDetail() {
-    }
-
-    public ExceptionDetail(final Throwable ex) {
+    public ExceptionDetail(
+            final Throwable ex,
+            final @Nullable List<RootCauseFinder> rootCauseFinders) {
         this.className = ex.getClass().getName();
         this.message = ex.getMessage();
-        final StackTraceElement[] stackTraceElements = ex.getStackTrace();
-        for (final StackTraceElement stackTraceElement : stackTraceElements) {
-            this.stackTrace.add(format(stackTraceElement));
-        }
 
-        final Throwable cause = causeOf(ex);
-        if (cause != null && cause != ex) {
-            this.causedBy = new ExceptionDetail(cause);
-        }
+        Stream.of(ex.getStackTrace())
+            .map(ExceptionDetail::format)
+            .forEach(stackTrace::add);
+
+        this.causedBy = _Exceptions.getRootCause(ex, rootCauseFinders)
+            .filter(cause->cause!=ex)
+            .map(cause->new ExceptionDetail(cause, rootCauseFinders))
+            .orElse(null);
     }
 
-    private static Throwable causeOf(Throwable ex) {
-        if (ex instanceof JDOException) {
-            final JDOException jdoException = (JDOException) ex;
-            final Throwable[] nestedExceptions = jdoException.getNestedExceptions();
-            return nestedExceptions != null && nestedExceptions.length > 0? nestedExceptions[0]: null;
-        }
-        else {
-            return ex.getCause();
-        }
+    // -- HELPER
+
+    private static String format(final StackTraceElement stackTraceElement) {
+        return stackTraceElement.toString();
     }
+
+
 
 }

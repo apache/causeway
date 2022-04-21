@@ -1040,27 +1040,23 @@ li.select2-results__option {
     padding-right: 15px;
 }
 
-.booleanPanel .form-control.scalarValueInlinePromptLink,
-.referencePanel .form-control.scalarValueInlinePromptLink {
-    display: inline-flex;
-    width: 85%;
+div.scalarValueInlinePromptLink {
+	width: 100%;
 }
-
-div.scalarValueInlinePromptLink.form-control {
+.scalarValueInlinePromptLink.form-control {
     text-decoration: none;
     overflow: hidden;
 }
-div.scalarValueInlinePromptLink.form-control:hover {
+.scalarValueInlinePromptLink.form-control:hover {
 	cursor: pointer;
 	background-color: rgba(0, 0, 0, 0.08);
 }
-div.scalarValueInlinePromptLink.form-control .btn-group,
-span.scalarValueInput.input-group div.btn-group {
-    display: none;
+.scalarValueInlinePromptLink .btn-group > button.btn {
+  opacity: 0.5;
 }
-div.scalarValueInlinePromptLink.form-control:hover .btn-group,
-span.scalarValueInput.input-group:hover div.btn-group {
-	display: inherit;
+.scalarValueInlinePromptLink .btn-group > button.btn:focus,
+.scalarValueInlinePromptLink:hover .btn-group > button.btn {
+  opacity: 1.0;
 }
 
 .entityUrlSource {
@@ -1208,7 +1204,7 @@ ul.tertiary li.dropdown ul.dropdown-menu {
 /* header/footer vertical padding fix */
 nav.sticky-top,
 footer > .navbar {
-    padding: 0.5rem 1rem;
+    padding: 0 1rem;
 }
 
 /* enable line wrapping on nav-bar's content, so we don't overflow */

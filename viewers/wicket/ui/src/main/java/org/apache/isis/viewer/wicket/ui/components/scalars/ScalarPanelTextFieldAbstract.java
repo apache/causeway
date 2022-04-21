@@ -22,15 +22,12 @@ import java.util.Optional;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.validation.validator.StringValidator;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -109,8 +106,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     protected final FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
         formField = createTextField(id);
         formField.setOutputMarkupId(true);
-        setFormComponentAttributes(formField);
-        return formField;
+        return applyFormComponentAttributes(formField);
     }
 
     @Override
@@ -161,33 +157,13 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     // -- HELPER
 
-    void setFormComponentAttributes(final FormComponent<?> formComponent) {
+    <F extends FormComponent<?>> F applyFormComponentAttributes(final F formComponent) {
         val scalarModel = scalarModel();
-        val scalarTypeSpec = scalarModel.getScalarTypeSpec();
-
-        if(formComponent instanceof TextArea) {
-            Facets.multilineNumberOfLines(scalarTypeSpec)
-            .ifPresent(numberOfLines->
-                Wkt.attributeReplace(formComponent, "rows", numberOfLines));
-
-            // in conjunction with javascript in jquery.isis.wicket.viewer.js
-            // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
-            //Wkt.attributeReplace(textArea, "maxlength", getMaxLengthOf(scalarModel));
-        }
-
-        val maxLenIfAny = Facets.maxLength(scalarTypeSpec);
-        maxLenIfAny
-        .ifPresent(maxLength->{
-            Wkt.attributeReplace(formComponent, "maxlength", maxLength);
-            if(type.equals(String.class)) {
-                formComponent.add(StringValidator.maximumLength(maxLength));
-            }
-        });
-
-        Facets.typicalLength(scalarTypeSpec, maxLenIfAny)
-        .ifPresent(typicalLength->
-            Wkt.attributeReplace(formComponent, "size", typicalLength));
-
+        Wkt.setFormComponentAttributes(formComponent,
+                scalarModel::multilineNumberOfLines,
+                scalarModel::maxLength,
+                scalarModel::typicalLength);
+        return formComponent;
     }
 
 }

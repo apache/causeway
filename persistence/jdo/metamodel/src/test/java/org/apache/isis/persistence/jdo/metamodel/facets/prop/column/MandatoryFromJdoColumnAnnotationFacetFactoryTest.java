@@ -33,14 +33,14 @@ import lombok.val;
 public class MandatoryFromJdoColumnAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
-    private MandatoryFromJdoColumnAnnotationFacetFactory facetFactory;
+    private MandatoryFromColumnAnnotationFacetFactory facetFactory;
     private Class<?> cls;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new MandatoryFromJdoColumnAnnotationFacetFactory(metaModelContext, jdoFacetContext);
+        facetFactory = new MandatoryFromColumnAnnotationFacetFactory(metaModelContext, jdoFacetContext);
         cls = SimpleObjectWithColumnAllowsNullAnnotations.class;
     }
 
@@ -66,7 +66,7 @@ extends AbstractFacetFactoryTest {
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromAbsenceOfJdoColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromAbsenceOfColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(false));
     }
 
@@ -77,7 +77,7 @@ extends AbstractFacetFactoryTest {
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(false));
     }
 
@@ -88,7 +88,7 @@ extends AbstractFacetFactoryTest {
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(false));
     }
 
@@ -99,7 +99,7 @@ extends AbstractFacetFactoryTest {
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(true));
     }
 
@@ -110,7 +110,7 @@ extends AbstractFacetFactoryTest {
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromAbsenceOfJdoColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromAbsenceOfColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(true));
     }
 
@@ -121,7 +121,7 @@ extends AbstractFacetFactoryTest {
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(true));
     }
 
@@ -132,7 +132,7 @@ extends AbstractFacetFactoryTest {
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(false));
     }
 
@@ -143,7 +143,7 @@ extends AbstractFacetFactoryTest {
 
         final MandatoryFacet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetFromJdoColumnAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromColumnAnnotation);
         assertThat(facet.getSemantics().isOptional(), is(true));
     }
 
