@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -132,8 +131,8 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 assoc -> assoc.isOneToOneAssociation();
 
         public static final Predicate<ObjectAssociation> REFERENCE_PROPERTIES =
-                assoc ->  assoc.isOneToOneAssociation() &&
-                         !assoc.getElementType().containsNonFallbackFacet(ValueFacet.class);
+                assoc ->  assoc.isOneToOneAssociation()
+                            && !assoc.getElementType().isValue();
 
         public static final Predicate<ObjectAssociation> COLLECTIONS =
                 assoc -> assoc.isOneToManyAssociation();

@@ -25,6 +25,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
@@ -44,7 +45,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
@@ -148,14 +149,26 @@ public final class _Reflect {
         return a.getName().compareTo(b.getName());
     }
 
+    /**
+     * Whether the caller can access this reflected object.
+     * (method, field or constructor)
+     * @param obj
+     */
+    public static boolean canAccess(
+            final @Nullable AccessibleObject member,
+            final @Nullable Object obj) {
+        return member != null
+                && member.canAccess(obj);
+    }
 
     /**
-     * Returns whether a {@link Member} is accessible.
-     * @param m Member to check
-     * @return {@code true} if <code>m</code> is accessible
+     * Returns whether a {@link Member} is public and not synthetic (can be accessed).
+     * @param member Member to check
      */
-    public static boolean isAccessible(final Member m) {
-        return m != null && Modifier.isPublic(m.getModifiers()) && !m.isSynthetic();
+    public static boolean isPublicNonSynthetic(final @Nullable Member member) {
+        return member != null
+                && Modifier.isPublic(member.getModifiers())
+                && !member.isSynthetic();
     }
 
     /**
@@ -375,7 +388,7 @@ public final class _Reflect {
             final boolean searchSupers,
             final boolean ignoreAccess) {
 
-        if (!ignoreAccess && !isAccessible(method)) {
+        if (!ignoreAccess && !isPublicNonSynthetic(method)) {
             return null;
         }
 
@@ -425,26 +438,10 @@ public final class _Reflect {
     // -- METHOD/FIELD HANDLES
 
     public static MethodHandle handleOf(final Method method) throws IllegalAccessException {
-        if(!method.isAccessible()) { // java9+ to replace by canAccess
-            /*sonar-ignore-on*/
-            method.setAccessible(true);
-            MethodHandle mh = MethodHandles.publicLookup().unreflect(method);
-            method.setAccessible(false);
-            /*sonar-ignore-off*/
-            return mh;
-        }
-        return MethodHandles.publicLookup().unreflect(method);
+        return MethodHandles.lookup().unreflect(method);
     }
 
     public static MethodHandle handleOfGetterOn(final Field field) throws IllegalAccessException {
-        if(!field.isAccessible()) { // java9+ to replace by canAccess
-            /*sonar-ignore-on*/
-            field.setAccessible(true);
-            MethodHandle mh = MethodHandles.lookup().unreflectGetter(field);
-            field.setAccessible(false);
-            /*sonar-ignore-off*/
-            return mh;
-        }
         return MethodHandles.lookup().unreflectGetter(field);
     }
 
@@ -509,7 +506,7 @@ public final class _Reflect {
             final @NonNull Object target) throws IllegalArgumentException, IllegalAccessException {
 
         /*sonar-ignore-on*/
-        if(field.isAccessible()) {
+        if(canAccess(field, target)) {
             return field.get(target);
         }
         try {
@@ -527,7 +524,7 @@ public final class _Reflect {
             final Object fieldValue) throws IllegalArgumentException, IllegalAccessException {
 
         /*sonar-ignore-on*/
-        if(field.isAccessible()) {
+        if(canAccess(field, target)) {
             field.set(target, fieldValue);
             return;
         }
@@ -541,14 +538,14 @@ public final class _Reflect {
     }
 
 
-    public static Result<Object> invokeMethodOn(
+    public static Try<Object> invokeMethodOn(
             final @NonNull Method method,
             final @NonNull Object target,
             final Object... args) {
 
         /*sonar-ignore-on*/
-        return Result.of(()->{
-            if(method.isAccessible()) {
+        return Try.call(()->{
+            if(canAccess(method, target)) {
                 return method.invoke(target, args);
             }
             try {
@@ -561,13 +558,13 @@ public final class _Reflect {
         /*sonar-ignore-off*/
     }
 
-    public static <T> Result<T> invokeConstructor(
+    public static <T> Try<T> invokeConstructor(
             final @NonNull Constructor<T> constructor,
             final Object... args) {
 
         /*sonar-ignore-on*/
-        return Result.of(()->{
-            if(constructor.isAccessible()) {
+        return Try.call(()->{
+            if(canAccess(constructor, null)) {
                 return constructor.newInstance(args);
             }
             try {

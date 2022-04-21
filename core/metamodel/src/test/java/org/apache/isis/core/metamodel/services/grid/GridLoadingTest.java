@@ -21,6 +21,11 @@ package org.apache.isis.core.metamodel.services.grid;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
 import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.layout.Style;
@@ -29,11 +34,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-
-import static org.junit.Assert.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
 
 import lombok.val;
 
@@ -46,7 +46,8 @@ extends MetaModelTestAbstract {
     @Override
     protected void afterSetUp() {
         layoutService = getServiceRegistry().lookupServiceElseFail(LayoutService.class);
-        gridLoaderService = (GridLoaderServiceDefault)getServiceRegistry().lookupServiceElseFail(GridLoaderService.class);
+        gridLoaderService = (GridLoaderServiceDefault)getServiceRegistry()
+                .lookupServiceElseFail(GridLoaderService.class);
     }
 
     @Test @Disabled("just a blueprint")

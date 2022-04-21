@@ -19,33 +19,31 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 
-public class MutatorSpec {
+import lombok.RequiredArgsConstructor;
 
-    public static MutatorSpec of(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final RestfulHttpMethod httpMethod, final BodyArgs argSpec) {
-        return of(rel, validationFacetType, mutatorFacetType, httpMethod, argSpec, null);
-    }
+@RequiredArgsConstructor(staticName = "of")
+public final class MutatorSpec {
 
-    public static MutatorSpec of(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final RestfulHttpMethod httpMethod, final BodyArgs argSpec, final String suffix) {
-        return new MutatorSpec(rel, validationFacetType, mutatorFacetType, httpMethod, argSpec, suffix);
+    public static MutatorSpec of(
+            final Rel rel,
+            final Class<? extends Facet> mutatorFacetType,
+            final RestfulHttpMethod httpMethod,
+            final BodyArgs argSpec) {
+        return of(rel, mutatorFacetType, httpMethod, argSpec, null);
     }
 
     public final Rel rel;
-    public final Class<? extends Facet> validationFacetType;
-    public final Class<? extends Facet> mutatorFacetType;
+    private final Class<? extends Facet> mutatorFacetType;
     public final RestfulHttpMethod httpMethod;
-    public final String suffix;
     public final BodyArgs arguments;
+    public final String suffix;
 
-    private MutatorSpec(final Rel rel, final Class<? extends Facet> validationFacetType, final Class<? extends Facet> mutatorFacetType, final RestfulHttpMethod httpMethod, final BodyArgs bodyArgs, final String suffix) {
-        this.rel = rel;
-        this.validationFacetType = validationFacetType;
-        this.mutatorFacetType = mutatorFacetType;
-        this.httpMethod = httpMethod;
-        this.arguments = bodyArgs;
-        this.suffix = suffix;
+    public boolean appliesTo(final ObjectMember objectMember) {
+        return objectMember.containsFacet(mutatorFacetType);
     }
 
 }

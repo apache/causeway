@@ -26,11 +26,11 @@ import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.layout.grid.bootstrap.BSClearFix;
+import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
+import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.CollectionInteraction;
@@ -99,18 +99,18 @@ public class ObjectViewFx extends VBox {
             }
 
             @Override
-            protected Pane newRow(final Pane container, final BS3Row bs3Row) {
+            protected Pane newRow(final Pane container, final BSRow bsRow) {
                 val uiRow = _fx.newFlowPane(container);
                 return uiRow;
             }
 
             @Override
-            protected Pane newCol(final Pane container, final BS3Col bs3col) {
+            protected Pane newCol(final Pane container, final BSCol bscol) {
 
                 val uiCol = _fx.newVBox(container);
 
                 // note: also account for insets and padding, assuming that 98% seems reasonable
-                double realtiveWidthWithRespectToContainer = bs3col.getSpan()*0.98/12;
+                double realtiveWidthWithRespectToContainer = bscol.getSpan()*0.98/12;
 
                 uiCol.prefWidthProperty().bind(
                         container.widthProperty().multiply(realtiveWidthWithRespectToContainer));
@@ -132,13 +132,13 @@ public class ObjectViewFx extends VBox {
             }
 
             @Override
-            protected TabPane newTabGroup(final Pane container, final BS3TabGroup tabGroupData) {
+            protected TabPane newTabGroup(final Pane container, final BSTabGroup tabGroupData) {
                 val uiTabGroup = _fx.newTabGroup(container);
                 return uiTabGroup;
             }
 
             @Override
-            protected Pane newTab(final TabPane container, final BS3Tab tabData) {
+            protected Pane newTab(final TabPane container, final BSTab tabData) {
                 val uiTab = _fx.newTab(container, tabData.getName());
                 val uiTabContentPane = new VBox();
                 uiTab.setContent(uiTabContentPane);
@@ -161,7 +161,7 @@ public class ObjectViewFx extends VBox {
 
 
             @Override
-            protected void onClearfix(final Pane container, final BS3ClearFix clearFixData) {
+            protected void onClearfix(final Pane container, final BSClearFix clearFixData) {
                 // TODO Auto-generated method stub
             }
 

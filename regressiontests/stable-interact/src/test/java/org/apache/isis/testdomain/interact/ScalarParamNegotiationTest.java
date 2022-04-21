@@ -39,10 +39,10 @@ import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 Configuration_usingInteractionDomain.class
-        }, 
+        },
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL",
                 "isis.applib.annotation.domain-object.editing=TRUE",
@@ -62,19 +62,19 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
         RANGE_C,
         C;
     }
-    
+
     ParameterNegotiationModel pendingArgs;
-    
+
     SimulatedUiChoices uiParamRangeA;
     SimulatedUiChoices uiParamRangeB;
     SimulatedUiChoices uiParamRangeC;
-    
+
     SimulatedUiChoices uiParamA;
     SimulatedUiChoices uiParamB;
     SimulatedUiAutoComplete uiParamC;
-    
+
     SimulatedUiSubmit uiSubmit;
-    
+
     @BeforeEach
     void setUpSimulatedUi() {
 
@@ -83,81 +83,81 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
                 .checkUsability();
 
         assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
-        
+
         val managedAction = actionInteraction.getManagedAction().get();
         pendingArgs = managedAction.startParameterNegotiation();
-        
+
         // setting up and binding all the simulated UI components
-        
+
         uiParamRangeA = new SimulatedUiChoices();
         uiParamRangeB = new SimulatedUiChoices();
         uiParamRangeC = new SimulatedUiChoices();
-        
+
         uiParamA = new SimulatedUiChoices();
         uiParamB = new SimulatedUiChoices();
         uiParamC = new SimulatedUiAutoComplete();
-        
+
         uiSubmit = new SimulatedUiSubmit();
-        
+
         uiParamRangeA.bind(pendingArgs, NegotiationParams.RANGE_A.ordinal());
         uiParamRangeB.bind(pendingArgs, NegotiationParams.RANGE_B.ordinal());
         uiParamRangeC.bind(pendingArgs, NegotiationParams.RANGE_C.ordinal());
-        
+
         uiParamA.bind(pendingArgs, NegotiationParams.A.ordinal());
         uiParamB.bind(pendingArgs, NegotiationParams.B.ordinal());
         uiParamC.bind(pendingArgs, NegotiationParams.C.ordinal());
-        
+
         uiSubmit.bind(actionInteraction, pendingArgs);
-        
+
         // verify that initial defaults are as expected
-        
+
         assertEquals(NumberRange.POSITITVE, uiParamRangeA.getValue().getPojo());
         assertEquals(NumberRange.NEGATIVE, uiParamRangeB.getValue().getPojo());
         assertEquals(NumberRange.ODD, uiParamRangeC.getValue().getPojo());
-        
+
         assertEquals(1, uiParamA.getValue().getPojo());
         assertEquals(-1, uiParamB.getValue().getPojo());
         assertEquals(-3, uiParamC.getValue().getPojo());
-        
+
         // verify that initial choices are as expected
-        
+
         assertComponentWiseUnwrappedEquals(NumberRange.POSITITVE.numbers(), uiParamA.getChoices());
         assertComponentWiseUnwrappedEquals(NumberRange.NEGATIVE.numbers(), uiParamB.getChoices());
         assertEmpty(uiParamC.getChoices()); // empty because the search argument is also empty
-        
-        // verify that initial validation messages are all empty, 
-        // because we don't validate anything until a user initiated submit attempt occurs 
-        
+
+        // verify that initial validation messages are all empty,
+        // because we don't validate anything until a user initiated submit attempt occurs
+
         assertEmpty(uiParamRangeA.getValidationMessage());
         assertEmpty(uiParamRangeB.getValidationMessage());
         assertEmpty(uiParamRangeC.getValidationMessage());
-        
+
         assertEmpty(uiParamA.getValidationMessage());
         assertEmpty(uiParamB.getValidationMessage());
         assertEmpty(uiParamC.getValidationMessage());
-        
+
         assertEmpty(uiSubmit.getValidationMessage());
-        
+
         // verify that validation feedback is not active
-        
+
         assertFalse(pendingArgs.getObservableValidationFeedbackActive().getValue());
-        
+
     }
-    
+
     @Test
     void paramC_whenSettingSearchArgument_shouldProvideChoices() {
-        
+
         // verify that changing the search argument fires change event
         assertDoesIncrement(
                 uiParamC::getChoiceBoxUpdateEventCount,
                 ()->uiParamC.setSimulatedSearchArgument("-")); // select for all negative and odd numbers
-                        
-        
+
+
         // verify that no additional changes are triggered
-        assertDoesNotIncrement(        
+        assertDoesNotIncrement(
                 uiParamC::getChoiceBoxUpdateEventCount,
                 ()->assertComponentWiseUnwrappedEquals(new int[] {-3, -1}, uiParamC.getChoices()));
-        
+
         // TODO such a change might set or clear paramC validation message once validation feedback is active
     }
 
@@ -168,50 +168,50 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
         assertDoesIncrement(
                 uiParamRangeA::getSelectedItemUpdateEventCount,
                 ()->uiParamRangeA.simulateChoiceSelect(NumberRange.NEGATIVE.ordinal()));
-        
+
         assertEquals(NumberRange.NEGATIVE, uiParamRangeA.getValue().getPojo());
         assertComponentWiseUnwrappedEquals(NumberRange.NEGATIVE.numbers(), uiParamA.getChoices());
 
         // TODO such a change might set or clear paramA validation message once validation feedback is active
     }
-    
+
     @Test
     void whenSimulatedSubmit_shouldActivateValidationFeedback_andPassAfterChangingParam() {
-        
+
         // failed simulated submit attempt should trigger validation change listeners on the 'action'
         assertDoesIncrement(
                 uiSubmit::getValidationUpdateEventCount,
                 ()->uiSubmit.simulateSubmit());
-        
+
         // simulated submit attempt, should have activate validation feedback
         assertTrue(pendingArgs.getObservableValidationFeedbackActive().getValue());
 
         // unless all validations give green light, submission must be vetoed
-        assertEquals(null, uiSubmit.getResult().leftIfAny());
-        assertEquals("invalid, sum must be zero, got -3", ""+uiSubmit.getResult().rightIfAny());
-        
+        assertEquals(null, uiSubmit.getResult().getSuccess().orElse(null));
+        assertEquals("invalid, sum must be zero, got -3", ""+uiSubmit.getResult().getFailureElseFail());
+
         // verify that changing paramA triggers validation change listeners on the 'action'
         assertDoesIncrement(
                 uiSubmit::getValidationUpdateEventCount,
                 ()->{
-                    
+
                     // verify that changing paramA does not triggers validation change listeners on paramA,
                     // since paramA is already valid before the change
                     assertDoesNotIncrement(
                             uiParamA::getValidationUpdateEventCount,
-                            ()->uiParamA.simulateChoiceSelect(3)); // change parameters, so we pass validation                    
-                    
+                            ()->uiParamA.simulateChoiceSelect(3)); // change parameters, so we pass validation
+
                 });
 
         // verify that submission is granted now
         uiSubmit.simulateSubmit();
 
-        // verify that we have the expected result returned from the action invocation 
-        assertTrue(uiSubmit.getResult().isLeft());
-        assertEquals(0, uiSubmit.getResult().leftIfAny().getPojo());
-        
-        //TODO exceptions that occur during action invocation could either be rendered 
-        //     as message, error page or action validation message 
+        // verify that we have the expected result returned from the action invocation
+        assertTrue(uiSubmit.getResult().isSuccess());
+        assertEquals(0, uiSubmit.getResult().getSuccessElseFail().getPojo());
+
+        //TODO exceptions that occur during action invocation could either be rendered
+        //     as message, error page or action validation message
     }
 
     @Test
@@ -219,20 +219,20 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
 
         pendingArgs.activateValidationFeedback(); // turn on validation feedback for testing
         assertEquals(null, uiParamA.getValidationMessage()); // expected pre condition
-        
+
         // verify that changing paramRangeA triggers validation change listeners on paramA
         assertDoesIncrement(
                 uiParamA::getValidationUpdateEventCount,
                 ()->uiParamRangeA.simulateChoiceSelect(NumberRange.NEGATIVE.ordinal()));
-    
+
         // not only verify that paramA is invalid, but also that all pending args were considered
         assertEquals(
-                "invalid, element not contained in NEGATIVE got 1, param set [1, -1, -3]", 
+                "invalid, element not contained in NEGATIVE got 1, param set [1, -1, -3]",
                 uiParamA.getValidationMessage());
-        
+
     }
-    
-    
-    
+
+
+
 
 }

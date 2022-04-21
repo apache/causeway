@@ -291,7 +291,8 @@ implements MultiselectChoices {
             val managedAction = actionInteraction.getManagedActionElseFail();
             val args = argsMemento.getArgumentList(managedAction.getMetaModel());
             // invocation bypassing domain events (pass-through)
-            val actionResult = managedAction.invoke(args, InteractionInitiatedBy.PASS_THROUGH).left().orElseThrow();
+            val actionResult = managedAction.invoke(args, InteractionInitiatedBy.PASS_THROUGH)
+                    .getSuccessElseFail();
             return forAction(managedAction, args, actionResult);
         }
     }

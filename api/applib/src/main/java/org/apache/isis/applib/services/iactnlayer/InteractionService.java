@@ -20,8 +20,8 @@ package org.apache.isis.applib.services.iactnlayer;
 
 import java.util.concurrent.Callable;
 
-import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.commons.functional.Try;
 
 import lombok.NonNull;
 
@@ -140,24 +140,24 @@ public interface InteractionService extends InteractionLayerTracker {
      */
     void runAnonymous(@NonNull ThrowingRunnable runnable);
 
-    // -- RESULT SUPPORT
+    // -- TRY SUPPORT
 
     /**
      * Variant of {@link #call(InteractionContext, Callable)} that wraps the return value
-     * with a {@link Result}, also catching any exception, that might have occurred.
+     * with a {@link Try}, also catching any exception, that might have occurred.
      */
-    default <R> Result<R> callAndCatch(
+    default <R> Try<R> callAndCatch(
             final @NonNull InteractionContext interactionContext,
             final @NonNull Callable<R> callable) {
-        return Result.of(()->call(interactionContext, callable));
+        return Try.call(()->call(interactionContext, callable));
     }
 
     /**
      * Variant of {@link #run(InteractionContext, ThrowingRunnable)} that returns
-     * a {@link Result} of {@code Result<Void>},
+     * a {@link Try} of {@code Result<Void>},
      * also catching any exception, that might have occurred.
      */
-    default Result<Void> runAndCatch(
+    default Try<Void> runAndCatch(
             final @NonNull InteractionContext interactionContext,
             final @NonNull ThrowingRunnable runnable){
         return callAndCatch(interactionContext, ThrowingRunnable.toCallable(runnable));
@@ -165,19 +165,19 @@ public interface InteractionService extends InteractionLayerTracker {
 
     /**
      * Variant of {@link #callAnonymous(Callable)} that wraps the return value
-     * with a {@link Result}, also catching any exception, that might have occurred.
+     * with a {@link Try}, also catching any exception, that might have occurred.
      */
-    default <R> Result<R> callAnonymousAndCatch(
+    default <R> Try<R> callAnonymousAndCatch(
             final @NonNull Callable<R> callable) {
-        return Result.of(()->callAnonymous(callable));
+        return Try.call(()->callAnonymous(callable));
     }
 
     /**
      * Variant of {@link #runAnonymous(ThrowingRunnable)} that returns
-     * a {@link Result} of {@code Result<Void>},
+     * a {@link Try} of {@code Try<Void>},
      * also catching any exception, that might have occurred.
      */
-    default Result<Void> runAnonymousAndCatch(
+    default Try<Void> runAnonymousAndCatch(
             final @NonNull ThrowingRunnable runnable) {
         return callAnonymousAndCatch(ThrowingRunnable.toCallable(runnable));
     }

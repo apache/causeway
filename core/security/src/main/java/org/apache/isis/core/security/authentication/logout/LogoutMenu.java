@@ -45,8 +45,7 @@ import lombok.val;
 
 @Named(LogoutMenu.LOGICAL_TYPE_NAME)
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = LogoutMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY

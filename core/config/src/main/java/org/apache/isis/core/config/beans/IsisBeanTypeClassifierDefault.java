@@ -107,9 +107,12 @@ implements IsisBeanTypeClassifier {
 
         val aDomainService = _Annotations.synthesize(type, DomainService.class);
         if(aDomainService.isPresent()) {
-            return BeanClassification
-                    .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING,
-                            aDomainService.get().logicalTypeName());
+            return _Strings.isNotEmpty(aDomainService.get().logicalTypeName())
+                    ? BeanClassification
+                        .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING,
+                                aDomainService.get().logicalTypeName())
+                    : BeanClassification
+                        .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING);
         }
 
         // allow ServiceLoader plugins to have a say, eg. when classifying entity types

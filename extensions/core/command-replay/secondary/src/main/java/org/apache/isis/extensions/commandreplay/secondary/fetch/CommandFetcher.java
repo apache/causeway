@@ -18,32 +18,32 @@
  */
 package org.apache.isis.extensions.commandreplay.secondary.fetch;
 
-import java.net.URI;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
-import org.apache.isis.extensions.commandlog.model.command.CommandModel;
-import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
-import org.apache.isis.extensions.commandreplay.secondary.StatusException;
+import org.apache.isis.applib.client.SuppressionType;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
-import org.apache.isis.extensions.jaxrsclient.applib.client.JaxRsClient;
-import org.apache.isis.extensions.jaxrsclient.applib.client.JaxRsResponse;
-import org.apache.isis.extensions.jaxrsclient.impl.client.JaxRsClientDefault;
+import org.apache.isis.extensions.commandreplay.secondary.status.SecondaryStatus;
+import org.apache.isis.extensions.commandreplay.secondary.status.StatusException;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.cmd.v2.CommandsDto;
+import org.apache.isis.viewer.restfulobjects.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 
@@ -51,14 +51,24 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service()
-@Named("isis.ext.commandReplaySecondary.CommandFetcher")
+@Named(IsisModuleExtCommandLogApplib.NAMESPACE_REPLAY_SECONDARY + ".CommandFetcher")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE) // JUnit Support
 @Log4j2
 public class CommandFetcher {
 
     static final String URL_SUFFIX =
-            "services/isisExtensionsCommandReplayPrimary.CommandRetrievalService/actions/findCommandsOnPrimaryFrom/invoke";
+            "services/"
+            + IsisModuleExtCommandLogApplib.SERVICE_REPLAY_PRIMARY_COMMAND_RETRIEVAL
+            + "/actions/findCommandsOnPrimaryAsDto/invoke";
 
+    private final SecondaryConfig secondaryConfig;
+    private final boolean useRequestDebugLogging;
+
+    @Inject
+    public CommandFetcher(final SecondaryConfig secondaryConfig) {
+        this(secondaryConfig, false);
+    }
 
     /**
      * Replicates a single command.
@@ -66,16 +76,13 @@ public class CommandFetcher {
      * @param previousHwmIfAny
      * @throws StatusException
      */
-    public List<CommandDto> fetchCommand(
-            final @Nullable CommandModel previousHwmIfAny)
+    public Can<CommandDto> fetchCommand(
+            final @Nullable ICommandLog previousHwmIfAny)
             throws StatusException {
 
         log.debug("finding command on primary ...");
 
-        final CommandsDto commandsDto = fetchCommands(previousHwmIfAny);
-        return commandsDto != null
-                ? commandsDto.getCommandDto()
-                : Collections.emptyList();
+        return fetchCommands(previousHwmIfAny);
     }
 
     /**
@@ -83,90 +90,58 @@ public class CommandFetcher {
      * @param previousHwmIfAny
      * @throws StatusException
      */
-    private CommandsDto fetchCommands(final CommandModel previousHwmIfAny)
+    private Can<CommandDto> fetchCommands(final ICommandLog previousHwmIfAny)
             throws StatusException {
 
-        final UUID transactionId = previousHwmIfAny != null ? previousHwmIfAny.getInteractionId() : null;
+        final UUID transactionId = previousHwmIfAny != null
+                ? previousHwmIfAny.getInteractionId()
+                : null;
 
         log.debug("finding commands on primary ...");
 
-        final URI uri = buildUri(transactionId);
-
-        final JaxRsResponse response = callPrimary(uri);
-
-        final CommandsDto commandsDto = unmarshal(response, uri);
-
-        final int size = commandsDto.getCommandDto().size();
-        if(size == 0) {
-            return null;
-        }
-        return commandsDto;
+        val commands = callPrimary(transactionId);
+        return commands;
     }
 
+    // package private in support of JUnit
+    Can<CommandDto> callPrimary(final @Nullable UUID interactionId) throws StatusException {
 
-    private URI buildUri(final UUID interactionId) {
-        final UriBuilder uriBuilder = UriBuilder.fromUri(
-                interactionId != null
-                        ? String.format(
-                            "%s%s?interactionId=%s&batchSize=%d",
-                            secondaryConfig.getPrimaryBaseUrlRestful(), URL_SUFFIX, interactionId, secondaryConfig.getBatchSize())
-                        : String.format(
-                            "%s%s?batchSize=%d",
-                            secondaryConfig.getPrimaryBaseUrlRestful(), URL_SUFFIX, secondaryConfig.getBatchSize())
-        );
-        final URI uri = uriBuilder.build();
-        log.info("uri = {}", uri);
-        return uri;
+        val client = newClient(secondaryConfig, useRequestDebugLogging);
+        val request = client.request(
+                URL_SUFFIX,
+                SuppressionType.RO);
+
+        val args = client.arguments()
+                .addActionParameter("interactionId", interactionId!=null ? interactionId.toString() : null)
+                .addActionParameter("batchSize", secondaryConfig.getBatchSize())
+                .build();
+
+        final Response response = request.post(args);
+        val digest = client.digestList(response, CommandDto.class, new GenericType<List<CommandDto>>(){})
+                .mapFailure(failure->{
+                    log.warn("rest call failed", failure);
+                    return new StatusException(SecondaryStatus.REST_CALL_FAILING);
+                })
+                .ifFailureFail();
+
+        return digest.getValue().orElseThrow();
     }
 
-    private JaxRsResponse callPrimary(final URI uri) throws StatusException {
-        final JaxRsResponse response;
-        final JaxRsClient jaxRsClient = new JaxRsClientDefault();
-        try {
-            final String user = secondaryConfig.getPrimaryUser();
-            final String password = secondaryConfig.getPrimaryPassword();
-            response = jaxRsClient.get(uri, CommandsDto.class, JaxRsClient.ReprType.ACTION_RESULT, user, password);
-            int status = response.getStatus();
-            if(status != Response.Status.OK.getStatusCode()) {
-                final String entity = readEntityFrom(response);
-                if(entity != null) {
-                    log.warn("status: {}, entity: \n{}", status, entity);
-                } else {
-                    log.warn("status: {}, unable to read entity from response", status);
-                }
-                throw new StatusException(SecondaryStatus.REST_CALL_FAILING);
-            }
-        } catch(Exception ex) {
-            log.warn("rest call failed", ex);
-            throw new StatusException(SecondaryStatus.REST_CALL_FAILING, ex);
-        }
-        return response;
-    }
+    private static RestfulClient newClient(
+            final SecondaryConfig secondaryConfig,
+            final boolean useRequestDebugLogging) {
 
-    private CommandsDto unmarshal(final JaxRsResponse response, final URI uri) throws StatusException {
-        CommandsDto commandsDto;
-        String entity = "<unable to read from response entity>";
-        try {
-            entity = readEntityFrom(response);
-            final JaxbService jaxbService = new Simple();
-            commandsDto = jaxbService.fromXml(CommandsDto.class, entity);
-            log.debug("commands:\n{}", entity);
-        } catch(Exception ex) {
-            log.warn("unable to unmarshal entity from {} to CommandsDto.class; was:\n{}", uri, entity);
-            throw new StatusException(SecondaryStatus.FAILED_TO_UNMARSHALL_RESPONSE, ex);
-        }
-        return commandsDto;
-    }
+        val clientConfig = new RestfulClientConfig();
+        clientConfig.setRestfulBase(secondaryConfig.getPrimaryBaseUrlRestful());
+        // setup basic-auth
+        clientConfig.setUseBasicAuth(true);
+        clientConfig.setRestfulAuthUser(secondaryConfig.getPrimaryUser());
+        clientConfig.setRestfulAuthPassword(secondaryConfig.getPrimaryPassword());
+        // setup request/response debug logging
+        clientConfig.setUseRequestDebugLogging(useRequestDebugLogging);
 
-    private static String readEntityFrom(final JaxRsResponse response) {
-        try {
-            return response.readEntity(String.class);
-        } catch(Exception e) {
-            return null;
-        }
+        val client = RestfulClient.ofConfig(clientConfig);
+        return client;
     }
-
-    @Inject
-    SecondaryConfig secondaryConfig;
 
 }

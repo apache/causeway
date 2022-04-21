@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.primitive;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -35,9 +37,9 @@ import demoapp.dom.types.primitive.ints.PrimitiveInts;
 import demoapp.dom.types.primitive.longs.PrimitiveLongs;
 import demoapp.dom.types.primitive.shorts.PrimitiveShorts;
 
+@Named("demo.PrimitiveTypesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.PrimitiveTypesMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="PrimitiveTypes"

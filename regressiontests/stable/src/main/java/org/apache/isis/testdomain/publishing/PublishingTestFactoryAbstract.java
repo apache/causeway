@@ -282,6 +282,8 @@ public abstract class PublishingTestFactoryAbstract {
     /** to setup the test - method is embedded in its own interaction and transaction */
     protected abstract void setupEntity(PublishingTestContext context);
 
+    protected abstract void releaseContext(PublishingTestContext context);
+
     /** a test - method is embedded in its own interaction and transaction */
     protected abstract void programmaticExecution(PublishingTestContext context);
 
@@ -379,6 +381,8 @@ public abstract class PublishingTestFactoryAbstract {
 
 
             } finally {
+
+                releaseContext(testContext);
                 traceLog.log("5. exit test %s", displayName);
                 traceLog.footer();
             }

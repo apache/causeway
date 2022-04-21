@@ -19,6 +19,8 @@
  */
 package demoapp.dom.types.jodatime;
 
+import javax.inject.Named;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.annotation.Action;
@@ -37,9 +39,9 @@ import demoapp.dom.types.jodatime.jodalocaldate.JodaLocalDates;
 import demoapp.dom.types.jodatime.jodalocaldatetime.JodaLocalDateTimes;
 import demoapp.dom.types.jodatime.jodalocaltime.JodaLocalTimes;
 
+@Named("demo.JodaTimeTypesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.JodaTimeTypesMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="JodaTimeTypes"

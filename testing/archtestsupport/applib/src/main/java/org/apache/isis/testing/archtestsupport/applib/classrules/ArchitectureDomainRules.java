@@ -26,6 +26,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -82,15 +83,16 @@ public class ArchitectureDomainRules {
                 .should().beAnnotatedWith(DomainObject_logicalTypeName());
     }
 
-    /**
-     * This rule requires that classes annotated with the {@link DomainService} annotation must specify their
-     * {@link DomainService#logicalTypeName() logicalTypeName}.
-     */
-    public static ArchRule every_DomainService_must_specify_logicalTypeName() {
-        return classes()
-                .that().areAnnotatedWith(DomainService.class)
-                .should().beAnnotatedWith(DomainService_logicalTypeName());
-    }
+// Spring takes care of naming Beans it manages!
+//    /**
+//     * This rule requires that classes annotated with the {@link DomainService} annotation must specify their
+//     * {@link DomainService#logical~Type~Name() logicalTypeName}.
+//     */
+//    public static ArchRule every_DomainService_must_specify_logicalTypeName() {
+//        return classes()
+//                .that().areAnnotatedWith(DomainService.class)
+//                .should().beAnnotatedWith(DomainService_logicalTypeName());
+//    }
 
     private static Map<String, JavaClass> javaClassByLogicalTypeName = new TreeMap<>();
 
@@ -104,13 +106,13 @@ public class ArchitectureDomainRules {
                 .or().areAnnotatedWith(DomainService.class)
                 .and(new DescribedPredicate<>("have an logicalTypeName") {
                     @Override
-                    public boolean apply(JavaClass javaClass) {
+                    public boolean apply(final JavaClass javaClass) {
                         val domainObjectIfAny = javaClass.tryGetAnnotationOfType(DomainObject.class);
                         if (domainObjectIfAny.isPresent() && !_Strings.isNullOrEmpty(domainObjectIfAny.get().logicalTypeName())) {
                             return true;
                         }
-                        val domainServiceIfAny = javaClass.tryGetAnnotationOfType(DomainService.class);
-                        if (domainServiceIfAny.isPresent() && !_Strings.isNullOrEmpty(domainServiceIfAny.get().logicalTypeName())) {
+                        val namedIfAny = javaClass.tryGetAnnotationOfType(Named.class);
+                        if (namedIfAny.isPresent() && !_Strings.isNullOrEmpty(namedIfAny.get().value())) {
                             return true;
                         }
 
@@ -119,15 +121,15 @@ public class ArchitectureDomainRules {
                 })
                 .should(new ArchCondition<>("be unique") {
                     @Override
-                    public void check(JavaClass javaClass, ConditionEvents conditionEvents) {
+                    public void check(final JavaClass javaClass, final ConditionEvents conditionEvents) {
                         val domainObjectIfAny = javaClass.tryGetAnnotationOfType(DomainObject.class);
                         String logicalTypeName = null;
                         if (domainObjectIfAny.isPresent()) {
                             logicalTypeName = domainObjectIfAny.get().logicalTypeName();
                         } else {
-                            val domainServiceIfAny = javaClass.tryGetAnnotationOfType(DomainService.class);
-                            if (domainServiceIfAny.isPresent()) {
-                                logicalTypeName = domainServiceIfAny.get().logicalTypeName();
+                            val namedIfAny = javaClass.tryGetAnnotationOfType(Named.class);
+                            if (namedIfAny.isPresent()) {
+                                logicalTypeName = namedIfAny.get().value();
                             }
                         }
                         final JavaClass existing = javaClassByLogicalTypeName.get(logicalTypeName);
@@ -386,7 +388,7 @@ public class ArchitectureDomainRules {
     private static DescribedPredicate<JavaClass> areJaxbViewModels() {
         return new DescribedPredicate<JavaClass>("are JAXB view models") {
             @Override
-            public boolean apply(JavaClass input) {
+            public boolean apply(final JavaClass input) {
                 return input.isAnnotatedWith(XmlRootElement.class);
             }
         };
@@ -413,7 +415,7 @@ public class ArchitectureDomainRules {
     private static DescribedPredicate<JavaClass> areSerializableViewModels() {
         return new DescribedPredicate<JavaClass>("are serializable view models") {
             @Override
-            public boolean apply(JavaClass input) {
+            public boolean apply(final JavaClass input) {
                 val domainObjectIfAny = input.tryGetAnnotationOfType(DomainObject.class);
                 if(!domainObjectIfAny.isPresent()) {
                     return false;
@@ -454,7 +456,7 @@ public class ArchitectureDomainRules {
     static DescribedPredicate<JavaClass> eitherOptionalOrCollection() {
         return new DescribedPredicate<JavaClass>("either Optional or Collection") {
             @Override
-            public boolean apply(JavaClass input) {
+            public boolean apply(final JavaClass input) {
                 return input.isAssignableTo(java.util.Optional.class)
                         || input.isAssignableTo(java.util.Collection.class);
             }

@@ -24,8 +24,8 @@ import java.util.function.UnaryOperator;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -157,7 +157,7 @@ implements HasMetaModel<ObjectAction> {
     /**
      * Returns either a fixed point or the last iteration.
      */
-    private static <T> _Either<T, T> fixedPointSearch(
+    private static <T> Either<T, T> fixedPointSearch(
             final T start,
             final UnaryOperator<T> f,
             final int maxIterations) {
@@ -166,12 +166,12 @@ implements HasMetaModel<ObjectAction> {
         for(int i=0; i<maxIterations; ++i) {
             t1 = f.apply(t0);
             if(t1.equals(t0)) {
-                return _Either.left(t1);
+                return Either.left(t1);
             }
             t0 = t1;
         }
 
-        return _Either.right(t0);
+        return Either.right(t0);
     }
 
 }

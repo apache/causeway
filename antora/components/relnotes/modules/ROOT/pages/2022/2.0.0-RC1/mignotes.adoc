@@ -14,18 +14,35 @@
 | previously
 | new
 
+| `@DomainService.logicalTypeName` deprecated for removal
+| use `@Named` or any other semantics supported by Spring
++
+Behavioral change: `@DomainService.logicalTypeName` can now be left empty, which is interpreted as _unspecified/indifferent_ 
+
 | `RecreatableDomainObject` interface removed
 | use `ViewModel` interface instead
 
 | `ViewModel.viewModelInit(String memento)` removed
 | use a single (String) argument constructor instead; this will allow Java Records to be used as viewmodels (future work)
 
-|
-|
+| `MetamodelEvent` as provided with _metamodel_ moved
+| moved to _applib_; we introduced _interface_ `MetamodelListener` for convenience to maybe use instead
+[source, java]
+.Example
+----
+@Service
+public class SeedService implements MetamodelListener {
+/..
+    @Override
+    public void onMetamodelLoaded() {
+        // seed database entities
+    }
+}
+---- 
 
 |===
 
-== Configuration
+== Commons
 
 Following configuration options changed:
 [cols="2a,3a", options="header"]
@@ -35,5 +52,75 @@ Following configuration options changed:
 | previously
 | new
 
+| `Result<T>` removed
+| replaced by `Try<T>`; also promoting `Either<L, R>` to non-internal, 
+and introducing `Railway<F, S>` 
+
 |===
+
+== Other
+
+=== Bill of Material / Parent POM
+
+Folder moved `/isis-parent` -> `/bom` 
+
+[source, xml]
+.Bill of Material
+----
+<!-- renamed
+<groupId>org.apache.isis</groupId>
+<artifactId>isis-parent</artifactId>
+-->
+
+<groupId>org.apache.isis</groupId>
+<artifactId>isis-bom</artifactId>
+----
+
+=== Restclient
+
+[source, java]
+.Restclient Package Names
+----
+//import org.apache.isis.extensions.restclient.RestfulClient;
+//import org.apache.isis.extensions.restclient.RestfulClientConfig;
+import org.apache.isis.viewer.restfulobjects.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
+----
+
+[source, xml]
+.Restclient Artifacts
+----
+<!-- renamed
+<groupId>org.apache.isis.mappings</groupId>
+<artifactId>isis-mappings-restclient-applib</artifactId>
+-->
+
+<groupId>org.apache.isis.viewer</groupId>
+<artifactId>isis-viewer-restfulobjects-client</artifactId>
+----
+
+[source, java]
+.Restclient Usage
+----
+// DigestResponse is no longer publicly visible, instead returning Try<T>  
+<T> Try<T> digest(Response response, Class<T> entityType);
+
+// DigestResponse is no longer publicly visible, instead returning Try<Can<T>>
+<T> Try<Can<T>> digestList(Response response, Class<T> entityType, GenericType<List<T>> genericType);
+----
+
+
+
+=== Mappings
+
+[source, xml]
+.Mappings
+----
+<!-- all removed
+<groupId>org.apache.isis.mappings</groupId>
+<artifactId>isis-mappings-...</artifactId>
+-->
+----
+
+
 

@@ -18,16 +18,13 @@
  */
 package org.apache.isis.viewer.common.model.feature;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.core.metamodel.util.Facets;
 
 public interface ScalarUiModel {
 
@@ -54,25 +51,8 @@ public interface ScalarUiModel {
         return getMetaModel().getDescription(this::getOwner);
     }
 
-    /**
-     * for {@link BigDecimal}s only.
-     *
-     * @see #getLength()
-     */
-    default Integer getLength() {
-        return getMetaModel().lookupFacet(MaxTotalDigitsFacet.class)
-                .map(MaxTotalDigitsFacet::getMaxTotalDigits)
-                .orElse(null);
-    }
-
-    default Integer getTypicalLength() {
-        final TypicalLengthFacet facet = getMetaModel().getFacet(TypicalLengthFacet.class);
-        return facet != null? facet.value() : null;
-    }
-
     default String getFileAccept() {
-        final FileAcceptFacet facet = getMetaModel().getFacet(FileAcceptFacet.class);
-        return facet != null? facet.value(): null;
+        return Facets.fileAccept(getMetaModel()).orElse(null);
     }
 
     int getAutoCompleteMinLength();

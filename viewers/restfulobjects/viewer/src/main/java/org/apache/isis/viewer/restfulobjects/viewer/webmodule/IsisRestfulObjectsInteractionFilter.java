@@ -386,7 +386,7 @@ public class IsisRestfulObjectsInteractionFilter implements Filter {
                             transactionService.runWithinCurrentTransactionElseCreateNew(()->
                                 chain.doFilter(request, response))
                             .mapFailure(e->new TransactionalException("", e))
-                            .optionalElseFail();
+                            .ifFailureFail();
                         });
 
                 return;

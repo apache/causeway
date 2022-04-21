@@ -19,6 +19,8 @@
  */
 package demoapp.dom.types.javalang;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -30,9 +32,9 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import demoapp.dom.types.javalang.strings.JavaLangStrings;
 import demoapp.dom.types.javalang.voids.JavaLangVoids;
 
+@Named("demo.JavaLangTypesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.JavaLangTypesMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="JavaLangTypes"

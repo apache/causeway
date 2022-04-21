@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
+import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 import java.util.Random;
 
@@ -82,26 +83,29 @@ class _CryptFactory {
     private byte[] getSalt(final int size, final String encryptionKey) {
         final byte[] salt = FIXED_SALT_FOR_PROTOTYPING.equals(encryptionKey)
                 ? machineFixedSalt(size)
-                : randomSalt(size);
+                : secureSalt(size);
         return salt;
     }
 
     /**
-     * cloned from {@link SunJceCrypt#randomSalt()}
+     * Cloned from {@link SunJceCrypt#randomSalt()},
+     * but using {@link SecureRandom} instead of {@link Random}.
      */
-    private byte[] randomSalt(final int size) {
+    private byte[] secureSalt(final int size) {
         val salt = new byte[size];
-        new Random().nextBytes(salt);
+        new SecureRandom().nextBytes(salt);
         return salt;
     }
 
     private byte[] machineFixedSalt(final int size) {
         val machineFixedSeed = _OsUtil.machineId();
         if(machineFixedSeed.isEmpty()){
-            return randomSalt(size);
+            return secureSalt(size);
         }
         val salt = new byte[size];
-        new Random(machineFixedSeed.getAsLong()).nextBytes(salt);
+        /*sonar-ignore-on*/
+        new Random(machineFixedSeed.getAsLong()).nextBytes(salt); // not required to be secure
+        /*sonar-ignore-off*/
         return salt;
     }
 

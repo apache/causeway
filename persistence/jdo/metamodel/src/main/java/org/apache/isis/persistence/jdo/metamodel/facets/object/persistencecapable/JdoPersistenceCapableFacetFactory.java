@@ -22,6 +22,8 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapab
 import javax.inject.Inject;
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -29,7 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetFromJdoPersistenceCapableAnnotation;
+import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetFromJdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
@@ -53,36 +55,74 @@ implements ObjectTypeFacetFactory {
 
     @Override
     public void process(final ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
 
-        // only applies to JDO entities; ignore any view models
+        val cls = processClassContext.getCls();
+
+        // only applies to JDO entities; ignore non enhanced classes
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
             return;
         }
 
+        if(!processJdoAnnotations(processClassContext)) {
+            processJpaAnnotations(processClassContext);
+        }
+    }
+
+    // -- HELPER
+
+    private boolean processJdoAnnotations(final ProcessObjectTypeContext processClassContext) {
+        val cls = processClassContext.getCls();
+
         val persistenceCapableIfAny = processClassContext.synthesizeOnType(PersistenceCapable.class);
         if (!persistenceCapableIfAny.isPresent()) {
-            return;
+            return false;
         }
 
         val embeddedOnlyIfAny = processClassContext.synthesizeOnType(EmbeddedOnly.class);
+        val facetHolder = processClassContext.getFacetHolder();
+
+        return FacetUtil.addFacetIfPresent(
+                JdoPersistenceCapableFacetFromAnnotation
+                .createUsingJdo(persistenceCapableIfAny, embeddedOnlyIfAny, cls, facetHolder))
+        .map(jdoPersistenceCapableFacet->{
+
+            FacetUtil.addFacetIfPresent(
+                    LogicalTypeFacetFromJdoPersistenceCapableFacet
+                    .create(jdoPersistenceCapableFacet, cls, facetHolder));
+
+            FacetUtil.addFacet(
+                    jdoFacetContext.createEntityFacet(facetHolder));
+
+            return true; // jdoPersistenceCapableFacet was created
+        })
+        .orElse(false);
+    }
+
+    private void processJpaAnnotations(final ProcessObjectTypeContext processClassContext) {
+        val entityIfAny = processClassContext.synthesizeOnType(Entity.class);
+        if(!entityIfAny.isPresent()) {
+            return;
+        }
+
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+
+        //val embeddedOnlyIfAny = processClassContext.synthesizeOnType(Embeddable.class);
+        val tableIfAny = processClassContext.synthesizeOnType(Table.class);
 
         FacetUtil.addFacetIfPresent(
                 JdoPersistenceCapableFacetFromAnnotation
-                .create(persistenceCapableIfAny, embeddedOnlyIfAny, cls, facetHolder))
+                .createUsingJpa(entityIfAny, tableIfAny, cls, facetHolder))
         .ifPresent(jdoPersistenceCapableFacet->{
 
             FacetUtil.addFacetIfPresent(
-                    LogicalTypeFacetFromJdoPersistenceCapableAnnotation
+                    LogicalTypeFacetFromJdoPersistenceCapableFacet
                     .create(jdoPersistenceCapableFacet, cls, facetHolder));
 
             FacetUtil.addFacet(
                     jdoFacetContext.createEntityFacet(facetHolder));
 
         });
-
     }
-
 
 }

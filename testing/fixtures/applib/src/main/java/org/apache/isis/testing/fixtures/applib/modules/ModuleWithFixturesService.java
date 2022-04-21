@@ -41,12 +41,13 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.subdomains.spring.applib.service.BeanDescriptor;
-import org.apache.isis.subdomains.spring.applib.service.ContextBeans;
-import org.apache.isis.subdomains.spring.applib.service.SpringBeansService;
+import org.apache.isis.core.runtimeservices.spring.BeanDescriptor;
+import org.apache.isis.core.runtimeservices.spring.ContextBeans;
+import org.apache.isis.core.runtimeservices.spring.SpringBeansService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -58,14 +59,10 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ModuleWithFixturesService {
 
     private final SpringBeansService springBeansService;
-
-    @Inject
-    public ModuleWithFixturesService(final SpringBeansService springBeansService) {
-        this.springBeansService = springBeansService;
-    }
 
     public FixtureScript getRefDataSetupFixture() {
         return new FixtureScript() {

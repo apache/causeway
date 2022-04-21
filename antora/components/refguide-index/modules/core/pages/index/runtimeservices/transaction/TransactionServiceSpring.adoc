@@ -8,7 +8,7 @@
 ----
 class TransactionServiceSpring {
   TransactionServiceSpring(List<PlatformTransactionManager> platformTransactionManagers, List<PersistenceExceptionTranslator> persistenceExceptionTranslators, InteractionLayerTracker interactionLayerTracker)
-  Result<T> callTransactional(TransactionDefinition def, Callable<T> callable)
+  Try<T> callTransactional(TransactionDefinition def, Callable<T> callable)
   void flushTransaction()
   Optional<TransactionId> currentTransactionId()
   TransactionState currentTransactionState()

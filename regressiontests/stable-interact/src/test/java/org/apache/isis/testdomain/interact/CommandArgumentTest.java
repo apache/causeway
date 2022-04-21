@@ -106,9 +106,9 @@ class CommandArgumentTest extends InteractionTestAbstract {
         pendingArgs.setParamValue(0, objectManager.adapt(Arrays.asList(1L, 2L, 3L)));
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        assertTrue(resultOrVeto.isLeft());
+        assertTrue(resultOrVeto.isSuccess());
 
-        val stringified = resultOrVeto.left()
+        val stringified = resultOrVeto.getSuccess()
                 .map(ManagedObject::getPojo)
                 .map(CommandResult.class::cast)
                 .map(CommandResult::getResultAsString)

@@ -42,10 +42,10 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -411,12 +411,9 @@ implements ScalarModelSubscriber {
 
         Wkt.cssAppend(this, scalarModel.getCssClass());
 
-        scalarModel.lookupFacet(CssClassFacet.class)
-        .ifPresent(cssClassFacet->{
-            val parentAdapter =
-                    scalarModel.getParentUiModel().getManagedObject();
-            Wkt.cssAppend(this, cssClassFacet.cssClass(parentAdapter));
-        });
+        Facets.cssClass(scalarModel.getMetaModel(), scalarModel.getParentUiModel().getManagedObject())
+        .ifPresent(cssClass->
+            Wkt.cssAppend(this, cssClass));
     }
 
 
@@ -573,25 +570,8 @@ implements ScalarModelSubscriber {
         Wkt.cssAppend(markupContainer, determineActionLayoutPositioningCss(actionLinks));
     }
 
-    private static String determinePropParamLayoutCss(final ScalarModel model) {
-        final LabelAtFacet facet = model.getFacet(LabelAtFacet.class);
-        if (facet != null) {
-            switch (facet.label()) {
-            case LEFT:
-                return "label-left";
-            case RIGHT:
-                return "label-right";
-            case NONE:
-                return "label-none";
-            case TOP:
-                return "label-top";
-            case DEFAULT:
-            case NOT_SPECIFIED:
-            default:
-                break;
-            }
-        }
-        return "label-left";
+    private static String determinePropParamLayoutCss(final ScalarModel scalarModel) {
+        return Facets.labelAtCss(scalarModel.getMetaModel());
     }
 
     private static String determineActionLayoutPositioningCss(final Can<LinkAndLabel> entityActionLinks) {
@@ -611,6 +591,7 @@ implements ScalarModelSubscriber {
     public void repaint(final AjaxRequestTarget target) {
         target.add(this);
     }
+
     /**
     *
     * @param paramModel - the action being invoked
@@ -618,7 +599,6 @@ implements ScalarModelSubscriber {
     *
     * @return - true if changed as a result of these pending arguments.
     */
-
    public Repaint updateIfNecessary(
            final @NonNull ParameterUiModel paramModel,
            final @NonNull Optional<AjaxRequestTarget> target) {
@@ -650,7 +630,6 @@ implements ScalarModelSubscriber {
            }
        }
 
-
        // repaint the entire form if visibility has changed
        if (!visibilityBefore || !visibilityAfter) {
            return Repaint.ENTIRE_FORM;
@@ -666,7 +645,5 @@ implements ScalarModelSubscriber {
                ? Repaint.PARAM_ONLY
                : Repaint.NOTHING;
    }
-
-
 
 }

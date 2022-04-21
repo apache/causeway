@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
@@ -327,7 +327,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
          * <b>NOT API</b>: intended to be called only by the framework.
          */
         @Override
-        public void setResult(final Result<Bookmark> resultBookmark) {
+        public void setResult(final Try<Bookmark> resultBookmark) {
             Command.this.result = resultBookmark.getValue().orElse(null);
             Command.this.exception = resultBookmark.getFailure().orElse(null);
         }

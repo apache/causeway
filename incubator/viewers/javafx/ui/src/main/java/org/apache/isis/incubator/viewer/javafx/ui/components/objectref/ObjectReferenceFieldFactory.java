@@ -20,8 +20,6 @@ package org.apache.isis.incubator.viewer.javafx.ui.components.objectref;
 
 import javax.inject.Inject;
 
-import org.springframework.core.annotation.Order;
-
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
@@ -40,14 +38,13 @@ import javafx.scene.control.Label;
 public class ObjectReferenceFieldFactory implements UiComponentHandlerFx {
 
     @Override
-    public boolean isHandling(ComponentRequest request) {
-        //return request.hasFeatureFacet(StringValueFacet.class);
+    public boolean isHandling(final ComponentRequest request) {
         return request.getFeatureTypeSpec().isEntityOrViewModelOrAbstract()
                 || request.getFeatureType().isEnum();
     }
 
     @Override
-    public Node handle(ComponentRequest request) {
+    public Node handle(final ComponentRequest request) {
 
         //TODO 1) move all the logic that is in the request to the underlying ManagedProperty
         // 2) pass the ManagedProperty over with the request object

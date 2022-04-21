@@ -36,15 +36,15 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import lombok.Getter;
@@ -96,22 +96,19 @@ public class JsonValueEncoder {
         if (!argValueRepr.isValue()) {
             throw new IllegalArgumentException("Representation must be of a value");
         }
-        val valueFacet = objectSpec.getFacet(ValueFacet.class);
-        if (valueFacet == null) {
-            String reason = "ObjectSpec expected to have a ValueFacet";
-            throw new IllegalArgumentException(reason);
-        }
 
-        val cls = objectSpec.getCorrespondingClass();
-        final JsonValueConverter jvc = converterByClass.get(cls);
+        val valueClass = objectSpec.getCorrespondingClass();
+        val valueSerializer =
+                Facets.valueSerializerElseFail(objectSpec, valueClass);
+
+        final JsonValueConverter jvc = converterByClass.get(valueClass);
         if(jvc == null) {
             // best effort
             if (argValueRepr.isString()) {
                 final String argStr = argValueRepr.asString();
                 return ManagedObject.of(objectSpec,
-                        valueFacet.fromEncodedString(Format.JSON, argStr));
+                        valueSerializer.fromEncodedString(Format.JSON, argStr));
             }
-
             throw new IllegalArgumentException("Unable to parse value");
         }
 
@@ -125,7 +122,7 @@ public class JsonValueEncoder {
             final String argStr = argValueRepr.asString();
             try {
                 return ManagedObject.of(objectSpec,
-                        valueFacet.fromEncodedString(Format.JSON, argStr));
+                        valueSerializer.fromEncodedString(Format.JSON, argStr));
             } catch(TextEntryParseException ex) {
                 throw new IllegalArgumentException(ex.getMessage());
             }
@@ -135,30 +132,30 @@ public class JsonValueEncoder {
     }
 
     public Object appendValueAndFormat(
-            final ManagedObject objectAdapter,
-            final ObjectSpecification objectSpecification,
+            final ManagedObject valueAdapter,
             final JsonRepresentation repr,
             final String format,
             final boolean suppressExtensions) {
 
-        val cls = objectSpecification.getCorrespondingClass();
-        val jsonValueConverter = converterByClass.get(cls);
+        val valueSpec = valueAdapter.getSpecification();
+        val valueClass = valueSpec.getCorrespondingClass();
+        val jsonValueConverter = converterByClass.get(valueClass);
         if(jsonValueConverter != null) {
-            return jsonValueConverter.appendValueAndFormat(objectAdapter, format, repr, suppressExtensions);
+            return jsonValueConverter.appendValueAndFormat(valueAdapter, format, repr, suppressExtensions);
         } else {
 
-            final Object value = ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
+            final Object value = ManagedObjects.isNullOrUnspecifiedOrEmpty(valueAdapter)
                     ? NullNode.getInstance()
-                    : decomposeToJson(objectSpecification, objectAdapter.getPojo())
+                    : decomposeToJson(valueAdapter)
                         .map(Object.class::cast)
                         .orElseGet(()->{
                             log.warn("{Could not resolve a ValueComposer for {}, "
                                     + "falling back to rendering as 'null'. "
                                     + "Make sure the framework has access to a ValueSemanticsProvider<{}> "
                                     + "that implements ValueComposer<{}>}",
-                                    objectSpecification.getLogicalTypeName(),
-                                    objectSpecification.getCorrespondingClass().getSimpleName(),
-                                    objectSpecification.getCorrespondingClass().getSimpleName());
+                                    valueSpec.getLogicalTypeName(),
+                                    valueSpec.getCorrespondingClass().getSimpleName(),
+                                    valueSpec.getCorrespondingClass().getSimpleName());
                             return NullNode.getInstance();
                         });
 
@@ -168,15 +165,14 @@ public class JsonValueEncoder {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private static <T> Optional<ValueDecomposition> decompose(final ObjectSpecification spec, final T pojo) {
-        return spec.lookupFacet(ValueFacet.class)
-            .flatMap(ValueFacet::selectDefaultSemantics)
-            .<ValueDecomposition>map(composer->((ValueSemanticsProvider<T>)composer).decompose(pojo));
+    private static Optional<ValueDecomposition> decompose(final ManagedObject valueAdapter) {
+        val valueClass = valueAdapter.getSpecification().getCorrespondingClass();
+        return Facets.valueDefaultSemantics(valueAdapter.getSpecification(), valueClass)
+                .map(composer->composer.decompose(_Casts.uncheckedCast(valueAdapter.getPojo())));
     }
 
-    private static <T> Optional<String> decomposeToJson(final ObjectSpecification spec, final T pojo) {
-        return decompose(spec, pojo)
+    private static Optional<String> decomposeToJson(final ManagedObject valueAdapter) {
+        return decompose(valueAdapter)
                 .map(ValueDecomposition::toJson);
     }
 
@@ -192,11 +188,8 @@ public class JsonValueEncoder {
         }
 
         // else
-        val valueFacet = objectSpec.getFacet(ValueFacet.class);
-        if (valueFacet == null) {
-            throw new IllegalArgumentException("objectSpec expected to have ValueFacet");
-        }
-        return valueFacet.toEncodedString(Format.JSON, adapter.getPojo());
+        return Facets.valueSerializerElseFail(objectSpec, cls)
+                .toEncodedString(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
     }
 
 

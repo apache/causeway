@@ -25,6 +25,8 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.commons.internal.os._OsUtil;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.config.util.SpringProfileUtil;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jpa.IsisModuleValAsciidocPersistenceJpa;
@@ -45,6 +47,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 @Import({
     // App-Manifest (Configuration)
     DemoAppManifestJpa.class,
+    //IsisModuleSecurityBypass.class, // <-- bypass authentication
 
     // Metamodel
     IsisModuleValAsciidocMetaModel.class,
@@ -86,7 +89,10 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
         //IsisPresets.logging(EntityModel.class, "debug");
         //IsisPresets.logging(FormExecutorDefault.class, "debug");
 
-        System.setProperty("spring.profiles.active", "demo-jpa");
+        SpringProfileUtil.removeActiveProfile("demo-jdo"); // just in case
+    	SpringProfileUtil.addActiveProfile("demo-jpa");
+
+    	IsisModuleExtCommandLogApplib.honorSystemEnvironment();
 
         SpringApplication.run(new Class[] { DemoAppWicketJpa.class }, args);
 

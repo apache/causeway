@@ -27,6 +27,7 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.incubator.viewer.vaadin.ui</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/incubator/viewer/vaadin/ui</git-plugin.propertiesDir>
+		<enforcer.skip>true</enforcer.skip>
 	</properties>
 
 	<!-- IN CASE WE WANT TO USE VAADIN ADDONS -->

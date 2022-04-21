@@ -52,7 +52,7 @@
 	<dependencyManagement>
 		<dependencies>
 			<!-- dependency convergence clash with org.apache.cxf:cxf-core:3.4.0 (used 
-				by isis-mappings-jaxrsclient-impl) -->
+				by isis-mappings-jaxrsclient-impl) TODO ... jaxrsclient was removed -->
 			<dependency>
 				<groupId>com.fasterxml.woodstox</groupId>
 				<artifactId>woodstox-core</artifactId>
@@ -67,11 +67,40 @@
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.moxy</artifactId>
 				<version>2.7.10</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm-tree</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm-analysis</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.sdo</artifactId>
 				<version>2.7.10</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ow2.asm</groupId>
+				<artifactId>asm</artifactId>
+				<version>${asm.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ow2.asm</groupId>
+				<artifactId>asm-tree</artifactId>
+				<version>${asm.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ow2.asm</groupId>
+				<artifactId>asm-analysis</artifactId>
+				<version>${asm.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -80,8 +109,17 @@
 		<dependency>
 			<groupId>com.sun.xml.ws</groupId>
 			<artifactId>jaxws-ri</artifactId>
+			<version>${jaxws-ri.version}</version>
 			<type>pom</type>
 			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.bind.external</groupId>
+					<artifactId>rngom</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind.external</groupId>
+					<artifactId>relaxng-datatype</artifactId>
+				</exclusion>
 				<exclusion>
 					<!-- version clash with spring, we pull it in elsewhere -->
 					<groupId>jakarta.annotation</groupId>
@@ -123,6 +161,10 @@
 					<groupId>org.codehaus.woodstox</groupId>
 					<artifactId>stax2-api</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind.external</groupId>
+					<artifactId>rngom</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -145,6 +187,17 @@
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.sun.xml.bind.external</groupId>
+			<artifactId>rngom</artifactId>
+			<version>2.3.6</version> 
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind.external</groupId>
+			<artifactId>relaxng-datatype</artifactId>
+			<version>2.3.6</version> 
 		</dependency>
 		
 		<!-- v8.0.0 provides @Inject, @Qualifier, ... that's required by Spring 5.x -->

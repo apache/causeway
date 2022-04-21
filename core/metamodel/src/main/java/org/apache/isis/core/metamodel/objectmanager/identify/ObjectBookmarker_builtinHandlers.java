@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker.Handler;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -133,7 +132,7 @@ class ObjectBookmarker_builtinHandlers {
 
         @Override
         public boolean isHandling(final ManagedObject managedObject) {
-            return managedObject.getSpecification().containsFacet(ValueFacet.class);
+            return managedObject.getSpecification().isValue();
         }
 
         @SneakyThrows
@@ -145,7 +144,7 @@ class ObjectBookmarker_builtinHandlers {
                 return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), "{}");
             }
 
-            val valueFacet = spec.getFacet(ValueFacet.class);
+            val valueFacet = spec.valueFacet().orElse(null);
             ValueSemanticsProvider<Object> composer = (ValueSemanticsProvider) valueFacet.selectDefaultSemantics()
                     .orElseThrow(()->_Exceptions.illegalArgument(
                             "Cannot create a bookmark for the value type %s, "

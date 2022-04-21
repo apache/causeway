@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting.MetaM
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
-import org.apache.isis.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3;
+import org.apache.isis.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBS;
 
 import lombok.Getter;
 import lombok.val;
@@ -81,7 +81,7 @@ implements HasMetaModelContext {
                     val messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
                     val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
                     val menuBarsLoaderService = getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
-                    return new MenuBarsServiceBS3(
+                    return new MenuBarsServiceBS(
                             menuBarsLoaderService,
                             messageService,
                             jaxbService,

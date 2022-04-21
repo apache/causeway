@@ -20,7 +20,7 @@ package org.apache.isis.extensions.commandreplay.secondary.job;
 
 import org.quartz.JobExecutionContext;
 
-import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
+import org.apache.isis.extensions.commandreplay.secondary.status.SecondaryStatus;
 import org.apache.isis.extensions.quartz.context.JobExecutionData;
 
 import lombok.val;

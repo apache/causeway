@@ -19,6 +19,8 @@
  */
 package demoapp.dom.types.javamath;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -30,9 +32,9 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import demoapp.dom.types.javamath.bigdecimals.JavaMathBigDecimals;
 import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
 
+@Named("demo.JavaMathTypesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.JavaMathTypesMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="JavaMathTypes"

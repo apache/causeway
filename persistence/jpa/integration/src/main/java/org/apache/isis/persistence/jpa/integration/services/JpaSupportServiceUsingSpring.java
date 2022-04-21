@@ -23,7 +23,7 @@ import javax.persistence.EntityManager;
 
 import org.springframework.data.jpa.repository.JpaContext;
 
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.persistence.jpa.applib.services.JpaSupportService;
 
 import lombok.NonNull;
@@ -38,13 +38,13 @@ public class JpaSupportServiceUsingSpring implements JpaSupportService {
     private final JpaContext jpaContextSpring;
 
     @Override
-    public Result<EntityManager> getEntityManager(final @NonNull Class<?> entityClass) {
+    public Try<EntityManager> getEntityManager(final @NonNull Class<?> entityClass) {
         try {
             val em = jpaContextSpring.getEntityManagerByManagedType(entityClass);
-            return Result.success(em);
+            return Try.success(em);
         } catch (Exception e) {
             log.error("failed to get an EntityManager for entity type %s", entityClass, e);
-            return Result.failure(e);
+            return Try.failure(e);
         }
     }
 

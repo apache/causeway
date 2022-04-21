@@ -19,6 +19,7 @@
 package demoapp.dom.featured.layout.describedAs;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -33,9 +34,9 @@ import lombok.val;
 
 import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
 
+@Named("demo.DescribedAsMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.DescribedAsMenu"
+        nature=NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })

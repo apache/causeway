@@ -23,8 +23,10 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.event.EventListener;
@@ -64,6 +66,7 @@ import lombok.val;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @ExtendWith({IsisInteractionHandler.class})
 @DirtiesContext
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class JpaTransactionRollbackTest_usingInteractionService
 //extends IsisIntegrationTestAbstract
 {
@@ -80,10 +83,14 @@ class JpaTransactionRollbackTest_usingInteractionService
     void setUp() {
 
         // cleanup
-        fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
 
         transactionAfterCompletionEvent =
                 _Refs.<TransactionAfterCompletionEvent>objectRef(null);
+    }
+
+    @AfterEach
+    void cleanUp() {
     }
 
     @Test

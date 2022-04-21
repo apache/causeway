@@ -43,10 +43,12 @@ import lombok.val;
 public enum JpaTestDomainPersona
 implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
-    PurgeAll {
+    InventoryPurgeAll {
         @Override
         public BuilderScriptWithoutResult builder() {
             return new BuilderScriptWithoutResult() {
+
+                @Inject private RepositoryService repository;
 
                 @Override
                 protected void execute(final ExecutionContext ec) {
@@ -62,8 +64,6 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
                 }
 
-                @Inject private RepositoryService repository;
-
             };
         }
     },
@@ -72,6 +72,8 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
         @Override
         public BuilderScriptWithResult<JpaInventory> builder() {
             return new BuilderScriptWithResult<JpaInventory>() {
+
+                @Inject private RepositoryService repository;
 
                 @Override
                 protected JpaInventory buildResult(final ExecutionContext ec) {
@@ -86,8 +88,6 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
                     return inventory;
 
                 }
-
-                @Inject private RepositoryService repository;
 
             };
         }

@@ -13,7 +13,7 @@ interface CommandOutcomeHandler {
   Timestamp getStartedAt()     // <.>
   void setStartedAt(Timestamp startedAt)     // <.>
   void setCompletedAt(Timestamp completedAt)     // <.>
-  void setResult(Result<Bookmark> resultBookmark)     // <.>
+  void setResult(Try<Bookmark> resultBookmark)     // <.>
 }
 ----
 
@@ -32,7 +32,7 @@ Sets the `startedAt` field on the underlying xref:refguide:applib:index/services
 --
 Sets the `completedAt` field on the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent)
 --
-<.> xref:#setResult__Result[setResult(Result)]
+<.> xref:#setResult__Try[setResult(Try)]
 +
 --
 Sets the result of the execute, represented as a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , on the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent).
@@ -57,7 +57,7 @@ Sets the `startedAt` field on the underlying xref:refguide:applib:index/services
 
 Sets the `completedAt` field on the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent)
 
-[#setResult__Result]
-=== setResult(Result)
+[#setResult__Try]
+=== setResult(Try)
 
 Sets the result of the execute, represented as a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , on the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent).

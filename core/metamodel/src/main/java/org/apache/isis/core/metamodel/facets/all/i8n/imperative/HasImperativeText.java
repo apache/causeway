@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.all.i8n.imperative;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public interface HasImperativeText {
@@ -34,11 +34,11 @@ public interface HasImperativeText {
      * <p>
      * eg. title, name, description
      */
-    Result<String> text(ManagedObject object);
+    Try<String> text(ManagedObject object);
 
     @Nullable
     default String textElseNull(final ManagedObject object) {
-        return text(object).optionalElseFail().orElse(null);
+        return text(object).ifFailureFail().getValue().orElse(null);
     }
 
 }

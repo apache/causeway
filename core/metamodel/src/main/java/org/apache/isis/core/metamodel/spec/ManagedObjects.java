@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Objects;
@@ -55,10 +55,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStack;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -198,6 +197,7 @@ public final class ManagedObjects {
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
 
+
     /**
      *
      * @param managedObject
@@ -218,6 +218,16 @@ public final class ManagedObjects {
         return stringify(managedObject, separator)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
+
+    public static String stringifyElseUnidentified(
+            final @Nullable ManagedObject managedObject,
+            final @NonNull String separator) {
+        return stringify(managedObject, separator)
+                .orElseGet(()->isSpecified(managedObject)
+                        ? managedObject.getSpecification().getLogicalTypeName() + separator + "?"
+                        : "?" + separator + "?");
+    }
+
 
     // -- PACKING
 
@@ -433,18 +443,18 @@ public final class ManagedObjects {
 
     // -- IMPERATIVE TEXT UTILITY
 
-    public static Result<String> imperativeText(
+    public static Try<String> imperativeText(
             final @Nullable ManagedObject object,
             final @NonNull Method method,
             final @Nullable TranslationContext translationContext) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(object)) {
-            return Result.success(null);
+            return Try.success(null);
         }
 
         val mmc = object.getSpecification().getMetaModelContext();
 
-        val result =  Result.of(()->{
+        val result =  Try.call(()->{
             final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, object);
             if(returnValue instanceof String) {
                 return (String) returnValue;
@@ -577,43 +587,13 @@ public final class ManagedObjects {
         }
     }
 
-    // -- BOOKMARK UTILITIES
-
-    @UtilityClass
-    static final class BookmarkUtil {
-
-        Optional<Bookmark> bookmark(final @Nullable ManagedObject adapter) {
-
-            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                    || adapter.getSpecification().isValue()) {
-                return Optional.empty();
-            }
-
-            if(!ManagedObjects.isIdentifiable(adapter)) {
-                log.warn("about to create a random UUID bookmark for {}; this is probably an invalid code-path taken (TODO)",
-                        adapter.getSpecification());
-            }
-
-            return ManagedObjects.spec(adapter)
-                    .map(ObjectSpecification::getMetaModelContext)
-                    .map(MetaModelContext::getObjectManager)
-                    .map(objectManager->objectManager.bookmarkObject(adapter));
-
-    //TODO[2686] strictly forbid dummy UUID bookmark creation
-//            return ManagedObjects.isIdentifiable(adapter)
-//                    ? objectManager(adapter)
-//                            .map(objectManager->objectManager.bookmarkObject(adapter))
-//                    : Optional.empty();
-        }
-    }
-
     // -- ENTITY UTILITIES
 
     @UtilityClass
     public static final class EntityUtil {
 
         @NonNull
-        public static Optional<PersistenceStandard> getPersistenceStandard(final @Nullable ManagedObject adapter) {
+        public static Optional<PersistenceStack> getPersistenceStandard(final @Nullable ManagedObject adapter) {
             if(adapter==null) {
                 return Optional.empty();
             }
@@ -627,7 +607,7 @@ public final class ManagedObjects {
                 return Optional.empty();
             }
 
-            return Optional.of(entityFacet.getPersistenceStandard());
+            return Optional.of(entityFacet.getPersistenceStack());
         }
 
         @NonNull
@@ -848,7 +828,8 @@ public final class ManagedObjects {
 
 
         /**
-         * @param adapter - an adapter around the domain object whose visibility is being checked
+         * @param adapter - wrapper of domain object whose visibility is being checked,
+         *      must not be a mixin
          * @param interactionInitiatedBy
          */
         public static boolean isVisible(
@@ -1159,5 +1140,6 @@ public final class ManagedObjects {
             }
         }
     }
+
 
 }

@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.user;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -52,9 +53,9 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = ImpersonateStopMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
+@Named(ImpersonateStopMenu.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.TERTIARY

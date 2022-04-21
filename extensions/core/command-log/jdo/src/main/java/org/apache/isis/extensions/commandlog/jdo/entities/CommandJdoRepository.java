@@ -28,12 +28,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -42,12 +42,14 @@ import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.extensions.commandlog.model.command.CommandModel;
-import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
-import org.apache.isis.extensions.commandlog.model.command.ReplayState;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
+import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
@@ -63,17 +65,22 @@ import lombok.val;
  * {@link CommandJdo command} entities.
  */
 @Service
-@Named("isis.ext.commandLog.CommandJdoRepository")
+@Named(IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandJdoRepository")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandJdoRepository
-implements CommandModelRepository<CommandJdo> {
+implements ICommandLogRepository<CommandJdo> {
 
     @Inject final Provider<InteractionProvider> interactionProviderProvider;
     @Inject final Provider<RepositoryService> repositoryServiceProvider;
     @Inject final JdoSupportService jdoSupport;
+
+    @Override
+    public CommandJdo createCommandLog(final Command command) {
+        return new CommandJdo(command);
+    }
 
     @Override
     public List<CommandJdo> findByFromAndTo(
@@ -111,7 +118,7 @@ implements CommandModelRepository<CommandJdo> {
     }
 
     @Override
-    public List<CommandJdo> findByParent(final CommandModel parent) {
+    public List<CommandJdo> findByParent(final ICommandLog parent) {
         return repositoryService().allMatches(
                 Query.named(CommandJdo.class, "findByParent")
                     .withParameter("parent", parent));
@@ -210,13 +217,9 @@ implements CommandModelRepository<CommandJdo> {
 
 
     private CommandJdo findByInteractionIdElseNull(final UUID interactionId) {
-        val tsq = jdoSupport.newTypesafeQuery(CommandJdo.class);
-        val cand = QCommandJdo.candidate();
-        val q = tsq.filter(
-                cand.interactionIdStr.eq(tsq.parameter("interactionIdStr", String.class))
-        );
-        q.setParameter("interactionIdStr", interactionId.toString());
-        return q.executeUnique();
+        val q = Query.named(CommandJdo.class, "findByInteractionIdStr")
+        .withParameter("interactionIdStr", interactionId.toString());
+        return repositoryService().uniqueMatch(q).orElse(null);
     }
 
     private List<CommandJdo> findSince(
@@ -256,7 +259,7 @@ implements CommandModelRepository<CommandJdo> {
     @Override
     public List<CommandJdo> findNotYetReplayed() {
         return repositoryService().allMatches(
-                Query.named(CommandJdo.class, "findNotYetReplayed"));
+                Query.named(CommandJdo.class, "findNotYetReplayed").withLimit(10));
     }
 
     @Override

@@ -164,6 +164,7 @@ That means that it's not enough to just add the appropriate Maven module to the 
 
 == Configuration Properties
 
+NOTE: TODO mappings was removed
 The core framework has a large number of configuration properties, as do the various xref:about.adoc#specifying-components[components].
 For that matter, so do some of the xref:subdomains:ROOT:about.adoc[subdomain] libraries, bounded context xref:mappings:ROOT:about.adoc[mapping] libraries and xref:valuetypes:ROOT:about.adoc[value type] libraries.
 

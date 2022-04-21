@@ -141,7 +141,7 @@ implements FacetHolder {
         addNamedFacetIfRequired();
 
         // go no further if a value
-        if(this.containsFacet(ValueFacet.class)) {
+        if(this.isValue()) {
             if (log.isDebugEnabled()) {
                 log.debug("skipping type hierarchy introspection for value type {}", getFullIdentifier());
             }
@@ -180,7 +180,7 @@ implements FacetHolder {
     @Override
     protected void introspectMembers() {
 
-        if(this.containsFacet(ValueFacet.class)) {
+        if(this.isValue()) {
             if (log.isDebugEnabled()) {
                 log.debug("skipping full introspection for value type {}", getFullIdentifier());
             }
@@ -354,7 +354,8 @@ implements FacetHolder {
 
     // -- ELEMENT SPECIFICATION
 
-    private final _Lazy<Optional<ObjectSpecification>> elementSpecification = _Lazy.of(this::lookupElementSpecification);
+    private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
+            _Lazy.of(this::lookupElementSpecification);
 
     @Override
     public Optional<ObjectSpecification> getElementSpecification() {
@@ -362,7 +363,7 @@ implements FacetHolder {
     }
 
     private Optional<ObjectSpecification> lookupElementSpecification() {
-        return Optional.ofNullable(getFacet(TypeOfFacet.class))
+        return lookupFacet(TypeOfFacet.class)
                 .map(typeOfFacet -> ElementSpecificationProvider.of(typeOfFacet).getElementType());
     }
 
@@ -377,5 +378,25 @@ implements FacetHolder {
             .streamPropertiesForColumnRendering(this, memberIdentifier, parentObject);
     }
 
+    // -- VALUE FACET OPTIMIZATION (MEMOIZATION)
+
+    // not thread-safe, but seems ok for caching
+    @SuppressWarnings("rawtypes")
+    private Optional<ValueFacet> valueFacetMemoized = null;
+
+    @SuppressWarnings("rawtypes")
+    public void onValueFacetProcessed(final Optional<ValueFacet> valueFacetIfAny) {
+        valueFacetMemoized = valueFacetIfAny;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public Optional<ValueFacet> valueFacet() {
+        return valueFacetMemoized != null
+                ? valueFacetMemoized
+                : lookupFacet(ValueFacet.class);
+    }
+
+    // --
 
 }

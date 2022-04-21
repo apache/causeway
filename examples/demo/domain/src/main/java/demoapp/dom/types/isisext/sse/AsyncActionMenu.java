@@ -19,6 +19,7 @@
 package demoapp.dom.types.isisext.sse;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -31,9 +32,9 @@ import org.apache.isis.applib.value.Markup;
 
 import lombok.val;
 
+@Named("demo.AsyncActionMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.AsyncActionMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="Async Actions"

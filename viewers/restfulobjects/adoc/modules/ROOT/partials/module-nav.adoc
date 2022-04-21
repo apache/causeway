@@ -8,6 +8,8 @@
 ** xref:vro:ROOT:content-negotiation/other-representations.adoc[Other Representations]
 * xref:vro:ROOT:security.adoc[Security]
 * xref:vro:ROOT:layout-resources.adoc[Layout Resources]
+* xref:vro:ROOT:client.adoc[Client]
 * xref:vro:ROOT:hints-and-tips.adoc[Hints-n-Tips]
+
 
 

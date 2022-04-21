@@ -113,6 +113,7 @@ public class DomainObjectList {
 
 
     // -- title
+    @Getter
     private String title;
     @ObjectSupport public String title() {
         return title;

@@ -19,6 +19,8 @@
 package org.apache.isis.viewer.wicket.ui.util;
 
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.function.Supplier;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -59,6 +61,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.danekja.java.util.function.serializable.SerializableBiConsumer;
 import org.danekja.java.util.function.serializable.SerializableBooleanSupplier;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
@@ -73,10 +76,6 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
@@ -84,6 +83,9 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.jquery.Key;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -703,6 +705,10 @@ public class Wkt {
 
     // -- TEXT AREA
 
+    public TextArea<String> textArea(final String id, final IModel<String> textModel) {
+        return new TextArea<String>(id, textModel);
+    }
+
     public TextArea<String> textAreaNoTab(final String id, final IModel<String> textModel) {
         return new TextArea<String>(id, textModel) {
             private static final long serialVersionUID = 1L;
@@ -713,10 +719,10 @@ public class Wkt {
         };
     }
 
-    public TextArea<String> textAreaAddNoTab(
-            final MarkupContainer container, final String id, final IModel<String> textModel) {
-        return add(container, textAreaNoTab(id, textModel));
-    }
+//    public TextArea<String> textAreaAddNoTab(
+//            final MarkupContainer container, final String id, final IModel<String> textModel) {
+//        return add(container, textAreaNoTab(id, textModel));
+//    }
 
     /**
      * @param converter - if {@code null} returns {@link TextArea} using Wicket's default converters.
@@ -865,6 +871,38 @@ public class Wkt {
         }
     }
 
+    // -- FORM COMPONENT ATTRIBUTE UTILITY
+
+    public void setFormComponentAttributes(
+            final FormComponent<?> formComponent,
+            final Supplier<OptionalInt> multilineNumberOfLines,
+            final Supplier<OptionalInt> maxLength,
+            final Supplier<OptionalInt> typicalLength) {
+
+        if(formComponent instanceof TextArea) {
+            multilineNumberOfLines.get()
+            .ifPresent(numberOfLines->{
+                System.err.printf("%d%n", numberOfLines);
+                Wkt.attributeReplace(formComponent, "rows", numberOfLines);});
+        }
+
+        maxLength.get()
+        .ifPresent(maxLen->{
+            // for TextArea in conjunction with javascript in jquery.isis.wicket.viewer.js
+            // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
+
+            Wkt.attributeReplace(formComponent, "maxlength", maxLen);
+            if(formComponent.getType().equals(String.class)) {
+                formComponent.add(StringValidator.maximumLength(maxLen));
+            }
+        });
+
+        typicalLength.get()
+        .ifPresent(typicalLen->
+            Wkt.attributeReplace(formComponent, "size", typicalLen));
+
+    }
+
     // -- DISABLE WORKAROUND
 
     /**
@@ -877,7 +915,7 @@ public class Wkt {
      * @deprecated since Wicket 7.0: doesn't mangle the link/button's markup anymore
      */
     @Deprecated
-    public static void fixDisabledState(final Component component, final ComponentTag tag) {
+    public void fixDisabledState(final Component component, final ComponentTag tag) {
         if (!component.isEnabledInHierarchy()) {
             if (component instanceof AbstractLink) {
                 tag.setName("a");

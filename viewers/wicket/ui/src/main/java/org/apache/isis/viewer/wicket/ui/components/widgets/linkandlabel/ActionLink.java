@@ -42,7 +42,7 @@ import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.BS3GridPanel;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs.BSGridPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
@@ -231,7 +231,7 @@ extends IndicatingAjaxLink<ManagedObject> {
 
         castTo(ActionPromptWithExtraContent.class, actionPrompt)
         .ifPresent(promptWithExtraContent->{
-            BS3GridPanel.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
+            BSGridPanel.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
             .ifPresent(gridPanel->promptWithExtraContent.setExtraContentPanel(gridPanel, target));
         });
     }

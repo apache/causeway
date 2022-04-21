@@ -12,11 +12,11 @@ class ApplicationFeatureViewModel {
   public static final String LOGICAL_TYPE_NAME;
   ApplicationFeatureViewModel()
   ApplicationFeatureViewModel(ApplicationFeatureId featureId)
+  ApplicationFeatureViewModel(String encodedMemento)
   ApplicationFeatureViewModel newViewModel(ApplicationFeatureId featureId, ApplicationFeatureRepository applicationFeatureRepository, FactoryService factoryService)
   String title()     // <.>
   String iconName()
   String viewModelMemento()
-  void viewModelInit(String encodedMemento)
   ApplicationFeature getFeature()
   String getFullyQualifiedName()
   ApplicationFeatureSort getSort()

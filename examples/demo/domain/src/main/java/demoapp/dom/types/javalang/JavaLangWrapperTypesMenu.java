@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.javalang;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -35,9 +37,9 @@ import demoapp.dom.types.javalang.integers.WrapperIntegers;
 import demoapp.dom.types.javalang.longs.WrapperLongs;
 import demoapp.dom.types.javalang.shorts.WrapperShorts;
 
+@Named("demo.JavaLangWrapperTypesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.JavaLangWrapperTypesMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="JavaLangWrapperTypes"

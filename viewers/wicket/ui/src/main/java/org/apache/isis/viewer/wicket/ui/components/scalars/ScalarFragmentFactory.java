@@ -206,7 +206,7 @@ public class ScalarFragmentFactory {
         LABEL("fragment-prompt-label", promptLabelModel->
             Wkt.label(ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel)),
         TEXTAREA("fragment-prompt-textarea", promptLabelModel->
-            Wkt.textAreaNoTab(ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel)),
+            Wkt.textArea(ScalarPanelAbstract.ID_SCALAR_VALUE, promptLabelModel)),
         CHECKBOX_YES("fragment-prompt-checkboxYes", null),
         CHECKBOX_NO("fragment-prompt-checkboxNo", null),
         CHECKBOX_INTERMEDIATE("fragment-prompt-checkboxIntermediate", null),

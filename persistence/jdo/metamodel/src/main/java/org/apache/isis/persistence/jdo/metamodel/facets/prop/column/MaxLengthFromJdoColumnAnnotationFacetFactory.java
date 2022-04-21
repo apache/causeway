@@ -21,7 +21,6 @@ package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
-import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -62,13 +61,21 @@ implements MetaModelRefiner {
         if(String.class != processMethodContext.getMethod().getReturnType()) {
             return;
         }
-        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         val facetHolder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacetIfPresent(
-                MaxTotalDigitsFacetFromJdoColumnAnnotation
-                .create(jdoColumnIfAny, facetHolder));
+        _ColumnUtil.processColumnAnnotations(processMethodContext,
+                jdoColumnIfAny->{
+                    FacetUtil.addFacetIfPresent(
+                            MaxTotalDigitsFacetFromJdoColumnAnnotation
+                            .createJdo(jdoColumnIfAny, facetHolder));
+                },
+                jpaColumnIfAny->{
+                    FacetUtil.addFacetIfPresent(
+                            MaxTotalDigitsFacetFromJdoColumnAnnotation
+                            .createJpa(jpaColumnIfAny, facetHolder));
+                });
+
     }
 
     @Override

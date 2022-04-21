@@ -9,8 +9,11 @@ Provides access to the current interaction's _EntityManager_ (s)
 .JpaSupportService.java
 ----
 interface JpaSupportService {
-  Result<EntityManager> getEntityManager(Class<?> entityType)     // <.>
+  Try<EntityManager> getEntityManager(Class<?> entityType)     // <.>
   EntityManager getEntityManagerElseFail(Class<?> entityType)     // <.>
+  IllegalStateException failureFor(Class<?> entityType, Throwable cause)
+  IllegalStateException failureFor(Class<?> entityType)
+  String failureMessage(Class<?> entityType)
 }
 ----
 

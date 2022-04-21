@@ -24,6 +24,7 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
@@ -60,17 +61,18 @@ import lombok.extern.log4j.Log4j2;
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Log4j2
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
     @Inject private KVStoreForTesting kvStore;
 
-    @Test @Order(0) @Rollback(false)
-    void init() {
+    @Test @Order(1) @Rollback(false)
+    void setup() {
 
         // cleanup
-        fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
         kvStore.clear(JpaBook.class);
 
         // given
@@ -79,7 +81,7 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
     }
 
 
-    @Test @Order(1)
+    @Test @Order(2)
     void sampleBook_shouldHave_injectionPointsResolved() {
         log.debug("TEST 1 ENTERING");
 
@@ -93,7 +95,7 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
         log.debug("TEST 1 EXITING");
     }
 
-    @Test @Order(2)
+    @Test @Order(3)
     void sampleBook_shouldHave_injectionPointsResolved_whenFetchedAgain() {
 
         log.debug("TEST 2 ENTERING");
@@ -109,7 +111,7 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
 
     }
 
-    @Test @Order(3)
+    @Test @Order(4)
     void sampleBook_shouldHave_injectionPointsResolved_whenFetchedAgain2() {
 
         log.debug("TEST 3 ENTERING");
@@ -122,6 +124,7 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
         //assertInjectCountRange(1, 4);
 
         log.debug("TEST 3 EXITING");
+
     }
 
     // -- HELPER

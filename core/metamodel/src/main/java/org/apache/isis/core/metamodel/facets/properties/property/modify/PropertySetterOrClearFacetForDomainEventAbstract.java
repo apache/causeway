@@ -164,8 +164,8 @@ implements
                             InteractionHead.regular(targetAdapter),
                             newValueAdapter,
                             interactionInitiatedBy))
-                .optionalElseFail()
-                .orElse(null);
+                .ifFailureFail()
+                .getValue().orElse(null);
         }
 
     @RequiredArgsConstructor

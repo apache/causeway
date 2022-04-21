@@ -38,7 +38,7 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.extensions.commandlog.model.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult;
 import org.apache.isis.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService;
@@ -53,12 +53,12 @@ import org.apache.isis.extensions.quartz.spring.AutowiringSpringBeanJobFactory;
 import lombok.val;
 
 /**
+ * Activates with <i>Spring profile</i> 'command-replay-secondary'.
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
         // @Configuration's
-        IsisModuleExtCommandLogApplib.class,
         IsisModuleExtQuartzImpl.class,
 
         // @Service's
@@ -75,10 +75,10 @@ import lombok.val;
         Object_openOnPrimary.class,
 
 })
-@Profile("secondary")
+@Profile("command-replay-secondary")
 public class IsisModuleExtCommandReplaySecondary {
 
-    public static final String NAMESPACE = "isis.ext.commandReplaySecondary";
+    public static final String NAMESPACE = IsisModuleExtCommandLogApplib.NAMESPACE_REPLAY_SECONDARY;
 
     public abstract static class ActionDomainEvent<S>
             extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> { }
@@ -102,7 +102,7 @@ public class IsisModuleExtCommandReplaySecondary {
     }
 
     @Bean(name = "ReplicateAndReplayTrigger" )
-    public SimpleTriggerFactoryBean replicateAndReplayTriggerFactory(@Qualifier("ReplicateAndReplayJob") JobDetail job) {
+    public SimpleTriggerFactoryBean replicateAndReplayTriggerFactory(@Qualifier("ReplicateAndReplayJob") final JobDetail job) {
         val triggerFactory = new SimpleTriggerFactoryBean();
         triggerFactory.setJobDetail(job);
         val config = isisConfiguration.getExtensions().getCommandReplay().getQuartzReplicateAndReplayJob();

@@ -29,6 +29,7 @@
 
 	<properties>
 		<skipTests>true</skipTests>
+		<enforcer.skip>true</enforcer.skip>
 	</properties>
 
 	<dependencies>

@@ -29,11 +29,11 @@ import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
+import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
+import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.IsisSchemas;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -60,12 +60,12 @@ extends MetaModelTestAbstract {
     @Test
     void happy_case() throws Exception {
 
-        final BS3Grid bs3Grid = new BS3Grid();
+        final BSGrid bsGrid = new BSGrid();
 
         // header
-        final BS3Row headerRow = new BS3Row();
-        bs3Grid.getRows().add(headerRow);
-        final BS3Col headerCol = new BS3Col();
+        final BSRow headerRow = new BSRow();
+        bsGrid.getRows().add(headerRow);
+        final BSCol headerCol = new BSCol();
         headerRow.getCols().add(headerCol);
         headerCol.setSpan(12);
 
@@ -78,24 +78,24 @@ extends MetaModelTestAbstract {
         headerCol.getActions().add(deleteActionLayoutData);
 
         // content
-        final BS3Row contentRow = new BS3Row();
-        bs3Grid.getRows().add(contentRow);
+        final BSRow contentRow = new BSRow();
+        bsGrid.getRows().add(contentRow);
 
-        final BS3Col contentCol = new BS3Col();
+        final BSCol contentCol = new BSCol();
         contentRow.getCols().add(contentCol);
         contentCol.setSpan(12);
 
         // a tabgroup containing a 'Common' tab
-        final BS3TabGroup tabGroup = new BS3TabGroup();
+        final BSTabGroup tabGroup = new BSTabGroup();
         contentCol.getTabGroups().add(tabGroup);
-        BS3Tab bs3Tab = new BS3Tab();
-        tabGroup.getTabs().add(bs3Tab);
-        bs3Tab.setName("Common");
+        BSTab bsTab = new BSTab();
+        tabGroup.getTabs().add(bsTab);
+        bsTab.setName("Common");
 
         // with a left col...
-        final BS3Row tabRow = new BS3Row();
-        bs3Tab.getRows().add(tabRow);
-        final BS3Col tabLeftCol = new BS3Col();
+        final BSRow tabRow = new BSRow();
+        bsTab.getRows().add(tabRow);
+        final BSCol tabLeftCol = new BSCol();
         tabRow.getCols().add(tabLeftCol);
         tabLeftCol.setSpan(6);
 
@@ -117,7 +117,7 @@ extends MetaModelTestAbstract {
         namePropertyLayoutData.getActions().add(updateNameActionLayoutData);
 
         // and the tab also has a right col...
-        final BS3Col tabRightCol = new BS3Col();
+        final BSCol tabRightCol = new BSCol();
         tabRow.getCols().add(tabRightCol);
         tabRightCol.setSpan(6);
 
@@ -127,24 +127,24 @@ extends MetaModelTestAbstract {
         tabRightCol.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 
-        final String schemaLocations = gridServiceDefault.tnsAndSchemaLocation(bs3Grid);
-        String xml = jaxbService.toXml(bs3Grid,
+        final String schemaLocations = gridServiceDefault.tnsAndSchemaLocation(bsGrid);
+        String xml = jaxbService.toXml(bsGrid,
                 _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         println(xml);
 
-        BS3Grid bs3Pageroundtripped = jaxbService.fromXml(BS3Grid.class, xml);
-        String xmlRoundtripped = jaxbService.toXml(bs3Pageroundtripped,
+        BSGrid bsPageroundtripped = jaxbService.fromXml(BSGrid.class, xml);
+        String xmlRoundtripped = jaxbService.toXml(bsPageroundtripped,
                 _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         assertThat(xml, is(equalTo(xmlRoundtripped)));
 
 
         println("==========");
 
-        dumpXsd(bs3Grid);
+        dumpXsd(bsGrid);
     }
 
-    protected void dumpXsd(final BS3Grid bs3Page) {
-        Map<String, String> schemas = jaxbService.toXsd(bs3Page, IsisSchemas.INCLUDE);
+    protected void dumpXsd(final BSGrid bsPage) {
+        Map<String, String> schemas = jaxbService.toXsd(bsPage, IsisSchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
             println(entry.getKey() + ":");
             println(entry.getValue());

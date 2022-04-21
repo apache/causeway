@@ -10,6 +10,8 @@ class CommonDtoUtils {
   ValueWithTypeDto getFundamentalValueFromJson(ValueType valueType, String json)
   String getFundamentalValueAsJson(ValueWithTypeDto valueDto)
   String getFundamentalValueAsJson(ValueType valueType, ValueDto valueDto)
+  String getCompositeValueAsJson(TypedTupleDto composite)
+  TypedTupleDto getCompositeValueFromJson(String json)
   D recordFundamentalValue(ValueType valueType, D valueDto, Object pojo)
   Object getValueAsObject(ValueWithTypeDto valueDto)
   Object getValueAsObject(ValueType valueType, ValueDto valueDto)

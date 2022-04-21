@@ -110,7 +110,8 @@ $(function() {
                 let elNodeName = $(el).prop('nodeName')
                 if (elNodeName) {
                     let x = elNodeName.toLowerCase()
-                    if(x === 'input') {
+                    if(x === 'input'
+                    	|| x === 'textarea') {
                         el.focus();
                     } else {
                         el.select2('open').select2('close');

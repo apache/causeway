@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
@@ -39,15 +38,15 @@ extends MemberInteraction<ManagedCollection, CollectionInteraction> {
 
         val managedCollection = ManagedCollection.lookupCollection(owner, memberId, where);
 
-        final _Either<ManagedCollection, InteractionVeto> chain = managedCollection.isPresent()
-                ? _Either.left(managedCollection.get())
-                : _Either.right(InteractionVeto.notFound(MemberType.COLLECTION, memberId));
+        final InteractionRailway<ManagedCollection> railway = managedCollection.isPresent()
+                ? InteractionRailway.success(managedCollection.get())
+                : InteractionRailway.veto(InteractionVeto.notFound(MemberType.COLLECTION, memberId));
 
-        return new CollectionInteraction(chain);
+        return new CollectionInteraction(railway);
     }
 
-    CollectionInteraction(@NonNull final _Either<ManagedCollection, InteractionVeto> chain) {
-        super(chain);
+    CollectionInteraction(@NonNull final InteractionRailway<ManagedCollection> railway) {
+        super(railway);
     }
 
     /**

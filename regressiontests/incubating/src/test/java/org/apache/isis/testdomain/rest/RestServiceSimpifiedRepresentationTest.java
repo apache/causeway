@@ -32,6 +32,7 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.Table;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -43,15 +44,12 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.extensions.restclient.ActionParameterListBuilder;
-import org.apache.isis.extensions.restclient.ResponseDigest;
-import org.apache.isis.extensions.restclient.log.ClientConversationFilter;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.rospec.BigComplex;
 import org.apache.isis.testdomain.rospec.Configuration_usingRoSpec;
@@ -61,6 +59,8 @@ import org.apache.isis.testdomain.util.UtilSurefire;
 import org.apache.isis.testdomain.util.rest.RestEndpointService;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
+import org.apache.isis.viewer.restfulobjects.client.ActionParameterListBuilder;
+import org.apache.isis.viewer.restfulobjects.client.log.ClientConversationFilter;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 
 import static org.apache.isis.testdomain.util.CollectionAssertions.assertComponentWiseEquals;
@@ -99,10 +99,10 @@ class RestServiceSimpifiedRepresentationTest {
     private final Filter4ReprType filter4ReprType = new Filter4ReprType();
     private final Filter4Reporting filter4Reporting = new Filter4Reporting();
     private final Can<ClientConversationFilter> conversationFilters = Can.of(
-            filter4ReprType, 
+            filter4ReprType,
             filter4Reporting);
 
-    
+
     @AfterAll
     static void tearDown() throws IOException {
     	if(UtilSurefire.isRunningWithSurefire()) {
@@ -116,27 +116,27 @@ class RestServiceSimpifiedRepresentationTest {
 
     // -- VOID
 
-    @Test @Order(1) 
+    @Test @Order(1)
     void voidResult() {
         val digest = digest("voidResult", void.class);
-        assertTrue(digest.getEntities().isEmpty());
+        assertTrue(digest.getValue().isEmpty());
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VOID);
     }
 
     // -- STRING
 
-    @Test @Order(2) 
+    @Test @Order(2)
     void string() {
         val digest = digest("string", String.class);
-        val returnValue = digest.getEntities().getSingletonOrFail();
+        val returnValue = digest.getValue().orElseThrow();
         assertEquals(refSampler.string(), returnValue);
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUE);
     }
-    
-    @Test @Order(2) 
+
+    @Test @Order(2)
     void stringUsingGet() {
         val digest = digestUsingGet("stringSafe", String.class);
-        val returnValue = digest.getEntities().getSingletonOrFail();
+        val returnValue = digest.getValue().orElseThrow();
         assertEquals(refSampler.stringSafe(), returnValue);
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUE);
     }
@@ -144,7 +144,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(3)
     void stringNull() {
         val digest = digest("stringNull", String.class);
-        assertTrue(digest.getEntities().isEmpty());
+        assertTrue(digest.getValue().orElseThrow().isEmpty());
         filter4ReprType.assertHttpReturnCode(404);
         filter4ReprType.assertRepresentationType(null);
     }
@@ -154,7 +154,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(4)
     void stringArray() {
         val digest = digestArray("stringArray", String.class, new GenericType<List<String>>(){});
-        val returnValue = digest.getEntities();
+        val returnValue = digest.getValue().orElseThrow();
         assertComponentWiseEquals(refSampler.stringArray(), returnValue);
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUES);
     }
@@ -162,7 +162,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(5)
     void stringArrayEmpty() {
         val digest = digestArray("stringArrayEmpty", String.class, new GenericType<List<String>>(){});
-        assertTrue(digest.getEntities().isEmpty());
+        assertTrue(digest.getValue().orElseThrow().isEmpty());
         filter4ReprType.assertHttpReturnCode(404);
         filter4ReprType.assertRepresentationType(null);
     }
@@ -170,7 +170,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(6)
     void stringArrayNull() {
         val digest = digestArray("stringArrayNull", String.class, new GenericType<List<String>>(){});
-        assertTrue(digest.getEntities().isEmpty());
+        assertTrue(digest.getValue().orElseThrow().isEmpty());
         filter4ReprType.assertHttpReturnCode(404);
         filter4ReprType.assertRepresentationType(null);
     }
@@ -180,7 +180,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(7)
     void stringList() {
         val digest = digestList("stringList", String.class, new GenericType<List<String>>(){});
-        val returnValues = digest.getEntities();
+        val returnValues = digest.getValue().orElseThrow();
         assertComponentWiseEquals(refSampler.stringList(), returnValues);
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUES);
     }
@@ -188,7 +188,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(8)
     void stringListEmpty() {
         val digest = digestList("stringListEmpty", String.class, new GenericType<List<String>>(){});
-        assertTrue(digest.getEntities().isEmpty());
+        assertTrue(digest.getValue().orElseThrow().isEmpty());
         filter4ReprType.assertHttpReturnCode(404);
         filter4ReprType.assertRepresentationType(null);
     }
@@ -196,7 +196,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(9)
     void stringListNull() {
         val digest = digestList("stringListNull", String.class, new GenericType<List<String>>(){});
-        assertTrue(digest.getEntities().isEmpty());
+        assertTrue(digest.getValue().orElseThrow().isEmpty());
         filter4ReprType.assertHttpReturnCode(404);
         filter4ReprType.assertRepresentationType(null);
     }
@@ -206,7 +206,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(10)
     void integer() {
         val digest = digest("integer", Integer.class);
-        val returnValue = digest.getEntities().getSingletonOrFail();
+        val returnValue = digest.getValue().orElseThrow();
         assertEquals(refSampler.integer(), returnValue);
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUE);
     }
@@ -214,7 +214,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(11)
     void integerNull() {
         val digest = digest("integerNull", Integer.class);
-        assertTrue(digest.getEntities().isEmpty());       
+        assertTrue(digest.getValue().isEmpty());
         filter4ReprType.assertHttpReturnCode(404);
         filter4ReprType.assertRepresentationType(null);
     }
@@ -222,7 +222,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(12)
     void integerPrimitive() {
         val digest = digest("integerPrimitive", int.class);
-        val returnValue = digest.getEntities().getSingletonOrFail();
+        val returnValue = digest.getValue().orElseThrow();
         assertEquals(refSampler.integerPrimitive(), returnValue);
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUE);
     }
@@ -232,7 +232,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(13)
     void bigInteger() {
         val digest = digest("bigInteger", BigInteger.class);
-        val returnValue = digest.getEntities().getSingletonOrFail();
+        val returnValue = digest.getValue().orElseThrow();
         assertEquals(refSampler.bigInteger(), returnValue);
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUE);
     }
@@ -240,7 +240,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(14)
     void bigIntegerNull() {
         val digest = digest("bigIntegerNull", BigInteger.class);
-        assertTrue(digest.getEntities().isEmpty());
+        assertTrue(digest.getValue().isEmpty());
         filter4ReprType.assertHttpReturnCode(404);
         filter4ReprType.assertRepresentationType(null);
     }
@@ -248,7 +248,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(15)
     void bigIntegerList() {
         val digest = digestList("bigIntegerList", BigInteger.class, new GenericType<List<BigInteger>>(){});
-        val returnValue = digest.getEntities();
+        val returnValue = digest.getValue().orElseThrow();
         assertComponentWiseNumberEquals(refSampler.bigIntegerList(), returnValue);
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUES);
     }
@@ -258,7 +258,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(16)
     void customer() {
         val digest = digest("customer", Customer.class);
-        val returnValue = digest.getEntities().getSingletonOrFail();
+        val returnValue = digest.getValue().orElseThrow();
         assertEquals(refSampler.customer(), returnValue);
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.OBJECT);
     }
@@ -266,7 +266,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(17)
     void customerNull() {
         val digest = digest("customerNull", Customer.class);
-        assertTrue(digest.getEntities().isEmpty());
+        assertTrue(digest.getValue().isEmpty());
         filter4ReprType.assertHttpReturnCode(404);
         filter4ReprType.assertRepresentationType(null);
     }
@@ -274,7 +274,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(18)
     void customerList() {
         val digest = digestList("customerList", Customer.class, new GenericType<List<Customer>>(){});
-        val returnValues = digest.getEntities();
+        val returnValues = digest.getValue().orElseThrow();
         assertComponentWiseEquals(refSampler.customerList(), returnValues);
         filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.LIST);
     }
@@ -282,7 +282,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(19)
     void customerListEmpty() {
         val digest = digestList("customerListEmpty", Customer.class, new GenericType<List<Customer>>(){});
-        assertTrue(digest.getEntities().isEmpty());
+        assertTrue(digest.getValue().orElseThrow().isEmpty());
         filter4ReprType.assertHttpReturnCode(404);
         filter4ReprType.assertRepresentationType(null);
     }
@@ -290,7 +290,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(20)
     void customerListNull() {
         val digest = digestList("customerListNull", Customer.class, new GenericType<List<Customer>>(){});
-        assertTrue(digest.getEntities().isEmpty());
+        assertTrue(digest.getValue().orElseThrow().isEmpty());
         filter4ReprType.assertHttpReturnCode(404);
         filter4ReprType.assertRepresentationType(null);
     }
@@ -300,7 +300,7 @@ class RestServiceSimpifiedRepresentationTest {
     @Test @Order(21)
     void complexList() {
         val digest = digestList("complexList", BigComplex.class, new GenericType<List<BigComplex>>(){});
-        val returnValue = digest.getEntities();
+        val returnValue = digest.getValue().orElseThrow();
         assertComponentWiseEquals(refSampler.complexList(), returnValue);
         // in practice we might be agnostic to the actual representation type here, as long as we can successfully digest
         //filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUES);
@@ -309,9 +309,9 @@ class RestServiceSimpifiedRepresentationTest {
 
     @Test @Order(22)
     void complexAdd() {
-        // given 
+        // given
         val a = BigComplex.of(
-                "1.0000000000000000000000000000000000000001", 
+                "1.0000000000000000000000000000000000000001",
                 "-2.0000000000000000000000000000000000000002");
         val b = BigComplex.of("3", "4");
 
@@ -321,7 +321,7 @@ class RestServiceSimpifiedRepresentationTest {
             argBuilder.addActionParameter("bre", b.getRe().toPlainString());
             argBuilder.addActionParameter("bim", b.getIm().toPlainString());
         });
-        val returnValue = digest.getEntities().getSingletonOrFail();
+        val returnValue = digest.getValue().orElseThrow();
         BigComplex.assertEquals(a.add(b), returnValue);
         // in practice we might be agnostic to the actual representation type here, as long as we can successfully digest
         //filter4ReprType.assertRepresentationType(RepresentationTypeSimplifiedV2.VALUE);
@@ -330,120 +330,111 @@ class RestServiceSimpifiedRepresentationTest {
 
     // -- HELPER
 
-    <T> ResponseDigest<T> digest(String actionName, Class<T> entityType) {
+    <T> Try<T> digest(final String actionName, final Class<T> entityType) {
         return digest(actionName, entityType, argBuilder->{});
     }
 
-    <T> ResponseDigest<T> digest(String actionName, Class<T> entityType, Consumer<ActionParameterListBuilder> onArgs) {
+    <T> Try<T> digest(final String actionName, final Class<T> entityType, final Consumer<ActionParameterListBuilder> onArgs) {
 
         _Probe.errOut("");
         _Probe.errOut("=== %s", actionName);
         _Probe.errOut("");
-        
+
         assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false;
         val client = restService.newClient(useRequestDebugLogging, conversationFilters);
 
-        val request = restService.newInvocationBuilder(client, 
-                String.format("services/testdomain.RoSpecSampler/actions/%s/invoke", actionName)); 
+        val request = restService.newInvocationBuilder(client,
+                String.format("services/testdomain.RoSpecSampler/actions/%s/invoke", actionName));
 
         val argBuilder = client.arguments();
         onArgs.accept(argBuilder);
 
-        val args = argBuilder 
+        val args = argBuilder
                 .build();
-        
+
         val argsAsJavaSource = argBuilder.getActionParameterTypes().entrySet().stream()
-        .map(entry->String.format("\n    %s %s", entry.getValue().getSimpleName(), entry.getKey()))        
+        .map(entry->String.format("\n    %s %s", entry.getValue().getSimpleName(), entry.getKey()))
         .collect(Collectors.joining(", "));
-        
+
         filter4Reporting.next(String.format("@Action\n%s %s(%s) {\n    /*...*/\n}", entityType.getSimpleName(), actionName, argsAsJavaSource));
 
         val response = request.post(args);
-        val digest = client.digest(response, entityType);
-
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
-        }
+        val digest = client.digest(response, entityType)
+                .ifFailure(Assertions::fail);
 
         return digest;
 
     }
-    
-    <T> ResponseDigest<T> digestUsingGet(String actionName, Class<T> entityType) {
+
+    <T> Try<T> digestUsingGet(final String actionName, final Class<T> entityType) {
 
         _Probe.errOut("");
         _Probe.errOut("=== %s", actionName);
         _Probe.errOut("");
-        
+
         assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false;
         val client = restService.newClient(useRequestDebugLogging, conversationFilters);
 
-        val request = restService.newInvocationBuilder(client, 
-                String.format("services/testdomain.RoSpecSampler/actions/%s/invoke", actionName)); 
+        val request = restService.newInvocationBuilder(client,
+                String.format("services/testdomain.RoSpecSampler/actions/%s/invoke", actionName));
 
         filter4Reporting.next(String.format("@Action\n%s %s {\n    /*...*/\n}", entityType.getSimpleName(), actionName));
 
         val response = request.get();
-        val digest = client.digest(response, entityType);
-
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
-        }
+        val digest = client.digest(response, entityType)
+                .ifFailure(Assertions::fail);
 
         return digest;
     }
 
-    <T> ResponseDigest<T> digestArray(
-            String actionName, 
-            Class<T> entityType, 
-            GenericType<List<T>> genericType) {
+    <T> Try<Can<T>> digestArray(
+            final String actionName,
+            final Class<T> entityType,
+            final GenericType<List<T>> genericType) {
         filter4Reporting.next(String.format("@Action\n%s[] %s() {\n    /*...*/\n}", entityType.getSimpleName(), actionName));
         return digestVector(actionName, entityType, genericType);
     }
-    
-    <T> ResponseDigest<T> digestList(
-            String actionName, 
-            Class<T> entityType, 
-            GenericType<List<T>> genericType) {
+
+    <T> Try<Can<T>> digestList(
+            final String actionName,
+            final Class<T> entityType,
+            final GenericType<List<T>> genericType) {
         filter4Reporting.next(String.format("@Action\nList<%s> %s() {\n    /*...*/\n}", entityType.getSimpleName(), actionName));
         return digestVector(actionName, entityType, genericType);
     }
-    
-    <T> ResponseDigest<T> digestVector(
-            String actionName, 
-            Class<T> entityType, 
-            GenericType<List<T>> genericType) {
+
+    <T> Try<Can<T>> digestVector(
+            final String actionName,
+            final Class<T> entityType,
+            final GenericType<List<T>> genericType) {
 
         _Probe.errOut("");
         _Probe.errOut("=== %s", actionName);
         _Probe.errOut("");
-        
+
         assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false;
         val client = restService.newClient(useRequestDebugLogging, conversationFilters);
 
-        val request = restService.newInvocationBuilder(client, 
-                String.format("services/testdomain.RoSpecSampler/actions/%s/invoke", actionName)); 
+        val request = restService.newInvocationBuilder(client,
+                String.format("services/testdomain.RoSpecSampler/actions/%s/invoke", actionName));
 
         val args = client.arguments()
                 .build();
 
         val response = request.post(args);
-        val digest = client.digestList(response, entityType, genericType);
-
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
-        }
+        val digest = client.digestList(response, entityType, genericType)
+                .ifFailure(Assertions::fail);
 
         return digest;
 
     }
-    
+
     // -- FILTER FOR REPRESENTATION TYPE
 
     static class Filter4ReprType implements ClientConversationFilter {
@@ -452,45 +443,45 @@ class RestServiceSimpifiedRepresentationTest {
         private int httpReturnCode;
 
         @Override
-        public void onRequest(String endpoint, String method, String acceptHeaderParsing,
-                Map<String, List<String>> headers, String body) {
+        public void onRequest(final String endpoint, final String method, final String acceptHeaderParsing,
+                final Map<String, List<String>> headers, final String body) {
         }
 
         @Override
-        public void onResponse(int httpReturnCode, Map<String, List<String>> headers, String body) {
-            
+        public void onResponse(final int httpReturnCode, final Map<String, List<String>> headers, final String body) {
+
             this.httpReturnCode = httpReturnCode;
-            
+
             val contentTypeHeaderStrings = Can.ofCollection(headers.get("Content-Type"));
             reprType = RepresentationTypeSimplifiedV2.parseContentTypeHeaderString(
                     contentTypeHeaderStrings.getFirst().orElse(null))
                     .orElse(null);
 //            if(reprType==null) {
 //                Assertions.fail(String.format(
-//                        "Invalid REST response, cannot parse header's Content-Type '%s' for the repr-type to use", 
+//                        "Invalid REST response, cannot parse header's Content-Type '%s' for the repr-type to use",
 //                        contentTypeHeaderStrings));
-//            } 
+//            }
         }
-        
-        void assertRepresentationType(RepresentationTypeSimplifiedV2 expected) {
+
+        void assertRepresentationType(final RepresentationTypeSimplifiedV2 expected) {
             assertEquals(expected, reprType);
         }
 
-        void assertHttpReturnCode(int expected) {
+        void assertHttpReturnCode(final int expected) {
             assertEquals(expected, httpReturnCode);
         }
-        
+
     }
-    
+
     // -- FILTER FOR ADOC REPORT
-    
+
     static class Filter4Reporting implements ClientConversationFilter {
-        
+
         private static Document doc = doc();
         private static Table table;
-        
+
         static {
-            
+
             table = table(doc);
             table.setTitle(String.format("Autogenerated by %s", RestServiceSimpifiedRepresentationTest.class.getSimpleName()));
             table.setAttribute("cols", "a,a", true);
@@ -501,22 +492,22 @@ class RestServiceSimpifiedRepresentationTest {
             cell(table, headRow, "Action");
             cell(table, headRow, "Request and Response");
         }
-        
+
         private Row row;
         private StringBuilder requestAndResponseCellContent;
 
-        void next(String javaSource) {
-            
+        void next(final String javaSource) {
+
             row = row(table);
             cell(table, row, AsciiDocFactory.toString(doc->
                 AsciiDocFactory.SourceFactory.java(doc, javaSource, null)));
             requestAndResponseCellContent = new StringBuilder();
         }
-        
+
         @Override
-        public void onRequest(String endpoint, String method, String acceptHeaderParsing,
-                Map<String, List<String>> headers, String body) {
-            
+        public void onRequest(final String endpoint, final String method, final String acceptHeaderParsing,
+                final Map<String, List<String>> headers, final String body) {
+
             requestAndResponseCellContent.append("==== REQUEST\n\n");
             requestAndResponseCellContent.append(
                     AsciiDocFactory.toString(doc->
@@ -524,27 +515,27 @@ class RestServiceSimpifiedRepresentationTest {
         }
 
         @Override
-        public void onResponse(int httpReturnCode, Map<String, List<String>> headers, String body) {
+        public void onResponse(final int httpReturnCode, final Map<String, List<String>> headers, final String body) {
             val contentTypeHeaderStrings = Can.ofCollection(headers.get("Content-Type"));
             val reprType = RepresentationTypeSimplifiedV2.parseContentTypeHeaderString(
                     contentTypeHeaderStrings.getFirst().orElse(null))
                     .orElse(null);
-            
+
             requestAndResponseCellContent
             .append("\n==== RESPONSE\n\n")
-            .append(String.format("- HTTP return code: %d\n", httpReturnCode)) 
+            .append(String.format("- HTTP return code: %d\n", httpReturnCode))
             .append(String.format("- Representation Type: %s\n\n", reprType))
             .append(AsciiDocFactory.toString(doc->
                 AsciiDocFactory.SourceFactory.json(doc, body, null)));
-            
+
             cell(table, row, requestAndResponseCellContent.toString());
         }
-        
+
         @SneakyThrows
         public static String print() {
             return AsciiDocWriter.toString(doc);
         }
-        
+
     }
 
 

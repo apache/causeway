@@ -19,6 +19,7 @@
 package demoapp.dom.domain.actions.progmodel.depargs;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -31,9 +32,9 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@Named("demo.DependentArgsActionMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.DependentArgsActionMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(named="Associated Action")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)

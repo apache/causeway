@@ -18,37 +18,68 @@
  */
 package org.apache.isis.extensions.commandreplay.secondary.fetch;
 
-import java.net.URI;
+import java.util.Optional;
 
-import javax.ws.rs.core.UriBuilder;
-
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
-import org.apache.isis.applib.util.JaxbUtil;
-import org.apache.isis.extensions.jaxrsclient.applib.client.JaxRsClient;
-import org.apache.isis.extensions.jaxrsclient.applib.client.JaxRsResponse;
-import org.apache.isis.extensions.jaxrsclient.impl.client.JaxRsClientDefault;
-import org.apache.isis.schema.cmd.v2.CommandsDto;
+import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
+import org.apache.isis.extensions.commandreplay.secondary.status.StatusException;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import lombok.val;
 
+@SpringBootTest(
+        classes = {
+                CommandFetcher_Test.TestManifest.class
+        },
+        webEnvironment = SpringBootTest.WebEnvironment.NONE,
+        properties = {
+                // "isis.core.meta-model.introspector.parallelize=false",
+                // "logging.level.ObjectSpecificationAbstract=TRACE"
+        })
+@TestPropertySource({
+    IsisPresets.UseLog4j2Test,
+})
+//intended only for manual verification.
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+//@Log4j2
+class CommandFetcher_Test {
 
-public class CommandFetcher_Test {
+    @Configuration
+    static class TestManifest {
 
-    @Disabled // intended only for manual verification.
-    @Test
-    public void testing_the_unmarshalling() {
-        val jaxRsClient = new JaxRsClientDefault();
-        final UriBuilder uriBuilder = UriBuilder.fromUri(
-                        String.format(
-                        "%s%s?batchSize=%d",
-                        "http://localhost:8080/restful/", CommandFetcher.URL_SUFFIX, 10)
-        );
-        URI uri = uriBuilder.build();
-        JaxRsResponse invoke = jaxRsClient.get(uri, CommandsDto.class, JaxRsClient.ReprType.ACTION_RESULT, "sven", "pass");
-        CommandsDto entity = invoke.readEntity(CommandsDto.class);
-        System.out.println(JaxbUtil.toXml(entity));
     }
+
+    @Test
+    void testing_the_fetcher() throws StatusException {
+
+        // given
+        val mmc = MetaModelContext_forTesting.buildDefault();
+
+        val config = mmc.getConfiguration().getExtensions().getCommandReplay();
+        config.getPrimaryAccess().setUser(Optional.of("sven"));
+        config.getPrimaryAccess().setPassword(Optional.of("pass"));
+        config.getPrimaryAccess().setBaseUrlRestful(Optional.of("http://localhost:8080/restful/"));
+        config.getPrimaryAccess().setBaseUrlWicket(Optional.of("http://localhost:8080/wicket/"));
+        config.setBatchSize(10);
+
+        val secondaryConfig = new SecondaryConfig(mmc.getConfiguration());
+        val useRequestDebugLogging = true;
+        val fetcher = new CommandFetcher(secondaryConfig, useRequestDebugLogging);
+
+        // when
+        //log.info("about to call REST endpoint ...");
+        val commands = fetcher.callPrimary(null);
+        assertNotNull(commands);
+        System.out.println(commands);
+    }
+
+
 }

@@ -1,6 +1,0 @@
-
-
-
-* xref:outbox-publisher:about.adoc[Outbox Publisher]
-
-

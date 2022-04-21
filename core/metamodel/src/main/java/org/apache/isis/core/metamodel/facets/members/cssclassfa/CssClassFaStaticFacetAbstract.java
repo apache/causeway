@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -54,7 +54,7 @@ implements CssClassFaStaticFacet {
     private static final String DEFAULT_PRIMARY_PREFIX = "fa";
 
     @Getter(onMethod_ = {@Override})
-    private final _Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> specialization = _Either.left(this);
+    private final Either<CssClassFaStaticFacet, CssClassFaImperativeFacet> specialization = Either.left(this);
 
     @Getter(onMethod_ = {@Override}) private CssClassFaPosition position;
     private final List<String> cssClasses; // serializable list implementation

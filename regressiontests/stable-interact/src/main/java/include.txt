@@ -1,0 +1,1 @@
+existence of the src/main/java folder, even if empty, suppresses build [WARNING] JAR will be empty - no content was marked for inclusion

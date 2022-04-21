@@ -1,0 +1,115 @@
+= Railway _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The xref:refguide:commons:index/functional/Railway.adoc[Railway] type represents a value of one of two possible types (a disjoint union) of _Success_ or _Failure_ , where chaining follows the *Railway Pattern* , that is, once failed, stays failed.
+
+Factory methods _Railway#success(Object)_ and _Railway#failure(Object)_ correspond to the two possible values.
+
+== API
+
+[source,java]
+.Railway.java
+----
+interface Railway<F, S> {
+  Success<F, S> success(S success)
+  Failure<F, S> failure(F failure)
+  boolean isSuccess()
+  boolean isFailure()
+  Optional<S> getSuccess()     // <.>
+  S getSuccessElseFail()
+  S getSuccessElseFail(Function<F, ? extends Throwable> toThrowable)
+  Optional<F> getFailure()     // <.>
+  F getFailureElseFail()
+  Railway<F, S> ifSuccess(Consumer<S> successConsumer)     // <.>
+  Railway<F, S> ifFailure(Consumer<F> failureConsumer)     // <.>
+  Railway<F, R> mapSuccess(Function<S, R> successMapper)     // <.>
+  Railway<R, S> mapFailure(Function<F, R> failureMapper)     // <.>
+  R fold(Function<F, R> failureMapper, Function<S, R> successMapper)     // <.>
+  Railway<F, S> chain(Function<S, Railway<F, S>> chainingFunction)     // <.>
+}
+----
+
+<.> xref:#getSuccess__[getSuccess()]
++
+--
+Optionally returns the contained _value_ based on presence, that is, if this is a _Success_ .
+--
+<.> xref:#getFailure__[getFailure()]
++
+--
+Optionally returns the contained _failure_ based on presence, that is, if this is a _Failure_ .
+--
+<.> xref:#ifSuccess__Consumer[ifSuccess(Consumer)]
++
+--
+Peeks into the contained _success_ if this is a _Success_ .
+--
+<.> xref:#ifFailure__Consumer[ifFailure(Consumer)]
++
+--
+Peeks into the contained _failure_ if this is a _Failure_ .
+--
+<.> xref:#mapSuccess__Function[mapSuccess(Function)]
++
+--
+Maps this xref:refguide:commons:index/functional/Railway.adoc[Railway] to another if this is a _Success_ . Otherwise if this is a _Failure_ acts as identity operator.
+--
+<.> xref:#mapFailure__Function[mapFailure(Function)]
++
+--
+Maps this xref:refguide:commons:index/functional/Railway.adoc[Railway] to another if this is a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
+--
+<.> xref:#fold__Function_Function[fold(Function, Function)]
++
+--
+Maps the contained _success_ or _failure_ to a new value of type _R_ using according mapping function _successMapper_ or _failureMapper_ .
+--
+<.> xref:#chain__Function[chain(Function)]
++
+--
+ *Railway Pattern* If this is a _Success_ , returns a new xref:refguide:commons:index/functional/Railway.adoc[Railway] as produced by the chainingFunction, that receives the current success value as input. Otherwise if this is a _Failure_ acts as identity operator and the chainingFunction is not executed.
+--
+
+== Members
+
+[#getSuccess__]
+=== getSuccess()
+
+Optionally returns the contained _value_ based on presence, that is, if this is a _Success_ .
+
+[#getFailure__]
+=== getFailure()
+
+Optionally returns the contained _failure_ based on presence, that is, if this is a _Failure_ .
+
+[#ifSuccess__Consumer]
+=== ifSuccess(Consumer)
+
+Peeks into the contained _success_ if this is a _Success_ .
+
+[#ifFailure__Consumer]
+=== ifFailure(Consumer)
+
+Peeks into the contained _failure_ if this is a _Failure_ .
+
+[#mapSuccess__Function]
+=== mapSuccess(Function)
+
+Maps this xref:refguide:commons:index/functional/Railway.adoc[Railway] to another if this is a _Success_ . Otherwise if this is a _Failure_ acts as identity operator.
+
+[#mapFailure__Function]
+=== mapFailure(Function)
+
+Maps this xref:refguide:commons:index/functional/Railway.adoc[Railway] to another if this is a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
+
+[#fold__Function_Function]
+=== fold(Function, Function)
+
+Maps the contained _success_ or _failure_ to a new value of type _R_ using according mapping function _successMapper_ or _failureMapper_ .
+
+[#chain__Function]
+=== chain(Function)
+
+ *Railway Pattern* If this is a _Success_ , returns a new xref:refguide:commons:index/functional/Railway.adoc[Railway] as produced by the chainingFunction, that receives the current success value as input. Otherwise if this is a _Failure_ acts as identity operator and the chainingFunction is not executed.
+
+In other words: if once failed stays failed

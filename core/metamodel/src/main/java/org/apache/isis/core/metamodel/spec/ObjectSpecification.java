@@ -32,7 +32,6 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -59,7 +58,6 @@ import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionF
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
@@ -69,7 +67,6 @@ import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
@@ -352,7 +349,8 @@ extends
      * In effect, means has got {@link ValueFacet}.
      */
     default boolean isValue() {
-        return getBeanSort().isValue();
+        return getBeanSort().isValue()
+                || valueFacet().isPresent();
     }
 
     /**
@@ -559,7 +557,7 @@ extends
     }
 
     default String fqcn() {
-        return  getCorrespondingClass().getName();
+        return getCorrespondingClass().getName();
     }
 
     default Stream<ObjectSpecification> streamTypeHierarchy() {
@@ -570,21 +568,8 @@ extends
 
     // -- VALUE SEMANTICS SUPPORT
 
-    @SuppressWarnings("unchecked")
-    default Optional<Parser<?>> selectParser(final ObjectFeature objFeature) {
-        return lookupFacet(ValueFacet.class)
-                .flatMap(valueFacet->valueFacet.selectParserForFeature(objFeature));
-    }
-
-    default Parser<?> selectParserElseFallback(final ObjectFeature objFeature) {
-        return lookupFacet(ValueFacet.class)
-                .map(valueFacet->
-                        valueFacet.selectParserForFeatureElseFallback(objFeature))
-                .orElseGet(()->ValueFacetAbstract.fallbackParser(
-                        getLogicalType(),
-                        objFeature.getFeatureIdentifier()));
-    }
-
-
+    /** introduced for lookup optimization / allow memoization */
+    @SuppressWarnings("rawtypes")
+    Optional<ValueFacet> valueFacet();
 
 }

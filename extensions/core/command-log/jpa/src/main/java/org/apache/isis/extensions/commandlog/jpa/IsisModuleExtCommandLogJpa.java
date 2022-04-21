@@ -18,10 +18,13 @@
  */
 package org.apache.isis.extensions.commandlog.jpa;
 
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.subscriber.CommandSubscriberForCommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.ui.CommandLogServiceMenu;
 import org.apache.isis.extensions.commandlog.jpa.entities.CommandJpa;
 import org.apache.isis.extensions.commandlog.jpa.entities.CommandJpaRepository;
 
@@ -31,19 +34,20 @@ import org.apache.isis.extensions.commandlog.jpa.entities.CommandJpaRepository;
 @Configuration
 @Import({
         // @DomainService's
-        CommandJpaRepository.class
-//TODO        , CommandServiceMenu.class
+        CommandLogServiceMenu.class,
 
         // @Service's
-        , CommandJpa.TableColumnOrderDefault.class
+        CommandJpaRepository.class,
+        CommandLog.TableColumnOrderDefault.class,
+        CommandSubscriberForCommandLog.class,
 
         // entities
-        , CommandJpa.class
+        CommandJpa.class
+
 })
-@ComponentScan(
-        basePackageClasses= {
-                IsisModuleExtCommandLogJpa.class
-        })
+@EntityScan(basePackageClasses = {
+        CommandJpa.class,
+})
 public class IsisModuleExtCommandLogJpa {
 
     public static final String NAMESPACE = "isis.ext.commandLog";

@@ -19,6 +19,7 @@
 package demoapp.dom.domain.objects.DomainObject;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -35,9 +36,9 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObje
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.StatefulVmJaxbRefsEntity;
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.usingjaxb.StatefulVmUsingJaxb;
 
+@Named("demo.DomainObjectMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.DomainObjectMenu"
+        nature=NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

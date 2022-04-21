@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import org.apache.wicket.markup.html.form.TextField;
 
-import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
@@ -41,9 +41,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     }
 
     protected int getDateRenderAdjustDays() {
-        return scalarModel().lookupFacet(DateRenderAdjustFacet.class)
-            .map(DateRenderAdjustFacet::getDateRenderAdjustDays)
-            .orElse(0);
+        return Facets.dateRenderAdjustDays(scalarModel().getMetaModel());
     }
 
     @Override

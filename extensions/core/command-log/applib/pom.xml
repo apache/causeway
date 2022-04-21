@@ -65,6 +65,11 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtimeservices</artifactId>
         </dependency>
+        
+		<dependency>
+		    <groupId>org.datanucleus</groupId>
+		    <artifactId>javax.jdo</artifactId>
+		</dependency>
 
         <!-- Testing -->
 

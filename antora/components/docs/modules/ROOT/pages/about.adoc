@@ -93,10 +93,6 @@ _For Use in Apps_
 *  xref:subdomains:ROOT:about.adoc[Subdomain Libraries]
 *  xref:valuetypes:ROOT:about.adoc[Value Type Catalog]
 
-_Integrate between Apps_
-
-*  xref:mappings:ROOT:about.adoc[Bounded Context Mapping Libraries]
-
 _Extending the framework itself_
 
 *  xref:extensions:ROOT:about.adoc[Extensions Catalog]

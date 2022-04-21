@@ -18,6 +18,8 @@
  */
 package demoapp.dom.domain.actions.ActionLayout;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -26,7 +28,8 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.ActionLayoutMenu")
+@DomainService(nature=NatureOfService.VIEW)
+@Named("demo.ActionLayoutMenu")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 //@Log4j2
 public class ActionLayoutMenu {

@@ -24,13 +24,9 @@ import java.util.function.Consumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedFeature;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
@@ -39,6 +35,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
 
 import lombok.NonNull;
@@ -119,19 +116,9 @@ public interface UiComponentFactory<B, C> {
 
         public boolean hasFacetForValueType(final @Nullable Class<?> valueType) {
             return valueType!=null
-                    ? getFeatureTypeSpec().lookupFacet(ValueFacet.class)
-                            .map(ValueFacet::getLogicalType)
-                            .map(LogicalType::getCorrespondingClass)
-                            .map(valueType::equals)
-                            .orElse(false)
+                    ? Facets.valueTypeMatches(valueType::equals)
+                            .test(getFeatureTypeSpec())
                     : false;
-        }
-
-        public <T extends Facet> boolean hasFeatureTypeFacetAnyOf(
-                final @NonNull Can<Class<? extends Facet>> facetTypes) {
-            return facetTypes.stream()
-                    .map(getFeatureTypeSpec()::getFacet)
-                    .anyMatch(_NullSafe::isPresent);
         }
 
         //TODO are there ever parameters that might render readonly?

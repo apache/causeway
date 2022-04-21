@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -182,7 +182,7 @@ implements MemberExecutorService {
             executionPublisher.get().publishActionInvocation(priorExecution);
         }
 
-        val result = filteredIfRequired(method, returnedAdapter, interactionInitiatedBy);
+        val result = resultFilteredHonoringVisibility(method, returnedAdapter, interactionInitiatedBy);
         _Xray.exitInvocation(xrayHandle);
         return result;
     }
@@ -279,7 +279,7 @@ implements MemberExecutorService {
         if(entityState.isAttached()) {
             resultAdapter.getBookmark()
             .ifPresent(bookmark->
-                command.updater().setResult(Result.success(bookmark))
+                command.updater().setResult(Try.success(bookmark))
             );
         } else {
             if(entityState.isPersistable()) {
@@ -292,7 +292,7 @@ implements MemberExecutorService {
 
     }
 
-    private ManagedObject filteredIfRequired(
+    private ManagedObject resultFilteredHonoringVisibility(
             final Method method,
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -301,14 +301,12 @@ implements MemberExecutorService {
             return resultAdapter;
         }
 
-        val isFilterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
-        if (!isFilterForVisibility
+        if (!getConfiguration().getCore().getMetaModel().isFilterVisibility()
                 || resultAdapter instanceof PackedManagedObject) {
             return resultAdapter;
         }
 
-        val isVisible = ManagedObjects.VisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy);
-        return isVisible
+        return ManagedObjects.VisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy)
                 ? resultAdapter
                 : null;
     }

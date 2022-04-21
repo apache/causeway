@@ -19,6 +19,8 @@
  */
 package demoapp.dom.types.javasql;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -30,9 +32,9 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import demoapp.dom.types.javasql.javasqldate.JavaSqlDates;
 import demoapp.dom.types.javasql.javasqltimestamp.JavaSqlTimestamps;
 
+@Named("demo.JavaSqlTypesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.JavaSqlTypesMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="JavaSqlTypes"

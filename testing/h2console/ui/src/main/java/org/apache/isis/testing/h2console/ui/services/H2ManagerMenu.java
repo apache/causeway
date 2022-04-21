@@ -19,6 +19,7 @@
 package org.apache.isis.testing.h2console.ui.services;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -38,17 +39,15 @@ import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
  * @since 2.0 {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = H2ManagerMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
+@Named(IsisModuleTestingH2ConsoleUi.NAMESPACE + ".H2ManagerMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class H2ManagerMenu {
-
-    public static final String LOGICAL_TYPE_NAME = IsisModuleTestingH2ConsoleUi.NAMESPACE + ".H2ManagerMenu";
 
     private final WebModuleH2Console webModule;
 

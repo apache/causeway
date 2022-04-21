@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.hsqldbmgr.dom.services;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.hsqldb.util.DatabaseManagerSwing;
 
@@ -43,9 +44,9 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = HsqlDbManagerMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
+@Named(IsisModuleExtHsqldbMgr.NAMESPACE + ".HsqlDbManagerMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
@@ -54,12 +55,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class HsqlDbManagerMenu {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtHsqldbMgr.NAMESPACE + ".HsqlDbManagerMenu";
-
     private final String url;
 
     @Inject
-    public HsqlDbManagerMenu(DataSourceIntrospectionService datasourceIntrospector) {
+    public HsqlDbManagerMenu(final DataSourceIntrospectionService datasourceIntrospector) {
         this.url = datasourceIntrospector.getDataSourceInfos()
         .stream()
         .map(DataSourceInfo::getJdbcUrl)

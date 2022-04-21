@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.javanet;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -28,9 +30,9 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom.types.javanet.urls.JavaNetUrls;
 
+@Named("demo.JavaNetTypesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.JavaNetTypesMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="JavaNetTypes"

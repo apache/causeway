@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.services.exceprecog.ExceptionRecognizerFor
 import org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault;
 import org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb;
 import org.apache.isis.core.metamodel.services.grid.GridServiceDefault;
-import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBootstrap;
+import org.apache.isis.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
 import org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.isis.core.metamodel.services.metamodel.MetaModelServiceDefault;
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;

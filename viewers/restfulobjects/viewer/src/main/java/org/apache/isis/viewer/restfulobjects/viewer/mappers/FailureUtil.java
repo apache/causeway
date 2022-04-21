@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.mappers;
 import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
@@ -40,7 +40,7 @@ final class FailureUtil {
             .streamMethodsMatchingSignature(MethodFinder.NO_ARG)
             .findFirst()
             .map(errorCodeGetter->_Reflect.invokeMethodOn(errorCodeGetter, ex))
-            .map(Result::getValue)
+            .map(Try::getValue)
             .map(Optional::stream)
             .map(Integer.class::isInstance)
             .map(Integer.class::cast)

@@ -109,6 +109,9 @@ content:
       branches: HEAD
 
     - url: .
+      start_path: extensions/applib/excel/adoc # extensions
+      branches: HEAD
+    - url: .
       start_path: extensions/core/command-log/adoc # extensions
       branches: HEAD
     - url: .
@@ -167,26 +170,6 @@ content:
       start_path: incubator/viewers/vaadin/adoc # incubator
       branches: HEAD
 
-# mappings
-    - url: .
-      start_path: mappings/adoc # mappings
-      branches: HEAD
-    - url: .
-      start_path: mappings/jaxrsclient/adoc # mappings
-      branches: HEAD
-    - url: .
-      start_path: mappings/minio/adoc # mappings
-      branches: HEAD
-    - url: .
-      start_path: mappings/outbox-publisher/adoc # mappings
-      branches: HEAD
-    - url: .
-      start_path: mappings/restclient/adoc # mappings
-      branches: HEAD
-    - url: .
-      start_path: mappings/slack/adoc # mappings
-      branches: HEAD
-
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # starters
@@ -222,40 +205,6 @@ content:
       start_path: starters/adoc # toc
       branches: HEAD
 
-# subdomains
-    - url: .
-      start_path: subdomains/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/base/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/docx/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/excel/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/freemarker/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/ognl/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/pdfbox/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/settings/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/spring/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/xdocreport/adoc # subdomains
-      branches: HEAD
-    - url: .
-      start_path: subdomains/zip/adoc # subdomains
-      branches: HEAD
 
 # testing
     - url: .

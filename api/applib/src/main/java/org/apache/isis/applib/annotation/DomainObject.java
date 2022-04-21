@@ -24,6 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.inject.Named;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -184,7 +186,7 @@ public @interface DomainObject {
      * Otherwise, if not specified, the fully qualified class name is used instead.
      * </p>
      *
-     * @see DomainService#logicalTypeName()
+     * @see Named
      */
     String logicalTypeName()
             default "";

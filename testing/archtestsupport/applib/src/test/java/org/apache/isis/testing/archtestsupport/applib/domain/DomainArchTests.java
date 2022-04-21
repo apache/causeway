@@ -31,7 +31,6 @@ import static org.apache.isis.testing.archtestsupport.applib.classrules.Architec
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureDomainRules.every_DomainObject_must_also_be_annotated_with_DomainObjectLayout;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureDomainRules.every_DomainObject_must_specify_logicalTypeName;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureDomainRules.every_DomainService_must_also_be_annotated_with_DomainServiceLayout;
-import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureDomainRules.every_DomainService_must_specify_logicalTypeName;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureDomainRules.every_Property_mixin_must_follow_naming_convention;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureDomainRules.every_Repository_must_follow_naming_conventions;
 import static org.apache.isis.testing.archtestsupport.applib.classrules.ArchitectureDomainRules.every_class_named_Controller_must_be_annotated_correctly;
@@ -59,9 +58,10 @@ public class DomainArchTests {
   public static ArchRule every_DomainService_must_also_be_annotated_with_DomainServiceLayout =
       every_DomainService_must_also_be_annotated_with_DomainServiceLayout();
 
-  @ArchTest
-  public static ArchRule every_DomainService_must_specify_logicalTypeName =
-      every_DomainService_must_specify_logicalTypeName();
+//Spring takes care of naming Beans it manages!
+//  @ArchTest
+//  public static ArchRule every_DomainService_must_specify_logicalTypeName =
+//      every_DomainService_must_specify_logicalTypeName();
 
   @ArchTest
   public static ArchRule every_Repository_must_be_follow_naming_conventions =

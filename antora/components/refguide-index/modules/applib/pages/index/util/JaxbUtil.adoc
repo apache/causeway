@@ -11,9 +11,9 @@ For example usage, seeIsis addons' publishmq module(non-ASF)
 .JaxbUtil.java
 ----
 class JaxbUtil {
-  Result<T> fromXml(Reader reader, Class<T> dtoClass)
-  Result<T> fromXml(Class<?> contextClass, String resourceName, Class<T> dtoClass)
-  Result<String> toXml(Object dto)
+  Try<T> fromXml(Reader reader, Class<T> dtoClass)
+  Try<T> fromXml(Class<?> contextClass, String resourceName, Class<T> dtoClass)
+  Try<String> toXml(Object dto)
   void toXml(T dto, Writer writer)
   JAXBContext jaxbContextFor(Class<?> dtoClass)
 }

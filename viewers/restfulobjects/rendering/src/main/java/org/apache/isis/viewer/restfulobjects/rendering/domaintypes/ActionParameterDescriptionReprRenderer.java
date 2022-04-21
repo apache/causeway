@@ -19,10 +19,10 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -101,9 +101,9 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
                 .orElseThrow(_Exceptions::unexpectedCodeReach));
         representation.mapPut("number", getObjectFeature().getParameterIndex());
         representation.mapPut("optional", getObjectFeature().isOptional());
-        getObjectFeature()
-            .lookupNonFallbackFacet(MaxLengthFacet.class)
-            .ifPresent(maxLengthFacet->representation.mapPut("maxLength", maxLengthFacet.value()));
+
+        Facets.maxLength(getObjectFeature())
+            .ifPresent(maxLength->representation.mapPut("maxLength", maxLength));
     }
 
     @Override

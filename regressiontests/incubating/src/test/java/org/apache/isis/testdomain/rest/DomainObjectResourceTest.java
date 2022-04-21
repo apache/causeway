@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
+import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -100,7 +100,7 @@ class DomainObjectResourceTest {
 
         val resourceContext = domainObjectResourceServerside.resourceContextForTesting(layoutResourceDescriptor, /*params*/null);
 
-        val grid = (BS3Grid) spec.getFacet(GridFacet.class).getGrid(objectAdapter);
+        val grid = (BSGrid) spec.getFacet(GridFacet.class).getGrid(objectAdapter);
 
         DomainObjectResourceServerside.addLinks(resourceContext, domainType, instanceId, grid);
 
@@ -136,7 +136,7 @@ class DomainObjectResourceTest {
 
         val resourceContext = domainObjectResourceServerside.resourceContextForTesting(layoutResourceDescriptor, /*params*/null);
 
-        val grid = (BS3Grid) spec.getFacet(GridFacet.class).getGrid(objectAdapter);
+        val grid = (BSGrid) spec.getFacet(GridFacet.class).getGrid(objectAdapter);
 
         DomainObjectResourceServerside.addLinks(resourceContext, domainType, instanceId, grid);
 

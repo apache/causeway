@@ -9,6 +9,7 @@
 interface NamedWithMimeType {
   String getName()
   MimeType getMimeType()
+  int compareTo(NamedWithMimeType o)
 }
 ----
 

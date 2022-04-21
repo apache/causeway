@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStack;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
@@ -164,7 +164,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
             }
             @Override
             public EntityFacet createEntityFacet(final FacetHolder facetHolder) {
-                return EntityFacet.forTesting(PersistenceStandard.JDO, facetHolder);
+                return EntityFacet.forTesting(PersistenceStack.JDO, facetHolder);
             }
         };
     }

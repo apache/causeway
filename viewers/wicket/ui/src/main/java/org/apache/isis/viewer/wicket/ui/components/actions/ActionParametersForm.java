@@ -28,8 +28,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -196,8 +196,8 @@ extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    protected _Either<ActionModel, ScalarPropertyModel> getMemberModel() {
-        return _Either.left(actionModel());
+    protected Either<ActionModel, ScalarPropertyModel> getMemberModel() {
+        return Either.left(actionModel());
     }
 
 }

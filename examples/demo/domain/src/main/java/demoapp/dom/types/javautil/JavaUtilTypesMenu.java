@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.javautil;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -29,9 +31,9 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import demoapp.dom.types.javautil.javautildate.JavaUtilDates;
 import demoapp.dom.types.javautil.uuids.JavaUtilUuids;
 
+@Named("demo.JavaUtilTypesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.JavaUtilTypesMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
         named="JavaUtilTypes"

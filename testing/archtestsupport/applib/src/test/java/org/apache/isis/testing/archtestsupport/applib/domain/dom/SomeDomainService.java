@@ -18,10 +18,13 @@
  */
 package org.apache.isis.testing.archtestsupport.applib.domain.dom;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 
-@DomainService(logicalTypeName = "foo2")
+@DomainService()
+@Named("foo2")
 @DomainServiceLayout()
 public class SomeDomainService {
 

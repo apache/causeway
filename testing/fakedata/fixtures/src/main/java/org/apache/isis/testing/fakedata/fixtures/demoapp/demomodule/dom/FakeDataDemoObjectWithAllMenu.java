@@ -21,6 +21,7 @@ package org.apache.isis.testing.fakedata.fixtures.demoapp.demomodule.dom;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -35,9 +36,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import lombok.val;
 
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = "libFakeDataFixture.FakeDataDemoObjectWithAllMenu"
+        nature = NatureOfService.VIEW
 )
+@Named("libFakeDataFixture.FakeDataDemoObjectWithAllMenu")
 @DomainServiceLayout(
         named = "Demo"
 )

@@ -70,8 +70,7 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
         // Util_H2Console.main(null);
     }
 
-    @Inject
-    ConfigurableBeanFactory configurableBeanFactory;
+    @Inject ConfigurableBeanFactory configurableBeanFactory;
 
     @Test @Order(1)
     void sampleInventory_shouldBeSetUpWith3Books() {

@@ -22,6 +22,7 @@ import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -32,19 +33,17 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.cors.impl.IsisModuleExtCors;
-import org.apache.isis.extensions.restclient.ResponseDigest;
-import org.apache.isis.extensions.restclient.log.ClientConversationFilter;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.rospec.Configuration_usingRoSpec;
 import org.apache.isis.testdomain.rospec.RoSpecSampler;
 import org.apache.isis.testdomain.util.rest.RestEndpointService;
+import org.apache.isis.viewer.restfulobjects.client.log.ClientConversationFilter;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 
 import lombok.val;
@@ -106,7 +105,7 @@ class CorsFilterTest {
 
     // -- HELPER
 
-    <T> ResponseDigest<T> digestUsingPost(
+    <T> Try<T> digestUsingPost(
             final String actionName,
             final Class<T> entityType,
             final UnaryOperator<javax.ws.rs.client.Invocation.Builder> onRequestBuilder) {
@@ -130,7 +129,7 @@ class CorsFilterTest {
 
     }
 
-    <T> ResponseDigest<T> digestUsingGet(
+    <T> Try<T> digestUsingGet(
             final String actionName,
             final Class<T> entityType,
             final UnaryOperator<javax.ws.rs.client.Invocation.Builder> onRequestBuilder) {
@@ -159,17 +158,15 @@ class CorsFilterTest {
         return "http://localhost";
     }
 
-    private void assertHttpResponse200(final ResponseDigest<String> digest) {
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
-        }
-        val returnValue = digest.getEntities().getSingletonOrFail();
+    private void assertHttpResponse200(final Try<String> digest) {
+        digest.ifFailure(Assertions::fail);
+        val returnValue = digest.getValue().orElseThrow();
         assertEquals(refSampler.string(), returnValue);
     }
 
-    private void assertHttpResponse403(final ResponseDigest<String> digest) {
-        assertNotNull(digest.getFailureCause(), "request was expected to fail, but succeeded");
-        assertTrue(digest.getFailureCause().getMessage().contains("403"));
+    private void assertHttpResponse403(final Try<String> digest) {
+        assertTrue(digest.getFailure().isPresent(), "request was expected to fail, but succeeded");
+        assertTrue(digest.getFailure().get().getMessage().contains("403"));
     }
 
 }

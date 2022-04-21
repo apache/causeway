@@ -19,19 +19,15 @@
 package org.apache.isis.testdomain.persistence.jpa.entitylifecycle;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +43,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.entities.JpaEntityNonGeneratedStringId;
+import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;
 
@@ -59,23 +56,12 @@ import lombok.val;
 @Transactional
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext
+//@DirtiesContext
 class JpaNonGeneratedStringIdEntityLifecycleTest {
 
     @Inject private RepositoryService repository;
     @Inject private ObjectManager objectManager;
-
-    private static AtomicReference<ManagedObject> entityRef;
-
-    @BeforeAll
-    static void beforeAll() {
-        entityRef = new AtomicReference<>();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        entityRef = null;
-    }
+    @Inject private KVStoreForTesting kvStore;
 
     @Test @Order(0) @Commit
     void cleanup_justInCase() {
@@ -94,13 +80,13 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
                 EntityState.PERSISTABLE_DETACHED,
                 ManagedObjects.EntityUtil.getEntityState(entity));
 
-        entityRef.set(entity);
+        setEntityRef(entity);
     }
 
     @Test @Order(2) @Commit
     void attached_shouldBeProperlyDetected() {
 
-        val entity = entityRef.get();
+        val entity = getEntityRef();
 
         repository.persist(entity.getPojo());
 
@@ -117,9 +103,9 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         // expected post-condition (after persist, and having entered a new transaction)
         assertEquals(
                 EntityState.PERSISTABLE_DETACHED,
-                ManagedObjects.EntityUtil.getEntityState(entityRef.get()));
+                ManagedObjects.EntityUtil.getEntityState(getEntityRef()));
 
-        val id = ((JpaEntityNonGeneratedStringId)entityRef.get().getPojo()).getName();
+        val id = ((JpaEntityNonGeneratedStringId)getEntityRef().getPojo()).getName();
 
         val entity = objectManager.adapt(
                 repository.firstMatch(
@@ -137,22 +123,36 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         // expected post-condition (after removal)
         assertDetachedOrDeleted(entity);
 
-        entityRef.set(entity);
+        setEntityRef(entity);
     }
 
     @Test @Order(4) @Commit
     void postCondition_shouldBe_anEmptyRepository() {
 
-        val entity = entityRef.get();
+        val entity = getEntityRef();
 
         assertDetachedOrDeleted(entity);
         assertEquals(0, repository.allInstances(JpaEntityNonGeneratedStringId.class).size());
 
     }
 
+    @Test @Order(5)
+    void cleanup() {
+        kvStore.clear(this);
+    }
+
     // -- HELPER
 
-    public static void assertDetachedOrDeleted(final ManagedObject entity) {
+    void setEntityRef(final ManagedObject entity) {
+        kvStore.put(this, "entity", entity);
+    }
+
+    ManagedObject getEntityRef() {
+        val entity = (ManagedObject) kvStore.get(this, "entity").get();
+        return entity;
+    }
+
+    static void assertDetachedOrDeleted(final ManagedObject entity) {
         assertEquals(
                 EntityState.PERSISTABLE_DETACHED, // if undecidable we currently return PERSISTABLE_DETACHED;
                 ManagedObjects.EntityUtil.getEntityState(entity));

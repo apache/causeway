@@ -33,10 +33,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -45,6 +42,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.util.Facets;
 
 import lombok.val;
 
@@ -184,15 +182,12 @@ class Generation {
         // but this is now done by SpecificationLoader itself)
         for (final ObjectSpecification objectSpec : specificationLoader.snapshotSpecifications()) {
 
-            final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
-            if (domainServiceFacet != null) {
+            if(Facets.domainServiceIsPresent(objectSpec)
+                    || Facets.mixinIsPresent(objectSpec)) {
                 continue;
             }
-            final MixinFacet mixinFacet = objectSpec.getFacet(MixinFacet.class);
-            if (mixinFacet != null) {
-                continue;
-            }
-            if(visibility.isPublic() && !_Util.isVisibleForPublic(objectSpec)) {
+            if(visibility.isPublic()
+                    && !_Util.isVisibleForPublic(objectSpec)) {
                 continue;
             }
             if(objectSpec.isAbstract()) {
@@ -210,7 +205,8 @@ class Generation {
             final List<OneToManyAssociation> objectCollections = _Util.collectionsOf(objectSpec, visibility);
             final List<ObjectAction> objectActions = _Util.actionsOf(objectSpec, visibility, classExcluder);
 
-            if(objectProperties.isEmpty() && objectCollections.isEmpty()) {
+            if(objectProperties.isEmpty()
+                    && objectCollections.isEmpty()) {
                 continue;
             }
             final ModelImpl isisModel = appendObjectPathAndModelDefinitions(objectSpec);
@@ -638,16 +634,9 @@ class Generation {
     }
 
     Property actionReturnTypeFor(final ObjectAction objectAction) {
-
-        final ObjectSpecification specification = objectAction.getReturnType();
-        TypeOfFacet typeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-        if(typeOfFacet != null) {
-            ObjectSpecification elementSpec = typeOfFacet.valueSpec();
-            if(elementSpec != null) {
-                return arrayPropertyOf(elementSpec);
-            }
-        }
-        return modelFor(specification);
+        return objectAction.getReturnType().isNonScalar()
+                ? arrayPropertyOf(objectAction.getElementType())
+                : modelFor(objectAction.getReturnType());
     }
 
     private Property modelFor(final OneToManyAssociation collection) {
@@ -685,12 +674,9 @@ class Generation {
         }
 
         if(specification.isNonScalar()) {
-            TypeOfFacet typeOfFacet = specification.getFacet(TypeOfFacet.class);
-            if(typeOfFacet != null) {
-                ObjectSpecification elementSpec = typeOfFacet.valueSpec();
-                if(elementSpec != null) {
-                    return arrayPropertyOf(elementSpec);
-                }
+            val elementSpec = Facets.typeOf(specification).orElse(null);
+            if(elementSpec != null) {
+                return arrayPropertyOf(elementSpec);
             }
         }
 
@@ -773,7 +759,7 @@ class Generation {
     }
 
     static String logicalTypeNameFor(final ObjectSpecification objectSpec) {
-        return objectSpec.getFacet(LogicalTypeFacet.class).value();
+        return objectSpec.getLogicalTypeName();
     }
 
     static StringProperty stringProperty() {
@@ -781,7 +767,7 @@ class Generation {
     }
 
     static StringProperty stringPropertyEnum(final String... enumValues) {
-        StringProperty stringProperty = stringProperty();
+        final StringProperty stringProperty = stringProperty();
         stringProperty._enum(Arrays.asList(enumValues));
         if(enumValues.length >= 1) {
             stringProperty._default(enumValues[0]);

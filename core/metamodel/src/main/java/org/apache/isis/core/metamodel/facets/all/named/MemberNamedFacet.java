@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.all.named;
 
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticText;
@@ -27,7 +27,7 @@ public interface MemberNamedFacet
 extends
     Facet {
 
-    _Either<HasStaticText, HasImperativeText> getSpecialization();
+    Either<HasStaticText, HasImperativeText> getSpecialization();
 
     @Override
     default boolean isPopulateAllFacetRanks() {

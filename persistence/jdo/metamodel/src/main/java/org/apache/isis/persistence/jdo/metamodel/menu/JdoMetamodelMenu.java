@@ -42,19 +42,15 @@ import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@DomainService(
-        logicalTypeName = JdoMetamodelMenu.LOGICAL_TYPE_NAME
-)
+@Named(IsisModulePersistenceJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu")
+@DomainService()
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named = "Prototyping"
 )
-@Named(JdoMetamodelMenu.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class JdoMetamodelMenu {
-
-    public final static String LOGICAL_TYPE_NAME = IsisModulePersistenceJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu";
 
     final JdoSupportService jdoSupport;
     final JdoFacetContext jdoFacetContext;
@@ -102,7 +98,7 @@ public class JdoMetamodelMenu {
         return zipWriter.toBytes();
     }
 
-    private String zipEntryNameFor(TypeMetadata metadata) {
+    private String zipEntryNameFor(final TypeMetadata metadata) {
         return metadata.getName() + ".xml";
     }
 

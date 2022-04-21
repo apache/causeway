@@ -18,26 +18,38 @@
  */
 package org.apache.isis.applib.value.semantics;
 
+import java.io.Serializable;
+
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
+import org.apache.isis.commons.functional.Either.HasEither;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
-public final class ValueDecomposition extends _Either<ValueWithTypeDto, TypedTupleDto> {
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
+@RequiredArgsConstructor(access=AccessLevel.PROTECTED)
+@ToString @EqualsAndHashCode
+public final class ValueDecomposition
+implements
+    HasEither<ValueWithTypeDto, TypedTupleDto>,
+    Serializable {
     private static final long serialVersionUID = 1L;
 
     public static ValueDecomposition ofFundamental(final ValueWithTypeDto valueWithTypeDto) {
-        return new ValueDecomposition(valueWithTypeDto, null);
+        return new ValueDecomposition(Either.left(valueWithTypeDto));
     }
 
     public static ValueDecomposition ofComposite(final TypedTupleDto typedTupleDto) {
-        return new ValueDecomposition(null, typedTupleDto);
+        return new ValueDecomposition(Either.right(typedTupleDto));
     }
 
-    private ValueDecomposition(final ValueWithTypeDto left, final TypedTupleDto right) {
-        super(left, right);
-    }
+    @Getter private final Either<ValueWithTypeDto, TypedTupleDto> either;
 
     // used by RO-Viewer to render values
     public String toJson() {

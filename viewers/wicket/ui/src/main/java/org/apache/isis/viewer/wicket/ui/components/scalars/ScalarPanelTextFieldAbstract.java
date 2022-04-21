@@ -22,16 +22,11 @@ import java.util.Optional;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.validation.validator.StringValidator;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
@@ -111,8 +106,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     protected final FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
         formField = createTextField(id);
         formField.setOutputMarkupId(true);
-        setFormComponentAttributes(formField);
-        return formField;
+        return applyFormComponentAttributes(formField);
     }
 
     @Override
@@ -163,53 +157,13 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     // -- HELPER
 
-    private static Integer getMaxLengthOf(final ScalarModel model) {
-        return model.getScalarTypeSpec()
-                .lookupFacet(MaxLengthFacet.class)
-                .map(MaxLengthFacet::value)
-                .orElse(null);
-    }
-
-    private static Integer getTypicalLenghtOf(final ScalarModel model, final Integer maxLength) {
-        val typicalLength = model.getScalarTypeSpec()
-                .lookupFacet(TypicalLengthFacet.class)
-                .map(TypicalLengthFacet::value)
-                .orElse(null);
-        // doesn't make sense for typical length to be > maxLength
-        if(typicalLength != null
-                && maxLength != null
-                && typicalLength > maxLength) {
-            return maxLength;
-        }
-        return typicalLength;
-    }
-
-    private static Integer getNumberOfLinesOf(final ScalarModel model) {
-        return model.getScalarTypeSpec()
-                .lookupFacet(MultiLineFacet.class)
-                .map(MultiLineFacet::numberOfLines)
-                .orElse(null);
-    }
-
-    void setFormComponentAttributes(final FormComponent<?> formComponent) {
+    <F extends FormComponent<?>> F applyFormComponentAttributes(final F formComponent) {
         val scalarModel = scalarModel();
-
-        if(formComponent instanceof TextArea) {
-            Wkt.attributeReplace(formComponent, "rows", getNumberOfLinesOf(scalarModel));
-            // in conjunction with javascript in jquery.isis.wicket.viewer.js
-            // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
-            //Wkt.attributeReplace(textArea, "maxlength", getMaxLengthOf(scalarModel));
-        }
-
-        final Integer maxLength = getMaxLengthOf(scalarModel);
-        if(maxLength != null) {
-            Wkt.attributeReplace(formComponent, "maxlength", maxLength);
-            if(type.equals(String.class)) {
-                formComponent.add(StringValidator.maximumLength(maxLength));
-            }
-        }
-
-        Wkt.attributeReplace(formComponent, "size", getTypicalLenghtOf(scalarModel, maxLength));
+        Wkt.setFormComponentAttributes(formComponent,
+                scalarModel::multilineNumberOfLines,
+                scalarModel::maxLength,
+                scalarModel::typicalLength);
+        return formComponent;
     }
 
 }

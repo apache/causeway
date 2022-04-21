@@ -24,7 +24,7 @@ import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -48,7 +48,7 @@ implements
 
     private final Identifier featureIdentifier;
     private final ScalarRepresentation scalarRepresentation;
-    private transient _Either<OneToOneAssociation, ObjectActionParameter> propOrParam;
+    private transient Either<OneToOneAssociation, ObjectActionParameter> propOrParam;
     private transient IsisAppCommonContext commonContext;
 
     public ConverterBasedOnValueSemantics(
@@ -56,8 +56,8 @@ implements
             final @NonNull ScalarRepresentation scalarRepresentation) {
         this.scalarRepresentation = scalarRepresentation;
         this.propOrParam = propOrParam instanceof OneToOneAssociation // memoize
-                ? _Either.left((OneToOneAssociation)propOrParam)
-                : _Either.right((ObjectActionParameter)propOrParam);
+                ? Either.left((OneToOneAssociation)propOrParam)
+                : Either.right((ObjectActionParameter)propOrParam);
         this.featureIdentifier = propOrParam.getFeatureIdentifier();
     }
 
@@ -138,8 +138,8 @@ implements
         if(propOrParam==null) {
             val feature = getSpecificationLoader().loadFeature(featureIdentifier).orElse(null);
             this.propOrParam = (feature instanceof OneToOneAssociation)
-                    ? _Either.left((OneToOneAssociation)feature)
-                    : _Either.right(((ObjectActionParameter)feature));
+                    ? Either.left((OneToOneAssociation)feature)
+                    : Either.right(((ObjectActionParameter)feature));
         }
         return propOrParam.fold(
                 ObjectFeature.class::cast,
@@ -150,12 +150,12 @@ implements
     private ValueFacet<T> valueFacet() {
         val feature = feature();
         val valueFacet = feature.getElementType()
-                .lookupFacet(ValueFacet.class)
+                .valueFacet()
                 .orElseThrow(()->_Exceptions.noSuchElement(
                         "Value type Property or Parameter %s is missing a ValueFacet",
                         feature.getFeatureIdentifier()));
 
-        return valueFacet;
+        return (ValueFacet<T>) valueFacet;
     }
 
     // -- DEPENDENCIES

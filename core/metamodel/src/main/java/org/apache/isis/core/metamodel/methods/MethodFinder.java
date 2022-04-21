@@ -250,7 +250,7 @@ public class MethodFinder {
             final Class<? extends Annotation> annotationType,
             final Can<Class<? extends Annotation>> conflictingAnnotations) {
 
-        return _Reflect.isAccessible(method)
+        return _Reflect.isPublicNonSynthetic(method)
                 ? true
                 : havingAnnotation(method, annotationType, conflictingAnnotations);
     }

@@ -28,8 +28,8 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Either;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -123,7 +123,7 @@ public final class ManagedAction extends ManagedMember {
 
     // -- INTERACTION
 
-    public _Either<ManagedObject, InteractionVeto> invoke(
+    public Railway<InteractionVeto, ManagedObject> invoke(
             final @NonNull Can<ManagedObject> actionParameters,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -132,10 +132,10 @@ public final class ManagedAction extends ManagedMember {
                 // executions on value-types have no rule checking and trigger no domain events
                 .execute(interactionHead(), actionParameters, interactionInitiatedBy);
 
-        return _Either.left(route(actionResult));
+        return Railway.success(route(actionResult));
     }
 
-    public _Either<ManagedObject, InteractionVeto> invoke(
+    public Railway<InteractionVeto, ManagedObject> invoke(
             final @NonNull Can<ManagedObject> actionParameters) {
         return invoke(actionParameters, InteractionInitiatedBy.USER);
     }

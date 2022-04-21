@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -29,8 +28,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererException;
-
-import lombok.val;
 
 public class ScalarValueReprRenderer
 extends ReprRendererAbstract<ManagedObject> {
@@ -58,8 +55,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
     @Override
     public ScalarValueReprRenderer with(final ManagedObject objectAdapter) {
-        val valueFacet = objectAdapter.getSpecification().getFacet(ValueFacet.class);
-        if (valueFacet == null) {
+        if (!objectAdapter.getSpecification().isValue()) {
             throw ReprRendererException.create("Not an (encodable) value", objectAdapter.titleString());
         }
         String format = null; // TODO

@@ -48,7 +48,7 @@ import org.apache.isis.applib.annotation.ObjectLifecycle;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
@@ -440,7 +440,7 @@ public final class ProgrammingModelConstants {
             public <T> Optional<Constructor<T>> get(final Class<T> cls) {
                 // heap-pollution: only produces stack-traces when cls violates viewmodel contract,
                 // which is covered by mm validation
-                return Result.of(()->
+                return Try.call(()->
                         cls.getDeclaredConstructor(new Class<?>[]{String.class}))
                         .getValue();
             }

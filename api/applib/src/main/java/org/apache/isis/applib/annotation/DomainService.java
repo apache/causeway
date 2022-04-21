@@ -27,7 +27,6 @@ import java.lang.annotation.Target;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -74,12 +73,15 @@ public @interface DomainService {
      * This value, if specified, is used in the serialized form of the object's {@link Bookmark}.
      * A {@link Bookmark} is used by the framework to uniquely identify an object over time
      * (same concept as a URN).
-     * Otherwise, if not specified, the fully qualified class name is used instead.
+     * Otherwise, if not specified, the default Spring Bean name is used instead.
      * </p>
-     *
+     * @deprecated use Spring semantics instead, eg. {@link Named} or equivalent
      * @see DomainObject#logicalTypeName()
+     * @see Named
      */
-    @AliasFor(annotation = Named.class, attribute = "value")
+    @Deprecated(forRemoval = true, since = "2.0.0-RC1")
+    // commented out: let the IsisBeanFactoryPostProcessorForSpring take care of that!
+    //@AliasFor(annotation = Named.class, attribute = "value")
     String logicalTypeName()
             default "";
 

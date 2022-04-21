@@ -24,7 +24,7 @@ import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -56,7 +56,7 @@ implements
     }
 
     @Override
-    public final Result<String> text(final ManagedObject object) {
+    public final Try<String> text(final ManagedObject object) {
         return ManagedObjects.imperativeText(object, method, translationContext);
     }
 

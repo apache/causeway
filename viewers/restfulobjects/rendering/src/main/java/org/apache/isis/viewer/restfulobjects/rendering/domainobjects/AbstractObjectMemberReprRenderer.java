@@ -222,7 +222,7 @@ extends ReprRendererAbstract<ManagedMember> {
      * mutators}.
      */
     protected void addLinkFor(final @NonNull MutatorSpec mutatorSpec) {
-        if (!hasMemberFacet(mutatorSpec.mutatorFacetType)) {
+        if (!mutatorSpec.appliesTo(objectMember)) {
             return;
         }
         final JsonRepresentation arguments = mutatorArgs(mutatorSpec);
@@ -302,10 +302,6 @@ extends ReprRendererAbstract<ManagedMember> {
      */
     protected <F extends Facet> F getMemberSpecFacet(final Class<F> facetType) {
         return objectMember.getElementType().getFacet(facetType);
-    }
-
-    protected boolean hasMemberFacet(final Class<? extends Facet> facetType) {
-        return objectMember.getFacet(facetType) != null;
     }
 
     protected Consent usability() {

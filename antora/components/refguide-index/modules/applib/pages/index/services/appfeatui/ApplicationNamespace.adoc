@@ -10,6 +10,7 @@ class ApplicationNamespace {
   public static final String LOGICAL_TYPE_NAME;
   ApplicationNamespace()
   ApplicationNamespace(ApplicationFeatureId featureId)
+  ApplicationNamespace(String memento)
   List<ApplicationFeatureViewModel> getContents()
   boolean hideContents()
 }

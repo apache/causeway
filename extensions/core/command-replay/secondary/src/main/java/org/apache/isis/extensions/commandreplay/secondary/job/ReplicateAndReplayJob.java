@@ -28,9 +28,9 @@ import org.quartz.PersistJobDataAfterExecution;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands;
+import org.apache.isis.extensions.commandreplay.secondary.status.SecondaryStatus;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

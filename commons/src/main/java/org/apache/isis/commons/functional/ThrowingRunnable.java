@@ -44,7 +44,7 @@ public interface ThrowingRunnable {
         };
     }
 
-    static Result<Void> resultOf(final @NonNull ThrowingRunnable runnable) {
-        return Result.of(toCallable(runnable));
+    static Try<Void> resultOf(final @NonNull ThrowingRunnable runnable) {
+        return Try.run(runnable);
     }
 }

@@ -24,7 +24,7 @@
 	<description>
         Convenience aggregator POM that references all modules, some explicitely,
         others via profiles, that are not activiated per default.
-        The parent POM of the core framework is isis-parent/pom.xml.
+        The parent POM of the core framework is bom/pom.xml.
     </description>
 
     <properties>
@@ -61,17 +61,35 @@
                 also keep profiles in sync with the site documentation
                 https://github.com/apache/isis/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-isis.adoc
                     -->
+                <module>bom</module>
 				<module>core</module>
 				<module>extensions</module>
-				<module>isis-parent</module>
-				<module>mappings</module>
 				<module>mavendeps</module>
 				<module>starters</module>
-				<module>subdomains</module>
 				<module>testing</module>
 				<module>valuetypes</module>
 			</modules>
 
+		</profile>
+
+		<!-- RELEASED MODULES -->
+
+		<profile>
+			<id>released</id>
+			<activation>
+				<property>
+					<name>released</name>
+				</property>
+			</activation>
+			<modules>
+				<module>bom</module>
+				<module>core</module>
+				<module>extensions</module>
+				<module>mavendeps</module>
+				<module>starters</module>
+				<module>testing</module>
+				<module>valuetypes</module>
+			</modules>
 		</profile>
 
 		<!-- ALL MODULES -->
@@ -153,9 +171,10 @@
 				</property>
 			</activation>
 			<modules>
-				<module>examples/demo/javafx</module>
 				<!-- prerequisites ... -->
 				<module>incubator/viewers/javafx</module>
+
+				<module>examples/demo/javafx</module>
 			</modules>
 		</profile>
 
@@ -167,11 +186,14 @@
 				</property>
 			</activation>
 			<modules>
+				<!-- prerequisites ... -->
+				<module>examples/demo</module>
+				<module>examples/demo/domain</module>
+				<module>examples/demo/web</module>
+
 				<module>examples/demo/wicket/common</module>
 				<module>examples/demo/wicket/jdo</module>
 				<module>examples/demo/wicket/jpa</module>
-				<!-- prerequisites ... -->
-				<module>examples/demo/web</module>
 			</modules>
 		</profile>
 
@@ -184,12 +206,14 @@
 				</property>
 			</activation>
 			<modules>
-				<module>examples/demo/vaadin</module>
 				<!-- prerequisites ... -->
 				<module>incubator/viewers/vaadin</module>
+				<module>examples/demo/domain</module>
 				<module>examples/demo/web</module>
 				<module>examples/demo/wicket/common</module>
 				<module>examples/demo/wicket/jdo</module>
+
+				<module>examples/demo/vaadin</module>
 			</modules>
 		</profile>
 
@@ -253,9 +277,10 @@
 				</property>
 			</activation>
 			<modules>
-				<module>regressiontests</module>
 				<!-- prerequisites ... -->
 				<module>tooling</module>
+
+				<module>regressiontests</module>
 			</modules>
 		</profile>
 

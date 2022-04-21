@@ -41,11 +41,10 @@ import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
-
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 /**
  *  Adds inline prompt logic.
@@ -129,9 +128,11 @@ extends ScalarPanelAbstract {
             return PromptFragment.TEXTAREA
                     .createFragment(id, this, scalarValueId->{
                         val textArea = Wkt.textAreaNoTab(scalarValueId, this::obtainOutputFormat);
-                        if(this instanceof ScalarPanelTextFieldAbstract) {
-                            ((ScalarPanelTextFieldAbstract)this).setFormComponentAttributes(textArea);
-                        }
+                        val scalarModel = scalarModel();
+                        Wkt.setFormComponentAttributes(textArea,
+                                scalarModel::multilineNumberOfLines,
+                                scalarModel::maxLength,
+                                scalarModel::typicalLength);
                         return textArea;
                     });
         }

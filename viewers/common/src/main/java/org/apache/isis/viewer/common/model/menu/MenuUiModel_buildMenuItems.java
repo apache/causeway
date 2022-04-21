@@ -22,9 +22,9 @@ import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
-import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuSection;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenu;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBar;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuSection;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -40,7 +40,7 @@ final class MenuUiModel_buildMenuItems {
 
     public static void buildMenuItems(
             IsisAppCommonContext commonContext,
-            BS3MenuBar menuBar,
+            BSMenuBar menuBar,
             MenuVisitor menuBuilder) {
 
         val itemsPerSectionCounter = new LongAdder();
@@ -98,16 +98,16 @@ final class MenuUiModel_buildMenuItems {
         private final IsisAppCommonContext commonContext;
         private final MenuVisitor menuVisitor;
 
-        private BS3Menu currentTopLevel;
+        private BSMenu currentTopLevel;
         private boolean pushedCurrentTopLevel = false;
 
-        public void addTopLevel(BS3Menu menu) {
+        public void addTopLevel(BSMenu menu) {
             currentTopLevel = menu;
             pushedCurrentTopLevel = false;
         }
 
         public void addSubMenu(
-                @NonNull BS3MenuSection menuSection,
+                @NonNull BSMenuSection menuSection,
                 @NonNull ManagedAction managedAction,
                 boolean isFirstInSection,
                 ServiceActionLayoutData actionLayoutData) {
@@ -152,7 +152,7 @@ final class MenuUiModel_buildMenuItems {
      */
     private static MenuItemDto topLevelDto(
             final IsisAppCommonContext commonContext,
-            final BS3Menu menu) {
+            final BSMenu menu) {
 
         val menuItemIsUserProfile = _Strings.isNullOrEmpty(menu.getNamed()); // top level menu item name
 

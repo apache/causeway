@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.web.context.request.RequestContextHolder;
@@ -42,9 +43,9 @@ import org.apache.isis.testdomain.util.dto.BookDto;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@Named("testdomain.jdo.InventoryResource")
 @DomainService(
-        nature = NatureOfService.REST,
-        logicalTypeName = "testdomain.jdo.InventoryResource"
+        nature = NatureOfService.REST
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
@@ -64,9 +65,20 @@ public class JdoInventoryResource {
 
     @Action
     public JdoBook recommendedBookOfTheWeek() {
-        // for this test we do not care if we generate duplicates
-        val book = JdoBook.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
-        return repository.persist(book);
+        return repository.persist(
+                JdoBook.fromDto(recommendedBookOfTheWeekDto()));
+    }
+
+    @Action // REST stress test action
+    public BookDto recommendedBookOfTheWeekDto() {
+        return BookDto.builder()
+                .name("Book of the week")
+                .description("An awesome Book")
+                .price(12)
+                .author("Author")
+                .isbn("ISBN")
+                .publisher("Publisher")
+                .build();
     }
 
     @Action

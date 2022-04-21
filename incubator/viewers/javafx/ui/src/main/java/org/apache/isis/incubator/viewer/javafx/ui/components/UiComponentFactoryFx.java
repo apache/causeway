@@ -28,8 +28,8 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory;
 import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
@@ -112,9 +112,8 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
 
     @Override
     public LabelAndPosition<Node> labelFor(final ComponentRequest request) {
-        val labelPosition = request.getManagedFeature().getFacet(LabelAtFacet.class)
-                .map(LabelAtFacet::label)
-                .orElse(LabelPosition.NOT_SPECIFIED);
+        val labelPosition = Facets.labelAt(request.getManagedFeature().getMetaModel())
+                .orElse(LabelPosition.LEFT);
         val uiLabel = new Label(request.getFriendlyName());
         return LabelAndPosition.of(labelPosition, uiLabel);
     }

@@ -19,6 +19,8 @@
  */
 package demoapp.dom.types.isisext;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -31,9 +33,9 @@ import demoapp.dom.types.isisext.asciidocs.IsisAsciiDocs;
 import demoapp.dom.types.isisext.cal.IsisCalendarEvents;
 import demoapp.dom.types.isisext.markdowns.IsisMarkdowns;
 
+@Named("demo.IsisExtTypesMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "demo.IsisExtTypesMenu"
+        nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(named="IsisExtTypes")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)

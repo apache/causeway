@@ -61,11 +61,11 @@ public final class RestfulMediaType {
     public static final String APPLICATION_JSON_TYPE_ACTION_RESULT = JSON_BASE + "type-action-result" + DQ;
 
     private static final String XML_BASE = "application/xml" + ";profile=" + DQ + PROFILE_PARAM_PREFIX;
-    public static final String APPLICATION_XML_LAYOUT_BS3 = XML_BASE + "layout-bs3" + DQ;
-    public static final String APPLICATION_JSON_LAYOUT_BS3 = JSON_BASE + "layout-bs3" + DQ;
+    public static final String APPLICATION_XML_LAYOUT_BS = XML_BASE + "layout-bs" + DQ;
+    public static final String APPLICATION_JSON_LAYOUT_BS = JSON_BASE + "layout-bs" + DQ;
 
-    public static final String APPLICATION_XML_OBJECT_LAYOUT_BS3 = XML_BASE + "object-layout-bs3" + DQ;
-    public static final String APPLICATION_JSON_OBJECT_LAYOUT_BS3 = JSON_BASE + "object-layout-bs3" + DQ;
+    public static final String APPLICATION_XML_OBJECT_LAYOUT_BS = XML_BASE + "object-layout-bs" + DQ;
+    public static final String APPLICATION_JSON_OBJECT_LAYOUT_BS = JSON_BASE + "object-layout-bs" + DQ;
 
     public static final String APPLICATION_JSON_LAYOUT_MENUBARS = JSON_BASE + "layout-menubars" + DQ;
     public static final String APPLICATION_XML_LAYOUT_MENUBARS = XML_BASE + "layout-menubars" + DQ;

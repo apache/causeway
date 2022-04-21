@@ -107,8 +107,7 @@ public interface CollectionFacet extends Facet {
         if(container==null) {
             return Optional.empty();
         }
-        val collectionSpec = container.getSpecification();
-        return Optional.ofNullable(collectionSpec.getFacet(CollectionFacet.class));
+        return container.getSpecification().lookupFacet(CollectionFacet.class);
     }
 
     public static int elementCount(@Nullable final ManagedObject container) {

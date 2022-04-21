@@ -50,7 +50,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStack;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -87,8 +87,8 @@ implements EntityFacet {
     }
 
     @Override
-    public PersistenceStandard getPersistenceStandard() {
-        return PersistenceStandard.JDO;
+    public PersistenceStack getPersistenceStack() {
+        return PersistenceStack.JDO;
     }
 
     @Override
@@ -270,7 +270,7 @@ implements EntityFacet {
 
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.makePersistent(pojo))
-        .optionalElseFail();
+        .ifFailureFail();
 
         //TODO integrate with entity change tracking
     }
@@ -292,7 +292,7 @@ implements EntityFacet {
 
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.deletePersistent(pojo))
-        .optionalElseFail();
+        .ifFailureFail();
 
         //TODO integrate with entity change tracking
     }
@@ -312,7 +312,7 @@ implements EntityFacet {
 
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
-        .optionalElseFail();
+        .ifFailureFail();
 
         //TODO integrate with entity change tracking
     }
@@ -376,7 +376,7 @@ implements EntityFacet {
                 ()->_NullSafe.stream(fetcher.get())
                     .map(fetchedObject->adopt(entityChangeTracker, fetchedObject))
                     .collect(Can.toCan()))
-                .presentElseFail();
+                .getValue().orElseThrow();
     }
 
     private ManagedObject adopt(final EntityChangeTracker entityChangeTracker, final Object fetchedObject) {

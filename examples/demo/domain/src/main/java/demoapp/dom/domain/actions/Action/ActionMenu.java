@@ -19,6 +19,7 @@
 package demoapp.dom.domain.actions.Action;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -43,7 +44,8 @@ import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsVm;
 import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfVm;
 import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 
-@DomainService(nature=NatureOfService.VIEW, logicalTypeName = "demo.ActionMenu")
+@Named("demo.ActionMenu")
+@DomainService(nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {

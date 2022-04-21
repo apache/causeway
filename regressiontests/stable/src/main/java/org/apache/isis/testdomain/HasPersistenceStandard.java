@@ -19,11 +19,11 @@
 package org.apache.isis.testdomain;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStack;
 
 public interface HasPersistenceStandard {
 
-    PersistenceStandard getPersistenceStandard();
+    PersistenceStack getPersistenceStandard();
 
     default String formatPersistenceStandardSpecificLowerCase(final String format) {
         return String.format(

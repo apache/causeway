@@ -26,7 +26,7 @@ This is most easily done by rebuilding all:
 +
 [source,bash,subs="attributes+"]
 ----
-pushd isis-parent
+pushd bom
 mvn clean install -DskipTests -Dreleased
 popd
 ----

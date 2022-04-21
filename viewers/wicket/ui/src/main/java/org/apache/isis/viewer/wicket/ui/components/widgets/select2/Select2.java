@@ -32,7 +32,7 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -55,19 +55,19 @@ implements
 
     private static final long serialVersionUID = 1L;
 
-    final _Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice;
+    final Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice;
 
     public static Select2 createSelect2(final String id, final ScalarModel scalarModel) {
         return new Select2(!scalarModel.isCollection()
-                ? _Either.left(
+                ? Either.left(
                         Select2ChoiceExt.create(id,
                                 ScalarModelWithSingleChoice.chain(scalarModel), scalarModel))
-                : _Either.right(
+                : Either.right(
                         Select2MultiChoiceExt.create(id,
                                 ScalarModelWithMultiChoice.chain(scalarModel), scalarModel)));
     }
 
-    private Select2(final @NonNull _Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice) {
+    private Select2(final @NonNull Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice) {
         this.select2Choice = select2Choice;
         asComponent().setOutputMarkupId(true);
     }

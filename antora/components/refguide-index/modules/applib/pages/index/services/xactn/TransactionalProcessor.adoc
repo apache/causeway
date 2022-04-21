@@ -9,12 +9,12 @@ Provides the mechanism to run a block of code within a transaction boundary, usi
 .TransactionalProcessor.java
 ----
 interface TransactionalProcessor {
-  Result<T> callTransactional(TransactionDefinition def, Callable<T> callable)     // <.>
-  Result<Void> runTransactional(TransactionDefinition def, ThrowingRunnable runnable)     // <.>
-  Result<T> callTransactional(Propagation propagation, Callable<T> callable)     // <.>
-  Result<Void> runTransactional(Propagation propagation, ThrowingRunnable runnable)     // <.>
-  Result<T> callWithinCurrentTransactionElseCreateNew(Callable<T> callable)     // <.>
-  Result<Void> runWithinCurrentTransactionElseCreateNew(ThrowingRunnable runnable)     // <.>
+  Try<T> callTransactional(TransactionDefinition def, Callable<T> callable)     // <.>
+  Try<Void> runTransactional(TransactionDefinition def, ThrowingRunnable runnable)     // <.>
+  Try<T> callTransactional(Propagation propagation, Callable<T> callable)     // <.>
+  Try<Void> runTransactional(Propagation propagation, ThrowingRunnable runnable)     // <.>
+  Try<T> callWithinCurrentTransactionElseCreateNew(Callable<T> callable)     // <.>
+  Try<Void> runWithinCurrentTransactionElseCreateNew(ThrowingRunnable runnable)     // <.>
 }
 ----
 

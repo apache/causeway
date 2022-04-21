@@ -150,7 +150,7 @@ public class ValueSemanticsTester<T> {
     public static String valueDtoToXml(final ValueWithTypeDto valueWithTypeDto) {
         val xmlResult = _Xml.writeXml(valueWithTypeDto,
                 WriteOptions.builder().allowMissingRootElement(true).useContextCache(true).build());
-        val rawXml = xmlResult.presentElseFail();
+        val rawXml = xmlResult.getValue().orElseThrow();
         val xmlRef = _Refs.stringRef(rawXml);
         xmlRef.cutAtIndexOf("<ValueWithTypeDto");
         return xmlRef.cutAtLastIndexOf("</ValueWithTypeDto>")

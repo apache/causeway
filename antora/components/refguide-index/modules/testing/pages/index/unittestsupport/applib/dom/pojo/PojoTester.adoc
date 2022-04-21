@@ -17,6 +17,7 @@ class PojoTester {
   PojoTester usingData(Class<T> c, T... data)     // <.>
   PojoTester usingData(Class<T> c, List<T> data)
   PojoTester usingData(Class<T> compileTimeType, Class<? extends T> runtimeType)     // <.>
+  PojoTester usingData(Class<T> compileTimeType)     // <.>
   void exercise(Object bean)     // <.>
   void exercise(Object bean, FilterSet filterSet)     // <.>
 }
@@ -41,6 +42,11 @@ Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:in
 +
 --
 Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] for the specified compile time type, with the runtime type providing a no-arg constructor so that instances can be generated as required.
+--
+<.> xref:#usingData__Class[usingData(Class)]
++
+--
+Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] for the specified compile time type, also instantiatable as the runtime type (with a no-arg constructor).
 --
 <.> xref:#exercise__Object[exercise(Object)]
 +
@@ -80,6 +86,11 @@ There should be at least two and ideally three different data instances.
 === usingData(Class, Class)
 
 Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] for the specified compile time type, with the runtime type providing a no-arg constructor so that instances can be generated as required.
+
+[#usingData__Class]
+=== usingData(Class)
+
+Convenience overload to provide a _DatumFactory_ to the xref:refguide:testing:index/unittestsupport/applib/dom/pojo/PojoTester.adoc[PojoTester] for the specified compile time type, also instantiatable as the runtime type (with a no-arg constructor).
 
 [#exercise__Object]
 === exercise(Object)

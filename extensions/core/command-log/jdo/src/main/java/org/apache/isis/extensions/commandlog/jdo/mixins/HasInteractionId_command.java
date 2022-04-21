@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
 
@@ -50,7 +50,7 @@ import lombok.RequiredArgsConstructor;
 public class HasInteractionId_command {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtCommandLogJdo.ActionDomainEvent<HasInteractionId_command> { }
+            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<HasInteractionId_command> { }
 
     private final HasInteractionId hasInteractionId;
 

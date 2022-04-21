@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
@@ -43,17 +44,18 @@ import org.apache.isis.commons.internal.collections._Lists;
  * @since 2.x  {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = ApplicationFeatureMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
+@Named(ApplicationFeatureMenu.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class ApplicationFeatureMenu {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureMenu";
+    public static final String LOGICAL_TYPE_NAME =
+            IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureMenu";
 
     public static abstract class PropertyDomainEvent<T>
     extends IsisModuleApplib.PropertyDomainEvent<ApplicationFeatureMenu, T> {}

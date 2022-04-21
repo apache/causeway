@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -92,11 +92,11 @@ public interface ObjectFeature extends Specification {
      * @see #getCanonicalFriendlyName()
      * @since 2.0
      */
-    default _Either<String, String> getStaticOrCanonicalFriendlyName() {
+    default Either<String, String> getStaticOrCanonicalFriendlyName() {
         val staticFriendlyName = getStaticFriendlyName();
         return staticFriendlyName.isPresent()
-                ? _Either.left(staticFriendlyName.get())
-                : _Either.right(getCanonicalFriendlyName());
+                ? Either.left(staticFriendlyName.get())
+                : Either.right(getCanonicalFriendlyName());
     }
 
     /**
@@ -138,12 +138,12 @@ public interface ObjectFeature extends Specification {
      * @see #getCanonicalDescription()
      * @since 2.0
      */
-    default Optional<_Either<String, String>> getStaticOrCanonicalDescription() {
+    default Optional<Either<String, String>> getStaticOrCanonicalDescription() {
         val staticDescription = getStaticDescription();
         return staticDescription.isPresent()
-                ? Optional.of(_Either.left(staticDescription.get()))
+                ? Optional.of(Either.left(staticDescription.get()))
                 : getCanonicalDescription()
-                    .map(_Either::right);
+                    .map(Either::right);
     }
 
     /**

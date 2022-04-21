@@ -19,16 +19,14 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -66,9 +64,15 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         renderMemberContent();
 
         final LinkFollowSpecs followValue = getLinkFollowSpecs().follow("value");
-        boolean eagerlyRender = resourceContext.honorUiHints() && renderEagerly() || !followValue.isTerminated();
+        final boolean eagerlyRender = !followValue.isTerminated()
+                || (resourceContext.honorUiHints()
+                        && Facets.defaultViewIsTable(objectMember));
 
-        if ((mode.isInline() && eagerlyRender) || mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !ManagedObjects.isIdentifiable(objectAdapter)) {
+        if ((mode.isInline() && eagerlyRender)
+                || mode.isStandalone()
+                || mode.isMutated()
+                || mode.isEventSerialization()
+                || !ManagedObjects.isIdentifiable(objectAdapter)) {
             addValue(followValue);
         }
         if(!mode.isEventSerialization()) {
@@ -82,11 +86,6 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         return representation;
     }
 
-    private boolean renderEagerly() {
-        final DefaultViewFacet defaultViewFacet = objectMember.getFacet(DefaultViewFacet.class);
-        return defaultViewFacet != null && Objects.equals(defaultViewFacet.value(), "table");
-    }
-
     // ///////////////////////////////////////////////////
     // value
     // ///////////////////////////////////////////////////
@@ -98,9 +97,10 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         }
 
         final LinkFollowSpecs followHref = linkFollower.follow("href");
-        boolean eagerlyRender = resourceContext.honorUiHints()
-                && renderEagerly(valueAdapter)
-                || !followHref.isTerminated();
+        final boolean eagerlyRender = !followHref.isTerminated()
+                || (resourceContext.honorUiHints()
+                        && Facets.defaultViewIsTable(objectMember)
+                        && resourceContext.canEagerlyRender(valueAdapter));
 
         final List<JsonRepresentation> list = _Lists.newArrayList();
 
@@ -125,9 +125,6 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         representation.mapPut("value", list);
     }
 
-    private boolean renderEagerly(final ManagedObject valueAdapter) {
-        return renderEagerly() && resourceContext.canEagerlyRender(valueAdapter);
-    }
 
     // ///////////////////////////////////////////////////
     // details link

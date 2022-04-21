@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
@@ -53,12 +53,11 @@ extends MetaModelVisitingValidatorForClauseAbstract {
             return;
         }
 
-        val fromSpecResult = Result.of(()->getSpecificationLoader()
+        val fromSpecResult = Try.call(()->getSpecificationLoader()
                     .specForType(_Context.loadClass(classNameFromClause))
                     .orElse(null));
 
-        if(fromSpecResult.isFailure()
-                || !fromSpecResult.getValue().isPresent()) {
+        if(!fromSpecResult.getValue().isPresent()) {
             ValidationFailure.raise(
                     objectSpec.getSpecificationLoader(),
                     Identifier.classIdentifier(objectSpec.getLogicalType()),

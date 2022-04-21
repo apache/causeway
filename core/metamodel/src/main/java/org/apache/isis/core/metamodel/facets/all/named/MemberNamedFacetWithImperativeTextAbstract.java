@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.all.named;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
@@ -45,7 +45,7 @@ implements MemberNamedFacet {
     }
 
     @Getter(onMethod_ = {@Override})
-    private final _Either<HasStaticText, HasImperativeText> specialization = _Either.right(this);
+    private final Either<HasStaticText, HasImperativeText> specialization = Either.right(this);
 
     protected MemberNamedFacetWithImperativeTextAbstract(
             final Method method,

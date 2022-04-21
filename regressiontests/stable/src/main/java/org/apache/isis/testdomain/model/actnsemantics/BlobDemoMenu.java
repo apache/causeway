@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.model.actnsemantics;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -30,10 +31,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.val;
 
-@DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "regressiontests.BlobDemoMenu"
-)
+@Named("regressiontests.BlobDemoMenu")
+@DomainService(nature=NatureOfService.VIEW)
 @DomainObjectLayout(
         named="Blob Demo Menu"
 )

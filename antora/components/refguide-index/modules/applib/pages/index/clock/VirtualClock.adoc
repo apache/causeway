@@ -30,6 +30,7 @@ interface VirtualClock {
   VirtualClock frozenAt(org.joda.time.LocalDateTime frozenAt)     // <.>
   VirtualClock frozenAt(org.joda.time.DateTime frozenAt)     // <.>
   VirtualClock frozenTestClock()     // <.>
+  ZoneId localTimeZone()     // <.>
   long nowAsEpochMilli()     // <.>
   LocalDate nowAsLocalDate(ZoneId zoneId)     // <.>
   LocalDate nowAsLocalDate()     // <.>
@@ -138,6 +139,11 @@ use java.time variant instead (Joda Time is deprecated)
 +
 --
 Always returns the time _Instant_ 2003/8/17 21:30:25 (UTC)
+--
+<.> xref:#localTimeZone__[localTimeZone()]
++
+--
+Used to interpret local time.
 --
 <.> xref:#nowAsEpochMilli__[nowAsEpochMilli()]
 +
@@ -351,6 +357,13 @@ use java.time variant instead (Joda Time is deprecated)
 === frozenTestClock()
 
 Always returns the time _Instant_ 2003/8/17 21:30:25 (UTC)
+
+[#localTimeZone__]
+=== localTimeZone()
+
+Used to interpret local time.
+
+Returns _ZoneId#systemDefault()_ .
 
 [#nowAsEpochMilli__]
 === nowAsEpochMilli()

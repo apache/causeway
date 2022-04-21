@@ -41,7 +41,7 @@ import org.apache.isis.commons.internal.base._Strings;
  * @since 2.x {@index}
  */
 @Named(SitemapServiceMenu.LOGICAL_TYPE_NAME)
-@DomainService(logicalTypeName = SitemapServiceMenu.LOGICAL_TYPE_NAME)
+@DomainService()
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

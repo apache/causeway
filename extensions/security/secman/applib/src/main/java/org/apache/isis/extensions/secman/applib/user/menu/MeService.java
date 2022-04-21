@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.applib.user.menu;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -48,9 +49,9 @@ import lombok.RequiredArgsConstructor;
 /**
  * @since 2.0 {@index}
  */
+@Named(MeService.LOGICAL_TYPE_NAME)
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = MeService.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY

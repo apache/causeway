@@ -29,11 +29,21 @@ import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAb
 public class MaxLengthFacetFromJdoColumnAnnotation
 extends MaxLengthFacetAbstract {
 
-    public static Optional<MaxLengthFacet> create(
+    public static Optional<MaxLengthFacet> createJdo(
             final Optional<Column> jdoColumnIfAny,
             final FacetHolder holder) {
 
         return jdoColumnIfAny
+        .map(jdoColumn->
+            new MaxLengthFacetFromJdoColumnAnnotation(
+                    jdoColumn.length(), holder));
+    }
+
+    public static Optional<MaxLengthFacet> createJpa(
+            final Optional<javax.persistence.Column> jpaColumnIfAny,
+            final FacetHolder holder) {
+
+        return jpaColumnIfAny
         .map(jdoColumn->
             new MaxLengthFacetFromJdoColumnAnnotation(
                     jdoColumn.length(), holder));

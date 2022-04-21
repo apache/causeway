@@ -20,13 +20,14 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Debug;
@@ -34,13 +35,12 @@ import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
@@ -135,10 +135,10 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
      * <p>
      * Corresponds to the enum {@link #getParamOrProp()}.
      */
-    public final _Either<ScalarParameterModel, ScalarPropertyModel> getSpecialization() {
+    public final Either<ScalarParameterModel, ScalarPropertyModel> getSpecialization() {
         switch(getParamOrProp()) {
-        case PARAMETER: return _Either.left((ScalarParameterModel) this);
-        case PROPERTY: return _Either.right((ScalarPropertyModel) this);
+        case PARAMETER: return Either.left((ScalarParameterModel) this);
+        case PROPERTY: return Either.right((ScalarPropertyModel) this);
         default:
             throw _Exceptions.unmatchedCase(getParamOrProp());
         }
@@ -220,10 +220,12 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     public abstract String getCssClass();
 
+    @Deprecated // viewers should not directly use facets
     public final <T extends Facet> T getFacet(final Class<T> facetType) {
         return getMetaModel().getFacet(facetType);
     }
 
+    @Deprecated // viewers should not directly use facets
     public final <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType) {
         return getMetaModel().lookupFacet(facetType);
     }
@@ -240,23 +242,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     @Override
     public final PromptStyle getPromptStyle() {
-        return getPromptStyleOrElse(PromptStyle.INLINE);
-    }
-
-    private final PromptStyle getPromptStyleOrElse(final PromptStyle fallback) {
-        final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
-        if(facet == null) {
-            // don't think this can happen actually, see PromptStyleFacetFallback
-            return fallback;
-        }
-        val promptStyle = facet.value();
-        if (promptStyle == PromptStyle.AS_CONFIGURED) {
-            // I don't think this can happen, actually...
-            // when the metamodel is built, it should replace AS_CONFIGURED with one of the other prompts
-            // (see PromptStyleConfiguration and PromptStyleFacetFallback)
-            return fallback;
-        }
-        return promptStyle;
+        return Facets.promptStyleOrElse(getMetaModel(), PromptStyle.INLINE);
     }
 
     public boolean canEnterEditMode() {
@@ -359,26 +345,16 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
         return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
     }
 
-    @SuppressWarnings("unchecked")
-    public Optional<ObjectAction> lookupCompositeValueMixinForFeature() {
-        val spec = getScalarTypeSpec();
-        if(!spec.isValue()) {
-            return Optional.empty();
-        }
-        return getSpecialization().<Optional<ObjectAction>>fold(
-                param->{
-                    return spec.lookupFacet(ValueFacet.class)
-                            .<ObjectAction>flatMap(valueFacet->
-                                valueFacet.selectCompositeValueMixinForParameter(
-                                        param.getParameterNegotiationModel(), param.getParameterIndex()));
+    public final OptionalInt multilineNumberOfLines() {
+        return Facets.multilineNumberOfLines(getMetaModel());
+    }
 
+    public final OptionalInt maxLength() {
+        return Facets.maxLength(getScalarTypeSpec());
+    }
 
-                },
-                prop->{
-                    return spec.lookupFacet(ValueFacet.class)
-                            .<ObjectAction>flatMap(valueFacet->
-                                valueFacet.selectCompositeValueMixinForProperty(prop.getManagedProperty()));
-                });
+    public final OptionalInt typicalLength() {
+        return Facets.typicalLength(getScalarTypeSpec(), maxLength());
     }
 
 }

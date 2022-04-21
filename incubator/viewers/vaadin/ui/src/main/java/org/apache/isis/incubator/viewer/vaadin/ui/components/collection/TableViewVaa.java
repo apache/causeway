@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -36,6 +35,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
 
 import lombok.AccessLevel;
@@ -66,10 +66,7 @@ public class TableViewVaa extends VerticalLayout {
             final @NonNull ManagedObject collection,
             final @NonNull Where where) {
 
-        val collectionFacet = collection.getSpecification()
-                .getFacet(CollectionFacet.class);
-
-        val objects = collectionFacet.stream(collection)
+        val objects = Facets.collectionStream(collection)
                 .collect(Can.toCan());
 
         return ManagedObjects.commonSpecification(objects)

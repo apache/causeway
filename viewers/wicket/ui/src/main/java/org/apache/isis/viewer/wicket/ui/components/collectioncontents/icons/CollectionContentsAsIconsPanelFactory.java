@@ -21,12 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
+
+import lombok.val;
 
 /**
  * {@link ComponentFactory} for {@link CollectionContentsAsIconsPanel}.
@@ -48,12 +49,11 @@ public class CollectionContentsAsIconsPanelFactory extends ComponentFactoryAbstr
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-        final ObjectSpecification typeOfSpec = entityCollectionModel.getElementType();
-        if (typeOfSpec.getFacet(IconFacet.class) == null) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-        return ApplicationAdvice.APPLIES;
+        val entityCollectionModel = (EntityCollectionModel) model;
+
+        return Facets.iconIsPresent(entityCollectionModel.getElementType())
+                ? ApplicationAdvice.APPLIES
+                : ApplicationAdvice.DOES_NOT_APPLY;
     }
 
     @Override

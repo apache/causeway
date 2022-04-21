@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.rest;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -30,7 +31,6 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
@@ -61,13 +61,10 @@ class RestServiceTest {
         val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
-        val digest = restService.getRecommendedBookOfTheWeek(restfulClient);
+        val digest = restService.getRecommendedBookOfTheWeek(restfulClient)
+                .ifFailure(Assertions::fail);
 
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
-        }
-
-        val bookOfTheWeek = digest.getEntities().getSingletonOrFail();
+        val bookOfTheWeek = digest.getValue().orElseThrow();
 
         assertNotNull(bookOfTheWeek);
         assertEquals("Book of the week", bookOfTheWeek.getName());
@@ -85,13 +82,10 @@ class RestServiceTest {
         val newBook = JdoBook.of("REST Book", "A sample REST book for testing.", 77.,
                 "REST Author", "REST ISBN", "REST Publisher");
 
-        val digest = restService.storeBook(restfulClient, newBook);
+        val digest = restService.storeBook(restfulClient, newBook)
+                .ifFailure(Assertions::fail);
 
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
-        }
-
-        val storedBook = digest.getEntities().getSingletonOrFail();
+        val storedBook = digest.getValue().orElseThrow();
 
         assertNotNull(storedBook);
         assertEquals("REST Book", storedBook.getName());
@@ -106,13 +100,10 @@ class RestServiceTest {
         val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
-        val digest = restService.getMultipleBooks(restfulClient);
+        val digest = restService.getMultipleBooks(restfulClient)
+                .ifFailure(Assertions::fail);
 
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
-        }
-
-        val multipleBooks = digest.getEntities();
+        val multipleBooks = digest.getValue().orElseThrow();
 
         assertEquals(2, multipleBooks.size());
 
@@ -130,13 +121,10 @@ class RestServiceTest {
         val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
-        val digest = restService.getRecommendedBookOfTheWeekAsDto(restfulClient);
+        val digest = restService.getRecommendedBookOfTheWeekAsDto(restfulClient)
+                .ifFailure(Assertions::fail);
 
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
-        }
-
-        val bookOfTheWeek = digest.getEntities().getSingletonOrFail();
+        val bookOfTheWeek = digest.getValue().orElseThrow();
 
         assertNotNull(bookOfTheWeek);
         assertEquals("Book of the week", bookOfTheWeek.getName());
@@ -151,13 +139,10 @@ class RestServiceTest {
         val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
-        val digest = restService.getMultipleBooksAsDto(restfulClient);
+        val digest = restService.getMultipleBooksAsDto(restfulClient)
+                .ifFailure(Assertions::fail);
 
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
-        }
-
-        val multipleBooks = digest.getEntities();
+        val multipleBooks = digest.getValue().orElseThrow();
 
         assertEquals(2, multipleBooks.size());
 
@@ -167,20 +152,16 @@ class RestServiceTest {
 
     }
 
-
     @Test
     void httpSessionInfo() {
 
         val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
-        val digest = restService.getHttpSessionInfo(restfulClient);
+        val digest = restService.getHttpSessionInfo(restfulClient)
+                .ifFailure(Assertions::fail);
 
-        if(!digest.isSuccess()) {
-            fail(digest.getFailureCause());
-        }
-
-        val httpSessionInfo = digest.getEntities().getSingletonOrFail();
+        val httpSessionInfo = digest.getValue().orElseThrow();
 
         assertNotNull(httpSessionInfo);
 
@@ -188,7 +169,5 @@ class RestServiceTest {
         assertEquals("no http-session", httpSessionInfo);
 
     }
-
-
 
 }

@@ -30,7 +30,7 @@ import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.incubator.viewer.vaadin.ui.binding.BindingsVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
@@ -123,13 +123,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
     }
 
     private Optional<TemporalValueSemantics<?>> getTemporalValueSemantics(final ComponentRequest request) {
-        ValueFacet<?> valueFacet = request
-                .getFeatureTypeSpec()
-                .getFacet(ValueFacet.class);
-        if(valueFacet==null) {
-            return Optional.empty();
-        }
-        return valueFacet.streamValueSemantics(TemporalValueSemantics.class)
+        return Facets.valueStreamSemantics(request.getFeatureTypeSpec(), TemporalValueSemantics.class)
                 .findFirst()
                 .map(v->(TemporalValueSemantics<?>)v);
     }

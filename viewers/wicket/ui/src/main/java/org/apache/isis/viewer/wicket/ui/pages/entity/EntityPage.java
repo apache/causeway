@@ -38,12 +38,11 @@ import org.apache.isis.commons.internal.base._Refs.ObjectReference;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -177,13 +176,8 @@ public class EntityPage extends PageAbstract {
         }
 
         final ObjectSpecification objectSpec = model.getTypeOfSpecification();
-        final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
-        if(gridFacet != null) {
-            // the facet should always exist, in fact
-            // just enough to ask for the metadata.
-            // This will cause the current ObjectSpec to be updated as a side effect.
-            gridFacet.getGrid(objectAdapter);
-        }
+
+        Facets.gridPreload(objectSpec, objectAdapter);
 
         final String titleStr = objectAdapter.titleString();
         setTitle(titleStr);
@@ -191,11 +185,10 @@ public class EntityPage extends PageAbstract {
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
         Wkt.cssAppend(entityPageContainer, objectSpec.getFeatureIdentifier());
 
-        CssClassFacet cssClassFacet = objectSpec.getFacet(CssClassFacet.class);
-        if(cssClassFacet != null) {
-            final String cssClass = cssClassFacet.cssClass(objectAdapter);
-            Wkt.cssAppend(entityPageContainer, cssClass);
-        }
+        Facets.cssClass(objectSpec, objectAdapter)
+        .ifPresent(cssClass->
+            Wkt.cssAppend(entityPageContainer, cssClass)
+        );
 
         themeDiv.addOrReplace(entityPageContainer);
 

@@ -3,8 +3,6 @@
 
 Indicates that an object belongs to the UI/application layer, and is intended to be used as a view model.
 
-Objects that are part of the domain object layer should instead implement _RecreatableDomainObject_ .
-
 == API
 
 [source,java]
@@ -12,7 +10,6 @@ Objects that are part of the domain object layer should instead implement _Recre
 ----
 interface ViewModel {
   String viewModelMemento()     // <.>
-  void viewModelInit(String memento)     // <.>
 }
 ----
 
@@ -20,11 +17,6 @@ interface ViewModel {
 +
 --
 Obtain a memento of the view model.
---
-<.> xref:#viewModelInit__String[viewModelInit(String)]
-+
---
-Used to re-initialize a view model with a memento obtained from _#viewModelMemento()_ .
 --
 
 == Members
@@ -34,11 +26,4 @@ Used to re-initialize a view model with a memento obtained from _#viewModelMemen
 
 Obtain a memento of the view model.
 
-Typically this will be the identifier of a backing domain entity, but it could also be an arbitrary string, for example a bunch of JSON.
-
-This method is called by the framework in order that the view model may be recreated subsequently through _#viewModelInit(String)_ .
-
-[#viewModelInit__String]
-=== viewModelInit(String)
-
-Used to re-initialize a view model with a memento obtained from _#viewModelMemento()_ .
+Instances of xref:refguide:applib:index/ViewModel.adoc[ViewModel] must include a public single _String_ argument constructor, that recreates an instance from a memento string. This constructor is not required to resolve injection points or fire domain events, instead this responsibility is encapsulated with the framework.

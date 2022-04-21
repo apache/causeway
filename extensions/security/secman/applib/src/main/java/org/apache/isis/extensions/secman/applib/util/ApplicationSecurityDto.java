@@ -117,7 +117,7 @@ public class ApplicationSecurityDto {
     private List<UserDto> users = new ArrayList<>();
 
     public String toYaml() {
-        return _Yaml.toString(this).presentElseFail();
+        return _Yaml.toString(this).getValue().orElseThrow();
     }
 
 }

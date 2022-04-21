@@ -21,7 +21,7 @@ package org.apache.isis.extensions.commandlog.model.util;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.extensions.commandlog.model.util.StringUtils;
+import org.apache.isis.extensions.commandlog.applib.util.StringUtils;
 
 public class StringUtils_trimmed_Test {
 

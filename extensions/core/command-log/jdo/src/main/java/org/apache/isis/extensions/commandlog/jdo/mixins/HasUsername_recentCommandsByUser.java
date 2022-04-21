@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.mixins.security.HasUsername;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
 import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
 
@@ -44,7 +44,7 @@ import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
 public class HasUsername_recentCommandsByUser {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandLogJdo.CollectionDomainEvent<HasUsername_recentCommandsByUser, CommandJdo> { }
+            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<HasUsername_recentCommandsByUser, CommandJdo> { }
 
     private final HasUsername hasUsername;
     public HasUsername_recentCommandsByUser(final HasUsername hasUsername) {

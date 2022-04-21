@@ -20,8 +20,10 @@ package org.apache.isis.testdomain.transactions.jpa;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -52,13 +54,14 @@ import org.apache.isis.testing.integtestsupport.applib.IsisInteractionHandler;
  */
 @DirtiesContext
 @ExtendWith(IsisInteractionHandler.class)
+@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class JpaTransactionScopeListenerTest {
 
     @Inject private FixtureScripts fixtureScripts;
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
     @Inject private InteractionService interactionService;
-    @Inject private KVStoreForTesting kvStoreForTesting;
+    @Inject private KVStoreForTesting kvStore;
 
     /* Expectations:
      * 1. for each InteractionScope there should be a new InteractionBoundaryProbe instance
@@ -76,10 +79,14 @@ class JpaTransactionScopeListenerTest {
         interactionService.runAnonymous(()->{
 
             // cleanup
-            fixtureScripts.runPersona(JpaTestDomainPersona.PurgeAll);
+            fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
 
         });
 
+    }
+
+    @AfterEach
+    void cleanUp() {
     }
 
     @Test
@@ -105,10 +112,12 @@ class JpaTransactionScopeListenerTest {
 
         });
 
-        assertEquals(2, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
-        assertEquals(2, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
-        assertEquals(2, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
-        assertEquals(2, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
+        final int expectedIaCount = 2;
+
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsStarted(kvStore));
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsEnded(kvStore));
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalTransactionsEnding(kvStore));
+        assertEquals(expectedIaCount, InteractionBoundaryProbe.totalTransactionsCommitted(kvStore));
 
     }
 

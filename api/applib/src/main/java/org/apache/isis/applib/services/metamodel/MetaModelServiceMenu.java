@@ -57,8 +57,7 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
  */
 @Named(MetaModelServiceMenu.LOGICAL_TYPE_NAME)
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = MetaModelServiceMenu.LOGICAL_TYPE_NAME
+        nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
         named = "Prototyping",

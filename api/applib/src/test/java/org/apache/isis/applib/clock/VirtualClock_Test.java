@@ -18,12 +18,17 @@
  */
 package org.apache.isis.applib.clock;
 
+import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class VirtualClock_Test {
 
@@ -34,57 +39,173 @@ class VirtualClock_Test {
         virtualClock = VirtualClock.frozenTestClock();
     }
 
+    // -- FACTORIES (TICKING)
+
+    final static long TOLERANCE_SECONDS = 2;
+
     @Test
-    void nowAt() {
-        Assertions.assertThat(virtualClock.nowAsInstant()).isEqualTo("2003-07-17T21:30:25Z");
+    void nowAtLocalDate() {
+        final java.time.LocalDate virtualNow = java.time.LocalDate.of(2014, 5, 18);
+        assertTimeEquals(
+                VirtualClock.nowAt(virtualNow),
+                virtualNow.atStartOfDay().atZone(VirtualClock.localTimeZone()).toInstant(),
+                TOLERANCE_SECONDS);
+    }
+
+    @Test
+    void nowAtLocalDateTime() {
+        final java.time.LocalDateTime virtualNow = java.time.LocalDateTime.of(2014, 5, 18, 7, 15);
+        assertTimeEquals(
+                VirtualClock.nowAt(virtualNow),
+                virtualNow.atZone(VirtualClock.localTimeZone()).toInstant(),
+                TOLERANCE_SECONDS);
+    }
+
+    @Test
+    void nowAtOffsetDateTime() {
+        final java.time.OffsetDateTime virtualNow =
+                java.time.OffsetDateTime.of(2014, 5, 18, 7, 15, 0, 0, ZoneOffset.ofHours(-3));
+        assertTimeEquals(
+                VirtualClock.nowAt(virtualNow),
+                virtualNow.toInstant(),
+                TOLERANCE_SECONDS);
+    }
+
+    @Test
+    void nowAtZonedDateTime() {
+        final java.time.ZonedDateTime virtualNow =
+                java.time.ZonedDateTime.of(2014, 5, 18, 7, 15, 0, 0, ZoneOffset.ofHours(-3));
+        assertTimeEquals(
+                VirtualClock.nowAt(virtualNow),
+                virtualNow.toInstant(),
+                TOLERANCE_SECONDS);
+    }
+
+    @Test
+    void nowAtDate() {
+        @SuppressWarnings("deprecation")
+        final java.util.Date virtualNow = new java.util.Date(2014-1900, 5-1, 18);
+        assertTimeEquals(
+                VirtualClock.nowAt(virtualNow),
+                Instant.ofEpochMilli(virtualNow.getTime()),
+                TOLERANCE_SECONDS);
+    }
+
+    // -- FACTORIES (FROZEN)
+
+    @Test
+    void frozenAtLocalDate() {
+        final java.time.LocalDate virtualNow = java.time.LocalDate.of(2014, 5, 18);
+        assertTimeEquals(
+                VirtualClock.frozenAt(virtualNow),
+                virtualNow.atStartOfDay().atZone(VirtualClock.localTimeZone()).toInstant());
+    }
+
+    @Test
+    void frozenAtLocalDateTime() {
+        final java.time.LocalDateTime virtualNow = java.time.LocalDateTime.of(2014, 5, 18, 7, 15);
+        assertTimeEquals(
+                VirtualClock.frozenAt(virtualNow),
+                virtualNow.atZone(VirtualClock.localTimeZone()).toInstant());
+    }
+
+    @Test
+    void frozenAtOffsetDateTime() {
+        final java.time.OffsetDateTime virtualNow =
+                java.time.OffsetDateTime.of(2014, 5, 18, 7, 15, 0, 0, ZoneOffset.ofHours(-3));
+        assertTimeEquals(
+                VirtualClock.frozenAt(virtualNow),
+                virtualNow.toInstant());
+    }
+
+    @Test
+    void frozenAtZonedDateTime() {
+        final java.time.ZonedDateTime virtualNow =
+                java.time.ZonedDateTime.of(2014, 5, 18, 7, 15, 0, 0, ZoneOffset.ofHours(-3));
+        assertTimeEquals(
+                VirtualClock.frozenAt(virtualNow),
+                virtualNow.toInstant());
+    }
+
+    @Test
+    void frozenAtDate() {
+        @SuppressWarnings("deprecation")
+        final java.util.Date virtualNow = new java.util.Date(2014-1900, 5-1, 18);
+        assertTimeEquals(
+                VirtualClock.frozenAt(virtualNow),
+                Instant.ofEpochMilli(virtualNow.getTime()));
+    }
+
+
+    // -- QUERIES
+
+    @Test
+    void nowAsInstant() {
+        assertThat(virtualClock.nowAsInstant()).isEqualTo("2003-07-17T21:30:25Z");
     }
 
     @Test
     void nowAsEpochMilli() {
-        Assertions.assertThat(virtualClock.nowAsEpochMilli()).isEqualTo(1058477425000L);
+        assertThat(virtualClock.nowAsEpochMilli()).isEqualTo(1058477425000L);
     }
 
     @Test
     void nowAsLocalDate() {
-        Assertions.assertThat(virtualClock.nowAsLocalDate(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17");
+        assertThat(virtualClock.nowAsLocalDate(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17");
     }
 
     @Test
     void nowAsLocalDateTime() {
-        Assertions.assertThat(virtualClock.nowAsLocalDateTime(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17T21:30:25");
+        assertThat(virtualClock.nowAsLocalDateTime(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17T21:30:25");
     }
 
     @Test
     void nowAsOffsetDateTime() {
-        Assertions.assertThat(virtualClock.nowAsOffsetDateTime(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17T21:30:25Z");
+        assertThat(virtualClock.nowAsOffsetDateTime(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17T21:30:25Z");
     }
 
     @Test
     @Disabled // depends on the timezone
     void nowAsJavaUtilDate() {
-        Assertions.assertThat(virtualClock.nowAsJavaUtilDate().toString()).isEqualTo("Thu Jul 17 22:30:25 BST 2003");
+        assertThat(virtualClock.nowAsJavaUtilDate().toString()).isEqualTo("Thu Jul 17 22:30:25 BST 2003");
     }
 
     @Test
     @Disabled // depends on the timezone
     void nowAsJavaSqlTimestamp() {
-        Assertions.assertThat(virtualClock.nowAsJavaSqlTimestamp().toString()).isEqualTo("2003-07-17 22:30:25.0");
+        assertThat(virtualClock.nowAsJavaSqlTimestamp().toString()).isEqualTo("2003-07-17 22:30:25.0");
     }
 
     @Test
     @Disabled // depends on the timezone
     void nowAsXmlGregorianCalendar() {
-        Assertions.assertThat(virtualClock.nowAsXmlGregorianCalendar().toString()).isEqualTo("2003-07-17T22:30:25.000+01:00");
+        assertThat(virtualClock.nowAsXmlGregorianCalendar().toString()).isEqualTo("2003-07-17T22:30:25.000+01:00");
     }
 
     @Test
     void nowAsJodaDateTime() {
-        Assertions.assertThat(virtualClock.nowAsJodaDateTime(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17T21:30:25.000Z");
+        assertThat(virtualClock.nowAsJodaDateTime(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17T21:30:25.000Z");
     }
 
     @Test
     void nowAsJodaLocalDate() {
-        Assertions.assertThat(virtualClock.nowAsJodaLocalDate(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17");
+        assertThat(virtualClock.nowAsJodaLocalDate(ZoneId.of("UTC")).toString()).isEqualTo("2003-07-17");
     }
+
+    // -- HELPER
+
+    static void assertTimeEquals(final VirtualClock virtualClock, final Instant expectedInstant) {
+        assertEquals(virtualClock.nowAsInstant(), expectedInstant);
+    }
+
+    private void assertTimeEquals(final VirtualClock virtualClock,
+            final Instant expectedInstant, final long toleranceSeconds) {
+        final long deltaSeconds = Math.abs(
+                virtualClock.nowAsInstant().getEpochSecond()
+                - expectedInstant.getEpochSecond());
+        assertTrue(deltaSeconds <= toleranceSeconds);
+    }
+
+
 
 }

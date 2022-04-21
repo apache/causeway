@@ -31,7 +31,7 @@ import lombok.val;
  *
  * <p>
  *     The multi-level sub menu support is borrowed from
- *     <a href="http://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs3">Bootsnip</a>
+ *     <a href="http://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs">Bootsnip</a>
  * </p>
  */
 public class TertiaryActionsPanel extends MenuActionPanel {

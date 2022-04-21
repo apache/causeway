@@ -24,6 +24,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
@@ -35,58 +36,46 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.extensions.commandlog.model.command.CommandModel;
-import org.apache.isis.extensions.commandlog.model.command.CommandModelRepository;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository.NotFoundException;
+import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
-import org.apache.isis.extensions.commandreplay.primary.restapi.CommandRetrievalService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
  * @since 2.0 {@index}
  */
 @DomainService(
-    nature = NatureOfService.VIEW,
-    logicalTypeName = CommandReplayOnPrimaryService.LOGICAL_TYPE_NAME
+    nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Named(CommandReplayOnPrimaryService.LOGICAL_TYPE_NAME)
+@Named(IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandReplayOnPrimaryService")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
+@Profile("command-replay-primary")
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandReplayOnPrimaryService {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtCommandReplayPrimary.NAMESPACE + ".CommandReplayOnPrimaryService";
-
-    @Inject final CommandModelRepository<? extends CommandModel> commandModelRepository;
+    @Inject final ICommandLogRepository<? extends CommandLog> commandLogRepository;
     @Inject final JaxbService jaxbService;
     @Inject final MessageService messageService;
     @Inject final ContentMappingServiceForCommandsDto contentMappingServiceForCommandsDto;
-    @Inject final CommandRetrievalService commandRetrievalService;
 
-    public static abstract class ActionDomainEvent<T> extends IsisModuleExtCommandReplayPrimary.ActionDomainEvent<T> { }
+    public static abstract class ActionDomainEvent<T>
+    extends IsisModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
-
-    public static class NotFoundException extends RecoverableException {
-        private static final long serialVersionUID = 1L;
-        @Getter
-        private final UUID interactionId;
-        public NotFoundException(final UUID interactionId) {
-            super("Command not found");
-            this.interactionId = interactionId;
-        }
-    }
 
     @Action(domainEvent = findCommands.ActionEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-search", sequence="40")
@@ -102,7 +91,7 @@ public class CommandReplayOnPrimaryService {
          * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
          * @throws NotFoundException - if the command with specified transaction cannot be found.
          */
-        @MemberSupport public List<? extends CommandModel> act(
+        @MemberSupport public List<? extends CommandLog> act(
                 @Nullable
                 @ParameterLayout(named="Interaction Id")
                 final UUID interactionId,
@@ -110,16 +99,13 @@ public class CommandReplayOnPrimaryService {
                 @ParameterLayout(named="Batch size")
                 final Integer batchSize)
                 throws NotFoundException {
-            return commandRetrievalService.findCommandsOnPrimaryFrom(interactionId, batchSize);
+            return commandLogRepository.findCommandsOnPrimaryElseFail(interactionId, batchSize);
         }
         @MemberSupport public Integer default1Act() {
-            return commandRetrievalService.default1FindCommandsOnPrimaryFrom();
+            return 25;
         }
 
     }
-
-
-
 
     @Action(domainEvent = downloadCommands.ActionEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-download", sequence="50")
@@ -141,7 +127,7 @@ public class CommandReplayOnPrimaryService {
                 @Nullable
                 final Integer batchSize,
                 final String filenamePrefix) {
-            final List<? extends CommandModel> commands = commandModelRepository.findSince(interactionId, batchSize);
+            final List<? extends ICommandLog> commands = commandLogRepository.findSince(interactionId, batchSize);
             if(commands == null) {
                 messageService.informUser("No commands found");
             }
@@ -183,7 +169,7 @@ public class CommandReplayOnPrimaryService {
                 final UUID interactionId,
                 final String filenamePrefix) {
 
-            return commandModelRepository.findByInteractionId(interactionId)
+            return commandLogRepository.findByInteractionId(interactionId)
                     .map(commandJdo -> {
 
                         final CommandDto commandDto = commandJdo.getCommandDto();

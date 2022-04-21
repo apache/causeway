@@ -28,13 +28,12 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Collections;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.NonNull;
@@ -152,23 +151,14 @@ extends ModelAbstract<ManagedObject> {
     }
 
 
-    public boolean hasAsRootPolicy() {
-        return hasBookmarkPolicy(BookmarkPolicy.AS_ROOT);
+    public final boolean hasAsRootPolicy() {
+        return Facets.bookmarkPolicyMatches(BookmarkPolicy.AS_ROOT::equals)
+                .test(getTypeOfSpecification());
     }
 
-    public boolean hasAsChildPolicy() {
-        return hasBookmarkPolicy(BookmarkPolicy.AS_CHILD);
-    }
-
-    private boolean hasBookmarkPolicy(final BookmarkPolicy policy) {
-        return lookupFacet(BookmarkPolicyFacet.class)
-                .map(facet->facet.value() == policy)
-                .orElse(false);
-    }
-
-    public <T extends Facet> Optional<T> lookupFacet(final Class<T> facetClass) {
-        return Optional.ofNullable(getTypeOfSpecification())
-                .map(objectSpec->objectSpec.getFacet(facetClass));
+    public final boolean hasAsChildPolicy() {
+        return Facets.bookmarkPolicyMatches(BookmarkPolicy.AS_CHILD::equals)
+                .test(getTypeOfSpecification());
     }
 
     public boolean isEmpty() {

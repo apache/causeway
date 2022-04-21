@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
@@ -94,7 +95,7 @@ extends TitleFacetAbstract {
 
         final ManagedObject owningAdapter = titleRenderRequest.getObject();
 
-        if(owningAdapter == null) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
             return null;
         }
 

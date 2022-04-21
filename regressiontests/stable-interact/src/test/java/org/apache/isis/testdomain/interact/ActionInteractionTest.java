@@ -152,7 +152,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
 
         // we should not be able to invoke the action
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        assertTrue(resultOrVeto.isRight());
+        assertTrue(resultOrVeto.isFailure());
 
         val tester =
                 testerFactory.actionTester(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS);
@@ -196,9 +196,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
         pendingArgs.setParamValues(params);
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        assertTrue(resultOrVeto.isLeft());
+        assertTrue(resultOrVeto.isSuccess());
 
-        assertEquals(46, (int)resultOrVeto.leftIfAny().getPojo());
+        assertEquals(46, (int)resultOrVeto.getSuccessElseFail().getPojo());
     }
 
     @Test
@@ -214,9 +214,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
         pendingArgs.setParamValues(params);
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        assertTrue(resultOrVeto.isLeft());
+        assertTrue(resultOrVeto.isSuccess());
 
-        assertEquals(12, (int)resultOrVeto.leftIfAny().getPojo());
+        assertEquals(12, (int)resultOrVeto.getSuccessElseFail().getPojo());
 
     }
 

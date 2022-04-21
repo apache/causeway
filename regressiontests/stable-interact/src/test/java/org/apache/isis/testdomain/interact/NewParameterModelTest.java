@@ -24,6 +24,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -36,10 +40,6 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo_biArgEnabled
 import org.apache.isis.testdomain.model.interaction.InteractionNpmDemo;
 import org.apache.isis.testdomain.model.interaction.InteractionNpmDemo_biArgEnabled;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -101,9 +101,9 @@ class NewParameterModelTest extends InteractionTestAbstract {
         pendingArgs.setParamValues(params);
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        assertTrue(resultOrVeto.isLeft());
+        assertTrue(resultOrVeto.isSuccess());
 
-        assertEquals(46, (int)resultOrVeto.leftIfAny().getPojo());
+        assertEquals(46, (int)resultOrVeto.getSuccessElseFail().getPojo());
     }
 
     @Test
@@ -119,9 +119,9 @@ class NewParameterModelTest extends InteractionTestAbstract {
         pendingArgs.setParamValues(params);
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        assertTrue(resultOrVeto.isLeft());
+        assertTrue(resultOrVeto.isSuccess());
 
-        assertEquals(46, (int)resultOrVeto.leftIfAny().getPojo());
+        assertEquals(46, (int)resultOrVeto.getSuccessElseFail().getPojo());
     }
 
     @Test
@@ -137,9 +137,9 @@ class NewParameterModelTest extends InteractionTestAbstract {
         pendingArgs.setParamValues(params);
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
-        assertTrue(resultOrVeto.isLeft());
+        assertTrue(resultOrVeto.isSuccess());
 
-        assertEquals(5, (int)resultOrVeto.leftIfAny().getPojo());
+        assertEquals(5, (int)resultOrVeto.getSuccessElseFail().getPojo());
     }
 
     @Test

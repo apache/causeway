@@ -24,7 +24,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
-import org.apache.isis.commons.internal.base._Either;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.functions._Functions;
 
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class InlinePromptContext implements Serializable {
         scalarIfRegularInlinePromptForm.setVisible(true);
     }
 
-    public void onCancel(final _Either<ActionModel, ScalarPropertyModel> memberModel) {
+    public void onCancel(final Either<ActionModel, ScalarPropertyModel> memberModel) {
 
         memberModel
         .accept(_Functions.noopConsumer(), prop->{

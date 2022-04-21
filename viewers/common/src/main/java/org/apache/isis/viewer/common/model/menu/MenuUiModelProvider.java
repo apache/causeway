@@ -28,11 +28,9 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import lombok.val;
+import org.apache.isis.core.metamodel.util.Facets;
 
 @Service
 public class MenuUiModelProvider {
@@ -54,14 +52,11 @@ public class MenuUiModelProvider {
     }
 
     private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBarSelect) {
-        return (ManagedObject adapter) -> {
-            val domainServiceLayoutFacet = adapter.getSpecification()
-                    .getFacet(DomainServiceLayoutFacet.class);
-            return (domainServiceLayoutFacet != null
-                        && domainServiceLayoutFacet.getMenuBar() == menuBarSelect)
-                    || (domainServiceLayoutFacet == null
-                        && menuBarSelect == DomainServiceLayout.MenuBar.PRIMARY);
-        };
+        return (final ManagedObject adapter) ->
+
+            Facets.domainServiceLayoutMenuBar(adapter.getSpecification())
+                    .orElse(DomainServiceLayout.MenuBar.PRIMARY)
+                    .equals(menuBarSelect);
     }
 
 }

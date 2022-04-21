@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.grid;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.layout.LayoutService;
@@ -35,7 +37,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  */
 public interface GridFacet extends Facet {
 
-    Grid getGrid(final ManagedObject objectAdapter);
+    Grid getGrid(@Nullable ManagedObject objectAdapter);
 
 
 }

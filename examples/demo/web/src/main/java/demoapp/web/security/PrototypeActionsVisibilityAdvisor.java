@@ -18,6 +18,8 @@
  */
 package demoapp.web.security;
 
+import javax.inject.Named;
+
 import org.springframework.context.event.EventListener;
 
 import org.apache.isis.applib.annotation.Action;
@@ -34,9 +36,9 @@ import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.isis.applib.mixins.rest.Object_openRestApi;
 import org.apache.isis.core.metamodel.inspect.Object_inspectMetamodel;
 
+@Named("demo.PrototypeActionsVisibilityAdvisor")
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = "demo.PrototypeActionsVisibilityAdvisor"
+        nature = NatureOfService.VIEW
 )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY

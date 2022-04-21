@@ -31,6 +31,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.core.metamodel.valuesemantics.ImageValueSemantics;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
@@ -82,9 +83,9 @@ public class WicketImageUtil {
           return Optional.empty();
       }
 
-      val spec = model.getScalarTypeSpec();
+      val typeSpec = model.getScalarTypeSpec();
 
-      return spec.streamValueSemantics(ImageValueSemantics.class)
+      return Facets.valueStreamSemantics(typeSpec, ImageValueSemantics.class)
       .map(imageValueSemantics->imageValueSemantics.getImage(adapter).orElse(null))
       .filter(_NullSafe::isPresent)
       .map(buffImg->asWicketImage(id, buffImg).orElse(null))

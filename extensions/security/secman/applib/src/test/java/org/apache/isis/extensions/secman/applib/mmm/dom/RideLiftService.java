@@ -18,10 +18,13 @@
  */
 package org.apache.isis.extensions.secman.applib.mmm.dom;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 
-@DomainService(logicalTypeName = "mmm.RideLiftService")
+@Named("mmm.RideLiftService")
+@DomainService
 public class RideLiftService {
     @Action
     public void rideLift() {}

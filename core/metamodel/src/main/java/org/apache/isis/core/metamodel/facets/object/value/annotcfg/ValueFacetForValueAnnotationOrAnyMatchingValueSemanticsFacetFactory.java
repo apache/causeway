@@ -18,12 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -39,8 +40,10 @@ import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetFromV
 import org.apache.isis.core.metamodel.facets.object.value.ImmutableFacetViaValueSemantics;
 import org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
+import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -68,7 +71,6 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * Note that {@link ParentedCollectionFacet} is <i>not</i> installed.
  */
-@SuppressWarnings("rawtypes")
 @Log4j2
 public class ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
 extends FacetFactoryAbstract {
@@ -81,48 +83,48 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val cls = processClassContext.getCls();
+        val valueClass = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
         val valueIfAny = processClassContext.synthesizeOnType(Value.class);
 
         val logicalTypeFacetIfAny = addFacetIfPresent(
                 LogicalTypeFacetForValueAnnotation
-                .create(valueIfAny, cls, facetHolder));
+                .create(valueIfAny, valueClass, facetHolder));
 
         val logicalType = logicalTypeFacetIfAny
                 .map(logicalTypeFacet->logicalTypeFacet.getLogicalType())
-                .orElseGet(()->LogicalType.fqcn(cls));
+                .orElseGet(()->LogicalType.fqcn(valueClass));
 
         val identifier = Identifier.classIdentifier(logicalType);
 
-        final Can<ValueSemanticsProvider> valueSemantics = _Casts.uncheckedCast(
-                getValueSemanticsResolver().selectValueSemantics(identifier, cls));
+        val valueFacetIfAny = addAllFacetsForValueSemantics(identifier, valueClass, facetHolder, valueIfAny);
 
-        if(!valueSemantics.isEmpty()) {
-            addAllFacetsForValueSemantics(valueSemantics, facetHolder);
-            log.debug("found ValueSemanticsProvider for value type {}", cls);
-        }
-
-        valueIfAny
-        .ifPresent(value->{
-
-            if(valueSemantics.isCardinalityMultiple()) {
-                log.warn("found multiple ValueSemanticsProvider for value type {}; using the first", cls);
-            } else if(valueSemantics.isEmpty()) {
-                log.warn("could not find a ValueSemanticsProvider for value type {}; ", cls);
-                addAllFacetsForValueSemantics(Can.empty(), facetHolder);
-            }
-
-        });
+        emitValueFacetProcessed(facetHolder, _Casts.uncheckedCast(valueFacetIfAny));
     }
 
     // -- HELPER
 
-    private void addAllFacetsForValueSemantics(
-            final Can<ValueSemanticsProvider> semanticsProviders,
-            final FacetHolder holder) {
+    private <T> Optional<ValueFacet<T>> addAllFacetsForValueSemantics(
+            final Identifier identifier,
+            final Class<T> valueClass,
+            final FacetHolder holder,
+            final Optional<Value> valueIfAny) {
 
-        val valueFacet = new ValueFacetUsingSemanticsProvider(semanticsProviders, holder);
+        val semanticsProviders = getValueSemanticsResolver().selectValueSemantics(identifier, valueClass);
+        if(semanticsProviders.isEmpty()) {
+            if(valueIfAny.isPresent()) {
+                log.warn("could not find a ValueSemanticsProvider for value type {}; "
+                        + "the type was found to be annotated with @Value", valueClass);
+                // fall through, so gets a ValueFacet
+            } else {
+                // don't install a ValueFacet
+                return Optional.empty();
+            }
+        } else {
+            log.debug("found {} ValueSemanticsProvider(s) for value type {}", semanticsProviders.size(), valueClass);
+        }
+
+        val valueFacet = ValueFacetUsingSemanticsProvider.create(valueClass, semanticsProviders, holder);
 
         addFacet(valueFacet);
         addFacet(new ImmutableFacetViaValueSemantics(holder));
@@ -132,6 +134,15 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(MaxLengthFacetFromValueFacet.create(valueFacet, holder));
         addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, holder));
 
+        return Optional.of(valueFacet);
+    }
+
+    // optimization
+    private void emitValueFacetProcessed(
+            final FacetHolder holder,
+            final Optional<ValueFacet> valueFacetIfAny) {
+        _Casts.castTo(ObjectSpecificationDefault.class, holder)
+        .ifPresent(receiver->receiver.onValueFacetProcessed(valueFacetIfAny));
     }
 
     // -- DEPENDENCIES
