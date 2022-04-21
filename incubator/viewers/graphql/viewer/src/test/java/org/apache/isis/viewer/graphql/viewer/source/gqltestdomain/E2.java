@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 //@Profile("demo-jpa")
 @Entity
 @Table(
-        schema = "demo",
+        schema = "public",
         name = "E2"
 )
 @DomainObject(nature = Nature.ENTITY, logicalTypeName = "gqltestdomain.E2")

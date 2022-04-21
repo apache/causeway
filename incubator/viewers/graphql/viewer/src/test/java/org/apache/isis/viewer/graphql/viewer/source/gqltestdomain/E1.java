@@ -12,7 +12,7 @@ import javax.persistence.*;
 //@Profile("demo-jpa")
 @Entity
 @Table(
-        schema = "demo",
+        schema = "public",
         name = "E1"
 )
 @DomainObject(nature = Nature.ENTITY, logicalTypeName = "gqltestdomain.E1")
