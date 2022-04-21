@@ -48,7 +48,6 @@ public class TestDomainModuleIntegTestAbstract {
             @PropertySource(IsisPresets.UseLog4j2Test),
             @PropertySource(IsisPresets.SilenceMetaModel),
             @PropertySource(IsisPresets.SilenceProgrammingModel),
-
     })
     public static class TestApp {
 

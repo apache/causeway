@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
 import javax.inject.Inject;
@@ -44,7 +45,8 @@ import lombok.val;
 
 
 //@Transactional NOT USING @Transactional since we are running server within same transaction otherwise
-public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract{
+@ActiveProfiles("test")
+public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
 
     @Inject TransactionService transactionService;
     @Inject IsisSystemEnvironment isisSystemEnvironment;
