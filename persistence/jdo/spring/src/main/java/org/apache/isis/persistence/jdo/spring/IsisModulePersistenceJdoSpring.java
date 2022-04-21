@@ -18,9 +18,31 @@
  */
 package org.apache.isis.persistence.jdo.spring;
 
+import java.util.Optional;
+
+import javax.jdo.JDOException;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import org.apache.isis.applib.services.exceprecog.RootCauseFinder;
 
 @Configuration
 public class IsisModulePersistenceJdoSpring {
+
+    @Bean
+    public RootCauseFinder getJdoExceptionRootCauseFinder() {
+        return (final Throwable ex) -> {
+            if (ex instanceof JDOException) {
+                final JDOException jdoException = (JDOException) ex;
+                final Throwable[] nestedExceptions = jdoException.getNestedExceptions();
+                return nestedExceptions != null
+                        && nestedExceptions.length > 0
+                        ? Optional.ofNullable(nestedExceptions[0])
+                        : Optional.empty();
+            }
+            return Optional.empty();
+        };
+    }
 
 }

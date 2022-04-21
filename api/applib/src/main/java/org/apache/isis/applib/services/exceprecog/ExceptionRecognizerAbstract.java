@@ -123,8 +123,9 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
                     return translatableMessage.translate(translationService, translationContext);
                 }
             }
-            final Throwable rootCause = _Exceptions.getRootCause(throwable);
-            final String formattedMessage = rootCauseMessageFormatter.apply(rootCause);
+            final String formattedMessage = _Exceptions.getRootCause(throwable)
+                .map(rootCauseMessageFormatter::apply)
+                .orElse("");
             return formattedMessage;
         })
         .filter(_NullSafe::isPresent)

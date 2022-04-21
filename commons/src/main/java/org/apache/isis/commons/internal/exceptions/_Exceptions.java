@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -344,8 +345,26 @@ public final class _Exceptions {
         return chain.stream();
     }
 
-    public static Throwable getRootCause(final @Nullable Throwable ex) {
-        return _Lists.lastElementIfAny(getCausalChain(ex));
+    public static Optional<Throwable> getRootCause(final @Nullable Throwable ex) {
+        return _Lists.lastElement(getCausalChain(ex));
+    }
+
+    /**
+     * Variant to support custom root cause finders.
+     * @param rootCauseFinders -
+     *      either returns a more specific {@link Throwable} or an {@link Optional#empty()}.
+     * @implNote non-recursive
+     */
+    public static Optional<Throwable> getRootCause(
+            final @Nullable Throwable ex,
+            final @Nullable List<? extends Function<Throwable, Optional<Throwable>>> rootCauseFinders) {
+        return getRootCause(ex)
+        .map(rootCause->_NullSafe.stream(rootCauseFinders)
+            .map(finder->finder.apply(rootCause))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .findFirst()
+            .orElse(rootCause));
     }
 
     // -- SWALLOW
@@ -479,8 +498,5 @@ public final class _Exceptions {
         }
 
     }
-
-
-
 
 }

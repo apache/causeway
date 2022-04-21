@@ -28,7 +28,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.isis.applib.exceptions.RecoverableException;
+import org.apache.isis.applib.services.exceprecog.RootCauseFinder;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -43,8 +46,8 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public abstract class ExceptionMapperAbstract<T extends Throwable> implements ExceptionMapper<T> {
 
-    @Context
-    protected HttpHeaders httpHeaders;
+    @Context protected HttpHeaders httpHeaders;
+    @Autowired(required = false) protected List<RootCauseFinder> rootCauseFinders;
 
     Response buildResponse(final T ex) {
         return buildResponse(ex, determineStatusCode(ex));
@@ -132,10 +135,11 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
     private ExceptionDetail detailIfRequired(
             final RestfulResponse.HttpStatusCode httpStatusCode,
             final Throwable ex) {
+
         return httpStatusCode == RestfulResponse.HttpStatusCode.NOT_FOUND ||
                 httpStatusCode == RestfulResponse.HttpStatusCode.OK
                 ? null
-                        : new ExceptionDetail(ex);
+                : new ExceptionDetail(ex, rootCauseFinders);
     }
 
     private Response buildResponse(

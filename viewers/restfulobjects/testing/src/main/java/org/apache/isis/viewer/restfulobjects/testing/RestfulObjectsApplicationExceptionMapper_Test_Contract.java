@@ -38,6 +38,8 @@ import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication;
 
+import lombok.val;
+
 /**
  * contract test.
  */
@@ -127,9 +129,9 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
 
         // given
         context.allowing(mockHttpHeaders);
-        final Exception rootCause = new Exception("bozfoz");
-        final Exception cause = new Exception("barfoo", rootCause);
-        final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, cause, "foobar");
+        val cause = new Exception("barfoo", new Exception("root-cause-message"));
+        val ex = RestfulObjectsApplicationException
+                .createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, cause, "foobar");
 
         // when
         final Response response = exceptionMapper.toResponse(ex);
@@ -140,12 +142,12 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
         // then
         assertThat((String) response.getMetadata().get("Warning").get(0), is("199 RestfulObjects foobar"));
         assertThat(jsonRepr.getString("message"), is("foobar"));
-        final JsonRepresentation detail = jsonRepr.getRepresentation("detail");
-        assertThat(detail, is(not(nullValue())));
-        assertThat(detail.getString("message"), is("foobar"));
-        final JsonRepresentation causedBy = detail.getRepresentation("causedBy");
-        assertThat(causedBy, is(not(nullValue())));
-        assertThat(causedBy.getString("message"), is(cause.getMessage()));
+        val detailJson = jsonRepr.getRepresentation("detail");
+        assertThat(detailJson, is(not(nullValue())));
+        assertThat(detailJson.getString("message"), is("foobar"));
+        val causedByJson = detailJson.getRepresentation("causedBy");
+        assertThat(causedByJson, is(not(nullValue())));
+        assertThat(causedByJson.getString("message"), is("root-cause-message"));
     }
 
 }
