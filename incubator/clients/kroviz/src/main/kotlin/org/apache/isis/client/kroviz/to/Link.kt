@@ -22,20 +22,21 @@ import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.utils.StringUtils
 
 @Serializable
-data class Link(val rel: String = "",
-                val method: String = Method.GET.operation,
-                val href: String,
-                val type: String = "",
-        //RO SPEC OR ISIS IMPL? can "args" be folded into "arguments"
-                val args: Map<String, Argument> = emptyMap(),
-        /* arguments can either be:
-         * -> empty Map {}
-         * -> Map with "value": null (cf. SO_PROPERTY)
-         * -> Map with empty key "" (cf. ACTIONS_DOWNLOAD_META_MODEL)
-         * -> Map with key,<VALUE> (cf. ACTIONS_RUN_FIXTURE_SCRIPT, ACTIONS_FIND_BY_NAME, ACTIONS_CREATE) */
-                val arguments: Map<String, Argument?> = emptyMap(),
-                val title: String = "")
-    : TransferObject {
+data class Link(
+    val rel: String = "",
+    val method: String = Method.GET.operation,
+    val href: String,
+    val type: String = "",
+    //RO SPEC OR ISIS IMPL? can "args" be folded into "arguments"
+    val args: Map<String, Argument> = emptyMap(),
+    /* arguments can either be:
+     * -> empty Map {}
+     * -> Map with "value": null (cf. SO_PROPERTY)
+     * -> Map with empty key "" (cf. ACTIONS_DOWNLOAD_META_MODEL)
+     * -> Map with key,<VALUE> (cf. ACTIONS_RUN_FIXTURE_SCRIPT, ACTIONS_FIND_BY_NAME, ACTIONS_CREATE) */
+    val arguments: Map<String, Argument?> = emptyMap(),
+    val title: String = "",
+) : TransferObject {
 
     fun argMap(): Map<String, Argument?>? {
         return when {
@@ -86,6 +87,12 @@ data class Link(val rel: String = "",
         raw = raw.replace(isisPrefix, "")
         raw = raw.replace("\"", "")
         return Represention.find(raw)!!
+    }
+
+    fun simpleType(): String {
+        val stringList = type.split("/")
+        val t = stringList.last()
+        return t.removeSuffix("\"")
     }
 
 }

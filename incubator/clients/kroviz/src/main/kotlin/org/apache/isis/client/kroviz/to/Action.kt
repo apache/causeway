@@ -21,15 +21,22 @@ package org.apache.isis.client.kroviz.to
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Action(val id: String,
-                  val memberType: String,
-                  override val links: List<Link> = emptyList(),
-                  val parameters: Map<String, Parameter> = emptyMap(),
-                  val extensions: Extensions
+data class Action(
+    val id: String,
+    val memberType: String,
+    override val links: List<Link> = emptyList(),
+    val parameters: Map<String, Parameter> = emptyMap(),
+    val extensions: Extensions,
 ) : TransferObject, WithLinks {
 
     fun getInvokeLink(): Link? {
         return links.firstOrNull { it.rel.indexOf(id) > 0 }
+    }
+
+    fun getSelfLink(): Link {
+        return links.first {
+            it.relation() == Relation.SELF
+        }
     }
 
     fun findParameterByName(name: String): Parameter? {

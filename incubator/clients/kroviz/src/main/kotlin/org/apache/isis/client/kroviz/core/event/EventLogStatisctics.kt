@@ -21,29 +21,34 @@ package org.apache.isis.client.kroviz.core.event
 import org.apache.isis.client.kroviz.ui.core.SessionManager
 
 class EventLogStatistics {
-    var numberOfRequests = 0
+    var cntRequests = 0
     var totalDurationMs = 0.0
     var totalResponseBytes = 0
-    var averageDurationMs = 0.0
-    var averageResponseBytes = 0.0
-    var averageRunningAtStart = 0.0
+    var avgRequestDurationMs = 0.0
+    var avgResponseBytes = 0.0
+    var avgRunningAtStart = 0.0
+    var avgBytesPerSec = 0.0
     var requestsPerSec = 0.0
 
     init {
         val logEntries = SessionManager.getEventStore().log.filter { !it.isView() }
-        numberOfRequests = logEntries.size
+        cntRequests = logEntries.size
         totalDurationMs = calculateTotalDuration(logEntries)
         totalResponseBytes = calculateTotalResponseLength(logEntries)
-        averageDurationMs = totalDurationMs / numberOfRequests
-        averageResponseBytes = (totalResponseBytes / numberOfRequests).toDouble()
-        averageRunningAtStart = calculateTotalRunningAtStart(logEntries) / numberOfRequests
-        requestsPerSec = numberOfRequests / totalDurationMs * 1000
+        avgRequestDurationMs = totalDurationMs / cntRequests
+        avgResponseBytes = (totalResponseBytes / cntRequests).toDouble()
+        avgRunningAtStart = calculateTotalRunningAtStart(logEntries) / cntRequests
+        avgBytesPerSec = totalResponseBytes / totalDurationMs * 1000
+        requestsPerSec = cntRequests / totalDurationMs * 1000
     }
 
     private fun calculateTotalResponseLength(logEntries: List<LogEntry>): Int {
         var sum = 0
         logEntries.forEach {
             sum += it.responseLength
+            if (it.blob != null && it.blob!!.isClosed) {
+                sum += it.blob!!.size
+            }
         }
         return sum
     }
@@ -65,4 +70,8 @@ class EventLogStatistics {
         return sum
     }
 
+}
+
+private operator fun Int.plus(size: Number): Int {
+    return this + size
 }

@@ -24,9 +24,8 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
-import org.apache.isis.client.kroviz.to.Relation
-import org.apache.isis.client.kroviz.to.TransferObject
-import org.apache.isis.client.kroviz.to.WithLinks
+import org.apache.isis.client.kroviz.to.*
+import org.apache.isis.client.kroviz.to.bs3.Grid
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.w3c.files.Blob
@@ -41,6 +40,7 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
     SUCCESS_XML("SUCCESS_XML", "fas fa-code", ButtonStyle.SUCCESS),
     SUCCESS_IMG("SUCCESS_IMG", "fas fa-image", ButtonStyle.SUCCESS),
     VIEW("VIEW", "fas fa-eye", ButtonStyle.INFO),
+    DIALOG("DIALOG", "fas fa-o-commenting", ButtonStyle.LIGHT),
     USER_ACTION("ACTION", "fas fa-user-times", ButtonStyle.INFO),
     DUPLICATE("DUPLICATE", "fas fa-copy", ButtonStyle.OUTLINESUCCESS),
     CLOSED("CLOSED", "fas fa-eye-slash", ButtonStyle.OUTLINEINFO),
@@ -174,35 +174,37 @@ data class LogEntry(
 
     fun setTransferObject(to: TransferObject) {
         this.obj = to
-        this.type = extractType()
+        when (to) {
+            is WithLinks -> {
+                this.type = extractType(to)
+            }
+            is Grid -> {
+                this.type = Relation.LAYOUT.type
+            }
+            is Icon -> {
+                this.type = Relation.OBJECT_ICON.type
+            }
+            is Blob -> {
+                this.type = Represention.IMAGE_PNG.type
+            }
+            else -> {
+                console.log("[LE.setTransferObject]")
+                console.log(to)
+            }
+        }
     }
 
     //TODO this should be moved to a ValueSemanticsProvider
-    private fun extractType(): String {
-        var result = ""
-        if (obj != null && obj is WithLinks) {
-            val self = (obj as WithLinks).getLinks().firstOrNull() { it.relation() == Relation.SELF }
-            if (self != null) {
-                val t = self.type.removePrefix("application/json;profile=\"urn:org.restfulobjects:repr-types/")
-                result = t.removeSuffix("\"")
-            }
-        }
-        if (result.isEmpty()) {
-            val stringList = url.split("/")
-            if (stringList.contains("actions")) {
-                result = "object-action"
-            } else {
-                result = stringList.last()
-            }
-        }
+    private fun extractType(wl: WithLinks): String {
+        val firstLink = wl.getLinks().firstOrNull()!!
+        val result = firstLink.simpleType()
         if (result.trim().length == 0) {
-            console.log("[LE.initType]")
+            console.log("[LE.extractType]")
             console.log(obj)
             console.log(result)
         }
         return result
     }
-
 
 // region response
     /**
@@ -216,7 +218,7 @@ data class LogEntry(
         return response
     }
 
-    fun hasResponse(): Boolean {
+    private fun hasResponse(): Boolean {
         return response != ""
     }
 
@@ -266,7 +268,7 @@ data class LogEntry(
 
     fun addAggregator(aggregator: BaseAggregator) {
         if (aggregator is ActionDispatcher) {
-            console.log("[LE.addAggregator] is ActionDispatcher")
+//            console.log("[LE.addAggregator] is ActionDispatcher")
             ViewManager.setBusyCursor()
         }
         aggregators.add(aggregator)

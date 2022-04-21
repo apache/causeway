@@ -45,7 +45,8 @@ class RoStatusBar {
     private val success = buildButton("0", "OK", ButtonStyle.OUTLINESUCCESS)
     private val running = buildButton("0", "Run", ButtonStyle.OUTLINEWARNING)
     private val errors = buildButton("0", "Error", ButtonStyle.OUTLINEDANGER)
-    private val views = buildButton("0", "Visualize", ButtonStyle.OUTLINEINFO)
+    private val views = buildButton("0", "Visualize", ButtonStyle.LIGHT)
+    private val dialogs = buildButton("0", "Dialog", ButtonStyle.LIGHT)
 
     private fun buildButton(text: String, iconName: String, style: ButtonStyle): Button {
         return Button(
@@ -67,10 +68,12 @@ class RoStatusBar {
         nav.add(running)
         nav.add(errors)
         nav.add(views)
+        nav.add(dialogs)
         nav.add(userBtn)
         initRunning()
         initErrors()
         initViews()
+        initDialogs()
     }
 
     fun update(status: StatusPo) {
@@ -78,6 +81,7 @@ class RoStatusBar {
         running.text = status.runningNo.toString()
         errors.text = status.errorNo.toString()
         views.text = status.viewsNo.toString()
+ //FIXME       dialogs.text = status.dialogsNo.toString()
     }
 
     private fun initRunning() {
@@ -98,6 +102,13 @@ class RoStatusBar {
         views.setAttribute(name = "title", value = "Number of VIEWS")
         views.onClick {
             EventDialog(EventState.VIEW).open()
+        }
+    }
+
+    private fun initDialogs() {
+        views.setAttribute(name = "title", value = "Number of DIALOGS")
+        views.onClick {
+            EventDialog(EventState.DIALOG).open()
         }
     }
 
