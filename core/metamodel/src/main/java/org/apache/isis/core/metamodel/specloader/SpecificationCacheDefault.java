@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -25,6 +26,7 @@ import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections.snapshot._VersionedList;
@@ -100,7 +102,9 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
         if(shouldRunConcurrent) {
             vList.forEachParallel(onSpec);
         } else {
-            vList.forEach(onSpec);
+            vList
+                .stream().sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
+                .forEach(onSpec);
         }
     }
 
