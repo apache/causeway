@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.hints;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 /**
- * All events to be propogated should inherit from this.
+ * All events to be propagated should inherit from this.
  *
  * <p>
  *
@@ -29,7 +29,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
  */
 public abstract class IsisEventLetterAbstract extends IsisEventAbstract {
 
-    public IsisEventLetterAbstract(AjaxRequestTarget target) {
+    public IsisEventLetterAbstract(final AjaxRequestTarget target) {
         super(target);
     }
 }

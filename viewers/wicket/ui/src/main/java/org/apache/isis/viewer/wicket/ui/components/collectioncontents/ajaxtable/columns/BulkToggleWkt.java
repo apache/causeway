@@ -43,12 +43,6 @@ extends BooleanBinding<DataTableModel> {
     @Override
     protected Optional<_BindableAbstract<Boolean>> getBindable(
             final @Nullable DataTableModel dataTable) {
-
-        if(dataTable==null) {
-            //XXX debug
-            System.err.printf("BulkToggleWkt %s%n", "unexpected dataTable null");
-        }
-
         return dataTable!=null
                 ? Optional.ofNullable(dataTable.getSelectAllToggle())
                 : Optional.empty();
