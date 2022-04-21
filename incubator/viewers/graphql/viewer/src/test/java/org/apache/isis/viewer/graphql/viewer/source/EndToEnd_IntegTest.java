@@ -79,7 +79,7 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract{
     @UseReporter(TextWebReporter.class)
     void simple_post_request() throws Exception {
 
-        Approvals.verify(sendPostRequestWith("body1", "targetFile1"), new Options());
+        Approvals.verify(sendPostRequestWith("simplePostRequestBody", "targetFile1"), new Options());
 
     }
 
@@ -102,7 +102,7 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract{
         });
 
         // when, then
-        Approvals.verify(sendPostRequestWith("body2", "targetFile2"), new Options());
+        Approvals.verify(sendPostRequestWith("findAllE1Body", "targetFile2"), new Options());
 
     }
 
@@ -114,7 +114,7 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract{
 
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
 
-            sendPostRequestWith("body3", "targetFile3");
+            sendPostRequestWith("createE1Body", "targetFile3");
             // just to show we need to query in separate tranasction
             List<E2> list = testEntityRepository.findAllE2();
             assertTrue(list.isEmpty());
@@ -155,7 +155,7 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract{
 
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
 
-            sendPostRequestWith("body4", "targetFile4");
+            sendPostRequestWith("changeNameBody", "targetFile4");
 
         });
 
