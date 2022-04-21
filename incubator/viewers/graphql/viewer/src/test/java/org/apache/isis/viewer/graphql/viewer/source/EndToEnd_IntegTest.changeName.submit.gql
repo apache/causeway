@@ -1,0 +1,14 @@
+{
+  gqltestdomain_GQLTestDomainMenu {
+    findE2(name:"foo") {
+      name_gql_mutations {
+        changeName(newName:"bar") {
+          name
+          e1 {
+            name
+          }
+        }
+      }
+    }
+  }
+}

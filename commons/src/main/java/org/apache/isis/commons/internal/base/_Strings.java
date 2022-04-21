@@ -613,7 +613,7 @@ public final class _Strings {
             final @NonNull Class<?> resourceLocation,
             final @NonNull String resourceName,
             final @NonNull Charset charset) {
-        try(lombok.val input = resourceLocation.getResourceAsStream(resourceName)){
+        try(InputStream input = resourceLocation.getResourceAsStream(resourceName)){
             return read(input, charset);
         }
     }

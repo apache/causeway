@@ -1,3 +1,0 @@
-{
-  "query" : "{gqltestdomain_GQLTestDomainMenu{findAllE1{name,_gql_meta{id,logicalTypeName,version}}}}"
-}
