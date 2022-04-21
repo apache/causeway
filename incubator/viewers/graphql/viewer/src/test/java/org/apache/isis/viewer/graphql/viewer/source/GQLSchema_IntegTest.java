@@ -57,6 +57,7 @@ public class GQLSchema_IntegTest extends TestDomainModuleIntegTestAbstract{
     }
 
     @Test
+    @Disabled
     void assert_stuff_works() {
 
 //        _IocContainer iocContainer = isisSystemEnvironment.getIocContainer();
