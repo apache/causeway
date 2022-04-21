@@ -23,6 +23,8 @@ import org.springframework.graphql.execution.GraphQlSource;
  * {@link org.springframework.graphql.execution.GraphQlSource.Builder} whilst retaining
  * default auto-configuration.
  *
+ * This has been copied in from Spring Boot 2.7 (not yet released - will remove once bump up).
+ *
  * @author Rossen Stoyanchev
  * @since 2.7.0
  */

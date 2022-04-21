@@ -69,6 +69,8 @@ import org.springframework.web.socket.server.support.WebSocketHttpRequestHandler
  * {@link EnableAutoConfiguration Auto-configuration} for enabling Spring GraphQL over
  * Spring MVC.
  *
+ * This has been copied in from Spring Boot 2.7 (not yet released - will remove once bump up).
+ *
  * @author Brian Clozel
  * @since 2.7.0
  */

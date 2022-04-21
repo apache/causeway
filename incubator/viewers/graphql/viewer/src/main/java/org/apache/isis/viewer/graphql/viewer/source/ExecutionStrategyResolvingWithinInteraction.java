@@ -29,12 +29,8 @@ public class ExecutionStrategyResolvingWithinInteraction extends AsyncExecutionS
         // TODO: propagate identity from executionContext
 //        interactionService.openInteraction(InteractionContext.builder().user(UserMemento.builder().build()).build());
 
-        interactionService.openInteraction();
-        try {
+        return interactionService.callAnonymous( () -> {
             return super.resolveFieldWithInfo(executionContext, parameters);
-        } finally {
-            interactionService.closeInteractionLayers();
-        }
-
+        });
     }
 }

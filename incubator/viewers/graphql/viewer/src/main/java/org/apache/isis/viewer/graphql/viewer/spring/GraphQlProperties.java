@@ -24,6 +24,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * {@link ConfigurationProperties properties} for Spring GraphQL.
  *
+ *
+ * This has been copied in from Spring Boot 2.7 (not yet released - will remove once bump up).
+ *
  * @author Brian Clozel
  * @since 2.7.0
  */

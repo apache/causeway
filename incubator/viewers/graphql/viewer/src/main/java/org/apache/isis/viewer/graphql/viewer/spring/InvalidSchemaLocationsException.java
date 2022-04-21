@@ -29,6 +29,8 @@ import org.springframework.util.Assert;
  * {@link InvalidSchemaLocationsException} thrown when no schema file could be found in
  * the provided locations.
  *
+ * This has been copied in from Spring Boot 2.7 (not yet released - will remove once bump up).
+ *
  * @author Brian Clozel
  * @since 2.7.0
  */
