@@ -1,0 +1,4 @@
+isis:
+  persistence:
+    schema:
+      auto-create-schemas: "demo"

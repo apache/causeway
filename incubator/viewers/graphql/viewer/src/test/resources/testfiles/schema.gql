@@ -1,0 +1,645 @@
+"Directs the executor to include this field or fragment only when the `if` argument is true"
+directive @include(
+    "Included when true."
+    if: Boolean!
+  ) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"Directs the executor to skip this field or fragment when the `if`'argument is true."
+directive @skip(
+    "Skipped when true."
+    if: Boolean!
+  ) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"Marks the field, argument, input field or enum value as deprecated"
+directive @deprecated(
+    "The reason for the deprecation"
+    reason: String = "No longer supported"
+  ) on FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM_VALUE | INPUT_FIELD_DEFINITION
+
+"Exposes a URL that specifies the behaviour of this scalar."
+directive @specifiedBy(
+    "The URL that specifies the behaviour of this scalar."
+    url: String!
+  ) on SCALAR
+
+type Query {
+  gqltestdomain_GQLTestDomainMenu: gqltestdomain_GQLTestDomainMenu
+  isis_applib_UserMenu: isis_applib_UserMenu
+  isis_conf_ConfigurationMenu: isis_conf_ConfigurationMenu
+  isis_security_LogoutMenu: isis_security_LogoutMenu
+  numServices: Int
+}
+
+type gqltestdomain_E1 {
+  _gql_meta: gqltestdomain_E1__DomainObject_meta
+  e2: gqltestdomain_E2
+  logicalTypeName: String
+  name: String!
+  objectIdentifier: String
+}
+
+type gqltestdomain_E1__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+  version: String
+}
+
+type gqltestdomain_E2 {
+  _gql_meta: gqltestdomain_E2__DomainObject_meta
+  _gql_mutations: gqltestdomain_E2__DomainObject_mutators
+  e1: gqltestdomain_E1
+  logicalTypeName: String
+  name: String!
+  objectIdentifier: String
+  otherE2List: [gqltestdomain_E2]
+  otherEntities: [org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity]
+  stringList: [String]
+  zintList: [Int]
+}
+
+type gqltestdomain_E2__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+  version: String
+}
+
+type gqltestdomain_E2__DomainObject_mutators {
+  changeE1(e1: _gql_input__gqltestdomain_E1!): gqltestdomain_E2
+  changeName(newName: String!): gqltestdomain_E2
+}
+
+type gqltestdomain_GQLTestDomainMenu {
+  createE1(e2: _gql_input__gqltestdomain_E2, name: String): gqltestdomain_E1
+  findAllE1: [gqltestdomain_E1]
+  findAllE2: [gqltestdomain_E2]
+  findAllTestEntities: [org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity]
+}
+
+type isis_applib_ActionNode {
+  _gql_meta: isis_applib_ActionNode__DomainObject_meta
+  _gql_mutations: isis_applib_ActionNode__DomainObject_mutators
+  action: String!
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type isis_applib_ActionNode__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_applib_ActionNode__DomainObject_mutators {
+  createTitle: String
+  streamChildNodes: java_util_stream_Stream
+}
+
+type isis_applib_CollectionNode {
+  _gql_meta: isis_applib_CollectionNode__DomainObject_meta
+  _gql_mutations: isis_applib_CollectionNode__DomainObject_mutators
+  collection: String!
+  logicalTypeName: String
+  objectIdentifier: String
+  parentNode: isis_applib_TypeNode!
+}
+
+type isis_applib_CollectionNode__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_applib_CollectionNode__DomainObject_mutators {
+  createTitle: String
+  streamChildNodes: java_util_stream_Stream
+}
+
+type isis_applib_DomainObjectList {
+  _gql_meta: isis_applib_DomainObjectList__DomainObject_meta
+  actionArguments: String
+  actionId: String
+  actionOwningFqcn: String
+  elementTypeFqcn: String!
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type isis_applib_DomainObjectList__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_applib_FacetAttrNode {
+  _gql_meta: isis_applib_FacetAttrNode__DomainObject_meta
+  _gql_mutations: isis_applib_FacetAttrNode__DomainObject_mutators
+  facetAttr: String!
+  logicalTypeName: String
+  objectIdentifier: String
+  parentNode: isis_applib_FacetNode!
+}
+
+type isis_applib_FacetAttrNode__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_applib_FacetAttrNode__DomainObject_mutators {
+  createTitle: String
+  streamChildNodes: java_util_stream_Stream
+}
+
+type isis_applib_FacetGroupNode {
+  _gql_meta: isis_applib_FacetGroupNode__DomainObject_meta
+  _gql_mutations: isis_applib_FacetGroupNode__DomainObject_mutators
+  facets: String!
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type isis_applib_FacetGroupNode__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_applib_FacetGroupNode__DomainObject_mutators {
+  createTitle: String
+  streamChildNodes: java_util_stream_Stream
+}
+
+type isis_applib_FacetNode {
+  _gql_meta: isis_applib_FacetNode__DomainObject_meta
+  _gql_mutations: isis_applib_FacetNode__DomainObject_mutators
+  facet: String!
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type isis_applib_FacetNode__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_applib_FacetNode__DomainObject_mutators {
+  createTitle: String
+  streamChildNodes: java_util_stream_Stream
+}
+
+type isis_applib_ParameterNode {
+  _gql_meta: isis_applib_ParameterNode__DomainObject_meta
+  _gql_mutations: isis_applib_ParameterNode__DomainObject_mutators
+  logicalTypeName: String
+  objectIdentifier: String
+  parameter: String!
+  parentNode: isis_applib_ActionNode!
+}
+
+type isis_applib_ParameterNode__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_applib_ParameterNode__DomainObject_mutators {
+  createTitle: String
+  streamChildNodes: java_util_stream_Stream
+}
+
+type isis_applib_PropertyNode {
+  _gql_meta: isis_applib_PropertyNode__DomainObject_meta
+  _gql_mutations: isis_applib_PropertyNode__DomainObject_mutators
+  logicalTypeName: String
+  objectIdentifier: String
+  parentNode: isis_applib_TypeNode!
+  property: String!
+}
+
+type isis_applib_PropertyNode__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_applib_PropertyNode__DomainObject_mutators {
+  createTitle: String
+  streamChildNodes: java_util_stream_Stream
+}
+
+type isis_applib_RoleMemento {
+  _gql_meta: isis_applib_RoleMemento__DomainObject_meta
+  description: String!
+  logicalTypeName: String
+  name: String!
+  objectIdentifier: String
+}
+
+type isis_applib_RoleMemento__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_applib_TypeNode {
+  _gql_meta: isis_applib_TypeNode__DomainObject_meta
+  _gql_mutations: isis_applib_TypeNode__DomainObject_mutators
+  domainClassDto: String!
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type isis_applib_TypeNode__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_applib_TypeNode__DomainObject_mutators {
+  createTitle: String
+  streamChildNodes: java_util_stream_Stream
+}
+
+type isis_applib_UserMemento {
+  _gql_meta: isis_applib_UserMemento__DomainObject_meta
+  _gql_mutations: isis_applib_UserMemento__DomainObject_mutators
+  authenticationCode: String!
+  authenticationSource: String!
+  avatarUrl: String
+  impersonating: String!
+  languageLocale: String
+  logicalTypeName: String
+  multiTenancyToken: String
+  name: String!
+  numberFormatLocale: String
+  objectIdentifier: String
+  realName: String
+  roles: [isis_applib_RoleMemento]
+  timeFormatLocale: String
+}
+
+type isis_applib_UserMemento__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_applib_UserMemento__DomainObject_mutators {
+  isCurrentUser(userName: String): Boolean
+}
+
+type isis_applib_UserMenu {
+  me: isis_applib_UserMemento
+}
+
+type isis_conf_ConfigurationMenu {
+  configuration: isis_conf_ConfigurationViewmodel
+}
+
+type isis_conf_ConfigurationProperty {
+  _gql_meta: isis_conf_ConfigurationProperty__DomainObject_meta
+  key: String!
+  logicalTypeName: String
+  objectIdentifier: String
+  value: String!
+}
+
+type isis_conf_ConfigurationProperty__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_conf_ConfigurationViewmodel {
+  _gql_meta: isis_conf_ConfigurationViewmodel__DomainObject_meta
+  configuration: [isis_conf_ConfigurationProperty]
+  environment: [isis_conf_ConfigurationProperty]
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type isis_conf_ConfigurationViewmodel__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_feat_ApplicationFeatureViewModel {
+  _gql_meta: isis_feat_ApplicationFeatureViewModel__DomainObject_meta
+  logicalTypeName: String
+  memberName: String!
+  namespaceName: String!
+  objectIdentifier: String
+  typeSimpleName: String!
+}
+
+type isis_feat_ApplicationFeatureViewModel__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_feat_ApplicationNamespace {
+  _gql_meta: isis_feat_ApplicationNamespace__DomainObject_meta
+  logicalTypeName: String
+  memberName: String!
+  namespaceName: String!
+  objectIdentifier: String
+  typeSimpleName: String!
+}
+
+type isis_feat_ApplicationNamespace__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_feat_ApplicationType {
+  _gql_meta: isis_feat_ApplicationType__DomainObject_meta
+  actions: [isis_feat_ApplicationTypeAction]
+  collections: [isis_feat_ApplicationTypeCollection]
+  logicalTypeName: String
+  memberName: String!
+  namespaceName: String!
+  objectIdentifier: String
+  properties: [isis_feat_ApplicationTypeProperty]
+  typeSimpleName: String!
+}
+
+type isis_feat_ApplicationTypeAction {
+  _gql_meta: isis_feat_ApplicationTypeAction__DomainObject_meta
+  actionSemantics: String!
+  logicalTypeName: String
+  memberName: String!
+  namespaceName: String!
+  objectIdentifier: String
+  returnType: String!
+  typeSimpleName: String!
+}
+
+type isis_feat_ApplicationTypeAction__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_feat_ApplicationTypeCollection {
+  _gql_meta: isis_feat_ApplicationTypeCollection__DomainObject_meta
+  derived: String!
+  elementType: String!
+  logicalTypeName: String
+  memberName: String!
+  namespaceName: String!
+  objectIdentifier: String
+  typeSimpleName: String!
+}
+
+type isis_feat_ApplicationTypeCollection__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_feat_ApplicationTypeMember {
+  _gql_meta: isis_feat_ApplicationTypeMember__DomainObject_meta
+  logicalTypeName: String
+  memberName: String!
+  namespaceName: String!
+  objectIdentifier: String
+  typeSimpleName: String!
+}
+
+type isis_feat_ApplicationTypeMember__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_feat_ApplicationTypeProperty {
+  _gql_meta: isis_feat_ApplicationTypeProperty__DomainObject_meta
+  derived: String!
+  logicalTypeName: String
+  maxLength: String
+  memberName: String!
+  namespaceName: String!
+  objectIdentifier: String
+  returnType: String!
+  typeSimpleName: String!
+  typicalLength: String
+}
+
+type isis_feat_ApplicationTypeProperty__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_feat_ApplicationType__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_security_LoginRedirect {
+  _gql_meta: isis_security_LoginRedirect__DomainObject_meta
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type isis_security_LoginRedirect__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type isis_security_LogoutMenu {
+  logout: String
+}
+
+type isis_testing_fixtures_FixtureResult {
+  _gql_meta: isis_testing_fixtures_FixtureResult__DomainObject_meta
+  className: String!
+  fixtureScriptClassName: String
+  key: String!
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type isis_testing_fixtures_FixtureResult__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type java_util_SortedMap {
+  _gql_meta: java_util_SortedMap__DomainObject_meta
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type java_util_SortedMap__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type java_util_stream_Stream {
+  _gql_meta: java_util_stream_Stream__DomainObject_meta
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type java_util_stream_Stream__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type org_apache_isis_applib_services_inject_ServiceInjector {
+  _gql_meta: org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_meta
+  _gql_mutations: org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_mutators
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_mutators {
+  injectServicesInto(domainObject: String): String
+}
+
+type org_apache_isis_core_metamodel_inspect_model_MMNode {
+  _gql_meta: org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_meta
+  logicalTypeName: String
+  objectIdentifier: String
+}
+
+type org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript {
+  _gql_meta: org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta
+  friendlyName: String!
+  logicalTypeName: String
+  objectIdentifier: String
+  qualifiedName: String!
+}
+
+type org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+type org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
+  _gql_meta: org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_meta
+  logicalTypeName: String
+  name: String!
+  objectIdentifier: String
+}
+
+type org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_meta {
+  id: String!
+  logicalTypeName: String!
+}
+
+input _gql_input__gqltestdomain_E1 {
+  id: ID!
+}
+
+input _gql_input__gqltestdomain_E2 {
+  id: ID!
+}
+
+input _gql_input__isis_applib_ActionNode {
+  id: ID!
+}
+
+input _gql_input__isis_applib_CollectionNode {
+  id: ID!
+}
+
+input _gql_input__isis_applib_DomainObjectList {
+  id: ID!
+}
+
+input _gql_input__isis_applib_FacetAttrNode {
+  id: ID!
+}
+
+input _gql_input__isis_applib_FacetGroupNode {
+  id: ID!
+}
+
+input _gql_input__isis_applib_FacetNode {
+  id: ID!
+}
+
+input _gql_input__isis_applib_ParameterNode {
+  id: ID!
+}
+
+input _gql_input__isis_applib_PropertyNode {
+  id: ID!
+}
+
+input _gql_input__isis_applib_RoleMemento {
+  id: ID!
+}
+
+input _gql_input__isis_applib_TypeNode {
+  id: ID!
+}
+
+input _gql_input__isis_applib_UserMemento {
+  id: ID!
+}
+
+input _gql_input__isis_conf_ConfigurationProperty {
+  id: ID!
+}
+
+input _gql_input__isis_conf_ConfigurationViewmodel {
+  id: ID!
+}
+
+input _gql_input__isis_feat_ApplicationFeatureViewModel {
+  id: ID!
+}
+
+input _gql_input__isis_feat_ApplicationNamespace {
+  id: ID!
+}
+
+input _gql_input__isis_feat_ApplicationType {
+  id: ID!
+}
+
+input _gql_input__isis_feat_ApplicationTypeAction {
+  id: ID!
+}
+
+input _gql_input__isis_feat_ApplicationTypeCollection {
+  id: ID!
+}
+
+input _gql_input__isis_feat_ApplicationTypeMember {
+  id: ID!
+}
+
+input _gql_input__isis_feat_ApplicationTypeProperty {
+  id: ID!
+}
+
+input _gql_input__isis_security_LoginRedirect {
+  id: ID!
+}
+
+input _gql_input__isis_testing_fixtures_FixtureResult {
+  id: ID!
+}
+
+input _gql_input__java_util_SortedMap {
+  id: ID!
+}
+
+input _gql_input__java_util_stream_Stream {
+  id: ID!
+}
+
+input _gql_input__org_apache_isis_applib_services_inject_ServiceInjector {
+  id: ID!
+}
+
+input _gql_input__org_apache_isis_core_metamodel_inspect_model_MMNode {
+  id: ID!
+}
+
+input _gql_input__org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript {
+  id: ID!
+}
+
+input _gql_input__org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
+  id: ID!
+}

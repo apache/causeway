@@ -73,7 +73,7 @@ public class DomainModelValidator {
             if(log.isDebugEnabled()) {
                 specificationLoader.forEach(spec->{
                     log.debug("loaded: " + spec.getFullIdentifier());
-                });
+                },false);
             }
         }
 

@@ -142,6 +142,18 @@
 
 			<dependency>
 				<groupId>org.apache.isis.incubator.viewer</groupId>
+				<artifactId>isis-viewer-graphql</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.incubator.viewer</groupId>
+				<artifactId>isis-viewer-javafx</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.incubator.viewer</groupId>
 				<artifactId>isis-viewer-vaadin</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
@@ -185,8 +197,9 @@
 
 	<modules>
  		<module>clients/kroviz</module>
-		<module>viewers/vaadin</module>
+		<module>viewers/graphql</module>
 		<module>viewers/javafx</module>
+		<module>viewers/vaadin</module>
 		<module>../valuetypes/prism/vaadin</module>
 		<module>../valuetypes/asciidoc/ui/vaadin</module>
 	</modules>
