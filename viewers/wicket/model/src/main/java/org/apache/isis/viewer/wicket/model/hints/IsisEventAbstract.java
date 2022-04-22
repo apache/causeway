@@ -20,6 +20,9 @@ package org.apache.isis.viewer.wicket.model.hints;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * All Isis-related events subclass from this, and fall into two categories.
  *
@@ -34,13 +37,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
  * send as a {@link org.apache.wicket.event.Broadcast#BREADTH down} to all its components.
  * </p>
  */
+@RequiredArgsConstructor
 public abstract class IsisEventAbstract {
-
-    private final AjaxRequestTarget target;
-
-    public IsisEventAbstract(AjaxRequestTarget target) {
-        this.target = target;
-    }
 
     /**
      * The {@link AjaxRequestTarget target}, if any, that caused this event to be generated.
@@ -48,8 +46,7 @@ public abstract class IsisEventAbstract {
      * <p>
      * Typically populated, but not always...
      */
-    public AjaxRequestTarget getTarget() {
-        return target;
-    }
+    @Getter private final AjaxRequestTarget target;
+
 }
 

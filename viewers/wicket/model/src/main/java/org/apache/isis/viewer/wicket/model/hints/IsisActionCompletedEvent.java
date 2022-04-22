@@ -19,30 +19,15 @@
 package org.apache.isis.viewer.wicket.model.hints;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
-
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 
 /**
  *
  */
 public class IsisActionCompletedEvent extends IsisEventLetterAbstract {
 
-    private final ActionModel actionModel;
-    private final Form<?> form;
-
-    public IsisActionCompletedEvent(ActionModel actionModel, AjaxRequestTarget target, Form<?> form) {
+    public IsisActionCompletedEvent(final AjaxRequestTarget target) {
         super(target);
-        this.actionModel = actionModel;
-        this.form = form;
     }
 
-    public ActionModel getActionModel() {
-        return actionModel;
-    }
-
-    public Form<?> getForm() {
-        return form;
-    }
 }
 

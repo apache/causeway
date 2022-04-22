@@ -77,13 +77,14 @@ import org.apache.isis.viewer.wicket.ui.util.FontAwesomeCssReferenceWkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
+
 import de.agilecoders.wicket.core.Bootstrap;
 // import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
@@ -483,12 +484,9 @@ implements ActionPromptProvider {
      */
     @Override
     public void onEvent(final org.apache.wicket.event.IEvent<?> event) {
-        final Object payload = event.getPayload();
-        if(payload instanceof IsisEventLetterAbstract) {
-            final IsisEventLetterAbstract letter = (IsisEventLetterAbstract)payload;
-            final IsisEnvelopeEvent broadcastEv = new IsisEnvelopeEvent(letter);
-            send(this, Broadcast.BREADTH, broadcastEv);
-        }
+        _Casts.castTo(IsisEventLetterAbstract.class, event.getPayload())
+        .ifPresent(letter->
+            send(PageAbstract.this, Broadcast.BREADTH, new IsisEnvelopeEvent(letter)));
     }
 
     // -- getComponentFactoryRegistry (Convenience)

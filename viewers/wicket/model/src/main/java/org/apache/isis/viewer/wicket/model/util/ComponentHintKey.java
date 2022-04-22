@@ -20,10 +20,9 @@ package org.apache.isis.viewer.wicket.model.util;
 
 import java.io.Serializable;
 
-import javax.inject.Provider;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.danekja.java.util.function.serializable.SerializableSupplier;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
@@ -42,32 +41,32 @@ public class ComponentHintKey implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static ComponentHintKey create(
-            IsisAppCommonContext commonContext,
-            Provider<Component> pathProvider,
-            String key) {
+            final IsisAppCommonContext commonContext,
+            final SerializableSupplier<Component> componentProvider,
+            final String key) {
         return new ComponentHintKey(
                 commonContext.lookupServiceElseFail(HintStore.class),
-                pathProvider, null, key, null);
+                componentProvider, null, key, null);
     }
 
     public static ComponentHintKey create(
-            IsisAppCommonContext commonContext,
-            Component path,
-            String key) {
+            final IsisAppCommonContext commonContext,
+            final Component path,
+            final String key) {
         return new ComponentHintKey(
                 commonContext.lookupServiceElseFail(HintStore.class),
                 null, path, key, null);
     }
 
     public static ComponentHintKey create(
-            HintStore hintStore,
-            String fullKey) {
+            final HintStore hintStore,
+            final String fullKey) {
         return new ComponentHintKey(hintStore,
                 null, null, null, fullKey);
     }
 
     private transient HintStore hintStore;
-    private final transient Provider<Component> componentProvider;
+    private final SerializableSupplier<Component> componentProvider;
     private Component component;
     private final String keyName;
     private final String fullKey;
@@ -91,7 +90,7 @@ public class ComponentHintKey implements Serializable {
         return keyOfProvided.equals(key);
     }
 
-    public void set(final Bookmark bookmark, String value) {
+    public void set(final Bookmark bookmark, final String value) {
         if(bookmark == null) {
             return;
         }
@@ -161,7 +160,7 @@ public class ComponentHintKey implements Serializable {
 
     // -- HELPER
 
-    private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
+    private <X> X computeIfAbsent(final Class<X> type, final X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
                 : CommonContextUtils.getCommonContext().lookupServiceElseFail(type);

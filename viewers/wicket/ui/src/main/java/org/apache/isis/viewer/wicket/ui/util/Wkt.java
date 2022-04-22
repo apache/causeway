@@ -33,7 +33,6 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -71,13 +70,10 @@ import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.commons.internal.functions._Functions.SerializableFunction;
-import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
-import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -373,21 +369,6 @@ public class Wkt {
             private static final long serialVersionUID = 1L;
             @Override protected void onUpdate(final AjaxRequestTarget target) {
                 onUpdate.accept(target); }
-            /**
-             * XXX[ISIS-3005] Any action dialog submission on the same page will
-             * result in a new DataTabelModel, where any previously rendered check-boxes
-             * run out of sync with their DataRowToggle model.
-             * Hence we intercept such events and reset check-boxes to un-checked.
-             */
-            @Override public void onEvent(final IEvent<?> event) {
-                _Casts.castTo(IsisEnvelopeEvent.class, event.getPayload())
-                .ifPresent(envelopeEvent->{
-                    if(envelopeEvent.getLetter() instanceof IsisActionCompletedEvent) {
-                        super.setModelObject(false);
-                    }
-                });
-                super.onEvent(event);
-            }
         };
     }
 
