@@ -19,6 +19,8 @@
 package org.apache.isis.viewer.wicket.model.util;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.core.request.handler.ListenerRequestHandler;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
@@ -26,7 +28,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContex
 /**
  * @since 2.0
  */
-public class CommonContextUtils {
+public class WktContext {
 
     public static IsisAppCommonContext getCommonContext() {
         return ((HasCommonContext) Application.get()).getCommonContext();
@@ -36,6 +38,15 @@ public class CommonContextUtils {
         return commonContext!=null
                 ? commonContext
                 : getCommonContext();
+    }
+
+    public static void pageReload() {
+        var cycle = RequestCycle.get();
+        var handler = cycle.getActiveRequestHandler();
+        if(handler instanceof ListenerRequestHandler) {
+            var currentPage = ((ListenerRequestHandler)handler).getPage();
+            cycle.setResponsePage(currentPage);
+        }
     }
 
 }

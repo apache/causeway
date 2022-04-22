@@ -40,7 +40,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContex
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiChoice;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithSingleChoice;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 import lombok.NonNull;
 import lombok.val;
@@ -198,7 +198,7 @@ implements
 
     @Override
     public IsisAppCommonContext getCommonContext() {
-        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+        return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
 

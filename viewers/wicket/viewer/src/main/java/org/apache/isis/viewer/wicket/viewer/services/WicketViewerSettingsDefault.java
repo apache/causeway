@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 @Service
 @Named("isis.viewer.wicket..WicketViewerSettingsDefault")
@@ -90,7 +90,7 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
     private IsisConfiguration getConfiguration() {
         if(configuration==null) {
-            configuration = CommonContextUtils.getCommonContext().getConfiguration();
+            configuration = WktContext.getCommonContext().getConfiguration();
         }
         return configuration;
     }
