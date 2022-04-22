@@ -22,13 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import graphql.GraphQL;
-import graphql.execution.instrumentation.Instrumentation;
-import graphql.schema.idl.RuntimeWiring;
-import graphql.schema.visibility.NoIntrospectionGraphqlFieldVisibility;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -48,6 +43,10 @@ import org.springframework.graphql.execution.ExecutionGraphQlService;
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.graphql.execution.MissingSchemaException;
 import org.springframework.graphql.execution.RuntimeWiringConfigurer;
+
+import graphql.GraphQL;
+import graphql.execution.instrumentation.Instrumentation;
+import graphql.schema.visibility.NoIntrospectionGraphqlFieldVisibility;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for creating a Spring GraphQL base

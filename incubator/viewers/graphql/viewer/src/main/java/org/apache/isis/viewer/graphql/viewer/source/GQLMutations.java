@@ -1,10 +1,11 @@
 package org.apache.isis.viewer.graphql.viewer.source;
 
-import lombok.Data;
+import java.util.List;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 
-import java.util.List;
+import lombok.Data;
 
 @Data
 public class GQLMutations {

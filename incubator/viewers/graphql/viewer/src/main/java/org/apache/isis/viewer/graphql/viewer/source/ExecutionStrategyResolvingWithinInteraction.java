@@ -4,8 +4,6 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
-import org.apache.isis.applib.services.user.UserMemento;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;

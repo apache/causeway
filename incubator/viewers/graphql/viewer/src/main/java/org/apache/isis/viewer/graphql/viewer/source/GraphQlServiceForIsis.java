@@ -2,7 +2,6 @@ package org.apache.isis.viewer.graphql.viewer.source;
 
 import javax.inject.Inject;
 
-import graphql.GraphQL;
 import org.springframework.graphql.GraphQlService;
 import org.springframework.graphql.RequestInput;
 import org.springframework.graphql.RequestOutput;

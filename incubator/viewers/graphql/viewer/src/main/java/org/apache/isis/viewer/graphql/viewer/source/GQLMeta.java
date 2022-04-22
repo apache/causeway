@@ -1,12 +1,9 @@
 package org.apache.isis.viewer.graphql.viewer.source;
 
-import graphql.schema.DataFetchingEnvironment;
-import lombok.Data;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 
-import java.util.Optional;
+import lombok.Data;
 
 @Data
 public class GQLMeta {

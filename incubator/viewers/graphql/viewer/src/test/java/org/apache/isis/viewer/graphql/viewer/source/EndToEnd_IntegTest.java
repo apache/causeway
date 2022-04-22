@@ -1,12 +1,21 @@
 package org.apache.isis.viewer.graphql.viewer.source;
 
-import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.E1;
-import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.E2;
-import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.GQLTestDomainMenu;
-import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.TestEntityRepository;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.approvaltests.core.Scrubber;
@@ -20,24 +29,18 @@ import org.junit.jupiter.api.TestInfo;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-import javax.inject.Inject;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.E1;
+import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.E2;
+import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.GQLTestDomainMenu;
+import org.apache.isis.viewer.graphql.viewer.source.gqltestdomain.TestEntityRepository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Resources;
-
-import static org.apache.isis.commons.internal.assertions._Assert.*;
+import static org.apache.isis.commons.internal.assertions._Assert.assertEquals;
+import static org.apache.isis.commons.internal.assertions._Assert.assertNotNull;
+import static org.apache.isis.commons.internal.assertions._Assert.assertTrue;
 
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -60,7 +63,7 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
-    void beforeEach(TestInfo testInfo) {
+    void beforeEach(final TestInfo testInfo) {
         this.testInfo = testInfo;
         assertNotNull(isisSystemEnvironment);
         assertNotNull(specificationLoader);
@@ -208,23 +211,22 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
         return HttpRequest.newBuilder().uri(uri).POST(bodyPublisher).setHeader("Content-Type", "application/json").build();
     }
 
-    private String submitRequest(HttpRequest request) throws IOException, InterruptedException {
+    private String submitRequest(final HttpRequest request) throws IOException, InterruptedException {
         val responseBodyHandler = HttpResponse.BodyHandlers.ofString();
         val httpClient = HttpClient.newBuilder().build();
         val httpResponse = httpClient.send(request, responseBodyHandler);
         return httpResponse.body();
     }
 
-    private String readResource(String resourceName) throws IOException {
-        URL resource = Resources.getResource(getClass(), resourceName);
-        return Resources.toString(resource, StandardCharsets.UTF_8);
+    private String readResource(final String resourceName) throws IOException {
+        return _Resources.loadAsString(getClass(), resourceName, StandardCharsets.UTF_8);
     }
 
     private Options gqlOptions() {
         return new Options().withScrubber(new Scrubber() {
             @SneakyThrows
             @Override
-            public String scrub(String s) {
+            public String scrub(final String s) {
                 return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
             }
         }).forFile().withExtension(".gql");

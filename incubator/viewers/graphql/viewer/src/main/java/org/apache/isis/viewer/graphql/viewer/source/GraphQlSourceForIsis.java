@@ -1,22 +1,30 @@
 package org.apache.isis.viewer.graphql.viewer.source;
 
-import graphql.GraphQL;
-import graphql.Scalars;
-import graphql.schema.*;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.springframework.graphql.execution.GraphQlSource;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.springframework.graphql.execution.GraphQlSource;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.HashSet;
-import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+import graphql.GraphQL;
+import graphql.Scalars;
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLCodeRegistry;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLSchema;
+import graphql.schema.GraphQLType;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
