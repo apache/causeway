@@ -53,13 +53,11 @@ extends SortableDataProvider<DataRow, String> {
     }
 
     public DataTableModel getDataTableModel() {
-        System.err.printf("getDataTableModel %s%n", System.identityHashCode(dataTableModelHolder.getObject()));
         return dataTableModelHolder.getObject();
     }
 
     @Override
     public IModel<DataRow> model(final DataRow dataRow) {
-        System.err.printf("CollectionContentsSortableDataProvider model(%s)%n", dataRow.getUuid());
         return DataRowWkt.chain(dataTableModelHolder, dataRow);
     }
 
