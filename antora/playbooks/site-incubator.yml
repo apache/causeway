@@ -40,6 +40,9 @@ content:
     - url: .
       start_path: incubator/clients/kroviz/adoc # incubator
       branches: HEAD
+    - url: .
+      start_path: incubator/viewers/graphql/adoc # incubator
+      branches: HEAD
 #    - url: .
 #      start_path: incubator/viewers/javafx/adoc # incubator
 #      branches: HEAD

@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="DemoAppWicketJpa" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="demo-wicket-jpa" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="demoapp.webapp.wicket.jpa.DemoAppWicketJpa" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

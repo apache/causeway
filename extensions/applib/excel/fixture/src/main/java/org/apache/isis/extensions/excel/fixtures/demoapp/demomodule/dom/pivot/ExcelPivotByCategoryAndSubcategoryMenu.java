@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
@@ -35,9 +36,9 @@ import org.apache.isis.extensions.excel.applib.service.ExcelServiceDefault;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = "libExcelFixture.ExcelPivotByCategoryAndSubcategoryMenu"
+        nature = NatureOfService.VIEW
 )
+@Named("libExcelFixture.ExcelPivotByCategoryAndSubcategoryMenu")
 @DomainServiceLayout(
         named = "Excel"
 )

@@ -243,6 +243,7 @@
 				<module>wicket/common</module>
 				<module>wicket/jdo</module>
 				<module>wicket/jpa</module>
+				<module>wicket/jpa-and-graphql</module>
 				<module>vaadin</module>
 			</modules>
 		</profile>

@@ -24,8 +24,10 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -46,9 +48,9 @@ import org.apache.isis.applib.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = "libExcelFixture.ExcelDemoToDoItemMenu"
+        nature = NatureOfService.VIEW
 )
+@Named("libExcelFixture.ExcelDemoToDoItemMenu")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ExcelDemoToDoItemMenu {
@@ -176,7 +178,7 @@ public class ExcelDemoToDoItemMenu {
 //                new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05)));
 
         LocalDate today = currentDate();
-        toDoItem.setDueBy(today.plusDays((long)random(10)-2L));
+        toDoItem.setDueBy(today.plusDays(random(10)-2L));
 
         repositoryService.persist(toDoItem);
 
@@ -193,7 +195,7 @@ public class ExcelDemoToDoItemMenu {
 //        return Math.random() * (to-from) + from;
 //    }
 
-    private static int random(int n) {
+    private static int random(final int n) {
         return (int) (Math.random() * n);
     }
 
