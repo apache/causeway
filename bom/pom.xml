@@ -415,8 +415,8 @@ under the License.
 
 		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts)
 			versions -->
-		<node.version>v16.14.0</node.version>
-		<npm.version>8.3.1</npm.version>
+		<node.version>v16.14.2</node.version>
+		<npm.version>8.5.0</npm.version>
 
 		<objenesis.version>3.2</objenesis.version>
 		<ognl.version>3.3.2</ognl.version>
@@ -439,7 +439,7 @@ under the License.
 
 		<togglz.version>3.1.1</togglz.version>
 
-		<vaadin.version>23.0.4</vaadin.version>
+		<vaadin.version>23.0.6</vaadin.version>
 
 		<wicket.version>9.9.1</wicket.version>
 		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
