@@ -197,7 +197,7 @@
 		<dependency>
 			<groupId>com.sun.xml.bind.external</groupId>
 			<artifactId>relaxng-datatype</artifactId>
-			<version>2.3.6</version> 
+			<version>3.0.2</version> 
 		</dependency>
 		
 		<!-- v8.0.0 provides @Inject, @Qualifier, ... that's required by Spring 5.x -->
