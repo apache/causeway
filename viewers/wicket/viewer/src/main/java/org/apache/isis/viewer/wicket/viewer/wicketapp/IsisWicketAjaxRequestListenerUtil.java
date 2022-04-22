@@ -18,12 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
-import java.util.Map;
-
-import org.apache.wicket.Component;
 import org.apache.wicket.SystemMapper;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.AjaxRequestTarget.IListener;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.PageInstanceMapper;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -36,10 +31,7 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.experimental.UtilityClass;
 
-/**
- * Could maybe instead utilize
- * {@link org.apache.wicket.ajax.AjaxRequestTarget.IListener#onBeforeRespond(java.util.Map, org.apache.wicket.ajax.AjaxRequestTarget)}
- */
+
 @UtilityClass
 public final class IsisWicketAjaxRequestListenerUtil {
 
@@ -57,6 +49,9 @@ public final class IsisWicketAjaxRequestListenerUtil {
                         //final boolean isAjax = ((WebRequest)request).isAjax();
 
                         if(handler instanceof ListenerRequestHandler) {
+//                            _Debug.log("AJAX via ListenerRequestHandler");
+//                            RequestCycle.get().getListeners().add(newRequestCycleListener());
+
                             EntityPage.viewmodelRefresh(((ListenerRequestHandler)handler).getPage());
                         }
 
@@ -67,13 +62,27 @@ public final class IsisWicketAjaxRequestListenerUtil {
         });
     }
 
-    public IListener newAjaxListener() {
-        return new IListener() {;
-            @Override
-            public void onBeforeRespond(final Map<String, Component> map, final AjaxRequestTarget target) {
-                EntityPage.broadcastAjaxRequest(target.getPage(), target);
-            }
-        };
-    }
+//    public IListener newAjaxListener() {
+//
+//        RequestCycle x;
+//
+//        return new IListener() {;
+//            @Override
+//            public void onBeforeRespond(final Map<String, Component> map, final AjaxRequestTarget target) {
+//                _Debug.log("AJAX via IListener");
+//                EntityPage.broadcastAjaxRequest(target.getPage(), target);
+//
+//            }
+//        };
+//    }
+
+//    private IRequestCycleListener newRequestCycleListener() {
+//        return new IRequestCycleListener() {
+//            @Override
+//            public void onRequestHandlerResolved(final RequestCycle cycle, final IRequestHandler handler) {
+//                _Debug.log("RequestCycle: handler resolved %s", handler);
+//            }
+//        };
+//    }
 
 }

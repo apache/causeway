@@ -62,7 +62,7 @@ extends ChainingModel<DataRow> {
             dataRow = getDataTableModel().lookupDataRow(uuid)
                     .orElse(null);
             if(dataRow==null) {
-                // UI out of sync with model: reload page
+                // XXX[ISIS-3005] UI out of sync with model: reload page
                 WktContext.pageReload();
             }
         }

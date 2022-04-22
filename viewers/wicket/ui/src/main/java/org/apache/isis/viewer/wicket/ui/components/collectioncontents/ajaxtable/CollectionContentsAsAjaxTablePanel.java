@@ -21,18 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 import java.util.List;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
-import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
@@ -41,7 +36,6 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericPropertyColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage.ViewmodelRefreshedEvent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
@@ -117,39 +111,6 @@ implements CollectionCountProvider {
         setOutputMarkupId(true);
     }
 
-    int primed = 0;
-
-    /**
-     * XXX[ISIS-3005] Any action dialog submission on the same page will
-     * result in a new {@link DataTableModel}, where any previously rendered check-boxes
-     * run out of sync with their DataRowToggle model.
-     * Hence we intercept such events and reset check-boxes to un-checked.
-     */
-    @Override public void onEvent(final IEvent<?> event) {
-        _Casts.castTo(IsisEnvelopeEvent.class, event.getPayload())
-        .ifPresent(envelopeEvent->{
-            if(envelopeEvent.getLetter() instanceof IsisActionCompletedEvent) {
-                _Debug.log("DETACHING");
-                val dataTable = (IsisAjaxDataTable)get(ID_TABLE);
-                ((CollectionContentsSortableDataProvider)dataTable.getDataProvider()).forceDetach();
-                primed = 2;
-            }
-            if(envelopeEvent.getLetter() instanceof ViewmodelRefreshedEvent) {
-                _Debug.log("EVENT");
-                if(primed==2) {
-                    primed--;
-                } else if(primed==1) {
-                    _Debug.log("ATTACHING");
-                    //buildGui();
-                    envelopeEvent.getTarget().add(this);
-                    primed = 0;
-                }
-            }
-
-        });
-        super.onEvent(event);
-    }
-
     private MultiselectToggleProvider getMultiselectToggleProvider() {
         Component component = this;
         while(component != null) {
@@ -160,7 +121,6 @@ implements CollectionCountProvider {
         }
         return null;
     }
-
 
     private void addTitleColumn(
             final List<GenericColumn> columns,
