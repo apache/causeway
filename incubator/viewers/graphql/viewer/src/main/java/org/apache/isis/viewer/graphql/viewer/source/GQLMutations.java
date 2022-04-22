@@ -32,6 +32,4 @@ public class GQLMutations {
     private final BookmarkService bookmarkService;
     private final List<String> mutatorFieldNames;
 
-
-
 }

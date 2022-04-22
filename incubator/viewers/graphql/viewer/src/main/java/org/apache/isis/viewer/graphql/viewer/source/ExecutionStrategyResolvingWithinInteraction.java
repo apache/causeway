@@ -40,7 +40,9 @@ public class ExecutionStrategyResolvingWithinInteraction extends AsyncExecutionS
     private final InteractionService interactionService;
 
     @Override
-    protected CompletableFuture<FieldValueInfo> resolveFieldWithInfo(ExecutionContext executionContext, ExecutionStrategyParameters parameters) {
+    protected CompletableFuture<FieldValueInfo> resolveFieldWithInfo(
+            final ExecutionContext executionContext,
+            final ExecutionStrategyParameters parameters) {
 
         // TODO: propagate identity from executionContext
 //        interactionService.openInteraction(InteractionContext.builder().user(UserMemento.builder().build()).build());

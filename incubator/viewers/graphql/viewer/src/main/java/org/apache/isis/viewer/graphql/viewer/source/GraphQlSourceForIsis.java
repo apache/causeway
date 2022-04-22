@@ -92,7 +92,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
         specificationLoader.forEach(objectSpecification -> {
 
             val logicalTypeName = objectSpecification.getLogicalTypeName();
-            String logicalTypeNameSanitized = Utils.logicalTypeNameSanitized(logicalTypeName);
+            String logicalTypeNameSanitized = _Utils.logicalTypeNameSanitized(logicalTypeName);
 
             switch (objectSpecification.getBeanSort()) {
 
@@ -101,13 +101,15 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                 case ENTITY:    // @DomainObject(nature=ENTITY)
 
                     // TODO: App interface should mapp to gql interfaces?
-                    objectTypeFactory.objectTypeFromObjectSpecification(objectSpecification, graphQLObjectTypes, codeRegistryBuilder);
+                    objectTypeFactory
+                        .objectTypeFromObjectSpecification(objectSpecification, graphQLObjectTypes, codeRegistryBuilder);
 
                     break;
 
                 case MANAGED_BEAN_CONTRIBUTING: //@DomainService
 
-                    queryFieldFactory.queryFieldFromObjectSpecification(queryBuilder, codeRegistryBuilder, objectSpecification);
+                    queryFieldFactory
+                        .queryFieldFromObjectSpecification(queryBuilder, codeRegistryBuilder, objectSpecification);
                     break;
 
                 case MANAGED_BEAN_NOT_CONTRIBUTING: // a @Service or @Component ... ignore

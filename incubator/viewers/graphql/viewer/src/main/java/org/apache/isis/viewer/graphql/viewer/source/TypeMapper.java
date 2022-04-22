@@ -28,19 +28,23 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
+import lombok.experimental.UtilityClass;
+
 import graphql.Scalars;
 import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
 
+@UtilityClass
 public class TypeMapper {
 
-    private static List<Class> mapToInteger = Arrays.asList(int.class, Integer.class, Short.class, short.class, BigInteger.class);
-    private static List<Class> mapToLong = Arrays.asList(Long.class, long.class, BigDecimal.class);
-    private static List<Class> mapToBoolean = Arrays.asList(Boolean.class, boolean.class);
+    private List<Class<?>> mapToInteger = Arrays.asList(
+            int.class, Integer.class, Short.class, short.class, BigInteger.class);
+    private List<Class<?>> mapToLong = Arrays.asList(Long.class, long.class, BigDecimal.class);
+    private List<Class<?>> mapToBoolean = Arrays.asList(Boolean.class, boolean.class);
 
-    public static GraphQLType typeFor(final Class c){
+    public GraphQLType typeFor(final Class<?> c){
         if (mapToInteger.contains(c)){
             return Scalars.GraphQLInt;
         }
@@ -53,14 +57,14 @@ public class TypeMapper {
         return Scalars.GraphQLString;
     }
 
-    public static GraphQLInputType inputTypeFor(final ObjectActionParameter objectActionParameter){
+    public GraphQLInputType inputTypeFor(final ObjectActionParameter objectActionParameter){
         ObjectSpecification elementType = objectActionParameter.getElementType();
         switch (elementType.getBeanSort()) {
             case ABSTRACT:
             case ENTITY:
             case VIEW_MODEL:
 
-                return GraphQLTypeReference.typeRef(Utils.GQL_INPUTTYPE_PREFIX + Utils.logicalTypeNameSanitized(elementType.getLogicalTypeName()));
+                return GraphQLTypeReference.typeRef(_Utils.GQL_INPUTTYPE_PREFIX + _Utils.logicalTypeNameSanitized(elementType.getLogicalTypeName()));
 
             case VALUE:
                 return (GraphQLInputType) typeFor(elementType.getCorrespondingClass());
@@ -74,7 +78,7 @@ public class TypeMapper {
 
     }
 
-    public static GraphQLType typeForObjectAction(final ObjectAction objectAction){
+    public GraphQLType typeForObjectAction(final ObjectAction objectAction){
         ObjectSpecification objectSpecification = objectAction.getReturnType();
         switch (objectSpecification.getBeanSort()){
 
@@ -94,13 +98,13 @@ public class TypeMapper {
         }
     }
 
-    public static GraphQLType outputTypeFor(final ObjectSpecification objectSpecification){
+    public GraphQLType outputTypeFor(final ObjectSpecification objectSpecification){
 
         switch (objectSpecification.getBeanSort()){
             case ABSTRACT:
             case ENTITY:
             case VIEW_MODEL:
-                return GraphQLTypeReference.typeRef(Utils.logicalTypeNameSanitized(objectSpecification.getLogicalTypeName()));
+                return GraphQLTypeReference.typeRef(_Utils.logicalTypeNameSanitized(objectSpecification.getLogicalTypeName()));
 
             case VALUE:
                 return typeFor(objectSpecification.getCorrespondingClass());
