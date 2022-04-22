@@ -226,7 +226,7 @@ public class EntityPage extends PageAbstract {
 
     }
 
-    // -- UTILIES
+    // -- UTILITIES
 
     /**
      * Re-fetch entities for view-models, usually required once at begin of request.

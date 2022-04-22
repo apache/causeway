@@ -107,8 +107,6 @@ implements CollectionCountProvider {
         val dataTable = new IsisAjaxDataTable(
                 ID_TABLE, columns, dataProvider, collectionModel.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
-
-        setOutputMarkupId(true);
     }
 
     private MultiselectToggleProvider getMultiselectToggleProvider() {

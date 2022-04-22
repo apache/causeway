@@ -160,33 +160,8 @@ implements HasDynamicallyVisibleContent {
         } else {
             selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN,
                     collectionModel, selectedItemHintKey);
-            //final Model<ComponentFactory> componentFactoryModel = new Model<>();
-            //final String selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
-            //ComponentFactory selectedComponentFactory = selectorHelper.find(selected);
-            //componentFactoryModel.setObject(selectedComponentFactory);
             div.addOrReplace(selectorDropdownPanel);
         }
     }
-
-//    /**
-//     * XXX[ISIS-3005] Any action dialog submission on the same page will
-//     * result in a new {@link DataTableModel}, where any previously rendered check-boxes
-//     * run out of sync with their DataRowToggle model.
-//     * Hence we intercept such events and reset check-boxes to un-checked.
-//     */
-//    @Override public void onEvent(final IEvent<?> event) {
-//        _Casts.castTo(IsisEnvelopeEvent.class, event.getPayload())
-//        .ifPresent(envelopeEvent->{
-//            if(envelopeEvent.getLetter() instanceof IsisActionCompletedEvent) {
-//                if(visible) {
-//                    val outdatedPanel = (CollectionPanel)div.get(ID_COLLECTION);
-//                    outdatedPanel.reset(envelopeEvent.getTarget());
-//                    envelopeEvent.getTarget().add(outdatedPanel);
-//                }
-//            }
-//        });
-//        super.onEvent(event);
-//    }
-
 
 }
