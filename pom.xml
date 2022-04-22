@@ -229,6 +229,7 @@
 			<modules>
 				<module>valuetypes/asciidoc/ui/vaadin</module>
 				<module>incubator/clients/kroviz</module>
+				<module>incubator/viewers/graphql</module>
 				<module>incubator/viewers/javafx</module>
 				<module>incubator/viewers/vaadin</module>
 			</modules>

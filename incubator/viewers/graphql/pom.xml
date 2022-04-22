@@ -43,11 +43,6 @@
 
 	<packaging>pom</packaging>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.incubator.viewer.graphql</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/incubator/viewer/graphql</git-plugin.propertiesDir>
-	</properties>
-
 	<dependencyManagement>
 		<dependencies>
 

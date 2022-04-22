@@ -18,23 +18,20 @@
  */
 package org.apache.isis.viewer.graphql.viewer.source;
 
-import lombok.experimental.UtilityClass;
+final class _Utils {
 
-@UtilityClass
-class _Utils {
+    final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
+    final static String GQL_MUTATTIONS_FIELDNAME = "_gql_mutations";
 
-    final String GQL_INPUTTYPE_PREFIX = "_gql_input__";
-    final String GQL_MUTATTIONS_FIELDNAME = "_gql_mutations";
-
-    String metaTypeName(final String logicalTypeNameSanitized){
+    static String metaTypeName(final String logicalTypeNameSanitized){
         return logicalTypeNameSanitized + "__DomainObject_meta";
     }
 
-    String mutatorsTypeName(final String logicalTypeNameSanitized){
+    static String mutatorsTypeName(final String logicalTypeNameSanitized){
         return logicalTypeNameSanitized + "__DomainObject_mutators";
     }
 
-    String logicalTypeNameSanitized(final String logicalTypeName) {
+    static String logicalTypeNameSanitized(final String logicalTypeName) {
         return logicalTypeName.replace('.', '_');
     }
 
