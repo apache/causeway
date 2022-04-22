@@ -53,11 +53,13 @@ extends SortableDataProvider<DataRow, String> {
     }
 
     public DataTableModel getDataTableModel() {
+        System.err.printf("getDataTableModel %s%n", System.identityHashCode(dataTableModelHolder.getObject()));
         return dataTableModelHolder.getObject();
     }
 
     @Override
     public IModel<DataRow> model(final DataRow dataRow) {
+        System.err.printf("CollectionContentsSortableDataProvider model(%s)%n", dataRow.getUuid());
         return DataRowWkt.chain(dataTableModelHolder, dataRow);
     }
 
@@ -68,8 +70,7 @@ extends SortableDataProvider<DataRow, String> {
 
     @Override
     public Iterator<DataRow> iterator(final long skip, final long limit) {
-        val visibleRows = getDataTableModel().getDataRowsFiltered()
-                .getValue();
+        val visibleRows = getDataTableModel().getDataRowsFiltered().getValue();
         return sorted(visibleRows).iterator(Math.toIntExact(skip), Math.toIntExact(limit));
     }
 

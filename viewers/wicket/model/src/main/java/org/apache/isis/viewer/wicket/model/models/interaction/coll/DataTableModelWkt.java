@@ -87,7 +87,7 @@ implements
 
         val tableMemento = table.getMemento(null);
 
-        val model =  new DataTableModelWkt(
+        val model = new DataTableModelWkt(
                 bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), tableMemento);
 
         model.setObject(table); // memoize
@@ -125,7 +125,7 @@ implements
     }
 
     @Override
-    public void detach() {
+    public final void detach() {
         // in support of table sorting, don't detach; instead reuse model
     }
 

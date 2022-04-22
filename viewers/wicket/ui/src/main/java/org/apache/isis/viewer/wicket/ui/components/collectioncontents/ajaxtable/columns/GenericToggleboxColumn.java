@@ -54,26 +54,26 @@ extends GenericColumnAbstract {
 
     public GenericToggleboxColumn(
             final IsisAppCommonContext commonContext,
-            final IModel<DataTableModel> dataTableModelHolder
-            ) {
+            final IModel<DataTableModel> dataTableModelHolder) {
         super(commonContext, "");
         this.dataTableModelHolder = dataTableModelHolder;
     }
 
     @Override
     public Component getHeader(final String componentId) {
-
-        val bulkToggle = new ContainedToggleboxPanel(componentId, new BulkToggleWkt(dataTableModelHolder)) {
-            private static final long serialVersionUID = 1L;
-            @Override public void onUpdate(final AjaxRequestTarget target) {
-                val bulkToggle = BulkToggle.valueOf(this.isChecked());
-                for (ContainedToggleboxPanel rowToggle : rowToggles) {
-                    rowToggle.set(bulkToggle, target);
-                }
-            }
-        };
+        val bulkToggle = new ContainedToggleboxPanel(
+                componentId,
+                new BulkToggleWkt(dataTableModelHolder),
+                this::onBulkUpdate);
         Wkt.cssAppend(bulkToggle, "title-column");
         return bulkToggle;
+    }
+
+    private void onBulkUpdate(final Boolean isChecked, final AjaxRequestTarget target) {
+        val bulkToggle = BulkToggle.valueOf(isChecked);
+        for (ContainedToggleboxPanel rowToggle : rowToggles) {
+            rowToggle.set(bulkToggle, target);
+        }
     }
 
     private final List<ContainedToggleboxPanel> rowToggles = _Lists.newArrayList();
@@ -88,7 +88,9 @@ extends GenericColumnAbstract {
 
         final MarkupContainer row = cellItem.getParent().getParent();
         row.setOutputMarkupId(true);
-        val rowToggle = new ContainedToggleboxPanel(componentId, ((DataRowWkt)rowModel).getDataRowToggle());
+        val rowToggle = new ContainedToggleboxPanel(
+                componentId,
+                ((DataRowWkt)rowModel).getDataRowToggle());
         rowToggles.add(rowToggle);
         rowToggle.setOutputMarkupId(true);
         cellItem.add(rowToggle);
@@ -97,6 +99,9 @@ extends GenericColumnAbstract {
     public void removeToggles() {
         rowToggles.clear();
     }
+
+
+
 
 
 }

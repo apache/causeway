@@ -23,7 +23,7 @@ import java.util.Locale;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 import lombok.val;
 
@@ -49,7 +49,7 @@ class PrototypingMessageProvider {
     // -- HELPER
 
     private static IsisAppCommonContext commonContext() {
-        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+        return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
     private static boolean isPrototyping() {

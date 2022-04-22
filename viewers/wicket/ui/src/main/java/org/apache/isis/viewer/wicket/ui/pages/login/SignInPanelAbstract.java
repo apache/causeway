@@ -43,7 +43,7 @@ import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -87,7 +87,7 @@ implements HasCommonContext {
 
     @Override
     public IsisAppCommonContext getCommonContext() {
-        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+        return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
     /**

@@ -22,7 +22,7 @@ import org.apache.wicket.validation.IValidator;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 /**
  * Provides the <em>common context</em> for implementing sub-classes.
@@ -44,7 +44,7 @@ implements
 
     @Override
     public IsisAppCommonContext getCommonContext() {
-        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+        return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
 }

@@ -120,7 +120,6 @@ implements CollectionCountProvider {
         return null;
     }
 
-
     private void addTitleColumn(
             final List<GenericColumn> columns,
             final Variant variant,

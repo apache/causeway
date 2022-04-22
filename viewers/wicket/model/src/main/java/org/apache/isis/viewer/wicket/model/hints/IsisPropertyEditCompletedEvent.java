@@ -19,30 +19,15 @@
 package org.apache.isis.viewer.wicket.model.hints;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
-
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
  *
  */
 public class IsisPropertyEditCompletedEvent extends IsisEventLetterAbstract {
 
-    private final ScalarModel scalarModel;
-    private final Form<?> form;
-
-    public IsisPropertyEditCompletedEvent(ScalarModel scalarModel, AjaxRequestTarget target, Form<?> form) {
+    public IsisPropertyEditCompletedEvent(final AjaxRequestTarget target) {
         super(target);
-        this.scalarModel = scalarModel;
-        this.form = form;
     }
 
-    public ScalarModel getScalarModel() {
-        return scalarModel;
-    }
-
-    public Form<?> getForm() {
-        return form;
-    }
 }
 

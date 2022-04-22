@@ -18,10 +18,16 @@
  */
 package org.apache.isis.viewer.wicket.model.models.binding;
 
+import java.util.Optional;
+
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
+
+import lombok.val;
 
 /**
  * Boolean {@link IModel} to bind to the associated {@code T} model`s
@@ -38,19 +44,26 @@ extends ChainingModel<Boolean> {
 
     @Override
     public final Boolean getObject() {
-        return getBindable(model()).getValue();
+        return getBindable(modelObject())
+                .map(_BindableAbstract::getValue)
+                .orElse(null);
     }
 
     @Override
     public final void setObject(final Boolean value) {
-        getBindable(model()).setValue(value);
+        getBindable(modelObject())
+        .ifPresent(bindable->bindable.setValue(value));
     }
 
-    protected abstract _BindableAbstract<Boolean> getBindable(T model);
+    protected abstract Optional<_BindableAbstract<Boolean>> getBindable(@Nullable T model);
 
-    @SuppressWarnings("unchecked")
-    protected T model() {
-        return ((IModel<T>) super.getTarget()).getObject();
+    /**
+     * For BulkToggleWkt returns its DataTableModel.<br>
+     * For DataRowToggleWkt returns its DataRow.
+     */
+    protected T modelObject() {
+        val model = _Casts.<IModel<T>>uncheckedCast(super.getTarget());
+        return model.getObject();
     }
 
 }

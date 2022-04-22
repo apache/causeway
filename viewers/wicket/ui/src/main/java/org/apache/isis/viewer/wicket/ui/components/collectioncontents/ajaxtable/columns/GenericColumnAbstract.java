@@ -27,7 +27,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -66,7 +66,7 @@ implements GenericColumn {
     }
 
     public IsisAppCommonContext getCommonContext() {
-        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+        return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
     protected ComponentFactory findComponentFactory(final ComponentType componentType, final IModel<?> model) {

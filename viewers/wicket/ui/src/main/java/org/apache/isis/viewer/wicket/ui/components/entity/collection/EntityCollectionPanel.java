@@ -18,15 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.entity.collection;
 
-import java.io.Serializable;
 import java.util.List;
 
-import javax.inject.Provider;
-
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
@@ -35,6 +29,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
@@ -49,6 +44,8 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.val;
 
 /**
@@ -70,20 +67,26 @@ implements HasDynamicallyVisibleContent {
 
     private final ComponentHintKey selectedItemHintKey;
 
-    CollectionPresentationSelectorPanel selectorDropdownPanel;
+    @Getter(onMethod_= {@Override})
+    private boolean visible = false;
 
-    final WebMarkupContainer div;
+    @Getter(value = AccessLevel.PROTECTED)
+    private CollectionPresentationSelectorPanel selectorDropdownPanel;
+
+    private final WebMarkupContainer div;
 
     public EntityCollectionPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        selectedItemHintKey = ComponentHintKey.create(super.getCommonContext(), getSelectorDropdownPanel(), EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM);
-        div = buildGui();
+        this.div = new WebMarkupContainer(ID_COLLECTION_GROUP);
+
+        selectedItemHintKey = ComponentHintKey.create(super.getCommonContext(),
+                this::getSelectorDropdownPanel,
+                EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM);
+
+        buildGui();
     }
 
-    Provider<Component> getSelectorDropdownPanel() {
-        return new SelectorDropDownPanelProvider();
-    }
 
     /**
      * Attach UI only after added to parent.
@@ -95,14 +98,14 @@ implements HasDynamicallyVisibleContent {
         final WebMarkupContainer panel = this;
         if(visible) {
             panel.add(div);
+            this.setOutputMarkupId(true);
         } else {
             WktComponents.permanentlyHide(panel, div.getId());
         }
 
     }
 
-    private WebMarkupContainer buildGui() {
-        final WebMarkupContainer div = new WebMarkupContainer(ID_COLLECTION_GROUP);
+    private void buildGui() {
 
         val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel());
         div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
@@ -123,13 +126,11 @@ implements HasDynamicallyVisibleContent {
             Facets.cssClass(collectionMetaModel, objectAdapter)
             .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
-            final CollectionPanel collectionPanel = newCollectionModel(ID_COLLECTION, collectionModel);
+            val collectionPanel = new CollectionPanel(ID_COLLECTION, collectionModel);
             div.addOrReplace(collectionPanel);
 
-            final Label labelComponent = collectionPanel
-                    .createLabel(
-                            ID_COLLECTION_NAME,
-                            collectionMetaModel.getFriendlyName(collectionModel::getParentObject));
+            val labelComponent = Wkt.label(ID_COLLECTION_NAME,
+                    collectionMetaModel.getFriendlyName(collectionModel::getParentObject));
             labelComponent.setEscapeModelStrings(true);
             div.add(labelComponent);
 
@@ -137,53 +138,30 @@ implements HasDynamicallyVisibleContent {
             .ifPresent(description->WktTooltips.addTooltip(labelComponent, description));
 
             final Can<LinkAndLabel> links = collectionModel.getLinks();
-            AdditionalLinksPanel.addAdditionalLinks(div,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
+            AdditionalLinksPanel.addAdditionalLinks(
+                    div, ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
 
-            final CollectionPresentationSelectorHelper selectorHelper =
-                    new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry(),
-                            selectedItemHintKey);
+            createSelectorDropdownPanel(collectionModel);
+            collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
 
-            final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
-
-            if (componentFactories.size() <= 1) {
-                permanentlyHide(ID_SELECTOR_DROPDOWN);
-            } else {
-                selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN,
-                        collectionModel, selectedItemHintKey);
-
-                final Model<ComponentFactory> componentFactoryModel = new Model<>();
-
-                final String selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
-
-                ComponentFactory selectedComponentFactory = selectorHelper.find(selected);
-                componentFactoryModel.setObject(selectedComponentFactory);
-
-                this.setOutputMarkupId(true);
-                div.addOrReplace(selectorDropdownPanel);
-
-                collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
-            }
-        }
-        return div;
-    }
-
-    protected CollectionPanel newCollectionModel(final String id, final EntityCollectionModelParented entityCollectionModel) {
-        return new CollectionPanel(id, entityCollectionModel);
-    }
-
-
-    private boolean visible = false;
-    @Override
-    public boolean isVisible() {
-        return visible;
-    }
-
-    private class SelectorDropDownPanelProvider implements Provider<Component>, Serializable {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Component get() {
-            return selectorDropdownPanel;
         }
     }
+
+    private void createSelectorDropdownPanel(final EntityCollectionModel collectionModel) {
+
+        final CollectionPresentationSelectorHelper selectorHelper =
+                new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry(),
+                        selectedItemHintKey);
+
+        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
+
+        if (componentFactories.size() <= 1) {
+            permanentlyHide(ID_SELECTOR_DROPDOWN);
+        } else {
+            selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN,
+                    collectionModel, selectedItemHintKey);
+            div.addOrReplace(selectorDropdownPanel);
+        }
+    }
+
 }

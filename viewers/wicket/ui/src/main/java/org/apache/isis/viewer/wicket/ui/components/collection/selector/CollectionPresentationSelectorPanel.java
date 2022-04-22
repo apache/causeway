@@ -207,9 +207,8 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
     protected void setViewHintAndBroadcast(final String viewName, final AjaxRequestTarget target) {
         final CollectionPresentationSelectorPanel component = CollectionPresentationSelectorPanel.this;
-        final IsisSelectorEvent selectorEvent =
-                new IsisSelectorEvent(component, CollectionPresentationSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target);
-        send(getPage(), Broadcast.EXACT, selectorEvent);
+        send(getPage(), Broadcast.EXACT,
+                new IsisSelectorEvent(component, CollectionPresentationSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target));
     }
 
 }

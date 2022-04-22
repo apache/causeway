@@ -25,7 +25,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.commons.functional.Either;
@@ -38,7 +37,6 @@ import org.apache.isis.viewer.common.model.PlacementDirection;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
-import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
@@ -110,11 +108,6 @@ extends PromptFormAbstract<ActionModel> {
             onNewScalarPanel.accept(scalarPanel);
         });
 
-    }
-
-    @Override
-    protected Object newCompletedEvent(final AjaxRequestTarget target, final Form<?> form) {
-        return new IsisActionCompletedEvent(actionModel(), target, form);
     }
 
     @Override
