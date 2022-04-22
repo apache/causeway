@@ -2,11 +2,11 @@ package org.apache.isis.viewer.graphql.viewer.source;
 
 import javax.inject.Inject;
 
-import org.springframework.graphql.GraphQlService;
-import org.springframework.graphql.RequestInput;
-import org.springframework.graphql.RequestOutput;
+import org.springframework.graphql.ExecutionGraphQlRequest;
+import org.springframework.graphql.ExecutionGraphQlResponse;
+import org.springframework.graphql.ExecutionGraphQlService;
 import org.springframework.graphql.execution.BatchLoaderRegistry;
-import org.springframework.graphql.execution.ExecutionGraphQlService;
+import org.springframework.graphql.execution.DefaultExecutionGraphQlService;
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
@@ -19,19 +19,19 @@ import reactor.core.publisher.Mono;
  */
 @Service()
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class GraphQlServiceForIsis implements GraphQlService {
+public class GraphQlServiceForIsis implements ExecutionGraphQlService {
 
     private final BatchLoaderRegistry batchLoaderRegistry;
     private final GraphQlSource graphQlSource;
 
-    ExecutionGraphQlService delegate;
+    DefaultExecutionGraphQlService delegate;
 
     @Override
-    public Mono<RequestOutput> execute(RequestInput input) {
+    public Mono<ExecutionGraphQlResponse> execute(final ExecutionGraphQlRequest request) {
         if(delegate == null) {
-            delegate = new ExecutionGraphQlService(graphQlSource);
+            delegate = new DefaultExecutionGraphQlService(graphQlSource);
             delegate.addDataLoaderRegistrar(batchLoaderRegistry);
         }
-        return delegate.execute(input);
+        return delegate.execute(request);
     }
 }

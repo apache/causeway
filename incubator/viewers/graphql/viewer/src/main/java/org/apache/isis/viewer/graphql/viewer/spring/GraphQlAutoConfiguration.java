@@ -19,33 +19,35 @@ package org.apache.isis.viewer.graphql.viewer.spring;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.convert.ApplicationConversionService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.format.support.DefaultFormattingConversionService;
-import org.springframework.graphql.GraphQlService;
+import org.springframework.graphql.ExecutionGraphQlService;
 import org.springframework.graphql.data.method.annotation.support.AnnotatedControllerConfigurer;
 import org.springframework.graphql.execution.BatchLoaderRegistry;
 import org.springframework.graphql.execution.DataFetcherExceptionResolver;
 import org.springframework.graphql.execution.DefaultBatchLoaderRegistry;
-import org.springframework.graphql.execution.ExecutionGraphQlService;
+import org.springframework.graphql.execution.DefaultExecutionGraphQlService;
 import org.springframework.graphql.execution.GraphQlSource;
-import org.springframework.graphql.execution.MissingSchemaException;
 import org.springframework.graphql.execution.RuntimeWiringConfigurer;
 
 import graphql.GraphQL;
 import graphql.execution.instrumentation.Instrumentation;
+import graphql.schema.idl.RuntimeWiring.Builder;
 import graphql.schema.visibility.NoIntrospectionGraphqlFieldVisibility;
 
 /**
@@ -62,74 +64,83 @@ public class GraphQlAutoConfiguration {
 
 	private static final Log logger = LogFactory.getLog(GraphQlAutoConfiguration.class);
 
-	private final BatchLoaderRegistry batchLoaderRegistry = new DefaultBatchLoaderRegistry();
+    private final ListableBeanFactory beanFactory;
 
-	@Bean
-	 @ConditionalOnMissingBean
-	public GraphQlSource graphQlSource(ResourcePatternResolver resourcePatternResolver, GraphQlProperties properties,
-			ObjectProvider<DataFetcherExceptionResolver> exceptionResolversProvider,
-			ObjectProvider<Instrumentation> instrumentationsProvider,
-			ObjectProvider<RuntimeWiringConfigurer> wiringConfigurers,
-			ObjectProvider<GraphQlSourceBuilderCustomizer> sourceCustomizers) {
+    public GraphQlAutoConfiguration(final ListableBeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
+    }
 
-		List<Resource> schemaResources = resolveSchemaResources(resourcePatternResolver,
-				properties.getSchema().getLocations(), properties.getSchema().getFileExtensions());
-		GraphQlSource.Builder builder = GraphQlSource.builder()
-				.schemaResources(schemaResources.toArray(new Resource[0]))
-				.exceptionResolvers(exceptionResolversProvider.orderedStream().collect(Collectors.toList()))
-				.instrumentation(instrumentationsProvider.orderedStream().collect(Collectors.toList()));
-		if (!properties.getSchema().getIntrospection().isEnabled()) {
-			builder.configureRuntimeWiring((wiring) -> wiring
-					.fieldVisibility(NoIntrospectionGraphqlFieldVisibility.NO_INTROSPECTION_FIELD_VISIBILITY));
-		}
-		wiringConfigurers.orderedStream().forEach(builder::configureRuntimeWiring);
-		sourceCustomizers.orderedStream().forEach((customizer) -> customizer.customize(builder));
-		try {
-			return builder.build();
-		}
-		catch (MissingSchemaException exc) {
-			throw new InvalidSchemaLocationsException(properties.getSchema().getLocations(), resourcePatternResolver,
-					exc);
-		}
-	}
+    @Bean
+    @ConditionalOnMissingBean
+    public GraphQlSource graphQlSource(final ResourcePatternResolver resourcePatternResolver, final GraphQlProperties properties,
+            final ObjectProvider<DataFetcherExceptionResolver> exceptionResolvers,
+            final ObjectProvider<Instrumentation> instrumentations, final ObjectProvider<RuntimeWiringConfigurer> wiringConfigurers,
+            final ObjectProvider<GraphQlSourceBuilderCustomizer> sourceCustomizers) {
+        String[] schemaLocations = properties.getSchema().getLocations();
+        Resource[] schemaResources = resolveSchemaResources(resourcePatternResolver, schemaLocations,
+                properties.getSchema().getFileExtensions());
+        GraphQlSource.SchemaResourceBuilder builder = GraphQlSource.schemaResourceBuilder()
+                .schemaResources(schemaResources).exceptionResolvers(toList(exceptionResolvers))
+                .instrumentation(toList(instrumentations));
+        if (!properties.getSchema().getIntrospection().isEnabled()) {
+            builder.configureRuntimeWiring(this::enableIntrospection);
+        }
+        wiringConfigurers.orderedStream().forEach(builder::configureRuntimeWiring);
+        sourceCustomizers.orderedStream().forEach((customizer) -> customizer.customize(builder));
+        return builder.build();
+    }
 
-	@Bean
-	@ConditionalOnMissingBean
-	public BatchLoaderRegistry batchLoaderRegistry() {
-		return this.batchLoaderRegistry;
-	}
+    private Builder enableIntrospection(final Builder wiring) {
+        return wiring.fieldVisibility(NoIntrospectionGraphqlFieldVisibility.NO_INTROSPECTION_FIELD_VISIBILITY);
+    }
 
-	@Bean
-	@ConditionalOnMissingBean
-	public GraphQlService graphQlService(GraphQlSource graphQlSource) {
-		ExecutionGraphQlService service = new ExecutionGraphQlService(graphQlSource);
-		service.addDataLoaderRegistrar(this.batchLoaderRegistry);
-		return service;
-	}
+    private Resource[] resolveSchemaResources(final ResourcePatternResolver resolver, final String[] locations,
+            final String[] extensions) {
+        List<Resource> resources = new ArrayList<>();
+        for (String location : locations) {
+            for (String extension : extensions) {
+                resources.addAll(resolveSchemaResources(resolver, location + "*" + extension));
+            }
+        }
+        return resources.toArray(new Resource[0]);
+    }
 
-	@Bean
-	@ConditionalOnMissingBean
-	public AnnotatedControllerConfigurer annotatedControllerConfigurer() {
-		AnnotatedControllerConfigurer annotatedControllerConfigurer = new AnnotatedControllerConfigurer();
-		annotatedControllerConfigurer.setConversionService(new DefaultFormattingConversionService());
-		return annotatedControllerConfigurer;
-	}
+    private List<Resource> resolveSchemaResources(final ResourcePatternResolver resolver, final String pattern) {
+        try {
+            return Arrays.asList(resolver.getResources(pattern));
+        }
+        catch (IOException ex) {
+            logger.debug("Could not resolve schema location: '" + pattern + "'", ex);
+            return Collections.emptyList();
+        }
+    }
 
-	private List<Resource> resolveSchemaResources(ResourcePatternResolver resolver, String[] schemaLocations,
-			String[] fileExtensions) {
-		List<Resource> schemaResources = new ArrayList<>();
-		for (String location : schemaLocations) {
-			for (String extension : fileExtensions) {
-				String resourcePattern = location + "*" + extension;
-				try {
-					schemaResources.addAll(Arrays.asList(resolver.getResources(resourcePattern)));
-				}
-				catch (IOException ex) {
-					logger.debug("Could not resolve schema location: '" + resourcePattern + "'", ex);
-				}
-			}
-		}
-		return schemaResources;
-	}
+    @Bean
+    @ConditionalOnMissingBean
+    public BatchLoaderRegistry batchLoaderRegistry() {
+        return new DefaultBatchLoaderRegistry();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ExecutionGraphQlService executionGraphQlService(final GraphQlSource graphQlSource,
+            final BatchLoaderRegistry batchLoaderRegistry) {
+        DefaultExecutionGraphQlService service = new DefaultExecutionGraphQlService(graphQlSource);
+        service.addDataLoaderRegistrar(batchLoaderRegistry);
+        return service;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AnnotatedControllerConfigurer annotatedControllerConfigurer() {
+        AnnotatedControllerConfigurer controllerConfigurer = new AnnotatedControllerConfigurer();
+        controllerConfigurer
+                .addFormatterRegistrar((registry) -> ApplicationConversionService.addBeans(registry, this.beanFactory));
+        return controllerConfigurer;
+    }
+
+    private <T> List<T> toList(final ObjectProvider<T> provider) {
+        return provider.orderedStream().collect(Collectors.toList());
+    }
 
 }
