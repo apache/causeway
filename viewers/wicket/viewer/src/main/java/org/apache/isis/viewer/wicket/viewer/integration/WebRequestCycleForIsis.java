@@ -43,6 +43,7 @@ import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
@@ -67,8 +68,8 @@ import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Isis-specific implementation of the Wicket's {@link RequestCycle},
@@ -116,7 +117,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     private IsisAppCommonContext commonContext;
 
     @Override
-    public synchronized void onBeginRequest(RequestCycle requestCycle) {
+    public synchronized void onBeginRequest(final RequestCycle requestCycle) {
 
         log.debug("onBeginRequest in");
 
@@ -210,7 +211,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
      * throw an exception.
      */
     @Override
-    public void onRequestHandlerExecuted(RequestCycle requestCycle, IRequestHandler handler) {
+    public void onRequestHandlerExecuted(final RequestCycle requestCycle, final IRequestHandler handler) {
         log.debug("onRequestHandlerExecuted: handler: {}", handler.getClass().getName());
 
     }
@@ -219,7 +220,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
      * It is not possible to throw exceptions here, hence use of {@link #onRequestHandlerExecuted(RequestCycle, IRequestHandler)}.
      */
     @Override
-    public synchronized void onEndRequest(RequestCycle requestCycle) {
+    public synchronized void onEndRequest(final RequestCycle requestCycle) {
 
         log.debug("onEndRequest");
 
@@ -230,14 +231,14 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     @Override
-    public void onDetach(RequestCycle requestCycle) {
+    public void onDetach(final RequestCycle requestCycle) {
         // detach the current @RequestScope, if any
         IRequestCycleListener.super.onDetach(requestCycle);
     }
 
 
     @Override
-    public IRequestHandler onException(RequestCycle cycle, Exception ex) {
+    public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
 
         log.debug("onException {}", ex.getClass().getSimpleName());
 
@@ -259,7 +260,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                     // no message.
                     // this seems to occur when press ESC twice in rapid succession on a modal dialog.
                 } else {
-                    addMessage(null);
+                    addActionNoLongerAvailableMessage(null);
 
                 }
                 return respondGracefully(cycle);
@@ -269,6 +270,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             val exceptionRecognizerService = getExceptionRecognizerService();
             val recognizedIfAny = exceptionRecognizerService.recognize(ex);
             if(recognizedIfAny.isPresent()) {
+                addWarning(recognizedIfAny.get().toMessage(getCommonContext().getTranslationService()));
                 return respondGracefully(cycle);
             }
 
@@ -276,13 +278,13 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             final Optional<Throwable> hiddenIfAny = causalChain.stream()
                     .filter(ObjectMember.HiddenException::isInstanceOf).findFirst();
             if(hiddenIfAny.isPresent()) {
-                addMessage("hidden");
+                addActionNoLongerAvailableMessage("hidden");
                 return respondGracefully(cycle);
             }
             final Optional<Throwable> disabledIfAny = causalChain.stream()
                     .filter(ObjectMember.DisabledException::isInstanceOf).findFirst();
             if(disabledIfAny.isPresent()) {
-                addTranslatedMessage(disabledIfAny.get().getMessage());
+                addActionNoLongerAvailableMessage(disabledIfAny.get().getMessage());
                 return respondGracefully(cycle);
             }
 
@@ -306,18 +308,22 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         return new RenderPageRequestHandler(pageProvider);
     }
 
-    private void addMessage(final String message) {
-        final String translatedMessage = translate(message);
-        addTranslatedMessage(translatedMessage);
+    private void addWarning(final @Nullable String translatedWarning) {
+        _Strings.nonEmpty(translatedWarning)
+        .ifPresent(warning->{
+            getMessageBroker().ifPresent(broker->{
+                broker.addWarning(warning);
+            });
+        });
     }
 
-    private void addTranslatedMessage(final String translatedSuffixIfAny) {
+    private void addActionNoLongerAvailableMessage(final @Nullable String suffixIfAny) {
 
         getMessageBroker().ifPresent(broker->{
 
             final String translatedPrefix = translate("Action no longer available");
-            final String message = translatedSuffixIfAny != null
-                    ? String.format("%s (%s)", translatedPrefix, translatedSuffixIfAny)
+            final String message = suffixIfAny != null
+                    ? String.format("%s (%s)", translatedPrefix, translate(suffixIfAny))
                     : translatedPrefix;
 
             broker.addMessage(message);
@@ -335,7 +341,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                 		text);
     }
 
-    protected PageProvider errorPageProviderFor(Exception ex) {
+    protected PageProvider errorPageProviderFor(final Exception ex) {
         IRequestablePage errorPage = errorPageFor(ex);
         return errorPage != null
                 ? new PageProvider(errorPage)
@@ -348,7 +354,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                     PageExpiredException.class,
                     __->"Requested page is no longer available.");
 
-    protected IRequestablePage errorPageFor(Exception ex) {
+    protected IRequestablePage errorPageFor(final Exception ex) {
 
         val commmonContext = getCommonContext();
 
@@ -424,7 +430,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         return getWicketAuthenticatedWebSession().isSignedIn();
     }
 
-    private boolean userHasSessionWithRememberMe(RequestCycle requestCycle) {
+    private boolean userHasSessionWithRememberMe(final RequestCycle requestCycle) {
         val containerRequest = requestCycle.getRequest().getContainerRequest();
 
         if (containerRequest instanceof HttpServletRequest) {
@@ -442,7 +448,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
 
-    public void setPageClassRegistry(PageClassRegistry pageClassRegistry) {
+    public void setPageClassRegistry(final PageClassRegistry pageClassRegistry) {
         this.pageClassRegistry = pageClassRegistry;
     }
 
