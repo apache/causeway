@@ -21,6 +21,7 @@ package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehand
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
@@ -30,16 +31,16 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.extensions.excel.testing.ExcelFixture;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler;
+import org.apache.isis.extensions.excel.testing.ExcelFixture;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = "libExcelFixture.ExcelUploadServiceForDemoToDoItem"
+        nature = NatureOfService.VIEW
 )
+@Named("libExcelFixture.ExcelUploadServiceForDemoToDoItem")
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named = "Prototyping"
@@ -50,7 +51,7 @@ public class ExcelUploadServiceForDemoToDoItem {
     private final FixtureScripts fixtureScripts;
 
     @Inject
-    public ExcelUploadServiceForDemoToDoItem(FixtureScripts fixtureScripts) {
+    public ExcelUploadServiceForDemoToDoItem(final FixtureScripts fixtureScripts) {
         this.fixtureScripts = fixtureScripts;
     }
 

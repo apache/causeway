@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.annotation.Action;
@@ -37,9 +38,9 @@ import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
 
 @DomainService(
-        nature = NatureOfService.VIEW,
-        logicalTypeName = "libExcelFixture.BulkUpdateMenuForDemoToDoItem"
+        nature = NatureOfService.VIEW
 )
+@Named("libExcelFixture.BulkUpdateMenuForDemoToDoItem")
 @DomainServiceLayout(
         named = "Excel"
 )
