@@ -80,11 +80,8 @@ implements IsisBeanTypeClassifier {
         }
 
         // handle vetoing ...
-
-        for(TypeVetoMarker vetoMarker : TypeVetoMarker.values()) {
-            if(_Annotations.synthesize(type, vetoMarker.getAnnotationType()).isPresent()) {
-                return BeanClassification.selfManaged(BeanSort.VETOED); // reject
-            }
+        if(TypeVetoMarker.anyMatchOn(type)) {
+            return BeanClassification.selfManaged(BeanSort.VETOED); // reject
         }
 
         val profiles = Can.ofArray(_Annotations.synthesize(type, Profile.class)
