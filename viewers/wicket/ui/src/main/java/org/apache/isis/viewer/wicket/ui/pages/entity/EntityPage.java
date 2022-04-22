@@ -22,7 +22,9 @@ import java.util.UUID;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -45,6 +47,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.modelhelpers.WhereAmIHelper;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -230,8 +233,10 @@ public class EntityPage extends PageAbstract {
 
     /**
      * Re-fetch entities for view-models, usually required once at begin of request.
+     * @param target
      */
-    public static void viewmodelRefresh(final IRequestablePage iRequestablePage) {
+    public static void viewmodelRefresh(
+            final IRequestablePage iRequestablePage) {
         if(iRequestablePage instanceof EntityPage) {
 
             val entityPage = (EntityPage) iRequestablePage;
@@ -247,8 +252,30 @@ public class EntityPage extends PageAbstract {
                     ()->PageParameterUtils
                             .toBookmark(entityPage.getPageParameters())
                             .orElseThrow());
+
+//            broadcastAjaxRequest(entityPage,
+//                    new AjaxRequestHandler(entityPage));
         }
     }
+
+    public static void broadcastAjaxRequest(
+            final IRequestablePage iRequestablePage,
+            final AjaxRequestTarget target) {
+        if(iRequestablePage instanceof EntityPage) {
+            val entityPage = (EntityPage) iRequestablePage;
+            if(target!=null) {
+                entityPage.send(entityPage, Broadcast.EXACT, new ViewmodelRefreshedEvent(target));
+            }
+        }
+    }
+
+
+    public static class ViewmodelRefreshedEvent extends IsisEventLetterAbstract {
+        public ViewmodelRefreshedEvent(final AjaxRequestTarget target) {
+            super(target);
+        }
+    }
+
 
     // -- HELPER
 

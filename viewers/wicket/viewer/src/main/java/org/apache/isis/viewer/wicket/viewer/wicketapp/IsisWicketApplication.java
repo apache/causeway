@@ -179,6 +179,8 @@ implements
 
         // intercept AJAX requests and reload view-models so any detached entities are re-fetched
         IsisWicketAjaxRequestListenerUtil.setRootRequestMapper(this, commonContext);
+
+        getAjaxRequestTargetListeners().add(IsisWicketAjaxRequestListenerUtil.newAjaxListener());
     }
 
     private AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {

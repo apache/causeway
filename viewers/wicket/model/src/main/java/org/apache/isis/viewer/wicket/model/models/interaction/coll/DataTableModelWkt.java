@@ -129,4 +129,8 @@ implements
         // in support of table sorting, don't detach; instead reuse model
     }
 
+    public final void forceDetach() {
+        super.detach();
+    }
+
 }

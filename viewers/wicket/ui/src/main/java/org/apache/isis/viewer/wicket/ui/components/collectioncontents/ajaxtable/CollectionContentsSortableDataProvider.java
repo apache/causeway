@@ -27,12 +27,15 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataRowWkt;
+import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
 import lombok.val;
 
@@ -53,11 +56,13 @@ extends SortableDataProvider<DataRow, String> {
     }
 
     public DataTableModel getDataTableModel() {
+        System.err.printf("getDataTableModel %s%n", System.identityHashCode(dataTableModelHolder.getObject()));
         return dataTableModelHolder.getObject();
     }
 
     @Override
     public IModel<DataRow> model(final DataRow dataRow) {
+        System.err.printf("CollectionContentsSortableDataProvider model(%s)%n", dataRow.getUuid());
         return DataRowWkt.chain(dataTableModelHolder, dataRow);
     }
 
@@ -68,9 +73,17 @@ extends SortableDataProvider<DataRow, String> {
 
     @Override
     public Iterator<DataRow> iterator(final long skip, final long limit) {
-        val visibleRows = getDataTableModel().getDataRowsFiltered()
-                .getValue();
+        System.err.printf("CollectionContentsSortableDataProvider %s%n", "new iterator");
+
+        _Debug.log("CollectionContentsSortableDataProvider %s%n", "new iterator");
+
+        val visibleRows = getDataTableModel().getDataRowsFiltered().getValue();
         return sorted(visibleRows).iterator(Math.toIntExact(skip), Math.toIntExact(limit));
+    }
+
+    public void forceDetach() {
+        _Casts.castTo(DataTableModelWkt.class, dataTableModelHolder)
+        .ifPresent(DataTableModelWkt::forceDetach);
     }
 
     // -- HELPER

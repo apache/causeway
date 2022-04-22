@@ -18,7 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
+import java.util.Map;
+
+import org.apache.wicket.Component;
 import org.apache.wicket.SystemMapper;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.AjaxRequestTarget.IListener;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.PageInstanceMapper;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -60,6 +65,15 @@ public final class IsisWicketAjaxRequestListenerUtil {
                 };
             }
         });
+    }
+
+    public IListener newAjaxListener() {
+        return new IListener() {;
+            @Override
+            public void onBeforeRespond(final Map<String, Component> map, final AjaxRequestTarget target) {
+                EntityPage.broadcastAjaxRequest(target.getPage(), target);
+            }
+        };
     }
 
 }
