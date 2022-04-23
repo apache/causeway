@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.errors;
 
 import org.apache.wicket.util.string.Strings;
 
+import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.MessageBroker;
 
@@ -95,11 +96,17 @@ public class JGrowlUtil {
     }
 
     String escape(final String origMsg) {
+
+        _Text.normalize(origMsg);
+
         final String escaped = Strings.escapeMarkup(origMsg).toString();
 
         // convert (what would originally have been either) ' or " to '
         return escaped
                 .replace("&quot;", "'")
-                .replace("&#039;", "'");
+                .replace("&#039;", "'")
+                .replace("\r", "")
+                .replace("\t", " ")
+                .replace("\n", "<br/>");
     }
 }

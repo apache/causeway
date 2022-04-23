@@ -30,7 +30,7 @@ import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 import lombok.val;
 
@@ -92,7 +92,7 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
     }
 
     protected IsisAppCommonContext getCommonContext() {
-        return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+        return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
 }

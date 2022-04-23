@@ -53,7 +53,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.model.util.CommonContextUtils;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 
 import lombok.NonNull;
@@ -319,7 +319,7 @@ class IsisToWicketTreeAdapter {
         // in case we were de-serialzed
         private void ensureInit() {
             if(commonContext!=null) return;
-            init(CommonContextUtils.getCommonContext());
+            init(WktContext.getCommonContext());
         }
 
     }
@@ -419,7 +419,7 @@ class IsisToWicketTreeAdapter {
         @Override
         protected TreeModel load() {
 
-            commonContext = CommonContextUtils.computeIfAbsent(commonContext);
+            commonContext = WktContext.computeIfAbsent(commonContext);
 
             val oid = bookmark;
             val objAdapter = commonContext.getMetaModelContext()

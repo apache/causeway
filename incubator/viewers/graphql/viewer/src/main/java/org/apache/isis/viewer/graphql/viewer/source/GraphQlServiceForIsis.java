@@ -1,13 +1,30 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.viewer.graphql.viewer.source;
 
 import javax.inject.Inject;
 
-import graphql.GraphQL;
-import org.springframework.graphql.GraphQlService;
-import org.springframework.graphql.RequestInput;
-import org.springframework.graphql.RequestOutput;
+import org.springframework.graphql.ExecutionGraphQlRequest;
+import org.springframework.graphql.ExecutionGraphQlResponse;
+import org.springframework.graphql.ExecutionGraphQlService;
 import org.springframework.graphql.execution.BatchLoaderRegistry;
-import org.springframework.graphql.execution.ExecutionGraphQlService;
+import org.springframework.graphql.execution.DefaultExecutionGraphQlService;
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
@@ -20,19 +37,19 @@ import reactor.core.publisher.Mono;
  */
 @Service()
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class GraphQlServiceForIsis implements GraphQlService {
+public class GraphQlServiceForIsis implements ExecutionGraphQlService {
 
     private final BatchLoaderRegistry batchLoaderRegistry;
     private final GraphQlSource graphQlSource;
 
-    ExecutionGraphQlService delegate;
+    DefaultExecutionGraphQlService delegate;
 
     @Override
-    public Mono<RequestOutput> execute(RequestInput input) {
+    public Mono<ExecutionGraphQlResponse> execute(final ExecutionGraphQlRequest request) {
         if(delegate == null) {
-            delegate = new ExecutionGraphQlService(graphQlSource);
+            delegate = new DefaultExecutionGraphQlService(graphQlSource);
             delegate.addDataLoaderRegistrar(batchLoaderRegistry);
         }
-        return delegate.execute(input);
+        return delegate.execute(request);
     }
 }

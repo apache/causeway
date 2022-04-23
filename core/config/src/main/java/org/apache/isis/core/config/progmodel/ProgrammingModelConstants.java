@@ -53,6 +53,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
@@ -73,6 +74,36 @@ public final class ProgrammingModelConstants {
         DOMAIN_EXLCUDE(Domain.Exclude.class),
         VETO(Vetoed.class);
         private final Class<? extends Annotation> annotationType;
+
+        public static boolean anyMatchOn(final Class<?> type) {
+            for(TypeVetoMarker vetoMarker : TypeVetoMarker.values()) {
+                if(_Annotations.synthesize(type, vetoMarker.getAnnotationType()).isPresent()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum MethodVetoMarker {
+        DOMAIN_EXLCUDE(Domain.Exclude.class),
+        PRE_DESTROY_JAVAX(javax.annotation.PreDestroy.class),
+        POST_CONSTRUCT_JAVAX(javax.annotation.PostConstruct.class),
+        //PRE_DESTROY__JAKARTA(jakarta.annotation.PreDestroy.class),
+        //POST_CONSTRUCT_JAKARTA(jakarta.annotation.PreDestroy.class)
+        ;
+        private final Class<? extends Annotation> annotationType;
+
+        public static boolean anyMatchOn(final Method method) {
+            for(MethodVetoMarker vetoMarker : MethodVetoMarker.values()) {
+                if(_Annotations.synthesize(method, vetoMarker.getAnnotationType()).isPresent()) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     // -- ACCESSORS

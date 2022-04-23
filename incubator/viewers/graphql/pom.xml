@@ -43,11 +43,6 @@
 
 	<packaging>pom</packaging>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.incubator.viewer.graphql</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/incubator/viewer/graphql</git-plugin.propertiesDir>
-	</properties>
-
 	<dependencyManagement>
 		<dependencies>
 
@@ -77,8 +72,8 @@
 
 			<dependency>
 				<groupId>org.springframework.graphql</groupId>
-				<artifactId>spring-graphql</artifactId>
-				<version>1.0.0-M5</version>
+  				<artifactId>spring-graphql</artifactId>
+  				<version>1.0.0-RC1</version>
 			</dependency>
 
 			<dependency>

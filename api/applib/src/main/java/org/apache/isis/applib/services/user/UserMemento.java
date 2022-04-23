@@ -272,10 +272,8 @@ implements Serializable {
         return roles.toList();
     }
 
-    @Programmatic
     @Builder.Default
-    Can<RoleMemento> roles = Can.empty();
-
+    private Can<RoleMemento> roles = Can.empty();
 
     @Programmatic
     public UserMemento withRoleAdded(final String role) {

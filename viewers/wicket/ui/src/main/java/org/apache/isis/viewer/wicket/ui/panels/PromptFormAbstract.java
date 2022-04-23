@@ -28,7 +28,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.commons.functional.Either;
@@ -36,6 +35,8 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -85,7 +86,6 @@ implements ScalarModelSubscriber {
 
     protected abstract void addParameters();
     protected abstract Either<ActionModel, ScalarPropertyModel> getMemberModel();
-    protected abstract Object newCompletedEvent(AjaxRequestTarget target, Form<?> form);
 
     @Override
     public final void renderHead(final IHeaderResponse response) {
@@ -122,7 +122,9 @@ implements ScalarModelSubscriber {
 
         if (outcome.isSuccess()) {
             completePrompt(target);
-            okButton.send(target.getPage(), Broadcast.EXACT, newCompletedEvent(target, form));
+            okButton.send(target.getPage(), Broadcast.EXACT, getMemberModel().fold(
+                act->new IsisActionCompletedEvent(target),
+                prop->new IsisPropertyEditCompletedEvent(target)));
             WktComponents.addToAjaxRequest(target, form);
         }
     }

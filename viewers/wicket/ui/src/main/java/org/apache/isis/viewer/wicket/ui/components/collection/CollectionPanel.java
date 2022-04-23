@@ -20,9 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.collection;
 
 import java.util.Optional;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
@@ -35,7 +33,6 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -57,8 +54,6 @@ implements
 
     private static final String ID_FEEDBACK = "feedback";
 
-    private Component collectionContents;
-    private Label label;
     @Getter @Setter private CollectionPresentationSelectorPanel selectorDropdownPanel;
 
     public CollectionPanel(
@@ -82,19 +77,13 @@ implements
     }
 
     private void buildGui() {
-        collectionContents = getComponentFactoryRegistry()
+        val collectionContents = getComponentFactoryRegistry()
                 .addOrReplaceComponent(this, ComponentType.COLLECTION_CONTENTS, getModel());
 
         addOrReplace(new NotificationPanel(ID_FEEDBACK, collectionContents,
                 new ComponentFeedbackMessageFilter(collectionContents)));
 
         setOutputMarkupId(true);
-    }
-
-    public Label createLabel(final String id, final String collectionName) {
-        this.label = Wkt.label(id, collectionName);
-        label.setOutputMarkupId(true);
-        return this.label;
     }
 
     // -- MULTI SELECTION SUPPORT

@@ -81,8 +81,8 @@ public interface FacetFactory {
          *     of the {@link #getMethod() method}; the method might have been inherited.
          * </p>
          */
-        @Getter private final Class<?> cls;
-        @Getter private final IntrospectionPolicy introspectionPolicy;
+        @Getter private final @NonNull Class<?> cls;
+        @Getter private final @NonNull IntrospectionPolicy introspectionPolicy;
 
         AbstractProcessWithClsContext(
                 final Class<?> cls,

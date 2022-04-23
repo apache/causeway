@@ -20,12 +20,10 @@ package org.apache.isis.viewer.wicket.ui.components.property;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
 
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
@@ -62,11 +60,6 @@ class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
         _Casts.castTo(ScalarPanelAbstract.class, component)
         .ifPresent(scalarModelSubscriber->
             scalarModelSubscriber.notifyOnChange(this)); // handling onUpdate and onError
-    }
-
-    @Override
-    protected Object newCompletedEvent(final AjaxRequestTarget target, final Form<?> form) {
-        return new IsisPropertyEditCompletedEvent(scalarPropertyModel(), target, form);
     }
 
     @Override

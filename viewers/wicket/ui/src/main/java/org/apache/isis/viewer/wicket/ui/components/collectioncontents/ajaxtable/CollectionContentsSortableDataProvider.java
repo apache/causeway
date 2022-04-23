@@ -68,8 +68,7 @@ extends SortableDataProvider<DataRow, String> {
 
     @Override
     public Iterator<DataRow> iterator(final long skip, final long limit) {
-        val visibleRows = getDataTableModel().getDataRowsFiltered()
-                .getValue();
+        val visibleRows = getDataTableModel().getDataRowsFiltered().getValue();
         return sorted(visibleRows).iterator(Math.toIntExact(skip), Math.toIntExact(limit));
     }
 

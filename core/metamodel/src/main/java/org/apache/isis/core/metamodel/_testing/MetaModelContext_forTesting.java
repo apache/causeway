@@ -20,12 +20,11 @@ package org.apache.isis.core.metamodel._testing;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -54,6 +53,7 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Streams;
@@ -65,6 +65,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
@@ -462,29 +463,35 @@ implements MetaModelContext {
 
     // -- SERVICE REGISTRY HELPER
 
-    final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =
+    private final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =
             _Lazy.threadSafe(this::collectBeansOfKnownSort);
 
-
-    private final Map<String, ManagedObject> collectBeansOfKnownSort() {
-
-        return getServiceRegistry()
-                .streamRegisteredBeans()
-                .map(this::toManagedObject)
-                .collect(Collectors.toMap(
-                        serviceAdapter->serviceAdapter.getSpecification().getFullIdentifier(),
-                        v->v, (o,n)->n, LinkedHashMap::new));
+    public void clearRegisteredBeans() {
+        objectAdaptersForBeansOfKnownSort.clear();
     }
 
-    private final ManagedObject toManagedObject(final _ManagedBeanAdapter managedBeanAdapter) {
+    private final Map<String, ManagedObject> collectBeansOfKnownSort() {
+        val map = _Maps.<String, ManagedObject>newLinkedHashMap();
+        getServiceRegistry()
+            .streamRegisteredBeans()
+            .filter(bean->_Strings.isNotEmpty(bean.getId()))
+            .forEach(bean->
+                toManagedObject(bean)
+                .ifPresent(serviceAdapter->map.put(bean.getId(), serviceAdapter)));
+        return map;
+    }
+
+    private final Optional<ManagedObject> toManagedObject(final _ManagedBeanAdapter managedBeanAdapter) {
 
         val servicePojo = managedBeanAdapter.getInstance().getFirst()
                 .orElseThrow(()->_Exceptions.unrecoverableFormatted(
                         "Cannot get service instance of type '%s'",
                         managedBeanAdapter.getBeanClass()));
 
-        return ManagedObject.lazy(getSpecificationLoader(), servicePojo);
-
+        if(ProgrammingModelConstants.TypeVetoMarker.anyMatchOn(managedBeanAdapter.getBeanClass())) {
+            return Optional.empty();
+        }
+        return Optional.of(ManagedObject.lazy(getSpecificationLoader(), servicePojo));
     }
 
     // -- RECURSIVE INITIALIZATION FIX
@@ -501,4 +508,6 @@ implements MetaModelContext {
             postConstructRunnables.clear();
         }
     }
+
+
 }

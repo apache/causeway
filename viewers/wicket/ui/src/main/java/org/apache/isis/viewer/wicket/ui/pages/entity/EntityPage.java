@@ -226,12 +226,13 @@ public class EntityPage extends PageAbstract {
 
     }
 
-    // -- UTILIY
+    // -- UTILITIES
 
     /**
      * Re-fetch entities for view-models, usually required once at begin of request.
      */
-    public static void viewmodelRefresh(final IRequestablePage iRequestablePage) {
+    public static void viewmodelRefresh(
+            final IRequestablePage iRequestablePage) {
         if(iRequestablePage instanceof EntityPage) {
 
             val entityPage = (EntityPage) iRequestablePage;

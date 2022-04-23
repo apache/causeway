@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.model.models.interaction.coll;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.wicket.model.ChainingModel;
@@ -25,6 +26,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -55,12 +57,20 @@ extends ChainingModel<DataRow> {
     }
 
     @Override
-    public DataRow getObject() {
+    public final DataRow getObject() {
         if(dataRow==null) {
             dataRow = getDataTableModel().lookupDataRow(uuid)
                     .orElse(null);
+            if(dataRow==null) {
+                // XXX[ISIS-3005] UI out of sync with model: reload page
+                WktContext.pageReload();
+            }
         }
         return dataRow;
+    }
+
+    public Optional<DataRow> dataRow() {
+        return Optional.ofNullable(getObject());
     }
 
     // -- HELPER

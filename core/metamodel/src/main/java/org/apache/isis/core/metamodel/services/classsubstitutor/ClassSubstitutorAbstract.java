@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.services.classsubstitutor;
 import java.util.Objects;
 import java.util.Set;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.proxy._ProxyFactoryService;
 import org.apache.isis.commons.internal.reflection._ClassCache;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 
 import lombok.NonNull;
@@ -129,8 +129,8 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
             return shouldIgnore(cls.getComponentType());
         }
 
-        // ignore any classes
-        if(cls.getAnnotation(Programmatic.class) != null) {
+        // ignore vetoed types
+        if(ProgrammingModelConstants.TypeVetoMarker.anyMatchOn(cls)) {
             return true;
         }
 

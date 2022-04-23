@@ -30,8 +30,10 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -41,6 +43,7 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -68,13 +71,21 @@ import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.commons.internal.functions._Functions.SerializableFunction;
+import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
+
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
@@ -83,9 +94,6 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.jquery.Key;
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -305,7 +313,7 @@ public class Wkt {
     final String fragment_prompt_checkboxIntermediate = "<label class=\"fs-4\" style=\"color: silver;\">"
             + "<i class=\"fa-regular fa-square-minus\"></i></label>";
 
-    public static CheckBoxX checkbox(
+    public static CheckBoxX checkboxX(
             final String id,
             final IModel<Boolean> checkedModel,
             final boolean required,
@@ -356,6 +364,43 @@ public class Wkt {
         };
         checkBox.setOutputMarkupId(true); // allows AJAX updates to work
         return checkBox;
+    }
+
+    public static AjaxCheckBox checkbox(
+            final String id,
+            final IModel<Boolean> checkedModel,
+            final SerializableConsumer<AjaxRequestTarget> onUpdate) {
+        return new AjaxCheckBox(id, checkedModel) {
+            private static final long serialVersionUID = 1L;
+            @Override protected void onUpdate(final AjaxRequestTarget target) {
+                onUpdate.accept(target); }
+            /**
+             * XXX[ISIS-3005] Any action dialog submission on the same page will
+             * result in a new {@link DataTableModel}, where any previously rendered check-boxes
+             * run out of sync with their DataRowToggle model.
+             * Hence we intercept such events and reset check-boxes to un-checked.
+             */
+            @Override public void onEvent(final IEvent<?> event) {
+                _Casts.castTo(IsisEnvelopeEvent.class, event.getPayload())
+                .ifPresent(envelopeEvent->{
+                    if(envelopeEvent.getLetter() instanceof IsisActionCompletedEvent) {
+                        if(Boolean.TRUE.equals(this.getModelObject())) {
+                            this.setModelObject(false);
+                            envelopeEvent.getTarget().add(this);
+                        }
+                    }
+                });
+                super.onEvent(event);
+            }
+        };
+    }
+
+    public static AjaxCheckBox checkboxAdd(
+            final MarkupContainer container,
+            final String id,
+            final IModel<Boolean> checkedModel,
+            final SerializableConsumer<AjaxRequestTarget> onUpdate) {
+        return add(container, checkbox(id, checkedModel, onUpdate));
     }
 
     // -- CONTAINER
@@ -529,6 +574,16 @@ public class Wkt {
     public Fragment fragmentAddNoTab(final MarkupContainer container,
             final String id, final String fragmentId, final MarkupContainer markupProvider) {
         return add(container, fragmentNoTab(id, fragmentId, markupProvider));
+    }
+
+    // -- FORM
+
+    public static Form<Object> form(final String id) {
+        return new Form<Object>(id);
+    }
+
+    public static Form<Object> formAdd(final MarkupContainer container, final String id) {
+        return add(container, form(id));
     }
 
     // -- IMAGE
@@ -931,6 +986,5 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
-
 
 }

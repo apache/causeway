@@ -18,7 +18,10 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
+import java.util.Optional;
+
 import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
@@ -38,8 +41,11 @@ extends BooleanBinding<DataTableModel> {
     }
 
     @Override
-    protected _BindableAbstract<Boolean> getBindable(final DataTableModel dataTable) {
-        return dataTable.getSelectAllToggle();
+    protected Optional<_BindableAbstract<Boolean>> getBindable(
+            final @Nullable DataTableModel dataTable) {
+        return dataTable!=null
+                ? Optional.ofNullable(dataTable.getSelectAllToggle())
+                : Optional.empty();
     }
 
 }

@@ -16,35 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.validation;
+package org.apache.isis.viewer.wicket.model.util;
 
-import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.Application;
+import org.apache.wicket.core.request.handler.ListenerRequestHandler;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 /**
- * Provides the <em>common context</em> for implementing sub-classes.
  * @since 2.0
- *
  */
-public abstract class ValidatorBase<T>
-implements
-    HasCommonContext,
-    IValidator<T> {
+public class WktContext {
 
-    private static final long serialVersionUID = 1L;
-
-    private transient IsisAppCommonContext commonContext;
-
-    protected ValidatorBase(final IsisAppCommonContext commonContext) {
-        this.commonContext = commonContext;
+    public static IsisAppCommonContext getCommonContext() {
+        return ((HasCommonContext) Application.get()).getCommonContext();
     }
 
-    @Override
-    public IsisAppCommonContext getCommonContext() {
-        return commonContext = WktContext.computeIfAbsent(commonContext);
+    public static IsisAppCommonContext computeIfAbsent(final IsisAppCommonContext commonContext) {
+        return commonContext!=null
+                ? commonContext
+                : getCommonContext();
+    }
+
+    public static void pageReload() {
+        var cycle = RequestCycle.get();
+        var handler = cycle.getActiveRequestHandler();
+        if(handler instanceof ListenerRequestHandler) {
+            var currentPage = ((ListenerRequestHandler)handler).getPage();
+            cycle.setResponsePage(currentPage);
+        }
     }
 
 }

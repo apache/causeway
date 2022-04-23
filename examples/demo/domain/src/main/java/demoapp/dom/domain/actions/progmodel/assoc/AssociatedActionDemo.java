@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
 
@@ -64,12 +65,17 @@ public class AssociatedActionDemo implements HasAsciiDocDescription {
 
     @Getter private final Set<DemoItem> items = new LinkedHashSet<>();
 
+    @XmlTransient @ObjectSupport
+    public String title() {
+        return "Associated Action Demo";
+    }
+
     @Action(choicesFrom = "items")
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
     public AssociatedActionDemo doSomethingWithItems(
 
             // bulk selection
-            Set<DemoItem> items) {
+            final Set<DemoItem> items) {
 
         if(items!=null) {
             items.forEach(item->messageService.informUser(item.getName()));

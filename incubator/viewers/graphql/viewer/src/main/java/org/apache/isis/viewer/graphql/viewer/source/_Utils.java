@@ -16,26 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.util;
+package org.apache.isis.viewer.graphql.viewer.source;
 
-import org.apache.wicket.Application;
+final class _Utils {
 
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+    final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
+    final static String GQL_MUTATTIONS_FIELDNAME = "_gql_mutations";
 
-/**
- * @since 2.0
- */
-public class CommonContextUtils {
-
-    public static IsisAppCommonContext getCommonContext() {
-        return ((HasCommonContext) Application.get()).getCommonContext();
+    static String metaTypeName(final String logicalTypeNameSanitized){
+        return logicalTypeNameSanitized + "__DomainObject_meta";
     }
 
-    public static IsisAppCommonContext computeIfAbsent(final IsisAppCommonContext commonContext) {
-        return commonContext!=null
-                ? commonContext
-                : getCommonContext();
+    static String mutatorsTypeName(final String logicalTypeNameSanitized){
+        return logicalTypeNameSanitized + "__DomainObject_mutators";
+    }
+
+    static String logicalTypeNameSanitized(final String logicalTypeName) {
+        return logicalTypeName.replace('.', '_');
     }
 
 }

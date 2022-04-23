@@ -18,19 +18,29 @@
  */
 package org.apache.isis.viewer.wicket.ui.errors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class JGrowlUtilTest {
+class JGrowlUtilTest {
 
     @Test
-    public void testEscape() throws Exception {
-
-        assertThat(JGrowlUtil.escape(
-                "double quotes \" and single quotes ' and <p>markup</p>"), equalTo(
+    void testEscape() throws Exception {
+        assertThat(JGrowlUtil
+                .escape(
+                        "double quotes \" and single quotes ' and <p>markup</p>"),
+                equalTo(
                         "double quotes ' and single quotes ' and &lt;p&gt;markup&lt;/p&gt;"));
+    }
+
+    @Test
+    void testNewlineEscape() throws Exception {
+        assertThat(JGrowlUtil
+                .escape(
+                        "a\n\rb"),
+                equalTo(
+                        "a<br/>b"));
     }
 
 }
