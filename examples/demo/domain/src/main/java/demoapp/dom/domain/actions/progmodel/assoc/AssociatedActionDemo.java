@@ -65,7 +65,7 @@ public class AssociatedActionDemo implements HasAsciiDocDescription {
 
     @Getter private final Set<DemoItem> items = new LinkedHashSet<>();
 
-    @XmlTransient @ObjectSupport
+    @ObjectSupport
     public String title() {
         return "Associated Action Demo";
     }
