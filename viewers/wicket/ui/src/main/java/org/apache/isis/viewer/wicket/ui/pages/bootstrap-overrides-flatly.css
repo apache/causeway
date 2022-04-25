@@ -54,3 +54,10 @@ a.scalarValueInlinePromptLink:focus textarea,
     border-color: rgb(24, 188, 156);
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgb(24, 188, 156);
 }
+
+/* contrast fix for badges inside tables */
+td .badge.bg-light {
+  --bs-bg-opacity: 1;
+  background-color: rgba(230, 228, 226 ,var(--bs-bg-opacity)) !important;
+  color:#606264;
+}
