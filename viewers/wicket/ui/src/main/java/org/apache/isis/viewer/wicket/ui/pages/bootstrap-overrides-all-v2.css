@@ -1042,7 +1042,7 @@ div.scalarValueInlinePromptLink {
 	background-color: rgba(0, 0, 0, 0.08);
 }
 .scalarValueInlinePromptLink .btn-group > button.btn {
-  opacity: 0.5;
+  opacity: 0.25;
 }
 .scalarValueInlinePromptLink .btn-group > button.btn:focus,
 .scalarValueInlinePromptLink:hover .btn-group > button.btn {
