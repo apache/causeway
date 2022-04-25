@@ -18,8 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.object.logicaltype;
 
+import java.util.Map;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
@@ -37,7 +40,7 @@ public class LogicalTypeMalformedValidator
 implements MetaModelRefiner {
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         programmingModel.addVisitingValidator(spec->{
 
@@ -60,13 +63,14 @@ implements MetaModelRefiner {
                     || nameParts.stream()
                         .anyMatch(String::isEmpty)) {
 
-                ValidationFailure.raiseFormatted(
-                        spec,
-                        "%s: the object type must declare a namespace, yet was found to be invalid '%s'; "
-                        + "eg. @DomainObject(logicalTypeName=\"Customer\") is considered invalid, "
-                        + "whereas @DomainObject(logicalTypeName=\"sales.Customer\") is valid.",
-                        spec.getFullIdentifier(),
-                        logicalTypeName);
+                val validationResponse = spec.isManagedBean()
+                        ? ProgrammingModelConstants.Validation.DOMAIN_SERVICE_MISSING_A_NAMESPACE
+                        : ProgrammingModelConstants.Validation.DOMAIN_OBJECT_MISSING_A_NAMESPACE;
+
+                ValidationFailure.raiseFormatted(spec,
+                        validationResponse.getMessage(Map.of(
+                                "type", spec.getFullIdentifier(),
+                                "logicalTypeName", logicalTypeName)));
             }
 
         });
