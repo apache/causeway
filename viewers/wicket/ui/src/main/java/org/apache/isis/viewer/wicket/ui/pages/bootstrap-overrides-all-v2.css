@@ -974,7 +974,10 @@ footer .footer-image {
     margin-bottom: 4px;
 }
 
-
+/* fit button-group inside surrounding value input box */
+.scalarValueInput .btn-group-sm > .btn {
+	padding: .20rem .5rem;
+}
 
 .booleanPanel .actions-right .additionalLinkListInline {
     margin-top: 0px;
