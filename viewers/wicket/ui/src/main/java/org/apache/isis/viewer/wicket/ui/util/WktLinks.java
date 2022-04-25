@@ -94,8 +94,8 @@ public final class WktLinks {
         } else {
             Wkt.cssAppend(link, linkAndLabel.isRenderOutlined()
                     || action.isPrototype()
-                    ? ButtonSemantics.PRIMARY.buttonOutlineCss()
-                    : ButtonSemantics.PRIMARY.buttonDefaultCss());
+                    ? ButtonSemantics.SECONDARY.buttonOutlineCss()
+                    : ButtonSemantics.SECONDARY.buttonDefaultCss());
         }
 
         linkAndLabel
