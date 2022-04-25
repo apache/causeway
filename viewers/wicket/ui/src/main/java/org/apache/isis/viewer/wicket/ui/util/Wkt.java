@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -51,6 +52,7 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -59,6 +61,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.convert.IConverter;
@@ -223,6 +226,41 @@ public class Wkt {
         if (component.getBehaviors(ReplaceDisabledTagWithReadonlyTagBehavior.class).isEmpty()) {
             component.add(new ReplaceDisabledTagWithReadonlyTagBehavior());
         }
+    }
+
+    // -- BOKMARKABLE PAGE LINK
+
+    public BookmarkablePageLink<Void> bookmarkablePageLinkWithVisibility(
+            final String id,
+            final Class<? extends Page> pageClass,
+            final PageParameters pageParameters,
+            final SerializableBooleanSupplier dynamicVisibility) {
+
+        return new BookmarkablePageLink<Void>(
+                id, pageClass, pageParameters) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean isVisible() {
+                return dynamicVisibility.getAsBoolean();
+            }
+
+            //XXX ISIS[3022] adds support for CTRL down behavior, that is, opens URL in new tab if CTRL pressed
+            @Override protected CharSequence getOnClickScript(final CharSequence url) {
+                return "var win = this.ownerDocument.defaultView || this.ownerDocument.parentWindow; "
+                        + "if (win == window) {"
+                        + "  if(event.ctrlKey) {"
+                        + "    window.open('" + url + "', '_blank').focus();"
+                        + "  } else {"
+                        + "    window.location.href='" + url + "';"
+                        + "  }"
+                        + "}"
+                        + "return false";
+            }
+
+        };
+
     }
 
     // -- BUTTON
@@ -986,5 +1024,7 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
+
+
 
 }
