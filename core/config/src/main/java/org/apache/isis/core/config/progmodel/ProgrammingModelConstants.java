@@ -446,8 +446,8 @@ public final class ProgrammingModelConstants {
         DOMAIN_OBJECT_MISSING_A_NAMESPACE("${type}: the service type must declare a namespace, "
                 + "yet there was none found in '${logicalTypeName}'; "
                 + "Spring supports various naming strategies @Named(...) being one of them, "
-                + "where eg. @Named(\"Customer\") is considered invalid, "
-                + "whereas @Named(\"sales.Customer\") is valid."),
+                + "where eg. @Named(\"CustomerService\") is considered invalid, "
+                + "whereas @Named(\"sales.CustomerService\") is valid."),
         DOMAIN_SERVICE_MISSING_A_NAMESPACE("${type}: the object type must declare a namespace, "
                 + "yet there was none found in '${logicalTypeName}'; "
                 + "eg. @DomainObject(logicalTypeName=\"Customer\") is considered invalid, "
