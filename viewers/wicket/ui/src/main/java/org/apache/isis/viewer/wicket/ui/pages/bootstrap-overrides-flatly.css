@@ -59,5 +59,5 @@ a.scalarValueInlinePromptLink:focus textarea,
 td .badge.bg-light {
   --bs-bg-opacity: 1;
   background-color: rgba(230, 228, 226 ,var(--bs-bg-opacity)) !important;
-  color:#606264;
+  color:rgb(24, 49, 83);
 }

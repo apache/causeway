@@ -176,11 +176,6 @@ footer > .navbar {
 .collectionContentsAsAjaxTablePanel table.contents tr {
 }
 
-
-.collectionContentsAsAjaxTablePanel table.contents tr td {
-    padding-left: 4px;
-    padding-right: 4px;
-}
 .collectionContentsAsAjaxTablePanel table.contents tr th,
 .collectionContentsAsAjaxTablePanel table.contents tr th a span {
     text-align: left;
@@ -203,13 +198,6 @@ footer > .navbar {
     border: none;
 }
 
-/*
-.collectionContentsAsAjaxTablePanel table.contents .uuidPanel,
-.collectionContentsAsAjaxTablePanel table.contents .javaSqlTimestampPanel {
-    font-family: monospace;
-}
-*/
-
 .collectionContentsAsAjaxTablePanel table.contents .javaMathBigDecimalPanel,
 .collectionContentsAsAjaxTablePanel table.contents .javaMathBigIntegerPanel,
 .collectionContentsAsAjaxTablePanel table.contents .bytePanel,
@@ -222,9 +210,8 @@ footer > .navbar {
 /*    font-family: monospace;*/
 }
 
-.collectionContentsAsAjaxTablePanel table.contents tbody td,
-.collectionContentsAsAjaxTablePanel table.contents thead th {
-    padding:5px;
+.collectionContentsAsAjaxTablePanel table.contents .booleanPanel {
+    text-align: center;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigatorLabel {
