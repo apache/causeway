@@ -443,15 +443,15 @@ public final class ProgrammingModelConstants {
         VIEWMODEL_MISSING_DESERIALIZING_CONSTRUCTOR(
                 "${type}: ViewModel contract violation: missing single (String) arg constructor "
                 + "(for de-serialization from memento string)."),
-        DOMAIN_OBJECT_MISSING_A_NAMESPACE("${type}: the service type must declare a namespace, "
+        DOMAIN_OBJECT_MISSING_A_NAMESPACE("${type}: the object type must declare a namespace, "
+                + "yet there was none found in '${logicalTypeName}'; "
+                + "eg. @DomainObject(logicalTypeName=\"Customer\") is considered invalid, "
+                + "whereas @DomainObject(logicalTypeName=\"sales.Customer\") is valid."),
+        DOMAIN_SERVICE_MISSING_A_NAMESPACE("${type}: the service type must declare a namespace, "
                 + "yet there was none found in '${logicalTypeName}'; "
                 + "Spring supports various naming strategies @Named(...) being one of them, "
                 + "where eg. @Named(\"CustomerService\") is considered invalid, "
                 + "whereas @Named(\"sales.CustomerService\") is valid."),
-        DOMAIN_SERVICE_MISSING_A_NAMESPACE("${type}: the object type must declare a namespace, "
-                + "yet there was none found in '${logicalTypeName}'; "
-                + "eg. @DomainObject(logicalTypeName=\"Customer\") is considered invalid, "
-                + "whereas @DomainObject(logicalTypeName=\"sales.Customer\") is valid."),
         ;
         private final String template;
         public String getMessage(final Identifier featureIdentifier) {
