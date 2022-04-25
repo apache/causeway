@@ -93,8 +93,9 @@ public final class WktLinks {
             WktDecorators.getDanger().decorate(link);
         } else {
             Wkt.cssAppend(link, linkAndLabel.isRenderOutlined()
-                    ? ButtonSemantics.SECONDARY.buttonOutlineCss()
-                    : ButtonSemantics.SECONDARY.buttonDefaultCss());
+                    || action.isPrototype()
+                    ? ButtonSemantics.PRIMARY.buttonOutlineCss()
+                    : ButtonSemantics.PRIMARY.buttonDefaultCss());
         }
 
         linkAndLabel

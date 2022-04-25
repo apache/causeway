@@ -29,4 +29,8 @@ div.entitySimpleLinkPanel > div {
 	height: 16px;
 }
 
+.null-representation {
+	opacity: 0.5;
+}
+
 

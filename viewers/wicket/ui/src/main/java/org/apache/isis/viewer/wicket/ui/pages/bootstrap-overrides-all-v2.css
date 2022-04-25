@@ -588,11 +588,11 @@ ul.dropdown-menu {
 }
 
 /* removes the caret (arrow down) from the additional links selector dropdowns */
-.additionalLinkList .btn.btn-secondary.dropdown-toggle::after {
+.additionalLinkList .btn.dropdown-toggle::after {
 	content: none;
 }
 /* removes default margin right after fa-icon in dropdown-toggles */
-.additionalLinkList .btn.btn-secondary.dropdown-toggle .fa {
+.additionalLinkList .btn.dropdown-toggle .fa {
 	margin-right: 0px;
 }
 

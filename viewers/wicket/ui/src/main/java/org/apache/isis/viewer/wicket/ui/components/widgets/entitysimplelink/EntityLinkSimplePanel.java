@@ -66,8 +66,9 @@ implements CancelHintRequired  {
 
         if(isEmpty) {
             // represent no object by a simple label displaying '(none)'
-            Wkt.labelAdd(this, ID_ENTITY_TITLE_NULL, ValueSemanticsAbstract.NULL_REPRESENTATION);
-            permanentlyHide(ID_ENTITY_TITLE_NULL);
+            val nullRepresentation =
+                    Wkt.labelAdd(this, ID_ENTITY_TITLE_NULL, ValueSemanticsAbstract.NULL_REPRESENTATION);
+            Wkt.cssAppend(nullRepresentation, "null-representation");
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
 
         } else {
