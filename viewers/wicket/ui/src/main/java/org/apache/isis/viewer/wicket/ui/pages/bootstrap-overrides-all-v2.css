@@ -18,7 +18,9 @@
  */
 :root {
 	--form-label-width: 160px;
-	--form-field-width: calc(100% - var(--form-label-width));	
+	--form-field-width: calc(100% - var(--form-label-width));
+	--link-color: var(--bs-success);
+	--link-color-hover: var(--link-color);
 }
 
 #container {
@@ -92,6 +94,15 @@ body {
 .navbar {
     border-radius: 0;
     margin-bottom: 0px;
+}
+
+.nav-link, a, .btn-link {
+	color: var(--link-color);
+}
+.nav-link:focus, .nav-link:hover,
+a:focus, a:hover, 
+.btn-link:focus, .btn-link:hover {
+    color: var(--link-color-hover);
 }
 
 footer > .navbar {
@@ -1059,11 +1070,12 @@ div.scalarValueInlinePromptLink {
 
 .entityTitle {
     text-decoration: none;
-    color: var(--bs-success);
+    color: var(--link-color);
 }
 .entityTitle:hover {
     text-decoration: underline;
     cursor: pointer;
+    color: var(--link-color-hover);
 }
 
 #container.page #wicketDebugBar {
