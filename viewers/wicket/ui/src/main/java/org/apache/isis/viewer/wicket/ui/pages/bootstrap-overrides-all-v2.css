@@ -569,6 +569,11 @@ div.additionalLinkList {
     background-color: rgba(255, 255, 255, 0.3);
 }
 
+/* button size fix - using size from before Bootstrap 5.x */
+.btn-group-sm > .btn, .btn-sm {
+  font-size: 0.8rem;
+}
+
 /* buttons: distinguished rendering for disabled action buttons
    (assuming changing of background transparency is reasonable to apply to light as well as dark themes) */
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
@@ -943,10 +948,12 @@ footer .footer-image {
     margin-bottom: 4px;
 }
 
-/* fit button-group inside surrounding value input box */
+/* fit button-group inside surrounding value input box 
+   obsolete when changing button size more generally
 .scalarValueInput .btn-group-sm > .btn {
-	padding: .20rem .5rem;
+	padding: .20rem .5rem;  
 }
+*/
 
 .booleanPanel .actions-right .additionalLinkListInline {
     margin-top: 0px;
