@@ -33,10 +33,8 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModel;
 import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModelProvider;
-import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
-import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
-import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
-import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
+import org.apache.isis.viewer.common.model.decorators.IconDecorator;
+import org.apache.isis.viewer.common.model.decorators.TooltipDecorator;
 
 import lombok.Getter;
 import lombok.val;
@@ -60,7 +58,7 @@ public class Decorators {
     public final static class Tooltip implements TooltipDecorator<Component> {
 
         @Override
-        public void decorate(Component uiComponent, TooltipUiModel tooltipUiModel) {
+        public void decorate(Component uiComponent, TooltipDecorationModel tooltipDecorationModel) {
             log.warn("not implemented yet");
         }
 
@@ -71,9 +69,9 @@ public class Decorators {
         @Override
         public Component decorate(
                 final Component uiComponent,
-                final Optional<FontAwesomeUiModel> fontAwesomeUiModel) {
+                final Optional<FontAwesomeDecorationModel> fontAwesomeDecorationModel) {
 
-            val decoratedUiComponent = fontAwesomeUiModel
+            val decoratedUiComponent = fontAwesomeDecorationModel
             .map(fontAwesome->{
 
                 val faIcon = new Span();

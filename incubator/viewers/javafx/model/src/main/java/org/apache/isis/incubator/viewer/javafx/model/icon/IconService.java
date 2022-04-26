@@ -20,12 +20,12 @@ package org.apache.isis.incubator.viewer.javafx.model.icon;
 
 import java.util.Optional;
 
-import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 
 import javafx.scene.image.Image;
 
 public interface IconService {
 
-    Optional<Image> fontAwesome(FontAwesomeUiModel fontAwesomeUiModel);
+    Optional<Image> fontAwesome(FontAwesomeDecorationModel fontAwesomeDecorationModel);
 
 }

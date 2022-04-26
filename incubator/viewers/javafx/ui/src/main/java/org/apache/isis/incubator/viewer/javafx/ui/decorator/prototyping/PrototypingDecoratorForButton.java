@@ -23,8 +23,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
-import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
-import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
+import org.apache.isis.viewer.common.model.decorators.PrototypingDecorator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -42,13 +41,13 @@ public class PrototypingDecoratorForButton implements PrototypingDecorator<Butto
     private final PrototypingInfoPopupProvider prototypingInfoService;
 
     @Override
-    public Node decorate(Button uiButton, PrototypingUiModel prototypingUiModel) {
+    public Node decorate(Button uiButton, PrototypingDecorationModel prototypingDecorationModel) {
         val span = new HBox();
         val prototypingLabel = _fx.add(span, new Label("ⓘ"));
         _fx.add(span, uiButton);
         prototypingLabel.setTooltip(new Tooltip("Inspect Metamodel"));
         prototypingLabel.setOnMouseClicked(e->
-            prototypingInfoService.showPrototypingPopup(prototypingUiModel));
+            prototypingInfoService.showPrototypingPopup(prototypingDecorationModel));
 
         uiButton.getStyleClass().add("button-prototyping");
 

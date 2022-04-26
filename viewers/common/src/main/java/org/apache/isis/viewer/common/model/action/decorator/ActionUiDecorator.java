@@ -18,11 +18,11 @@
  */
 package org.apache.isis.viewer.common.model.action.decorator;
 
-import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
-import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
-import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
-import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
+import org.apache.isis.viewer.common.model.decorators.ConfirmDecorator;
+import org.apache.isis.viewer.common.model.decorators.DisablingDecorator;
+import org.apache.isis.viewer.common.model.decorators.IconDecorator;
+import org.apache.isis.viewer.common.model.decorators.PrototypingDecorator;
+import org.apache.isis.viewer.common.model.decorators.TooltipDecorator;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

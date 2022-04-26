@@ -45,7 +45,7 @@ import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableVi
 import org.apache.isis.incubator.viewer.javafx.ui.components.form.FormPane;
 import org.apache.isis.incubator.viewer.javafx.ui.components.panel.TitledPanel;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
+import org.apache.isis.viewer.common.model.decorators.DisablingDecorator.DisablingDecorationModel;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 
 import lombok.NonNull;
@@ -179,7 +179,7 @@ public class ObjectViewFx extends VBox {
                     val uiButton = uiComponentFactory.buttonFor(
                                     UiComponentFactory.ButtonRequest.of(
                                         managedAction,
-                                        DisablingUiModel.of(interaction),
+                                        DisablingDecorationModel.of(interaction),
                                         actionEventHandler));
 
                     if(container instanceof FormPane) {
@@ -211,7 +211,7 @@ public class ObjectViewFx extends VBox {
                     val request = UiComponentFactory.ComponentRequest.of(
                             propNeg,
                             managedProperty,
-                            DisablingUiModel.of(interaction));
+                            DisablingDecorationModel.of(interaction));
 
                     val uiPropertyField = uiComponentFactory.componentFor(request);
                     val labelAndPostion = uiComponentFactory.labelFor(request);

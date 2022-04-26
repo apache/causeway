@@ -55,7 +55,7 @@ import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
+import org.apache.isis.viewer.common.model.decorators.DisablingDecorator.DisablingDecorationModel;
 import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
 
 import lombok.NonNull;
@@ -200,7 +200,7 @@ public class ObjectViewVaa extends VerticalLayout {
                             uiComponentFactory.buttonFor(
                                     UiComponentFactory.ButtonRequest.of(
                                             managedAction,
-                                            DisablingUiModel.of(interaction),
+                                            DisablingDecorationModel.of(interaction),
                                             actionEventHandler)));
                 });
 
@@ -226,7 +226,7 @@ public class ObjectViewVaa extends VerticalLayout {
                                     UiComponentFactory.ComponentRequest.of(
                                             propNeg,
                                             managedProperty,
-                                            DisablingUiModel.of(interaction))));
+                                            DisablingDecorationModel.of(interaction))));
 
                     // handle associated actions
                     val actionBar = newActionPanel(container);

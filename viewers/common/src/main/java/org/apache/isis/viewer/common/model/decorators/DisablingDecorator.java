@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.decorator.disable;
+package org.apache.isis.viewer.common.model.decorators;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -29,22 +29,28 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-@Getter
-@RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class DisablingUiModel implements Serializable {
+public interface DisablingDecorator<T> {
 
-    private static final long serialVersionUID = 1L;
+    void decorate(T uiComponent, DisablingDecorationModel disableUiModel);
 
-    final @NonNull String reason;
+    @Getter
+    @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
+    public static class DisablingDecorationModel implements Serializable {
 
-    public static Optional<DisablingUiModel> of(@NonNull final Optional<InteractionVeto> usabilityVeto) {
-        return usabilityVeto
-                .map(veto->of(veto.getReason()));
+        private static final long serialVersionUID = 1L;
+
+        final @NonNull String reason;
+
+        public static Optional<DisablingDecorationModel> of(@NonNull final Optional<InteractionVeto> usabilityVeto) {
+            return usabilityVeto
+                    .map(veto->of(veto.getReason()));
+        }
+
+        public static Optional<DisablingDecorationModel> of(@NonNull final MemberInteraction<?, ?> memberInteraction) {
+            return of(memberInteraction.getInteractionVeto());
+        }
+
+
     }
-
-    public static Optional<DisablingUiModel> of(@NonNull final MemberInteraction<?, ?> memberInteraction) {
-        return of(memberInteraction.getInteractionVeto());
-    }
-
 
 }

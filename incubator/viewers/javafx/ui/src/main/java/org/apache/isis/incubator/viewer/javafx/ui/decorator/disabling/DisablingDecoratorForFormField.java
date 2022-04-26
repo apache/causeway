@@ -22,8 +22,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
+import org.apache.isis.viewer.common.model.decorators.DisablingDecorator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -35,7 +34,7 @@ import javafx.scene.Node;
 public class DisablingDecoratorForFormField implements DisablingDecorator<Node> {
 
     @Override
-    public void decorate(Node formField, DisablingUiModel disableUiModel) {
+    public void decorate(final Node formField, final DisablingDecorationModel disableUiModel) {
 
         val reason = disableUiModel.getReason();
 

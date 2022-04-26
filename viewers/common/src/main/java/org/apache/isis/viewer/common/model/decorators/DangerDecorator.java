@@ -16,22 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.decorator.icon;
+package org.apache.isis.viewer.common.model.decorators;
 
-import java.util.Optional;
+public interface DangerDecorator<T> {
 
-/**
- * @param <T> UI component type to decorate
- * @param <R> resulting UI component type
- */
-public interface IconDecorator<T, R> {
-
-    /**
-     * corresponds to the webjars path as provided by the maven artifact
-     * {@code org.webjars:font-awesome}
-     */
-    public static final String FONTAWESOME_RESOURCE = "font-awesome/6.1.0/css/all.min.css";
-
-    R decorate(T uiComponent, Optional<FontAwesomeUiModel> fontAwesomeUiModel);
+    void decorate(T uiComponent);
 
 }

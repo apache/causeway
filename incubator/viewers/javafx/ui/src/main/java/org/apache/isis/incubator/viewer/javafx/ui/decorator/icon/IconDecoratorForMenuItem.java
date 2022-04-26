@@ -26,8 +26,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.incubator.viewer.javafx.model.icon.IconService;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
-import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
-import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
+import org.apache.isis.viewer.common.model.decorators.IconDecorator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -43,10 +42,10 @@ public class IconDecoratorForMenuItem implements IconDecorator<MenuItem, MenuIte
     private final IconService iconService;
 
     @Override
-    public MenuItem decorate(MenuItem menuItem, Optional<FontAwesomeUiModel> fontAwesomeUiModel) {
+    public MenuItem decorate(MenuItem menuItem, Optional<FontAwesomeDecorationModel> fontAwesomeDecorationModel) {
         // TODO honor icon position
 
-        fontAwesomeUiModel.ifPresent(fa->{
+        fontAwesomeDecorationModel.ifPresent(fa->{
             val icon = iconService.fontAwesome(fa);
             icon
             .map(this::iconForImage)

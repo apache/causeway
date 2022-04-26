@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -37,23 +37,23 @@ public class CssClassFaBehavior extends Behavior {
 
     private static final long serialVersionUID = 1L;
 
-    @NonNull private final FontAwesomeUiModel fontAwesomeUiModel;
+    @NonNull private final FontAwesomeDecorationModel fontAwesomeDecorationModel;
 
     @Override
     public void beforeRender(final Component component) {
         super.beforeRender(component);
-        val position = fontAwesomeUiModel.getPosition();
+        val position = fontAwesomeDecorationModel.getPosition();
         if (position == null || CssClassFaPosition.LEFT == position) {
-            val cssClassFa = fontAwesomeUiModel.getCssClassesSpaceSeparated();
+            val cssClassFa = fontAwesomeDecorationModel.getCssClassesSpaceSeparated();
             component.getResponse().write("<span class=\""+cssClassFa+" fontAwesomeIcon\"></span>");
         }
     }
 
     @Override
     public void afterRender(final Component component) {
-        val position = fontAwesomeUiModel.getPosition();
+        val position = fontAwesomeDecorationModel.getPosition();
         if (CssClassFaPosition.RIGHT == position) {
-            val cssClassFa = fontAwesomeUiModel.getCssClassesSpaceSeparated();
+            val cssClassFa = fontAwesomeDecorationModel.getCssClassesSpaceSeparated();
             component.getResponse().write("<span class=\""+cssClassFa+" fontAwesomeIcon\"></span>");
         }
         super.afterRender(component);
