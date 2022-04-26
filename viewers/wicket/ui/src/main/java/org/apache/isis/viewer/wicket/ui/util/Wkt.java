@@ -567,7 +567,6 @@ public class Wkt {
             private static final long serialVersionUID = 1L;
             @Override public MarkupContainer add(final Component... children) {
                 for(var child:children) {
-
                     System.err.printf("add %s -> %s %n", this.getId(), child.getId());
                 }
                 return super.add(children); }
@@ -974,9 +973,8 @@ public class Wkt {
 
         if(formComponent instanceof TextArea) {
             multilineNumberOfLines.get()
-            .ifPresent(numberOfLines->{
-                System.err.printf("%d%n", numberOfLines);
-                Wkt.attributeReplace(formComponent, "rows", numberOfLines);});
+            .ifPresent(numberOfLines->
+                Wkt.attributeReplace(formComponent, "rows", numberOfLines));
         }
 
         maxLength.get()

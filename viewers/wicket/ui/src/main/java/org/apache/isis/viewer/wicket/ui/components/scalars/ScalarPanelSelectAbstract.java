@@ -26,14 +26,11 @@ import org.apache.wicket.model.Model;
 import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.ChoiceProvider;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
@@ -113,37 +110,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         if (select2 == null) {
             return false;
         }
-
-        final ChoiceProvider<ObjectMemento> choiceProvider = buildChoiceProvider();
-        select2.setProvider(choiceProvider);
-
-        //sets up the choices, also ensuring that any currently held value is compatible.
-
-        _Casts.castTo(ObjectAdapterMementoProviderAbstract.class, choiceProvider)
-        .ifPresent(mementoProvider->{
-            if(mementoProvider.dependsOnPreviousArgs()){
-
-                _Debug.log("ChoiceProvider with DependsOnPreviousArgs while scalarModel() %s",
-                        scalarModel().isEmpty()? "is empty" : "is not empty");
-
-                System.err.printf("ChoiceProvider with DependsOnPreviousArgs while scalarModel() %s%n",
-                        scalarModel().isEmpty()? "is empty" : "is not empty");
-
-                //XXX what to do?
-//                if(scalarModel().isScalar()) {
-//                    if(select2.isEmpty()) {
-//                        select2.clear(); // why?
-//                        getModel().setObject(null);
-//                    }
-//                }
-//
-//                if(scalarModel().isEmpty()) {
-//                    select2.clear();
-//                }
-
-            }
-        });
-
+        select2.setProvider(buildChoiceProvider());
         return true;
     }
 
