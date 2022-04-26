@@ -24,16 +24,19 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Logger;
 
+import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
-final class SpecificationLoaderDefault_debug {
+@UtilityClass
+final class _Util {
 
-    static void logBefore(
-            Logger log,
-            SpecificationCache<ObjectSpecification> cache,
-            List<? extends ObjectSpecification> scanned) {
+    void logBefore(
+            final Logger log,
+            final SpecificationCache<ObjectSpecification> cache,
+            final List<? extends ObjectSpecification> scanned) {
 
         if(!log.isDebugEnabled()) {
             return;
@@ -57,10 +60,10 @@ final class SpecificationLoaderDefault_debug {
                 registryNotCached.size(), cachedNotRegistry.size()));
     }
 
-    static void logAfter(
-            Logger log,
-            SpecificationCache<ObjectSpecification> cache,
-            Collection<? extends ObjectSpecification> scanned) {
+    void logAfter(
+            final Logger log,
+            final SpecificationCache<ObjectSpecification> cache,
+            final Collection<? extends ObjectSpecification> scanned) {
 
         if(!log.isDebugEnabled()) {
             return;
@@ -74,6 +77,20 @@ final class SpecificationLoaderDefault_debug {
         log.debug(String.format(
                 "cachedSpecificationsAfter.size = %d ; cachedAfterNotBefore.size = %d",
                 cached.size(), cachedAfterNotBefore.size()));
+    }
+
+    /**
+     * Returns either 'JDO' or 'JPA' based on what {@link IsisBeanTypeClassifier} we find
+     * registered with <i>Spring</i>.
+     * Alternative implementations could be considered, however this works for now.
+     */
+    String persistenceLayerName() {
+        return IsisBeanTypeClassifier.get().stream()
+            .map(IsisBeanTypeClassifier::getClass)
+            .map(Class::getSimpleName)
+            .anyMatch(classifierName->classifierName.startsWith("Jdo"))
+            ? "JDO "
+            : "JPA";
     }
 
 }

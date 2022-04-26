@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -60,6 +61,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -277,8 +279,9 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         });
 
         //XXX[ISIS-2382] when parallel introspecting, make sure we have the mixins before their holders
+        // (observation by experiment, no real understanding as to why)
 
-        SpecificationLoaderDefault_debug.logBefore(log, cache, knownSpecs);
+        _Util.logBefore(log, cache, knownSpecs);
 
         log.info(" - introspecting {} type hierarchies", knownSpecs.size());
         introspect(Can.ofCollection(knownSpecs), IntrospectionState.TYPE_INTROSPECTED);
@@ -289,20 +292,20 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         log.info(" - introspecting {} mixins", isisBeanTypeRegistry.getMixinTypes().size());
         introspect(Can.ofCollection(mixinSpecs), IntrospectionState.FULLY_INTROSPECTED);
 
-        log.info(" - introspecting {} managed beans contributing (domain services)", isisBeanTypeRegistry.getManagedBeansContributing().size());
-//        log.info(" - introspecting {}/{} entities (JDO/JPA)",
-//                isisBeanTypeRegistry.getEntityTypesJdo().size(),
-//                isisBeanTypeRegistry.getEntityTypesJpa().size());
+        log.info(" - introspecting {} managed beans contributing (domain services)",
+                isisBeanTypeRegistry.getManagedBeansContributing().size());
 
-        log.info(" - introspecting {} entities (JDO+JPA)",
-                isisBeanTypeRegistry.getEntityTypes().size());
+        log.info(" - introspecting {} entities ({})",
+                isisBeanTypeRegistry.getEntityTypes().size(),
+                _Util.persistenceLayerName());
+
         log.info(" - introspecting {} view models", isisBeanTypeRegistry.getViewModelTypes().size());
 
         serviceRegistry.lookupServiceElseFail(MenuBarsService.class).menuBars();
 
         introspect(Can.ofCollection(domainObjectSpecs), IntrospectionState.FULLY_INTROSPECTED);
 
-        SpecificationLoaderDefault_debug.logAfter(log, cache, knownSpecs);
+        _Util.logAfter(log, cache, knownSpecs);
 
         if(isFullIntrospect()) {
             val snapshot = cache.snapshotSpecs();
@@ -564,31 +567,15 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         if(isMetamodelFullyIntrospected()
                 && isisConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
-            val sort = isisBeanTypeClassifier
-                    .classify(cls)
-                    .getBeanSort();
+            val warningMessage = ProgrammingModelConstants.Validation.TYPE_NOT_EAGERLY_DISCOVERED
+                .getMessage(Map.of(
+                        "type", cls.getName(),
+                        "beanSort", isisBeanTypeClassifier
+                            .classify(cls)
+                            .getBeanSort()
+                            .name()));
 
-//          ISIS-2256:
-//            throw _Exceptions.illegalState(
-//                    "Cannot introspect class '%s' of sort %s, because the metamodel has been fully introspected and is now locked. " +
-//                    "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
-//                    "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
-//                    "@DomainService.",
-//                    cls.getName(), sort);
-
-            log.warn("Missed class '{}' when the metamodel was fully introspected.", cls.getName());
-
-            if(sort.isValue()) {
-                return; // opinionated: just relax when value
-            }
-
-            if(sort.isToBeIntrospected()) {
-                log.warn("Introspecting class '{}' of sort {}, after the metamodel had been fully introspected and is now locked. " +
-                      "One reason this can happen is if you are attempting to invoke an action through the WrapperFactory " +
-                      "on a service class incorrectly annotated with Spring's @Service annotation instead of " +
-                      "@DomainService.",
-                        cls.getName(), sort);
-            }
+            log.warn(warningMessage);
         }
     }
 

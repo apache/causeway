@@ -452,6 +452,16 @@ public final class ProgrammingModelConstants {
                 + "Spring supports various naming strategies @Named(...) being one of them, "
                 + "where eg. @Named(\"CustomerService\") is considered invalid, "
                 + "whereas @Named(\"sales.CustomerService\") is valid."),
+        TYPE_NOT_EAGERLY_DISCOVERED("The metamodel is configured for FULL introspection mode, "
+                + "yet missed ${type} of sort ${beanSort} during application start. " +
+                "This happens when type ${type} is not eagerly discovered by the metamodel introspection, "
+                + "which (initially) only considers compile-time types via reflection. "
+                + "Run-time types, "
+                + "not explicitly referenced to be included with Spring's class discovery mechanism, "
+                + "might slip this process. "
+                + "Consider importing type ${type} with Spring's @Import annotation. "
+                + "Types of sort VALUE should instead register a ValueSemanticsProvider with Spring, "
+                + "to be properly understood by the framework."),
         ;
         private final String template;
         public String getMessage(final Identifier featureIdentifier) {
