@@ -90,7 +90,6 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * <p>
  * The implementation provides for a degree of pluggability:
  * <ul>
  * <li>The most important plug-in point is {@link ProgrammingModel} that
@@ -102,7 +101,6 @@ import lombok.extern.log4j.Log4j2;
  * conjunction with some <tt>PersistenceMechanism</tt>s that do class
  * enhancement.
  * </ul>
- * </p>
  */
 @Service
 @Named("isis.metamodel.SpecificationLoaderDefault")
@@ -385,19 +383,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     public ObjectSpecification loadSpecification(
             final @Nullable Class<?> type,
             final @NonNull IntrospectionState upTo) {
-
-        return _loadSpecification(
-                type,
-                __->isisBeanTypeRegistry
-                    .lookupIntrospectableType(type)
-                    .map(IsisBeanMetaData::getBeanSort)
-                    .orElseGet(()->
-                        valueSemanticsResolver.get().hasValueSemantics(type)
-                        ? BeanSort.VALUE
-                        : isisBeanTypeClassifier.classify(type)
-                                .getBeanSort()
-                    ),
-                upTo);
+        return _loadSpecification(type, this::classify, upTo);
     }
 
     @Override
@@ -526,6 +512,23 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
 
     // -- HELPER
+
+    /**
+     * Classification ideally happens eagerly during Spring's class path scan,
+     * however as a fallback we might need to classify types that escaped eager introspection
+     * here.
+     */
+    private BeanSort classify(final @Nullable Class<?> type) {
+        return isisBeanTypeRegistry
+                .lookupIntrospectableType(type)
+                .map(IsisBeanMetaData::getBeanSort)
+                .orElseGet(()->
+                    valueSemanticsResolver.get().hasValueSemantics(type)
+                    ? BeanSort.VALUE
+                    : isisBeanTypeClassifier.classify(type)
+                            .getBeanSort()
+                );
+    }
 
     @Nullable
     private ObjectSpecification primeSpecification(
