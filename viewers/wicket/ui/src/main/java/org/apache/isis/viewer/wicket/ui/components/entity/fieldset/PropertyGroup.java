@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
@@ -191,9 +190,10 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, EntityModel> imp
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-        if(scalarNameAndValueComponent instanceof MarkupContainer) {
-            Wkt.cssAppend(scalarNameAndValueComponent, scalarModel.getIdentifier());
-        }
+//XXX[ISIS-3026] this is a bad idea
+//        if(scalarNameAndValueComponent instanceof MarkupContainer) {
+//            Wkt.cssAppend(scalarNameAndValueComponent, scalarModel.getIdentifier());
+//        }
 
         val entity = entityModel.getManagedObject();
 
