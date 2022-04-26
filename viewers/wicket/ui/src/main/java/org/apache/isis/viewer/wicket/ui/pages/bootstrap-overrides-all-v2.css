@@ -589,8 +589,10 @@ div.additionalLinkList {
    (assuming changing of background transparency is reasonable to apply to light as well as dark themes) */
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
     cursor: not-allowed!important;
-    opacity: 0.65;
+    opacity: 0.5;
     box-shadow: none;
+    border-style: none;
+	text-decoration-line: line-through;
 }
 
 /* make sure there is no gap between the menu toggle and its menu, otherwise menu hides on focus transition*/
