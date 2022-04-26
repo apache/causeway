@@ -19,11 +19,18 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.viewer.common.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
+import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.val;
 
@@ -45,9 +52,9 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
 
     private void buildGui() {
 
-        Wkt.labelAdd(this, ID_SCALAR_NAME, ()->getModel().getFriendlyName());
+        Wkt.add(this, createScalarNameLabel(ID_SCALAR_NAME));
 
-        val wicketImage = WicketImageUtil.asWicketImage(ID_SCALAR_VALUE, getModel())
+        val wicketImage = WicketImageUtil.asWicketImage(ID_SCALAR_VALUE, scalarModel())
                 .orElse(null);
         if(wicketImage != null) {
             addOrReplace(wicketImage);
@@ -61,6 +68,32 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
             permanentlyHide(ID_SCALAR_VALUE, ID_FEEDBACK);
         }
 
+    }
+
+    /** copied over from {@link ScalarPanelAbstract} */
+    protected Label createScalarNameLabel(final String id) {
+
+        val labelCaption = Model.of(scalarModel().getFriendlyName());
+
+        final Label scalarNameLabel = Wkt.label(id, labelCaption);
+        if(_Strings.isNullOrEmpty(labelCaption.getObject())) {
+            return scalarNameLabel;
+        }
+
+        val scalarModel = scalarModel();
+
+        WktDecorators.getFormLabel()
+            .decorate(scalarNameLabel, FormLabelDecorationModel
+                    .mandatory(scalarModel.isRequired()
+                            && scalarModel.isEnabled()));
+
+        scalarModel.getDescribedAs()
+        .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
+        return scalarNameLabel;
+    }
+
+    protected final ScalarModel scalarModel() {
+        return getModel();
     }
 
 }

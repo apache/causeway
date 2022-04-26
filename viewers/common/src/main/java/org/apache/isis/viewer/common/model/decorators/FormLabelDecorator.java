@@ -19,40 +19,38 @@
 package org.apache.isis.viewer.common.model.decorators;
 
 import java.io.Serializable;
-import java.util.Optional;
 
-import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
-import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction;
+import org.springframework.lang.Nullable;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @FunctionalInterface
-public interface DisablingDecorator<T> {
+public interface FormLabelDecorator<T> {
 
-    void decorate(T uiComponent, DisablingDecorationModel decorationModel);
+    void decorate(T uiComponent, FormLabelDecorationModel decorationModel);
 
     // -- DECORATION MODEL
 
     @Getter
     @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-    public static class DisablingDecorationModel implements Serializable {
+    public static class FormLabelDecorationModel implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        final @NonNull String reason;
-
-        public static Optional<DisablingDecorationModel> of(@NonNull final Optional<InteractionVeto> usabilityVeto) {
-            return usabilityVeto
-                    .map(veto->of(veto.getReason()));
+        public static FormLabelDecorationModel mandatory(final boolean mandatory) {
+            return of(mandatory, ":");
         }
 
-        public static Optional<DisablingDecorationModel> of(@NonNull final MemberInteraction<?, ?> memberInteraction) {
-            return of(memberInteraction.getInteractionVeto());
+        public static FormLabelDecorationModel mandatorySuffixed(
+                final boolean mandatory,
+                final @Nullable String suffix) {
+            return of(mandatory, suffix);
         }
 
+        final boolean mandatoryMarker;
+        final @Nullable String suffix;
 
     }
 

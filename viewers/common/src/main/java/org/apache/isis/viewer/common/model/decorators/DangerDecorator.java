@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.common.model.decorators;
 
+@FunctionalInterface
 public interface DangerDecorator<T> {
 
     void decorate(T uiComponent);

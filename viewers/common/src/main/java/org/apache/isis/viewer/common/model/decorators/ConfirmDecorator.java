@@ -32,9 +32,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@FunctionalInterface
 public interface ConfirmDecorator<T> {
 
-    void decorate(T uiComponent, ConfirmDecorationModel confirmDecorationModel);
+    void decorate(T uiComponent, ConfirmDecorationModel decorationModel);
+
+    // -- DECORATION MODEL
 
     @Getter
     @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)

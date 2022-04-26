@@ -36,9 +36,12 @@ import lombok.RequiredArgsConstructor;
  * @param <T> UI component type to decorate
  * @param <R> resulting UI component type
  */
+@FunctionalInterface
 public interface PrototypingDecorator<T, R> {
 
-    R decorate(T uiComponent, PrototypingDecorationModel prototypingDecorationModel);
+    R decorate(T uiComponent, PrototypingDecorationModel decorationModel);
+
+    // -- DECORATION MODEL
 
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

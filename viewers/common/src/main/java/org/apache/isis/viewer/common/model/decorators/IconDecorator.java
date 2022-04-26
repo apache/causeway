@@ -36,6 +36,7 @@ import lombok.RequiredArgsConstructor;
  * @param <T> UI component type to decorate
  * @param <R> resulting UI component type
  */
+@FunctionalInterface
 public interface IconDecorator<T, R> {
 
     /**
@@ -44,7 +45,9 @@ public interface IconDecorator<T, R> {
      */
     public static final String FONTAWESOME_RESOURCE = "font-awesome/6.1.0/css/all.min.css";
 
-    R decorate(T uiComponent, Optional<FontAwesomeDecorationModel> fontAwesomeDecorationModel);
+    R decorate(T uiComponent, Optional<FontAwesomeDecorationModel> decorationModel);
+
+    // -- DECORATION MODEL
 
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

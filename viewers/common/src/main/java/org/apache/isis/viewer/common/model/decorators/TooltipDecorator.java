@@ -29,9 +29,12 @@ import org.apache.isis.viewer.common.model.PlacementDirection;
 import lombok.NonNull;
 import lombok.Value;
 
+@FunctionalInterface
 public interface TooltipDecorator<T> {
 
-    void decorate(T uiComponent, TooltipDecorationModel tooltipDecorationModel);
+    void decorate(T uiComponent, TooltipDecorationModel decorationModel);
+
+    // -- DECORATION MODEL
 
     @Value(staticConstructor = "of")
     public static class TooltipDecorationModel implements Serializable {
