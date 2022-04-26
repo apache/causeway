@@ -16,6 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+:root {
+	--form-label-width: 160px;
+	--form-field-width: calc(100% - var(--form-label-width));	
+}
 
 #container {
 	padding-left: 0px;
@@ -505,8 +509,6 @@ span.containedButtonPanel {
 }
 
 
-
-
 /* from entityPropertiesPanel */
 
 
@@ -600,13 +602,6 @@ ul.dropdown-menu {
 	padding: 0px;
 }
 
-.col .additionalLinks,
-.col .additionalLinksAndSelectorDropDown,
-.entityPropertiesPanel .additionalLinks,
-.entityCollectionsPanel .additionalLinksAndSelectorDropDown {
-    /*margin-top: -0.3em;*/
-}
-
 .collection.card-body {
     padding-top: 0px;
 }
@@ -649,7 +644,7 @@ div.label-left.form-group {
 }
 
 div.label-left label.col-form-label {
-    width: 30%;
+    width: var(--form-label-width);
     float: left;
     padding-top: 2px;
     padding-right: 2px;
@@ -661,27 +656,17 @@ div.label-left label.col-form-label {
     padding-left: 10px;
 }
 
-div.label-top label.col-form-label {
-    /*padding-left: 10px;*/
-    /*padding-bottom: 4px;*/
-}
-
 div.label-none label.col-form-label {
     display: none;
 }
 
 div.label-left .scalarValueWrapper {
-    width: 70%;
+    width: var(--form-field-width);
     float: left;
-}
-
-div.label-left.actions-right .scalarValueWrapper {
-    /*width: 62%;*/
 }
 
 .actions-right .additionalLinkListDropDown {
     float:right;
-    /*width: 3%;*/
 }
 
 .float-right .additionalLinkListDropDown li.additionalLinkItem a.btn {
@@ -691,10 +676,7 @@ div.label-left.actions-right .scalarValueWrapper {
 
 div.label-top .scalarValueWrapper,
 div.label-none .scalarValueWrapper {
-    /*width: 99.5%;*/
     display: block;
-    /*padding-left: 8px;*/
-    /*padding-right: 20px;*/
 }
 
 .modal-body div.label-top .scalarValueWrapper,
@@ -726,7 +708,7 @@ div.label-left .choicesPlaceholder {
 }
 
 div.label-right .scalarValueWrapper {
-    padding-left: 30%;
+    padding-left: var(--form-label-width);
 }
 
 div.label-right .scalarValueWrapper .col-form-label{
@@ -734,8 +716,8 @@ div.label-right .scalarValueWrapper .col-form-label{
 }
 
 div.label-right .scalarValueWrapper .feedback-links-below-wrapper {
-    padding-left: 30%;
-    width: 70%;
+    padding-left: var(--form-label-width);
+    width: var(--form-field-width);
     float: left;
 }
 
