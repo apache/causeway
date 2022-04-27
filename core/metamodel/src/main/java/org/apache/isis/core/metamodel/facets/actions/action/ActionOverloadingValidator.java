@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ActionScope;
@@ -56,10 +57,12 @@ extends MetaModelVisitingValidatorAbstract {
 
             val overloadedNames = _Sets.<String>newHashSet();
 
-            spec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED, oa->{
-                overloadedNames.add(oa.getFeatureIdentifier().getMemberLogicalName());
-            })
-            .count(); // consumer the stream
+            _Blackhole.consume( // not strictly required, just to mark this as call with side-effects
+                spec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED, oa->{
+                    overloadedNames.add(oa.getFeatureIdentifier().getMemberLogicalName());
+                })
+                .count() // consumes the stream
+            );
 
             if(!overloadedNames.isEmpty()) {
 

@@ -44,7 +44,7 @@ public class _Doubles {
     /**
      * Ignores precision loss.
      * @throws ArithmeticException
-     *      if {@code decimal} cannot not be approximated by {@link Double}.
+     *      if {@code decimal} cannot be approximated by {@link Double}.
      * @apiNote specifically not using {@link OptionalDouble} as result type here,
      * based on how this method is used from value semantics
      */
@@ -56,7 +56,7 @@ public class _Doubles {
     /**
      * Ignores precision loss.
      * @throws ArithmeticException
-     *      if {@code decimal} cannot not be approximated by {@link Double}.
+     *      if {@code decimal} cannot be approximated by {@link Double}.
      */
     public double convertToDouble(final @NonNull BigDecimal decimal) {
         val doubleValue = decimal.doubleValue();
