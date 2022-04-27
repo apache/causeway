@@ -58,7 +58,7 @@ public class _Floats {
     public float convertToFloat(final @NonNull BigDecimal decimal) {
         val floatValue = decimal.floatValue();
         // overflow detection
-        if(!Float.isInfinite(floatValue)) {
+        if(!Float.isFinite(floatValue)) {
             throw new ArithmeticException("non finite BigDecimal to float conversion");
         }
         return floatValue;

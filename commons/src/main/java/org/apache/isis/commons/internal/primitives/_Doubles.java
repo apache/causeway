@@ -61,7 +61,7 @@ public class _Doubles {
     public double convertToDouble(final @NonNull BigDecimal decimal) {
         val doubleValue = decimal.doubleValue();
         // overflow detection
-        if(!Double.isInfinite(doubleValue)) {
+        if(!Double.isFinite(doubleValue)) {
             throw new ArithmeticException("non finite BigDecimal to double conversion");
         }
         return doubleValue;
