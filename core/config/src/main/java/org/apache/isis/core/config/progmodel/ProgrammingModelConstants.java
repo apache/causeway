@@ -85,6 +85,8 @@ public final class ProgrammingModelConstants {
         }
     }
 
+    // -- METHOD VETO MARKERS (EXLUDE FROM DOMAIN)
+
     @Getter
     @RequiredArgsConstructor
     public enum MethodVetoMarker {

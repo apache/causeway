@@ -89,7 +89,7 @@ final class _Util {
             .map(IsisBeanTypeClassifier::getClass)
             .map(Class::getSimpleName)
             .anyMatch(classifierName->classifierName.startsWith("Jdo"))
-            ? "JDO "
+            ? "JDO"
             : "JPA";
     }
 

@@ -18,15 +18,12 @@
  */
 package org.apache.isis.core.metamodel.facets.param.validate.method;
 
-import java.util.EnumSet;
-
 import javax.inject.Inject;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacet;
 
@@ -39,9 +36,7 @@ extends ActionParameterSupportFacetFactoryAbstract  {
 
     @Inject
     public ActionParameterValidationFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, MemberSupportPrefix.VALIDATE, searchOptions->
-            searchOptions
-            .searchAlgorithms(EnumSet.of(SearchAlgorithm.PAT, SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE)));
+        super(mmc, MemberSupportPrefix.VALIDATE);
     }
 
     @Override

@@ -73,7 +73,11 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
                         ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                         .processMethodContext(processMethodContext)
                         .paramIndexToMethodNameProviders(methodNameCandidates)
-                        .searchAlgorithms(EnumSet.of(SearchAlgorithm.PAT, SearchAlgorithm.SWEEP))
+                        .searchAlgorithms(EnumSet.of(
+                                SearchAlgorithm.PAT,
+                                isMultivariateParameterSupportEnabled()
+                                    ? SearchAlgorithm.SWEEP
+                                    : SearchAlgorithm.SINGLEARG_BEING_PARAMTYPE))
                         .returnTypePattern(memberSupportPrefix.getSupportMethodReturnType()))
                 .build();
 
@@ -90,5 +94,13 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
     protected abstract void onSearchResult(
             FacetedMethodParameter paramAsHolder,
             ParamSupportingMethodSearchResult searchResult);
+
+    // -- HELPER
+
+    /** Always enabled, unless explicitly disabled via environment variable
+     * {@code MULTIVARIATE_PARAMETER_SUPPORT=true}. */
+    private boolean isMultivariateParameterSupportEnabled() {
+        return !"false".equalsIgnoreCase(System.getenv("MULTIVARIATE_PARAMETER_SUPPORT"));
+    }
 
 }
