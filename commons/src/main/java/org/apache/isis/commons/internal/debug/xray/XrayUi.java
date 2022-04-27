@@ -105,8 +105,10 @@ public class XrayUi extends JFrame {
         System.err.println("Waiting for XrayUi to shut down...");
         try {
             latch.await();
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
+            // Restore interrupted state...
+            Thread.currentThread().interrupt();
         }
     }
 
