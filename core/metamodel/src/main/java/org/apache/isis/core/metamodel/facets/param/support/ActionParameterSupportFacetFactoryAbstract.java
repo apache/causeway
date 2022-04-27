@@ -98,7 +98,7 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
     // -- HELPER
 
     /** Always enabled, unless explicitly disabled via environment variable
-     * {@code MULTIVARIATE_PARAMETER_SUPPORT=true}. */
+     * {@code MULTIVARIATE_PARAMETER_SUPPORT=false}. */
     private boolean isMultivariateParameterSupportEnabled() {
         return !"false".equalsIgnoreCase(System.getenv("MULTIVARIATE_PARAMETER_SUPPORT"));
     }
