@@ -90,7 +90,8 @@ implements
 
     @Override
     public BigInteger parseTextRepresentation(final Context context, final String text) {
-        return super.parseInteger(context, text);
+        return super.parseInteger(context, text)
+                .orElse(null);
     }
 
     @Override

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.value.semantics;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
@@ -65,7 +67,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  * the object reflectively.
  *
  * @see DefaultsProvider
- * @see EncoderDecoder
  * @see ValueSemanticsProvider
  * @since 1.x {@index}
  */
@@ -86,6 +87,7 @@ public interface Parser<T> {
     /**
      * Parses a string to an instance of the object. (bijective)
      */
+    @Nullable
     T parseTextRepresentation(ValueSemanticsProvider.Context context, String text);
 
     /**

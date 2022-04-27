@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
 import javax.inject.Named;
@@ -101,7 +102,9 @@ implements
             return null;
         }
         try {
-            return super.parseInteger(context, input).intValueExact();
+            return super.parseInteger(context, input)
+                    .map(BigInteger::intValueExact)
+                    .orElse(null);
         } catch (final NumberFormatException | ArithmeticException e) {
             throw new TextEntryParseException("Not a 32-bit signed integer " + input, e);
         }

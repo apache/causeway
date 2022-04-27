@@ -182,6 +182,7 @@ implements
      * this is typically overruled later by implementations of
      * {@link #configureDecimalFormat(org.apache.isis.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
      */
+   @SuppressWarnings("javadoc")
    protected DecimalFormat getNumberFormat(final @Nullable ValueSemanticsProvider.Context context) {
         val format = (DecimalFormat)NumberFormat.getNumberInstance(getUserLocale(context).getNumberFormatLocale());
         // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
@@ -189,26 +190,27 @@ implements
         return format;
     }
 
-    protected @Nullable BigInteger parseInteger(
+    protected Optional<BigInteger> parseInteger(
             final @Nullable ValueSemanticsProvider.Context context,
             final @Nullable String text) {
         val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
-            return null;
+            return Optional.empty();
         }
         try {
-            return parseDecimal(context, input).toBigIntegerExact();
+            return parseDecimal(context, input)
+            .map(BigDecimal::toBigIntegerExact);
         } catch (final NumberFormatException | ArithmeticException e) {
             throw new TextEntryParseException("Not an integer value " + text, e);
         }
     }
 
-    protected @Nullable BigDecimal parseDecimal(
+    protected Optional<BigDecimal> parseDecimal(
             final @Nullable ValueSemanticsProvider.Context context,
             final @Nullable String text) {
         val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
-            return null;
+            return Optional.empty();
         }
         val format = getNumberFormat(context);
         format.setParseBigDecimal(true);
@@ -230,7 +232,7 @@ implements
                         "No more than %d digits can be entered after the decimal separator, "
                         + "got %d in '%s'.", maxFractionDigits, number.scale(), input));
             }
-            return number;
+            return Optional.of(number);
         } catch (final NumberFormatException | ParseException e) {
             throw new TextEntryParseException(String.format(
                     "Not a decimal value '%s': %s", input, e.getMessage()),

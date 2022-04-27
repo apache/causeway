@@ -101,7 +101,8 @@ implements
 
     @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        return super.parseDecimal(context, text);
+        return super.parseDecimal(context, text)
+                .orElse(null);
     }
 
     @Override

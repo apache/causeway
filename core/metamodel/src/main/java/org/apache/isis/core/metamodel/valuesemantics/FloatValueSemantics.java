@@ -30,10 +30,9 @@ import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.primitives._Floats;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
-
-import lombok.val;
 
 /**
  * due to auto-boxing also handles the primitive variant
@@ -94,11 +93,8 @@ implements
 
     @Override
     public Float parseTextRepresentation(final Context context, final String text) {
-        //TODO at least overflow should be detected
-        val bigDec = super.parseDecimal(context, text);
-        return bigDec!=null
-                ? bigDec.floatValue() // simply ignoring loss of precision or overflow
-                : null;
+        return _Floats.convertToFloat(super.parseDecimal(context, text))
+                .orElse(null);
     }
 
     @Override
