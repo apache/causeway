@@ -7,7 +7,6 @@
 .CommandReplayOnPrimaryService.java
 ----
 class CommandReplayOnPrimaryService {
-  public static final String LOGICAL_TYPE_NAME;
 }
 ----
 

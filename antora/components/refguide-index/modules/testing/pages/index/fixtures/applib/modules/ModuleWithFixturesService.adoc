@@ -7,7 +7,6 @@
 .ModuleWithFixturesService.java
 ----
 class ModuleWithFixturesService {
-  ModuleWithFixturesService(SpringBeansService springBeansService)
   FixtureScript getRefDataSetupFixture()
   FixtureScript getTeardownFixture()
   List<ModuleWithFixturesDescriptor> modules()

@@ -10,7 +10,6 @@ A library of architecture tests to ensure coding conventions are followed for do
 ----
 class ArchitectureDomainRules {
   ArchRule every_DomainObject_must_specify_logicalTypeName()     // <.>
-  ArchRule every_DomainService_must_specify_logicalTypeName()     // <.>
   ArchRule every_logicalTypeName_must_be_unique()     // <.>
   ArchRule every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()     // <.>
   ArchRule every_DomainService_must_also_be_annotated_with_DomainServiceLayout()     // <.>
@@ -36,11 +35,6 @@ class ArchitectureDomainRules {
 +
 --
 This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation must specify their _DomainObject#logicalTypeName() logicalTypeName_ .
---
-<.> xref:#every_DomainService_must_specify_logicalTypeName__[every_DomainService_must_specify_logicalTypeName()]
-+
---
-This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must specify their _DomainService#logicalTypeName() logicalTypeName_ .
 --
 <.> xref:#every_logicalTypeName_must_be_unique__[every_logicalTypeName_must_be_unique()]
 +
@@ -119,11 +113,6 @@ This rule requires that finders of repos reutrn either _java.util.Collection_ s 
 === every_DomainObject_must_specify_logicalTypeName()
 
 This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation must specify their _DomainObject#logicalTypeName() logicalTypeName_ .
-
-[#every_DomainService_must_specify_logicalTypeName__]
-=== every_DomainService_must_specify_logicalTypeName()
-
-This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must specify their _DomainService#logicalTypeName() logicalTypeName_ .
 
 [#every_logicalTypeName_must_be_unique__]
 === every_logicalTypeName_must_be_unique()
