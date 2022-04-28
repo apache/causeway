@@ -1,0 +1,94 @@
+= Influencing the Interaction
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+By default integration tests are run as the built-in "__system" user.
+But sometimes you need control over the user that executes the test matters, and so you want to specify a different user to perform the test (or change their roles, or change the time, or their locale).
+
+The framework provides a number of options.
+
+== Using `SudoService` or `InteractionService` directly
+
+The most straightforward option is to use the xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService] to specify the user to interact with:
+
+[source,java]
+----
+sudoService.sudo(
+    InteractionContext.switchUser(UserMemento.ofName("joe")),
+    () -> wrap(toDoItem).completed()
+);
+----
+
+Alternatively, you can achieve much the same thing using xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService], which is a slightly lower-level but more powerful service:
+
+[source,java]
+----
+interactionService.run(
+        InteractionContext.builder().user(UserMemento.ofName("joe")).build(),
+        () -> wrap(toDoItem).completed()
+);
+----
+
+== Using `@InteractAs`
+
+Rather than making an imperative call, you can use the `@InteractAs` annotation to declaratively indicate the user to run the test as.
+
+[source,java]
+----
+@InteractAs(userName = "joe")
+@Test
+public void happy_case(){
+    // ...
+}
+----
+
+== Using the `NoPermissionChecks` JUnit 5 extension
+
+If your integration test references secman, then this will activate secman's authorizor.
+Unless you have set up a seed service, chances are that the default "__system" user will have no permissions and so any calls through the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] will likely fail.
+
+However, any interaction made by a user with the xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService]'s xref:refguide:applib:index/services/sudo/SudoService.adoc#ACCESS_ALL_ROLE[ACCESS_ALL_ROLE] role skips permissions checks.
+
+The `NoPermissionChecks` JUnit 5 extension ensures that the user has this role, effectively disabling permission checks even if secman is part of the app.
+
+[source,java]
+----
+@ExtendWith(NoPermissionChecks.class)
+public class MyIntegrationTest extends IsisIntegrationTestAbstract {
+    // ...
+}
+----
+
+== Using the `UserMementoRefiners` JUnit 5 extension
+
+The `UserMementoRefiner` SPI is part of the authentication process, allowing the user memento representing the logged-on user to be tweaked.
+However, this SPI is not normally called during integration tests, because the authentication process is skipped (tests start executing "under the skin", so to speak).
+
+The `UserMementoRefiners` JUnit 5 extension allows any available `UserMementoRefiner` implementations to be called.
+Normally these would be defined within the TestApp used to bootstrap the integration test.
+
+For example:
+
+[source,java]
+----
+@ExtendWith({UserMementoRefiners.class})
+public class MyIntegTest extends IsisIntegrationTestAbstract {
+
+    @SpringBootConfiguration
+    @EnableAutoConfiguration
+    @Import({
+            // ...
+            MyModule.class
+    })
+    public static class TestApp {
+
+        @Bean
+        public UserMementoRefiner userMementoRefiner() {
+            return userMemento -> userMemento.withRoleAdded(
+                                    SudoService.ACCESS_ALL_ROLE.getName()); // <.>
+        }
+    }
+----
+<.> has the same effect as the `NoPermissionsCheck` extension, discussed earlier.
+
+

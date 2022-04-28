@@ -2,5 +2,8 @@
 
 
 * xref:testing:integtestsupport:about.adoc[Integ Test Support]
+** xref:testing:integtestsupport:influencing-the-interaction.adoc[Influencing the Interaction]
 ** xref:testing:integtestsupport:domain-model-validator.adoc[Domain Model Validator]
 ** xref:testing:integtestsupport:swagger-exporter.adoc[Swagger Exporter]
+** xref:testing:integtestsupport:hints-and-tips.adoc[Hints and Tips]
+
