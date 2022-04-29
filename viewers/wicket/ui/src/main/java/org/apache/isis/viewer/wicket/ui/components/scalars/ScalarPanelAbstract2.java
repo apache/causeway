@@ -28,7 +28,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -41,10 +41,11 @@ import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
+
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 /**
  *  Adds inline prompt logic.
@@ -147,7 +148,8 @@ extends ScalarPanelAbstract {
     protected String obtainOutputFormat() {
         return _Strings.nonEmpty(
                     scalarModel().proposedValue().getValueAsHtml().getValue())
-                .orElseGet(()->translate(ValueSemanticsAbstract.NULL_REPRESENTATION));
+                .orElseGet(()->
+                    PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
     }
 
     /**

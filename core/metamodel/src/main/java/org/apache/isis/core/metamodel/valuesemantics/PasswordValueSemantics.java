@@ -67,14 +67,19 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final Password value) {
-        return render(value, v->"*");
+        return renderTitle(value, v->PlaceholderLiteral.SUPPRESSED.asText(this::translate));
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final Password value) {
+        return renderHtml(value, v->PlaceholderLiteral.SUPPRESSED.asHtml(this::translate));
     }
 
     // -- PARSER
 
     @Override
     public String parseableTextRepresentation(final Context context, final Password value) {
-        return render(value, v->"*");
+        return renderTitle(value, v->PlaceholderLiteral.SUPPRESSED.asText(this::translate));
     }
 
     @Override

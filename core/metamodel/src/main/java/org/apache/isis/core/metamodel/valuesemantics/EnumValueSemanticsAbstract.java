@@ -142,7 +142,12 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final T value) {
-        return render(value, v->friendlyName(context, v));
+        return renderTitle(value, v->friendlyName(context, v));
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final T value) {
+        return renderHtml(value, v->friendlyName(context, v));
     }
 
     private String friendlyName(final Context context, final T object) {

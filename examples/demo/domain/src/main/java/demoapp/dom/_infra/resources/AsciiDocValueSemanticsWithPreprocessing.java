@@ -20,8 +20,7 @@ extends AsciiDocValueSemantics {
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
-
-        return render(adoc, plainAdoc->
+        return renderHtml(adoc, plainAdoc->
             asciiDocConverterService
             .adocToHtml(
                     context.getFeatureIdentifier().getLogicalType().getCorrespondingClass(),

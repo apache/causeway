@@ -93,7 +93,12 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final TreeNode<?> value) {
-        return super.render(value, TreeNode::toString);
+        return renderTitle(value, TreeNode::toString);
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final TreeNode<?> value) {
+        return renderHtml(value, TreeNode::toString);
     }
 
     // -- EXAMPLES

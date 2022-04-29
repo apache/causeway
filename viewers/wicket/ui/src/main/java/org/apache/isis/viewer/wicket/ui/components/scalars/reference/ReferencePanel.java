@@ -31,6 +31,7 @@ import org.apache.wicket.util.convert.IConverter;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.Facets;
@@ -205,7 +206,8 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
                     || isInlinePrompt) {
                 WktComponents.permanentlyHide(container, ID_ENTITY_TITLE_IF_NULL);
             } else {
-                Wkt.labelAdd(container, ID_ENTITY_TITLE_IF_NULL, "(none)"); //XXX missing i18n support
+                Wkt.labelAdd(container, ID_ENTITY_TITLE_IF_NULL,
+                        PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
             }
         });
 

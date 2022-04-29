@@ -32,7 +32,7 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
@@ -89,7 +89,8 @@ extends ScalarPanelFormFieldAbstract<T> {
     protected String obtainOutputFormat() {
         return getBlobOrClobFromModel()
                 .map(NamedWithMimeType::getName)
-                .orElse(translate(ValueSemanticsAbstract.NULL_REPRESENTATION));
+                .orElseGet(()->
+                    PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
     }
 
     @Override

@@ -65,12 +65,12 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final Markup value) {
-        return render(value, Markup::toString);
+        return renderTitle(value, Markup::toString);
     }
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final Markup adoc) {
-        return render(adoc, Markup::asHtml);
+        return renderHtml(adoc, Markup::asHtml);
     }
 
     // -- PARSER

@@ -38,6 +38,7 @@ import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -159,7 +160,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
             assertEquals("",
                     semantics.getRenderer().titlePresentation(null, null));
         } else {
-            assertEquals(ValueSemanticsAbstract.NULL_REPRESENTATION,
+            assertEquals(PlaceholderLiteral.NULL_REPRESENTATION.getLiteral(),
                     semantics.getRenderer().titlePresentation(null, null));
         }
 

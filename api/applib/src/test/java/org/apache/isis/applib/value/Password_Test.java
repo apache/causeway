@@ -25,18 +25,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
+
 import lombok.val;
 
 class Password_Test {
-
-    private static final String STARS = "*";
 
     @Nested
     public class checkPassword {
 
         @Test
         void case_sensitive() {
-            // guven
+            // given
             final Password password = new Password("secret");
 
             // when, then
@@ -75,10 +75,10 @@ class Password_Test {
         @Test
         void obscures_password() {
             Password password = new Password("secret");
-            assertEquals(STARS, password.toString());
+            assertEquals(PlaceholderLiteral.SUPPRESSED.getLiteral(), password.toString());
 
             password = new Password("a very very very long password");
-            assertEquals(STARS, password.toString());
+            assertEquals(PlaceholderLiteral.SUPPRESSED.getLiteral(), password.toString());
         }
     }
 

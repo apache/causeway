@@ -143,7 +143,14 @@ implements TemporalValueSemantics<T> {
     public final String titlePresentation(
             final ValueSemanticsProvider.Context context,
             final T value) {
-        return render(value, getRenderingFormat(context)::format);
+        return renderTitle(value, getRenderingFormat(context)::format);
+    }
+
+    @Override
+    public final String htmlPresentation(
+            final ValueSemanticsProvider.Context context,
+            final T value) {
+        return renderHtml(value, getRenderingFormat(context)::format);
     }
 
     // -- PARSER

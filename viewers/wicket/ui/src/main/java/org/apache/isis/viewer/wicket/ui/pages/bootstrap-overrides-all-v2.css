@@ -823,6 +823,10 @@ div.referencePanel.scalarNameAndValueComponentType {
     margin-right: 0px;
 }
 
+.placeholder-literal-null,
+.placeholder-literal-suppressed {
+	opacity: 0.85;
+}
 
 .scalarValueWrapper ul.additionalLinkList {
     padding-bottom: 5px;

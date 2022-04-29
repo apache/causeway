@@ -125,7 +125,7 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final CalendarEvent value) {
-        return render(value, v->{
+        return renderTitle(value, v->{
             val title = new _StringInterpolation(toMap(context, value))
                     .applyTo(titleTemplate);
             return title;
@@ -137,7 +137,7 @@ implements
 
     @Override
     public String htmlPresentation(final Context context, final CalendarEvent value) {
-        return render(value, v->{
+        return renderHtml(value, v->{
             val html = new _StringInterpolation(toMap(context, value))
                     .applyTo(htmlTemplate)
                     .stream()

@@ -28,7 +28,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -62,7 +62,7 @@ extends ChoiceProvider<ObjectMemento> {
     public String getDisplayValue(final ObjectMemento choiceMemento) {
         if (choiceMemento == null
                 || choiceMemento instanceof ObjectMementoForEmpty) {
-            return translate(ValueSemanticsAbstract.NULL_REPRESENTATION);
+            return PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate);
         }
         val choice = getCommonContext().reconstructObject(choiceMemento);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(choice)) {
@@ -74,7 +74,7 @@ extends ChoiceProvider<ObjectMemento> {
     @Override
     public String getIdValue(final ObjectMemento choiceMemento) {
         if (choiceMemento == null) {
-            return NULL_PLACEHOLDER;
+            return PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate);
         }
         val logicalType = choiceMemento.getLogicalType();
         val spec = getCommonContext().getSpecificationLoader()

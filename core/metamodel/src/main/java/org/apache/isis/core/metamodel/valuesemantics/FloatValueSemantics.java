@@ -78,7 +78,12 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final Float value) {
-        return render(value, getNumberFormat(context)::format);
+        return renderTitle(value, getNumberFormat(context)::format);
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final Float value) {
+        return renderHtml(value, getNumberFormat(context)::format);
     }
 
     // -- PARSER
