@@ -422,7 +422,7 @@ under the License.
 		<ognl.version>3.3.2</ognl.version>
 
 		<picocontainer.version>2.15</picocontainer.version>
-		<poi.version>5.2.1</poi.version>
+		<poi.version>5.2.2</poi.version>
 
 		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
