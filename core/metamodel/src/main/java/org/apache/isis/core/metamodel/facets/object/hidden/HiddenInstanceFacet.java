@@ -36,6 +36,11 @@ import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
  * </p>
  *
  * @see HiddenFacet
+ * @see HiddenObjectFacet
+ * @see HiddenTypeFacet
+ *
+ * @apiNote An unification attempt on HiddenTypeFacet and HiddenObjectFacet into a single,
+ * failed, because both facets must co-exist, where each has veto power (not one overruling the other).
  */
 public interface HiddenInstanceFacet extends Facet, HidingInteractionAdvisor {
 
