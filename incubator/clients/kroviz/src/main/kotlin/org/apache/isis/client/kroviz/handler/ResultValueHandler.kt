@@ -31,7 +31,6 @@ class ResultValueHandler : BaseHandler() {
         update()
     }
 
-    
     override fun parse(response: String): TransferObject {
         return Json.decodeFromString<ResultValue>(response)
     }

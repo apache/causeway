@@ -40,7 +40,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
 
     protected fun invokeLayoutLink(obj: TObject, aggregator: AggregatorWithLayout, referrer: String) {
         val l = obj.getLayoutLink()
-        if (l.representation() == Represention.OBJECT_LAYOUT_BS3) {
+        if (l.representation() == Represention.OBJECT_LAYOUT_BS) {
             invoke(l, aggregator, Constants.subTypeXml, referrer)
         } else {
             invoke(l, aggregator, referrer = referrer)

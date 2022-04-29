@@ -34,6 +34,7 @@ data class PropertyLt(val id: String? = null,
                       val multiLine: Int? = 1,
                       val namedEscaped: Boolean? = false,
                       val promptStyle: String? = null,
+                      val dateRenderAdjustDays: Int? = 0,
                       val renderDay: Boolean? = false,
                       val renderedAsDayBefore: String? = null,   //always omitted with 2.0.0?
                       val typicalLength: Int? = null,

@@ -22,7 +22,8 @@ import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.to.Link
 
 @Serializable
-data class ColLt(val domainObject: DomainObjectLt? = null,
+data class ColLt(val sizeSpan: List<Int> = mutableListOf<Int>(),
+                 val domainObject: DomainObjectLt? = null,
                  val row: List<RowLt> = mutableListOf<RowLt>(),
                  val fieldSet: List<FieldSetLt> = mutableListOf<FieldSetLt>(),
                  val action: List<ActionLt> = mutableListOf<ActionLt>(),

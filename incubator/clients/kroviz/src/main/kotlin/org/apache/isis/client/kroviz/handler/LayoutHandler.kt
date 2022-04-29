@@ -28,9 +28,9 @@ import org.apache.isis.client.kroviz.utils.XmlHelper
 class LayoutHandler : BaseHandler() {
 
     override fun canHandle(response: String): Boolean {
-        val isJsonLayout = !XmlHelper.isXml(response)
-                && UrlUtils.isLayout(logEntry.url)
-        if (isJsonLayout) {
+        val isJson = !XmlHelper.isXml(response)
+        val isLayout = UrlUtils.isLayout(logEntry.url)
+        if (isJson && isLayout) {
             return super.canHandle(response)
         }
         return false
