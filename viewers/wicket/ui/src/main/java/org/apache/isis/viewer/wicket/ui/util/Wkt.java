@@ -83,6 +83,7 @@ import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableMo
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
@@ -766,6 +767,20 @@ public class Wkt {
             final IModel<? extends List<T>> listModel,
                     final SerializableConsumer<ListItem<T>> itemPopulator) {
         return add(container, listView(id, listModel, itemPopulator));
+    }
+
+    // -- MARKUP
+
+    public MarkupComponent markup(final String id, final IModel<String> htmlModel) {
+        return new MarkupComponent(id, htmlModel);
+    }
+
+    public MarkupComponent markup(final String id, final String html) {
+        return new MarkupComponent(id, html);
+    }
+
+    public MarkupComponent markupAdd(final MarkupContainer container, final String id, final String html) {
+        return add(container, markup(id, html));
     }
 
     // -- REPEATING VIEW

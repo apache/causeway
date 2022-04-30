@@ -66,11 +66,9 @@ implements CancelHintRequired  {
         val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(getModel().getObject());
 
         if(isEmpty) {
-            // represent no object by a simple label displaying '(none)'
-            val nullRepresentation =
-                    Wkt.labelAdd(this, ID_ENTITY_TITLE_NULL,
-                            PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
-            Wkt.cssAppend(nullRepresentation, "null-representation");
+            // represent null reference by a simple markup displaying '(none)'
+            Wkt.markupAdd(this, ID_ENTITY_TITLE_NULL,
+                    PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
 
         } else {

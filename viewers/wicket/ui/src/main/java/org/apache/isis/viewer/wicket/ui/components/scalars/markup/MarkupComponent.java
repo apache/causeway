@@ -25,6 +25,7 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
@@ -49,6 +50,10 @@ public class MarkupComponent extends WebComponent {
 
     public MarkupComponent(final String id, final IModel<String> model){
         super(id, model);
+    }
+
+    public MarkupComponent(final String id, final String html){
+        super(id, Model.of(html));
     }
 
     @Override

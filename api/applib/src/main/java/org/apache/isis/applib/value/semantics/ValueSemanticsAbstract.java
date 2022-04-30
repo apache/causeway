@@ -67,8 +67,8 @@ implements
     @Getter
     @RequiredArgsConstructor
     public static enum PlaceholderLiteral {
-        NULL_REPRESENTATION("(none)",   "badge bg-light placeholder-literal-null"),
-        SUPPRESSED("(suppressed)",      "badge bg-light placeholder-literal-suppressed");
+        NULL_REPRESENTATION("(none)",       "badge bg-light placeholder-literal-null"),
+        SUPPRESSED(         "(suppressed)", "badge bg-light placeholder-literal-suppressed");
         private final String literal;
         private final String cssClass;
         public String asText(final UnaryOperator<String> translator) {

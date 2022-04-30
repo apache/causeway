@@ -206,7 +206,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
                     || isInlinePrompt) {
                 WktComponents.permanentlyHide(container, ID_ENTITY_TITLE_IF_NULL);
             } else {
-                Wkt.labelAdd(container, ID_ENTITY_TITLE_IF_NULL,
+                Wkt.markupAdd(container, ID_ENTITY_TITLE_IF_NULL,
                         PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
             }
         });
