@@ -22,6 +22,23 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 public interface TranslationService {
 
+    TranslationService IDENTITY = new TranslationService() {
+        @Override
+        public String translate(String context, String text) {
+            return text;
+        }
+
+        @Override
+        public String translate(String context, String singularText, String pluralText, int num) {
+            return singularText;
+        }
+
+        @Override
+        public Mode getMode() {
+            return Mode.READ;
+        }
+    };
+
     /**
      * Return a translation of the text, in the locale of the &quot;current user&quot;.
      *

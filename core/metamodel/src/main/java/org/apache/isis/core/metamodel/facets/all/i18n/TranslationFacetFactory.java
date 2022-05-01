@@ -21,7 +21,11 @@ package org.apache.isis.core.metamodel.facets.all.i18n;
 
 import com.google.common.base.Strings;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -33,6 +37,8 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class TranslationFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TranslationFacetFactory.class);
 
     private TranslationService translationService;
 
@@ -132,6 +138,10 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
     TranslationService lookupTranslationService() {
         if(translationService == null) {
             translationService = servicesInjector.lookupService(TranslationService.class);
+        }
+        if(translationService == null) {
+            LOG.warn("TranslationService could not be found; falling back to IDENTITY");
+            translationService = TranslationService.IDENTITY;
         }
         return translationService;
     }
