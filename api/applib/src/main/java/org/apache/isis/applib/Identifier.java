@@ -72,11 +72,11 @@ implements
          */
         ACTION_PARAMETER,
         /**
-         * <i>One to One Association (Property)</i> (of any cardinality), either declared or mixed in.
+         * <i>One to One Association (Property)</i> either declared or mixed in.
          */
         PROPERTY,
         /**
-         * <i>One to Many Association (Collection)</i> (of any cardinality), either declared or mixed in.
+         * <i>One to Many Association (Collection)</i> either declared or mixed in.
          */
         COLLECTION
         ;
