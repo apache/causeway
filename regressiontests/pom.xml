@@ -153,12 +153,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.isis.mavendeps</groupId> -->
-<!-- 			<artifactId>isis-mavendeps-webapp</artifactId> -->
-<!-- 			<type>pom</type> -->
-<!-- 		</dependency> -->
-
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-unittestsupport-applib</artifactId>
@@ -167,6 +161,7 @@
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-integtestsupport-applib</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 	</dependencies>
@@ -248,6 +243,12 @@
 				<artifactId>isis-extensions-shiro-realm-ldap-impl</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.isis.testing</groupId>
+				<artifactId>isis-testing-integtestsupport-applib</artifactId>
+			</dependency>
+			
 
 			<!-- TEST DEPENDENCIES -->
 
@@ -262,13 +263,6 @@
 				<artifactId>javax.json</artifactId>
 				<version>1.1.4</version>
 				<scope>test</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.mavendeps</groupId>
-				<artifactId>isis-mavendeps-integtests</artifactId>
-				<version>${project.version}</version>
-				<type>pom</type>
 			</dependency>
 
 			<dependency>
