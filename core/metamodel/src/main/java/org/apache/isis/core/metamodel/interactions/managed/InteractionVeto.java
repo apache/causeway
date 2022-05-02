@@ -22,9 +22,9 @@ import java.io.Serializable;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -53,7 +53,7 @@ public class InteractionVeto implements Serializable {
     @NonNull private final Consent vetoConsent;
 
     public static InteractionVeto notFound(
-            @NonNull final MemberType memberType,
+            @NonNull final Identifier.Type memberType,
             @Nullable final String memberId) {
         val reason = String.format("member '%s' in %s either does not exist, is disabled or is not visible",
                 "" + memberId,

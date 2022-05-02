@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.LongAdder;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.functional.Railway;
@@ -30,7 +31,6 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction.Res
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -216,7 +216,7 @@ class _DomainResourceHelper {
             // no such action or not visible or not usable
             throw InteractionFailureHandler.onFailure(actionInteraction
                     .getInteractionVeto()
-                    .orElseGet(()->InteractionVeto.notFound(MemberType.ACTION, actionId))); // unexpected code reach
+                    .orElseGet(()->InteractionVeto.notFound(Identifier.Type.ACTION, actionId))); // unexpected code reach
         }
 
         val hasParams = pendingArgs.getParamCount()>0;
