@@ -61,9 +61,8 @@
         <!-- TESTING -->
 		
 		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-unittests</artifactId>
-			<type>pom</type>
+			<groupId>org.apache.isis.testing</groupId>
+			<artifactId>isis-testing-unittestsupport-applib</artifactId>
             <scope>test</scope>
 		</dependency>
 		

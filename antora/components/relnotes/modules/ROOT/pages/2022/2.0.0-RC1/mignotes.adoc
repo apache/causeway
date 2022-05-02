@@ -143,4 +143,22 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 <artifactId>isis-testing-fixtures-applib</artifactId>
 ----
 
+[source, xml]
+.unittests
+----
+<!-- removed
+<groupId>org.apache.isis.mavendeps</groupId>
+<artifactId>isis-mavendeps-unittests</artifactId>
+<type>pom</type>
+-->
+
+<!-- instead use directly as required ... -->
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-unittestsupport-applib</artifactId>
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-fakedata-applib</artifactId>
+----
+
 
