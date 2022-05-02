@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;
@@ -56,7 +57,7 @@ extends ManagedMember {
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        return ManagedMember.<OneToOneAssociation>lookup(owner, MemberType.PROPERTY, memberId)
+        return ManagedMember.<OneToOneAssociation>lookup(owner, Identifier.Type.PROPERTY, memberId)
         .map(objectAction -> of(owner, objectAction, where));
     }
 
@@ -84,8 +85,8 @@ extends ManagedMember {
     }
 
     @Override
-    public MemberType getMemberType() {
-        return MemberType.PROPERTY;
+    public Identifier.Type getMemberType() {
+        return Identifier.Type.PROPERTY;
     }
 
     public Can<ObjectAction> getAssociatedActions() {

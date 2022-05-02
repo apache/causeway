@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -64,7 +65,7 @@ public final class ManagedAction extends ManagedMember {
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        return ManagedMember.<ObjectAction>lookup(owner, MemberType.ACTION, memberId)
+        return ManagedMember.<ObjectAction>lookup(owner, Identifier.Type.ACTION, memberId)
         .map(objectAction -> of(owner, objectAction, where));
     }
 
@@ -74,7 +75,7 @@ public final class ManagedAction extends ManagedMember {
             final @NonNull Where where,
             final @NonNull MultiselectChoices multiselectChoices) {
 
-        return ManagedMember.<ObjectAction>lookup(owner, MemberType.ACTION, memberId)
+        return ManagedMember.<ObjectAction>lookup(owner, Identifier.Type.ACTION, memberId)
                 .map(objectAction -> new ManagedAction(owner, objectAction, where, multiselectChoices));
     }
 
@@ -117,8 +118,8 @@ public final class ManagedAction extends ManagedMember {
     }
 
     @Override
-    public MemberType getMemberType() {
-        return MemberType.ACTION;
+    public Identifier.Type getMemberType() {
+        return Identifier.Type.ACTION;
     }
 
     // -- INTERACTION
