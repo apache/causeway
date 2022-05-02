@@ -40,6 +40,9 @@ public class SeedService implements MetamodelListener {
 }
 ---- 
 
+| Factory method `Identifier.propertyOrCollectionIdentifier(..)`
+| was slit up into `Identifier.propertyIdentifier(..)` and `Identifier.collectionIdentifier(..)`
+
 |===
 
 == Commons

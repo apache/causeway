@@ -40,7 +40,7 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forModify {
     public void defaultEventType() throws Exception {
 
         SomeDomainObject sdo = new SomeDomainObject();
-        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.propertyIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "someDateProperty");
         LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = LocalDate.of(2013,5,2);
@@ -59,7 +59,7 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forModify {
     public void customEventType() throws Exception {
 
         SomeDomainObject sdo = new SomeDomainObject();
-        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.propertyIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "someDateProperty");
         LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = LocalDate.of(2013,5,2);

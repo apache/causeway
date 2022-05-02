@@ -49,13 +49,13 @@ public enum FeatureType {
     PROPERTY("Property") {
         @Override
         public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
-            return propertyOrCollectionIdentifierFor(typeIdentifier, method);
+            return propertyIdentifierFor(typeIdentifier, method);
         }
     },
     COLLECTION("Collection") {
         @Override
         public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
-            return propertyOrCollectionIdentifierFor(typeIdentifier, method);
+            return collectionIdentifierFor(typeIdentifier, method);
         }
     },
     ACTION("Action") {
@@ -119,29 +119,28 @@ public enum FeatureType {
         this.name = name;
     }
 
-    private static Identifier propertyOrCollectionIdentifierFor(
+    private static Identifier propertyIdentifierFor(
             final LogicalType typeIdentifier,
             final Method method) {
-
         final String capitalizedName = StringExtensions.asJavaBaseName(method.getName());
         final String beanName = Introspector.decapitalize(capitalizedName);
-        return Identifier.propertyOrCollectionIdentifier(typeIdentifier, beanName);
+        return Identifier.propertyIdentifier(typeIdentifier, beanName);
     }
 
-    public boolean isProperty() {
-        return this == PROPERTY;
+    private static Identifier collectionIdentifierFor(
+            final LogicalType typeIdentifier,
+            final Method method) {
+        final String capitalizedName = StringExtensions.asJavaBaseName(method.getName());
+        final String beanName = Introspector.decapitalize(capitalizedName);
+        return Identifier.collectionIdentifier(typeIdentifier, beanName);
     }
 
-    public boolean isCollection() {
-        return this == COLLECTION;
-    }
-
-    public boolean isAction() {
-        return this == ACTION;
-    }
-
+    public boolean isProperty() { return this == PROPERTY; }
+    public boolean isCollection() { return this == COLLECTION; }
+    public boolean isAction() { return this == ACTION; }
     public boolean isActionParameter() {
-        return this == ACTION_PARAMETER_SCALAR || this == ACTION_PARAMETER_COLLECTION;
+        return this == ACTION_PARAMETER_SCALAR
+                || this == ACTION_PARAMETER_COLLECTION;
     }
 
     /**

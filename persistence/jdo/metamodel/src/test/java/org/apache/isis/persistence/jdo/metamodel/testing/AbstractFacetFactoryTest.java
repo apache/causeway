@@ -104,7 +104,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         facetHolder = FacetHolderAbstract.simple(
                 metaModelContext,
-                Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
+                Identifier.propertyIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
 
         facetedMethod = FacetedMethod.createForProperty(metaModelContext, Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(

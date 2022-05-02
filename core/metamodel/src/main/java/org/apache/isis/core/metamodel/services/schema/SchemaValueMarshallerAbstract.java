@@ -205,7 +205,7 @@ implements SchemaValueMarshaller {
     @Override
     public final Identifier propertyIdentifier(final @NonNull PropertyDto propertyDto) {
         return IdentifierUtil.memberIdentifierFor(getSpecificationLoader(),
-                Type.PROPERTY_OR_COLLECTION,
+                Type.PROPERTY,
                 propertyDto.getLogicalMemberIdentifier());
     }
 
