@@ -114,13 +114,17 @@ public class UserPermissionViewModel implements ViewModel {
 
     // -- VIEWMODEL CONTRACT
 
-    public UserPermissionViewModel(final String encodedMemento) {
-        parseEncoded(encodedMemento);
+    public UserPermissionViewModel(final String memento) {
+        val payload = _Serializables.read(String[].class,
+                _Bytes.ofUrlBase64.apply(memento.getBytes(StandardCharsets.US_ASCII)));
+        parse(payload);
     }
 
     @Override
     public String viewModelMemento() {
-        return asEncodedString();
+        return asEncodedString(getFeatureId(), getUsername(),
+                newEvaluation(viewingGranted, viewingFeatureId, viewingRule, viewingMode),
+                newEvaluation(changingGranted, changingFeatureId, changingRule, changingMode));
     }
 
     private static String asEncodedString(
@@ -158,11 +162,6 @@ public class UserPermissionViewModel implements ViewModel {
             featureId.getFullyQualifiedName()
         };
         return new String(_Bytes.asUrlBase64.apply(_Serializables.write(payload)), StandardCharsets.US_ASCII);
-    }
-
-    private void parseEncoded(final String encodedString) {
-        val payload = _Serializables.read(String[].class, _Bytes.ofUrlBase64.apply(encodedString.getBytes(StandardCharsets.US_ASCII)));
-        parse(payload);
     }
 
     private void parse(final String[] payload) {
@@ -204,12 +203,6 @@ public class UserPermissionViewModel implements ViewModel {
         this.featureId = ApplicationFeatureId.newFeature(type, iterator.next());
     }
 
-
-    @Programmatic
-    public String asEncodedString() {
-        return asEncodedString(getFeatureId(), getUsername(), newEvaluation(viewingGranted, viewingFeatureId, viewingRule, viewingMode), newEvaluation(changingGranted, changingFeatureId, changingRule, changingMode));
-    }
-
     private static ApplicationPermissionValueSet.Evaluation newEvaluation(final boolean granted, final ApplicationFeatureId featureId, final ApplicationPermissionRule rule, final ApplicationPermissionMode mode) {
         return new ApplicationPermissionValueSet.Evaluation(newPermissionValue(featureId, rule, mode), granted);
     }
@@ -246,9 +239,6 @@ public class UserPermissionViewModel implements ViewModel {
     @Getter(onMethod_ = {@Programmatic})
     private String username;
 
-
-
-
     // -- verb (derived property)
 
     private boolean viewingGranted;
@@ -278,7 +268,6 @@ public class UserPermissionViewModel implements ViewModel {
                                 : "No access to";
     }
 
-
     // -- feature (derived property)
 
     @Property(
@@ -304,14 +293,9 @@ public class UserPermissionViewModel implements ViewModel {
         return ApplicationFeatureViewModel.newViewModel(getFeatureId(), featureRepository, factory);
     }
 
-
-
-
     @Getter(onMethod_ = {@Programmatic})
     @Setter
     private ApplicationFeatureId featureId;
-
-
 
     // -- viewingPermission (derived property)
 
@@ -348,14 +332,11 @@ public class UserPermissionViewModel implements ViewModel {
                 : new ApplicationPermissionValue(viewingFeatureId, viewingRule, viewingMode);
     }
 
-
-
     // -- changingPermission (derived property)
 
     private ApplicationFeatureId changingFeatureId;
     private ApplicationPermissionMode changingMode;
     private ApplicationPermissionRule changingRule;
-
 
     @Property(
             domainEvent = ChangingPermission.DomainEvent.class,
@@ -386,8 +367,6 @@ public class UserPermissionViewModel implements ViewModel {
                 : new ApplicationPermissionValue(changingFeatureId, changingRule, changingMode);
     }
 
-
-
     // -- toString
 
     private static final ToString<UserPermissionViewModel> toString =
@@ -399,8 +378,6 @@ public class UserPermissionViewModel implements ViewModel {
     public String toString() {
         return toString.toString(this);
     }
-
-
 
     // -- Factory
 
