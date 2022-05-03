@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.interactions.managed;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
@@ -29,10 +28,7 @@ import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -45,39 +41,6 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 public abstract class ManagedMember
 implements ManagedFeature {
-
-    // only used to create failure messages
-    @RequiredArgsConstructor
-    public static enum MemberType {
-        PROPERTY(OneToOneAssociation.class, (spec, propertyId)->
-            spec.getProperty(propertyId)),
-
-        COLLECTION(OneToManyAssociation.class, (spec, collectionId)->
-            spec.getCollection(collectionId)),
-
-        ACTION(ObjectAction.class, (spec, actionId)->
-            spec.getAction(actionId));
-
-        @Getter private final Class<? extends ObjectMember> memberType;
-        private final BiFunction<
-                ObjectSpecification,
-                String,
-                Optional<? extends ObjectMember>> memberProvider;
-
-        public <T extends ObjectMember> Optional<T> lookup(
-                final @NonNull ManagedObject owner,
-                final @NonNull String memberId) {
-            val onwerSpec = owner.getSpecification();
-            val member = memberProvider.apply(onwerSpec, memberId);
-            return _Casts.uncheckedCast(member);
-        }
-
-        public boolean isPropertyOrCollection() {
-            return this == PROPERTY
-                    || this == COLLECTION;
-        }
-
-    }
 
     /**
      * Some representations may vary according to whether the member is to be represented for read
@@ -121,7 +84,7 @@ implements ManagedFeature {
     @Override
     public abstract ObjectMember getMetaModel();
 
-    public abstract MemberType getMemberType();
+    public abstract Identifier.Type getMemberType();
 
     @Override
     public ObjectSpecification getElementType() {
@@ -200,11 +163,17 @@ implements ManagedFeature {
 
     protected static <T extends ObjectMember> Optional<T> lookup(
             final @NonNull ManagedObject owner,
-            final @NonNull MemberType memberType,
+            final @NonNull Identifier.Type memberType,
             final @NonNull String memberId) {
-        return memberType.lookup(owner, memberId);
+
+        val onwerSpec = owner.getSpecification();
+        switch (memberType) {
+        case ACTION:     return _Casts.uncheckedCast(onwerSpec.getAction(memberId));
+        case PROPERTY:   return _Casts.uncheckedCast(onwerSpec.getProperty(memberId));
+        case COLLECTION: return _Casts.uncheckedCast(onwerSpec.getCollection(memberId));
+        default:
+            return Optional.empty();
+        }
     }
-
-
 
 }

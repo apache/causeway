@@ -40,6 +40,9 @@ public class SeedService implements MetamodelListener {
 }
 ---- 
 
+| Factory method `Identifier.propertyOrCollectionIdentifier(..)`
+| was slit up into `Identifier.propertyIdentifier(..)` and `Identifier.collectionIdentifier(..)`
+
 |===
 
 == Commons
@@ -109,8 +112,6 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 <T> Try<Can<T>> digestList(Response response, Class<T> entityType, GenericType<List<T>> genericType);
 ----
 
-
-
 === Mappings
 
 [source, xml]
@@ -122,5 +123,45 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 -->
 ----
 
+=== Mavendeps
+
+[source, xml]
+.integtests
+----
+<!-- removed
+<groupId>org.apache.isis.mavendeps</groupId>
+<artifactId>isis-mavendeps-integtests</artifactId>
+<type>pom</type>
+-->
+
+<!-- instead use directly as required ... -->
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-integtestsupport-applib</artifactId>
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-fakedata-applib</artifactId>
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-fixtures-applib</artifactId>
+----
+
+[source, xml]
+.unittests
+----
+<!-- removed
+<groupId>org.apache.isis.mavendeps</groupId>
+<artifactId>isis-mavendeps-unittests</artifactId>
+<type>pom</type>
+-->
+
+<!-- instead use directly as required ... -->
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-unittestsupport-applib</artifactId>
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-fakedata-applib</artifactId>
+----
 
 

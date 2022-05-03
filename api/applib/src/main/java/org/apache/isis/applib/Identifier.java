@@ -72,14 +72,20 @@ implements
          */
         ACTION_PARAMETER,
         /**
-         * <i>Association</i> (of any cardinality), either declared or mixed in.
+         * <i>One to One Association (Property)</i> either declared or mixed in.
          */
-        PROPERTY_OR_COLLECTION
+        PROPERTY,
+        /**
+         * <i>One to Many Association (Collection)</i> either declared or mixed in.
+         */
+        COLLECTION
         ;
         public boolean isClass() { return this == CLASS; }
         public boolean isAction() { return this == ACTION; }
         public boolean isActionParameter() { return this == ACTION_PARAMETER; }
-        public boolean isPropertyOrCollection() { return this == PROPERTY_OR_COLLECTION;}
+        public boolean isProperty() { return this == PROPERTY;}
+        public boolean isCollection() { return this == COLLECTION;}
+        public boolean isPropertyOrCollection() { return this == PROPERTY || this == COLLECTION;}
     }
 
     // -- FACTORY METHODS
@@ -88,12 +94,20 @@ implements
         return new Identifier(typeIdentifier, "", Can.empty(), Type.CLASS);
     }
 
-    public static Identifier propertyOrCollectionIdentifier(
+    public static Identifier propertyIdentifier(
             final LogicalType typeIdentifier,
             final String propertyOrCollectionName) {
         return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(),
-                Type.PROPERTY_OR_COLLECTION);
+                Type.PROPERTY);
     }
+
+    public static Identifier collectionIdentifier(
+            final LogicalType typeIdentifier,
+            final String propertyOrCollectionName) {
+        return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(),
+                Type.COLLECTION);
+    }
+
 
     /** for reporting orphaned methods */
     public static Identifier methodIdentifier(

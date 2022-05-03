@@ -85,6 +85,8 @@ public final class ProgrammingModelConstants {
         }
     }
 
+    // -- METHOD VETO MARKERS (EXLUDE FROM DOMAIN)
+
     @Getter
     @RequiredArgsConstructor
     public enum MethodVetoMarker {
@@ -428,7 +430,7 @@ public final class ProgrammingModelConstants {
         }
     }
 
-    //maybe consolidate all MM validation raisers here, if we can find a common method signature for that
+    //maybe gradually consolidate all MM validation raisers here
     @RequiredArgsConstructor
     public static enum Validation {
         CONFLICTING_TITLE_STRATEGIES(
@@ -442,7 +444,26 @@ public final class ProgrammingModelConstants {
                 + "is assumed to represent or support a property, collection or action."),
         VIEWMODEL_MISSING_DESERIALIZING_CONSTRUCTOR(
                 "${type}: ViewModel contract violation: missing single (String) arg constructor "
-                + "(for de-serialization from memento string).");
+                + "(for de-serialization from memento string)."),
+        DOMAIN_OBJECT_MISSING_A_NAMESPACE("${type}: the object type must declare a namespace, "
+                + "yet there was none found in '${logicalTypeName}'; "
+                + "eg. @DomainObject(logicalTypeName=\"Customer\") is considered invalid, "
+                + "whereas @DomainObject(logicalTypeName=\"sales.Customer\") is valid."),
+        DOMAIN_SERVICE_MISSING_A_NAMESPACE("${type}: the service type must declare a namespace, "
+                + "yet there was none found in '${logicalTypeName}'; "
+                + "Spring supports various naming strategies @Named(...) being one of them, "
+                + "where eg. @Named(\"CustomerService\") is considered invalid, "
+                + "whereas @Named(\"sales.CustomerService\") is valid."),
+        TYPE_NOT_EAGERLY_DISCOVERED("The metamodel is configured for FULL introspection mode, "
+                + "yet missed ${type} of sort ${beanSort} during application start. " +
+                "This happens when type ${type} is not eagerly discovered by the metamodel introspection, "
+                + "which (initially) only considers compile-time types via reflection. "
+                + "Run-time types, "
+                + "not explicitly referenced to be included with Spring's class discovery mechanism, "
+                + "might slip this process. "
+                + "Consider importing type ${type} with Spring's @Import annotation. "
+                + "Types of sort VALUE should instead register a ValueSemanticsProvider with Spring, "
+                + "to be properly understood by the framework."),
         ;
         private final String template;
         public String getMessage(final Identifier featureIdentifier) {

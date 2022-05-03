@@ -80,7 +80,7 @@ extends PublishingTestAbstract {
 
             switch(changeScenario) {
             case PROPERTY_UPDATE: {
-                Identifier propertyId = Identifier.propertyOrCollectionIdentifier(
+                Identifier propertyId = Identifier.propertyIdentifier(
                         LogicalType.fqcn(bookClass), "name");
                 Object argValue = "Book #2";
 

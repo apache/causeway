@@ -245,7 +245,7 @@ class DomainModelTest_usingBadDomain {
 
         final String annotationLiteral = "@" + annotationType.getSimpleName();
         validator.assertAnyFailuresContaining(
-                Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(mixinClass), mixinMethodName),
+                Identifier.propertyIdentifier(LogicalType.fqcn(mixinClass), mixinMethodName),
                 String.format("Annotation %s on both method and type level is not allowed", annotationLiteral));
     }
 

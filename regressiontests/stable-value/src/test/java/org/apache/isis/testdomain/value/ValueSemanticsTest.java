@@ -50,6 +50,7 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -197,7 +198,7 @@ class ValueSemanticsTest {
 
                         if(valueType.equals(Password.class)) {
                             val recoveredValue = (Password)parser.parseTextRepresentation(context, stringified);
-                            assertTrue(recoveredValue.checkPassword("*"));
+                            assertTrue(recoveredValue.checkPassword(PlaceholderLiteral.SUPPRESSED.getLiteral()));
 
                         } else {
 

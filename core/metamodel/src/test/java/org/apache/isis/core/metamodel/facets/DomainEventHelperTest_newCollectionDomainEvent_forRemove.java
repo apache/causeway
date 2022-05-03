@@ -44,7 +44,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     public void defaultEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
-        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.collectionIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
@@ -57,7 +57,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     public void collectionRemovedFromDefaultEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
-        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.collectionIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
@@ -70,7 +70,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     public void customEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
-        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.collectionIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = Utils.domainEventHelper().newCollectionDomainEvent(

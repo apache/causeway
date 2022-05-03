@@ -79,12 +79,12 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final java.net.URL value) {
-        return render(value, v->v.toString());
+        return renderTitle(value, v->v.toString());
     }
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final java.net.URL value) {
-        return render(value, v->toHtmlLink(v));
+        return renderHtml(value, v->toHtmlLink(v));
     }
 
     private String toHtmlLink(final java.net.URL url) {

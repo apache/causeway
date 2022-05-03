@@ -348,27 +348,6 @@ implements Serializable {
                 .build();
     }
 
-//    // -- VIEWMODEL CONTRACT
-//
-//    //FIXME[ISIS-2964] as UserMemento is serializable, it should not even be required to implement ViewModel
-//    public UserMemento(final String memento) {
-//        this(_Serializables.read(UserMemento.class,
-//                _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(memento, StandardCharsets.UTF_8))));
-//    }
-//
-//    private UserMemento(final UserMemento copy) {
-//        this(copy.name, copy.realName, copy.avatarUrl, copy.languageLocale, copy.numberFormatLocale,
-//                copy.timeFormatLocale, copy.authenticationSource, copy.impersonating,
-//                copy.multiTenancyToken, copy.authenticationCode, copy.roles);
-//    }
-
-//    @Programmatic
-//    @Override
-//    public String viewModelMemento() {
-//        val bytes = _Serializables.write(this);
-//        return _Strings.ofBytes(_Bytes.asCompressedUrlBase64.apply(bytes), StandardCharsets.UTF_8);
-//    }
-
     // -- HELPER
 
     private static UserMementoBuilder builderWithDefaults(final String name) {

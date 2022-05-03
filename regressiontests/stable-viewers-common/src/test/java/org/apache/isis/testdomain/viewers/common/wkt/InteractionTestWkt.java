@@ -46,7 +46,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingWicket.WicketTesterFac
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
+import org.apache.isis.viewer.common.model.decorators.DisablingDecorator.DisablingDecorationModel;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
@@ -182,7 +182,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
                 .checkVisibility()
                 .checkUsability();
 
-        val disablingUiModel = DisablingUiModel.of(actionInteraction);
+        val disablingUiModel = DisablingDecorationModel.of(actionInteraction);
         assertFalse(disablingUiModel.isPresent());
     }
 
@@ -193,7 +193,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
                 .checkVisibility()
                 .checkUsability();
 
-        val disablingUiModel = DisablingUiModel.of(actionInteraction).get();
+        val disablingUiModel = DisablingDecorationModel.of(actionInteraction).get();
         assertEquals("Disabled for demonstration.", disablingUiModel.getReason());
     }
 }

@@ -30,10 +30,9 @@ import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.primitives._Doubles;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
-
-import lombok.val;
 
 /**
  * due to auto-boxing also handles the primitive variant
@@ -79,37 +78,39 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final Double value) {
-        return render(value, getNumberFormat(context)::format);
+        return renderTitle(value, getNumberFormat(context)::format);
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final Double value) {
+        return renderHtml(value, getNumberFormat(context)::format);
     }
 
     // -- PARSER
 
     @Override
     public String parseableTextRepresentation(final Context context, final Double value) {
-        return value==null
-                ? null
-                : getNumberFormat(context)
-                    .format(value);
-    }
-
-    @Override
-    public Double parseTextRepresentation(final Context context, final String text) {
-        //TODO at least overflow should be detected
-        val bigDec = super.parseDecimal(context, text);
-        return bigDec!=null
-                ? bigDec.doubleValue() // simply ignoring loss of precision or overflow
+        return value!=null
+                ? getNumberFormat(context)
+                    .format(value)
                 : null;
     }
 
     @Override
+    public Double parseTextRepresentation(final Context context, final String text) {
+        return _Doubles.convertToDouble(super.parseDecimal(context, text))
+                .orElse(null);
+    }
+
+    @Override
     public int typicalLength() {
-        //TODO research - legacy value, what motivates this number?
+        //XXX research - legacy value, what motivates this number?
         return 10;
     }
 
     @Override
     public int maxLength() {
-        //TODO research - legacy value, what motivates this number?
+        //XXX research - legacy value, what motivates this number?
         return 25;
     }
 

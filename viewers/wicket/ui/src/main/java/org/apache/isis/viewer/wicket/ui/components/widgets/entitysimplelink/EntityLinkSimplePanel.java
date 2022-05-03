@@ -23,7 +23,8 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -65,9 +66,9 @@ implements CancelHintRequired  {
         val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(getModel().getObject());
 
         if(isEmpty) {
-            // represent no object by a simple label displaying '(none)'
-            Wkt.labelAdd(this, ID_ENTITY_TITLE_NULL, ValueSemanticsAbstract.NULL_REPRESENTATION);
-            permanentlyHide(ID_ENTITY_TITLE_NULL);
+            // represent null reference by a simple markup displaying '(none)'
+            Wkt.markupAdd(this, ID_ENTITY_TITLE_NULL,
+                    PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
 
         } else {
@@ -103,5 +104,16 @@ implements CancelHintRequired  {
     public void validate() {
         // no-op since immutable
     }
+
+    // -- TRANSLATION
+
+    /**
+     * Translate without context: Tooltips, Button-Labels, etc.
+     */
+    public final String translate(final String input) {
+        return ((HasCommonContext)getModel()).getCommonContext().getTranslationService()
+                .translate(TranslationContext.empty(), input);
+    }
+
 
 }

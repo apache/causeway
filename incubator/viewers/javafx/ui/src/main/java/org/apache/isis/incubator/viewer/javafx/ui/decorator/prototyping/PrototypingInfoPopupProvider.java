@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.dialog.Dialogs;
-import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
+import org.apache.isis.viewer.common.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -51,10 +51,10 @@ public class PrototypingInfoPopupProvider {
 
     private final Provider<UiComponentFactoryFx> uiComponentFactory;
 
-    public void showPrototypingPopup(final PrototypingUiModel prototypingUiModel) {
-        val infoNode = getPrototypingInfoUiComponent(prototypingUiModel);
-        val headerText = prototypingUiModel.getFeatureFriendlyIdentifier();
-        val contentText = prototypingUiModel.getFeatureType().toString();
+    public void showPrototypingPopup(final PrototypingDecorationModel prototypingDecorationModel) {
+        val infoNode = getPrototypingInfoUiComponent(prototypingDecorationModel);
+        val headerText = prototypingDecorationModel.getFeatureFriendlyIdentifier();
+        val contentText = prototypingDecorationModel.getFeatureType().toString();
         Dialogs.message("Inspect Metamodel", headerText, contentText, infoNode);
     }
 
@@ -70,7 +70,7 @@ public class PrototypingInfoPopupProvider {
         }
     }
 
-    private Node getPrototypingInfoUiComponent(final PrototypingUiModel prototypingUiModel) {
+    private Node getPrototypingInfoUiComponent(final PrototypingDecorationModel prototypingDecorationModel) {
 
         val infos = _Sets.<Info>newTreeSet();
 
@@ -82,7 +82,7 @@ public class PrototypingInfoPopupProvider {
 
         infos.add(Info.of("Handlers", handlerInfo));
 
-        prototypingUiModel.streamFeatureFacets()
+        prototypingDecorationModel.streamFeatureFacets()
         .forEach(facet ->
             infos.add(Info.of(
                     facet.facetType().getSimpleName(),

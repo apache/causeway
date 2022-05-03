@@ -91,7 +91,7 @@ public final class Enums {
             final @Nullable String text) {
         val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
-            return null;
+            return Optional.empty();
         }
         final T[] enumConstants = correspondingClass.getEnumConstants();
         for (final T enumConstant : enumConstants) {

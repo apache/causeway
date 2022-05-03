@@ -7,11 +7,13 @@
 .CommandFetcher.java
 ----
 class CommandFetcher {
-  List<CommandDto> fetchCommand(CommandModel previousHwmIfAny)     // <.>
+  CommandFetcher(SecondaryConfig secondaryConfig)
+  Can<CommandDto> fetchCommand(ICommandLog previousHwmIfAny)     // <.>
+  Can<CommandDto> callPrimary(UUID interactionId)
 }
 ----
 
-<.> xref:#fetchCommand__CommandModel[fetchCommand(CommandModel)]
+<.> xref:#fetchCommand__ICommandLog[fetchCommand(ICommandLog)]
 +
 --
 Replicates a single command.
@@ -19,7 +21,7 @@ Replicates a single command.
 
 == Members
 
-[#fetchCommand__CommandModel]
-=== fetchCommand(CommandModel)
+[#fetchCommand__ICommandLog]
+=== fetchCommand(ICommandLog)
 
 Replicates a single command.

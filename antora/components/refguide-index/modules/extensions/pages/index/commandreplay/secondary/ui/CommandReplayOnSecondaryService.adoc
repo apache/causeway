@@ -7,7 +7,6 @@
 .CommandReplayOnSecondaryService.java
 ----
 class CommandReplayOnSecondaryService {
-  public static final String LOGICAL_TYPE_NAME;
 }
 ----
 

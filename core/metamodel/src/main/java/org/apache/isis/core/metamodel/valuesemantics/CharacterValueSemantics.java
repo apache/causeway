@@ -88,7 +88,12 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final Character value) {
-        return render(value, c->""+c);
+        return renderTitle(value, c->""+c);
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final Character value) {
+        return renderHtml(value, c->""+c);
     }
 
     // -- PARSER

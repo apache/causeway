@@ -30,8 +30,8 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
-import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorators.DisablingDecorator.DisablingDecorationModel;
+import org.apache.isis.viewer.common.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 
 import lombok.val;
 
@@ -91,9 +91,9 @@ public interface HasManagedAction {
 
     // -- UI SPECIFICS
 
-    default Optional<FontAwesomeUiModel> getFontAwesomeUiModel() {
+    default Optional<FontAwesomeDecorationModel> getFontAwesomeUiModel() {
         val managedAction = getManagedAction();
-        return FontAwesomeUiModel.of(ObjectAction.Util.cssClassFaFactoryFor(
+        return FontAwesomeDecorationModel.of(ObjectAction.Util.cssClassFaFactoryFor(
                 managedAction.getAction(),
                 managedAction.getOwner()));
     }
@@ -111,8 +111,8 @@ public interface HasManagedAction {
         return a -> a.getPosition() == position;
     }
 
-    default Optional<DisablingUiModel> getDisableUiModel() {
-        return DisablingUiModel.of(getManagedAction().checkUsability()) ;
+    default Optional<DisablingDecorationModel> getDisableUiModel() {
+        return DisablingDecorationModel.of(getManagedAction().checkUsability()) ;
     }
 
 }

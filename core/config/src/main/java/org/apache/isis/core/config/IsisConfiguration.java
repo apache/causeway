@@ -1396,30 +1396,6 @@ public class IsisConfiguration {
                 private boolean allowDeprecated = true;
 
                 /**
-                 * If set, then checks that the supports <code>hideXxx</code> and <code>disableXxx</code> methods for
-                 * actions do not have take parameters.
-                 *
-                 * <p>
-                 *     Historically, the programming model allowed these methods to accept the same number of
-                 *     parameters as the action method to which they relate, the rationale being for similarity with
-                 *     the <code>validateXxx</code> method.  However, since these parameters serve no function, the
-                 *     programming model has been simplified so that these supporting methods are discovered if they
-                 *     have exactly no parameters.
-                 * </p>
-                 *
-                 * <p>
-                 *     Note that this aspect of the programming model relates to the <code>hideXxx</code> and
-                 *     <code>disableXxx</code> supporting methods that relate to the entire method.  Do not confuse
-                 *     these with the <code>hideNXxx</code> and <code>disableNXxx</code> supporting methods, which
-                 *     relate to the N-th parameter, and allow up to N-1 parameters to be passed in (allowing the Nth
-                 *     parameter to be dynamically hidden or disabled).
-                 * </p>
-                 * @deprecated this option is ignored by the framework, behavior is now fixated to noParamsOnly = true
-                 */
-                @Deprecated(forRemoval = true, since = "2.0.0-M7")
-                private boolean noParamsOnly = true;
-
-                /**
                  * Whether to validate that any actions that accept action parameters have either a corresponding
                  * choices or auto-complete for that action parameter, or are associated with a collection of the
                  * appropriate type.
@@ -1486,6 +1462,7 @@ public class IsisConfiguration {
                      */
                     private boolean variablesClause = true;
                 }
+
             }
         }
 

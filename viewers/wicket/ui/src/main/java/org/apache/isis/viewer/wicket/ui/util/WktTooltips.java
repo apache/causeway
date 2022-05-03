@@ -26,7 +26,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.common.model.PlacementDirection;
-import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
+import org.apache.isis.viewer.common.model.decorators.TooltipDecorator.TooltipDecorationModel;
 import org.apache.isis.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
 import lombok.NonNull;
@@ -46,23 +46,23 @@ public class WktTooltips {
     /**
      * Adds popover behavior to the {@code target}, if at least the body is not empty/blank.
      * @param target
-     * @param tooltipUiModel
+     * @param tooltipDecorationModel
      */
     public <T extends Component> T addTooltip(
             final @Nullable T target,
-            final @Nullable TooltipUiModel tooltipUiModel) {
+            final @Nullable TooltipDecorationModel tooltipDecorationModel) {
 
         if(target==null
-                || tooltipUiModel==null
-                || tooltipUiModel.isEmpty()) {
+                || tooltipDecorationModel==null
+                || tooltipDecorationModel.isEmpty()) {
             return target; // no body so don't render tooltip
         }
 
-        val placementDirection = tooltipUiModel.getPlacementDirection();
+        val placementDirection = tooltipDecorationModel.getPlacementDirection();
 
-        final IModel<String> bodyModel = Model.of(tooltipUiModel.getBody());
+        final IModel<String> bodyModel = Model.of(tooltipDecorationModel.getBody());
 
-        val tooltipBehavior = tooltipUiModel
+        val tooltipBehavior = tooltipDecorationModel
                 .getTitle()
                 .map(title->Model.of(title))
                 .map(titleModel->createTooltipBehavior(placementDirection, titleModel, bodyModel))
@@ -102,7 +102,7 @@ public class WktTooltips {
             final @Nullable String body) {
         return addTooltip(target, _Strings.isEmpty(body)
                 ? null
-                : TooltipUiModel.ofBody(placementDirection, body));
+                : TooltipDecorationModel.ofBody(placementDirection, body));
     }
 
     public <T extends Component> T addTooltip(
@@ -110,7 +110,7 @@ public class WktTooltips {
             final @Nullable T target,
             final @Nullable String title,
             final @Nullable String body) {
-        return addTooltip(target, TooltipUiModel.ofTitleAndBody(placementDirection, title, body));
+        return addTooltip(target, TooltipDecorationModel.ofTitleAndBody(placementDirection, title, body));
     }
 
     // -- HELPER

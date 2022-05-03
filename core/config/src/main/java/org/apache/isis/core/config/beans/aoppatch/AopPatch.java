@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.config.beans.aoppatch;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Named;
 
 import org.springframework.beans.BeansException;
@@ -27,13 +26,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Role;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.config.TransactionManagementConfigUtils;
 import org.springframework.transaction.interceptor.BeanFactoryTransactionAttributeSourceAdvisor;
 import org.springframework.transaction.interceptor.TransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -52,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
 public class AopPatch implements ApplicationContextAware {
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
 
         if(!applicationContext.containsBean(TransactionManagementConfigUtils.TRANSACTION_ADVISOR_BEAN_NAME)) {
             return;
@@ -86,7 +85,7 @@ public class AopPatch implements ApplicationContextAware {
     private TransactionInterceptor patchedTransactionInterceptor(
             final @Nullable TransactionAttributeSource transactionAttributeSource,
             final @Nullable TransactionInterceptorFactory transactionInterceptorFactory,
-            final @NonNull  TransactionManager txManager) {
+            final @Nullable TransactionManager txManager) {
 
         final TransactionInterceptor interceptor = transactionInterceptorFactory==null
                 ? new TransactionInterceptor()

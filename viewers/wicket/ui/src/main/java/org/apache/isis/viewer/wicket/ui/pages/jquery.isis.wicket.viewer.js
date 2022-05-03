@@ -105,13 +105,15 @@ $(function() {
 
     Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_PARAMETER, function(jqEvent, elementId) {
         setTimeout(function() {
-            let el = $('#'+elementId).find('.inputFormTable.parameters').find('input,textarea,div.cbx,select').filter(':visible:first');
+            let el = $('#'+elementId).find('.inputFormTable.parameters')
+            	.find('input,textarea,div.cbx,select').filter(':visible:first');
             if(el) {
                 let elNodeName = $(el).prop('nodeName')
                 if (elNodeName) {
                     let x = elNodeName.toLowerCase()
                     if(x === 'input'
-                    	|| x === 'textarea') {
+                    	|| x === 'textarea'
+                    	|| x === 'div') {
                         el.focus();
                     } else {
                         el.select2('open').select2('close');

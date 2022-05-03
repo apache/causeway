@@ -94,8 +94,12 @@ public class IdentifierUtil {
             return Identifier.actionIdentifier(logicalType, memberId);
         }
 
-        if(indentifierType.isPropertyOrCollection()) {
-            return Identifier.propertyOrCollectionIdentifier(logicalType, memberId);
+        if(indentifierType.isProperty()) {
+            return Identifier.propertyIdentifier(logicalType, memberId);
+        }
+
+        if(indentifierType.isCollection()) {
+            return Identifier.collectionIdentifier(logicalType, memberId);
         }
 
         throw _Exceptions.illegalArgument("unsupported identifier type %s (logicalMemberIdentifier=%s)",

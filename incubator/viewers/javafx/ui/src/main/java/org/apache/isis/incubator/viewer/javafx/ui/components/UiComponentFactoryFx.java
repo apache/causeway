@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.viewer.common.model.components.UiComponentFactory;
-import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
+import org.apache.isis.viewer.common.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 
 import lombok.Getter;
 import lombok.val;
@@ -79,7 +79,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
 
         return isPrototyping
                 ? uiContext.getPrototypingDecoratorForFormField()
-                        .decorate(formField, PrototypingUiModel.of(managedMember))
+                        .decorate(formField, PrototypingDecorationModel.of(managedMember))
                 : formField;
     }
 
@@ -100,7 +100,7 @@ public class UiComponentFactoryFx implements UiComponentFactory<Node, Node> {
 
         return isPrototyping
                 ? uiContext.getPrototypingDecoratorForButton()
-                        .decorate(uiButton, PrototypingUiModel.of(managedAction))
+                        .decorate(uiButton, PrototypingDecorationModel.of(managedAction))
                 : uiButton;
     }
 

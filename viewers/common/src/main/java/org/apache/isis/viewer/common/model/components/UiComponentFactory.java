@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
+import org.apache.isis.viewer.common.model.decorators.DisablingDecorator.DisablingDecorationModel;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -58,7 +58,7 @@ public interface UiComponentFactory<B, C> {
     @Value(staticConstructor = "of")
     public static class ButtonRequest {
         @NonNull private final ManagedAction managedAction;
-        @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
+        @NonNull private final Optional<DisablingDecorationModel> disablingUiModelIfAny;
         @NonNull private final Consumer<ManagedAction> actionEventHandler;
     }
 
@@ -67,7 +67,7 @@ public interface UiComponentFactory<B, C> {
 
         @NonNull private final ManagedValue managedValue;
         @NonNull private final ManagedFeature managedFeature;
-        @NonNull private final Optional<DisablingUiModel> disablingUiModelIfAny;
+        @NonNull private final Optional<DisablingDecorationModel> disablingUiModelIfAny;
 
         public static ComponentRequest of(final ManagedParameter managedParameter) {
             return of(managedParameter, managedParameter, Optional.empty());

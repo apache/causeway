@@ -43,7 +43,7 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
     public void defaultEventType() throws Exception {
 
         SomeDomainObject sdo = new SomeDomainObject();
-        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.propertyIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "someDateProperty");
         LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = null;
@@ -62,7 +62,7 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
     public void customEventType() throws Exception {
 
         SomeDomainObject sdo = new SomeDomainObject();
-        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.propertyIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "someDateProperty");
         LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = null;

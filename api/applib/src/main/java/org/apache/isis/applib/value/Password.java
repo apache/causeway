@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 
 /**
  * Represents a password that will not displayed to the UI but can be persisted.
@@ -62,7 +63,7 @@ public class Password implements Serializable {
 
     @Override
     public String toString() {
-        return "*";
+        return PlaceholderLiteral.SUPPRESSED.getLiteral();
     }
 
     public static class JaxbToStringAdapter

@@ -86,7 +86,12 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
-        return render(value, getNumberFormat(context)::format);
+        return renderTitle(value, getNumberFormat(context)::format);
+    }
+
+    @Override
+    public String htmlPresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
+        return renderHtml(value, getNumberFormat(context)::format);
     }
 
     // -- PARSER
@@ -101,7 +106,8 @@ implements
 
     @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        return super.parseDecimal(context, text);
+        return super.parseDecimal(context, text)
+                .orElse(null);
     }
 
     @Override

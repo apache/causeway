@@ -26,8 +26,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.incubator.viewer.javafx.model.icon.IconService;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
-import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
-import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
+import org.apache.isis.viewer.common.model.decorators.IconDecorator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -43,8 +42,8 @@ public class IconDecoratorForLabeled implements IconDecorator<Labeled, Labeled> 
     private final IconService iconService;
 
     @Override
-    public Labeled decorate(Labeled uiComponent, Optional<FontAwesomeUiModel> fontAwesomeUiModel) {
-        fontAwesomeUiModel.ifPresent(fa->{
+    public Labeled decorate(Labeled uiComponent, Optional<FontAwesomeDecorationModel> fontAwesomeDecorationModel) {
+        fontAwesomeDecorationModel.ifPresent(fa->{
             val icon = iconService.fontAwesome(fa);
             icon
             .map(this::iconForImage)

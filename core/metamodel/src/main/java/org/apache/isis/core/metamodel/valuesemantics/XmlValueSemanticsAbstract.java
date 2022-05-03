@@ -89,12 +89,12 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final T value) {
-        return render(value, v->String.format("XML[length=%d]", toXml(v).length()));
+        return renderTitle(value, v->String.format("XML[length=%d]", toXml(v).length()));
     }
 
     @Override
     public String htmlPresentation(final Context context, final T value) {
-        return render(value, v->renderXml(context, toXml(v)));
+        return renderHtml(value, v->renderXml(context, toXml(v)));
     }
 
     protected String renderXml(final @NonNull Context context, final @NonNull String xml) {

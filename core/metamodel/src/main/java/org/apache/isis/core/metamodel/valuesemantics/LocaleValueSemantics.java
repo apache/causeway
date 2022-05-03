@@ -70,26 +70,30 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final Locale value) {
+        return renderTitle(value, v->localeToString(context, value));
+    }
 
-        return render(value, v->{
+    @Override
+    public String htmlPresentation(final ValueSemanticsProvider.Context context, final Locale value) {
+        return renderHtml(value, v->localeToString(context, value));
+    }
 
-            val userLanguageLocale = context.getInteractionContext().getLocale().getLanguageLocale();
+    private String localeToString(final ValueSemanticsProvider.Context context, final Locale value) {
+        val userLanguageLocale = context.getInteractionContext().getLocale().getLanguageLocale();
 
-            val language = value.getDisplayLanguage(userLanguageLocale);
-            if(_Strings.isEmpty(language)) {
-                return stringify(v);
-            }
+        val language = value.getDisplayLanguage(userLanguageLocale);
+        if(_Strings.isEmpty(language)) {
+            return stringify(value);
+        }
 
-            val country = value.getDisplayCountry(userLanguageLocale);
-            if(_Strings.isEmpty(country)) {
-                return language;
-            }
+        val country = value.getDisplayCountry(userLanguageLocale);
+        if(_Strings.isEmpty(country)) {
+            return language;
+        }
 
-            return String.format("%s (%s)",
-                    value.getDisplayLanguage(userLanguageLocale),
-                    value.getDisplayCountry(userLanguageLocale));
-
-        });
+        return String.format("%s (%s)",
+                value.getDisplayLanguage(userLanguageLocale),
+                value.getDisplayCountry(userLanguageLocale));
     }
 
     // -- PARSER

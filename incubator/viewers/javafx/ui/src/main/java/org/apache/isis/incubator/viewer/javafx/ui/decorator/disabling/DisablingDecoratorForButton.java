@@ -22,8 +22,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
+import org.apache.isis.viewer.common.model.decorators.DisablingDecorator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -36,7 +35,7 @@ import javafx.scene.control.Tooltip;
 public class DisablingDecoratorForButton implements DisablingDecorator<Button> {
 
     @Override
-    public void decorate(Button uiButton, DisablingUiModel disableUiModel) {
+    public void decorate(final Button uiButton, final DisablingDecorationModel disableUiModel) {
 
         val reason = disableUiModel.getReason();
 

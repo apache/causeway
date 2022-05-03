@@ -7,7 +7,6 @@
 .HsqlDbManagerMenu.java
 ----
 class HsqlDbManagerMenu {
-  public final static String LOGICAL_TYPE_NAME;
   HsqlDbManagerMenu(DataSourceIntrospectionService datasourceIntrospector)
   void hsqlDbManager()
   boolean hideHsqlDbManager()

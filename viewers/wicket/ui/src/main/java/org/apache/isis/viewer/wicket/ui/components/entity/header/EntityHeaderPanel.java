@@ -63,7 +63,8 @@ extends PanelAbstract<ManagedObject, EntityModel> {
     }
 
     private void addOrReplaceIconAndTitle() {
-        final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, getEntityModel());
+        final ComponentFactory componentFactory = getComponentFactoryRegistry()
+                .findComponentFactory(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, getEntityModel());
         final Component component = componentFactory.createComponent(getEntityModel());
         addOrReplace(component);
     }

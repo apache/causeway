@@ -32,15 +32,13 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
-
-import static org.apache.isis.commons.internal.functions._Functions.peek;
 
 import lombok.val;
 
@@ -89,7 +87,8 @@ extends ScalarPanelFormFieldAbstract<T> {
     protected String obtainOutputFormat() {
         return getBlobOrClobFromModel()
                 .map(NamedWithMimeType::getName)
-                .orElse(translate(ValueSemanticsAbstract.NULL_REPRESENTATION));
+                .orElseGet(()->
+                    PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate));
     }
 
     @Override
@@ -111,18 +110,21 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     private Component createDownloadLink(final String id, final IModel<String> labelModel) {
-        val linkContainer = getBlobOrClobFromModel()
-                .map(this::newResource)
-                .map(resource->(MarkupContainer)Wkt.downloadLinkNoCache(id, resource))
-                .map(peek(downloadLink->{
-                    WktTooltips.addTooltip(downloadLink, translate("Download file"));
-                }))
-                .orElseGet(()->{
-                    // fallback to an inactive (no link) container, with secondary color
-                    return Wkt.cssAppend(Wkt.container(id), "link-secondary");
-                });
-        Wkt.labelAdd(linkContainer, CompactFragment.ID_LINK_LABEL, labelModel);
-        return linkContainer;
+        return getBlobOrClobFromModel()
+        .map(this::newResource)
+        .map(resource->(MarkupContainer)Wkt.downloadLinkNoCache(id, resource))
+        .<Component>map(linkContainer->{
+            WktTooltips.addTooltip(linkContainer, translate("Download file"));
+            Wkt.labelAdd(linkContainer, CompactFragment.ID_LINK_LABEL, labelModel);
+            return linkContainer;
+        })
+        .orElseGet(()->{
+            // represent null reference by a simple markup displaying '(none)'
+            val linkContainer = Wkt.container(id);
+            Wkt.markupAdd(linkContainer, CompactFragment.ID_LINK_LABEL,
+                    PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
+            return linkContainer;
+        });
     }
 
     // -- LEGACY

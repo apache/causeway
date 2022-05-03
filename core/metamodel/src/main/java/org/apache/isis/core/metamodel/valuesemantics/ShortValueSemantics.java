@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
 import javax.inject.Named;
@@ -81,7 +82,12 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final Short value) {
-        return render(value, getNumberFormat(context)::format);
+        return renderTitle(value, getNumberFormat(context)::format);
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final Short value) {
+        return renderHtml(value, getNumberFormat(context)::format);
     }
 
     // -- PARSER
@@ -101,7 +107,9 @@ implements
             return null;
         }
         try {
-            return super.parseInteger(context, input).shortValueExact();
+            return super.parseInteger(context, input)
+                    .map(BigInteger::shortValueExact)
+                    .orElse(null);
         } catch (final NumberFormatException | ArithmeticException e) {
             throw new TextEntryParseException("Not a 16-bit signed integer " + input, e);
         }

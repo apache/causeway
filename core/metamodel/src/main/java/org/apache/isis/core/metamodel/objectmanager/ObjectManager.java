@@ -149,6 +149,10 @@ public interface ObjectManager {
         if(pojo==null) {
             return ManagedObject.unspecified();
         }
+        if(pojo instanceof ManagedObject) {
+            // yet ignoring any bookmarking policy, assuming this is not required here
+            return (ManagedObject) pojo;
+        }
         // could be any pojo, even of a type, that is vetoed for introspection (spec==null)
         val spec = specForType(pojo.getClass()).orElse(null);
         if(spec==null) {

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
 import javax.inject.Named;
@@ -81,7 +82,12 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final Byte value) {
-        return render(value, getNumberFormat(context)::format);
+        return renderTitle(value, getNumberFormat(context)::format);
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final Byte value) {
+        return renderHtml(value, getNumberFormat(context)::format);
     }
 
     // -- PARSER
@@ -101,7 +107,9 @@ implements
             return null;
         }
         try {
-            return super.parseInteger(context, input).byteValueExact();
+            return super.parseInteger(context, input)
+                    .map(BigInteger::byteValueExact)
+                    .orElse(null);
         } catch (final NumberFormatException | ArithmeticException e) {
             throw new TextEntryParseException("Not a 8-bit signed integer " + input, e);
         }

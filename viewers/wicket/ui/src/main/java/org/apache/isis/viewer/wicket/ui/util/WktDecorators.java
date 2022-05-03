@@ -22,21 +22,24 @@ import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.common.model.PlacementDirection;
 import org.apache.isis.viewer.common.model.action.decorator.ActionUiDecorator;
-import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmDecorator;
-import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
-import org.apache.isis.viewer.common.model.decorator.danger.DangerDecorator;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingDecorator;
-import org.apache.isis.viewer.common.model.decorator.disable.DisablingUiModel;
-import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
-import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
-import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingDecorator;
-import org.apache.isis.viewer.common.model.decorator.prototyping.PrototypingUiModel;
-import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
-import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
+import org.apache.isis.viewer.common.model.decorators.ConfirmDecorator;
+import org.apache.isis.viewer.common.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
+import org.apache.isis.viewer.common.model.decorators.DangerDecorator;
+import org.apache.isis.viewer.common.model.decorators.DisablingDecorator;
+import org.apache.isis.viewer.common.model.decorators.FormLabelDecorator;
+import org.apache.isis.viewer.common.model.decorators.IconDecorator;
+import org.apache.isis.viewer.common.model.decorators.PrototypingDecorator;
+import org.apache.isis.viewer.common.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
+import org.apache.isis.viewer.common.model.decorators.TooltipDecorator;
+import org.apache.isis.viewer.common.model.decorators.TooltipDecorator.TooltipDecorationModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
@@ -57,13 +60,12 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.Confi
 public class WktDecorators {
 
     // -- BASIC DECORATORS
+    @Getter(lazy = true) private final static FormLabel formLabel = new FormLabel();
     @Getter(lazy = true) private final static Tooltip tooltip = new Tooltip();
     @Getter(lazy = true) private final static Disable disable = new Disable();
     @Getter(lazy = true) private final static Prototyping prototyping = new Prototyping();
     @Getter(lazy = true) private final static Confirm confirm = new Confirm();
     @Getter(lazy = true) private final static Danger danger = new Danger();
-
-
     @Getter(lazy = true) private final static IconDecoratorWkt icon = new IconDecoratorWkt();
     @Getter(lazy = true) private final static MissingIconDecorator missingIcon = new MissingIconDecorator();
 
@@ -73,18 +75,33 @@ public class WktDecorators {
 
     // -- BASIC DECORATOR CLASSES
 
+    public final static class FormLabel implements FormLabelDecorator<Component> {
+        @Override
+        public void decorate(final Component uiComponent, final FormLabelDecorationModel decorationModel) {
+            if(decorationModel.isMandatoryMarker()) {
+                Wkt.cssAppend(uiComponent, "mandatory");
+            }
+            if(_Strings.isNotEmpty(decorationModel.getSuffix())) {
+                final IModel<String> labelModel = _Casts.uncheckedCast(uiComponent.getDefaultModel());
+                uiComponent.setDefaultModel(Model.of(labelModel.getObject() + decorationModel.getSuffix()));
+            }
+            uiComponent.setEscapeModelStrings(true);
+        }
+    }
+
     public final static class Tooltip implements TooltipDecorator<Component> {
         @Override
-        public void decorate(final Component uiComponent, final TooltipUiModel tooltipUiModel) {
-            WktTooltips.addTooltip(uiComponent, tooltipUiModel);
+        public void decorate(final Component uiComponent, final TooltipDecorationModel decorationModel) {
+            WktTooltips.addTooltip(uiComponent, decorationModel);
         }
     }
 
     public final static class Disable implements DisablingDecorator<Component> {
         @Override
-        public void decorate(final Component uiComponent, final DisablingUiModel disableUiModel) {
-            val tooltipUiModel = TooltipUiModel.ofBody(PlacementDirection.BOTTOM, disableUiModel.getReason());
-            getTooltip().decorate(uiComponent, tooltipUiModel);
+        public void decorate(final Component uiComponent, final DisablingDecorationModel decorationModel) {
+            val tooltipDecorationModel = TooltipDecorationModel
+                    .ofBody(PlacementDirection.BOTTOM, decorationModel.getReason());
+            getTooltip().decorate(uiComponent, tooltipDecorationModel);
 
             Wkt.cssAppend(uiComponent, "disabled");
             uiComponent.setEnabled(false);
@@ -93,7 +110,7 @@ public class WktDecorators {
 
     public final static class Prototyping implements PrototypingDecorator<Component, Component> {
         @Override
-        public Component decorate(final Component uiComponent, final PrototypingUiModel prototypingUiModel) {
+        public Component decorate(final Component uiComponent, final PrototypingDecorationModel decorationModel) {
             Wkt.cssAppend(uiComponent, "prototype");
             return uiComponent;
         }
@@ -101,15 +118,15 @@ public class WktDecorators {
 
     public final static class Confirm implements ConfirmDecorator<Component> {
         @Override
-        public void decorate(final Component uiComponent, final ConfirmUiModel confirmUiModel) {
+        public void decorate(final Component uiComponent, final ConfirmDecorationModel decorationModel) {
 
             val confirmationConfig = new ConfirmationConfig()
-                    .withTitle(confirmUiModel.getTitle())
-                    .withBtnOkLabel(confirmUiModel.getOkLabel())
-                    .withBtnCancelLabel(confirmUiModel.getCancelLabel())
+                    .withTitle(decorationModel.getTitle())
+                    .withBtnOkLabel(decorationModel.getOkLabel())
+                    .withBtnCancelLabel(decorationModel.getCancelLabel())
                     .withBtnOkClass(ButtonSemantics.DANGER.fullButtonCss())
                     .withBtnCancelClass(ButtonSemantics.SECONDARY.fullButtonCss())
-                    .withPlacement(Placement.valueOf(confirmUiModel.getPlacement().name().toLowerCase()));
+                    .withPlacement(Placement.valueOf(decorationModel.getPlacement().name().toLowerCase()));
 
             uiComponent.add(new ConfirmationBehavior(confirmationConfig));
 
@@ -138,7 +155,7 @@ public class WktDecorators {
 
     public final static class IconDecoratorWkt implements IconDecorator<Component, Component> {
         @Override
-        public Component decorate(final Component uiComponent, final Optional<FontAwesomeUiModel> fontAwesome) {
+        public Component decorate(final Component uiComponent, final Optional<FontAwesomeDecorationModel> fontAwesome) {
             if(fontAwesome.isPresent()) {
                 uiComponent.add(new CssClassFaBehavior(fontAwesome.get()));
             }
@@ -148,7 +165,7 @@ public class WktDecorators {
 
     public final static class MissingIconDecorator implements IconDecorator<Component, Component> {
         @Override
-        public Component decorate(final Component uiComponent, final Optional<FontAwesomeUiModel> fontAwesome) {
+        public Component decorate(final Component uiComponent, final Optional<FontAwesomeDecorationModel> fontAwesome) {
             if(!fontAwesome.isPresent()) {
                 Wkt.cssAppend(uiComponent, "menuLinkSpacer");
             }
@@ -179,7 +196,7 @@ public class WktDecorators {
             linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
                 getDisableDecorator().decorate(uiComponent, disableUiModel);
                 getTooltipDecorator().decorate(uiComponent,
-                        TooltipUiModel.ofBody(PlacementDirection.BOTTOM, disableUiModel.getReason()));
+                        TooltipDecorationModel.ofBody(PlacementDirection.BOTTOM, disableUiModel.getReason()));
             });
 
             if (!linkAndLabel.getDisableUiModel().isPresent()) {
@@ -189,12 +206,12 @@ public class WktDecorators {
                 .ifPresent(describedAs->
                     getTooltipDecorator()
                     .decorate(uiComponent,
-                            TooltipUiModel.ofBody(PlacementDirection.BOTTOM, describedAs)));
+                            TooltipDecorationModel.ofBody(PlacementDirection.BOTTOM, describedAs)));
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
                 if (actionMeta.isImmediateConfirmationRequired()) {
 
-                    val confirmUiModel = ConfirmUiModel.ofAreYouSure(translationService, PlacementDirection.BOTTOM);
+                    val confirmUiModel = ConfirmDecorationModel.areYouSure(translationService, PlacementDirection.BOTTOM);
                     getConfirmDecorator().decorate(actionLinkUiComponent, confirmUiModel);
 
                 }
@@ -203,7 +220,7 @@ public class WktDecorators {
 
             if (actionMeta.isPrototype()) {
                 getPrototypingDecorator()
-                .decorate(actionLinkUiComponent, PrototypingUiModel.of(linkAndLabel.getManagedAction()));
+                .decorate(actionLinkUiComponent, PrototypingDecorationModel.of(linkAndLabel.getManagedAction()));
             }
 
         }

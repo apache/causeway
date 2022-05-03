@@ -157,7 +157,10 @@ implements InvocationHandler {
         return hashCode;
     }
 
-    private int getValueHashCode(final Object value) {
+    private int getValueHashCode(final @Nullable Object value) {
+        if(value==null) {
+            return 0;
+        }
         // Use Arrays.hashCode since ObjectUtils doesn't comply to to
         // Annotation#hashCode()
         if (value instanceof boolean[]) {

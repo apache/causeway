@@ -25,7 +25,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics;
 
 public class BooleanValueSemanticsProviderTest
@@ -81,7 +81,7 @@ extends ValueSemanticsProviderAbstractTestCase<Boolean> {
 
     @Test
     public void testTitleWhenNotSet() throws Exception {
-        assertEquals(ValueSemanticsAbstract.NULL_REPRESENTATION,
+        assertEquals(PlaceholderLiteral.NULL_REPRESENTATION.getLiteral(),
                 value.titlePresentation(null, null));
     }
 

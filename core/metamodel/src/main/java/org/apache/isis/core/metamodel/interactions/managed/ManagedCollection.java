@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -50,7 +51,7 @@ public final class ManagedCollection extends ManagedMember {
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        return ManagedMember.<OneToManyAssociation>lookup(owner, MemberType.COLLECTION, memberId)
+        return ManagedMember.<OneToManyAssociation>lookup(owner, Identifier.Type.COLLECTION, memberId)
         .map(objectAction -> of(owner, objectAction, where));
     }
 
@@ -73,8 +74,8 @@ public final class ManagedCollection extends ManagedMember {
     }
 
     @Override
-    public MemberType getMemberType() {
-        return MemberType.COLLECTION;
+    public Identifier.Type getMemberType() {
+        return Identifier.Type.COLLECTION;
     }
 
     public Can<ObjectAction> getAssociatedActions() {

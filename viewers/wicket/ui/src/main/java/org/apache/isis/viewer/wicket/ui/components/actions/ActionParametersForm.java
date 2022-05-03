@@ -35,7 +35,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.common.model.PlacementDirection;
 import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.common.model.decorator.confirm.ConfirmUiModel;
+import org.apache.isis.viewer.common.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -126,7 +126,7 @@ extends PromptFormAbstract<ActionModel> {
         val action = actionModel.getAction();
 
         if (action.getSemantics().isAreYouSure()) {
-            val confirmUiModel = ConfirmUiModel.ofAreYouSure(getTranslationService(), PlacementDirection.BOTTOM);
+            val confirmUiModel = ConfirmDecorationModel.areYouSure(getTranslationService(), PlacementDirection.BOTTOM);
             WktDecorators.getConfirm().decorate(button, confirmUiModel);
         }
     }

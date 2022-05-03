@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.NonNull;
@@ -40,7 +40,7 @@ extends MemberInteraction<ManagedCollection, CollectionInteraction> {
 
         final InteractionRailway<ManagedCollection> railway = managedCollection.isPresent()
                 ? InteractionRailway.success(managedCollection.get())
-                : InteractionRailway.veto(InteractionVeto.notFound(MemberType.COLLECTION, memberId));
+                : InteractionRailway.veto(InteractionVeto.notFound(Identifier.Type.COLLECTION, memberId));
 
         return new CollectionInteraction(railway);
     }

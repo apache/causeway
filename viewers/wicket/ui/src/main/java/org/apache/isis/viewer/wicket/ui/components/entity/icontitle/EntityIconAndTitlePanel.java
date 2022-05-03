@@ -21,11 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 import java.util.Optional;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
@@ -137,31 +134,21 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         return link;
     }
 
-    private AbstractLink createDynamicallyVisibleLink(final ManagedObject targetAdapter) {
+    private AbstractLink createDynamicallyVisibleLink(final ManagedObject _targetAdapter) {
+        val pageParameters = PageParameterUtils
+                .createPageParametersForBookmarkablePageLink(getModel(), _targetAdapter);
+        val pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
 
-        final ObjectAdapterModel entityModel = getModel();
-        final PageParameters pageParameters = PageParameterUtils
-                .createPageParametersForBookmarkablePageLink(getModel(), targetAdapter);
-        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
+        return Wkt.bookmarkablePageLinkWithVisibility(ID_ENTITY_LINK, pageClass, pageParameters, ()->{
+            // not visible if null
+            // (except its null because its a detached entity,
+            // which we can re-fetch due to memoized bookmark)
+            val targetAdapter = EntityIconAndTitlePanel.this.getModel().getObject();
+            return targetAdapter != null
+                    && (targetAdapter.getPojo()!=null
+                            || targetAdapter.isBookmarkMemoized());
+        });
 
-        final BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>(
-                ID_ENTITY_LINK, pageClass, pageParameters) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public boolean isVisible() {
-                // not visible if null
-                // (except its null because its a detached entity,
-                // which we can re-fetch due to memoized bookmark)
-                val targetAdapter = entityModel.getObject();
-                return targetAdapter != null
-                        && (targetAdapter.getPojo()!=null
-                                || targetAdapter.isBookmarkMemoized());
-            }
-        };
-
-        return link;
     }
 
     private String titleAbbreviated(final String titleString) {

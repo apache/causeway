@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.util;
 
-import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
+import org.apache.isis.viewer.common.model.decorators.IconDecorator;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 

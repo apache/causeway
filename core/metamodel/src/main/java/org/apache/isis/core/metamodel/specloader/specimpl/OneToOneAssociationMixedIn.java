@@ -73,7 +73,7 @@ implements MixedInMember {
             final Class<?> mixinType,
             final String mixinMethodName) {
 
-        super(Identifier.propertyOrCollectionIdentifier(
+        super(Identifier.propertyIdentifier(
                     LogicalType.eager(
                             mixeeSpec.getCorrespondingClass(),
                             mixeeSpec.getLogicalTypeName()),

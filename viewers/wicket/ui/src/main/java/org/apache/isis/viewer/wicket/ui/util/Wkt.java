@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -51,6 +52,7 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -59,6 +61,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.convert.IConverter;
@@ -80,6 +83,7 @@ import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableMo
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
@@ -223,6 +227,41 @@ public class Wkt {
         if (component.getBehaviors(ReplaceDisabledTagWithReadonlyTagBehavior.class).isEmpty()) {
             component.add(new ReplaceDisabledTagWithReadonlyTagBehavior());
         }
+    }
+
+    // -- BOKMARKABLE PAGE LINK
+
+    public BookmarkablePageLink<Void> bookmarkablePageLinkWithVisibility(
+            final String id,
+            final Class<? extends Page> pageClass,
+            final PageParameters pageParameters,
+            final SerializableBooleanSupplier dynamicVisibility) {
+
+        return new BookmarkablePageLink<Void>(
+                id, pageClass, pageParameters) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean isVisible() {
+                return dynamicVisibility.getAsBoolean();
+            }
+
+            //XXX ISIS[3022] adds support for CTRL down behavior, that is, opens URL in new tab if CTRL pressed
+            @Override protected CharSequence getOnClickScript(final CharSequence url) {
+                return "var win = this.ownerDocument.defaultView || this.ownerDocument.parentWindow; "
+                        + "if (win == window) {"
+                        + "  if(event.ctrlKey) {"
+                        + "    window.open('" + url + "', '_blank').focus();"
+                        + "  } else {"
+                        + "    window.location.href='" + url + "';"
+                        + "  }"
+                        + "}"
+                        + "return false";
+            }
+
+        };
+
     }
 
     // -- BUTTON
@@ -529,7 +568,6 @@ public class Wkt {
             private static final long serialVersionUID = 1L;
             @Override public MarkupContainer add(final Component... children) {
                 for(var child:children) {
-
                     System.err.printf("add %s -> %s %n", this.getId(), child.getId());
                 }
                 return super.add(children); }
@@ -729,6 +767,20 @@ public class Wkt {
             final IModel<? extends List<T>> listModel,
                     final SerializableConsumer<ListItem<T>> itemPopulator) {
         return add(container, listView(id, listModel, itemPopulator));
+    }
+
+    // -- MARKUP
+
+    public MarkupComponent markup(final String id, final IModel<String> htmlModel) {
+        return new MarkupComponent(id, htmlModel);
+    }
+
+    public MarkupComponent markup(final String id, final String html) {
+        return new MarkupComponent(id, html);
+    }
+
+    public MarkupComponent markupAdd(final MarkupContainer container, final String id, final String html) {
+        return add(container, markup(id, html));
     }
 
     // -- REPEATING VIEW
@@ -936,9 +988,8 @@ public class Wkt {
 
         if(formComponent instanceof TextArea) {
             multilineNumberOfLines.get()
-            .ifPresent(numberOfLines->{
-                System.err.printf("%d%n", numberOfLines);
-                Wkt.attributeReplace(formComponent, "rows", numberOfLines);});
+            .ifPresent(numberOfLines->
+                Wkt.attributeReplace(formComponent, "rows", numberOfLines));
         }
 
         maxLength.get()
@@ -986,5 +1037,7 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
+
+
 
 }

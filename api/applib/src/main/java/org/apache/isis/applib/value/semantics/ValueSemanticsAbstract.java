@@ -31,12 +31,16 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.locale.UserLocale;
+import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.EditingFormatDirection;
@@ -48,7 +52,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -58,8 +64,22 @@ public abstract class ValueSemanticsAbstract<T>
 implements
     ValueSemanticsProvider<T> {
 
-    public static final String NULL_REPRESENTATION = "(none)";
-
+    @Getter
+    @RequiredArgsConstructor
+    public static enum PlaceholderLiteral {
+        NULL_REPRESENTATION("(none)",       "badge bg-light placeholder-literal-null"),
+        SUPPRESSED(         "(suppressed)", "badge bg-light placeholder-literal-suppressed");
+        private final String literal;
+        private final String cssClass;
+        public String asText(final UnaryOperator<String> translator) {
+            return translator.apply(literal);
+        }
+        public String asHtml(final UnaryOperator<String> translator) {
+            return String.format("<span class=\"%s\">%s</span>",
+                    getCssClass(),
+                    asText(translator));
+        }
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -107,11 +127,18 @@ implements
         .orElseGet(UserLocale::getDefault);
     }
 
-    protected String render(final T value, final Function<T, String> toString) {
+    protected String renderTitle(final T value, final Function<T, String> toString) {
         return Optional.ofNullable(value)
                 .map(toString)
-                .orElse(NULL_REPRESENTATION);
+                .orElse(PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate));
     }
+
+    protected String renderHtml(final T value, final Function<T, String> toString) {
+        return Optional.ofNullable(value)
+                .map(toString)
+                .orElse(PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
+    }
+
 
     // -- COMPOSITION UTILS
 
@@ -182,6 +209,7 @@ implements
      * this is typically overruled later by implementations of
      * {@link #configureDecimalFormat(org.apache.isis.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
      */
+   @SuppressWarnings("javadoc")
    protected DecimalFormat getNumberFormat(final @Nullable ValueSemanticsProvider.Context context) {
         val format = (DecimalFormat)NumberFormat.getNumberInstance(getUserLocale(context).getNumberFormatLocale());
         // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
@@ -189,26 +217,27 @@ implements
         return format;
     }
 
-    protected @Nullable BigInteger parseInteger(
+    protected Optional<BigInteger> parseInteger(
             final @Nullable ValueSemanticsProvider.Context context,
             final @Nullable String text) {
         val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
-            return null;
+            return Optional.empty();
         }
         try {
-            return parseDecimal(context, input).toBigIntegerExact();
+            return parseDecimal(context, input)
+            .map(BigDecimal::toBigIntegerExact);
         } catch (final NumberFormatException | ArithmeticException e) {
             throw new TextEntryParseException("Not an integer value " + text, e);
         }
     }
 
-    protected @Nullable BigDecimal parseDecimal(
+    protected Optional<BigDecimal> parseDecimal(
             final @Nullable ValueSemanticsProvider.Context context,
             final @Nullable String text) {
         val input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
-            return null;
+            return Optional.empty();
         }
         val format = getNumberFormat(context);
         format.setParseBigDecimal(true);
@@ -230,7 +259,7 @@ implements
                         "No more than %d digits can be entered after the decimal separator, "
                         + "got %d in '%s'.", maxFractionDigits, number.scale(), input));
             }
-            return number;
+            return Optional.of(number);
         } catch (final NumberFormatException | ParseException e) {
             throw new TextEntryParseException(String.format(
                     "Not a decimal value '%s': %s", input, e.getMessage()),
@@ -306,6 +335,15 @@ implements
         }
     }
 
+    // TRANSLATION SUPPORT
+
+    @Autowired(required = false) // nullable (JUnit support)
+    protected TranslationService translationService;
+    protected String translate(final String text) {
+        return translationService!=null
+                ? translationService.translate(TranslationContext.empty(), text)
+                : text;
+    }
 
 
 }

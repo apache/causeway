@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.common.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
 import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -61,6 +62,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
+import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.AccessLevel;
@@ -505,18 +507,21 @@ implements ScalarModelSubscriber {
     // ///////////////////////////////////////////////////////////////////
 
     protected Label createScalarNameLabel(final String id, final IModel<String> labelCaption) {
+
         final Label scalarNameLabel = Wkt.label(id, labelCaption);
-        val scalarModel = scalarModel();
-        if(scalarModel.isRequired()
-                && scalarModel.isEnabled()) {
-            final String label = scalarNameLabel.getDefaultModelObjectAsString();
-            if(!_Strings.isNullOrEmpty(label)) {
-                Wkt.cssAppend(scalarNameLabel, "mandatory");
-            }
+        if(_Strings.isNullOrEmpty(labelCaption.getObject())) {
+            return scalarNameLabel;
         }
-        scalarNameLabel.setEscapeModelStrings(true);
+
+        val scalarModel = scalarModel();
+
+        WktDecorators.getFormLabel()
+            .decorate(scalarNameLabel, FormLabelDecorationModel
+                    .mandatory(scalarModel.isRequired()
+                            && scalarModel.isEnabled()));
+
         scalarModel.getDescribedAs()
-            .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
+        .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
         return scalarNameLabel;
     }
 

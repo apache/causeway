@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
 import org.apache.isis.commons.collections.Can;
@@ -170,7 +171,7 @@ public final class _ClassCache implements AutoCloseable {
     @AllArgsConstructor(staticName = "of") @EqualsAndHashCode
     private static final class ConstructorKey {
         private final Class<?> type; // constructors's declaring class
-        private final Class<?>[] paramTypes;
+        private final @Nullable Class<?>[] paramTypes;
 
         public static ConstructorKey of(final Class<?> type, final Constructor<?> constructor) {
             return ConstructorKey.of(type, _Arrays.emptyToNull(constructor.getParameterTypes()));
@@ -181,7 +182,7 @@ public final class _ClassCache implements AutoCloseable {
     private static final class MethodKey {
         private final Class<?> type; // method's declaring class
         private final String name; // method name
-        private final Class<?>[] paramTypes;
+        private final @Nullable Class<?>[] paramTypes;
 
         public static MethodKey of(final Class<?> type, final Method method) {
             return MethodKey.of(type, method.getName(), _Arrays.emptyToNull(method.getParameterTypes()));

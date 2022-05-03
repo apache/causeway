@@ -69,8 +69,22 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final LocalResourcePath value) {
-        return render(value, LocalResourcePath::getValue);
+        return renderTitle(value, LocalResourcePath::getValue);
     }
+
+    @Override
+    public String htmlPresentation(final Context context, final LocalResourcePath value) {
+        return renderHtml(value, v->toHtmlLink(v));
+    }
+
+    private String toHtmlLink(final LocalResourcePath path) {
+        val href = path.getValue();
+        return String.format("<a "
+                + "target=\"_blank\" "
+                + "class=\"no-click-bubbling\" "
+                + "href=\"%s\">%s</a>", href, href);
+    }
+
 
     // -- PARSER
 

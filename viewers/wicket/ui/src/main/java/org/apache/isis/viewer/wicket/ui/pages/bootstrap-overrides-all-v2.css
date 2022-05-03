@@ -16,6 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+:root {
+	--form-label-width: 160px;
+	--form-field-width: calc(100% - var(--form-label-width));
+	--link-color: var(--bs-success);
+	--link-color-hover: var(--link-color);
+}
 
 #container {
 	padding-left: 0px;
@@ -36,6 +42,12 @@ body {
 .navbar-nav.tertiary .dropdown-menu {
 	right: 0;
 	left: auto;
+}
+
+/* font-size fix for badges inside tables and form-controls */
+td .badge,
+.form-control-sm .badge {
+ font-size:.85em
 }
 
 .card {
@@ -88,6 +100,15 @@ body {
 .navbar {
     border-radius: 0;
     margin-bottom: 0px;
+}
+
+.nav-link, a, .btn-link {
+	color: var(--link-color);
+}
+.nav-link:focus, .nav-link:hover,
+a:focus, a:hover, 
+.btn-link:focus, .btn-link:hover {
+    color: var(--link-color-hover);
 }
 
 footer > .navbar {
@@ -176,11 +197,6 @@ footer > .navbar {
 .collectionContentsAsAjaxTablePanel table.contents tr {
 }
 
-
-.collectionContentsAsAjaxTablePanel table.contents tr td {
-    padding-left: 4px;
-    padding-right: 4px;
-}
 .collectionContentsAsAjaxTablePanel table.contents tr th,
 .collectionContentsAsAjaxTablePanel table.contents tr th a span {
     text-align: left;
@@ -203,13 +219,6 @@ footer > .navbar {
     border: none;
 }
 
-/*
-.collectionContentsAsAjaxTablePanel table.contents .uuidPanel,
-.collectionContentsAsAjaxTablePanel table.contents .javaSqlTimestampPanel {
-    font-family: monospace;
-}
-*/
-
 .collectionContentsAsAjaxTablePanel table.contents .javaMathBigDecimalPanel,
 .collectionContentsAsAjaxTablePanel table.contents .javaMathBigIntegerPanel,
 .collectionContentsAsAjaxTablePanel table.contents .bytePanel,
@@ -222,9 +231,8 @@ footer > .navbar {
 /*    font-family: monospace;*/
 }
 
-.collectionContentsAsAjaxTablePanel table.contents tbody td,
-.collectionContentsAsAjaxTablePanel table.contents thead th {
-    padding:5px;
+.collectionContentsAsAjaxTablePanel table.contents .booleanPanel {
+    text-align: center;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigatorLabel {
@@ -518,8 +526,6 @@ span.containedButtonPanel {
 }
 
 
-
-
 /* from entityPropertiesPanel */
 
 
@@ -580,12 +586,19 @@ div.additionalLinkList {
     background-color: rgba(255, 255, 255, 0.3);
 }
 
+/* button size fix - using size from before Bootstrap 5.x */
+.btn-group-sm > .btn, .btn-sm {
+  font-size: 0.8rem;
+}
+
 /* buttons: distinguished rendering for disabled action buttons
    (assuming changing of background transparency is reasonable to apply to light as well as dark themes) */
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
     cursor: not-allowed!important;
-    opacity: 0.65;
+    opacity: 0.5;
     box-shadow: none;
+    border-style: none;
+	text-decoration-line: line-through;
 }
 
 /* make sure there is no gap between the menu toggle and its menu, otherwise menu hides on focus transition*/
@@ -601,23 +614,16 @@ ul.dropdown-menu {
 }
 
 /* removes the caret (arrow down) from the additional links selector dropdowns */
-.additionalLinkList .btn.btn-secondary.dropdown-toggle::after {
+.additionalLinkList .btn.dropdown-toggle::after {
 	content: none;
 }
 /* removes default margin right after fa-icon in dropdown-toggles */
-.additionalLinkList .btn.btn-secondary.dropdown-toggle .fa {
+.additionalLinkList .btn.dropdown-toggle .fa {
 	margin-right: 0px;
 }
 
 .additionalLinkList.additionalLinkListDropDown li.dropdown-item.additionalLinkItem {
 	padding: 0px;
-}
-
-.col .additionalLinks,
-.col .additionalLinksAndSelectorDropDown,
-.entityPropertiesPanel .additionalLinks,
-.entityCollectionsPanel .additionalLinksAndSelectorDropDown {
-    /*margin-top: -0.3em;*/
 }
 
 .collection.card-body {
@@ -662,7 +668,7 @@ div.label-left.form-group {
 }
 
 div.label-left label.col-form-label {
-    width: 30%;
+    width: var(--form-label-width);
     float: left;
     padding-top: 2px;
     padding-right: 2px;
@@ -674,27 +680,17 @@ div.label-left label.col-form-label {
     padding-left: 10px;
 }
 
-div.label-top label.col-form-label {
-    /*padding-left: 10px;*/
-    /*padding-bottom: 4px;*/
-}
-
 div.label-none label.col-form-label {
     display: none;
 }
 
 div.label-left .scalarValueWrapper {
-    width: 70%;
+    width: var(--form-field-width);
     float: left;
-}
-
-div.label-left.actions-right .scalarValueWrapper {
-    /*width: 62%;*/
 }
 
 .actions-right .additionalLinkListDropDown {
     float:right;
-    /*width: 3%;*/
 }
 
 .float-right .additionalLinkListDropDown li.additionalLinkItem a.btn {
@@ -704,10 +700,7 @@ div.label-left.actions-right .scalarValueWrapper {
 
 div.label-top .scalarValueWrapper,
 div.label-none .scalarValueWrapper {
-    /*width: 99.5%;*/
     display: block;
-    /*padding-left: 8px;*/
-    /*padding-right: 20px;*/
 }
 
 .modal-body div.label-top .scalarValueWrapper,
@@ -739,7 +732,7 @@ div.label-left .choicesPlaceholder {
 }
 
 div.label-right .scalarValueWrapper {
-    padding-left: 30%;
+    padding-left: var(--form-label-width);
 }
 
 div.label-right .scalarValueWrapper .col-form-label{
@@ -747,8 +740,8 @@ div.label-right .scalarValueWrapper .col-form-label{
 }
 
 div.label-right .scalarValueWrapper .feedback-links-below-wrapper {
-    padding-left: 30%;
-    width: 70%;
+    padding-left: var(--form-label-width);
+    width: var(--form-field-width);
     float: left;
 }
 
@@ -836,6 +829,10 @@ div.referencePanel.scalarNameAndValueComponentType {
     margin-right: 0px;
 }
 
+.placeholder-literal-null,
+.placeholder-literal-suppressed {
+	opacity: 0.85;
+}
 
 .scalarValueWrapper ul.additionalLinkList {
     padding-bottom: 5px;
@@ -974,7 +971,12 @@ footer .footer-image {
     margin-bottom: 4px;
 }
 
-
+/* fit button-group inside surrounding value input box 
+   obsolete when changing button size more generally
+.scalarValueInput .btn-group-sm > .btn {
+	padding: .20rem .5rem;  
+}
+*/
 
 .booleanPanel .actions-right .additionalLinkListInline {
     margin-top: 0px;
@@ -1052,7 +1054,7 @@ div.scalarValueInlinePromptLink {
 	background-color: rgba(0, 0, 0, 0.08);
 }
 .scalarValueInlinePromptLink .btn-group > button.btn {
-  opacity: 0.5;
+  opacity: 0.25;
 }
 .scalarValueInlinePromptLink .btn-group > button.btn:focus,
 .scalarValueInlinePromptLink:hover .btn-group > button.btn {
@@ -1080,11 +1082,12 @@ div.scalarValueInlinePromptLink {
 
 .entityTitle {
     text-decoration: none;
-    color: var(--bs-success);
+    color: var(--link-color);
 }
 .entityTitle:hover {
     text-decoration: underline;
     cursor: pointer;
+    color: var(--link-color-hover);
 }
 
 #container.page #wicketDebugBar {

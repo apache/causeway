@@ -22,12 +22,9 @@ import java.util.function.UnaryOperator;
 
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -52,9 +49,6 @@ implements
     DefaultsProvider<Boolean>,
     Parser<Boolean>,
     Renderer<Boolean> {
-
-    @Autowired(required = false)
-    private TranslationService translationService;
 
     @Override
     public Class<Boolean> getCorrespondingClass() {
@@ -88,10 +82,12 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final Boolean value) {
-        val title = render(value, v->v.booleanValue() ? "True" : "False");
-        return translationService!=null
-                ? translationService.translate(TranslationContext.empty(), title)
-                : title;
+        return renderTitle(value, v->translate(v.booleanValue() ? "True" : "False"));
+    }
+
+    @Override
+    public String htmlPresentation(final ValueSemanticsProvider.Context context, final Boolean value) {
+        return renderHtml(value, v->translate(v.booleanValue() ? "True" : "False"));
     }
 
     // -- PARSER

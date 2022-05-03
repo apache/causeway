@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.incubator.viewer.javafx.model.icon.IconService;
-import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
+import org.apache.isis.viewer.common.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -54,13 +54,13 @@ public class IconServiceDefault implements IconService {
        // see also https://www.jensd.de/wordpress/?p=132
     }
 
-    public Optional<Image> fontAwesome(String faCssClassName) {
+    public Optional<Image> fontAwesome(final String faCssClassName) {
         return Optional.ofNullable(faIconCache.get(faCssClassName));
     }
 
     @Override
-    public Optional<Image> fontAwesome(FontAwesomeUiModel fontAwesomeUiModel) {
-        return Optional.ofNullable(faIconCache.get(fontAwesomeUiModel.getCssClassesSpaceSeparated()));
+    public Optional<Image> fontAwesome(final FontAwesomeDecorationModel fontAwesomeDecorationModel) {
+        return Optional.ofNullable(faIconCache.get(fontAwesomeDecorationModel.getCssClassesSpaceSeparated()));
     }
 
 }

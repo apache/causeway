@@ -65,7 +65,7 @@ extends MetaModelTestAbstract {
         when(mockPeer.getMetaModelContext()).thenReturn(getMetaModelContext());
         when(mockPeer.getFeatureIdentifier()).thenReturn(
                 Identifier
-                .propertyOrCollectionIdentifier(
+                .collectionIdentifier(
                         TypeIdentifierTestFactory.newCustomer(),
                         COLLECTION_ID));
         when(mockPeer.getFacet(MemberNamedFacet.class)).thenReturn(mockNamedFacet);

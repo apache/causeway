@@ -75,7 +75,12 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final BigInteger value) {
-        return render(value, getNumberFormat(context)::format);
+        return renderTitle(value, getNumberFormat(context)::format);
+    }
+
+    @Override
+    public String htmlPresentation(final Context context, final BigInteger value) {
+        return renderHtml(value, getNumberFormat(context)::format);
     }
 
     // -- PARSER
@@ -90,7 +95,8 @@ implements
 
     @Override
     public BigInteger parseTextRepresentation(final Context context, final String text) {
-        return super.parseInteger(context, text);
+        return super.parseInteger(context, text)
+                .orElse(null);
     }
 
     @Override

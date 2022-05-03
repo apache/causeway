@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.interactions.managed.ManagedMember.MemberType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -72,7 +72,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
 
         final InteractionRailway<ManagedAction> railway = managedAction.isPresent()
                 ? InteractionRailway.success(managedAction.get())
-                : InteractionRailway.veto(InteractionVeto.notFound(MemberType.ACTION, memberId));
+                : InteractionRailway.veto(InteractionVeto.notFound(Identifier.Type.ACTION, memberId));
 
         return new ActionInteraction(
                 managedAction.map(ManagedAction::getAction),
@@ -88,7 +88,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
     public static ActionInteraction empty(final String actionId) {
         return new ActionInteraction(
                 Optional.empty(),
-                InteractionRailway.veto(InteractionVeto.notFound(MemberType.ACTION, actionId)));
+                InteractionRailway.veto(InteractionVeto.notFound(Identifier.Type.ACTION, actionId)));
     }
 
     ActionInteraction(
