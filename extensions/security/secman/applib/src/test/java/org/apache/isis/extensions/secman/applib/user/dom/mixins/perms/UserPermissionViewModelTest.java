@@ -68,7 +68,7 @@ class UserPermissionViewModelTest {
                 .apply(featureId);
 
         // when
-        val memento = vm.asEncodedString();
+        val memento = vm.viewModelMemento();
         val vmAfterRoundtrip = new UserPermissionViewModel(memento);
 
         // then
