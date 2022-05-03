@@ -76,176 +76,173 @@ public class PoReaderTest {
         Assert.assertNotNull(mockLanguageProvider.getPreferredLanguage());
     }
 
-    public static class Translate extends PoReaderTest {
+    @Test
+    public void singleContext() throws Exception {
 
-        @Test
-        public void singleContext() throws Exception {
+        // given
+        final TranslationContext context = TranslationContext.ofName(
+                "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
+        final String msgId = "Work of art";
+        final String msgStr = "Objet d'art";
 
-            // given
-            final TranslationContext context = TranslationContext.ofName(
-                    "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
-            final String msgId = "Work of art";
-            final String msgStr = "Objet d'art";
+        poReader = new PoReader(mockTranslationServicePo) {
+            @Override
+            protected List<String> readPo(final Locale locale) {
+                final List<String> lines = _Lists.newArrayList();
+                lines.add(String.format("#: %s", context.getName()));
+                lines.add(String.format("msgid \"%s\"", msgId));
+                lines.add(String.format("msgstr \"%s\"", msgStr));
+                return lines;
+            }
+        };
 
-            poReader = new PoReader(mockTranslationServicePo) {
-                @Override
-                protected List<String> readPo(final Locale locale) {
-                    final List<String> lines = _Lists.newArrayList();
-                    lines.add(String.format("#: %s", context.getName()));
-                    lines.add(String.format("msgid \"%s\"", msgId));
-                    lines.add(String.format("msgstr \"%s\"", msgStr));
-                    return lines;
-                }
-            };
+        // when
+        final String translated = poReader.translate(context, msgId);
 
-            // when
-            final String translated = poReader.translate(context, msgId);
+        // then
+        assertThat(translated, is(equalTo(msgStr)));
+    }
 
-            // then
-            assertThat(translated, is(equalTo(msgStr)));
-        }
+    @Test
+    public void multipleContext() throws Exception {
 
-        @Test
-        public void multipleContext() throws Exception {
+        // given
+        final TranslationContext context1 = TranslationContext.ofName(
+                "fixture.simple.SimpleObjectsFixturesService#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)");
+        final TranslationContext context2 = TranslationContext.ofName(
+                "org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)");
+        final String msgId = "Parameters";
+        final String msgStr = "Paramètres";
 
-            // given
-            final TranslationContext context1 = TranslationContext.ofName(
-                    "fixture.simple.SimpleObjectsFixturesService#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)");
-            final TranslationContext context2 = TranslationContext.ofName(
-                    "org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)");
-            final String msgId = "Parameters";
-            final String msgStr = "Paramètres";
+        poReader = new PoReader(mockTranslationServicePo) {
+            @Override
+            protected List<String> readPo(final Locale locale) {
+                final List<String> lines = _Lists.newArrayList();
+                lines.add(String.format("#: %s", context1.getName()));
+                lines.add(String.format("#: %s", context2.getName()));
+                lines.add(String.format("msgid \"%s\"", msgId));
+                lines.add(String.format("msgstr \"%s\"", msgStr));
+                return lines;
+            }
+        };
+        // when
+        final String translated = poReader.translate(context1, msgId);
 
-            poReader = new PoReader(mockTranslationServicePo) {
-                @Override
-                protected List<String> readPo(final Locale locale) {
-                    final List<String> lines = _Lists.newArrayList();
-                    lines.add(String.format("#: %s", context1.getName()));
-                    lines.add(String.format("#: %s", context2.getName()));
-                    lines.add(String.format("msgid \"%s\"", msgId));
-                    lines.add(String.format("msgstr \"%s\"", msgStr));
-                    return lines;
-                }
-            };
-            // when
-            final String translated = poReader.translate(context1, msgId);
+        // then
+        assertThat(translated, is(equalTo(msgStr)));
 
-            // then
-            assertThat(translated, is(equalTo(msgStr)));
+        // when
+        final String translated2 = poReader.translate(context2, msgId);
 
-            // when
-            final String translated2 = poReader.translate(context2, msgId);
+        // then
+        assertThat(translated2, is(equalTo(msgStr)));
+    }
 
-            // then
-            assertThat(translated2, is(equalTo(msgStr)));
-        }
+    @Test
+    public void multipleBlocks() throws Exception {
 
-        @Test
-        public void multipleBlocks() throws Exception {
+        // given
+        final TranslationContext context1 = TranslationContext.ofName(
+                "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
+        final String msgid1 = "Work of art";
+        final String msgstr1 = "Objet d'art";
 
-            // given
-            final TranslationContext context1 = TranslationContext.ofName(
-                    "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
-            final String msgid1 = "Work of art";
-            final String msgstr1 = "Objet d'art";
+        final TranslationContext context2 = TranslationContext.ofName(
+                "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#lookup()");
+        final String msgid2 = "Lookup";
+        final String msgstr2 = "Look up";
 
-            final TranslationContext context2 = TranslationContext.ofName(
-                    "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#lookup()");
-            final String msgid2 = "Lookup";
-            final String msgstr2 = "Look up";
+        poReader = new PoReader(mockTranslationServicePo) {
+            @Override
+            protected List<String> readPo(final Locale locale) {
+                final List<String> lines = _Lists.newArrayList();
+                lines.add(String.format("#: %s", context1.getName()));
+                lines.add(String.format("msgid \"%s\"", msgid1));
+                lines.add(String.format("msgstr \"%s\"", msgstr1));
 
-            poReader = new PoReader(mockTranslationServicePo) {
-                @Override
-                protected List<String> readPo(final Locale locale) {
-                    final List<String> lines = _Lists.newArrayList();
-                    lines.add(String.format("#: %s", context1.getName()));
-                    lines.add(String.format("msgid \"%s\"", msgid1));
-                    lines.add(String.format("msgstr \"%s\"", msgstr1));
+                lines.add(String.format(""));
+                lines.add(String.format("# "));
 
-                    lines.add(String.format(""));
-                    lines.add(String.format("# "));
+                lines.add(String.format("#: %s", context2.getName()));
+                lines.add(String.format("msgid \"%s\"", msgid2));
+                lines.add(String.format("msgstr \"%s\"", msgstr2));
 
-                    lines.add(String.format("#: %s", context2.getName()));
-                    lines.add(String.format("msgid \"%s\"", msgid2));
-                    lines.add(String.format("msgstr \"%s\"", msgstr2));
+                lines.add(String.format(""));
+                return lines;
+            }
+        };
 
-                    lines.add(String.format(""));
-                    return lines;
-                }
-            };
+        // when
+        final String translated1 = poReader.translate(context1, msgid1);
 
-            // when
-            final String translated1 = poReader.translate(context1, msgid1);
+        // then
+        assertThat(translated1, is(equalTo(msgstr1)));
 
-            // then
-            assertThat(translated1, is(equalTo(msgstr1)));
+        // when
+        final String translated2 = poReader.translate(context2, msgid2);
 
-            // when
-            final String translated2 = poReader.translate(context2, msgid2);
+        // then
+        assertThat(translated2, is(equalTo(msgstr2)));
+    }
 
-            // then
-            assertThat(translated2, is(equalTo(msgstr2)));
-        }
+    @Test
+    public void withPlurals() throws Exception {
 
-        @Test
-        public void withPlurals() throws Exception {
+        // given
+        final TranslationContext context = TranslationContext.ofName(
+                "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
+        final String msgid = "Work of art";
+        final String msgid_plural = "Works of art";
+        final String msgstr$0 = "Œuvre d'art";
+        final String msgstr$1 = "Les œuvres d'art";
 
-            // given
-            final TranslationContext context = TranslationContext.ofName(
-                    "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
-            final String msgid = "Work of art";
-            final String msgid_plural = "Works of art";
-            final String msgstr$0 = "Œuvre d'art";
-            final String msgstr$1 = "Les œuvres d'art";
+        poReader = new PoReader(mockTranslationServicePo) {
+            @Override
+            protected List<String> readPo(final Locale locale) {
+                final List<String> lines = _Lists.newArrayList();
+                lines.add(String.format("#: %s", context.getName()));
+                lines.add(String.format("msgid \"%s\"", msgid));
+                lines.add(String.format("msgid_plural \"%s\"", msgid_plural));
+                lines.add(String.format("msgstr[0] \"%s\"", msgstr$0));
+                lines.add(String.format("msgstr[1] \"%s\"", msgstr$1));
+                return lines;
+            }
+        };
 
-            poReader = new PoReader(mockTranslationServicePo) {
-                @Override
-                protected List<String> readPo(final Locale locale) {
-                    final List<String> lines = _Lists.newArrayList();
-                    lines.add(String.format("#: %s", context.getName()));
-                    lines.add(String.format("msgid \"%s\"", msgid));
-                    lines.add(String.format("msgid_plural \"%s\"", msgid_plural));
-                    lines.add(String.format("msgstr[0] \"%s\"", msgstr$0));
-                    lines.add(String.format("msgstr[1] \"%s\"", msgstr$1));
-                    return lines;
-                }
-            };
+        // when
+        final String translated1 = poReader.translate(context, msgid);
 
-            // when
-            final String translated1 = poReader.translate(context, msgid);
+        // then
+        assertThat(translated1, is(equalTo(msgstr$0)));
 
-            // then
-            assertThat(translated1, is(equalTo(msgstr$0)));
+        // when
+        final String translated2 = poReader.translate(context, msgid_plural);
 
-            // when
-            final String translated2 = poReader.translate(context, msgid_plural);
-
-            // then
-            assertThat(translated2, is(equalTo(msgstr$1)));
-        }
+        // then
+        assertThat(translated2, is(equalTo(msgstr$1)));
+    }
 
 
 
-        @Test
-        public void noTranslation() throws Exception {
+    @Test
+    public void noTranslation() throws Exception {
 
-            // given
+        // given
 
-            poReader = new PoReader(mockTranslationServicePo) {
-                @Override
-                protected List<String> readPo(final Locale locale) {
-                    return _Lists.newArrayList();
-                }
-            };
+        poReader = new PoReader(mockTranslationServicePo) {
+            @Override
+            protected List<String> readPo(final Locale locale) {
+                return _Lists.newArrayList();
+            }
+        };
 
-            TranslationContext context = TranslationContext.ofName("someContext");
+        TranslationContext context = TranslationContext.ofName("someContext");
 
-            // when
-            final String translated = poReader.translate(context, "Something to translate");
+        // when
+        final String translated = poReader.translate(context, "Something to translate");
 
-            // then
-            assertThat(translated, is(equalTo("Something to translate")));
-        }
+        // then
+        assertThat(translated, is(equalTo("Something to translate")));
     }
 
 }

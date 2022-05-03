@@ -28,7 +28,16 @@ import org.apache.isis.commons.internal.collections._Lists;
 class Block {
 
     private enum State {
-        CONTEXT("^#: (?<value>.+)$"),
+        /**
+         * XXX[ISIS-2987] in support of (not providing any context) ...
+         * <pre>
+         * #:
+         * msgid "Anonymous"
+         * msgstr "Anonim felhasználó"
+         * </pre>
+         */
+        ROOT_CONTEXT("^#:\\s*$"),
+        SPECIFIC_CONTEXT("^#: (?<value>.+)$"),
         MSGID("^msgid \"(?<value>.+)\"$"),
         MSGID_PLURAL("^msgid_plural \"(?<value>.+)\"$"),
         MSGSTR("^msgstr \"(?<value>.+)\"$"),
@@ -42,7 +51,7 @@ class Block {
         }
     }
 
-    State state = State.CONTEXT;
+    State state = State.SPECIFIC_CONTEXT;
 
     List<String> contextList = _Lists.newArrayList();
     String msgid = null;
@@ -51,11 +60,22 @@ class Block {
     String msgstr_plural = null; // from msgstr[1]
 
     Block parseLine(final String line, final Map<ContextAndMsgId, String> translationsByKey) {
-        if (state == State.CONTEXT) {
+
+        if (state == State.SPECIFIC_CONTEXT) {
             final Matcher contextMatcher = state.pattern.matcher(line);
             if (contextMatcher.matches()) {
                 final String context = contextMatcher.group("value");
                 contextList.add(context);
+                return this;
+            } else {
+                state = State.ROOT_CONTEXT;
+            }
+        }
+
+        if (state == State.ROOT_CONTEXT) {
+            final Matcher contextMatcher = state.pattern.matcher(line);
+            if (contextMatcher.matches()) {
+                contextList.add("");
                 return this;
             } else {
                 state = State.MSGID;
