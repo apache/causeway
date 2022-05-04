@@ -32,15 +32,14 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
  * @since 2.x {@index}
  */
 @Programmatic
-public class PersonaEnumPersistAll<
-E extends Enum<E> & PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>,
-        T>
+public class PersonaEnumPersistAll<T extends Enum<T> & PersonaWithBuilderScript<T, ? extends BuilderScriptAbstract<T>>>
+
 extends FixtureScript
 implements FixtureScriptWithExecutionStrategy {
 
-    private final Class<E> personaEnumClass;
+    private final Class<T> personaEnumClass;
 
-    public PersonaEnumPersistAll(final Class<E> personaEnumClass) {
+    public PersonaEnumPersistAll(final Class<T> personaEnumClass) {
         this.personaEnumClass = personaEnumClass;
     }
 
@@ -67,7 +66,7 @@ implements FixtureScriptWithExecutionStrategy {
     @Override
     protected void execute(final FixtureScript.ExecutionContext ec) {
 
-        final E[] enumConstants = personaEnumClass.getEnumConstants();
+        final T[] enumConstants = personaEnumClass.getEnumConstants();
         final int max = enumConstants.length;
 
         // defaults
