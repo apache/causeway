@@ -1019,6 +1019,10 @@ footer .footer-image {
 	z-index: 1060; /* as bootstrap modal dialogs appear to have 1055 */
 }
 
+.bootstrap-datetimepicker-widget{
+  	z-index: 1065; /* as bootstrap modal dialogs appear to have 1055; slightly higher than .select2-container*/
+}
+
 .select2-container-multi.input-sm {
     height: inherit;
 }

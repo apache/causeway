@@ -100,7 +100,8 @@
 				<wicket:container 
 					wicket:id="container-scalarValue"/>
 			
-				<span class="position-absolute top-0 end-0" style="z-index: 20;">
+				<!-- honor bootstrap modal dialog z-index of 1055-->
+				<span class="position-absolute top-0 end-0" style="z-index: 1080;"> 
            			<div class="btn-group btn-group-sm shadow" role="group">
            				<!-- additional buttons -->
          				<button wicket:id="scalarValueInput-buttons" 
