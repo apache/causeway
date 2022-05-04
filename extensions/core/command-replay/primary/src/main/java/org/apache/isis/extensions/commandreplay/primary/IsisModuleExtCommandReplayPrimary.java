@@ -43,7 +43,7 @@ import org.apache.isis.extensions.commandreplay.primary.ui.CommandReplayOnPrimar
         CommandReplayOnPrimaryService.class,
         PrimaryConfig.class,
 
-        // mixins
+        // Mixins
         Object_openOnSecondary.class,
 
 })

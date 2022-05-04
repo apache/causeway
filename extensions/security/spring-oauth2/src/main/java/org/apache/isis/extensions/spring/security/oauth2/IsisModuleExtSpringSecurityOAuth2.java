@@ -34,7 +34,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleSecuritySpring.class,
 
         // @Component's

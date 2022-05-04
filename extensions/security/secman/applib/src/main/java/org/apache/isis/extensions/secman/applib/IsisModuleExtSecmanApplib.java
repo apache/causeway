@@ -88,7 +88,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleTestingFixturesApplib.class,
 
         ApplicationFeatureChoices.class,

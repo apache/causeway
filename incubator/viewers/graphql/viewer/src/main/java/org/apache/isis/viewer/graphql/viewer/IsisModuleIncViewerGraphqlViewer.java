@@ -33,7 +33,7 @@ import org.apache.isis.viewer.graphql.viewer.spring.GraphQlWebMvcAutoConfigurati
 @Import({
         // @Service's
 
-        // modules
+        // Modules
         IsisModuleIncViewerGraphqlModel.class,
 
         // autoconfigurations

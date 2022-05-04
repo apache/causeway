@@ -38,7 +38,7 @@ import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatan
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleExtSecmanIntegration.class,
         IsisModulePersistenceJdoDatanucleus.class,
 

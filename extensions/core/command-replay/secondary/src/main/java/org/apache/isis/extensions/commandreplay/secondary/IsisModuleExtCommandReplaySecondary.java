@@ -71,7 +71,7 @@ import lombok.val;
         // @Service's
         SecondaryConfig.class,
 
-        // mixins
+        // Mixins
         Object_openOnPrimary.class,
 
 })

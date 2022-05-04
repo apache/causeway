@@ -26,8 +26,6 @@ import org.apache.isis.applib.mixins.dto.Dto_downloadXml;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
 import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
-import org.apache.isis.applib.mixins.metamodel.Object_logicalTypeName;
-import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
 import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.isis.applib.mixins.rest.Object_openRestApi;
 import org.apache.isis.applib.services.appfeatui.ApplicationFeatureMenu;
@@ -64,64 +62,56 @@ import org.apache.isis.schema.IsisModuleSchema;
  */
 @Configuration
 @Import({
-        // modules
-        IsisModuleSchema.class,
+    // Modules
+    IsisModuleSchema.class,
 
-        // mixins
-        BookmarkHolder_lookup.class,
-        BookmarkHolder_object.class,
-        Dto_downloadXml.class,
-        Dto_downloadXsd.class,
-        Object_downloadLayoutXml.class,
-        Object_downloadMetamodelXml.class,
-        Object_objectIdentifier.class,
-        Object_logicalTypeName.class,
-        Object_openRestApi.class,
-        Object_rebuildMetamodel.class,
+    // -- ViewModels
+    ApplicationNamespace.class,
+    ApplicationType.class,
+    ApplicationTypeAction.class,
+    ApplicationTypeCollection.class,
+    ApplicationTypeMember.class,
+    ApplicationTypeProperty.class,
 
-        // -- ViewModels
-        // TODO: not sure we need to register view models?
-        ApplicationNamespace.class,
-        ApplicationType.class,
-        ApplicationTypeAction.class,
-        ApplicationTypeCollection.class,
-        ApplicationTypeMember.class,
-        ApplicationTypeProperty.class,
+    // @DomainObject(s)
+    ConfigurationProperty.class,
+    DomainObjectList.class,
+    RoleMemento.class,
+    UserMemento.class,
 
-        // @DomainObject(s)
-        ConfigurationProperty.class,
-        DomainObjectList.class,
-        RoleMemento.class,
-        UserMemento.class,
+    // @DomainService(s)
+    ClockService.class,
+    ConfigurationMenu.class,
+    LayoutServiceMenu.class,
+    SitemapServiceMenu.class,
+    ImpersonateMenu.class,
+    ImpersonateStopMenu.class,
+    MetaModelServiceMenu.class,
+    QueryResultsCache.class,
+    ApplicationFeatureMenu.class,
+    UserMenu.class,
 
-        // @DomainService(s)
-        ClockService.class,
-        ConfigurationMenu.class,
-        LayoutServiceMenu.class,
-        SitemapServiceMenu.class,
-        ImpersonateMenu.class,
-        ImpersonateStopMenu.class,
-        MetaModelServiceMenu.class,
-        QueryResultsCache.class,
-        ApplicationFeatureMenu.class,
-        UserMenu.class,
+    // @Service(s)
+    CommandDtoProcessorServiceIdentity.class,
+    ContentMappingServiceForCommandDto.class,
+    ContentMappingServiceForCommandsDto.class,
+    SessionLoggingServiceLogging.class,
+    SudoService.class,
+    UserService.class,
+    UserMemento.UiSubscriber.class,
+    RoleMemento.UiSubscriber.class,
 
+    // Mixins (essential)
+    BookmarkHolder_lookup.class,
+    BookmarkHolder_object.class,
 
-        // @Service(s)
-        CommandDtoProcessorServiceIdentity.class,
-        ContentMappingServiceForCommandDto.class,
-        ContentMappingServiceForCommandsDto.class,
-        SessionLoggingServiceLogging.class,
-        SudoService.class,
-        UserService.class,
-        UserMemento.UiSubscriber.class,
-        RoleMemento.UiSubscriber.class,
-
-        // Execution/Change Loggers
-//      CommandLogger.class,
-//      EntityChangesLogger.class,
-//      EntityPropertyChangeLogger.class,
-//      ExecutionLogger.class,
+    // Mixins (prototyping)
+    Dto_downloadXml.class,
+    Dto_downloadXsd.class,
+    Object_downloadLayoutXml.class,
+    Object_downloadMetamodelXml.class,
+    Object_openRestApi.class,
+    Object_rebuildMetamodel.class,
 
 })
 public class IsisModuleApplib {

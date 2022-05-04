@@ -16,20 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model;
+package org.apache.isis.applib;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
+import org.apache.isis.applib.mixins.metamodel.Object_logicalTypeName;
+import org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier;
 
 /**
- * @since 1.x {@index}
+ * Registers domain object property mixins for object meta data such as
+ * the internal identifier or the logical type name of the domain object.
+ *
+ * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-        // Modules
-        IsisModuleCoreWebapp.class,
+    // Modules
+    IsisModuleApplib.class,
+
+    // Mixins (non-prototyping/non-essential)
+    Object_objectIdentifier.class,
+    Object_logicalTypeName.class,
+
 })
-public class IsisModuleViewerWicketModel {
+public class IsisModuleApplibObjectMetadataMixins {
+
 }

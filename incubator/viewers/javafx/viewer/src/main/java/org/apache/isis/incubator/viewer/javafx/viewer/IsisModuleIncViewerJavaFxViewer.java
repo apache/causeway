@@ -29,7 +29,7 @@ import org.apache.isis.incubator.viewer.javafx.ui.IsisModuleIncViewerJavaFxUi;
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
 
         IsisModuleIncViewerJavaFxUi.class,
 

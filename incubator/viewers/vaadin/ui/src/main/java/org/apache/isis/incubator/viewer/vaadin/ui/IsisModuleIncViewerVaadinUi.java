@@ -41,7 +41,7 @@ import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleViewerCommon.class,
         IsisModuleIncViewerVaadinModel.class,
 

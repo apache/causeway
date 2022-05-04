@@ -30,7 +30,7 @@ import org.apache.isis.valuetypes.jodatime.integration.IsisModuleValJodatimeInte
 
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleCoreMetamodel.class,
         IsisModuleCoreInteraction.class,
         IsisModuleCoreTransaction.class,

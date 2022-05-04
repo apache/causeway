@@ -47,7 +47,7 @@ public class SeedService implements MetamodelListener {
 
 == Commons
 
-Following configuration options changed:
+The following changed:
 [cols="2a,3a", options="header"]
 
 |===
@@ -58,6 +58,24 @@ Following configuration options changed:
 | `Result<T>` removed
 | replaced by `Try<T>`; also promoting `Either<L, R>` to non-internal, 
 and introducing `Railway<F, S>` 
+
+|===
+
+== Configuration
+
+The following changed:
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| (non-essential) object meta-data mixins were split out of `IsisModuleApplib` 
+| need to be explicitly imported via `IsisModuleApplibObjectMetadataMixins`
+
+| default logging subscribers were split out of `IsisModuleApplib` 
+| need to be explicitly imported via `IsisModuleApplibChangeAndExecutionLoggers`
 
 |===
 
@@ -84,6 +102,7 @@ Folder moved `/isis-parent` -> `/bom`
 [source, java]
 .Restclient Package Names
 ----
+// renamed ...
 //import org.apache.isis.extensions.restclient.RestfulClient;
 //import org.apache.isis.extensions.restclient.RestfulClientConfig;
 import org.apache.isis.viewer.restfulobjects.client.RestfulClient;

@@ -43,7 +43,7 @@ import org.apache.isis.viewer.restfulobjects.viewer.resources.VersionResourceSer
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleCoreWebapp.class,
         IsisModuleViewerCommon.class,
         IsisModuleRestfulObjectsRendering.class,

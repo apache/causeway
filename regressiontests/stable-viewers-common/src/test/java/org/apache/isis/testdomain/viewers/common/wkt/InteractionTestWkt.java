@@ -166,7 +166,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
         })
         .count();
 
-        assertEquals(5L, propertyCount);
+        assertEquals(3L, propertyCount);
 
         val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
                 .getManagedAction().get(); // should not throw

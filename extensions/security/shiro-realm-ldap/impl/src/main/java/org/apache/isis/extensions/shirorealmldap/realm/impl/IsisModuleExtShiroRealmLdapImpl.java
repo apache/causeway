@@ -29,7 +29,7 @@ import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleSecurityShiro.class
 
 })

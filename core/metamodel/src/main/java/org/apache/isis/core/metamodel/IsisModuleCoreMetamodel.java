@@ -90,7 +90,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
 
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleApplib.class,
         IsisModuleCoreConfig.class,
         IsisModuleCoreSecurity.class,

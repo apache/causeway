@@ -41,7 +41,7 @@ import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleViewerWicketUi.class,
 
         // @Service's

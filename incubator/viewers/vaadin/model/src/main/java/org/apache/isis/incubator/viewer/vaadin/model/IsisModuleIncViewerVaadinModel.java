@@ -25,7 +25,7 @@ import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleCoreWebapp.class,
 })
 public class IsisModuleIncViewerVaadinModel {

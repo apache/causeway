@@ -31,7 +31,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicke
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleViewerCommon.class,
         IsisModuleViewerWicketModel.class,
 

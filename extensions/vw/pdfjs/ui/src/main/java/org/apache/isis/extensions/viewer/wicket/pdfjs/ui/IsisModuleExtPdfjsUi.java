@@ -29,7 +29,7 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components.PdfJsViewerP
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleExtPdfjsMetaModel.class,
 
         // @Component's

@@ -30,7 +30,7 @@ import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjec
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleViewerRestfulObjectsViewer.class,
 
         // @Service's

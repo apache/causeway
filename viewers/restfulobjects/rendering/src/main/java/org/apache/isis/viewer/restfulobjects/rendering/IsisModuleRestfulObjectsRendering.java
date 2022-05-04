@@ -42,7 +42,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleViewerRestfulObjectsApplib.class,
         IsisModuleCoreRuntime.class,
 

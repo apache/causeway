@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
 
         // @Components's
 

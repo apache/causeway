@@ -25,7 +25,7 @@ import org.apache.isis.viewer.graphql.applib.IsisModuleIncViewerGraphqlApplib;
 
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleIncViewerGraphqlApplib.class
 })
 public class IsisModuleIncViewerGraphqlModel {

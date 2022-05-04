@@ -72,7 +72,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
 
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleCoreRuntime.class,
         IsisModuleCoreCodegenByteBuddy.class,
 

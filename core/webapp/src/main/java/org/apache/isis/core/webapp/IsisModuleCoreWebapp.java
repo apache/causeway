@@ -37,7 +37,7 @@ import org.apache.isis.core.webapp.webappctx.IsisWebAppContextInitializer;
 
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleCoreRuntime.class,
 
         // @Service's

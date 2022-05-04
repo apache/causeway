@@ -52,7 +52,7 @@ import lombok.val;
  */
 @Configuration
 @Import({
-        // modules
+        // Modules
         IsisModuleIncViewerVaadinUi.class,
 
         VaadinConfigurationProperties.class

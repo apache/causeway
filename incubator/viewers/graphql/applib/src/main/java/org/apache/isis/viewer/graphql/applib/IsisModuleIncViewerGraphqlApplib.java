@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-        // modules
+        // Modules
 })
 public class IsisModuleIncViewerGraphqlApplib {
 }

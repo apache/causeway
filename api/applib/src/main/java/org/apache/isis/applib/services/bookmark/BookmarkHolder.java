@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.bookmark;
 
 /**
- * Can be optionally implemented by any object that is holds (either directly
+ * Can be optionally implemented by any object that holds (either directly
  * or implicitly) a {@link Bookmark} to a domain object.
  *
  * <p>

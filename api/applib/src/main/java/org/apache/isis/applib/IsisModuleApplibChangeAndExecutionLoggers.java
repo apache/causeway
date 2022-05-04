@@ -16,20 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model;
+package org.apache.isis.applib;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
+import org.apache.isis.applib.services.publishing.log.CommandLogger;
+import org.apache.isis.applib.services.publishing.log.EntityChangesLogger;
+import org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger;
+import org.apache.isis.applib.services.publishing.log.ExecutionLogger;
 
 /**
- * @since 1.x {@index}
+ * Registers logging subscribers for the command/execution/change publishing subsystem.
+ *
+ * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-        // Modules
-        IsisModuleCoreWebapp.class,
+    // Modules
+    IsisModuleApplib.class,
+
+    // Execution/Change Loggers
+    CommandLogger.class,
+    EntityChangesLogger.class,
+    EntityPropertyChangeLogger.class,
+    ExecutionLogger.class,
 })
-public class IsisModuleViewerWicketModel {
+public class IsisModuleApplibChangeAndExecutionLoggers {
+
 }
