@@ -18,10 +18,18 @@
  */
 package org.apache.isis.testing.fixtures.applib.personas;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
+/**
+ * Unifies {@link PersonaWithFinder} and {@link PersonaWithBuilderScript}, so that an implementation (usually
+ * an enum) can both be {@link #build(FixtureScript, FixtureScript.ExecutionContext)} built) (in the context of an
+ * existing {@link FixtureScript}) and {@link PersonaWithFinder#findUsing(ServiceRegistry) found}.
+ *
+ * @since 2.x {@index}
+ */
 public interface Persona<T, B extends BuilderScriptAbstract<T>>
-    extends PersonaWithFinder<T>, PersonaWithBuilderScript<B> {
+    extends PersonaWithFinder<T>, PersonaWithBuilderScript<T, B> {
 
     default T build(final FixtureScript parentFixtureScript, FixtureScript.ExecutionContext executionContext) {
         return builder().build(parentFixtureScript, executionContext).getObject();

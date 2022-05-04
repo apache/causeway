@@ -30,8 +30,7 @@ package org.apache.isis.testing.fixtures.applib.personas;
  * @see PersonaWithFinder
  * @since 2.x {@index}
  */
-public interface PersonaWithBuilderScript<B extends BuilderScriptAbstract<?>>
-        extends org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript  {
+public interface PersonaWithBuilderScript<T, B extends BuilderScriptAbstract<T>>  {
 
     /**
      * Returns a {@link BuilderScriptAbstract} to use to instantiate this persona.
