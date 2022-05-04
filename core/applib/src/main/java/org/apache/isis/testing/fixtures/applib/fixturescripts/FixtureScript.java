@@ -3,6 +3,13 @@ package org.apache.isis.testing.fixtures.applib.fixturescripts;
 import java.io.PrintStream;
 
 public abstract class FixtureScript extends org.apache.isis.applib.fixturescripts.FixtureScript{
+
+    public static final FixtureScript NOOP = new FixtureScript() {
+        @Override
+        protected void execute(final ExecutionContext executionContext) {
+        }
+    };
+
     public FixtureScript() {
     }
 
