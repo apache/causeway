@@ -31,7 +31,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Sets;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * Adapter for {@link Module} which has a default no-op implementation.

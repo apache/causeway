@@ -23,30 +23,30 @@ package org.apache.isis.applib.fixturescripts;
  * {@link org.apache.isis.applib.fixturescripts.FixtureScript.Discoverability#DISCOVERABLE discoverable}
  * by default.
  */
-public abstract class DiscoverableFixtureScript extends FixtureScript {
+public abstract class DiscoverableFixtureScript extends org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript {
 
     /**
-     * Initializes a {@link Discoverability#DISCOVERABLE} fixture, with 
+     * Initializes a {@link Discoverability#DISCOVERABLE} fixture, with
      * {@link #getFriendlyName()} and {@link #getLocalName()} derived from the class name.
-     * 
+     *
      * <p>
      * Use {@link #withDiscoverability(Discoverability)} to override.
      */
     public DiscoverableFixtureScript() {
         this(null, null);
     }
-    
+
     /**
      * Initializes a {@link Discoverability#DISCOVERABLE} fixture.
-     * 
+     *
      * <p>
      * Use {@link #withDiscoverability(Discoverability)} to override.
-     * 
+     *
      * @param friendlyName - if null, will be derived from class name
      * @param localName - if null, will be derived from class name
      */
     public DiscoverableFixtureScript(final String friendlyName, final String localName) {
         super(friendlyName, localName, Discoverability.DISCOVERABLE);
     }
-    
+
 }

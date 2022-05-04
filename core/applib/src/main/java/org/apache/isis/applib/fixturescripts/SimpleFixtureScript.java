@@ -21,14 +21,14 @@ package org.apache.isis.applib.fixturescripts;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 
 @DomainObjectLayout(named="Simple Script")
-public abstract class SimpleFixtureScript extends FixtureScript {
+public abstract class SimpleFixtureScript extends org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript {
 
     private static Discoverability defaultDiscoverability() {
         return Discoverability.NON_DISCOVERABLE;
     }
 
     /**
-     * Initializes a {@link Discoverability#NON_DISCOVERABLE} fixture, with 
+     * Initializes a {@link Discoverability#NON_DISCOVERABLE} fixture, with
      * {@link #getFriendlyName()} and {@link #getLocalName()} derived from the class name.
      *
      * <p>

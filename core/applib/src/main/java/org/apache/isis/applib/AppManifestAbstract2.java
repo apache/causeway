@@ -42,7 +42,7 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
 
     @Programmatic
     public FixtureScript getRefDataSetupFixture() {
-        return new FixtureScript() {
+        return new org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
                 List<Module> modules = Module.Util.transitiveDependenciesOf(module);
@@ -58,7 +58,7 @@ public abstract class AppManifestAbstract2 extends AppManifestAbstract implement
 
     @Programmatic
     public FixtureScript getTeardownFixture() {
-        return new FixtureScript() {
+        return new org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
                 List<Module> modules = Module.Util.transitiveDependenciesOf(module);

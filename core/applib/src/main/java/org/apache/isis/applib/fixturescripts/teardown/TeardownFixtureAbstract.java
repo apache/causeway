@@ -24,8 +24,8 @@ import javax.jdo.metadata.TypeMetadata;
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 @Programmatic
 public abstract class TeardownFixtureAbstract extends FixtureScript {

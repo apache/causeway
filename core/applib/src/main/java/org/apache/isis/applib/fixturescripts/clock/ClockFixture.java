@@ -31,7 +31,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 @Programmatic
-class ClockFixture extends FixtureScript implements FixtureScriptWithExecutionStrategy {
+class ClockFixture extends org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript implements FixtureScriptWithExecutionStrategy {
 
     static ClockFixture setTo(final String date) {
         return new ClockFixture().setDate(date);

@@ -34,7 +34,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 @Programmatic
 public class TickingClockFixture
-        extends FixtureScript
+        extends org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript
         implements FixtureScriptWithExecutionStrategy {
 
     //region > date property

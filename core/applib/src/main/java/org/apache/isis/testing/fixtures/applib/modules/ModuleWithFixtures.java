@@ -2,7 +2,6 @@ package org.apache.isis.testing.fixtures.applib.modules;
 
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
-// TODO: move to isis v1 fork
 public interface ModuleWithFixtures {
 
     /**

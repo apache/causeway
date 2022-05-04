@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 @Programmatic
 public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,F>>
-        extends FixtureScript implements WithPrereqs<T,F>, FixtureScriptWithExecutionStrategy {
+        extends org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript implements WithPrereqs<T,F>, FixtureScriptWithExecutionStrategy {
 
     private final FixtureScripts.MultipleExecutionStrategy executionStrategy;
 

@@ -83,7 +83,7 @@ public abstract class IntegrationTestAbstract2 extends IntegrationTestAbstract {
         if(fixtureScriptList.length == 1) {
             fixtureScripts.runFixtureScript(fixtureScriptList[0], null);
         } else {
-            fixtureScripts.runFixtureScript(new FixtureScript() {
+            fixtureScripts.runFixtureScript(new org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript() {
                 @Override
                 protected void execute(final FixtureScript.ExecutionContext executionContext) {
                     for (FixtureScript fixtureScript : fixtureScriptList) {

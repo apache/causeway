@@ -320,7 +320,7 @@ public abstract class FixtureScripts extends AbstractService {
             if(!packageName.startsWith(getPackagePrefix())) {
                 // redundant check if ClassDiscoveryService2 in use because already filtered out
                 continue;
-            } 
+            }
             final FixtureScript fs = newFixtureScript(fixtureScriptCls);
             if(fs != null) {
                 fixtureScripts.add(fs);
@@ -385,7 +385,7 @@ public abstract class FixtureScripts extends AbstractService {
     //region > runFixtureScript (prototype action)
 
     /**
-     * To make this action usable in the UI, override either {@link #choices0RunFixtureScript()} or 
+     * To make this action usable in the UI, override either {@link #choices0RunFixtureScript()} or
      * {@link #autoComplete0RunFixtureScript(String)} with <tt>public</tt> visibility</tt>.
      */
     @Action(
@@ -393,7 +393,7 @@ public abstract class FixtureScripts extends AbstractService {
     )
     @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScript(
-            final FixtureScript fixtureScript, 
+            final FixtureScript fixtureScript,
             @ParameterLayout(
                     named="Parameters",
                     describedAs="Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
@@ -444,7 +444,7 @@ public abstract class FixtureScripts extends AbstractService {
         if (fixtureScriptList.length == 1) {
             runFixtureScript(fixtureScriptList[0], null);
         } else {
-            runFixtureScript(new FixtureScript() {
+            runFixtureScript(new org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript() {
                 protected void execute(ExecutionContext executionContext) {
                     FixtureScript[] fixtureScripts = fixtureScriptList;
                     for (FixtureScript fixtureScript : fixtureScripts) {
