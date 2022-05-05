@@ -52,8 +52,8 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 
 @ViewModelLayout(named="Script")
-public abstract class FixtureScript 
-        extends AbstractViewModel 
+public abstract class FixtureScript
+        extends AbstractViewModel
         implements InstallableFixture {
 
     protected static final String PATH_SEPARATOR = "/";
@@ -93,8 +93,8 @@ public abstract class FixtureScript
      * @param discoverability - whether this fixture script can be rendered as a choice to execute through {@link org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(FixtureScript, String)}}.
      */
     public FixtureScript(
-            final String friendlyName, 
-            final String localName, 
+            final String friendlyName,
+            final String localName,
             final Discoverability discoverability) {
         this(friendlyName, localName, discoverability, /* no tracing */ null);
     }
@@ -176,7 +176,7 @@ public abstract class FixtureScript
     //region > friendlyName (property)
 
     private String friendlyName;
-    
+
     @Title
     @PropertyLayout(hidden = Where.EVERYWHERE)
     public String getFriendlyName() {
@@ -208,7 +208,7 @@ public abstract class FixtureScript
     //region > parentPath
 
     private String parentPath;
-    
+
     /**
      * Path of the parent of this script (if any), with trailing {@value #PATH_SEPARATOR}.
      */
@@ -248,7 +248,7 @@ public abstract class FixtureScript
     /**
      * Whether this fixture script is {@link Discoverability discoverable} (in other words
      * whether it will be listed to be run in the {@link FixtureScripts#runFixtureScript(FixtureScript, String) run fixture script} action.
-     * 
+     *
      * <p>
      * By default {@link DiscoverableFixtureScript}s are {@link Discoverability#DISCOVERABLE discoverable}, all other
      * {@link FixtureScript}s are {@link Discoverability#NON_DISCOVERABLE not}.  This can be overridden in the
@@ -542,9 +542,9 @@ public abstract class FixtureScript
         }
 
         @Programmatic
-        public void executeChild(
+        public <T, F extends BuilderScriptAbstract<T,F>> void executeChild(
                 final FixtureScript callingFixtureScript,
-                final PersonaWithBuilderScript<?, ?> personaWithBuilderScript) {
+                final PersonaWithBuilderScript<T, F> personaWithBuilderScript) {
             executeChildren(callingFixtureScript, personaWithBuilderScript);
         }
 
@@ -559,19 +559,24 @@ public abstract class FixtureScript
         }
 
         @Programmatic
-        public void executeChildren(
+        public <T, F extends BuilderScriptAbstract<T,F>> void executeChildren(
                 final FixtureScript callingFixtureScript,
-                final PersonaWithBuilderScript<?, ?>... personaWithBuilderScripts) {
-            for (PersonaWithBuilderScript<?, ?> builder : personaWithBuilderScripts) {
+                final PersonaWithBuilderScript<T,F>... personaWithBuilderScripts) {
+            for (PersonaWithBuilderScript<T, F> builder : personaWithBuilderScripts) {
                 executeChild(callingFixtureScript, builder.builder());
             }
         }
 
         @Programmatic
-        public <T extends Enum<?> & PersonaWithBuilderScript<?, ?>> void executeChildren(
+        public <
+                E extends Enum<E> & org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript<T, ? extends org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract<T>>,
+                T>
+        void executeChildren(
                 final FixtureScript callingFixtureScript,
-                final Class<T> personaClass) {
-            executeChildren(callingFixtureScript, personaClass.getEnumConstants());
+                final Class<E> personaClass) {
+            for (E enumConstant : personaClass.getEnumConstants()) {
+                executeChild(callingFixtureScript, enumConstant.builder());
+            }
         }
 
         @Programmatic
@@ -1013,7 +1018,7 @@ public abstract class FixtureScript
     public FixtureType getType() {
         return FixtureType.DOMAIN_OBJECTS;
     }
-    
+
     @Programmatic
     public final void install() {
         run(null);
