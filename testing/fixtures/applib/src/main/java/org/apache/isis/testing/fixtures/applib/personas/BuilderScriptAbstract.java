@@ -75,7 +75,7 @@ extends FixtureScript implements FixtureScriptWithExecutionStrategy {
     // -- RUN PERSONAS
 
     public T objectFor(
-            final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona,
+            final PersonaWithBuilderScript<T, BuilderScriptAbstract<T>> persona,
             final ExecutionContext executionContext) {
 
         if(persona == null) {

@@ -430,10 +430,10 @@ public class FixtureScripts {
 
     @SafeVarargs
     @Programmatic
-    public final void runPersonas(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>> ... personaScripts) {
+    public final void runPersonas(final PersonaWithBuilderScript<?,? extends BuilderScriptAbstract<?>> ... personaScripts) {
         for (val personaWithBuilderScript : personaScripts) {
 
-            val script = _Casts.<PersonaWithBuilderScript<BuilderScriptAbstract<Object>>>
+            val script = _Casts.<PersonaWithBuilderScript<Object,BuilderScriptAbstract<Object>>>
                 uncheckedCast(personaWithBuilderScript);
 
             runPersona(script);
@@ -441,7 +441,7 @@ public class FixtureScripts {
     }
 
     @Programmatic
-    public <T> T runPersona(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<? extends T>> persona) {
+    public <T> T runPersona(final PersonaWithBuilderScript<T,? extends BuilderScriptAbstract<? extends T>> persona) {
         val fixtureScript = persona.builder();
         return runBuilder(fixtureScript);
     }

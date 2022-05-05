@@ -41,7 +41,7 @@ import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript
 import lombok.val;
 
 public enum JdoTestDomainPersona
-implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
+implements PersonaWithBuilderScript<Object, BuilderScriptAbstract<Object>>  {
 
     PurgeAll {
         @Override
@@ -70,11 +70,11 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
     InventoryWith1Book {
         @Override
-        public BuilderScriptWithResult<JdoInventory> builder() {
-            return new BuilderScriptWithResult<JdoInventory>() {
+        public BuilderScriptWithResult<Object> builder() {
+            return new BuilderScriptWithResult<Object>() {
 
                 @Override
-                protected JdoInventory buildResult(final ExecutionContext ec) {
+                protected Object buildResult(final ExecutionContext ec) {
 
                     val products = new HashSet<JdoProduct>();
 
@@ -95,7 +95,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
     SvenApplicationUser {
         @Override
-        public BuilderScriptAbstract<?> builder() {
+        public BuilderScriptAbstract<Object> builder() {
             return new BuilderScriptWithoutResult() {
 
                 @Override
