@@ -34,6 +34,23 @@ import kotlin.test.assertTrue
 class HttpErrorTest {
 
     @Test
+    fun testKnife500() {
+        val jsonStr = org.apache.isis.client.kroviz.snapshots.knife.HTTP_ERROR_500.str
+        val error = HttpErrorHandler().parse(jsonStr) as HttpError
+        val code = error.getStatusCode()
+        assertEquals(500, code)
+        assertNotNull(error.getMessage())
+
+        val detail = error.detail
+        assertNotNull(detail)
+        assertNotNull(detail.className)
+        assertEquals(null, detail.message)
+        assertEquals("", error.getMessage())
+        assertNotNull(detail.element)
+        assertTrue(detail.element.size > 0)
+    }
+
+    @Test
     fun testDemo500() {
         val jsonStr = HTTP_ERROR_500.str
         val error = HttpErrorHandler().parse(jsonStr) as HttpError

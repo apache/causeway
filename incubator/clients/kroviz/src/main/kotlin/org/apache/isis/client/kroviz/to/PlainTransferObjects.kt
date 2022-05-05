@@ -43,11 +43,11 @@ interface HttpErrorResponse {
 @Serializable
 data class HttpError(
     private val httpStatusCode: Int,
-    private val message: String,
+    private val message: String?,
     override val detail: HttpErrorDetail? = null
 ) : TransferObject, HttpErrorResponse {
     override fun getMessage(): String {
-        return message
+        return message ?: ""
     }
 
     override fun getStatusCode(): Int {
