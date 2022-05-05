@@ -2,9 +2,6 @@ package org.apache.isis.applib.fixturescripts.personas.dom;
 
 import java.util.Optional;
 
-import org.springframework.stereotype.Repository;
-
-@Repository
 public class CustomerRepository {
 
     public Customer create(String firstName, String lastName, int age) {
