@@ -49,13 +49,9 @@ public abstract class EventProviderAbstract implements EventProvider {
     // //////////////////////////////////////
 
     public EventProviderAbstract(final EntityCollectionModel collectionModel, final String calendarName) {
-        createEvents(collectionModel, calendarName);
-    }
+        val commonContext = collectionModel.getCommonContext();
 
-    private void createEvents(final EntityCollectionModel model, final String calendarName) {
-        val commonContext = model.getCommonContext();
-
-        model.getDataTableModel()
+        collectionModel.getDataTableModel()
         .getDataElements().getValue()
         .stream()
         .map(newEvent(commonContext, calendarName))
@@ -63,28 +59,46 @@ public abstract class EventProviderAbstract implements EventProvider {
         .forEach(event->eventById.put(event.getId(), event));
     }
 
+    @Override
+    public Collection<Event> getEvents(final ZonedDateTime start, final ZonedDateTime end) {
+        val result = eventById.values().stream()
+        .filter(event->!start.isAfter(event.getStart()))
+        .filter(event->!end.isBefore(event.getEnd()))
+        .collect(Collectors.toList());
+        return result;
+
+    }
+
+    @Override
+    public Event getEventForId(final String id) throws EventNotFoundException {
+        return eventById.get(id);
+    }
+
+    protected abstract CalendarEvent calendarEventFor(final Object domainObject, final String calendarName);
+
+    // -- HELPER
+
     private Object dereference(final IsisAppCommonContext commonContext, final Object domainObject) {
         val serviceRegistry = commonContext.getServiceRegistry();
         val services = serviceRegistry.select(CalendarableDereferencingService.class);
         for (final CalendarableDereferencingService dereferencingService : services) {
             final Object dereferencedObject = dereferencingService.dereference(domainObject);
-            if (dereferencedObject != null && dereferencedObject != domainObject) {
+            if (dereferencedObject != null
+                    && dereferencedObject != domainObject) {
                 return dereferencedObject;
             }
         }
         return domainObject;
     }
 
-    protected abstract CalendarEvent calendarEventFor(final Object domainObject, final String calendarName);
-
     private Function<ManagedObject, Event> newEvent(
             final IsisAppCommonContext commonContext,
             final String calendarName) {
 
-        return input -> {
+        return domainObject -> {
 
-            final Object domainObject = input.getPojo();
-            final CalendarEvent calendarEvent = calendarEventFor(domainObject, calendarName);
+            final Object domainObjectPojo = domainObject.getPojo();
+            final CalendarEvent calendarEvent = calendarEventFor(domainObjectPojo, calendarName);
             if(calendarEvent == null) {
                 return null;
             }
@@ -102,7 +116,7 @@ public abstract class EventProviderAbstract implements EventProvider {
             event.setEnd(end);
             event.setAllDay(true);
 
-            final Object dereferencedObject = dereference(commonContext, domainObject);
+            final Object dereferencedObject = dereference(commonContext, domainObjectPojo);
 
             val dereferencedManagedObject =
                     ManagedObject.lazy(commonContext.getSpecificationLoader(), dereferencedObject);
@@ -131,19 +145,6 @@ public abstract class EventProviderAbstract implements EventProvider {
             }
 
         };
-    }
-
-    @Override
-    public Collection<Event> getEvents(final ZonedDateTime start, final ZonedDateTime end) {
-        return eventById.values().stream()
-        .filter(event->!start.isAfter(event.getStart()))
-        .filter(event->!end.isBefore(event.getEnd()))
-        .collect(Collectors.toList());
-    }
-
-    @Override
-    public Event getEventForId(final String id) throws EventNotFoundException {
-        return eventById.get(id);
     }
 
 }

@@ -38,7 +38,6 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 		super(id);
 	}
 
-	// TODO see if it makes sense to switch these to Css/JavaScriptResourceReference
 	protected static final ResourceReference CSS = new PackageResourceReference(AbstractFullCalendar.class,
 		"res/fullcalendar.css");
 	protected static final ResourceReference JS = new PackageResourceReference(AbstractFullCalendar.class,
@@ -47,32 +46,16 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 		"res/fullcalendar.ext.js");
 	protected static final ResourceReference JS_MIN = new PackageResourceReference(AbstractFullCalendar.class,
 		"res/fullcalendar.min.js");
-	protected static final UrlResourceReference LOADASH = new UrlResourceReference(
+	protected static final UrlResourceReference LODASH = new UrlResourceReference(
 		Url.parse("https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"));
 
 	@Override
 	public void renderHead(final IHeaderResponse response) {
-
 		response.render(JavaScriptHeaderItem.forReference(WicketAjaxJQueryResourceReference.get()));
-
-		renderCssResources(response);
-
-		renderJavaScriptResources(response);
-		response.render(JavaScriptReferenceHeaderItem.forReference(JS_EXT));
-
-	}
-
-	protected void renderJavaScriptResources(final IHeaderResponse response) {
-		response.render(JavaScriptReferenceHeaderItem.forReference(LOADASH));
-		if (getApplication().usesDeploymentConfig()) {
-			response.render(JavaScriptReferenceHeaderItem.forReference(JS));
-		} else {
-			response.render(JavaScriptReferenceHeaderItem.forReference(JS));
-		}
-	}
-
-	protected void renderCssResources(final IHeaderResponse response) {
 		response.render(CssReferenceHeaderItem.forReference(CSS));
+        response.render(JavaScriptReferenceHeaderItem.forReference(LODASH));
+        response.render(JavaScriptReferenceHeaderItem.forReference(JS));
+        response.render(JavaScriptReferenceHeaderItem.forReference(JS_EXT));
 	}
 
 	public final String toJson(final Object value) {
