@@ -26,16 +26,16 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.extensions.fullcalendar.ui.wkt.Config;
+import org.apache.isis.extensions.fullcalendar.ui.wkt.EventProvider;
+import org.apache.isis.extensions.fullcalendar.ui.wkt.EventSource;
+import org.apache.isis.extensions.fullcalendar.ui.wkt.FullCalendar;
+import org.apache.isis.extensions.fullcalendar.ui.wkt.selector.EventSourceSelector;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-import net.ftlines.wicket.fullcalendar.Config;
-import net.ftlines.wicket.fullcalendar.EventProvider;
-import net.ftlines.wicket.fullcalendar.EventSource;
-import net.ftlines.wicket.fullcalendar.FullCalendar;
-import net.ftlines.wicket.fullcalendar.selector.EventSourceSelector;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel

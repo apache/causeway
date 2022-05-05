@@ -19,15 +19,12 @@
 package org.apache.isis.extensions.fullcalendar.ui.component;
 
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -36,14 +33,12 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.extensions.fullcalendar.applib.spi.CalendarableDereferencingService;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
-import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
+import org.apache.isis.extensions.fullcalendar.ui.wkt.Event;
+import org.apache.isis.extensions.fullcalendar.ui.wkt.EventNotFoundException;
+import org.apache.isis.extensions.fullcalendar.ui.wkt.EventProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
 import lombok.val;
-
-import net.ftlines.wicket.fullcalendar.Event;
-import net.ftlines.wicket.fullcalendar.EventNotFoundException;
-import net.ftlines.wicket.fullcalendar.EventProvider;
 
 public abstract class EventProviderAbstract implements EventProvider {
 
@@ -64,7 +59,7 @@ public abstract class EventProviderAbstract implements EventProvider {
         .getDataElements().getValue()
         .stream()
         .map(newEvent(commonContext, calendarName))
-        .filter(NOT_NULL)
+        .filter(Objects::nonNull)
         .forEach(event->eventById.put(event.getId(), event));
     }
 
@@ -99,7 +94,7 @@ public abstract class EventProviderAbstract implements EventProvider {
                     .map(InteractionContext::getTimeZone)
                     .orElse(ZoneId.systemDefault());
 
-            val start = JodaTimeConverters.toJoda(calendarEvent.asDateTime(timeZone));
+            val start = calendarEvent.asDateTime(timeZone);
             val end = start;
 
             final Event event = new Event();
@@ -138,16 +133,11 @@ public abstract class EventProviderAbstract implements EventProvider {
         };
     }
 
-    static final Predicate<Event> NOT_NULL = Objects::nonNull;
-
-    // //////////////////////////////////////
-
     @Override
-    public Collection<Event> getEvents(final DateTime start, final DateTime end) {
-        final Interval interval = new Interval(start, end);
-        final Predicate<Event> withinInterval = input -> interval.contains(input.getStart());
+    public Collection<Event> getEvents(final ZonedDateTime start, final ZonedDateTime end) {
         return eventById.values().stream()
-        .filter(withinInterval)
+        .filter(event->!start.isAfter(event.getStart()))
+        .filter(event->!end.isBefore(event.getEnd()))
         .collect(Collectors.toList());
     }
 

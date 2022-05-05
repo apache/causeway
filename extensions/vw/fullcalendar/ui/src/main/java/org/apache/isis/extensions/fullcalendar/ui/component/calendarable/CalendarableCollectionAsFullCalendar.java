@@ -25,9 +25,8 @@ import java.util.stream.Collectors;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.extensions.fullcalendar.ui.component.CalendaredCollectionAbstract;
+import org.apache.isis.extensions.fullcalendar.ui.wkt.EventProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-
-import net.ftlines.wicket.fullcalendar.EventProvider;
 
 public class CalendarableCollectionAsFullCalendar
 extends CalendaredCollectionAbstract {
