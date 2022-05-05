@@ -18,9 +18,9 @@
  */
 package org.apache.isis.extensions.fullcalendar.ui.component.calendarable;
 
-import java.util.Map;
-import java.util.function.Function;
+import java.util.Set;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.isis.extensions.fullcalendar.applib.Calendarable;
@@ -40,28 +40,19 @@ public class CalendarableEventProvider extends EventProviderAbstract {
 
     @Override
     protected CalendarEvent calendarEventFor(
-            final Object domainObject,
+            final Object domainObjectPojo,
             final String calendarName) {
-        if(!(domainObject instanceof Calendarable)) {
-            return null;
-        }
-        final Calendarable calendarable = (Calendarable)domainObject;
-        final Map<String, CalendarEventable> calendarEvents = calendarable.getCalendarEvents();
-        final CalendarEventable calendarEventable = calendarEvents.get(calendarName);
-        return calendarEventable!=null
-                ?calendarEventable.toCalendarEvent()
-                :null;
+        return _Casts.castTo(Calendarable.class, domainObjectPojo)
+        .map(calendarable->calendarable.getCalendarEvents().get(calendarName))
+        .map(CalendarEventable::toCalendarEvent)
+        .orElse(null);
     }
 
-    static final Function<ManagedObject, Iterable<String>> GET_CALENDAR_NAMES =
-            input -> {
-                final Object domainObject = input.getPojo();
-                if(!(domainObject instanceof Calendarable)) {
-                    return null;
-                }
-                final Calendarable calendarable = (Calendarable) domainObject;
-                return calendarable.getCalendarNames();
-            };
+    static final Set<String> getCalendarNames(final ManagedObject domainObject) {
+        return _Casts.castTo(Calendarable.class, domainObject.getPojo())
+        .map(Calendarable::getCalendarNames)
+        .orElse(null);
+    }
 
 
 }

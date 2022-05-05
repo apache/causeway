@@ -18,11 +18,7 @@
  */
 package org.apache.isis.extensions.fullcalendar.applib;
 
-import java.util.function.Function;
-
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
-
-import lombok.experimental.UtilityClass;
 
 /**
  * @since 2.0 {@index}
@@ -31,32 +27,15 @@ public interface CalendarEventable {
 
     /**
      * The name of the calendar to which this event belongs.
-     *
      * <p>
-     *     For example, an <code>Employee</code> might provide have a <code>employedOn</code>,
-     *     so the calendar name
-     *     would be 'employedOn'
-     * </p>
-     *
+     * For example, an <code>Employee</code> might have a <code>employedOn</code> property,
+     * so the calendar name would be 'employedOn'.
      * <p>
-     *     If there is possibly more than one date associated with the entity, then use
-     *     {@link Calendarable} instead.
-     * </p>
+     * If there is possibly more than one date associated with the entity, then use
+     * {@link Calendarable} instead.
      */
     String getCalendarName();
 
     CalendarEvent toCalendarEvent();
-
-    @UtilityClass
-    public static class Functions  {
-
-        public static <T extends CalendarEventable> Function<T, String> getCalendarName() {
-            return CalendarEventable::getCalendarName;
-        }
-
-        public static <T extends CalendarEventable> Function<T, CalendarEventable> cast() {
-            return CalendarEventable.class::cast;
-        }
-    }
 
 }

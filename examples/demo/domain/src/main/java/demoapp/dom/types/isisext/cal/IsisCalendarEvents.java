@@ -50,7 +50,8 @@ import demoapp.dom.types.isisext.cal.vm.IsisCalendarEventVm;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.IsisCalendarEvents", editing=Editing.ENABLED)
 //@Log4j2
-public class IsisCalendarEvents implements HasAsciiDocDescription {
+public class IsisCalendarEvents
+implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
         return "CalendarEvent data type";

@@ -19,8 +19,8 @@
 package org.apache.isis.extensions.fullcalendar.ui.component.calendareventable;
 
 import java.util.Objects;
-import java.util.function.Function;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
@@ -39,25 +39,18 @@ public class CalendarEventableEventProvider extends EventProviderAbstract {
 
     @Override
     protected CalendarEvent calendarEventFor(
-            final Object domainObject,
+            final Object domainObjectPojo,
             final String calendarName) {
-        if(!(domainObject instanceof CalendarEventable)) {
-            return null;
-        }
-        final CalendarEventable calendarEventable = (CalendarEventable)domainObject;
-        return Objects.equals(calendarName, calendarEventable.getCalendarName())
-                ? calendarEventable.toCalendarEvent()
-                : null;
+        return _Casts.castTo(CalendarEventable.class, domainObjectPojo)
+        .filter(calendarEventable->Objects.equals(calendarName, calendarEventable.getCalendarName()))
+        .map(CalendarEventable::toCalendarEvent)
+        .orElse(null);
     }
 
-    static final Function<ManagedObject, String> GET_CALENDAR_NAME = (final ManagedObject input) -> {
-            final Object domainObject = input.getPojo();
-            if(!(domainObject instanceof CalendarEventable)) {
-                return null;
-            }
-            final CalendarEventable calendarEventable = (CalendarEventable) domainObject;
-            return calendarEventable.getCalendarName();
-    };
-
+    static final String getCalendarName(final ManagedObject domainObject) {
+        return _Casts.castTo(CalendarEventable.class, domainObject.getPojo())
+        .map(CalendarEventable::getCalendarName)
+        .orElse(null);
+    }
 
 }

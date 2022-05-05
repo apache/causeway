@@ -48,7 +48,7 @@ extends CalendaredCollectionAbstract {
     @Override
     protected Set<String> getCalendarNames(final Iterable<ManagedObject> entityList) {
         return _NullSafe.stream(entityList)
-                .map(CalendarableEventProvider.GET_CALENDAR_NAMES)
+                .map(CalendarableEventProvider::getCalendarNames)
                 .flatMap(_NullSafe::stream)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }

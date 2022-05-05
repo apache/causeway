@@ -19,6 +19,7 @@
 package demoapp.dom.types.isisext.cal.persistence;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -32,11 +33,24 @@ public abstract class IsisCalendarEventEntity
 implements
     HasAsciiDocDescription,
     IsisCalendarEventHolder2,
+    CalendarEventable,
     ValueHolder<CalendarEvent> {
 
     @Override
     public CalendarEvent value() {
         return getReadOnlyProperty();
+    }
+
+    // -- CALENDAR EVENTABLE
+
+    @Override
+    public String getCalendarName() {
+        return toCalendarEvent().getCalendarName();
+    }
+
+    @Override
+    public CalendarEvent toCalendarEvent() {
+        return value();
     }
 
 }

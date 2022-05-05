@@ -28,17 +28,20 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 
-public abstract class CalendaredCollectionFactoryAbstract extends ComponentFactoryAbstract implements CollectionContentsAsFactory {
+public abstract class CalendaredCollectionFactoryAbstract<T>
+extends ComponentFactoryAbstract
+implements
+    CollectionContentsAsFactory {
 
     private static final long serialVersionUID = 1L;
 
     private static final String NAME = "calendar";
 
-    private Class<?> cls;
+    private Class<T> type;
 
-    public CalendaredCollectionFactoryAbstract(final Class<?> cls) {
+    protected CalendaredCollectionFactoryAbstract(final Class<T> type) {
         super(ComponentType.COLLECTION_CONTENTS, NAME);
-        this.cls = cls;
+        this.type = type;
     }
 
     @Override
@@ -51,7 +54,7 @@ public abstract class CalendaredCollectionFactoryAbstract extends ComponentFacto
         final ObjectSpecification elementSpec = entityCollectionModel.getElementType();
         final Class<?> correspondingClass = elementSpec.getCorrespondingClass();
 
-        return appliesIf(cls.isAssignableFrom(correspondingClass));
+        return appliesIf(type.isAssignableFrom(correspondingClass));
     }
 
     @Override

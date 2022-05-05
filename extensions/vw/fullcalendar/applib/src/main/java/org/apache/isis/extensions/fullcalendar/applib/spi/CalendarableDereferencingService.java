@@ -28,13 +28,11 @@ import org.apache.isis.extensions.fullcalendar.applib.Calendarable;
  * The markers on the calendar then open up the dereferenced object,
  * rather than the original
  * {@link Calendarable} or {@link CalendarEventable} object.
- *
  * <p>
- *     For example, the <tt>incode-module-commchannel</tt>'s <tt>Note</tt>
- *     implements <tt>CalendarEventable</tt>, but this service allows the
- *     <i>owner</i> of the
- *     <tt>Note</tt> (ie the <tt>Notable</tt>) sto be shown instead.
- * </p>
+ * For example, the <tt>incode-module-commchannel</tt>'s <tt>Note</tt>
+ * implements <tt>CalendarEventable</tt>, but this service allows the
+ * <i>owner</i> of the
+ * <tt>Note</tt> (ie the <tt>Notable</tt>) to be shown instead.
  *
  * @since 2.0 {@index}
  */
