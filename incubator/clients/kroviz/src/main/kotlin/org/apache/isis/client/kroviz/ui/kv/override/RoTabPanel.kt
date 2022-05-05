@@ -23,7 +23,7 @@ package org.apache.isis.client.kroviz.ui.kv.override
  * * add IconMenu to (Ro)Tab
  */
 
-import com.github.snabbdom.VNode
+import io.kvision.snabbdom.VNode
 import io.kvision.core.*
 import io.kvision.panel.SimplePanel
 import io.kvision.panel.VPanel

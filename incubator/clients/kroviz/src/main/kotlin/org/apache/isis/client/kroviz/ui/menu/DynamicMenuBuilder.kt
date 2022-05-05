@@ -17,19 +17,20 @@
  * under the License.
  */
 
-package org.apache.isis.client.kroviz.ui.panel
+package org.apache.isis.client.kroviz.ui.menu
 
 import io.kvision.utils.obj
+import org.apache.isis.client.kroviz.core.event.EventLogStatistics
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.ui.chart.ChartFactory
-import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.ui.dialog.EventExportDialog
+import org.apache.isis.client.kroviz.ui.panel.EventBubbleChart
+import org.apache.isis.client.kroviz.ui.panel.EventLogTable
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 
-class DynamicMenuBuilder {
+object DynamicMenuBuilder {
 
     fun buildObjectMenu(tObject: TObject): dynamic {
         val menu = mutableListOf<dynamic>()
@@ -48,21 +49,27 @@ class DynamicMenuBuilder {
     fun buildTableMenu(table: EventLogTable): dynamic {
         val menu = mutableListOf<dynamic>()
 
-        val a2 = buildMenuEntry("Export", "Export Events ...", {
+        val export = buildMenuEntry("Export", "Export Events ...", {
             EventExportDialog().open()
         })
-        menu.add(a2)
+        menu.add(export)
 
-        val a3 = buildMenuEntry("Tabulator Download", "Tabulator Download", {
+        val download = buildMenuEntry("Tabulator Download", "Tabulator Download", {
             this.downLoadCsv(table)
         })
-        menu.add(a3)
+        menu.add(download)
 
-        val title = "Chart"
-        val a4 = buildMenuEntry(title, title, {
-            ViewManager.add(title, ChartFactory().build(SessionManager.getEventStore().log))
+        val bubbleTitle = "Event Bubble Chart"
+        val bubble = buildMenuEntry(bubbleTitle, bubbleTitle, {
+            ViewManager.add(bubbleTitle, EventBubbleChart())
         })
-        menu.add(a4)
+        menu.add(bubble)
+
+        val statsTitle = "Event Statistics"
+        val stats = buildMenuEntry(statsTitle, statsTitle, {
+            logStatistics()
+        })
+        menu.add(stats)
 
         return menu.toTypedArray().asDynamic()
     }
@@ -78,6 +85,11 @@ class DynamicMenuBuilder {
 
     private fun downLoadCsv(table: EventLogTable) {
         table.tabulator.downloadCSV("data.csv")
+    }
+
+    private fun logStatistics() {
+        val stats = EventLogStatistics()
+        console.log(stats)
     }
 
 }

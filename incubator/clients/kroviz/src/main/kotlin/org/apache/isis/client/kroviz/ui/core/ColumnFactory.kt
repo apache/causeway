@@ -26,7 +26,7 @@ import io.kvision.tabulator.js.Tabulator
 import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.ui.panel.DynamicMenuBuilder
+import org.apache.isis.client.kroviz.ui.menu.DynamicMenuBuilder
 
 /**
  * Create ColumnDefinitions for Tabulator tables
@@ -50,26 +50,29 @@ class ColumnFactory {
 
     private fun columnForObjectMenu(): ColumnDefinition<dynamic> {
         return ColumnDefinition<dynamic>(
-                "",
-                field = "iconName", // any existing field can be used
-                formatter = Formatter.TICKCROSS,
-                formatterParams = menuFormatterParams,
-                hozAlign = Align.CENTER,
-                width = "40",
-                headerSort = false,
-                clickMenu = { component: dynamic, _: dynamic ->
-                    buildObjectMenu(component)
-                }
+            "",
+            field = "iconName", // any existing field can be used
+            formatter = Formatter.TICKCROSS,
+            formatterParams = menuFormatterParams,
+            hozAlign = Align.CENTER,
+            width = "40",
+            headerSort = false,
+            clickMenu = { component: dynamic, _: dynamic ->
+                buildObjectMenu(component)
+            }
         )
     }
 
     private fun buildObjectMenu(cell: Tabulator.CellComponent): dynamic {
         val exposer = cell.getData() as Exposer
         val tObject = exposer.delegate
-        return DynamicMenuBuilder().buildObjectMenu(tObject)
+        return DynamicMenuBuilder.buildObjectMenu(tObject)
     }
 
-    private fun addColumnForObjectIcon(displayCollection: CollectionDM, columns: MutableList<ColumnDefinition<Exposer>>) {
+    private fun addColumnForObjectIcon(
+        displayCollection: CollectionDM,
+        columns: MutableList<ColumnDefinition<Exposer>>,
+    ) {
         exposeIcons(displayCollection)
         val iconColumn = buildIconColumn()
         columns.add(iconColumn)
@@ -87,25 +90,28 @@ class ColumnFactory {
 
     private fun buildIconColumn(): ColumnDefinition<Exposer> {
         return ColumnDefinition<dynamic>(
-                "",
-                field = "icon",
-                formatter = Formatter.IMAGE,
-                formatterParams = obj { width = "16px"; height = "16px" },
-                hozAlign = Align.CENTER,
-                width = "40",
-                headerSort = false)
+            "",
+            field = "icon",
+            formatter = Formatter.IMAGE,
+            formatterParams = obj { width = "16px"; height = "16px" },
+            hozAlign = Align.CENTER,
+            width = "40",
+            headerSort = false)
     }
 
-    private fun addColumnsForProperties(displayCollection: CollectionDM, columns: MutableList<ColumnDefinition<Exposer>>) {
+    private fun addColumnsForProperties(
+        displayCollection: CollectionDM,
+        columns: MutableList<ColumnDefinition<Exposer>>,
+    ) {
         val propertyLabels = displayCollection.properties.list
         for (pl in propertyLabels) {
             if (!pl.hidden) {
                 val id = pl.key
                 val friendlyName = pl.friendlyName
                 var cd = ColumnDefinition<dynamic>(
-                        title = friendlyName,
-                        field = id,
-                        headerFilter = Editor.INPUT)
+                    title = friendlyName,
+                    field = id,
+                    headerFilter = Editor.INPUT)
                 if (id == "object") {
                     cd = buildLink()
                 }
@@ -116,9 +122,9 @@ class ColumnFactory {
 
     private fun buildLink(): ColumnDefinition<Exposer> {
         return ColumnDefinition<dynamic>(
-                title = "ResultListResult",
-                field = "result",
-                headerFilter = Editor.INPUT
+            title = "ResultListResult",
+            field = "result",
+            headerFilter = Editor.INPUT
         )
     }
 

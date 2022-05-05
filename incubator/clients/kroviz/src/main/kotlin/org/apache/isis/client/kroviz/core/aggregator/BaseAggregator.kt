@@ -59,8 +59,11 @@ abstract class BaseAggregator {
         logEntry.setUndefined("no handler found")
         console.log("[BaseAggregator.log] ")
         console.log(logEntry)
+        console.log(logEntry.response)
         val className = this::class.simpleName
-        throw Throwable("no handler found: $className")
+        throw Throwable("No handler found: $className. " +
+                "Probable cause is a format change in response, that leads to a parsing error, hence response is passed on." +
+                "logEntry.obj is likely null, i.e. no TransferObject was created in parse function.")
     }
 
     fun TObject.getLayoutLink(): Link? {
@@ -85,10 +88,11 @@ abstract class BaseAggregator {
     }
 
     protected fun invoke(
-            link: Link,
-            aggregator: BaseAggregator,
-            subType: String = Constants.subTypeJson,
-            referrer: String) {
+        link: Link,
+        aggregator: BaseAggregator,
+        subType: String = Constants.subTypeJson,
+        referrer: String,
+    ) {
         ResourceProxy().fetch(link, aggregator, subType, referrer = referrer)
     }
 

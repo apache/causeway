@@ -18,17 +18,17 @@
  */
 package org.apache.isis.client.kroviz.ui.panel
 
-import org.apache.isis.client.kroviz.ui.core.Constants
-import org.apache.isis.client.kroviz.utils.IconManager
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
-import io.kvision.maps.LatLng
+import io.kvision.maps.Maps
 import io.kvision.maps.maps
 import io.kvision.panel.HPanel
 import io.kvision.utils.pc
+import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.ViewManager
+import org.apache.isis.client.kroviz.utils.IconManager
 
 /**
  * Sample to be called from RoMenuBar
@@ -42,27 +42,25 @@ class GeoMap : HPanel() {
         }
 
         val home = LatLng(53.65425, 10.1545)
-        m.addMarker(home, "Home")
+        m.addMarker(s = "Home")
 
         val office = LatLng(53.5403735, 10.0008355)
-        m.addMarker(office, "Work<br><a href='https://en.wikipedia.org/wiki/Kuehne_%2B_Nagel'>KN</a>")
-
-        val reha = LatLng(53.6824359, 10.7661037)
-        m.addMarker(reha)
+        m.addMarker(s = "Work<br><a href='https://en.wikipedia.org/wiki/Kuehne_%2B_Nagel'>KN</a>")
 
         ViewManager.getRoIconBar().add(createLocationIcon())
 
         setDropTargetData(Constants.stdMimeType) { id ->
             val mrk = parseMarker(id!!)
-            if (mrk != null) m.addMarker(mrk.latLng, mrk.title)
+            if (mrk != null) m.addMarker(/*mrk.latLng,*/ s = mrk.title)
         }
     }
 
     private fun createLocationIcon(): Button {
         val loc = Button(
-                text = "",
-                icon = IconManager.find("Location"),
-                style = ButtonStyle.LIGHT).apply {
+            text = "",
+            icon = IconManager.find("Location"),
+            style = ButtonStyle.LIGHT
+        ).apply {
             padding = CssSize(-16, UNIT.px)
             margin = CssSize(0, UNIT.px)
             title = "Drag icon to map"
@@ -77,12 +75,22 @@ class GeoMap : HPanel() {
         return if (raw.isNotEmpty()) {
             val lat = raw[0].toDouble()
             val lng = raw[1].toDouble()
+//TODO implement extension function  and adopt new version of kvision.maps
             val latLng = LatLng(lat, lng)
             val title = if (raw.size >= 2) raw[2] else "no title set"
-            Marker(latLng, title)
+            Marker(title)
         } else null
     }
 
-    class Marker(val latLng: LatLng, val title: String)
+    private fun LatLng(lat: Double, lng: Double): Any {
+        return { }
+    }
+}
+
+private fun Maps.addMarker(latLang: Any? = null, s: String) {
 
 }
+
+class Marker(val title: String)
+
+

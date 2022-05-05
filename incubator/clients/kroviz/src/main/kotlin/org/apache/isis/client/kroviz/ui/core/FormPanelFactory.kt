@@ -35,6 +35,7 @@ import io.kvision.form.time.dateTime
 import io.kvision.html.Button
 import io.kvision.html.Div
 import io.kvision.html.Iframe
+import io.kvision.html.Image
 import io.kvision.panel.VPanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.auto
@@ -167,7 +168,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     private fun createImage(fi: FormItem): VPanel {
         val panel = VPanel {
             when (val fc = fi.content) {
-//                fc is Image -> fc
+                fc is Image -> fc
                 fc is String -> {
                     // interpret as (file) URL and load locally
                     console.log("[FPF.createImage]")
@@ -181,6 +182,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                 }
             }
         }
+        //TODO
+        panel.add(fi.content as Image)
         panel.addCssClass("form-panel")
         return panel
     }

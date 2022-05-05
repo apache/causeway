@@ -37,7 +37,7 @@ import io.kvision.html.Link as KvisionHtmlLink
 
 class RoDialog(
     caption: String,
-    val items: List<FormItem>,
+    val items: List<FormItem> = mutableListOf(),
     val controller: Controller,
     defaultAction: String = "OK",
     widthPerc: Int = 30,

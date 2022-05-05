@@ -49,6 +49,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
             when (val obj = logEntry.getTransferObject()) {
                 is TObject -> handleObject(obj, referrer)
                 is ResultObject -> handleResultObject(obj)
+                is ResultValue -> handleResultValue(obj)
                 is Property -> handleProperty(obj)
                 is Layout -> handleLayout(obj, dpm as ObjectDM, referrer)
                 is Grid -> handleGrid(obj)
@@ -96,6 +97,12 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
 
     fun handleResultObject(resultObject: ResultObject) {
         (dpm as ObjectDM).addResult(resultObject)
+    }
+
+    fun handleResultValue(resultValue: ResultValue) {
+// TODO       (dpm as ObjectDM).addResult(resultObject)
+        console.log("[OA.handleResultValue]")
+        console.log(resultValue)
     }
 
     override fun getObject(): TObject? {

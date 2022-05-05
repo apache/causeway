@@ -18,14 +18,6 @@
  */
 package org.apache.isis.client.kroviz.ui.core
 
-import kotlinx.browser.document
-import kotlinx.dom.removeClass
-import org.apache.isis.client.kroviz.core.event.ResourceSpecification
-import org.apache.isis.client.kroviz.core.model.Exposer
-import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.ui.core.MenuFactory.buildForTitle
-import org.apache.isis.client.kroviz.utils.IconManager
-import org.apache.isis.client.kroviz.utils.StringUtils
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.core.Widget
@@ -34,6 +26,15 @@ import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
 import io.kvision.panel.SimplePanel
 import io.kvision.panel.VPanel
+import kotlinx.browser.document
+import kotlinx.dom.removeClass
+import org.apache.isis.client.kroviz.core.event.ResourceSpecification
+import org.apache.isis.client.kroviz.core.model.Exposer
+import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.ui.menu.DropDownMenuBuilder
+import org.apache.isis.client.kroviz.ui.menu.DropDownMenuBuilder.buildForTitle
+import org.apache.isis.client.kroviz.utils.IconManager
+import org.apache.isis.client.kroviz.utils.StringUtils
 
 class RoIconBar : SimplePanel() {
 
@@ -80,9 +81,9 @@ class RoIconBar : SimplePanel() {
 
     private fun createDeleteIcon(): Button {
         val del = Button(
-                text = "",
-                icon = IconManager.find("Delete"),
-                style = ButtonStyle.LIGHT).apply {
+            text = "",
+            icon = IconManager.find("Delete"),
+            style = ButtonStyle.LIGHT).apply {
             padding = CssSize(-16, UNIT.px)
             margin = CssSize(0, UNIT.px)
             title = "Drop icon here in order to remove it"
@@ -109,10 +110,10 @@ class RoIconBar : SimplePanel() {
                 val hasIconName = ed.hasOwnProperty("iconName") as Boolean
                 val iconName = if (hasIconName) (ed["iconName"] as String) else ""
 
-                val icon = MenuFactory.buildForObject(
-                        tObject = obj,
-                        iconName = iconName,
-                        withText = false)
+                val icon = DropDownMenuBuilder.buildForObject(
+                    tObject = obj,
+                    iconName = iconName,
+                    withText = false)
                 var title = StringUtils.extractTitle(logEntry.title)
                 title += "\n${obj.title}"
                 initIcon(icon, url, title, "icon-bar-object", icon.buttonId()!!)
@@ -126,7 +127,7 @@ class RoIconBar : SimplePanel() {
         val titles = id.split(Constants.actionSeparator)
         val menuTitle = titles[0]
         val actionTitle = titles[1]
-        val icon = MenuFactory.buildForAction(menuTitle, actionTitle)!!
+        val icon = DropDownMenuBuilder.buildForAction(menuTitle, actionTitle)!!
         return initIcon(icon, id, id, "icon-bar-action", icon.id!!)
     }
 
@@ -135,11 +136,13 @@ class RoIconBar : SimplePanel() {
         return initIcon(icon, id, id, "icon-bar-factory", icon.buttonId()!!)
     }
 
-    private fun initIcon(icon: SimplePanel,
-                         id: String,
-                         title: String,
-                         cssClass: String,
-                         btnId: String)
+    private fun initIcon(
+        icon: SimplePanel,
+        id: String,
+        title: String,
+        cssClass: String,
+        btnId: String,
+    )
             : SimplePanel {
         icon.setDragDropData(Constants.stdMimeType, id)
         icon.id = id

@@ -24,6 +24,7 @@ import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.SvgDispatcher
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
+import org.apache.isis.client.kroviz.ui.core.SessionManager
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.utils.StringUtils
 import org.apache.isis.client.kroviz.utils.UUID
@@ -39,12 +40,17 @@ import org.w3c.files.Blob
  */
 class EventStore {
     var log = observableListOf<LogEntry>()
-    var logStartTime: Int = 0
 
     private fun log(logEntry: LogEntry) {
         log.add(logEntry)
-        if (log.size == 1) {
-            logStartTime = logEntry.createdAt.getMilliseconds()
+    }
+
+    fun getLogStartMilliSeconds(): Double {
+        return if (log.size >= 1) {
+            val le = log[0]
+            le.createdAt.getTime()
+        } else {
+            0.toDouble()
         }
     }
 
@@ -58,6 +64,7 @@ class EventStore {
         if (aggregator != null) {
             entry.addAggregator(aggregator)
         }
+        entry.runningAtStart = countRunning()
         log(entry)
         updateStatus(entry)
         return entry
@@ -80,7 +87,7 @@ class EventStore {
         val logEntry = findView(title)
         if (null != logEntry) {
             logEntry.setClose()
-            logEntry.getAggregator().reset()
+            logEntry.getAggregator()?.reset()
             updateStatus(logEntry)
         }
     }
@@ -97,6 +104,7 @@ class EventStore {
         if (entry != null) {
             entry.response = response
             entry.setSuccess()
+            entry.runningAtEnd = countRunning()
             updateStatus(entry)
         }
         return entry
@@ -104,14 +112,30 @@ class EventStore {
 
     fun end(reSpec: ResourceSpecification, pumlCode: String, response: Any?): LogEntry? {
         val entry: LogEntry? = findBy(reSpec, pumlCode)
+        val credentials: String = SessionManager.getCredentials()!!
+
         if (entry != null) {
             when (response) {
-                is String -> entry.response = response
+                is String -> {
+                    if (response.isEmpty()) {
+                        console.log("[ES.end]")
+                        console.log(reSpec)
+                        val rebound = CorsHttpRequest().invoke(reSpec.url, credentials)
+                        if (rebound.isEmpty()) {
+                            throw IllegalStateException("CORS issue while accessing layout xml")
+                        } else {
+                            entry.response = rebound
+                        }
+                    } else {
+                        entry.response = response
+                    }
+                }
                 is Blob -> entry.blob = response
                 else -> {
                 }
             }
             entry.setSuccess()
+            entry.runningAtEnd = countRunning()
             updateStatus(entry)
         }
         return entry
@@ -120,16 +144,21 @@ class EventStore {
     fun fault(reSpec: ResourceSpecification, fault: String) {
         val entry: LogEntry? = findBy(reSpec)
         entry!!.setError(fault)
+        entry.runningAtEnd = countRunning()
         updateStatus(entry)
     }
 
     internal fun updateStatus(entry: LogEntry) {
         val successNo = log.count { le -> le.isSuccess() }
-        val runningNo = log.count { le -> le.isRunning() }
+        val runningNo = countRunning()
         val errorNo = log.count { le -> le.isError() }
         val viewNo = log.count { le -> le.isView() }
         val status = StatusPo(successNo, runningNo, errorNo, viewNo)
         ViewManager.updateStatus(status)
+    }
+
+    private fun countRunning(): Int {
+        return log.count { le -> le.isRunning() }
     }
 
     /**

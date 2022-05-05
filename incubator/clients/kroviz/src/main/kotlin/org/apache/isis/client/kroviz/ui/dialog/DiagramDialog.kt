@@ -19,13 +19,17 @@
 package org.apache.isis.client.kroviz.ui.dialog
 
 import org.apache.isis.client.kroviz.to.ValueType
-import org.apache.isis.client.kroviz.ui.core.*
+import org.apache.isis.client.kroviz.ui.core.FormItem
+import org.apache.isis.client.kroviz.ui.core.RoDialog
+import org.apache.isis.client.kroviz.ui.core.SessionManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
+import org.apache.isis.client.kroviz.ui.menu.DropDownMenuBuilder
 import org.apache.isis.client.kroviz.utils.*
 import io.kvision.html.Link as KvisionHtmlLink
 
 class DiagramDialog(
-        var label: String,
-        private var pumlCode: String
+    var label: String,
+    private var pumlCode: String,
 ) : Controller() {
 
     private var callBack: Any = UUID()
@@ -41,13 +45,13 @@ class DiagramDialog(
         formItems.add(fi)
 
         dialog = RoDialog(
-                widthPerc = 80,
-                heightPerc = 80,
-                caption = label,
-                items = formItems,
-                controller = this,
-                defaultAction = "Pin",
-                menu = buildMenu()
+            widthPerc = 80,
+            heightPerc = 80,
+            caption = label,
+            items = formItems,
+            controller = this,
+            defaultAction = "Pin",
+            menu = buildMenu()
         )
     }
 
@@ -85,9 +89,9 @@ class DiagramDialog(
     }
 
     private fun buildPinAction(): io.kvision.html.Link {
-        val action = MenuFactory.buildActionLink(
-                label = "Pin",
-                menuTitle = "Pin")
+        val action = DropDownMenuBuilder.buildActionLink(
+            label = "Pin",
+            menuTitle = "Pin")
         action.onClick {
             pin()
         }
@@ -95,9 +99,9 @@ class DiagramDialog(
     }
 
     private fun buildDownloadAction(): io.kvision.html.Link {
-        val action = MenuFactory.buildActionLink(
-                label = "Download",
-                menuTitle = "Download")
+        val action = DropDownMenuBuilder.buildActionLink(
+            label = "Download",
+            menuTitle = "Download")
         action.onClick {
             download()
         }

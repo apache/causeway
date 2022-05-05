@@ -16,20 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.ui.chart
+package org.apache.isis.client.kroviz.handler
 
-import io.kvision.chart.DataSets
-import io.kvision.core.Color
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.to.TransferObject
 
-interface ChartModel {
+class TObjectHandler : BaseHandler() {
 
-    var bgColorList: MutableList<Color>
-    var bgColorList2: MutableList<Color>
-    var labelList: MutableList<String>
+    override fun canHandle(response: String): Boolean {
+        val urlPath = logEntry.url.split("restful")
+        val path = urlPath[1]
+        if (path != null && path.length > 1) {
+            return super.canHandle(response)
+        }
+        return false
+    }
 
-    var datasetList : MutableList<DataSets>
-
-    var ds1: DataSets
-    var ds2: DataSets
+    override fun parse(response: String): TransferObject {
+        return Json.decodeFromString<TObject>(response)
+    }
 
 }

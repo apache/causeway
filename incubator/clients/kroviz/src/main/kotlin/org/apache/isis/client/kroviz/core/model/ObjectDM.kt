@@ -54,7 +54,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val le = es.findBy(rs)!!
             val aggt = le.getAggregator()
             console.log(aggt)
-            val logEntries = es.findAllBy(aggt)
+            val logEntries = es.findAllBy(aggt!!)
             logEntries.forEach {
                 console.log(it)
             }

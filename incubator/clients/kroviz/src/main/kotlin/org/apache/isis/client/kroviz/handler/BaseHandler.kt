@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.handler
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.core.Constants
+ import org.apache.isis.client.kroviz.ui.core.SessionManager
 
 /**
  * Handle responses to XmlHttpRequests asynchronously,
@@ -76,7 +77,8 @@ abstract class BaseHandler {
     }
 
     open fun update() {
-        logEntry.getAggregator().update(logEntry, Constants.subTypeJson)
+        SessionManager.logInvocation(this)
+        logEntry.getAggregator()?.update(logEntry, Constants.subTypeJson)
     }
 
 }

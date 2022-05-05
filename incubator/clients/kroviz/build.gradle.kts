@@ -30,7 +30,7 @@ plugins {
 var version = "2.0.0-SNAPSHOT"
 
 kotlin.sourceSets.all {
-    languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+    languageSettings.optIn("org.mylibrary.OptInAnnotation")
 }
 
 repositories {
@@ -118,6 +118,7 @@ afterEvaluate {
     tasks {
         create("jar", Jar::class) {
             dependsOn("browserProductionWebpack")
+//            manifest.writeTo("$buildDir/mymanifest.mf")
             group = "package"
             destinationDirectory.set(file("$buildDir/libs"))
             val distribution =
@@ -133,6 +134,7 @@ afterEvaluate {
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
             inputs.files(distribution, webDir)
             outputs.file(archiveFile)
+
         }
     }
 

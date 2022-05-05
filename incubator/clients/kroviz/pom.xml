@@ -125,39 +125,9 @@
                             </arguments>
                         </configuration>
                     </execution>
-                    <!-- DOES NOT WORK ON WINDOWS (replaced by ant-tasks below ...)
-                    <execution>
-                        <id>copy-jar</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>cp</executable>
-                            <arguments>
-                                <argument>${project.basedir}/build/libs/kroviz-${project.version}.jar</argument>
-                                <argument>${project.build.directory}</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>rename-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>mv</executable>
-                            <arguments>
-                                <argument>${project.build.directory}/kroviz-${project.version}.jar</argument>
-                                <argument>${project.build.directory}/${project.artifactId}-${project.version}.jar
-                                </argument>
-                            </arguments>
-                        </configuration>
-                    </execution> -->
-                </executions> 
+                </executions>
             </plugin>
-            
+
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
@@ -166,11 +136,11 @@
                         <configuration>
                             <target>
                                 <copy
-                                	file="${project.basedir}/build/libs/kroviz-${project.version}.jar" 
-                                	todir="${project.build.directory}" />
-                               	<move 
-                               		file="${project.build.directory}/kroviz-${project.version}.jar" 
-                               		tofile="${project.build.directory}/${project.artifactId}-${project.version}.jar" />
+                                        file="${project.basedir}/build/libs/kroviz-${project.version}.jar"
+                                        todir="${project.build.directory}"/>
+                                <move
+                                        file="${project.build.directory}/kroviz-${project.version}.jar"
+                                        tofile="${project.build.directory}/${project.artifactId}-${project.version}.jar"/>
                             </target>
                         </configuration>
                         <goals>

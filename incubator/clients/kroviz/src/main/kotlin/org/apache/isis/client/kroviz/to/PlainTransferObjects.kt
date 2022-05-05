@@ -28,9 +28,10 @@ enum class ActionSemantics(val type: String) {
 }
 
 @Serializable
-data class DomainTypes(override val links: List<Link> = emptyList(),
-                       val values: List<Link> = emptyList(),
-                       val extensions: Extensions? = null
+data class DomainTypes(
+    override val links: List<Link> = emptyList(),
+    val values: List<Link> = emptyList(),
+    val extensions: Extensions? = null
 ) : TransferObject, WithLinks
 
 interface HttpErrorResponse {
@@ -42,23 +43,24 @@ interface HttpErrorResponse {
 @Serializable
 data class HttpError(
     private val httpStatusCode: Int,
-    private val message: String,
+    private val message: String?,
     override val detail: HttpErrorDetail? = null
 ) : TransferObject, HttpErrorResponse {
-    override fun getMessage() : String {
-        return message
+    override fun getMessage(): String {
+        return message ?: ""
     }
-    override fun getStatusCode() : Int {
+
+    override fun getStatusCode(): Int {
         return httpStatusCode
     }
 }
 
 @Serializable
 data class HttpErrorDetail(
-        val className: String,
-        val message: String? = null,
-        val element: List<String>,
-        var causedBy: HttpErrorDetail? = null
+    val className: String,
+    val message: String? = null,
+    val element: List<String>,
+    var causedBy: HttpErrorDetail? = null
 ) : TransferObject
 
 @Serializable
@@ -72,7 +74,8 @@ data class Http401Error(
     override fun getMessage(): String {
         return error + " / " + path + " / " + timestamp
     }
-    override fun getStatusCode() : Int {
+
+    override fun getStatusCode(): Int {
         return status
     }
 
@@ -80,7 +83,7 @@ data class Http401Error(
 
 @Serializable
 data class Links(
-        @SerialName("links") val content: List<Link> = emptyList()
+    @SerialName("links") val content: List<Link> = emptyList()
 ) : TransferObject
 
 enum class MemberType(val type: String) {
@@ -108,29 +111,33 @@ enum class Position(val type: String) {
 }
 
 @Serializable
-data class Property(val id: String = "",
-                    val memberType: String = "",
-                    override val links: List<Link> = emptyList(),
-                    val optional: Boolean? = null,
-                    val title: String? = null,
-                    val value: Value? = null,
-                    val extensions: Extensions? = null,
-                    val format: String? = null,
-                    val disabledReason: String? = null,
-                    val parameters: List<Parameter> = emptyList(),
-                    val maxLength: Int = 0
+data class Property(
+    val id: String = "",
+    val memberType: String = "",
+    override val links: List<Link> = emptyList(),
+    val optional: Boolean? = null,
+    val title: String? = null,
+    val value: Value? = null,
+    val extensions: Extensions? = null,
+    val format: String? = null,
+    val disabledReason: String? = null,
+    val parameters: List<Parameter> = emptyList(),
+    val maxLength: Int = 0
 ) : TransferObject, WithLinks
 
 @Serializable
-data class Restful(override val links: List<Link> = emptyList(),
-                   val extensions: Extensions
+data class Restful(
+    val userName: String? = null,
+    val roles: List<String>? = emptyList(),
+    override val links: List<Link> = emptyList(),
+    val extensions: Extensions
 ) : TransferObject, WithLinks
 
 @Serializable
 data class ResultList(
-        override val links: List<Link> = emptyList(),
-        val resulttype: String = ResultType.LIST.type,
-        val result: ResultListResult? = null
+    override val links: List<Link> = emptyList(),
+    val resulttype: String = ResultType.LIST.type,
+    val result: ResultListResult? = null
 ) : TransferObject, WithLinks
 
 /*
@@ -144,16 +151,16 @@ interface IResult : TransferObject
 
 @Serializable
 data class ResultListResult(
-        val value: List<Link> = emptyList(),
-        override val links: List<Link> = emptyList(),
-        val extensions: Extensions? = null
+    val value: List<Link> = emptyList(),
+    override val links: List<Link> = emptyList(),
+    val extensions: Extensions? = null
 ) : IResult, WithLinks
 
 @Serializable
 data class ResultObject(
-        override val links: List<Link> = emptyList(),
-        val resulttype: String = ResultType.DOMAINOBJECT.type,
-        val result: ResultObjectResult? = null
+    override val links: List<Link> = emptyList(),
+    val resulttype: String = ResultType.DOMAINOBJECT.type,
+    val result: ResultObjectResult? = null
 ) : IResult, WithLinks
 
 @Serializable
@@ -175,39 +182,42 @@ enum class ResultType(val type: String) {
 
 @Serializable
 data class ResultValue(
-        override val links: List<Link> = emptyList(),
-        val resulttype: String = ResultType.SCALARVALUE.type,
-        val result: ResultValueResult? = null
+    override val links: List<Link> = emptyList(),
+    val resulttype: String = ResultType.SCALARVALUE.type,
+    val result: ResultValueResult? = null
 ) : TransferObject, WithLinks
 
 @Serializable
 data class ResultValueResult(
-        val value: Value? = null,
-        override val links: List<Link> = emptyList(),
-        val extensions: Extensions? = null
+    val value: Value? = null,
+    override val links: List<Link> = emptyList(),
+    val extensions: Extensions? = null
 ) : IResult, WithLinks
 
 @Serializable
-data class Service(val value: List<Link> = emptyList(),
-                   override val links: List<Link> = emptyList(),
-                   val extensions: Extensions? = null,
-                   val title: String = "",
-                   val serviceId: String = "",
-                   val members: Map<String, Member> = emptyMap()
+data class Service(
+    val value: List<Link> = emptyList(),
+    override val links: List<Link> = emptyList(),
+    val extensions: Extensions? = null,
+    val title: String = "",
+    val serviceId: String = "",
+    val members: Map<String, Member> = emptyMap()
 ) : TransferObject, WithLinks
 
 @Serializable
-data class User(val userName: String = "",
-                val roles: List<String> = emptyList(),
-                override val links: List<Link> = emptyList(),
-                val extensions: Extensions? = null
+data class User(
+    val userName: String = "",
+    val roles: List<String> = emptyList(),
+    override val links: List<Link> = emptyList(),
+    val extensions: Extensions? = null
 ) : TransferObject, WithLinks
 
 @Serializable
-data class Version(override val links: List<Link> = emptyList(),
-                   val specVersion: String = "",
-                   val implVersion: String = "",
-                   val optionalCapabilities: Map<String, String> = emptyMap(),
-                   val extensions: Extensions? = null
+data class Version(
+    override val links: List<Link> = emptyList(),
+    val specVersion: String = "",
+    val implVersion: String = "",
+    val optionalCapabilities: Map<String, String> = emptyMap(),
+    val extensions: Extensions? = null
 ) : TransferObject, WithLinks
 

@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.to
 import org.apache.isis.client.kroviz.handler.Http401ErrorHandler
 import org.apache.isis.client.kroviz.handler.HttpErrorHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.HTTP_ERROR_401
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.HTTP_ERROR_403
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.HTTP_ERROR_405
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.HTTP_ERROR_500
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.HTTP_ERROR
@@ -33,11 +34,45 @@ import kotlin.test.assertTrue
 class HttpErrorTest {
 
     @Test
+    fun testKnife500() {
+        val jsonStr = org.apache.isis.client.kroviz.snapshots.knife.HTTP_ERROR_500.str
+        val error = HttpErrorHandler().parse(jsonStr) as HttpError
+        val code = error.getStatusCode()
+        assertEquals(500, code)
+        assertNotNull(error.getMessage())
+
+        val detail = error.detail
+        assertNotNull(detail)
+        assertNotNull(detail.className)
+        assertEquals(null, detail.message)
+        assertEquals("", error.getMessage())
+        assertNotNull(detail.element)
+        assertTrue(detail.element.size > 0)
+    }
+
+    @Test
     fun testDemo500() {
         val jsonStr = HTTP_ERROR_500.str
         val error = HttpErrorHandler().parse(jsonStr) as HttpError
         val code = error.getStatusCode()
         assertEquals(500, code)
+        assertNotNull(error.getMessage())
+
+        val detail = error.detail
+        assertNotNull(detail)
+        assertNotNull(detail.className)
+        assertNotNull(detail.message)
+        assertEquals(error.getMessage(), detail.message)
+        assertNotNull(detail.element)
+        assertTrue(detail.element.size > 0)
+    }
+
+    @Test
+    fun test403() {
+        val jsonStr = HTTP_ERROR_403.str
+        val error = HttpErrorHandler().parse(jsonStr) as HttpError
+        val code = error.getStatusCode()
+        assertEquals(403, code)
         assertNotNull(error.getMessage())
 
         val detail = error.detail

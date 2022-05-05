@@ -22,20 +22,21 @@ import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.utils.StringUtils
 
 @Serializable
-data class Link(val rel: String = "",
-                val method: String = Method.GET.operation,
-                val href: String,
-                val type: String = "",
-        //RO SPEC OR ISIS IMPL? can "args" be folded into "arguments"
-                val args: Map<String, Argument> = emptyMap(),
-        /* arguments can either be:
-         * -> empty Map {}
-         * -> Map with "value": null (cf. SO_PROPERTY)
-         * -> Map with empty key "" (cf. ACTIONS_DOWNLOAD_META_MODEL)
-         * -> Map with key,<VALUE> (cf. ACTIONS_RUN_FIXTURE_SCRIPT, ACTIONS_FIND_BY_NAME, ACTIONS_CREATE) */
-                val arguments: Map<String, Argument?> = emptyMap(),
-                val title: String = "")
-    : TransferObject {
+data class Link(
+    val rel: String = "",
+    val method: String = Method.GET.operation,
+    val href: String,
+    val type: String = "",
+    //RO SPEC OR ISIS IMPL? can "args" be folded into "arguments"
+    val args: Map<String, Argument> = emptyMap(),
+    /* arguments can either be:
+     * -> empty Map {}
+     * -> Map with "value": null (cf. SO_PROPERTY)
+     * -> Map with empty key "" (cf. ACTIONS_DOWNLOAD_META_MODEL)
+     * -> Map with key,<VALUE> (cf. ACTIONS_RUN_FIXTURE_SCRIPT, ACTIONS_FIND_BY_NAME, ACTIONS_CREATE) */
+    val arguments: Map<String, Argument?> = emptyMap(),
+    val title: String = "",
+) : TransferObject {
 
     fun argMap(): Map<String, Argument?>? {
         return when {
@@ -80,12 +81,22 @@ data class Link(val rel: String = "",
     }
 
     fun representation(): Represention {
-        val roPrefix = "application/json;profile=\"urn:org.restfulobjects:repr-types/"
-        val isisPrefix = "application/jsonprofile=\"urn:org.restfulobjects:repr-types/"
-        var raw = type.replace(roPrefix, "")
-        raw = raw.replace(isisPrefix, "")
-        raw = raw.replace("\"", "")
-        return Represention.find(raw)!!
+        var s = type.replace("application/json", "")
+        s = s.replace(";", "") // ; may be missing
+        s = s.replace("profile=\"urn:org.restfulobjects:repr-types/", "")
+        s = s.replace("\"", "")
+        val rep = Represention.find(s) ?: Represention.UNKNOWN
+        if (rep == Represention.UNKNOWN) {
+            console.log("[Link.representation]")
+            console.log(s)
+        }
+        return rep
+    }
+
+    fun simpleType(): String {
+        val stringList = type.split("/")
+        val t = stringList.last()
+        return t.removeSuffix("\"")
     }
 
 }
@@ -150,12 +161,13 @@ enum class Represention(val type: String) {
     OBJECT("object"),
     OBJECT_ACTION("object-action"),
     OBJECT_COLLECTION("object-collection"),
-    OBJECT_LAYOUT_BS3("object-layout-bs3"), // missing in RO SPEC ???
+    OBJECT_LAYOUT_BS("object-layout-bs"), // missing in RO SPEC ???
     OBJECT_PROPERTY("object-property"),
     PROPERTY_DESCRIPTION("property-description"),
     SELF("self"),
     TYPE_LIST("type-list"),
     TYPE_ACTION_RESULT("type-action-result"),
+    UNKNOWN("unknown"), // added by joerg.rade
     USER("user"),
     VERSION("version");
 

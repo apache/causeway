@@ -54,14 +54,14 @@ object OBJECT_COLLECTION: Response(){
   "value": [
     {
       "rel": "urn:org.restfulobjects:rels/value",
-      "href": "http://localhost:8080/restful/objects/demo.JavaLangStringEntity/1",
+      "href": "http://localhost:8080/restful/objects/demo.JavaLangStringEntity/196",
       "method": "GET",
       "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
       "title": "StringJDO entity: Hello"
     },
     {
       "rel": "urn:org.restfulobjects:rels/value",
-      "href": "http://localhost:8080/restful/objects/demo.JavaLangStringEntity/2",
+      "href": "http://localhost:8080/restful/objects/demo.JavaLangStringEntity/197",
       "method": "GET",
       "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
       "title": "StringJDO entity: world"

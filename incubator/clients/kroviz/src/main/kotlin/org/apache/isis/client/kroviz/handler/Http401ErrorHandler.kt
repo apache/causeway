@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.handler
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.core.aggregator.ErrorDispatcher
 import org.apache.isis.client.kroviz.to.Http401Error
@@ -31,6 +32,6 @@ class Http401ErrorHandler : BaseHandler() {
     }
 
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(Http401Error.serializer(), response)
+        return Json.decodeFromString<Http401Error>(response)
     }
 }

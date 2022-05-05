@@ -19,6 +19,7 @@
 
 package org.apache.isis.client.kroviz.handler
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.mb.Menubars
@@ -28,57 +29,50 @@ import org.apache.isis.client.kroviz.to.mb.Menubars
  */
 
 class DomainTypeHandler : BaseHandler() {
-    
+
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(DomainType.serializer(), response)
+        return Json.decodeFromString<DomainType>(response)
     }
 }
 
 class MemberHandler : BaseHandler() {
-    
+
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(Member.serializer(), response)
+        return Json.decodeFromString<Member>(response)
     }
 }
 
 class MenuBarsHandler : BaseHandler() {
-    
+
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(Menubars.serializer(), response)
+        return Json.decodeFromString<Menubars>(response)
     }
 }
 
 class PropertyHandler : BaseHandler() {
-    
+
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(Property.serializer(), response)
+        return Json.decodeFromString<Property>(response)
     }
 }
 
 class ServiceHandler : BaseHandler() {
-    
-    override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(Service.serializer(), response)
-    }
-}
 
-class TObjectHandler : BaseHandler() {
-    
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(TObject.serializer(), response)
+        return Json.decodeFromString<Service>(response)
     }
 }
 
 class UserHandler : BaseHandler() {
-    
+
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(User.serializer(), response)
+        return Json.decodeFromString<User>(response)
     }
 }
 
 class VersionHandler : BaseHandler() {
-    
+
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(Version.serializer(), response)
+        return Json.decodeFromString<Version>(response)
     }
 }

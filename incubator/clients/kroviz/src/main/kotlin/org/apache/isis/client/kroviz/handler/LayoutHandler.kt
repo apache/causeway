@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.handler
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.TransferObject
@@ -27,17 +28,16 @@ import org.apache.isis.client.kroviz.utils.XmlHelper
 class LayoutHandler : BaseHandler() {
 
     override fun canHandle(response: String): Boolean {
-        val isJsonLayout = !XmlHelper.isXml(response)
-                && UrlUtils.isLayout(logEntry.url)
-        if (isJsonLayout) {
+        val isJson = !XmlHelper.isXml(response)
+        val isLayout = UrlUtils.isLayout(logEntry.url)
+        if (isJson && isLayout) {
             return super.canHandle(response)
         }
         return false
     }
 
-
     override fun parse(response: String): TransferObject {
-        return Json.decodeFromString(Layout.serializer(), response)
+        return Json.decodeFromString<Layout>(response)
     }
 
 }

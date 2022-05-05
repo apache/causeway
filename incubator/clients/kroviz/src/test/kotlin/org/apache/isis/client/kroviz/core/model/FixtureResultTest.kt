@@ -37,7 +37,7 @@ class FixtureResultTest {
         val jsonStr = FR_OBJECT_BAZ.str
 
         // when
-        val tObj = Json.decodeFromString(TObject.serializer(), jsonStr)
+        val tObj = Json.decodeFromString<TObject>(jsonStr)
         val dynObj = tObj.asDynamic()
 
         // then

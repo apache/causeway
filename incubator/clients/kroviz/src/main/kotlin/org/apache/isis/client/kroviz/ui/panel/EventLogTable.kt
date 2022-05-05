@@ -31,6 +31,7 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.dialog.EventLogDetail
+import org.apache.isis.client.kroviz.ui.menu.DynamicMenuBuilder
 import org.apache.isis.client.kroviz.utils.StringUtils
 
 class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) : VPanel() {
@@ -42,7 +43,7 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
             title = "",
             field = "state",
             width = "50",
-            headerMenu = DynamicMenuBuilder().buildTableMenu(this),
+            headerMenu = DynamicMenuBuilder.buildTableMenu(this),
             hozAlign = Align.CENTER,
             vertAlign = VAlign.MIDDLE,
             formatterComponentFunction = { _, _, data -> buildActionButton(data) }
@@ -154,7 +155,6 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
 
         tabulator.onEvent {
             mouseover = {
-                console.log("[ED.init] dialog on init")
                 val jst = tabulator.jsTabulator
                 val value = filterState?.name
                 if (jst != null && value != null) {

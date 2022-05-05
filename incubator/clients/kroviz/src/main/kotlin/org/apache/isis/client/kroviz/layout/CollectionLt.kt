@@ -33,6 +33,6 @@ data class CollectionLt(var named: String? = "",
                         var defaultView: String? = null,
                         var hidden: String? = null,
                         var namedEscaped: String? = "",
-                        var paged: String? = ""
+                        var paged: Int? = 0
 )
 

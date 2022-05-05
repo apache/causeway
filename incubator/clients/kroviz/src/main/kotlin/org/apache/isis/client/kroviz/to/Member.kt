@@ -22,15 +22,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Member(val id: String,
-                  val memberType: String,
+                  val memberType: String, //TODO introduce enum
                   override val links: List<Link> = emptyList(),
-        //IMROVE: make value immutable (again) and handle property edits eg. via a wrapper
+        //IMPROVE: make value immutable (again) and handle property edits e.g. via a wrapper
         // members of type property have a value, those of type action don't
                   var value: Value? = null,
                   val format: String = "",
                   val extensions: Extensions? = null,
                   val disabledReason: String = "",
-                  val optional: Boolean = false
+                  val optional: Boolean? = false
 ) : TransferObject, WithLinks {
 
     var type: String? = ValueType.TEXT.type
@@ -45,12 +45,8 @@ data class Member(val id: String,
         type = TypeMapper().match(this)
     }
 
-    fun isProperty(): Boolean {
+    private fun isProperty(): Boolean {
         return memberType == MemberType.PROPERTY.type
-    }
-
-    fun isAction(): Boolean {
-        return memberType == MemberType.ACTION.type
     }
 
     fun isReadOnly(): Boolean {
@@ -64,7 +60,5 @@ data class Member(val id: String,
     fun getInvokeLink(): Link? {
         return links.firstOrNull { it.rel.indexOf(id) > 0 }
     }
-
-
 
 }

@@ -24,10 +24,8 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
-import org.apache.isis.client.kroviz.to.WithLinks
-import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.to.Relation
-import org.apache.isis.client.kroviz.to.TransferObject
+import org.apache.isis.client.kroviz.to.*
+import org.apache.isis.client.kroviz.to.bs3.Grid
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.w3c.files.Blob
@@ -42,6 +40,7 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
     SUCCESS_XML("SUCCESS_XML", "fas fa-code", ButtonStyle.SUCCESS),
     SUCCESS_IMG("SUCCESS_IMG", "fas fa-image", ButtonStyle.SUCCESS),
     VIEW("VIEW", "fas fa-eye", ButtonStyle.INFO),
+    DIALOG("DIALOG", "fas fa-o-commenting", ButtonStyle.LIGHT),
     USER_ACTION("ACTION", "fas fa-user-times", ButtonStyle.INFO),
     DUPLICATE("DUPLICATE", "fas fa-copy", ButtonStyle.OUTLINESUCCESS),
     CLOSED("CLOSED", "fas fa-eye-slash", ButtonStyle.OUTLINEINFO),
@@ -56,11 +55,13 @@ data class LogEntry(
     @Contextual val rs: ResourceSpecification,
     val method: String? = "",
     val request: String = "",
-    @Contextual val createdAt: Date = Date()
+    @Contextual val createdAt: Date = Date(),
 ) {
     val url: String = rs?.url
-        //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+
+    //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     val subType = rs?.subType
+
     //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     var state = EventState.INITIAL
     var title: String = ""
@@ -101,6 +102,9 @@ data class LogEntry(
 
     @Contextual
     var panel: SimplePanel? = null
+
+    var runningAtStart = 0
+    var runningAtEnd = 0
 
     // alternative constructor for UI events (eg. from user interaction)
     @JsName("secondaryConstructor")
@@ -170,21 +174,36 @@ data class LogEntry(
 
     fun setTransferObject(to: TransferObject) {
         this.obj = to
-        initType()
-    }
-
-    fun initType() {
-        if (obj != null && obj is WithLinks) {
-            val self = (obj as WithLinks).getLinks().firstOrNull() { it.relation() == Relation.SELF }
-            if (self != null) {
-                val t = self.type.removePrefix("application/json;profile=\"urn:org.restfulobjects:repr-types/")
-                type = t.removeSuffix("\"")
+        when (to) {
+            is WithLinks -> {
+                this.type = extractType(to)
+            }
+            is Grid -> {
+                this.type = Relation.LAYOUT.type
+            }
+            is Icon -> {
+                this.type = Relation.OBJECT_ICON.type
+            }
+            is Blob -> {
+                this.type = Represention.IMAGE_PNG.type
+            }
+            else -> {
+                console.log("[LE.setTransferObject]")
+                console.log(to)
             }
         }
-        if (type == "") {
-            val stringList = url.split("/")
-            type = stringList.last()
+    }
+
+    //TODO this should be moved to a ValueSemanticsProvider
+    private fun extractType(wl: WithLinks): String {
+        val firstLink = wl.getLinks().firstOrNull()!!
+        val result = firstLink.simpleType()
+        if (result.trim().length == 0) {
+            console.log("[LE.extractType]")
+            console.log(obj)
+            console.log(result)
         }
+        return result
     }
 
 // region response
@@ -199,7 +218,7 @@ data class LogEntry(
         return response
     }
 
-    fun hasResponse(): Boolean {
+    private fun hasResponse(): Boolean {
         return response != ""
     }
 
@@ -235,18 +254,21 @@ data class LogEntry(
         return fault != null
     }
 
-    fun getAggregator(): BaseAggregator {
+    fun getAggregator(): BaseAggregator? {
         //TODO the last aggt is not always the right one
         // callers need to filter  !!!
         if (aggregators.size == 0) {
-            console.log("[LE.getAggregator]")
+            console.log("[LE.getAggregator] no Aggregator(s) yet")
             console.log(this)
+            return null
+        } else {
+            return aggregators.last()
         }
-        return aggregators.last()
     }
 
     fun addAggregator(aggregator: BaseAggregator) {
         if (aggregator is ActionDispatcher) {
+//            console.log("[LE.addAggregator] is ActionDispatcher")
             ViewManager.setBusyCursor()
         }
         aggregators.add(aggregator)
@@ -255,25 +277,6 @@ data class LogEntry(
 
     fun matches(reSpec: ResourceSpecification): Boolean {
         return url == reSpec.url && subType.equals(reSpec.subType)
-    }
-
-    fun selfHref(): String {
-        if (selfLink() != null) {
-            return selfLink()!!.href
-        } else return ""
-    }
-
-    fun selfLink(): Link? {
-        getLinks().forEach { if (it.relation() == Relation.SELF) return it }
-        return null
-    }
-
-    fun getLinks(): List<Link> {
-        return if (obj is WithLinks) {
-            (obj as WithLinks).getLinks()
-        } else {
-            emptyList()
-        }
     }
 
 }

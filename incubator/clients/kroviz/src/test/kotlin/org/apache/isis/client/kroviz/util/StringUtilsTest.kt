@@ -26,4 +26,14 @@ class StringUtilsTest {
         assertEquals(expected, actual)
     }
 
+    @Test
+    fun testFormat() {
+        // given
+        val int = 123456789
+        // when
+        val actual = StringUtils.format(int)
+        // then
+        val expected = "123.456.789"
+        assertEquals(expected, actual)
+    }
 }

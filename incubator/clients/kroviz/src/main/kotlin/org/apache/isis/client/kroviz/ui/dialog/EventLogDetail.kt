@@ -74,8 +74,9 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
         )
         customButtons.add(FormItem("Console", ValueType.BUTTON, null, callBack = this, callBackAction = LOG))
 
+        val title = StringUtils.shortTitle(logEntry.title)
         dialog = RoDialog(
-            caption = "Details :" + logEntry.title,
+            caption = "Details :" + title,
             items = formItems,
             controller = this,
             defaultAction = "Response Diagram",

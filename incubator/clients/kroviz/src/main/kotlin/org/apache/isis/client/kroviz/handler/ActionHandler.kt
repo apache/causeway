@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.handler
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.to.Action
@@ -30,7 +31,7 @@ class ActionHandler : BaseHandler() {
         if (response.contains("collection-description")) {
             throw RuntimeException()
         }
-        return Json.decodeFromString(Action.serializer(), response)
+        return Json.decodeFromString<Action>(response)
     }
 
     override fun doHandle() {

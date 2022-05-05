@@ -23,6 +23,7 @@ import io.kvision.core.ResString
 import io.kvision.core.UNIT
 import io.kvision.core.style
 import io.kvision.dropdown.DropDown
+import io.kvision.dropdown.dropDown
 import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
 import io.kvision.html.Link
@@ -31,14 +32,14 @@ import io.kvision.panel.SimplePanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.px
 import org.apache.isis.client.kroviz.core.Session
+import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.to.mb.Menubars
-import org.apache.isis.client.kroviz.ui.chart.SampleChartModel
 import org.apache.isis.client.kroviz.ui.dialog.About
 import org.apache.isis.client.kroviz.ui.dialog.EventDialog
 import org.apache.isis.client.kroviz.ui.dialog.LoginPrompt
 import org.apache.isis.client.kroviz.ui.dialog.SvgInline
-import org.apache.isis.client.kroviz.ui.panel.EventChart
+import org.apache.isis.client.kroviz.ui.menu.DropDownMenuBuilder
 import org.apache.isis.client.kroviz.ui.panel.GeoMap
 import org.apache.isis.client.kroviz.ui.panel.ImageSample
 import org.apache.isis.client.kroviz.ui.panel.SvgMap
@@ -95,7 +96,7 @@ class RoMenuBar : SimplePanel() {
             mainEntry.image = session.resString
             mainEntry.icon = null
         }
-        mainEntry.image.apply { systemIconStyle }
+        mainEntry.image?.apply { systemIconStyle }
         val logEntry = SessionManager.getEventStore().findMenuBarsBy(session.baseUrl)
         if (logEntry != null) {
             val menuBars = logEntry.obj as Menubars
@@ -163,54 +164,47 @@ class RoMenuBar : SimplePanel() {
             buildMenuEntry("Events", "Event", { EventDialog().open() })
         )
 
-        val chartTitle = "Sample Chart"
-        mainMenu.add(
-            buildMenuEntry(chartTitle, "Chart", { ViewManager.add(chartTitle, EventChart(SampleChartModel())) })
-        )
-
-        val geoMapTitle = "Sample Geo Map"
-        mainMenu.add(
-            buildMenuEntry(geoMapTitle, "Map", { ViewManager.add(geoMapTitle, GeoMap()) })
-        )
-
-        val svgMapTitle = "Sample SVG Map"
-        mainMenu.add(
-            buildMenuEntry(svgMapTitle, "Diagram", { ViewManager.add(svgMapTitle, SvgMap()) })
-        )
-
-        val svgInlineTitle = "Sample SVG Inline (interactive)"
-        mainMenu.add(
-            buildMenuEntry(svgInlineTitle, "Diagram", { SvgInline().open() })
-        )
-
-        val imageTitle = "Sample Image"
-        mainMenu.add(
-            buildMenuEntry(imageTitle, "Image", { ViewManager.add(imageTitle, ImageSample) })
-        )
-
         val aboutTitle = "About"
         mainMenu.add(
             buildMenuEntry(aboutTitle, "About", { ViewManager.add(aboutTitle, About().dialog) })
         )
+
+        mainMenu.separator()
 
         val testTitle = "Execute All MenuBar Actions"
         mainMenu.add(
             buildMenuEntry(testTitle, "Test", { this.executeAllMenuBarActions() })
         )
 
-        /*
-              val testTitle = "Test"
-                mainMenu.add(
-                    buildMenuEntry(testTitle, "Test", { this.testFirstSession() })
-                )
+        val stats = "Log Handler Stats"
+        mainMenu.add(
+            buildMenuEntry(stats, "Console", { this.logStats() })
+        )
 
-         mainMenu.add(
-             buildMenuEntry("Browser in IFrame", "Wikipedia", { BrowserWindow("https://isis.apache.org/").open() })
-         )
+        mainMenu.separator()
 
-         mainMenu.add(
-             buildMenuEntry("SSH", "Terminal", { ShellWindow("localhost:8080").open() })
-         )*/
+        val subMenu = dropDown("Samples", icon = "fas fa-expand", forDropDown = true)
+        val geoMapTitle = "Sample Geo Map"
+        subMenu.add(
+            buildMenuEntry(geoMapTitle, "Map", { ViewManager.add(geoMapTitle, GeoMap()) })
+        )
+
+        val svgMapTitle = "Sample SVG Map"
+        subMenu.add(
+            buildMenuEntry(svgMapTitle, "Diagram", { ViewManager.add(svgMapTitle, SvgMap()) })
+        )
+
+        val svgInlineTitle = "Sample SVG Inline (interactive)"
+        subMenu.add(
+            buildMenuEntry(svgInlineTitle, "Diagram", { SvgInline().open() })
+        )
+
+        val imageTitle = "Sample Image"
+        subMenu.add(
+            buildMenuEntry(imageTitle, "Image", { ViewManager.add(imageTitle, ImageSample) })
+        )
+
+        mainMenu.add(subMenu)
 
         return mainMenu
     }
@@ -222,11 +216,11 @@ class RoMenuBar : SimplePanel() {
     fun amendMenu(menuBars: Menubars) {
         resetMenuBar()
         menuBars.primary.menu.forEach { m ->
-            val dd = MenuFactory.buildForMenu(m)
+            val dd = DropDownMenuBuilder.buildForMenu(m)
             if (dd.getChildren().isNotEmpty()) nav.add(dd)
         }
-        nav.add(MenuFactory.buildForMenu(menuBars.secondary.menu.first()))
-        nav.add(MenuFactory.buildForMenu(menuBars.tertiary.menu.first()))
+        nav.add(DropDownMenuBuilder.buildForMenu(menuBars.secondary.menu.first()))
+        nav.add(DropDownMenuBuilder.buildForMenu(menuBars.tertiary.menu.first()))
     }
 
     // this empties out any existing menuItems (non-system)
@@ -240,9 +234,15 @@ class RoMenuBar : SimplePanel() {
         menuBars.primary.menu.forEach { m ->
             m.section.forEachIndexed { index, section ->
                 section.serviceAction.forEach { sa ->
-                    ResourceProxy().fetch(sa.link!!)
+                    ResourceProxy().fetch(sa.link!!, ActionDispatcher())
                 }
             }
+        }
+    }
+
+    fun logStats() {
+        SessionManager.responseHandlerStatistics.forEach {
+            console.log("${it.key} -> ${it.value}")
         }
     }
 

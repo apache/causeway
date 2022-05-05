@@ -60,6 +60,7 @@ object IconManager {
         "Error Handling" to "bug",
         "Error" to "bug",
         "Event" to "bolt",
+        "Example" to "book",
         "Experimental" to "flask",
         "Export" to "file-export",
         "Facet" to "gem",
@@ -103,6 +104,7 @@ object IconManager {
         "Target" to "bullseye",
         "Tab" to "folder",
         "Terminal" to "terminal",
+        "Test" to "check",
         "Text" to "font",
         "Times" to "clock",
         "Toast" to "bread-slice", //comment-alt-plus/minus/exclamation

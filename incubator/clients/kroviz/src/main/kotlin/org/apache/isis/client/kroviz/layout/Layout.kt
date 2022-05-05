@@ -20,6 +20,7 @@ package org.apache.isis.client.kroviz.layout
 
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.to.TransferObject
+import org.apache.isis.client.kroviz.to.Value
 
 /**
  * Json variant of layout TransferObject
@@ -28,4 +29,5 @@ import org.apache.isis.client.kroviz.to.TransferObject
  */
 @Serializable
 data class Layout(val cssClass: String? = null,
+                  val metadataError: List<Value> = emptyList(),
                   val row: List<RowLt> = emptyList()) : TransferObject

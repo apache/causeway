@@ -18,12 +18,12 @@
  */
 package org.apache.isis.client.kroviz.to
 
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import org.apache.isis.client.kroviz.handler.ActionHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.Response2Handler
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-import kotlin.test.fail
+import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.ACTIONS_CREATE
+import kotlin.test.*
 
 class LinkTest {
 
@@ -39,7 +39,7 @@ class LinkTest {
         }"""
 
         // when
-        val link = Json.decodeFromString(Link.serializer(), jsonStr)
+        val link: Link = Json.decodeFromString(jsonStr)
 
         // then
         assertEquals("R", link.rel)
@@ -101,6 +101,18 @@ class LinkTest {
         }
         //then
         assertTrue(true, "no exception in loop")
+    }
+
+    @Test
+    fun testSimpleType() {
+        //given
+        val jsonStr = ACTIONS_CREATE.str
+        val action = ActionHandler().parse(jsonStr) as Action
+        val link = action.getSelfLink()
+        //when
+        val actual = link.simpleType()
+        //then
+        assertSame("object-action", actual)
     }
 
 }
