@@ -23,6 +23,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.testing.fixtures.applib.personas.Persona;
 
 @Programmatic
 public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,F>>
@@ -74,13 +75,13 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
 
     public abstract T getObject();
 
-    public <P extends PersonaWithBuilderScript<T, F>, T, F extends BuilderScriptAbstract<T,F>> T objectFor(
+    public <P extends Persona<T, B>, T, B extends org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract<T>> T objectFor(
             final P persona,
             final FixtureScript.ExecutionContext ec) {
         if(persona == null) {
             return null;
         }
-        final F fixtureScript = persona.builder();
+        final B fixtureScript = persona.builder();
         return ec.executeChildT(this, fixtureScript).getObject();
     }
 
