@@ -48,7 +48,7 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 	protected static final ResourceReference JS_MIN = new PackageResourceReference(AbstractFullCalendar.class,
 		"res/fullcalendar.min.js");
 	protected static final UrlResourceReference LOADASH = new UrlResourceReference(
-		Url.parse("https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"));
+		Url.parse("https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"));
 
 	@Override
 	public void renderHead(final IHeaderResponse response) {
@@ -76,6 +76,6 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 	}
 
 	public final String toJson(final Object value) {
-		return Json.toJson(value);
+		return _Json.toJson(value);
 	}
 }

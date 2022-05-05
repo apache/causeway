@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.fullcalendar.ui.wkt;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,13 +42,22 @@ import org.apache.isis.extensions.fullcalendar.ui.wkt.callback.SelectedRange;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.callback.View;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.callback.ViewDisplayCallback;
 
-public class FullCalendar extends AbstractFullCalendar implements IRequestListener {
+import lombok.Getter;
+
+public class FullCalendar
+extends AbstractFullCalendar
+implements IRequestListener {
 
     private static final long serialVersionUID = 1L;
 
-    private static final TextTemplate EVENTS = new PackageTextTemplate(FullCalendar.class, "FullCalendar.events.tpl.js");
+    private static final String START_KEY = "start";
+    private static final String END_KEY = "end";
+    private static final String OFFSET_KEY = "timezoneOffset";
 
-	private final Config config;
+    private static final TextTemplate EVENTS =
+            new PackageTextTemplate(FullCalendar.class, "FullCalendar.events.tpl.js");
+
+	@Getter private final Config config;
 	private EventDroppedCallback eventDropped;
 	private EventResizedCallback eventResized;
 	private GetEventsCallback getEvents;
@@ -65,13 +76,27 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		return false;
 	}
 
-	public Config getConfig() {
-		return config;
-	}
-
 	public EventManager getEventManager() {
 		return new EventManager(this);
 	}
+
+	public Instant startInstant() {
+	    return Instant.ofEpochMilli(
+                Long.parseLong(
+                        getRequest().getRequestParameters().getParameterValue(START_KEY).toOptionalString()));
+	}
+
+	public Instant endInstant() {
+	    return Instant.ofEpochMilli(
+                Long.parseLong(
+                        getRequest().getRequestParameters().getParameterValue(END_KEY).toOptionalString()));
+    }
+
+	public ZoneOffset clientZoneOffset() {
+        final int zoneOffsetMinutes = getRequest().getRequestParameters()
+                .getParameterValue(OFFSET_KEY).toInt();
+        return ZoneOffset.ofTotalSeconds(zoneOffsetMinutes * 60);
+    }
 
 	@Override
 	protected void onInitialize() {
@@ -171,7 +196,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		super.renderHead(response);
 
 		String configuration = "$(\"#" + getMarkupId() + "\").fullCalendarExt(";
-		configuration += Json.toJson(config);
+		configuration += _Json.toJson(config);
 		configuration += ");";
 
 		response.render(OnDomReadyHeaderItem.forScript(configuration));
