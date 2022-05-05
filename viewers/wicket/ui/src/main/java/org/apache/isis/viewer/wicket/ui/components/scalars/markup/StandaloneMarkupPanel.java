@@ -37,7 +37,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
 
         super(id, valueModel);
         val markupComponent = markupComponentFactory
-                .newMarkupComponent(ID_STANDALONE_VALUE, getModel());
+                .newMarkupComponent(ID_STANDALONE_VALUE, valueModel);
         add(markupComponent);
     }
 

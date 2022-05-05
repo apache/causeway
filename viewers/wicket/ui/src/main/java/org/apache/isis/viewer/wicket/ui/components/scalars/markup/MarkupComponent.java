@@ -77,22 +77,12 @@ public class MarkupComponent extends WebComponent {
         }
 
         if(modelObject instanceof ManagedObject) {
-
             val adapter = (ManagedObject) modelObject;
-
-            if(adapter.getPojo()==null) {
-                return fallback;
-            }
-
-            val asHtml = lookupObjectFeatureIn(getDefaultModel())
-            .map(feature->adapter.htmlString(feature))
-            .orElseGet(adapter::titleString);
-
-            if(asHtml != null) {
-                return asHtml;
-            }
-
-            return fallback;
+            val feature = lookupObjectFeatureIn(getDefaultModel()).orElse(null);
+            val asHtml = adapter.htmlString(feature);
+            return asHtml != null
+                ? asHtml
+                : fallback;
         }
 
         return modelObject.toString();

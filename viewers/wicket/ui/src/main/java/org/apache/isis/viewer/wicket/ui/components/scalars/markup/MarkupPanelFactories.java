@@ -104,11 +104,11 @@ public class MarkupPanelFactories {
 
             val valueModel = (ValueModel) model;
             val objectAdapter = valueModel.getObject();
-            if(objectAdapter==null || objectAdapter.getPojo()==null) {
+            if(objectAdapter==null) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
 
-            return appliesIf( valueType.isAssignableFrom(objectAdapter.getPojo().getClass()) );
+            return appliesIf( valueType.isAssignableFrom(objectAdapter.getSpecification().getCorrespondingClass()) );
         }
 
         @Override
