@@ -20,24 +20,24 @@ package org.apache.isis.extensions.fullcalendar.ui.wkt;
 
 import org.apache.wicket.util.lang.Objects;
 
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+
+@AllArgsConstructor
 public class EventManager {
-	private FullCalendar calendar;
 
-	EventManager(final FullCalendar calendar) {
-		this.calendar = calendar;
-	}
+    private @NonNull FullCalendar calendar;
 
-	public EventSource getEventSource(final String id) throws EventSourceNotFoundException {
-		for (EventSource source : calendar.getConfig().getEventSources()) {
-			if (Objects.equal(id, source.getUuid())) {
-				return source;
-			}
-		}
-		throw new EventSourceNotFoundException("Event source with uuid: " + id + " not found");
-	}
+    public EventSource getEventSource(@NonNull final String id) {
+        for (EventSource source : calendar.getConfig().getEventSources()) {
+            if (Objects.equal(id, source.getId())) {
+                return source;
+            }
+        }
+        throw new EventSourceNotFoundException("Event source with id: " + id + " not found");
+    }
 
-	public Event getEvent(final String sourceId, final String eventId)
-	        throws EventSourceNotFoundException, EventNotFoundException {
-		return getEventSource(sourceId).getEventProvider().getEventForId(eventId);
-	}
+    public Event getEvent(@NonNull final String sourceId, @NonNull final String eventId) {
+        return getEventSource(sourceId).getEventProvider().getEventForId(eventId);
+    }
 }

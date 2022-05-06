@@ -21,9 +21,12 @@ package org.apache.isis.extensions.fullcalendar.ui.wkt.callback;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.Event;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.EventSource;
 
+import lombok.NonNull;
+
 public class ResizedEvent extends AbstractShiftedEventParam {
 
-	public ResizedEvent(final EventSource source, final Event event, final int hoursDelta, final int minutesDelta) {
+	public ResizedEvent(final @NonNull EventSource source, final @NonNull Event event,
+	        final int hoursDelta, final int minutesDelta) {
 		super(source, event, hoursDelta, minutesDelta);
 	}
 

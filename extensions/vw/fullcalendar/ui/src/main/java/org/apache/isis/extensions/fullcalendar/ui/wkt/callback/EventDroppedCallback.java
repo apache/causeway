@@ -26,6 +26,8 @@ import org.apache.isis.extensions.fullcalendar.ui.wkt.CalendarResponse;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.Event;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.EventSource;
 
+import lombok.NonNull;
+
 public abstract class EventDroppedCallback
 extends AbstractAjaxCallbackWithClientsideRevert
 implements CallbackWithHandler {
@@ -33,18 +35,21 @@ implements CallbackWithHandler {
     private static final long serialVersionUID = 1L;
 
     @Override
-	protected String configureCallbackScript(final String script, final String urlTail) {
-		return script.replace(urlTail, "&eventId=\"+event.id+\"&sourceId=\"+event.source.data."
-			+ EventSource.Const.UUID + "+\"&dayDelta=\"+dayDelta+\"&minuteDelta=\"+minuteDelta+\"&allDay=\"+allDay+\"");
-	}
+    protected String configureCallbackScript(@NonNull final String script, @NonNull final String urlTail) {
+        return script.replace(urlTail, "&eventId=\"+event.id+\"&"
+                + "sourceId=\"+event.source.id+\"&"
+                + "minuteDelta=\"+delta.asMinutes()+\"&"
+                + "allDay=\"+event.start"
+                + ".hasTime()+\"");
+    }
+
+    @Override
+    public String getHandlerScript() {
+        return "function(event, delta, revertFunc, jsEvent, ui, view) {" + getCallbackScript() + "}";
+    }
 
 	@Override
-	public String getHandlerScript() {
-		return "function(event, dayDelta, minuteDelta, allDay, revertFunc) { " + getCallbackScript() + "}";
-	}
-
-	@Override
-	protected boolean onEvent(final AjaxRequestTarget target) {
+	protected boolean onEvent(final @NonNull AjaxRequestTarget target) {
 		Request r = getCalendar().getRequest();
 		String eventId = r.getRequestParameters().getParameterValue("eventId").toString();
 		String sourceId = r.getRequestParameters().getParameterValue("sourceId").toString();
@@ -52,15 +57,16 @@ implements CallbackWithHandler {
 		EventSource source = getCalendar().getEventManager().getEventSource(sourceId);
 		Event event = source.getEventProvider().getEventForId(eventId);
 
-		int dayDelta = r.getRequestParameters().getParameterValue("dayDelta").toInt();
-		int minuteDelta = r.getRequestParameters().getParameterValue("minuteDelta").toInt();
-		boolean allDay = r.getRequestParameters().getParameterValue("allDay").toBoolean();
+        // minuteDelta already contains the complete delta in minutes, so we can set daysDelta to 0
+		int dayDelta = 0;
+        int minuteDelta = r.getRequestParameters().getParameterValue("minuteDelta").toInt();
+        boolean allDay = r.getRequestParameters().getParameterValue("allDay").toBoolean();
 
 		return onEventDropped(new DroppedEvent(source, event, dayDelta, minuteDelta, allDay), new CalendarResponse(
 			getCalendar(), target));
 	}
 
-	protected abstract boolean onEventDropped(DroppedEvent event, CalendarResponse response);
+	protected abstract boolean onEventDropped(@NonNull DroppedEvent event, @NonNull CalendarResponse response);
 
 	@Override
 	protected String getRevertScript() {

@@ -21,18 +21,17 @@ package org.apache.isis.extensions.fullcalendar.ui.wkt.callback;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.Event;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.EventSource;
 
+import lombok.Getter;
+import lombok.NonNull;
+
 public class DroppedEvent extends AbstractShiftedEventParam {
 
-    private final boolean allDay;
+    @Getter private final boolean allDay;
 
-	public DroppedEvent(final EventSource source, final Event event, final int hoursDelta,
-	        final int minutesDelta, final boolean allDay) {
+	public DroppedEvent(final @NonNull EventSource source, final @NonNull Event event,
+	        final int hoursDelta, final int minutesDelta, final boolean allDay) {
 		super(source, event, hoursDelta, minutesDelta);
 		this.allDay = allDay;
-	}
-
-	public boolean isAllDay() {
-		return allDay;
 	}
 
 }

@@ -21,10 +21,11 @@ package org.apache.isis.extensions.fullcalendar.ui.wkt.callback;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.Event;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.EventSource;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter @RequiredArgsConstructor
+@Getter @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 abstract class AbstractEventParam {
 	private final EventSource source;
 	private final Event event;

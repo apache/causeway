@@ -22,13 +22,15 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 
 import org.apache.isis.extensions.fullcalendar.ui.wkt.FullCalendar;
 
+import lombok.NonNull;
+
 abstract class AbstractAjaxCallback extends AbstractDefaultAjaxBehavior {
 
     private static final long serialVersionUID = 1L;
 
     private static final String PLACEHOLDER = "<PLACEHOLDER>";
 
-	protected abstract String configureCallbackScript(String script, String urlTail);
+	protected abstract String configureCallbackScript(@NonNull String script, @NonNull String urlTail);
 
 	@Override
 	public final CharSequence getCallbackScript() {

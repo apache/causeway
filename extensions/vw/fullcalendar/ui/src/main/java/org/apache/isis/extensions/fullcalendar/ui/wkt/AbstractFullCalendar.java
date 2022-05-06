@@ -18,45 +18,64 @@
  */
 package org.apache.isis.extensions.fullcalendar.ui.wkt;
 
-import org.apache.wicket.MarkupContainer;
+import java.util.List;
+
 import org.apache.wicket.ajax.WicketAjaxJQueryResourceReference;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.request.Url;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.request.resource.UrlResourceReference;
 
-abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderContributor {
+import lombok.NonNull;
+
+abstract class AbstractFullCalendar
+extends WebMarkupContainer
+implements IHeaderContributor {
 
     private static final long serialVersionUID = 1L;
 
-    protected AbstractFullCalendar(final String id) {
+    protected AbstractFullCalendar(@NonNull final String id) {
 		super(id);
 	}
 
+    /**
+     * This is the original CSS file from the FullCalendar.io project.
+     */
 	protected static final ResourceReference CSS = new PackageResourceReference(AbstractFullCalendar.class,
-		"res/fullcalendar.css");
-	protected static final ResourceReference JS = new PackageResourceReference(AbstractFullCalendar.class,
-		"res/fullcalendar.js");
-	protected static final ResourceReference JS_EXT = new PackageResourceReference(AbstractFullCalendar.class,
-		"res/fullcalendar.ext.js");
-	protected static final ResourceReference JS_MIN = new PackageResourceReference(AbstractFullCalendar.class,
-		"res/fullcalendar.min.js");
-	protected static final UrlResourceReference LODASH = new UrlResourceReference(
-		Url.parse("https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"));
+		"res/fullcalendar.min.css");
 
-	@Override
-	public void renderHead(final IHeaderResponse response) {
-		response.render(JavaScriptHeaderItem.forReference(WicketAjaxJQueryResourceReference.get()));
-		response.render(CssReferenceHeaderItem.forReference(CSS));
-        response.render(JavaScriptReferenceHeaderItem.forReference(LODASH));
-        response.render(JavaScriptReferenceHeaderItem.forReference(JS));
-        response.render(JavaScriptReferenceHeaderItem.forReference(JS_EXT));
-	}
+    /**
+     * JS files for FullCalendar and the integration of it into <i>Wicket</i>.
+     * The order of the files is important.
+     * <p>
+     * With the exception of 'fullcalendar.ext.js',
+     * these are the original JavaScript files from the FullCalendar.io project (and related projects).
+     * These can/should be updated when updating FullCalendar version.
+     */
+    private static final List<ResourceReference> JS_FILES = List.of(
+            new PackageResourceReference(AbstractFullCalendar.class, "res/moment.min.js"),
+            new PackageResourceReference(AbstractFullCalendar.class, "res/fullcalendar.js"),
+            new PackageResourceReference(AbstractFullCalendar.class, "res/fullcalendar.ext.js"),
+            new PackageResourceReference(AbstractFullCalendar.class, "res/locale-all.js")
+    );
+
+
+    /**
+     * Renders the necessary Javascript files for FullCalendar.
+     */
+    @Override
+    public void renderHead(@NonNull final IHeaderResponse response) {
+        // jQuery
+        response.render(JavaScriptHeaderItem.forReference(WicketAjaxJQueryResourceReference.get()));
+        response.render(CssReferenceHeaderItem.forReference(CSS));
+        for (ResourceReference jsFile : JS_FILES) {
+            response.render(JavaScriptReferenceHeaderItem.forReference(jsFile));
+        }
+    }
 
 	public final String toJson(final Object value) {
 		return _Json.toJson(value);

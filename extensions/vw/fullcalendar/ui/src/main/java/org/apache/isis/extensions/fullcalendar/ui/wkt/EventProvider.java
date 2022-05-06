@@ -22,9 +22,18 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
+import lombok.NonNull;
+
 public interface EventProvider extends Serializable {
 
-    Collection<Event> getEvents(ZonedDateTime start, ZonedDateTime end);
+    Event getEventForId(@NonNull String id) throws EventNotFoundException;
 
-    Event getEventForId(String id) throws EventNotFoundException;
+    Collection<Event> getEvents(@NonNull ZonedDateTime start, @NonNull ZonedDateTime end);
+
+    default Collection<Event> getEvents(@NonNull final ImmutablePair<ZonedDateTime, ZonedDateTime> interval) {
+        return getEvents(interval.getLeft(), interval.getRight());
+    }
+
 }

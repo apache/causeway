@@ -27,9 +27,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.extensions.fullcalendar.ui.wkt.FullCalendar;
 
+import lombok.Getter;
+
 abstract class AbstractCallback extends Behavior implements IRequestListener {
     private static final long serialVersionUID = 1L;
-    private FullCalendar calendar;
+
+    @Getter private FullCalendar calendar;
 
 	@Override
 	public void bind(final Component component) {
@@ -55,10 +58,6 @@ abstract class AbstractCallback extends Behavior implements IRequestListener {
 	}
 
 	protected abstract void respond();
-
-	protected final FullCalendar getCalendar() {
-		return calendar;
-	}
 
 	@Override
 	public boolean getStatelessHint(final Component component) {

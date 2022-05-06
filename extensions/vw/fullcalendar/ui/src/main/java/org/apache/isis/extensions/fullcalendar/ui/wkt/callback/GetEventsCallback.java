@@ -25,6 +25,7 @@ import org.apache.wicket.request.handler.TextRequestHandler;
 
 import org.apache.isis.extensions.fullcalendar.ui.wkt.EventSource;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class GetEventsCallback extends AbstractCallback {
@@ -33,13 +34,15 @@ public class GetEventsCallback extends AbstractCallback {
 
     private static final String SOURCE_ID = "sid";
 
-    public String getUrl(final EventSource source) {
+    public String getUrl(final @NonNull EventSource source) {
         return getUrl(Map.of(SOURCE_ID, source.getUuid()));
     }
 
     @Override
     protected void respond() {
         val request = getCalendar().getRequest();
+
+        //val interval = CalendarHelper.getInterval(getCalendar());
 
         val clientZoneOffset = getCalendar().clientZoneOffset();
         var start = ZonedDateTime.ofInstant(getCalendar().startInstant(), clientZoneOffset);

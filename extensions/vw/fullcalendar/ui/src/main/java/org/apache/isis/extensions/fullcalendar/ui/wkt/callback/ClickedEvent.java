@@ -21,9 +21,11 @@ package org.apache.isis.extensions.fullcalendar.ui.wkt.callback;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.Event;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.EventSource;
 
+import lombok.NonNull;
+
 public class ClickedEvent extends AbstractEventParam {
 
-	public ClickedEvent(final EventSource source, final Event event) {
+	public ClickedEvent(final @NonNull EventSource source, final @NonNull Event event) {
 		super(source, event);
 	}
 

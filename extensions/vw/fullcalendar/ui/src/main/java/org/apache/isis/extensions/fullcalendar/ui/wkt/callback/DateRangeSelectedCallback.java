@@ -18,74 +18,58 @@
  */
 package org.apache.isis.extensions.fullcalendar.ui.wkt.callback;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.request.Request;
 
 import org.apache.isis.extensions.fullcalendar.ui.wkt.CalendarResponse;
+import org.apache.isis.extensions.fullcalendar.ui.wkt.util.CalendarHelper;
 
+import lombok.NonNull;
+import lombok.val;
+
+/**
+ * Callback that's executed when a range of dates is selected in the calendar.
+ */
 public abstract class DateRangeSelectedCallback
 extends AbstractAjaxCallback
 implements CallbackWithHandler {
 
     private static final long serialVersionUID = 1L;
 
-    private final boolean ignoreTimezone;
+    @Override
+    protected String configureCallbackScript(@NonNull final String script, @NonNull final String urlTail) {
+        /*
+         * According to https://fullcalendar.io/docs/select-callback the prior "allDay" parameter is now obsolete
+         * and can be reproduced by checking start.hasTime() and end.hasTime().
+         * */
+        return script.replace(urlTail,
+                "&timezoneOffset=\"+startDate.utcOffset()+\"&"
+                + "startDate=\"+startDate.valueOf()+\"&"
+                + "endDate=\"+endDate.valueOf()+\"&"
+                + "allDay=\"+(!(startDate"
+                        + ".hasTime()||endDate.hasTime()))+\"");
+    }
 
-	/**
-	 * If <var>ignoreTimezone</var> is {@code true}, then the remote client\"s time zone will be ignored when
-	 * determining the selected date range, resulting in a range with the selected start and end values, but in the
-	 * server\"s time zone.
-	 *
-	 * @param ignoreTimezone
-	 *            whether or not to ignore the remote client\"s time zone when determining the selected date range
-	 */
-	public DateRangeSelectedCallback(final boolean ignoreTimezone) {
-		this.ignoreTimezone = ignoreTimezone;
-	}
+    /**
+     * @see <a href="https://fullcalendar.io/docs/select-callback">https://fullcalendar.io/docs/select-callback</a>
+     */
+    @Override
+    public String getHandlerScript() {
+        return "function(startDate, endDate, jsEvent, view) { " + getCallbackScript() + "}";
+    }
 
-	@Override
-	protected String configureCallbackScript(final String script, final String urlTail) {
-		return script.replace(urlTail,
-			"&timezoneOffset=\"+startDate.getTimezoneOffset()+\"&startDate=\"+startDate.getTime()+\"&endDate=\"+endDate.getTime()+\"&allDay=\"+allDay+\"");
-	}
+    @Override
+    protected void respond(@NonNull final AjaxRequestTarget target) {
 
-	@Override
-	public String getHandlerScript() {
-		return "function(startDate, endDate, allDay) { " + getCallbackScript() + "}";
-	}
+        boolean allDay = getCalendar().getRequest().getRequestParameters().getParameterValue("allDay").toBoolean();
 
-	@Override
-	protected void respond(final AjaxRequestTarget target) {
-		Request r = getCalendar().getRequest();
-		LocalDateTime start = LocalDateTime.ofInstant(
-			Instant.ofEpochMilli(
-				Long.parseLong(r.getRequestParameters().getParameterValue("startDate").toOptionalString())),
-			ZoneId.systemDefault());
-		// LocalDateTime.parse(r.getRequestParameters().getParameterValue("startDate").toOptionalString(), fmt);
-		LocalDateTime end = LocalDateTime.ofInstant(
-			Instant
-				.ofEpochMilli(Long.parseLong(r.getRequestParameters().getParameterValue("endDate").toOptionalString())),
-			ZoneId.systemDefault());
-		// LocalDateTime.parse(r.getRequestParameters().getParameterValue("endDate").toOptionalString(), fmt);
+        val dateRange = CalendarHelper.getInterval(getCalendar());
+        val start = dateRange.getLeft().toLocalDateTime();
+        val end = dateRange.getRight().toLocalDateTime();
 
-		if (ignoreTimezone) {
-			// Convert to same DateTime in local time zone.
-			int remoteOffset = -r.getRequestParameters().getParameterValue("timezoneOffset").toInt();
-			int localOffset = OffsetDateTime.now().getOffset().getTotalSeconds() / 60000;
-			int minutesAdjustment = remoteOffset - localOffset;
-			start = start.plusMinutes(minutesAdjustment);
-			end = end.plusMinutes(minutesAdjustment);
-		}
-		boolean allDay = r.getRequestParameters().getParameterValue("allDay").toBoolean();
-		onSelect(new SelectedRange(start, end, allDay), new CalendarResponse(getCalendar(), target));
+        // create response / run callback method
+        onSelect(new SelectedRange(start, end, allDay), new CalendarResponse(getCalendar(), target));
+    }
 
-	}
-
-	protected abstract void onSelect(SelectedRange range, CalendarResponse response);
+    protected abstract void onSelect(@NonNull SelectedRange range, @NonNull CalendarResponse response);
 
 }

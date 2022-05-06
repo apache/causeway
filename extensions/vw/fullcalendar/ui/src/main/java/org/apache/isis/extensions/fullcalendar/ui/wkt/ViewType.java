@@ -18,21 +18,30 @@
  */
 package org.apache.isis.extensions.fullcalendar.ui.wkt;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public enum ViewType {
-	MONTH("month"), BASIC_WEEK("basicWeek"), BASIC_DAY("basicDay"), AGENDA_WEEK("agendaWeek"), AGENDA_DAY("agendaDay");
+    MONTH("month"),
+    BASIC_WEEK("basicWeek"),
+    BASIC_DAY("basicDay"),
+    AGENDA_WEEK("agendaWeek"),
+    AGENDA_DAY("agendaDay"),
+    LIST_DAY("listDay"),
+    LIST_WEEK("listWeek"),
+    LIST_MONTH("listMonth"),
+    LIST_YEAR("listYear");
 
-	private final String code;
+    private final String code;
 
-	private ViewType(final String code) {
-		this.code = code;
-	}
-
-	public static ViewType forCode(final String code) {
-		for (ViewType type : values()) {
-			if (type.code.equals(code))
-				return type;
-		}
-		throw new IllegalStateException("Invalid view type code: " + code);
-	}
+    public static ViewType forCode(@NonNull final String code) {
+        for (ViewType type : values()) {
+            if (type.code.equals(code)) {
+                return type;
+            }
+        }
+        throw new IllegalStateException("Invalid view type code: " + code);
+    }
 
 }

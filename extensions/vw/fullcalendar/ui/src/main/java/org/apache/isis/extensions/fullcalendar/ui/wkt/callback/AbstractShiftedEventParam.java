@@ -18,8 +18,6 @@
  */
 package org.apache.isis.extensions.fullcalendar.ui.wkt.callback;
 
-import java.time.Duration;
-import java.time.Period;
 import java.time.ZonedDateTime;
 
 import org.apache.isis.extensions.fullcalendar.ui.wkt.Event;
@@ -50,9 +48,9 @@ class AbstractShiftedEventParam extends AbstractEventParam {
 		return shift(getEvent().getEnd());
 	}
 
-	public Period getDelta() {
-		return Period.ofDays(daysDelta).plus(Duration.ofMinutes(minutesDelta));
-	}
+//	public Period getDelta() {
+//		return Period.ofDays(daysDelta).plus(Duration.ofMinutes(minutesDelta));
+//	}
 
 	private ZonedDateTime shift(final ZonedDateTime start) {
 		return start.plusDays(daysDelta).plusMinutes(minutesDelta);

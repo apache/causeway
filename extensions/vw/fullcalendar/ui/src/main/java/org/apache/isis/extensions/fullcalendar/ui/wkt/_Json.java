@@ -32,13 +32,12 @@ class _Json {
 		mapper.registerModule(new JavaTimeModule());
 		mapper.registerModule(module);
 
-		String json = null;
 		try {
-			json = mapper.writeValueAsString(object);
+			return mapper.writeValueAsString(object);
 		} catch (Exception e) {
 			throw new RuntimeException("Error encoding object: " + object + " into JSON string", e);
 		}
-		return json;
+
 	}
 
 }

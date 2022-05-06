@@ -23,8 +23,12 @@ import java.io.Serializable;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
-@Getter @Setter
+/**
+ * Represents the configuration of the UI header elements for <i>FullCalendar</i>.
+ */
+@Getter @Setter @Accessors(chain = true)
 public class Header implements Serializable {
 
     private static final long serialVersionUID = 1L;

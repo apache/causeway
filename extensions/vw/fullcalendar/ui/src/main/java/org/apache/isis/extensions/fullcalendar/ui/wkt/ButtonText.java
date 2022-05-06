@@ -23,12 +23,18 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @Accessors (chain = true)
+@NoArgsConstructor
 public class ButtonText implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private String prev, next, prevYear, nextYear, today, month, week, day;
+    private String listDay;
+    private String listWeek;
+    private String listMonth;
+    private String listYear;;
 
 }

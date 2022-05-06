@@ -123,19 +123,28 @@ $.fn.generateId = function() {
 							if (!this.enableInSelector) { checkbox.attr("disabled", "true"); }
 							checkbox.bind("click", function() { _toggleSource(owner, sourceUuid, this.checked); });
 							checkbox.generateId();
+							// Style current eventSource selector similar to the events in the calendar (if no specific CSS class is provided)
+							var colorStyle = "";
+							if (this.backgroundColor) {
+								colorStyle += "background-color: " + this.backgroundColor + ";";
+								if (this.textColor) {
+									colorStyle += "color: " + this.textColor + ";";
+								}
+							}
 							var li=$("<li></li>");
 							// Add the class used by the event source to the <li> so it can be styled.
 							if (this.className && $.trim(this.className) != "") { li.attr("class",this.className); }
 							checkbox.appendTo(li);
-							$("<label for='"+checkbox.attr("id")+"'>"+this.data.fcxTitle+"</label>").appendTo(li);
-							li.appendTo(ul);					
+							$("<label for='" + checkbox.attr("id") + "' style=\"" + colorStyle + "\">" + this.data.fcxTitle + "</label>")
+								.appendTo(li);
+							li.appendTo(ul);
 						}
 					});
-				}
+				};
 				
 				ext.toggleSource=function(sourceId, enabled) {
 					_toggleSource(owner, sourceId, enabled); 
-				}
+				};
 				
 				return ext;
 			}(this));

@@ -27,10 +27,12 @@ import org.apache.wicket.request.Request;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.CalendarResponse;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.ViewType;
 
+import lombok.val;
+
 /**
  * A base callback that passes back calendar's starting date
  */
-public abstract class ViewDisplayCallback
+public abstract class ViewRenderCallback
 extends AbstractAjaxCallback
 implements CallbackWithHandler {
 
@@ -56,16 +58,22 @@ implements CallbackWithHandler {
 		ViewType type = ViewType.forCode(r.getRequestParameters().getParameterValue("view").toString());
 		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		// DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-		LocalDateTime start = LocalDateTime.parse(r.getRequestParameters().getParameterValue("start").toString(), fmt);
-		LocalDateTime end = LocalDateTime.parse(r.getRequestParameters().getParameterValue("end").toString(), fmt);
-		LocalDateTime visibleStart = LocalDateTime
-			.parse(r.getRequestParameters().getParameterValue("visibleStart").toString(), fmt);
-		LocalDateTime visibleEnd = LocalDateTime
-			.parse(r.getRequestParameters().getParameterValue("visibleEnd").toString(), fmt);
+		val start = LocalDateTime
+		        .parse(r.getRequestParameters().getParameterValue("start").toString(), fmt)
+		        .toLocalDate();
+		val end = LocalDateTime
+		        .parse(r.getRequestParameters().getParameterValue("end").toString(), fmt)
+		        .toLocalDate();
+		val visibleStart = LocalDateTime
+		        .parse(r.getRequestParameters().getParameterValue("visibleStart").toString(), fmt)
+			    .toLocalDate();
+		val visibleEnd = LocalDateTime
+		        .parse(r.getRequestParameters().getParameterValue("visibleEnd").toString(), fmt)
+		        .toLocalDate();
 		View view = new View(type, start, end, visibleStart, visibleEnd);
 		CalendarResponse response = new CalendarResponse(getCalendar(), target);
-		onViewDisplayed(view, response);
+		onViewRendered(view, response);
 	}
 
-	protected abstract void onViewDisplayed(View view, CalendarResponse response);
+	protected abstract void onViewRendered(View view, CalendarResponse response);
 }

@@ -18,44 +18,21 @@
  */
 package org.apache.isis.extensions.fullcalendar.ui.wkt.callback;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import org.apache.isis.extensions.fullcalendar.ui.wkt.ViewType;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public class View {
-	private ViewType type;
-	private LocalDateTime start;
-	private LocalDateTime end;
-	private LocalDateTime visibleStart;
-	private LocalDateTime visibleEnd;
 
-	public View(final ViewType type, final LocalDateTime start, final LocalDateTime end, final LocalDateTime visibleStart,
-		final LocalDateTime visibleEnd) {
-		this.type = type;
-		this.start = start;
-		this.end = end;
-		this.visibleStart = visibleStart;
-		this.visibleEnd = visibleEnd;
-	}
-
-	public ViewType getType() {
-		return type;
-	}
-
-	public LocalDateTime getStart() {
-		return start;
-	}
-
-	public LocalDateTime getEnd() {
-		return end;
-	}
-
-	public LocalDateTime getVisibleStart() {
-		return visibleStart;
-	}
-
-	public LocalDateTime getVisibleEnd() {
-		return visibleEnd;
-	}
+    private final ViewType type;
+    private final LocalDate start;
+    private final LocalDate end;
+    private final LocalDate intervalStart;
+    private final LocalDate intervalEnd;
 
 }

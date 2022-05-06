@@ -25,6 +25,8 @@ import org.apache.isis.extensions.fullcalendar.ui.wkt.CalendarResponse;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.Event;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.EventSource;
 
+import lombok.NonNull;
+
 public abstract class EventClickedCallback
 extends AbstractAjaxCallback
 implements CallbackWithHandler {
@@ -32,15 +34,14 @@ implements CallbackWithHandler {
     private static final long serialVersionUID = 1L;
 
     @Override
-	protected String configureCallbackScript(final String script, final String urlTail) {
-		return script.replace(urlTail, "&eventId=\"+event.id+\"&sourceId=\"+event.source.data."
-			+ EventSource.Const.UUID + "+\"");
-	}
+    protected String configureCallbackScript(@NonNull final String script, @NonNull final String urlTail) {
+        return script.replace(urlTail, "&eventId=\"+event.id+\"&sourceId=\"+event.source.id+\"");
+    }
 
-	@Override
-	public String getHandlerScript() {
-		return "function(event) { " + getCallbackScript() + "}";
-	}
+    @Override
+    public String getHandlerScript() {
+        return "function(event, jsEvent, view) {" + getCallbackScript() + " return false; }";
+    }
 
 	@Override
 	protected void respond(final AjaxRequestTarget target) {
@@ -54,5 +55,5 @@ implements CallbackWithHandler {
 		onClicked(new ClickedEvent(source, event), new CalendarResponse(getCalendar(), target));
 	}
 
-	protected abstract void onClicked(ClickedEvent event, CalendarResponse response);
+	protected abstract void onClicked(@NonNull ClickedEvent event, @NonNull CalendarResponse response);
 }

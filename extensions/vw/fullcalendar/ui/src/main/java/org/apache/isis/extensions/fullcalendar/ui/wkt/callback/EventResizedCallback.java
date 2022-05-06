@@ -25,6 +25,8 @@ import org.apache.isis.extensions.fullcalendar.ui.wkt.CalendarResponse;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.Event;
 import org.apache.isis.extensions.fullcalendar.ui.wkt.EventSource;
 
+import lombok.NonNull;
+
 public abstract class EventResizedCallback
 extends AbstractAjaxCallbackWithClientsideRevert
 implements CallbackWithHandler {
@@ -32,15 +34,16 @@ implements CallbackWithHandler {
     private static final long serialVersionUID = 1L;
 
     @Override
-	protected String configureCallbackScript(final String script, final String urlTail) {
-		return script.replace(urlTail, "&eventId=\"+event.id+\"&sourceId=\"+event.source.data."
-			+ EventSource.Const.UUID + "+\"&dayDelta=\"+dayDelta+\"&minuteDelta=\"+minuteDelta+\"");
-	}
+    protected String configureCallbackScript(@NonNull final String script, @NonNull final String urlTail) {
+        return script.replace(urlTail, "&eventId=\"+event.id+\"&"
+                + "sourceId=\"+event.source.id+\"&"
+                + "minuteDelta=\"+delta.asMinutes()+\"");
+    }
 
-	@Override
-	public String getHandlerScript() {
-		return "function(event, dayDelta, minuteDelta,  revertFunc) { " + getCallbackScript() + "}";
-	}
+    @Override
+    public String getHandlerScript() {
+        return "function(event, delta, revertFunc, jsEvent, ui, view) { " + getCallbackScript() + "}";
+    }
 
 	@Override
 	protected boolean onEvent(final AjaxRequestTarget target) {
@@ -51,7 +54,8 @@ implements CallbackWithHandler {
 		EventSource source = getCalendar().getEventManager().getEventSource(sourceId);
 		Event event = source.getEventProvider().getEventForId(eventId);
 
-		int dayDelta = r.getRequestParameters().getParameterValue("dayDelta").toInt();
+		// minuteDelta already contains the complete delta in minutes, so we can set daysDelta to 0
+		int dayDelta = 0;
 		int minuteDelta = r.getRequestParameters().getParameterValue("minuteDelta").toInt();
 
 		return onEventResized(new ResizedEvent(source, event, dayDelta, minuteDelta), new CalendarResponse(
