@@ -26,6 +26,7 @@ import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.bs3.Grid
+import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.w3c.files.Blob
@@ -140,6 +141,10 @@ data class LogEntry(
     fun setSuccess() {
         calculate()
         responseLength = response.length
+        if (responseLength == 0) {
+            // it's a blob
+            responseLength = blob?.size as Int
+        }
         state = when {
             url.startsWith(Constants.krokiUrl) -> EventState.SUCCESS_IMG
             subType == Constants.subTypeXml -> EventState.SUCCESS_XML
@@ -186,6 +191,9 @@ data class LogEntry(
             }
             is Blob -> {
                 this.type = Represention.IMAGE_PNG.type
+            }
+            is Menubars -> {
+                this.type = Represention.LAYOUT_MENUBARS.type
             }
             else -> {
                 console.log("[LE.setTransferObject]")
