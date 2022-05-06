@@ -55,9 +55,10 @@ class _Sample {
             @Override
             protected void onEventClicked(final ClickedEvent event,
                     final CalendarResponse response) {
-                info2("Event clicked. eventId: " + event.getEvent().getId()
+                info("Event clicked. eventId: " + event.getEvent().getId()
                         + ", sourceId: " + event.getSource().getId());
-                response.refetchEvents();
+                //XXX reverts the config to its defaults
+                //response.refetchEvents();
                 response.getTarget().add(feedback);
             }
 
