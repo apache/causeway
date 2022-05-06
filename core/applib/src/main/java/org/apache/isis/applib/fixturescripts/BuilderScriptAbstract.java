@@ -75,7 +75,7 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
 
     public abstract T getObject();
 
-    public <P extends Persona<T, B>, T, B extends org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract<T>> T objectFor(
+    public <P extends Persona<X, B>, X, B extends org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract<X>> X objectFor(
             final P persona,
             final FixtureScript.ExecutionContext ec) {
         if(persona == null) {
@@ -85,7 +85,7 @@ public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,
         return ec.executeChildT(this, fixtureScript).getObject();
     }
 
-    public <P extends PersonaWithFinder<T>, T> T findUsing(final P persona) {
+    public <P extends PersonaWithFinder<X>, X> X findUsing(final P persona) {
         if(persona == null) {
             return null;
         }
