@@ -20,9 +20,9 @@ package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +34,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.joda.time.format.ISODateTimeFormat;
 
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -41,12 +42,14 @@ class _Json {
 
     public String toJson(final Object object) {
         ObjectMapper mapper = new ObjectMapper(new MappingJsonFactory());
-        SimpleModule module = new SimpleModule("fullcalendar", new Version(1, 0, 0, null, null, null));
+
+        val jodaModule = new SimpleModule("jodaTime");
+        jodaModule.addSerializer(new DateTimeSerializer());
+        jodaModule.addSerializer(new LocalTimeSerializer());
+        mapper.registerModule(jodaModule);
 
         mapper.registerModule(new JavaTimeModule());
-        module.addSerializer(new DateTimeSerializer());
-        module.addSerializer(new LocalTimeSerializer());
-        mapper.registerModule(module);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
         try {
             return mapper.writeValueAsString(object);
