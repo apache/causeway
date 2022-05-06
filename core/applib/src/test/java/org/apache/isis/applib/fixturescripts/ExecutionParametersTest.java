@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturescripts;
+package org.apache.isis.applib.fixturescripts;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -28,7 +28,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.testing.fixtures.applib.fixturescripts.ExecutionParameters;
+import org.apache.isis.applib.fixturescripts.ExecutionParameters;
 
 public class ExecutionParametersTest {
 

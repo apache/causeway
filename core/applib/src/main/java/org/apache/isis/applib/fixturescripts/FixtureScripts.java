@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturescripts;
+package org.apache.isis.applib.fixturescripts;
 
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
@@ -444,7 +444,7 @@ public abstract class FixtureScripts extends AbstractService {
         if (fixtureScriptList.length == 1) {
             runFixtureScript(fixtureScriptList[0], null);
         } else {
-            runFixtureScript(new org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript() {
+            runFixtureScript(new FixtureScript() {
                 protected void execute(ExecutionContext executionContext) {
                     FixtureScript[] fixtureScripts = fixtureScriptList;
                     for (FixtureScript fixtureScript : fixtureScripts) {

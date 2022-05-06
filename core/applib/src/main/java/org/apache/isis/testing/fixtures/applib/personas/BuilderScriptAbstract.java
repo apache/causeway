@@ -18,14 +18,10 @@
  */
 package org.apache.isis.testing.fixtures.applib.personas;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 @Programmatic
 public abstract class BuilderScriptAbstract<T>

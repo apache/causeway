@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturescripts;
+package org.apache.isis.applib.fixturescripts;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
  */
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
-        objectType = "isisApplib.FixtureScriptsDefault"
+        logicalTypeName = "isisApplib.FixtureScriptsDefault"
 )
 @DomainServiceLayout(
         named="Prototyping",

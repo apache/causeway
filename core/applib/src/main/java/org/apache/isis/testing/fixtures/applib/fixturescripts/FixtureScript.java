@@ -24,4 +24,10 @@ import org.apache.isis.applib.annotation.ViewModelLayout;
 public abstract class FixtureScript
         extends org.apache.isis.applib.fixturescripts.FixtureScript {
 
+    public static final FixtureScript NOOP = new FixtureScript() {
+        @Override
+        protected void execute(ExecutionContext executionContext) {
+        }
+    };
+
 }

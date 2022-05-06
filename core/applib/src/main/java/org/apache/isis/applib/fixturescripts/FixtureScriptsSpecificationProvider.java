@@ -16,16 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturescripts;
+package org.apache.isis.applib.fixturescripts;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * Overrides the {@link FixtureScriptsSpecification#getMultipleExecutionStrategy() globally-defined}
- * {@link FixtureScripts.MultipleExecutionStrategy} strategy, allowing individual fixtures to indicate that they have their own execution strategy.
+ * Rather than subclassing {@link FixtureScripts} class, you can instead implement this interface as a service.
+ *
+ * <p>
+ *     The framework will automatically instantiate {@link FixtureScriptsDefault} as a fallback, and use the
+ *     {@link FixtureScriptsSpecification} obtained from <i>this</i> service to configure itself.
+ * </p>
  */
-public interface FixtureScriptWithExecutionStrategy {
+public interface FixtureScriptsSpecificationProvider {
 
     @Programmatic
-    FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy();
+    FixtureScriptsSpecification getSpecification();
+
 }

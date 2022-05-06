@@ -14,9 +14,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturescripts;
+package org.apache.isis.applib.fixturescripts;
 
 import org.apache.isis.applib.annotation.Programmatic;
+
 
 /**
  * Pulls together the various state that influences the behaviour of {@link FixtureScripts} service.

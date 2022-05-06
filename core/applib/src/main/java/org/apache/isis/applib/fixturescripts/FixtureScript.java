@@ -50,12 +50,6 @@ import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.ExecutionParameters;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResultList;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.StringUtil;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
@@ -66,11 +60,6 @@ public abstract class FixtureScript
         extends AbstractViewModel
         implements InstallableFixture {
 
-    public static final FixtureScript NOOP = new FixtureScript() {
-        @Override
-        protected void execute(ExecutionContext executionContext) {
-        }
-    };
 
     protected static final String PATH_SEPARATOR = "/";
 

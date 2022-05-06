@@ -18,10 +18,10 @@
  */
 
 /**
- * The {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProvider} SPI service is an
- * alternative to subclassing the {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts} domain service.
+ * The {@link org.apache.isis.applib.fixturescripts.FixtureScriptsSpecificationProvider} SPI service is an
+ * alternative to subclassing the {@link org.apache.isis.applib.fixturescripts.FixtureScripts} domain service.
  * The logic that would normally be in the subclass moves to the provider service instead, and the framework
- * instantiates a fallback default instance, {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptsDefault}.
+ * instantiates a fallback default instance, {@link org.apache.isis.applib.fixturescripts.FixtureScriptsDefault}.
  *
  * @see <a href="http://isis.apache.org/migration-notes/migration-notes.html#_migration-notes_1.8.0-to-1.9.0_fixture-scripts-specification-provider">Reference guide</a>
  */

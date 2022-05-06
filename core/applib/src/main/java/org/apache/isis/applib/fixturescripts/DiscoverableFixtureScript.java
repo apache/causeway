@@ -18,14 +18,13 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * A convenience subclass of {@link FixtureScript} that is
  * {@link FixtureScript.Discoverability#DISCOVERABLE discoverable}
  * by default.
  */
-public abstract class DiscoverableFixtureScript extends org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript {
+public abstract class DiscoverableFixtureScript extends FixtureScript {
 
     /**
      * Initializes a {@link Discoverability#DISCOVERABLE} fixture, with

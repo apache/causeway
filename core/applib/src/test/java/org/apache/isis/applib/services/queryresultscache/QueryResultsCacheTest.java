@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptsDefault;
+import org.apache.isis.applib.fixturescripts.FixtureScriptsDefault;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

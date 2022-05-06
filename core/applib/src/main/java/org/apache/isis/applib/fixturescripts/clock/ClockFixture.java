@@ -26,11 +26,12 @@ import org.joda.time.format.DateTimeFormatter;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 @Programmatic
-class ClockFixture extends org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript implements FixtureScriptWithExecutionStrategy {
+class ClockFixture extends FixtureScript implements FixtureScriptWithExecutionStrategy {
 
     static ClockFixture setTo(final String date) {
         return new ClockFixture().setDate(date);

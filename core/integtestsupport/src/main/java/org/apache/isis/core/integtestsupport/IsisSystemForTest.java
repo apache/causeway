@@ -57,7 +57,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 import static org.junit.Assert.fail;
 

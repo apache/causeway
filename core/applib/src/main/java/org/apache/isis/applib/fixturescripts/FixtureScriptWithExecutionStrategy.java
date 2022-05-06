@@ -16,33 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturescripts;
+package org.apache.isis.applib.fixturescripts;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 
-
 /**
- * Acts as a factory by the {@link FixtureScripts} when
- * instantiating the {@link FixtureScript.ExecutionContext}.
- *
- * <p>
- *     Factoring this out as a service potentially allows for extensions to parsing; and also acts as an
- *     insurance policy to allow this part of the testing framework to be patched if the chosen parsing algorithms
- *     need refinement in the future).
- * </p>
- * it
+ * Overrides the {@link FixtureScriptsSpecification#getMultipleExecutionStrategy() globally-defined}
+ * {@link FixtureScripts.MultipleExecutionStrategy} strategy, allowing individual fixtures to indicate that they have their own execution strategy.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-)
-public class ExecutionParametersService {
+public interface FixtureScriptWithExecutionStrategy {
 
     @Programmatic
-    public ExecutionParameters newExecutionParameters(final String parameters) {
-        return new ExecutionParameters(parameters);
-    }
-
+    FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy();
 }

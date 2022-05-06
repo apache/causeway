@@ -16,9 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.fixturescripts;
+package org.apache.isis.applib.fixturescripts;
 
 import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
