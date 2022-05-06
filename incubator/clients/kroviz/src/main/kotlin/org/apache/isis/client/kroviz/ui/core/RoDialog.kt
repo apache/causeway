@@ -41,7 +41,7 @@ class RoDialog(
     val controller: Controller,
     defaultAction: String = "OK",
     widthPerc: Int = 30,
-    heightPerc: Int = 100,
+    heightPerc: Int = 50,
     menu: List<KvisionHtmlLink>? = null,
     customButtons: List<FormItem> = emptyList()
 ) :
