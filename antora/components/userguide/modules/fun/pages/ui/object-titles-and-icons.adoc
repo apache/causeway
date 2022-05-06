@@ -20,7 +20,6 @@ For example, a domain object may be rendered differently depending upon the role
 [#object-title]
 == Object Title
 
-The object title is a label to identify an object to the end-user.
 Generally the object title is a label to identify an object to the end-user.
 There is no requirement for it to be absolutely unique, but it should be "unique enough" to distinguish the object from other object's likely to be rendered on the same page.
 
