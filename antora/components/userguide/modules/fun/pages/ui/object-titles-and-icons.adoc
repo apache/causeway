@@ -262,7 +262,7 @@ public class OrderSubscriptions {
 == Object CSS Styling
 
 It is also possible for an object to return a xref:refguide:applib-methods:ui-hints.adoc#cssclass[CSS class].
-In conjunction with a viewer-specific customisation of CSS (eg for the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], seexref:vw:ROOT:customisation.adoc#custom-css[here]) this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+In conjunction with a viewer-specific customisation of CSS (eg for the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], see xref:vw:ROOT:customisation.adoc#custom-css[here]) this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 === Declarative style
 
