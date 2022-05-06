@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse;
-import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.ConfigNew;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.ClickedEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -49,7 +49,7 @@ final class FullCalendarWithEventHandling extends FullCalendar {
 
     FullCalendarWithEventHandling(
             final String id,
-            final ConfigNew config,
+            final CalendarConfig config,
             final NotificationPanel feedback) {
         super(id, config);
         this.feedback = feedback;

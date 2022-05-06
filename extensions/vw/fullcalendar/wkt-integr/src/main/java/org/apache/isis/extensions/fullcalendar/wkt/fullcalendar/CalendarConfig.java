@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ConfigNew implements Serializable {
+public class CalendarConfig implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,7 +49,7 @@ public class ConfigNew implements Serializable {
     @Setter
     private String select;
 
-    public ConfigNew add(final EventSource eventSource) {
+    public CalendarConfig add(final EventSource eventSource) {
         eventSources.add(eventSource);
         return this;
     }
@@ -63,12 +63,9 @@ public class ConfigNew implements Serializable {
         return eventClick;
     }
 
-
     @JsonRawValue
     public String getSelect() {
         return select;
     }
-
-
 
 }

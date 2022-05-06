@@ -26,7 +26,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.ConfigNew;
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventProvider;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
@@ -34,6 +34,8 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.selector.EventSo
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
+
+import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -72,10 +74,13 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         feedback.setOutputMarkupId(true);
         addOrReplace(feedback);
 
-        ConfigNew config = new ConfigNew();
+        val config = new CalendarConfig();
+        config.getHeaderToolbar().setLeft("prevYear,prev,next,nextYear, today");
         config.getHeaderToolbar().setCenter("title");
-        config.getHeaderToolbar().setLeft("prev,next today");
         config.getHeaderToolbar().setRight("dayGridMonth,timeGridWeek");
+        config.setSelectable(true);
+
+        _Sample.setupSamples(config);
 
         final Iterable<ManagedObject> entityList = model.getDataTableModel().getDataRowsFiltered().getValue()
                 .map(DataRow::getRowElement);
@@ -94,18 +99,11 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         }
 
 //FIXME ...
-//        config.setSelectable(true);
-//        config.setSelectHelper(false);
-//        config.setAspectRatio(2.5f);
-//        config.getHeader().setLeft("prevYear,prev,next,nextYear, today");
-//        config.getHeader().setCenter("title");
-//        config.getHeader().setRight("");
 //        config.setLoading("function(bool) { if (bool) $(\"#loading\").show(); else $(\"#loading\").hide(); }");
 //        config.setAllDaySlot(true);
 
         final FullCalendar calendar = new FullCalendarWithEventHandling(ID_FULL_CALENDAR, config, feedback);
         addOrReplace(calendar);
-
         addOrReplace(new EventSourceSelector(ID_SELECTOR, calendar));
     }
 
@@ -122,7 +120,6 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-
         PanelUtil.renderHead(response, getClass());
     }
 }

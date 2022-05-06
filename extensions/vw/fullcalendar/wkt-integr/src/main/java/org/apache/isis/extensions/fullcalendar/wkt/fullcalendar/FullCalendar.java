@@ -46,8 +46,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 
     private static final long serialVersionUID = 1L;
 
-	private final Config config = new Config();
-	private final ConfigNew configNew;
+	private final CalendarConfig calendarConfig;
 	private EventDroppedCallback eventDropped;
 	private EventResizedCallback eventResized;
 	private GetEventsCallback getEvents;
@@ -55,9 +54,9 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 	private EventClickedCallback dateClicked;
 	private ViewDisplayCallback viewDisplay;
 
-	public FullCalendar(final String id, final ConfigNew config) {
+	public FullCalendar(final String id, final CalendarConfig calendarConfig) {
 		super(id);
-		this.configNew = config;
+		this.calendarConfig = calendarConfig;
 		setVersioned(false);
 	}
 
@@ -70,7 +69,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		for (EventSource source : configNew.getEventSources()) {
+		for (EventSource source : calendarConfig.getEventSources()) {
 			if (source.getId() == null) {
 				String uuid = UUID.randomUUID().toString().replaceAll("[^A-Za-z0-9]", "");
 				source.setId(uuid);
@@ -105,18 +104,8 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 				}
 			});
 		}
-		configNew.setEventClick(dateClicked.getHandlerScript());
-		config.setEventClick(dateClicked.getHandlerScript());
+		calendarConfig.setEventClick(dateClicked.getHandlerScript());
 
-		if (dateClicked == null) {
-			add(dateClicked = new EventClickedCallback() {
-                private static final long serialVersionUID = 1L;
-                @Override
-				protected void onClicked(final ClickedEvent event, final CalendarResponse response) {
-					onEventClicked(event, response);
-				}
-			});
-		}
 		if (dateRangeSelected == null) {
 			add(dateRangeSelected = new DateRangeSelectedCallback() {
                 private static final long serialVersionUID = 1L;
@@ -127,8 +116,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 			});
 
 		}
-		config.setSelect(dateRangeSelected.getHandlerScript());
-		configNew.setSelect(dateRangeSelected.getHandlerScript());
+		calendarConfig.setSelect(dateRangeSelected.getHandlerScript());
 
 		if (eventDropped == null) {
 			add(eventDropped = new EventDroppedCallback() {
@@ -139,7 +127,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 				}
 			});
 		}
-		config.setEventDrop(eventDropped.getHandlerScript());
+		//configOld.setEventDrop(eventDropped.getHandlerScript());
 
 		if (eventResized == null) {
 			add(eventResized = new EventResizedCallback() {
@@ -151,7 +139,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 
 			});
 		}
-		config.setEventResize(eventResized.getHandlerScript());
+		//configOld.setEventResize(eventResized.getHandlerScript());
 
 		if (viewDisplay == null) {
 			add(viewDisplay = new ViewDisplayCallback() {
@@ -162,7 +150,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 				}
 			});
 		}
-		config.setViewDisplay(viewDisplay.getHandlerScript());
+		//configOld.setViewDisplay(viewDisplay.getHandlerScript());
 
 		getPage().dirty();
 	}
@@ -172,7 +160,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		super.renderHead(response);
 
 		String configuration = "$(\"#" + getMarkupId() + "\").fullCalendarExt(";
-		configuration += _Json.toJson(configNew);
+		configuration += _Json.toJson(calendarConfig);
 		configuration += ");";
 
 		response.render(OnDomReadyHeaderItem.forScript(configuration));
@@ -211,7 +199,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 	// -- EVENT MANAGEMENT
 
     public Optional<EventSource> lookupEventSource(final String id) {
-        for (EventSource source : configNew.getEventSources()) {
+        for (EventSource source : calendarConfig.getEventSources()) {
             if (Objects.equal(id, source.getId())) {
                 return Optional.ofNullable(source);
             }

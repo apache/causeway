@@ -16,6 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+div .calendarEventableCollectionAsFullCalendar {
+	margin-top: 1rem;
+}
 
 .calendarEventableCollectionAsFullCalendar .selector {
 	float: right;

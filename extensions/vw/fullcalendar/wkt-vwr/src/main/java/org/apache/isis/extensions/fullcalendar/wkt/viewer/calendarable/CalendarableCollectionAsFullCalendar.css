@@ -17,6 +17,10 @@
  *  under the License.
  */
 
+div .calendarableCollectionAsFullCalendar {
+	margin-top: 1rem;
+}
+
 .calendarableCollectionAsFullCalendar .selector {
 	float: right;
 	margin-bottom: -25px;
