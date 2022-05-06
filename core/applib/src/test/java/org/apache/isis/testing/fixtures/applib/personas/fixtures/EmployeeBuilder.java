@@ -7,7 +7,7 @@ import org.apache.isis.testing.fixtures.applib.personas.dom.Person;
 import lombok.Getter;
 
 
-public class EmployeeBuilder extends BuilderScriptAbstract<Employee, EmployeeBuilder> {
+public class EmployeeBuilder extends BuilderScriptAbstract<Employee> {
 
     private Person_persona persona;
 

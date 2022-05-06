@@ -1,6 +1,5 @@
 package org.apache.isis.testing.fixtures.applib.personas.fixtures;
 
-import org.apache.isis.testing.fixtures.applib.personas.dom.Person;
 import org.apache.isis.testing.fixtures.applib.setup.PersonaEnumPersistAll;
 
 import lombok.val;

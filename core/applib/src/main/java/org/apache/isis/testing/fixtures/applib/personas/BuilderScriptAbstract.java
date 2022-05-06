@@ -28,9 +28,9 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptWithE
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 @Programmatic
-public abstract class BuilderScriptAbstract<T, B extends BuilderScriptAbstract<T, B>>
+public abstract class BuilderScriptAbstract<T>
         extends FixtureScript
-        implements WithPrereqs<T, B>, FixtureScriptWithExecutionStrategy {
+        implements FixtureScriptWithExecutionStrategy {
 
     private final FixtureScripts.MultipleExecutionStrategy executionStrategy;
 
@@ -51,34 +51,25 @@ public abstract class BuilderScriptAbstract<T, B extends BuilderScriptAbstract<T
     }
 
     @Programmatic
-    public B build(
+    public BuilderScriptAbstract<T> build(
             final FixtureScript parentFixtureScript,
             ExecutionContext executionContext) {
 
-        final B onFixture = (B) BuilderScriptAbstract.this;
+        final BuilderScriptAbstract<T> onFixture = BuilderScriptAbstract.this;
         parentFixtureScript.getContainer().injectServicesInto(onFixture);
-
-        execPrereqs(executionContext);
 
         // returns the fixture script that is run
         // (either this one, or possibly one previously executed).
-        return (B)executionContext.executeChildT(parentFixtureScript, this);
+        return executionContext.executeChildT(parentFixtureScript, this);
     }
 
-    @Override
-    public void execPrereqs(final ExecutionContext executionContext) {
-        final B onFixture = (B) BuilderScriptAbstract.this;
-        for (final WithPrereqs.Block<T, B> prereq : prereqs) {
-            prereq.execute(onFixture, executionContext);
-        }
-    }
 
     @Override
     protected abstract void execute(final ExecutionContext executionContext);
 
     public abstract T getObject();
 
-    public <P extends Persona<X, B>, X, B extends BuilderScriptAbstract<X, B>> X objectFor(
+    public <P extends Persona<X, B>, X, B extends BuilderScriptAbstract<X>> X objectFor(
             final P persona,
             final FixtureScript.ExecutionContext ec) {
         if(persona == null) {
@@ -93,14 +84,6 @@ public abstract class BuilderScriptAbstract<T, B extends BuilderScriptAbstract<T
             return null;
         }
         return persona.findUsing(serviceRegistry);
-    }
-
-    private final List<WithPrereqs.Block<T, B>> prereqs = Lists.newArrayList();
-
-    @Override
-    public B setPrereq(WithPrereqs.Block<T, B> prereq) {
-        prereqs.add(prereq);
-        return (B)this;
     }
 
 

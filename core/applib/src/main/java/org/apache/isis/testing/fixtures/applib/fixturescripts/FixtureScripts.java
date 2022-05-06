@@ -469,26 +469,13 @@ public abstract class FixtureScripts extends AbstractService {
      * @param builderScript
      */
     @Programmatic
-    public <T> T runBuilder(final BuilderScriptAbstract<T,?> builderScript) {
+    public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
 
         serviceRegistry.injectServicesInto(builderScript);
 
         builderScript.run(null);
 
         final T object = builderScript.getObject();
-        transactionService.nextTransaction();
-
-        return object;
-    }
-
-    @Programmatic
-    public <T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final F fixtureScript) {
-
-        serviceRegistry.injectServicesInto(fixtureScript);
-
-        fixtureScript.run(null);
-
-        final T object = fixtureScript.getObject();
         transactionService.nextTransaction();
 
         return object;

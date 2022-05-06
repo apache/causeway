@@ -46,7 +46,6 @@ import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript;
 import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
-import org.apache.isis.testing.fixtures.applib.personas.WithPrereqs;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -554,9 +553,9 @@ public abstract class FixtureScript
         }
 
         @Programmatic
-        public <T, F extends BuilderScriptAbstract<T,F>> void executeChild(
+        public <T, B extends BuilderScriptAbstract<T>> void executeChild(
                 final FixtureScript callingFixtureScript,
-                final PersonaWithBuilderScript<T, F> personaWithBuilderScript) {
+                final PersonaWithBuilderScript<T, B> personaWithBuilderScript) {
             executeChildren(callingFixtureScript, personaWithBuilderScript);
         }
 
@@ -571,10 +570,10 @@ public abstract class FixtureScript
         }
 
         @Programmatic
-        public <T, F extends BuilderScriptAbstract<T,F>> void executeChildren(
+        public <T, B extends BuilderScriptAbstract<T>> void executeChildren(
                 final FixtureScript callingFixtureScript,
-                final PersonaWithBuilderScript<T,F>... personaWithBuilderScripts) {
-            for (PersonaWithBuilderScript<T, F> builder : personaWithBuilderScripts) {
+                final PersonaWithBuilderScript<T, B>... personaWithBuilderScripts) {
+            for (PersonaWithBuilderScript<T, B> builder : personaWithBuilderScripts) {
                 executeChild(callingFixtureScript, builder.builder());
             }
         }
@@ -583,7 +582,7 @@ public abstract class FixtureScript
         public <
                 T,
                 E extends Enum<E> & PersonaWithBuilderScript<T, B>,
-                B extends BuilderScriptAbstract<T,B>
+                B extends BuilderScriptAbstract<T>
                 >
         void executeChildren(
                 final FixtureScript callingFixtureScript,
@@ -676,12 +675,6 @@ public abstract class FixtureScript
             case IGNORE:
             case EXECUTE_ONCE_BY_CLASS:
                 previouslyExecutedScript = fixtureScriptByClass.get(childFixtureScript.getClass());
-                if (previouslyExecutedScript == null) {
-                    if (childFixtureScript instanceof WithPrereqs) {
-                        final WithPrereqs withPrereqs = (WithPrereqs) childFixtureScript;
-                        withPrereqs.execPrereqs(this);
-                    }
-                }
                 // the prereqs might now result in a match, so we check again.
                 previouslyExecutedScript = fixtureScriptByClass.get(childFixtureScript.getClass());
                 if (previouslyExecutedScript == null) {
@@ -724,12 +717,6 @@ public abstract class FixtureScript
 
         private <T extends FixtureScript> T executeChildIfNotAlreadyWithValueSemantics(final T childFixtureScript) {
             FixtureScript previouslyExecutedScript = fixtureScriptByValue.get(childFixtureScript);
-            if (previouslyExecutedScript == null) {
-                if (childFixtureScript instanceof WithPrereqs) {
-                    final WithPrereqs withPrereqs = (WithPrereqs) childFixtureScript;
-                    withPrereqs.execPrereqs(this);
-                }
-            }
             // the prereqs might now result in a match, so we check again.
             previouslyExecutedScript = fixtureScriptByValue.get(childFixtureScript);
             if (previouslyExecutedScript == null) {

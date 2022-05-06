@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testing.fixtures.applib.personas;
 
-public interface PersonaWithBuilderScript<T, B extends BuilderScriptAbstract<T, B>>  {
+public interface PersonaWithBuilderScript<T, B extends BuilderScriptAbstract<T>>  {
 
     B builder();
 

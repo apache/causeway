@@ -24,7 +24,7 @@ package org.apache.isis.testing.fixtures.applib.personas;
  *
  * @since 2.x {@index}
  */
-public abstract class BuilderScriptWithoutResult extends BuilderScriptAbstract<Object, BuilderScriptWithoutResult> {
+public abstract class BuilderScriptWithoutResult extends BuilderScriptAbstract<Object> {
 
     /**
      * Simply returns null.

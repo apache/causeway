@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 
 @RequiredArgsConstructor
-public class PersonBuilderScript extends BuilderScriptWithResult<Person, PersonBuilderScript> {
+public class PersonBuilderScript extends BuilderScriptWithResult<Person> {
 
     private final Person_persona persona;
 

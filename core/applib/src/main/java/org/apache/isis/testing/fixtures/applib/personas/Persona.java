@@ -28,7 +28,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
  *
  * @since 2.x {@index}
  */
-public interface Persona<T, B extends BuilderScriptAbstract<T, B>>
+public interface Persona<T, B extends BuilderScriptAbstract<T>>
     extends PersonaWithFinder<T>, PersonaWithBuilderScript<T, B> {
 
     default T build(final FixtureScript parentFixtureScript, FixtureScript.ExecutionContext executionContext) {
