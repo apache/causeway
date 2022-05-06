@@ -16,23 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
+import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.util.Collection;
 
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
+import org.joda.time.DateTime;
 
-/**
- * Featured Wicket specific extensions.
- */
-@Configuration
-@Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
+import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
 
+public interface EventProvider extends Serializable {
+
+	Event getEventForId(String id) throws EventNotFoundException;
+
+	default Collection<Event> getEvents(final ZonedDateTime start, final ZonedDateTime end) {
+	    return getEvents(JodaTimeConverters.toJoda(start), JodaTimeConverters.toJoda(end));
+	}
+
+    default Collection<Event> getEvents(final DateTime start, final DateTime end) {
+        return getEvents(JodaTimeConverters.fromJoda(start), JodaTimeConverters.fromJoda(end));
+    }
 }

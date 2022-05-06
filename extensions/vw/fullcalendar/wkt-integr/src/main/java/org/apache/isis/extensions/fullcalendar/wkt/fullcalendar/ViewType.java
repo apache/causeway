@@ -16,23 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
+public enum ViewType {
+	MONTH("month"), BASIC_WEEK("basicWeek"), BASIC_DAY("basicDay"), AGENDA_WEEK("agendaWeek"), AGENDA_DAY("agendaDay");
 
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
+	private final String code;
 
-/**
- * Featured Wicket specific extensions.
- */
-@Configuration
-@Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
+	private ViewType(String code) {
+		this.code = code;
+	}
+
+	public static ViewType forCode(String code) {
+		for (ViewType type : values()) {
+			if (type.code.equals(code))
+				return type;
+		}
+		throw new IllegalStateException("Invalid view type code: " + code);
+	}
 
 }

@@ -16,23 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
+public class EventNotFoundException extends RuntimeException {
 
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
-
-/**
- * Featured Wicket specific extensions.
- */
-@Configuration
-@Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
+	public EventNotFoundException(String message) {
+		super(message);
+	}
 
 }

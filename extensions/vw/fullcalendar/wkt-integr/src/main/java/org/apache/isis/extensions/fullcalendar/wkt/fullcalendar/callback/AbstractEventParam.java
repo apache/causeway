@@ -16,23 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
+abstract class AbstractEventParam {
+	private final EventSource source;
+	private final Event event;
 
-/**
- * Featured Wicket specific extensions.
- */
-@Configuration
-@Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
+	public AbstractEventParam(EventSource source, Event event) {
+		this.source = source;
+		this.event = event;
+	}
+
+	public EventSource getSource() {
+		return source;
+	}
+
+	public Event getEvent() {
+		return event;
+	}
 
 }

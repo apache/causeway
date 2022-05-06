@@ -16,23 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
+public class ResizedEvent extends AbstractShiftedEventParam {
 
-/**
- * Featured Wicket specific extensions.
- */
-@Configuration
-@Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
+	public ResizedEvent(EventSource source, Event event, int hoursDelta, int minutesDelta) {
+		super(source, event, hoursDelta, minutesDelta);
+	}
 
 }

@@ -16,23 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
+import org.apache.wicket.util.lang.Objects;
 
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
+public class EventManager {
+	private FullCalendar calendar;
 
-/**
- * Featured Wicket specific extensions.
- */
-@Configuration
-@Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
+	EventManager(FullCalendar calendar) {
+		this.calendar = calendar;
+	}
 
+	public EventSource getEventSource(String id) throws EventSourceNotFoundException {
+
+		for (EventSource source : calendar.getConfig().getEventSources()) {
+			if (Objects.equal(id, source.getId())) {
+				return source;
+			}
+		}
+		throw new EventSourceNotFoundException("Event source with uuid: " + id + " not found");
+	}
+
+	public Event getEvent(String sourceId, String eventId) throws EventSourceNotFoundException, EventNotFoundException {
+		return getEventSource(sourceId).getEventProvider().getEventForId(eventId);
+	}
 }
