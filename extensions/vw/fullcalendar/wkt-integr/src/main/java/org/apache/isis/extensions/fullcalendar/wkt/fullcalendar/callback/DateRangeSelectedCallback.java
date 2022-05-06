@@ -30,20 +30,6 @@ implements CallbackWithHandler {
 
     private static final long serialVersionUID = 1L;
 
-    private final boolean ignoreTimezone;
-
-	/**
-	 * If <var>ignoreTimezone</var> is {@code true}, then the remote client\"s time zone will be ignored when
-	 * determining the selected date range, resulting in a range with the selected start and end values, but in the
-	 * server\"s time zone.
-	 *
-	 * @param ignoreTimezone
-	 *            whether or not to ignore the remote client\"s time zone when determining the selected date range
-	 */
-	public DateRangeSelectedCallback(final boolean ignoreTimezone) {
-		this.ignoreTimezone = ignoreTimezone;
-	}
-
 	@Override
 	protected String configureCallbackScript(final String script, final String urlTail) {
 		return script

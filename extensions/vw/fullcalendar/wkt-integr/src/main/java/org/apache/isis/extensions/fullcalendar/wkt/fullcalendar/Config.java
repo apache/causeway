@@ -48,7 +48,6 @@ public class Config implements Serializable {
 	}
 
 	private List<EventSource> eventSources = new ArrayList<EventSource>();
-//	private Header headerToolbar = new Header();
 	private ButtonText buttonText = new ButtonText();
 	private String loading;
 	private Boolean editable;
@@ -78,7 +77,6 @@ public class Config implements Serializable {
 	private Boolean disableResizing;
 	private Integer slotMinutes;
 	private Float aspectRatio;
-	private boolean ignoreTimezone = false;
 
 	private boolean weekends = true;
 	private int firstDay = 0;
@@ -96,10 +94,6 @@ public class Config implements Serializable {
 	public Collection<EventSource> getEventSources() {
 		return Collections.unmodifiableList(eventSources);
 	}
-
-//	public Header getHeaderToolbar() {
-//		return headerToolbar;
-//	}
 
 	@JsonRawValue
 	public String getEventResize() {
@@ -348,34 +342,6 @@ public class Config implements Serializable {
 	 */
 	public Float getAspectRatio() {
 		return aspectRatio;
-	}
-
-	/**
-	 * If <var>ignoreTimezone</var> is {@code true}, then the remote client's time zone will be ignored when determining
-	 * selected date ranges, resulting in ranges with the selected start and end values, but in the server's time zone.
-	 * The default value is {@code false}.
-	 * <p>
-	 * Not currently used on the client side.
-	 *
-	 * @param ignoreTimezone
-	 *            whether or not to ignore the remote client's time zone when determining selected date ranges
-	 */
-	public void setIgnoreTimezone(final boolean ignoreTimezone) {
-		this.ignoreTimezone = ignoreTimezone;
-	}
-
-	/**
-	 * If <var>ignoreTimezone</var> is {@code true}, then the remote client's time zone will be ignored when determining
-	 * selected date ranges, resulting in ranges with the selected start and end values, but in the server's time zone.
-	 * The default value is {@code false}.
-	 * <p>
-	 * Not currently used on the client side.
-	 *
-	 * @return whether or not to ignore the remote client's time zone when determining selected date ranges
-	 */
-	@JsonIgnore
-	public boolean isIgnoreTimezone() {
-		return ignoreTimezone;
 	}
 
 	/**

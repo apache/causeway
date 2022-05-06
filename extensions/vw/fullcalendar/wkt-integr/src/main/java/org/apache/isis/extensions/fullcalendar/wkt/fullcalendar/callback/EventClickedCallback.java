@@ -48,8 +48,8 @@ implements CallbackWithHandler {
 		String eventId = r.getRequestParameters().getParameterValue("eventId").toString();
 		String sourceId = r.getRequestParameters().getParameterValue("sourceId").toString();
 
-		EventSource source = getCalendar().getEventManager().getEventSource(sourceId);
-		Event event = source.getEventById(eventId);//getEventProvider().getEventForId(eventId);
+		EventSource source = getCalendar().getEventSource(sourceId);
+		Event event = source.getEventById(eventId);
 
 		onClicked(new ClickedEvent(source, event), new CalendarResponse(getCalendar(), target));
 	}

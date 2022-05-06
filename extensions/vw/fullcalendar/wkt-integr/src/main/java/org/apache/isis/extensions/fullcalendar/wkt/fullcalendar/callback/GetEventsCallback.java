@@ -52,7 +52,7 @@ public class GetEventsCallback extends AbstractCallback {
 //			start = start.plusMinutes(minutesAdjustment);
 //			end = end.plusMinutes(minutesAdjustment);
 //		}
-		EventSource source = getCalendar().getEventManager().getEventSource(sid);
+		EventSource source = getCalendar().getEventSource(sid);
 		EventProvider provider = source.getEventProvider();
 		String response = getCalendar().toJson(provider.getEvents(start, end));
 

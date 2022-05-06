@@ -49,7 +49,7 @@ implements
 		String eventId = r.getRequestParameters().getParameterValue("eventId").toString();
 		String sourceId = r.getRequestParameters().getParameterValue("sourceId").toString();
 
-		EventSource source = getCalendar().getEventManager().getEventSource(sourceId);
+		EventSource source = getCalendar().getEventSource(sourceId);
 		Event event = source.getEventProvider().getEventForId(eventId);
 
 		int dayDelta = r.getRequestParameters().getParameterValue("dayDelta").toInt();

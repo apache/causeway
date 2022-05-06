@@ -35,7 +35,6 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 		super(id);
 	}
 
-	// TODO see if it makes sense to switch these to Css/JavaScriptResourceReference
 	protected static final ResourceReference CSS = new PackageResourceReference(AbstractFullCalendar.class,
 		"res/main.css");
 	protected static final ResourceReference JS = new PackageResourceReference(AbstractFullCalendar.class,
@@ -48,6 +47,7 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 	@Override
 	public void renderHead(final IHeaderResponse response) {
 
+	    // jQuery
 		response.render(JavaScriptHeaderItem.forReference(WicketAjaxJQueryResourceReference.get()));
 
 		renderCssResources(response);
@@ -70,6 +70,6 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 	}
 
 	public final String toJson(final Object value) {
-		return Json.toJson(value);
+		return _Json.toJson(value);
 	}
 }

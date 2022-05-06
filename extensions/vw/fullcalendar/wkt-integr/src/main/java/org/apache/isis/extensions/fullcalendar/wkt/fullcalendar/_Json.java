@@ -18,11 +18,21 @@
  */
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 import lombok.experimental.UtilityClass;
 
@@ -32,13 +42,46 @@ class _Json {
     public String toJson(final Object object) {
         ObjectMapper mapper = new ObjectMapper(new MappingJsonFactory());
         SimpleModule module = new SimpleModule("fullcalendar", new Version(1, 0, 0, null, null, null));
+
         mapper.registerModule(new JavaTimeModule());
+        module.addSerializer(new DateTimeSerializer());
+        module.addSerializer(new LocalTimeSerializer());
         mapper.registerModule(module);
 
         try {
             return mapper.writeValueAsString(object);
         } catch (Exception e) {
             throw new RuntimeException("Error encoding object: " + object + " into JSON string", e);
+        }
+
+    }
+
+    @Deprecated
+    public static class DateTimeSerializer extends JsonSerializer<DateTime> {
+        @Override
+        public void serialize(final DateTime value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException,
+                JsonProcessingException {
+            jgen.writeString(ISODateTimeFormat.dateTime().print(value));
+        }
+
+        @Override
+        public Class<DateTime> handledType() {
+            return DateTime.class;
+        }
+
+    }
+
+    @Deprecated
+    public static class LocalTimeSerializer extends JsonSerializer<LocalTime> {
+        @Override
+        public void serialize(final LocalTime value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException,
+            JsonProcessingException {
+            jgen.writeString(value.toString("h:mmaa"));
+        }
+
+        @Override
+        public Class<LocalTime> handledType() {
+            return LocalTime.class;
         }
 
     }

@@ -20,11 +20,14 @@ package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.wicket.IRequestListener;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.util.lang.Objects;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.AjaxConcurrency;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.ClickedEvent;
@@ -43,9 +46,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 
     private static final long serialVersionUID = 1L;
 
-    //private static final TextTemplate EVENTS = new PackageTextTemplate(FullCalendar.class, "FullCalendar.events.tpl");
-
-	private Config config = new Config();
+	private final Config config = new Config();
 	private final ConfigNew configNew;
 	private EventDroppedCallback eventDropped;
 	private EventResizedCallback eventResized;
@@ -65,13 +66,6 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		return false;
 	}
 
-	public ConfigNew getConfig() {
-		return configNew;
-	}
-
-	public EventManager getEventManager() {
-		return new EventManager(this);
-	}
 
 	@Override
 	protected void onInitialize() {
@@ -102,17 +96,10 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		if (getEvents == null) {
 			add(getEvents = new GetEventsCallback());
 		}
-//		for (EventSource source : config.getEventSources()) {
-//			source.setEvents(EVENTS.asString(new MicroMap<String, String>("url", getEvents.getUrl(source))));
-//		}
-
-//		for (EventSource source : configNew.getEventSources()) {
-//			source.setEvents(EVENTS.asString(new MicroMap<String, String>("url", getEvents.getUrl(source))));
-//		}
-
 		if (dateClicked == null) {
 			add(dateClicked = new EventClickedCallback() {
-				@Override
+                private static final long serialVersionUID = 1L;
+                @Override
 				protected void onClicked(final ClickedEvent event, final CalendarResponse response) {
 					onEventClicked(event, response);
 				}
@@ -123,16 +110,17 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 
 		if (dateClicked == null) {
 			add(dateClicked = new EventClickedCallback() {
-				@Override
+                private static final long serialVersionUID = 1L;
+                @Override
 				protected void onClicked(final ClickedEvent event, final CalendarResponse response) {
 					onEventClicked(event, response);
 				}
 			});
 		}
-//		configNew.setDateClick(dateClicked.getHandlerScript());
 		if (dateRangeSelected == null) {
-			add(dateRangeSelected = new DateRangeSelectedCallback(config.isIgnoreTimezone()) {
-				@Override
+			add(dateRangeSelected = new DateRangeSelectedCallback() {
+                private static final long serialVersionUID = 1L;
+                @Override
 				protected void onSelect(final SelectedRange range, final CalendarResponse response) {
 					FullCalendar.this.onDateRangeSelected(range, response);
 				}
@@ -144,8 +132,8 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 
 		if (eventDropped == null) {
 			add(eventDropped = new EventDroppedCallback() {
-
-				@Override
+                private static final long serialVersionUID = 1L;
+                @Override
 				protected boolean onEventDropped(final DroppedEvent event, final CalendarResponse response) {
 					return FullCalendar.this.onEventDropped(event, response);
 				}
@@ -155,8 +143,8 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 
 		if (eventResized == null) {
 			add(eventResized = new EventResizedCallback() {
-
-				@Override
+                private static final long serialVersionUID = 1L;
+                @Override
 				protected boolean onEventResized(final ResizedEvent event, final CalendarResponse response) {
 					return FullCalendar.this.onEventResized(event, response);
 				}
@@ -167,7 +155,8 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 
 		if (viewDisplay == null) {
 			add(viewDisplay = new ViewDisplayCallback() {
-				@Override
+                private static final long serialVersionUID = 1L;
+                @Override
 				protected void onViewDisplayed(final View view, final CalendarResponse response) {
 					FullCalendar.this.onViewDisplayed(view, response);
 				}
@@ -183,11 +172,10 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		super.renderHead(response);
 
 		String configuration = "$(\"#" + getMarkupId() + "\").fullCalendarExt(";
-		configuration += Json.toJson(configNew);
+		configuration += _Json.toJson(configNew);
 		configuration += ");";
 
 		response.render(OnDomReadyHeaderItem.forScript(configuration));
-
 	}
 
 	protected boolean onEventDropped(final DroppedEvent event, final CalendarResponse response) {
@@ -219,6 +207,27 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		getEvents.onRequest();
 
 	}
+
+	// -- EVENT MANAGEMENT
+
+    public Optional<EventSource> lookupEventSource(final String id) {
+        for (EventSource source : configNew.getEventSources()) {
+            if (Objects.equal(id, source.getId())) {
+                return Optional.ofNullable(source);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Event getEvent(final String sourceId, final String eventId) throws NoSuchElementException {
+        return getEventSource(sourceId).getEventProvider().getEventForId(eventId);
+    }
+
+    public EventSource getEventSource(final String id) throws NoSuchElementException {
+        return lookupEventSource(id)
+        .orElseThrow(()->
+            new NoSuchElementException("Event source with id: " + id + " not found"));
+    }
 
     // -- START/END UTILITY
 
