@@ -415,8 +415,8 @@ under the License.
 
 		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts)
 			versions -->
-		<node.version>v16.14.2</node.version>
-		<npm.version>8.5.0</npm.version>
+		<node.version>v16.15.0</node.version>
+		<npm.version>8.9.0</npm.version>
 
 		<objenesis.version>3.2</objenesis.version>
 		<ognl.version>3.3.2</ognl.version>
