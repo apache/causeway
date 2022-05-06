@@ -21,12 +21,12 @@ package org.apache.isis.applib.fixtures;
 
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * Convenience class for creating fixtures, with support to allow
  * users to be switching using the {@link SwitchUserService}.
- * 
+ *
  * <p>
  * Note that unlike {@link AbstractFixture}, fixtures inheriting from
  * this class <i>cannot</i> be used as domain objects (the {@link SwitchUserService} does

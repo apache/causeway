@@ -32,7 +32,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.fixtures.FixtureClock;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
@@ -44,18 +44,19 @@ import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 /**
  * Base class for integration tests.
- * 
+ *
  * <p>
  * There is substantial overlap with {@link CukeGlueAbstract}, and it would be possible to factor
  * out a common base class.  Both delegate to an underlying {@link ScenarioExecution}, and provide
- * a bunch of helper methods.  The reason this has not been done is mostly to make it easier to see 
+ * a bunch of helper methods.  The reason this has not been done is mostly to make it easier to see
  * the equivalence of these two classes.
- * 
+ *
  * <p>
- * The only real differences between this class and {@link CukeGlueAbstract} is that this class 
+ * The only real differences between this class and {@link CukeGlueAbstract} is that this class
  * uses JUnit rules to automatically perform {@link IsisTransactionRule transaction management} and
  * uses JUnit rules for {@link ExpectedException exception handling}.  In {@link CukeGlueAbstract} these
  * are required (by Cucumber-JVM) to be explicitly handled in the step definitions.
@@ -75,7 +76,7 @@ public abstract class IntegrationTestAbstract {
 
     // //////////////////////////////////////
 
-  
+
     /**
      * @deprecated - instead just inject {@link TransactionService} into test and use {@link TransactionService#nextTransaction()} instead.
      */
@@ -114,7 +115,7 @@ public abstract class IntegrationTestAbstract {
 
     // //////////////////////////////////////
 
-    
+
     /**
      * @deprecated - just inject {@link Scratchpad} service into test and use {@link Scratchpad#get(Object)} instead.
      */
@@ -154,7 +155,7 @@ public abstract class IntegrationTestAbstract {
     protected <T> T service(final Class<T> cls) {
         return scenarioExecution().service(cls);
     }
-    
+
     /**
      * @deprecated - instead just inject {@link org.apache.isis.applib.DomainObjectContainer} into test.
      */
@@ -162,7 +163,7 @@ public abstract class IntegrationTestAbstract {
     protected DomainObjectContainer container() {
         return scenarioExecution().container();
     }
-    
+
     /**
      * @deprecated - instead just inject {@link org.apache.isis.applib.services.wrapper.WrapperFactory} into test.
      */
@@ -192,7 +193,7 @@ public abstract class IntegrationTestAbstract {
         return container().mixin(mixinClass, mixedIn);
     }
 
-    
+
     // //////////////////////////////////////
 
     /**
@@ -206,8 +207,8 @@ public abstract class IntegrationTestAbstract {
 
         @Override
         public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
-            final IsisSystemForTest isft = IsisSystemForTest.get(); 
-            
+            final IsisSystemForTest isft = IsisSystemForTest.get();
+
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
@@ -257,10 +258,10 @@ public abstract class IntegrationTestAbstract {
 
     /**
      * Convenience method to avoid some boilerplate and rename (as more in keeping with the
-     * {@link org.apache.isis.applib.fixturescripts.FixtureScript} API compared to the older
+     * {@link FixtureScript} API compared to the older
      * {@link org.apache.isis.applib.fixtures.InstallableFixture} API).
      *
-     * @deprecated  - just inject {@link org.apache.isis.applib.fixturescripts.FixtureScripts} service for your application, and call.  If multiple fixture scripts, create an anonymous subclass of {@link org.apache.isis.applib.fixturescripts.FixtureScript} and override {@link org.apache.isis.applib.fixturescripts.FixtureScript#execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)} execute.
+     * @deprecated  - just inject {@link FixtureScripts} service for your application, and call.  If multiple fixture scripts, create an anonymous subclass of {@link FixtureScript} and override {@link FixtureScript#execute(FixtureScript.ExecutionContext)} execute.
      */
     @Deprecated
     protected static void runScript(final FixtureScript... fixtureScripts) {

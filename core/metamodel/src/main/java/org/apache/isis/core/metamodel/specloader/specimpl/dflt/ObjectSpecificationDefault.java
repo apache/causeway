@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -89,7 +89,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
      * Lazily built by {@link #getMember(Method)}.
      */
     private Map<Method, ObjectMember> membersByMethod = null;
-    
+
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final boolean isService;
 
@@ -339,7 +339,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final List<ObjectAction> actions =
-                getObjectActions(type, Contributed.INCLUDED, Filters.<ObjectAction>any()); 
+                getObjectActions(type, Contributed.INCLUDED, Filters.<ObjectAction>any());
         return firstAction(actions, id);
     }
 
@@ -348,13 +348,13 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final List<ObjectAction> actions =
-                getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters.<ObjectAction>any()); 
+                getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters.<ObjectAction>any());
         return firstAction(actions, id);
     }
 
     private static ObjectAction firstAction(
-            final List<ObjectAction> candidateActions, 
-            final String actionName, 
+            final List<ObjectAction> candidateActions,
+            final String actionName,
             final List<ObjectSpecification> parameters) {
         outer: for (int i = 0; i < candidateActions.size(); i++) {
             final ObjectAction action = candidateActions.get(i);
@@ -375,7 +375,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private static ObjectAction firstAction(
-            final List<ObjectAction> candidateActions, 
+            final List<ObjectAction> candidateActions,
             final String id) {
         if (id == null) {
             return null;
@@ -412,7 +412,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         catalogueActions(membersByMethod);
         return membersByMethod;
     }
-    
+
     private void cataloguePropertiesAndCollections(final Map<Method, ObjectMember> membersByMethod) {
         final Filter<ObjectAssociation> noop = Filters.anyOfType(ObjectAssociation.class);
         final List<ObjectAssociation> fields = getAssociations(Contributed.EXCLUDED, noop);

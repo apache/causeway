@@ -27,8 +27,8 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.events.system.FixturesInstalledEvent;
-import org.apache.isis.applib.events.system.FixturesInstallingEvent;
+import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
+import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
 import org.apache.isis.applib.fixtures.CompositeFixture;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
@@ -85,7 +85,7 @@ public class FixturesInstallerDelegate {
     /**
      * Installs all {{@link #addFixture(Object) added fixtures} fixtures (ie as
      * returned by {@link #getFixtures()}).
-     * 
+     *
      * <p>
      * The set of fixtures (as per {@link #getFixtures()}) is <i>not</i> cleared
      * after installation; the intention being to allow the
@@ -144,7 +144,7 @@ public class FixturesInstallerDelegate {
 
     /**
      * Obtain any child fixtures for this fixture.
-     * 
+     *
      * @param fixture
      */
     private List<Object> getFixtures(final Object fixture) {
@@ -197,7 +197,7 @@ public class FixturesInstallerDelegate {
 
     /**
      * The {@link LogonFixture}, if any.
-     * 
+     *
      * <p>
      * Used to automatically logon if in {@link DeploymentType#SERVER_PROTOTYPE} mode.
      */

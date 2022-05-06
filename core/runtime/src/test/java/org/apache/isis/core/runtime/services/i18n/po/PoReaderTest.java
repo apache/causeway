@@ -96,9 +96,9 @@ public class PoReaderTest {
 
             // given
             final String context1 =
-                    "fixture.simple.SimpleObjectsFixturesService#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)";
+                    "fixture.simple.SimpleObjectsFixturesService#runFixtureScript(org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript,java.lang.String)";
             final String context2 =
-                    "org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)";
+                    "org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript,java.lang.String)";
             final String msgId = "Parameters";
             final String msgStr = "Paramètres";
 

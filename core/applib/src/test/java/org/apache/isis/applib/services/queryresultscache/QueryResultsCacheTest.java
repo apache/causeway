@@ -21,8 +21,8 @@ import java.util.concurrent.Callable;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.events.system.FixturesInstallingEvent;
-import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptsDefault;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -42,41 +42,41 @@ public class QueryResultsCacheTest {
 
     @Test
     public void execute() {
-        
+
         String value = queryResultsCache.execute(new Callable<String>(){
 
             @Override
             public String call() throws Exception {
                 return "foo";
             }
-            
+
         }, QueryResultsCacheTest.class, "execute");
-        
+
         assertThat(value, is("foo"));
     }
 
     @Test
     public void caching() {
-        
+
         final int[] i = new int[]{0};
-        
+
         Callable<String> callable = new Callable<String>(){
-            
+
             @Override
             public String call() throws Exception {
                 i[0]++;
                 return "foo";
             }
-            
+
         };
         assertThat(i[0], is(0));
         assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "caching", "a","b",1,2), is("foo"));
         assertThat(i[0], is(1));
-        
+
         // should be a cache hit
         assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "caching", "a","b",1,2), is("foo"));
         assertThat(i[0], is(1));
-        
+
         // changing any of the keys results in a cache miss
         assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "XXXcaching", "a","b",1,2), is("foo"));
         assertThat(i[0], is(2));
@@ -87,7 +87,7 @@ public class QueryResultsCacheTest {
         assertThat(queryResultsCache.execute(callable, QueryResultsCacheTest.class, "caching", "a","b",1,2, "x"), is("foo"));
         assertThat(i[0], is(5));
     }
-    
+
     @Test
     public void cachingDisabled() {
 

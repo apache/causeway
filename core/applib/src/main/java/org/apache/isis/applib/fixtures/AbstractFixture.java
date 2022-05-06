@@ -26,11 +26,11 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * Convenience class for creating fixtures.
- * 
+ *
  * <p>
  * Most subclasses will simply override {@link #install()} to setup objects. In
  * addition though fixtures may also:
@@ -43,12 +43,12 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
  * {@link #uniqueMatch(Class, Predicate)} (and various
  * overloads thereof).
  * </ul>
- * 
+ *
  * <p>
  * This class has been designed so that it can also be used as a regular
  * domain object.  This may be useful to allow users to setup demo data in a
  * running application.
- *  
+ *
  * <p>
  * To automatically logon for the demo/test, use {@link LogonFixture}.
  *
@@ -78,11 +78,11 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     /**
      * Most subclasses will override this method, but composite fixtures should
      * instead call {@link #addFixture(Object)} in their constructor.
-     * 
+     *
      * <p>
      * The iteration over the child fixtures is then performed by the
      * <tt>FixturesInstallerDelegate</tt> (or equivalent).
-     * 
+     *
      * <p>
      * A slightly strange implementation?  Oh well, it works.
      */

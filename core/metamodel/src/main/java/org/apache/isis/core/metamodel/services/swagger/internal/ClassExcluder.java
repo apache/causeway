@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.services.swagger.internal;
 
 import java.util.List;
 
-import org.apache.isis.applib.fixturescripts.FixtureResult;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 

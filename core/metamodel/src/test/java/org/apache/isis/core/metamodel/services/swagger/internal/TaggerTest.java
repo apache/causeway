@@ -66,7 +66,7 @@ public class TaggerTest {
 
         @Test
         public void internals() throws Exception {
-            String tag = new Tagger().tagFor("org.apache.isis.applib.fixturescripts.FixtureResult", null);
+            String tag = new Tagger().tagFor("org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult", null);
             assertThat(tag, is(equalTo("> apache isis internals")));
         }
 

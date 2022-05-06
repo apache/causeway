@@ -25,7 +25,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;

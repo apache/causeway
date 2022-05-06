@@ -21,7 +21,7 @@ package org.apache.isis.applib.fixtures;
 
 import java.util.List;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * @deprecated - use {@link FixtureScript} instead.

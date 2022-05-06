@@ -32,8 +32,8 @@ import org.apache.isis.applib.AbstractSubscriber;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.events.system.FixturesInstalledEvent;
-import org.apache.isis.applib.events.system.FixturesInstallingEvent;
+import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
+import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
 import org.apache.isis.applib.services.WithTransactionScope;
 
 /**
@@ -60,13 +60,13 @@ public class QueryResultsCache implements WithTransactionScope {
         private final Class<?> callingClass;
         private final String methodName;
         private final Object[] keys;
-        
+
         public Key(Class<?> callingClass, String methodName, Object... keys) {
             this.callingClass = callingClass;
             this.methodName = methodName;
             this.keys = keys;
         }
-        
+
         public Class<?> getCallingClass() {
             return callingClass;
         }
@@ -76,7 +76,7 @@ public class QueryResultsCache implements WithTransactionScope {
         public Object[] getKeys() {
             return keys;
         }
-        
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj)
@@ -108,7 +108,7 @@ public class QueryResultsCache implements WithTransactionScope {
             // ok, matches
             return true;
         }
-        
+
         @Override
         public int hashCode() {
             final int prime = 31;
@@ -124,7 +124,7 @@ public class QueryResultsCache implements WithTransactionScope {
             return callingClass.getName() + "#" + methodName  + Arrays.toString(keys);
         }
     }
-    
+
     public static class Value<T> {
         private T result;
         public Value(T result) {
@@ -134,10 +134,10 @@ public class QueryResultsCache implements WithTransactionScope {
             return result;
         }
     }
-    
+
     // //////////////////////////////////////
 
-    
+
     private final Map<Key, Value<?>> cache = Maps.newHashMap();
 
     @Programmatic
@@ -195,7 +195,7 @@ public class QueryResultsCache implements WithTransactionScope {
     public <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
         return get(new Key(callingClass, methodName, keys));
     }
-    
+
     @Programmatic
     @SuppressWarnings("unchecked")
     public <T> Value<T> get(final Key cacheKey) {
@@ -211,9 +211,9 @@ public class QueryResultsCache implements WithTransactionScope {
     }
 
     private static void logHitOrMiss(final Key cacheKey, final Value<?> cacheValue) {
-        if(!LOG.isDebugEnabled()) { 
-            return; 
-        } 
+        if(!LOG.isDebugEnabled()) {
+            return;
+        }
         LOG.debug("{}: {}", (cacheValue != null ? "HIT" : "MISS"), cacheKey.toString());
     }
 

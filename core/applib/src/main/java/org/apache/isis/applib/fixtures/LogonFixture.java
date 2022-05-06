@@ -24,22 +24,22 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * Indicates that the demo or test should be run as the specified user, with the
  * specified roles.
- * 
+ *
  * <p>
  * Note: this fixture does not in itself do anything (its {@link #install()} is
  * a no-op). However, if present in the fixture list then is &quot;noticed&quot;
  * by the framework, and is used to automatically logon when the framework is
  * booted (providing running in prototype or exploration, not in production).
- * 
+ *
  * <p>
  * To change the user during the installation of fixtures, either use
  * {@link SwitchUserFixture}.
- * 
+ *
  * @see SwitchUserFixture
  * @deprecated - use {@link FixtureScript} instead.
  */

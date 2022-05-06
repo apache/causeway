@@ -2,8 +2,8 @@ package org.apache.isis.testing.fixtures.applib.personas;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
-public abstract class BuilderScriptWithResult<T>
-        extends BuilderScriptAbstract<T> {
+public abstract class BuilderScriptWithResult<T, B extends BuilderScriptAbstract<T, B>>
+        extends BuilderScriptAbstract<T, B> {
 
     public T object;
 

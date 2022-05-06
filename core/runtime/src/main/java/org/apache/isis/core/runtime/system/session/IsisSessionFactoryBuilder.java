@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
-import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScriptsDefault;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -141,7 +141,7 @@ public class IsisSessionFactoryBuilder {
                     DeploymentCategoryProvider.class, new DeploymentCategoryProviderDefault(deploymentCategory));
             servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, configuration);
 
-            
+
             // fixtureScripts
             servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
 

@@ -21,7 +21,7 @@ package org.apache.isis.applib.fixtures;
 import org.apache.isis.applib.AbstractContainedObject;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * @deprecated - use {@link FixtureScript} instead.
@@ -89,7 +89,7 @@ abstract class BaseFixture extends AbstractContainedObject implements Installabl
 
     /**
      * The {@link Clock} singleton, downcast to {@link FixtureClock}.
-     * 
+     *
      * <p>
      * Will return <tt>null</tt> if {@link FixtureClock} could not be
      * {@link FixtureClock#initialize() initialized}.

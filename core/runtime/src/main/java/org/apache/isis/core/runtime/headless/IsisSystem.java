@@ -48,6 +48,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 
 /**
@@ -450,7 +451,7 @@ public class IsisSystem {
     //region > Fixture management (for each test, rather than at bootstrap)
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.fixturescripts.FixtureScripts} domain service instead.
+     * @deprecated - use {@link FixtureScripts} domain service instead.
      */
     @Deprecated
     public void installFixtures(final InstallableFixture... fixtures) {
@@ -482,7 +483,7 @@ public class IsisSystem {
     private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
-    
+
     private PersistenceSession getPersistenceSession() {
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }

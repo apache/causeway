@@ -57,6 +57,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import static org.junit.Assert.fail;
 
@@ -72,25 +73,25 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     public interface Listener {
 
         void init(IsisConfiguration configuration) throws Exception;
-        
+
         void preOpenSession(boolean firstTime) throws Exception;
         void postOpenSession(boolean firstTime) throws Exception;
-        
+
         void preNextSession() throws Exception;
         void postNextSession() throws Exception;
 
         void preCloseSession() throws Exception;
         void postCloseSession() throws Exception;
     }
-    
+
     public static abstract class ListenerAdapter implements Listener {
-        
+
         private IsisConfiguration configuration;
 
         public void init(IsisConfiguration configuration) throws Exception {
             this.configuration = configuration;
         }
-        
+
         protected IsisConfiguration getConfiguration() {
             return configuration;
         }
@@ -129,7 +130,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     public static IsisSystemForTest getElseNull() {
         return ISFT.get();
     }
-    
+
     public static IsisSystemForTest get() {
         final IsisSystemForTest isft = ISFT.get();
         if(isft == null) {
@@ -263,7 +264,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     public org.apache.log4j.Level getLevel() {
         return level;
     }
-    
+
     public void setLevel(org.apache.log4j.Level level) {
         this.level = level;
     }
@@ -650,7 +651,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     //region > Fixture management (for each test, rather than at bootstrap)
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.fixturescripts.FixtureScripts} domain service instead.
+     * @deprecated - use {@link FixtureScripts} domain service instead.
      */
     @Deprecated
     public void installFixtures(final InstallableFixture... fixtures) {
@@ -682,7 +683,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();
     }
-    
+
     private PersistenceSession getPersistenceSession() {
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }

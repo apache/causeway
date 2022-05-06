@@ -31,7 +31,7 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * This utility service supports the dynamic discovery of classes from the classpath.  One service that uses this
@@ -48,7 +48,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
         menuOrder = "" + Integer.MAX_VALUE
 )
 public class ClassDiscoveryServiceUsingReflections
-            extends AbstractService 
+            extends AbstractService
             implements ClassDiscoveryService2 {
 
     @Programmatic

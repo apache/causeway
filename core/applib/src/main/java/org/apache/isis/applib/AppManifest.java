@@ -37,7 +37,7 @@ import org.reflections.vfs.SystemDir;
 import org.reflections.vfs.Vfs;
 
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * Programmatic specification of the constituent parts of an application, most specifically the modules that contain

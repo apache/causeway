@@ -4,12 +4,14 @@ import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
 public class PersonaEnumPersistAll<
-        E extends Enum<E> & PersonaWithBuilderScript<T, ? extends BuilderScriptAbstract<T>>,
-        T>
-        extends org.apache.isis.applib.fixturescripts.setup.PersonaEnumPersistAll{
+            T,
+            E extends Enum<E> & PersonaWithBuilderScript<T, B>,
+            B extends BuilderScriptAbstract<T, B>
+        >
+        extends org.apache.isis.testing.fixtures.applib.personas.PersonaEnumPersistAll {
 
 
-    public PersonaEnumPersistAll(Class personaEnumClass) {
+    public PersonaEnumPersistAll(Class<E> personaEnumClass) {
         super(personaEnumClass);
     }
 }

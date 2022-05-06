@@ -19,22 +19,22 @@
 
 package org.apache.isis.applib.fixtures;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * Sole purpose is to set the date/time while object fixtures are being
  * installed.
- * 
+ *
  * <p>
  * An alternative is to change the date using
  * {@link AbstractFixture#setDate(int, int, int)} and
  * {@link AbstractFixture#setTime(int, int)}.
- * 
+ *
  * <p>
  * Note that the last date set <i>will</i> remain in force for the application
  * itself. To revert to the current time, have a fixture at the end call
  * {@link #resetClock()}.
- * 
+ *
  * @see SwitchUserFixture
  *
  * @deprecated - use {@link FixtureScript} instead.

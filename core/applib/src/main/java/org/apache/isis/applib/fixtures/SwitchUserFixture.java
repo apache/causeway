@@ -26,21 +26,21 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * Sole purpose is to switch the current user while object fixtures are being
  * installed.
- * 
+ *
  * <p>
  * An alternative is to switch user using the
  * {@link AbstractFixtureSusa#switchUser(String, String...) switchUser} method.
- * 
+ *
  * <p>
  * Note that (unlike the otherwise similar {@link DateFixture}) the last user
  * switched to is <i>not</i> used as the logon fixture. If you want to
  * automatically logon as some user, use the {@link LogonFixture}.
- * 
+ *
  * @see DateFixture
  * @see LogonFixture
  *
