@@ -43,12 +43,12 @@ public abstract class IsisIntegrationTestAbstractWithFixtures extends IsisIntegr
         return this.fixtureScripts.runBuilder(fixtureScript);
     }
 
-    protected <T> void runPersonas(
-            @SuppressWarnings("unchecked") final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>... personaScripts) {
+    protected void runPersonas(
+            @SuppressWarnings("unchecked") final PersonaWithBuilderScript<?, ? extends BuilderScriptAbstract<?>>... personaScripts) {
         this.fixtureScripts.runPersonas(personaScripts);
     }
 
-    protected <T> T runPersona(final PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>> personaScript) {
+    protected <T> T runPersona(final PersonaWithBuilderScript<T, ? extends BuilderScriptAbstract<T>> personaScript) {
         return this.fixtureScripts.runPersona(personaScript);
     }
 

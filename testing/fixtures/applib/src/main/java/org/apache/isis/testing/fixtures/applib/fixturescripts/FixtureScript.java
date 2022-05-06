@@ -440,7 +440,7 @@ public abstract class FixtureScript {
         @Programmatic
         public void executeChild(
                 final FixtureScript callingFixtureScript,
-                final PersonaWithBuilderScript<?> personaWithBuilderScript) {
+                final PersonaWithBuilderScript<?,?> personaWithBuilderScript) {
 
             executeChildren(callingFixtureScript, personaWithBuilderScript);
         }
@@ -448,7 +448,7 @@ public abstract class FixtureScript {
         @Programmatic
         public <T, F extends BuilderScriptAbstract<T>> T executeChildT(
                 final FixtureScript callingFixtureScript,
-                final PersonaWithBuilderScript<F> personaWithBuilderScript) {
+                final PersonaWithBuilderScript<T, F> personaWithBuilderScript) {
             final F childFixtureScript = personaWithBuilderScript.builder();
             final F f = executeChildT(callingFixtureScript, childFixtureScript);
             return f.getObject();
@@ -467,15 +467,15 @@ public abstract class FixtureScript {
         @Programmatic
         public void executeChildren(
                 final FixtureScript callingFixtureScript,
-                final PersonaWithBuilderScript<?>... personaWithBuilderScripts) {
-            for (PersonaWithBuilderScript<?> builder : personaWithBuilderScripts) {
+                final PersonaWithBuilderScript<?,?>... personaWithBuilderScripts) {
+            for (PersonaWithBuilderScript<?,?> builder : personaWithBuilderScripts) {
                 BuilderScriptAbstract<?> childFixtureScript = builder.builder();
                 executeChild(callingFixtureScript, childFixtureScript);
             }
         }
 
         @Programmatic
-        public <T extends Enum<?> & PersonaWithBuilderScript<?>> void executeChildren(
+        public <T extends Enum<T> & PersonaWithBuilderScript<T,?>> void executeChildren(
                 final FixtureScript callingFixtureScript,
                 final Class<T> personaClass) {
             executeChildren(callingFixtureScript, personaClass.getEnumConstants());

@@ -41,14 +41,12 @@ import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript
 import lombok.val;
 
 public enum JpaTestDomainPersona
-implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
+        implements PersonaWithBuilderScript<Object, BuilderScriptAbstract<Object>>  {
 
     InventoryPurgeAll {
         @Override
         public BuilderScriptWithoutResult builder() {
             return new BuilderScriptWithoutResult() {
-
-                @Inject private RepositoryService repository;
 
                 @Override
                 protected void execute(final ExecutionContext ec) {
@@ -64,19 +62,19 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
                 }
 
+                @Inject private RepositoryService repository;
+
             };
         }
     },
 
     InventoryWith1Book {
         @Override
-        public BuilderScriptWithResult<JpaInventory> builder() {
-            return new BuilderScriptWithResult<JpaInventory>() {
-
-                @Inject private RepositoryService repository;
+        public BuilderScriptWithResult<Object> builder() {
+            return new BuilderScriptWithResult<Object>() {
 
                 @Override
-                protected JpaInventory buildResult(final ExecutionContext ec) {
+                protected Object buildResult(final ExecutionContext ec) {
 
                     val products = new TreeSet<JpaProduct>();
 
@@ -89,13 +87,15 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
 
                 }
 
+                @Inject private RepositoryService repository;
+
             };
         }
     },
 
     SvenApplicationUser {
         @Override
-        public BuilderScriptAbstract<?> builder() {
+        public BuilderScriptAbstract<Object> builder() {
             return new BuilderScriptWithoutResult() {
 
                 @Override

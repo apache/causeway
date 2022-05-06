@@ -32,9 +32,8 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
  * @since 2.x {@index}
  */
 @Programmatic
-public class PersonaEnumPersistAll<
-E extends Enum<E> & PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>,
-        T>
+public class PersonaEnumPersistAll<E extends Enum<E> & PersonaWithBuilderScript<T, ? extends BuilderScriptAbstract<T>>, T>
+
 extends FixtureScript
 implements FixtureScriptWithExecutionStrategy {
 
