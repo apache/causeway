@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
 import java.io.Serializable;
@@ -30,10 +29,20 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRawValue;
+
 import org.joda.time.LocalTime;
 
+import lombok.ToString;
+
+/**
+ * This class represents the configuration of the calendar which will be passed to FullCalendar as JSON object.
+ */
+//@Getter @Setter
+@ToString
 public class Config implements Serializable {
-	/** Use these to specify calendar column formats */
+    private static final long serialVersionUID = 1L;
+
+    /** Use these to specify calendar column formats */
 	public static enum ColumnFormat {
 		day, week, month;
 	}
@@ -79,7 +88,7 @@ public class Config implements Serializable {
 	private String[] dayNames;
 	private String[] dayNamesShort;
 
-	public Config add(EventSource eventSource) {
+	public Config add(final EventSource eventSource) {
 		eventSources.add(eventSource);
 		return this;
 	}
@@ -99,12 +108,12 @@ public class Config implements Serializable {
 
 	/**
 	 * Sets callback url to be used with this event.
-	 * 
+	 *
 	 * WARNING: see {@link FullCalendar#setupCallbacks()}
-	 * 
+	 *
 	 * @param eventResize
 	 */
-	public void setEventResize(String eventResize) {
+	public void setEventResize(final String eventResize) {
 		this.eventResize = eventResize;
 	}
 
@@ -113,7 +122,7 @@ public class Config implements Serializable {
 		return loading;
 	}
 
-	public void setLoading(String loading) {
+	public void setLoading(final String loading) {
 		this.loading = loading;
 	}
 
@@ -121,7 +130,7 @@ public class Config implements Serializable {
 		return editable;
 	}
 
-	public void setEditable(Boolean editable) {
+	public void setEditable(final Boolean editable) {
 		this.editable = editable;
 	}
 
@@ -132,12 +141,12 @@ public class Config implements Serializable {
 
 	/**
 	 * Sets callback url to be used with this event.
-	 * 
+	 *
 	 * WARNING: see {@link FullCalendar#setupCallbacks()}
-	 * 
+	 *
 	 * @param eventDrop
 	 */
-	public void setEventDrop(String eventDrop) {
+	public void setEventDrop(final String eventDrop) {
 		this.eventDrop = eventDrop;
 	}
 
@@ -145,7 +154,7 @@ public class Config implements Serializable {
 		return selectable;
 	}
 
-	public void setSelectable(Boolean selectable) {
+	public void setSelectable(final Boolean selectable) {
 		this.selectable = selectable;
 	}
 
@@ -153,7 +162,7 @@ public class Config implements Serializable {
 		return selectHelper;
 	}
 
-	public void setSelectHelper(Boolean selectHelper) {
+	public void setSelectHelper(final Boolean selectHelper) {
 		this.selectHelper = selectHelper;
 	}
 
@@ -164,12 +173,12 @@ public class Config implements Serializable {
 
 	/**
 	 * Sets callback url to be used with this event.
-	 * 
+	 *
 	 * WARNING: see {@link FullCalendar#setupCallbacks()}
-	 * 
+	 *
 	 * @param select
 	 */
-	public void setSelect(String select) {
+	public void setSelect(final String select) {
 		this.select = select;
 	}
 
@@ -180,12 +189,12 @@ public class Config implements Serializable {
 
 	/**
 	 * Sets callback url to be used with this event.
-	 * 
+	 *
 	 * WARNING: see {@link FullCalendar#setupCallbacks()}
-	 * 
+	 *
 	 * @param eventClick
 	 */
-	public void setEventClick(String eventClick) {
+	public void setEventClick(final String eventClick) {
 		this.eventClick = eventClick;
 	}
 
@@ -199,11 +208,11 @@ public class Config implements Serializable {
 	/**
 	 * See <a href="http://arshaw.com/fullcalendar/docs/views/Available_Views/">http ://arshaw.com/
 	 * fullcalendar/docs/views/Available_Views/</a> for the list of possible values.
-	 * 
+	 *
 	 * @param initialView
 	 *            the defaultView to set
 	 */
-	public void setInitialView(String initialView) {
+	public void setInitialView(final String initialView) {
 		this.initialView = initialView;
 	}
 
@@ -212,7 +221,7 @@ public class Config implements Serializable {
 		return columnFormat.get(ColumnFormat.day);
 	}
 
-	public void setColumnFormatDay(String format) {
+	public void setColumnFormatDay(final String format) {
 		columnFormat.put(ColumnFormat.day, format);
 	}
 
@@ -221,7 +230,7 @@ public class Config implements Serializable {
 		return columnFormat.get(ColumnFormat.week);
 	}
 
-	public void setColumnFormatWeek(String format) {
+	public void setColumnFormatWeek(final String format) {
 		columnFormat.put(ColumnFormat.week, format);
 	}
 
@@ -230,7 +239,7 @@ public class Config implements Serializable {
 		return columnFormat.get(ColumnFormat.month);
 	}
 
-	public void setColumnFormatMonth(String format) {
+	public void setColumnFormatMonth(final String format) {
 		columnFormat.put(ColumnFormat.month, format);
 	}
 
@@ -242,7 +251,7 @@ public class Config implements Serializable {
 		return minTime;
 	}
 
-	public void setMinTime(LocalTime minTime) {
+	public void setMinTime(final LocalTime minTime) {
 		this.minTime = minTime;
 	}
 
@@ -250,7 +259,7 @@ public class Config implements Serializable {
 		return maxTime;
 	}
 
-	public void setMaxTime(LocalTime maxTime) {
+	public void setMaxTime(final LocalTime maxTime) {
 		this.maxTime = maxTime;
 	}
 
@@ -258,7 +267,7 @@ public class Config implements Serializable {
 		return firstHour;
 	}
 
-	public void setFirstHour(Integer firstHour) {
+	public void setFirstHour(final Integer firstHour) {
 		this.firstHour = firstHour;
 	}
 
@@ -266,7 +275,7 @@ public class Config implements Serializable {
 		return allDaySlot;
 	}
 
-	public void setAllDaySlot(Boolean allDaySlot) {
+	public void setAllDaySlot(final Boolean allDaySlot) {
 		this.allDaySlot = allDaySlot;
 	}
 
@@ -274,7 +283,7 @@ public class Config implements Serializable {
 		return timeFormat;
 	}
 
-	public void setTimeFormat(String timeFormat) {
+	public void setTimeFormat(final String timeFormat) {
 		this.timeFormat = timeFormat;
 	}
 
@@ -283,7 +292,7 @@ public class Config implements Serializable {
 		return eventRender;
 	}
 
-	public void setEventRender(String eventRenderer) {
+	public void setEventRender(final String eventRenderer) {
 		this.eventRender = eventRenderer;
 	}
 
@@ -291,7 +300,7 @@ public class Config implements Serializable {
 		return disableDragging;
 	}
 
-	public void setDisableDragging(Boolean disableDragging) {
+	public void setDisableDragging(final Boolean disableDragging) {
 		this.disableDragging = disableDragging;
 	}
 
@@ -299,7 +308,7 @@ public class Config implements Serializable {
 		return disableResizing;
 	}
 
-	public void setDisableResizing(Boolean disableResizing) {
+	public void setDisableResizing(final Boolean disableResizing) {
 		this.disableResizing = disableResizing;
 	}
 
@@ -308,11 +317,11 @@ public class Config implements Serializable {
 		return viewDisplay;
 	}
 
-	public void setViewDisplay(String viewDisplay) {
+	public void setViewDisplay(final String viewDisplay) {
 		this.viewDisplay = viewDisplay;
 	}
 
-	public void setSlotMinutes(Integer slotMinutes) {
+	public void setSlotMinutes(final Integer slotMinutes) {
 		this.slotMinutes = slotMinutes;
 	}
 
@@ -323,18 +332,18 @@ public class Config implements Serializable {
 	/**
 	 * See <a href="http://arshaw.com/fullcalendar/docs/display/aspectRatio/">http ://arshaw.com/
 	 * fullcalendar/docs/display/aspectRatio/</a>
-	 * 
+	 *
 	 * @param aspectRatio
 	 *            the aspectRatio to set
 	 */
-	public void setAspectRatio(Float aspectRatio) {
+	public void setAspectRatio(final Float aspectRatio) {
 		this.aspectRatio = aspectRatio;
 	}
 
 	/**
 	 * See <a href="http://arshaw.com/fullcalendar/docs/display/aspectRatio/">http ://arshaw.com/
 	 * fullcalendar/docs/display/aspectRatio/</a>
-	 * 
+	 *
 	 * @return the aspectRatio
 	 */
 	public Float getAspectRatio() {
@@ -347,7 +356,7 @@ public class Config implements Serializable {
 	 * The default value is {@code false}.
 	 * <p>
 	 * Not currently used on the client side.
-	 * 
+	 *
 	 * @param ignoreTimezone
 	 *            whether or not to ignore the remote client's time zone when determining selected date ranges
 	 */
@@ -361,7 +370,7 @@ public class Config implements Serializable {
 	 * The default value is {@code false}.
 	 * <p>
 	 * Not currently used on the client side.
-	 * 
+	 *
 	 * @return whether or not to ignore the remote client's time zone when determining selected date ranges
 	 */
 	@JsonIgnore
@@ -371,7 +380,7 @@ public class Config implements Serializable {
 
 	/**
 	 * If <var>weekends</var> is {@code false}, then it will not display weekends. The default value is {@code true}
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/display/weekends/">http ://arshaw.com/
 	 *      fullcalendar/docs/display/weekends/</a>
 	 * @return whether or not the calendar shows weekends
@@ -382,13 +391,13 @@ public class Config implements Serializable {
 
 	/**
 	 * If <var>weekends</var> is {@code false}, then it will not display weekends. The default value is {@code true}
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/display/weekends/">http ://arshaw.com/
 	 *      fullcalendar/docs/display/weekends/</a>
 	 * @param weekends
 	 *            whether or not the calendar shows weekends
 	 */
-	public void setWeekends(boolean weekends) {
+	public void setWeekends(final boolean weekends) {
 		this.weekends = weekends;
 	}
 
@@ -396,7 +405,7 @@ public class Config implements Serializable {
 	 * Get the first day of a week as an {@code int} {@code 0} represent Sunday, {@code 1} represent Monday, etc...
 	 * <p>
 	 * The default value is {@code 0} Sunday
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/display/firstDay/">http://arshaw.com/
 	 *      fullcalendar/docs/display/firstDay/</a>
 	 * @return firstDay
@@ -409,13 +418,13 @@ public class Config implements Serializable {
 	 * Set the first day of a week as an {@code int} {@code 0} represent Sunday, {@code 1} represent Monday, etc...
 	 * <p>
 	 * The default value is {@code 0} Sunday
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/display/firstDay/">http://arshaw.com/
 	 *      fullcalendar/docs/display/firstDay/</a>
 	 * @param firstDay
 	 *            is the first day of a week represented by an {@code int}
 	 */
-	public void setFirstDay(int firstDay) {
+	public void setFirstDay(final int firstDay) {
 		this.firstDay = firstDay;
 	}
 
@@ -423,7 +432,7 @@ public class Config implements Serializable {
 	 * Override month names depending on your {@code Locale}
 	 * <p>
 	 * Use {@link #setMonthNames(String[])} to override month names.
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/text/monthNames/">http://arshaw.com/
 	 *      fullcalendar/docs/text/monthNames</a>
 	 * @return monthNames
@@ -438,16 +447,16 @@ public class Config implements Serializable {
 	 * It overrides all month names, do not forget one or it will print {@code null}
 	 * <p>
 	 * This is an example to set month names in French:
-	 * 
+	 *
 	 * setMonthNames(new String[]{"Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre",
 	 * "Octobre", "Novembre", "Décembre"});
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/text/monthNames/">http://arshaw.com/
 	 *      fullcalendar/docs/text/monthNames</a>
 	 * @param monthNames
 	 *            month names to override
 	 */
-	public void setMonthNames(String[] monthNames) {
+	public void setMonthNames(final String[] monthNames) {
 		this.monthNames = monthNames;
 	}
 
@@ -455,7 +464,7 @@ public class Config implements Serializable {
 	 * Override month short names depending on your {@code Locale}
 	 * <p>
 	 * Use {@link #setMonthNamesShort(String[])} to override month short names.
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/text/monthNamesShort/">http://arshaw.com/
 	 *      fullcalendar/docs/text/monthNamesShort</a>
 	 * @return monthNamesShort
@@ -471,13 +480,13 @@ public class Config implements Serializable {
 	 * <p>
 	 * This is an example to set month short names in French: setMonthNamesShort(new String[]{"Janv.", "Fév.", "Mars",
 	 * "Avr.", "Mai", "Juin", "Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc."});
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/text/monthNamesShort/">http://arshaw.com/
 	 *      fullcalendar/docs/text/monthNamesShort</a>
 	 * @param monthNamesShort
 	 *            month short names to override
 	 */
-	public void setMonthNamesShort(String[] monthNamesShort) {
+	public void setMonthNamesShort(final String[] monthNamesShort) {
 		this.monthNamesShort = monthNamesShort;
 	}
 
@@ -485,7 +494,7 @@ public class Config implements Serializable {
 	 * Override day names depending on your {@code Locale}
 	 * <p>
 	 * Use {@link #setDayNames(String[])} to override day names.
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/text/dayNames/">http://arshaw.com/
 	 *      fullcalendar/docs/text/dayNames</a>
 	 * @return dayNames
@@ -501,13 +510,13 @@ public class Config implements Serializable {
 	 * <p>
 	 * This is an example to set day names in French: setDayNames(new String[]{"Dimanche", "Lundi", "Mardi", "Mercredi",
 	 * "Jeudi", "Vendredi", "Samedi"});
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/text/dayNames/">http://arshaw.com/
 	 *      fullcalendar/docs/text/dayNames</a>
 	 * @param dayNames
 	 *            day names to override
 	 */
-	public void setDayNames(String[] dayNames) {
+	public void setDayNames(final String[] dayNames) {
 		this.dayNames = dayNames;
 	}
 
@@ -515,7 +524,7 @@ public class Config implements Serializable {
 	 * Override day short names depending on your {@code Locale}
 	 * <p>
 	 * Use {@link #setDayNamesShort(String[])} to override day short names.
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/text/dayNamesShort/">http://arshaw.com/
 	 *      fullcalendar/docs/text/dayNamesShort</a>
 	 * @return dayNamesShort
@@ -531,13 +540,13 @@ public class Config implements Serializable {
 	 * <p>
 	 * This is an example to set day short names in French: setDayNamesShort(new String[]{"Dim", "Lun", "Mar", "Mer",
 	 * "Jeu", "ven", "Sam"});
-	 * 
+	 *
 	 * @see <a href="http://arshaw.com/fullcalendar/docs/text/dayNamesShort/">http://arshaw.com/
 	 *      fullcalendar/docs/text/dayNamesShort</a>
 	 * @param dayNamesShort
 	 *            day short names to override
 	 */
-	public void setDayNamesShort(String[] dayNamesShort) {
+	public void setDayNamesShort(final String[] dayNamesShort) {
 		this.dayNamesShort = dayNamesShort;
 	}
 }

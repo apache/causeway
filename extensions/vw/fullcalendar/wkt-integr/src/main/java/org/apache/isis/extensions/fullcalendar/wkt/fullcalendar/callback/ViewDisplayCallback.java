@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -31,13 +30,15 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.ViewType;
 
 /**
  * A base callback that passes back calendar's starting date
- * 
- * @author igor
- * 
  */
-public abstract class ViewDisplayCallback extends AbstractAjaxCallback implements CallbackWithHandler {
-	@Override
-	protected String configureCallbackScript(String script, String urlTail) {
+public abstract class ViewDisplayCallback
+extends AbstractAjaxCallback
+implements CallbackWithHandler {
+
+    private static final long serialVersionUID = 1L;
+
+    @Override
+	protected String configureCallbackScript(final String script, final String urlTail) {
 		return script
 			.replace(
 				urlTail,
@@ -50,7 +51,7 @@ public abstract class ViewDisplayCallback extends AbstractAjaxCallback implement
 	}
 
 	@Override
-	protected void respond(AjaxRequestTarget target) {
+	protected void respond(final AjaxRequestTarget target) {
 		Request r = target.getPage().getRequest();
 		ViewType type = ViewType.forCode(r.getRequestParameters().getParameterValue("view").toString());
 		DateTimeFormatter fmt = ISODateTimeFormat.dateTimeParser().withZone(DateTimeZone.UTC);

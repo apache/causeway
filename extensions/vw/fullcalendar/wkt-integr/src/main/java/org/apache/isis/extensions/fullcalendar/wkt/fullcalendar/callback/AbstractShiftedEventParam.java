@@ -16,31 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import org.joda.time.DateTime;
-import org.joda.time.Period;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 
-class AbstractShiftedEventParam extends AbstractEventParam {
-	private final int daysDelta;
-	private final int minutesDelta;
+import lombok.Getter;
 
-	public AbstractShiftedEventParam(EventSource source, Event event, int hoursDelta, int minutesDelta) {
+class AbstractShiftedEventParam extends AbstractEventParam {
+
+    @Getter private final int daysDelta;
+    @Getter private final int minutesDelta;
+
+	public AbstractShiftedEventParam(final EventSource source, final Event event, final int hoursDelta, final int minutesDelta) {
 		super(source, event);
 		this.daysDelta = hoursDelta;
 		this.minutesDelta = minutesDelta;
-	}
-
-	public int getDaysDelta() {
-		return daysDelta;
-	}
-
-	public int getMinutesDelta() {
-		return minutesDelta;
 	}
 
 	public DateTime getNewStartTime() {
@@ -51,11 +44,11 @@ class AbstractShiftedEventParam extends AbstractEventParam {
 		return shift(getEvent().getEnd());
 	}
 
-	public Period getDelta() {
-		return Period.days(daysDelta).plusMinutes(minutesDelta);
-	}
+//	public Period getDelta() {
+//		return Period.days(daysDelta).plusMinutes(minutesDelta);
+//	}
 
-	private DateTime shift(DateTime start) {
+	private DateTime shift(final DateTime start) {
 		return start.plusDays(daysDelta).plusMinutes(minutesDelta);
 	}
 

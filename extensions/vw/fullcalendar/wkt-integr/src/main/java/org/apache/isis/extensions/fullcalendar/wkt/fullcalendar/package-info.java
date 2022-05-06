@@ -16,18 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fullcalendar.ui.wkt.callback;
-
-import java.time.LocalDateTime;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter @Setter @AllArgsConstructor
-public class SelectedRange {
-	private LocalDateTime start;
-	private LocalDateTime end;
-	private boolean allDay;
-
-}
+/**
+ * A clone of https://github.com/42Lines/wicket-fullcalendar, with support for <i>Wicket</i> 9+.
+ */
+package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;

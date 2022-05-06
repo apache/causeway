@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import java.util.Map;
@@ -28,16 +27,20 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 
+import lombok.Getter;
+
 abstract class AbstractCallback extends Behavior implements IRequestListener {
-	private FullCalendar calendar;
+    private static final long serialVersionUID = 1L;
+
+    @Getter private FullCalendar calendar;
 
 	@Override
-	public void bind(Component component) {
+	public void bind(final Component component) {
 		super.bind(component);
 		this.calendar = (FullCalendar) component;
 	}
 
-	protected final String getUrl(Map<String, Object> parameters) {
+	protected final String getUrl(final Map<String, Object> parameters) {
 		PageParameters params = new PageParameters();
 		String url = calendar.urlForListener(this, params).toString();
 
@@ -56,12 +59,8 @@ abstract class AbstractCallback extends Behavior implements IRequestListener {
 
 	protected abstract void respond();
 
-	protected final FullCalendar getCalendar() {
-		return calendar;
-	}
-
 	@Override
-	public boolean getStatelessHint(Component component) {
+	public boolean getStatelessHint(final Component component) {
 		return false;
 	}
 

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -26,9 +25,14 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 
-public abstract class EventClickedCallback extends AbstractAjaxCallback implements CallbackWithHandler {
-	@Override
-	protected String configureCallbackScript(String script, String urlTail) {
+public abstract class EventClickedCallback
+extends AbstractAjaxCallback
+implements CallbackWithHandler {
+
+    private static final long serialVersionUID = 1L;
+
+    @Override
+	protected String configureCallbackScript(final String script, final String urlTail) {
 		return script.replace(urlTail, "&eventId=\"+info.event.id+\"&sourceId=\"+info.event.source.id"
 			+ "+\"");
 	}
@@ -39,7 +43,7 @@ public abstract class EventClickedCallback extends AbstractAjaxCallback implemen
 	}
 
 	@Override
-	protected void respond(AjaxRequestTarget target) {
+	protected void respond(final AjaxRequestTarget target) {
 		Request r = getCalendar().getRequest();
 		String eventId = r.getRequestParameters().getParameterValue("eventId").toString();
 		String sourceId = r.getRequestParameters().getParameterValue("sourceId").toString();

@@ -16,13 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
-public class EventNotFoundException extends RuntimeException {
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.MappingJsonFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-	public EventNotFoundException(String message) {
-		super(message);
-	}
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+class _Json {
+
+    public String toJson(final Object object) {
+        ObjectMapper mapper = new ObjectMapper(new MappingJsonFactory());
+        SimpleModule module = new SimpleModule("fullcalendar", new Version(1, 0, 0, null, null, null));
+        mapper.registerModule(new JavaTimeModule());
+        mapper.registerModule(module);
+
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (Exception e) {
+            throw new RuntimeException("Error encoding object: " + object + " into JSON string", e);
+        }
+
+    }
 
 }

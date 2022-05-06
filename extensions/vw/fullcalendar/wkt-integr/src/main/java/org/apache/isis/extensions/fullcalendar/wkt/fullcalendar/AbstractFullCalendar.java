@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
 import org.apache.wicket.MarkupContainer;
@@ -30,7 +29,9 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderContributor {
-	public AbstractFullCalendar(String id) {
+    private static final long serialVersionUID = 1L;
+
+    public AbstractFullCalendar(final String id) {
 		super(id);
 	}
 
@@ -45,7 +46,7 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 		"res/main.min.js");
 
 	@Override
-	public void renderHead(IHeaderResponse response) {
+	public void renderHead(final IHeaderResponse response) {
 
 		response.render(JavaScriptHeaderItem.forReference(WicketAjaxJQueryResourceReference.get()));
 
@@ -56,7 +57,7 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 
 	}
 
-	protected void renderJavaScriptResources(IHeaderResponse response) {
+	protected void renderJavaScriptResources(final IHeaderResponse response) {
 		if (getApplication().usesDeploymentConfig()) {
 			response.render(JavaScriptReferenceHeaderItem.forReference(JS_MIN));
 		} else {
@@ -64,11 +65,11 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 		}
 	}
 
-	protected void renderCssResources(IHeaderResponse response) {
+	protected void renderCssResources(final IHeaderResponse response) {
 		response.render(CssReferenceHeaderItem.forReference(CSS));
 	}
 
-	public final String toJson(Object value) {
+	public final String toJson(final Object value) {
 		return Json.toJson(value);
 	}
 }

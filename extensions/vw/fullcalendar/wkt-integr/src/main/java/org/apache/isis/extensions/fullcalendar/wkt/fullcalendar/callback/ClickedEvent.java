@@ -16,15 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 
+import lombok.NonNull;
+
 public class ClickedEvent extends AbstractEventParam {
 
-	public ClickedEvent(EventSource source, Event event) {
+	public ClickedEvent(@NonNull final EventSource source, @NonNull final Event event) {
 		super(source, event);
 	}
 

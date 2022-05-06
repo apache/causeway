@@ -16,6 +16,7 @@ import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -25,7 +26,6 @@ import org.joda.time.DateTime;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.ConfigNew;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
-import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventNotFoundException;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventProvider;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
@@ -189,13 +189,13 @@ class _Sample {
 		}
 
 		@Override
-		public Event getEventForId(final String id) throws EventNotFoundException {
+		public Event getEventForId(final String id) throws NoSuchElementException {
 			Integer idd = Integer.valueOf(id);
 			Event event = events.get(idd);
 			if (event != null) {
 				return event;
 			}
-			throw new EventNotFoundException("Event with id: " + id
+			throw new NoSuchElementException("Event with id: " + id
 					+ " not found");
 		}
 

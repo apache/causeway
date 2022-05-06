@@ -22,6 +22,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -34,7 +35,6 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.extensions.fullcalendar.applib.spi.CalendarableDereferencingService;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
-import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventNotFoundException;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventProvider;
 import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -72,7 +72,7 @@ public abstract class EventProviderAbstract implements EventProvider {
     }
 
     @Override
-    public Event getEventForId(final String id) throws EventNotFoundException {
+    public Event getEventForId(final String id) throws NoSuchElementException {
         return eventById.get(id);
     }
 

@@ -16,14 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
+
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.util.UUID;
 
 import org.apache.wicket.IRequestListener;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.util.template.PackageTextTemplate;
-import org.apache.wicket.util.template.TextTemplate;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.AjaxConcurrency;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.ClickedEvent;
@@ -38,10 +39,11 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.Selecte
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.View;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.ViewDisplayCallback;
 
-import java.util.UUID;
-
 public class FullCalendar extends AbstractFullCalendar implements IRequestListener {
-	private static final TextTemplate EVENTS = new PackageTextTemplate(FullCalendar.class, "FullCalendar.events.tpl");
+
+    private static final long serialVersionUID = 1L;
+
+    //private static final TextTemplate EVENTS = new PackageTextTemplate(FullCalendar.class, "FullCalendar.events.tpl");
 
 	private Config config = new Config();
 	private final ConfigNew configNew;
@@ -52,7 +54,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 	private EventClickedCallback dateClicked;
 	private ViewDisplayCallback viewDisplay;
 
-	public FullCalendar(String id, ConfigNew config) {
+	public FullCalendar(final String id, final ConfigNew config) {
 		super(id);
 		this.configNew = config;
 		setVersioned(false);
@@ -91,7 +93,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 	/**
 	 * Configures callback urls to be used by fullcalendar js to talk to this component. If you wish to use custom
 	 * callbacks you should override this method and set them here.
-	 * 
+	 *
 	 * NOTE: This method is called every time this component is rendered to keep the urls current, so if you set them
 	 * outside this method they will most likely be overwritten by the default ones.
 	 */
@@ -111,7 +113,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		if (dateClicked == null) {
 			add(dateClicked = new EventClickedCallback() {
 				@Override
-				protected void onClicked(ClickedEvent event, CalendarResponse response) {
+				protected void onClicked(final ClickedEvent event, final CalendarResponse response) {
 					onEventClicked(event, response);
 				}
 			});
@@ -122,7 +124,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		if (dateClicked == null) {
 			add(dateClicked = new EventClickedCallback() {
 				@Override
-				protected void onClicked(ClickedEvent event, CalendarResponse response) {
+				protected void onClicked(final ClickedEvent event, final CalendarResponse response) {
 					onEventClicked(event, response);
 				}
 			});
@@ -131,7 +133,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		if (dateRangeSelected == null) {
 			add(dateRangeSelected = new DateRangeSelectedCallback(config.isIgnoreTimezone()) {
 				@Override
-				protected void onSelect(SelectedRange range, CalendarResponse response) {
+				protected void onSelect(final SelectedRange range, final CalendarResponse response) {
 					FullCalendar.this.onDateRangeSelected(range, response);
 				}
 			});
@@ -144,7 +146,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 			add(eventDropped = new EventDroppedCallback() {
 
 				@Override
-				protected boolean onEventDropped(DroppedEvent event, CalendarResponse response) {
+				protected boolean onEventDropped(final DroppedEvent event, final CalendarResponse response) {
 					return FullCalendar.this.onEventDropped(event, response);
 				}
 			});
@@ -155,7 +157,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 			add(eventResized = new EventResizedCallback() {
 
 				@Override
-				protected boolean onEventResized(ResizedEvent event, CalendarResponse response) {
+				protected boolean onEventResized(final ResizedEvent event, final CalendarResponse response) {
 					return FullCalendar.this.onEventResized(event, response);
 				}
 
@@ -166,7 +168,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		if (viewDisplay == null) {
 			add(viewDisplay = new ViewDisplayCallback() {
 				@Override
-				protected void onViewDisplayed(View view, CalendarResponse response) {
+				protected void onViewDisplayed(final View view, final CalendarResponse response) {
 					FullCalendar.this.onViewDisplayed(view, response);
 				}
 			});
@@ -177,7 +179,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 	}
 
 	@Override
-	public void renderHead(IHeaderResponse response) {
+	public void renderHead(final IHeaderResponse response) {
 		super.renderHead(response);
 
 		String configuration = "$(\"#" + getMarkupId() + "\").fullCalendarExt(";
@@ -188,23 +190,23 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 
 	}
 
-	protected boolean onEventDropped(DroppedEvent event, CalendarResponse response) {
+	protected boolean onEventDropped(final DroppedEvent event, final CalendarResponse response) {
 		return false;
 	}
 
-	protected boolean onEventResized(ResizedEvent event, CalendarResponse response) {
+	protected boolean onEventResized(final ResizedEvent event, final CalendarResponse response) {
 		return false;
 	}
 
-	protected void onDateRangeSelected(SelectedRange range, CalendarResponse response) {
+	protected void onDateRangeSelected(final SelectedRange range, final CalendarResponse response) {
 
 	}
 
-	protected void onEventClicked(ClickedEvent event, CalendarResponse response) {
+	protected void onEventClicked(final ClickedEvent event, final CalendarResponse response) {
 
 	}
 
-	protected void onViewDisplayed(View view, CalendarResponse response) {
+	protected void onViewDisplayed(final View view, final CalendarResponse response) {
 
 	}
 
@@ -217,5 +219,29 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		getEvents.onRequest();
 
 	}
+
+    // -- START/END UTILITY
+
+    private static final String START_KEY = "start";
+    private static final String END_KEY = "end";
+    private static final String OFFSET_KEY = "timezoneOffset";
+
+    public Instant startInstant() {
+        return Instant.ofEpochMilli(
+                Long.parseLong(
+                        getRequest().getRequestParameters().getParameterValue(START_KEY).toOptionalString()));
+    }
+
+    public Instant endInstant() {
+        return Instant.ofEpochMilli(
+                Long.parseLong(
+                        getRequest().getRequestParameters().getParameterValue(END_KEY).toOptionalString()));
+    }
+
+    public ZoneOffset clientZoneOffset() {
+        final int zoneOffsetMinutes = getRequest().getRequestParameters()
+                .getParameterValue(OFFSET_KEY).toInt();
+        return ZoneOffset.ofTotalSeconds(zoneOffsetMinutes * 60);
+    }
 
 }

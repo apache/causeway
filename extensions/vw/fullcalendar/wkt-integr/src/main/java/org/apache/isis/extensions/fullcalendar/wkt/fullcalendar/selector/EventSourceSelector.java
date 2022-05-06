@@ -16,11 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.selector;
 
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebComponent;
 
@@ -28,19 +25,15 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 
 public class EventSourceSelector extends WebComponent implements IHeaderContributor {
 
-	private final FullCalendar calendar;
+    private static final long serialVersionUID = 1L;
 
-	public EventSourceSelector(String id, FullCalendar calendar) {
+    private FullCalendar calendar;
+
+	public EventSourceSelector(final String id, final FullCalendar calendar) {
 		super(id);
 		this.calendar = calendar;
 		setOutputMarkupId(true);
 	}
 
-//	@Override
-//	public void renderHead(IHeaderResponse response) {
-//
-//		response.render(OnLoadHeaderItem.forScript("$('#" + calendar.getMarkupId()
-//			+ "').fullCalendarExt('createEventSourceSelector', '" + getMarkupId() + "');"));
-//	}
 
 }

@@ -85,7 +85,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         for (final String calendarName: calendarNames) {
             final EventSource namedCalendar = new EventSource();
             namedCalendar.setTitle(calendarName);
-            namedCalendar.setEventsProvider(newEventProvider(model, calendarName));
+            namedCalendar.setEventProvider(newEventProvider(model, calendarName));
             namedCalendar.setEditable(true);
             String color = COLORS[i++ % COLORS.length];
             namedCalendar.setBackgroundColor(color);

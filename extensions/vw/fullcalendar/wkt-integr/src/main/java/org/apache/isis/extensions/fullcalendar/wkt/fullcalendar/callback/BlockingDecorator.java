@@ -24,16 +24,16 @@ import org.apache.wicket.ajax.attributes.AjaxCallListener;
 /**
  * Prevents multiple clicks while ajax request is executing. We keep a variable that is set to {@code true} while the
  * request is running and to any other value when its done.
- * 
- * @author igor
  */
 public class BlockingDecorator extends AjaxCallListener {
 
-	private static String clean(String str) {
+    private static final long serialVersionUID = 1L;
+
+	private static String clean(final String str) {
 		return str != null ? str.replaceAll("[^0-9a-zA-Z]", "") : null;
 	}
 
-	private String var(Component component) {
+	private String var(final Component component) {
 		if (!component.getOutputMarkupId()) {
 			throw new IllegalStateException();
 		}
@@ -45,7 +45,7 @@ public class BlockingDecorator extends AjaxCallListener {
 	}
 
 	@Override
-	public CharSequence getPrecondition(Component component) {
+	public CharSequence getPrecondition(final Component component) {
 		// before we allow the request we check if one is already running by checking the var
 
 		// return false if the var is set to true (request running)
@@ -53,13 +53,13 @@ public class BlockingDecorator extends AjaxCallListener {
 	}
 
 	@Override
-	public CharSequence getBeforeSendHandler(Component component) {
+	public CharSequence getBeforeSendHandler(final Component component) {
 		// just before we start the request, we set the var to true
 		return var(component) + "=true;";
 	}
 
 	@Override
-	public CharSequence getCompleteHandler(Component component) {
+	public CharSequence getCompleteHandler(final Component component) {
 		// when the request is complete we set the var to false
 		return var(component) + "=false;";
 	}

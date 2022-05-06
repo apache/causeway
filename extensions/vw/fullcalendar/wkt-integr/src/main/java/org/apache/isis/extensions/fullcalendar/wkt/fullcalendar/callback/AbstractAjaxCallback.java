@@ -16,18 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 
+import lombok.NonNull;
+
 abstract class AbstractAjaxCallback extends AbstractDefaultAjaxBehavior {
 
-	private static final String PLACEHOLDER = "<PLACEHOLDER>";
+    private static final long serialVersionUID = 1L;
 
-	protected abstract String configureCallbackScript(String script, String urlTail);
+    private static final String PLACEHOLDER = "<PLACEHOLDER>";
+
+	protected abstract String configureCallbackScript(@NonNull String script, @NonNull String urlTail);
 
 	@Override
 	public final CharSequence getCallbackScript() {
@@ -43,8 +46,4 @@ abstract class AbstractAjaxCallback extends AbstractDefaultAjaxBehavior {
 		return (FullCalendar) getComponent();
 	}
 
-	/*
-	 * 
-	 * @Override protected IAjaxCallListener getAjaxCallListener() { return new BlockingDecorator(this); }
-	 */
 }

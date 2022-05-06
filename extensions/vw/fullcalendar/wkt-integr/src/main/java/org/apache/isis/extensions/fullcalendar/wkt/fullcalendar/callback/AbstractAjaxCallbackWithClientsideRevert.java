@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import java.util.UUID;
@@ -28,7 +27,9 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 
 abstract class AbstractAjaxCallbackWithClientsideRevert extends AbstractAjaxCallback {
 
-	private String uuid = "u" + UUID.randomUUID().toString().replace("-", "");
+    private static final long serialVersionUID = 1L;
+
+    private String uuid = "u" + UUID.randomUUID().toString().replace("-", "");
 
 	protected abstract String getRevertScript();
 
@@ -39,23 +40,25 @@ abstract class AbstractAjaxCallbackWithClientsideRevert extends AbstractAjaxCall
 	}
 
 	@Override
-	protected final void respond(AjaxRequestTarget target) {
+	protected final void respond(final AjaxRequestTarget target) {
 		boolean result = onEvent(target);
 		target.prependJavaScript(String.format("$.data(document, '%s', %s);", uuid, String.valueOf(result)));
 	}
 
 	@Override
-	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+	protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
 		super.updateAjaxAttributes(attributes);
 		AjaxCallListener listener = new AjaxCallListener() {
-			@Override
-			public CharSequence getSuccessHandler(Component component) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+			public CharSequence getSuccessHandler(final Component component) {
 				return String.format("if (false===$.data(document, '%s')) %s $.removeData(document, '%s');", uuid,
 					getRevertScriptBlock(), uuid);
 			}
 
 			@Override
-			public CharSequence getFailureHandler(Component component) {
+			public CharSequence getFailureHandler(final Component component) {
 				return getRevertScriptBlock();
 			}
 		};

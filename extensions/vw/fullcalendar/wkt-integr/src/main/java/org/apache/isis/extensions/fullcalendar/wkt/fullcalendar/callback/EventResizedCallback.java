@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -26,10 +25,15 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 
-public abstract class EventResizedCallback extends AbstractAjaxCallbackWithClientsideRevert implements
+public abstract class EventResizedCallback
+extends AbstractAjaxCallbackWithClientsideRevert
+implements
 	CallbackWithHandler {
-	@Override
-	protected String configureCallbackScript(String script, String urlTail) {
+
+    private static final long serialVersionUID = 1L;
+
+    @Override
+	protected String configureCallbackScript(final String script, final String urlTail) {
 		return script.replace(urlTail, "&eventId=\"+event.id+\"&sourceId=\"+event.source.data."
 			+ EventSource.Const.UUID + "+\"&dayDelta=\"+dayDelta+\"&minuteDelta=\"+minuteDelta+\"");
 	}
@@ -40,7 +44,7 @@ public abstract class EventResizedCallback extends AbstractAjaxCallbackWithClien
 	}
 
 	@Override
-	protected boolean onEvent(AjaxRequestTarget target) {
+	protected boolean onEvent(final AjaxRequestTarget target) {
 		Request r = getCalendar().getRequest();
 		String eventId = r.getRequestParameters().getParameterValue("eventId").toString();
 		String sourceId = r.getRequestParameters().getParameterValue("sourceId").toString();

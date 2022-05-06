@@ -16,19 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public enum ViewType {
-	MONTH("month"), BASIC_WEEK("basicWeek"), BASIC_DAY("basicDay"), AGENDA_WEEK("agendaWeek"), AGENDA_DAY("agendaDay");
+	MONTH("month"), BASIC_WEEK("basicWeek"), BASIC_DAY("basicDay"),
+	AGENDA_WEEK("agendaWeek"), AGENDA_DAY("agendaDay");
 
 	private final String code;
 
-	private ViewType(String code) {
-		this.code = code;
-	}
-
-	public static ViewType forCode(String code) {
+	public static ViewType forCode(final String code) {
 		for (ViewType type : values()) {
 			if (type.code.equals(code))
 				return type;

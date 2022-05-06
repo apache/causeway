@@ -16,29 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
+
+import java.util.NoSuchElementException;
 
 import org.apache.wicket.util.lang.Objects;
 
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+
+@AllArgsConstructor
 public class EventManager {
-	private FullCalendar calendar;
 
-	EventManager(FullCalendar calendar) {
-		this.calendar = calendar;
-	}
+    private @NonNull FullCalendar calendar;
 
-	public EventSource getEventSource(String id) throws EventSourceNotFoundException {
-
+	public EventSource getEventSource(final String id) throws NoSuchElementException {
 		for (EventSource source : calendar.getConfig().getEventSources()) {
 			if (Objects.equal(id, source.getId())) {
 				return source;
 			}
 		}
-		throw new EventSourceNotFoundException("Event source with uuid: " + id + " not found");
+		throw new NoSuchElementException("Event source with uuid: " + id + " not found");
 	}
 
-	public Event getEvent(String sourceId, String eventId) throws EventSourceNotFoundException, EventNotFoundException {
+	public Event getEvent(final String sourceId, final String eventId) throws NoSuchElementException {
 		return getEventSource(sourceId).getEventProvider().getEventForId(eventId);
 	}
 }

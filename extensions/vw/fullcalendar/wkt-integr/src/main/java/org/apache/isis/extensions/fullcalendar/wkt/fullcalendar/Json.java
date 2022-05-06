@@ -29,17 +29,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.github.openjson.JSONObject;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.joda.time.format.ISODateTimeFormat;
 
+@Deprecated
 class Json {
 	private Json() {
 
@@ -48,23 +48,23 @@ class Json {
 	private static class MyJsonFactory extends MappingJsonFactory {
 
 		@Override
-		public JsonGenerator createGenerator(Writer w) throws IOException {
+		public JsonGenerator createGenerator(final Writer w) throws IOException {
 			return super.createGenerator(w).useDefaultPrettyPrinter();
 		}
 
 		@Override
-		public JsonGenerator createGenerator(File f, JsonEncoding enc) throws IOException {
+		public JsonGenerator createGenerator(final File f, final JsonEncoding enc) throws IOException {
 			return super.createGenerator(f, enc).useDefaultPrettyPrinter();
 		}
 
 		@Override
-		public JsonGenerator createGenerator(OutputStream out, JsonEncoding enc) throws IOException {
+		public JsonGenerator createGenerator(final OutputStream out, final JsonEncoding enc) throws IOException {
 			return super.createGenerator(out, enc).useDefaultPrettyPrinter();
 		}
 
 	}
 
-	public static String toJson(Object object) {
+	public static String toJson(final Object object) {
 
 		ObjectMapper mapper = new ObjectMapper(new MyJsonFactory());
 		SimpleModule module = new SimpleModule("fullcalendar");
@@ -84,7 +84,7 @@ class Json {
 
 	public static class DateTimeSerializer extends JsonSerializer<DateTime> {
 		@Override
-		public void serialize(DateTime value, JsonGenerator jgen, SerializerProvider provider) throws IOException,
+		public void serialize(final DateTime value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException,
 				JsonProcessingException {
 			jgen.writeString(ISODateTimeFormat.dateTime().print(value));
 		}
@@ -98,7 +98,7 @@ class Json {
 
 	public static class LocalTimeSerializer extends JsonSerializer<LocalTime> {
 		@Override
-		public void serialize(LocalTime value, JsonGenerator jgen, SerializerProvider provider) throws IOException,
+		public void serialize(final LocalTime value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException,
 			JsonProcessingException {
 			jgen.writeString(value.toString("h:mmaa"));
 		}
@@ -113,7 +113,7 @@ class Json {
 	public static class Script implements Serializable {
 		private String code;
 
-		public Script(String value) {
+		public Script(final String value) {
 			this.code = value;
 		}
 

@@ -16,42 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
 import java.io.Serializable;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+/**
+ * Represents the configuration of the UI header elements for <i>FullCalendar</i>.
+ */
+@Getter @Setter @Accessors(chain = true)
 public class Header implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
 	private String left;
 	private String center;
 	private String right;
-
-	public String getLeft() {
-		return left;
-	}
-
-	public Header setLeft(String left) {
-		this.left = left;
-		return this;
-	}
-
-	public String getCenter() {
-		return center;
-	}
-
-	public Header setCenter(String center) {
-		this.center = center;
-		return this;
-	}
-
-	public String getRight() {
-		return right;
-	}
-
-	public Header setRight(String right) {
-		this.right = right;
-		return this;
-	}
 
 }

@@ -16,23 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
+
+import java.util.Map;
 
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.handler.TextRequestHandler;
-import org.apache.wicket.util.collections.MicroMap;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventProvider;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 
 public class GetEventsCallback extends AbstractCallback {
-	private static final String SOURCE_ID = "sid";
+    private static final long serialVersionUID = 1L;
 
-	public String getUrl(EventSource source) {
-		return getUrl(new MicroMap<String, Object>(SOURCE_ID, source.getId()));
+    private static final String SOURCE_ID = "sid";
+
+	public String getUrl(final EventSource source) {
+		return getUrl(Map.of(SOURCE_ID, source.getId()));
 	}
 
 	@Override
@@ -59,4 +60,28 @@ public class GetEventsCallback extends AbstractCallback {
 			new TextRequestHandler("application/json", "UTF-8", response));
 
 	}
+
+	private int xxx;
+
+	//TODO transition to ...
+	/*
+    protected void respond2() {
+        val request = getCalendar().getRequest();
+
+        //val interval = CalendarHelper.getInterval(getCalendar());
+
+        val clientZoneOffset = getCalendar().clientZoneOffset();
+        var start = ZonedDateTime.ofInstant(getCalendar().startInstant(), clientZoneOffset);
+        var end = ZonedDateTime.ofInstant(getCalendar().endInstant(), clientZoneOffset);
+
+        val sid = request.getRequestParameters().getParameterValue(SOURCE_ID).toString();
+        val eventSource = getCalendar().getEventManager().getEventSource(sid);
+        val eventProvider = eventSource.getEventProvider();
+        final String response = getCalendar().toJson(eventProvider.getEvents(start, end));
+
+        getCalendar().getRequestCycle()
+                .scheduleRequestHandlerAfterCurrent(new TextRequestHandler("application/json", "UTF-8", response));
+
+    }*/
+
 }

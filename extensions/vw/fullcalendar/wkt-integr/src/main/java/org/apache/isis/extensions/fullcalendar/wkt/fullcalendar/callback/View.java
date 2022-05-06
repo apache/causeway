@@ -23,39 +23,16 @@ import org.joda.time.DateMidnight;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.ViewType;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public class View {
 	private ViewType type;
 	private DateMidnight start;
 	private DateMidnight end;
 	private DateMidnight visibleStart;
 	private DateMidnight visibleEnd;
-
-	public View(ViewType type, DateMidnight start, DateMidnight end, DateMidnight visibleStart, DateMidnight visibleEnd) {
-		this.type = type;
-		this.start = start;
-		this.end = end;
-		this.visibleStart = visibleStart;
-		this.visibleEnd = visibleEnd;
-	}
-
-	public ViewType getType() {
-		return type;
-	}
-
-	public DateMidnight getStart() {
-		return start;
-	}
-
-	public DateMidnight getEnd() {
-		return end;
-	}
-
-	public DateMidnight getVisibleStart() {
-		return visibleStart;
-	}
-
-	public DateMidnight getVisibleEnd() {
-		return visibleEnd;
-	}
 
 }

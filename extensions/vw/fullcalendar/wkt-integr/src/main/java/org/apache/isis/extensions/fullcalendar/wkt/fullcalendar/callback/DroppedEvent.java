@@ -16,22 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 
-public class DroppedEvent extends AbstractShiftedEventParam {
-	private final boolean allDay;
+import lombok.Getter;
 
-	public DroppedEvent(EventSource source, Event event, int hoursDelta, int minutesDelta, boolean allDay) {
+public class DroppedEvent extends AbstractShiftedEventParam {
+
+    @Getter private final boolean allDay;
+
+	public DroppedEvent(final EventSource source, final Event event, final int hoursDelta, final int minutesDelta, final boolean allDay) {
 		super(source, event, hoursDelta, minutesDelta);
 		this.allDay = allDay;
-	}
-
-	public boolean isAllDay() {
-		return allDay;
 	}
 
 }

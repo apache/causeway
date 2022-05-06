@@ -16,27 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 abstract class AbstractEventParam {
 	private final EventSource source;
 	private final Event event;
-
-	public AbstractEventParam(EventSource source, Event event) {
-		this.source = source;
-		this.event = event;
-	}
-
-	public EventSource getSource() {
-		return source;
-	}
-
-	public Event getEvent() {
-		return event;
-	}
-
 }
