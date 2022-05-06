@@ -5,10 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Customer {
+public class Employee {
 
-    private String firstName;
-    private String lastName;
-    private int age;
+    private Person person;
 
 }
