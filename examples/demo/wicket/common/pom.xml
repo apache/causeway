@@ -106,7 +106,7 @@
 		
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-fullcalendar-ui</artifactId>
+			<artifactId>isis-extensions-fullcalendar-wkt-viewer</artifactId>
 		</dependency>
 
 	</dependencies>

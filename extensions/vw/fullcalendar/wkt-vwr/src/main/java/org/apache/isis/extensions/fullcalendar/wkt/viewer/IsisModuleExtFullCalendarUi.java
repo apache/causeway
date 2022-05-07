@@ -16,23 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
+package org.apache.isis.extensions.fullcalendar.wkt.viewer;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
-
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
+import org.apache.isis.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
+import org.apache.isis.extensions.fullcalendar.wkt.viewer.calendarable.CalendarableCollectionAsFullCalendarFactory;
+import org.apache.isis.extensions.fullcalendar.wkt.viewer.calendareventable.CalendarEventableCollectionAsFullCalendarFactory;
 
 /**
- * Featured Wicket specific extensions.
+ * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
+        IsisModuleExtFullCalendarApplib.class,
 
+        CalendarEventableCollectionAsFullCalendarFactory.class,
+        CalendarableCollectionAsFullCalendarFactory.class
+})
+public class IsisModuleExtFullCalendarUi {
 }

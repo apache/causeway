@@ -16,23 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
-
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
-
 /**
- * Featured Wicket specific extensions.
+ * A clone of https://github.com/42Lines/wicket-fullcalendar, with support for <i>Wicket</i> 9+.
  */
-@Configuration
-@Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
-
-}
+package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;

@@ -16,23 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
+package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.selector;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.WebComponent;
 
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
+public class EventSourceSelector extends WebComponent implements IHeaderContributor {
 
-/**
- * Featured Wicket specific extensions.
- */
-@Configuration
-@Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
+    private static final long serialVersionUID = 1L;
+
+    private FullCalendar calendar;
+
+	public EventSourceSelector(final String id, final FullCalendar calendar) {
+		super(id);
+		this.calendar = calendar;
+		setOutputMarkupId(true);
+	}
+
 
 }

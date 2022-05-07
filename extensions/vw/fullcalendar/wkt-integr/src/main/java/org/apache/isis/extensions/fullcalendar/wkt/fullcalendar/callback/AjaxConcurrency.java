@@ -16,23 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
+package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
-
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
-
-/**
- * Featured Wicket specific extensions.
- */
-@Configuration
-@Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
-
+public enum AjaxConcurrency {
+	/** queue and execute all callbacks */
+	QUEUE,
+	/** drop callbacks if a callback of the same type is already executing */
+	DROP_PER_CALLBACK,
+	/** drop any callback if one is already executing */
+	DROP;
 }

@@ -16,23 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
-
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
-
-/**
- * Featured Wicket specific extensions.
- */
-@Configuration
-@Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
-
+/** 
+	see https://fullcalendar.io/docs/events-function
+	implNote: java class FullCalendarEventSourceEvents is sensitive 
+		to the number of leading comment lines in this file! 
+*/
+function(fetchInfo, successCallback, failureCallback) { 
+	Wicket.Ajax.ajax({
+        "u": "${url}",
+        "dt": "json",
+        "wr":  false,
+        "ep": {
+            "startStr": fetchInfo.startStr,
+            "endStr": fetchInfo.endStr,
+            "timeZone": fetchInfo.timeZone
+        },
+        "sh": [function(data, textStatus, jqXHR, attrs) { successCallback(jqXHR); }]
+    });
 }

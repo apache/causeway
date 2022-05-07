@@ -16,23 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui;
+package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import java.io.Serializable;
 
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
+@Getter @Setter @Accessors (chain = true)
+@NoArgsConstructor
+public class ButtonText implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-/**
- * Featured Wicket specific extensions.
- */
-@Configuration
-@Import({
-    WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
-})
-public class DemoAppWicketCommon {
+    private String prev, next, prevYear, nextYear, today, month, week, day;
 
 }
