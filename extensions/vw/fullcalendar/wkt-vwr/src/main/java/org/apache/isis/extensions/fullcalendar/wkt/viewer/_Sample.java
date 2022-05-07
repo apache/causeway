@@ -12,6 +12,14 @@
 
 package org.apache.isis.extensions.fullcalendar.wkt.viewer;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Random;
+
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.joda.time.DateTime;
@@ -19,6 +27,7 @@ import org.joda.time.DateTime;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.Event;
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventProvider;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.ClickedEvent;
@@ -27,13 +36,17 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.Resized
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.SelectedRange;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.View;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.selector.EventSourceSelector;
+import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
 
+/**
+ * For troubleshooting and debugging.
+ */
 @UtilityClass
-@Log4j2
+//@Log4j2
 class _Sample {
 
 	public void buildCalendar(final WebMarkupContainer container, final String id) {
@@ -47,7 +60,7 @@ class _Sample {
 	    config.getHeaderToolbar().setCenter("title");
 		config.getHeaderToolbar().setRight("dayGridMonth,timeGridWeek");
 
-		setupSamples(config);
+		setupSampleSources(config);
 
 		FullCalendar calendar = new FullCalendar(id, config) {
             private static final long serialVersionUID = 1L;
@@ -117,7 +130,7 @@ class _Sample {
         System.err.printf("_Sample: %s%n", message);
     }
 
-    void setupSamples(final CalendarConfig config) {
+    void setupSampleSources(final CalendarConfig config) {
 
         EventSource reservations = new EventSource();
         reservations.setTitle("Reservations");
@@ -133,20 +146,68 @@ class _Sample {
         reservations.setEditable(true);
         reservations.setBackgroundColor("#63BA68");
         reservations.setBorderColor("#63BA68");
-        config.add(reservations);
+        reservations.setEventProvider(new SampleEventProvider(reservations.getTitle()));
+        config.addEventSource(reservations);
 
         EventSource downtimes = new EventSource();
         downtimes.setTitle("Maintenance");
         downtimes.setBackgroundColor("#B1ADAC");
         downtimes.setBorderColor("#B1ADAC");
-        config.add(downtimes);
+        downtimes.setEventProvider(new SampleEventProvider(downtimes.getTitle()));
+        config.addEventSource(downtimes);
 
         EventSource other = new EventSource();
         other.setTitle("Other Reservations");
         other.setBackgroundColor("#E6CC7F");
         other.setBorderColor("#E6CC7F");
-        config.add(other);
+        other.setEventProvider(new SampleEventProvider(other.getTitle()));
+        config.addEventSource(other);
 
     }
+
+    @RequiredArgsConstructor
+    private static class SampleEventProvider implements EventProvider {
+        private static final long serialVersionUID = 1L;
+
+        private final String title;
+        private final Map<String, Event> eventsById = new HashMap<>();
+        private final Random random = new Random();
+
+        @Override
+        public Collection<Event> getEvents(final ZonedDateTime start, final ZonedDateTime end) {
+            eventsById.clear();
+            val duration = Duration.between(start, end);
+            for (int i = 0; i < duration.toDays() + 1; i++) {
+
+                val id = "id_" + i;
+
+                ZonedDateTime time = start;
+                time = time.plusDays(i).withHour(
+                        6 + random.nextInt(10));
+
+                Event event = new Event();
+                event.setId(id);
+                event.setTitle(title + (1 + i));
+                event.setStart(JodaTimeConverters.toJoda(time));
+                time = time.plusHours(random.nextInt(8));
+                event.setEnd(JodaTimeConverters.toJoda(time));
+
+                eventsById.put(id, event);
+            }
+            return eventsById.values();
+        }
+
+        @Override
+        public Event getEventForId(final String id) throws NoSuchElementException {
+            val event = eventsById.get(id);
+            if (event != null) {
+                return event;
+            }
+            throw new NoSuchElementException("Event with id: " + id
+                    + " not found");
+        }
+
+    }
+
 
 }

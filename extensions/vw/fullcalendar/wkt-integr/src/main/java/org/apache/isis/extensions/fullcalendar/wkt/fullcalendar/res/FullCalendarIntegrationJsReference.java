@@ -20,7 +20,11 @@ package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.res;
 
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.util.string.Strings;
+
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -43,6 +47,23 @@ extends JavaScriptResourceReference {
      */
     public static HeaderItem asHeaderItem() {
         return JavaScriptHeaderItem.forReference(instance());
+    }
+
+    public static OnDomReadyHeaderItem domReadyScript(
+            final String markupId,
+            final CalendarConfig calendarConfig) {
+        return OnDomReadyHeaderItem.forScript(
+                calendarResponseScript(
+                markupId,
+                calendarConfig.toJson()));
+    }
+
+    public static String calendarResponseScript(
+            final String markupId,
+            final String... args) {
+        return String.format("$('#%s').fullCalendarExt(%s);",
+                markupId,
+                Strings.join(",", args));
     }
 
 }

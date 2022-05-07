@@ -21,7 +21,8 @@ package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 import java.util.Date;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.util.string.Strings;
+
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarIntegrationJsReference;
 
 public class CalendarResponse {
 	private final FullCalendar calendar;
@@ -89,8 +90,9 @@ public class CalendarResponse {
 	}
 
 	private CalendarResponse execute(final String... args) {
-		String js = String.format("$('#%s').fullCalendarExt(" + Strings.join(",", args) + ");", calendar.getMarkupId());
-		target.appendJavaScript(js);
+		target.appendJavaScript(
+		        FullCalendarIntegrationJsReference.calendarResponseScript(
+		                calendar.getMarkupId(), args));
 		return this;
 	}
 

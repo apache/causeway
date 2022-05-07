@@ -79,8 +79,9 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         config.getHeaderToolbar().setCenter("title");
         config.getHeaderToolbar().setRight("dayGridMonth,timeGridWeek");
         config.setSelectable(true);
+        config.setAllDaySlot(true);
 
-        _Sample.setupSamples(config);
+        _Sample.setupSampleSources(config);
 
         final Iterable<ManagedObject> entityList = model.getDataTableModel().getDataRowsFiltered().getValue()
                 .map(DataRow::getRowElement);
@@ -95,12 +96,8 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
             String color = COLORS[i++ % COLORS.length];
             namedCalendar.setBackgroundColor(color);
             namedCalendar.setBorderColor(color);
-            config.add(namedCalendar);
+            config.addEventSource(namedCalendar);
         }
-
-//FIXME ...
-//        config.setLoading("function(bool) { if (bool) $(\"#loading\").show(); else $(\"#loading\").hide(); }");
-//        config.setAllDaySlot(true);
 
         final FullCalendar calendar = new FullCalendarWithEventHandling(ID_FULL_CALENDAR, config, feedback);
         addOrReplace(calendar);

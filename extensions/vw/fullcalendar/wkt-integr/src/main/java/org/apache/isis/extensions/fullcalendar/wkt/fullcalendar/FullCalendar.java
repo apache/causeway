@@ -26,7 +26,6 @@ import java.util.UUID;
 
 import org.apache.wicket.IRequestListener;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.util.lang.Objects;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.AjaxConcurrency;
@@ -41,6 +40,9 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.Resized
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.SelectedRange;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.View;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.ViewDisplayCallback;
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarIntegrationJsReference;
+
+import lombok.val;
 
 public class FullCalendar extends AbstractFullCalendar implements IRequestListener {
 
@@ -95,6 +97,12 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		if (getEvents == null) {
 			add(getEvents = new GetEventsCallback());
 		}
+
+		for (val eventSource : calendarConfig.getEventSources()) {
+		    //FIXME
+		    //eventSource.setEvents(EVENTS.asString(new MicroMap<String, String>("url", getEvents.getUrl(eventSource))));
+		}
+
 		if (dateClicked == null) {
 			add(dateClicked = new EventClickedCallback() {
                 private static final long serialVersionUID = 1L;
@@ -127,7 +135,6 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 				}
 			});
 		}
-		//configOld.setEventDrop(eventDropped.getHandlerScript());
 
 		if (eventResized == null) {
 			add(eventResized = new EventResizedCallback() {
@@ -139,7 +146,6 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 
 			});
 		}
-		//configOld.setEventResize(eventResized.getHandlerScript());
 
 		if (viewDisplay == null) {
 			add(viewDisplay = new ViewDisplayCallback() {
@@ -150,7 +156,6 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 				}
 			});
 		}
-		//configOld.setViewDisplay(viewDisplay.getHandlerScript());
 
 		getPage().dirty();
 	}
@@ -158,12 +163,7 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 	@Override
 	public void renderHead(final IHeaderResponse response) {
 		super.renderHead(response);
-
-		String configuration = "$(\"#" + getMarkupId() + "\").fullCalendarExt(";
-		configuration += _Json.toJson(calendarConfig);
-		configuration += ");";
-
-		response.render(OnDomReadyHeaderItem.forScript(configuration));
+		response.render(FullCalendarIntegrationJsReference.domReadyScript(getMarkupId(), calendarConfig));
 	}
 
 	protected boolean onEventDropped(final DroppedEvent event, final CalendarResponse response) {

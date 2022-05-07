@@ -33,39 +33,67 @@ public class CalendarConfig implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * @see "https://fullcalendar.io/docs/headerToolbar"
+     */
     @Getter
     private Header headerToolbar = new Header();
-    private List<EventSource> eventSources = new ArrayList<EventSource>();
 
+    /**
+     * @see "https://fullcalendar.io/docs/themeSystem"
+     */
     @Getter @Setter
-    private String themeSystem;
+    private String themeSystem; //= "bootstrap5" TODO needs some CSS overrides
 
+    /**
+     * @see "https://fullcalendar.io/docs/selectable"
+     */
     @Getter @Setter
     private boolean selectable = true;
 
-    // events
-    @Setter
+    /**
+     * @see "https://fullcalendar.io/docs/allDaySlot"
+     */
+    @Getter @Setter
+    private boolean allDaySlot = true;
+
+    // -- EVENTS
+
+    /**
+     * @see "https://fullcalendar.io/docs/loading"
+     */
+    @JsonRawValue
+    @Getter @Setter
+    private String loading = "function(b) { let el = $('#fullCalendar-loading'); if (b) el.show(); else el.hide(); }";
+
+    /**
+     * @see "https://fullcalendar.io/docs/eventClick"
+     */
+    @JsonRawValue
+    @Getter @Setter
     private String eventClick;
-    @Setter
+
+    /**
+     * @see "https://fullcalendar.io/docs/select"
+     */
+    @JsonRawValue
+    @Getter @Setter
     private String select;
 
-    public CalendarConfig add(final EventSource eventSource) {
-        eventSources.add(eventSource);
-        return this;
-    }
-
+    private List<EventSource> eventSources = new ArrayList<EventSource>();
     public Collection<EventSource> getEventSources() {
         return Collections.unmodifiableList(eventSources);
     }
 
-    @JsonRawValue
-    public String getEventClick() {
-        return eventClick;
+    public CalendarConfig addEventSource(final EventSource eventSource) {
+        eventSources.add(eventSource);
+        return this;
     }
 
-    @JsonRawValue
-    public String getSelect() {
-        return select;
+    // -- SERIALIZE
+
+    public String toJson() {
+        return _Json.toJson(this);
     }
 
 }
