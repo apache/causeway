@@ -18,32 +18,31 @@
  */
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.res;
 
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
-
-public class FullCalendarCssReference
-extends WebjarsCssResourceReference {
+public class FullCalendarIntegrationJsReference
+extends JavaScriptResourceReference {
 
     private static final long serialVersionUID = 1L;
 
     @Getter(lazy = true) @Accessors(fluent = true)
-    private static final FullCalendarCssReference instance =
-        new FullCalendarCssReference();
+    private static final FullCalendarIntegrationJsReference instance =
+        new FullCalendarIntegrationJsReference();
 
-    private FullCalendarCssReference() {
-        super("fullcalendar/5.10.2/main.min.css");
+    private FullCalendarIntegrationJsReference() {
+        super(FullCalendarIntegrationJsReference.class, "fullcalendar-integration.js");
     }
 
     /**
      * @return this resource reference singleton instance as header item
      */
     public static HeaderItem asHeaderItem() {
-        return CssHeaderItem.forReference(instance());
+        return JavaScriptHeaderItem.forReference(instance());
     }
 
 }

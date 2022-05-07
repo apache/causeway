@@ -43,8 +43,8 @@ class _Sample {
 		container.addOrReplace(feedback);
 
 		val config = new CalendarConfig();
-		config.getHeaderToolbar().setCenter("title");
-		config.getHeaderToolbar().setLeft("prev,next today");
+		config.getHeaderToolbar().setLeft("prevYear,prev,next,nextYear, today");
+	    config.getHeaderToolbar().setCenter("title");
 		config.getHeaderToolbar().setRight("dayGridMonth,timeGridWeek");
 
 		setupSamples(config);
