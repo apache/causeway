@@ -19,14 +19,14 @@
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.WicketAjaxJQueryResourceReference;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarJsReference;
 
 abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderContributor {
     private static final long serialVersionUID = 1L;
@@ -37,36 +37,19 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 
 	protected static final ResourceReference CSS = new PackageResourceReference(AbstractFullCalendar.class,
 		"res/main.css");
-	protected static final ResourceReference JS = new PackageResourceReference(AbstractFullCalendar.class,
-		"res/main.js");
-	protected static final ResourceReference JS_EXT = new PackageResourceReference(AbstractFullCalendar.class,
-		"res/fullcalendar.ext.js");
-	protected static final ResourceReference JS_MIN = new PackageResourceReference(AbstractFullCalendar.class,
-		"res/main.min.js");
+	protected static final ResourceReference JS_INTEG = new PackageResourceReference(AbstractFullCalendar.class,
+		"res/fullcalendar-integration.js");
 
 	@Override
 	public void renderHead(final IHeaderResponse response) {
 
 	    // jQuery
-		response.render(JavaScriptHeaderItem.forReference(WicketAjaxJQueryResourceReference.get()));
+		//response.render(JavaScriptHeaderItem.forReference(WicketAjaxJQueryResourceReference.get()));
 
-		renderCssResources(response);
-
-		renderJavaScriptResources(response);
-		response.render(JavaScriptReferenceHeaderItem.forReference(JS_EXT));
-
-	}
-
-	protected void renderJavaScriptResources(final IHeaderResponse response) {
-		if (getApplication().usesDeploymentConfig()) {
-			response.render(JavaScriptReferenceHeaderItem.forReference(JS_MIN));
-		} else {
-			response.render(JavaScriptReferenceHeaderItem.forReference(JS));
-		}
-	}
-
-	protected void renderCssResources(final IHeaderResponse response) {
 		response.render(CssReferenceHeaderItem.forReference(CSS));
+		response.render(FullCalendarJsReference.asHeaderItem());
+		response.render(JavaScriptReferenceHeaderItem.forReference(JS_INTEG));
+
 	}
 
 	public final String toJson(final Object value) {
