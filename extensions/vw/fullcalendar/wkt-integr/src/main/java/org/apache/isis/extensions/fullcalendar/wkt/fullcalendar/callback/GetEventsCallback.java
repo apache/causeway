@@ -20,12 +20,11 @@ package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback;
 
 import java.util.Map;
 
-import org.apache.wicket.request.Request;
 import org.apache.wicket.request.handler.TextRequestHandler;
-import org.joda.time.DateTime;
 
-import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventProvider;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
+
+import lombok.val;
 
 public class GetEventsCallback extends AbstractCallback {
     private static final long serialVersionUID = 1L;
@@ -36,52 +35,21 @@ public class GetEventsCallback extends AbstractCallback {
 		return getUrl(Map.of(SOURCE_ID, source.getId()));
 	}
 
-	@Override
-	protected void respond() {
-		Request r = getCalendar().getRequest();
-
-		String sid = r.getRequestParameters().getParameterValue(SOURCE_ID).toString();
-		DateTime start = new DateTime(r.getRequestParameters().getParameterValue("start").toLong());
-		DateTime end = new DateTime(r.getRequestParameters().getParameterValue("end").toLong());
-
-//		if (getCalendar().getConfig().isIgnoreTimezone()) {
-//			// Convert to same DateTime in local time zone.
-//			int remoteOffset = -r.getRequestParameters().getParameterValue("timezoneOffset").toInt();
-//			int localOffset = DateTimeZone.getDefault().getOffset(null) / 60000;
-//			int minutesAdjustment = remoteOffset - localOffset;
-//			start = start.plusMinutes(minutesAdjustment);
-//			end = end.plusMinutes(minutesAdjustment);
-//		}
-		EventSource source = getCalendar().getEventSource(sid);
-		EventProvider provider = source.getEventProvider();
-		String response = getCalendar().toJson(provider.getEvents(start, end));
-
-		getCalendar().getRequestCycle().scheduleRequestHandlerAfterCurrent(
-			new TextRequestHandler("application/json", "UTF-8", response));
-
-	}
-
-	private int xxx;
-
-	//TODO transition to ...
-	/*
-    protected void respond2() {
+    @Override
+    protected void respond() {
         val request = getCalendar().getRequest();
 
-        //val interval = CalendarHelper.getInterval(getCalendar());
-
-        val clientZoneOffset = getCalendar().clientZoneOffset();
-        var start = ZonedDateTime.ofInstant(getCalendar().startInstant(), clientZoneOffset);
-        var end = ZonedDateTime.ofInstant(getCalendar().endInstant(), clientZoneOffset);
+        var start = getCalendar().startInstant();
+        var end = getCalendar().endInstant();
 
         val sid = request.getRequestParameters().getParameterValue(SOURCE_ID).toString();
-        val eventSource = getCalendar().getEventManager().getEventSource(sid);
+        val eventSource = getCalendar().getEventSource(sid);
         val eventProvider = eventSource.getEventProvider();
         final String response = getCalendar().toJson(eventProvider.getEvents(start, end));
 
         getCalendar().getRequestCycle()
                 .scheduleRequestHandlerAfterCurrent(new TextRequestHandler("application/json", "UTF-8", response));
 
-    }*/
+    }
 
 }

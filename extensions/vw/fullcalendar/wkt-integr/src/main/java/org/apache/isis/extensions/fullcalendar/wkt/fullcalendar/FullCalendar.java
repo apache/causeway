@@ -18,8 +18,8 @@
  */
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
-import java.time.Instant;
-import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,13 +33,11 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.Clicked
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.DateRangeSelectedCallback;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.DroppedEvent;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.EventClickedCallback;
-import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.EventDroppedCallback;
-import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.EventResizedCallback;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.GetEventsCallback;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.ResizedEvent;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.SelectedRange;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.View;
-import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.ViewDisplayCallback;
+import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarEventSourceEvents;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendarIntegrationJsReference;
 
 import lombok.val;
@@ -49,12 +47,12 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
     private static final long serialVersionUID = 1L;
 
 	private final CalendarConfig calendarConfig;
-	private EventDroppedCallback eventDropped;
-	private EventResizedCallback eventResized;
 	private GetEventsCallback getEvents;
 	private DateRangeSelectedCallback dateRangeSelected;
 	private EventClickedCallback dateClicked;
-	private ViewDisplayCallback viewDisplay;
+//	private EventDroppedCallback eventDropped;
+//  private EventResizedCallback eventResized;
+//	private ViewDisplayCallback viewDisplay;
 
 	public FullCalendar(final String id, final CalendarConfig calendarConfig) {
 		super(id);
@@ -66,7 +64,6 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 	protected boolean getStatelessHint() {
 		return false;
 	}
-
 
 	@Override
 	protected void onInitialize() {
@@ -85,23 +82,13 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		setupCallbacks();
 	}
 
-	/**
-	 * Configures callback urls to be used by fullcalendar js to talk to this component. If you wish to use custom
-	 * callbacks you should override this method and set them here.
-	 *
-	 * NOTE: This method is called every time this component is rendered to keep the urls current, so if you set them
-	 * outside this method they will most likely be overwritten by the default ones.
-	 */
 	protected void setupCallbacks() {
 
 		if (getEvents == null) {
 			add(getEvents = new GetEventsCallback());
 		}
 
-		for (val eventSource : calendarConfig.getEventSources()) {
-		    //FIXME
-		    //eventSource.setEvents(EVENTS.asString(new MicroMap<String, String>("url", getEvents.getUrl(eventSource))));
-		}
+		FullCalendarEventSourceEvents.setupEventSourceUrls(calendarConfig, getEvents::getUrl);
 
 		if (dateClicked == null) {
 			add(dateClicked = new EventClickedCallback() {
@@ -126,36 +113,36 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 		}
 		calendarConfig.setSelect(dateRangeSelected.getHandlerScript());
 
-		if (eventDropped == null) {
-			add(eventDropped = new EventDroppedCallback() {
-                private static final long serialVersionUID = 1L;
-                @Override
-				protected boolean onEventDropped(final DroppedEvent event, final CalendarResponse response) {
-					return FullCalendar.this.onEventDropped(event, response);
-				}
-			});
-		}
-
-		if (eventResized == null) {
-			add(eventResized = new EventResizedCallback() {
-                private static final long serialVersionUID = 1L;
-                @Override
-				protected boolean onEventResized(final ResizedEvent event, final CalendarResponse response) {
-					return FullCalendar.this.onEventResized(event, response);
-				}
-
-			});
-		}
-
-		if (viewDisplay == null) {
-			add(viewDisplay = new ViewDisplayCallback() {
-                private static final long serialVersionUID = 1L;
-                @Override
-				protected void onViewDisplayed(final View view, final CalendarResponse response) {
-					FullCalendar.this.onViewDisplayed(view, response);
-				}
-			});
-		}
+//		if (eventDropped == null) {
+//			add(eventDropped = new EventDroppedCallback() {
+//                private static final long serialVersionUID = 1L;
+//                @Override
+//				protected boolean onEventDropped(final DroppedEvent event, final CalendarResponse response) {
+//					return FullCalendar.this.onEventDropped(event, response);
+//				}
+//			});
+//		}
+//
+//		if (eventResized == null) {
+//			add(eventResized = new EventResizedCallback() {
+//                private static final long serialVersionUID = 1L;
+//                @Override
+//				protected boolean onEventResized(final ResizedEvent event, final CalendarResponse response) {
+//					return FullCalendar.this.onEventResized(event, response);
+//				}
+//
+//			});
+//		}
+//
+//		if (viewDisplay == null) {
+//			add(viewDisplay = new ViewDisplayCallback() {
+//                private static final long serialVersionUID = 1L;
+//                @Override
+//				protected void onViewDisplayed(final View view, final CalendarResponse response) {
+//					FullCalendar.this.onViewDisplayed(view, response);
+//				}
+//			});
+//		}
 
 		getPage().dirty();
 	}
@@ -219,26 +206,35 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
 
     // -- START/END UTILITY
 
-    private static final String START_KEY = "start";
-    private static final String END_KEY = "end";
-    private static final String OFFSET_KEY = "timezoneOffset";
+    /**
+     * An ISO8601 string representation of the start date.
+     * It will have a time zone offset according to the calendar’s timeZone like 2018-09-01T12:30:00-05:00.
+     */
+    private static final String START_KEY = "startStr";
+    /**
+     * An ISO8601 string representation of the end date.
+     * It will have a time zone offset according to the calendar’s timeZone like 2018-09-01T12:30:00-05:00.
+     */
+    private static final String END_KEY = "endStr";
+    /**
+     * @see "https://fullcalendar.io/docs/timeZone"
+     */
+    private static final String TIMEZONE_KEY = "timeZone";
 
-    public Instant startInstant() {
-        return Instant.ofEpochMilli(
-                Long.parseLong(
-                        getRequest().getRequestParameters().getParameterValue(START_KEY).toOptionalString()));
+    public ZonedDateTime startInstant() {
+        val startStr = getRequest().getRequestParameters().getParameterValue(START_KEY).toOptionalString();
+        return DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(startStr, ZonedDateTime::from);
     }
 
-    public Instant endInstant() {
-        return Instant.ofEpochMilli(
-                Long.parseLong(
-                        getRequest().getRequestParameters().getParameterValue(END_KEY).toOptionalString()));
+    public ZonedDateTime endInstant() {
+        val endStr = getRequest().getRequestParameters().getParameterValue(END_KEY).toOptionalString();
+        return DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(endStr, ZonedDateTime::from);
     }
 
-    public ZoneOffset clientZoneOffset() {
-        final int zoneOffsetMinutes = getRequest().getRequestParameters()
-                .getParameterValue(OFFSET_KEY).toInt();
-        return ZoneOffset.ofTotalSeconds(zoneOffsetMinutes * 60);
+    public String clientTimeZone() {
+        val timeZone = getRequest().getRequestParameters()
+                .getParameterValue(TIMEZONE_KEY).toOptionalString();
+        return timeZone;
     }
 
 }

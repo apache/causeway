@@ -22,7 +22,6 @@ import java.util.Random;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.joda.time.DateTime;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarResponse;
@@ -130,19 +129,11 @@ class _Sample {
         System.err.printf("_Sample: %s%n", message);
     }
 
-    void setupSampleSources(final CalendarConfig config) {
+    private void setupSampleSources(final CalendarConfig config) {
 
         EventSource reservations = new EventSource();
         reservations.setTitle("Reservations");
 
-        for (int i=1; i< 5; i++) {
-            Event event = new Event();
-            event.setId(String.valueOf(i));
-            event.setStart(DateTime.now().plusDays(i));
-            event.setAllDay(true);
-            event.setTitle("Bla " + i);
-            reservations.addEvent(event);
-        }
         reservations.setEditable(true);
         reservations.setBackgroundColor("#63BA68");
         reservations.setBorderColor("#63BA68");

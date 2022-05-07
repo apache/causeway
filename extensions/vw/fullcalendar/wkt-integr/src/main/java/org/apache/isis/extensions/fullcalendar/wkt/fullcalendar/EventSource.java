@@ -19,12 +19,11 @@
 package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRawValue;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.selector.EventSourceSelector;
 
@@ -56,7 +55,8 @@ public class EventSource implements Serializable {
 
 	private Map<String, Object> extraParams = new HashMap<String, Object>();
 
-	private List<Event> events;
+	@JsonRawValue
+    private String events;
 
 	@JsonIgnore
 	private EventProvider eventProvider;
@@ -86,19 +86,9 @@ public class EventSource implements Serializable {
 
 	@JsonIgnore
 	public Event getEventById(final String id) {
-		for (Event event : events) {
-			if (event.getId().equals(id)) {
-				return event;
-			}
-		}
-		return null;
-	}
-
-	public void addEvent(final Event event) {
-		if (events == null) {
-			events = new ArrayList<>();
-		}
-		events.add(event);
+	    return eventProvider!=null
+	            ? getEventProvider().getEventForId(id)
+                : null;
 	}
 
 }

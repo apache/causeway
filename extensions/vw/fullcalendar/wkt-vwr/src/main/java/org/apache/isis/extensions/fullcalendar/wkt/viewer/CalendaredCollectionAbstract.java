@@ -62,11 +62,11 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         buildGui();
     }
 
-    private void buildGui() {
+    private void buildGuiDebug() {
         _Sample.buildCalendar(this, ID_FULL_CALENDAR);
     }
 
-    private void buildGui2() {
+    private void buildGui() {
 
         final EntityCollectionModel model = getModel();
 
@@ -80,8 +80,6 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         config.getHeaderToolbar().setRight("dayGridMonth,timeGridWeek");
         config.setSelectable(true);
         config.setAllDaySlot(true);
-
-        _Sample.setupSampleSources(config);
 
         final Iterable<ManagedObject> entityList = model.getDataTableModel().getDataRowsFiltered().getValue()
                 .map(DataRow::getRowElement);
