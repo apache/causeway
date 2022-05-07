@@ -77,11 +77,11 @@ class RoStatusBar {
     }
 
     fun update(status: StatusPo) {
-        success.text = status.successNo.toString()
-        running.text = status.runningNo.toString()
-        errors.text = status.errorNo.toString()
-        views.text = status.viewsNo.toString()
- //FIXME       dialogs.text = status.dialogsNo.toString()
+        success.text = status.successCnt.toString()
+        running.text = status.runningCnt.toString()
+        errors.text = status.errorCnt.toString()
+        views.text = status.viewsCnt.toString()
+        dialogs.text = status.dialogsCnt.toString()
     }
 
     private fun initRunning() {

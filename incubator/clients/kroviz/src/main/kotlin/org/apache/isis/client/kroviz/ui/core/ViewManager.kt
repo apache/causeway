@@ -150,6 +150,7 @@ object ViewManager {
     }
 
     fun updateStatus(status: StatusPo) {
+        status.dialogsCnt = this.countDialogs() // code smell? arg is modified here
         getRoStatusBar().update(status)
         setNormalCursor()
     }
@@ -234,6 +235,10 @@ object ViewManager {
 
     private fun getEventStore(): EventStore {
         return SessionManager.getEventStore()
+    }
+
+    fun countDialogs(): Int {
+        return popups.size + 1
     }
 
 }
