@@ -28,7 +28,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 /**
  * Represents a collection of entities and domain services that provide a set of coherent functionality under a

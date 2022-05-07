@@ -52,7 +52,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;

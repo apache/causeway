@@ -31,7 +31,7 @@ import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.AppManifestAbstract2;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.fixtures.TickingFixtureClock;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.metamodel.MetaModelService4;

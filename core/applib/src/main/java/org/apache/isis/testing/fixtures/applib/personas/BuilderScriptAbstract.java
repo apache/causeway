@@ -65,7 +65,7 @@ public abstract class BuilderScriptAbstract<T>
 
     public abstract T getObject();
 
-    public <P extends Persona<X, B>, X, B extends BuilderScriptAbstract<X>> X objectFor(
+    public <P extends PersonaWithBuilderScript<X, B>, X, B extends BuilderScriptAbstract<X>> X objectFor(
             final P persona,
             final FixtureScript.ExecutionContext ec) {
         if(persona == null) {

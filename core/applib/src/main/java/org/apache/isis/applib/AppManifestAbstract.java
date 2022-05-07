@@ -26,7 +26,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 /**
  * Convenience adapter, configured using an {@link Builder}.

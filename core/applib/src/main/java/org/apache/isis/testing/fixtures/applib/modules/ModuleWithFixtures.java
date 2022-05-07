@@ -1,6 +1,6 @@
 package org.apache.isis.testing.fixtures.applib.modules;
 
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 public interface ModuleWithFixtures {
 
@@ -12,7 +12,7 @@ public interface ModuleWithFixtures {
      * </p>
      */
     default FixtureScript getRefDataSetupFixture() {
-        return FixtureScript.NOOP;
+        return org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript.NOOP;
     }
 
     /**
@@ -24,7 +24,7 @@ public interface ModuleWithFixtures {
      * </p>
      */
     default FixtureScript getTeardownFixture() {
-        return FixtureScript.NOOP;
+        return org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript.NOOP;
     }
 
 }

@@ -20,7 +20,7 @@
 package org.apache.isis.applib;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 public interface AppManifest2 extends AppManifest {
 
