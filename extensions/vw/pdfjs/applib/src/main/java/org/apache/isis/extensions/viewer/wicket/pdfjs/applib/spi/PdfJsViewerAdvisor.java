@@ -36,17 +36,28 @@ import lombok.With;
  */
 public interface PdfJsViewerAdvisor {
 
+    /** The main SPI called by the viewer. */
     Advice advise(final InstanceKey instanceKey);
+
+    /** Updates the service implementation whenever the user updates the page number,
+     * for a particular object/property/user (ie ViewerKey). */
     void pageNumChangedTo(final InstanceKey instanceKey, final int pageNum);
+
+    /** Updates the service implementation whenever the user updates the scale,
+     * for a particular object/property/user (ie ViewerKey). */
     void scaleChangedTo(final InstanceKey instanceKey, final Scale scale);
+
+    /** Updates the service implementation whenever the user updates the height,
+     * for a particular object/property/user (ie ViewerKey). */
     void heightChangedTo(final InstanceKey instanceKey, final int height);
 
     /**
-     * Key for the rendering of a specific property of an object for an named individual.
+     * Value type that identifies an object's type and identifier,
+     * its (PDF) property and the user that is viewing the object.
      *
      * <p>
-     *     This is a (serializable) value type so that, for example, implementations can use as a key within a hash structure.
-     * </p>
+     * This is a (serializable) value type so that, for example,
+     * implementations can use as a key within a hash structure.
      */
     @Programmatic
     @Value @RequiredArgsConstructor
@@ -103,18 +114,11 @@ public interface PdfJsViewerAdvisor {
              */
             private final String userName;
 
-            /**
-             * The object type of the object being rendered.
-             */
-            @Deprecated // don't duplicate this getter
-            public String getType() {
-                return logicalTypeName;
-            }
         }
     }
 
     /**
-     * Immutable value type.
+     * Immutable value type, that specifies the page number, scale and height to render the object with.
      * <p>
      * The <code>withXxx</code> allow clones of the value to be created,
      * for convenience of implementors.
@@ -126,33 +130,8 @@ public interface PdfJsViewerAdvisor {
         private static final long serialVersionUID = 1L;
 
         private final Integer pageNum;
-        private final TypeAdvice typeAdvice;
-
-        public Scale getScale() {
-            return typeAdvice.getScale();
-        }
-
-        public Integer getHeight() {
-            return typeAdvice.getHeight();
-        }
-
-        /**
-         * Immutable value type representing the scale/height to render a PDF.
-         * <p>
-         * The <code>withXxx</code> allow clones of the value to be created,
-         * for convenience of implementors.
-         */
-        @Programmatic
-        @Value @With
-        @Deprecated // why not just inline?
-        public static class TypeAdvice implements Serializable {
-
-            private static final long serialVersionUID = 1L;
-
-            private final Scale scale;
-            private final Integer height;
-
-        }
+        private final Scale scale;
+        private final Integer height;
     }
 
 }

@@ -28,7 +28,7 @@ public class PdfJsViewerAdvisorFallback implements PdfJsViewerAdvisor {
 
     @Override
     public Advice advise(final InstanceKey instanceKey) {
-        return new Advice(1, new Advice.TypeAdvice(Scale._1_00, 400));
+        return new Advice(1, Scale._1_00, 400);
     }
 
     @Override

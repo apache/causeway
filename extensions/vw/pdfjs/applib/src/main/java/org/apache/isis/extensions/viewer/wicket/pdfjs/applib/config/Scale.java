@@ -20,32 +20,38 @@ package org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config;
 
 import org.apache.wicket.util.lang.Objects;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * @since 2.0 {@index}
  */
+@RequiredArgsConstructor
 public enum Scale {
+    /** predefined scaling strategies, depend on the width/height of the panel available to render in */
     AUTOMATIC("auto"),
     ACTUAL_SIZE("page-actual"),
     PAGE_FIT("page-fit"),
     PAGE_WIDTH("page-width"),
+    /** 50% */
     _0_50("0.50"),
+    /** 75% */
     _0_75("0.75"),
+    /** 100% */
     _1_00("1.00"),
+    /** 125% */
     _1_25("1.25"),
+    /** 150% */
     _1_50("1.50"),
+    /** 200% */
     _2_00("2.00"),
+    /** 300% */
     _3_00("3.00"),
+    /** 400% */
     _4_00("4.00"),;
 
+    @Getter
     private final String value;
-
-    Scale(final String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
 
     public static Scale forValue(final String scaleValue) {
         if (scaleValue == null) {
