@@ -1,9 +1,9 @@
 package org.apache.isis.testing.fixtures.applib.personas.fixtures;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.testing.fixtures.applib.personas.Persona;
 import org.apache.isis.testing.fixtures.applib.personas.dom.Person;
 import org.apache.isis.testing.fixtures.applib.personas.dom.PersonRepository;
-import org.apache.isis.applib.services.registry.ServiceRegistry2;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public enum Person_persona
     }
 
     @Override
-    public Person findUsing(ServiceRegistry2 serviceRegistry2) {
+    public Person findUsing(ServiceRegistry serviceRegistry2) {
         return serviceRegistry2.lookupServiceElseFail(PersonRepository.class).findById(id).orElseThrow(RuntimeException::new);
     }
 }
