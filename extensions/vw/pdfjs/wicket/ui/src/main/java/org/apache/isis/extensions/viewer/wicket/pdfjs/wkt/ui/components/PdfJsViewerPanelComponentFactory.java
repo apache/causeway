@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.ui.components;
 
 import java.util.Objects;
 

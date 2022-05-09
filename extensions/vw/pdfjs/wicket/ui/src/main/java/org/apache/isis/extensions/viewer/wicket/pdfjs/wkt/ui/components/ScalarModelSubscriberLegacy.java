@@ -16,28 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.wicketstuff.pdfjs;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.ui.components;
 
-import java.util.List;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import org.apache.wicket.markup.head.HeaderItem;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.resource.JQueryPluginResourceReference;
+public interface ScalarModelSubscriberLegacy {
 
-public class WicketStuffPdfJsReference extends JQueryPluginResourceReference {
+    void onUpdate(AjaxRequestTarget target, ScalarPanelAbstractLegacy scalarPanel);
 
-    private static final long serialVersionUID = 1L;
+    void onError(AjaxRequestTarget target, ScalarPanelAbstractLegacy scalarPanel);
 
-    public static final WicketStuffPdfJsReference INSTANCE = new WicketStuffPdfJsReference();
-
-    private WicketStuffPdfJsReference() {
-        super(WicketStuffPdfJsReference.class, "res/wicketstuff-pdf.js");
-    }
-
-    @Override
-    public List<HeaderItem> getDependencies() {
-        final List<HeaderItem> dependencies = super.getDependencies();
-        dependencies.add(JavaScriptHeaderItem.forReference(PdfJsReference.INSTANCE));
-        return dependencies;
-    }
 }

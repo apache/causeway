@@ -16,27 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.ui;
 
-import java.util.List;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import org.apache.wicket.markup.head.HeaderItem;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.resource.JQueryPluginResourceReference;
-import org.wicketstuff.pdfjs.WicketStuffPdfJsReference;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.IsisModuleExtPdfjsMetaModel;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.ui.components.PdfJsViewerPanelComponentFactory;
 
-class PdfJsViewerReference extends JQueryPluginResourceReference {
+/**
+ * @since 2.0 {@index}
+ */
+@Configuration
+@Import({
+        // Modules
+        IsisModuleExtPdfjsMetaModel.class,
 
-    private static final long serialVersionUID = 1L;
-
-    public PdfJsViewerReference() {
-        super(PdfJsViewerPanel.class, "PdfJsViewerPanel.js");
-    }
-
-    @Override
-    public List<HeaderItem> getDependencies() {
-        final List<HeaderItem> dependencies = super.getDependencies();
-        dependencies.add(JavaScriptHeaderItem.forReference(WicketStuffPdfJsReference.INSTANCE));
-        return dependencies;
-    }
+        // @Component's
+        PdfJsViewerPanelComponentFactory.class,
+})
+public class IsisModuleExtPdfjsUi {
 }

@@ -16,38 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.wicketstuff.pdfjs;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration;
 
 import java.util.List;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.ajax.WicketAjaxJQueryResourceReference;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 
-public class PdfJsReference extends JQueryPluginResourceReference {
+public class WicketStuffPdfJsReference extends JQueryPluginResourceReference {
 
     private static final long serialVersionUID = 1L;
 
-    public static final PdfJsReference INSTANCE = new PdfJsReference();
+    public static final WicketStuffPdfJsReference INSTANCE = new WicketStuffPdfJsReference();
 
-    private PdfJsReference() {
-        super(PdfJsReference.class, "res/pdf.js");
+    private WicketStuffPdfJsReference() {
+        super(WicketStuffPdfJsReference.class, "res/wicketstuff-pdf.js");
     }
 
     @Override
     public List<HeaderItem> getDependencies() {
         final List<HeaderItem> dependencies = super.getDependencies();
-        ResourceReference wicketEventReference;
-        if (Application.exists()) {
-            wicketEventReference = Application.get()
-                    .getJavaScriptLibrarySettings().getJQueryReference();
-        } else {
-            wicketEventReference = WicketAjaxJQueryResourceReference.get();
-        }
-        dependencies.add(JavaScriptHeaderItem.forReference(wicketEventReference));
+        dependencies.add(JavaScriptHeaderItem.forReference(PdfJsReference.INSTANCE));
         return dependencies;
     }
 }

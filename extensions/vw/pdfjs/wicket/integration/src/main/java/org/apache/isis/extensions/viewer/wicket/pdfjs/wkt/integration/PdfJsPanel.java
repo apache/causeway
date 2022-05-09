@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.wicketstuff.pdfjs;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;

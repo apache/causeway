@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.ui.components;
 
 import java.nio.charset.StandardCharsets;
 
@@ -42,7 +42,6 @@ import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.IResource;
-import org.wicketstuff.pdfjs.PdfJsPanel;
 
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.value.Blob;
@@ -52,6 +51,7 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet.PdfJsViewerFacet;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.PdfJsPanel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
