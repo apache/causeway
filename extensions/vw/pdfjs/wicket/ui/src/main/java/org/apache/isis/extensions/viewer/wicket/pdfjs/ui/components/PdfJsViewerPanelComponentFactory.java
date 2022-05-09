@@ -46,14 +46,13 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
     }
 
     @Override
-    public ApplicationAdvice appliesTo(IModel<?> model) {
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
         if (!(model instanceof ScalarModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
         val scalarModel = (ScalarModel) model;
-        val facet = scalarModel.getFacet(PdfJsViewerFacet.class);
-        if(facet == null) {
+        if(!scalarModel.containsFacet(PdfJsViewerFacet.class)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
@@ -66,19 +65,19 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
         if (objectAdapter == null) {
             return false;
         }
-        final Object modelObject = objectAdapter.getPojo();
-        if (!(modelObject instanceof Blob)) {
+        final Object objectPojo = objectAdapter.getPojo();
+        if (!(objectPojo instanceof Blob)) {
             return false;
         }
-        final Blob blob = (Blob) modelObject;
+        final Blob blob = (Blob) objectPojo;
         final MimeType mimeType = blob.getMimeType();
         return Objects.equals("application", mimeType.getPrimaryType()) &&
                Objects.equals("pdf", mimeType.getSubType());
     }
 
     @Override
-    public Component createComponent(String id, IModel<?> model) {
-        ScalarModel scalarModel = (ScalarModel) model;
+    public Component createComponent(final String id, final IModel<?> model) {
+        val scalarModel = (ScalarModel) model;
         return new PdfJsViewerPanel(id, scalarModel);
     }
 }

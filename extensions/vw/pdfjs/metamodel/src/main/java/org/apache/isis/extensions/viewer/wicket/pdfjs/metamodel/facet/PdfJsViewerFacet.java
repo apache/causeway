@@ -24,6 +24,6 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvi
 
 public interface PdfJsViewerFacet extends Facet {
 
-    PdfJsConfig configFor(final PdfJsViewerAdvisor.InstanceKey instanceKey);
+    PdfJsConfig configFor(PdfJsViewerAdvisor.InstanceKey instanceKey);
 
 }

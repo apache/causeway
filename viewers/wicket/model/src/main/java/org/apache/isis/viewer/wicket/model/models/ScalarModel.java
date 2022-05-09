@@ -220,12 +220,26 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     public abstract String getCssClass();
 
-    @Deprecated // viewers should not directly use facets
+    /**
+     * Viewers should not use facets directly.
+     * However, viewer extensions that provide their own facet types, will have to.
+     */
+    public final <T extends Facet> boolean containsFacet(final Class<T> facetType) {
+        return getMetaModel().containsFacet(facetType);
+    }
+
+    /**
+     * Viewers should not use facets directly.
+     * However, viewer extensions that provide their own facet types, will have to.
+     */
     public final <T extends Facet> T getFacet(final Class<T> facetType) {
         return getMetaModel().getFacet(facetType);
     }
 
-    @Deprecated // viewers should not directly use facets
+    /**
+     * Viewers should not use facets directly.
+     * However, viewer extensions that provide their own facet types, will have to.
+     */
     public final <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType) {
         return getMetaModel().lookupFacet(facetType);
     }

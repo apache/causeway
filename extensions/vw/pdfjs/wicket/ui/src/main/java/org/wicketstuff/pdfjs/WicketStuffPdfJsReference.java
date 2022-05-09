@@ -26,6 +26,8 @@ import org.apache.wicket.resource.JQueryPluginResourceReference;
 
 public class WicketStuffPdfJsReference extends JQueryPluginResourceReference {
 
+    private static final long serialVersionUID = 1L;
+
     public static final WicketStuffPdfJsReference INSTANCE = new WicketStuffPdfJsReference();
 
     private WicketStuffPdfJsReference() {

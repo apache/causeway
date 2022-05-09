@@ -24,8 +24,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvisor;
 
+public abstract class PdfJsViewerFacetAbstract
+extends FacetAbstract
+implements PdfJsViewerFacet {
 
-public abstract class PdfJsViewerFacetAbstract extends FacetAbstract implements PdfJsViewerFacet {
+    private static final Class<? extends Facet> type() {
+        return PdfJsViewerFacet.class;
+    }
 
     private final PdfJsConfig config;
 
@@ -33,17 +38,12 @@ public abstract class PdfJsViewerFacetAbstract extends FacetAbstract implements 
             final PdfJsConfig config,
             final FacetHolder holder) {
         super(type(), holder);
-
         this.config = config;
     }
 
     @Override
     public PdfJsConfig configFor(final PdfJsViewerAdvisor.InstanceKey instanceKey) {
         return config;
-    }
-
-    private static final Class<? extends Facet> type() {
-        return PdfJsViewerFacet.class;
     }
 
 }

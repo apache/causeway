@@ -217,12 +217,13 @@ implements IRequestListener {
         final ManagedObject adapter = scalarModel.getObject();
         val blob = getBlob();
 
-        if (adapter != null && blob != null) {
-            val pdfJsViewerFacet = scalarModel.getFacet(PdfJsViewerFacet.class);
-            val instanceKey = buildKey();
-            val pdfJsConfig = pdfJsViewerFacet != null
-                    ? pdfJsViewerFacet.configFor(instanceKey)
-                    : new PdfJsConfig();
+        if (adapter != null
+                && blob != null) {
+
+            val pdfJsConfig =
+                scalarModel.lookupFacet(PdfJsViewerFacet.class)
+                .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
+                .orElseGet(PdfJsConfig::new);
 
             // Wicket 8 migration: previously this was urlFor(IResourceListener.INTERFACE, null);
             val urlStr = urlFor(

@@ -29,6 +29,8 @@ import org.apache.wicket.resource.JQueryPluginResourceReference;
 
 public class PdfJsReference extends JQueryPluginResourceReference {
 
+    private static final long serialVersionUID = 1L;
+
     public static final PdfJsReference INSTANCE = new PdfJsReference();
 
     private PdfJsReference() {

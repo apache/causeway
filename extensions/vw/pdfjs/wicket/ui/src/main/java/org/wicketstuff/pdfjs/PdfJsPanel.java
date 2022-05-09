@@ -33,6 +33,8 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
  */
 public class PdfJsPanel extends Panel {
 
+    private static final long serialVersionUID = 1L;
+
     private final PdfJsConfig config;
 
     /**
@@ -40,7 +42,7 @@ public class PdfJsPanel extends Panel {
      *
      * @param id The component id
      */
-    public PdfJsPanel(String id, PdfJsConfig config) {
+    public PdfJsPanel(final String id, final PdfJsConfig config) {
         super(id);
 
         this.config = Args.notNull(config, "config");
