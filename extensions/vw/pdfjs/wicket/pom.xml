@@ -27,12 +27,12 @@
     </parent>
 
     <artifactId>isis-extensions-pdfjs-wicket</artifactId>
-    <name>Apache Isis Ext - pdf.js - Wicket</name>
+    <name>Apache Isis Ext - pdf.js Wicket</name>
 
     <packaging>pom</packaging>
     
     <modules>
-<!--     	<module>integration</module> -->
+    	<module>integration</module>
     	<module>ui</module>
     </modules>
     

@@ -20,12 +20,13 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-extensions-pdfjs-wicket-ui</artifactId>
-	<name>Apache Isis Ext - pdf.js - Wicket (UI)</name>
+	<artifactId>isis-extensions-pdfjs-wicket-integration</artifactId>
+	<name>Apache Isis Ext - pdf.js - Wicket (Integration)</name>
+	<description>Integrates pdf.js with Wicket</description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.extensions.pdfjs.wicket.ui</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/extensions/pdfjs/wicket/ui</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.pdfjs.wicket.integration</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/pdfjs/wicket/integration</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -49,18 +50,14 @@
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-pdfjs-metamodel</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-pdfjs-wicket-integration</artifactId>
+			<artifactId>isis-extensions-pdfjs-applib</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>isis-viewer-wicket-ui</artifactId>
 		</dependency>
+		
 	</dependencies>
 
 </project>
