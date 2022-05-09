@@ -54,7 +54,6 @@ public interface PdfJsViewerAdvisor {
     /**
      * Value type that identifies an object's type and identifier,
      * its (PDF) property and the user that is viewing the object.
-     *
      * <p>
      * This is a (serializable) value type so that, for example,
      * implementations can use as a key within a hash structure.

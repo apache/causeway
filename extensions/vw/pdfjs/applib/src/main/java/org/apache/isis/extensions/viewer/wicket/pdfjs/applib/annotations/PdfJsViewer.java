@@ -37,8 +37,8 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 @Target(value = {ElementType.METHOD, ElementType.FIELD})
 public @interface PdfJsViewer {
 
-    /** The page (number) to render the first time,
-     *  this particular domain object('s property) is rendered.*/
+    /** The page (number) to render,
+     *  when this particular domain object('s property) is rendered the first time.*/
     int initialPageNum() default 1;
 
     /** The scale to render; defaults to 100%.*/
