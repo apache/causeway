@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>isis-extensions-pdfjs-metamodel</artifactId>
-    <name>Apache Isis Ext - Wicket Viewer - pdf.js (metamodel)</name>
+    <name>Apache Isis Ext - pdf.js - Metamodel</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.pdfjs.metamodel</jar-plugin.automaticModuleName>

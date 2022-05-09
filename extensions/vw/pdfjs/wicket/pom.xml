@@ -26,27 +26,14 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-extensions-pdfjs-applib</artifactId>
-    <name>Apache Isis Ext - pdf.js - Applib</name>
+    <artifactId>isis-extensions-pdfjs-wicket</artifactId>
+    <name>Apache Isis Ext - pdf.js - Wicket</name>
 
-    <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.pdfjs.applib</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/pdfjs/applib</git-plugin.propertiesDir>
-    </properties>
-
-    <dependencies>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-applib</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>wicket-bootstrap-core</artifactId>
-            <!-- to avoid polluting the classpath -->
-            <optional>true</optional>
-        </dependency>
-
-    </dependencies>
+    <packaging>pom</packaging>
+    
+    <modules>
+<!--     	<module>integration</module> -->
+    	<module>ui</module>
+    </modules>
+    
 </project>

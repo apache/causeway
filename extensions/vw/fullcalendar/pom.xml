@@ -37,8 +37,7 @@
 
     <modules>
         <module>applib</module>
-        <module>wkt-integr</module>
-        <module>wkt-vwr</module>
+        <module>wicket</module>
     </modules>
 
 </project>

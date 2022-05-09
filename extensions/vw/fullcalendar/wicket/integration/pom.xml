@@ -22,16 +22,17 @@
 
     <parent>
         <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-fullcalendar</artifactId>
+        <artifactId>isis-extensions-fullcalendar-wicket</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-extensions-fullcalendar-wkt-viewer</artifactId>
-    <name>Apache Isis Ext - FullCalendar (UI - Wicket Viewer)</name>
+	<artifactId>isis-extensions-fullcalendar-wicket-integration</artifactId>
+    <name>Apache Isis Ext - FullCalendar Wicket (Integration)</name>
+    <description>Integrates fullcalendar.io with Wicket</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.fullcalendar.ui</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/fullcalendar/ui</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.fullcalendar.wicket.integration</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/fullcalendar/wicket/integration</git-plugin.propertiesDir>
     </properties>
 
 	<build>
@@ -57,16 +58,30 @@
             <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-fullcalendar-applib</artifactId>
         </dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-fullcalendar-wkt-integr</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-wicket-ui</artifactId>
         </dependency>
+        
+        <dependency>
+        	<groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        
+     	<dependency>
+		    <groupId>org.webjars</groupId>
+			<artifactId>fullcalendar</artifactId>
+			<!--  keep in sync with o.a.i.extensions.fullcalendar.wkt.fullcalendar.res.FullCalendar*Reference -->
+			<version>5.10.2</version>
+		</dependency>
+		
+<!-- these are sources only, cannot use -->		
+<!-- 		<dependency> -->
+<!-- 		    <groupId>org.webjars.bowergithub.fullcalendar</groupId> -->
+<!-- 		    <artifactId>fullcalendar</artifactId> -->
+<!-- 		    <version>5.11.0</version> -->
+<!-- 		</dependency> -->
 
 		<!-- TESTING -->
 

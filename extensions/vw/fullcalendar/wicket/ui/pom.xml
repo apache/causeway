@@ -22,16 +22,17 @@
 
     <parent>
         <groupId>org.apache.isis.extensions</groupId>
-        <artifactId>isis-extensions-pdfjs</artifactId>
+        <artifactId>isis-extensions-fullcalendar-wicket</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-extensions-pdfjs-ui</artifactId>
-    <name>Apache Isis Ext - Wicket Viewer - pdf.js (ui)</name>
+	<artifactId>isis-extensions-fullcalendar-wicket-ui</artifactId>
+    <name>Apache Isis Ext - FullCalendar Wicket (UI)</name>
+    <description>Integrates FullCalendar Wicket with the Wicket Viewer</description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.pdfjs.ui</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/pdfjs/ui</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.fullcalendar.wicket.ui</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/fullcalendar/wicket/ui</git-plugin.propertiesDir>
     </properties>
 
 	<build>
@@ -54,14 +55,28 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.isis.extensions</groupId>
-            <artifactId>isis-extensions-pdfjs-metamodel</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-wicket-ui</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-fullcalendar-applib</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-fullcalendar-wicket-integration</artifactId>
+        </dependency>
+
+		<!-- TESTING -->
+
+        <dependency>
+            <groupId>org.apache.isis.testing</groupId>
+            <artifactId>isis-testing-unittestsupport-applib</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>
