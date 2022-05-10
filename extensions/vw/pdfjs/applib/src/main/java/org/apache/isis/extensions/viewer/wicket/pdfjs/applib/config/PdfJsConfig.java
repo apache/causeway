@@ -18,93 +18,68 @@
  */
 package org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config;
 
-import org.apache.wicket.util.lang.Args;
+import java.io.Serializable;
 
-import de.agilecoders.wicket.jquery.AbstractConfig;
-import de.agilecoders.wicket.jquery.IKey;
-import de.agilecoders.wicket.jquery.Key;
+import org.springframework.util.Assert;
+
+import org.apache.isis.commons.internal.resources._Json;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
 /**
  * @since 2.0 {@index}
  */
-public class PdfJsConfig extends AbstractConfig {
+@Getter @With @AllArgsConstructor @NoArgsConstructor @Builder
+public class PdfJsConfig implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final IKey<Integer> INITIAL_PAGE = new Key<>("initialPage", 1);
-    private static final IKey<String> INITIAL_SCALE = new Key<>("initialScale", Scale._1_00.getValue());
-    private static final IKey<Integer> INITIAL_HEIGHT = new Key<>("initialHeight", 800);
-    private static final IKey<Boolean> WORKER_DISABLED = new Key<>("workerDisabled", false);
-    private static final IKey<CharSequence> PDF_DOCUMENT_URL = new Key<>("documentUrl", null);
-    private static final IKey<CharSequence> WORKER_URL = new Key<>("workerUrl", null);
-    private static final IKey<CharSequence> CANVAS_ID = new Key<>("canvasId", null);
+    @Builder.Default
+    private int initialPage = 1;
+
+    @Builder.Default
+    private Scale initialScale = Scale._1_00;
+
+    @Builder.Default
+    private int initialHeight = 800;
+
+    @Builder.Default
+    private boolean workerDisabled = false;
+
+    private CharSequence documentUrl;
+    private CharSequence workerUrl;
+    private CharSequence canvasId;
 
     public PdfJsConfig withInitialPage(int initialPage) {
         if (initialPage < 1) {
             initialPage = 1;
         }
-        put(INITIAL_PAGE, initialPage);
-        return this;
-    }
-
-    public int getInitialPage() {
-        return get(INITIAL_PAGE);
+        return asBuilder().initialPage(initialPage).build();
     }
 
     public PdfJsConfig withInitialHeight(final int initialHeight) {
-        Args.isTrue(initialHeight >= 400 && initialHeight <= 2000,
-                "'initialHeight' must be between 400 and 2000");
-        put(INITIAL_HEIGHT, initialHeight);
-        return this;
+        Assert.isTrue(initialHeight >= 400 && initialHeight <= 2000,
+                ()->String.format("'initialHeight' must be between 400 and 2000; got %d", initialHeight));
+        return asBuilder().initialHeight(initialHeight).build();
     }
 
-    public int getInitialHeight() {
-        return get(INITIAL_HEIGHT);
+    public PdfJsConfig.PdfJsConfigBuilder asBuilder() {
+        return PdfJsConfig.builder()
+                .canvasId(getCanvasId())
+                .documentUrl(getDocumentUrl())
+                .initialHeight(getInitialHeight())
+                .initialPage(getInitialPage())
+                .initialScale(getInitialScale())
+                .workerDisabled(isWorkerDisabled())
+                .workerUrl(getWorkerUrl());
     }
 
-    public PdfJsConfig withInitialScale(final Scale initialScale) {
-        put(INITIAL_SCALE, initialScale.getValue());
-        return this;
-    }
-
-    public String getInitialScale() {
-        return get(INITIAL_SCALE);
-    }
-
-    public PdfJsConfig disableWorker(final boolean disable) {
-        put(WORKER_DISABLED, disable);
-        return this;
-    }
-
-    public boolean isWorkerDisabled() {
-        return get(WORKER_DISABLED);
-    }
-
-    public PdfJsConfig withDocumentUrl(final CharSequence url) {
-        put(PDF_DOCUMENT_URL, url);
-        return this;
-    }
-
-    public CharSequence getDocumentUrl() {
-        return get(PDF_DOCUMENT_URL);
-    }
-
-    public PdfJsConfig withWorkerUrl(final String url) {
-        put(WORKER_URL, url);
-        return this;
-    }
-
-    public CharSequence getWorkerUrl() {
-        return get(WORKER_URL);
-    }
-
-    public PdfJsConfig withCanvasId(final String url) {
-        put(CANVAS_ID, url);
-        return this;
-    }
-
-    public CharSequence getCanvasId() {
-        return get(CANVAS_ID);
+    public String toJsonString() {
+        return _Json.toString(this);
     }
 
 }

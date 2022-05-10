@@ -22,7 +22,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.res.PdfJsIntegrationReference;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.res.PdfJsReference;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -42,27 +41,27 @@ public class PdfJsPanel extends Panel {
     private final static String ID_PDFJSCANVAS = "pdfJsCanvas";
 
     @Getter @Accessors(makeFinal = true)
-    private final PdfJsConfig config;
+    private PdfJsConfigWkt config;
 
     /**
      * Constructor.
      *
      * @param id The component id
      */
-    public PdfJsPanel(final String id, final @NonNull PdfJsConfig config) {
+    public PdfJsPanel(final String id, final @NonNull PdfJsConfigWkt config) {
         super(id);
 
-        this.config = config;
-
         val pdfJsCanvas = Wkt.add(this, Wkt.ajaxEnable(new WebComponent(ID_PDFJSCANVAS)));
-        config.withCanvasId(pdfJsCanvas.getMarkupId());
+
+        this.config = PdfJsReference.configureWorkerUrl(config)
+                .withCanvasId(pdfJsCanvas.getMarkupId());
     }
 
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
-        response.render(PdfJsReference.asHeaderItem(config));
+        response.render(PdfJsReference.asHeaderItem());
         response.render(PdfJsIntegrationReference.asHeaderItem());
         response.render(PdfJsIntegrationReference.domReadyScript(config));
     }

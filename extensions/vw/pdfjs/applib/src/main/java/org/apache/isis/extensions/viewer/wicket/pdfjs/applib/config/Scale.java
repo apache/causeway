@@ -18,7 +18,9 @@
  */
 package org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config;
 
-import org.apache.wicket.util.lang.Objects;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +52,7 @@ public enum Scale {
     /** 400% */
     _4_00("4.00"),;
 
-    @Getter
+    @Getter @JsonValue
     private final String value;
 
     public static Scale forValue(final String scaleValue) {
@@ -58,7 +60,7 @@ public enum Scale {
             return null;
         }
         for (Scale scale : Scale.values()) {
-            if (Objects.equal(scale.value, scaleValue)) {
+            if (Objects.equals(scale.value, scaleValue)) {
                 return scale;
             }
         }

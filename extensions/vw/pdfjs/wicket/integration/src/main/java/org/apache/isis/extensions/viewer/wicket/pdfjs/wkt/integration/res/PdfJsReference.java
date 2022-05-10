@@ -24,7 +24,7 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.PdfJsConfigWkt;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -43,13 +43,14 @@ extends JavaScriptResourceReference {
     }
 
     /**
-     * As a side-effect updates config's worker-url.
-     * @param config
      * @return this resource reference singleton instance as header item
      */
-    public static HeaderItem asHeaderItem(final PdfJsConfig config) {
-        config.withWorkerUrl(createPdfJsWorkerUrl());
+    public static HeaderItem asHeaderItem() {
         return JavaScriptHeaderItem.forReference(instance());
+    }
+
+    public static PdfJsConfigWkt configureWorkerUrl(final PdfJsConfigWkt config) {
+        return config.withWorkerUrl(createPdfJsWorkerUrl());
     }
 
     // -- HELPER

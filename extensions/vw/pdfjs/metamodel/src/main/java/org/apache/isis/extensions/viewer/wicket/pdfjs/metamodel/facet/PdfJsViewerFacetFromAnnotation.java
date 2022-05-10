@@ -42,21 +42,21 @@ public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract {
             final PdfJsViewer annotation,
             final FacetHolder holder) {
 
-        PdfJsConfig config = new PdfJsConfig();
+        var config = new PdfJsConfig();
 
         int initialPage = annotation.initialPageNum();
         if (initialPage > 0) {
-            config.withInitialPage(initialPage);
+            config = config.withInitialPage(initialPage);
         }
 
         final Scale initialScale = annotation.initialScale();
         if (initialScale != Scale._1_00) {
-            config.withInitialScale(initialScale);
+            config = config.withInitialScale(initialScale);
         }
 
         int initialHeight = annotation.initialHeight();
         if (initialHeight > 0) {
-            config.withInitialHeight(initialHeight);
+            config = config.withInitialHeight(initialHeight);
         }
 
         return new PdfJsViewerFacetFromAnnotation(config, holder);
@@ -64,7 +64,7 @@ public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract {
 
     @Override
     public PdfJsConfig configFor(final PdfJsViewerAdvisor.InstanceKey instanceKey) {
-        final PdfJsConfig config = super.configFor(instanceKey);
+        var config = super.configFor(instanceKey);
 
         if(advisors != null) {
             for (PdfJsViewerAdvisor advisor : advisors) {
@@ -72,15 +72,15 @@ public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract {
                 if(advice != null) {
                     final Integer pageNum = advice.getPageNum();
                     if(pageNum != null) {
-                        config.withInitialPage(pageNum);
+                        config = config.withInitialPage(pageNum);
                     }
                     final Scale scale = advice.getScale();
                     if(scale != null) {
-                        config.withInitialScale(scale);
+                        config = config.withInitialScale(scale);
                     }
                     final Integer height = advice.getHeight();
                     if(height != null) {
-                        config.withInitialHeight(height);
+                        config = config.withInitialHeight(height);
                     }
                     break;
                 }
@@ -89,6 +89,5 @@ public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract {
 
         return config;
     }
-
 
 }

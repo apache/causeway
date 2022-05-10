@@ -48,6 +48,7 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.metamodel.facet.PdfJsViewerFacet;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.PdfJsConfigWkt;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.PdfJsPanel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
@@ -211,16 +212,14 @@ implements IRequestListener {
         if (adapter != null
                 && blob != null) {
 
-            val pdfJsConfig =
+            val pdfJsConfig = PdfJsConfigWkt.from(
                     scalarModel.lookupFacet(PdfJsViewerFacet.class)
                     .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
-                    .orElseGet(PdfJsConfig::new);
+                    .orElseGet(PdfJsConfig::new)
+                    .withDocumentUrl(urlFor(
+                            new ListenerRequestHandler(
+                                    new PageAndComponentProvider(getPage(), this)))));
 
-            // Wicket 8 migration: previously this was urlFor(IResourceListener.INTERFACE, null);
-            val urlStr = urlFor(
-                    new ListenerRequestHandler(
-                            new PageAndComponentProvider(getPage(), this)));
-            pdfJsConfig.withDocumentUrl(urlStr);
             val pdfJsPanel = new PdfJsPanel(ID_SCALAR_VALUE, pdfJsConfig);
 
             val prevPageButton = createComponent("prevPage", pdfJsConfig);
@@ -273,7 +272,7 @@ implements IRequestListener {
         return containerIfCompact;
     }
 
-    private MarkupContainer createComponent(final String id, final PdfJsConfig config) {
+    private MarkupContainer createComponent(final String id, final PdfJsConfigWkt config) {
         return new WebMarkupContainer(id) {
             private static final long serialVersionUID = 1L;
 
