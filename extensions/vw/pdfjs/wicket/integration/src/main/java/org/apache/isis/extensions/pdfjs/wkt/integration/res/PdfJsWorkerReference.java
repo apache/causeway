@@ -20,23 +20,28 @@ package org.apache.isis.extensions.pdfjs.wkt.integration.res;
 
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+
+import org.apache.isis.extensions.pdfjs.applib.config.PdfJsConfig;
 
 import lombok.Getter;
+import lombok.val;
 import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
-public class PdfJsReference
+public class PdfJsWorkerReference
 extends WebjarsJavaScriptResourceReference {
 
     private static final long serialVersionUID = 1L;
 
     @Getter(lazy = true) @Accessors(fluent = true)
-    private static final PdfJsReference instance =
-        new PdfJsReference();
+    private static final PdfJsWorkerReference instance =
+        new PdfJsWorkerReference();
 
-    private PdfJsReference() {
-        super("pdfjs-dist/build/pdf.min.js");
+    private PdfJsWorkerReference() {
+        super("pdfjs-dist/build/pdf.worker.min.js");
     }
 
     /**
@@ -44,6 +49,17 @@ extends WebjarsJavaScriptResourceReference {
      */
     public static HeaderItem asHeaderItem() {
         return JavaScriptHeaderItem.forReference(instance());
+    }
+
+    public static PdfJsConfig configureWorkerUrl(final PdfJsConfig config) {
+        return config.withWorkerUrl(asUrl().toString());
+    }
+
+    // -- HELPER
+
+    private static Url asUrl() {
+        val pdfJsUrl = RequestCycle.get().urlFor(instance(), null);
+        return Url.parse(pdfJsUrl);
     }
 
 }
