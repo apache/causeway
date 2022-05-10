@@ -35,12 +35,5 @@
     	<module>integration</module>
     	<module>ui</module>
     </modules>
-
-	<dependency>
-		<groupId>de.agilecoders.wicket</groupId>
-		<artifactId>wicket-bootstrap-core</artifactId>
-		<!-- to avoid polluting the classpath -->
-		<optional>true</optional>
-	</dependency>
     
 </project>

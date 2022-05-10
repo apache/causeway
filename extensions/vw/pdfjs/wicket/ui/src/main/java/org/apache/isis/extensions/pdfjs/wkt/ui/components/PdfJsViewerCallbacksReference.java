@@ -16,30 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.repainting;
+package org.apache.isis.extensions.pdfjs.wkt.ui.components;
 
-import org.springframework.stereotype.Service;
+import org.apache.isis.viewer.wicket.ui.util.LicensedTextTemplate;
 
-import org.apache.isis.extensions.pdfjs.applib.config.Scale;
-import org.apache.isis.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
-@Service
-public class PdfJsViewerAdvisorFallback implements PdfJsViewerAdvisor {
+public class PdfJsViewerCallbacksReference
+extends LicensedTextTemplate {
 
-    @Override
-    public Advice advise(final InstanceKey instanceKey) {
-        return new Advice(1, Scale._1_00, 400);
+    private static final long serialVersionUID = 1L;
+
+    @Getter(lazy = true) @Accessors(fluent = true)
+    private static final PdfJsViewerCallbacksReference instance =
+        new PdfJsViewerCallbacksReference();
+
+    private PdfJsViewerCallbacksReference() {
+        // skip 18 leading lines in referenced java-script
+        super(PdfJsViewerCallbacksReference.class, "PdfJsViewerPanelCallbacks.template.js", 18);
     }
 
-    @Override
-    public void pageNumChangedTo(final InstanceKey instanceKey, final int pageNum) {
-    }
-
-    @Override
-    public void scaleChangedTo(final InstanceKey instanceKey, final Scale scale) {
-    }
-
-    @Override
-    public void heightChangedTo(final InstanceKey instanceKey, final int height) {
-    }
 }

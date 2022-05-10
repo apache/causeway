@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
+import org.apache.isis.extensions.pdfjs.applib.annotations.PdfJsViewer;
 
 import lombok.Getter;
 import lombok.Setter;

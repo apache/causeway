@@ -16,30 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.repainting;
+package org.apache.isis.extensions.pdfjs.wkt.ui;
 
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.pdfjs.applib.config.Scale;
-import org.apache.isis.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
+import org.apache.isis.extensions.pdfjs.metamodel.IsisModuleExtPdfjsMetaModel;
+import org.apache.isis.extensions.pdfjs.wkt.ui.components.PdfJsViewerPanelComponentFactory;
 
-@Service
-public class PdfJsViewerAdvisorFallback implements PdfJsViewerAdvisor {
+/**
+ * @since 2.0 {@index}
+ */
+@Configuration
+@Import({
+        // Modules
+        IsisModuleExtPdfjsMetaModel.class,
 
-    @Override
-    public Advice advise(final InstanceKey instanceKey) {
-        return new Advice(1, Scale._1_00, 400);
-    }
-
-    @Override
-    public void pageNumChangedTo(final InstanceKey instanceKey, final int pageNum) {
-    }
-
-    @Override
-    public void scaleChangedTo(final InstanceKey instanceKey, final Scale scale) {
-    }
-
-    @Override
-    public void heightChangedTo(final InstanceKey instanceKey, final int height) {
-    }
+        // @Component's
+        PdfJsViewerPanelComponentFactory.class,
+})
+public class IsisModuleExtPdfjsUi {
 }

@@ -16,30 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.repainting;
+package org.apache.isis.extensions.pdfjs.wkt.ui.components;
 
-import org.springframework.stereotype.Service;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import org.apache.isis.extensions.pdfjs.applib.config.Scale;
-import org.apache.isis.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
+public interface ScalarModelSubscriberLegacy {
 
-@Service
-public class PdfJsViewerAdvisorFallback implements PdfJsViewerAdvisor {
+    void onUpdate(AjaxRequestTarget target, ScalarPanelAbstractLegacy scalarPanel);
 
-    @Override
-    public Advice advise(final InstanceKey instanceKey) {
-        return new Advice(1, Scale._1_00, 400);
-    }
+    void onError(AjaxRequestTarget target, ScalarPanelAbstractLegacy scalarPanel);
 
-    @Override
-    public void pageNumChangedTo(final InstanceKey instanceKey, final int pageNum) {
-    }
-
-    @Override
-    public void scaleChangedTo(final InstanceKey instanceKey, final Scale scale) {
-    }
-
-    @Override
-    public void heightChangedTo(final InstanceKey instanceKey, final int height) {
-    }
 }

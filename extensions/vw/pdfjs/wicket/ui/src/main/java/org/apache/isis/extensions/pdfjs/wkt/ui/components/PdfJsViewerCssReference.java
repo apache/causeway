@@ -16,30 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.repainting;
+package org.apache.isis.extensions.pdfjs.wkt.ui.components;
 
-import org.springframework.stereotype.Service;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.request.resource.CssResourceReference;
 
-import org.apache.isis.extensions.pdfjs.applib.config.Scale;
-import org.apache.isis.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
-@Service
-public class PdfJsViewerAdvisorFallback implements PdfJsViewerAdvisor {
+class PdfJsViewerCssReference extends CssResourceReference {
 
-    @Override
-    public Advice advise(final InstanceKey instanceKey) {
-        return new Advice(1, Scale._1_00, 400);
+    private static final long serialVersionUID = 1L;
+
+    @Getter(lazy = true) @Accessors(fluent = true)
+    private static final PdfJsViewerCssReference instance =
+        new PdfJsViewerCssReference();
+
+    private PdfJsViewerCssReference() {
+        super(PdfJsViewerPanel.class, "PdfJsViewerPanel.css");
     }
 
-    @Override
-    public void pageNumChangedTo(final InstanceKey instanceKey, final int pageNum) {
+    /**
+     * @return this resource reference singleton instance as header item
+     */
+    public static HeaderItem asHeaderItem() {
+        return CssHeaderItem.forReference(instance());
     }
 
-    @Override
-    public void scaleChangedTo(final InstanceKey instanceKey, final Scale scale) {
-    }
-
-    @Override
-    public void heightChangedTo(final InstanceKey instanceKey, final int height) {
-    }
 }
