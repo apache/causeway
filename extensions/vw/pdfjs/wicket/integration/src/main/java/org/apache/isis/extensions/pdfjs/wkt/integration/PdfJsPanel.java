@@ -27,10 +27,8 @@ import org.apache.isis.extensions.pdfjs.wkt.integration.res.PdfJsIntegrationRefe
 import org.apache.isis.extensions.pdfjs.wkt.integration.res.PdfJsReference;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-import lombok.experimental.Accessors;
 
 /**
  * A panel for rendering PDF documents inline in the page
@@ -41,7 +39,6 @@ public class PdfJsPanel extends Panel {
 
     private final static String ID_PDFJSCANVAS = "pdfJsCanvas";
 
-    @Getter @Accessors(makeFinal = true)
     private PdfJsConfig config;
 
     /**
@@ -65,6 +62,10 @@ public class PdfJsPanel extends Panel {
         response.render(PdfJsReference.asHeaderItem());
         response.render(PdfJsIntegrationReference.asHeaderItem());
         response.render(PdfJsIntegrationReference.domReadyScript(config));
+    }
+
+    public CharSequence getCanvasId() {
+        return config.getCanvasId();
     }
 
 }

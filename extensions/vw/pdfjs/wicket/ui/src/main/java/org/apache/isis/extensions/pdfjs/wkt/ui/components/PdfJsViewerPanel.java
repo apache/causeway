@@ -278,7 +278,7 @@ implements IRequestListener {
             @Override
             protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
-                tag.put("data-canvas-id", pdfJsPanel.getConfig().getCanvasId());
+                tag.put("data-canvas-id", pdfJsPanel.getCanvasId());
             }
         };
     }
