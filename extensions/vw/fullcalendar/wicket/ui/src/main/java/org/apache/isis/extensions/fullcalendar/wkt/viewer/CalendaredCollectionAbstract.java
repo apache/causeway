@@ -34,6 +34,7 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.selector.EventSo
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -70,8 +71,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
         final EntityCollectionModel model = getModel();
 
-        final NotificationPanel feedback = new NotificationPanel(ID_FEEDBACK);
-        feedback.setOutputMarkupId(true);
+        final NotificationPanel feedback = Wkt.ajaxEnable(new NotificationPanel(ID_FEEDBACK));
         addOrReplace(feedback);
 
         val config = new CalendarConfig();

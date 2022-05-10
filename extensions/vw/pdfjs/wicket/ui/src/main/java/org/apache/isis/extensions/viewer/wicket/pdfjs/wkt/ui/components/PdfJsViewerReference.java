@@ -21,10 +21,9 @@ package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.ui.components;
 import java.util.List;
 
 import org.apache.wicket.markup.head.HeaderItem;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 
-import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.WicketStuffPdfJsReference;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.res.PdfJsIntegrationReference;
 
 class PdfJsViewerReference extends JQueryPluginResourceReference {
 
@@ -37,7 +36,7 @@ class PdfJsViewerReference extends JQueryPluginResourceReference {
     @Override
     public List<HeaderItem> getDependencies() {
         final List<HeaderItem> dependencies = super.getDependencies();
-        dependencies.add(JavaScriptHeaderItem.forReference(WicketStuffPdfJsReference.INSTANCE));
+        dependencies.add(PdfJsIntegrationReference.asHeaderItem());
         return dependencies;
     }
 }

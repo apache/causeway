@@ -115,6 +115,16 @@ public class Wkt {
         return behavior;
     }
 
+    // -- AJAX ENABLER
+
+    /**
+     * Requirement for AJAX updates to work.
+     */
+    public <T extends Component> T ajaxEnable(final T component) {
+        component.setOutputMarkupId(true);
+        return component;
+    }
+
     // -- ATTRIBUTES
 
     /**

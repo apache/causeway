@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebComponent;
 
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.FullCalendar;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class EventSourceSelector extends WebComponent implements IHeaderContributor {
 
@@ -32,7 +33,7 @@ public class EventSourceSelector extends WebComponent implements IHeaderContribu
 	public EventSourceSelector(final String id, final FullCalendar calendar) {
 		super(id);
 		this.calendar = calendar;
-		setOutputMarkupId(true);
+		Wkt.ajaxEnable(this);
 	}
 
 

@@ -36,6 +36,7 @@ import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.Selecte
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.callback.View;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.selector.EventSourceSelector;
 import org.apache.isis.valuetypes.jodatime.applib.value.JodaTimeConverters;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -50,8 +51,7 @@ class _Sample {
 
 	public void buildCalendar(final WebMarkupContainer container, final String id) {
 
-		final FeedbackPanel feedback = new FeedbackPanel("feedback");
-		feedback.setOutputMarkupId(true);
+		final FeedbackPanel feedback = Wkt.ajaxEnable(new FeedbackPanel("feedback"));
 		container.addOrReplace(feedback);
 
 		val config = new CalendarConfig();

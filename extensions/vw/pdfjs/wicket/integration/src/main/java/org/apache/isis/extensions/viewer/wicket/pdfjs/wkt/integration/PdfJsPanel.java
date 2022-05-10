@@ -19,14 +19,18 @@
 package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.util.lang.Args;
 
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.res.PdfJsIntegrationReference;
+import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.res.PdfJsReference;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * A panel for rendering PDF documents inline in the page
@@ -35,6 +39,9 @@ public class PdfJsPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
+    private final static String ID_PDFJSCANVAS = "pdfJsCanvas";
+
+    @Getter @Accessors(makeFinal = true)
     private final PdfJsConfig config;
 
     /**
@@ -42,41 +49,22 @@ public class PdfJsPanel extends Panel {
      *
      * @param id The component id
      */
-    public PdfJsPanel(final String id, final PdfJsConfig config) {
+    public PdfJsPanel(final String id, final @NonNull PdfJsConfig config) {
         super(id);
 
-        this.config = Args.notNull(config, "config");
+        this.config = config;
 
-        final WebComponent pdfJsCanvas = new WebComponent("pdfJsCanvas");
-        pdfJsCanvas.setOutputMarkupId(true);
+        val pdfJsCanvas = Wkt.add(this, Wkt.ajaxEnable(new WebComponent(ID_PDFJSCANVAS)));
         config.withCanvasId(pdfJsCanvas.getMarkupId());
-        add(pdfJsCanvas);
-    }
-
-    public final PdfJsConfig getConfig() {
-        return config;
     }
 
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
-        response.render(JavaScriptHeaderItem.forReference(PdfJsReference.INSTANCE));
-        renderWicketStuffPdfJs(response);
-    }
-
-    protected void renderWicketStuffPdfJs(final IHeaderResponse response) {
-        config.withWorkerUrl(createPdfJsWorkerUrl());
-        response.render(JavaScriptHeaderItem.forReference(WicketStuffPdfJsReference.INSTANCE));
-        response.render(OnDomReadyHeaderItem.forScript(String.format("WicketStuff.PDFJS.init(%s)", config.toJsonString())));
-    }
-
-    protected String createPdfJsWorkerUrl() {
-        final CharSequence _pdfJsUrl = urlFor(PdfJsReference.INSTANCE, null);
-        final Url pdfJsUrl = Url.parse(_pdfJsUrl);
-        final Url pdfJsWorkerUrl = Url.parse("./pdf.worker.js");
-        pdfJsUrl.resolveRelative(pdfJsWorkerUrl);
-        return pdfJsUrl.toString();
+        response.render(PdfJsReference.asHeaderItem(config));
+        response.render(PdfJsIntegrationReference.asHeaderItem());
+        response.render(PdfJsIntegrationReference.domReadyScript(config));
     }
 
 }
