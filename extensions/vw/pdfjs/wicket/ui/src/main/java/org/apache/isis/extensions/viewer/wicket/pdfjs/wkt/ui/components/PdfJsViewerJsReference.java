@@ -21,16 +21,31 @@ package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.ui.components;
 import java.util.List;
 
 import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 
 import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.res.PdfJsIntegrationReference;
 
-class PdfJsViewerReference extends JQueryPluginResourceReference {
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+class PdfJsViewerJsReference extends JQueryPluginResourceReference {
 
     private static final long serialVersionUID = 1L;
 
-    public PdfJsViewerReference() {
+    @Getter(lazy = true) @Accessors(fluent = true)
+    private static final PdfJsViewerJsReference instance =
+        new PdfJsViewerJsReference();
+
+    private PdfJsViewerJsReference() {
         super(PdfJsViewerPanel.class, "PdfJsViewerPanel.js");
+    }
+
+    /**
+     * @return this resource reference singleton instance as header item
+     */
+    public static HeaderItem asHeaderItem() {
+        return JavaScriptHeaderItem.forReference(instance());
     }
 
     @Override

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.ui.components;
 
-import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.IRequestListener;
@@ -30,7 +30,6 @@ import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.handler.PageAndComponentProvider;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -40,12 +39,10 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
 import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.resource.ByteArrayResource;
-import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.IResource;
 
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
@@ -75,14 +72,8 @@ implements IRequestListener {
     AbstractDefaultAjaxBehavior updateScale;
     AbstractDefaultAjaxBehavior updateHeight;
 
-    String pdfJsViewerPanelCallbacksTemplateJs;
-
     PdfJsViewerPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
-
-        pdfJsViewerPanelCallbacksTemplateJs = _Strings.readFromResource(
-                PdfJsViewerPanel.class, "PdfJsViewerPanelCallbacks.template.js", StandardCharsets.UTF_8);
-
     }
 
     /**
@@ -185,14 +176,14 @@ implements IRequestListener {
     private void updateAdvisors(final Updater updater) {
         val instanceKey = buildKey();
         getServiceRegistry().select(PdfJsViewerAdvisor.class)
-                .forEach(advisor -> updater.update(advisor, instanceKey));
+        .forEach(advisor -> updater.update(advisor, instanceKey));
     }
 
     private PdfJsViewerAdvisor.InstanceKey buildKey() {
         return getServiceRegistry().lookupService(UserService.class)
-            .map(this::toInstanceKey)
-            .orElseThrow(() -> new IllegalStateException(
-                                    "Could not locate UserService"));
+                .map(this::toInstanceKey)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Could not locate UserService"));
     }
 
     private PdfJsViewerAdvisor.InstanceKey toInstanceKey(final UserService userService) {
@@ -221,9 +212,9 @@ implements IRequestListener {
                 && blob != null) {
 
             val pdfJsConfig =
-                scalarModel.lookupFacet(PdfJsViewerFacet.class)
-                .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
-                .orElseGet(PdfJsConfig::new);
+                    scalarModel.lookupFacet(PdfJsViewerFacet.class)
+                    .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
+                    .orElseGet(PdfJsConfig::new);
 
             // Wicket 8 migration: previously this was urlFor(IResourceListener.INTERFACE, null);
             val urlStr = urlFor(
@@ -251,8 +242,8 @@ implements IRequestListener {
                     currentZoomSelect, currentHeightSelect, printButton, downloadResourceLink);
 
 
-//            Label fileNameIfCompact = new Label("fileNameIfCompact", blob.getName());
-//            downloadLink.add(fileNameIfCompact);
+            //            Label fileNameIfCompact = new Label("fileNameIfCompact", blob.getName());
+            //            downloadLink.add(fileNameIfCompact);
 
 
             containerIfRegular.addOrReplace(new NotificationPanel(ID_FEEDBACK, pdfJsPanel, new ComponentFeedbackMessageFilter(pdfJsPanel)));
@@ -302,18 +293,13 @@ implements IRequestListener {
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
 
-        response.render(CssHeaderItem.forReference(new CssResourceReference(PdfJsViewerPanel.class, "PdfJsViewerPanel.css")));
-        response.render(JavaScriptHeaderItem.forReference(new PdfJsViewerReference()));
+        response.render(PdfJsViewerCssReference.asHeaderItem());
+        response.render(PdfJsViewerJsReference.asHeaderItem());
 
-         renderFunctionsForUpdateCallbacks(response);
-    }
-
-    private void renderFunctionsForUpdateCallbacks(final IHeaderResponse response) {
-
-        String script = pdfJsViewerPanelCallbacksTemplateJs
-                .replace("__updatePageNum_getCallbackUrl()__", updatePageNum.getCallbackUrl())
-                .replace("__updateScale_getCallbackUrl()__", updateScale.getCallbackUrl())
-                .replace("__updateHeight_getCallbackUrl()__", updateHeight.getCallbackUrl());
+        val script = PdfJsViewerCallbacksReference.instance().asString(Map.of(
+                "pageNumCallbackUrl", updatePageNum.getCallbackUrl(),
+                "scaleCallbackUrl", updateScale.getCallbackUrl(),
+                "heightCallbackUrl", updateHeight.getCallbackUrl()));
 
         response.render(JavaScriptHeaderItem.forScript(script, "pdfJsViewerCallbacks"));
     }

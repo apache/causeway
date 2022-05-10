@@ -23,13 +23,13 @@ if (typeof(PdfJsViewerPanel) !== 'object') {
     if (typeof(PdfJsViewerPanel.Callbacks) !== 'object') {
         PdfJsViewerPanel.Callbacks = {
             updatePageNum: function (pageNum) {
-                Wicket.Ajax.get({'u':'__updatePageNum_getCallbackUrl()__&pageNum=' + pageNum})
+                Wicket.Ajax.get({'u':'${pageNumCallbackUrl}&pageNum=' + pageNum})
             },
             updateScale: function (scale) {
-                Wicket.Ajax.get({'u':'__updateScale_getCallbackUrl()__&scale=' + scale})
+                Wicket.Ajax.get({'u':'${scaleCallbackUrl}&scale=' + scale})
             },
             updateHeight: function (height) {
-                Wicket.Ajax.get({'u':'__updateHeight_getCallbackUrl()__&height=' + height})
+                Wicket.Ajax.get({'u':'${heightCallbackUrl}&height=' + height})
             }
         };
     }

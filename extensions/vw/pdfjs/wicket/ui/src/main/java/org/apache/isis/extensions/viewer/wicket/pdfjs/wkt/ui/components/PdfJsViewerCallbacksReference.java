@@ -16,40 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.res;
+package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.ui.components;
 
-import java.util.Map;
-import java.util.function.Function;
-
-import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
-import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;
 import org.apache.isis.viewer.wicket.ui.util.LicensedTextTemplate;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.experimental.Accessors;
 
-public class FullCalendarEventSourceEvents
+public class PdfJsViewerCallbacksReference
 extends LicensedTextTemplate {
 
     private static final long serialVersionUID = 1L;
 
     @Getter(lazy = true) @Accessors(fluent = true)
-    private static final FullCalendarEventSourceEvents instance =
-        new FullCalendarEventSourceEvents();
+    private static final PdfJsViewerCallbacksReference instance =
+        new PdfJsViewerCallbacksReference();
 
-    private FullCalendarEventSourceEvents() {
-        // skip 23 leading lines in referenced java-script
-        super(FullCalendarEventSourceEvents.class, "fullcalendar-event-source-events.js", 23);
-    }
-
-    public static void setupEventSourceUrls(
-            final CalendarConfig calendarConfig,
-            final Function<EventSource, String> eventSourceUrlProvider) {
-        val instance = instance();
-        for (val eventSource : calendarConfig.getEventSources()) {
-            eventSource.setEvents(instance.asString(Map.of("url", eventSourceUrlProvider.apply(eventSource))));
-        }
+    private PdfJsViewerCallbacksReference() {
+        // skip 18 leading lines in referenced java-script
+        super(PdfJsViewerCallbacksReference.class, "PdfJsViewerPanelCallbacks.template.js", 18);
     }
 
 }
