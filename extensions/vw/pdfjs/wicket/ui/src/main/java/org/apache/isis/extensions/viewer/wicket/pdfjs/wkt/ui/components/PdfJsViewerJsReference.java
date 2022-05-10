@@ -18,18 +18,15 @@
  */
 package org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.ui.components;
 
-import java.util.List;
-
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.resource.JQueryPluginResourceReference;
-
-import org.apache.isis.extensions.viewer.wicket.pdfjs.wkt.integration.res.PdfJsIntegrationReference;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-class PdfJsViewerJsReference extends JQueryPluginResourceReference {
+class PdfJsViewerJsReference
+extends JavaScriptResourceReference {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,10 +45,4 @@ class PdfJsViewerJsReference extends JQueryPluginResourceReference {
         return JavaScriptHeaderItem.forReference(instance());
     }
 
-    @Override
-    public List<HeaderItem> getDependencies() {
-        final List<HeaderItem> dependencies = super.getDependencies();
-        dependencies.add(PdfJsIntegrationReference.asHeaderItem());
-        return dependencies;
-    }
 }
