@@ -1,17 +1,10 @@
 package org.apache.isis.testing.fixtures.applib.personas.fixtures;
 
-import java.util.List;
-
-import javax.inject.Inject;
+import javax.resource.spi.work.ExecutionContext;
 
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithResult;
-import org.apache.isis.testing.fixtures.applib.personas.dom.Customer;
-import org.apache.isis.testing.fixtures.applib.personas.dom.CustomerRepository;
+import org.apache.isis.testing.fixtures.applib.personas.dom.Person;
 import org.apache.isis.testing.fixtures.applib.setup.PersonaEnumPersistAll;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 
 public class PersistAllFixtureScript extends FixtureScript {
@@ -19,8 +12,11 @@ public class PersistAllFixtureScript extends FixtureScript {
     @Override
     protected void execute(ExecutionContext executionContext) {
 
-        val persistAll = new PersonaEnumPersistAll<>(Customer_persona.class);
+        // create them all.
+        final PersonaEnumPersistAll<Person, Person_persona, PersonBuilderScript> persistAll = new PersonaEnumPersistAll<>(Person_persona.class);
 
-        List<Customer> customers = executionContext.executeChildT(this, persistAll).getObjects();
+        executionContext.executeChildren(this, Person_persona.SteveSingle, Person_persona.MeghanMarriedMum);
+
+        Person person = executionContext.executeChildT(this, Person_persona.SteveSingle.builder()).getObject();
     }
 }
