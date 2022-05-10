@@ -48,7 +48,6 @@ import org.apache.isis.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.pdfjs.applib.config.Scale;
 import org.apache.isis.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.apache.isis.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet;
-import org.apache.isis.extensions.pdfjs.wkt.integration.PdfJsConfigWkt;
 import org.apache.isis.extensions.pdfjs.wkt.integration.PdfJsPanel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
@@ -212,24 +211,24 @@ implements IRequestListener {
         if (adapter != null
                 && blob != null) {
 
-            val pdfJsConfig = PdfJsConfigWkt.from(
+            val pdfJsConfig =
                     scalarModel.lookupFacet(PdfJsViewerFacet.class)
                     .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
                     .orElseGet(PdfJsConfig::new)
                     .withDocumentUrl(urlFor(
                             new ListenerRequestHandler(
-                                    new PageAndComponentProvider(getPage(), this)))));
+                                    new PageAndComponentProvider(getPage(), this))));
 
             val pdfJsPanel = new PdfJsPanel(ID_SCALAR_VALUE, pdfJsConfig);
 
-            val prevPageButton = createComponent("prevPage", pdfJsConfig);
-            val nextPageButton = createComponent("nextPage", pdfJsConfig);
-            val currentZoomSelect = createComponent("currentZoom", pdfJsConfig);
-            val currentPageLabel = createComponent("currentPage", pdfJsConfig);
-            val totalPagesLabel = createComponent("totalPages", pdfJsConfig);
+            val prevPageButton = createComponent("prevPage", pdfJsPanel);
+            val nextPageButton = createComponent("nextPage", pdfJsPanel);
+            val currentZoomSelect = createComponent("currentZoom", pdfJsPanel);
+            val currentPageLabel = createComponent("currentPage", pdfJsPanel);
+            val totalPagesLabel = createComponent("totalPages", pdfJsPanel);
 
-            val currentHeightSelect = createComponent("currentHeight", pdfJsConfig);
-            val printButton = createComponent("print", pdfJsConfig);
+            val currentHeightSelect = createComponent("currentHeight", pdfJsPanel);
+            val printButton = createComponent("print", pdfJsPanel);
 
             //MarkupContainer downloadButton = createComponent("download", config);
 
@@ -272,14 +271,14 @@ implements IRequestListener {
         return containerIfCompact;
     }
 
-    private MarkupContainer createComponent(final String id, final PdfJsConfigWkt config) {
+    private MarkupContainer createComponent(final String id, final PdfJsPanel pdfJsPanel) {
         return new WebMarkupContainer(id) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
-                tag.put("data-canvas-id", config.getCanvasId());
+                tag.put("data-canvas-id", pdfJsPanel.getConfig().getCanvasId());
             }
         };
     }

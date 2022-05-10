@@ -22,6 +22,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import org.apache.isis.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.pdfjs.wkt.integration.res.PdfJsIntegrationReference;
 import org.apache.isis.extensions.pdfjs.wkt.integration.res.PdfJsReference;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -41,14 +42,14 @@ public class PdfJsPanel extends Panel {
     private final static String ID_PDFJSCANVAS = "pdfJsCanvas";
 
     @Getter @Accessors(makeFinal = true)
-    private PdfJsConfigWkt config;
+    private PdfJsConfig config;
 
     /**
      * Constructor.
      *
      * @param id The component id
      */
-    public PdfJsPanel(final String id, final @NonNull PdfJsConfigWkt config) {
+    public PdfJsPanel(final String id, final @NonNull PdfJsConfig config) {
         super(id);
 
         val pdfJsCanvas = Wkt.add(this, Wkt.ajaxEnable(new WebComponent(ID_PDFJSCANVAS)));

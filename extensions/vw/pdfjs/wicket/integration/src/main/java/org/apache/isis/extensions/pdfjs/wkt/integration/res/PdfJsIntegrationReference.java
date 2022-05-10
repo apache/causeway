@@ -23,7 +23,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-import org.apache.isis.extensions.pdfjs.wkt.integration.PdfJsConfigWkt;
+import org.apache.isis.extensions.pdfjs.applib.config.PdfJsConfig;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -49,7 +49,7 @@ extends JavaScriptResourceReference {
     }
 
     public static OnDomReadyHeaderItem domReadyScript(
-            final PdfJsConfigWkt config) {
+            final PdfJsConfig config) {
         return OnDomReadyHeaderItem.forScript(
                 String.format("WicketStuff.PDFJS.init(%s)", config.toJsonString()));
     }
