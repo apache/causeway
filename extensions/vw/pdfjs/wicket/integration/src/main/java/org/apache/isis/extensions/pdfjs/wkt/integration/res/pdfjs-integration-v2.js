@@ -95,50 +95,6 @@
             });
 
 
-            /**
-             * Get page info from document, resize canvas accordingly, and render page.
-             * @param num Page number.
-             */
-            function renderPage(num) {
-                pageRendering = true;
-                if(num > pdfDoc.numPages) {
-                    num = pdfDoc.numPages
-                }
-                if(num < 1) {
-                    num = 1
-                }
-                // Using promise to fetch the page
-                pdfDoc.getPage(num).then(function(page) {
-
-                    if (autoScale) {
-                        scale = calculateAutoScale(page)
-                    }
-
-                    var viewport = page.getViewport(scale);
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-
-                    // Render PDF page into canvas context
-                    var renderContext = {
-                        canvasContext: ctx,
-                        viewport: viewport
-                    };
-                    var renderTask = page.render(renderContext);
-                    // Wait for rendering to finish
-                    renderTask.promise.then(function () {
-                        pageRendering = false;
-                        if (pageNumPending !== null) {
-                            // New page rendering is pending
-                                renderPage(pageNumPending);
-                                pageNumPending = null;
-                            }
-                        });
-                        Wicket.Event.publish(WicketStuff.PDFJS.Topic.CURRENT_PAGE, pageNum, {"canvasId": config.canvasId});
-                        Wicket.Event.publish(WicketStuff.PDFJS.Topic.CURRENT_ZOOM, scaleValue, {"canvasId": config.canvasId});
-                        Wicket.Event.publish(WicketStuff.PDFJS.Topic.CURRENT_HEIGHT, $(canvasDiv).height(), {"canvasId": config.canvasId});
-                });
-            }
-
             function printDocument() {
                 pageRendering = true;
                 abortingPrinting = false;
@@ -271,15 +227,15 @@
 
             function calculateAutoScale(page) {
 
-                var viewport = page.getViewport(1);
+                var viewport = page.getViewport({scale: 1});
                 var pageWidth = viewport.width;
                 var pageHeight = viewport.height;
 
                 var containerWidth = $(canvasDiv).width();
                 var containerHeight = $(canvasDiv).height();
 
-                // console.log("page      (width, height) = (" + pageWidth      + "," + pageHeight      + ")")
-                // console.log("container (width, height) = (" + containerWidth + "," + containerHeight + ")")
+                //console.log("page      (width, height) = (" + pageWidth      + "," + pageHeight      + ")")
+                //console.log("container (width, height) = (" + containerWidth + "," + containerHeight + ")")
 
                 var pageWidthScale = containerWidth / pageWidth;
                 var pageHeightScale = containerHeight / pageHeight;
@@ -390,8 +346,64 @@
                  printDocument();
             });
 
-			console.log("url: " + config.documentUrl);
-			console.log("cMapUrl: " + config.cmapsUrl);
+            function boundedPageNumber(num) {
+                if(num > pdfDoc.numPages) {
+                    return pdfDoc.numPages;
+                }
+                if(num < 1) {
+                    return 1;
+                }
+                return num;
+            }
+
+            /**
+             * Get page info from document, resize canvas accordingly, and render page.
+             * @param num Page number.
+             */
+            function renderPage(num) {
+				console.log("renderPage: " + num);
+	
+                pageRendering = true;
+                // Using promise to fetch the page
+                pdfDoc.getPage(num).then(function(page) {
+
+                    if (autoScale) {
+                        scale = calculateAutoScale(page);
+                    }
+                    
+					//console.log("page ready for rendering, scale: " + scale);
+
+                    var viewport = page.getViewport({scale: scale});
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    //console.log("viewport.height: " + viewport.height);
+                    //console.log("viewport.width: " + viewport.width);
+
+                    // Render PDF page into canvas context
+                    var renderContext = {
+                        canvasContext: ctx,
+                        viewport: viewport
+                    };
+                    var renderTask = page.render(renderContext);
+                    // Wait for rendering to finish
+                    renderTask.promise.then(function () {
+                        pageRendering = false;
+                        if (pageNumPending !== null) {
+                            // New page rendering is pending
+                                renderPage(pageNumPending);
+                                pageNumPending = null;
+                            }
+                        });
+                        Wicket.Event.publish(WicketStuff.PDFJS.Topic.CURRENT_PAGE, pageNum, {"canvasId": config.canvasId});
+                        Wicket.Event.publish(WicketStuff.PDFJS.Topic.CURRENT_ZOOM, scaleValue, {"canvasId": config.canvasId});
+                        Wicket.Event.publish(WicketStuff.PDFJS.Topic.CURRENT_HEIGHT, $(canvasDiv).height(), {"canvasId": config.canvasId});
+                });
+            }
+
+			//console.log("url: " + config.documentUrl);
+			//console.log("cMapUrl: " + config.cmapsUrl);
+			//console.log("canvasId: " + config.canvasId);
 
             /**
              * Asynchronously downloads PDF.
@@ -405,7 +417,7 @@
             loadingTask.promise.then(function (pdfDoc_) {
                 pdfDoc = pdfDoc_;
                 Wicket.Event.publish(WicketStuff.PDFJS.Topic.TOTAL_PAGES, pdfDoc.numPages, {"canvasId": config.canvasId});
-                renderPage(pageNum);
+                renderPage(boundedPageNumber(pageNum));
             });
         }
     };

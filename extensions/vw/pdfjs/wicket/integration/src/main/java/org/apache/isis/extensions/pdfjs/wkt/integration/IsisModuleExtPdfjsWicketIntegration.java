@@ -46,7 +46,7 @@ implements WicketApplicationInitializer {
     }
 
     public static PdfJsVersion getPdfJsVersion() {
-        return PdfJsVersion.V1_X;
+        return PdfJsVersion.V2_X;
     }
 
 }
