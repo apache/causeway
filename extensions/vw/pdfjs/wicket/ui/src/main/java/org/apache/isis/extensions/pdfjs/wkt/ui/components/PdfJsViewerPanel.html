@@ -21,7 +21,7 @@
     <body>
         <wicket:panel>
             <div class="pdfViewerPanel scalarNameAndValueComponentType">
-                <div class="form-group" wicket:id="scalarIfRegular">
+                <div class="form-group" wicket:id="regularFrame">
                     <div class="row">
                         <div class="scalarValue col-sm-12">
                             <div>
@@ -75,12 +75,10 @@
                     </div>
                     <span wicket:id="feedback"></span>
                 </div>
-                <div class="clearfix"></div>
             </div>
-            <span wicket:id="scalarIfCompact">
-                <a wicket:id="scalarIfCompactDownload"><span class="fileName" wicket:id="fileNameIfCompact"></span></a>
+            <span wicket:id="compactFrame">
+                <a wicket:id="compactFrame-download"><span class="fileName" wicket:id="compactFrame-fileName"></span></a>
             </span>
-
 
         </wicket:panel>
     </body>

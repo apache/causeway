@@ -20,14 +20,12 @@ package org.apache.isis.extensions.pdfjs.wkt.ui.components;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
@@ -35,15 +33,6 @@ abstract class ScalarPanelAbstractLegacy
 extends PanelAbstract<ManagedObject, ScalarModel> {
 
     private static final long serialVersionUID = 1L;
-
-    protected static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
-    protected static final String ID_SCALAR_NAME = "scalarName";
-    protected static final String ID_SCALAR_VALUE = "scalarValue";
-    protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
-    protected static final String ID_FEEDBACK = "feedback";
-
-    protected static final String ID_FILE_NAME_IF_COMPACT = "fileNameIfCompact";
-    protected static final String ID_DOWNLOAD_IF_COMPACT = "scalarIfCompactDownload";
 
     protected Component compactFrame;
     private Component regularFrame;
@@ -102,21 +91,11 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
     /**
      * Builds the hidden REGULAR component when in COMPACT format.
      */
-    protected MarkupContainer createShallowRegularFrame() {
-        val shallowRegularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
-        WktComponents.permanentlyHide(shallowRegularFrame,
-                ID_SCALAR_NAME, ID_SCALAR_VALUE, ID_FEEDBACK);
-        return shallowRegularFrame;
-    }
+    protected abstract MarkupContainer createShallowRegularFrame();
 
     /**
      * Builds the hidden COMPACT component when in REGULAR format.
      */
-    protected Component createShallowCompactFrame() {
-        val shallowCompactFrame = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
-        WktComponents.permanentlyHide(shallowCompactFrame,
-                ID_DOWNLOAD_IF_COMPACT, ID_FILE_NAME_IF_COMPACT);
-        return shallowCompactFrame;
-    }
+    protected abstract Component createShallowCompactFrame();
 
 }

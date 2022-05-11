@@ -32,24 +32,24 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
 import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.resource.ByteArrayResource;
-import org.apache.wicket.request.resource.IResource;
 
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.pdfjs.applib.config.Scale;
 import org.apache.isis.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.apache.isis.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet;
 import org.apache.isis.extensions.pdfjs.wkt.integration.components.PdfJsPanel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
+import lombok.NonNull;
 import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
@@ -63,21 +63,25 @@ implements IRequestListener {
 
     private static final long serialVersionUID = 1L;
 
+    private static final String ID_SCALAR_IF_REGULAR = "regularFrame";
+    private static final String ID_SCALAR_IF_COMPACT = "compactFrame";
+
+    // regular frame
+    private static final String ID_SCALAR_NAME = "scalarName";
+    private static final String ID_SCALAR_VALUE = "scalarValue";
+    private static final String ID_FEEDBACK = "feedback";
+    private static final String ID_DOWNLOAD = "download";
+
+    // compact frame
+    private static final String ID_FILE_NAME_IF_COMPACT = "compactFrame-fileName";
+    private static final String ID_DOWNLOAD_IF_COMPACT = "compactFrame-download";
+
     AbstractDefaultAjaxBehavior updatePageNum;
     AbstractDefaultAjaxBehavior updateScale;
     AbstractDefaultAjaxBehavior updateHeight;
 
     PdfJsViewerPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
-    }
-
-    /**
-     * from migration notes (https://cwiki.apache.org/confluence/display/WICKET/Migration+to+Wicket+8.0):
-     * "If you implemented IResourceListener previously, you have to override IRequestListener#rendersPage() now to return false."
-     */
-    @Override
-    public boolean rendersPage() {
-        return false;
     }
 
     interface Updater{
@@ -89,7 +93,6 @@ implements IRequestListener {
         super.onBeforeRender();
 
         // so we have a callback URL
-
 
         updatePageNum = new AbstractDefaultAjaxBehavior() {
             private static final long serialVersionUID = 1L;
@@ -193,89 +196,75 @@ implements IRequestListener {
         return new PdfJsViewerAdvisor.InstanceKey(logicalTypeName, identifier, propertyId, userName);
     }
 
-
     @Override
     protected MarkupContainer createRegularFrame() {
+        val blob = getBlob();
+        if (blob == null) {
+            return createShallowRegularFrame();
+        }
 
         val scalarModel = scalarModel();
 
-        MarkupContainer containerIfRegular = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
+        val regularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
 
-        final ManagedObject adapter = scalarModel.getObject();
-        val blob = getBlob();
+        val pdfJsConfig =
+                scalarModel.lookupFacet(PdfJsViewerFacet.class)
+                .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
+                .orElseGet(PdfJsConfig::new)
+                .withDocumentUrl(urlFor(
+                        new ListenerRequestHandler(
+                                new PageAndComponentProvider(getPage(), this))));
 
-        if (adapter != null
-                && blob != null) {
+        val pdfJsPanel = new PdfJsPanel(ID_SCALAR_VALUE, pdfJsConfig);
 
-            val pdfJsConfig =
-                    scalarModel.lookupFacet(PdfJsViewerFacet.class)
-                    .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
-                    .orElseGet(PdfJsConfig::new)
-                    .withDocumentUrl(urlFor(
-                            new ListenerRequestHandler(
-                                    new PageAndComponentProvider(getPage(), this))));
+        val prevPageButton = createToolbarComponent("prevPage", pdfJsPanel);
+        val nextPageButton = createToolbarComponent("nextPage", pdfJsPanel);
+        val currentZoomSelect = createToolbarComponent("currentZoom", pdfJsPanel);
+        val currentPageLabel = createToolbarComponent("currentPage", pdfJsPanel);
+        val totalPagesLabel = createToolbarComponent("totalPages", pdfJsPanel);
 
-            val pdfJsPanel = new PdfJsPanel(ID_SCALAR_VALUE, pdfJsConfig);
+        val currentHeightSelect = createToolbarComponent("currentHeight", pdfJsPanel);
+        val printButton = createToolbarComponent("print", pdfJsPanel);
 
-            val prevPageButton = createComponent("prevPage", pdfJsPanel);
-            val nextPageButton = createComponent("nextPage", pdfJsPanel);
-            val currentZoomSelect = createComponent("currentZoom", pdfJsPanel);
-            val currentPageLabel = createComponent("currentPage", pdfJsPanel);
-            val totalPagesLabel = createComponent("totalPages", pdfJsPanel);
+        val downloadResourceLink = Wkt.downloadLinkNoCache(ID_DOWNLOAD, asBlobResource(blob));
 
-            val currentHeightSelect = createComponent("currentHeight", pdfJsPanel);
-            val printButton = createComponent("print", pdfJsPanel);
-
-            //MarkupContainer downloadButton = createComponent("download", config);
-
-            val byteArrayResource = new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
-            val downloadResourceLink = new ResourceLink<>("download", byteArrayResource);
-
-            containerIfRegular.addOrReplace(
-                    pdfJsPanel, prevPageButton, nextPageButton, currentPageLabel, totalPagesLabel,
-                    currentZoomSelect, currentHeightSelect, printButton, downloadResourceLink);
+        regularFrame.addOrReplace(
+                pdfJsPanel, prevPageButton, nextPageButton, currentPageLabel, totalPagesLabel,
+                currentZoomSelect, currentHeightSelect, printButton, downloadResourceLink,
+                new NotificationPanel(ID_FEEDBACK,
+                        pdfJsPanel,
+                        new ComponentFeedbackMessageFilter(pdfJsPanel)));
 
 
-            //            Label fileNameIfCompact = new Label("fileNameIfCompact", blob.getName());
-            //            downloadLink.add(fileNameIfCompact);
+        return regularFrame;
+    }
 
-
-            containerIfRegular.addOrReplace(new NotificationPanel(ID_FEEDBACK, pdfJsPanel, new ComponentFeedbackMessageFilter(pdfJsPanel)));
-        } else {
-            permanentlyHide(ID_SCALAR_VALUE, ID_FEEDBACK);
-        }
-
-        return containerIfRegular;
+    @Override
+    protected MarkupContainer createShallowRegularFrame() {
+        val shallowRegularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
+        WktComponents.permanentlyHide(shallowRegularFrame,
+                ID_SCALAR_NAME, ID_SCALAR_VALUE, ID_FEEDBACK, ID_DOWNLOAD);
+        return shallowRegularFrame;
     }
 
     @Override
     protected Component createCompactFrame() {
-        final Blob blob = getBlob();
+        val blob = getBlob();
         if (blob == null) {
-            return null;
+            return createShallowCompactFrame();
         }
-        val containerIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
-
-        final IResource bar = new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
-        final ResourceLink<Void> downloadLink = new ResourceLink<>(ID_DOWNLOAD_IF_COMPACT, bar);
-        containerIfCompact.add(downloadLink);
-
-        Label fileNameIfCompact = new Label(ID_FILE_NAME_IF_COMPACT, blob.getName());
-        downloadLink.add(fileNameIfCompact);
-
-        return containerIfCompact;
+        val compactFrame = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
+        val downloadLink = Wkt.add(compactFrame, Wkt.downloadLinkNoCache(ID_DOWNLOAD_IF_COMPACT, asBlobResource(blob)));
+        Wkt.labelAdd(downloadLink, ID_FILE_NAME_IF_COMPACT, blob.getName());
+        return compactFrame;
     }
 
-    private MarkupContainer createComponent(final String id, final PdfJsPanel pdfJsPanel) {
-        return new WebMarkupContainer(id) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onComponentTag(final ComponentTag tag) {
-                super.onComponentTag(tag);
-                tag.put("data-canvas-id", pdfJsPanel.getCanvasId());
-            }
-        };
+    @Override
+    protected Component createShallowCompactFrame() {
+        val shallowCompactFrame = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
+        WktComponents.permanentlyHide(shallowCompactFrame,
+                ID_DOWNLOAD_IF_COMPACT, ID_FILE_NAME_IF_COMPACT);
+        return shallowCompactFrame;
     }
 
     @Override
@@ -294,35 +283,68 @@ implements IRequestListener {
     }
 
     /**
+     * from migration notes (https://cwiki.apache.org/confluence/display/WICKET/Migration+to+Wicket+8.0):
+     * "If you implemented IResourceListener previously, you have to override IRequestListener#rendersPage() now to return false."
+     */
+    @Override
+    public boolean rendersPage() {
+        return false;
+    }
+
+    /**
      * per migration notes (https://cwiki.apache.org/confluence/display/WICKET/Migration+to+Wicket+8.0)
      * Assume this replaces IResourceListener#onResourceRequested()
      */
     @Override
     public void onRequest() {
-        Blob pdfBlob = getBlob();
-        if (pdfBlob != null) {
-            final byte[] bytes = pdfBlob.getBytes();
-            final ByteArrayResource resource = new ByteArrayResource("application/pdf", bytes) {
-                private static final long serialVersionUID = 1L;
-
-                @Override protected void configureResponse(
-                        final ResourceResponse response, final Attributes attributes) {
-                    super.configureResponse(response, attributes);
-                    response.disableCaching();
-                }
-            };
-            final ResourceRequestHandler handler = new ResourceRequestHandler(resource, null);
-            getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
-        } else {
+        val blob = getBlob();
+        if (blob == null) {
             throw new AbortWithHttpErrorCodeException(404);
         }
+        getRequestCycle().scheduleRequestHandlerAfterCurrent(
+                new ResourceRequestHandler(asBlobResourceNoCache(blob), null));
     }
 
+//    @Override
+//    protected void setupInlinePrompt() {
+//        // not used
+//    }
+//
+//    @Override
+//    protected Component getValidationFeedbackReceiver() {
+//        return null; // not used
+//    }
+
+    // -- HELPER
+
     private Blob getBlob() {
-        final ManagedObject adapter = getModel().getObject();
-        return adapter != null
-                ? (Blob) adapter.getPojo()
-                : null;
+        return (Blob) ManagedObjects.UnwrapUtil.single(scalarModel().getObject());
+    }
+
+    private static ByteArrayResource asBlobResource(final @NonNull Blob blob) {
+        return new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
+    }
+
+    private static ByteArrayResource asBlobResourceNoCache(final @NonNull Blob blob) {
+        final byte[] bytes = blob.getBytes();
+        return new ByteArrayResource("application/pdf", bytes) {
+            private static final long serialVersionUID = 1L;
+            @Override protected void configureResponse(
+                    final ResourceResponse response, final Attributes attributes) {
+                super.configureResponse(response, attributes);
+                response.disableCaching();
+            }
+        };
+    }
+
+    private MarkupContainer createToolbarComponent(final String id, final PdfJsPanel pdfJsPanel) {
+        return new WebMarkupContainer(id) {
+            private static final long serialVersionUID = 1L;
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.put("data-canvas-id", pdfJsPanel.getCanvasId());
+            }
+        };
     }
 
 }
