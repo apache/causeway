@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -154,7 +155,7 @@ public class PropertyLayoutMenu {
         val vm = new PropertyLayoutRepaintingVm();
         vm.setEditMe("Modify this field to see if repainting occurs...");
         samples.stream()
-                .filter(x -> x.getName().endsWith(".pdf"))
+                .filter(x -> CommonMimeType.PDF.matches(x.getMimeType()))
                 .findFirst()
                 .ifPresent(pdfBlob -> {
                     vm.setPropertyUsingAnnotation(pdfBlob);

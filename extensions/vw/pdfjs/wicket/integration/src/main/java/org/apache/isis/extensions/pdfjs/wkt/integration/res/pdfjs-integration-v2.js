@@ -135,7 +135,7 @@
                 pdfDoc.getPage(num).then(function(page) {
                     if (abortingPrinting) { return; }
 
-                    var viewport = page.getViewport(1);
+                    var viewport = page.getViewport({scale: 1});
                     var offScreenCanvas = $('<canvas/>')[0];
                     offScreenCanvas.width = viewport.width;
                     offScreenCanvas.height = viewport.height;
@@ -360,7 +360,10 @@
              * Get page info from document, resize canvas accordingly, and render page.
              * @param num Page number.
              */
-            function renderPage(num) {
+            function renderPage(num_) {
+	
+				const num = boundedPageNumber(num_);
+	
 				// console.log("renderPage: " + num);
 	
                 pageRendering = true;
@@ -417,7 +420,7 @@
             loadingTask.promise.then(function (pdfDoc_) {
                 pdfDoc = pdfDoc_;
                 Wicket.Event.publish(WicketStuff.PDFJS.Topic.TOTAL_PAGES, pdfDoc.numPages, {"canvasId": config.canvasId});
-                renderPage(boundedPageNumber(pageNum));
+                renderPage(pageNum);
             });
         }
     };
