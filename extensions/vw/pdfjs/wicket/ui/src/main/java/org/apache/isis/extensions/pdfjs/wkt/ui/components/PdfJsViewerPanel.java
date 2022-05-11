@@ -25,7 +25,6 @@ import org.apache.wicket.IRequestListener;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.handler.PageAndComponentProvider;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
@@ -63,10 +62,6 @@ extends ScalarPanelAbstractLegacy
 implements IRequestListener {
 
     private static final long serialVersionUID = 1L;
-
-    //private static final String ID_SCALAR_NAME = "scalarName";
-    private static final String ID_SCALAR_VALUE = "scalarValue";
-    private static final String ID_FEEDBACK = "feedback";
 
     AbstractDefaultAjaxBehavior updatePageNum;
     AbstractDefaultAjaxBehavior updateScale;
@@ -200,10 +195,11 @@ implements IRequestListener {
 
 
     @Override
-    protected MarkupContainer addComponentForRegular() {
+    protected MarkupContainer createRegularFrame() {
 
-        MarkupContainer containerIfRegular = new WebMarkupContainer("scalarIfRegular");
-        addOrReplace(containerIfRegular);
+        val scalarModel = scalarModel();
+
+        MarkupContainer containerIfRegular = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
 
         final ManagedObject adapter = scalarModel.getObject();
         val blob = getBlob();
@@ -253,19 +249,18 @@ implements IRequestListener {
     }
 
     @Override
-    protected Component addComponentForCompact() {
+    protected Component createCompactFrame() {
         final Blob blob = getBlob();
         if (blob == null) {
             return null;
         }
-        val containerIfCompact = new WebMarkupContainer("scalarIfCompact");
-        addOrReplace(containerIfCompact);
+        val containerIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
 
         final IResource bar = new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
-        final ResourceLink<Void> downloadLink = new ResourceLink<>("scalarIfCompactDownload", bar);
+        final ResourceLink<Void> downloadLink = new ResourceLink<>(ID_DOWNLOAD_IF_COMPACT, bar);
         containerIfCompact.add(downloadLink);
 
-        Label fileNameIfCompact = new Label("fileNameIfCompact", blob.getName());
+        Label fileNameIfCompact = new Label(ID_FILE_NAME_IF_COMPACT, blob.getName());
         downloadLink.add(fileNameIfCompact);
 
         return containerIfCompact;
@@ -281,10 +276,6 @@ implements IRequestListener {
                 tag.put("data-canvas-id", pdfJsPanel.getCanvasId());
             }
         };
-    }
-
-    @Override
-    protected void addFormComponentBehavior(final Behavior behavior) {
     }
 
     @Override

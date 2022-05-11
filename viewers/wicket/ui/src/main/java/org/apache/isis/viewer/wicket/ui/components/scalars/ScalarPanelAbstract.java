@@ -69,7 +69,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -162,8 +161,9 @@ implements ScalarModelSubscriber {
     /**
      * Identical to super.getModel()
      */
-    @Getter @Accessors(fluent = true)
-    private final ScalarModel scalarModel;
+    public final ScalarModel scalarModel() {
+        return super.getModel();
+    }
 
     @Getter
     private final ImmutableEnumSet<FormatModifier> formatModifiers;
@@ -215,7 +215,6 @@ implements ScalarModelSubscriber {
 
     protected ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
-        this.scalarModel = scalarModel;
 
         val formatModifiers = EnumSet.noneOf(FormatModifier.class);
         setupFormatModifiers(formatModifiers);
@@ -251,16 +250,17 @@ implements ScalarModelSubscriber {
      */
     private void buildGui() {
 
+        val scalarModel = scalarModel();
+
         scalarFrameContainer = Wkt.containerAdd(this, ID_SCALAR_TYPE_CONTAINER);
         Wkt.cssAppend(scalarFrameContainer, getCssClassName());
 
         switch(scalarModel.getRenderingHint()) {
         case REGULAR:
-            regularFrame = createRegularFrame();
+            regularFrame = Wkt.ajaxEnable(createRegularFrame());
             compactFrame = createShallowCompactFrame();
             regularFrame.setVisible(true);
             compactFrame.setVisible(false);
-            regularFrame.setOutputMarkupId(true); // enable as AJAX target
 
             scalarFrameContainer.addOrReplace(compactFrame, regularFrame,
                     formFrame = createFormFrame());
@@ -358,7 +358,7 @@ implements ScalarModelSubscriber {
 
     private void callHooks() {
 
-        final ScalarModel scalarModel = scalarModel();
+        val scalarModel = scalarModel();
 
         final String disableReasonIfAny = scalarModel.disableReasonIfAny();
         final boolean mustBeEditable = scalarModel.mustBeEditable();
@@ -607,6 +607,8 @@ implements ScalarModelSubscriber {
    public Repaint updateIfNecessary(
            final @NonNull ParameterUiModel paramModel,
            final @NonNull Optional<AjaxRequestTarget> target) {
+
+       val scalarModel = scalarModel();
 
        // visibility
        val visibilityConsent = paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getParameterIndex());
