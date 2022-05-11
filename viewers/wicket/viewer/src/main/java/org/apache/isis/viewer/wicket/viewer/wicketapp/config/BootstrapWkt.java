@@ -23,13 +23,15 @@ import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
+import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
+
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 
 @Configuration
-public class BootstrapWkt implements WicketApplicationInitConfiguration {
+public class BootstrapWkt implements WicketApplicationInitializer {
 
     @Override
     public void init(final WebApplication webApplication) {

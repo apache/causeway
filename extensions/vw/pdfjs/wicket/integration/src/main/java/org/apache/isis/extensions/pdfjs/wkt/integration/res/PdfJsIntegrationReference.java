@@ -38,7 +38,7 @@ extends JavaScriptResourceReference {
         new PdfJsIntegrationReference();
 
     private PdfJsIntegrationReference() {
-        super(PdfJsIntegrationReference.class, "pdfjs-integration.js");
+        super(PdfJsIntegrationReference.class, "pdfjs-integration-v1.js");
     }
 
     /**

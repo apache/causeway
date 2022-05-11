@@ -16,18 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.viewer.wicketapp.config;
+package org.apache.isis.viewer.wicket.model.isis;
 
 import org.apache.wicket.protocol.http.WebApplication;
 
-import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
-
 /**
- * {@link IsisWicketApplication} refiner, supposed to be managed by <i>Spring</i>.
+ * {@code IsisWicketApplication} refiner, supposed to be managed by <i>Spring</i>.
  *
  * @since 2.0 {index}
  */
-public interface WicketApplicationInitConfiguration {
+public interface WicketApplicationInitializer {
 
     /**
      * Refines given {@link WebApplication},

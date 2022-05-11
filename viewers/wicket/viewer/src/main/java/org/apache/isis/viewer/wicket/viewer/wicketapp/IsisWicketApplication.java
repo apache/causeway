@@ -64,6 +64,7 @@ import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
+import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -83,7 +84,6 @@ import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapte
 import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.IsisResourceSettings;
 import org.apache.isis.viewer.wicket.viewer.integration.WebRequestCycleForIsis;
-import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WicketApplicationInitConfiguration;
 
 import lombok.Getter;
 import lombok.val;
@@ -128,7 +128,7 @@ implements
     }
 
     @Inject private MetaModelContext metaModelContext;
-    @Inject private List<WicketApplicationInitConfiguration> applicationInitializers;
+    @Inject private List<WicketApplicationInitializer> applicationInitializers;
 
     @Getter(onMethod = @__(@Override)) private IsisAppCommonContext commonContext; // shared
 

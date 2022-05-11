@@ -48,7 +48,7 @@ import org.apache.isis.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.pdfjs.applib.config.Scale;
 import org.apache.isis.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.apache.isis.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet;
-import org.apache.isis.extensions.pdfjs.wkt.integration.PdfJsPanel;
+import org.apache.isis.extensions.pdfjs.wkt.integration.components.PdfJsPanel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;

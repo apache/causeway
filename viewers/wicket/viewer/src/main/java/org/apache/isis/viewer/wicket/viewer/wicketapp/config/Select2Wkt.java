@@ -21,13 +21,14 @@ package org.apache.isis.viewer.wicket.viewer.wicketapp.config;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
+import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2BootstrapCssReference;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2JsReference;
 
 import lombok.val;
 
 @Configuration
-public class Select2Wkt implements WicketApplicationInitConfiguration {
+public class Select2Wkt implements WicketApplicationInitializer {
 
     @Override
     public void init(final WebApplication webApplication) {

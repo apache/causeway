@@ -21,12 +21,14 @@ package org.apache.isis.viewer.wicket.viewer.wicketapp.config;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
+import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
+
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 
 @Configuration
-public class WebjarsWkt implements WicketApplicationInitConfiguration {
+public class WebjarsWkt implements WicketApplicationInitializer {
 
     @Override
     public void init(final WebApplication webApplication) {

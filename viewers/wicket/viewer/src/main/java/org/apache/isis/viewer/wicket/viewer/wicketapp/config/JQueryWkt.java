@@ -25,13 +25,14 @@ import org.apache.wicket.resource.JQueryResourceReference;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
 
 import lombok.val;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 @Configuration
-public class JQueryWkt implements WicketApplicationInitConfiguration {
+public class JQueryWkt implements WicketApplicationInitializer {
 
     @Inject IsisConfiguration configuration;
 

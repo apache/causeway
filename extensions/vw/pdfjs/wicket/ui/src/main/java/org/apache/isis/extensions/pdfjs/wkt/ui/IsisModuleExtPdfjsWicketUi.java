@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.pdfjs.metamodel.IsisModuleExtPdfjsMetaModel;
+import org.apache.isis.extensions.pdfjs.wkt.integration.IsisModuleExtPdfjsWicketIntegration;
 import org.apache.isis.extensions.pdfjs.wkt.ui.components.PdfJsViewerPanelComponentFactory;
 
 /**
@@ -31,9 +32,11 @@ import org.apache.isis.extensions.pdfjs.wkt.ui.components.PdfJsViewerPanelCompon
 @Import({
         // Modules
         IsisModuleExtPdfjsMetaModel.class,
+        IsisModuleExtPdfjsWicketIntegration.class,
 
         // @Component's
         PdfJsViewerPanelComponentFactory.class,
 })
-public class IsisModuleExtPdfjsUi {
+public class IsisModuleExtPdfjsWicketUi {
+
 }
