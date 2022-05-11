@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
@@ -33,27 +34,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Provides the ability for the end-user to discard these UI hints so that the
+ * Provides the ability for the end-user to discard UI hints so that the
  * object is rendered in its initial state:
- *
  * <p>
  * When a domain object is rendered the end-user can select different tabs,
  * and for collections can sort the columns, navigate to second pages, or
  * select different views of collections.
  * If the user revisits that object, the Wicket viewer (at least) will remember
  * these hints and render the domain object in the same state.
- * </p>
- *
  * <p>
  * These rendering hints are also included if the user copies the URL using
  * the anchor link (to right hand of the object's title).
- * </p>
- *
  * <p>
- *     This mixin - contributed to <code>java.lang.Object</code> and therefore
- *     to allo domain objects - provides the ability for the end user to clear
- *     any hints that might have been set for the domain object being rendered.
- * </p>
+ * This mixin - contributed to <code>java.lang.Object</code> and therefore
+ * to all domain objects - provides the ability for the end user to clear
+ * any hints that might have been set for the domain object being rendered.
  *
  * @see HintStore
  *
@@ -69,18 +64,21 @@ import lombok.val;
         cssClassFa = "fa-circle",
         position = ActionLayout.Position.PANEL,
         associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
-        sequence = "400.1"
+        sequence = "400.1",
+        describedAs = "Resets the presentation of the displayed object/page to its initial form. "
+                + "(table sorting, tab selection, etc.)"
 )
-//mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
 public class Object_clearHints {
 
-    public static class ActionDomainEvent
-    extends org.apache.isis.applib.events.domain.ActionDomainEvent<Object> {}
+    @Inject HintStore hintStore;
+    @Inject BookmarkService bookmarkService;
 
     private final Object holder;
 
-    public Object act() {
+    public static class ActionDomainEvent
+        extends org.apache.isis.applib.events.domain.ActionDomainEvent<Object> {}
+    @MemberSupport public Object act() {
         if (getHintStoreUsingWicketSession() != null) {
             val bookmark = bookmarkService.bookmarkForElseFail(holder);
             val hintStore = getHintStoreUsingWicketSession();
@@ -91,17 +89,16 @@ public class Object_clearHints {
         return holder;
     }
 
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return getHintStoreUsingWicketSession() == null;
     }
+
+    // -- HELPER
 
     private HintStoreUsingWicketSession getHintStoreUsingWicketSession() {
         return hintStore instanceof HintStoreUsingWicketSession
                 ? (HintStoreUsingWicketSession) hintStore
-                        : null;
+                : null;
     }
-
-    @Inject HintStore hintStore;
-    @Inject BookmarkService bookmarkService;
 
 }
