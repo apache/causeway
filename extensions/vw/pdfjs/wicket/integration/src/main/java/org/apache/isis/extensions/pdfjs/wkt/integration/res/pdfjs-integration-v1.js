@@ -54,7 +54,7 @@
             // Disable workers to avoid yet another cross-origin issue (workers need
             // the URL of the script to be loaded, and dynamically loading a cross-origin
             // script does not work).
-            PDFJS.disableWorker = config.workerDisabled || false;
+            PDFJS.disableWorker = false;
             PDFJS.workerSrc = config.workerUrl;
 
             var pdfDoc = null,

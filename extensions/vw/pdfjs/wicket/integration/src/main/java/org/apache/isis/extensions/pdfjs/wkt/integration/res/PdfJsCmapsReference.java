@@ -18,10 +18,9 @@
  */
 package org.apache.isis.extensions.pdfjs.wkt.integration.res;
 
-import org.apache.wicket.markup.head.HeaderItem;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.extensions.pdfjs.wkt.integration.IsisModuleExtPdfjsWicketIntegration;
 
@@ -31,29 +30,22 @@ import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
-public class PdfJsWorkerReference
+public class PdfJsCmapsReference
 extends WebjarsJavaScriptResourceReference {
 
     private static final long serialVersionUID = 1L;
 
     @Getter(lazy = true) @Accessors(fluent = true)
-    private static final PdfJsWorkerReference instance =
-        new PdfJsWorkerReference();
+    private static final PdfJsCmapsReference instance =
+        new PdfJsCmapsReference();
 
-    private PdfJsWorkerReference() {
-        super(String.format("%s/build/pdf.worker.min.js",
+    private PdfJsCmapsReference() {
+        super(String.format("%s/cmaps/_.bcmap",
                 IsisModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath()));
     }
 
-    /**
-     * @return this resource reference singleton instance as header item
-     */
-    public static HeaderItem asHeaderItem() {
-        return JavaScriptHeaderItem.forReference(instance());
-    }
-
-    public static String workerUrl() {
-        return asUrl().toString();
+    public static String cmapsUrl() {
+        return Strings.stripEnding(asUrl().toString(), "_.bcmap");
     }
 
     // -- HELPER
@@ -62,5 +54,7 @@ extends WebjarsJavaScriptResourceReference {
         val pdfJsUrl = RequestCycle.get().urlFor(instance(), null);
         return Url.parse(pdfJsUrl);
     }
+
+
 
 }

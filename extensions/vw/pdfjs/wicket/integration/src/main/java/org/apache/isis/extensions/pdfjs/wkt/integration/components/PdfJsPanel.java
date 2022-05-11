@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import org.apache.isis.extensions.pdfjs.applib.config.PdfJsConfig;
+import org.apache.isis.extensions.pdfjs.wkt.integration.res.PdfJsCmapsReference;
 import org.apache.isis.extensions.pdfjs.wkt.integration.res.PdfJsIntegrationReference;
 import org.apache.isis.extensions.pdfjs.wkt.integration.res.PdfJsReference;
 import org.apache.isis.extensions.pdfjs.wkt.integration.res.PdfJsWorkerReference;
@@ -52,7 +53,9 @@ public class PdfJsPanel extends Panel {
 
         val pdfJsCanvas = Wkt.add(this, Wkt.ajaxEnable(new WebComponent(ID_PDFJSCANVAS)));
 
-        this.config = PdfJsWorkerReference.configureWorkerUrl(config)
+        this.config = config
+                .withWorkerUrl(PdfJsWorkerReference.workerUrl())
+                .withCmapsUrl(PdfJsCmapsReference.cmapsUrl())
                 .withCanvasId(pdfJsCanvas.getMarkupId());
     }
 

@@ -47,11 +47,9 @@ public class PdfJsConfig implements Serializable {
     @Builder.Default
     private int initialHeight = 800;
 
-    @Builder.Default
-    private boolean workerDisabled = false;
-
     private CharSequence documentUrl;
     private CharSequence workerUrl;
+    private CharSequence cmapsUrl;
     private CharSequence canvasId;
 
     public PdfJsConfig withInitialPage(int initialPage) {
@@ -74,8 +72,8 @@ public class PdfJsConfig implements Serializable {
                 .initialHeight(getInitialHeight())
                 .initialPage(getInitialPage())
                 .initialScale(getInitialScale())
-                .workerDisabled(isWorkerDisabled())
-                .workerUrl(getWorkerUrl());
+                .workerUrl(getWorkerUrl())
+                .cmapsUrl(getCmapsUrl());
     }
 
     public String toJsonString() {

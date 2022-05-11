@@ -20,8 +20,9 @@
 
     'use strict';
 
-	if (!pdfjsLib.getDocument || !pdfjsViewer.PDFPageView) {
-	  alert("Missing pdf.js prerequisites.");
+	if (!pdfjsLib.getDocument 
+			/* || !pdfjsViewer.PDFPageView */) {
+	  console.error("Missing pdf.js prerequisites.");
 	  exit;
 	}
 
@@ -50,15 +51,6 @@
 
         init: function (config) {
 
-            // If absolute URL from the remote server is provided, configure the CORS
-            // header on that server.
-            var url = config.documentUrl;
-
-            //
-            // Disable workers to avoid yet another cross-origin issue (workers need
-            // the URL of the script to be loaded, and dynamically loading a cross-origin
-            // script does not work).
-            //PDFJS.disableWorker = config.workerDisabled || false;
             pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerUrl;
 
             var pdfDoc = null,
@@ -398,10 +390,19 @@
                  printDocument();
             });
 
+			console.log("url: " + config.documentUrl);
+			console.log("cMapUrl: " + config.cmapsUrl);
+
             /**
              * Asynchronously downloads PDF.
              */
-            pdfjsLib.getDocument({"url": url}).promise.then(function (pdfDoc_) {
+	        const loadingTask = pdfjsLib.getDocument({
+	          url: config.documentUrl,
+	          cMapUrl: config.cmapsUrl,
+	          cMapPacked: true,
+	          enableXfa: false,
+	        });
+            loadingTask.promise.then(function (pdfDoc_) {
                 pdfDoc = pdfDoc_;
                 Wicket.Event.publish(WicketStuff.PDFJS.Topic.TOTAL_PAGES, pdfDoc.numPages, {"canvasId": config.canvasId});
                 renderPage(pageNum);
