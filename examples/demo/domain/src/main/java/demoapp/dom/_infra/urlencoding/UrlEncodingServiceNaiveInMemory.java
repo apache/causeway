@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -59,7 +60,7 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
     private final int maxIdentifierSize = 12*1024; // 12K
 
     @Override
-    public String encode(byte[] bytes) {
+    public String encode(final byte[] bytes) {
 
         // web servers might have restrictions to header sizes of eg. max 4k or 8k
         // if the encodedString is reasonable small, we pass it through
@@ -81,7 +82,7 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
     }
 
     @Override
-    public byte[] decode(String prefixed) {
+    public byte[] decode(final String prefixed) {
         val encodingType = EncodingType.parse(prefixed);
         val encodedStringOrBase64Key = encodingType.decode(prefixed);
 
@@ -93,6 +94,10 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
         case HASH_KEYED_CACHE: {
             val base64Key = encodedStringOrBase64Key;
             val encodedString = map.get(base64Key);
+            if(encodedString==null) {
+                throw new UnrecoverableException("Cache miss on view model recreation attempt. "
+                        + "(This cache is specific to the Demo App.)");
+            }
             return urlEncodingService.decode(encodedString);
         }
         default:
@@ -116,13 +121,13 @@ public class UrlEncodingServiceNaiveInMemory implements UrlEncodingService {
         PASS_THROUGH('P'),
         HASH_KEYED_CACHE('H');
         private final char prefix;
-        public String encode(String input) {
+        public String encode(final String input) {
             return prefix + input;
         }
-        public String decode(String input) {
+        public String decode(final String input) {
             return input.substring(1);
         }
-        public static EncodingType parse(String input) {
+        public static EncodingType parse(final String input) {
             if(_NullSafe.size(input)<1) {
                 throw _Exceptions.unrecoverable("input required size underflow");
             }

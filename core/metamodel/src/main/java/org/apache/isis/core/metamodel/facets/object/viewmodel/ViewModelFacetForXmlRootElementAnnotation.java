@@ -48,7 +48,9 @@ extends ViewModelFacetAbstract {
             @NonNull final Bookmark bookmark) {
         final String xmlStr = getUrlEncodingService().decodeToString(bookmark.getIdentifier());
         val viewmodelPojo = getJaxbService().fromXml(viewmodelSpec.getCorrespondingClass(), xmlStr);
-        return ManagedObject.bookmarked(viewmodelSpec, viewmodelPojo, bookmark);
+        return viewmodelPojo!=null
+                ? ManagedObject.bookmarked(viewmodelSpec, viewmodelPojo, bookmark)
+                : ManagedObject.empty(viewmodelSpec);
     }
 
     @Override
