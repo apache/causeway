@@ -24,9 +24,11 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.resources._Resources;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.val;
 
@@ -35,21 +37,27 @@ import demoapp.dom.types.Samples;
 @Service
 public class IsisBlobsSamples implements Samples<Blob> {
 
+    @Getter(lazy = true)
+    private final Can<Blob> blobs = Can.of(
+            "file-sample_100kB.docx",
+            //"file-sample_150kB.pdf",
+            "isis-logo-568x286.png",
+            "compressed.tracemonkey-pldi-09.pdf" // advanced example from the Mozilla pdf.js project
+            )
+        .map(this::loadBlob);
+
     @Override
     public Stream<Blob> stream() {
-        return Stream.of(
-                "file-sample_100kB.docx", "file-sample_150kB.pdf", "isis-logo-568x286.png")
-                .map(this::loadBlob);
+        return getBlobs().stream();
     }
 
-
     @SneakyThrows
-    private Blob loadBlob(String name) {
+    private Blob loadBlob(final String name) {
         val bytes = _Bytes.of(_Resources.load(IsisBlobsSamples.class, name ));
         return Blob.of(name, mimeTypeFor(name), bytes);
     }
 
-    private static NamedWithMimeType.CommonMimeType mimeTypeFor(String name) {
+    private static NamedWithMimeType.CommonMimeType mimeTypeFor(final String name) {
         if (name.endsWith(".png")) return NamedWithMimeType.CommonMimeType.PNG;
         if (name.endsWith(".docx")) return NamedWithMimeType.CommonMimeType.DOCX;
         if (name.endsWith(".pdf")) return NamedWithMimeType.CommonMimeType.PDF;

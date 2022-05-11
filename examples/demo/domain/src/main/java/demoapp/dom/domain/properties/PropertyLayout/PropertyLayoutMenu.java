@@ -34,7 +34,6 @@ import org.apache.isis.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.domain.properties.PropertyLayout.cssClass.PropertyLayoutCssClassVm;
 import demoapp.dom.domain.properties.PropertyLayout.describedAs.PropertyLayoutDescribedAsVm;
@@ -55,7 +54,7 @@ import demoapp.dom.types.Samples;
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-@Log4j2
+//@Log4j2
 public class PropertyLayoutMenu {
 
     final ClockService clockService;

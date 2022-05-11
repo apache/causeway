@@ -361,7 +361,7 @@
              * @param num Page number.
              */
             function renderPage(num) {
-				console.log("renderPage: " + num);
+				// console.log("renderPage: " + num);
 	
                 pageRendering = true;
                 // Using promise to fetch the page
