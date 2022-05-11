@@ -45,11 +45,11 @@ import lombok.val;
  * package private mixin for IsisWicketApplication;
  * to move experimental code out of IsisWicketApplication
  */
-final class IsisWicketApplication_experimental {
+final class _Experimental {
 
     private final IsisWicketApplication holder;
 
-    IsisWicketApplication_experimental(final IsisWicketApplication holder) {
+    _Experimental(final IsisWicketApplication holder) {
         this.holder = holder;
     }
 

@@ -16,10 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 ;(function ($, undefined) {
 
     'use strict';
+
+	if (!pdfjsLib.getDocument || !pdfjsViewer.PDFPageView) {
+	  alert("Missing pdf.js prerequisites.");
+	  exit;
+	}
 
     if (typeof(WicketStuff) !== 'object') {
         window.WicketStuff = {};
@@ -54,8 +58,8 @@
             // Disable workers to avoid yet another cross-origin issue (workers need
             // the URL of the script to be loaded, and dynamically loading a cross-origin
             // script does not work).
-            PDFJS.disableWorker = config.workerDisabled || false;
-            PDFJS.workerSrc = config.workerUrl;
+            //PDFJS.disableWorker = config.workerDisabled || false;
+            pdfjsLib.GlobalWorkerOptions.workerSrc = config.workerUrl;
 
             var pdfDoc = null,
                 pageNum = config.initialPage || 1,
@@ -397,7 +401,7 @@
             /**
              * Asynchronously downloads PDF.
              */
-            PDFJS.getDocument(url).then(function (pdfDoc_) {
+            pdfjsLib.getDocument({"url": url}).promise.then(function (pdfDoc_) {
                 pdfDoc = pdfDoc_;
                 Wicket.Event.publish(WicketStuff.PDFJS.Topic.TOTAL_PAGES, pdfDoc.numPages, {"canvasId": config.canvasId});
                 renderPage(pageNum);

@@ -35,6 +35,10 @@ import org.apache.isis.viewer.wicket.viewer.services.ImageResourceCacheClassPath
 import org.apache.isis.viewer.wicket.viewer.services.TranslationsResolverWicket;
 import org.apache.isis.viewer.wicket.viewer.services.WicketViewerSettingsDefault;
 import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.BootstrapWkt;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.JQueryWkt;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.Select2Wkt;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WebjarsWkt;
 
 /**
  * @since 1.x {@index}
@@ -43,6 +47,12 @@ import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
 @Import({
         // Modules
         IsisModuleViewerWicketUi.class,
+
+        // @Configuration's
+        BootstrapWkt.class,
+        JQueryWkt.class,
+        Select2Wkt.class,
+        WebjarsWkt.class,
 
         // @Service's
         BookmarkUiServiceWicket.class,

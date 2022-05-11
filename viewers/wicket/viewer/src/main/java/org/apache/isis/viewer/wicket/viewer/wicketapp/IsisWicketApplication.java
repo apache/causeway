@@ -20,12 +20,11 @@ package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
-
-import static java.util.Objects.requireNonNull;
 
 import javax.inject.Inject;
 
@@ -44,10 +43,8 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.devutils.debugbar.DebugBarInitializer;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.ResourceAggregator;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -55,10 +52,8 @@ import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
@@ -77,8 +72,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2BootstrapCssReference;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2JsReference;
 import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
@@ -90,19 +83,14 @@ import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapte
 import org.apache.isis.viewer.wicket.viewer.integration.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.IsisResourceSettings;
 import org.apache.isis.viewer.wicket.viewer.integration.WebRequestCycleForIsis;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WicketApplicationInitConfiguration;
 
 import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
-import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
-import de.agilecoders.wicket.webjars.WicketWebjars;
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
-import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
-import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 
 /**
  * Main application, subclassing the Wicket {@link Application} and
@@ -140,6 +128,7 @@ implements
     }
 
     @Inject private MetaModelContext metaModelContext;
+    @Inject private List<WicketApplicationInitConfiguration> applicationInitializers;
 
     @Getter(onMethod = @__(@Override)) private IsisAppCommonContext commonContext; // shared
 
@@ -150,14 +139,12 @@ implements
     private IsisSystemEnvironment systemEnvironment;
     private IsisConfiguration configuration;
 
-    private final IsisWicketApplication_experimental experimental;
+    private final _Experimental experimental;
 
-    // /////////////////////////////////////////////////
-    // constructor, init
-    // /////////////////////////////////////////////////
+    // -- CONSTRUCTION
 
     public IsisWicketApplication() {
-        experimental = new IsisWicketApplication_experimental(this);
+        experimental = new _Experimental(this);
     }
 
     /**
@@ -171,9 +158,6 @@ implements
         // in which search for i18n properties, to search for the application-specific
         // settings before any other.
         setResourceSettings(new IsisResourceSettings(this));
-
-        // this doesn't seem to accomplish anything
-        // experimental.addListenerToStripRemovedComponentsFromAjaxTargetResponse();
 
         super.internalInit();
 
@@ -213,7 +197,6 @@ implements
 
         // bootstrap dependencies from the metaModelContext
         {
-
             Objects.requireNonNull(metaModelContext, "metaModelContext");
 
             commonContext = IsisAppCommonContext.of(metaModelContext);
@@ -224,18 +207,19 @@ implements
             systemEnvironment = commonContext.lookupServiceElseFail(IsisSystemEnvironment.class);
         }
 
-        //spent 2 hours on that one, does not work
-        //experimental.enableCsrfTokensForAjaxRequests(configuration);
-
-        val backgroundInitializationTasks =
-                _ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
-                .addRunnable("Configure WebJars",            this::configureWebJars)
-                .addRunnable("Configure WicketBootstrap",    this::configureWicketBootstrap)
-                .addRunnable("Configure WicketSelect2",      this::configureWicketSelect2);
+        // gather configuration plugins into a list of named tasks
+        val initializationTasks =
+                _ConcurrentTaskList.named("Isis Application Initialization Tasks");
+        applicationInitializers
+            .forEach(initializer->initializationTasks
+                    .addRunnable(String
+                            .format("Configure %s",
+                                    initializer.getClass().getSimpleName()),
+                            ()->initializer.init(this)));
 
         try {
 
-            backgroundInitializationTasks.submit(_ConcurrentContext.sequential());
+            initializationTasks.submit(_ConcurrentContext.sequential());
 
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
@@ -250,8 +234,6 @@ implements
                 webRequestCycleForIsis.setPageClassRegistry(pageClassRegistry);
             }
 
-            setupJQuery();
-
             this.getMarkupSettings().setStripWicketTags(configuration.getViewer().getWicket().isStripWicketTags());
 
             configureSecurity(configuration);
@@ -262,8 +244,6 @@ implements
             buildCssBundle();
 
             filterJavascriptContributions();
-
-            configureWicketSourcePluginIfNecessary();
 
             // TODO ISIS-987 Either make the API better (no direct access to the map) or use DB records
             int maxEntries = 1000;
@@ -284,7 +264,7 @@ implements
             log.debug("storeSettings.maxSizePerSession        : {}", getStoreSettings().getMaxSizePerSession());
             log.debug("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
 
-            backgroundInitializationTasks.await();
+            initializationTasks.await();
 
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
@@ -351,60 +331,6 @@ implements
                 : UUID.randomUUID().toString();
     }
 
-    private void configureWicketSelect2() {
-        ApplicationSettings select2Settings = ApplicationSettings.get();
-        select2Settings.setCssReference(new Select2BootstrapCssReference());
-        select2Settings.setJavascriptReferenceFull(new Select2JsReference());
-        select2Settings.setIncludeJavascriptFull(true);
-    }
-
-    protected void configureWicketSourcePluginIfNecessary() {
-
-        requireNonNull(configuration, "Configuration must be prepared prior to init().");
-
-        if(configuration.getViewer().getWicket().isWicketSourcePlugin()) {
-            configureWicketSourcePlugin();
-        }
-    }
-
-    @Deprecated
-    protected void configureWicketSourcePlugin() {
-        if(systemEnvironment.isPrototyping()) {
-            //WicketSource.configure(this);
-        }
-    }
-
-    // //////////////////////////////////////
-
-    /**
-     * Install 2 default collector instances: (FileAssetPathCollector(WEBJARS_PATH_PREFIX), JarAssetPathCollector),
-     * and a webjars resource finder.
-     *
-     * <p>
-     * Factored out for easy (informal) pluggability.
-     * </p>
-     */
-    protected void configureWebJars() {
-        IWebjarsSettings settings = new WebjarsSettings();
-        WicketWebjars.install(this, settings);
-    }
-
-    protected void configureWicketBootstrap() {
-        final IBootstrapSettings settings = new BootstrapSettings();
-        settings.setDeferJavascript(false);
-        Bootstrap.install(this, settings);
-
-        getHeaderContributorListeners().add(new IHeaderContributor() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void renderHead(final IHeaderResponse response) {
-                BootstrapBaseBehavior bootstrapBaseBehavior = new BootstrapBaseBehavior();
-                bootstrapBaseBehavior.renderHead(settings, response);
-            }
-        });
-    }
-
     // //////////////////////////////////////
 
     /**
@@ -467,7 +393,6 @@ implements
      * </p>
      */
     protected void filterJavascriptContributions() {
-
         setHeaderResponseDecorator(response -> {
             return new ResourceAggregator(new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS"));
         });
@@ -483,7 +408,6 @@ implements
      * </p>
      */
     protected void mountPages() {
-
         mountPage("/signin", PageType.SIGN_IN);
         mountPage("/signup", PageType.SIGN_UP);
         mountPage("/signup/verify", PageType.SIGN_UP_VERIFY);
@@ -597,23 +521,6 @@ implements
     @SuppressWarnings("unchecked")
     public Class<? extends WebPage> getForgotPasswordPageClass() {
         return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.PASSWORD_RESET);
-    }
-
-    protected void setupJQuery() {
-        switch(configuration.getViewer().getWicket().getJQueryVersion()) {
-        case 2:
-            getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV2());
-            break;
-        default:
-            // getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
-        	/*
-        	 * downgrading to jquery 3.5.1 because of this issue:
-        	 *
-        	 * https://github.com/select2/select2/issues/5993
-        	 */
-        	getJavaScriptLibrarySettings().setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.5.1/jquery.js"));
-            break;
-        }
     }
 
 }
