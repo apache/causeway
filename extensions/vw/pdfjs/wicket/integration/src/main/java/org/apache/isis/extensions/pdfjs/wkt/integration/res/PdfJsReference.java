@@ -21,6 +21,8 @@ package org.apache.isis.extensions.pdfjs.wkt.integration.res;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 
+import org.apache.isis.extensions.pdfjs.wkt.integration.IsisModuleExtPdfjsWicketIntegration;
+
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -36,7 +38,8 @@ extends WebjarsJavaScriptResourceReference {
         new PdfJsReference();
 
     private PdfJsReference() {
-        super("pdfjs-dist/build/pdf.min.js");
+        super(String.format("%s/build/pdf.min.js",
+                IsisModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath()));
     }
 
     /**

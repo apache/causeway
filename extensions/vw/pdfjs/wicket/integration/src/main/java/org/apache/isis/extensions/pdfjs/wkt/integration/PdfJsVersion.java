@@ -18,35 +18,17 @@
  */
 package org.apache.isis.extensions.pdfjs.wkt.integration;
 
-import org.apache.wicket.markup.html.SecurePackageResourceGuard;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
-
-import lombok.val;
-
-/**
- * @since 2.0 {@index}
- */
-@Configuration
-@Import({
-
-})
-public class IsisModuleExtPdfjsWicketIntegration
-implements WicketApplicationInitializer {
-
-    @Override
-    public void init(final WebApplication webApplication) {
-        // pdf.js cmap support
-        val resourceGuard =
-                (SecurePackageResourceGuard) webApplication.getResourceSettings().getPackageResourceGuard();
-        resourceGuard.addPattern("+*.bcmap");
-    }
-
-    public static PdfJsVersion getPdfJsVersion() {
-        return PdfJsVersion.V1_X;
-    }
+@RequiredArgsConstructor
+public enum PdfJsVersion {
+    /** <i>Mozilla pdf.js</i> last released version {@code 1.10.100} */
+    V1_X("v1", "pdfjs-dist"),
+    /** <i>Mozilla pdf.js</i> latest version */
+    V2_X("v2", "pdfjs-dist/2.13.216")
+    ;
+    @Getter private final String integrationScriptSuffix;
+    @Getter private final String webjarPath;
 
 }

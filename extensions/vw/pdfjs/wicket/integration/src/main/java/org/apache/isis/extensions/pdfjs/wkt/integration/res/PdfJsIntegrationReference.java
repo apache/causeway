@@ -24,6 +24,7 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.isis.extensions.pdfjs.applib.config.PdfJsConfig;
+import org.apache.isis.extensions.pdfjs.wkt.integration.IsisModuleExtPdfjsWicketIntegration;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -38,7 +39,9 @@ extends JavaScriptResourceReference {
         new PdfJsIntegrationReference();
 
     private PdfJsIntegrationReference() {
-        super(PdfJsIntegrationReference.class, "pdfjs-integration-v1.js");
+        super(PdfJsIntegrationReference.class,
+                String.format("pdfjs-integration-%s.js",
+                        IsisModuleExtPdfjsWicketIntegration.getPdfJsVersion().getIntegrationScriptSuffix()));
     }
 
     /**

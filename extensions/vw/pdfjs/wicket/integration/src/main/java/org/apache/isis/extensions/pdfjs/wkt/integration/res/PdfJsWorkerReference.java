@@ -24,6 +24,7 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.extensions.pdfjs.applib.config.PdfJsConfig;
+import org.apache.isis.extensions.pdfjs.wkt.integration.IsisModuleExtPdfjsWicketIntegration;
 
 import lombok.Getter;
 import lombok.val;
@@ -41,7 +42,8 @@ extends WebjarsJavaScriptResourceReference {
         new PdfJsWorkerReference();
 
     private PdfJsWorkerReference() {
-        super("pdfjs-dist/build/pdf.worker.min.js");
+        super(String.format("%s/build/pdf.worker.min.js",
+                IsisModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath()));
     }
 
     /**
