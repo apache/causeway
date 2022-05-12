@@ -21,8 +21,6 @@ package org.apache.isis.schema.utils.jaxbadapters;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
-
 import org.joda.time.LocalDateTime;
 
 /**
@@ -51,16 +49,14 @@ public final class JodaLocalDateTimeXMLGregorianCalendarAdapter {
             return null;
         }
 
-        final XMLGregorianCalendarImpl xgc = new XMLGregorianCalendarImpl();
-        xgc.setYear(dateTime.getYear());
-        xgc.setMonth(dateTime.getMonthOfYear());
-        xgc.setDay(dateTime.getDayOfMonth());
-        xgc.setHour(dateTime.getHourOfDay());
-        xgc.setMinute(dateTime.getMinuteOfHour());
-        xgc.setSecond(dateTime.getSecondOfMinute());
-        xgc.setMillisecond(dateTime.getMillisOfSecond());
-
-        return xgc;
+        return _Gregorian.of(
+        dateTime.getYear(),
+        dateTime.getMonthOfYear(),
+        dateTime.getDayOfMonth(),
+        dateTime.getHourOfDay(),
+        dateTime.getMinuteOfHour(),
+        dateTime.getSecondOfMinute(),
+        dateTime.getMillisOfSecond());
     }
 
     public static class ForJaxb extends XmlAdapter<XMLGregorianCalendar, LocalDateTime> {

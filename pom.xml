@@ -22,68 +22,16 @@
 
 	<name>Apache Isis (Aggregator)</name>
 	<description>
+    	LAB EDITION - NOT FOR RELEASE
+    	
         Convenience aggregator POM that references all modules.
         The parent POM of all modules is core/pom.xml
     </description>
 
-	<scm>
-		<connection>scm:git:https://github.com/apache/isis.git</connection>
-		<developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
-		<url>https://github.com/apache/isis.git</url>
-		<tag>HEAD</tag>
-	</scm>
-
-
-	<profiles>
-		<profile>
-			<id>core</id>
-			<activation>
-				<property>
-					<name>!skip.core</name>
-				</property>
-			</activation>
-			<modules>
-				<module>core</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>app</id>
-			<activation>
-				<property>
-					<name>!skip.app</name>
-				</property>
-			</activation>
-			<modules>
-				<module>example/application/helloworld</module>
-				<module>example/application/simpleapp</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>arch</id>
-			<activation>
-				<property>
-					<name>arch</name>
-				</property>
-			</activation>
-			<modules>
-				<!-- <module>example/archetype/helloworld</module> -->
-				<module>example/archetype/simpleapp</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>docs</id>
-			<activation>
-				<property>
-					<name>docs</name>
-				</property>
-			</activation>
-			<modules>
-				<module>adocs/documentation</module>
-			</modules>
-		</profile>
-	</profiles>
+	<modules>
+		<module>core</module>
+<!-- 		<module>example/application/helloworld</module> -->
+<!-- 		<module>example/application/simpleapp</module> -->
+	</modules>
 
 </project>

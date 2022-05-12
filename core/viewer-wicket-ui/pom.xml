@@ -24,7 +24,7 @@
 
     <parent>
         <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis</artifactId>
+        <artifactId>isis-core</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 

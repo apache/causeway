@@ -31,23 +31,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 public class JavaSqlTimestampXmlGregorianCalendarAdapter  {
 
-
-    // this assumes DTF is thread-safe, which it most probably is..
-    // http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6466177
-    static DatatypeFactory datatypeFactory = null;
-
-    private static DatatypeFactory getDatatypeFactory() {
-        if(datatypeFactory == null) {
-            try {
-                datatypeFactory = DatatypeFactory.newInstance();
-                return datatypeFactory;
-            } catch (DatatypeConfigurationException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return datatypeFactory;
-    }
-
     public static java.sql.Timestamp parse(final XMLGregorianCalendar calendar) {
         return calendar != null
                 ? new Timestamp(calendar.toGregorianCalendar().getTime().getTime())
@@ -60,7 +43,7 @@ public class JavaSqlTimestampXmlGregorianCalendarAdapter  {
         }
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(timestamp);
-        return getDatatypeFactory().newXMLGregorianCalendar(c);
+        return _Gregorian.getDatatypeFactory().newXMLGregorianCalendar(c);
     }
 
     public static class ForJaxb extends XmlAdapter<XMLGregorianCalendar, java.sql.Timestamp> {

@@ -23,9 +23,9 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -36,8 +36,7 @@ import org.joda.time.DateTimeZone;
 public final class JodaDateTimeXMLGregorianCalendarAdapter {
     private JodaDateTimeXMLGregorianCalendarAdapter() {
     }
-
-
+   
     public static DateTime parse(final XMLGregorianCalendar xgc) {
         if(xgc == null) return null;
 
@@ -60,8 +59,7 @@ public final class JodaDateTimeXMLGregorianCalendarAdapter {
         final TimeZone timeZone = dateTimeZone.toTimeZone();
         final GregorianCalendar calendar = new GregorianCalendar(timeZone);
         calendar.setTimeInMillis(millis);
-
-        return new XMLGregorianCalendarImpl(calendar);
+        return _Gregorian.getDatatypeFactory().newXMLGregorianCalendar(calendar);
     }
 
     public static class ForJaxb extends XmlAdapter<XMLGregorianCalendar, DateTime> {
