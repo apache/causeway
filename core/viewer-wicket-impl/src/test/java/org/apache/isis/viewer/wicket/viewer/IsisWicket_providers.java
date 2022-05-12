@@ -19,20 +19,19 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class IsisWicket_providers {
 
@@ -41,7 +40,7 @@ public class IsisWicket_providers {
 
     @Before
     public void setUp() throws Exception {
-        isisWicketModule = new IsisWicketModule(null, null);
+        isisWicketModule = new IsisWicketModule(null, null, null);
         injector = Guice.createInjector(isisWicketModule);
     }
 

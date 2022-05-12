@@ -19,12 +19,11 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.isis;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.RuntimeConfigurationType;
-
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
+import org.apache.wicket.Application;
+import org.apache.wicket.RuntimeConfigurationType;
 
 /**
  * {@link DeploymentType} for production usage.
@@ -42,7 +41,9 @@ public class DeploymentTypeWicketAbstract extends DeploymentTypeAbstract {
     }
 
     public RuntimeConfigurationType getConfigurationType() {
-        return getDeploymentCategory().isProduction()? RuntimeConfigurationType.DEPLOYMENT: RuntimeConfigurationType.DEVELOPMENT;
+        return getDeploymentCategory().isProduction()
+        		? RuntimeConfigurationType.DEPLOYMENT: 
+    			RuntimeConfigurationType.DEVELOPMENT;
     }
 
 

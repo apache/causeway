@@ -22,19 +22,19 @@ package org.apache.isis.core.runtime.runner;
 import java.util.List;
 import java.util.Map;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 
 public class IsisInjectModule extends AbstractModule {
 
@@ -86,7 +86,7 @@ public class IsisInjectModule extends AbstractModule {
      */
     @Override
     protected void configure() {
-        bind(AppManifest.class).toInstance(APP_MANIFEST_NOOP);
+        //bind(AppManifest.class).toInstance(APP_MANIFEST_NOOP);
     }
 
     @Provides

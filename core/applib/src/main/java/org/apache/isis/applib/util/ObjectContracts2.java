@@ -21,8 +21,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.base.Function;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Iterables;
@@ -275,7 +276,7 @@ public class ObjectContracts2 {
     }
 
     private String toStringOf(final Object p, final Iterable<String> propertyNamesIter) {
-        final ToStringHelper stringHelper = Objects.toStringHelper(p);
+        final ToStringHelper stringHelper = MoreObjects.toStringHelper(p);
         for (final Clause clause : clausesFor(propertyNamesIter)) {
             stringHelper.add(clause.getPropertyName(), asString(clause, p));
         }

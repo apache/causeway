@@ -25,9 +25,47 @@
 	<name>Apache Isis App - HelloWorld</name>
 
 	<properties>
+		<spring-boot.version>2.6.7</spring-boot.version>
+		<wicket-spring-boot-starter.version>3.1.6</wicket-spring-boot-starter.version>
 	</properties>
 
 	<dependencies>
+	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-parent</artifactId>
+			<version>${spring-boot.version}</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
+		
+		<dependency>
+		  	<groupId>org.springframework.boot</groupId>
+  			<artifactId>spring-boot-starter</artifactId>
+  			<version>${spring-boot.version}</version>
+ 		</dependency>
+ 		
+		<dependency>
+		  	<groupId>org.springframework.boot</groupId>
+  			<artifactId>spring-boot-starter-web</artifactId>
+  			<version>${spring-boot.version}</version>
+ 		</dependency>
+ 		
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-jdk-supplemental</artifactId>
+			<type>pom</type>
+		</dependency>
+		
+		<dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+		
+		<dependency>
+        	<groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
 
 		<!-- ISIS API -->
 		<dependency>

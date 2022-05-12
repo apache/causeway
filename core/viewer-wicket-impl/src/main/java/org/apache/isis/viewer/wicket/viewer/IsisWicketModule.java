@@ -19,21 +19,20 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import static org.apache.isis.viewer.wicket.viewer.IsisWicketApplication.readLines;
+
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provider;
-import com.google.inject.name.Names;
-
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.services.email.EmailServiceDefault;
 import org.apache.isis.core.runtime.services.userreg.EmailNotificationServiceDefault;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -51,7 +50,9 @@ import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDe
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault;
 import org.apache.isis.viewer.wicket.viewer.settings.WicketViewerSettingsDefault;
 
-import static org.apache.isis.viewer.wicket.viewer.IsisWicketApplication.readLines;
+import com.google.inject.AbstractModule;
+import com.google.inject.Provider;
+import com.google.inject.name.Names;
 
 /**
  * To override
@@ -72,18 +73,22 @@ import static org.apache.isis.viewer.wicket.viewer.IsisWicketApplication.readLin
  */
 public class IsisWicketModule extends AbstractModule {
 
+	private AppManifest appManifest;
     private ServletContext servletContext;
     private IsisConfiguration isisConfigIfAny;
 
     public IsisWicketModule(
+    		final AppManifest appManifest,  
             final ServletContext servletContext,
             final IsisConfiguration isisConfigurationIfAny) {
+    	this.appManifest = appManifest; 
         this.servletContext = servletContext;
         this.isisConfigIfAny = isisConfigurationIfAny;
     }
 
     @Override
     protected void configure() {
+    	bind(AppManifest.class).to(appManifest.getClass());
         bind(ComponentFactoryRegistry.class).to(ComponentFactoryRegistryDefault.class);
         bind(PageClassRegistry.class).to(PageClassRegistryDefault.class);
         bind(EmailVerificationUrlService.class).to(EmailVerificationUrlServiceDefault.class);

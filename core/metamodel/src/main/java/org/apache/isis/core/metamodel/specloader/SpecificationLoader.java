@@ -20,16 +20,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
@@ -62,9 +52,16 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import org.apache.isis.schema.utils.CommonDtoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 /**
  * Builds the meta-model.
@@ -299,13 +296,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
     private void invokeAndWait(final List<Callable<Object>> callables) {
-        final ThreadPoolSupport threadPoolSupport = ThreadPoolSupport.getInstance();
-        final boolean parallelize = CONFIG_PROPERTY_PARALLELIZE.from(configuration);
-
-        final List<Future<Object>> futures = parallelize
-                ? threadPoolSupport.invokeAll(callables)
-                : threadPoolSupport.invokeAllSequential(callables);
-        threadPoolSupport.joinGatherFailures(futures);
+    	callables.forEach(c->{
+    		try {
+				c.call();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+    	});
     }
 
     private List<ObjectSpecification> loadSpecificationsFor(

@@ -27,21 +27,22 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.io.BaseEncoding;
-
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
-import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
  * Value type representing a package, class or member.
@@ -522,7 +523,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         // https://issues.apache.org/jira/browse/ISIS-1590
         // not using our ObjectContracts helper for efficiency.
 
-        final Objects.ToStringHelper stringHelper = Objects.toStringHelper(this);
+        final ToStringHelper stringHelper = MoreObjects.toStringHelper(this);
         switch (type) {
             case PACKAGE:
                 stringHelper.add("type", getType());

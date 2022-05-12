@@ -40,12 +40,16 @@ public class TimestampService implements
 
     @PostConstruct
     public void open() {
-        isisJdoSupport.getJdoPersistenceManager().addInstanceLifecycleListener(this, null);
+    	if(isisJdoSupport!=null) {
+    		isisJdoSupport.getJdoPersistenceManager().addInstanceLifecycleListener(this);
+    	}
     }
 
     @PreDestroy
     public void close() {
-        isisJdoSupport.getJdoPersistenceManager().removeInstanceLifecycleListener(this);
+    	if(isisJdoSupport!=null) {
+    		isisJdoSupport.getJdoPersistenceManager().removeInstanceLifecycleListener(this);
+    	}
     }
 
     @Programmatic
