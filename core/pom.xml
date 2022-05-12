@@ -32,10 +32,6 @@
     	LAB EDITION - NOT FOR RELEASE
     
         Core framework, providing metamodel, runtime and core APIs.
-
-        Also defines standard build process, as well as
-        standard set of 3rd party dependencies (eg for testing and 
-        logging frameworks).
     </description>
 
     <properties>
@@ -214,6 +210,20 @@
                     </configuration>
                     <!-- goal:test binds to phase:test -->
                 </plugin>
+                
+                <plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.2.0</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+						</archive>
+					</configuration>
+				</plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -1215,11 +1225,6 @@
 
 
             <!-- DataNucleus -->
-<!--             <dependency> -->
-<!--                 <groupId>javax.jdo</groupId> -->
-<!--                 <artifactId>jdo-api</artifactId> -->
-<!--                 <version>${jdo-api.version}</version> -->
-<!--             </dependency> -->
 			<dependency>
 				<groupId>org.datanucleus</groupId>
 				<artifactId>javax.jdo</artifactId>
@@ -1340,8 +1345,7 @@
         <module>viewer-wicket-impl</module>
 
         <module>maven-plugin</module>
-
-        <module>mavendeps/webapp</module>
+        
         <module>mavendeps/testing</module>
 
     </modules>

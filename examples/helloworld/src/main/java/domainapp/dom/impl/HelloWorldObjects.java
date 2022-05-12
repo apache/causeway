@@ -20,7 +20,8 @@ package domainapp.dom.impl;
 
 import java.util.List;
 
-import org.datanucleus.query.typesafe.TypesafeQuery;
+import javax.jdo.JDOQLTypedQuery;
+import javax.persistence.TypedQuery;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -55,7 +56,7 @@ public class HelloWorldObjects {
             @Parameter(maxLength = 40)
             @ParameterLayout(named = "Name")
             final String name) {
-        TypesafeQuery<HelloWorldObject> q = isisJdoSupport.newTypesafeQuery(HelloWorldObject.class);
+        JDOQLTypedQuery<HelloWorldObject> q = isisJdoSupport.newTypesafeQuery(HelloWorldObject.class);
         final QHelloWorldObject cand = QHelloWorldObject.candidate();
         q = q.filter(
                 cand.name.indexOf(q.stringParameter("name")).ne(-1)

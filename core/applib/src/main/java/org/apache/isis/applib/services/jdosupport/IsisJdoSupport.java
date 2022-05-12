@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.PersistenceManager;
 import javax.jdo.query.BooleanExpression;
 
@@ -120,15 +121,15 @@ public interface IsisJdoSupport {
     @Programmatic
     <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression booleanExpression);
 
-//    /**
-//     * To support the execution of type-safe queries using DataNucleus' lower-level APIs
-//     * (eg for group by and so on).
-//     *
-//     * <p>
-//     *     Responsibility for cloning any result sets and closing the query is the responsibility
-//     *     of the caller.
-//     * </p>
-//     */
-//    @Programmatic
-//    <T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls);
+    /**
+     * To support the execution of type-safe queries using DataNucleus' lower-level APIs
+     * (eg for group by and so on).
+     *
+     * <p>
+     *     Responsibility for cloning any result sets and closing the query is the responsibility
+     *     of the caller.
+     * </p>
+     */
+    @Programmatic
+    <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls);
 }
