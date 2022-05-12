@@ -1,17 +1,26 @@
 package org.apache.isis.schema.utils.jaxbadapters;
 
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.GregorianCalendar;
+
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-//@UtilityClass
+import org.joda.time.LocalDate;
+
+import lombok.val;
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 class _Gregorian {
 
 	// this assumes DTF is thread-safe, which it most probably is..
     // http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6466177
-    static DatatypeFactory datatypeFactory = null;
+    DatatypeFactory datatypeFactory = null;
 
-    public static DatatypeFactory getDatatypeFactory() {
+    public DatatypeFactory getDatatypeFactory() {
         if(datatypeFactory == null) {
             try {
                 datatypeFactory = DatatypeFactory.newInstance();
@@ -23,19 +32,29 @@ class _Gregorian {
         return datatypeFactory;
     }
 
-	public static XMLGregorianCalendar of(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour,
+	public XMLGregorianCalendar of(
+			int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour,
 			int secondOfMinute, int millisOfSecond) {
-		// TODO Auto-generated method stub
-		return null;
+		return getDatatypeFactory().newXMLGregorianCalendar(
+				year, monthOfYear, dayOfMonth, 
+				hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond, 
+				0);
 	}
 
-	public static XMLGregorianCalendar of(int year, int monthOfYear, int dayOfMonth) {
-		// TODO Auto-generated method stub
-		return null;
+	public XMLGregorianCalendar of(int year, int monthOfYear, int dayOfMonth) {
+		return getDatatypeFactory().newXMLGregorianCalendar(
+				year, monthOfYear, dayOfMonth, 
+				0, 0, 0, 0, 
+				0);
 	}
 
-	public static XMLGregorianCalendar of(int hourOfDay, int minuteOfHour, int secondOfMinute, int millisOfSecond) {
-		// TODO Auto-generated method stub
-		return null;
+	public XMLGregorianCalendar of(int hourOfDay, int minuteOfHour, int secondOfMinute, int millisOfSecond) {
+		
+		val today = LocalDate.now();
+		
+		return getDatatypeFactory().newXMLGregorianCalendar(
+				today.getYear(), today.getMonthOfYear(), today.getDayOfMonth(), 
+				hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond, 
+				0);
 	}
 }
