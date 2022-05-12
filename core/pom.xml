@@ -69,17 +69,15 @@
 
         <projectUrl>${project.url}</projectUrl>
 
-        <!-- Datanucleus Objectstore -->
-        <jdo-api.version>3.1</jdo-api.version>
-
         <!-- Isis Datanucleus JDO dn -->
-        <datanucleus-core.version>4.1.7</datanucleus-core.version>
-        <datanucleus-api-jdo.version>4.1.1</datanucleus-api-jdo.version>
-        <datanucleus-jdo-query.version>4.0.5</datanucleus-jdo-query.version>
-        <datanucleus-rdbms.version>4.1.9</datanucleus-rdbms.version>
-
-        <datanucleus-jodatime.version>4.1.0-release</datanucleus-jodatime.version>
-        <datanucleus-maven-plugin.version>4.0.2</datanucleus-maven-plugin.version>
+     	<datanucleus-api-jdo.version>6.0.0-m5</datanucleus-api-jdo.version>
+		<datanucleus-api-jpa.version>6.0.0-m5</datanucleus-api-jpa.version>
+		<datanucleus-core.version>6.0.0-m5</datanucleus-core.version>
+		<datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
+		<datanucleus-jdo-query.version>6.0.0-m1</datanucleus-jdo-query.version>
+		<datanucleus-jodatime.version>6.0.0-m5</datanucleus-jodatime.version>
+		<datanucleus-maven-plugin.version>6.0.0-m1</datanucleus-maven-plugin.version>
+		<datanucleus-rdbms.version>6.0.0-m5</datanucleus-rdbms.version>
 
         <shiro.version>1.2.6</shiro.version>
 
@@ -215,84 +213,6 @@
                         <printSummary>false</printSummary>
                     </configuration>
                     <!-- goal:test binds to phase:test -->
-                </plugin>
-
-
-                <!-- Artifacts derived from code: taglist -->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>taglist-maven-plugin</artifactId>
-                    <version>2.4</version>
-                    <inherited>true</inherited>
-                    <!-- goal:taglist is a report so is configured in the 
-                        reporting section -->
-                </plugin>
-
-                <!-- Artifacts derived from code: javadoc; supports both 
-                    build and report goals; not included as a build plugin except through profiles 
-                    (to speed up the build) -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.9.1</version>
-                    <inherited>true</inherited>
-                    <configuration>
-                        <!-- as per http://stackoverflow.com/a/16743137/56880; only if using java 8 to build -->
-<!--
-                        <additionalparam>-Xdoclint:none</additionalparam>
--->
-                        <debug>true</debug>
-                        <minmemory>128m</minmemory>      
-                        <maxmemory>1024m</maxmemory>
-                        <quiet>true</quiet>
-                        <doctitle>${project.name} ${project.version}</doctitle>
-                        <windowtitle>${project.name} ${project.version}</windowtitle>
-                        <testDoctitle>${project.name} ${project.version}
-                            (TEST API)
-                        </testDoctitle>
-                        <testWindowtitle>${project.name}
-                            ${project.version} (TEST API)
-                        </testWindowtitle>
-                        <splitindex>true</splitindex>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                        <links>
-                            <link>http://docs.oracle.com/javase/8/docs/api/</link>
-                        </links>
-                        <linksource>true</linksource>
-                        <detectOfflineLinks>false</detectOfflineLinks>
-                    </configuration>
-                </plugin>
-
-                <!-- Packaging: WAR -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>2.4</version>
-                    <configuration>
-                        <warSourceExcludes>
-                            WEB-INF/lib/*.jar
-                        </warSourceExcludes>
-                        <archive>
-                            <manifest>
-                                <addClasspath>true</addClasspath>
-                                <classpathPrefix>lib/</classpathPrefix>
-                            </manifest>
-                        </archive>
-                    </configuration>
-                    <!-- goal:war binds to phase:package -->
-                </plugin>
-
-
-                <!-- Runtime: jetty -->
-                <plugin>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>${jetty.version}</version>
-                    <configuration>
-                        <webAppConfig>
-                            <contextPath>webapp</contextPath>
-                        </webAppConfig>
-                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -1295,11 +1215,16 @@
 
 
             <!-- DataNucleus -->
-            <dependency>
-                <groupId>javax.jdo</groupId>
-                <artifactId>jdo-api</artifactId>
-                <version>${jdo-api.version}</version>
-            </dependency>
+<!--             <dependency> -->
+<!--                 <groupId>javax.jdo</groupId> -->
+<!--                 <artifactId>jdo-api</artifactId> -->
+<!--                 <version>${jdo-api.version}</version> -->
+<!--             </dependency> -->
+			<dependency>
+				<groupId>org.datanucleus</groupId>
+				<artifactId>javax.jdo</artifactId>
+				<version>${datanucleus-jdo-api.version}</version>
+			</dependency>
             <dependency>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-core</artifactId>

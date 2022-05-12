@@ -201,7 +201,7 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
         }
     }
 
-    public void postCommit(org.datanucleus.Transaction tx) {
+    public void postCommit(org.datanucleus.transaction.Transaction tx) {
         final Hint previous = hint.get();
         try {
             hint.set(Hint.POST_COMMIT);

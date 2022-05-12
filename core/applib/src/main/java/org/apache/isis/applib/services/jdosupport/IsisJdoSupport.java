@@ -24,9 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.jdo.PersistenceManager;
-
-import org.datanucleus.query.typesafe.BooleanExpression;
-import org.datanucleus.query.typesafe.TypesafeQuery;
+import javax.jdo.query.BooleanExpression;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -122,15 +120,15 @@ public interface IsisJdoSupport {
     @Programmatic
     <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression booleanExpression);
 
-    /**
-     * To support the execution of type-safe queries using DataNucleus' lower-level APIs
-     * (eg for group by and so on).
-     *
-     * <p>
-     *     Responsibility for cloning any result sets and closing the query is the responsibility
-     *     of the caller.
-     * </p>
-     */
-    @Programmatic
-    <T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls);
+//    /**
+//     * To support the execution of type-safe queries using DataNucleus' lower-level APIs
+//     * (eg for group by and so on).
+//     *
+//     * <p>
+//     *     Responsibility for cloning any result sets and closing the query is the responsibility
+//     *     of the caller.
+//     * </p>
+//     */
+//    @Programmatic
+//    <T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls);
 }

@@ -77,8 +77,8 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
     {
         Blob blob = ((Blob)value);
         if (blob == null) {
-            getDatastoreMapping(0).setString(preparedStmt, exprIndex[0], null);
-            getDatastoreMapping(1).setString(preparedStmt, exprIndex[1], null);
+        	getColumnMapping(0).setString(preparedStmt, exprIndex[0], null);
+        	getColumnMapping(1).setString(preparedStmt, exprIndex[1], null);
 
             // using:
             // getDatastoreMapping(2).setObject(preparedStmt, exprIndex[2], null);
@@ -90,9 +90,9 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
                 // ignore
             }
         } else {
-            getDatastoreMapping(0).setString(preparedStmt, exprIndex[0], blob.getName());
-            getDatastoreMapping(1).setString(preparedStmt, exprIndex[1], blob.getMimeType().getBaseType());
-            getDatastoreMapping(2).setObject(preparedStmt, exprIndex[2], blob.getBytes());
+        	getColumnMapping(0).setString(preparedStmt, exprIndex[0], blob.getName());
+        	getColumnMapping(1).setString(preparedStmt, exprIndex[1], blob.getMimeType().getBaseType());
+        	getColumnMapping(2).setObject(preparedStmt, exprIndex[2], blob.getBytes());
         }
     }
     
@@ -101,7 +101,7 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
         try
         {
             // Check for null entries
-            if (getDatastoreMapping(0).getObject(resultSet, exprIndex[0]) == null)
+            if (getColumnMapping(0).getObject(resultSet, exprIndex[0]) == null)
             {
                 return null;
             }
@@ -111,9 +111,9 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
             // Do nothing
         }
 
-        final String name = getDatastoreMapping(0).getString(resultSet, exprIndex[0]);
-        final String mimeTypeBase = getDatastoreMapping(1).getString(resultSet, exprIndex[1]);
-        final byte[] bytes = (byte[]) getDatastoreMapping(2).getObject(resultSet, exprIndex[2]);
+        final String name = getColumnMapping(0).getString(resultSet, exprIndex[0]);
+        final String mimeTypeBase = getColumnMapping(1).getString(resultSet, exprIndex[1]);
+        final byte[] bytes = (byte[]) getColumnMapping(2).getObject(resultSet, exprIndex[2]);
         if(name == null || mimeTypeBase == null || bytes == null) {
             return null;
         }

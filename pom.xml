@@ -30,8 +30,7 @@
 
 	<modules>
 		<module>core</module>
-<!-- 		<module>example/application/helloworld</module> -->
-<!-- 		<module>example/application/simpleapp</module> -->
+		<module>examples</module>
 	</modules>
 
 </project>

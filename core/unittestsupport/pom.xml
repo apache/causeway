@@ -59,12 +59,10 @@
             <artifactId>jmock-junit4</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo-api</artifactId>
-            <version>${jdo-api.version}</version>
-            <optional>true</optional>
-        </dependency>
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>javax.jdo</artifactId>
+		</dependency>
 
         <dependency>
             <groupId>org.javassist</groupId>

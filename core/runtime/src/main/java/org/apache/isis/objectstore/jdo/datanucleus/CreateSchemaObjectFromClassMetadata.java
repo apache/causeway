@@ -31,7 +31,6 @@ import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.enhancer.EnhancementNucleusContextImpl;
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.metadata.MetaDataListener;
-import org.datanucleus.store.encryption.ConnectionEncryptionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -181,25 +180,6 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Da
      */
     private String getConnectionPassword() {
     	String password = properties.get("javax.jdo.option.ConnectionPassword");
-        if (password != null)
-        {
-            String decrypterName = properties.get("datanucleus.ConnectionPasswordDecrypter");
-            if (decrypterName != null)
-            {
-                // Decrypt the password using the provided class
-                ClassLoaderResolver clr = new EnhancementNucleusContextImpl("JDO", properties).getClassLoaderResolver(null);
-                try
-                {
-                    Class decrypterCls = clr.classForName(decrypterName);
-                    ConnectionEncryptionProvider decrypter = (ConnectionEncryptionProvider) decrypterCls.newInstance();
-                    password = decrypter.decrypt(password);
-                }
-                catch (Exception e)
-                {
-                    LOG.warn("Error invoking decrypter class {}", decrypterName, e);
-                }
-            }
-        }
         return password;
 	}    
     //endregion
