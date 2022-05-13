@@ -152,11 +152,12 @@ extends ScalarPanelAbstract {
     /**
      * Output format (usually HTML) as String, for any non editing scenario.
      * <p>
-     * Usually HTML, except for (non-empty) text-areas.
+     * Usually HTML, except for (non-empty) text-areas or badges (that are already modeled in HTML).
      */
     protected String obtainOutputFormat() {
         return _Strings.nonEmpty(
                     isUsingTextarea()
+                    || getFormatModifiers().contains(FormatModifier.BADGE)
                         ? scalarModel().proposedValue().getValueAsTitle().getValue()
                         : scalarModel().proposedValue().getValueAsHtml().getValue())
                 .orElseGet(()->
