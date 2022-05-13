@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.specloader;
 
-import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -26,7 +25,6 @@ import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections.snapshot._VersionedList;
@@ -44,7 +42,7 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
     private final _VersionedList<T> vList = new _VersionedList<>();
 
     @Override
-    public Optional<T> lookup(Class<?> cls) {
+    public Optional<T> lookup(final Class<?> cls) {
         synchronized(this) {
             return Optional.ofNullable(specByClass.get(cls));
         }
@@ -52,8 +50,8 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
 
     @Override
     public T computeIfAbsent(
-            Class<?> cls,
-            Function<Class<?>, T> mappingFunction) {
+            final Class<?> cls,
+            final Function<Class<?>, T> mappingFunction) {
         synchronized(this) {
             T spec = specByClass.get(cls);
             if(spec==null) {
@@ -86,7 +84,7 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
     }
 
     @Override
-    public T remove(@NonNull Class<?> cls) {
+    public T remove(@NonNull final Class<?> cls) {
         synchronized(this) {
             final T removed = specByClass.remove(cls);
             if(removed!=null) {
@@ -98,19 +96,18 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
     }
 
     @Override
-    public void forEach(Consumer<T> onSpec, boolean shouldRunConcurrent) {
-        if(shouldRunConcurrent) {
-            vList.forEachParallel(onSpec);
-        } else {
-            vList
-                .stream().sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
-                .forEach(onSpec);
-        }
+    public void forEachConcurrent(final Consumer<T> onSpec) {
+        vList.forEachConcurrent(onSpec);
+    }
+
+    @Override
+    public void forEach(final Consumer<T> onSpec) {
+        vList.forEach(onSpec);
     }
 
     // -- HELPER
 
-    private void internalPut(@Nullable T spec) {
+    private void internalPut(@Nullable final T spec) {
         if(spec==null) {
             return;
         }

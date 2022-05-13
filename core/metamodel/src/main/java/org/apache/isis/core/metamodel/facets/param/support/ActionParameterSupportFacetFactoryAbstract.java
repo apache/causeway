@@ -82,6 +82,13 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
             val paramIndex = searchResult.getParamIndex();
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.getElseFail(paramIndex);
+
+            if(searchResult.getSupportingMethod().toString().endsWith(
+                    "HasCommunicationChannels_removeCommunicationChannel.choices0Act()")) {
+                System.err.printf("%s%n", searchResult.getSupportingMethod());
+                System.err.printf("\t%d: %s%n", paramIndex, paramAsHolder.getFeatureIdentifier().toString());
+            }
+
             onSearchResult(paramAsHolder, searchResult);
         });
 
