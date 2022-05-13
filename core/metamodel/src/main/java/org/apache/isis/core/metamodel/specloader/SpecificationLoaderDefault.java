@@ -434,8 +434,14 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     @Override
-    public void forEach(final Consumer<ObjectSpecification> onSpec, final boolean shouldRunConcurrent) {
-        cache.forEach(onSpec, shouldRunConcurrent);
+    public void forEach(final Consumer<ObjectSpecification> onSpec) {
+        val shouldRunConcurrent = isisConfiguration.getCore().getMetaModel().getValidator().isParallelize();
+        if(shouldRunConcurrent) {
+            cache.forEachConcurrent(onSpec);
+        } else {
+            cache.forEach(onSpec);
+        }
+
     }
 
     @Override
@@ -652,7 +658,5 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             spec = spec.superclass();
         }
     }
-
-
 
 }

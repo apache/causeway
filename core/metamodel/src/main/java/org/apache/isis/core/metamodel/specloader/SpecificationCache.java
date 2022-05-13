@@ -38,6 +38,7 @@ interface SpecificationCache<T extends ObjectSpecification> {
     /** @returns thread-safe defensive copy */
     Can<T> snapshotSpecs();
 
-    void forEach(Consumer<T> onSpec, boolean shouldRunConcurrent);
+    void forEach(Consumer<T> onSpec);
+    void forEachConcurrent(Consumer<T> onSpec);
 
 }
