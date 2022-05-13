@@ -23,12 +23,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
@@ -44,6 +38,11 @@ import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 /**
  * Initialize the {@link IsisSessionFactoryBuilder} when the web application starts, and
@@ -150,13 +149,6 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         }
 
 
-    }
-
-    private Injector createGuiceInjector(
-            final IsisConfigurationDefault isisConfiguration,
-            final DeploymentCategory deploymentCategory) {
-        final IsisInjectModule isisModule = new IsisInjectModule(deploymentCategory, isisConfiguration);
-        return Guice.createInjector(isisModule);
     }
 
     /**
