@@ -29,12 +29,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListExtensions;
@@ -59,6 +53,11 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class FacetedMethodsBuilder {
 
@@ -206,14 +205,14 @@ public class FacetedMethodsBuilder {
 
 
     public void introspectObjectSpecId() {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("introspecting {}: objectSpecId", getClassName());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("introspecting {}: objectSpecId", getClassName());
         }
         getFacetProcessor().processObjectSpecId(introspectedClass, spec);
     }
     public Properties introspectClass() {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("introspecting {}: class-level details", getClassName());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("introspecting {}: class-level details", getClassName());
         }
 
         // process facets at object level
