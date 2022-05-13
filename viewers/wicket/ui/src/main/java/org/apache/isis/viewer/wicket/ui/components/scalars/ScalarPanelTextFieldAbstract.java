@@ -134,27 +134,6 @@ extends ScalarPanelFormFieldAbstract<T> {
         return super.obtainOutputFormat();
     }
 
-//    protected class ToStringConvertingModel<X> extends Model<String> {
-//        private static final long serialVersionUID = 1L;
-//
-//        @NonNull private final IConverter<X> converter;
-//
-//        private ToStringConvertingModel(final @NonNull IConverter<X> converter) {
-//            this.converter = converter;
-//        }
-//
-//        @Override public String getObject() {
-//            val adapter = scalarModel().getObject();
-//            val value = ManagedObjects.UnwrapUtil.single(adapter);
-//            final String str = value != null
-//                    ? converter.convertToString(
-//                            _Casts.uncheckedCast(value),
-//                            getLanguageProvider().getPreferredLanguage().orElseGet(Locale::getDefault))
-//                    : null;
-//            return str;
-//        }
-//    }
-
     // -- HELPER
 
     <F extends FormComponent<?>> F applyFormComponentAttributes(final F formComponent) {

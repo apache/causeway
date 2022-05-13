@@ -122,9 +122,7 @@ extends ScalarPanelAbstract {
      * However, it may be overridden if required.
      */
     protected Component createComponentForOutput(final String id) {
-        if(getFormatModifiers().contains(FormatModifier.MULITLINE)
-                && !getFormatModifiers().contains(FormatModifier.MARKUP)
-                && !getRenderScenario().isCompact()) {
+        if(isUsingTextarea()) {
             return PromptFragment.TEXTAREA
                     .createFragment(id, this, scalarValueId->{
                         val textArea = Wkt.textAreaNoTab(scalarValueId, this::obtainOutputFormat);
@@ -141,12 +139,26 @@ extends ScalarPanelAbstract {
                         Wkt.markup(scalarValueId, this::obtainOutputFormat));
     }
 
+    private boolean isUsingTextarea() {
+        if(getRenderScenario().isCompact()
+                || getFormatModifiers().contains(FormatModifier.MARKUP)
+                || !getFormatModifiers().contains(FormatModifier.MULITLINE)) {
+            return false;
+        }
+        // only render a text-area if it has content
+        return !scalarModel().isEmpty();
+    }
+
     /**
      * Output format (usually HTML) as String, for any non editing scenario.
+     * <p>
+     * Usually HTML, except for (non-empty) text-areas.
      */
     protected String obtainOutputFormat() {
         return _Strings.nonEmpty(
-                    scalarModel().proposedValue().getValueAsHtml().getValue())
+                    isUsingTextarea()
+                        ? scalarModel().proposedValue().getValueAsTitle().getValue()
+                        : scalarModel().proposedValue().getValueAsHtml().getValue())
                 .orElseGet(()->
                     PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
     }

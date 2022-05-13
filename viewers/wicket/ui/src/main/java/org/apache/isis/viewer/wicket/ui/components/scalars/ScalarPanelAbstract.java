@@ -85,12 +85,12 @@ implements ScalarModelSubscriber {
     protected static final String ID_SCALAR_VALUE = "scalarValue";
 
     public enum FormatModifier {
-        READONLY,
+        //READONLY,
         MARKUP,
         MULITLINE,
         COMPOSITE,
         TRISTATE,
-        FLEX,
+        //FLEX,
         BLOB,
     }
 
