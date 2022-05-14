@@ -67,6 +67,14 @@ extends ObjectSpecificationPostProcessorAbstract {
 
         val paramAsHolder = param;
 
+        if(Optional.ofNullable(paramAsHolder.getFeatureIdentifier().getClassName()).orElse("")
+                .contains("HasCommunicationChannels_removeCommunicationChannel")) {
+            System.err.println("==ChoicesAndDefaultsPostProcessor");
+            System.err.printf("%s%n", paramAsHolder.getFeatureIdentifier());
+            System.err.printf("\t%d: %s%n", paramAsHolder.getParameterIndex(), paramAsHolder.getFeatureIdentifier().toString());
+            System.err.printf("\thasMemberLevelChoices: %b%n", hasMemberLevelChoices(param));
+        }
+
         if(!hasMemberLevelChoices(param)) {
             param.getElementType()
             .lookupNonFallbackFacet(ChoicesFacet.class)

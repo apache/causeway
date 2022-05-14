@@ -97,9 +97,10 @@ implements MixedInMember {
                     _MixedInMemberNamingStrategy.determineIdFrom(mixinAction)),
                 mixinAction.getFacetedMethod(), typeOfSpec(mixinAction));
 
-        this.facetHolder = FacetHolderAbstract.simple(
+        this.facetHolder = FacetHolderAbstract.wrapped(
                 mixeeSpec.getMetaModelContext(),
-                super.getFeatureIdentifier());
+                super.getFeatureIdentifier(),
+                mixinAction.getFacetedMethod());
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
@@ -111,14 +112,6 @@ implements MixedInMember {
         FacetUtil.addFacet(new SnapshotExcludeFacetAbstract(this) {});
         FacetUtil.addFacet(disabledFacet());
         FacetUtil.addFacet(new TypeOfFacetAbstract(getElementType().getCorrespondingClass(), this) {});
-
-        //
-        // in addition, copy over facets from contributed to own.
-        //
-        // These could include everything under @Collection(...) because the
-        // CollectionAnnotationFacetFactory is also run against actions.
-        //
-        FacetUtil.copyFacetsTo(mixinAction.getFacetedMethod(), facetHolder);
 
         // adjust name if necessary
         val isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.param.choices.methodnum;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
@@ -43,6 +45,14 @@ extends ActionParameterSupportFacetFactoryAbstract {
         val choicesMethod = searchResult.getSupportingMethod();
         val returnType = searchResult.getReturnType();
         val patConstructor = searchResult.getPatConstructor();
+
+        if(Optional.ofNullable(paramAsHolder.getFeatureIdentifier().getClassName()).orElse("")
+                .contains("HasCommunicationChannels_removeCommunicationChannel")) {
+            System.err.println("==ActionParameterChoicesFacetViaMethodFactory");
+            System.err.printf("%s%n", paramAsHolder.getFeatureIdentifier());
+            System.err.printf("\t%d: %s%n", paramAsHolder.getParamIndex(), paramAsHolder.getFeatureIdentifier().toString());
+        }
+
         addFacet(
                 new ActionParameterChoicesFacetViaMethod(
                         choicesMethod, returnType, patConstructor, paramAsHolder));

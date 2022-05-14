@@ -55,8 +55,9 @@ public interface Specification extends HasFacetHolder {
      * </li><li>for a {@link OneToManyAssociation collection} it will be the type of
      * element the collection holds (not the type of collection)
      * </li><li>for an {@link ObjectAction action} will return {@link ObjectAction#getReturnType()}
-     * </li><li>for an {@link ObjectActionParameter action parameter}, will return the type of
-     * the parameter
+     * </li><li>for an {@link ObjectActionParameter action parameter}, will return the element type of
+     * the parameter (this is the parameter type itself if scalar, otherwise the type of
+     * element the collection (non-scalar) parameter holds)
      * </li>
      * </ul>
      * @since 2.0

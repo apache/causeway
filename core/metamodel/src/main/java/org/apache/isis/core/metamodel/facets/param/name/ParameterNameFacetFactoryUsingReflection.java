@@ -68,7 +68,12 @@ extends FacetFactoryAbstract {
         val naturalName = StringExtensions.asNaturalName2(parameterName);
         val facetHolder = processParameterContext.getFacetHolder();
 
-
+        if(Optional.ofNullable(facetHolder.getFeatureIdentifier().getClassName()).orElse("")
+                .contains("HasCommunicationChannels_removeCommunicationChannel")) {
+            System.err.println("==ParameterNameFacetFactoryUsingReflection");
+            System.err.printf("%s%n", facetHolder.getFeatureIdentifier());
+            System.err.printf("\t%d: %s%n", facetHolder.getParamIndex(), facetHolder.getFeatureIdentifier().toString());
+        }
 
         FacetUtil.addFacet(
                 new NamedFacetForParameterUsingReflection(naturalName, facetHolder));
