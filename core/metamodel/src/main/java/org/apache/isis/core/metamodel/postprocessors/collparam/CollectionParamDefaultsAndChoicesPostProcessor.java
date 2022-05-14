@@ -32,35 +32,18 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class DeriveCollectionParamDefaultsAndChoicesPostProcessor
+public class CollectionParamDefaultsAndChoicesPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
     @Inject
-    public DeriveCollectionParamDefaultsAndChoicesPostProcessor(final MetaModelContext metaModelContext) {
+    public CollectionParamDefaultsAndChoicesPostProcessor(final MetaModelContext metaModelContext) {
         super(metaModelContext);
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
     }
 
     @Override
@@ -108,6 +91,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         });
     }
 
+    // -- HELPER
 
     private static void addCollectionParamDefaultsFacetIfNoneAlready(
             final ObjectActionParameter collectionParam) {
@@ -128,10 +112,8 @@ extends ObjectSpecificationPostProcessorAbstract {
                 scalarOrCollectionParam.containsNonFallbackFacet(ActionParameterAutoCompleteFacet.class)) {
             return;
         }
-
         FacetUtil.addFacet(new ActionParameterChoicesFacetFromParentedCollection(
                         scalarOrCollectionParam, otma));
     }
-
 
 }

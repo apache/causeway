@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProc
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -60,6 +59,11 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
     }
 
+    @Inject ServiceRegistry serviceRegistry;
+    @Inject UserService userService;
+    @Inject @Lazy ApplicationUserRepository userRepository;
+    @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
+
     @Inject
     public TenantedAuthorizationPostProcessor(final MetaModelContext metaModelContext) {
         super(metaModelContext);
@@ -76,11 +80,6 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
-        // no-op
-    }
-
-    @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
         addFacetTo(objectSpecification, prop);
     }
@@ -89,6 +88,8 @@ extends ObjectSpecificationPostProcessorAbstract {
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         addFacetTo(objectSpecification, coll);
     }
+
+    // -- HELPER
 
     private void addFacetTo(final ObjectSpecification specification, final ObjectFeature objectFeature) {
         FacetUtil.addFacetIfPresent(createFacet(specification.getCorrespondingClass(), objectFeature));
@@ -111,10 +112,5 @@ extends ObjectSpecificationPostProcessorAbstract {
                         queryResultsCacheProvider, userService,
                         holder));
     }
-
-    @Inject ServiceRegistry serviceRegistry;
-    @Inject UserService userService;
-    @Inject @Lazy ApplicationUserRepository userRepository;
-    @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
 
 }

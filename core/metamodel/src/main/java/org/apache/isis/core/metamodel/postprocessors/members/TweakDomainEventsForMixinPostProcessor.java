@@ -48,7 +48,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
@@ -61,11 +60,6 @@ extends ObjectSpecificationPostProcessorAbstract {
     @Inject
     public TweakDomainEventsForMixinPostProcessor(final MetaModelContext metaModelContext) {
         super(metaModelContext);
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification) {
-        // no-op
     }
 
     @Override
@@ -89,11 +83,6 @@ extends ObjectSpecificationPostProcessorAbstract {
                 }
             }
         }
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
-        // no-op
     }
 
     @Override
@@ -177,6 +166,5 @@ extends ObjectSpecificationPostProcessorAbstract {
             }
         }
     }
-
 
 }

@@ -18,8 +18,9 @@
  */
 package org.apache.isis.core.metamodel.postprocessors.object;
 
-import org.springframework.lang.Nullable;
 import javax.inject.Inject;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -32,18 +33,14 @@ import org.apache.isis.core.metamodel.facets.object.projection.ident.TitleFacetF
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
-public class DeriveProjectionFacetsPostProcessor
+public class ProjectionFacetsPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
     @Inject
-    public DeriveProjectionFacetsPostProcessor(final MetaModelContext metaModelContext) {
+    public ProjectionFacetsPostProcessor(final MetaModelContext metaModelContext) {
         super(metaModelContext);
     }
 
@@ -68,27 +65,12 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
     }
 
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
-    }
+    // -- HELPER
 
     private static boolean canOverwrite(final @Nullable Facet existingFacet) {
         return existingFacet == null
                 || existingFacet.getPrecedence().isFallback()
                 || existingFacet.getPrecedence().isInferred();
     }
-
 
 }

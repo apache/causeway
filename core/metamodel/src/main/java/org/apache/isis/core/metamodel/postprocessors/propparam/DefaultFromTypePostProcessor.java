@@ -16,41 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
+package org.apache.isis.core.metamodel.postprocessors.propparam;
 
 import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
+import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetFromDefaultedFacet;
+import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetFromTypeFactory;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.val;
 
-public class CssClassFaFacetOnMemberPostProcessor
+/**
+ * Installs {@link PropertyDefaultFacetFromTypeFactory} as a fallback.
+ */
+public class DefaultFromTypePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
     @Inject
-    public CssClassFaFacetOnMemberPostProcessor(final MetaModelContext mmc) {
-        super(mmc);
+    public DefaultFromTypePostProcessor(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
-
-        if(objectAction.isDeclaredOnMixin()) {
-            return; // don't process mixin main method, instead process its peer
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+        if(property.containsNonFallbackFacet(PropertyDefaultFacet.class)) {
+            return;
         }
-
-        val hasExplicitFaIcon = objectAction.containsNonFallbackFacet(CssClassFaFacet.class);
-
-        if(!hasExplicitFaIcon) {
-            FacetUtil.addFacetIfPresent(
-                    CssClassFaFacetOnMemberFromConfiguredRegex
-                    .create(objectSpecification, objectAction));
-        }
+        property.getElementType()
+        .lookupNonFallbackFacet(DefaultedFacet.class)
+        .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetFromDefaultedFacet(
+                                    specFacet, facetedMethodFor(property))));
     }
 
 }

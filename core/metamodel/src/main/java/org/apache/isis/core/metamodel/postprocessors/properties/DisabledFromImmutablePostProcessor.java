@@ -26,13 +26,11 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.object.immutable.EditingEnabledFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyFromImmutable;
+import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyFromImmutableFactory;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
@@ -41,16 +39,12 @@ import lombok.val;
 /**
  * Replaces {@link DisabledFacetOnPropertyFromImmutableFactory}
  */
-public class DeriveDisabledFromImmutablePostProcessor
+public class DisabledFromImmutablePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
     @Inject
-    public DeriveDisabledFromImmutablePostProcessor(final MetaModelContext metaModelContext) {
+    public DisabledFromImmutablePostProcessor(final MetaModelContext metaModelContext) {
         super(metaModelContext);
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification) {
     }
 
     @Override
@@ -58,10 +52,6 @@ extends ObjectSpecificationPostProcessorAbstract {
         // previously was also copying ImmutableFacet from spec onto Action (as for properties and collections ...
         // corresponds to CopyImmutableFacetOntoMembersFactory.  However, ImmutableFacet only ever disables for
         // properties and collections, so no point in copying over.
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
     }
 
     @Override
@@ -92,11 +82,5 @@ extends ObjectSpecificationPostProcessorAbstract {
                             .forImmutable(facetedMethodFor(property), immutableFacet));
         });
     }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
-
-    }
-
 
 }

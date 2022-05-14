@@ -86,18 +86,18 @@ import org.apache.isis.core.metamodel.facets.value.semantics.ValueSemanticsAnnot
 import org.apache.isis.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.all.DeriveDescribedAsFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.all.DescribedAsFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.collparam.DeriveCollectionParamDefaultsAndChoicesPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.collparam.CollectionParamDefaultsAndChoicesPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.members.navigation.DeriveNavigationFacetFromHiddenTypePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.object.DeriveProjectionFacetsPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromImmutablePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveChoicesFromExistingChoicesPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveDefaultFromTypePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveTypicalLengthFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.object.ProjectionFacetsPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.properties.DisabledFromImmutablePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.propparam.ChoicesFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.propparam.DefaultFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.propparam.TypicalLengthFromTypePostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
@@ -260,20 +260,20 @@ extends ProgrammingModelAbstract {
         // requires member names to have settled
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new CssClassFaFacetOnMemberPostProcessor(mmc));
 
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDescribedAsFromTypePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveTypicalLengthFromTypePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDefaultFromTypePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveChoicesFromExistingChoicesPostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDisabledFromImmutablePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveCollectionParamDefaultsAndChoicesPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DescribedAsFromTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TypicalLengthFromTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DefaultFromTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new ChoicesFromTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DisabledFromImmutablePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new CollectionParamDefaultsAndChoicesPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TweakDomainEventsForMixinPostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveProjectionFacetsPostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveNavigationFacetFromHiddenTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new ProjectionFacetsPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new NavigationFacetFromHiddenTypePostProcessor(mmc));
 
         // must be after all named facets and description facets have been installed
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TranslationPostProcessor(mmc));
 
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new AuthorizationFacetPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new AuthorizationPostProcessor(mmc));
     }
 
     private void addValidators() {

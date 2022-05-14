@@ -16,60 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.postprocessors.members.navigation;
+package org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization;
 
 import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.object.hidden.HiddenTypeFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-/**
- * Installs the {@link NavigationFacetFromHiddenType} on all of the
- * {@link ObjectMember}s of the {@link ObjectSpecification}.
- */
-public class DeriveNavigationFacetFromHiddenTypePostProcessor extends ObjectSpecificationPostProcessorAbstract {
+public class AuthorizationPostProcessor
+    extends ObjectSpecificationPostProcessorAbstract {
 
     @Inject
-    public DeriveNavigationFacetFromHiddenTypePostProcessor(final MetaModelContext metaModelContext) {
+    public AuthorizationPostProcessor(final MetaModelContext metaModelContext) {
         super(metaModelContext);
     }
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification) {
+        addFacet(objectSpecification);
     }
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
-        addFacetIfRequired(act, act.getReturnType());
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
+        addFacet(act);
     }
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
-        addFacetIfRequired(prop, prop.getElementType());
+        addFacet(prop);
     }
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
-        addFacetIfRequired(coll, coll.getElementType());
+        addFacet(coll);
     }
 
-    private static void addFacetIfRequired(final FacetHolder facetHolder, final ObjectSpecification navigatedType) {
-        if(navigatedType.containsNonFallbackFacet(HiddenTypeFacet.class)) {
-            FacetUtil.addFacet(new NavigationFacetFromHiddenType(facetHolder, navigatedType));
-        }
+    private static void addFacet(final FacetHolder facetHolder) {
+        facetHolder.addFacet(new AuthorizationFacetImpl(facetHolder));
     }
 
 }
