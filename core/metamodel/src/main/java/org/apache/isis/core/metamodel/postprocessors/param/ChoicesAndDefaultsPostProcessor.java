@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.postprocessors.propparam;
+package org.apache.isis.core.metamodel.postprocessors.param;
 
 import javax.inject.Inject;
 
@@ -34,8 +34,6 @@ import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyCh
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetFromDefaultedFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
-import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterChoicesFacetFromParentedCollection;
-import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -153,7 +151,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     private static boolean hasMemberLevelChoices(final OneToOneAssociation prop) {
-        return prop.containsNonFallbackFacet(PropertyDefaultFacet.class)
+        return prop.containsNonFallbackFacet(PropertyChoicesFacet.class)
                 || prop.containsNonFallbackFacet(PropertyAutoCompleteFacet.class);
     }
 
