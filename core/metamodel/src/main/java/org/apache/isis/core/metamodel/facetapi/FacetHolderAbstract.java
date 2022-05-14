@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -50,119 +49,6 @@ implements FacetHolder {
 
     public static FacetHolderAbstract simple(final MetaModelContext mmc, final Identifier featureIdentifier) {
         final FacetHolderAbstract facetHolder = new FacetHolderAbstract(mmc) {};
-        facetHolder.featureIdentifier = featureIdentifier;
-        return facetHolder;
-    }
-
-    public static FacetHolder wrapped(
-            final @NonNull MetaModelContext mmc,
-            final @NonNull Identifier featureIdentifier,
-            final @NonNull FacetHolder delegate) {
-        return new WrappedFacetHolder(mmc, featureIdentifier, delegate);
-    }
-
-    /**
-     * @see FacetHolderAbstract#wrapped(MetaModelContext, Identifier, FacetHolder)
-     */
-    @RequiredArgsConstructor
-    static class WrappedFacetHolder implements FacetHolder {
-
-        @Getter(onMethod_ = {@Override})
-        private final @NonNull MetaModelContext metaModelContext;
-        private final @NonNull Identifier featureIdentifierOverride;
-        private final @NonNull FacetHolder delegate;
-
-        @Override public Identifier getFeatureIdentifier() {
-            return featureIdentifierOverride; }
-        @Override public int getFacetCount() {
-            return delegate.getFacetCount(); }
-        @Override public <T extends Facet> T getFacet(final Class<T> facetType) {
-            return delegate.getFacet(facetType); }
-        @Override public boolean containsFacet(final Class<? extends Facet> facetType) {
-            return delegate.containsFacet(facetType); }
-        @Override public Stream<Facet> streamFacets() {
-            return delegate.streamFacets(); }
-        @Override public Stream<FacetRanking> streamFacetRankings() {
-            return delegate.streamFacetRankings(); }
-        @Override public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
-            return delegate.getFacetRanking(facetType); }
-        @Override public void addFacet(final @NonNull Facet facet) {
-            delegate.addFacet(facet);
-        }
-
-    }
-
-    /**
-     * @see FacetHolderAbstract#layered(MetaModelContext, Identifier, FacetHolder)
-     */
-    static class LayeredFacetHolder extends FacetHolderAbstract {
-
-        private final @NonNull FacetHolder parentLayer;
-
-        private LayeredFacetHolder(final MetaModelContext metaModelContext, final FacetHolder parentLayer) {
-            super(metaModelContext);
-            this.parentLayer = parentLayer;
-        }
-
-        @Override
-        public int getFacetCount() {
-            // cannot simply add up this and parent
-            return (int)streamFacets().count();
-        }
-
-        @Override
-        public <T extends Facet> T getFacet(final Class<T> facetType) {
-            return Optional.ofNullable(super.getFacet(facetType))
-                    .orElse(parentLayer.getFacet(facetType));
-        }
-
-        @Override
-        public boolean containsFacet(final Class<? extends Facet> facetType) {
-            return super.containsFacet(facetType)
-                    || parentLayer.containsFacet(facetType);
-        }
-
-        @Override
-        public Stream<Facet> streamFacets() {
-            val localFacetTypes = new HashSet<Class<? extends Facet>>();
-            return Stream.concat(
-                    super.streamFacets()
-                    .peek(facet->localFacetTypes.add(facet.facetType()))
-                    ,
-                    parentLayer.streamFacets()
-                    .filter(facet->!localFacetTypes.contains(facet.facetType())));
-        }
-
-        @Override
-        public Stream<FacetRanking> streamFacetRankings() {
-            val localFacetTypes = new HashSet<Class<? extends Facet>>();
-            return Stream.concat(
-                    super.streamFacetRankings()
-                    .peek(ranking->localFacetTypes.add(ranking.facetType()))
-                    ,
-                    parentLayer.streamFacetRankings()
-                    .filter(ranking->!localFacetTypes.contains(ranking.facetType())));
-        }
-
-        @Override
-        public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
-            return Optional.ofNullable(super.getFacetRanking(facetType))
-                    .orElse(parentLayer.getFacetRanking(facetType));
-        }
-
-    }
-
-    /**
-     * Adds a new (transparent) layer on top of the {@code parentLayer}.
-     * <p>
-     * Facets can be added to this holder, while not affecting its parent.
-     * However, the parent acts as a fallback for {@link Facet} lookups.
-     */
-    private static FacetHolder layered(
-            final @NonNull MetaModelContext mmc,
-            final @NonNull Identifier featureIdentifier,
-            final @NonNull FacetHolder parentLayer) {
-        val facetHolder = new LayeredFacetHolder(mmc, parentLayer);
         facetHolder.featureIdentifier = featureIdentifier;
         return facetHolder;
     }
@@ -260,8 +146,6 @@ implements FacetHolder {
         });
         return snapshot;
     }
-
-
 
 
 }

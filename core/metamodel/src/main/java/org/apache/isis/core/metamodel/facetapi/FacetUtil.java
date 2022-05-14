@@ -26,11 +26,13 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.metamodel.util.snapshot.XmlSchema;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+//@UtilityClass XXX lombok issue, cannot use here
 public final class FacetUtil {
 
     /**
@@ -38,7 +40,7 @@ public final class FacetUtil {
      * @param facet - non-null
      * @return the argument as is
      */
-    public <F extends Facet> F addFacet(final @NonNull F facet) {
+    public static <F extends Facet> F addFacet(final @NonNull F facet) {
         facet.getFacetHolder().addFacet(facet);
         return facet;
     }
@@ -49,7 +51,7 @@ public final class FacetUtil {
      * @param facetIfAny - null-able (for fail-safety)
      * @return the argument as is - or just in case if null converted to an Optional.empty()
      */
-    public <F extends Facet> Optional<F> addFacetIfPresent(final @Nullable Optional<F> facetIfAny) {
+    public static <F extends Facet> Optional<F> addFacetIfPresent(final @Nullable Optional<F> facetIfAny) {
         if (facetIfAny == null) {
             return Optional.empty();
         }
@@ -64,7 +66,7 @@ public final class FacetUtil {
      *
      * @return whether given {@code facetList} contains any non-<tt>null</tt> facets
      */
-    public boolean addFacets(final @NonNull Iterable<Facet> facetList) {
+    public static boolean addFacets(final @NonNull Iterable<Facet> facetList) {
         boolean addedFacets = false;
         for (val facet : facetList) {
             addedFacets = addFacetIfPresent(Optional.ofNullable(facet)).isPresent()
@@ -73,7 +75,7 @@ public final class FacetUtil {
         return addedFacets;
     }
 
-    public <T extends Facet> XmlSchema.ExtensionData<T> getFacetsByType(final FacetHolder facetHolder) {
+    public static <T extends Facet> XmlSchema.ExtensionData<T> getFacetsByType(final FacetHolder facetHolder) {
 
         return new XmlSchema.ExtensionData<T>() {
 
@@ -92,13 +94,18 @@ public final class FacetUtil {
         };
     }
 
+//    public static void copyFacetsTo(final FacetHolder source, final FacetHolder target) {
+//        source.streamFacets()
+//        .forEach(target::addFacet);
+//    }
+
     // -- DYNAMIC UPDATE SUPPORT
 
     /**
      * Removes any facet that matches the facet's java class from its FacetHolder,
      * then adds the facet to the facetHolder.
      */
-    public <F extends Facet> void updateFacet(
+    public static <F extends Facet> void updateFacet(
             final @NonNull F facet) {
 
         purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.getFacetHolder());
@@ -109,7 +116,7 @@ public final class FacetUtil {
      * Removes any facet of facet-type from facetHolder if it passes the given filter,
      * then if present adds facetIfAny to the facetHolder.
      */
-    public <F extends Facet> void updateFacet(
+    public static <F extends Facet> void updateFacet(
             final @NonNull Class<F> facetType,
             final @NonNull Predicate<? super F> filter,
             final @NonNull Optional<? extends F> facetIfAny,
@@ -122,7 +129,7 @@ public final class FacetUtil {
     /**
      * Removes any facet of facet-type from facetHolder if it passes the given filter.
      */
-    public <F extends Facet> void purgeIf(
+    public static <F extends Facet> void purgeIf(
             final Class<F> facetType,
             final Predicate<? super F> filter,
             final FacetHolder facetHolder) {

@@ -24,8 +24,12 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -118,5 +122,50 @@ public interface FacetHolder extends HasMetaModelContext {
 
     Stream<FacetRanking> streamFacetRankings();
     Optional<FacetRanking> getFacetRanking(Class<? extends Facet> facetType);
+
+    // -- WRAPPER
+
+    /**
+     * Adds a transparent facade onto given delegate,
+     * only overriding the {@link FacetHolder#getFeatureIdentifier()}.
+     * <p>
+     * Used by mixed in members.
+     */
+    public static FacetHolder wrapped(
+            final @NonNull MetaModelContext mmc,
+            final @NonNull Identifier featureIdentifier,
+            final @NonNull FacetHolder delegate) {
+        return new WrappedFacetHolder(mmc, featureIdentifier, delegate);
+    }
+
+    /**
+     * @see FacetHolder#wrapped(MetaModelContext, Identifier, FacetHolder)
+     */
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    static class WrappedFacetHolder implements FacetHolder {
+
+        @Getter(onMethod_ = {@Override})
+        private final @NonNull MetaModelContext metaModelContext;
+        private final @NonNull Identifier featureIdentifierOverride;
+        private final @NonNull FacetHolder delegate;
+
+        @Override public Identifier getFeatureIdentifier() {
+            return featureIdentifierOverride; }
+        @Override public int getFacetCount() {
+            return delegate.getFacetCount(); }
+        @Override public <T extends Facet> T getFacet(final Class<T> facetType) {
+            return delegate.getFacet(facetType); }
+        @Override public boolean containsFacet(final Class<? extends Facet> facetType) {
+            return delegate.containsFacet(facetType); }
+        @Override public Stream<Facet> streamFacets() {
+            return delegate.streamFacets(); }
+        @Override public Stream<FacetRanking> streamFacetRankings() {
+            return delegate.streamFacetRankings(); }
+        @Override public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
+            return delegate.getFacetRanking(facetType); }
+        @Override public void addFacet(final @NonNull Facet facet) {
+            delegate.addFacet(facet);
+        }
+    }
 
 }
