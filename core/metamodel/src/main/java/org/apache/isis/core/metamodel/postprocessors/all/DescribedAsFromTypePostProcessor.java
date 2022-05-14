@@ -54,13 +54,13 @@ extends ObjectSpecificationPostProcessorAbstract {
                 DescribedAsFacetOnMemberFromType
                 .create(
                         specFacet,
-                        facetedMethodFor(objectAction))));
+                        objectAction)));
     }
 
     @Override
     protected void doPostProcess(
-            final ObjectSpecification objectSpecification, 
-            final ObjectAction objectAction, 
+            final ObjectSpecification objectSpecification,
+            final ObjectAction objectAction,
             final ObjectActionParameter parameter) {
         if(parameter.containsNonFallbackFacet(ParamDescribedFacet.class)) {
             return;
@@ -94,7 +94,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         .lookupNonFallbackFacet(ObjectDescribedFacet.class)
         .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(
                 DescribedAsFacetOnMemberFromType
-                .create(specFacet, facetedMethodFor(objectAssociation))));
+                .create(specFacet, objectAssociation)));
     }
 
 }

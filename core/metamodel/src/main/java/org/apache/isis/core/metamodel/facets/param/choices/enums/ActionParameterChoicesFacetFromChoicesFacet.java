@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.facets.param.choices.enums;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.Specification;
 
 public class ActionParameterChoicesFacetFromChoicesFacet
 extends ActionParameterChoicesFacetAbstract {
@@ -43,9 +43,8 @@ extends ActionParameterChoicesFacetAbstract {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final FacetHolder facetHolder = getFacetHolder();
-        final TypedHolder paramPeer = (TypedHolder) facetHolder;
-        final ObjectSpecification noSpec = specForTypeElseFail(paramPeer.getType());
-        final ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
+        final Specification paramPeer = (Specification) facetHolder;
+        final ChoicesFacet choicesFacet = paramPeer.getElementType().getFacet(ChoicesFacet.class);
         if (choicesFacet == null) {
             return Can.empty();
         }

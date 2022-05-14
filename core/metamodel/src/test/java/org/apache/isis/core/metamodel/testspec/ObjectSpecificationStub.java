@@ -79,7 +79,12 @@ implements ObjectSpecification {
     private final String name;
 
     @Override
-    public FacetHolder getFacetHolder() {
+    public final FacetHolder getFacetHolder() {
+        return this;
+    }
+
+    @Override
+    public final ObjectSpecification getElementType() {
         return this;
     }
 

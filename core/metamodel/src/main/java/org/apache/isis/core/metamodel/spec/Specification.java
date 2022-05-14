@@ -20,9 +20,13 @@ package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
  * Base interface for elements of the metamodel.
@@ -39,5 +43,24 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 public interface Specification extends HasFacetHolder {
 
     FeatureType getFeatureType();
+
+    /**
+     * The element specification of the associated type.
+     * <ul>
+     * <li>for any {@link ObjectSpecification type}, will return itself,
+     * unless a {@link TypeOfFacet} is present
+     * </li>
+     * <li>for a {@link OneToOneAssociation property}, will return the
+     * {@link ObjectSpecification} of the type that the <i>getter</i> returns
+     * </li><li>for a {@link OneToManyAssociation collection} it will be the type of
+     * element the collection holds (not the type of collection)
+     * </li><li>for an {@link ObjectAction action} will return {@link ObjectAction#getReturnType()}
+     * </li><li>for an {@link ObjectActionParameter action parameter}, will return the type of
+     * the parameter
+     * </li>
+     * </ul>
+     * @since 2.0
+     */
+    ObjectSpecification getElementType();
 
 }

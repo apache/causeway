@@ -26,7 +26,6 @@ import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 
 import lombok.val;
@@ -145,22 +144,6 @@ public interface ObjectFeature extends Specification {
                 : getCanonicalDescription()
                     .map(Either::right);
     }
-
-    /**
-     * The specification of the associated type.
-     * <ul>
-     * <li>for a {@link OneToOneAssociation property}, will return the
-     * {@link ObjectSpecification} of the type that the <i>getter</i> returns.
-     * <li>for a {@link OneToManyAssociation collection} it will be the type of
-     * element the collection holds (not the type of collection).
-     * <li>for an {@link ObjectAction action} will return {@link ObjectAction#getReturnType()}.
-     * <li>for an {@link ObjectActionParameter action parameter}, will return the type of
-     * the parameter.
-     * </ul>
-     * @since 2.0
-     */
-    ObjectSpecification getElementType();
-
 
     /**
      * Returns a flag indicating if it can be left unset when the action can be

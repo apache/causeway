@@ -19,19 +19,15 @@
 package org.apache.isis.core.metamodel.postprocessors;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class ObjectSpecificationPostProcessorAbstract
 implements ObjectSpecificationPostProcessor {
@@ -72,11 +68,5 @@ implements ObjectSpecificationPostProcessor {
     protected void doPostProcess(final ObjectSpecification objSpec, final ObjectAction act, final ObjectActionParameter param) {};
     protected void doPostProcess(final ObjectSpecification objSpec, final OneToOneAssociation prop) {};
     protected void doPostProcess(final ObjectSpecification objSpec, final OneToManyAssociation coll) {};
-
-    protected static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
-        // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
-        val objectMemberImpl = (ObjectMemberAbstract) objectMember;
-        return objectMemberImpl.getFacetedMethod();
-    }
 
 }

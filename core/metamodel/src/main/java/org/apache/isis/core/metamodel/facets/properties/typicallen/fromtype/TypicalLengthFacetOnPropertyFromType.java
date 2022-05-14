@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
@@ -38,15 +37,15 @@ extends TypicalLengthFacetAbstract {
      */
     public static TypicalLengthFacetOnPropertyFromType createWhilePostprocessing(
             final TypicalLengthFacet typicalLengthFacet,
-            final FacetedMethod peer) {
+            final FacetHolder facetHolder) {
 
-        final int numberOfLines = peer.lookupFacet(MultiLineFacet.class)
+        final int numberOfLines = facetHolder.lookupFacet(MultiLineFacet.class)
                 .map(MultiLineFacet::numberOfLines)
                 .orElse(1);
         final int typicalLength = numberOfLines * typicalLengthFacet.value();
 
         return new TypicalLengthFacetOnPropertyFromType(
-                typicalLength, typicalLengthFacet, peer);
+                typicalLength, typicalLengthFacet, facetHolder);
     }
 
     // -- FIELDS

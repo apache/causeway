@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -35,10 +34,10 @@ extends DisabledFacetAbstract {
     // -- FACTORY
 
     public static DisabledFacetOnPropertyFromImmutable forImmutable(
-            final @NonNull FacetedMethod facetedMethodFor,
+            final @NonNull FacetHolder facetHolder,
             final @NonNull ImmutableFacet immutableFacet) {
 
-        return new DisabledFacetOnPropertyFromImmutable(facetedMethodFor, immutableFacet);
+        return new DisabledFacetOnPropertyFromImmutable(facetHolder, immutableFacet);
     }
 
     // -- FIELDS

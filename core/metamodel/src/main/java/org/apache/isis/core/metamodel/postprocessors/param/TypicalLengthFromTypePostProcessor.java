@@ -69,7 +69,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             .ifPresent(typicalLengthFacet ->
                     FacetUtil.addFacet(
                             TypicalLengthFacetOnPropertyFromType
-                            .createWhilePostprocessing(typicalLengthFacet, facetedMethodFor(property))));
+                            .createWhilePostprocessing(typicalLengthFacet, property)));
 
     }
 

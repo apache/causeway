@@ -67,8 +67,6 @@ extends ObjectSpecificationPostProcessorAbstract {
 
         val paramAsHolder = param;
 
-
-
         if(!hasMemberLevelChoices(param)) {
             param.getElementType()
             .lookupNonFallbackFacet(ChoicesFacet.class)
@@ -85,13 +83,13 @@ extends ObjectSpecificationPostProcessorAbstract {
             prop.getElementType()
             .lookupNonFallbackFacet(DefaultedFacet.class)
             .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetFromDefaultedFacet(
-                                        specFacet, facetedMethodFor(prop))));
+                                        specFacet, prop)));
         }
         if(!hasMemberLevelChoices(prop)) {
             prop.getElementType()
             .lookupNonFallbackFacet(ChoicesFacet.class)
             .ifPresent(specFacet -> FacetUtil
-                    .addFacet(new PropertyChoicesFacetFromChoicesFacet(facetedMethodFor(prop))));
+                    .addFacet(new PropertyChoicesFacetFromChoicesFacet(prop)));
         }
     }
 
