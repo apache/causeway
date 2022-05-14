@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
@@ -76,6 +77,11 @@ implements ObjectSpecification {
     private ObjectSpecification elementSpecification;
     private final Class<?> correspondingClass;
     private final String name;
+
+    @Override
+    public FacetHolder getFacetHolder() {
+        return this;
+    }
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {

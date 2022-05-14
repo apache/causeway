@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * Introduces so that viewers can deal with abstract Instances of said.
  *
  */
-public interface Specification extends FacetHolder {
+public interface Specification extends HasFacetHolder {
 
     FeatureType getFeatureType();
 
