@@ -53,7 +53,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             .ifPresent(typicalLengthFacet ->
                     FacetUtil.addFacet(
                             TypicalLengthFacetOnParameterFromType
-                            .createWhilePostprocessing(typicalLengthFacet, peerFor(parameter))));
+                            .createWhilePostprocessing(typicalLengthFacet, parameter)));
     }
 
     @Override

@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
@@ -127,6 +128,10 @@ implements ObjectSpecification {
         }
     }
 
+    @Override
+    public FacetHolder getFacetHolder() {
+        return this;
+    }
 
     // -- FIELDS
 
