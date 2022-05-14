@@ -48,14 +48,8 @@ public class TreePanelFactories {
             if (!(model instanceof ScalarModel)) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
-
             final ScalarModel scalarModel = (ScalarModel) model;
-
-            if(!scalarModel.isScalarTypeSubtypeOf(org.apache.isis.applib.graph.tree.TreeNode.class)) {
-                return ApplicationAdvice.DOES_NOT_APPLY;
-            }
-
-            return appliesIf( !scalarModel.hasChoices() );
+            return appliesIf(scalarModel.isScalarTypeSubtypeOf(org.apache.isis.applib.graph.tree.TreeNode.class));
         }
 
         @Override

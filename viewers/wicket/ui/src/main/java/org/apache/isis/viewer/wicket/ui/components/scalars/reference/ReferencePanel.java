@@ -132,7 +132,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
             settings.setMinimumInputLength(minLength);
             settings.setPlaceholder(scalarModel.getFriendlyName());
 
-        } else if(hasObjectAutoComplete()) {
+        } else if(hasObjectAutoComplete(scalarModel)) {
             Facets.autoCompleteMinLength(scalarModel.getScalarTypeSpec())
             .ifPresent(settings::setMinimumInputLength);
         }
@@ -316,18 +316,20 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     // -- HELPERS
 
     private boolean isEditableWithEitherAutoCompleteOrChoices() {
-        if(getModel().getRenderingHint().isInTable()) {
+        val scalarModel = scalarModel();
+
+        if(scalarModel.getRenderingHint().isInTable()) {
             return false;
         }
         // doesn't apply if not editable, either
-        if(getModel().isViewMode()) {
+        if(scalarModel.isViewMode()) {
             return false;
         }
-        return getModel().hasChoices() || getModel().hasAutoComplete() || hasObjectAutoComplete();
+        return scalarModel.hasChoices() || scalarModel.hasAutoComplete() || hasObjectAutoComplete(scalarModel);
     }
 
-    private boolean hasObjectAutoComplete() {
-        return Facets.autoCompleteIsPresent(scalarModel().getScalarTypeSpec());
+    private boolean hasObjectAutoComplete(final ScalarModel scalarModel) {
+        return Facets.autoCompleteIsPresent(scalarModel.getScalarTypeSpec());
     }
 
 }

@@ -59,6 +59,7 @@ extends ComponentFactoryAbstract {
         if(!scalarModel.isScalarTypeAnyOf(scalarTypes)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
+        // if has choices, handled by select2 panels instead
         // autoComplete not supported on values, only references
         return appliesIf( !(scalarModel.hasChoices()
                 /*|| scalarModel.hasAutoComplete()*/) );

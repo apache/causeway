@@ -196,7 +196,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         if (choiceAdapters == null || choiceAdapters.isEmpty()) {
             return null;
         }
-        final List<Object> list = _Lists.newArrayList();
+        final List<Object> list = _Lists.newArrayList(choiceAdapters.size());
         for (val choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = objectMember.getSpecification();

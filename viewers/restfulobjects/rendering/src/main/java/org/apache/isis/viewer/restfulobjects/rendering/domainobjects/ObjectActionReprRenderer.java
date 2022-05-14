@@ -163,12 +163,11 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     private Object choicesFor(
             final ManagedParameter paramMod,
             final ParameterNegotiationModel paramNeg) {
-        val paramMeta = paramMod.getMetaModel();
-        val choiceAdapters = paramMeta.getChoices(paramNeg, getInteractionInitiatedBy());
+        val choiceAdapters = paramMod.getMetaModel().getChoices(paramNeg, getInteractionInitiatedBy());
         if (choiceAdapters == null || choiceAdapters.isEmpty()) {
             return null;
         }
-        final List<Object> list = _Lists.newArrayList();
+        final List<Object> list = _Lists.newArrayList(choiceAdapters.size());
         for (val choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = param.getSpecification();

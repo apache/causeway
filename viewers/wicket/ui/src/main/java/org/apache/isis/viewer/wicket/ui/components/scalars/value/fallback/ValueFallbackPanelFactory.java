@@ -49,6 +49,7 @@ extends ComponentFactoryScalarAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final boolean hasChoices = scalarModel.hasChoices();
+        // if has choices, handled by select2 panels instead
         // autoComplete not supported on values, only references
         // final boolean hasAutoComplete = scalarModel.hasAutoComplete();
         return appliesIf( !(hasChoices /*|| hasAutoComplete*/) );

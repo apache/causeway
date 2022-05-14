@@ -48,6 +48,8 @@ extends ChoiceProvider<ObjectMemento> {
 
     private static final long serialVersionUID = 1L;
 
+    /** arbitrary String, that is expected not to collide by chance with actual Strings used
+     * (at least not in this universe) */
     protected static final String NULL_PLACEHOLDER = "VGN6r6zKTiLhUsA0WkdQ17LvMU1IYdb0";
 
     @Getter private final ScalarModel scalarModel;
