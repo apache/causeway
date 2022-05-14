@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
@@ -375,26 +376,18 @@ implements HasMetaModelContext{
             final MethodRemover methodRemover,
             final FacetedMethodParameter facetedMethodParameter) {
 
-        for (val featureType : FeatureType.PARAMETERS_ONLY) {
-            processParams(introspectedClass, introspectionPolicy, method, methodRemover, facetedMethodParameter, featureType);
-        }
-    }
-
-    public void processParams(
-            final Class<?> introspectedClass,
-            final IntrospectionPolicy introspectionPolicy,
-            final Method method,
-            final MethodRemover methodRemover,
-            final FacetedMethodParameter facetedMethodParameter,
-            final FeatureType featureType) {
-
         val processParameterContext =
-                new ProcessParameterContext(introspectedClass, introspectionPolicy, method, methodRemover, facetedMethodParameter);
+                new ProcessParameterContext(introspectedClass, introspectionPolicy,
+                        method, methodRemover, facetedMethodParameter);
 
-        factoryListByFeatureType.get().getOrElseEmpty(featureType)
+        val factoryCache = factoryListByFeatureType.get();
+
+        FeatureType.PARAMETERS_ONLY.stream()
+        .map(factoryCache::getOrElseEmpty)
+        .flatMap(List::stream)
+        .collect(Collectors.toSet())
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
     }
-
 
     private void clearCaches() {
         factoryListByFeatureType.clear();
