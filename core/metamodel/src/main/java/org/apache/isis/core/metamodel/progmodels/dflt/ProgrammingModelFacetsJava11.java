@@ -90,13 +90,11 @@ import org.apache.isis.core.metamodel.postprocessors.all.DescribedAsFromTypePost
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.collparam.CollectionParamDefaultsAndChoicesPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.object.ProjectionFacetsPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.properties.DisabledFromImmutablePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.ChoicesFromTypePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.DefaultFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.propparam.ChoicesAndDefaultsPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.propparam.TypicalLengthFromTypePostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -262,10 +260,8 @@ extends ProgrammingModelAbstract {
 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DescribedAsFromTypePostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TypicalLengthFromTypePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DefaultFromTypePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new ChoicesFromTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new ChoicesAndDefaultsPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DisabledFromImmutablePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new CollectionParamDefaultsAndChoicesPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TweakDomainEventsForMixinPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new ProjectionFacetsPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new NavigationFacetFromHiddenTypePostProcessor(mmc));

@@ -38,6 +38,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.memento.ActionParameterMemento;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 /**
  * Analogous to {@link ObjectAssociation}.
@@ -175,75 +177,52 @@ extends ObjectFeature, CurrentHolder {
             InteractionInitiatedBy interactionInitiatedBy);
 
     @Vetoed
+    @UtilityClass
     public static class Predicates {
-        private Predicates(){}
 
         /**
          * A predicate for action parameters that checks that the parameter collection element type
          * is the same as assignable (that is, the same or a supertype of, supporting co-variance) the
          * {@link ObjectSpecification element type} provided in the constructor.
-         *
          * <p>
-         *     For example, a parented collection of <tt>LeaseTerm</tt>s provides an elementSpec of <tt>LeaseTerm</tt>
-         *     into the constructor.  An action with signature <tt>removeTerms(List&lt;LeaseTerm>)</tt> would match on
-         *     its (first) parameter.
-         * </p>
-         *
+         * For example, a parented collection of <tt>LeaseTerm</tt>s provides an elementSpec of <tt>LeaseTerm</tt>
+         * into the constructor.  An action with signature <tt>removeTerms(List&lt;LeaseTerm>)</tt> would match on
+         * its (first) parameter.
          * <p>
-         *     For example, a parented collection of <tt>LeaseTermForServiceCharge</tt>s provides an elementSpec
-         *     of <tt>LeaseTermForServiceCharge</tt> into the constructor.  An action with signature
-         *     <tt>removeTerms(List&lt;LeaseTerm>)</tt> would match on its (first) parameter.
-         * </p>
+         * For example, a parented collection of <tt>LeaseTermForServiceCharge</tt>s provides an elementSpec
+         * of <tt>LeaseTermForServiceCharge</tt> into the constructor.  An action with signature
+         * <tt>removeTerms(List&lt;LeaseTerm>)</tt> would match on its (first) parameter.
          */
-        public static class CollectionParameter implements Predicate<ObjectActionParameter> {
+        @RequiredArgsConstructor
+        public class CollectionParameter implements Predicate<ObjectActionParameter> {
 
-            private final ObjectSpecification elementSpecification;
-
-            public CollectionParameter(final ObjectSpecification elementSpecification) {
-                this.elementSpecification = elementSpecification;
-            }
+            private final @NonNull ObjectSpecification elementType;
 
             @Override
             public boolean test(final @Nullable ObjectActionParameter objectActionParameter) {
-                if (!(objectActionParameter instanceof OneToManyActionParameter)) {
-                    return false;
-                }
-
-                final OneToManyActionParameter otmap =
-                        (OneToManyActionParameter) objectActionParameter;
-                final ObjectSpecification paramElementSpecification = otmap.getElementType();
-                return this.elementSpecification.isOfType(paramElementSpecification);
+                return objectActionParameter instanceof OneToManyActionParameter
+                        && elementType.isOfType(objectActionParameter.getElementType());
             }
         }
 
         /**
          * A predicate for action parameters that checks that the parameter collection element type
-         * is exactly the same as the {@link ObjectSpecification element type} (no co/contra-variance) provided in the constructor.
-         *
+         * is exactly the same as the {@link ObjectSpecification element type} (no co/contra-variance)
+         * provided in the constructor.
          * <p>
-         *     For example, a parented collection of <tt>LeaseTerm</tt>s provides an elementSpec of <tt>LeaseTerm</tt>
-         *     into the constructor.  An action with signature <tt>addTerm(LeaseTerm)</tt> would match on
-         *     its (first) parameter.
-         * </p>
+         * For example, a parented collection of <tt>LeaseTerm</tt>s provides an elementSpec of <tt>LeaseTerm</tt>
+         * into the constructor.  An action with signature <tt>addTerm(LeaseTerm)</tt> would match on
+         * its (first) parameter.
          */
-        public static class ScalarParameter implements Predicate<ObjectActionParameter> {
+        @RequiredArgsConstructor
+        public class ScalarParameter implements Predicate<ObjectActionParameter> {
 
-            private final ObjectSpecification specification;
-
-            public ScalarParameter(final ObjectSpecification specification) {
-                this.specification = specification;
-            }
+            private final @NonNull ObjectSpecification elementType;
 
             @Override
             public boolean test(final @Nullable ObjectActionParameter objectActionParameter) {
-                if (!(objectActionParameter instanceof OneToOneActionParameter)) {
-                    return false;
-                }
-
-                final OneToOneActionParameter otoap =
-                        (OneToOneActionParameter) objectActionParameter;
-                final ObjectSpecification paramSecification = otoap.getElementType();
-                return paramSecification == this.specification;
+                return objectActionParameter instanceof OneToOneActionParameter
+                        && elementType == objectActionParameter.getElementType();
             }
         }
     }
