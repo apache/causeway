@@ -93,9 +93,9 @@ import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.A
 import org.apache.isis.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.object.ProjectionFacetsPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.param.ChoicesAndDefaultsPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.param.TypicalLengthFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.properties.DisabledFromImmutablePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.ChoicesAndDefaultsPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.TypicalLengthFromTypePostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;

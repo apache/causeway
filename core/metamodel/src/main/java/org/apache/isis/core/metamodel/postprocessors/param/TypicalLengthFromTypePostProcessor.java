@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.postprocessors.propparam;
+package org.apache.isis.core.metamodel.postprocessors.param;
 
 import javax.inject.Inject;
 

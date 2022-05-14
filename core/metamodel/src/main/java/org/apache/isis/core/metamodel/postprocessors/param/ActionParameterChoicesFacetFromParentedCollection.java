@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.postprocessors.collparam;
+package org.apache.isis.core.metamodel.postprocessors.param;
 
 import java.util.function.BiConsumer;
 
