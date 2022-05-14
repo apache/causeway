@@ -32,6 +32,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Introspection.MemberAnnotationPolicy;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -50,6 +57,7 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterChoicesFacetFromParentedCollection;
 import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterDefaultsFacetFromAssociatedCollection;
@@ -64,6 +72,8 @@ import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testdomain.model.good.ElementTypeAbstract;
 import org.apache.isis.testdomain.model.good.ElementTypeConcrete;
 import org.apache.isis.testdomain.model.good.ElementTypeInterface;
+import org.apache.isis.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference;
+import org.apache.isis.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString;
 import org.apache.isis.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
 import org.apache.isis.testdomain.model.good.ProperFullyImpl;
@@ -79,13 +89,6 @@ import org.apache.isis.testdomain.model.good.ViewModelWithAnnotationOptionalUsin
 import org.apache.isis.testdomain.model.good.ViewModelWithEncapsulatedMembers;
 import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 
@@ -436,8 +439,39 @@ class DomainModelTest_usingGoodDomain {
                 param0.lookupFacet(ActionParameterDefaultsFacet.class)
                     .map(Object::getClass)
                     .orElse(null));
-
     }
+
+    @Test
+    void actionParamChoices_shouldBeAvailable_whenMixedInActionHasParamSupportingMethodTypeOfString() {
+
+        val spec = specificationLoader.specForTypeElseFail(ProperChoicesWhenActionHasParamSupportingMethodTypeOfString.class);
+
+        val action = spec.getActionElseFail("remove");
+        val param0 = action.getParameters().getFirstOrFail();
+
+        assertEquals(
+                ActionParameterChoicesFacetViaMethod.class,
+                param0.lookupFacet(ActionParameterChoicesFacet.class)
+                    .map(Object::getClass)
+                    .orElse(null));
+    }
+
+    @Test
+    void actionParamChoices_shouldBeAvailable_whenMixedInActionHasParamSupportingMethodTypeOfReference() {
+
+        val spec = specificationLoader
+                .specForTypeElseFail(ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference.class);
+
+        val action = spec.getActionElseFail("remove");
+        val param0 = action.getParameters().getFirstOrFail();
+
+        assertEquals(
+                ActionParameterChoicesFacetViaMethod.class,
+                param0.lookupFacet(ActionParameterChoicesFacet.class)
+                    .map(Object::getClass)
+                    .orElse(null));
+    }
+
 
     @ParameterizedTest
     @MethodSource("provideImperativelyNamed")
