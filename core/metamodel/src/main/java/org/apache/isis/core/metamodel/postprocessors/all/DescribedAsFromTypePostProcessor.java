@@ -35,17 +35,12 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public class DeriveDescribedAsFromTypePostProcessor
+public class DescribedAsFromTypePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
     @Inject
-    public DeriveDescribedAsFromTypePostProcessor(final MetaModelContext mmc) {
+    public DescribedAsFromTypePostProcessor(final MetaModelContext mmc) {
         super(mmc);
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification) {
-        // no-op
     }
 
     @Override
@@ -85,6 +80,8 @@ extends ObjectSpecificationPostProcessorAbstract {
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         handle(coll);
     }
+
+    // -- HELPER
 
     private void handle(final ObjectAssociation objectAssociation) {
         if(objectAssociation.containsNonFallbackFacet(MemberDescribedFacet.class)) {

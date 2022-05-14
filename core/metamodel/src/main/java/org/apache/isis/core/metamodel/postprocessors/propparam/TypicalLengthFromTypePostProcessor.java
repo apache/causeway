@@ -22,55 +22,50 @@ import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
-import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetFromDefaultedFacet;
-import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetFromTypeFactory;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterFromType;
+import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyFromType;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-
-/**
- * Installs {@link PropertyDefaultFacetFromTypeFactory} as a fallback.
- */
-public class DeriveDefaultFromTypePostProcessor
+public class TypicalLengthFromTypePostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
     @Inject
-    public DeriveDefaultFromTypePostProcessor(final MetaModelContext metaModelContext) {
+    public TypicalLengthFromTypePostProcessor(final MetaModelContext metaModelContext) {
         super(metaModelContext);
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
+        if(parameter.containsNonFallbackFacet(TypicalLengthFacet.class)) {
+            return;
+        }
+        parameter
+            .getElementType()
+            .lookupNonFallbackFacet(TypicalLengthFacet.class)
+            .ifPresent(typicalLengthFacet ->
+                    FacetUtil.addFacet(
+                            TypicalLengthFacetOnParameterFromType
+                            .createWhilePostprocessing(typicalLengthFacet, peerFor(parameter))));
     }
 
     @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
-        if(property.containsNonFallbackFacet(PropertyDefaultFacet.class)) {
+        if(property.containsNonFallbackFacet(TypicalLengthFacet.class)) {
             return;
         }
-        property.getElementType()
-        .lookupNonFallbackFacet(DefaultedFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetFromDefaultedFacet(
-                                    specFacet, facetedMethodFor(property))));
-    }
+        property
+            .getElementType()
+            .lookupNonFallbackFacet(TypicalLengthFacet.class)
+            .ifPresent(typicalLengthFacet ->
+                    FacetUtil.addFacet(
+                            TypicalLengthFacetOnPropertyFromType
+                            .createWhilePostprocessing(typicalLengthFacet, facetedMethodFor(property))));
 
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction,
-            final ObjectActionParameter param) {
     }
 
 }

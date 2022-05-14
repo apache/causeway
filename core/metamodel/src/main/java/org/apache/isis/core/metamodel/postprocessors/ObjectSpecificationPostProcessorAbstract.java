@@ -52,27 +52,28 @@ implements ObjectSpecificationPostProcessor {
         doPostProcess(objectSpecification);
 
         objectSpecification.streamRuntimeActions(MixedIn.INCLUDED)
-                .forEach(objectAction -> {
-                    objectAction.streamParameters()
-                    .forEach(param -> doPostProcess(objectSpecification, objectAction, param));
-                });
+        .forEach(act -> {
 
-        objectSpecification.streamRuntimeActions(MixedIn.INCLUDED)
-                .forEach(act -> doPostProcess(objectSpecification, act));
+            act.streamParameters()
+                .forEach(param -> doPostProcess(objectSpecification, act, param));
 
-        objectSpecification.streamProperties(MixedIn.INCLUDED).
-                forEach(prop -> doPostProcess(objectSpecification, prop));
+            doPostProcess(objectSpecification, act);
 
-        objectSpecification.streamCollections(MixedIn.INCLUDED).
-                forEach(coll -> doPostProcess(objectSpecification, coll));
+        });
+
+        objectSpecification.streamProperties(MixedIn.INCLUDED)
+        .forEach(prop -> doPostProcess(objectSpecification, prop));
+
+        objectSpecification.streamCollections(MixedIn.INCLUDED)
+        .forEach(coll -> doPostProcess(objectSpecification, coll));
 
     }
 
-    protected abstract void doPostProcess(ObjectSpecification objSpec);
-    protected abstract void doPostProcess(ObjectSpecification objSpec, ObjectAction act);
-    protected abstract void doPostProcess(ObjectSpecification objSpec, ObjectAction act, ObjectActionParameter param);
-    protected abstract void doPostProcess(ObjectSpecification objSpec, OneToOneAssociation prop);
-    protected abstract void doPostProcess(ObjectSpecification objSpec, OneToManyAssociation coll);
+    protected void doPostProcess(final ObjectSpecification objSpec) {};
+    protected void doPostProcess(final ObjectSpecification objSpec, final ObjectAction act) {};
+    protected void doPostProcess(final ObjectSpecification objSpec, final ObjectAction act, final ObjectActionParameter param) {};
+    protected void doPostProcess(final ObjectSpecification objSpec, final OneToOneAssociation prop) {};
+    protected void doPostProcess(final ObjectSpecification objSpec, final OneToManyAssociation coll) {};
 
     protected static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
