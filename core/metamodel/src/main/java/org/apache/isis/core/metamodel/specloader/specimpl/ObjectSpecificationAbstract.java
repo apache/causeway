@@ -377,6 +377,7 @@ implements ObjectSpecification {
             this.objectActions.addAll(orderedActions);
             unmodifiableActions.clear(); // invalidate
 
+            // rebuild objectActionsByType multi-map
             for (val actionType : ActionScope.values()) {
                 val objectActionForType = objectActionsByType.getOrElseNew(actionType);
                 objectActionForType.clear();
@@ -641,7 +642,7 @@ implements ObjectSpecification {
     public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        createMixedInAssociations(); // only if not already
+        mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort); // only if not already
 
         synchronized(unmodifiableAssociations) {
             return stream(unmodifiableAssociations.get())
@@ -684,7 +685,7 @@ implements ObjectSpecification {
             final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        createMixedInActions(); // only if not already
+        mixedInActionAdder.trigger(this::createMixedInActionsAndResort);
 
         return actionScopes.stream()
                 .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
@@ -844,41 +845,37 @@ implements ObjectSpecification {
 
     // -- MIXIN ADDER ONESHOTs
 
-    private final _Oneshot mixedInAssociationAdder = new _Oneshot();
     private final _Oneshot mixedInActionAdder = new _Oneshot();
+    private final _Oneshot mixedInAssociationAdder = new _Oneshot();
 
     /**
-     * one-shot: ignored if already created
+     * one-shot: must be no-op, if already created
      */
-    private void createMixedInActions() {
-        mixedInAssociationAdder.trigger(()->{
-            val actions = _Lists.newArrayList(this.objectActions);
-            if (isEntityOrViewModelOrAbstract()
-                    || getBeanSort().isManagedBeanContributing()
-                    // in support of composite value-type constructor mixins
-                    || getBeanSort().isValue()) {
-                createMixedInActions(actions::add);
-            }
-            sortCacheAndUpdateActions(actions);
-        });
+    private void createMixedInActionsAndResort() {
+        val newActions = _Lists.newArrayList(objectActions);
+        if (isEntityOrViewModelOrAbstract()
+                || getBeanSort().isManagedBeanContributing()
+                // in support of composite value-type constructor mixins
+                || getBeanSort().isValue()) {
+            createMixedInActions(newActions::add);
+        }
+        sortCacheAndUpdateActions(newActions);
     }
 
     /**
-     * one-shot: ignored if already created
+     * one-shot: must be no-op, if already created
      */
-    private void createMixedInAssociations() {
-        mixedInActionAdder.trigger(()->{
-            val associations = _Lists.newArrayList(this.associations);
-            if(isEntityOrViewModelOrAbstract()) {
-                createMixedInAssociations(associations::add);
-            }
-            sortAndUpdateAssociations(associations);
-        });
+    private void createMixedInAssociationsAndResort() {
+        val newAssociations = _Lists.newArrayList(associations);
+        if(isEntityOrViewModelOrAbstract()) {
+            createMixedInAssociations(newAssociations::add);
+        }
+        sortAndUpdateAssociations(newAssociations);
     }
 
-    protected IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
-        return getServiceRegistry()
+    @Getter(lazy = true)
+    private final IsisBeanTypeRegistry isisBeanTypeRegistry =
+        getServiceRegistry()
                 .lookupServiceElseFail(IsisBeanTypeRegistry.class);
-    }
 
 }
