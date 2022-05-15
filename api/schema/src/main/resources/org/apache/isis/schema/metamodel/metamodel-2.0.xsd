@@ -107,22 +107,33 @@
 
 
     <xs:complexType name="member">
-        <xs:annotation>
-            <xs:documentation>Represents a member of a class (property, collection or action).
-                Corresponds to ObjectMember in the internal metamodel.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexContent>
-            <xs:extension base="facetHolder">
-                <xs:attribute name="id" type="xs:string">
-                    <xs:annotation>
-                        <xs:documentation>The id of the member, which should be unique within the domain class.
-                            NB: this assumes no overloading of method names.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-            </xs:extension>
-        </xs:complexContent>
+    	<xs:annotation>
+    		<xs:documentation>
+    			Represents a member of a class (property, collection or
+    			action). Corresponds to ObjectMember in the internal
+    			metamodel.
+    		</xs:documentation>
+    	</xs:annotation>
+    	<xs:complexContent>
+    		<xs:extension base="facetHolder">
+    			<xs:attribute name="id" type="xs:string">
+    				<xs:annotation>
+    					<xs:documentation>
+    						The id of the member, which should be unique
+    						within the domain class. NB: this assumes no
+    						overloading of method names.
+    					</xs:documentation>
+    				</xs:annotation>
+    			</xs:attribute>
+    			<xs:attribute name="mixedIn" type="xs:boolean" use="required">
+    				<xs:annotation>
+    					<xs:documentation>
+    						Whether the member (action, property or collection) is mixed in.
+    					</xs:documentation>
+    				</xs:annotation>
+    			</xs:attribute>
+    		</xs:extension>
+    	</xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="property">

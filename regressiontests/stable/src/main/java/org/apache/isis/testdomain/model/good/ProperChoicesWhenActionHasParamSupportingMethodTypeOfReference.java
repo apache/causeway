@@ -38,6 +38,7 @@ public class ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference {
         return _Lists.of();
     }
 
+    // mixed in Action
     @Action
     @RequiredArgsConstructor
     public static class ProperChoicesWhenActionHasParamSupportingMethod_remove {
