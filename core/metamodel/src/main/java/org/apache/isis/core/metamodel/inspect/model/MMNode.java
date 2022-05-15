@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Navigable;
 import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
@@ -70,6 +71,7 @@ public abstract class MMNode {
                 ? title = createTitle()
                 : title;
     }
+    @Programmatic
     protected abstract String createTitle();
 
     protected abstract String iconSuffix();
