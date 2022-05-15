@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
@@ -38,7 +39,8 @@ import lombok.ToString;
 
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        logicalTypeName = CollectionNode.LOGICAL_TYPE_NAME
+        logicalTypeName = CollectionNode.LOGICAL_TYPE_NAME,
+        introspection = Introspection.ANNOTATION_REQUIRED
 )
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
