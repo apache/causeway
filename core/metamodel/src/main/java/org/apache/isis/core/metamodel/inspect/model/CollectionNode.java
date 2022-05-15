@@ -50,6 +50,8 @@ public class CollectionNode extends MMNode {
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Collection collection;
 
+    @Getter @Setter private boolean mixedIn;
+
     @Override
     public String createTitle() {
         return String.format("%s: %s", collection.getId(), typeToString(collection.getType()));
@@ -57,7 +59,7 @@ public class CollectionNode extends MMNode {
 
     @Override
     protected String iconSuffix() {
-        return "";
+        return isMixedIn() ? "mixedin" : "";
     }
 
     // -- TREE NODE STUFF

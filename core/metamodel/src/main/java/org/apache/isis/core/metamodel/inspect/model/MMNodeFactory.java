@@ -31,56 +31,59 @@ import lombok.val;
 
 public class MMNodeFactory {
 
-    public static MMNode type(DomainClassDto domainClassDto, MMNode parentNode) {
+    public static MMNode type(final DomainClassDto domainClassDto, final MMNode parentNode) {
         val node = new TypeNode();
         node.setDomainClassDto(domainClassDto);
         node.setParentNode(parentNode);
         return node;
     }
 
-    public static MMNode facet(Facet facet, FacetGroupNode parentNode) {
+    public static MMNode facet(final Facet facet, final FacetGroupNode parentNode) {
         val node = new FacetNode();
         node.setFacet(facet);
         node.setParentNode(parentNode);
         return node;
     }
 
-    public static MMNode facetAttr(FacetAttr facetAttr, FacetNode parentNode) {
+    public static MMNode facetAttr(final FacetAttr facetAttr, final FacetNode parentNode) {
         val node = new FacetAttrNode();
         node.setFacetAttr(facetAttr);
         node.setParentNode(parentNode);
         return node;
     }
 
-    public static MMNode action(Action action, TypeNode parentNode) {
+    public static MMNode action(final Action action, final TypeNode parentNode) {
         val node = new ActionNode();
         node.setAction(action);
         node.setParentNode(parentNode);
+        node.setMixedIn(action.isMixedIn());
         return node;
     }
 
-    public static MMNode property(Property property, TypeNode parentNode) {
+    public static MMNode property(final Property property, final TypeNode parentNode) {
         val node = new PropertyNode();
         node.setProperty(property);
         node.setParentNode(parentNode);
+        node.setMixedIn(property.isMixedIn());
         return node;
     }
 
-    public static MMNode collection(Collection collection, TypeNode parentNode) {
+    public static MMNode collection(final Collection collection, final TypeNode parentNode) {
         val node = new CollectionNode();
         node.setCollection(collection);
         node.setParentNode(parentNode);
+        node.setMixedIn(collection.isMixedIn());
         return node;
     }
 
-    public static MMNode param(Param param, ActionNode parentNode) {
+    public static MMNode param(final Param param, final ActionNode parentNode) {
         val node = new ParameterNode();
         node.setParameter(param);
         node.setParentNode(parentNode);
         return node;
     }
 
-    public static MMNode facetGroup(Facets facets, MMNode parentNode) {
+    public static MMNode facetGroup(final Facets facets, final MMNode parentNode) {
         val node = new FacetGroupNode();
         node.setFacets(facets);
         node.setParentNode(parentNode);

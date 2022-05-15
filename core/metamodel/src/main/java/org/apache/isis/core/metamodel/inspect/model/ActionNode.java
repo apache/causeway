@@ -50,6 +50,8 @@ public class ActionNode extends MMNode {
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Action action;
 
+    @Getter @Setter private boolean mixedIn;
+
     @Override
     public String createTitle() {
         return String.format("%s(...): %s", action.getId(), typeToString(action.getReturnType()));
@@ -57,7 +59,7 @@ public class ActionNode extends MMNode {
 
     @Override
     protected String iconSuffix() {
-        return "";
+        return isMixedIn() ? "mixedin" : "";
     }
 
     // -- TREE NODE STUFF

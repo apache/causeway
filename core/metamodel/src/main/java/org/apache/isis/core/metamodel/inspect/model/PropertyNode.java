@@ -49,6 +49,8 @@ public class PropertyNode extends MMNode {
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private org.apache.isis.schema.metamodel.v2.Property property;
 
+    @Getter @Setter private boolean mixedIn;
+
     @Override
     public String createTitle() {
         return String.format("%s: %s", property.getId(), typeToString(property.getType()));
@@ -56,7 +58,7 @@ public class PropertyNode extends MMNode {
 
     @Override
     protected String iconSuffix() {
-        return "";
+        return isMixedIn() ? "mixedin" : "";
     }
 
     // -- TREE NODE STUFF

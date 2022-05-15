@@ -279,6 +279,7 @@ class MetaModelExporter {
 
         Property propertyType = new Property();
         propertyType.setId(otoa.getId());
+        propertyType.setMixedIn(otoa.isMixedIn());
         propertyType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
         final ObjectSpecification specification = otoa.getElementType();
         final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
@@ -294,6 +295,7 @@ class MetaModelExporter {
             final Config config) {
         Collection collectionType = new Collection();
         collectionType.setId(otoa.getId());
+        collectionType.setMixedIn(otoa.isMixedIn());
         collectionType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
         final ObjectSpecification specification = otoa.getElementType();
         final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
@@ -309,6 +311,7 @@ class MetaModelExporter {
             final Config config) {
         Action actionType = new Action();
         actionType.setId(oa.getId());
+        actionType.setMixedIn(oa.isMixedIn());
         actionType.setFacets(new org.apache.isis.schema.metamodel.v2.FacetHolder.Facets());
         actionType.setParams(new Action.Params());
 
