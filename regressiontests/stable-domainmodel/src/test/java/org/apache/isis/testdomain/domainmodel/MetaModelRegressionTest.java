@@ -87,7 +87,7 @@ class MetaModelRegressionTest {
         val downloadMetaModelDiff =
                 factoryService.mixin(MetaModelServiceMenu.downloadMetaModelDiff.class, metaModelServiceMenu);
         val metamodelExport =
-                downloadMetaModelDiff.act("metamodel.xml", List.of("org.apache.isis.testdomain.model.good"), true,
+                downloadMetaModelDiff.act("metamodel.xml", namespaces(), true,
                         currentMetaModelAsZippedBlob())
                 .unZip(CommonMimeType.XML)
                 .toClob(StandardCharsets.UTF_8);
@@ -122,7 +122,11 @@ class MetaModelRegressionTest {
     private Blob currentMetaModelAsZippedBlob() {
         val downloadMetaModelXml =
                 factoryService.mixin(MetaModelServiceMenu.downloadMetaModelXml.class, metaModelServiceMenu);
-        return downloadMetaModelXml.act("metamodel.xml", List.of("org.apache.isis.testdomain.model.good"), true);
+        return downloadMetaModelXml.act("metamodel.xml", namespaces(), true);
+    }
+
+    private List<String> namespaces() {
+        return List.of("org.apache.isis.testdomain.model.good");
     }
 
 }
