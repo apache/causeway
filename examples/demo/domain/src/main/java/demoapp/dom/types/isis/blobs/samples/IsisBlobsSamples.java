@@ -53,7 +53,7 @@ public class IsisBlobsSamples implements Samples<Blob> {
 
     @SneakyThrows
     private Blob loadBlob(final String name) {
-        val bytes = _Bytes.of(_Resources.load(IsisBlobsSamples.class, name ));
+        val bytes = _Bytes.of(_Resources.load(IsisBlobsSamples.class, name));
         return Blob.of(name, mimeTypeFor(name), bytes);
     }
 
