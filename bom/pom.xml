@@ -350,7 +350,7 @@ under the License.
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
 
-		<camel.version>3.14.2</camel.version>
+		<camel.version>3.14.3</camel.version>
 
 		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
