@@ -67,18 +67,13 @@ public class DependentArgsActionDemo_useHide {
 
     // -- PARAM 0 (boolean hideMessageField)
 
-    @MemberSupport public boolean default0Act() {
+    @MemberSupport public boolean default0Act(final Parameters params) {
         return holder.isDialogCheckboxDefault();
     }
 
     // -- PARAM 1 (String message)
 
-    @MemberSupport public boolean hide1Act(final boolean hideMessageField) {
-        return hideMessageField;
-    }
-
-
-    public boolean hide1Act(final Parameters params) {
+    @MemberSupport public boolean hide1Act(final Parameters params) {
         return params.hideMessageField();
     }
 
