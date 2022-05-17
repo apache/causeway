@@ -267,6 +267,11 @@ public interface ObjectAction extends ObjectMember {
                 // no-arg DIALOG is correctly handled,
                 // whereas for INLINE it would render a form with no fields
                 || getParameterCount() == 0) {
+
+            if(isImmediateConfirmationRequired()) {
+                return PromptStyle.DIALOG_MODAL; // always modal
+            }
+
             if (promptStyle.isPresent()) {
                 if (promptStyle.get().isDialogAny()) {
                     // preserve dialog specialization

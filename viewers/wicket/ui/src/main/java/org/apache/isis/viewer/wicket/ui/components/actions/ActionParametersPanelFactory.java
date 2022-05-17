@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actions;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -39,8 +40,11 @@ public class ActionParametersPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return appliesIf(model instanceof ActionModel
-                && ((ActionModel)model).hasParameters());
+        return appliesIf(_Casts.castTo(ActionModel.class, model)
+                .map(actionModel->
+                    actionModel.hasParameters()
+                        || actionModel.getAction().isImmediateConfirmationRequired())
+                .orElse(false));
     }
 
     @Override

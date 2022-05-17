@@ -142,18 +142,18 @@ public class WktTooltips {
                 // so we wrap the call within a document search, that will only process elements,
                 // that actually exist within the DOM
                 val markupId = WktComponents.getMarkupId(component);
-                return String.format("document.querySelectorAll('#%s').forEach((elem)=>{"
-                        + "new bootstrap.Popover(elem, %s);"
-                        + "})",
-                        markupId,
-                        config.toJsonString());
-// alternative jQuery syntax ...
-//                return String.format("$('#%s').each((i,elem)=>{"
-//                        + "new bootstrap.Popover(elem, %s);"
-//                        + "})",
-//                        markupId,
-//                        config.toJsonString());
+                return onFirstMatchingElement(markupId,
+                        String.format(
+                                "new bootstrap.Popover(elem, %s);",
+                                config.toJsonString()));
             }
+
+            private String onFirstMatchingElement(final CharSequence markupId, final String doJavaScript) {
+                return String.format(
+                        "{var elem = document.querySelector('#%s'); if(elem){%s}}",
+                        markupId, doJavaScript);
+            }
+
         };
     }
 

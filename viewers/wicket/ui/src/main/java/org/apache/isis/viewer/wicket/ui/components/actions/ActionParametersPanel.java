@@ -60,9 +60,11 @@ extends PanelAbstract<ManagedObject, ActionModel> {
 
         final ActionModel actionModel = getModel();
 
-        if (!actionModel.hasParameters()) {
+        if (!actionModel.hasParameters()
+                && !actionModel.getAction().isImmediateConfirmationRequired()) {
             // the factory should check for this already, so this should never occur...
-            throw new IllegalStateException("model has no parameters!");
+            throw new IllegalStateException("model has no parameters "
+                    + "(and is not a confirmation dialog)!");
         }
 
         final WebMarkupContainer header =

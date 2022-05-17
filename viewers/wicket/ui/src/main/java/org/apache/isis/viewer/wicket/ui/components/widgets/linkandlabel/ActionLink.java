@@ -37,8 +37,8 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
-import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
@@ -172,8 +172,9 @@ extends IndicatingAjaxLink<ManagedObject> {
         if(actionModel.getPromptStyle().isDialogAny()
                 || actionModel.getInlinePromptContext() == null) {
 
-            if(actionModel.hasParameters()) {
-                startDialogWithParams(target);
+            if(actionModel.hasParameters()
+                    || actionModel.getAction().isImmediateConfirmationRequired()) {
+                startDialogWithParamsOrConfirmation(target);
             } else {
                 executeWithoutParams();
             }
@@ -209,7 +210,7 @@ extends IndicatingAjaxLink<ManagedObject> {
         }
     }
 
-    private void startDialogWithParams(final AjaxRequestTarget target) {
+    private void startDialogWithParamsOrConfirmation(final AjaxRequestTarget target) {
         val actionModel = this.getActionModel();
         val actionOwnerSpec = actionModel.getActionOwner().getSpecification();
         val actionPrompt = ActionPromptProvider
