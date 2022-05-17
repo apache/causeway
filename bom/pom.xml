@@ -441,7 +441,7 @@ under the License.
 
 		<vaadin.version>23.0.7</vaadin.version>
 
-		<wicket.version>9.9.1</wicket.version>
+		<wicket.version>9.10.0</wicket.version>
 		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
 		<wicket-webjars.version>3.0.4</wicket-webjars.version>
 		<wicket-viewer-jquery.version>3.5.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
