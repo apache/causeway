@@ -21,9 +21,11 @@ package demoapp.dom.featured.layout.describedAs;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
@@ -43,6 +45,7 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Markup;
 
 import lombok.Getter;
@@ -57,6 +60,9 @@ import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
 @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.Tooltip")
 public class DescribedAsVm implements HasAsciiDocDescription {
 
+    @XmlTransient
+    @Inject MessageService messageService;
+
     @ObjectSupport public String title() {
         return "Tooltip Demo";
     }
@@ -68,6 +74,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
             named = "No Arguments",
             describedAs="This is a no-arg action with a tooltip.")
     public DescribedAsVm noArgAction(){
+        messageService.informUser("clicked on noArgAction");
         return this;
     }
 
@@ -75,8 +82,10 @@ public class DescribedAsVm implements HasAsciiDocDescription {
     @ActionLayout(
             named = "No Arguments With Confirm",
             cssClass="btn-danger",
-            describedAs="This is a no-arg action with a tooltip and 'are you sure' semantics.")
+            describedAs="This is a no-arg action with a tooltip and 'are you sure' semantics."
+            )
     public DescribedAsVm noArgActionWithConfirm(){
+        messageService.informUser("clicked on noArgActionWithConfirm");
         return this;
     }
 
