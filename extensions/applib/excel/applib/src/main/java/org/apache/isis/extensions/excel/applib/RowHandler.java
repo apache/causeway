@@ -16,18 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.excel.applib.util;
+package org.apache.isis.extensions.excel.applib;
+
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * @since 2.0 {@index}
  */
-public enum Mode {
-    /**
-     * All cells must be well formed and with valid data
-     */
-    STRICT,
-    /**
-     * Ignore any cells that cannot be interpreted.
-     */
-    RELAXED
+public interface RowHandler<T extends RowHandler<T>> {
+    @Programmatic
+    void handleRow(T previousRow);
 }

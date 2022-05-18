@@ -24,7 +24,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
-import org.apache.isis.extensions.excel.applib.dom.AggregationType;
+import org.apache.isis.extensions.excel.applib.AggregationType;
 
 /**
  * @since 2.0 {@index}

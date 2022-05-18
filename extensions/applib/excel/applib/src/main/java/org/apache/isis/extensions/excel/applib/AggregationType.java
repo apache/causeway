@@ -16,14 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.excel.applib.dom;
-
-import org.apache.isis.applib.annotation.Programmatic;
+package org.apache.isis.extensions.excel.applib;
 
 /**
  * @since 2.0 {@index}
  */
-public interface RowHandler<T extends RowHandler<T>> {
-    @Programmatic
-    void handleRow(T previousRow);
+public enum AggregationType {
+    SUM,
+    COUNT;
 }

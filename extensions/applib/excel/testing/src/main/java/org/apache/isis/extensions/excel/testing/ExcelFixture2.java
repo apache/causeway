@@ -30,8 +30,8 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.extensions.excel.applib.IsisModuleExtExcelApplib;
-import org.apache.isis.extensions.excel.applib.dom.ExcelService;
-import org.apache.isis.extensions.excel.applib.dom.WorksheetSpec;
+import org.apache.isis.extensions.excel.applib.ExcelService;
+import org.apache.isis.extensions.excel.applib.WorksheetSpec;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;

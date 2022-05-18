@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.excel.applib.dom;
+package org.apache.isis.extensions.excel.applib;
 
 import java.io.InputStream;
 import java.util.List;
@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.extensions.excel.applib.service.ExcelServiceDefault;
-import org.apache.isis.extensions.excel.applib.util.Mode;
 
 /**
  * @since 2.0 {@index}

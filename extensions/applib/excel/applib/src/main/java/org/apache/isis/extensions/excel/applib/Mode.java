@@ -16,15 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.excel.applib.dom;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+package org.apache.isis.extensions.excel.applib;
 
 /**
  * @since 2.0 {@index}
  */
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PivotDecoration {
-    int order();
+public enum Mode {
+    /**
+     * All cells must be well formed and with valid data
+     */
+    STRICT,
+    /**
+     * Ignore any cells that cannot be interpreted.
+     */
+    RELAXED
 }

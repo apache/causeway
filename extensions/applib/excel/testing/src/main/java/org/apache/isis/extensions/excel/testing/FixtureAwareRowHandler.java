@@ -20,7 +20,7 @@ package org.apache.isis.extensions.excel.testing;
 
 
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.excel.applib.dom.RowHandler;
+import org.apache.isis.extensions.excel.applib.RowHandler;
 
 /**
  * @since 2.0 {@index}

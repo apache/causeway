@@ -16,14 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.excel.applib.dom;
+package org.apache.isis.extensions.excel.applib.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import org.apache.isis.extensions.excel.applib.AggregationType;
 
 /**
  * @since 2.0 {@index}
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface HyperLink {
+public @interface PivotValue {
+    int order();
+    AggregationType type() default AggregationType.SUM;
 }

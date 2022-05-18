@@ -28,7 +28,7 @@ import org.apache.poi.util.IOUtils;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.extensions.excel.applib.dom.ExcelService;
+import org.apache.isis.extensions.excel.applib.ExcelService;
 import org.apache.isis.extensions.excel.applib.service.ExcelServiceDefault;
 
 import lombok.val;

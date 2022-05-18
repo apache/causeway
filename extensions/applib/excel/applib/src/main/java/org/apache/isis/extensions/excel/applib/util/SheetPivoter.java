@@ -34,7 +34,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellReference;
 
-import org.apache.isis.extensions.excel.applib.dom.AggregationType;
+import org.apache.isis.extensions.excel.applib.AggregationType;
 import org.apache.isis.extensions.excel.applib.service.ExcelServiceDefault;
 
 import lombok.val;
