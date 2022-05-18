@@ -27,6 +27,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.common.model.PlacementDirection;
 import org.apache.isis.viewer.common.model.decorators.TooltipDecorator.TooltipDecorationModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
 import lombok.NonNull;
@@ -56,6 +57,17 @@ public class WktTooltips {
                 || tooltipDecorationModel==null
                 || tooltipDecorationModel.isEmpty()) {
             return target; // no body so don't render tooltip
+        }
+
+        if(target instanceof ActionLink) {
+            val actionLink = (ActionLink)target;
+            if(!actionLink.getActionModel().hasParameters()) {
+                //XXX[ISIS-3051] adding a tooltip to an ActionLink will break any ConfirmationBehavior,
+                //that's also applied to the ActionLink.
+                throw _Exceptions.illegalArgument(
+                        "Adding a tooltip to an ActionLink will break any ConfirmationBehavior, "
+                        + "that's also applied to same ActionLink!");
+            }
         }
 
         val placementDirection = tooltipDecorationModel.getPlacementDirection();

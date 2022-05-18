@@ -50,7 +50,6 @@ import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameRemover;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 /**
@@ -128,7 +127,7 @@ public class WktDecorators {
                     .withBtnCancelClass(ButtonSemantics.SECONDARY.fullButtonCss())
                     .withPlacement(Placement.valueOf(decorationModel.getPlacement().name().toLowerCase()));
 
-            uiComponent.add(new ConfirmationBehavior(confirmationConfig));
+            Wkt.behaviorAddConfirm(uiComponent, confirmationConfig);
 
             if(uiComponent instanceof Button) {
                 // ensure dialog ok buttons receive the danger style as well

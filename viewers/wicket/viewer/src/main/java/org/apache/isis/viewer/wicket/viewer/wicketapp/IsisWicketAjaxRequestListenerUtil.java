@@ -28,8 +28,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.component.IRequestablePage;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -58,13 +57,9 @@ public final class IsisWicketAjaxRequestListenerUtil {
                             final IRequestablePage iRequestablePage =
                                     ((ListenerRequestHandler)handler).getPage();
 
-                            if(iRequestablePage instanceof StandaloneCollectionPage) {
-                                val collectionPage = (StandaloneCollectionPage) iRequestablePage;
-                                collectionPage.onNewRequestCycle();
-                            }
-                            else if(iRequestablePage instanceof EntityPage) {
-                                val entityPage = (EntityPage) iRequestablePage;
-                                entityPage.onNewRequestCycle();
+                            if(iRequestablePage instanceof PageAbstract) {
+                                val pageAbstract = (PageAbstract) iRequestablePage;
+                                pageAbstract.onNewRequestCycle();
                             }
 
                         }

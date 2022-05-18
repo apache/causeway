@@ -93,6 +93,8 @@ import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
@@ -218,6 +220,10 @@ public class Wkt {
         return new ReplaceDisabledTagWithReadonlyTagBehavior();
     }
 
+    public Behavior behaviorConfirm(final ConfirmationConfig config) {
+        return new ConfirmationBehavior(config);
+    }
+
     public Behavior behaviorAddOnClick(
             final Component component,
             final SerializableConsumer<AjaxRequestTarget> onClick) {
@@ -228,6 +234,12 @@ public class Wkt {
             final Component component,
             final SerializableConsumer<AjaxRequestTarget> onRespond) {
         return add(component, behaviorFireOnEscapeKey(onRespond));
+    }
+
+    public Behavior behaviorAddConfirm(
+            final Component component,
+            final ConfirmationConfig config) {
+        return add(component, behaviorConfirm(config));
     }
 
     public void behaviorAddReplaceDisabledTagWithReadonlyTag(final @Nullable Component component) {
@@ -1047,7 +1059,5 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
-
-
 
 }
