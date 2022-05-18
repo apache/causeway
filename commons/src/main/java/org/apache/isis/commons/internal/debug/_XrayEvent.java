@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -86,7 +87,16 @@ public class _XrayEvent {
                 .collect(Can.toCan());
                 //.reverse();
 
-        val logMessage = String.format(format, args);
+        var logMessage = "???";
+        if(_NullSafe.isEmpty(args)) {
+            logMessage = format;
+        } else {
+            try {
+                logMessage = String.format(format, args);
+            } catch (Throwable e) {
+                logMessage = "" + format + " <- " + args;
+            }
+        }
 
         _Xray.recordDebugLogEvent(icon, logMessage, stackTrace);
 
