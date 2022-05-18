@@ -439,7 +439,7 @@ under the License.
 
 		<togglz.version>3.1.2</togglz.version>
 
-		<vaadin.version>23.0.7</vaadin.version>
+		<vaadin.version>23.0.9</vaadin.version>
 
 		<wicket.version>9.10.0</wicket.version>
 		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
