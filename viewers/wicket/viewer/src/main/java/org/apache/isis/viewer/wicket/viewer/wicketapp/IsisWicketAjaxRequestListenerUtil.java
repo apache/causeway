@@ -25,10 +25,13 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.component.IRequestablePage;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 
@@ -52,7 +55,18 @@ public final class IsisWicketAjaxRequestListenerUtil {
 //                            _Debug.log("AJAX via ListenerRequestHandler");
 //                            RequestCycle.get().getListeners().add(newRequestCycleListener());
 
-                            EntityPage.viewmodelRefresh(((ListenerRequestHandler)handler).getPage());
+                            final IRequestablePage iRequestablePage =
+                                    ((ListenerRequestHandler)handler).getPage();
+
+                            if(iRequestablePage instanceof StandaloneCollectionPage) {
+                                val collectionPage = (StandaloneCollectionPage) iRequestablePage;
+                                collectionPage.onNewRequestCycle();
+                            }
+                            else if(iRequestablePage instanceof EntityPage) {
+                                val entityPage = (EntityPage) iRequestablePage;
+                                entityPage.onNewRequestCycle();
+                            }
+
                         }
 
                         return handler;

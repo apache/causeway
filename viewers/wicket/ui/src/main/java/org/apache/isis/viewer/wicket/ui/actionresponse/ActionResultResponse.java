@@ -100,14 +100,16 @@ public class ActionResultResponse {
     }
 
     /**
-     * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#SCHEDULE_HANDLER}
+     * Populated only if {@link #getHandlingStrategy() handling strategy}
+     * is {@link ActionResultResponseHandlingStrategy#SCHEDULE_HANDLER}
      */
     public IRequestHandler getHandler() {
         return handler;
     }
 
     /**
-     * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#REDIRECT_TO_PAGE}
+     * Populated only if {@link #getHandlingStrategy() handling strategy}
+     * is {@link ActionResultResponseHandlingStrategy#REDIRECT_TO_PAGE}
      */
     public PageRedirectRequest<?> getPageRedirect() {
         return pageRedirect;
@@ -130,4 +132,38 @@ public class ActionResultResponse {
     public String getUrl() {
         return url;
     }
+
+    @Override
+    public String toString() {
+        return String.format("ActionResultResponse["
+                + "handlingStrategy=%s,"
+                + "requestHandler=%s,"
+                + "pageRedirect=%s,"
+                + "ajaxTarget=%s,"
+                + "url=%s"
+                + "]",
+                handlingStrategy.name(),
+                handler,
+                pageRedirect,
+                target,
+                url);
+    }
+
+    /** introduced for debugging */
+    public String toStringMultiline() {
+        return String.format("ActionResultResponse {\n"
+                + "\thandlingStrategy=%s,\n"
+                + "\trequestHandler=%s,\n"
+                + "\tpageRedirect=%s,\n"
+                + "\tajaxTarget=%s,\n"
+                + "\turl=%s\n"
+                + "}",
+                handlingStrategy.name(),
+                handler,
+                pageRedirect,
+                target,
+                url);
+    }
+
+
 }

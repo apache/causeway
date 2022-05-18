@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
-import java.util.UUID;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -28,14 +26,10 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.applib.services.user.UserMemento;
-import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.commons.internal.base._Refs.ObjectReference;
-import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -137,22 +131,6 @@ public class EntityPage extends PageAbstract {
     }
 
     @Override
-    public void renderPage() {
-        if(XrayUi.isXrayEnabled()){
-            _Debug.log("about to render EntityPage ..");
-            val stopWatch = _Timing.now();
-            viewmodelRefresh(this);
-            super.renderPage();
-            stopWatch.stop();
-            _Debug.log(".. rendering took %s", stopWatch.toString());
-        } else {
-            viewmodelRefresh(this);
-            super.renderPage();
-        }
-    }
-
-
-    @Override
     public UiHintContainer getUiHintContainerIfAny() {
         return model;
     }
@@ -226,57 +204,22 @@ public class EntityPage extends PageAbstract {
 
     }
 
-    // -- UTILITIES
+    // -- RE-ATTACH ENTITIES
 
-    /**
-     * Re-fetch entities for view-models, usually required once at begin of request.
-     */
-    public static void viewmodelRefresh(
-            final IRequestablePage iRequestablePage) {
-        if(iRequestablePage instanceof EntityPage) {
-
-            val entityPage = (EntityPage) iRequestablePage;
-
-            // optimization, not strictly required
-            if(entityPage.isAlreadyRefreshedWithinThisInteraction()) {
-                return;
-            }
-
-            val entityModel = (EntityModel)entityPage.getUiHintContainerIfAny();
-
-            ManagedObjects.refreshViewmodel(entityModel.getObject(),
-                    ()->PageParameterUtils
-                            .toBookmark(entityPage.getPageParameters())
-                            .orElseThrow());
+    @Override
+    public void onNewRequestCycle() {
+        // optimization, not strictly required
+        if(isAlreadyRefreshedWithinThisInteraction()) {
+            return;
         }
+        val entityModel = (EntityModel) getUiHintContainerIfAny();
+        ManagedObjects.refreshViewmodel(entityModel.getObject(),
+                ()->PageParameterUtils
+                        .toBookmark(getPageParameters())
+                        .orElseThrow());
     }
 
     // -- HELPER
-
-    private transient ObjectReference<UUID> interactionId;
-    private ObjectReference<UUID> interactionIdRef() {
-        if(interactionId==null) {
-            interactionId = _Refs.objectRef(null);
-        }
-        return interactionId;
-    }
-
-    private boolean isAlreadyRefreshedWithinThisInteraction() {
-        val currentInteractionId = getCommonContext()
-                .getInteractionProvider().getInteractionId().orElseThrow();
-
-        val alreadyRefreshedForThisInteraction =
-            interactionIdRef().getValue()
-            .map(currentInteractionId::equals)
-            .orElse(false);
-
-        if(alreadyRefreshedForThisInteraction) {
-            return true;
-        }
-
-        interactionIdRef().setValue(currentInteractionId);
-        return false;
-    }
 
     private void addBreadcrumbIfShown(final EntityModel entityModel) {
         getBreadcrumbModel()

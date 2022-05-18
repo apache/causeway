@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -53,6 +54,11 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Refs.ObjectReference;
+import org.apache.isis.commons.internal.base._Timing;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
@@ -496,5 +502,57 @@ implements ActionPromptProvider {
     }
 
 
+    // -- RE-ATTACH ENTITIES
+
+    @Override
+    public void renderPage() {
+        if(XrayUi.isXrayEnabled()){
+            _Debug.log("about to render %s ..", this.getClass().getSimpleName());
+            val stopWatch = _Timing.now();
+            onNewRequestCycle();
+            super.renderPage();
+            stopWatch.stop();
+            _Debug.log(".. rendering took %s", stopWatch.toString());
+        } else {
+            onNewRequestCycle();
+            super.renderPage();
+        }
+    }
+
+    /**
+     * Hook to re-fetch entities for view-models, usually required once at begin of request.
+     * @apiNote ideally we would not need that hook at all;
+     * this is a hack that came after re-designing the entity-model
+     */
+    public void onNewRequestCycle() {
+        // implemented only by EntityPage
+    }
+
+    // -- HELPER
+
+    private transient ObjectReference<UUID> interactionId;
+    private ObjectReference<UUID> interactionIdRef() {
+        if(interactionId==null) {
+            interactionId = _Refs.objectRef(null);
+        }
+        return interactionId;
+    }
+
+    protected boolean isAlreadyRefreshedWithinThisInteraction() {
+        val currentInteractionId = getCommonContext()
+                .getInteractionProvider().getInteractionId().orElseThrow();
+
+        val alreadyRefreshedForThisInteraction =
+            interactionIdRef().getValue()
+            .map(currentInteractionId::equals)
+            .orElse(false);
+
+        if(alreadyRefreshedForThisInteraction) {
+            return true;
+        }
+
+        interactionIdRef().setValue(currentInteractionId);
+        return false;
+    }
 
 }
