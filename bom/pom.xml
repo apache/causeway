@@ -346,11 +346,11 @@ under the License.
         <!-- LIBRARY DEPENDENCIES -->
 		<archunit.version>0.23.1</archunit.version>
 		<asm.version>9.3</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
-		<approvaltests.version>15.4.0</approvaltests.version>
+		<approvaltests.version>15.5.0</approvaltests.version>
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
 
-		<camel.version>3.14.2</camel.version>
+		<camel.version>3.14.3</camel.version>
 
 		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
@@ -385,7 +385,7 @@ under the License.
 		<jakarta.annotation-api.version>2.1.0</jakarta.annotation-api.version>
 		<jakartaee.version>8.0.0</jakartaee.version>
 		<javafaker.version>1.0.2</javafaker.version>
-		<javassist.version>3.28.0-GA</javassist.version>
+		<javassist.version>3.29.0-GA</javassist.version>
 		<javax-servlet.version>4.0.1</javax-servlet.version>
 		<jaxb-impl.version>2.3.6</jaxb-impl.version>
 		<jaxws-ri.version>2.3.5</jaxws-ri.version>
@@ -437,9 +437,9 @@ under the License.
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.6</swagger-core.version>
 
-		<togglz.version>3.1.2</togglz.version>
+		<togglz.version>3.2.0</togglz.version>
 
-		<vaadin.version>23.0.7</vaadin.version>
+		<vaadin.version>23.0.9</vaadin.version>
 
 		<wicket.version>9.10.0</wicket.version>
 		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
