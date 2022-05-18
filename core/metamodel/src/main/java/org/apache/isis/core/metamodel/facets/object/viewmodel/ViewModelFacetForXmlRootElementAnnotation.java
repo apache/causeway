@@ -47,6 +47,16 @@ extends ViewModelFacetAbstract {
             @NonNull final ObjectSpecification viewmodelSpec,
             @NonNull final Bookmark bookmark) {
         final String xmlStr = getUrlEncodingService().decodeToString(bookmark.getIdentifier());
+
+        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+            _Debug.log("[JAXB] de-serializing viewmodel %s\n"
+                    + "--- XML ---\n"
+                    + "%s"
+                    + "-----------\n",
+                    viewmodelSpec.getLogicalTypeName(),
+                    xmlStr);
+        });
+
         val viewmodelPojo = getJaxbService().fromXml(viewmodelSpec.getCorrespondingClass(), xmlStr);
         return viewmodelPojo!=null
                 ? ManagedObject.bookmarked(viewmodelSpec, viewmodelPojo, bookmark)
@@ -55,10 +65,15 @@ extends ViewModelFacetAbstract {
 
     @Override
     protected String serialize(final ManagedObject managedObject) {
-        final String xml = getJaxbService().toXml(managedObject.getPojo());
-        final String encoded = getUrlEncodingService().encodeString(xml);
+
+        final String xml = getJaxbService().toXml(managedObject.getPojo());        final String encoded = getUrlEncodingService().encodeString(xml);
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("[JAXB] serializing viewmodel %s", managedObject.getSpecification().getLogicalTypeName());
+            _Debug.log("[JAXB] serializing viewmodel %s\n"
+                    + "--- XML ---\n"
+                    + "%s"
+                    + "-----------\n",
+                    managedObject.getSpecification().getLogicalTypeName(),
+                    xml);
         });
         return encoded;
     }
