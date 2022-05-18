@@ -15,7 +15,7 @@ Or, this fixture script uses the `SudoService` to set up `ToDoItem` objects:
 ----
 protected void execute(final ExecutionContext ec) {
     ...
-    sudoService.sudo(
+    sudoService.call(
         InteractionContext.switchUser(UserMemento.ofName("joe")),
         () -> wrap(toDoItem).completed()
     );
@@ -24,45 +24,31 @@ protected void execute(final ExecutionContext ec) {
 ----
 
 
-== Interaction with Shiro
+== Disabling permission checks
 
-When `sudo(...)` is called the "effective user" is reported by  xref:refguide:applib:index/services/user/UserService.adoc[UserService].
-However, it does _not_ propagate through to the xref:security:ROOT:about.adoc[Shiro security mechanism], which continue to be evaluated according to the permissions of the current user.
+Sometimes it's useful to be able to "switch off" security checks, for example when running in initial seed scripts or fixtures that use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory].
+This can be done using any user that has the special xref:refguide:applib:index/services/sudo/SudoService.adoc#ACCESS_ALL_ROLE[ACCESS_ALL_ROLE] role.
 
-This can be a problem in certain use cases.
-For example if running a fixture script (which uses the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory]) from within an implementation of xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService], this is likely to result in ``HiddenException``s being thrown because there is no effective user.
-
-In such cases, permission checking can simply be disabled by specifying `SudoService.ACCESS_ALL_ROLE` as one of the roles.
 For example:
 
 [source,java]
 ----
 protected void execute(final ExecutionContext ec) {
     ...
-    ExecutionContext ec =
-        ExecutionContext.ofUserWithSystemDefaults(
-            UserMemento.ofNameAndRoleNames("joe", SudoService.ACCESS_ALL_ROLE)));
-
-    sudoService.sudo(ec, () -> wrap(toDoItem).completed());
+    sudoService.sudo(InteractionContext.switchUser(
+            UserMemento.ofNameAndRoles("seed-user", SudoService.ACCESS_ALL_ROLE),
+            () -> { /* ... */ }
+    );
     ...
 }
 ----
-
-[NOTE]
-====
-In the future this service may be used more deeply, eg to propagate permissions through to the Shiro security mechanism also.
-====
-
 
 
 
 
 == See also
 
-* xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext]
-
-* xref:refguide:applib:index/services/sudo/SudoServiceListener.adoc[SudoServiceListener]
-
-* the `InteractionFactory` is a lower-level framework (non-API) service, that provides the ability to programmatically start a new "interaction"; these can be nested.
-
+* xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[]
+* xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService]
+* xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory]
 
