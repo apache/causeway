@@ -437,7 +437,7 @@ under the License.
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.6</swagger-core.version>
 
-		<togglz.version>3.1.2</togglz.version>
+		<togglz.version>3.2.0</togglz.version>
 
 		<vaadin.version>23.0.7</vaadin.version>
 
