@@ -7,6 +7,6 @@
 ** xref:docs:starters:simpleapp.adoc[SimpleApp]
 
 ** xref:docs:parent-pom:about.adoc[Parent POM]
-** xref:docs:mavendeps:about.adoc[Aggregator POMs]
+** xref:docs:mavendeps:about.adoc[Webapp Aggregator POM]
 
 
