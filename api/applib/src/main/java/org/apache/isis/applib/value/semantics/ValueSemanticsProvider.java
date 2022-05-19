@@ -24,6 +24,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
@@ -111,6 +112,12 @@ public interface ValueSemanticsProvider<T> {
      * If not <tt>null</tt>, implies that the value has (or may have) a default.
      */
     DefaultsProvider<T> getDefaultsProvider();
+
+    // -- UTILITY
+
+    default <X> ValueSemanticsProvider<X> castTo(final Class<X> cls) {
+        return _Casts.uncheckedCast(this);
+    }
 
     // -- CATEGORIZATION
 
