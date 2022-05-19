@@ -71,12 +71,6 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.springframework.graphql</groupId>
-  				<artifactId>spring-graphql</artifactId>
-  				<version>1.0.0</version>
-			</dependency>
-
-			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-websocket</artifactId>
 				<version>${spring-boot.version}</version>
