@@ -99,6 +99,9 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
 
     @Override
     public ObjectMemento mementoForParameter(@NonNull final ManagedObject paramAdapter) {
+        if(paramAdapter instanceof PackedManagedObject) {
+            return mementoForObjects((PackedManagedObject) paramAdapter);
+        }
         val mementoAdapter = _ObjectMemento.createOrNull(paramAdapter);
         if(mementoAdapter==null) {
             return new ObjectMementoForEmpty(paramAdapter.getSpecification().getLogicalType());
