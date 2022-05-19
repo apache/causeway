@@ -212,7 +212,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final @NonNull SyncControl syncControl) {
 
         T mixin = factoryService.mixin(mixinClass, mixee);
-        serviceInjector.injectServicesInto(mixin);
+        // no need to inject services into the mixin, factoryService does it for us.
 
         if (isWrapper(mixee)) {
             val wrapperObject = (WrappingObject) mixee;
