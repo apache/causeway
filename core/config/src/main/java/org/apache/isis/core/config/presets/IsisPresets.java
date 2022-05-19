@@ -33,6 +33,7 @@ public final class IsisPresets  {
     public static final String IntrospectFully = "classpath:/org/apache/isis/core/config/presets/IntrospectFully.properties";
 
     public static final String DatanucleusAutocreateNoValidate = "classpath:/org/apache/isis/core/config/presets/DatanucleusAutocreateNoValidate.properties";
+    public static final String DatanucleusEagerlyCreateTables = "classpath:/org/apache/isis/core/config/presets/DatanucleusEagerlyCreateTables.properties";
 
     public static final String DebugPersistence = "classpath:/org/apache/isis/core/config/presets/DebugPersistence.properties";
     public static final String DebugRequestScopedServices = "classpath:/org/apache/isis/core/config/presets/DebugRequestScopedServices.properties";
