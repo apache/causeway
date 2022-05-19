@@ -342,6 +342,7 @@ extends DelegatingInvocationHandlerDefault<T> {
 
             val currentReferencedObj = UnwrapUtil.single(currentReferencedAdapter);
 
+
             val propertyAccessEvent = new PropertyAccessEvent(
                     getDelegate(), property.getFeatureIdentifier(), currentReferencedObj);
             notifyListeners(propertyAccessEvent);

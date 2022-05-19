@@ -36,6 +36,7 @@ import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
@@ -88,6 +89,7 @@ implements MemberExecutorService {
     private final @Getter IsisConfiguration configuration;
     private final @Getter ObjectManager objectManager;
     private final @Getter ClockService clockService;
+    private final @Getter ServiceInjector serviceInjector;
     private final @Getter Provider<MetricsService> metricsService;
     private final @Getter InteractionDtoFactory interactionDtoFactory;
     private final @Getter Provider<ExecutionPublisher> executionPublisher;
@@ -167,6 +169,7 @@ implements MemberExecutorService {
         }
 
         val returnedPojo = priorExecution.getReturned();
+        getServiceInjector().injectServicesInto(returnedPojo);
         val returnedAdapter = objectManager.adapt(
                 returnedPojo, owningAction::getElementType, EntityAdaptingMode.MEMOIZE_BOOKMARK);
 
