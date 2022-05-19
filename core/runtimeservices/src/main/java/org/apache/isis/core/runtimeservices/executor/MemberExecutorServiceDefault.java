@@ -169,7 +169,6 @@ implements MemberExecutorService {
         }
 
         val returnedPojo = priorExecution.getReturned();
-        getServiceInjector().injectServicesInto(returnedPojo);
         val returnedAdapter = objectManager.adapt(
                 returnedPojo, owningAction::getElementType, EntityAdaptingMode.MEMOIZE_BOOKMARK);
 

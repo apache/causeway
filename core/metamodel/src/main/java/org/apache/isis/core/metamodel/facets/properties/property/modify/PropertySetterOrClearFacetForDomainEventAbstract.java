@@ -230,6 +230,8 @@ implements
                             oldValuePojo, actualNewValue);
                 }
 
+                // with action invocations, we inject services in the returned pojo at this point.
+                // for property sets, though, there's no need, as we're just returning the targetPojo itself
                 return head.getTarget().getPojo();
 
                 //
