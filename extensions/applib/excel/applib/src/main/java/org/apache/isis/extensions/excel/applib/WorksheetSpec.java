@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.excel.applib.dom;
+package org.apache.isis.extensions.excel.applib;
 
 import java.util.List;
 
@@ -24,7 +24,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.extensions.excel.applib.util.Mode;
 
 import lombok.Setter;
 

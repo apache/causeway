@@ -28,14 +28,13 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.extensions.excel.applib.dom.ExcelService;
+import org.apache.isis.extensions.excel.applib.ExcelService;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateManagerForDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem;

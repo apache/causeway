@@ -35,7 +35,7 @@ For example:
 ----
 protected void execute(final ExecutionContext ec) {
     ...
-    sudoService.sudo(InteractionContext.switchUser(
+    sudoService.call(InteractionContext.switchUser(
             UserMemento.ofNameAndRoles("seed-user", SudoService.ACCESS_ALL_ROLE),
             () -> { /* ... */ }
     );

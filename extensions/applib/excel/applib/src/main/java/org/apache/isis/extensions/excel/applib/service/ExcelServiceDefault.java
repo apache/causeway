@@ -37,10 +37,10 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.extensions.excel.applib.dom.ExcelService;
-import org.apache.isis.extensions.excel.applib.dom.WorksheetContent;
-import org.apache.isis.extensions.excel.applib.dom.WorksheetSpec;
-import org.apache.isis.extensions.excel.applib.util.Mode;
+import org.apache.isis.extensions.excel.applib.ExcelService;
+import org.apache.isis.extensions.excel.applib.WorksheetContent;
+import org.apache.isis.extensions.excel.applib.WorksheetSpec;
+import org.apache.isis.extensions.excel.applib.Mode;
 
 
 @Service

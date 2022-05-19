@@ -16,34 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.excel.applib.dom;
+package org.apache.isis.extensions.excel.applib;
 
-import java.util.List;
-
-import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * @since 2.0 {@index}
  */
-public class WorksheetContent {
-
-    private final List<?> domainObjects;
-    private final WorksheetSpec spec;
-
-    public <T> WorksheetContent(
-            final List<T> domainObjects,
-            final WorksheetSpec spec) {
-        this.domainObjects = domainObjects;
-        this.spec = spec;
-    }
-
-    @Programmatic
-    public List<?> getDomainObjects() {
-        return domainObjects;
-    }
-
-    @Programmatic
-    public WorksheetSpec getSpec() {
-        return spec;
-    }
+public interface ExcelMetaDataEnabled {
+    void setExcelSheetName(final String sheetName);
+    void setExcelRowNumber(final Integer rowNumber);
 }

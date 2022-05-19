@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.extensions.excel.applib.dom.ExcelMetaDataEnabled;
+import org.apache.isis.extensions.excel.applib.ExcelMetaDataEnabled;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
 import org.apache.isis.extensions.excel.testing.ExcelFixture2;

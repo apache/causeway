@@ -41,7 +41,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.excel.applib.IsisModuleExtExcelApplib;
-import org.apache.isis.extensions.excel.applib.dom.ExcelService;
+import org.apache.isis.extensions.excel.applib.ExcelService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
