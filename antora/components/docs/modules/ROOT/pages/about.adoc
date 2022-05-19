@@ -33,7 +33,7 @@ link:https://simpleapp.jpa.isis.incode.work[jpa])
 _POMs_
 
 * xref:docs:parent-pom:about.adoc[Parent POM]
-* xref:docs:mavendeps:about.adoc[Aggregator POMs]
+* xref:docs:mavendeps:about.adoc[Webapp Aggregator POM]
 
 |
 [discrete]
