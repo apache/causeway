@@ -218,15 +218,16 @@ public class WrapperFactoryDefault implements WrapperFactory {
             val wrapperObject = (WrappingObject) mixee;
             val executionMode = wrapperObject.__isis_executionModes();
             val underlyingMixee = wrapperObject.__isis_wrapped();
+
             serviceInjector.injectServicesInto(underlyingMixee);
 
             if(equivalent(executionMode, syncControl.getExecutionModes())) {
                 return mixin;
             }
             return _Casts.uncheckedCast(createMixinProxy(underlyingMixee, mixin, syncControl));
-        } else {
-            serviceInjector.injectServicesInto(mixee);
         }
+
+        serviceInjector.injectServicesInto(mixee);
 
         return createMixinProxy(mixee, mixin, syncControl);
     }
