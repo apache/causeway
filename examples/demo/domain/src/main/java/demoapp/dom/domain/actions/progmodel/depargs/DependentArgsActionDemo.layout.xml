@@ -33,6 +33,7 @@
 				<cpt:action id="useChoices"/>
 				<cpt:action id="useChoices2"/>
             	<cpt:action id="useAutoComplete"/>
+            	<cpt:action id="useAutoComplete2"/>
             	<cpt:action id="useDefault"/>
 	            <cpt:property id="dependentText1"/>
                 <cpt:property id="dialogParityDefault" />
