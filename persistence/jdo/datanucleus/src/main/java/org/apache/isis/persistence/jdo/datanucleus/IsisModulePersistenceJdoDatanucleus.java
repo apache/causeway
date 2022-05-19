@@ -42,7 +42,6 @@ import org.apache.isis.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
-import org.apache.isis.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
@@ -69,7 +68,6 @@ import lombok.extern.log4j.Log4j2;
     IsisModulePersistenceJdoIntegration.class,
 
     // @Component's
-    DnEntityDiscoveryListener.class,
     DnEntityStateProvider.class,
 
     // @Mixin's
