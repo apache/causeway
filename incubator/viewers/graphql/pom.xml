@@ -73,7 +73,7 @@
 			<dependency>
 				<groupId>org.springframework.graphql</groupId>
   				<artifactId>spring-graphql</artifactId>
-  				<version>1.0.0-RC1</version>
+  				<version>1.0.0</version>
 			</dependency>
 
 			<dependency>
