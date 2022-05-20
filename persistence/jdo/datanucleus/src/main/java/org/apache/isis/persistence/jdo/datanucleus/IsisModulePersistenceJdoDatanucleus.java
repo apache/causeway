@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Provider;
@@ -221,10 +222,11 @@ public class IsisModulePersistenceJdoDatanucleus {
         if(_NullSafe.isEmpty(jdoEntityTypes)) {
             return;
         }
-        val dnProps = dnSettings.getAsProperties();
+        val jdoEntityTypesView = Collections.unmodifiableSet(jdoEntityTypes);
+        val dnProps = Collections.unmodifiableMap(dnSettings.getAsProperties());
         _NullSafe.stream(jdoEntityDiscoveryListeners)
                 .forEach(listener->
-                    listener.onEntitiesDiscovered(pmf, jdoEntityTypes, dnProps));
+                    listener.onEntitiesDiscovered(pmf, jdoEntityTypesView, dnProps));
     }
 
     /**
