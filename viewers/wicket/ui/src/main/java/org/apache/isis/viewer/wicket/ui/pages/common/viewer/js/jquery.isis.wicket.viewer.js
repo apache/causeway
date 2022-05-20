@@ -88,18 +88,18 @@ $(function() {
     Wicket.Event.subscribe(Isis.Topic.OPEN_SELECT2, function(jqEvent, panelId) {
         setTimeout(function() {
             var $panel = $('#'+panelId);
-             console.log($panel);
+            //console.log('Isis.Topic.OPEN_SELECT2: panelId=' + panelId);
             $($panel).find('select').select2('open');
-//            $($panel).find('select').filter(':visible:first').focus();
+			//$($panel).find('select').filter(':visible:first').focus();
         }, 0);
     });
 
     Wicket.Event.subscribe(Isis.Topic.CLOSE_SELECT2, function(jqEvent, panelId) {
         setTimeout(function() {
             var $panel = $('#'+panelId);
-             console.log($panel);
-            $($panel).find('select').select2('close');
-            $($panel).find('select').filter(':visible:first').focus();
+            //console.log('Isis.Topic.CLOSE_SELECT2: panelId=' + panelId);
+            //$($panel).find('select').select2('close');
+            //$($panel).find('select').filter(':visible:first').focus();
         }, 0);
     });
 
@@ -108,6 +108,9 @@ $(function() {
             let el = $('#'+elementId).find('.inputFormTable.parameters')
             	.find('input,textarea,div.cbx,select').filter(':visible:first');
             if(el) {
+	
+				//console.log('Isis.Topic.FOCUS_FIRST_PARAMETER: elementId=' + elementId);
+	
                 let elNodeName = $(el).prop('nodeName')
                 if (elNodeName) {
                     let x = elNodeName.toLowerCase()
@@ -215,16 +218,6 @@ $(function() {
 	$('.no-click-bubbling').click(function(event){
 	    event.stopImmediatePropagation();
 	});
-
-/*
-    $('.editing .editable').parent().hover(function () {
-        var inputEl = $(this).find("> .editable")
-        $(inputEl).css({cursor: 'pointer'})
-    },function () {
-        var inputEl = $(this).find("> .editable")
-        $(inputEl).css({cursor: 'auto'})
-    });
-*/
 
     /*
     Adapted from https://bootstrap-menu.com/detail-basic-hover.html
