@@ -20,31 +20,30 @@ package org.apache.isis.viewer.wicket.viewer.wicketapp.config;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.devutils.debugbar.DebugBarInitializer;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
 
-import lombok.val;
-
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
-
 @Configuration
-public class JQueryInitWkt implements WicketApplicationInitializer {
+public class DebugInitWkt implements WicketApplicationInitializer {
 
-    @Inject IsisConfiguration configuration;
+    @Inject private IsisSystemEnvironment systemEnvironment;
+    @Inject private IsisConfiguration configuration;
 
-    /**
-     * Downgrading jquery 3.6.0 -> 3.5.1 because of:
-     *
-     * https://github.com/select2/select2/issues/5993
-     */
     @Override
     public void init(final WebApplication webApplication) {
-        val settings = webApplication.getJavaScriptLibrarySettings();
-        // settings.setJQueryReference(JQueryResourceReference.getV3());
-        settings.setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.5.1/jquery.js"));
+
+        webApplication.getDebugSettings()
+            .setAjaxDebugModeEnabled(configuration.getViewer().getWicket().isAjaxDebugMode());
+
+        if(systemEnvironment.isPrototyping()
+                && configuration.getViewer().getWicket().getDevelopmentUtilities().isEnable()) {
+            new DebugBarInitializer().init(webApplication);
+        }
     }
 
 }

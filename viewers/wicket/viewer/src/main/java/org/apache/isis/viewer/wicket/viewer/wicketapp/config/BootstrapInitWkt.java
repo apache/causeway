@@ -18,33 +18,46 @@
  */
 package org.apache.isis.viewer.wicket.viewer.wicketapp.config;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
+import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport;
+
+import lombok.val;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
-import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 
 @Configuration
 public class BootstrapInitWkt implements WicketApplicationInitializer {
 
+    @Inject ServiceRegistry serviceRegistry;
+
     @Override
     public void init(final WebApplication webApplication) {
-        final IBootstrapSettings settings = new BootstrapSettings();
-        settings.setDeferJavascript(false);
-        Bootstrap.install(webApplication, settings);
+        val bsSettings = new BootstrapSettings();
+        bsSettings.setDeferJavascript(false);
+        Bootstrap.install(webApplication, bsSettings);
 
         webApplication.getHeaderContributorListeners().add(new IHeaderContributor() {
             private static final long serialVersionUID = 1L;
             @Override
             public void renderHead(final IHeaderResponse response) {
-                new BootstrapBaseBehavior().renderHead(settings, response);
+                new BootstrapBaseBehavior().renderHead(bsSettings, response);
             }
+        });
+
+        serviceRegistry.select(IsisWicketThemeSupport.class)
+        .getFirst()
+        .ifPresent(themeSupport->{
+            bsSettings.setThemeProvider(themeSupport.getThemeProvider());
         });
     }
 

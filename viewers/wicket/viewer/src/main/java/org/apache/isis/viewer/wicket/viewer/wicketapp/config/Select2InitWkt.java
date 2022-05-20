@@ -22,8 +22,6 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.res.css.Select2BootstrapCssReference;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.res.js.Select2JsReference;
 
 import lombok.val;
 
@@ -33,8 +31,8 @@ public class Select2InitWkt implements WicketApplicationInitializer {
     @Override
     public void init(final WebApplication webApplication) {
         val select2Settings = org.wicketstuff.select2.ApplicationSettings.get();
-        select2Settings.setCssReference(new Select2BootstrapCssReference());
-        select2Settings.setJavascriptReferenceFull(new Select2JsReference());
+        //select2Settings.setCssReference(new Select2BootstrapCssReference());
+        //select2Settings.setJavascriptReferenceFull(new Select2JsReference());
         select2Settings.setIncludeJavascriptFull(true);
     }
 

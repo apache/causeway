@@ -36,9 +36,11 @@ import org.apache.isis.viewer.wicket.viewer.services.TranslationsResolverWicket;
 import org.apache.isis.viewer.wicket.viewer.services.WicketViewerSettingsDefault;
 import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.config.BootstrapInitWkt;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.DebugInitWkt;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.config.JQueryInitWkt;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.config.Select2InitWkt;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WebjarsInitWkt;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WicketViewerCssBundleInit;
 
 /**
  * @since 1.x {@index}
@@ -53,6 +55,8 @@ import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WebjarsInitWkt;
         JQueryInitWkt.class,
         Select2InitWkt.class,
         WebjarsInitWkt.class,
+        WicketViewerCssBundleInit.class,
+        DebugInitWkt.class,
 
         // @Service's
         BookmarkUiServiceWicket.class,
