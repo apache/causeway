@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.viewer.wicketapp.config;
 import javax.inject.Inject;
 
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.resource.JQueryResourceReference;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.core.config.IsisConfiguration;
@@ -41,20 +40,13 @@ public class JQueryInitWkt implements WicketApplicationInitializer {
 
         val settings = webApplication.getJavaScriptLibrarySettings();
 
-        switch(configuration.getViewer().getWicket().getJQueryVersion()) {
-        case 2:
-            settings.setJQueryReference(JQueryResourceReference.getV2());
-            break;
-        default:
-            // getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
-            /*
-             * downgrading to jquery 3.5.1 because of this issue:
-             *
-             * https://github.com/select2/select2/issues/5993
-             */
-            settings.setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.5.1/jquery.js"));
-            break;
-        }
+        // getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
+        /*
+         * downgrading to jquery 3.5.1 because of this issue:
+         *
+         * https://github.com/select2/select2/issues/5993
+         */
+        settings.setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.5.1/jquery.js"));
     }
 
 }

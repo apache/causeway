@@ -43,8 +43,7 @@ public class BootstrapInitWkt implements WicketApplicationInitializer {
             private static final long serialVersionUID = 1L;
             @Override
             public void renderHead(final IHeaderResponse response) {
-                BootstrapBaseBehavior bootstrapBaseBehavior = new BootstrapBaseBehavior();
-                bootstrapBaseBehavior.renderHead(settings, response);
+                new BootstrapBaseBehavior().renderHead(settings, response);
             }
         });
     }

@@ -16,15 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
+package org.apache.isis.viewer.wicket.ui.components.widgets.select2.res.css;
 
 import java.util.List;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
-
-import org.apache.isis.viewer.wicket.ui.pages.SidebarCssResourceReference;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -37,18 +35,7 @@ import lombok.experimental.Accessors;
 public class Select2BootstrapCssReference extends CssResourceReference {
     private static final long serialVersionUID = 1L;
 
-    @Getter(lazy = true) @Accessors(fluent = true)
-    private static final Select2BootstrapCssReference instance =
-        new Select2BootstrapCssReference();
-
-    public static CssHeaderItem asHeaderItem() {
-        return CssHeaderItem.forReference(SidebarCssResourceReference.instance());
-    }
-
-    /**
-     * Private constructor.
-     */
-    private Select2BootstrapCssReference() {
+    public Select2BootstrapCssReference() {
         super(Select2BootstrapCssReference.class, "select2-bootstrap.css");
     }
 
@@ -60,6 +47,6 @@ public class Select2BootstrapCssReference extends CssResourceReference {
     @Getter(lazy = true) @Accessors(fluent = true)
     private static final List<HeaderItem> dependencies =
             List.<HeaderItem>of(CssHeaderItem.forReference(
-                    new CssResourceReference(Select2BootstrapCssReference.class, "res/css/select2.css")));
+                    new CssResourceReference(Select2BootstrapCssReference.class, "select2.css")));
 
 }

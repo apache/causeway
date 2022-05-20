@@ -69,8 +69,6 @@ import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Core;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -1884,12 +1882,6 @@ public class IsisConfiguration {
              * Whether the Ajax debug should be shown, by default this is disabled.
              */
             private boolean ajaxDebugMode = false;
-
-            /**
-             * Which major JQuery version the <i>Wicket Viewer</i> should use, default is 3.
-             * @see org.apache.wicket.resource.JQueryResourceReference
-             */
-            private int jQueryVersion = 3;
 
             /**
              * The base path at which the Wicket viewer is mounted.
