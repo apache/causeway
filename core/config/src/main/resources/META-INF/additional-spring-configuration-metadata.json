@@ -168,7 +168,7 @@
       ]
     },
     {
-      "name": "datanucleus.schema.generatedatabase.mode",
+      "name": "datanucleus.schema.generate-database.mode",
       "values": [
         {
           "value": "none"

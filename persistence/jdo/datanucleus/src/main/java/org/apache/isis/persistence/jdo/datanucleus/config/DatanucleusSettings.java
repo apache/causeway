@@ -46,9 +46,9 @@ import lombok.extern.log4j.Log4j2;
  *
  * <p>
  *     A bit more detail on the above: DN specifies that configuration parameters should be in <code>camelCase</code>,
- *     however that is not the normal idiom for Spring Boot, moreover specifying camelCase properties, which possible,
- *     is laborious.  Luckily DN actually lower cases all properties anyway.  It's therefore pretty simple for this
- *     class to sanitize keys from kebab case to lower case.
+ *     however that is not the normal idiom for Spring Boot; moreover specifying camelCase properties, while possible,
+ *     is laborious.  Luckily DN actually lower cases all property keys anyway before using them.  It's therefore
+ *     pretty simple for this class to sanitize keys from kebab case to lower case and then pass them onto DN.
  * </p>
  *
  * @since 2.0
