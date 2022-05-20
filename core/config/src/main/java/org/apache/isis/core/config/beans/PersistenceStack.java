@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.entity;
+package org.apache.isis.core.config.beans;
 
 public enum PersistenceStack {
     JPA,

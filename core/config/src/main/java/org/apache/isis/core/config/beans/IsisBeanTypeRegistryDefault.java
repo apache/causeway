@@ -65,7 +65,7 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
     // -- LOOKUPS
 
     @Override
-    public Optional<IsisBeanMetaData> lookupIntrospectableType(Class<?> type) {
+    public Optional<IsisBeanMetaData> lookupIntrospectableType(final Class<?> type) {
         return Optional.ofNullable(introspectableTypesByClass.get(type));
     }
 
@@ -116,5 +116,7 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
         });
 
     }
+
+
 
 }

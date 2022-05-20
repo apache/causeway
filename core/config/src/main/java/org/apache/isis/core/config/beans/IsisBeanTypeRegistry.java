@@ -55,5 +55,24 @@ public interface IsisBeanTypeRegistry {
                 .map(IsisBeanMetaData::getBeanName);
     }
 
+    default Set<Class<?>> getEntityTypes(final PersistenceStack persistenceStack) {
+        return determineCurrentPersistenceStack().equals(persistenceStack)
+                ? getEntityTypes()
+                : Set.of();
+    }
+
+    /**
+     * Returns either 'JDO' or 'JPA' based on what {@link IsisBeanTypeClassifier} we find
+     * registered with <i>Spring</i>.
+     * Alternative implementations could be considered, however this works for now.
+     */
+    default PersistenceStack determineCurrentPersistenceStack() {
+        return IsisBeanTypeClassifier.get().stream()
+                .map(IsisBeanTypeClassifier::getClass)
+                .map(Class::getSimpleName)
+                .anyMatch(classifierName->classifierName.startsWith("Jdo"))
+                ? PersistenceStack.JDO
+                : PersistenceStack.JPA;
+    }
 
 }

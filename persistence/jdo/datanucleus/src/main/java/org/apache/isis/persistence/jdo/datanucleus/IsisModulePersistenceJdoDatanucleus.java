@@ -41,6 +41,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
@@ -145,14 +146,7 @@ public class IsisModulePersistenceJdoDatanucleus {
 
         val pmf = localPmfBean.getObject(); // created once per application lifecycle
 
-        val entityTypes = beanTypeRegistry.getEntityTypes();
-        if(! _NullSafe.isEmpty(entityTypes)) {
-            val dnProps = dnSettings.getAsProperties();
-            _NullSafe.stream(jdoEntityDiscoveryListeners)
-                    .forEach(listener->{
-                        listener.onEntitiesDiscovered(pmf, entityTypes, dnProps);
-                    });
-        }
+        notifyJdoEntityDiscoveryListeners(pmf, beanTypeRegistry, jdoEntityDiscoveryListeners, dnSettings);
 
         val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy(metaModelContext);
         tapmfProxy.setTargetPersistenceManagerFactory(pmf);
@@ -213,6 +207,25 @@ public class IsisModulePersistenceJdoDatanucleus {
     }
 
     // -- HELPER
+
+    private static void notifyJdoEntityDiscoveryListeners(
+            final PersistenceManagerFactory pmf,
+            final IsisBeanTypeRegistry beanTypeRegistry,
+            final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners,
+            final DatanucleusSettings dnSettings) {
+
+        if(_NullSafe.isEmpty(jdoEntityDiscoveryListeners)) {
+            return;
+        }
+        val jdoEntityTypes = beanTypeRegistry.getEntityTypes(PersistenceStack.JDO);
+        if(_NullSafe.isEmpty(jdoEntityTypes)) {
+            return;
+        }
+        val dnProps = dnSettings.getAsProperties();
+        _NullSafe.stream(jdoEntityDiscoveryListeners)
+                .forEach(listener->
+                    listener.onEntitiesDiscovered(pmf, jdoEntityTypes, dnProps));
+    }
 
     /**
      * integrates with settings from isis.persistence.schema.*

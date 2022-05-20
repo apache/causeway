@@ -295,7 +295,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         log.info(" - introspecting {} entities ({})",
                 isisBeanTypeRegistry.getEntityTypes().size(),
-                _Util.persistenceLayerName());
+                isisBeanTypeRegistry.determineCurrentPersistenceStack().name());
 
         log.info(" - introspecting {} view models", isisBeanTypeRegistry.getViewModelTypes().size());
 

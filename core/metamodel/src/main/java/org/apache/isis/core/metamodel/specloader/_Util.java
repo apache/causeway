@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Logger;
 
-import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
@@ -77,20 +76,6 @@ final class _Util {
         log.debug(String.format(
                 "cachedSpecificationsAfter.size = %d ; cachedAfterNotBefore.size = %d",
                 cached.size(), cachedAfterNotBefore.size()));
-    }
-
-    /**
-     * Returns either 'JDO' or 'JPA' based on what {@link IsisBeanTypeClassifier} we find
-     * registered with <i>Spring</i>.
-     * Alternative implementations could be considered, however this works for now.
-     */
-    String persistenceLayerName() {
-        return IsisBeanTypeClassifier.get().stream()
-            .map(IsisBeanTypeClassifier::getClass)
-            .map(Class::getSimpleName)
-            .anyMatch(classifierName->classifierName.startsWith("Jdo"))
-            ? "JDO"
-            : "JPA";
     }
 
 }

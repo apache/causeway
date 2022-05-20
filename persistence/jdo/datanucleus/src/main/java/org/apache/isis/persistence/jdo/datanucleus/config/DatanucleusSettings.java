@@ -20,7 +20,6 @@ package org.apache.isis.persistence.jdo.datanucleus.config;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Priority;
@@ -99,6 +98,8 @@ public class DatanucleusSettings {
         return properties;
     }
 
+    // -- HELPER
+
     private void addFallbacks(final Map<String, Object> props) {
 
         val connectionFactoryName = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
@@ -133,7 +134,7 @@ public class DatanucleusSettings {
 
     }
 
-    private static String sanitizeKey(String key) {
+    private static String sanitizeKey(final String key) {
         return key.replaceAll("-", "").toLowerCase();
     }
 
