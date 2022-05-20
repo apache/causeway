@@ -94,18 +94,18 @@ The default value is to use SQL-99 syntax ("CREATE SCHEMA IF NOT EXISTS %S"), pa
 == Auto-create (or validate) tables
 
 When running against the h2 in-memory database (eg for prototype mode or integration tests), you'll probably want DataNucleus to automatically create the tables.
+This can be done either eagerly or lazily:
 
-This can be configured using the:
+* to create all tables eagerly, set xref:refguide:config:sections/datanucleus.adoc#datanucleus.schema.generate-database.mode[datanucleus.schema.generate-database.mode] to `create`.
 
-* xref:refguide:config:sections/datanucleus.adoc#datanucleus.schema.auto-create-all[datanucleus.schema.autoCreateAll] configuration property.
+* to create all tables lazily (only as objects are read from/written to them), set the xref:refguide:config:sections/datanucleus.adoc#datanucleus.schema.auto-create-all[datanucleus.schema.auto-create-all] to `true`.
+
+Generally we recommend eager creation; there are certain edge cases  -- eg inheritance hierarchies using the superclass (roll-up) table mappging -- where lazy creation can fail.
 
 Conversely, if running in production then you will probably use xref:userguide:flyway:about.adoc[Flyway] to manage database migrations.
-In this case you'll just want to validate that the database table structure of the target database is in line with what DataNucleus expectss.
+In this case you'll just want to validate that the database table structure of the target database is in line with what DataNucleus expects.
 
-You can do this using the:
-
-* xref:refguide:config:sections/datanucleus.adoc#datanucleus.schema.validate-all[datanucleus.schema.validateAll] configuration property.
-
+You can do this using the xref:refguide:config:sections/datanucleus.adoc#datanucleus.schema.validate-all[datanucleus.schema.validateAll] configuration property.
 This will fail-fast if there is a mismatch.
 
 

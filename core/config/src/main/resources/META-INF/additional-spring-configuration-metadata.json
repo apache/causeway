@@ -166,6 +166,23 @@
           "value": "None"
         }
       ]
+    },
+    {
+      "name": "datanucleus.schema.generatedatabase.mode",
+      "values": [
+        {
+          "value": "none"
+        },
+        {
+          "value": "create"
+        },
+        {
+          "value": "drop-and-create"
+        },
+        {
+          "value": "drop"
+        }
+      ]
     }
   ]
 }
