@@ -5,3 +5,4 @@
 * xref:pjpa:ROOT:mapping-guide.adoc[Mapping Guide]
 * xref:pjpa:ROOT:dependency-injection.adoc[Dependency Injection]
 * xref:pjpa:ROOT:domain-services.adoc[Domain Services]
+* xref:pjpa:ROOT:hints-and-tips.adoc[Hints and Tips]

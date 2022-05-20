@@ -57,7 +57,7 @@ import lombok.val;
 @Service
 @Named("isis.persistence.jdo.JdoSupportServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("DN5")
+@Qualifier("DN6")
 public class JdoSupportServiceDefault implements JdoSupportService {
 
     @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;

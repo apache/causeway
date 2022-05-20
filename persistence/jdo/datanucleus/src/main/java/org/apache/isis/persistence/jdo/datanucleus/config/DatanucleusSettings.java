@@ -20,6 +20,7 @@ package org.apache.isis.persistence.jdo.datanucleus.config;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Priority;
@@ -35,20 +36,32 @@ import org.apache.isis.persistence.jdo.datanucleus.entities.DnObjectProviderForI
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * This class slurps up all configuration properties but exposes (through {@link #getAsProperties()} only those
+ * prefixed either "datanucleus." or "javax.jdo".  It also sanitizes the keys, converting from <code>kebab-case</code>
+ * into a form that DN is happy with.
+ *
+ * <p>
+ *     A bit more detail on the above: DN specifies that configuration parameters should be in <code>camelCase</code>,
+ *     however that is not the normal idiom for Spring Boot; moreover specifying camelCase properties, while possible,
+ *     is laborious.  Luckily DN actually lower cases all property keys anyway before using them.  It's therefore
+ *     pretty simple for this class to sanitize keys from kebab case to lower case and then pass them onto DN.
+ * </p>
+ *
  * @since 2.0
  */
 @Configuration
 @Named("isis.persistence.jdo.DnSettings")
 @Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Dn5")
+@Qualifier("DN6")
 @ConfigurationProperties(
         prefix = "",
         ignoreUnknownFields = true)
 @Log4j2
-public class DnSettings {
+public class DatanucleusSettings {
 
     /** mapped by {@code datanucleus.*} */
     @Getter @Setter
@@ -61,13 +74,17 @@ public class DnSettings {
     private final Object lock = new Object();
     private Map<String, Object> properties;
 
+    /**
+     * Returns all "datanucleus.*" and "javax.jdo" configuration properties, with the keys converted to lowercase
+     * (from kebab case) so that they are recognised by DataNucleus.
+     */
     public Map<String, Object> getAsProperties() {
         synchronized(lock) {
             if(properties==null) {
                 properties = new HashMap<>();
 
                 if(datanucleus!=null) {
-                    datanucleus.forEach((k, v)->properties.put("datanucleus." + k, v));
+                    datanucleus.forEach((k, v)->properties.put(sanitizeKey("datanucleus." + k), v));
                 }
 
                 if(javax!=null) {
@@ -76,20 +93,18 @@ public class DnSettings {
                     .forEach(e->properties.put("javax." + e.getKey(), e.getValue()));
                 }
 
-                amendProperties(properties);
+                addFallbacks(properties);
             }
         }
         return properties;
     }
 
-    private void amendProperties(final Map<String, Object> props) {
+    private void addFallbacks(final Map<String, Object> props) {
 
-        // add optional defaults if needed
-
-        String connectionFactoryName = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
+        val connectionFactoryName = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
         if(connectionFactoryName != null) {
-            String connectionFactory2Name = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY2_NAME);
-            String transactionType = (String) props.get("javax.jdo.option.TransactionType");
+            val connectionFactory2Name = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY2_NAME);
+            val transactionType = (String) props.get("javax.jdo.option.TransactionType".toLowerCase());
             // extended logging
             if(transactionType == null) {
                 log.info("found config properties to use non-JTA JNDI datasource ({})", connectionFactoryName);
@@ -105,13 +120,23 @@ public class DnSettings {
             } else {
                 log.info("... and config properties for second '-nontx' JNDI datasource also found; {}", connectionFactory2Name);
             }
-            // nothing further to do
         }
 
         props.computeIfAbsent(PropertyNames.PROPERTY_STATE_MANAGER_CLASS_NAME,
                 key->DnObjectProviderForIsis.class.getName());
 
+        // we debated whether to default 'create' mode, ie eagerly create the database tables ... however while this is
+        // fine for integration testing, it doesn't make much sense for production usage.  So instead we'll just make
+        // sure it is well documented, and in the sample apps.
+        //
+        // props.computeIfAbsent(PropertyNames.PROPERTY_SCHEMA_GENERATE_DATABASE_MODE, s -> "create");
+
     }
+
+    private static String sanitizeKey(String key) {
+        return key.replaceAll("-", "").toLowerCase();
+    }
+
 
 
 }

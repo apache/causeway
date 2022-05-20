@@ -6,9 +6,4 @@
 
 This page provides some solutions for problems we've encountered ourselves or have been raised on the Apache Isis mailing lists.
 
-include::hints-and-tips/tracing-sql-statements.adoc[leveloffset=+1]
-include::hints-and-tips/overriding-jdo-annotations.adoc[leveloffset=+1]
-include::hints-and-tips/subtype-entity-not-fully-populated.adoc[leveloffset=+1]
-include::hints-and-tips/diagnosing-n-plus-1.adoc[leveloffset=+1]
-include::hints-and-tips/typesafe-queries-and-fetchgroups.adoc[leveloffset=+1]
-include::hints-and-tips/jdoql-and-timestamps.adoc[leveloffset=+1]
+include::pjdo:ROOT:page$hints-and-tips/tracing-sql-statements.adoc[]

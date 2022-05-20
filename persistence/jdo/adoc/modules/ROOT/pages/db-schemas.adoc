@@ -13,8 +13,11 @@ For example, xref:security:secman:about.adoc[SecMan]' JDO implementation resides
 Its `ApplicationUser` entity is defined as:
 
 [source,java]
+.ApplicationUser.java
 ----
-@javax.jdo.annotations.PersistenceCapable(
+import javax.jdo.annotations.PersistenceCapable;
+
+@PersistenceCapable(
         schema = "isisExtensionsSecman",
         table = "ApplicationUser",
         ...

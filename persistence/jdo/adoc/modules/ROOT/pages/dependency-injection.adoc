@@ -5,5 +5,20 @@
 
 With Apache Isis it's common to inject domain services into domain entities; this allows behaviour to be pushed down into those entities.
 
-For JDO, this injection performs automatically; there is no configuration or boilerplate required.
+For JDO, both field injection and setter injection is performed automatically:
+
+[source,java]
+.Customer.java
+----
+import javax.inject.Inject;
+
+// ...
+public class Customer {
+
+    // ...
+    @Import OrderRepository orderRepository;
+}
+----
+
+However, constructor injection is _not_ supported.
 
