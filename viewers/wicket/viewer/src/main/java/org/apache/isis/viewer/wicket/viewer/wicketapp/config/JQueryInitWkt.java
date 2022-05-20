@@ -32,7 +32,7 @@ import lombok.val;
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 @Configuration
-public class JQueryWkt implements WicketApplicationInitializer {
+public class JQueryInitWkt implements WicketApplicationInitializer {
 
     @Inject IsisConfiguration configuration;
 

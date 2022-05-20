@@ -18,24 +18,35 @@
  */
 package org.apache.isis.viewer.wicket.viewer.wicketapp.config;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2BootstrapCssReference;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2JsReference;
 
-import lombok.val;
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 
 @Configuration
-public class Select2Wkt implements WicketApplicationInitializer {
+public class BootstrapInitWkt implements WicketApplicationInitializer {
 
     @Override
     public void init(final WebApplication webApplication) {
-        val select2Settings = org.wicketstuff.select2.ApplicationSettings.get();
-        select2Settings.setCssReference(Select2BootstrapCssReference.instance());
-        select2Settings.setJavascriptReferenceFull(new Select2JsReference());
-        select2Settings.setIncludeJavascriptFull(true);
+        final IBootstrapSettings settings = new BootstrapSettings();
+        settings.setDeferJavascript(false);
+        Bootstrap.install(webApplication, settings);
+
+        webApplication.getHeaderContributorListeners().add(new IHeaderContributor() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public void renderHead(final IHeaderResponse response) {
+                BootstrapBaseBehavior bootstrapBaseBehavior = new BootstrapBaseBehavior();
+                bootstrapBaseBehavior.renderHead(settings, response);
+            }
+        });
     }
 
 }

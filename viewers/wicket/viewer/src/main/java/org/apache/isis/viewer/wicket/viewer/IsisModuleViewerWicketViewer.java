@@ -35,10 +35,10 @@ import org.apache.isis.viewer.wicket.viewer.services.ImageResourceCacheClassPath
 import org.apache.isis.viewer.wicket.viewer.services.TranslationsResolverWicket;
 import org.apache.isis.viewer.wicket.viewer.services.WicketViewerSettingsDefault;
 import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
-import org.apache.isis.viewer.wicket.viewer.wicketapp.config.BootstrapWkt;
-import org.apache.isis.viewer.wicket.viewer.wicketapp.config.JQueryWkt;
-import org.apache.isis.viewer.wicket.viewer.wicketapp.config.Select2Wkt;
-import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WebjarsWkt;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.BootstrapInitWkt;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.JQueryInitWkt;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.Select2InitWkt;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WebjarsInitWkt;
 
 /**
  * @since 1.x {@index}
@@ -49,10 +49,10 @@ import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WebjarsWkt;
         IsisModuleViewerWicketUi.class,
 
         // @Configuration's
-        BootstrapWkt.class,
-        JQueryWkt.class,
-        Select2Wkt.class,
-        WebjarsWkt.class,
+        BootstrapInitWkt.class,
+        JQueryInitWkt.class,
+        Select2InitWkt.class,
+        WebjarsInitWkt.class,
 
         // @Service's
         BookmarkUiServiceWicket.class,

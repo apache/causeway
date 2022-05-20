@@ -18,35 +18,22 @@
  */
 package org.apache.isis.viewer.wicket.viewer.wicketapp.config;
 
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
 
-import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
-import de.agilecoders.wicket.core.settings.BootstrapSettings;
-import de.agilecoders.wicket.core.settings.IBootstrapSettings;
+import de.agilecoders.wicket.webjars.WicketWebjars;
+import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
+import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 
 @Configuration
-public class BootstrapWkt implements WicketApplicationInitializer {
+public class WebjarsInitWkt implements WicketApplicationInitializer {
 
     @Override
     public void init(final WebApplication webApplication) {
-        final IBootstrapSettings settings = new BootstrapSettings();
-        settings.setDeferJavascript(false);
-        Bootstrap.install(webApplication, settings);
-
-        webApplication.getHeaderContributorListeners().add(new IHeaderContributor() {
-            private static final long serialVersionUID = 1L;
-            @Override
-            public void renderHead(final IHeaderResponse response) {
-                BootstrapBaseBehavior bootstrapBaseBehavior = new BootstrapBaseBehavior();
-                bootstrapBaseBehavior.renderHead(settings, response);
-            }
-        });
+        final IWebjarsSettings settings = new WebjarsSettings();
+        WicketWebjars.install(webApplication, settings);
     }
 
 }

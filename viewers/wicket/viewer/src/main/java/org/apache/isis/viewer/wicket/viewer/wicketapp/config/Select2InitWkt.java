@@ -22,18 +22,20 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2BootstrapCssReference;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2JsReference;
 
-import de.agilecoders.wicket.webjars.WicketWebjars;
-import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
-import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
+import lombok.val;
 
 @Configuration
-public class WebjarsWkt implements WicketApplicationInitializer {
+public class Select2InitWkt implements WicketApplicationInitializer {
 
     @Override
     public void init(final WebApplication webApplication) {
-        final IWebjarsSettings settings = new WebjarsSettings();
-        WicketWebjars.install(webApplication, settings);
+        val select2Settings = org.wicketstuff.select2.ApplicationSettings.get();
+        select2Settings.setCssReference(Select2BootstrapCssReference.instance());
+        select2Settings.setJavascriptReferenceFull(new Select2JsReference());
+        select2Settings.setIncludeJavascriptFull(true);
     }
 
 }
