@@ -91,7 +91,7 @@ The default value is to use SQL-99 syntax ("CREATE SCHEMA IF NOT EXISTS %S"), pa
 
 
 
-== Auto-create (or validate) tables
+== Auto-create tables during prototyping/tests
 
 When running against the h2 in-memory database (eg for prototype mode or integration tests), you'll probably want DataNucleus to automatically create the tables.
 This can be done either eagerly or lazily:
@@ -102,10 +102,29 @@ This can be done either eagerly or lazily:
 
 Generally we recommend eager creation; there are certain edge cases  -- eg inheritance hierarchies using the superclass (roll-up) table mappging -- where lazy creation can fail.
 
-Conversely, if running in production then you will probably use xref:userguide:flyway:about.adoc[Flyway] to manage database migrations.
-In this case you'll just want to validate that the database table structure of the target database is in line with what DataNucleus expects.
+If running in an integration test, you can use a preset:
 
-You can do this using the xref:refguide:config:sections/datanucleus.adoc#datanucleus.schema.validate-all[datanucleus.schema.validateAll] configuration property.
+[source,java]
+.MyIntegrationTest.java
+----
+@SpringBootTest
+@TestPropertySource({
+    IsisPresets.UseLog4j2Test,
+    IsisPresets.DatanucleusEagerlyCreateTables      // <.>
+})
+class MyIntegrationTest extends IsisIntegrationTestAbstract {
+    //...
+}
+----
+<.> simply sets the `datanucleus.schema.generate-database.mode` to true.
+
+
+== Validating tables in production
+
+When running in production then you may probably want to use xref:userguide:flyway:about.adoc[Flyway] to manage database migrations, rather than have DataNucleus maintain the schema.
+However, it is useful to validate that the database table structure of the target database is in line with what DataNucleus expects.
+
+You can do this using the xref:refguide:config:sections/datanucleus.adoc#datanucleus.schema.validate-all[datanucleus.schema.validate-all] configuration property.
 This will fail-fast if there is a mismatch.
 
 
