@@ -18,7 +18,11 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages;
 
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * A CSS resource reference that provides CSS rules which override the CSS rules
@@ -29,7 +33,16 @@ public class BootstrapOverridesCssResourceReference extends CssResourceReference
 
     private static final long serialVersionUID = 1L;
 
-    public BootstrapOverridesCssResourceReference() {
+    @Getter(lazy = true) @Accessors(fluent = true)
+    private static final BootstrapOverridesCssResourceReference instance =
+        new BootstrapOverridesCssResourceReference();
+
+    public static CssHeaderItem asHeaderItem() {
+        return CssHeaderItem.forReference(BootstrapOverridesCssResourceReference.instance());
+    }
+
+    private BootstrapOverridesCssResourceReference() {
         super(BootstrapOverridesCssResourceReference.class, "bootstrap-overrides-all-v2.css");
     }
+
 }

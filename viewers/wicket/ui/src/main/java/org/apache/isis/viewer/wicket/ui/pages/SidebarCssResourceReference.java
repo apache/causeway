@@ -18,7 +18,11 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages;
 
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * A CSS resource reference that provides CSS rules which override the CSS rules
@@ -28,7 +32,18 @@ import org.apache.wicket.request.resource.CssResourceReference;
 public class SidebarCssResourceReference extends CssResourceReference {
     private static final long serialVersionUID = 1L;
 
-    public SidebarCssResourceReference() {
+    @Getter(lazy = true) @Accessors(fluent = true)
+    private static final SidebarCssResourceReference instance =
+        new SidebarCssResourceReference();
+
+    public static CssHeaderItem asHeaderItem() {
+        return CssHeaderItem.forReference(SidebarCssResourceReference.instance());
+    }
+
+    /**
+     * Private constructor.
+     */
+    private SidebarCssResourceReference() {
         super(SidebarCssResourceReference.class, "simple-sidebar.css");
     }
 }

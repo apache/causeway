@@ -33,7 +33,7 @@ public class Select2Wkt implements WicketApplicationInitializer {
     @Override
     public void init(final WebApplication webApplication) {
         val select2Settings = org.wicketstuff.select2.ApplicationSettings.get();
-        select2Settings.setCssReference(new Select2BootstrapCssReference());
+        select2Settings.setCssReference(Select2BootstrapCssReference.instance());
         select2Settings.setJavascriptReferenceFull(new Select2JsReference());
         select2Settings.setIncludeJavascriptFull(true);
     }

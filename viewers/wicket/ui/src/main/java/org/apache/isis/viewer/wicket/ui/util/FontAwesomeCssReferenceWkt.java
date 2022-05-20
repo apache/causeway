@@ -18,26 +18,24 @@
  */
 package org.apache.isis.viewer.wicket.ui.util;
 
+import org.apache.wicket.markup.head.CssHeaderItem;
+
 import org.apache.isis.viewer.common.model.decorators.IconDecorator;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 
 public class FontAwesomeCssReferenceWkt extends WebjarsCssResourceReference {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Singleton instance of this reference
-     */
-    private static final class Holder {
+    @Getter(lazy = true) @Accessors(fluent = true)
+    private static final FontAwesomeCssReferenceWkt instance =
+        new FontAwesomeCssReferenceWkt();
 
-        private static final FontAwesomeCssReferenceWkt INSTANCE = new FontAwesomeCssReferenceWkt();
-    }
-
-    /**
-     * @return the single instance of the resource reference
-     */
-    public static FontAwesomeCssReferenceWkt instance() {
-        return Holder.INSTANCE;
+    public static CssHeaderItem asHeaderItem() {
+        return CssHeaderItem.forReference(FontAwesomeCssReferenceWkt.instance());
     }
 
     /**

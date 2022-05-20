@@ -21,10 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 import java.util.List;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.isis.commons.internal.collections._Lists;
+
+import org.apache.isis.viewer.wicket.ui.pages.SidebarCssResourceReference;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * A CSS reference that loads <a href="https://github.com/ivaynberg/select2/">Select2.css</a>
@@ -34,14 +37,29 @@ import org.apache.isis.commons.internal.collections._Lists;
 public class Select2BootstrapCssReference extends CssResourceReference {
     private static final long serialVersionUID = 1L;
 
-    public Select2BootstrapCssReference() {
+    @Getter(lazy = true) @Accessors(fluent = true)
+    private static final Select2BootstrapCssReference instance =
+        new Select2BootstrapCssReference();
+
+    public static CssHeaderItem asHeaderItem() {
+        return CssHeaderItem.forReference(SidebarCssResourceReference.instance());
+    }
+
+    /**
+     * Private constructor.
+     */
+    private Select2BootstrapCssReference() {
         super(Select2BootstrapCssReference.class, "select2-bootstrap.css");
     }
 
     @Override
     public List<HeaderItem> getDependencies() {
-        // CssReferenceHeaderItem select2CssReference = CssHeaderItem.forReference(new CssResourceReference(ApplicationSettings.class, "res/css/select2.css"));
-    	CssReferenceHeaderItem select2CssReference = CssHeaderItem.forReference(new CssResourceReference(Select2BootstrapCssReference.class, "res/css/select2.css"));
-        return _Lists.<HeaderItem>of(select2CssReference);
+        return dependencies();
     }
+
+    @Getter(lazy = true) @Accessors(fluent = true)
+    private static final List<HeaderItem> dependencies =
+            List.<HeaderItem>of(CssHeaderItem.forReference(
+                    new CssResourceReference(Select2BootstrapCssReference.class, "res/css/select2.css")));
+
 }

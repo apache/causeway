@@ -255,9 +255,9 @@ implements ActionPromptProvider {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance())));
 
-        response.render(CssHeaderItem.forReference(FontAwesomeCssReferenceWkt.instance()));
-        response.render(CssHeaderItem.forReference(new BootstrapOverridesCssResourceReference()));
-        response.render(CssHeaderItem.forReference(new SidebarCssResourceReference()));
+        response.render(FontAwesomeCssReferenceWkt.asHeaderItem());
+        response.render(BootstrapOverridesCssResourceReference.asHeaderItem());
+        response.render(SidebarCssResourceReference.asHeaderItem());
         contributeThemeSpecificOverrides(response);
 
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));

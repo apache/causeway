@@ -38,8 +38,10 @@ import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -62,8 +64,10 @@ import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
@@ -100,6 +104,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.jquery.Key;
+
+import static de.agilecoders.wicket.jquery.JQuery.$;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -396,14 +402,16 @@ public class Wkt {
         .withThreeState(!required);
 
         final CheckBoxX checkBox = new CheckBoxX(id, checkedModel) {
-
             private static final long serialVersionUID = 1L;
-
-            @Override
-            public CheckBoxXConfig getConfig() {
+            @Override public CheckBoxXConfig getConfig() {
                 return config;
             }
-
+            //override to don't express FontAwesome twice, we already do that for all pages
+            @Override public void renderHead(final IHeaderResponse response) {
+                response.render(CssHeaderItem.forReference(new CssResourceReference(CheckBoxX.class, "css/checkbox-x.css")));
+                response.render(JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(CheckBoxX.class, "js/checkbox-x.js")));
+                response.render(OnDomReadyHeaderItem.forScript($(this).chain("checkboxX", getConfig()).get()));
+            }
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
                 //
@@ -423,8 +431,7 @@ public class Wkt {
                 tag.put("type", "xx");
             }
         };
-        checkBox.setOutputMarkupId(true); // allows AJAX updates to work
-        return checkBox;
+        return ajaxEnable(checkBox);
     }
 
     public static AjaxCheckBox checkbox(
