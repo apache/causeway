@@ -1,1 +1,14 @@
-{"data":{"gqltestdomain_GQLTestDomainMenu":{"findAllE2":[{"name":"foo","_gql_mutations":null}]}}}
+{
+  "data" : {
+    "gqltestdomain_GQLTestDomainMenu" : {
+      "findE2" : {
+        "name" : "foo",
+        "_gql_mutations" : {
+          "changeName" : {
+            "name" : "bar"
+          }
+        }
+      }
+    }
+  }
+}

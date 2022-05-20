@@ -18,13 +18,16 @@
  */
 package org.apache.isis.viewer.graphql.viewer.source;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -105,10 +108,10 @@ public class ObjectTypeFactory {
         String inputTypeName = _Utils.GQL_INPUTTYPE_PREFIX + logicalTypeNameSanitized;
         GraphQLInputObjectType.Builder inputTypeBuilder = newInputObject().name(inputTypeName);
         inputTypeBuilder
-            .field(GraphQLInputObjectField.newInputObjectField()
-                .name("id")
-                .type(nonNull(Scalars.GraphQLID))
-                .build());
+                .field(GraphQLInputObjectField.newInputObjectField()
+                        .name("id")
+                        .type(nonNull(Scalars.GraphQLID))
+                        .build());
         GraphQLInputType inputType = inputTypeBuilder.build();
         addTypeIfNotAlreadyPresent(graphQLObjectTypes, inputType, inputTypeName);
 
@@ -129,7 +132,7 @@ public class ObjectTypeFactory {
         // create and register data fetchers
         createAndRegisterDataFetchersForMetaData(
                 codeRegistryBuilder, objectSpecificationBeanSort, metaType, gql_meta, graphQLObjectType);
-        if (mutatorsDataForEntity!=null) createAndRegisterDataFetchersForMutators(
+        if (mutatorsDataForEntity != null) createAndRegisterDataFetchersForMutators(
                 codeRegistryBuilder, objectSpecificationBeanSort, mutatorsDataForEntity, graphQLObjectType);
         createAndRegisterDataFetchersForField(objectSpecification, codeRegistryBuilder, graphQLObjectType);
         createAndRegisterDataFetchersForCollection(objectSpecification, codeRegistryBuilder, graphQLObjectType);
@@ -143,7 +146,75 @@ public class ObjectTypeFactory {
             final MutatorsDataForEntity mutatorsDataForEntity,
             final GraphQLObjectType graphQLObjectType) {
 
+        List<String> mutatorsTypeFields = mutatorsDataForEntity.getMutatorsTypeFields().stream().map(f -> f.getName()).collect(Collectors.toList());
 
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, _Utils.GQL_MUTATTIONS_FIELDNAME), new DataFetcher<Object>() {
+
+            @Override
+            public Object get(DataFetchingEnvironment environment) throws Exception {
+
+                Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
+                if (bookmark == null) return null;
+                return new GQLMutations(bookmark, bookmarkService, mutatorsTypeFields);
+
+            }
+
+        });
+
+        GraphQLObjectType mutatorsType = mutatorsDataForEntity.getMutatorsType();
+        ObjectSpecification objectSpecification = mutatorsDataForEntity.getObjectSpecification();
+        mutatorsDataForEntity.getMutatorsTypeFields().forEach(
+                mf -> {
+                    Optional<ObjectAction> action = objectSpecification.getAction(mf.getName());
+                    if (action.isPresent()) {
+                        ObjectAction objectAction = action.get();
+                        codeRegistryBuilder
+                                .dataFetcher(
+                                        FieldCoordinates.coordinates(mutatorsType, mf.getName()),
+                                        new DataFetcher<Object>() {
+
+                                            @Override
+                                            public Object get(final DataFetchingEnvironment dataFetchingEnvironment) throws Exception {
+
+                                                GQLMutations gqlMutations = dataFetchingEnvironment.getSource();
+
+                                                Optional<Object> optionalDomainObject = bookmarkService.lookup(gqlMutations.getBookmark());
+
+                                                if (!optionalDomainObject.isPresent()) return null;
+                                                Object domainObject = optionalDomainObject.get();
+
+                                                Class<?> domainObjectInstanceClass = domainObject.getClass();
+                                                ObjectSpecification specification = specificationLoader
+                                                        .loadSpecification(domainObjectInstanceClass);
+
+                                                ManagedObject owner = ManagedObject.of(specification, domainObject);
+
+                                                ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
+
+                                                Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
+                                                Can<ObjectActionParameter> parameters = objectAction.getParameters();
+                                                Can<ManagedObject> canOfParams = parameters.stream().map(oap -> {
+                                                    Object argumentValue = arguments.get(oap.getId());
+                                                    ObjectSpecification elementType = oap.getElementType();
+
+                                                    if (argumentValue == null)
+                                                        return ManagedObject.empty(elementType);
+                                                    return ManagedObject.of(elementType, argumentValue);
+
+
+                                                }).collect(Can.toCan());
+
+                                                ManagedObject managedObject = objectAction
+                                                        .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
+
+                                                return managedObject.getPojo();
+                                            }
+
+                                        });
+
+                    }
+                }
+        );
 
 
     }
@@ -151,10 +222,10 @@ public class ObjectTypeFactory {
     void addTypeIfNotAlreadyPresent(
             final Set<GraphQLType> graphQLObjectTypes,
             final GraphQLType typeToAdd,
-            final String logicalTypeName){
+            final String logicalTypeName) {
 
         boolean present;
-        if (typeToAdd.getClass().isAssignableFrom(GraphQLObjectType.class)){
+        if (typeToAdd.getClass().isAssignableFrom(GraphQLObjectType.class)) {
             GraphQLObjectType typeToAdd1 = (GraphQLObjectType) typeToAdd;
             present = graphQLObjectTypes.stream()
                     .filter(o -> o.getClass().isAssignableFrom(GraphQLObjectType.class))
@@ -170,7 +241,7 @@ public class ObjectTypeFactory {
                     .filter(ot -> ot.getName().equals(typeToAdd1.getName()))
                     .findFirst().isPresent();
         }
-        if (present){
+        if (present) {
             // For now we just log and skip
             System.out.println("==== DOUBLE ====");
             System.out.println(logicalTypeName);
@@ -185,43 +256,43 @@ public class ObjectTypeFactory {
             final GraphQLObjectType.Builder objectTypeBuilder) {
 
         objectSpecification.streamProperties(MixedIn.INCLUDED)
-        .forEach(otoa -> {
+                .forEach(otoa -> {
 
-            ObjectSpecification fieldObjectSpecification = otoa.getElementType();
-            BeanSort beanSort = fieldObjectSpecification.getBeanSort();
-            switch (beanSort) {
+                    ObjectSpecification fieldObjectSpecification = otoa.getElementType();
+                    BeanSort beanSort = fieldObjectSpecification.getBeanSort();
+                    switch (beanSort) {
 
-                case VIEW_MODEL:
-                case ENTITY:
+                        case VIEW_MODEL:
+                        case ENTITY:
 
-                    String logicalTypeNameOfField = fieldObjectSpecification.getLogicalTypeName();
+                            String logicalTypeNameOfField = fieldObjectSpecification.getLogicalTypeName();
 
-                    GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                        .name(otoa.getId())
-                        .type(otoa.isOptional()
-                                ? GraphQLTypeReference.typeRef(
-                                        _Utils.logicalTypeNameSanitized(logicalTypeNameOfField))
-                                : nonNull(GraphQLTypeReference.typeRef(
-                                        _Utils.logicalTypeNameSanitized(logicalTypeNameOfField))));
-                    objectTypeBuilder.field(fieldBuilder);
+                            GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
+                                    .name(otoa.getId())
+                                    .type(otoa.isOptional()
+                                            ? GraphQLTypeReference.typeRef(
+                                            _Utils.logicalTypeNameSanitized(logicalTypeNameOfField))
+                                            : nonNull(GraphQLTypeReference.typeRef(
+                                            _Utils.logicalTypeNameSanitized(logicalTypeNameOfField))));
+                            objectTypeBuilder.field(fieldBuilder);
 
-                    break;
+                            break;
 
-                case VALUE:
+                        case VALUE:
 
-                    // todo: map ...
+                            // todo: map ...
 
-                    GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
-                        .name(otoa.getId())
-                        .type(otoa.isOptional()
-                                ? Scalars.GraphQLString
-                                : nonNull(Scalars.GraphQLString));
-                    objectTypeBuilder.field(valueBuilder);
+                            GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
+                                    .name(otoa.getId())
+                                    .type(otoa.isOptional()
+                                            ? Scalars.GraphQLString
+                                            : nonNull(Scalars.GraphQLString));
+                            objectTypeBuilder.field(valueBuilder);
 
-                    break;
+                            break;
 
-            }
-        });
+                    }
+                });
     }
 
     void createAndRegisterDataFetchersForField(
@@ -229,11 +300,11 @@ public class ObjectTypeFactory {
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
             final GraphQLObjectType graphQLObjectType) {
         objectSpecification.streamProperties(MixedIn.INCLUDED)
-        .forEach(otoa -> {
+                .forEach(otoa -> {
 
-            createAndRegisterDataFetcherForObjectAssociation(codeRegistryBuilder, graphQLObjectType, otoa);
+                    createAndRegisterDataFetcherForObjectAssociation(codeRegistryBuilder, graphQLObjectType, otoa);
 
-        });
+                });
     }
 
     void addCollections(
@@ -251,9 +322,9 @@ public class ObjectTypeFactory {
 
                     String logicalTypeNameOfField = elementType.getLogicalTypeName();
                     GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
-                        .name(otom.getId())
-                        .type(GraphQLList.list(GraphQLTypeReference.typeRef(
-                                _Utils.logicalTypeNameSanitized(logicalTypeNameOfField))));
+                            .name(otom.getId())
+                            .type(GraphQLList.list(GraphQLTypeReference.typeRef(
+                                    _Utils.logicalTypeNameSanitized(logicalTypeNameOfField))));
                     objectTypeBuilder.field(fieldBuilder);
 
                     break;
@@ -261,8 +332,8 @@ public class ObjectTypeFactory {
                 case VALUE:
 
                     GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
-                        .name(otom.getId())
-                        .type(GraphQLList.list(TypeMapper.typeFor(elementType.getCorrespondingClass())));
+                            .name(otom.getId())
+                            .type(GraphQLList.list(TypeMapper.typeFor(elementType.getCorrespondingClass())));
                     objectTypeBuilder.field(valueBuilder);
 
                     break;
@@ -341,7 +412,7 @@ public class ObjectTypeFactory {
 
                 });
 
-        if (!mutatorsTypeFields.isEmpty()){
+        if (!mutatorsTypeFields.isEmpty()) {
             GraphQLObjectType mutatorsType = mutatorsTypeBuilder.build();
             addTypeIfNotAlreadyPresent(graphQLObjectTypes, mutatorsType, mutatorsTypeName);
             GraphQLFieldDefinition gql_mutations = newFieldDefinition()
@@ -350,29 +421,8 @@ public class ObjectTypeFactory {
                     .build();
             objectTypeBuilder.field(gql_mutations);
 
-            return new MutatorsDataForEntity(mutatorsType, mutatorsTypeFields);
+            return new MutatorsDataForEntity(objectSpecification, mutatorsType, mutatorsTypeFields);
 
-//            // I think we have to create and register data fetcher for mutations here, but we can't since we have no objectTypeYet
-//            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLTypeReference, gql_mutations), new DataFetcher<Object>() {
-//                @Override
-//                public Object get(DataFetchingEnvironment environment) throws Exception {
-//
-//                    Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
-//                    if (bookmark == null) return null; //TODO: is this correct ?
-//                    return new GQLMutations(bookmark, bookmarkService, mutatorsTypeFields);
-//                }
-//            });
-//
-//            // for each field something like
-//            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(mutatorsType, idField), new DataFetcher<Object>() {
-//                @Override
-//                public Object get(DataFetchingEnvironment environment) throws Exception {
-//
-//                    GQLMeta gqlMeta = environment.getSource();
-//
-//                    return gqlMeta.id();
-//                }
-//            });
         }
 
         return null;
@@ -382,6 +432,8 @@ public class ObjectTypeFactory {
     @Data
     @AllArgsConstructor
     class MutatorsDataForEntity {
+
+        private ObjectSpecification objectSpecification;
 
         private GraphQLObjectType mutatorsType;
 
@@ -405,22 +457,22 @@ public class ObjectTypeFactory {
             case ENTITY:
 
                 codeRegistryBuilder
-                .dataFetcher(
-                    FieldCoordinates.coordinates(graphQLObjectType, otom.getId()),
-                    (DataFetcher<Object>) environment -> {
+                        .dataFetcher(
+                                FieldCoordinates.coordinates(graphQLObjectType, otom.getId()),
+                                (DataFetcher<Object>) environment -> {
 
-                        Object domainObjectInstance = environment.getSource();
+                                    Object domainObjectInstance = environment.getSource();
 
-                        Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
-                        ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
+                                    Class<?> domainObjectInstanceClass = domainObjectInstance.getClass();
+                                    ObjectSpecification specification = specificationLoader.loadSpecification(domainObjectInstanceClass);
 
-                        ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
+                                    ManagedObject owner = ManagedObject.adaptSingular(specification, domainObjectInstance);
 
-                        ManagedObject managedObject = otom.get(owner);
+                                    ManagedObject managedObject = otom.get(owner);
 
-                        return managedObject!=null ? managedObject.getPojo() : null;
+                                    return managedObject != null ? managedObject.getPojo() : null;
 
-                    });
+                                });
 
 
                 break;

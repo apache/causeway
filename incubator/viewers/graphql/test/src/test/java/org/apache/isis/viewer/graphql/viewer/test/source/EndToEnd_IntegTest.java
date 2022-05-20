@@ -205,10 +205,9 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
 
         E2 e2Modified = e2List.get(0);
 
-        //TODO: implement ...
-//        assertEquals("bar", e2Modified.getName());
-//
-//        Approvals.verify(response, new Options());
+        assertEquals("bar", e2Modified.getName());
+
+        Approvals.verify(response, gqlOptions());
 
     }
 
