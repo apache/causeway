@@ -42,7 +42,6 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
@@ -218,14 +217,15 @@ public class IsisModulePersistenceJdoDatanucleus {
         if(_NullSafe.isEmpty(jdoEntityDiscoveryListeners)) {
             return;
         }
-        val jdoEntityTypes = beanTypeRegistry.getEntityTypes(PersistenceStack.JDO);
+        // assuming, as we instantiate a DN PMF, all entities discovered are JDO entities
+        val jdoEntityTypes = beanTypeRegistry.getEntityTypes();
         if(_NullSafe.isEmpty(jdoEntityTypes)) {
             return;
         }
         val jdoEntityTypesView = Collections.unmodifiableSet(jdoEntityTypes);
         val dnProps = Collections.unmodifiableMap(dnSettings.getAsProperties());
-        _NullSafe.stream(jdoEntityDiscoveryListeners)
-                .forEach(listener->
+        jdoEntityDiscoveryListeners
+            .forEach(listener->
                     listener.onEntitiesDiscovered(pmf, jdoEntityTypesView, dnProps));
     }
 
