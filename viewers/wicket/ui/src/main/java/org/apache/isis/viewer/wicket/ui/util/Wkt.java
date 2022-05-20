@@ -1023,7 +1023,7 @@ public class Wkt {
 
         maxLength.get()
         .ifPresent(maxLen->{
-            // for TextArea in conjunction with javascript in jquery.isis.wicket.viewer.js
+            // for TextArea in conjunction with javascript in IsisWicketViewerJsResourceReference
             // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
 
             Wkt.attributeReplace(formComponent, "maxlength", maxLen);

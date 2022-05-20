@@ -16,34 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.pages;
+package org.apache.isis.viewer.wicket.ui.pages.common.viewer.js;
 
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
- * A CSS resource reference that provides CSS rules which override the CSS rules
- * provided by the currently active Bootstrap theme.
- * Usually the overrides rules are about sizes and weights, but should not change any colors
+ * Javascript (client-side) extensions and fixes.
  */
-public class SidebarCssResourceReference extends CssResourceReference {
+public class IsisWicketViewerJsResourceReference
+extends JavaScriptResourceReference {
     private static final long serialVersionUID = 1L;
 
     @Getter(lazy = true) @Accessors(fluent = true)
-    private static final SidebarCssResourceReference instance =
-        new SidebarCssResourceReference();
+    private static final IsisWicketViewerJsResourceReference instance =
+        new IsisWicketViewerJsResourceReference();
 
-    public static CssHeaderItem asHeaderItem() {
-        return CssHeaderItem.forReference(SidebarCssResourceReference.instance());
+    public static JavaScriptReferenceHeaderItem asHeaderItem() {
+        return JavaScriptReferenceHeaderItem.forReference(IsisWicketViewerJsResourceReference.instance());
     }
 
     /**
      * Private constructor.
      */
-    private SidebarCssResourceReference() {
-        super(SidebarCssResourceReference.class, "simple-sidebar.css");
+    private IsisWicketViewerJsResourceReference() {
+        super(IsisWicketViewerJsResourceReference.class, "jquery.isis.wicket.viewer.js");
     }
 }

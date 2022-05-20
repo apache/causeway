@@ -16,33 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.pages;
+package org.apache.isis.viewer.wicket.ui.pages.common.livequery.js;
 
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
- * A CSS resource reference that provides CSS rules which override the CSS rules
- * provided by the currently active Bootstrap theme.
- * Usually the overrides rules are about sizes and weights, but should not change any colors
+ * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
+ * @deprecated replace by webjar eventually
  */
-public class BootstrapOverridesCssResourceReference extends CssResourceReference {
-
+@Deprecated
+public class LiveQueryJsResourceReference extends JavaScriptResourceReference {
     private static final long serialVersionUID = 1L;
 
     @Getter(lazy = true) @Accessors(fluent = true)
-    private static final BootstrapOverridesCssResourceReference instance =
-        new BootstrapOverridesCssResourceReference();
+    private static final LiveQueryJsResourceReference instance =
+    new LiveQueryJsResourceReference();
 
-    public static CssHeaderItem asHeaderItem() {
-        return CssHeaderItem.forReference(BootstrapOverridesCssResourceReference.instance());
+    public static JavaScriptReferenceHeaderItem asHeaderItem() {
+        return JavaScriptReferenceHeaderItem.forReference(LiveQueryJsResourceReference.instance());
     }
 
-    private BootstrapOverridesCssResourceReference() {
-        super(BootstrapOverridesCssResourceReference.class, "bootstrap-overrides-all-v2.css");
+    /**
+     * Private constructor.
+     */
+    private LiveQueryJsResourceReference() {
+        super(LiveQueryJsResourceReference.class, "jquery.livequery.js");
     }
-
 }
