@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.util;
+package org.apache.isis.viewer.wicket.ui.pages.common.fontawesome;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 

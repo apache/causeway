@@ -74,10 +74,10 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.common.bootstrap.css.BootstrapOverridesCssResourceReference;
+import org.apache.isis.viewer.wicket.ui.pages.common.fontawesome.FontAwesomeCssReferenceWkt;
 import org.apache.isis.viewer.wicket.ui.pages.common.livequery.js.LiveQueryJsResourceReference;
 import org.apache.isis.viewer.wicket.ui.pages.common.sidebar.css.SidebarCssResourceReference;
 import org.apache.isis.viewer.wicket.ui.pages.common.viewer.js.IsisWicketViewerJsResourceReference;
-import org.apache.isis.viewer.wicket.ui.util.FontAwesomeCssReferenceWkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 

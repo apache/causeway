@@ -14,11 +14,14 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-package org.apache.isis.viewer.wicket.ui.util;
+package org.apache.isis.viewer.wicket.ui.pages.common.serversentevents.js;
 
-import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Server-sent events.
@@ -28,18 +31,23 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
  *
  * @since 2.0
  */
-public class SSESupport {
+public class ServerSentEventsJsReference
+extends JavaScriptResourceReference {
+    private static final long serialVersionUID = 1L;
 
-    private static final JavaScriptResourceReference SSE_SUPPORT_JS =
-            new JavaScriptResourceReference(SSESupport.class, "SSESupport.js");
+    @Getter(lazy = true) @Accessors(fluent = true)
+    private static final ServerSentEventsJsReference instance =
+        new ServerSentEventsJsReference();
 
-    /**
-     * To include the SSE-javascript when a page is rendered.
-     * @param response
-     */
-    public static void renderHead(IHeaderResponse response) {
-        response.render(JavaScriptReferenceHeaderItem.forReference(SSE_SUPPORT_JS));
+    public static JavaScriptHeaderItem asHeaderItem() {
+        return JavaScriptReferenceHeaderItem.forReference(ServerSentEventsJsReference.instance());
     }
 
+    /**
+     * Private constructor.
+     */
+    private ServerSentEventsJsReference() {
+        super(ServerSentEventsJsReference.class, "isis-server-sent-events.js");
+    }
 
 }
