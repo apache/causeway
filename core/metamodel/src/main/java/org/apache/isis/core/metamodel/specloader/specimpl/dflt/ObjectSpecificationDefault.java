@@ -40,6 +40,7 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -72,7 +73,8 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ObjectSpecificationDefault
-extends ObjectSpecificationAbstract {
+extends ObjectSpecificationAbstract
+implements FacetHolder {
 
     private static String determineShortName(final Class<?> introspectedClass) {
         final String name = introspectedClass.getName();

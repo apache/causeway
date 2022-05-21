@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.postprocessors.param;
 
-import java.util.Optional;
-
 import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -64,16 +62,11 @@ extends ObjectSpecificationPostProcessorAbstract {
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction,
             final ObjectActionParameter param) {
-
-        val paramAsHolder = param;
-
-
-
         if(!hasMemberLevelChoices(param)) {
             param.getElementType()
             .lookupNonFallbackFacet(ChoicesFacet.class)
             .ifPresent(choicesFacet -> FacetUtil
-                    .addFacet(new ActionParameterChoicesFacetFromChoicesFacet(param)));
+                    .addFacet(new ActionParameterChoicesFacetFromChoicesFacet(peerFor(param))));
         }
     }
 

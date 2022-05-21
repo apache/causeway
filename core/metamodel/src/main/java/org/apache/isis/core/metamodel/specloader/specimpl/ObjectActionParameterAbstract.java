@@ -164,7 +164,7 @@ implements
     // -- FacetHolder
 
     @Override
-    public final FacetHolder getFacetHolder() {
+    public FacetHolder getFacetHolder() {
         // that is the faceted method parameter
         return parentAction.getFacetedMethod().getParameters().getElseFail(parameterIndex);
     }

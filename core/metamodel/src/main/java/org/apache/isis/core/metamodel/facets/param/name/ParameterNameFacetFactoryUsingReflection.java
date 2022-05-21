@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.param.name;
 
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
@@ -67,8 +66,6 @@ extends FacetFactoryAbstract {
 
         val naturalName = StringExtensions.asNaturalName2(parameterName);
         val facetHolder = processParameterContext.getFacetHolder();
-
-
 
         FacetUtil.addFacet(
                 new NamedFacetForParameterUsingReflection(naturalName, facetHolder));

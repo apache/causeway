@@ -58,10 +58,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(
-            final ObjectSpecification objectSpecification, 
-            final ObjectAction objectAction, 
-            final ObjectActionParameter parameter) {
+    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
         if(parameter.containsNonFallbackFacet(ParamDescribedFacet.class)) {
             return;
         }
@@ -70,7 +67,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         .ifPresent(describedAsFacet->{
             FacetUtil.addFacetIfPresent(
                     DescribedAsFacetOnParameterFromType
-                    .create(describedAsFacet, parameter));
+                    .create(describedAsFacet, peerFor(parameter)));
         });
     }
 
