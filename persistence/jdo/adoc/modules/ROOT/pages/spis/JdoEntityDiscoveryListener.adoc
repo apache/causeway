@@ -9,7 +9,7 @@ It can be used to perform additional bootstrapping tasks.
 For example, to eagerly register all named queries, you could use:
 
 [source,java]
-.Customer.java
+.NamedQueryEagerRegistrar.java
 ----
 @Component
 public class NamedQueryEagerRegistrar implements JdoEntityDiscoveryListener {
@@ -40,7 +40,7 @@ public class NamedQueryEagerRegistrar implements JdoEntityDiscoveryListener {
 You could also use an implementation to eagerly create the database tables in the database:
 
 [source,java]
-.Customer.java
+.DatabaseCreator.java
 ----
 @Component
 public class DatabaseCreator implements JdoEntityDiscoveryListener {

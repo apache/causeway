@@ -22,8 +22,7 @@ Enabling p6spy is easily done using the https://github.com/gavlyukovskiy/spring-
 ----
 <.> change to `test` if only using within integration tests, for example.
 
-* add properties to enable logging.
-As a minimum, you could add just:
+* add properties to enable logging:
 +
 [source,properties]
 .application.properties

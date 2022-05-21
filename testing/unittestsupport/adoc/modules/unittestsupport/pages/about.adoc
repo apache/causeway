@@ -110,7 +110,7 @@ public class Customer {
 then all of the getters and setters can be exercised using:
 
 [source,java]
-.Customer.java
+.Customer_Test.java
 ----
 public class Customer_Test {
 
