@@ -68,12 +68,12 @@ public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
 
 //end::class[]
 //tag::child[]
-    @XmlRootElement(name = "root")
+    @XmlRootElement
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
     @DomainObject(
             nature=Nature.VIEW_MODEL
-            , logicalTypeName = "demo.StatefulViewModelUsingJaxb.Child")
+            , logicalTypeName = "demo.StatefulVmUsingJaxb.Child")
     @Data
     public static class Child {
         @Title
