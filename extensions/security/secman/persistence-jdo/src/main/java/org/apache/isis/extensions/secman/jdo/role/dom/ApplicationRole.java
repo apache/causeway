@@ -57,12 +57,12 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 })
 @Queries({
     @Query(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
+            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq.FIND_BY_NAME,
             value = "SELECT "
                     + "FROM " + ApplicationRole.FQCN
                     + " WHERE name == :name"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
+            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq.FIND_BY_NAME_CONTAINING,
             value = "SELECT "
                     + "FROM " + ApplicationRole.FQCN
                     + " WHERE name.matches(:regex) ")

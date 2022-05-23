@@ -62,22 +62,22 @@ import lombok.Setter;
 )
 @NamedQueries({
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.NAMED_QUERY_FIND_BY_USERNAME,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.username = :username"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.emailAddress = :emailAddress"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.NAMED_QUERY_FIND_BY_ATPATH,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.atPath = :atPath"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.NAMED_QUERY_FIND,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.username LIKE :regex"

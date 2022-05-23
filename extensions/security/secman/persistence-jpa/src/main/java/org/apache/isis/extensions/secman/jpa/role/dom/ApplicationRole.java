@@ -54,12 +54,12 @@ import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 )
 @NamedQueries({
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
+            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq.FIND_BY_NAME,
             query = "SELECT r "
                   + "FROM ApplicationRole r "
                   + "WHERE r.name = :name"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
+            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq.FIND_BY_NAME_CONTAINING,
             query = "SELECT r "
                   + "FROM ApplicationRole r "
                   + "WHERE r.name LIKE :regex"),

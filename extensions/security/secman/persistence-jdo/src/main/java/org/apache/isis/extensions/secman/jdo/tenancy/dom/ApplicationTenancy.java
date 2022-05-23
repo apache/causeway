@@ -61,17 +61,17 @@ import org.apache.isis.commons.internal.base._Casts;
 })
 @Queries( {
     @Query(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
+            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq.FIND_BY_PATH,
             value = "SELECT "
                     + "FROM " + ApplicationTenancy.FQCN
                     + " WHERE path == :path"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
+            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq.FIND_BY_NAME,
             value = "SELECT "
                     + "FROM " + ApplicationTenancy.FQCN
                     + " WHERE name == :name"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
+            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq.FIND_BY_NAME_OR_PATH_MATCHING,
             value = "SELECT "
                     + "FROM " + ApplicationTenancy.FQCN
                     + " WHERE name.matches(:regex) || path.matches(:regex) ")})

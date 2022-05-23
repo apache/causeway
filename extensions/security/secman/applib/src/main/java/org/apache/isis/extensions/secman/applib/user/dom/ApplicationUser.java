@@ -64,6 +64,7 @@ import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.HasAtPath;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * @since 2.0 {@index}
@@ -77,6 +78,13 @@ public abstract class ApplicationUser
     public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
     public static final String TABLE = "ApplicationUser";
 
+    @UtilityClass
+    public static class Nq {
+        public static final String FIND_BY_USERNAME = ApplicationUser.LOGICAL_TYPE_NAME + ".findByUsername";
+        public static final String FIND_BY_EMAIL_ADDRESS = ApplicationUser.LOGICAL_TYPE_NAME + ".findByEmailAddress";
+        public static final String FIND = ApplicationUser.LOGICAL_TYPE_NAME + ".find";
+        public static final String FIND_BY_ATPATH = ApplicationUser.LOGICAL_TYPE_NAME + ".findByAtPath";
+    }
 
     @Inject private transient ApplicationUserRepository applicationUserRepository;
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
@@ -109,12 +117,6 @@ public abstract class ApplicationUser
         return config.getExtensions().getSecman();
     }
 
-    // -- CONSTANTS
-
-    public static final String NAMED_QUERY_FIND_BY_USERNAME = "ApplicationUser.findByUsername";
-    public static final String NAMED_QUERY_FIND_BY_EMAIL_ADDRESS = "ApplicationUser.findByEmailAddress";
-    public static final String NAMED_QUERY_FIND = "ApplicationUser.find";
-    public static final String NAMED_QUERY_FIND_BY_ATPATH = "ApplicationUser.findByAtPath";
 
     // -- DOMAIN EVENTS
 

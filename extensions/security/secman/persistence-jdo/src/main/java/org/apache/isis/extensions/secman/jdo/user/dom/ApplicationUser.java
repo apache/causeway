@@ -68,22 +68,22 @@ import lombok.Setter;
 })
 @Queries( {
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND_BY_USERNAME,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE username == :username"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND_BY_EMAIL_ADDRESS,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE emailAddress == :emailAddress"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND_BY_ATPATH,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE atPath == :atPath"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND,
+            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE username.matches(:regex)"

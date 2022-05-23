@@ -52,17 +52,17 @@ import org.apache.isis.commons.internal.base._Casts;
 )
 @NamedQueries({
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
+            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq.FIND_BY_PATH,
             query = "SELECT t "
                   + "  FROM ApplicationTenancy t "
                   + " WHERE t.path = :path"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
+            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq.FIND_BY_NAME,
             query = "SELECT t "
                   + "  FROM ApplicationTenancy t "
                   + " WHERE t.name = :name"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
+            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq.FIND_BY_NAME_OR_PATH_MATCHING,
             query = "SELECT t "
                   + "  FROM ApplicationTenancy t "
                   + " WHERE t.name LIKE :regex "

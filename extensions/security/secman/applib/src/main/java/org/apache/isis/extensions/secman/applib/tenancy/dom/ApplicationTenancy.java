@@ -43,6 +43,8 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * @since 2.0 {@index}
  */
@@ -54,9 +56,12 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
     public static final String TABLE = "ApplicationTenancy";
 
-    public static final String NAMED_QUERY_FIND_BY_NAME = "ApplicationTenancy.findByName";
-    public static final String NAMED_QUERY_FIND_BY_PATH = "ApplicationTenancy.findByPath";
-    public static final String NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING = "ApplicationTenancy.findByNameOrPathMatching";
+    @UtilityClass
+    public static class Nq {
+        public static final String FIND_BY_NAME = ApplicationTenancy.LOGICAL_TYPE_NAME + ".findByName";
+        public static final String FIND_BY_PATH = ApplicationTenancy.LOGICAL_TYPE_NAME + ".findByPath";
+        public static final String FIND_BY_NAME_OR_PATH_MATCHING = ApplicationTenancy.LOGICAL_TYPE_NAME + ".findByNameOrPathMatching";
+    }
 
 
     // -- DOMAIN EVENTS

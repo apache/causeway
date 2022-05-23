@@ -48,6 +48,8 @@ import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermis
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * @since 2.0 {@index}
  */
@@ -59,8 +61,11 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
     public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
     public static final String TABLE = "ApplicationRole";
 
-    public static final String NAMED_QUERY_FIND_BY_NAME = "ApplicationRole.findByName";
-    public static final String NAMED_QUERY_FIND_BY_NAME_CONTAINING = "ApplicationRole.findByNameContaining";
+    @UtilityClass
+    public static class Nq {
+        public static final String FIND_BY_NAME = ApplicationRole.LOGICAL_TYPE_NAME + ".findByName";
+        public static final String FIND_BY_NAME_CONTAINING = ApplicationRole.LOGICAL_TYPE_NAME + ".findByNameContaining";
+    }
 
     @Inject transient private ApplicationPermissionRepository applicationPermissionRepository;
 

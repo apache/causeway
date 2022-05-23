@@ -89,12 +89,15 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
     public static final String TABLE = "ApplicationPermission";
 
-    public static final String NAMED_QUERY_FIND_BY_FEATURE = "ApplicationPermission.findByFeature";
-    public static final String NAMED_QUERY_FIND_BY_ROLE = "ApplicationPermission.findByRole";
-    public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE = "ApplicationPermission.findByRoleAndRuleAndFeature";
-    public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN = "ApplicationPermission.findByRoleAndRuleAndFeatureAndFqn";
-    public static final String NAMED_QUERY_FIND_BY_USER = "ApplicationPermission.findByUser";
-    public static final String NAMED_QUERY_FIND_BY_ROLE_NAMES = "ApplicationPermission.findByRoleNames";
+    @UtilityClass
+    public static class Nq {
+        public static final String FIND_BY_FEATURE = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByFeature";
+        public static final String FIND_BY_ROLE = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRole";
+        public static final String FIND_BY_ROLE_RULE_FEATURE = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRoleAndRuleAndFeature";
+        public static final String FIND_BY_ROLE_RULE_FEATURE_FQN = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRoleAndRuleAndFeatureAndFqn";
+        public static final String FIND_BY_USER = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByUser";
+        public static final String FIND_BY_ROLE_NAMES = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRoleNames";
+    }
 
 
     @Inject transient ApplicationFeatureRepository featureRepository;

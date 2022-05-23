@@ -83,7 +83,7 @@ implements ApplicationRoleRepository {
             return Optional.empty();
         }
         return _Casts.uncheckedCast(
-                repository.uniqueMatch(Query.named(applicationRoleClass, ApplicationRole.NAMED_QUERY_FIND_BY_NAME)
+                repository.uniqueMatch(Query.named(applicationRoleClass, ApplicationRole.Nq.FIND_BY_NAME)
                 .withParameter("name", name))
         );
     }
@@ -94,7 +94,7 @@ implements ApplicationRoleRepository {
         if(search != null && search.length() > 0) {
             val nameRegex = regexReplacer.asRegex(search);
             return repository.allMatches(
-                    Query.named(applicationRoleClass, ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING)
+                    Query.named(applicationRoleClass, ApplicationRole.Nq.FIND_BY_NAME_CONTAINING)
                     .withParameter("regex", nameRegex))
                     .stream()
                     .collect(_Sets.toUnmodifiableSorted());

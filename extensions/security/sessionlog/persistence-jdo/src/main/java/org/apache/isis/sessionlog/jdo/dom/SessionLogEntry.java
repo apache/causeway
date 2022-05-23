@@ -142,20 +142,20 @@ public class SessionLogEntry implements HasUsername, Comparable<SessionLogEntry>
     public static final String TABLE = "SessionLogEntry";
 
     @UtilityClass
-    static class Nq {
-        static final String FIND_BY_SESSION_ID = "findBySessionId";
-        static final String FIND_BY_USER_AND_TIMESTAMP_BETWEEN = "findByUserAndTimestampBetween";
-        static final String FIND_BY_USER_AND_TIMESTAMP_AFTER = "findByUserAndTimestampAfter";
-        static final String FIND_BY_USER_AND_TIMESTAMP_BEFORE = "findByUserAndTimestampBefore";
-        static final String FIND_BY_USER = "findByUser";
-        static final String FIND_BY_TIMESTAMP_BETWEEN = "findByTimestampBetween";
-        static final String FIND_BY_TIMESTAMP_AFTER = "findByTimestampAfter";
-        static final String FIND_BY_TIMESTAMP_BEFORE = "findByTimestampBefore";
-        static final String FIND = "find";
-        static final String FIND_BY_USER_AND_TIMESTAMP_STRICTLY_BEFORE = "findByUserAndTimestampStrictlyBefore";
-        static final String FIND_BY_USER_AND_TIMESTAMP_STRICTLY_AFTER = "findByUserAndTimestampStrictlyAfter";
-        static final String FIND_ACTIVE_SESSIONS = "findActiveSessions";
-        static final String FIND_RECENT_BY_USER = "findRecentByUser";
+    public static class Nq {
+        public static final String FIND_BY_SESSION_ID =  SessionLogEntry.LOGICAL_TYPE_NAME + ".findBySessionId";
+        public static final String FIND_BY_USER_AND_TIMESTAMP_BETWEEN = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUserAndTimestampBetween";
+        public static final String FIND_BY_USER_AND_TIMESTAMP_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUserAndTimestampAfter";
+        public static final String FIND_BY_USER_AND_TIMESTAMP_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUserAndTimestampBefore";
+        public static final String FIND_BY_USER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUser";
+        public static final String FIND_BY_TIMESTAMP_BETWEEN = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampBetween";
+        public static final String FIND_BY_TIMESTAMP_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampAfter";
+        public static final String FIND_BY_TIMESTAMP_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampBefore";
+        public static final String FIND = SessionLogEntry.LOGICAL_TYPE_NAME + ".find";
+        public static final String FIND_BY_USER_AND_TIMESTAMP_STRICTLY_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUserAndTimestampStrictlyBefore";
+        public static final String FIND_BY_USER_AND_TIMESTAMP_STRICTLY_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUserAndTimestampStrictlyAfter";
+        public static final String FIND_ACTIVE_SESSIONS = SessionLogEntry.LOGICAL_TYPE_NAME + ".findActiveSessions";
+        public static final String FIND_RECENT_BY_USER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findRecentByUser";
     }
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSessionLogApplib.PropertyDomainEvent<SessionLogEntry, T> { }
