@@ -40,13 +40,13 @@ content:
 
 # extensions
     - url: .
-      start_path: extensions/security/audit-trail/adoc # security
+      start_path: extensions/security/audittrail/adoc # security
       branches: HEAD
     - url: .
       start_path: extensions/security/secman/adoc # security
       branches: HEAD
     - url: .
-      start_path: extensions/security/session-log/adoc # security
+      start_path: extensions/security/sessionlog/adoc # security
       branches: HEAD
     - url: .
       start_path: extensions/security/shiro-realm-ldap/adoc # security

@@ -1024,8 +1024,8 @@ demoapp.dom.types.primitive.shorts.persistence.PrimitiveShortSeeding +
 .Dependencies
 ****
 com.h2database:h2:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-command-log-jdo:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-command-log-jpa:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-commandlog-jdo:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-commandlog-jpa:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-exceldownload-ui:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-pdfjs-applib:jar:<managed> +
@@ -1102,8 +1102,8 @@ demoapp.web._infra.utils.ThereCanBeOnlyOne +
 .Dependencies
 ****
 org.apache.isis.examples.apps:demo-domain:jar:${project.version} +
-org.apache.isis.extensions:isis-extensions-command-replay-primary:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-command-replay-secondary:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-commandreplay-primary:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-commandreplay-secondary:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed> +
 org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed> +
 org.springframework.boot:spring-boot-starter:jar:<managed> +
@@ -4868,9 +4868,9 @@ package "Core: Command Log\n[Software System]" {
 [source,yaml]
 ----
 Group: org.apache.isis.extensions
-Artifact: isis-extensions-command-log
+Artifact: isis-extensions-commandlog
 Type: pom
-Directory: /extensions/core/command-log
+Directory: /extensions/core/commandlog
 ----
 |Logs commands
 
@@ -4878,9 +4878,9 @@ Directory: /extensions/core/command-log
 [source,yaml]
 ----
 Group: org.apache.isis.extensions
-Artifact: isis-extensions-command-log-applib
+Artifact: isis-extensions-commandlog-applib
 Type: jar
-Directory: /extensions/core/command-log/applib
+Directory: /extensions/core/commandlog/applib
 ----
 |.Components
 ****
@@ -4909,9 +4909,9 @@ xref:refguide:extensions:index/commandlog/applib/command/subscriber/CommandSubsc
 [source,yaml]
 ----
 Group: org.apache.isis.extensions
-Artifact: isis-extensions-command-log-jdo
+Artifact: isis-extensions-commandlog-jdo
 Type: jar
-Directory: /extensions/core/command-log/jdo
+Directory: /extensions/core/commandlog/jdo
 ----
 |.Components
 ****
@@ -4920,7 +4920,7 @@ o.a.i.extensions.commandlog.jdo.entities.CommandJdoRepository +
 
 .Dependencies
 ****
-org.apache.isis.extensions:isis-extensions-command-log-applib:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-commandlog-applib:jar:<managed> +
 org.apache.isis.mavendeps:isis-mavendeps-integtests:pom:<managed> +
 org.apache.isis.mavendeps:isis-mavendeps-unittests:pom:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed> +
@@ -4935,9 +4935,9 @@ xref:refguide:extensions:index/commandlog/jdo/IsisModuleExtCommandLogJdo.adoc[Is
 [source,yaml]
 ----
 Group: org.apache.isis.extensions
-Artifact: isis-extensions-command-log-jpa
+Artifact: isis-extensions-commandlog-jpa
 Type: jar
-Directory: /extensions/core/command-log/jpa
+Directory: /extensions/core/commandlog/jpa
 ----
 |.Components
 ****
@@ -4946,7 +4946,7 @@ o.a.i.extensions.commandlog.jpa.entities.CommandJpaRepository +
 
 .Dependencies
 ****
-org.apache.isis.extensions:isis-extensions-command-log-applib:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-commandlog-applib:jar:<managed> +
 org.apache.isis.mavendeps:isis-mavendeps-integtests:pom:<managed> +
 org.apache.isis.mavendeps:isis-mavendeps-unittests:pom:<managed> +
 org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed> +
@@ -5008,9 +5008,9 @@ package "Core: Command Replay\n[Software System]" {
 [source,yaml]
 ----
 Group: org.apache.isis.extensions
-Artifact: isis-extensions-command-replay
+Artifact: isis-extensions-commandreplay
 Type: pom
-Directory: /extensions/core/command-replay
+Directory: /extensions/core/commandreplay
 ----
 |Replays commands to secondary system
 
@@ -5018,9 +5018,9 @@ Directory: /extensions/core/command-replay
 [source,yaml]
 ----
 Group: org.apache.isis.extensions
-Artifact: isis-extensions-command-replay-primary
+Artifact: isis-extensions-commandreplay-primary
 Type: jar
-Directory: /extensions/core/command-replay/primary
+Directory: /extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
@@ -5035,7 +5035,7 @@ o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
 org.apache.isis.core:isis-core-config:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
 org.apache.isis.core:isis-schema:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-command-log-applib:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-commandlog-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 ****
 
@@ -5048,9 +5048,9 @@ xref:refguide:extensions:index/commandreplay/primary/IsisModuleExtCommandReplayP
 [source,yaml]
 ----
 Group: org.apache.isis.extensions
-Artifact: isis-extensions-command-replay-secondary
+Artifact: isis-extensions-commandreplay-secondary
 Type: jar
-Directory: /extensions/core/command-replay/secondary
+Directory: /extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
@@ -5070,7 +5070,7 @@ org.apache.isis.core:isis-core-config:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
 org.apache.isis.core:isis-schema:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-command-log-applib:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-commandlog-applib:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-quartz-impl:jar:<managed> +
 org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-restfulobjects-client:jar:<managed> +

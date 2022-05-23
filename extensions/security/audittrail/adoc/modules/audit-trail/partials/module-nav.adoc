@@ -1,6 +1,6 @@
 
 
 
-** xref:security:audit-trail:about.adoc[Audit Trail]
+** xref:security:audittrail:about.adoc[Audit Trail]
 
 

@@ -1,6 +1,6 @@
 
 
 
-** xref:security:session-log:about.adoc[Session Log]
+** xref:security:sessionlog:about.adoc[Session Log]
 
 

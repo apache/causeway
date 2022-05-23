@@ -8,11 +8,11 @@
 The `CommandExecutorService` domain service is provides the ability to execute a specified xref:refguide:applib:index/services/command/Command.adoc[Command], optionally running the command with the identity of the user captured in that xref:refguide:applib:index/services/command/Command.adoc[Command].
 
 
-// TODO - v2 this is out of date; reference the command-replay service, now part of framework.
+// TODO - v2 this is out of date; reference the commandreplay service, now part of framework.
 
 //In fact, the service requires that the implementation of the xref:refguide:applib:index/services/command/Command.adoc[Command] being executed implements the `CommandWithDto` sub-interface.
 //This allows the xref:refguide:schema:cmd.adoc[CommandDto] memento to be extracted, from which the action can be invoked/property edited.
 //
 //The primary use case for this service is to allow the replay of commands, eg for regression testing.
-//This is implemented by the (non-ASF) link:https://platform.incode.org/modules/spi/command/spi-command-replay.html[command replay module].
+//This is implemented by the (non-ASF) link:https://platform.incode.org/modules/spi/command/spi-commandreplay.html[command replay module].
 //(The command replay module also provides a decorator implementation of this service that allows the command to be re-executed at the same _time_ as the original command, leveraging the `TickingClock` implementation provided by the framework).

@@ -1,6 +1,6 @@
 include::userguide:excel:partial$module-nav.adoc[]
-include::userguide:command-log:partial$module-nav.adoc[]
-include::userguide:command-replay:partial$module-nav.adoc[]
+include::userguide:commandlog:partial$module-nav.adoc[]
+include::userguide:commandreplay:partial$module-nav.adoc[]
 include::userguide:flyway:partial$module-nav.adoc[]
 include::userguide:quartz:partial$module-nav.adoc[]
 
