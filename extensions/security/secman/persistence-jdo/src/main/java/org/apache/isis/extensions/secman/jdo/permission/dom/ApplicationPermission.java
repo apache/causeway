@@ -45,8 +45,8 @@ import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
-        schema = "isisExtensionsSecman",
-        table = "ApplicationPermission")
+        schema = ApplicationPermission.SCHEMA,
+        table = ApplicationPermission.TABLE)
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
 @DatastoreIdentity(

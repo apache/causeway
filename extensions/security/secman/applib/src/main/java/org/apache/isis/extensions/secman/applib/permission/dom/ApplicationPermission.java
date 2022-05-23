@@ -86,6 +86,8 @@ import lombok.experimental.UtilityClass;
 public abstract class ApplicationPermission implements Comparable<ApplicationPermission> {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermission";
+    public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
+    public static final String TABLE = "ApplicationPermission";
 
     public static final String NAMED_QUERY_FIND_BY_FEATURE = "ApplicationPermission.findByFeature";
     public static final String NAMED_QUERY_FIND_BY_ROLE = "ApplicationPermission.findByRole";

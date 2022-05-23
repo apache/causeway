@@ -74,6 +74,9 @@ public abstract class ApplicationUser
         implements HasUsername, HasAtPath, Comparable<ApplicationUser> {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationUser";
+    public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
+    public static final String TABLE = "ApplicationUser";
+
 
     @Inject private transient ApplicationUserRepository applicationUserRepository;
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;

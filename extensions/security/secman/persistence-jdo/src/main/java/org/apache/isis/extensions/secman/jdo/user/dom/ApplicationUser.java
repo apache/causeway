@@ -52,8 +52,8 @@ import lombok.Setter;
 
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
-        schema = "isisExtensionsSecman",
-        table = "ApplicationUser")
+        schema = ApplicationUser.SCHEMA,
+        table = ApplicationUser.TABLE)
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
 @DatastoreIdentity(
@@ -103,6 +103,7 @@ public class ApplicationUser
     extends org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser {
 
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser";
+
 
 
     // -- USERNAME

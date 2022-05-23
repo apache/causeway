@@ -51,6 +51,8 @@ import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 public abstract class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancy";
+    public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
+    public static final String TABLE = "ApplicationTenancy";
 
     public static final String NAMED_QUERY_FIND_BY_NAME = "ApplicationTenancy.findByName";
     public static final String NAMED_QUERY_FIND_BY_PATH = "ApplicationTenancy.findByPath";

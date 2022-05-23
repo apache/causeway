@@ -46,8 +46,8 @@ import org.apache.isis.commons.internal.base._Casts;
 
 @PersistenceCapable(
         identityType = IdentityType.APPLICATION,
-        schema = "isisExtensionsSecman",
-        table = "ApplicationTenancy")
+        schema = ApplicationTenancy.SCHEMA,
+        table = ApplicationTenancy.TABLE)
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
 @DatastoreIdentity(

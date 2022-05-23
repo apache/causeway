@@ -30,7 +30,7 @@ import java.util.Date;
  *
  * @since 1.x {@index}
  */
-public interface SessionLoggingService {
+public interface SessionLogService {
 
     enum Type {
         LOGIN,

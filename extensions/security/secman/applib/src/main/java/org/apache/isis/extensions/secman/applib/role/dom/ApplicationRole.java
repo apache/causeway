@@ -56,6 +56,8 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 public abstract class ApplicationRole implements Comparable<ApplicationRole> {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRole";
+    public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
+    public static final String TABLE = "ApplicationRole";
 
     public static final String NAMED_QUERY_FIND_BY_NAME = "ApplicationRole.findByName";
     public static final String NAMED_QUERY_FIND_BY_NAME_CONTAINING = "ApplicationRole.findByNameContaining";

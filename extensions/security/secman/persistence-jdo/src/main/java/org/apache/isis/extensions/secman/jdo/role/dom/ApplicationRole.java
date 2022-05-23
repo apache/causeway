@@ -45,8 +45,8 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
-        schema = "isisExtensionsSecman",
-        table = "ApplicationRole")
+        schema = ApplicationRole.SCHEMA,
+        table = ApplicationRole.TABLE)
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
 @DatastoreIdentity(
@@ -80,7 +80,6 @@ public class ApplicationRole
     extends org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole {
 
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole";
-
 
 
     // -- NAME
