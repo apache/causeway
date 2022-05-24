@@ -18,10 +18,11 @@
  */
 package demoapp.dom.types.isis.markups.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
+
 import org.apache.isis.applib.value.Markup;
 
-@LogicalTypeName("demo.IsisMarkupHolder")
+@Named("demo.IsisMarkupHolder")
 //tag::class[]
 public interface IsisMarkupHolder {
 

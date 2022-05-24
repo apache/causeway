@@ -18,15 +18,15 @@
  */
 package org.apache.isis.core.metamodel.facets.object.logicaltype;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
+
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Corresponds to the value of {@link DomainObject#logicalTypeName()} or
- * {@link LogicalTypeName#value()}, that specifies the <i>logical type name</i>
- * of a domain object.
+ * Corresponds to the value of {@link Named#value()},
+ * that specifies the <i>logical type name</i>
+ * of a domain object or interface or abstract type.
  * <p>
  * The <i>logical type name</i> must be unique, among non-abstract classes, but
  * is allowed to be shared with interfaces and abstract classes.

@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.primitive.floats.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.PrimitiveFloatHolder")
+@Named("demo.PrimitiveFloatHolder")
 //tag::class[]
 public interface PrimitiveFloatHolder {
 

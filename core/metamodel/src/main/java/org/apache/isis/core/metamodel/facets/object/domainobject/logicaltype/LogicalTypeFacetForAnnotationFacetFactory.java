@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.LogicalTypeName;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
@@ -30,11 +31,11 @@ import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
 import lombok.val;
 
-public class LogicalTypeFacetForLogicalTypeNameAnnotationFacetFactory
+public class LogicalTypeFacetForAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
     @Inject
-    public LogicalTypeFacetForLogicalTypeNameAnnotationFacetFactory(
+    public LogicalTypeFacetForAnnotationFacetFactory(
             final MetaModelContext mmc,
             final MethodByClassMap postConstructMethodsCache) {
         super(mmc, FeatureType.OBJECTS_ONLY);
@@ -42,19 +43,24 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        val logicalTypeNameIfAny = processClassContext.synthesizeOnType(LogicalTypeName.class);
-        val cls = processClassContext.getCls();
 
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
+
+        // deprecated annotation @LogicalTypeName
         if(cls.isInterface()
                 || ClassExtensions.isAbstract(cls)) {
-
-            val facetHolder = processClassContext.getFacetHolder();
-
+            val logicalTypeNameIfAny = processClassContext.synthesizeOnType(LogicalTypeName.class);
             FacetUtil.addFacetIfPresent(
                     LogicalTypeFacetForLogicalTypeNameAnnotation
                     .create(logicalTypeNameIfAny, cls, facetHolder));
-
         }
+
+        val namedIfAny = processClassContext.synthesizeOnType(Named.class);
+
+        FacetUtil.addFacetIfPresent(
+                LogicalTypeFacetForNamedAnnotation
+                .create(namedIfAny, cls, facetHolder));
 
     }
 

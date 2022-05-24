@@ -18,9 +18,9 @@
  */
 package demoapp.dom.domain.objects.other.mixins;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.CountHolder")
+@Named("demo.CountHolder")
 //tag::class[]
 public interface CountHolder {
     int getCount();

@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.primitive.shorts.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.PrimitiveShortHolder")
+@Named("demo.PrimitiveShortHolder")
 //tag::class[]
 public interface PrimitiveShortHolder {
 

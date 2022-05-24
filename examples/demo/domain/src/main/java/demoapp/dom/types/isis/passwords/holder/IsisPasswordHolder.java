@@ -18,10 +18,11 @@
  */
 package demoapp.dom.types.isis.passwords.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
+
 import org.apache.isis.applib.value.Password;
 
-@LogicalTypeName("demo.IsisPasswordHolder")
+@Named("demo.IsisPasswordHolder")
 //tag::class[]
 public interface IsisPasswordHolder {
 
