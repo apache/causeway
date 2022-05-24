@@ -76,7 +76,6 @@ public @interface DomainService {
      * Otherwise, if not specified, the default Spring Bean name is used instead.
      * </p>
      * @deprecated use Spring semantics instead, eg. {@link Named} or equivalent
-     * @see DomainObject#logicalTypeName()
      * @see Named
      */
     @Deprecated(forRemoval = true, since = "2.0.0-RC1")

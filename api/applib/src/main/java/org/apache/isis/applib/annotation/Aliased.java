@@ -26,11 +26,15 @@ import java.lang.annotation.Target;
 
 import javax.inject.Named;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
+
 /**
- * Introduced to allow for abstract types to be mapped to a logical-type-name,
- * for the security model to apply permission checks against.
- * @deprecated use {@link Named} instead
+ * Introduced to allow for historic bookmarks to be resolved to
+ * their corresponding new types.
+ * @see Bookmark
  * @see Named
+ *
+ * @since 2.0 {@index}
  */
 @Inherited
 @Target({
@@ -38,14 +42,13 @@ import javax.inject.Named;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Deprecated(forRemoval = true, since = "2.0.0-RC1")
-public @interface LogicalTypeName {
+public @interface Aliased {
 
     /**
-     * If unspecified, the fully-qualified class name is used instead.
-     * @see DomainObject#logicalTypeName()
+     * Alternative logical type name(s) for the annotated type.
+     * @see Bookmark
+     * @see Named
      */
-    String value()
-        default "";
+    String[] value() default {};
 
 }

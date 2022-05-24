@@ -185,9 +185,10 @@ public @interface DomainObject {
      * (same concept as a URN).
      * Otherwise, if not specified, the fully qualified class name is used instead.
      * </p>
-     *
+     * @deprecated use {@link Named} instead
      * @see Named
      */
+    @Deprecated(forRemoval = true, since = "2.0.0-RC1")
     String logicalTypeName()
             default "";
 
