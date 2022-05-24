@@ -47,8 +47,8 @@ import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 @Entity
 @Table(
-        schema = "isisExtensionsSecman",
-        name = "ApplicationPermission",
+        schema = ApplicationPermission.SCHEMA,
+        name = ApplicationPermission.TABLE,
         uniqueConstraints=
             @UniqueConstraint(
                     name = "ApplicationPermission_role_feature_rule_UNQ",

@@ -43,8 +43,8 @@ import org.apache.isis.commons.internal.base._Casts;
 
 @Entity
 @Table(
-        schema = "isisExtensionsSecman",
-        name = "ApplicationTenancy",
+        schema = ApplicationTenancy.SCHEMA,
+        name = ApplicationTenancy.TABLE,
         uniqueConstraints =
             @UniqueConstraint(
                     name = "ApplicationTenancy_name_UNQ",
