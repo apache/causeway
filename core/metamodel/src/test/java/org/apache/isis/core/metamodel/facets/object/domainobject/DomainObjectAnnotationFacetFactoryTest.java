@@ -35,6 +35,7 @@ import static org.junit.Assert.assertFalse;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
@@ -51,10 +52,8 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.editing.Immutab
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetFromConfiguration;
-import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForNamedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.AliasedFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
@@ -67,12 +66,10 @@ public class DomainObjectAnnotationFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
 
     DomainObjectAnnotationFacetFactory facetFactory;
-    LogicalTypeFacetForAnnotationFacetFactory facetFactory2;
 
     @Before
     public void setUp() throws Exception {
         facetFactory = new DomainObjectAnnotationFacetFactory(metaModelContext, new MethodByClassMap());
-        facetFactory2 = new LogicalTypeFacetForAnnotationFacetFactory(metaModelContext, new MethodByClassMap());
     }
 
     @Override
@@ -578,19 +575,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         @Test
         public void whenDomainObjectAndObjectTypeSetToTrue() {
-
-            facetFactory2.process(ProcessClassContext
-                    .forTesting(CustomerWithDomainObjectAndObjectTypeSet.class, mockMethodRemover, facetHolder));
-
-            final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
-            Assert.assertNotNull(facet);
-
-            Assert.assertTrue(facet instanceof LogicalTypeFacetForNamedAnnotation);
-            final LogicalTypeFacetForNamedAnnotation facetForDomainObjectAnnotation =
-                    (LogicalTypeFacetForNamedAnnotation) facet;
-
-            assertThat(facetForDomainObjectAnnotation.value(), is("CUS"));
-
+            assertThat(LogicalType.infer(CustomerWithDomainObjectAndObjectTypeSet.class).getLogicalTypeName(),
+                    is("CUS"));
             expectNoMethodsRemoved();
         }
 
@@ -600,7 +586,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             facetFactory.process(ProcessClassContext
                     .forTesting(CustomerWithDomainObjectButNoObjectType.class, mockMethodRemover, facetHolder));
 
-            final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
+            final Facet facet = facetHolder.getFacet(AliasedFacet.class);
             Assert.assertNull(facet);
 
             expectNoMethodsRemoved();
@@ -612,7 +598,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             facetFactory.process(ProcessClassContext
                     .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
-            final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
+            final Facet facet = facetHolder.getFacet(AliasedFacet.class);
             Assert.assertNull(facet);
 
             expectNoMethodsRemoved();

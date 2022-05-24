@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetFromValu
 import org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
-import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 import lombok.AccessLevel;
@@ -87,14 +86,7 @@ extends FacetFactoryAbstract {
         val facetHolder = processClassContext.getFacetHolder();
         val valueIfAny = processClassContext.synthesizeOnType(Value.class);
 
-        val logicalTypeFacetIfAny = addFacetIfPresent(
-                LogicalTypeFacetForValueAnnotation
-                .create(valueIfAny, valueClass, facetHolder));
-
-        val logicalType = logicalTypeFacetIfAny
-                .map(logicalTypeFacet->logicalTypeFacet.getLogicalType())
-                .orElseGet(()->LogicalType.fqcn(valueClass));
-
+        val logicalType = LogicalType.infer(valueClass);
         val identifier = Identifier.classIdentifier(logicalType);
 
         val valueFacetIfAny = addAllFacetsForValueSemantics(identifier, valueClass, facetHolder, valueIfAny);

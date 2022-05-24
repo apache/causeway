@@ -66,7 +66,12 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 @Component @Scope("prototype")
 public @interface DomainObject {
 
-    // ...
+    /**
+     * Alternative logical type name(s) for the annotated type.
+     * @see Bookmark
+     * @see Named
+     */
+    String[] aliased() default {};
 
     /**
      * The class of the domain service that provides an <code>autoComplete(String)</code> method.

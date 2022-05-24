@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
@@ -58,7 +57,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 
-import lombok.Synchronized;
 import lombok.val;
 
 public class ObjectSpecificationStub
@@ -71,7 +69,7 @@ implements ObjectSpecification {
     /**
      * lazily derived, see {@link #getLogicalType()}
      */
-    private LogicalType logicalType;
+    private final LogicalType logicalType;
 
     private ObjectSpecification elementSpecification;
     private final Class<?> correspondingClass;
@@ -98,8 +96,9 @@ implements ObjectSpecification {
     public ObjectSpecificationStub(final MetaModelContext mmc, final Class<?> correspondingClass) {
         super(mmc);
         this.correspondingClass = correspondingClass;
-        title = "";
-        name = correspondingClass.getCanonicalName();
+        this.logicalType = LogicalType.infer(correspondingClass);
+        this.title = "";
+        this.name = correspondingClass.getCanonicalName();
     }
 
     @Override
@@ -137,12 +136,8 @@ implements ObjectSpecification {
         return name;
     }
 
-    @Synchronized
     @Override
     public LogicalType getLogicalType() {
-        if(logicalType == null) {
-            logicalType = getFacet(LogicalTypeFacet.class).getLogicalType();
-        }
         return logicalType;
     }
 

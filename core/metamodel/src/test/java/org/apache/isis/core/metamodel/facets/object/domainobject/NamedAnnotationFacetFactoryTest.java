@@ -16,22 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.logicaltype.classname;
+package org.apache.isis.core.metamodel.facets.object.domainobject;
 
+import javax.inject.Named;
+
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.core.metamodel.commons.ClassUtil;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 
-public class LogicalTypeFacetFromClassName
-extends LogicalTypeFacetAbstract {
+public class NamedAnnotationFacetFactoryTest
+extends AbstractFacetFactoryJUnit4TestCase {
 
-    public LogicalTypeFacetFromClassName(final Class<?> cls, final FacetHolder holder) {
-        this(LogicalType.eager(cls, ClassUtil.getCanonicalName_friendlyToInnerClasses(cls)), holder);
-    }
+    @Test
+    public void logicalTypeNameAnnotationPickedUpOnClass() {
 
-    public LogicalTypeFacetFromClassName(final LogicalType logicalType, final FacetHolder holder) {
-        super(logicalType, holder, Precedence.INFERRED);
+        @Named("CUS")
+        @DomainObject
+        class Customer {
+        }
+
+        assertThat(LogicalType.infer(Customer.class).getLogicalTypeName(), is("CUS"));
+
     }
 
 }

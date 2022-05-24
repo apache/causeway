@@ -21,10 +21,13 @@ package org.apache.isis.applib.id;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import javax.inject.Named;
+import javax.persistence.Table;
 
 import org.springframework.lang.Nullable;
 
@@ -111,6 +114,7 @@ implements
     /**
      * Infer from annotations.
      */
+    @SuppressWarnings("removal")
     public static LogicalType infer(
             final @NonNull Class<?> correspondingClass) {
 
@@ -154,8 +158,29 @@ implements
                 return eager(correspondingClass, logicalTypeName);
             }
         }
+
+        // fallback to @Table annotations
+        {
+            val logicalTypeName =
+                    _Annotations.synthesize(correspondingClass, Table.class)
+                    .map(table->
+                        _Strings.nullToEmpty(table.schema())
+                            .toLowerCase(Locale.ROOT)
+                        + "."
+                        + _Strings.nullToEmpty(table.name()))
+                    .orElse(null);
+            if(logicalTypeName!=null
+                    && !logicalTypeName.startsWith(".")
+                    && !logicalTypeName.endsWith(".")) {
+                return eager(correspondingClass, logicalTypeName);
+            }
+        }
+
         // fallback to fqcn
-        return eager(correspondingClass, correspondingClass.getName());
+        return eager(correspondingClass,
+                Optional
+                    .ofNullable(correspondingClass.getCanonicalName())
+                    .orElseGet(correspondingClass::getName));
     }
 
     // -- HIDDEN CONSTRUTORS

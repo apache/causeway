@@ -21,20 +21,17 @@ package org.apache.isis.core.config.beans;
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.Locale;
 
-import javax.inject.Named;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.TypeVetoMarker;
 
@@ -105,12 +102,11 @@ implements IsisBeanTypeClassifier {
 
         val aDomainService = _Annotations.synthesize(type, DomainService.class);
         if(aDomainService.isPresent()) {
-            return _Strings.isNotEmpty(aDomainService.get().logicalTypeName())
-                    ? BeanClassification
+            val logicalType = LogicalType.infer(type);
+            // overrides Spring naming strategy
+            return BeanClassification
                         .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING,
-                                aDomainService.get().logicalTypeName())
-                    : BeanClassification
-                        .delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING);
+                                logicalType.getLogicalTypeName());
         }
 
         // allow ServiceLoader plugins to have a say, eg. when classifying entity types
@@ -127,58 +123,19 @@ implements IsisBeanTypeClassifier {
 
         val entityAnnotation = _Annotations.synthesize(type, Entity.class).orElse(null);
         if(entityAnnotation!=null) {
-
-            String logicalTypeName = null;
-
-            // deprecated @DomainObject(logicalTypeName=...)
-            val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
-            if(aDomainObject!=null) {
-                logicalTypeName = aDomainObject.logicalTypeName();
-            }
-
-            val named = _Annotations.synthesize(type, Named.class).orElse(null);
-            if(named!=null) {
-                logicalTypeName = named.value();
-            }
-
-            // don't trample over the @Named/@DomainObject(logicalTypeName=..) if present
-            if(_Strings.isEmpty(logicalTypeName)) {
-                val aTable = _Annotations.synthesize(type, Table.class).orElse(null);
-                if(aTable!=null) {
-                    val schema = aTable.schema();
-                    if(_Strings.isNotEmpty(schema)) {
-                        val table = aTable.name();
-                        logicalTypeName = String.format("%s.%s", schema.toLowerCase(Locale.ROOT),
-                                _Strings.isNotEmpty(table)
-                                    ? table
-                                    : type.getSimpleName());
-                    }
-                }
-            }
-
-            if(_Strings.isNotEmpty(logicalTypeName)) {
-                BeanClassification.selfManaged(
-                        BeanSort.ENTITY, logicalTypeName);
-            }
-            return BeanClassification.selfManaged(BeanSort.ENTITY);
+            val logicalType = LogicalType.infer(type);
+            return BeanClassification.selfManaged(
+                        BeanSort.ENTITY, logicalType.getLogicalTypeName());
         }
 
         val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
             case BEAN:
-
-                // deprecated @DomainObject(logicalTypeName=...)
-                String logicalTypeName = aDomainObject.logicalTypeName();
-
-                val named = _Annotations.synthesize(type, Named.class).orElse(null);
-                if(named!=null) {
-                    logicalTypeName = named.value();
-                }
-
+                val logicalTypeName = LogicalType.infer(type).getLogicalTypeName();
                 return BeanClassification.delegated(
                         BeanSort.MANAGED_BEAN_CONTRIBUTING,
-                        _Strings.emptyToNull(logicalTypeName));
+                        logicalTypeName);
             case MIXIN:
                 return BeanClassification.selfManaged(BeanSort.MIXIN);
             case ENTITY:

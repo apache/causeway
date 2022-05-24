@@ -18,12 +18,9 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.beans;
 
-import java.util.Locale;
-
-import javax.inject.Named;
 import javax.jdo.annotations.EmbeddedOnly;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.reflection._Annotations;
@@ -41,7 +38,8 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
     public BeanClassification classify(
             final Class<?> type) {
 
-        val persistenceCapableAnnot = _Annotations.synthesize(type, javax.jdo.annotations.PersistenceCapable.class);
+        val persistenceCapableAnnot = _Annotations
+                .synthesize(type, javax.jdo.annotations.PersistenceCapable.class);
         if(persistenceCapableAnnot.isPresent()) {
 
             val embeddedOnlyAttribute = persistenceCapableAnnot.get().embeddedOnly();
@@ -53,39 +51,24 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
                 return null; // don't categorize as entity ... fall through in the caller's logic
             }
 
-            String logicalTypeName = null;
+            String logicalTypeName = LogicalType.infer(type).getLogicalTypeName();
 
-            // deprecated @DomainObject(logicalTypeName=...)
-            val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
-            if(aDomainObject!=null) {
-                logicalTypeName = aDomainObject.logicalTypeName();
-            }
-
-            val named = _Annotations.synthesize(type, Named.class).orElse(null);
-            if(named!=null) {
-                logicalTypeName = named.value();
-            }
-
-            // don't trample over the @DomainObject(logicalTypeName=..) if present
-            if(_Strings.isEmpty(logicalTypeName)) {
+            // don't trample over the @Named(=...) if present
+            if(logicalTypeName.equals(type.getName())) {
                 val schema = persistenceCapableAnnot.get().schema();
                 if(_Strings.isNotEmpty(schema)) {
 
                     val table = persistenceCapableAnnot.get().table();
 
-                    logicalTypeName = String.format("%s.%s", schema.toLowerCase(Locale.ROOT),
-                            _Strings.isNotEmpty(table)
-                                ? table
-                                : type.getSimpleName());
+                    //FIXME - this custom name is never honored
+//                    logicalTypeName = String.format("%s.%s", schema.toLowerCase(Locale.ROOT),
+//                            _Strings.isNotEmpty(table)
+//                                ? table
+//                                : type.getSimpleName());
                 }
             }
 
-
-            if(_Strings.isNotEmpty(logicalTypeName)) {
-                BeanClassification.selfManaged(
-                        BeanSort.ENTITY, logicalTypeName);
-            }
-            return BeanClassification.selfManaged(BeanSort.ENTITY);
+            return BeanClassification.selfManaged(BeanSort.ENTITY, logicalTypeName);
         }
 
         return null; // we don't feel responsible to classify given type

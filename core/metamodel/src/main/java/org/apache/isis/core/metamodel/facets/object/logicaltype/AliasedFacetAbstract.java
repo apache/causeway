@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.logicaltype;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -28,36 +29,35 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import lombok.Getter;
 import lombok.NonNull;
 
-public abstract class LogicalTypeFacetAbstract
+public abstract class AliasedFacetAbstract
 extends FacetAbstract
-implements LogicalTypeFacet {
+implements AliasedFacet {
 
     private static final Class<? extends Facet> type() {
-        return LogicalTypeFacet.class;
+        return AliasedFacet.class;
     }
 
     @Getter(onMethod_ = {@Override})
-    private final @NonNull LogicalType logicalType;
+    private final @NonNull Can<LogicalType> aliases;
 
-    protected LogicalTypeFacetAbstract(
-            final LogicalType logicalType,
+    protected AliasedFacetAbstract(
+            final Can<LogicalType> aliases,
             final FacetHolder holder) {
-        super(LogicalTypeFacetAbstract.type(), holder);
-        this.logicalType = logicalType;
+        super(AliasedFacetAbstract.type(), holder);
+        this.aliases = aliases;
     }
 
-    protected LogicalTypeFacetAbstract(
-            final LogicalType logicalType,
+    protected AliasedFacetAbstract(
+            final Can<LogicalType> aliases,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
-        super(LogicalTypeFacetAbstract.type(), holder, precedence);
-        this.logicalType = logicalType;
+        super(AliasedFacetAbstract.type(), holder, precedence);
+        this.aliases = aliases;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("logicalTypeName", logicalType.getLogicalTypeName());
-        visitor.accept("logicalTypeCorrespondingClass", logicalType.getCorrespondingClass().getName());
+        visitor.accept("aliases", aliases);
     }
 }

@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid.LogicalTypeFacetFromJdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
@@ -86,10 +85,6 @@ implements ObjectTypeFacetFactory {
                 .createUsingJdo(persistenceCapableIfAny, embeddedOnlyIfAny, cls, facetHolder))
         .map(jdoPersistenceCapableFacet->{
 
-            FacetUtil.addFacetIfPresent(
-                    LogicalTypeFacetFromJdoPersistenceCapableFacet
-                    .create(jdoPersistenceCapableFacet, cls, facetHolder));
-
             FacetUtil.addFacet(
                     jdoFacetContext.createEntityFacet(facetHolder));
 
@@ -114,10 +109,6 @@ implements ObjectTypeFacetFactory {
                 JdoPersistenceCapableFacetFromAnnotation
                 .createUsingJpa(entityIfAny, tableIfAny, cls, facetHolder))
         .ifPresent(jdoPersistenceCapableFacet->{
-
-            FacetUtil.addFacetIfPresent(
-                    LogicalTypeFacetFromJdoPersistenceCapableFacet
-                    .create(jdoPersistenceCapableFacet, cls, facetHolder));
 
             FacetUtil.addFacet(
                     jdoFacetContext.createEntityFacet(facetHolder));

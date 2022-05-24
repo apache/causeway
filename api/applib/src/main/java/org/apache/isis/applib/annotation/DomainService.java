@@ -58,6 +58,13 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 public @interface DomainService {
 
     /**
+     * Alternative logical type name(s) for the annotated type.
+     * @see Bookmark
+     * @see Named
+     */
+    String[] aliased() default {};
+
+    /**
      * The nature of this service, either in the UI or REST only
      *
      * @see DomainObject#nature()

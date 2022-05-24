@@ -49,12 +49,8 @@ implements MetaModelRefiner {
                 return;
             }
 
-            val logicalTypeFacet = spec.getFacet(LogicalTypeFacet.class);
-            if(logicalTypeFacet == null) {
-                return;
-            }
-
-            val logicalTypeName = logicalTypeFacet.value();
+            val logicalType = spec.getLogicalType();
+            val logicalTypeName = logicalType.getLogicalTypeName();
 
             val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
                     .collect(Can.toCan());

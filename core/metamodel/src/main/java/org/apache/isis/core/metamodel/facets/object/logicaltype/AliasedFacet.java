@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.logicaltype;
 import javax.inject.Named;
 
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -44,12 +45,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * in principle allowed to share the same logical type-name. In which case reverse
  * lookup from logical-type-name to type must always resolve the most specific one (B).
  */
-public interface LogicalTypeFacet extends Facet {
+public interface AliasedFacet extends Facet {
 
-    LogicalType getLogicalType();
-
-    default String value() {
-        return getLogicalType().getLogicalTypeName();
-    }
+    Can<LogicalType> getAliases();
 
 }

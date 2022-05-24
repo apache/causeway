@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
@@ -71,7 +72,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.editing.Editing
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
@@ -112,7 +112,8 @@ implements
     public void process(final ProcessObjectTypeContext processClassContext) {
 
         val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
-        processLogicalTypeName(domainObjectIfAny, processClassContext);
+        processAliased(domainObjectIfAny, processClassContext);
+        processIntrospecion(domainObjectIfAny, processClassContext);
 
         // conflicting type semantics validation ...
         validateConflictingTypeSemantics(domainObjectIfAny, processClassContext);
@@ -166,7 +167,8 @@ implements
         }
 
         if(domainObject.nature().isMixin()
-                && _Strings.isNotEmpty(domainObject.logicalTypeName())) {
+                && (_Strings.isNotEmpty(domainObject.logicalTypeName())
+                        || processClassContext.synthesizeOnType(Named.class).isPresent())) {
             // just a console warning, not decided yet whether we should be strict and fail MM validation
             log.warn("Mixins don't need a logicalTypeName, as was declared with {}.", cls.getName());
         }
@@ -311,8 +313,8 @@ implements
                 .create(domainObjectIfAny, getConfiguration(), facetHolder));
     }
 
-    // check from @DomainObject(logicalTypeName=..., introspection=...)
-    void processLogicalTypeName(
+    // check from @DomainObject(aliased=...)
+    void processAliased(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {
 
@@ -320,14 +322,23 @@ implements
         val facetHolder = processClassContext.getFacetHolder();
 
         FacetUtil.addFacetIfPresent(
-                LogicalTypeFacetForDomainObjectAnnotation
+                AliasedFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, cls, facetHolder));
+    }
+
+    // check from @DomainObject(introspection=...)
+    void processIntrospecion(
+            final Optional<DomainObject> domainObjectIfAny,
+            final ProcessObjectTypeContext processClassContext) {
+
+        val cls = processClassContext.getCls();
+        val facetHolder = processClassContext.getFacetHolder();
 
         FacetUtil.addFacetIfPresent(
                 IntrospectionPolicyFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, cls, facetHolder));
-
     }
+
 
 
     void processNature(

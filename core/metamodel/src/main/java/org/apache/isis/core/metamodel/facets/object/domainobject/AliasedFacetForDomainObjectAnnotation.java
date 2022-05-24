@@ -16,37 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype;
+package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.AliasedFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.AliasedFacetAbstract;
 
-@Deprecated //@DomainObject(logicalTypeName=...) is deprecated
-public class LogicalTypeFacetForDomainObjectAnnotation
-extends LogicalTypeFacetAbstract {
+public class AliasedFacetForDomainObjectAnnotation
+extends AliasedFacetAbstract {
 
-    public static Optional<LogicalTypeFacet> create(
+    public static Optional<AliasedFacet> create(
             final Optional<DomainObject> domainObjectIfAny,
             final Class<?> correspondingClass,
             final FacetHolder holder) {
 
         return domainObjectIfAny
-                .map(annot->annot.logicalTypeName())
-                .filter(_Strings::isNotEmpty)
-                .map(logicalTypeName -> new LogicalTypeFacetForDomainObjectAnnotation(
-                        LogicalType.eager(correspondingClass, logicalTypeName),
+                .map(annot->annot.aliased())
+                .map(Can::ofArray)
+                .filter(Can::isNotEmpty)
+                .map(aliasNames -> new AliasedFacetForDomainObjectAnnotation(
+                        aliasNames
+                            .map(aliasName->LogicalType.eager(correspondingClass, aliasName)),
                         holder));
     }
 
-    private LogicalTypeFacetForDomainObjectAnnotation(
-            final LogicalType logicalType,
+    private AliasedFacetForDomainObjectAnnotation(
+            final Can<LogicalType> aliases,
             final FacetHolder holder) {
-        super(logicalType, holder);
+        super(aliases, holder);
     }
 }
