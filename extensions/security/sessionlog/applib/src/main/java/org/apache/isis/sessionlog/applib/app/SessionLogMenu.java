@@ -71,7 +71,7 @@ public class SessionLogMenu {
             if(user == null) {
                 return sessionLogEntryRepository.findByFromAndTo(from, to);
             } else {
-                return sessionLogEntryRepository.findByUserAndFromAndTo(user, from, to);
+                return sessionLogEntryRepository.findByUsernameAndFromAndTo(user, from, to);
             }
         }
     }

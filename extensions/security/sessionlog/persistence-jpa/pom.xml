@@ -27,15 +27,25 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-extensions-sessionlog-applib</artifactId>
-    <name>Apache Isis Ext - Session Log Applib</name>
+    <artifactId>isis-extensions-sessionlog-persistence-jpa</artifactId>
+    <name>Apache Isis Ext - Session Log Persistence (using JPA)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.sessionlog.applib</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/sessionlog/applib</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.sessionlog.jpa</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/sessionlog/jpa</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-sessionlog-applib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.persistence</groupId>
+            <artifactId>isis-persistence-jpa-eclipselink</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -53,6 +63,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
     </dependencies>
 
 </project>

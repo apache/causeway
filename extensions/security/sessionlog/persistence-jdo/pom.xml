@@ -27,7 +27,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>sis-extensions-sessionlog-persistence-jdo</artifactId>
+    <artifactId>isis-extensions-sessionlog-persistence-jdo</artifactId>
     <name>Apache Isis Ext - Session Log Persistence (using JDO)</name>
 
     <properties>

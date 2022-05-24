@@ -1,14 +1,7 @@
 package org.apache.isis.sessionlog.jdo.dom;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.List;
 
-import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -16,29 +9,10 @@ import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberSupport;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.component.CssClassFaPosition;
-import org.apache.isis.applib.mixins.security.HasUsername;
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.session.SessionLogService;
-import org.apache.isis.applib.util.ObjectContracts;
-
-import org.apache.isis.sessionlog.applib.IsisModuleExtSessionLogApplib;
-
-import lombok.val;
-import lombok.experimental.UtilityClass;
+import org.apache.isis.sessionlog.applib.dom.SessionLogEntry.Nq;
 
 @PersistenceCapable(
         identityType=IdentityType.APPLICATION,
@@ -46,89 +20,89 @@ import lombok.experimental.UtilityClass;
         table = SessionLogEntry.TABLE)
 @Queries( {
         @Query(
-                name= SessionLogEntry.Nq.FIND_BY_SESSION_ID,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                      + "WHERE sessionId == :sessionId"),
+                name  = Nq.FIND_BY_SESSION_ID,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE sessionId == :sessionId"),
         @Query(
-                name= SessionLogEntry.Nq.FIND_BY_USER_AND_TIMESTAMP_BETWEEN,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                        + "WHERE user == :user "
-                        + "&& loginTimestamp >= :from "
-                        + "&& logoutTimestamp <= :to "
-                        + "ORDER BY loginTimestamp DESC"),
+                name  = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + "WHERE username == :username "
+                      + "&& loginTimestamp >= :from "
+                      + "&& logoutTimestamp <= :to "
+                      + "ORDER BY loginTimestamp DESC"),
         @Query(
-                name= SessionLogEntry.Nq.FIND_BY_USER_AND_TIMESTAMP_AFTER,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                        + "WHERE user == :user "
-                        + "&& loginTimestamp >= :from "
-                        + "ORDER BY loginTimestamp DESC"),
+                name  = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_AFTER,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE username == :username "
+                      + "    && loginTimestamp >= :from "
+                      + " ORDER BY loginTimestamp DESC"),
         @Query(
-                name= SessionLogEntry.Nq.FIND_BY_USER_AND_TIMESTAMP_BEFORE,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                        + "WHERE user == :user "
-                        + "&& loginTimestamp <= :from "
-                        + "ORDER BY loginTimestamp DESC"),
+                name  = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE username == :username "
+                      + "    && loginTimestamp <= :from "
+                      + " ORDER BY loginTimestamp DESC"),
         @Query(
-                name= SessionLogEntry.Nq.FIND_BY_USER,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                        + "WHERE user == :user "
-                        + "ORDER BY loginTimestamp DESC"),
+                name  = Nq.FIND_BY_USERNAME,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE username == :username "
+                      + " ORDER BY loginTimestamp DESC"),
         @Query(
-                name= SessionLogEntry.Nq.FIND_BY_TIMESTAMP_BETWEEN,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                        + "WHERE loginTimestamp >= :from "
-                        + "&&    logoutTimestamp <= :to "
-                        + "ORDER BY loginTimestamp DESC"),
+                name  = Nq.FIND_BY_TIMESTAMP_BETWEEN,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE loginTimestamp >= :from "
+                      + "    && logoutTimestamp <= :to "
+                      + " ORDER BY loginTimestamp DESC"),
         @Query(
-                name= SessionLogEntry.Nq.FIND_BY_TIMESTAMP_AFTER,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                        + "WHERE loginTimestamp >= :from "
-                        + "ORDER BY loginTimestamp DESC"),
+                name  = Nq.FIND_BY_TIMESTAMP_AFTER,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE loginTimestamp >= :from "
+                      + " ORDER BY loginTimestamp DESC"),
         @Query(
-                name= SessionLogEntry.Nq.FIND_BY_TIMESTAMP_BEFORE,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                        + "WHERE loginTimestamp <= :to "
-                        + "ORDER BY loginTimestamp DESC"),
+                name  = Nq.FIND_BY_TIMESTAMP_BEFORE,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE loginTimestamp <= :to "
+                      + " ORDER BY loginTimestamp DESC"),
         @Query(
-                name= SessionLogEntry.Nq.FIND,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                        + "ORDER BY loginTimestamp DESC"),
+                name  = Nq.FIND,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " ORDER BY loginTimestamp DESC"),
         @Query(
-                name= SessionLogEntry.Nq.FIND_BY_USER_AND_TIMESTAMP_STRICTLY_BEFORE,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                        + "WHERE user == :user "
-                        + "&& loginTimestamp < :from "
-                        + "ORDER BY loginTimestamp DESC"),
+                name  = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_BEFORE,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE username == :username "
+                      + "    && loginTimestamp < :from "
+                      + " ORDER BY loginTimestamp DESC"),
         @Query(
-                name= SessionLogEntry.Nq.FIND_BY_USER_AND_TIMESTAMP_STRICTLY_AFTER,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                        + "WHERE user == :user "
-                        + "&& loginTimestamp > :from "
-                        + "ORDER BY loginTimestamp ASC"),
+                name  = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_AFTER,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE username == :username "
+                      + "    && loginTimestamp > :from "
+                      + " ORDER BY loginTimestamp ASC"),
         @Query(
-                name= SessionLogEntry.Nq.FIND_ACTIVE_SESSIONS,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                      + "WHERE logoutTimestamp == null "
-                      + "ORDER BY loginTimestamp ASC"),
+                name  = Nq.FIND_ACTIVE_SESSIONS,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE logoutTimestamp == null "
+                      + " ORDER BY loginTimestamp ASC"),
         @Query(
-                name= SessionLogEntry.Nq.FIND_RECENT_BY_USER,
-                value="SELECT "
-                        + "FROM " + SessionLogEntry.FQCN + " "
-                        + "WHERE user == :user "
-                        + "ORDER BY loginTimestamp DESC "
-                        + "RANGE 0,10")
+                name  = Nq.FIND_RECENT_BY_USERNAME,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE username == :username "
+                      + " ORDER BY loginTimestamp DESC "
+                      + " RANGE 0,10")
 })
 @DomainObject(
         logicalTypeName = SessionLogEntry.LOGICAL_TYPE_NAME,
@@ -148,7 +122,7 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
 
 
     @PrimaryKey
-    @Column(allowsNull="false", length=15)
+    @Column(allowsNull = "false", length=15)
     private String sessionId;
     @Override
     @SessionId
@@ -176,7 +150,7 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
 
 
 
-    @Column(allowsNull="false")
+    @Column(allowsNull = "false")
     private Timestamp loginTimestamp;
     @Override
     @LoginTimestamp
@@ -190,7 +164,7 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
 
 
 
-    @Column(allowsNull="true")
+    @Column(allowsNull = "true")
     private Timestamp logoutTimestamp;
     @Override
     @LogoutTimestamp

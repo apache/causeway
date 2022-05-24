@@ -9,12 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.PrimaryKey;
-import javax.jdo.annotations.Queries;
-import javax.jdo.annotations.Query;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -51,18 +45,18 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     @UtilityClass
     public static class Nq {
         public static final String FIND_BY_SESSION_ID =  SessionLogEntry.LOGICAL_TYPE_NAME + ".findBySessionId";
-        public static final String FIND_BY_USER_AND_TIMESTAMP_BETWEEN = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUserAndTimestampBetween";
-        public static final String FIND_BY_USER_AND_TIMESTAMP_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUserAndTimestampAfter";
-        public static final String FIND_BY_USER_AND_TIMESTAMP_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUserAndTimestampBefore";
-        public static final String FIND_BY_USER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUser";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampBetween";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampAfter";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampBefore";
+        public static final String FIND_BY_USERNAME = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsername";
         public static final String FIND_BY_TIMESTAMP_BETWEEN = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampBetween";
         public static final String FIND_BY_TIMESTAMP_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampAfter";
         public static final String FIND_BY_TIMESTAMP_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampBefore";
         public static final String FIND = SessionLogEntry.LOGICAL_TYPE_NAME + ".find";
-        public static final String FIND_BY_USER_AND_TIMESTAMP_STRICTLY_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUserAndTimestampStrictlyBefore";
-        public static final String FIND_BY_USER_AND_TIMESTAMP_STRICTLY_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUserAndTimestampStrictlyAfter";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampStrictlyBefore";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampStrictlyAfter";
         public static final String FIND_ACTIVE_SESSIONS = SessionLogEntry.LOGICAL_TYPE_NAME + ".findActiveSessions";
-        public static final String FIND_RECENT_BY_USER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findRecentByUser";
+        public static final String FIND_RECENT_BY_USERNAME = SessionLogEntry.LOGICAL_TYPE_NAME + ".findRecentByUsername";
     }
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSessionLogApplib.PropertyDomainEvent<SessionLogEntry, T> { }
@@ -258,7 +252,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         }
 
         @MemberSupport public SessionLogEntry act() {
-            final List<SessionLogEntry> after = sessionLogEntryRepository.findByUserAndStrictlyAfter(getUsername(), getLoginTimestamp());
+            final List<SessionLogEntry> after = sessionLogEntryRepository.findByUsernameAndStrictlyAfter(getUsername(), getLoginTimestamp());
             return !after.isEmpty() ? after.get(0) : SessionLogEntry.this;
         }
 
@@ -286,7 +280,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         }
 
         @MemberSupport public SessionLogEntry act() {
-            final List<SessionLogEntry> before = sessionLogEntryRepository.findByUserAndStrictlyBefore(getUsername(), getLoginTimestamp());
+            final List<SessionLogEntry> before = sessionLogEntryRepository.findByUsernameAndStrictlyBefore(getUsername(), getLoginTimestamp());
             return !before.isEmpty() ? before.get(0) : SessionLogEntry.this;
         }
 

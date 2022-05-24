@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import org.joda.time.LocalDate;
-import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -32,7 +31,6 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
     }
 
     public void logoutAllSessions(final Timestamp logoutTimestamp) {
-
         val allSessions = repositoryService.allMatches(
                 Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_ACTIVE_SESSIONS));
         for (val activeEntry : allSessions) {
@@ -61,15 +59,15 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
     }
 
 
-    public List<E> findByUser(final String username) {
+    public List<E> findByUsername(final String username) {
         return repositoryService.allMatches(
-                Query.named(sessionLogEntryClass, "findByUsername")
+                Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USERNAME)
                      .withParameter("username", username));
     }
 
 
-    public List<E> findByUserAndFromAndTo(
-            final String user,
+    public List<E> findByUsernameAndFromAndTo(
+            final String username,
             final LocalDate from,
             final LocalDate to) {
         val fromTs = toTimestampStartOfDayWithOffset(from, 0);
@@ -78,23 +76,23 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
         final Query<E> query;
         if(from != null) {
             if(to != null) {
-                query = Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USER_AND_TIMESTAMP_BETWEEN)
-                        .withParameter("user", user)
+                query = Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN)
+                        .withParameter("username", username)
                         .withParameter("from", fromTs)
                         .withParameter("to", toTs);
             } else {
-                query = Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USER_AND_TIMESTAMP_AFTER)
-                        .withParameter("user", user)
+                query = Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USERNAME_AND_TIMESTAMP_AFTER)
+                        .withParameter("username", username)
                         .withParameter("from", fromTs);
             }
         } else {
             if(to != null) {
-                query = Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USER_AND_TIMESTAMP_BEFORE)
-                        .withParameter("user", user)
+                query = Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE)
+                        .withParameter("username", username)
                         .withParameter("to", toTs);
             } else {
-                query = Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USER)
-                        .withParameter("user", user);
+                query = Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USERNAME)
+                        .withParameter("username", username);
             }
         }
         return repositoryService.allMatches(query);
@@ -129,23 +127,23 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
     }
 
 
-    public List<E> findByUserAndStrictlyBefore(
-            final String user,
+    public List<E> findByUsernameAndStrictlyBefore(
+            final String username,
             final Timestamp from) {
 
         return repositoryService.allMatches(
-                Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USER_AND_TIMESTAMP_STRICTLY_BEFORE)
-                    .withParameter("user", user)
+                Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_BEFORE)
+                    .withParameter("username", username)
                     .withParameter("from", from));
     }
 
 
-    public List<E> findByUserAndStrictlyAfter(
-            final String user,
+    public List<E> findByUsernameAndStrictlyAfter(
+            final String username,
             final Timestamp from) {
         return repositoryService.allMatches(
-                Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USER_AND_TIMESTAMP_STRICTLY_AFTER)
-                    .withParameter("user", user)
+                Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_AFTER)
+                    .withParameter("username", username)
                     .withParameter("from", from));
     }
 
@@ -158,10 +156,11 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
 
 
 
-    public List<E> findRecentByUser(final String user) {
+    public List<E> findRecentByUsername(final String username) {
         return repositoryService.allMatches(
-                Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_RECENT_BY_USER)
-                        .withParameter("user", user));
+                Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_RECENT_BY_USERNAME)
+                        .withParameter("username", username)
+                        .withLimit(10));
 
     }
 

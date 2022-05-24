@@ -63,27 +63,27 @@ import lombok.Setter;
     @Query(
             name = Nq.FIND_BY_USERNAME,
             value = "SELECT "
-                    + "FROM " + ApplicationUser.FQCN
-                    + " WHERE username == :username"),
+                  + "  FROM " + ApplicationUser.FQCN
+                  + " WHERE username == :username"),
     @Query(
             name = Nq.FIND_BY_EMAIL_ADDRESS,
             value = "SELECT "
-                    + "FROM " + ApplicationUser.FQCN
-                    + " WHERE emailAddress == :emailAddress"),
+                  + "  FROM " + ApplicationUser.FQCN
+                  + " WHERE emailAddress == :emailAddress"),
     @Query(
             name = Nq.FIND_BY_ATPATH,
             value = "SELECT "
-                    + "FROM " + ApplicationUser.FQCN
-                    + " WHERE atPath == :atPath"),
+                  + "  FROM " + ApplicationUser.FQCN
+                  + " WHERE atPath == :atPath"),
     @Query(
             name = Nq.FIND,
             value = "SELECT "
-                    + "FROM " + ApplicationUser.FQCN
-                    + " WHERE username.matches(:regex)"
-                    + " || familyName.matches(:regex)"
-                    + " || givenName.matches(:regex)"
-                    + " || knownAs.matches(:regex)"
-                    + " || emailAddress.matches(:regex)")
+                  + "  FROM " + ApplicationUser.FQCN
+                  + " WHERE username.matches(:regex)"
+                  + "    || familyName.matches(:regex)"
+                  + "    || givenName.matches(:regex)"
+                  + "    || knownAs.matches(:regex)"
+                  + "    || emailAddress.matches(:regex)")
 })
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)

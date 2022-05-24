@@ -36,7 +36,7 @@ public class HasUsername_recentSessionsForUser {
         if(hasUsername == null || hasUsername.getUsername() == null) {
             return Collections.emptyList();
         }
-        return sessionLogEntryRepository.findRecentByUser(hasUsername.getUsername());
+        return sessionLogEntryRepository.findRecentByUsername(hasUsername.getUsername());
     }
     @MemberSupport public boolean hideAct() {
         return hasUsername == null || hasUsername.getUsername() == null;
