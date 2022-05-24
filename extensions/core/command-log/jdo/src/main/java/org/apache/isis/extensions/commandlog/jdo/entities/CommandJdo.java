@@ -20,6 +20,7 @@ package org.apache.isis.extensions.commandlog.jdo.entities;
 
 import java.sql.Timestamp;
 
+import javax.inject.Named;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -214,10 +215,9 @@ import lombok.Setter;
 //                    + " WHERE replayState = 'PENDING' "
 //                    + "ORDER BY this.timestamp DESC "
 //                    + "RANGE 0,20"),
+@Named(CommandJdo.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = CommandJdo.LOGICAL_TYPE_NAME,
-        editing = Editing.DISABLED
-)
+        editing = Editing.DISABLED)
 //@Log4j2
 @NoArgsConstructor
 public class CommandJdo

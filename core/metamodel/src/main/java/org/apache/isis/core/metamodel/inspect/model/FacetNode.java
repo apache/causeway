@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.inspect.model;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -41,9 +42,9 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.val;
 
+@Named(FacetNode.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        logicalTypeName = FacetNode.LOGICAL_TYPE_NAME,
         introspection = Introspection.ANNOTATION_REQUIRED
 )
 @XmlRootElement

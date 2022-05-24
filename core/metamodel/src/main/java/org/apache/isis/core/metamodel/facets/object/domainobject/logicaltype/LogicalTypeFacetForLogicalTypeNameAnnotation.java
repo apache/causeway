@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
+@Deprecated //@LogicalTypeName(...) is deprecated
 public class LogicalTypeFacetForLogicalTypeNameAnnotation
 extends LogicalTypeFacetAbstract {
 

@@ -19,6 +19,7 @@
 package demoapp.dom.services.core.wrapperFactory.jdo;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -51,9 +52,9 @@ import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePrope
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@Named("demo.WrapperFactoryEntity")
 @DomainObject(
         nature=Nature.ENTITY
-        , logicalTypeName = "demo.WrapperFactoryEntity"
         , editing = Editing.DISABLED
 )
 public class WrapperFactoryJdo

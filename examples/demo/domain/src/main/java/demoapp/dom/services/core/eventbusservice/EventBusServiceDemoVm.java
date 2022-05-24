@@ -21,6 +21,7 @@ package demoapp.dom.services.core.eventbusservice;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
@@ -34,7 +35,8 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.EventBusServiceDemoVm")
+@Named("demo.EventBusServiceDemoVm")
+@DomainObject(nature=Nature.VIEW_MODEL)
 public class EventBusServiceDemoVm implements HasAsciiDocDescription {
 
     @Inject private EventLogEntryRepository<? extends EventLogEntry> eventLogEntryRepository;
@@ -49,7 +51,8 @@ public class EventBusServiceDemoVm implements HasAsciiDocDescription {
         return eventLogEntryRepository.listAll();
     }
 
-    @DomainObject(nature = Nature.VIEW_MODEL, logicalTypeName = "demo.EventBusServiceDemoVm.UiButtonEvent")
+    @Named("demo.EventBusServiceDemoVm.UiButtonEvent")
+    @DomainObject(nature = Nature.VIEW_MODEL)
     public static class UiButtonEvent implements ViewModel {
         // -- VIEWMODEL CONTRACT
         public UiButtonEvent(final String memento) { }

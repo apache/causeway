@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javamath.bigintegers.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javamath.bigintegers.persistence.JavaMathBigIntegerEnti
       name = "JavaMathBigIntegerJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.JavaMathBigIntegerEntity"
-)
+@Named("demo.JavaMathBigIntegerEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaMathBigIntegerJpa
         extends JavaMathBigIntegerEntity {

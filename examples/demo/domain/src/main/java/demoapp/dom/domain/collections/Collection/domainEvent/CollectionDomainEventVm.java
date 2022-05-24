@@ -21,6 +21,7 @@ package demoapp.dom.domain.collections.Collection.domainEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -45,9 +46,9 @@ import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDom
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.CollectionDomainEventVm")
 @DomainObject(
     nature=Nature.VIEW_MODEL,
-    logicalTypeName = "demo.CollectionDomainEventVm",
     editing = Editing.ENABLED
 )
 //tag::class[]

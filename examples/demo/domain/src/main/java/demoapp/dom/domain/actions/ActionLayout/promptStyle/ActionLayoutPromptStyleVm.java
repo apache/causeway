@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.promptStyle;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -41,10 +42,9 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.ActionLayoutPromptStyleVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.ActionLayoutPromptStyleVm"
-)
+        nature=Nature.VIEW_MODEL)
 public class ActionLayoutPromptStyleVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

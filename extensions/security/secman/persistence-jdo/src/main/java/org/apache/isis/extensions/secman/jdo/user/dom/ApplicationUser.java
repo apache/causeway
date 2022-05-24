@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.Element;
@@ -91,11 +92,10 @@ import lombok.Setter;
                     + " || knownAs.matches(:regex)"
                     + " || emailAddress.matches(:regex)")
 })
+@Named(ApplicationUser.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = ApplicationUser.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationUserRepository.class,
-        autoCompleteMethod = "findMatching"
-)
+        autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
 )

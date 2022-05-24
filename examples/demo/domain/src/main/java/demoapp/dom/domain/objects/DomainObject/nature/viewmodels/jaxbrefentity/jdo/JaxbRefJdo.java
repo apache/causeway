@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -38,9 +39,9 @@ import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.J
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@Named("demo.JaxbRefEntity")
 @DomainObject(
-        bounding = Bounding.BOUNDED
-        , logicalTypeName = "demo.JaxbRefEntity")
+        bounding = Bounding.BOUNDED)
 public class JaxbRefJdo
         extends JaxbRefEntity {
 

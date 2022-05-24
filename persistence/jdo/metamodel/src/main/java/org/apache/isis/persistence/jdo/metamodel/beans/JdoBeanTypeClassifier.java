@@ -20,6 +20,7 @@ package org.apache.isis.persistence.jdo.metamodel.beans;
 
 import java.util.Locale;
 
+import javax.inject.Named;
 import javax.jdo.annotations.EmbeddedOnly;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -54,9 +55,15 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
 
             String logicalTypeName = null;
 
+            // deprecated @DomainObject(logicalTypeName=...)
             val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
             if(aDomainObject!=null) {
                 logicalTypeName = aDomainObject.logicalTypeName();
+            }
+
+            val named = _Annotations.synthesize(type, Named.class).orElse(null);
+            if(named!=null) {
+                logicalTypeName = named.value();
             }
 
             // don't trample over the @DomainObject(logicalTypeName=..) if present

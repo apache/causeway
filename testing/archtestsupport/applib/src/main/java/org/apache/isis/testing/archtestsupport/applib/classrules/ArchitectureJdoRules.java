@@ -39,7 +39,6 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -58,22 +57,21 @@ public class ArchitectureJdoRules {
                 .that().areAnnotatedWith(DomainObject.class)
                 .and(new DescribedPredicate<>("have a logicalTypeName") {
                     @Override
-                    public boolean apply(JavaClass javaClass) {
-                        val domainObjectIfAny = javaClass.tryGetAnnotationOfType(DomainObject.class);
-                        return domainObjectIfAny.isPresent() && !_Strings.isNullOrEmpty(domainObjectIfAny.get().logicalTypeName());
+                    public boolean apply(final JavaClass javaClass) {
+                        return _LogicalNaming.hasExplicitLogicalName(javaClass);
                     }
                 })
                 .and(new DescribedPredicate<>("have a @Discriminator") {
                     @Override
-                    public boolean apply(JavaClass javaClass) {
+                    public boolean apply(final JavaClass javaClass) {
                         val discriminatorIfAny = javaClass.tryGetAnnotationOfType(Discriminator.class);
                         return discriminatorIfAny.isPresent();
                     }
                 })
                 .should(new ArchCondition<>("be the same") {
                     @Override
-                    public void check(JavaClass javaClass, ConditionEvents conditionEvents) {
-                        val logicalTypeName = javaClass.getAnnotationOfType(DomainObject.class).logicalTypeName();
+                    public void check(final JavaClass javaClass, final ConditionEvents conditionEvents) {
+                        val logicalTypeName = _LogicalNaming.logicalNameFor(javaClass);
                         val discriminatorValue = javaClass.getAnnotationOfType(Discriminator.class).value();
                         if (!Objects.equals(logicalTypeName, discriminatorValue)) {
                             conditionEvents.add(
@@ -253,7 +251,7 @@ public class ArchitectureJdoRules {
     static DescribedPredicate<JavaClass> areEntities() {
         return new DescribedPredicate<>("are entities") {
             @Override
-            public boolean apply(JavaClass input) {
+            public boolean apply(final JavaClass input) {
                 return input.isAnnotatedWith(PersistenceCapable.class);
             }
         };

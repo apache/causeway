@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimelocaldatetime.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javatime.javatimelocaldatetime.persistence.JavaTimeLoca
       name = "JavaTimeLocalDateTimeJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.JavaTimeLocalDateTimeEntity"
-)
+@Named("demo.JavaTimeLocalDateTimeEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaTimeLocalDateTimeJpa
         extends JavaTimeLocalDateTimeEntity {

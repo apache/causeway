@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -67,14 +68,12 @@ import org.apache.isis.commons.internal.base._Casts;
                   + " WHERE t.name LIKE :regex "
                   + "    OR t.path LIKE :regex"),
 })
+@Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = ApplicationTenancy.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationTenancyRepository.class,
-        autoCompleteMethod = "findMatching"
-        )
+        autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT
-        )
+        bookmarking = BookmarkPolicy.AS_ROOT)
 public class ApplicationTenancy
     extends org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy {
 
@@ -94,7 +93,7 @@ public class ApplicationTenancy
         return name;
     }
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -111,7 +110,7 @@ public class ApplicationTenancy
         return path;
     }
     @Override
-    public void setPath(String path) {
+    public void setPath(final String path) {
         this.path = path;
     }
 
@@ -128,7 +127,7 @@ public class ApplicationTenancy
         return parent;
     }
     @Override
-    public void setParent(org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
+    public void setParent(final org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
         this.parent = _Casts.uncheckedCast(parent);
     }
 
@@ -143,7 +142,7 @@ public class ApplicationTenancy
     public Set<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> getChildren() {
         return _Casts.uncheckedCast(children);
     }
-    public void setChildren(SortedSet<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
+    public void setChildren(final SortedSet<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
         this.children = _Casts.uncheckedCast(children);
     }
     // necessary for integration tests

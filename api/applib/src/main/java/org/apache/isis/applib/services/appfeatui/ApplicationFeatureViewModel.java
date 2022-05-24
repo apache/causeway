@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.ViewModel;
@@ -63,9 +64,8 @@ import lombok.val;
  *
  * @since 2.x  {@index}
  */
-@DomainObject(
-    logicalTypeName = ApplicationFeatureViewModel.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationFeatureViewModel.LOGICAL_TYPE_NAME)
+@DomainObject
 public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureViewModel";

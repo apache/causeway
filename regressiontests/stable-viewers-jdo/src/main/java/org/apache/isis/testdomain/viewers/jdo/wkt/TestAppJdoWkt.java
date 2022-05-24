@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.viewers.jdo.wkt;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -68,10 +69,9 @@ public class TestAppJdoWkt extends SpringBootServletInitializer {
         SpringApplication.run(new Class[] { TestAppJdoWkt.class }, args);
     }
 
+    @Named("testdomain.jdo.TestHomePage")
     @DomainObject(
-            nature=Nature.VIEW_MODEL,
-            logicalTypeName = "testdomain.jdo.TestHomePage"
-            )
+            nature=Nature.VIEW_MODEL)
     @HomePage
     public static class TestHomePage {
 

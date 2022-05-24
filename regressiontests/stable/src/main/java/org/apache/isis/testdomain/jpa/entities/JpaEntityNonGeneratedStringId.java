@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.jpa.entities;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -34,8 +35,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
+@Named("testdomain.jpa.NonGeneratedStringId")
 @DomainObject(
-        logicalTypeName = "testdomain.jpa.NonGeneratedStringId",
         entityChangePublishing = Publishing.DISABLED)
 @NoArgsConstructor
 @AllArgsConstructor

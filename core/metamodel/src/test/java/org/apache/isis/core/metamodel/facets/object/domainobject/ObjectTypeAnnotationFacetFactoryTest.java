@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
+import javax.inject.Named;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,38 +30,38 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
-import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForNamedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
-import lombok.val;
-
 public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
-    private DomainObjectAnnotationFacetFactory facetFactory;
+    private LogicalTypeFacetForAnnotationFacetFactory facetFactory;
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new DomainObjectAnnotationFacetFactory(metaModelContext, new MethodByClassMap());
+        facetFactory = new LogicalTypeFacetForAnnotationFacetFactory(metaModelContext, new MethodByClassMap());
     }
 
     @Test
     public void logicalTypeNameAnnotationPickedUpOnClass() {
 
-        @DomainObject(logicalTypeName = "CUS")
+        @Named("CUS")
+        @DomainObject
         class Customer {
         }
 
         expectNoMethodsRemoved();
 
-        val context = new ProcessObjectTypeContext(Customer.class, facetHolder);
-        facetFactory.processLogicalTypeName(context.synthesizeOnType(DomainObject.class), context);
+        facetFactory.process(ProcessClassContext
+                .forTesting(Customer.class, mockMethodRemover, facetHolder));
 
         final LogicalTypeFacet facet = facetHolder.getFacet(LogicalTypeFacet.class);
 
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof LogicalTypeFacetForDomainObjectAnnotation, is(true));
+        assertThat(facet instanceof LogicalTypeFacetForNamedAnnotation, is(true));
         assertThat(facet.value(), is("CUS"));
 
     }

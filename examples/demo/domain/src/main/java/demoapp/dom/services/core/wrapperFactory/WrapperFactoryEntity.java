@@ -18,15 +18,16 @@
  */
 package demoapp.dom.services.core.wrapperFactory;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.domain._commands.ExposePersistedCommands;
 
-@DomainObject(
-        logicalTypeName = "demo.WrapperFactoryEntity" // shared permissions with concrete sub class
-)
+@Named("demo.WrapperFactoryEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class WrapperFactoryEntity
 implements
     HasAsciiDocDescription,

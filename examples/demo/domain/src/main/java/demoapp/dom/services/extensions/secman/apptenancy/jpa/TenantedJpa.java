@@ -18,6 +18,7 @@
  */
 package demoapp.dom.services.extensions.secman.apptenancy.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -51,9 +52,8 @@ import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEnt
     name = "TenantedJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-    logicalTypeName = "demo.TenantedEntity"
-)
+@Named("demo.TenantedEntity")
+@DomainObject
 @NoArgsConstructor
 public class TenantedJpa
         extends TenantedEntity {

@@ -21,6 +21,8 @@ package demoapp.dom.domain._interactions;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.LabelPosition;
@@ -41,10 +43,9 @@ import lombok.Setter;
 import lombok.val;
 
 //tag::class[]
+@Named("demo.InteractionDtoVm")
 @DomainObject(
-    logicalTypeName = "demo.InteractionDtoVm"
-    , nature = Nature.VIEW_MODEL
-)
+        nature = Nature.VIEW_MODEL)
 @NoArgsConstructor
 @AllArgsConstructor
 public class InteractionDtoVm implements ViewModel {

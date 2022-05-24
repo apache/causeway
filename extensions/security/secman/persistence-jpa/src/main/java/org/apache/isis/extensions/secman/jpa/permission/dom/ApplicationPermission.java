@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jpa.permission.dom;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -95,9 +96,8 @@ import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
                   + "   AND p.featureSort = :featureSort "),
 })
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-        logicalTypeName = ApplicationPermission.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationPermission.LOGICAL_TYPE_NAME)
+@DomainObject
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
 )

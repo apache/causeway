@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.jdo.role.dom;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -66,9 +67,9 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
                     + "FROM " + ApplicationRole.FQCN
                     + " WHERE name.matches(:regex) ")
 })
+@Named(ApplicationRole.LOGICAL_TYPE_NAME)
 @DomainObject(
         bounding = Bounding.BOUNDED,
-        logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationRoleRepository.class,
         autoCompleteMethod = "findMatching"
         )
@@ -93,7 +94,7 @@ public class ApplicationRole
         return name;
     }
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -109,7 +110,7 @@ public class ApplicationRole
         return description;
     }
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 

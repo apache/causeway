@@ -19,6 +19,7 @@
 package demoapp.dom.types.isisext.asciidocs.jpa;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,9 +58,8 @@ import demoapp.dom.types.isisext.asciidocs.persistence.IsisAsciiDocEntity;
       name = "IsisAsciiDocJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.IsisAsciiDocEntity"
-)
+@Named("demo.IsisAsciiDocEntity")
+@DomainObject
 @NoArgsConstructor
 public class IsisAsciiDocJpa
         extends IsisAsciiDocEntity {

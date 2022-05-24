@@ -25,6 +25,8 @@ import java.lang.annotation.Target;
 import java.util.Collection;
 import java.util.Comparator;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -44,9 +46,8 @@ import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 /**
  * @since 2.0 {@index}
  */
-@DomainObject(
-        logicalTypeName = ApplicationTenancy.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
+@DomainObject
 public abstract class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancy";

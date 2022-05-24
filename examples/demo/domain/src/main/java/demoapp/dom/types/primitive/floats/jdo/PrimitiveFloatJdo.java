@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.floats.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -40,14 +41,13 @@ import demoapp.dom.types.primitive.floats.persistence.PrimitiveFloatEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.PrimitiveFloatEntity"
-)
+@Named("demo.PrimitiveFloatEntity")
+@DomainObject
 public class PrimitiveFloatJdo                                      // <.>
         extends PrimitiveFloatEntity {
 
 //end::class[]
-    public PrimitiveFloatJdo(float initialValue) {
+    public PrimitiveFloatJdo(final float initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

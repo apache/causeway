@@ -20,6 +20,7 @@ package org.apache.isis.extensions.commandlog.jpa.entities;
 
 import java.sql.Timestamp;
 
+import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -182,8 +183,8 @@ import lombok.Setter;
 //                    + "ORDER BY this.timestamp DESC "
 //                    + "RANGE 0,20"),
 
+@Named(CommandJpa.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = CommandJpa.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED)
 @EntityListeners(IsisEntityListener.class)
 @NoArgsConstructor

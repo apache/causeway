@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.permission.dom;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -97,9 +98,8 @@ import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
             name = "ApplicationPermission_role_feature_rule_UNQ",
             members = { "role", "featureSort", "featureFqn", "rule" })
 })
-@DomainObject(
-        logicalTypeName = ApplicationPermission.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationPermission.LOGICAL_TYPE_NAME)
+@DomainObject
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
 )
@@ -120,7 +120,7 @@ public class ApplicationPermission
         return role;
     }
     @Override
-    public void setRole(ApplicationRole role) {
+    public void setRole(final ApplicationRole role) {
         this.role = _Casts.uncheckedCast(role);
     }
 
@@ -136,7 +136,7 @@ public class ApplicationPermission
         return rule;
     }
     @Override
-    public void setRule(ApplicationPermissionRule rule) {
+    public void setRule(final ApplicationPermissionRule rule) {
         this.rule = rule;
     }
 
@@ -152,7 +152,7 @@ public class ApplicationPermission
         return mode;
     }
     @Override
-    public void setMode(ApplicationPermissionMode mode) {
+    public void setMode(final ApplicationPermissionMode mode) {
         this.mode = mode;
     }
 
@@ -168,7 +168,7 @@ public class ApplicationPermission
         return featureSort;
     }
     @Override
-    public void setFeatureSort(ApplicationFeatureSort featureSort) {
+    public void setFeatureSort(final ApplicationFeatureSort featureSort) {
         this.featureSort = featureSort;
     }
 
@@ -184,7 +184,7 @@ public class ApplicationPermission
         return featureFqn;
     }
     @Override
-    public void setFeatureFqn(String featureFqn) {
+    public void setFeatureFqn(final String featureFqn) {
         this.featureFqn = featureFqn;
     }
 

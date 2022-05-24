@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.jpa.role.dom;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -64,9 +65,9 @@ import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
                   + "WHERE r.name LIKE :regex"),
 })
 @EntityListeners(IsisEntityListener.class)
+@Named(ApplicationRole.LOGICAL_TYPE_NAME)
 @DomainObject(
         bounding = Bounding.BOUNDED,
-        logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationRoleRepository.class,
         autoCompleteMethod = "findMatching"
         )

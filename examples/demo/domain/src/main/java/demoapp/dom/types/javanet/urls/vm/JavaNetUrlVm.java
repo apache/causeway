@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javanet.urls.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -42,16 +43,15 @@ import demoapp.dom.types.javanet.urls.holder.JavaNetUrlHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.JavaNetUrlVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.JavaNetUrlVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaNetUrlVm
         implements HasAsciiDocDescription, JavaNetUrlHolder2 {
 
 //end::class[]
-    public JavaNetUrlVm(java.net.URL initialValue) {
+    public JavaNetUrlVm(final java.net.URL initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

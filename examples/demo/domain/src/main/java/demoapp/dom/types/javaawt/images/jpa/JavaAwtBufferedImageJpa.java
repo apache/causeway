@@ -20,6 +20,7 @@ package demoapp.dom.types.javaawt.images.jpa;
 
 import java.awt.image.BufferedImage;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -52,9 +53,8 @@ import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
       name = "JavaAwtBufferedImageJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.JavaAwtBufferedImageEntity"
-)
+@Named("demo.JavaAwtBufferedImageEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaAwtBufferedImageJpa
         extends JavaAwtBufferedImageEntity

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javasql.javasqltimestamp.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,16 +45,15 @@ import demoapp.dom.types.javasql.javasqltimestamp.holder.JavaSqlTimestampHolder3
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.JavaSqlTimestampVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.JavaSqlTimestampVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaSqlTimestampVm
         implements HasAsciiDocDescription, JavaSqlTimestampHolder3 {
 
 //end::class[]
-    public JavaSqlTimestampVm(java.sql.Timestamp initialValue) {
+    public JavaSqlTimestampVm(final java.sql.Timestamp initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

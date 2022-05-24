@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimezoneddatetime.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.persistence.JavaTimeZone
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaTimeZonedDateTimeEntity"
-)
+@Named("demo.JavaTimeZonedDateTimeEntity")
+@DomainObject
 public class JavaTimeZonedDateTimeJdo                                          // <.>
         extends JavaTimeZonedDateTimeEntity {
 
 //end::class[]
-    public JavaTimeZonedDateTimeJdo(java.time.ZonedDateTime initialValue) {
+    public JavaTimeZonedDateTimeJdo(final java.time.ZonedDateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

@@ -26,6 +26,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -113,10 +114,9 @@ public class ApplicationFeatureChoices {
      * because at the time of writing,
      * autoComplete/choices do not support value types.
      */
+    @Named(AppFeat.LOGICAL_TYPE_NAME)
     @DomainObject(
-            nature = Nature.VIEW_MODEL,
-            logicalTypeName = AppFeat.LOGICAL_TYPE_NAME
-    )
+            nature = Nature.VIEW_MODEL)
     @AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode
     public static class AppFeat
     implements

@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.javautil.uuids.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javautil.uuids.holder.JavaUtilUuidHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.JavaUtilUuidEntity" // shared permissions with concrete sub class
-)
+@Named("demo.JavaUtilUuidEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class JavaUtilUuidEntity
 implements
     HasAsciiDocDescription,

@@ -26,6 +26,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacetAbstract;
 
+@Deprecated // @Value(logicalTypeName=...) is deprecated
 public class LogicalTypeFacetForValueAnnotation
 extends LogicalTypeFacetAbstract {
 

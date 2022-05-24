@@ -23,6 +23,7 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Locale;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -129,12 +130,18 @@ implements IsisBeanTypeClassifier {
 
             String logicalTypeName = null;
 
+            // deprecated @DomainObject(logicalTypeName=...)
             val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
             if(aDomainObject!=null) {
                 logicalTypeName = aDomainObject.logicalTypeName();
             }
 
-            // don't trample over the @DomainObject(logicalTypeName=..) if present
+            val named = _Annotations.synthesize(type, Named.class).orElse(null);
+            if(named!=null) {
+                logicalTypeName = named.value();
+            }
+
+            // don't trample over the @Named/@DomainObject(logicalTypeName=..) if present
             if(_Strings.isEmpty(logicalTypeName)) {
                 val aTable = _Annotations.synthesize(type, Table.class).orElse(null);
                 if(aTable!=null) {
@@ -160,9 +167,18 @@ implements IsisBeanTypeClassifier {
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
             case BEAN:
+
+                // deprecated @DomainObject(logicalTypeName=...)
+                String logicalTypeName = aDomainObject.logicalTypeName();
+
+                val named = _Annotations.synthesize(type, Named.class).orElse(null);
+                if(named!=null) {
+                    logicalTypeName = named.value();
+                }
+
                 return BeanClassification.delegated(
                         BeanSort.MANAGED_BEAN_CONTRIBUTING,
-                        aDomainObject.logicalTypeName());
+                        _Strings.emptyToNull(logicalTypeName));
             case MIXIN:
                 return BeanClassification.selfManaged(BeanSort.MIXIN);
             case ENTITY:

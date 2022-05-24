@@ -18,17 +18,24 @@
  */
 package org.apache.isis.viewer.graphql.viewer.source.gqltestdomain;
 
-import lombok.RequiredArgsConstructor;
-import org.apache.isis.applib.annotation.*;
-import org.springframework.lang.Nullable;
-
-import javax.inject.Inject;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.SemanticsOf;
+
+import lombok.RequiredArgsConstructor;
+
+@Named("gqltestdomain.GQLTestDomainMenu")
 @DomainService(
-        nature=NatureOfService.VIEW,
-        logicalTypeName = "gqltestdomain.GQLTestDomainMenu"
-)
+        nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class GQLTestDomainMenu {

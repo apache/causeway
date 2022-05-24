@@ -32,6 +32,7 @@ import java.util.function.Function;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -72,7 +73,8 @@ import lombok.extern.log4j.Log4j2;
  * @see Clob
  * @since 1.x {@index}
  */
-@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Blob")
+@Named(IsisModuleApplib.NAMESPACE + ".value.Blob")
+@Value
 @XmlJavaTypeAdapter(Blob.JaxbToStringAdapter.class)   // for JAXB view model support
 @Log4j2
 public final class Blob implements NamedWithMimeType {

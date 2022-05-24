@@ -30,6 +30,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -76,11 +77,6 @@ public class ObjectSpecificationDefault
 extends ObjectSpecificationAbstract
 implements FacetHolder {
 
-    private static String determineShortName(final Class<?> introspectedClass) {
-        final String name = introspectedClass.getName();
-        return name.substring(name.lastIndexOf('.') + 1);
-    }
-
     // -- constructor, fields
 
     /**
@@ -109,7 +105,10 @@ implements FacetHolder {
             final PostProcessor postProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
-        super(correspondingClass, determineShortName(correspondingClass), beanSort, facetProcessor, postProcessor);
+        super(correspondingClass,
+                LogicalType.infer(correspondingClass),
+                determineShortName(correspondingClass),
+                beanSort, facetProcessor, postProcessor);
 
         this.nameIfIsManagedBean = nameIfIsManagedBean;
         this.classSubstitutorRegistry = classSubstitutorRegistry;
@@ -130,6 +129,11 @@ implements FacetHolder {
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
 
+    }
+
+    private static String determineShortName(final Class<?> introspectedClass) {
+        final String name = introspectedClass.getName();
+        return name.substring(name.lastIndexOf('.') + 1);
     }
 
     @Override

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.actions.Action.restrictTo;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,10 +45,9 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.ActionRestrictToVm")
 @DomainObject(
-    nature=Nature.VIEW_MODEL,
-    logicalTypeName = "demo.ActionRestrictToVm"
-)
+    nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 //tag::class[]
 public class ActionRestrictToVm implements HasAsciiDocDescription {

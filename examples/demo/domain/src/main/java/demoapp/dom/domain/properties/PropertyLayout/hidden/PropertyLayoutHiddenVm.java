@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.PropertyLayout.hidden;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -49,11 +50,10 @@ import demoapp.dom.domain.properties.PropertyLayout.hidden.child.PropertyLayoutH
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PropertyLayoutHiddenVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PropertyLayoutHiddenVm",
-        editing = Editing.ENABLED
-)
+        editing = Editing.ENABLED)
 @NoArgsConstructor
 public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
 

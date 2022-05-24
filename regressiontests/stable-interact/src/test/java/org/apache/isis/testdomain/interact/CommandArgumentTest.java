@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -68,7 +69,8 @@ class CommandArgumentTest extends InteractionTestAbstract {
     @XmlRootElement(name = "root")
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
-    @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName="regressiontests.CommandResult")
+    @Named("regressiontests.CommandResult")
+    @DomainObject(nature=Nature.VIEW_MODEL)
     @NoArgsConstructor
     @AllArgsConstructor(staticName = "of")
     public static class CommandResult {
@@ -82,7 +84,8 @@ class CommandArgumentTest extends InteractionTestAbstract {
     @XmlRootElement(name = "root")
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
-    @DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName="regressiontests.CommandArgDemo")
+    @Named("regressiontests.CommandArgDemo")
+    @DomainObject(nature=Nature.VIEW_MODEL)
     public static class CommandArgDemo {
 
         @Action

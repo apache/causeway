@@ -22,6 +22,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -46,7 +47,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.AssociatedAction", editing=Editing.ENABLED)
+@Named("demo.AssociatedAction")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 @NoArgsConstructor
 public class AssociatedActionDemo implements HasAsciiDocDescription {
 

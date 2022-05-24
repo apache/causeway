@@ -24,11 +24,16 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import javax.inject.Named;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.reflection._Annotations;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -100,6 +105,56 @@ implements
     public static LogicalType fqcn(
             final @NonNull Class<?> correspondingClass) {
 
+        return eager(correspondingClass, correspondingClass.getName());
+    }
+
+    /**
+     * Infer from annotations.
+     */
+    public static LogicalType infer(
+            final @NonNull Class<?> correspondingClass) {
+
+        // has precedence, over any former (deprecated) naming strategies
+        val named = _Strings.emptyToNull(
+                _Annotations.synthesize(correspondingClass, Named.class)
+                .map(Named::value)
+                .orElse(null));
+        if(named!=null) {
+            return eager(correspondingClass, named);
+        }
+
+        // 3x deprecated naming strategies ...
+
+        {
+            val logicalTypeName = _Strings.emptyToNull(
+                    _Annotations.synthesize(correspondingClass, DomainObject.class)
+                    .map(DomainObject::logicalTypeName)
+                    .orElse(null));
+            if(logicalTypeName!=null) {
+                return eager(correspondingClass, logicalTypeName);
+            }
+        }
+
+        {
+            val logicalTypeName = _Strings.emptyToNull(
+                    _Annotations.synthesize(correspondingClass, DomainService.class)
+                    .map(DomainService::logicalTypeName)
+                    .orElse(null));
+            if(logicalTypeName!=null) {
+                return eager(correspondingClass, logicalTypeName);
+            }
+        }
+
+        {
+            val logicalTypeName = _Strings.emptyToNull(
+                    _Annotations.synthesize(correspondingClass, Value.class)
+                    .map(Value::logicalTypeName)
+                    .orElse(null));
+            if(logicalTypeName!=null) {
+                return eager(correspondingClass, logicalTypeName);
+            }
+        }
+        // fallback to fqcn
         return eager(correspondingClass, correspondingClass.getName());
     }
 

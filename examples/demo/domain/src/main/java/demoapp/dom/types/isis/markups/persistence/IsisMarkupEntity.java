@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.isis.markups.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.value.Markup;
 
@@ -25,9 +27,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.isis.markups.holder.IsisMarkupHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.IsisMarkupEntity" // shared permissions with concrete sub class
-)
+@Named("demo.IsisMarkupEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class IsisMarkupEntity
 implements
     HasAsciiDocDescription,

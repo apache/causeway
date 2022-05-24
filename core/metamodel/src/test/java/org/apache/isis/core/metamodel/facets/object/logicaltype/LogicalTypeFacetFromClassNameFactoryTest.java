@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.logicaltype;
 
+import javax.inject.Named;
+
 import org.datanucleus.testing.dom.CustomerAsProxiedByDataNucleus;
 import org.junit.Test;
 
@@ -28,11 +30,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForNamedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassName;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassNameFactory;
-import org.apache.isis.core.metamodel.facets.value.annotation.LogicalTypeFacetForValueAnnotation;
-import org.apache.isis.core.metamodel.facets.value.annotation.ValueAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.methods.MethodByClassMap;
+
+import lombok.val;
 
 public class LogicalTypeFacetFromClassNameFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
@@ -78,23 +84,26 @@ extends AbstractFacetFactoryJUnit4TestCase {
         assertThat(facet.value(), is(ValueExample1.class.getCanonicalName()));
     }
 
-    @Value(logicalTypeName = "xxx.ValueExample")
+    @Named("xxx.ValueExample")
+    @Value
     public static class ValueExample2 {
     }
 
     @Test
     public void installsFacet_onValuesUsingLogicalTypeName() {
 
-        facetFactory = new ValueAnnotationFacetFactory(metaModelContext);
+        val facetFactory =
+                new LogicalTypeFacetForAnnotationFacetFactory(metaModelContext, new MethodByClassMap());
 
         expectNoMethodsRemoved();
 
-        facetFactory.process(new ObjectTypeFacetFactory.ProcessObjectTypeContext(ValueExample2.class, facetHolder));
+        facetFactory.process(ProcessClassContext
+                .forTesting(ValueExample2.class, mockMethodRemover, facetHolder));
 
         final LogicalTypeFacet facet = facetHolder.getFacet(LogicalTypeFacet.class);
 
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof LogicalTypeFacetForValueAnnotation, is(true));
+        assertThat(facet instanceof LogicalTypeFacetForNamedAnnotation, is(true));
         assertThat(facet.value(), is("xxx.ValueExample"));
     }
 

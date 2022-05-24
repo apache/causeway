@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -51,7 +52,8 @@ import lombok.Setter;
 @XmlRootElement(name = "InteractionDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName="regressiontests.InteractionDemo", editing=Editing.ENABLED)
+@Named("regressiontests.InteractionDemo")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 public class InteractionDemo {
 
     @Property(

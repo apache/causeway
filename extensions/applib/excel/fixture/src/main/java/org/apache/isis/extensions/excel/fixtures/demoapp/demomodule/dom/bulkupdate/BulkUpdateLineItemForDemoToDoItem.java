@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -49,10 +50,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Named("libExcelFixture.BulkUpdateLineItemForDemoToDoItem")
 @DomainObject(
-        nature = Nature.VIEW_MODEL,
-        logicalTypeName = "libExcelFixture.BulkUpdateLineItemForDemoToDoItem"
-)
+        nature = Nature.VIEW_MODEL)
 @DomainObjectLayout(
         named = "Bulk update line item",
         bookmarking = BookmarkPolicy.AS_ROOT
@@ -75,7 +75,7 @@ import lombok.Setter;
 public class BulkUpdateLineItemForDemoToDoItem
         implements Comparable<BulkUpdateLineItemForDemoToDoItem> {
 
-    public BulkUpdateLineItemForDemoToDoItem(ExcelDemoToDoItem toDoItem) {
+    public BulkUpdateLineItemForDemoToDoItem(final ExcelDemoToDoItem toDoItem) {
         modifyToDoItem(toDoItem);
     }
 

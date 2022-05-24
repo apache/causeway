@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.properties.Property.mustSatisfy;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -40,11 +41,10 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PropertyMustSatisfyVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PropertyMustSatisfyVm",
-        editing = Editing.ENABLED
-)
+        editing = Editing.ENABLED)
 public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

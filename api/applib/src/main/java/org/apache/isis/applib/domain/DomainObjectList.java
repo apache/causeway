@@ -21,6 +21,7 @@ package org.apache.isis.applib.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -67,17 +68,15 @@ import lombok.Getter;
         }
         )
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named(DomainObjectList.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = DomainObjectList.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED,
-        nature = Nature.VIEW_MODEL
-        )
+        nature = Nature.VIEW_MODEL)
 @DomainObjectLayout(
         titleUiEvent = DomainObjectList.TitleUiEvent.class,
         iconUiEvent = DomainObjectList.IconUiEvent.class,
         cssClassUiEvent = DomainObjectList.CssClassUiEvent.class,
-        layoutUiEvent = DomainObjectList.LayoutUiEvent.class
-        )
+        layoutUiEvent = DomainObjectList.LayoutUiEvent.class)
 public class DomainObjectList {
 
     public static final String LOGICAL_TYPE_NAME = "isis.applib.DomainObjectList";

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.integers.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javalang.integers.persistence.WrapperIntegerEntity;
       name = "WrapperIntegerJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.WrapperIntegerEntity"
-)
+@Named("demo.WrapperIntegerEntity")
+@DomainObject
 @NoArgsConstructor
 public class WrapperIntegerJpa
         extends WrapperIntegerEntity {

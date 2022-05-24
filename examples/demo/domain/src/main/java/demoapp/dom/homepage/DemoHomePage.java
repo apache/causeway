@@ -19,6 +19,7 @@
 package demoapp.dom.homepage;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.HomePage;
@@ -31,10 +32,9 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.resources.AsciiDocReaderService;
 
 //tag::class[]
+@Named("demo.Homepage")
 @DomainObject(
-    nature=Nature.VIEW_MODEL,
-    logicalTypeName = "demo.Homepage"
-)
+    nature=Nature.VIEW_MODEL)
 @HomePage                                                       // <.>
 public class DemoHomePage
         implements HasAsciiDocDescription {                     // <.>

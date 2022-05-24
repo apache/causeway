@@ -21,12 +21,14 @@ package org.apache.isis.testdomain.jpa.springdata;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "testdomain.jpa.springdata.EmployeeManager")
+@Named("testdomain.jpa.springdata.EmployeeManager")
+@DomainObject(nature=Nature.VIEW_MODEL)
 public class EmployeeManager {
 
     @Inject private EmployeeRepository employeeRepo;

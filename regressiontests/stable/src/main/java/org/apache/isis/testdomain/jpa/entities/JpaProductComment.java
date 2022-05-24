@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.jpa.entities;
 
 import java.sql.Timestamp;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,8 +37,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@DomainObject(
-        logicalTypeName = "testdomain.jpa.ProductComment")
+@Named("testdomain.jpa.ProductComment")
+@DomainObject
 public class JpaProductComment implements OnUpdatedByAndAt {
 
     @Id

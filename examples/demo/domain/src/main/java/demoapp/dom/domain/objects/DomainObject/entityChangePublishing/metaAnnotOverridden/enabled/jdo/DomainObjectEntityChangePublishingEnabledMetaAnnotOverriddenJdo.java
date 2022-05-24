@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -43,9 +44,9 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotO
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObjectEntityChangePublishingDisabledMetaAnnotation                   // <.>
+@Named("demo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity")
 @DomainObject(
         nature=Nature.ENTITY
-        , logicalTypeName = "demo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity"
         , entityChangePublishing = Publishing.ENABLED         // <.>
         , bounding = Bounding.BOUNDED
 )
@@ -59,7 +60,7 @@ public class DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo
     // ...
 //end::class[]
 
-    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo(String initialValue) {
+    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo(final String initialValue) {
         this.property = initialValue;
         this.propertyUpdatedByAction = initialValue;
     }

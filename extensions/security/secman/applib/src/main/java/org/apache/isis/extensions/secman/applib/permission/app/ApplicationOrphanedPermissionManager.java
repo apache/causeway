@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.applib.permission.app;
 import java.util.Collection;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
@@ -29,10 +30,9 @@ import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 
+@Named(ApplicationOrphanedPermissionManager.LOGICAL_TYPE_NAME)
 @DomainObject(
-        nature = Nature.VIEW_MODEL,
-        logicalTypeName = ApplicationOrphanedPermissionManager.LOGICAL_TYPE_NAME
-)
+        nature = Nature.VIEW_MODEL)
 public class ApplicationOrphanedPermissionManager {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationOrphanedPermissionManager";

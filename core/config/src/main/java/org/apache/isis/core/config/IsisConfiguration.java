@@ -41,6 +41,7 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import javax.activation.DataSource;
+import javax.inject.Named;
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -54,8 +55,6 @@ import org.springframework.validation.annotation.Validated;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -1402,7 +1401,7 @@ public class IsisConfiguration {
 
                 /**
                  * Whether to ensure that the logical-type-name of all objects must be specified explicitly, using either
-                 * {@link DomainObject#logicalTypeName()} or {@link DomainService#logicalTypeName()}.
+                 * {@link Named}.
                  *
                  * <p>
                  *     It is <i>highly advisable</i> to leave this set as enabled (the default). These logical-type-names

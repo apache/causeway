@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.shorts.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,16 +41,15 @@ import demoapp.dom.types.primitive.shorts.holder.PrimitiveShortHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PrimitiveShortVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PrimitiveShortVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                           // <.>
 public class PrimitiveShortVm
         implements HasAsciiDocDescription, PrimitiveShortHolder2 {
 
 //end::class[]
-    public PrimitiveShortVm(short initialValue) {
+    public PrimitiveShortVm(final short initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

@@ -311,7 +311,7 @@ implements
                 .create(domainObjectIfAny, getConfiguration(), facetHolder));
     }
 
-    // check from @DomainObject(logicalTypeName=...)
+    // check from @DomainObject(logicalTypeName=..., introspection=...)
     void processLogicalTypeName(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {

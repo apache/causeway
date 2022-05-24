@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.applib.role.man;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
@@ -30,10 +31,9 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 
+@Named(ApplicationRoleManager.LOGICAL_TYPE_NAME)
 @DomainObject(
-        nature = Nature.VIEW_MODEL,
-        logicalTypeName = ApplicationRoleManager.LOGICAL_TYPE_NAME
-)
+        nature = Nature.VIEW_MODEL)
 public class ApplicationRoleManager {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleManager";

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -50,9 +51,8 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 /**
  * @since 2.0 {@index}
  */
-@DomainObject(
-        logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationRole.LOGICAL_TYPE_NAME)
+@DomainObject
 public abstract class ApplicationRole implements Comparable<ApplicationRole> {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRole";

@@ -19,12 +19,13 @@
 package demoapp.dom.types.isis.passwords.persistence;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.annotation.ActionLayout.Position;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Password;
 
@@ -32,9 +33,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.isis.passwords.holder.IsisPasswordHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.IsisPasswordEntity" // shared permissions with concrete sub class
-)
+@Named("demo.IsisPasswordEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class IsisPasswordEntity
 implements
     HasAsciiDocDescription,

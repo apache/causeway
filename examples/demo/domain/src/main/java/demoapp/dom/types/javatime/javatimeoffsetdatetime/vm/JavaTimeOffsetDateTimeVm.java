@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimeoffsetdatetime.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,16 +45,15 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.holder.JavaTimeOffsetDa
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.JavaTimeOffsetDateTimeVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.JavaTimeOffsetDateTimeVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeOffsetDateTimeVm
         implements HasAsciiDocDescription, JavaTimeOffsetDateTimeHolder3 {
 
 //end::class[]
-    public JavaTimeOffsetDateTimeVm(java.time.OffsetDateTime initialValue) {
+    public JavaTimeOffsetDateTimeVm(final java.time.OffsetDateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

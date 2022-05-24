@@ -20,6 +20,8 @@ package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.dom.pivot;
 
 import java.math.BigDecimal;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.extensions.excel.applib.AggregationType;
@@ -32,10 +34,9 @@ import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcateg
 import lombok.Getter;
 import lombok.Setter;
 
+@Named("libExcelFixture.ExcelPivotByCategoryAndSubcategory")
 @DomainObject(
-        logicalTypeName = "libExcelFixture.ExcelPivotByCategoryAndSubcategory",
-        nature = Nature.VIEW_MODEL
-)
+        nature = Nature.VIEW_MODEL)
 public class ExcelPivotByCategoryAndSubcategory {
 
     public ExcelPivotByCategoryAndSubcategory(

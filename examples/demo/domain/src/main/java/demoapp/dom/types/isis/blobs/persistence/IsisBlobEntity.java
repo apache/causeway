@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.isis.blobs.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.value.Blob;
 
@@ -25,9 +27,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.isis.blobs.holder.IsisBlobHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.IsisBlobEntity" // shared permissions with concrete sub class
-)
+@Named("demo.IsisBlobEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class IsisBlobEntity
 implements
     HasAsciiDocDescription,

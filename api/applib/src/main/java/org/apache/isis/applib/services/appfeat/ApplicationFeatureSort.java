@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
 
@@ -25,7 +27,8 @@ import org.apache.isis.applib.annotation.Value;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@Value(logicalTypeName = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureSort")
+@Named(IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureSort")
+@Value
 public enum ApplicationFeatureSort {
 
     /**

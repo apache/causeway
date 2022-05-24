@@ -18,19 +18,20 @@
  */
 package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturescripts;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.extensions.excel.applib.WorksheetSpec;
 import org.apache.isis.extensions.excel.applib.Mode;
+import org.apache.isis.extensions.excel.applib.WorksheetSpec;
 import org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.fixturehandlers.demotodoitem.DemoToDoItemRowHandler2;
 import org.apache.isis.extensions.excel.testing.ExcelFixture2;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@DomainObject(
-        logicalTypeName = "isis.sub.excel.DemoFixture_extending_ExcelFixture2"
-)
+@Named("isis.sub.excel.DemoFixture_extending_ExcelFixture2")
+@DomainObject
 public class DemoFixture_extending_ExcelFixture2 extends ExcelFixture2 {
 
     public DemoFixture_extending_ExcelFixture2(){

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.booleans.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javalang.booleans.persistence.WrapperBooleanEntity;
       name = "WrapperBooleanJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.WrapperBooleanEntity"
-)
+@Named("demo.WrapperBooleanEntity")
+@DomainObject
 @NoArgsConstructor
 public class WrapperBooleanJpa
         extends WrapperBooleanEntity {

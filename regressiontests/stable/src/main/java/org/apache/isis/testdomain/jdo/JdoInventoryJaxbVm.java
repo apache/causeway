@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -56,10 +57,9 @@ import lombok.Setter;
                 "books", "booksForTab1", "booksForTab2"}
 )
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("testdomain.jdo.JdoInventoryJaxbVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL
-        , logicalTypeName = "testdomain.jdo.JdoInventoryJaxbVm"
-)
+        nature=Nature.VIEW_MODEL)
 public class JdoInventoryJaxbVm {
 
     @XmlTransient @Inject

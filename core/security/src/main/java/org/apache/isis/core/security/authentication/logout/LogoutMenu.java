@@ -94,9 +94,9 @@ public class LogoutMenu {
     }
 
     /** A pseudo model used to redirect to the login page.*/
+    @Named(LoginRedirect.LOGICAL_TYPE_NAME)
     @DomainObject(
-            nature = Nature.VIEW_MODEL,
-            logicalTypeName = LoginRedirect.LOGICAL_TYPE_NAME)
+            nature = Nature.VIEW_MODEL)
     public static class LoginRedirect {
         public final static String LOGICAL_TYPE_NAME = "isis.security.LoginRedirect";
     }

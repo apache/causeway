@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -86,11 +87,10 @@ import lombok.Setter;
                   + "    OR u.emailAddress LIKE :regex")
 })
 @EntityListeners(IsisEntityListener.class)
+@Named(ApplicationUser.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = ApplicationUser.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationUserRepository.class,
-        autoCompleteMethod = "findMatching"
-        )
+        autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )

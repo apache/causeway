@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javamath.bigintegers.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javamath.bigintegers.persistence.JavaMathBigIntegerEnti
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaMathBigIntegerEntity"
-)
+@Named("demo.JavaMathBigIntegerEntity")
+@DomainObject
 public class JavaMathBigIntegerJdo                                          // <.>
         extends JavaMathBigIntegerEntity {
 
 //end::class[]
-    public JavaMathBigIntegerJdo(java.math.BigInteger initialValue) {
+    public JavaMathBigIntegerJdo(final java.math.BigInteger initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

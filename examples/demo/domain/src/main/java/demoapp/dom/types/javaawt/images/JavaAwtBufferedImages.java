@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -48,7 +49,8 @@ import demoapp.dom.types.javaawt.images.vm.JavaAwtBufferedImageVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.JavaAwtBufferedImages", editing=Editing.ENABLED)
+@Named("demo.JavaAwtBufferedImages")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 //@Log4j2
 public class JavaAwtBufferedImages implements HasAsciiDocDescription {
 

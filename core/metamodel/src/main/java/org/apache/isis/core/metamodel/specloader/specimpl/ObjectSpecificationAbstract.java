@@ -64,7 +64,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactor
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
@@ -177,8 +176,7 @@ implements ObjectSpecification {
     private final String shortName;
     private final boolean isAbstract;
 
-    // derived lazily, cached since immutable
-    private _Lazy<LogicalType> logicalTypeLazy = _Lazy.threadSafe(this::lookupLogicalType);
+    private final LogicalType logicalType;
 
     private ObjectSpecification superclassSpec;
 
@@ -191,8 +189,9 @@ implements ObjectSpecification {
 
 
     // -- Constructor
-    public ObjectSpecificationAbstract(
+    protected ObjectSpecificationAbstract(
             final Class<?> introspectedClass,
+            final LogicalType logicalType,
             final String shortName,
             final BeanSort beanSort,
             final FacetProcessor facetProcessor,
@@ -201,16 +200,13 @@ implements ObjectSpecification {
         super(facetProcessor.getMetaModelContext());
 
         this.correspondingClass = introspectedClass;
+        this.logicalType = logicalType;
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;
         this.beanSort = beanSort;
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
-
-        super.featureIdentifier = Identifier.classIdentifier(
-                LogicalType.lazy(
-                        introspectedClass,
-                        ()->logicalTypeLazy.get().getLogicalTypeName()));
+        super.featureIdentifier = Identifier.classIdentifier(logicalType);
 
         this.facetProcessor = facetProcessor;
         this.postProcessor = postProcessor;
@@ -224,15 +220,7 @@ implements ObjectSpecification {
 
     @Override
     public final LogicalType getLogicalType() {
-        return logicalTypeLazy.get();
-    }
-
-    private LogicalType lookupLogicalType() {
-        val logicalTypeFacet = getFacet(LogicalTypeFacet.class);
-        if(logicalTypeFacet == null) {
-            throw new IllegalStateException("could not find an LogicalTypeFacet for " + this.getFullIdentifier());
-        }
-        return logicalTypeFacet.getLogicalType();
+        return logicalType;
     }
 
     @Override

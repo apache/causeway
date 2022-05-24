@@ -21,6 +21,7 @@ package demoapp.dom.services.core.eventbusservice;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -41,7 +42,8 @@ import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonE
 
 @Profile("demo-jpa")
 @Entity
-@DomainObject(logicalTypeName = "demo.EventLogEntry")
+@Named("demo.EventLogEntry")
+@DomainObject
 public class EventLogEntryJpa
 extends EventLogEntry {
 

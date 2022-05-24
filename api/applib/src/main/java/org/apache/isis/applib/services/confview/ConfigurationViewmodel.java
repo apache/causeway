@@ -21,6 +21,8 @@ package org.apache.isis.applib.services.confview;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.inject.Named;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.IsisModuleApplib;
@@ -29,9 +31,9 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
 
+@Named(ConfigurationViewmodel.LOGICAL_TYPE_NAME)
 @DomainObject(
-        nature = Nature.VIEW_MODEL,
-        logicalTypeName = ConfigurationViewmodel.LOGICAL_TYPE_NAME)
+        nature = Nature.VIEW_MODEL)
 public class ConfigurationViewmodel {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationViewmodel";

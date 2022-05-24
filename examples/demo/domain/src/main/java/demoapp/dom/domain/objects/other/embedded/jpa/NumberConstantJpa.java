@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.objects.other.embedded.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -47,7 +48,8 @@ import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntit
       name = "NumberConstantJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(logicalTypeName = "demo.NumberConstantEntity")
+@Named("demo.NumberConstantEntity")
+@DomainObject
 @NoArgsConstructor
 public class NumberConstantJpa
         extends NumberConstantEntity {

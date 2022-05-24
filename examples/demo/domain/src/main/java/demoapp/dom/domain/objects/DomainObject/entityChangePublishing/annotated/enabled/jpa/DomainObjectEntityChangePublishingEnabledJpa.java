@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -48,9 +49,9 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.
     name = "DomainObjectEntityChangePublishingEnabledJpa"
 )
 @EntityListeners(IsisEntityListener.class)
+@Named("demo.DomainObjectEntityChangePublishingEnabledEntity")
 @DomainObject(
         nature=Nature.ENTITY
-        , logicalTypeName = "demo.DomainObjectEntityChangePublishingEnabledEntity"
         , entityChangePublishing = Publishing.ENABLED            // <.>
         , bounding = Bounding.BOUNDED
     )

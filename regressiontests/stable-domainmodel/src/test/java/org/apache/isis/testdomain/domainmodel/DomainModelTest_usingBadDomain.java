@@ -34,6 +34,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -58,7 +61,6 @@ import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
 import org.apache.isis.testdomain.model.bad.InvalidActionOverloading;
 import org.apache.isis.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.isis.testdomain.model.bad.InvalidDomainObjectOnInterface;
-import org.apache.isis.testdomain.model.bad.InvalidLogicalTypeNameClash;
 import org.apache.isis.testdomain.model.bad.InvalidMemberOverloadingWhenInherited;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
@@ -67,9 +69,6 @@ import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
 import org.apache.isis.testdomain.model.bad.OrphanedMemberSupportDetection;
 import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -200,16 +199,16 @@ class DomainModelTest_usingBadDomain {
                         "isActive()"));
     }
 
-    @Test
-    void logicalTypeNameClash_shouldFail() {
-        assertLogicalTypeNameClashesAmong(Can.of(
-                InvalidLogicalTypeNameClash.VariantA.class,
-                InvalidLogicalTypeNameClash.VariantB.class
-
-                //FIXME ISIS-2871 for some reason the value type c does not get considered
-                //,InvalidLogicalTypeNameClash.VariantC.class
-                ));
-    }
+//    @Test
+//    void logicalTypeNameClash_shouldFail() {
+//        assertLogicalTypeNameClashesAmong(Can.of(
+//                InvalidLogicalTypeNameClash.VariantA.class,
+//                InvalidLogicalTypeNameClash.VariantB.class
+//
+//                //FIXME ISIS-2871 for some reason the value type c does not get considered
+//                //,InvalidLogicalTypeNameClash.VariantC.class
+//                ));
+//    }
 
     private void assertLogicalTypeNameClashesAmong(final Can<Class<?>> types) {
 

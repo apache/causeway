@@ -23,12 +23,13 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Value;
 
-public class InvalidLogicalTypeNameClash {
+//TODO this is now captured by Spring - it fails early; remove eventually
+class InvalidLogicalTypeNameClash {
 
     // logical type name clash: should fail validation
-    @DomainObject(nature = Nature.VIEW_MODEL,
-            logicalTypeName = "isis.testdomain.InvalidLogicalTypeNameClash")
-    public static class VariantA {
+    //@Named("isis.testdomain.InvalidLogicalTypeNameClash")
+    @DomainObject(nature = Nature.VIEW_MODEL)
+    private static class VariantA {
 
         @Action
         public boolean anAction() {
@@ -38,9 +39,9 @@ public class InvalidLogicalTypeNameClash {
     }
 
     // logical type name clash: should fail validation
-    @DomainObject(nature = Nature.VIEW_MODEL,
-            logicalTypeName = "isis.testdomain.InvalidLogicalTypeNameClash")
-    public static class VariantB {
+    //@Named("isis.testdomain.InvalidLogicalTypeNameClash")
+    @DomainObject(nature = Nature.VIEW_MODEL)
+    private static class VariantB {
 
         @Action
         public boolean anAction() {
@@ -50,11 +51,10 @@ public class InvalidLogicalTypeNameClash {
     }
 
     // logical type name clash: should fail validation
-    @Value(
-            logicalTypeName = "isis.testdomain.InvalidLogicalTypeNameClash")
-    public static class VariantC {
+    //@Named("isis.testdomain.InvalidLogicalTypeNameClash")
+    @Value
+    private static class VariantC {
 
     }
-
 
 }

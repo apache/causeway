@@ -47,6 +47,6 @@ extends LogicalTypeFacetAbstract {
     private LogicalTypeFacetForNamedAnnotation(
             final LogicalType logicalType,
             final FacetHolder holder) {
-        super(logicalType, holder, Precedence.DEFAULT);
+        super(logicalType, holder, Precedence.HIGH);
     }
 }

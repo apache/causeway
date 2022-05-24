@@ -20,15 +20,16 @@ package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity;
 
 import java.util.Objects;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 
 import demoapp.dom._infra.values.ValueHolder;
 
-@DomainObject(
-        logicalTypeName = "demo.JaxbRefEntity" // shared permissions with concrete sub class
-)
+@Named("demo.JaxbRefEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class JaxbRefEntity
 implements
     ValueHolder<String> {

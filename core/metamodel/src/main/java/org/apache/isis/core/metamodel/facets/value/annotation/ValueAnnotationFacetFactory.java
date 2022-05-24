@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 
 import lombok.val;
 
+@Deprecated // @Value(logicalTypeName=...) is deprecated
 public class ValueAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements
@@ -42,6 +43,7 @@ implements
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
+        // deprecated
         // @Value(logicalTypeName=...)
         val valueIfAny = processClassContext.synthesizeOnType(org.apache.isis.applib.annotation.Value.class);
         addFacetIfPresent(LogicalTypeFacetForValueAnnotation.create(valueIfAny, cls, facetHolder));

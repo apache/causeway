@@ -23,6 +23,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -37,9 +39,8 @@ import lombok.val;
 /**
  * @since 2.x  {@index}
  */
-@DomainObject(
-        logicalTypeName = ApplicationTypeProperty.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationTypeProperty.LOGICAL_TYPE_NAME)
+@DomainObject
 @DomainObjectLayout(
         paged = 100
 )

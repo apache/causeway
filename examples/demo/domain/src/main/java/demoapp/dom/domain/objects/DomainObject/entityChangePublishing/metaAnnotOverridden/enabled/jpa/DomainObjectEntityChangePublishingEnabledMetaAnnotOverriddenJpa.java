@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -50,9 +51,9 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotO
 )
 @EntityListeners(IsisEntityListener.class)
 @DomainObjectEntityChangePublishingDisabledMetaAnnotation                   // <.>
+@Named("demo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity")
 @DomainObject(
         nature=Nature.ENTITY
-        , logicalTypeName = "demo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity"
         , entityChangePublishing = Publishing.ENABLED         // <.>
         , bounding = Bounding.BOUNDED
 )

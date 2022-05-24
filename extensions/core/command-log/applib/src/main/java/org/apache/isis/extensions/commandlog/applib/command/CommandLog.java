@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Transient;
 
@@ -74,10 +75,9 @@ import lombok.val;
  * Note that this class doesn't subclass from {@link Command} ({@link Command}
  * is not an interface).
  */
+@Named(CommandLog.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = CommandLog.LOGICAL_TYPE_NAME,
-        editing = Editing.DISABLED
-)
+        editing = Editing.DISABLED)
 @DomainObjectLayout(
         named = "Command",
         titleUiEvent = ICommandLog.TitleUiEvent.class,

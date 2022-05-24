@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.jdo.entities;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.PersistenceCapable;
@@ -54,9 +55,9 @@ import lombok.extern.log4j.Log4j2;
 @PersistenceCapable
 //@Inheritance(strategy=InheritanceStrategy.SUPERCLASS_TABLE)
 @Discriminator(value="Book")
+@Named("testdomain.jdo.Book")
 @DomainObject(
-        logicalTypeName = "testdomain.jdo.Book"
-        , entityChangePublishing = Publishing.ENABLED
+        entityChangePublishing = Publishing.ENABLED
 
         , actionDomainEvent = JdoBook.ActionDomainEvent.class
         , propertyDomainEvent = JdoBook.PropertyDomainEvent.class

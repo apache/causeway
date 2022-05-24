@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.jpa.entities;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,14 +35,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
+@Named("testdomain.jpa.GeneratedLongId")
 @DomainObject(
-        logicalTypeName = "testdomain.jpa.GeneratedLongId",
         entityChangePublishing = Publishing.DISABLED)
 @NoArgsConstructor
 @ToString
 public class JpaEntityGeneratedLongId {
 
-    public JpaEntityGeneratedLongId(String name) {
+    public JpaEntityGeneratedLongId(final String name) {
         this.name = name;
     }
 

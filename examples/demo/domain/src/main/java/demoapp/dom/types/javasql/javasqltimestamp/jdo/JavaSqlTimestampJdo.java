@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javasql.javasqltimestamp.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampEn
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaSqlTimestampEntity"
-)
+@Named("demo.JavaSqlTimestampEntity")
+@DomainObject
 public class JavaSqlTimestampJdo                                          // <.>
         extends JavaSqlTimestampEntity {
 
 //end::class[]
-    public JavaSqlTimestampJdo(java.sql.Timestamp initialValue) {
+    public JavaSqlTimestampJdo(final java.sql.Timestamp initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

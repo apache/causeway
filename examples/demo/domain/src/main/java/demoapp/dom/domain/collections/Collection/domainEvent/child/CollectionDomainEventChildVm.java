@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.collections.Collection.domainEvent.child;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -40,10 +41,9 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.CollectionDomainEventChildVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.CollectionDomainEventChildVm"
-)
+        nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 public class CollectionDomainEventChildVm implements HasAsciiDocDescription {
 

@@ -35,6 +35,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -91,8 +93,8 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - BASIC
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleBoolean")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleBoolean",
             nature = Nature.BEAN)
     public static class ValueTypeExampleBoolean
     extends ValueTypeExample<Boolean> {
@@ -102,8 +104,8 @@ public abstract class ValueTypeExample<T> {
         private Boolean updateValue = Boolean.FALSE;
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleCharacter")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleCharacter",
             nature = Nature.BEAN)
     public static class ValueTypeExampleCharacter
     extends ValueTypeExample<Character> {
@@ -113,8 +115,8 @@ public abstract class ValueTypeExample<T> {
         private Character updateValue = 'b';
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleString")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleString",
             nature = Nature.BEAN)
     public static class ValueTypeExampleString
     extends ValueTypeExample<String> {
@@ -124,8 +126,8 @@ public abstract class ValueTypeExample<T> {
         private String updateValue = "anotherString";
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExamplePassword")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExamplePassword",
             nature = Nature.BEAN)
     public static class ValueTypeExamplePassword
     extends ValueTypeExample<Password> {
@@ -135,8 +137,8 @@ public abstract class ValueTypeExample<T> {
         private Password updateValue = Password.of("anotherPassword");
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleBufferedImage")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleBufferedImage",
             nature = Nature.BEAN)
     public static class ValueTypeExampleBufferedImage
     extends ValueTypeExample<BufferedImage> {
@@ -147,8 +149,8 @@ public abstract class ValueTypeExample<T> {
         private BufferedImage updateValue = new BufferedImage(8, 8, BufferedImage.TYPE_INT_RGB);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleBlob")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleBlob",
             nature = Nature.BEAN)
     public static class ValueTypeExampleBlob
     extends ValueTypeExample<Blob> {
@@ -158,8 +160,8 @@ public abstract class ValueTypeExample<T> {
         private Blob updateValue = Blob.of("anotherBlob", CommonMimeType.BIN, new byte[] {3, 4});
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleClob")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleClob",
             nature = Nature.BEAN)
     public static class ValueTypeExampleClob
     extends ValueTypeExample<Clob> {
@@ -169,8 +171,8 @@ public abstract class ValueTypeExample<T> {
         private Clob updateValue = Clob.of("anotherClob", CommonMimeType.TXT, "ef");
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleLocalResourcePath")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleLocalResourcePath",
             nature = Nature.BEAN)
     public static class ValueTypeExampleLocalResourcePath
     extends ValueTypeExample<LocalResourcePath> {
@@ -180,8 +182,8 @@ public abstract class ValueTypeExample<T> {
         private LocalResourcePath updateValue = new LocalResourcePath("img/b");
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleUrl")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleUrl",
             nature = Nature.BEAN)
     public static class ValueTypeExampleUrl
     extends ValueTypeExample<URL> {
@@ -195,8 +197,8 @@ public abstract class ValueTypeExample<T> {
         }
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleMarkup")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleMarkup",
             nature = Nature.BEAN)
     public static class ValueTypeExampleMarkup
     extends ValueTypeExample<Markup> {
@@ -206,8 +208,8 @@ public abstract class ValueTypeExample<T> {
         private Markup updateValue = Markup.valueOf("anotherMarkup");
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleUuid")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleUuid",
             nature = Nature.BEAN)
     public static class ValueTypeExampleUuid
     extends ValueTypeExample<UUID> {
@@ -217,8 +219,8 @@ public abstract class ValueTypeExample<T> {
         private UUID updateValue = UUID.randomUUID();
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleLocale")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleLocale",
             nature = Nature.BEAN)
     public static class ValueTypeExampleLocale
     extends ValueTypeExample<Locale> {
@@ -230,8 +232,8 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - NUMBERS
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleByte")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleByte",
             nature = Nature.BEAN)
     public static class ValueTypeExampleByte
     extends ValueTypeExample<Byte> {
@@ -241,8 +243,8 @@ public abstract class ValueTypeExample<T> {
         private Byte updateValue = 0;
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleShort")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleShort",
             nature = Nature.BEAN)
     public static class ValueTypeExampleShort
     extends ValueTypeExample<Short> {
@@ -252,8 +254,8 @@ public abstract class ValueTypeExample<T> {
         private Short updateValue = 0;
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleInteger")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleInteger",
             nature = Nature.BEAN)
     public static class ValueTypeExampleInteger
     extends ValueTypeExample<Integer> {
@@ -263,8 +265,8 @@ public abstract class ValueTypeExample<T> {
         private Integer updateValue = 0;
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleLong")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleLong",
             nature = Nature.BEAN)
     public static class ValueTypeExampleLong
     extends ValueTypeExample<Long> {
@@ -274,8 +276,8 @@ public abstract class ValueTypeExample<T> {
         private Long updateValue = 0L;
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleFloat")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleFloat",
             nature = Nature.BEAN)
     public static class ValueTypeExampleFloat
     extends ValueTypeExample<Float> {
@@ -285,8 +287,8 @@ public abstract class ValueTypeExample<T> {
         private Float updateValue = 0.f;
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleDouble")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleDouble",
             nature = Nature.BEAN)
     public static class ValueTypeExampleDouble
     extends ValueTypeExample<Double> {
@@ -296,8 +298,8 @@ public abstract class ValueTypeExample<T> {
         private Double updateValue = 0.;
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleBigInteger")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleBigInteger",
             nature = Nature.BEAN)
     public static class ValueTypeExampleBigInteger
     extends ValueTypeExample<BigInteger> {
@@ -307,8 +309,8 @@ public abstract class ValueTypeExample<T> {
         private BigInteger updateValue = BigInteger.ZERO;
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleBigDecimal")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleBigDecimal",
             nature = Nature.BEAN)
     public static class ValueTypeExampleBigDecimal
     extends ValueTypeExample<BigDecimal> {
@@ -320,8 +322,8 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - TEMPORAL - LEGACY
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleJavaUtilDate")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJavaUtilDate",
             nature = Nature.BEAN)
     public static class ValueTypeExampleJavaUtilDate
     extends ValueTypeExample<java.util.Date> {
@@ -331,8 +333,8 @@ public abstract class ValueTypeExample<T> {
         private java.util.Date updateValue = new java.util.Date(0L);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleJavaSqlDate")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJavaSqlDate",
             nature = Nature.BEAN)
     public static class ValueTypeExampleJavaSqlDate
     extends ValueTypeExample<java.sql.Date> {
@@ -342,8 +344,8 @@ public abstract class ValueTypeExample<T> {
         private java.sql.Date updateValue = new java.sql.Date(0L);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleJavaSqlTime")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJavaSqlTime",
             nature = Nature.BEAN)
     public static class ValueTypeExampleJavaSqlTime
     extends ValueTypeExample<java.sql.Time> {
@@ -353,8 +355,8 @@ public abstract class ValueTypeExample<T> {
         private java.sql.Time updateValue = new java.sql.Time(0L);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleTimestamp")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleTimestamp",
             nature = Nature.BEAN)
     public static class ValueTypeExampleTimestamp
     extends ValueTypeExample<Timestamp> {
@@ -366,8 +368,8 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - TEMPORAL - JAVA TIME
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleLocalDate")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleLocalDate",
             nature = Nature.BEAN)
     public static class ValueTypeExampleLocalDate
     extends ValueTypeExample<LocalDate> {
@@ -377,8 +379,8 @@ public abstract class ValueTypeExample<T> {
         private LocalDate updateValue = LocalDate.now().plusDays(2);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleLocalDateTime")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleLocalDateTime",
             nature = Nature.BEAN)
     public static class ValueTypeExampleLocalDateTime
     extends ValueTypeExample<LocalDateTime> {
@@ -388,8 +390,9 @@ public abstract class ValueTypeExample<T> {
         private LocalDateTime updateValue = LocalDateTime.now().plusDays(2).plusSeconds(15);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleLocalTime")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleLocalTime",
+
             nature = Nature.BEAN)
     public static class ValueTypeExampleLocalTime
     extends ValueTypeExample<LocalTime> {
@@ -399,8 +402,8 @@ public abstract class ValueTypeExample<T> {
         private LocalTime updateValue = LocalTime.now().plusSeconds(15);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleOffsetDateTime")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOffsetDateTime",
             nature = Nature.BEAN)
     public static class ValueTypeExampleOffsetDateTime
     extends ValueTypeExample<OffsetDateTime> {
@@ -410,8 +413,8 @@ public abstract class ValueTypeExample<T> {
         private OffsetDateTime updateValue = OffsetDateTime.now().plusDays(2).plusSeconds(15);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleOffsetTime")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOffsetTime",
             nature = Nature.BEAN)
     public static class ValueTypeExampleOffsetTime
     extends ValueTypeExample<OffsetTime> {
@@ -421,8 +424,8 @@ public abstract class ValueTypeExample<T> {
         private OffsetTime updateValue = OffsetTime.now().plusSeconds(15);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleZonedDateTime")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleZonedDateTime",
             nature = Nature.BEAN)
     public static class ValueTypeExampleZonedDateTime
     extends ValueTypeExample<ZonedDateTime> {
@@ -434,8 +437,8 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - TEMPORAL - JODA TIME
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleJodaDateTime")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJodaDateTime",
             nature = Nature.BEAN)
     public static class ValueTypeExampleJodaDateTime
     extends ValueTypeExample<org.joda.time.DateTime> {
@@ -445,8 +448,8 @@ public abstract class ValueTypeExample<T> {
         private org.joda.time.DateTime updateValue = org.joda.time.DateTime.now().plusDays(2).plusSeconds(15);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleJodaLocalDateTime")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJodaLocalDateTime",
             nature = Nature.BEAN)
     public static class ValueTypeExampleJodaLocalDateTime
     extends ValueTypeExample<org.joda.time.LocalDateTime> {
@@ -456,8 +459,8 @@ public abstract class ValueTypeExample<T> {
         private org.joda.time.LocalDateTime updateValue = org.joda.time.LocalDateTime.now().plusDays(2).plusSeconds(15);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleJodaLocalDate")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJodaLocalDate",
             nature = Nature.BEAN)
     public static class ValueTypeExampleJodaLocalDate
     extends ValueTypeExample<org.joda.time.LocalDate> {
@@ -467,8 +470,8 @@ public abstract class ValueTypeExample<T> {
         private org.joda.time.LocalDate updateValue = org.joda.time.LocalDate.now().plusDays(2);
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleJodaLocalTime")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleJodaLocalTime",
             nature = Nature.BEAN)
     public static class ValueTypeExampleJodaLocalTime
     extends ValueTypeExample<org.joda.time.LocalTime> {
@@ -480,8 +483,8 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - META MODEL
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleApplicationFeatureId")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleApplicationFeatureId",
             nature = Nature.BEAN)
     public static class ValueTypeExampleApplicationFeatureId
     extends ValueTypeExample<ApplicationFeatureId> {
@@ -495,7 +498,7 @@ public abstract class ValueTypeExample<T> {
 
     //TODO    TreeNode
 //    @DomainObject(
-//            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleTreeNode",
+//            @Named("isis.testdomain.valuetypes.ValueTypeExampleTreeNode",
 //            nature = Nature.BEAN)
     public static class ValueTypeExampleTreeNode
     extends ValueTypeExample<TreeNode<String>> {
@@ -521,8 +524,8 @@ public abstract class ValueTypeExample<T> {
         HALLO, WORLD
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleEnum")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleEnum",
             nature = Nature.BEAN)
     public static class ValueTypeExampleEnum
     extends ValueTypeExample<ExampleEnum> {
@@ -534,8 +537,8 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - COMPOSITES
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleCalendarEvent")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleCalendarEvent",
             nature = Nature.BEAN)
     public static class ValueTypeExampleCalendarEvent
     extends ValueTypeExample<CalendarEvent> {
@@ -549,8 +552,8 @@ public abstract class ValueTypeExample<T> {
 
     // -- EXAMPLES - OTHER
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleBookmark")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleBookmark",
             nature = Nature.BEAN)
     public static class ValueTypeExampleBookmark
     extends ValueTypeExample<Bookmark> {
@@ -560,8 +563,8 @@ public abstract class ValueTypeExample<T> {
         private Bookmark updateValue = Bookmark.parseElseFail("c:d");
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleOidDto")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleOidDto",
             nature = Nature.BEAN)
     public static class ValueTypeExampleOidDto
     extends ValueTypeExample<OidDto> {
@@ -571,8 +574,8 @@ public abstract class ValueTypeExample<T> {
         private OidDto updateValue = Bookmark.parseElseFail("c:d").toOidDto();
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleChangesDto")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleChangesDto",
             nature = Nature.BEAN)
     public static class ValueTypeExampleChangesDto
     extends ValueTypeExample<ChangesDto> {
@@ -582,8 +585,8 @@ public abstract class ValueTypeExample<T> {
         private ChangesDto updateValue = new ChangesDto();
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleCommandDto")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleCommandDto",
             nature = Nature.BEAN)
     public static class ValueTypeExampleCommandDto
     extends ValueTypeExample<CommandDto> {
@@ -593,8 +596,8 @@ public abstract class ValueTypeExample<T> {
         private CommandDto updateValue = new CommandDto();
     }
 
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleInteractionDto")
     @DomainObject(
-            logicalTypeName = "isis.testdomain.valuetypes.ValueTypeExampleInteractionDto",
             nature = Nature.BEAN)
     public static class ValueTypeExampleInteractionDto
     extends ValueTypeExample<InteractionDto> {

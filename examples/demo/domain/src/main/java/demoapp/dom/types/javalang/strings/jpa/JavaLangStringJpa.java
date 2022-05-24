@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.strings.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javalang.strings.persistence.JavaLangStringEntity;
         name = "JavaLangStringJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-        logicalTypeName = "demo.JavaLangStringEntity"
-)
+@Named("demo.JavaLangStringEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaLangStringJpa
         extends JavaLangStringEntity {

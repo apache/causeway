@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimelocaldate.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,16 +45,15 @@ import demoapp.dom.types.javatime.javatimelocaldate.holder.JavaTimeLocalDateHold
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.JavaTimeLocalDateVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.JavaTimeLocalDateVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeLocalDateVm
         implements HasAsciiDocDescription, JavaTimeLocalDateHolder3 {
 
 //end::class[]
-    public JavaTimeLocalDateVm(java.time.LocalDate initialValue) {
+    public JavaTimeLocalDateVm(final java.time.LocalDate initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

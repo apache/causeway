@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.doubles.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javalang.doubles.persistence.WrapperDoubleEntity;
       name = "WrapperDoubleJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.WrapperDoubleEntity"
-)
+@Named("demo.WrapperDoubleEntity")
+@DomainObject
 @NoArgsConstructor
 public class WrapperDoubleJpa
         extends WrapperDoubleEntity {

@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.Property.regexPattern;
 
 import java.util.regex.Pattern;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -42,11 +43,10 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PropertyRegexPatternVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PropertyRegexPatternVm",
-        editing = Editing.ENABLED
-)
+        editing = Editing.ENABLED)
 public class PropertyRegexPatternVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

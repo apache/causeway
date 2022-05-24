@@ -33,8 +33,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.DependentArgsDemoItem")
-@Named("depargs.DemoItem")
+@Named("demo.DependentArgsDemoItem")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 @AllArgsConstructor(staticName="of")
 @EqualsAndHashCode // required for the Dependent Arguments demo to work properly

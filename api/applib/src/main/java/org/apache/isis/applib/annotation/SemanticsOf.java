@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.annotation;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.util.Enums;
 
@@ -25,7 +27,8 @@ import org.apache.isis.applib.util.Enums;
  * @since 1.x {@index}
  * @see <a href="https://isis.apache.org/guides/rgant/rgant.html#_rgant-Action_semantics">Reference Guide</a>
  */
-@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".annotation.SemanticsOf")
+@Named(IsisModuleApplib.NAMESPACE + ".annotation.SemanticsOf")
+@Value
 public enum SemanticsOf {
 
     /**

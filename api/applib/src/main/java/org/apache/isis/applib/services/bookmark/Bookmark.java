@@ -22,6 +22,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
+import javax.inject.Named;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
@@ -42,8 +44,8 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@org.apache.isis.applib.annotation.Value(
-        logicalTypeName = IsisModuleApplib.NAMESPACE + ".Bookmark")
+@Named(IsisModuleApplib.NAMESPACE + ".Bookmark")
+@org.apache.isis.applib.annotation.Value
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Bookmark implements Oid {
 

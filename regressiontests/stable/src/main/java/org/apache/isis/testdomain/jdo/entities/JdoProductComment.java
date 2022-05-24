@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.jdo.entities;
 
 import java.sql.Timestamp;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -34,8 +35,8 @@ import lombok.Setter;
 
 @PersistenceCapable
 @DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
-@DomainObject(
-        logicalTypeName = "testdomain.jdo.ProductComment")
+@Named("testdomain.jdo.ProductComment")
+@DomainObject
 public class JdoProductComment implements OnUpdatedByAndAt {
 
     @Property @Column(allowsNull = "false")

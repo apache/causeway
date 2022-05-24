@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.function.Function;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -68,10 +69,9 @@ import lombok.val;
  * View model identified by {@link ApplicationFeatureId} and backed by an
  * {@link ApplicationFeature}.
  */
+@Named(UserPermissionViewModel.LOGICAL_TYPE_NAME)
 @DomainObject(
-        nature = Nature.VIEW_MODEL,
-        logicalTypeName = UserPermissionViewModel.LOGICAL_TYPE_NAME
-)
+        nature = Nature.VIEW_MODEL)
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
 )
