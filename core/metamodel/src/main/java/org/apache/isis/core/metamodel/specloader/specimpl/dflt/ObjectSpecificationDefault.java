@@ -90,11 +90,6 @@ implements FacetHolder {
     @Getter(onMethod_ = {@Override})
     private final IntrospectionPolicy introspectionPolicy;
 
-//    /**
-//     * available only for managed-beans
-//     */
-//    private final String nameIfIsManagedBean;
-
     public ObjectSpecificationDefault(
             final IsisBeanMetaData typeMeta,
             final MetaModelContext mmc,

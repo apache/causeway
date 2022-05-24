@@ -90,7 +90,6 @@ implements IsisComponentScanInterceptor {
 
         if(beanSort.isToBeIntrospected()) {
             val correspondingClass = scanMeta.getUnderlyingClassOrFailure().getUnderlyingClass();
-            scanMeta.getEffectiveBeanName();
 
             introspectableTypes.put(correspondingClass, typeMeta);
 
