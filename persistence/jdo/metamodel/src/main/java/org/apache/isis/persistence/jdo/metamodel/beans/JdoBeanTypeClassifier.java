@@ -18,12 +18,15 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.beans;
 
+import java.util.Locale;
+
 import javax.jdo.annotations.EmbeddedOnly;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.reflection._Annotations;
+import org.apache.isis.core.config.beans.IsisBeanMetaData;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 
 import lombok.val;
@@ -35,8 +38,7 @@ import lombok.val;
 public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
 
     @Override
-    public BeanClassification classify(
-            final Class<?> type) {
+    public IsisBeanMetaData classify(final Class<?> type) {
 
         val persistenceCapableAnnot = _Annotations
                 .synthesize(type, javax.jdo.annotations.PersistenceCapable.class);
@@ -51,27 +53,30 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
                 return null; // don't categorize as entity ... fall through in the caller's logic
             }
 
-            String logicalTypeName = LogicalType.infer(type).getLogicalTypeName();
+            var logicalType = LogicalType.infer(type);
 
             // don't trample over the @Named(=...) if present
-            if(logicalTypeName.equals(type.getName())) {
+            if(logicalType.getLogicalTypeName().equals(type.getName())) {
                 val schema = persistenceCapableAnnot.get().schema();
                 if(_Strings.isNotEmpty(schema)) {
 
                     val table = persistenceCapableAnnot.get().table();
 
-                    //FIXME - this custom name is never honored
-//                    logicalTypeName = String.format("%s.%s", schema.toLowerCase(Locale.ROOT),
-//                            _Strings.isNotEmpty(table)
-//                                ? table
-//                                : type.getSimpleName());
+                    val logicalTypeName = String.format("%s.%s",
+                            schema.toLowerCase(Locale.ROOT),
+                            _Strings.isNotEmpty(table)
+                                ? table
+                                : type.getSimpleName());
+
+                    logicalType = LogicalType.eager(type, logicalTypeName);
+
                 }
             }
 
-            return BeanClassification.selfManaged(BeanSort.ENTITY, logicalTypeName);
+            return IsisBeanMetaData.isisManaged(BeanSort.ENTITY, logicalType);
         }
 
-        return null; // we don't feel responsible to classify given type
+        return null; // we don't see fit to classify given type
     }
 
 

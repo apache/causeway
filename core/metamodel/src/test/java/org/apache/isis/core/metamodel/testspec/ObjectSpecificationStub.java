@@ -89,6 +89,12 @@ implements ObjectSpecification {
     }
 
     @Override
+    public boolean isInjectable() {
+        // XXX not implemented
+        return false;
+    }
+
+    @Override
     public Class<?> getCorrespondingClass() {
         return correspondingClass;
     }
@@ -320,12 +326,6 @@ implements ObjectSpecification {
     @Override
     public void introspectUpTo(final IntrospectionState upTo) {
         // [2158] not implemented yet
-    }
-
-    @Override
-    public String getManagedBeanName() {
-        // [2158] not implemented yet
-        return null;
     }
 
     @Override

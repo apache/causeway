@@ -164,7 +164,7 @@ extends ReprRendererAbstract<ManagedObject> {
             return null;
         }
 
-        final boolean isService = objectAdapter.getSpecification().isManagedBean();
+        final boolean isService = objectAdapter.getSpecification().isInjectable();
 
         if (!(mode.isArgs())) {
 
@@ -434,7 +434,7 @@ extends ReprRendererAbstract<ManagedObject> {
         if (!ManagedObjects.isIdentifiable(objectAdapter)) {
             return;
         }
-        final boolean isService = objectAdapter.getSpecification().isManagedBean();
+        final boolean isService = objectAdapter.getSpecification().isInjectable();
         if(isService) {
             return;
         }

@@ -222,7 +222,7 @@ public class IsisModulePersistenceJdoDatanucleus {
         if(_NullSafe.isEmpty(jdoEntityTypes)) {
             return;
         }
-        val jdoEntityTypesView = Collections.unmodifiableSet(jdoEntityTypes);
+        val jdoEntityTypesView = Collections.unmodifiableSet(jdoEntityTypes.keySet());
         val dnProps = Collections.unmodifiableMap(dnSettings.getAsProperties());
         jdoEntityDiscoveryListeners
             .forEach(listener->
@@ -266,7 +266,7 @@ public class IsisModulePersistenceJdoDatanucleus {
         val pumd = new PersistenceUnitMetaData(
                 "dynamic-unit", "RESOURCE_LOCAL", null);
         pumd.setExcludeUnlistedClasses(false);
-        beanTypeRegistry.getEntityTypes().stream()
+        beanTypeRegistry.getEntityTypes().keySet().stream()
         .map(Class::getName)
         .forEach(pumd::addClassName);
         return pumd;

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services;
 
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -28,10 +27,7 @@ public final class ServiceUtil {
     }
 
     public static String idOfSpec(final ObjectSpecification serviceSpec) {
-        _Assert.assertEquals(
-                serviceSpec.getManagedBeanName(),
-                serviceSpec.getLogicalTypeName());
-        return serviceSpec.getManagedBeanName();
+        return serviceSpec.getLogicalTypeName();
     }
 
     public static String idOfAdapter(final ManagedObject serviceAdapter) {

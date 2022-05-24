@@ -46,7 +46,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     protected void doPostProcess(final ObjectSpecification objectSpecification) {
 
         if(!(objectSpecification.isEntityOrViewModelOrAbstract()
-                || objectSpecification.isManagedBean())) {
+                || objectSpecification.isInjectable())) {
             return;
         }
 

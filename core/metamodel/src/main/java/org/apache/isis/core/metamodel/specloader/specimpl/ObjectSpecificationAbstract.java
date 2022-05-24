@@ -396,7 +396,7 @@ implements ObjectSpecification {
                 return titleString;
             }
         }
-        val prefix = this.isManagedBean()
+        val prefix = this.isInjectable()
                 ? ""
                 : "Untitled ";
         return prefix + getSingularName();
@@ -683,14 +683,14 @@ implements ObjectSpecification {
     // -- mixin associations (properties and collections)
 
     private void createMixedInAssociations(final Consumer<ObjectAssociation> onNewMixedInAssociation) {
-        if (isManagedBean() || isValue()) {
+        if (isInjectable() || isValue()) {
             return;
         }
         val mixinTypes = getIsisBeanTypeRegistry().getMixinTypes();
         if(_NullSafe.isEmpty(mixinTypes)) {
             return;
         }
-        for (val mixinType : mixinTypes) {
+        for (val mixinType : mixinTypes.keySet()) {
             forEachMixedInAssociation(mixinType, onNewMixedInAssociation);
         }
     }
@@ -733,7 +733,7 @@ implements ObjectSpecification {
         if(_NullSafe.isEmpty(mixinTypes)) {
             return;
         }
-        for (val mixinType : mixinTypes) {
+        for (val mixinType : mixinTypes.keySet()) {
             forEachMixedInAction(mixinType, onNewMixedInAction);
         }
     }

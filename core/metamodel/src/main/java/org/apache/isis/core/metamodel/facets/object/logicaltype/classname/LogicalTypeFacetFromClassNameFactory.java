@@ -131,7 +131,7 @@ implements
         if(objectSpec.isMixin()) {
             return false; //skip validation
         }
-        if (objectSpec.isManagedBean()) {
+        if (objectSpec.isInjectable()) {
             // only check if domain service is contributing to the public API (UI/REST)
             if(!DomainServiceFacet.getNatureOfService(objectSpec).isPresent()) {
                 return false; //skip validation

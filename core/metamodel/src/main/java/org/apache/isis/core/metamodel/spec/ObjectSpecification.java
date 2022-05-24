@@ -385,16 +385,7 @@ extends
      * Whether this specification represents a bean, that is a managed bean
      * with scoped life-cycle, available for dependency injection.
      */
-    default boolean isManagedBean() {
-        return getManagedBeanName()!=null;
-    }
-
-    /**
-     * If this specification represents a bean, that is a managed bean, then
-     * returns the bean's name/id as recognized by the IoC container.
-     * <p>Otherwise returns {@code null}.
-     */
-    String getManagedBeanName();
+    boolean isInjectable();
 
     default boolean isMixin() {
         return getBeanSort().isMixin();
@@ -481,7 +472,7 @@ extends
      * @since 2.0
      */
     default boolean isIdentifiable() {
-        return isManagedBean() || isViewModel() || isEntity();
+        return isInjectable() || isViewModel() || isEntity();
     }
 
     /**

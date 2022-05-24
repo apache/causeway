@@ -45,7 +45,7 @@ implements MetaModelRefiner {
         programmingModel.addVisitingValidator(spec->{
 
             if(!spec.isEntityOrViewModel()
-                    && !spec.isManagedBean() ) {
+                    && !spec.isInjectable() ) {
                 return;
             }
 
@@ -59,7 +59,7 @@ implements MetaModelRefiner {
                     || nameParts.stream()
                         .anyMatch(String::isEmpty)) {
 
-                val validationResponse = spec.isManagedBean()
+                val validationResponse = spec.isInjectable()
                         ? ProgrammingModelConstants.Validation.DOMAIN_SERVICE_MISSING_A_NAMESPACE
                         : ProgrammingModelConstants.Validation.DOMAIN_OBJECT_MISSING_A_NAMESPACE;
 
