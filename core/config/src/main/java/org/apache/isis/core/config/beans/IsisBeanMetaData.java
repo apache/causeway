@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.config.beans;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 
@@ -39,7 +37,7 @@ public class IsisBeanMetaData {
     }
 
     private final @NonNull BeanSort beanSort;
-    private final @Nullable LogicalType logicalType; // only nullable in phase 1
+    private final @NonNull LogicalType logicalType;
     private @NonNull ManagedBy managedBy;
 
     public Class<?> getCorrespondingClass() {

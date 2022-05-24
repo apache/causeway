@@ -113,6 +113,8 @@ implements
 
     /**
      * Infer from annotations.
+     * @apiNote Does only simple inference, not involving classifier plugins.
+     * Use with caution!
      */
     @SuppressWarnings("removal")
     public static LogicalType infer(
