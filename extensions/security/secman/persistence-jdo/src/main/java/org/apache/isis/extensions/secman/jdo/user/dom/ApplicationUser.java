@@ -22,7 +22,6 @@ import java.util.Locale;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.Element;
@@ -45,6 +44,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.Getter;
@@ -54,13 +54,6 @@ import lombok.Setter;
         identityType = IdentityType.DATASTORE,
         schema = ApplicationUser.SCHEMA,
         table = ApplicationUser.TABLE)
-@Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@Version(
-        strategy = VersionStrategy.VERSION_NUMBER,
-        column = "version")
 @Uniques({
     @Unique(
             name = "ApplicationUser_username_UNQ",
@@ -68,22 +61,22 @@ import lombok.Setter;
 })
 @Queries( {
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND_BY_USERNAME,
+            name = Nq.FIND_BY_USERNAME,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE username == :username"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND_BY_EMAIL_ADDRESS,
+            name = Nq.FIND_BY_EMAIL_ADDRESS,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE emailAddress == :emailAddress"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND_BY_ATPATH,
+            name = Nq.FIND_BY_ATPATH,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE atPath == :atPath"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND,
+            name = Nq.FIND,
             value = "SELECT "
                     + "FROM " + ApplicationUser.FQCN
                     + " WHERE username.matches(:regex)"
@@ -92,10 +85,18 @@ import lombok.Setter;
                     + " || knownAs.matches(:regex)"
                     + " || emailAddress.matches(:regex)")
 })
-@Named(ApplicationUser.LOGICAL_TYPE_NAME)
+@Inheritance(
+        strategy = InheritanceStrategy.NEW_TABLE)
+@DatastoreIdentity(
+        strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@Version(
+        strategy = VersionStrategy.VERSION_NUMBER,
+        column = "version")
 @DomainObject(
+        logicalTypeName = ApplicationUser.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationUserRepository.class,
-        autoCompleteMethod = "findMatching")
+        autoCompleteMethod = "findMatching"
+)
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
 )

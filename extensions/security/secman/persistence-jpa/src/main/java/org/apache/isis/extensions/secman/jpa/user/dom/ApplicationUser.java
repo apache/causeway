@@ -45,6 +45,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
@@ -62,22 +63,22 @@ import lombok.Setter;
 )
 @NamedQueries({
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND_BY_USERNAME,
+            name = Nq.FIND_BY_USERNAME,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.username = :username"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND_BY_EMAIL_ADDRESS,
+            name = Nq.FIND_BY_EMAIL_ADDRESS,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.emailAddress = :emailAddress"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND_BY_ATPATH,
+            name = Nq.FIND_BY_ATPATH,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.atPath = :atPath"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq.FIND,
+            name = Nq.FIND,
             query = "SELECT u "
                   + "  FROM ApplicationUser u "
                   + " WHERE u.username LIKE :regex"

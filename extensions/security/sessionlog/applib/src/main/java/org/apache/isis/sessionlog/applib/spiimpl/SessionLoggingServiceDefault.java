@@ -1,19 +1,18 @@
-package org.apache.isis.sessionlog.jdo.spiimpl;
+package org.apache.isis.sessionlog.applib.spiimpl;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.session.SessionLogService;
-import org.apache.isis.sessionlog.jdo.dom.SessionLogEntry;
-import org.apache.isis.sessionlog.jdo.dom.SessionLogEntryRepository;
+import java.util.Date;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.sql.Timestamp;
-import java.util.Date;
 
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.session.SessionLogService;
+import org.apache.isis.sessionlog.applib.dom.SessionLogEntry;
+import org.apache.isis.sessionlog.applib.dom.SessionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -43,7 +42,8 @@ public class SessionLoggingServiceDefault implements SessionLogService {
         if (type == Type.LOGIN) {
             sessionLogEntryRepository.create(username, sessionId, causedBy, timestamp);
         } else {
-            sessionLogEntryRepository.findBySessionId(sessionId)
+            Optional<SessionLogEntry> sessionLogEntryIfAny = sessionLogEntryRepository.findBySessionId(sessionId);
+            sessionLogEntryIfAny
                     .ifPresent(entry -> {
                         entry.setLogoutTimestamp(timestamp);
                         entry.setCausedBy(causedBy);

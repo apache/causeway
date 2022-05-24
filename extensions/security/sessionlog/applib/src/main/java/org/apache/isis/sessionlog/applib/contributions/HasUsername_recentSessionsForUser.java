@@ -1,4 +1,4 @@
-package org.apache.isis.sessionlog.jdo.contributions;
+package org.apache.isis.sessionlog.applib.contributions;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,12 +10,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.security.HasUsername;
-
-
 import org.apache.isis.sessionlog.applib.IsisModuleExtSessionLogApplib;
-import org.apache.isis.sessionlog.jdo.IsisModuleExtSessionLogPersistenceJdo;
-import org.apache.isis.sessionlog.jdo.dom.SessionLogEntry;
-import org.apache.isis.sessionlog.jdo.dom.SessionLogEntryRepository;
+import org.apache.isis.sessionlog.applib.dom.SessionLogEntry;
+import org.apache.isis.sessionlog.applib.dom.SessionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 

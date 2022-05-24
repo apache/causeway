@@ -1,4 +1,4 @@
-package org.apache.isis.sessionlog.jdo.app;
+package org.apache.isis.sessionlog.applib.app;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.sessionlog.applib.IsisModuleExtSessionLogApplib;
-import org.apache.isis.sessionlog.jdo.dom.SessionLogEntry;
-import org.apache.isis.sessionlog.jdo.dom.SessionLogEntryRepository;
+import org.apache.isis.sessionlog.applib.dom.SessionLogEntry;
+import org.apache.isis.sessionlog.applib.dom.SessionLogEntryRepository;
 
 
 /**
@@ -57,7 +57,7 @@ public class SessionLogMenu {
         public class ActionEvent extends ActionDomainEvent<findSessions> { }
 
         @Action(
-                domainEvent = findSessions.ActionEvent.class,
+                domainEvent = ActionEvent.class,
                 semantics = SemanticsOf.SAFE
         )
         @ActionLayout(

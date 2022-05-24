@@ -3,10 +3,18 @@ package org.apache.isis.sessionlog.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.sessionlog.applib.app.SessionLogMenu;
+import org.apache.isis.sessionlog.applib.dom.SessionLogEntryRepository;
+import org.apache.isis.sessionlog.applib.spiimpl.SessionLoggingServiceDefault;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+
 
 @Configuration
 @Import({
+        IsisModuleTestingFixturesApplib.class,
 
+        SessionLogMenu.class,
+        SessionLoggingServiceDefault.class
 })
 public class IsisModuleExtSessionLogApplib {
 

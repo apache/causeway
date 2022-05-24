@@ -40,6 +40,7 @@ import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
@@ -54,12 +55,12 @@ import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 )
 @NamedQueries({
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq.FIND_BY_NAME,
+            name = Nq.FIND_BY_NAME,
             query = "SELECT r "
                   + "FROM ApplicationRole r "
                   + "WHERE r.name = :name"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq.FIND_BY_NAME_CONTAINING,
+            name = Nq.FIND_BY_NAME_CONTAINING,
             query = "SELECT r "
                   + "FROM ApplicationRole r "
                   + "WHERE r.name LIKE :regex"),

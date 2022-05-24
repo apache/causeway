@@ -21,7 +21,6 @@ package org.apache.isis.extensions.secman.jdo.role.dom;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -40,6 +39,7 @@ import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 
@@ -47,29 +47,30 @@ import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
         identityType = IdentityType.DATASTORE,
         schema = ApplicationRole.SCHEMA,
         table = ApplicationRole.TABLE)
-@Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
 @Uniques({
     @Unique(
-            name = "ApplicationRole_name_UNQ", members = { "name" })
+            name = "ApplicationRole_name_UNQ",
+            members = { "name" })
 })
 @Queries({
     @Query(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq.FIND_BY_NAME,
+            name = Nq.FIND_BY_NAME,
             value = "SELECT "
                     + "FROM " + ApplicationRole.FQCN
                     + " WHERE name == :name"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq.FIND_BY_NAME_CONTAINING,
+            name = Nq.FIND_BY_NAME_CONTAINING,
             value = "SELECT "
                     + "FROM " + ApplicationRole.FQCN
                     + " WHERE name.matches(:regex) ")
 })
-@Named(ApplicationRole.LOGICAL_TYPE_NAME)
+@Inheritance(
+        strategy = InheritanceStrategy.NEW_TABLE)
+@DatastoreIdentity(
+        strategy = IdGeneratorStrategy.NATIVE, column = "id")
 @DomainObject(
         bounding = Bounding.BOUNDED,
+        logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationRoleRepository.class,
         autoCompleteMethod = "findMatching"
         )

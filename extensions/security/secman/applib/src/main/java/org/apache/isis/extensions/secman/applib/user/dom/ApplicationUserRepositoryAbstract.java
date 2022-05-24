@@ -50,7 +50,7 @@ import org.apache.isis.extensions.secman.applib.util.RegexReplacer;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class ApplicationUserRepositoryAbstract<U extends ApplicationUser>
+public class ApplicationUserRepositoryAbstract<U extends ApplicationUser>
 implements ApplicationUserRepository {
 
     @Inject private FactoryService factoryService;

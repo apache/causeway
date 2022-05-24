@@ -18,7 +18,6 @@
  */
 package org.apache.isis.extensions.secman.jdo.permission.dom;
 
-import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -48,13 +47,11 @@ import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
         identityType = IdentityType.DATASTORE,
         schema = ApplicationPermission.SCHEMA,
         table = ApplicationPermission.TABLE)
-@Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@Version(
-        strategy = VersionStrategy.VERSION_NUMBER,
-        column = "version")
+@Uniques({
+        @Unique(
+                name = "ApplicationPermission_role_feature_rule_UNQ",
+                members = { "role", "featureSort", "featureFqn", "rule" })
+})
 @Queries( {
     @Query(
             name = Nq.FIND_BY_ROLE,
@@ -94,13 +91,16 @@ import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
                     + "   && rule == :rule "
                     + "   && featureSort == :featureSort "),
 })
-@Uniques({
-    @Unique(
-            name = "ApplicationPermission_role_feature_rule_UNQ",
-            members = { "role", "featureSort", "featureFqn", "rule" })
-})
-@Named(ApplicationPermission.LOGICAL_TYPE_NAME)
-@DomainObject
+@Inheritance(
+        strategy = InheritanceStrategy.NEW_TABLE)
+@DatastoreIdentity(
+        strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@Version(
+        strategy = VersionStrategy.VERSION_NUMBER,
+        column = "version")
+@DomainObject(
+        logicalTypeName = ApplicationPermission.LOGICAL_TYPE_NAME
+)
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
 )
