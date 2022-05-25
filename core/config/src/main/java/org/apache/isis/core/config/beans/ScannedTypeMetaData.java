@@ -18,13 +18,13 @@
  */
 package org.apache.isis.core.config.beans;
 
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.Value;
 import lombok.val;
 
 @RequiredArgsConstructor(staticName = "of")
@@ -51,7 +51,7 @@ final class ScannedTypeMetaData {
     @Getter @Setter private boolean injectable = true;
 
     @Getter(lazy=true)
-    private final ClassOrFailure underlyingClassOrFailure = resolveClass();
+    private final Try<Class<?>> underlyingClass = resolveClass();
 
     // -- UTILITY
 
@@ -64,27 +64,14 @@ final class ScannedTypeMetaData {
     // -- HELPER
 
     /**
-     * Holds either the class or the failure string when attempting to load by name.
-     */
-    @Value(staticConstructor = "of")
-    static final class ClassOrFailure {
-        Class<?> underlyingClass;
-        String failure;
-        public boolean isFailure() {
-            return underlyingClass==null;
-        }
-    }
-
-    /**
      * @return the underlying class of this TypeMetaData
      */
-    private ClassOrFailure resolveClass() {
-        try {
-            return ClassOrFailure.of(_Context.loadClass(className), null);
-        } catch (ClassNotFoundException e) {
-            val msg = String.format("Failed to load class for name '%s', throwing %s", className, e);
-            return ClassOrFailure.of(null, msg);
-        }
+    private Try<Class<?>> resolveClass() {
+        return Try.<Class<?>>call(()->_Context.loadClass(className))
+        .mapFailure(ex->{
+            val msg = String.format("Failed to load class for name '%s'", className);
+            return new RuntimeException(msg, ex);
+        });
     }
 
 

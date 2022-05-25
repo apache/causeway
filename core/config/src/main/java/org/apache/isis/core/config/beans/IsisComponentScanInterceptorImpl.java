@@ -71,31 +71,27 @@ implements IsisComponentScanInterceptor {
     @Override
     public void intercept(final ScannedTypeMetaData scanMeta) {
 
-        val classOrFailure = scanMeta.getUnderlyingClassOrFailure();
+        val classOrFailure = scanMeta.getUnderlyingClass();
         if(classOrFailure.isFailure()) {
             log.warn(classOrFailure.getFailure());
             return;
         }
 
-        val type = classOrFailure.getUnderlyingClass();
-        val typeMeta = isisBeanTypeClassifier.classify(type);
+        val correspondingClass = classOrFailure.getValue().get();
+        val typeMeta = isisBeanTypeClassifier.classify(correspondingClass);
 
-        val beanSort = typeMeta.getBeanSort();
-
-        scanMeta.setInjectable(!typeMeta.getManagedBy().isIsis());
+        scanMeta.setInjectable(typeMeta.getManagedBy().isInjectable());
         if(typeMeta.getManagedBy().isIsis()) {
-            // otherwise we don't care
+            // otherwise we don't interfere with naming strategies
             scanMeta.setBeanNameOverride(typeMeta.getLogicalType().getLogicalTypeName());
         }
 
+        val beanSort = typeMeta.getBeanSort();
         if(beanSort.isToBeIntrospected()) {
-            val correspondingClass = scanMeta.getUnderlyingClassOrFailure().getUnderlyingClass();
-
             introspectableTypes.put(correspondingClass, typeMeta);
-
             if(log.isDebugEnabled()) {
                 log.debug("to-be-introspected: {} [{}]",
-                                type,
+                                correspondingClass,
                                 beanSort.name());
             }
         }

@@ -34,6 +34,13 @@ public class IsisBeanMetaData {
         public boolean isUnspecified() {return this == ManagedBy.UNSPECIFIED; }
         public boolean isSpring() {return this == ManagedBy.SPRING; }
         public boolean isIsis() {return this == ManagedBy.ISIS; }
+        /**
+         * Whether Spring should make that underlying bean injectable.
+         * @implNote if not managed by Isis, let ultimately Spring decide
+         */
+        public boolean isInjectable() {
+            return !isIsis();
+        }
     }
 
     private final @NonNull BeanSort beanSort;
