@@ -50,7 +50,7 @@ import org.apache.isis.extensions.secman.applib.util.RegexReplacer;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class ApplicationUserRepositoryAbstract<U extends ApplicationUser>
+public class ApplicationUserRepositoryAbstract<U extends ApplicationUser>
 implements ApplicationUserRepository {
 
     @Inject private FactoryService factoryService;
@@ -104,7 +104,7 @@ implements ApplicationUserRepository {
     @Override
     public Optional<ApplicationUser> findByUsername(final String username) {
         return _Casts.uncheckedCast(
-                repository.uniqueMatch(Query.named(this.applicationUserClass, ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME)
+                repository.uniqueMatch(Query.named(this.applicationUserClass, ApplicationUser.Nq.FIND_BY_USERNAME)
                 .withParameter("username", username))
         );
     }
@@ -119,7 +119,7 @@ implements ApplicationUserRepository {
     @Override
     public Optional<ApplicationUser> findByEmailAddress(final String emailAddress) {
         return _Casts.uncheckedCast(
-                repository.uniqueMatch(Query.named(this.applicationUserClass, ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS)
+                repository.uniqueMatch(Query.named(this.applicationUserClass, ApplicationUser.Nq.FIND_BY_EMAIL_ADDRESS)
                 .withParameter("emailAddress", emailAddress))
         );
     }
@@ -129,7 +129,7 @@ implements ApplicationUserRepository {
     @Override
     public Collection<ApplicationUser> find(final @Nullable String _search) {
         val regex = regexReplacer.asRegex(_search);
-        return repository.allMatches(Query.named(this.applicationUserClass, ApplicationUser.NAMED_QUERY_FIND)
+        return repository.allMatches(Query.named(this.applicationUserClass, ApplicationUser.Nq.FIND)
                 .withParameter("regex", regex))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
@@ -140,7 +140,7 @@ implements ApplicationUserRepository {
 
     @Override
     public Collection<ApplicationUser> findByAtPath(final String atPath) {
-        return repository.allMatches(Query.named(this.applicationUserClass, ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH)
+        return repository.allMatches(Query.named(this.applicationUserClass, ApplicationUser.Nq.FIND_BY_ATPATH)
                 .withParameter("atPath", atPath))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());

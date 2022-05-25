@@ -18,7 +18,6 @@
  */
 package org.apache.isis.extensions.secman.jdo.user.dom;
 
-import java.util.Locale;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -44,23 +43,17 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
-        schema = "isisExtensionsSecman",
-        table = "ApplicationUser")
-@Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@Version(
-        strategy = VersionStrategy.VERSION_NUMBER,
-        column = "version")
+        schema = ApplicationUser.SCHEMA,
+        table = ApplicationUser.TABLE)
 @Uniques({
     @Unique(
             name = "ApplicationUser_username_UNQ",
@@ -68,34 +61,42 @@ import lombok.Setter;
 })
 @Queries( {
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_USERNAME,
+            name = Nq.FIND_BY_USERNAME,
             value = "SELECT "
-                    + "FROM " + ApplicationUser.FQCN
-                    + " WHERE username == :username"),
+                  + "  FROM " + ApplicationUser.FQCN
+                  + " WHERE username == :username"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_EMAIL_ADDRESS,
+            name = Nq.FIND_BY_EMAIL_ADDRESS,
             value = "SELECT "
-                    + "FROM " + ApplicationUser.FQCN
-                    + " WHERE emailAddress == :emailAddress"),
+                  + "  FROM " + ApplicationUser.FQCN
+                  + " WHERE emailAddress == :emailAddress"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND_BY_ATPATH,
+            name = Nq.FIND_BY_ATPATH,
             value = "SELECT "
-                    + "FROM " + ApplicationUser.FQCN
-                    + " WHERE atPath == :atPath"),
+                  + "  FROM " + ApplicationUser.FQCN
+                  + " WHERE atPath == :atPath"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.NAMED_QUERY_FIND,
+            name = Nq.FIND,
             value = "SELECT "
-                    + "FROM " + ApplicationUser.FQCN
-                    + " WHERE username.matches(:regex)"
-                    + " || familyName.matches(:regex)"
-                    + " || givenName.matches(:regex)"
-                    + " || knownAs.matches(:regex)"
-                    + " || emailAddress.matches(:regex)")
+                  + "  FROM " + ApplicationUser.FQCN
+                  + " WHERE username.matches(:regex)"
+                  + "    || familyName.matches(:regex)"
+                  + "    || givenName.matches(:regex)"
+                  + "    || knownAs.matches(:regex)"
+                  + "    || emailAddress.matches(:regex)")
 })
+@Inheritance(
+        strategy = InheritanceStrategy.NEW_TABLE)
+@DatastoreIdentity(
+        strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@Version(
+        strategy = VersionStrategy.VERSION_NUMBER,
+        column = "version")
 @Named(ApplicationUser.LOGICAL_TYPE_NAME)
 @DomainObject(
         autoCompleteRepository = ApplicationUserRepository.class,
-        autoCompleteMethod = "findMatching")
+        autoCompleteMethod = "findMatching"
+)
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
 )
@@ -105,208 +106,104 @@ public class ApplicationUser
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser";
 
 
-    // -- USERNAME
-
-    @Column(allowsNull = "false", length = Username.MAX_LENGTH)
+    @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)
+    @Username
+    @Getter @Setter
     private String username;
 
-    @Username
-    @Override
-    public String getUsername() {
-        return username;
-    }
-    @Override
-    public void setUsername(final String username) { this.username = username; }
 
-
-    // -- FAMILY NAME
-
-    @Column(allowsNull = "true", length = FamilyName.MAX_LENGTH)
+    @Column(allowsNull = FamilyName.ALLOWS_NULL, length = FamilyName.MAX_LENGTH)
+    @FamilyName
+    @Getter @Setter
     private String familyName;
 
-    @FamilyName
-    @Override
-    public String getFamilyName() {
-        return familyName;
-    }
-    @Override
-    public void setFamilyName(final String familyName) {
-        this.familyName = familyName;
-    }
 
-
-    // -- GIVEN NAME
-
-    @Column(allowsNull = "true", length = GivenName.MAX_LENGTH)
+    @Column(allowsNull = GivenName.ALLOWS_NULL, length = GivenName.MAX_LENGTH)
+    @GivenName
+    @Getter @Setter
     private String givenName;
 
-    @GivenName
-    @Override
-    public String getGivenName() {
-        return givenName;
-    }
-    @Override
-    public void setGivenName(final String givenName) {
-        this.givenName = givenName;
-    }
 
-
-    // -- KNOWN AS
-
-    @Column(allowsNull = "true", length = KnownAs.MAX_LENGTH)
+    @Column(allowsNull = KnownAs.ALLOWS_NULL, length = KnownAs.MAX_LENGTH)
+    @KnownAs
+    @Getter @Setter
     private String knownAs;
 
-    @KnownAs
-    @Override
-    public String getKnownAs() {
-        return knownAs;
-    }
-    @Override
-    public void setKnownAs(final String knownAs) {
-        this.knownAs = knownAs;
-    }
 
-
-    // -- EMAIL ADDRESS
-
-    @Column(allowsNull="true", length = EmailAddress.MAX_LENGTH)
+    @Column(allowsNull = EmailAddress.ALLOWS_NULL, length = EmailAddress.MAX_LENGTH)
+    @EmailAddress
+    @Getter @Setter
     private String emailAddress;
 
-    @EmailAddress
-    @Override
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-    @Override
-    public void setEmailAddress(final String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
 
-
-    // -- PHONE NUMBER
-
-    @Column(allowsNull = "true", length = PhoneNumber.MAX_LENGTH)
+    @Column(allowsNull = PhoneNumber.ALLOWS_NULL, length = PhoneNumber.MAX_LENGTH)
+    @PhoneNumber
+    @Getter @Setter
     private String phoneNumber;
 
-    @PhoneNumber
-    @Override
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-    @Override
-    public void setPhoneNumber(final String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 
-
-    // -- FAX NUMBER
-
-    @Column(allowsNull = "true", length = FaxNumber.MAX_LENGTH)
+    @Column(allowsNull = FaxNumber.ALLOWS_NULL, length = FaxNumber.MAX_LENGTH)
+    @FaxNumber
+    @Getter @Setter
     private String faxNumber;
 
-    @FaxNumber
-    @Override
-    public String getFaxNumber() {
-        return faxNumber;
-    }
-    @Override
-    public void setFaxNumber(final String faxNumber) {
-        this.faxNumber = faxNumber;
-    }
 
-    // -- LOCALE
-
-    @UserLocale
-    @Column(allowsNull="true")
+    @Column(allowsNull = Language.ALLOWS_NULL)
+    @Language
     @Getter @Setter
-    private Locale language;
+    private java.util.Locale language;
 
-    @UserLocale
-    @Column(allowsNull="true")
+
+    @Column(allowsNull = NumberFormat.ALLOWS_NULL)
+    @NumberFormat
     @Getter @Setter
-    private Locale numberFormat;
+    private java.util.Locale numberFormat;
 
-    @UserLocale
-    @Column(allowsNull="true")
+
+    @Column(allowsNull = TimeFormat.ALLOWS_NULL)
+    @TimeFormat
     @Getter @Setter
-    private Locale timeFormat;
+    private java.util.Locale timeFormat;
 
-    // -- AT PATH
 
-    @Column(allowsNull="true")
+    @Column(allowsNull = AtPath.ALLOWS_NULL, length = AtPath.MAX_LENGTH)
+    @AtPath
+    @Getter @Setter
     private String atPath;
 
-    @AtPath
-    @Override
-    public String getAtPath() {
-        return atPath;
-    }
-    @Override
-    public void setAtPath(final String atPath) {
-        this.atPath = atPath;
-    }
 
-
-    // -- ACCOUNT TYPE
-
-    @Column(allowsNull = "false")
-    private org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType;
-
+    @Column(allowsNull = AccountType.ALLOWS_NULL)
     @AccountType
-    @Override
-    public org.apache.isis.extensions.secman.applib.user.dom.AccountType getAccountType() {
-        return accountType;
-    }
+    @Getter
+    private org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType;
     @Override
     public void setAccountType(final org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType) {
         this.accountType = accountType;
     }
 
 
-    // -- STATUS
-
-    @Column(allowsNull = "false")
+    @Column(allowsNull = Status.ALLOWS_NULL)
+    @Status
+    @Getter @Setter
     private ApplicationUserStatus status;
 
-    @Status
-    @Override
-    public ApplicationUserStatus getStatus() {
-        return status;
-    }
-    @Override
-    public void setStatus(final ApplicationUserStatus status) {
-        this.status = status;
-    }
 
-
-    // -- ENCRYPTED PASSWORD
-
-    @Column(allowsNull = "true")
+    @Column(allowsNull = EncryptedPassword.ALLOWS_NULL, length = EncryptedPassword.MAX_LENGTH)
+    @EncryptedPassword
+    @Getter @Setter
     private String encryptedPassword;
 
-    @EncryptedPassword
-    @Override
-    public String getEncryptedPassword() {
-        return encryptedPassword;
-    }
-    @Override
-    public void setEncryptedPassword(final String encryptedPassword) {
-        this.encryptedPassword = encryptedPassword;
-    }
 
 
     // ROLES
 
-    @Persistent(table="ApplicationUserRoles")
-    @Join(column="userId")
-    @Element(column="roleId")
-    private SortedSet<org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole> roles = new TreeSet<>();
-
+    @Persistent(table = Roles.Persistence.TABLE)
+    @Join(column = Roles.Persistence.JOIN_COLUMN)
+    @Element(column = Roles.Persistence.INVERSE_JOIN_COLUMN)
     @Roles
+    private SortedSet<org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole> roles = new TreeSet<>();
     @Override
-    public SortedSet<ApplicationRole> getRoles() {
+    public SortedSet<org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole> getRoles() {
         return _Casts.uncheckedCast(roles);
     }
-
-
 }

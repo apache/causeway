@@ -19,7 +19,19 @@
 package org.apache.isis.extensions.secman.applib.tenancy.dom;
 
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 /**
  * Role interface for domain objects to implement, indicating that these are characteristics of the entity that
@@ -111,6 +123,24 @@ import org.apache.isis.extensions.secman.applib.tenancy.spi.ApplicationTenancyEv
  */
 public interface HasAtPath {
 
+    @AtPath
     String getAtPath();
+
+    @Property(
+            maxLength = AtPath.MAX_LENGTH,
+            editing = Editing.DISABLED,
+            optionality = Optionality.OPTIONAL
+    )
+    @Parameter(
+            maxLength = AtPath.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AtPath {
+        int MAX_LENGTH = 255;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
+    }
 
 }

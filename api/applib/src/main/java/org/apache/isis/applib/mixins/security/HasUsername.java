@@ -18,6 +18,16 @@
  */
 package org.apache.isis.applib.mixins.security;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.updates.OnUpdatedBy;
 
 /**
@@ -37,10 +47,28 @@ import org.apache.isis.applib.mixins.updates.OnUpdatedBy;
  */
 public interface HasUsername {
 
+
+    @Property(
+            editing = Editing.DISABLED,
+            maxLength = Username.MAX_LENGTH
+    )
+    @Parameter(
+            maxLength = Username.MAX_LENGTH
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Username {
+        int MAX_LENGTH = 120;
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
+    }
+
     /**
      * The user that created, updated or is otherwise associated with this
      * object.
      */
+    @Username
     String getUsername();
+
 
 }

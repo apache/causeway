@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid
+        xsi:schemaLocation="http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd   http://isis.apache.org/applib/layout/grid/bootstrap3 http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
+        xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3"
+        xmlns:cpt="http://isis.apache.org/applib/layout/component"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <cpt:domainObject/>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="6">
+            <bs3:tabGroup>
+                <bs3:tab name="Identifier">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Identifiers" id="identifiers" unreferencedProperties="true">
+                                <cpt:action id="previous"/>
+                                <cpt:action id="next"/>
+                                <cpt:property id="username"/>
+                                <cpt:property id="loginTimestamp"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Metadata">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Metadata" id="metadata">
+                                <cpt:action id="recentAuditEntries" position="PANEL_DROPDOWN"/>
+                                <cpt:action id="findChangesByDate" position="PANEL_DROPDOWN"/>
+                                <cpt:action id="recentChanges" position="PANEL_DROPDOWN"/>
+                                <cpt:action id="clearHints" position="PANEL_DROPDOWN"/>
+                                <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
+                                <cpt:action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
+                                <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
+                                <cpt:property id="sessionId"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+        </bs3:col>
+        <bs3:col span="6">
+            <bs3:tabGroup collapseIfOne="false">
+                <bs3:tab name="Logout">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Timestamps" id="logout">
+                                <cpt:property id="loginTimestamp"/>
+                                <cpt:property id="logoutTimestamp"/>
+                                <cpt:property id="causedBy2"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+        </bs3:col>
+        <bs3:col span="12" unreferencedCollections="true"/>
+    </bs3:row>
+</bs3:grid>

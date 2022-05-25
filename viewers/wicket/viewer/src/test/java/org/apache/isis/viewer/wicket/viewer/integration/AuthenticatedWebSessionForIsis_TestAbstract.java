@@ -28,7 +28,7 @@ import org.junit.Rule;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.applib.services.session.SessionLogService;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -55,7 +55,7 @@ public abstract class AuthenticatedWebSessionForIsis_TestAbstract {
                 allowing(mockCommonContext).getServiceRegistry();
                 will(returnValue(mockServiceRegistry));
 
-                allowing(mockServiceRegistry).lookupService(SessionLoggingService.class);
+                allowing(mockServiceRegistry).lookupService(SessionLogService.class);
                 will(returnValue(Optional.empty()));
 
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionService.class);

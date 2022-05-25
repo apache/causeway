@@ -55,13 +55,13 @@ commands:
 
       Extensions: org.apache.isis.extensions
       "Applib: Excel": "org.apache.isis.extensions:isis-extensions-excel.*"
-      "Core: Command Log": "org.apache.isis.extensions:isis-extensions-command-log.*"
-      "Core: Command Replay": "org.apache.isis.extensions:isis-extensions-command-replay.*"
+      "Core: Command Log": "org.apache.isis.extensions:isis-extensions-commandlog.*"
+      "Core: Command Replay": "org.apache.isis.extensions:isis-extensions-commandreplay.*"
       #"Core: Flyway": "org.apache.isis.extensions:isis-extensions-flyway.*"
       "Core: Quartz": "org.apache.isis.extensions:isis-extensions-quartz.*"
-      #"Security: Audit Trail": "org.apache.isis.security:isis-extensions-audit-trail.*"
+      #"Security: Audit Trail": "org.apache.isis.security:isis-extensions-audittrail.*"
       "Security: Secman": "org.apache.isis.security:isis-extensions-secman.*"
-      #"Security: Session Log": "org.apache.isis.security:isis-extensions-session-log.*"
+      #"Security: Session Log": "org.apache.isis.security:isis-extensions-sessionlog.*"
       "Security: Shiro LDAP Realm": "org.apache.isis.security:isis-extensions-shiro-realm-ldap.*"
       "RO Viewer: CORS": "org.apache.isis.security:isis-extensions-cors.*"
       "Wicket Viewer: Excel Download": "org.apache.isis.security:isis-extensions-exceldownload.*"

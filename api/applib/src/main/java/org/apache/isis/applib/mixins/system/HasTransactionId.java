@@ -18,6 +18,17 @@
  */
 package org.apache.isis.applib.mixins.system;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.Property;
+
+import lombok.Setter;
+
 /**
  * Extends {@link HasInteractionId} to add a strictly monotonically increasing
  * sequence number so that each transaction within the overall
@@ -36,6 +47,14 @@ package org.apache.isis.applib.mixins.system;
  */
 public interface HasTransactionId extends HasInteractionId {
 
+    @Property(
+            editing = Editing.DISABLED
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Sequence {
+    }
+
     /**
      * Holds the sequence number uniquely identifying the transaction number
      * within the overall
@@ -43,9 +62,10 @@ public interface HasTransactionId extends HasInteractionId {
      *
      * <p>
      *     The values in this sequence are ultimately obtained from the non-API
-     *     method 
+     *     method
      *     {@link org.apache.isis.core.metamodel.execution.InteractionInternal#getTransactionSequence}.
      * </p>
      */
+    @Sequence
     int getSequence();
 }

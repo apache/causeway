@@ -60,11 +60,11 @@
 		<!-- Extensions -->
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-command-replay-primary</artifactId>
+			<artifactId>isis-extensions-commandreplay-primary</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-command-replay-secondary</artifactId>
+			<artifactId>isis-extensions-commandreplay-secondary</artifactId>
 		</dependency>
 
 		<dependency>

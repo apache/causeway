@@ -89,19 +89,19 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-command-log-applib</artifactId>
+				<artifactId>isis-extensions-commandlog-applib</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-command-log-jdo</artifactId>
+				<artifactId>isis-extensions-commandlog-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-command-log-jpa</artifactId>
+				<artifactId>isis-extensions-commandlog-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
@@ -113,13 +113,13 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-command-replay-primary</artifactId>
+				<artifactId>isis-extensions-commandreplay-primary</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-command-replay-secondary</artifactId>
+				<artifactId>isis-extensions-commandreplay-secondary</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
@@ -230,6 +230,12 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-sessionlog-impl</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-cors-impl</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
@@ -257,14 +263,15 @@
 	<modules>
 		<module>applib/excel</module>
 
-		<module>core/command-log</module>
-		<module>core/command-replay</module>
+		<module>core/commandlog</module>
+		<module>core/commandreplay</module>
 		<module>core/flyway</module>
 		<module>core/quartz</module>
 
 		<module>security/secman</module>
 		<module>security/shiro-realm-ldap</module>
 		<module>security/spring-oauth2</module>
+		<module>security/sessionlog</module>
 
 		<module>vro/cors</module>
 

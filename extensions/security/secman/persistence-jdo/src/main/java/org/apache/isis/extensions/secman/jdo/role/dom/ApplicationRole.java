@@ -40,33 +40,38 @@ import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq;
+import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
-        schema = "isisExtensionsSecman",
-        table = "ApplicationRole")
-@Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
+        schema = ApplicationRole.SCHEMA,
+        table = ApplicationRole.TABLE)
 @Uniques({
     @Unique(
-            name = "ApplicationRole_name_UNQ", members = { "name" })
+            name = "ApplicationRole_name_UNQ",
+            members = { "name" })
 })
 @Queries({
     @Query(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
+            name = Nq.FIND_BY_NAME,
             value = "SELECT "
                     + "FROM " + ApplicationRole.FQCN
                     + " WHERE name == :name"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
+            name = Nq.FIND_BY_NAME_CONTAINING,
             value = "SELECT "
                     + "FROM " + ApplicationRole.FQCN
                     + " WHERE name.matches(:regex) ")
 })
+@Inheritance(
+        strategy = InheritanceStrategy.NEW_TABLE)
+@DatastoreIdentity(
+        strategy = IdGeneratorStrategy.NATIVE, column = "id")
 @Named(ApplicationRole.LOGICAL_TYPE_NAME)
 @DomainObject(
         bounding = Bounding.BOUNDED,
@@ -82,51 +87,27 @@ public class ApplicationRole
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole";
 
 
-
-    // -- NAME
-
-    @Column(allowsNull = "false", length = Name.MAX_LENGTH)
+    @Column(allowsNull = Name.ALLOWS_NULL, length = Name.MAX_LENGTH)
+    @Name
+    @Getter @Setter
     private String name;
 
-    @Name
-    @Override
-    public String getName() {
-        return name;
-    }
-    @Override
-    public void setName(final String name) {
-        this.name = name;
-    }
 
-
-    // -- DESCRIPTION
-
-    @Column(allowsNull = "true", length = Description.MAX_LENGTH)
+    @Column(allowsNull = Description.ALLOWS_NULL, length = Description.MAX_LENGTH)
+    @Description
+    @Getter @Setter
     private String description;
 
-    @Description
-    @Override
-    public String getDescription() {
-        return description;
-    }
-    @Override
-    public void setDescription(final String description) {
-        this.description = description;
-    }
 
-
-    // -- USERS
-
-    @Persistent(mappedBy = "roles")
-    private SortedSet<org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser> users = new TreeSet<>();
-
+    @Persistent(mappedBy = Users.MAPPED_BY)
     @Users
+    private SortedSet<org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser> users = new TreeSet<>();
     @Override
-    public SortedSet<ApplicationUser> getUsers() {
+    public SortedSet<org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser> getUsers() {
         return _Casts.uncheckedCast(users);
     }
     // necessary for integration tests
-    public void addToUsers(final ApplicationUser applicationUser) {
+    public void addToUsers(final org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser applicationUser) {
         getUsers().add(applicationUser);
     }
 

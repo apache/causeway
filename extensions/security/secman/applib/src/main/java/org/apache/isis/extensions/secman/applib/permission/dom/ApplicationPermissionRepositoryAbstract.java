@@ -80,7 +80,7 @@ implements ApplicationPermissionRepository {
     public List<ApplicationPermission> findByRole(final @NonNull ApplicationRole role) {
         return _Casts.uncheckedCast(
                 repository.allMatches(
-                Query.named(this.applicationPermissionClass, ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE)
+                Query.named(this.applicationPermissionClass, ApplicationPermission.Nq.FIND_BY_ROLE)
                     .withParameter("role", role))
         );
     }
@@ -106,7 +106,7 @@ implements ApplicationPermissionRepository {
     public List<ApplicationPermission> findByRoleNames(final @NonNull List<String> roleNames) {
         return _Casts.uncheckedCast(
                 repository.allMatches(
-                        Query.named(this.applicationPermissionClass, ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_NAMES)
+                        Query.named(this.applicationPermissionClass, ApplicationPermission.Nq.FIND_BY_ROLE_NAMES)
                                 .withParameter("roleNames", roleNames))
         );
     }
@@ -114,7 +114,7 @@ implements ApplicationPermissionRepository {
     private List<ApplicationPermission> findByUser(final String username) {
         return _Casts.uncheckedCast(
                 repository.allMatches(
-                Query.named(this.applicationPermissionClass, ApplicationPermission.NAMED_QUERY_FIND_BY_USER)
+                Query.named(this.applicationPermissionClass, ApplicationPermission.Nq.FIND_BY_USER)
                     .withParameter("username", username))
         );
     }
@@ -179,7 +179,7 @@ implements ApplicationPermissionRepository {
             final ApplicationPermissionRule rule,
             final ApplicationFeatureSort featureSort) {
         return repository.allMatches(Query.named(
-                        this.applicationPermissionClass, ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE)
+                        this.applicationPermissionClass, ApplicationPermission.Nq.FIND_BY_ROLE_RULE_FEATURE)
                     .withParameter("role", role)
                     .withParameter("rule", rule)
                     .withParameter("featureSort", featureSort))
@@ -210,7 +210,7 @@ implements ApplicationPermissionRepository {
         return _Casts.uncheckedCast(
                 repository
                 .uniqueMatch(Query.named(
-                                this.applicationPermissionClass, ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN)
+                                this.applicationPermissionClass, ApplicationPermission.Nq.FIND_BY_ROLE_RULE_FEATURE_FQN)
                         .withParameter("role", role)
                         .withParameter("rule", rule)
                         .withParameter("featureSort", featureSort)
@@ -231,7 +231,7 @@ implements ApplicationPermissionRepository {
     public Collection<ApplicationPermission> findByFeature(final ApplicationFeatureId featureId) {
         return repository.allMatches(
                 Query.named(
-                        this.applicationPermissionClass, ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE)
+                        this.applicationPermissionClass, ApplicationPermission.Nq.FIND_BY_FEATURE)
                 .withParameter("featureSort", featureId.getSort())
                 .withParameter("featureFqn", featureId.getFullyQualifiedName()))
                 .stream()

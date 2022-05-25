@@ -31,8 +31,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.ObjectSupport;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -83,25 +87,41 @@ import lombok.experimental.UtilityClass;
  */
 @Named(ApplicationPermission.LOGICAL_TYPE_NAME)
 @DomainObject
+@DomainObjectLayout(
+        titleUiEvent = ApplicationPermission.TitleUiEvent.class,
+        iconUiEvent = ApplicationPermission.IconUiEvent.class,
+        cssClassUiEvent = ApplicationPermission.CssClassUiEvent.class,
+        layoutUiEvent = ApplicationPermission.LayoutUiEvent.class
+)
 public abstract class ApplicationPermission implements Comparable<ApplicationPermission> {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermission";
+    public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
+    public static final String TABLE = "ApplicationPermission";
 
-    public static final String NAMED_QUERY_FIND_BY_FEATURE = "ApplicationPermission.findByFeature";
-    public static final String NAMED_QUERY_FIND_BY_ROLE = "ApplicationPermission.findByRole";
-    public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE = "ApplicationPermission.findByRoleAndRuleAndFeature";
-    public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN = "ApplicationPermission.findByRoleAndRuleAndFeatureAndFqn";
-    public static final String NAMED_QUERY_FIND_BY_USER = "ApplicationPermission.findByUser";
-    public static final String NAMED_QUERY_FIND_BY_ROLE_NAMES = "ApplicationPermission.findByRoleNames";
+    @UtilityClass
+    public static class Nq {
+        public static final String FIND_BY_FEATURE = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByFeature";
+        public static final String FIND_BY_ROLE = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRole";
+        public static final String FIND_BY_ROLE_RULE_FEATURE = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRoleAndRuleAndFeature";
+        public static final String FIND_BY_ROLE_RULE_FEATURE_FQN = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRoleAndRuleAndFeatureAndFqn";
+        public static final String FIND_BY_USER = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByUser";
+        public static final String FIND_BY_ROLE_NAMES = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRoleNames";
+    }
 
 
-    @Inject transient ApplicationFeatureRepository featureRepository;
+    // -- UI & DOMAIN EVENTS
 
-    // -- DOMAIN EVENTS
+    public static class TitleUiEvent extends IsisModuleExtSecmanApplib.TitleUiEvent<ApplicationPermission> { }
+    public static class IconUiEvent extends IsisModuleExtSecmanApplib.IconUiEvent<ApplicationPermission> { }
+    public static class CssClassUiEvent extends IsisModuleExtSecmanApplib.CssClassUiEvent<ApplicationPermission> { }
+    public static class LayoutUiEvent extends IsisModuleExtSecmanApplib.LayoutUiEvent<ApplicationPermission> { }
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermission, T> {}
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationPermission, T> {}
 
+
+    @Inject transient ApplicationFeatureRepository featureRepository;
 
     // -- MODEL
 
@@ -145,17 +165,24 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     @Property(
             domainEvent = Role.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            optionality = Optionality.MANDATORY
     )
     @PropertyLayout(
             fieldSetId = "identity",
             hidden = Where.REFERENCES_PARENT,
             sequence = "1"
     )
+    @Parameter(
+            optionality = Optionality.MANDATORY
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Role {
-        public static class DomainEvent extends PropertyDomainEvent<ApplicationRole> {}
+        class DomainEvent extends PropertyDomainEvent<ApplicationRole> {}
+        String NAME = "roleId";
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
 
     @Role
@@ -167,18 +194,23 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     @Property(
             domainEvent = Rule.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            optionality = Optionality.MANDATORY
     )
     @PropertyLayout(
             fieldSetId = "rule",
             sequence = "1"
     )
+    @Parameter(
+            optionality = Optionality.MANDATORY
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Rule {
         class DomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
-
     @Rule
     public abstract ApplicationPermissionRule getRule();
     public abstract void setRule(ApplicationPermissionRule rule);
@@ -188,18 +220,23 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     @Property(
             domainEvent = Mode.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            optionality = Optionality.MANDATORY
     )
     @PropertyLayout(
             fieldSetId = "mode",
             sequence = "1"
     )
+    @Parameter(
+            optionality = Optionality.MANDATORY
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Mode {
         class DomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
-
     @Mode
     public abstract ApplicationPermissionMode getMode();
     public abstract void setMode(ApplicationPermissionMode mode);
@@ -222,11 +259,9 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Sort {
-        int TYPICAL_LENGTH = 7;  // ApplicationFeatureType.PACKAGE is longest
-
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int TYPICAL_LENGTH = 7;  // ApplicationFeatureType.PACKAGE is longest
     }
-
     @Sort
     public String getSort() {
         final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER
@@ -238,6 +273,13 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     // -- FEATURE SORT
 
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface FeatureSort {
+        int TYPICAL_LENGTH = 7;  // ApplicationFeatureType.PACKAGE is longest
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
+    }
     /**
      * Which {@link ApplicationFeatureId#getSort() sort} of
      * feature this is.
@@ -279,8 +321,9 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     @Retention(RetentionPolicy.RUNTIME)
     public @interface FeatureFqn {
         class DomainEvent extends PropertyDomainEvent<String> {}
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
-
     @FeatureFqn
     public abstract String getFeatureFqn();
     public abstract void setFeatureFqn(String featureFqn);
