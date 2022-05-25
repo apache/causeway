@@ -1,6 +1,7 @@
 package org.apache.isis.sessionlog.jdo.dom;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
@@ -11,7 +12,6 @@ import javax.jdo.annotations.Query;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.session.SessionLogService;
 import org.apache.isis.sessionlog.applib.dom.SessionLogEntry.Nq;
 
@@ -24,10 +24,15 @@ import lombok.Setter;
         table = SessionLogEntry.TABLE)
 @Queries( {
         @Query(
-                name  = Nq.FIND_BY_SESSION_ID,
+                name  = Nq.FIND_BY_SESSION_GUID_STR,
                 value = "SELECT "
                       + "  FROM " + SessionLogEntry.FQCN + " "
-                      + " WHERE sessionId == :sessionId"),
+                      + " WHERE sessionGuidStr == :sessionGuidStr"),
+        @Query(
+                name  = Nq.FIND_BY_HTTP_SESSION_ID,
+                value = "SELECT "
+                      + "  FROM " + SessionLogEntry.FQCN + " "
+                      + " WHERE httpSessionId == :httpSessionId"),
         @Query(
                 name  = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN,
                 value = "SELECT "
@@ -117,19 +122,26 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
     public static final String FQCN = "org.apache.isis.sessionlog.jdo.dom.SessionLogEntry";
 
     public SessionLogEntry(
-            final String sessionId,
+            final UUID sessionGuid,
+            final String httpSessionId,
             final String username,
             final SessionLogService.CausedBy causedBy,
             final Timestamp loginTimestamp) {
-        super(sessionId, username, causedBy, loginTimestamp);
+        super(sessionGuid, httpSessionId, username, causedBy, loginTimestamp);
     }
 
 
     @PrimaryKey
-    @Column(allowsNull = SessionId.ALLOWS_NULL, length = SessionId.MAX_LENGTH)
-    @SessionId
+    @Column(allowsNull = SessionGuidStr.ALLOWS_NULL, length = SessionGuidStr.MAX_LENGTH)
+    @SessionGuidStr
     @Getter @Setter
-    private String sessionId;
+    private String sessionGuidStr;
+
+
+    @Column(allowsNull = HttpSessionId.ALLOWS_NULL, length = HttpSessionId.MAX_LENGTH)
+    @HttpSessionId
+    @Getter @Setter
+    private String httpSessionId;
 
 
     @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)

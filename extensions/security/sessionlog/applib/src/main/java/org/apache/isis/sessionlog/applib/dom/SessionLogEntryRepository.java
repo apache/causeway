@@ -3,6 +3,7 @@ package org.apache.isis.sessionlog.applib.dom;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -41,21 +42,36 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
 
     public SessionLogEntry create(
             final String username,
-            final String sessionId,
+            final UUID sessionGuid,
+            final String httpSessionId,
             final SessionLogService.CausedBy causedBy,
             final Timestamp timestamp) {
         E entry = factoryService.detachedEntity(sessionLogEntryClass);
         entry.setUsername(username);
-        entry.setSessionId(sessionId);
+        entry.setSessionGuidStr(sessionGuid.toString());
+        entry.setHttpSessionId(httpSessionId);
         entry.setCausedBy(causedBy);
         entry.setLoginTimestamp(timestamp);
         return repositoryService.persistAndFlush(entry);
     }
 
-    public Optional<E> findBySessionId(final String sessionId) {
+
+    public Optional<E> findBySessionGuid(final UUID sessionUuid) {
+        return findBySessionGuidStr(sessionUuid.toString());
+    }
+
+
+    public Optional<E> findBySessionGuidStr(final String sessionGuidStr) {
         return repositoryService.firstMatch(
-                Query.named(sessionLogEntryClass,  SessionLogEntry.Nq.FIND_BY_SESSION_ID)
-                     .withParameter("sessionId", sessionId));
+                Query.named(sessionLogEntryClass,  SessionLogEntry.Nq.FIND_BY_SESSION_GUID_STR)
+                     .withParameter("sessionGuidStr", sessionGuidStr));
+    }
+
+
+    public Optional<E> findByHttpSessionId(final String httpSessionId) {
+        return repositoryService.firstMatch(
+                Query.named(sessionLogEntryClass,  SessionLogEntry.Nq.FIND_BY_HTTP_SESSION_ID)
+                     .withParameter("httpSessionId", httpSessionId));
     }
 
 

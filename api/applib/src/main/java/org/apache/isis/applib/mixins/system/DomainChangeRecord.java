@@ -81,7 +81,14 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     ChangeType getType();
 
 
-    @PropertyLayout(fieldSetId="Identifiers",sequence = "50")
+
+    @Property(
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId="Identifiers",
+            sequence = "50"
+    )
     @HasInteractionId.InteractionId
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -100,7 +107,13 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
 
 
 
-    @PropertyLayout(fieldSetId="Identifiers",sequence = "10")
+    @Property(
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            fieldSetId="Identifiers",
+            sequence = "10"
+    )
     @HasUsername.Username
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)

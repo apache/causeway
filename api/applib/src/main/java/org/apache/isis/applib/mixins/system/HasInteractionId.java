@@ -27,6 +27,7 @@ import java.util.UUID;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactn.Interaction;
 
 
@@ -40,7 +41,7 @@ import org.apache.isis.applib.services.iactn.Interaction;
 public interface HasInteractionId {
 
     @Property(
-            editing = Editing.DISABLED,
+            hidden = Where.EVERYWHERE,
             maxLength = InteractionIdStr.MAX_LENGTH
     )
     @Parameter(
@@ -54,6 +55,7 @@ public interface HasInteractionId {
         String ALLOWS_NULL = InteractionId.ALLOWS_NULL;
         String NAME = "interactionId";
     }
+
 
     @Property(
             editing = Editing.DISABLED

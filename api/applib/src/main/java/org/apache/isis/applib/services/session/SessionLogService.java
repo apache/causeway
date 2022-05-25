@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.session;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Defines an API to track the status of the current sessions
@@ -46,24 +47,20 @@ public interface SessionLogService {
     /**
      * Callback to log the session.
      *
-     * <p>
-     *     The <code>sessionId</code> is an internal identifier (for the
-     *     Wicket viewer, its the JVM hashCode of the Wicket session).
-     * </p>
-     *
      * @param type
      * @param username
      * @param date
      * @param causedBy
-     * @param sessionId
+     * @param sessionGuid - guaranteed to be unique
+     * @param httpSessionId - generally expected to be unique, provided to correlate with other logs
      */
     void log(
             Type type,
             String username,
             Date date,
             CausedBy causedBy,
-            String sessionId
-    );
+            UUID sessionGuid,
+            String httpSessionId);
 
 
 }

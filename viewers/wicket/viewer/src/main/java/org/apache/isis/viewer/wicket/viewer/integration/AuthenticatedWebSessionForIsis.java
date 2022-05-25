@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.viewer.integration;
 
+import java.util.UUID;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -73,6 +75,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
      */
     private InteractionContext authentication;
 
+    @Getter
+    private UUID sessionGuid;
     private String cachedSessionId;
 
     public String getCachedSessionId() {
@@ -90,6 +94,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         this.commonContext = commonContext;
         bookmarkedPagesModel = new BookmarkedPagesModel(commonContext);
         breadcrumbModel = new BreadcrumbModel(commonContext);
+        sessionGuid = UUID.randomUUID();
     }
 
     @Override
@@ -233,9 +238,9 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
             val now = virtualClock().nowAsJavaUtilDate();
 
-            String sessionId = AuthenticatedWebSessionForIsis.this.getCachedSessionId();
+            String httpSessionId = AuthenticatedWebSessionForIsis.this.getCachedSessionId();
             sessionLoggingServices.forEach(sessionLoggingService ->
-                sessionLoggingService.log(type, username, now, causedBy, sessionId)
+                sessionLoggingService.log(type, username, now, causedBy, getSessionGuid(), httpSessionId)
             );
         };
 

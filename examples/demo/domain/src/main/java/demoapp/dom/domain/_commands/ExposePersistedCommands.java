@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderForCollectionTypeAbstract;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 
 /**
  * Marker interface for mixins to contribute to.
@@ -34,9 +35,9 @@ public interface ExposePersistedCommands {
 
     @Service
     @javax.annotation.Priority(PriorityPrecedence.EARLY)
-    public static class TableColumnOrderDefault extends TableColumnOrderForCollectionTypeAbstract<ICommandLog> {
+    public static class TableColumnOrderDefault extends TableColumnOrderForCollectionTypeAbstract<CommandLogEntry> {
 
-        public TableColumnOrderDefault() { super(ICommandLog.class); }
+        public TableColumnOrderDefault() { super(CommandLogEntry.class); }
 
         @Override
         protected List<String> orderParented(Object parent, String collectionId, List<String> propertyIds) {

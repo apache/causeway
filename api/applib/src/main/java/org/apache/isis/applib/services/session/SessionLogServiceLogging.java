@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.session;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.annotation.Priority;
 import javax.inject.Named;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -38,7 +40,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("logging")
 @Log4j2
-public class SessionLoggingServiceLogging implements SessionLogService {
+public class SessionLogServiceLogging implements SessionLogService {
 
     @Override
     public void log(
@@ -46,23 +48,21 @@ public class SessionLoggingServiceLogging implements SessionLogService {
             final String username,
             final Date date,
             final CausedBy causedBy,
-            final String sessionId) {
+            final UUID sessionGuid,
+            final String httpSessionId) {
 
         if(log.isDebugEnabled()) {
-            final StringBuilder logMessage = new StringBuilder();
-            logMessage.append("User '").append(username);
-            logMessage.append("' with sessionId '").append(sessionId)
-            .append("' has logged ");
-            if (type == Type.LOGIN) {
-                logMessage.append("in");
-            } else {
-                logMessage.append("out");
-            }
-            logMessage.append(" at '").append(date).append("'.");
-            if (causedBy == CausedBy.SESSION_EXPIRATION) {
-                logMessage.append("Cause: session expiration");
-            }
-            log.debug(logMessage);
+
+            val msg = String.format(
+                    "User '%s' with sessionGuid '%s' (httpSessionId '%s') has logged %s at '%s'.%s",
+                    username,
+                    sessionGuid,
+                    httpSessionId,
+                    type == Type.LOGIN ? "in" : "out",
+                    date,
+                    causedBy == CausedBy.SESSION_EXPIRATION ? " (session expiration)" : ""
+            );
+            log.debug(msg);
         }
     }
 }

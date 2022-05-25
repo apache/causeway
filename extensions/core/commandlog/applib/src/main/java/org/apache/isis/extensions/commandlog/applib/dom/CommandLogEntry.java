@@ -42,6 +42,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -223,28 +224,26 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
 
 
 
-    @Property(
-            domainEvent = InteractionIdStr.DomainEvent.class
-    )
-    @HasInteractionId.InteractionIdStr
-    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface InteractionIdStr {
-        int MAX_LENGTH = HasInteractionId.InteractionIdStr.MAX_LENGTH;
-        boolean NULLABLE = HasInteractionId.InteractionIdStr.NULLABLE;
-        String ALLOWS_NULL = HasInteractionId.InteractionIdStr.ALLOWS_NULL;
-        String NAME = HasInteractionId.InteractionIdStr.NAME;
-        class DomainEvent extends PropertyDomainEvent<String> {}
-    }
     @InteractionIdStr
     public abstract String getInteractionIdStr();
     public abstract void setInteractionIdStr(String interactionIdStr);
 
 
 
-    @Override
+    @Property(
+            domainEvent = InteractionId.DomainEvent.class
+    )
     @DomainChangeRecord.InteractionId
-    public UUID getInteractionId() {return UUID.fromString(getInteractionIdStr());}
+    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface InteractionId {
+        class DomainEvent extends PropertyDomainEvent<UUID> {}
+    }
+    @Override
+    @InteractionId
+    public UUID getInteractionId() {
+        return UUID.fromString(getInteractionIdStr());
+    }
 
 
 

@@ -1,6 +1,7 @@
 package org.apache.isis.sessionlog.jpa.dom;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,18 +11,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.eclipse.persistence.annotations.PrimaryKey;
-import org.springframework.data.jpa.repository.Query;
-
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.session.SessionLogService;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.sessionlog.applib.dom.SessionLogEntry.Nq;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -31,10 +27,15 @@ import lombok.Setter;
 
 @NamedQueries( {
         @NamedQuery(
-                name  = Nq.FIND_BY_SESSION_ID,
+                name  = Nq.FIND_BY_SESSION_GUID_STR,
                 query = "SELECT e "
                       + "  FROM SessionLogEntry e "
-                      + " WHERE e.sessionId = :sessionId"),
+                      + " WHERE e.sessionGuidStr = :sessionGuidStr"),
+        @NamedQuery(
+                name  = Nq.FIND_BY_HTTP_SESSION_ID,
+                query = "SELECT e "
+                      + "  FROM SessionLogEntry e "
+                      + " WHERE e.httpSessionId = :httpSessionId"),
         @NamedQuery(
                 name  = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN,
                 query = "SELECT e"
@@ -124,23 +125,30 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
 
 
     public SessionLogEntry(
-            final String sessionId,
+            final UUID sessionGuid,
+            final String httpSessionId,
             final String username,
             final SessionLogService.CausedBy causedBy,
             final Timestamp loginTimestamp) {
-        super(sessionId, username, causedBy, loginTimestamp);
+        super(sessionGuid, httpSessionId, username, causedBy, loginTimestamp);
     }
 
     public SessionLogEntry() {
-        super(null, null, null, null);
+        super(null, null, null, null, null);
     }
 
 
     @Id
-    @Column(nullable = SessionId.NULLABLE, length = SessionId.MAX_LENGTH)
-    @SessionId
+    @Column(nullable = SessionGuidStr.NULLABLE, length = SessionGuidStr.MAX_LENGTH)
+    @SessionGuidStr
     @Getter @Setter
-    private String sessionId;
+    private String sessionGuidStr;
+
+
+    @Column(nullable = HttpSessionId.NULLABLE, length = HttpSessionId.MAX_LENGTH)
+    @HttpSessionId
+    @Getter @Setter
+    private String httpSessionId;
 
 
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)

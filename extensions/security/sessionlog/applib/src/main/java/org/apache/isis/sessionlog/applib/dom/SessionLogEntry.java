@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -51,7 +52,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_SESSION_ID =  SessionLogEntry.LOGICAL_TYPE_NAME + ".findBySessionId";
+        public static final String FIND_BY_SESSION_GUID_STR =  SessionLogEntry.LOGICAL_TYPE_NAME + ".findBySessionGuidStr";
+        public static final String FIND_BY_HTTP_SESSION_ID =  SessionLogEntry.LOGICAL_TYPE_NAME + ".findByHttpSessionId";
         public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampBetween";
         public static final String FIND_BY_USERNAME_AND_TIMESTAMP_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampAfter";
         public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampBefore";
@@ -81,11 +83,13 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
 
     protected SessionLogEntry(
-            final String sessionId,
+            final UUID sessionGuid,
+            final String httpSessionId,
             final String username,
             final SessionLogService.CausedBy causedBy,
             final Timestamp loginTimestamp) {
-        setSessionId(sessionId);
+        setSessionGuidStr(sessionGuid.toString());
+        setHttpSessionId(httpSessionId);
         setUsername(username);
         setCausedBy(causedBy);
         setLoginTimestamp(loginTimestamp);
@@ -120,31 +124,59 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
 
     @Property(
-            domainEvent = SessionId.DomainEvent.class,
-            editing = Editing.DISABLED,
-            maxLength = SessionId.MAX_LENGTH,
-            optionality = Optionality.MANDATORY
-    )
-    @PropertyLayout(
-            fieldSetId="identity",
-            hidden = Where.PARENTED_TABLES,
-            sequence = "1"
-    )
-    @Parameter(
-            maxLength = SessionId.MAX_LENGTH,
-            optionality = Optionality.MANDATORY
+            hidden = Where.EVERYWHERE
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface SessionId {
+    public @interface SessionGuidStr {
         class DomainEvent extends PropertyDomainEvent<String> {}
-        int MAX_LENGTH = 32; // to hold UUID.randomUuid().toString()
+        int MAX_LENGTH = 36; // to hold UUID.randomUuid().toString()
         boolean NULLABLE = false;
         String ALLOWS_NULL = "false";
     }
-    @SessionId
-    public abstract String getSessionId();
-    public abstract void setSessionId(String sessionId);
+    @SessionGuidStr
+    public abstract String getSessionGuidStr();
+    public abstract void setSessionGuidStr(String sessionGuidStr);
+
+
+
+    @Property(
+        domainEvent = SessionGuid.DomainEvent.class
+    )
+    @PropertyLayout(
+            fieldSetId = "Identity",
+            hidden = Where.PARENTED_TABLES,
+            sequence = "1"
+    )
+    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface SessionGuid {
+        class DomainEvent extends PropertyDomainEvent<UUID> {}
+    }
+    @SessionGuid
+    public UUID getSessionGuid() {return UUID.fromString(getSessionGuidStr());}
+
+
+    @Property(
+            domainEvent = HttpSessionId.DomainEvent.class
+    )
+    @PropertyLayout(
+            fieldSetId = "Metadata",
+            hidden = Where.PARENTED_TABLES,
+            sequence = "2"
+    )
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface HttpSessionId {
+        class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = 32;
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
+    }
+    @HttpSessionId
+    public abstract String getHttpSessionId();
+    public abstract void setHttpSessionId(String httpSessionId);
+
 
 
 
@@ -152,7 +184,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             domainEvent = Username.DomainEvent.class
     )
     @PropertyLayout(
-            fieldSetId="Identity",
+            fieldSetId = "Who",
             hidden = Where.PARENTED_TABLES,
             sequence = "2"
     )
@@ -177,9 +209,9 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             optionality = Optionality.MANDATORY
     )
     @PropertyLayout(
-            fieldSetId="Identity",
+            fieldSetId = "Duration",
             hidden = Where.PARENTED_TABLES,
-            sequence = "3"
+            sequence = "1"
     )
     @Parameter(
             optionality = Optionality.MANDATORY
@@ -207,9 +239,9 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
-            fieldSetId="Identity",
+            fieldSetId = "Duration",
             hidden = Where.PARENTED_TABLES,
-            sequence = "3"
+            sequence = "2"
     )
     @Parameter(
             optionality = Optionality.OPTIONAL
@@ -237,7 +269,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     )
     @PropertyLayout(
             fieldSetId="Details",
-            sequence = "1"
+            sequence = "2"
     )
     @Parameter(
             optionality = Optionality.MANDATORY
@@ -318,7 +350,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             ObjectContracts.contract(SessionLogEntry.class)
                     .thenUse("loginTimestamp", SessionLogEntry::getLoginTimestamp)
                     .thenUse("username", SessionLogEntry::getUsername)
-                    .thenUse("sessionId", SessionLogEntry::getSessionId)
+                    .thenUse("sessionId", SessionLogEntry::getSessionGuidStr)
                     .thenUse("logoutTimestamp", SessionLogEntry::getLogoutTimestamp)
                     .thenUse("causedBy", SessionLogEntry::getCausedBy)
             ;
