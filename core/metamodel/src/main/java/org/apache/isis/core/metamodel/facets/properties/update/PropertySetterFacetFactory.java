@@ -40,7 +40,7 @@ import lombok.val;
 /**
  * Sets up the {@link PropertySetterFacetViaSetterMethod} to invoke the
  * property's setter if available, but if none then marks the property as
- * {@link SnapshotExcludeFacetInferred not-persistable}.
+ * {@link SnapshotExcludeFacetFromImmutableMember not-persistable}.
  */
 public class PropertySetterFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
@@ -79,7 +79,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             });
 
         } else {
-            addFacet(new SnapshotExcludeFacetInferred(property));
+            addFacet(new SnapshotExcludeFacetFromImmutableMember(property));
 
             // previously we also added the DisabledFacetAlwaysEverywhere facet here.
             // however, the PropertyModifyFacetFactory (which comes next) might install a PropertySetterFacet instead.

@@ -76,9 +76,12 @@ class MetaModelRegressionTest {
 
         val url = _Resources.getResourceUrl(getClass(), "/metamodel.xml.zip");
         if(url==null) {
-            //createReferenceMetaModelFile(new File("/???/metamodel.xml.zip"));
+            //createReferenceMetaModelFile(new File("/<path to resources>/metamodel.xml.zip"));
             _Exceptions.throwNotImplemented();
         }
+
+        //for maintenance
+        //createReferenceMetaModelFile(new File("d:/tmp/_scratch/metamodel.xml.zip"));
     }
 
     @Test
@@ -88,7 +91,7 @@ class MetaModelRegressionTest {
                 factoryService.mixin(MetaModelServiceMenu.downloadMetaModelDiff.class, metaModelServiceMenu);
         val metamodelExport =
                 downloadMetaModelDiff.act("metamodel.xml", namespaces(), true,
-                        currentMetaModelAsZippedBlob())
+                        referenceMetaModelAsZippedBlob())
                 .unZip(CommonMimeType.XML)
                 .toClob(StandardCharsets.UTF_8);
 
@@ -101,7 +104,6 @@ class MetaModelRegressionTest {
             System.err.printf("%s%n", diff);
             fail("Reference meta-model and current do differ.");
         }
-
     }
 
     // -- HELPER

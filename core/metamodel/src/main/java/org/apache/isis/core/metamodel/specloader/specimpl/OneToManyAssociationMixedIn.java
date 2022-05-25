@@ -28,12 +28,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromActionReturn;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -108,9 +108,9 @@ implements MixedInMember {
         //
         // ensure the mixedIn collection cannot be modified, and derive its TypeOfFaccet
         //
-        FacetUtil.addFacet(new SnapshotExcludeFacetAbstract(this) {});
+        FacetUtil.addFacet(new SnapshotExcludeFacetFromImmutableMember(this));
         FacetUtil.addFacet(disabledFacet());
-        FacetUtil.addFacet(new TypeOfFacetAbstract(getElementType().getCorrespondingClass(), this) {});
+        FacetUtil.addFacet(new TypeOfFacetFromActionReturn(getElementType().getCorrespondingClass(), this));
 
         // adjust name if necessary
         val isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)

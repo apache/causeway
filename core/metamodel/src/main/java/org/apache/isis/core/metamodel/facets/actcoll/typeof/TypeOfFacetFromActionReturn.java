@@ -16,15 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.properties.update;
+package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacetAbstract;
 
-public class SnapshotExcludeFacetInferred extends SnapshotExcludeFacetAbstract {
+public class TypeOfFacetFromActionReturn
+extends TypeOfFacetAbstract {
 
-    public SnapshotExcludeFacetInferred(final FacetHolder holder) {
-        super(holder);
+    public TypeOfFacetFromActionReturn(final Class<?> type, final FacetHolder holder) {
+        super(type, holder);
     }
 
 }
