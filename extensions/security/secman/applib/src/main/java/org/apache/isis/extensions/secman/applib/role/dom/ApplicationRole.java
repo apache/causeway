@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -53,9 +54,8 @@ import lombok.experimental.UtilityClass;
 /**
  * @since 2.0 {@index}
  */
-@DomainObject(
-        logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationRole.LOGICAL_TYPE_NAME)
+@DomainObject
 @DomainObjectLayout(
         titleUiEvent = ApplicationRole.TitleUiEvent.class,
         iconUiEvent = ApplicationRole.IconUiEvent.class,

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.permission.dom;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -101,9 +102,8 @@ import lombok.Setter;
 @Version(
         strategy = VersionStrategy.VERSION_NUMBER,
         column = "version")
-@DomainObject(
-        logicalTypeName = ApplicationPermission.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationPermission.LOGICAL_TYPE_NAME)
+@DomainObject()
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
 )

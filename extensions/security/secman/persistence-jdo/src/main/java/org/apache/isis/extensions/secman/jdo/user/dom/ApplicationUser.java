@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.jdo.user.dom;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.Element;
@@ -91,8 +92,8 @@ import lombok.Setter;
 @Version(
         strategy = VersionStrategy.VERSION_NUMBER,
         column = "version")
+@Named(ApplicationUser.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = ApplicationUser.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationUserRepository.class,
         autoCompleteMethod = "findMatching"
 )

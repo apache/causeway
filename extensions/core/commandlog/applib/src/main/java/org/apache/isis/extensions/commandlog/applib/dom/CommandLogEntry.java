@@ -31,6 +31,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import javax.annotation.Priority;
+import javax.inject.Named;
 import javax.validation.constraints.Digits;
 
 import org.springframework.stereotype.Service;
@@ -82,8 +83,8 @@ import lombok.experimental.UtilityClass;
  * Note that this class doesn't subclass from {@link Command} ({@link Command}
  * is not an interface).
  */
+@Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = CommandLogEntry.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
 )
 @DomainObjectLayout(

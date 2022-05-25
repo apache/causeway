@@ -3,6 +3,7 @@ package org.apache.isis.sessionlog.jdo.dom;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -113,8 +114,8 @@ import lombok.Setter;
                       + " ORDER BY loginTimestamp DESC "
                       + " RANGE 0,10")
 })
+@Named(SessionLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = SessionLogEntry.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
 )
 public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.SessionLogEntry {

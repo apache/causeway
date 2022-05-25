@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.jdo.role.dom;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -71,9 +72,9 @@ import lombok.Setter;
         strategy = InheritanceStrategy.NEW_TABLE)
 @DatastoreIdentity(
         strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@Named(ApplicationRole.LOGICAL_TYPE_NAME)
 @DomainObject(
         bounding = Bounding.BOUNDED,
-        logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationRoleRepository.class,
         autoCompleteMethod = "findMatching"
         )

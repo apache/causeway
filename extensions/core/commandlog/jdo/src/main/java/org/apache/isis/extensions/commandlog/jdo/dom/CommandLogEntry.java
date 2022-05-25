@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.commandlog.jdo.dom;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Index;
@@ -189,8 +190,8 @@ import lombok.Setter;
                   + " ORDER BY this.timestamp ASC "
                   + " RANGE 0,10"),    // same as batch size
 })
+@Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = CommandLogEntry.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
 )
 //@Log4j2

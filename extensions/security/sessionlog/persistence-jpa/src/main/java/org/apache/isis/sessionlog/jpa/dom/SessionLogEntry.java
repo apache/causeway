@@ -3,6 +3,7 @@ package org.apache.isis.sessionlog.jpa.dom;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -117,12 +118,11 @@ import lombok.Setter;
                     /*+ " LIMIT 0,10"*/)  // instead use withRange on the Query.named(...) object in the repo.
 })
 @EntityListeners(IsisEntityListener.class)
+@Named(SessionLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = SessionLogEntry.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
 )
 public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.SessionLogEntry {
-
 
     public SessionLogEntry(
             final UUID sessionGuid,

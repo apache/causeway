@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.commandlog.jpa.dom;
 
+import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -181,8 +182,8 @@ import lombok.Setter;
                   + " WHERE cl.replayState = 'PENDING' "
                   + " ORDER BY cl.timestamp ASC"), // programmatic LIMIT 10
 })
+@Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = CommandLogEntry.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
 )
 @EntityListeners(IsisEntityListener.class)

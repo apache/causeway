@@ -39,15 +39,15 @@ import lombok.RequiredArgsConstructor;
  */
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
-    domainEvent = CommandLog_exclude.ActionDomainEvent.class
+    domainEvent = CommandLogEntry_exclude.ActionDomainEvent.class
 )
 @ActionLayout(associateWith = "executeIn", sequence = "2")
 @RequiredArgsConstructor
 //@Log4j2
-public class CommandLog_exclude {
+public class CommandLogEntry_exclude {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLog_exclude> { }
+            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLogEntry_exclude> { }
 
     final CommandLogEntry commandLogEntry;
 

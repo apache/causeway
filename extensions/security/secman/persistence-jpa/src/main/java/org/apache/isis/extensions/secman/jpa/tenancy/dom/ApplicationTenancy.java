@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -71,8 +72,8 @@ import lombok.Setter;
                   + " WHERE t.name LIKE :regex "
                   + "    OR t.path LIKE :regex"),
 })
+@Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = ApplicationTenancy.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteMethod = "findMatching"
         )

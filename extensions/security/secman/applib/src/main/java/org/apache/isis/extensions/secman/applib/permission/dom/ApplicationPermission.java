@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -84,9 +85,8 @@ import lombok.experimental.UtilityClass;
  *
  * @since 2.0 {@index}
  */
-@DomainObject(
-        logicalTypeName = ApplicationPermission.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationPermission.LOGICAL_TYPE_NAME)
+@DomainObject
 @DomainObjectLayout(
         titleUiEvent = ApplicationPermission.TitleUiEvent.class,
         iconUiEvent = ApplicationPermission.IconUiEvent.class,

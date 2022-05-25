@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -34,8 +35,8 @@ import org.apache.isis.sessionlog.applib.IsisModuleExtSessionLogApplib;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
+@Named(SessionLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = SessionLogEntry.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
 )
 @DomainObjectLayout(

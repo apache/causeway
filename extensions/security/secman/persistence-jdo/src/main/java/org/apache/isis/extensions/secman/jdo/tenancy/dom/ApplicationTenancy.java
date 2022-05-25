@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.jdo.tenancy.dom;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -80,8 +81,8 @@ import lombok.Setter;
 @Version(
         strategy = VersionStrategy.VERSION_NUMBER,
         column = "version")
+@Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = ApplicationTenancy.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteMethod = "findMatching"
 )
