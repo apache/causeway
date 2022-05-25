@@ -84,7 +84,7 @@ public class CommandReplayOnPrimaryService {
 
         /**
          * These actions should be called with HTTP Accept Header set to:
-         * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"</code>
+         * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v2.CommandsDto"</code>
          *
          * @param interactionId - to search from.  This transactionId will <i>not</i> be included in the response.
          * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
@@ -114,7 +114,7 @@ public class CommandReplayOnPrimaryService {
 
         /**
          * These actions should be called with HTTP Accept Header set to:
-         * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"</code>
+         * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v2.CommandsDto"</code>
          *
          * @param interactionId - to search from.  This transactionId will <i>not</i> be included in the response.
          * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
@@ -158,7 +158,7 @@ public class CommandReplayOnPrimaryService {
 
         /**
          * This action should be called with HTTP Accept Header set to:
-         * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"</code>
+         * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v2.CommandDto"</code>
          *
          * @param interactionId - to download.
          * @throws NotFoundException - if the command with specified transaction cannot be found.

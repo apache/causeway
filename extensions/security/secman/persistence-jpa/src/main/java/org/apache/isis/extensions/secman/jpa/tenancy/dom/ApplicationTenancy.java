@@ -112,8 +112,12 @@ public class ApplicationTenancy
 
     @OneToMany(mappedBy = Children.MAPPED_BY)
     @Children
-    @Getter
     private Set<ApplicationTenancy> children = new TreeSet<>();
+
+    @Override
+    public Set<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> getChildren() {
+        return _Casts.uncheckedCast(children);
+    }
     public void setChildren(final Set<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
         this.children = _Casts.uncheckedCast(children);
     }

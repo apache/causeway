@@ -42,8 +42,10 @@ import javax.persistence.Version;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
@@ -199,8 +201,10 @@ public class ApplicationUser
             joinColumns = {@JoinColumn(name = Roles.Persistence.JOIN_COLUMN)},
             inverseJoinColumns = {@JoinColumn(name = Roles.Persistence.INVERSE_JOIN_COLUMN)})
     @Roles
-    @Getter
-    private Set<org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole> roles = new TreeSet<>();
+    private Set<ApplicationRole> roles = new TreeSet<>();
 
-
+    @Override
+    public Set<org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole> getRoles() {
+        return _Casts.uncheckedCast(roles);
+    }
 }

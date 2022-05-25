@@ -41,8 +41,10 @@ import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -198,7 +200,9 @@ public class ApplicationUser
     @Join(column = Roles.Persistence.JOIN_COLUMN)
     @Element(column = Roles.Persistence.INVERSE_JOIN_COLUMN)
     @Roles
-    @Getter
     private SortedSet<org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole> roles = new TreeSet<>();
-
+    @Override
+    public SortedSet<org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole> getRoles() {
+        return _Casts.uncheckedCast(roles);
+    }
 }

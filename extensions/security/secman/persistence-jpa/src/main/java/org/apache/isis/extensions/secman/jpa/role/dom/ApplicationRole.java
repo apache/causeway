@@ -41,7 +41,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq;
-import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
@@ -103,10 +103,15 @@ public class ApplicationRole
 
     @ManyToMany(mappedBy = Users.MAPPED_BY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Users
-    @Getter
-    private Set<org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser> users = new TreeSet<>();
+    private Set<ApplicationUser> users = new TreeSet<>();
+
+    @Override
+    public Set<org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser> getUsers() {
+        return _Casts.uncheckedCast(users);
+    }
+
     // necessary for integration tests
-    public void addToUsers(final org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser applicationUser) {
+    public void addToUsers(final ApplicationUser applicationUser) {
         getUsers().add(applicationUser);
     }
 
