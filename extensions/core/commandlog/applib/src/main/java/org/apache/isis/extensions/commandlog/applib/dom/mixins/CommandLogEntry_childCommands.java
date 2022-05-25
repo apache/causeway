@@ -16,47 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandreplay.secondary.mixins;
+package org.apache.isis.extensions.commandlog.applib.dom.mixins;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
-import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
-import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * @since 2.0 {@index}
- */
+
 @Collection(
-    domainEvent = CommandLog_replayQueue.CollectionDomainEvent.class
+    domainEvent = CommandLogEntry_childCommands.CollectionDomainEvent.class
 )
 @CollectionLayout(
     defaultView = "table",
     sequence = "100.100"
 )
 @RequiredArgsConstructor
-public class CommandLog_replayQueue {
+public class CommandLogEntry_childCommands {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandReplaySecondary.CollectionDomainEvent<CommandLog_replayQueue, CommandLog> { }
+            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandLogEntry_childCommands, CommandLogEntry> { }
 
-    final CommandLog commandLog;
+    private final CommandLogEntry commandLogEntry;
 
-    public List<CommandLog> coll() {
-        return commandLogRepository.findReplayedOnSecondary();
-    }
-    public boolean hideColl() {
-        return !secondaryConfig.isConfigured();
+    @MemberSupport
+    public List<CommandLogEntry> coll() {
+        return commandLogEntryRepository.findByParent(commandLogEntry);
     }
 
-    @Inject SecondaryConfig secondaryConfig;
-    @Inject ICommandLogRepository<CommandLog> commandLogRepository;
+    @javax.inject.Inject
+    private CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
 
 }

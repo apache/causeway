@@ -24,8 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,6 +42,6 @@ public class ExposePersistedCommands_commands {
         return commandModelRepository.findCompleted();
     }
 
-    @Inject ICommandLogRepository<? extends ICommandLog> commandModelRepository;
+    @Inject CommandLogEntryRepository<? extends ICommandLog> commandModelRepository;
 }
 //end::class[]

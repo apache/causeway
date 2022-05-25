@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.mixins;
+package org.apache.isis.extensions.commandlog.applib.contributions;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -28,10 +29,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 
 /**
@@ -54,7 +56,7 @@ public class HasInteractionId_command {
 
     private final HasInteractionId hasInteractionId;
 
-    public CommandJdo act() {
+    public CommandLogEntry act() {
         return findCommand();
     }
     /**
@@ -62,18 +64,18 @@ public class HasInteractionId_command {
      * {@link Command#getParent() parent} property.
      */
     public boolean hideAct() {
-        return (hasInteractionId instanceof CommandJdo);
+        return (hasInteractionId instanceof CommandLogEntry);
     }
     public String disableAct() {
         return findCommand() == null ? "No command found for unique Id": null;
     }
 
-    private CommandJdo findCommand() {
-        final UUID transactionId = hasInteractionId.getInteractionId();
-        return commandServiceRepository
+    private CommandLogEntry findCommand() {
+        val transactionId = hasInteractionId.getInteractionId();
+        return commandLogEntryRepository
                 .findByInteractionId(transactionId)
                 .orElse(null);
     }
 
-    @Inject CommandJdoRepository commandServiceRepository;
+    @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
 }

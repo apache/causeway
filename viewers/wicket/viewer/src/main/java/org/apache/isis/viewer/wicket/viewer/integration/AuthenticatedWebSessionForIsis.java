@@ -63,13 +63,24 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     @Getter protected transient IsisAppCommonContext commonContext;
 
+    @Getter
     private BreadcrumbModel breadcrumbModel;
+    @Getter
     private BookmarkedPagesModel bookmarkedPagesModel;
 
     /**
      * As populated in {@link #signIn(String, String)}.
      */
     private InteractionContext authentication;
+
+    private String cachedSessionId;
+
+    public String getCachedSessionId() {
+        if (cachedSessionId == null && Session.exists()) {
+            cachedSessionId = getId();
+        }
+        return cachedSessionId;
+    }
 
     public AuthenticatedWebSessionForIsis(final Request request) {
         super(request);
@@ -79,7 +90,6 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         this.commonContext = commonContext;
         bookmarkedPagesModel = new BookmarkedPagesModel(commonContext);
         breadcrumbModel = new BreadcrumbModel(commonContext);
-
     }
 
     @Override
@@ -204,19 +214,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         super.detach();
     }
 
-    // /////////////////////////////////////////////////
-    // Breadcrumbs and Bookmarks support
-    // /////////////////////////////////////////////////
 
-    @Override
-    public BreadcrumbModel getBreadcrumbModel() {
-        return breadcrumbModel;
-    }
-
-    @Override
-    public BookmarkedPagesModel getBookmarkedPagesModel() {
-        return bookmarkedPagesModel;
-    }
 
     protected AuthenticationManager getAuthenticationManager() {
         return commonContext.getAuthenticationManager();
@@ -235,10 +233,9 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
             val now = virtualClock().nowAsJavaUtilDate();
 
-            // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
-            int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
+            String sessionId = AuthenticatedWebSessionForIsis.this.getCachedSessionId();
             sessionLoggingServices.forEach(sessionLoggingService ->
-                sessionLoggingService.log(type, username, now, causedBy, Integer.toString(sessionHashCode))
+                sessionLoggingService.log(type, username, now, causedBy, sessionId)
             );
         };
 

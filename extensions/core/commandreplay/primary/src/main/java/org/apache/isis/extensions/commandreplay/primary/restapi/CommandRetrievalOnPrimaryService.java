@@ -37,9 +37,9 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
-import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository.NotFoundException;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository.NotFoundException;
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
@@ -59,7 +59,7 @@ public class CommandRetrievalOnPrimaryService {
 
     public static class FindCommandsOnPrimaryFromDomainEvent extends ActionDomainEvent { }
 
-    @Inject ICommandLogRepository<? extends CommandLog> commandLogRepository;
+    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
 
     /**
      * TODO: outdated info ...
@@ -84,9 +84,9 @@ public class CommandRetrievalOnPrimaryService {
             @ParameterLayout(named="Batch size")
             final Integer batchSize) throws NotFoundException {
 
-        return commandLogRepository.findCommandsOnPrimaryElseFail(interactionId, batchSize)
+        return commandLogEntryRepository.findCommandsOnPrimaryElseFail(interactionId, batchSize)
                 .stream()
-                .map(CommandLog::getCommandDto)
+                .map(CommandLogEntry::getCommandDto)
                 .collect(Collectors.toList());
     }
     @MemberSupport public Integer default1FindCommandsOnPrimaryAsDto() {

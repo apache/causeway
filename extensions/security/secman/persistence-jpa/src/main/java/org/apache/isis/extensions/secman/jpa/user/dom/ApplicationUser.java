@@ -18,7 +18,6 @@
  */
 package org.apache.isis.extensions.secman.jpa.user.dom;
 
-import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -43,8 +42,6 @@ import javax.persistence.Version;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
@@ -98,222 +95,112 @@ import lombok.Setter;
 public class ApplicationUser
     extends org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser {
 
-
     @Id
     @GeneratedValue
     private Long id;
+
 
     @Version
     private Long version;
 
 
-    // -- USERNAME
-
-    @Column(nullable = false, length = Username.MAX_LENGTH)
+    @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
+    @Username
+    @Getter @Setter
     private String username;
 
-    @Username
-    @Override
-    public String getUsername() {
-        return username;
-    }
-    @Override
-    public void setUsername(final String username) { this.username = username; }
 
-
-    // -- FAMILY NAME
-
-    @Column(nullable = true, length = FamilyName.MAX_LENGTH)
+    @Column(nullable = FamilyName.NULLABLE, length = FamilyName.MAX_LENGTH)
+    @FamilyName
+    @Getter @Setter
     private String familyName;
 
-    @FamilyName
-    @Override
-    public String getFamilyName() {
-        return familyName;
-    }
-    @Override
-    public void setFamilyName(final String familyName) {
-        this.familyName = familyName;
-    }
 
-
-    // -- GIVEN NAME
-
-    @Column(nullable = true, length = GivenName.MAX_LENGTH)
+    @Column(nullable = GivenName.NULLABLE, length = GivenName.MAX_LENGTH)
+    @GivenName
+    @Getter @Setter
     private String givenName;
 
-    @GivenName
-    @Override
-    public String getGivenName() {
-        return givenName;
-    }
-    @Override
-    public void setGivenName(final String givenName) {
-        this.givenName = givenName;
-    }
 
-
-    // -- KNOWN AS
-
-    @Column(nullable = true, length = KnownAs.MAX_LENGTH)
+    @Column(nullable = KnownAs.NULLABLE, length = KnownAs.MAX_LENGTH)
+    @KnownAs
+    @Getter @Setter
     private String knownAs;
 
-    @KnownAs
-    @Override
-    public String getKnownAs() {
-        return knownAs;
-    }
-    @Override
-    public void setKnownAs(final String knownAs) {
-        this.knownAs = knownAs;
-    }
 
-
-    // -- EMAIL ADDRESS
-
-    @Column(nullable = true, length = EmailAddress.MAX_LENGTH)
+    @Column(nullable = EmailAddress.NULLABLE, length = EmailAddress.MAX_LENGTH)
+    @EmailAddress
+    @Getter @Setter
     private String emailAddress;
 
-    @EmailAddress
-    @Override
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-    @Override
-    public void setEmailAddress(final String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
 
-
-    // -- PHONE NUMBER
-
-    @Column(nullable = true, length = PhoneNumber.MAX_LENGTH)
+    @Column(nullable = PhoneNumber.NULLABLE, length = PhoneNumber.MAX_LENGTH)
+    @PhoneNumber
+    @Getter @Setter
     private String phoneNumber;
 
-    @PhoneNumber
-    @Override
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-    @Override
-    public void setPhoneNumber(final String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 
-
-    // -- FAX NUMBER
-
-    @Column(nullable = true, length= FaxNumber.MAX_LENGTH)
+    @Column(nullable = FaxNumber.NULLABLE, length= FaxNumber.MAX_LENGTH)
+    @FaxNumber
+    @Getter @Setter
     private String faxNumber;
 
-    @FaxNumber
-    @Override
-    public String getFaxNumber() {
-        return faxNumber;
-    }
-    @Override
-    public void setFaxNumber(final String faxNumber) {
-        this.faxNumber = faxNumber;
-    }
 
-    // -- REGIONAL SETTINGS
-
-    @UserLocale
-    @Column(nullable = true)
+    @Column(nullable = Language.NULLABLE)
+    @Language
     @Getter @Setter
-    private Locale language;
+    private java.util.Locale language;
 
-    @UserLocale
-    @Column(nullable = true)
+    @Column(nullable = NumberFormat.NULLABLE)
+    @NumberFormat
     @Getter @Setter
-    private Locale numberFormat;
+    private java.util.Locale numberFormat;
 
-    @UserLocale
-    @Column(nullable = true)
+
+    @Column(nullable = TimeFormat.NULLABLE)
+    @TimeFormat
     @Getter @Setter
-    private Locale timeFormat;
+    private java.util.Locale timeFormat;
 
-    // -- AT PATH
 
-    @Column(nullable = true)
+    @Column(nullable = AtPath.NULLABLE, length = AtPath.MAX_LENGTH)
+    @AtPath
+    @Getter @Setter
     private String atPath;
 
-    @AtPath
-    @Override
-    public String getAtPath() {
-        return atPath;
-    }
-    @Override
-    public void setAtPath(final String atPath) {
-        this.atPath = atPath;
-    }
 
-
-    // -- ACCOUNT TYPE
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType;
-
+    @Column(nullable = AccountType.NULLABLE) @Enumerated(EnumType.STRING)
     @AccountType
-    @Override
-    public org.apache.isis.extensions.secman.applib.user.dom.AccountType getAccountType() {
-        return accountType;
-    }
+    @Getter
+    private org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType;
     @Override
     public void setAccountType(final org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType) {
         this.accountType = accountType;
     }
 
 
-    // -- STATUS
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Column(nullable = Status.NULLABLE) @Enumerated(EnumType.STRING)
+    @Status
+    @Getter @Setter
     private ApplicationUserStatus status;
 
-    @Status
-    @Override
-    public ApplicationUserStatus getStatus() {
-        return status;
-    }
-    @Override
-    public void setStatus(final ApplicationUserStatus status) {
-        this.status = status;
-    }
 
-
-    // -- ENCRYPTED PASSWORD
-
-    @Column(nullable = true)
+    @Column(nullable = EncryptedPassword.NULLABLE, length = EncryptedPassword.MAX_LENGTH)
+    @EncryptedPassword
+    @Getter @Setter
     private String encryptedPassword;
 
-    @EncryptedPassword
-    @Override
-    public String getEncryptedPassword() {
-        return encryptedPassword;
-    }
-    @Override
-    public void setEncryptedPassword(final String encryptedPassword) {
-        this.encryptedPassword = encryptedPassword;
-    }
 
-
-    // ROLES
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
-            schema = "isisExtensionsSecman",
-            name = "ApplicationUserRoles",
-            joinColumns = {@JoinColumn(name = "userId")},
-            inverseJoinColumns = {@JoinColumn(name = "roleId")})
-    private Set<org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole> roles = new TreeSet<>();
-
+            schema = ApplicationUser.SCHEMA,
+            name = Roles.Persistence.TABLE,
+            joinColumns = {@JoinColumn(name = Roles.Persistence.JOIN_COLUMN)},
+            inverseJoinColumns = {@JoinColumn(name = Roles.Persistence.INVERSE_JOIN_COLUMN)})
     @Roles
-    @Override
-    public Set<ApplicationRole> getRoles() {
-        return _Casts.uncheckedCast(roles);
-    }
+    @Getter
+    private Set<org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole> roles = new TreeSet<>();
 
 
 }

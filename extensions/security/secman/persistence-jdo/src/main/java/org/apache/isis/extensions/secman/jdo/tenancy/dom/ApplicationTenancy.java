@@ -42,6 +42,10 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq;
+import org.apache.isis.extensions.secman.applib.tenancy.dom.HasAtPath;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 @PersistenceCapable(
@@ -90,66 +94,33 @@ public class ApplicationTenancy
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy";
 
 
-    // -- NAME
-
-    @Column(allowsNull = "false", length = Name.MAX_LENGTH)
+    @Column(allowsNull = Name.ALLOWS_NULL, length = Name.MAX_LENGTH)
+    @Name
+    @Getter @Setter
     private String name;
 
-    @Name
-    @Override
-    public String getName() {
-        return name;
-    }
-    @Override
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-
-    // -- PATH
 
     @PrimaryKey
-    @Column(allowsNull = "false", length = Path.MAX_LENGTH)
+    @Column(allowsNull = Path.ALLOWS_NULL, length = Path.MAX_LENGTH)
+    @Path
+    @Getter @Setter
     private String path;
 
-    @Path
-    @Override
-    public String getPath() {
-        return path;
-    }
-    @Override
-    public void setPath(final String path) {
-        this.path = path;
-    }
 
-
-    // -- PARENT
-
-
-    @Column(name = "parentPath", allowsNull = "true")
-    private ApplicationTenancy parent;
-
+    @Column(name = Parent.NAME, allowsNull = Parent.ALLOWS_NULL)
     @Parent
-    @Override
-    public org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy getParent() {
-        return parent;
-    }
+    @Getter
+    private ApplicationTenancy parent;
     @Override
     public void setParent(org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
         this.parent = _Casts.uncheckedCast(parent);
     }
 
 
-    // -- CHILDREN
-
-    @Persistent(mappedBy = "parent")
-    private SortedSet<ApplicationTenancy> children = new TreeSet<>();
-
+    @Persistent(mappedBy = Children.MAPPED_BY)
     @Children
-    @Override
-    public SortedSet<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> getChildren() {
-        return _Casts.uncheckedCast(children);
-    }
+    @Getter
+    private SortedSet<ApplicationTenancy> children = new TreeSet<>();
     public void setChildren(final SortedSet<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
         this.children = _Casts.uncheckedCast(children);
     }

@@ -25,10 +25,9 @@ import java.lang.annotation.Target;
 import java.util.Collection;
 import java.util.Comparator;
 
-import javax.inject.Named;
-
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Parameter;
@@ -42,14 +41,23 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 
 import lombok.experimental.UtilityClass;
 
 /**
  * @since 2.0 {@index}
  */
-@Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
-@DomainObject
+@DomainObject(
+        logicalTypeName = ApplicationTenancy.LOGICAL_TYPE_NAME
+)
+@DomainObjectLayout(
+        titleUiEvent = ApplicationTenancy.TitleUiEvent.class,
+        iconUiEvent = ApplicationTenancy.IconUiEvent.class,
+        cssClassUiEvent = ApplicationTenancy.CssClassUiEvent.class,
+        layoutUiEvent = ApplicationTenancy.LayoutUiEvent.class
+)
 public abstract class ApplicationTenancy implements Comparable<ApplicationTenancy> {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancy";
@@ -64,7 +72,12 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     }
 
 
-    // -- DOMAIN EVENTS
+    // -- UI & DOMAIN EVENTS
+
+    public static class TitleUiEvent extends IsisModuleExtSecmanApplib.TitleUiEvent<ApplicationTenancy> { }
+    public static class IconUiEvent extends IsisModuleExtSecmanApplib.IconUiEvent<ApplicationTenancy> { }
+    public static class CssClassUiEvent extends IsisModuleExtSecmanApplib.CssClassUiEvent<ApplicationTenancy> { }
+    public static class LayoutUiEvent extends IsisModuleExtSecmanApplib.LayoutUiEvent<ApplicationTenancy> { }
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationTenancy, T> {}
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationTenancy, T> {}
@@ -100,12 +113,12 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Name {
+        class DomainEvent extends PropertyDomainEvent<String> {}
         int MAX_LENGTH = 120;
         int TYPICAL_LENGTH = 20;
-
-        class DomainEvent extends PropertyDomainEvent<String> {}
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
-
     @Name
     public abstract String getName();
     public abstract void setName(String name);
@@ -114,20 +127,20 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     // -- PATH
 
     @Property(
-            domainEvent = Parent.DomainEvent.class,
-            editing = Editing.DISABLED
+            domainEvent = Parent.DomainEvent.class
     )
     @PropertyLayout(
             fieldSetId = "identity"
     )
+    @HasAtPath.AtPath
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Path {
-        int MAX_LENGTH = 255;
-
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = HasAtPath.AtPath.MAX_LENGTH;
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
-
     @Path
     public abstract String getPath();
     public abstract void setPath(String path);
@@ -148,16 +161,20 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Parent {
         class DomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
+        String NAME = "parentPath";
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
-
     @Parent
     public abstract ApplicationTenancy getParent();
     public abstract void setParent(ApplicationTenancy parent);
+
 
     @Programmatic
     public boolean isRoot() {
         return getParent()==null;
     }
+
 
     // -- CHILDREN
 
@@ -171,8 +188,8 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Children {
         class DomainEvent extends CollectionDomainEvent<ApplicationTenancy> {}
+        String MAPPED_BY = "parent";
     }
-
     @Children
     public abstract Collection<ApplicationTenancy> getChildren();
 

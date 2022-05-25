@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.mixins;
+package org.apache.isis.extensions.commandlog.applib.contributions;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,8 +33,8 @@ import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -65,9 +65,9 @@ public class Object_recentCommands {
 
     private final Object domainObject; // mixee
 
-    @MemberSupport public List<CommandJdo> act() {
+    @MemberSupport public List<CommandLogEntry> act() {
         return bookmarkService.bookmarkFor(domainObject)
-        .map(commandServiceRepository::findRecentByTarget)
+        .map(commandLogEntryRepository::findRecentByTarget)
         .orElse(Collections.emptyList());
     }
 
@@ -79,7 +79,7 @@ public class Object_recentCommands {
         return (domainObject instanceof HasInteractionId);
     }
 
-    @Inject CommandJdoRepository commandServiceRepository;
+    @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
     @Inject BookmarkService bookmarkService;
 
 }

@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.isis.extensions.commandreplay.secondary.status.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.status.StatusException;
@@ -77,7 +77,7 @@ public class CommandFetcher {
      * @throws StatusException
      */
     public Can<CommandDto> fetchCommand(
-            final @Nullable ICommandLog previousHwmIfAny)
+            final @Nullable CommandLogEntry previousHwmIfAny)
             throws StatusException {
 
         log.debug("finding command on primary ...");
@@ -90,7 +90,7 @@ public class CommandFetcher {
      * @param previousHwmIfAny
      * @throws StatusException
      */
-    private Can<CommandDto> fetchCommands(final ICommandLog previousHwmIfAny)
+    private Can<CommandDto> fetchCommands(final CommandLogEntry previousHwmIfAny)
             throws StatusException {
 
         final UUID transactionId = previousHwmIfAny != null

@@ -42,6 +42,9 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
@@ -83,50 +86,24 @@ public class ApplicationRole
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole";
 
 
-    // -- NAME
-
-    @Column(allowsNull = "false", length = Name.MAX_LENGTH)
+    @Column(allowsNull = Name.ALLOWS_NULL, length = Name.MAX_LENGTH)
+    @Name
+    @Getter @Setter
     private String name;
 
-    @Name
-    @Override
-    public String getName() {
-        return name;
-    }
-    @Override
-    public void setName(final String name) {
-        this.name = name;
-    }
 
-
-    // -- DESCRIPTION
-
-    @Column(allowsNull = "true", length = Description.MAX_LENGTH)
+    @Column(allowsNull = Description.ALLOWS_NULL, length = Description.MAX_LENGTH)
+    @Description
+    @Getter @Setter
     private String description;
 
-    @Description
-    @Override
-    public String getDescription() {
-        return description;
-    }
-    @Override
-    public void setDescription(final String description) {
-        this.description = description;
-    }
 
-
-    // -- USERS
-
-    @Persistent(mappedBy = "roles")
-    private SortedSet<org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser> users = new TreeSet<>();
-
+    @Persistent(mappedBy = Users.MAPPED_BY)
     @Users
-    @Override
-    public SortedSet<ApplicationUser> getUsers() {
-        return _Casts.uncheckedCast(users);
-    }
+    @Getter
+    private SortedSet<org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser> users = new TreeSet<>();
     // necessary for integration tests
-    public void addToUsers(final ApplicationUser applicationUser) {
+    public void addToUsers(final org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser applicationUser) {
         getUsers().add(applicationUser);
     }
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.applib.command.mixins;
+package org.apache.isis.extensions.commandlog.applib.dom.mixins;
 
 import javax.inject.Inject;
 
@@ -27,27 +27,27 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
     semantics = SemanticsOf.SAFE,
-    domainEvent = CommandLog_openTargetObject.ActionDomainEvent.class
+    domainEvent = CommandLogEntry_openResultObject.ActionDomainEvent.class
 )
-@ActionLayout(named = "Open", associateWith = "target", sequence="1")
+@ActionLayout(named = "Open", associateWith = "result", sequence="1")
 @RequiredArgsConstructor
-public class CommandLog_openTargetObject {
+public class CommandLogEntry_openResultObject {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLog_openTargetObject> { }
+            extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLogEntry_openResultObject> { }
 
-    private final CommandLog commandLog;
+    private final CommandLogEntry commandLogEntry;
 
     @MemberSupport
     public Object act() {
-        val targetBookmark = bookmarkService.lookup(commandLog.getTarget()).orElse(null);
+        val targetBookmark = bookmarkService.lookup(commandLogEntry.getResult()).orElse(null);
         if(targetBookmark == null) {
             messageService.warnUser("Object not found - has it since been deleted?");
             return null;
@@ -55,7 +55,7 @@ public class CommandLog_openTargetObject {
         return targetBookmark;
     }
     @MemberSupport public boolean hideAct() {
-        return commandLog.getTarget() == null;
+        return commandLogEntry.getResult() == null;
     }
 
     @Inject BookmarkService bookmarkService;

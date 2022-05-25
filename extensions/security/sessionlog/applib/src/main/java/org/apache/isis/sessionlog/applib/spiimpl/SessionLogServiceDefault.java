@@ -24,7 +24,7 @@ import lombok.val;
  */
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class SessionLoggingServiceDefault implements SessionLogService {
+public class SessionLogServiceDefault implements SessionLogService {
 
     final SessionLogEntryRepository sessionLogEntryRepository;
     final ClockService clockService;
@@ -35,7 +35,6 @@ public class SessionLoggingServiceDefault implements SessionLogService {
         sessionLogEntryRepository.logoutAllSessions(timestamp);
     }
 
-    @Programmatic
     @Override
     public void log(final Type type, final String username, final Date date, final CausedBy causedBy, final String sessionId) {
         val timestamp = clockService.getClock().nowAsJavaSqlTimestamp();

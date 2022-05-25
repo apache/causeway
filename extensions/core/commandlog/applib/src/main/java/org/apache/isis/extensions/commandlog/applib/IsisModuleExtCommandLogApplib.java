@@ -18,13 +18,20 @@
  */
 package org.apache.isis.extensions.commandlog.applib;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import org.apache.isis.core.config.util.SpringProfileUtil;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
-public interface IsisModuleExtCommandLogApplib
-extends ModuleWithFixtures {
+@Configuration
+@Import({
+})
+public class IsisModuleExtCommandLogApplib
+implements ModuleWithFixtures {
 
     public static final String NAMESPACE = "isis.ext.commandLog";
+    public static final String SCHEMA = "isisExtCommandLog";
 
     public abstract static class TitleUiEvent<S>
         extends org.apache.isis.applib.events.ui.TitleUiEvent<S> { }

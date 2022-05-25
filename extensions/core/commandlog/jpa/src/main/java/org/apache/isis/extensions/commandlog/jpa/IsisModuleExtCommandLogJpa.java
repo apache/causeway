@@ -22,34 +22,38 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.subscriber.CommandSubscriberForCommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.ui.CommandLogServiceMenu;
-import org.apache.isis.extensions.commandlog.jpa.entities.CommandJpa;
-import org.apache.isis.extensions.commandlog.jpa.entities.CommandJpaRepository;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.app.CommandLogServiceMenu;
+import org.apache.isis.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
+import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntryRepository;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
+        // modules
+        IsisModuleExtCommandLogApplib.class,
+
         // @DomainService's
         CommandLogServiceMenu.class,
 
         // @Service's
-        CommandJpaRepository.class,
-        CommandLog.TableColumnOrderDefault.class,
+        CommandLogEntryRepository.class,
+        org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry.TableColumnOrderDefault.class,
         CommandSubscriberForCommandLog.class,
 
         // entities
-        CommandJpa.class
-
+        CommandLogEntry.class
 })
 @EntityScan(basePackageClasses = {
-        CommandJpa.class,
+        CommandLogEntry.class,
 })
 public class IsisModuleExtCommandLogJpa {
 
-    public static final String NAMESPACE = "isis.ext.commandLog";
+    public static final String NAMESPACE = IsisModuleExtCommandLogApplib.NAMESPACE;
+    public static final String SCHEMA = IsisModuleExtCommandLogApplib.SCHEMA;
+
 
 }

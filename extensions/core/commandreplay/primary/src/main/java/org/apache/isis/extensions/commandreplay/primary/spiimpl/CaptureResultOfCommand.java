@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.conmap.UserDataKeys;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
@@ -52,11 +52,11 @@ public class CaptureResultOfCommand implements CommandDtoProcessorService {
     @Override
     public CommandDto process(final Object domainObject, CommandDto commandDto) {
 
-        if (!(domainObject instanceof CommandLog)) {
+        if (!(domainObject instanceof CommandLogEntry)) {
             return commandDto;
         }
 
-        val commandLog = (CommandLog) domainObject;
+        val commandLog = (CommandLogEntry) domainObject;
         if(commandDto == null) {
             commandDto = commandLog.getCommandDto();
         }

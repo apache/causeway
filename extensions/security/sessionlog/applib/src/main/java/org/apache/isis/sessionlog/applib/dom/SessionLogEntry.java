@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
@@ -36,6 +37,12 @@ import lombok.experimental.UtilityClass;
         logicalTypeName = SessionLogEntry.LOGICAL_TYPE_NAME,
         editing = Editing.DISABLED
 )
+@DomainObjectLayout(
+        titleUiEvent = SessionLogEntry.TitleUiEvent.class,
+        iconUiEvent = SessionLogEntry.IconUiEvent.class,
+        cssClassUiEvent = SessionLogEntry.CssClassUiEvent.class,
+        layoutUiEvent = SessionLogEntry.LayoutUiEvent.class
+)
 public abstract class SessionLogEntry implements HasUsername, Comparable<SessionLogEntry> {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSessionLogApplib.NAMESPACE + ".SessionLogEntry";
@@ -58,6 +65,13 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         public static final String FIND_ACTIVE_SESSIONS = SessionLogEntry.LOGICAL_TYPE_NAME + ".findActiveSessions";
         public static final String FIND_RECENT_BY_USERNAME = SessionLogEntry.LOGICAL_TYPE_NAME + ".findRecentByUsername";
     }
+
+    // -- UI & DOMAIN EVENTS
+
+    public static class TitleUiEvent extends IsisModuleExtSessionLogApplib.TitleUiEvent<SessionLogEntry> { }
+    public static class IconUiEvent extends IsisModuleExtSessionLogApplib.IconUiEvent<SessionLogEntry> { }
+    public static class CssClassUiEvent extends IsisModuleExtSessionLogApplib.CssClassUiEvent<SessionLogEntry> { }
+    public static class LayoutUiEvent extends IsisModuleExtSessionLogApplib.LayoutUiEvent<SessionLogEntry> { }
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSessionLogApplib.PropertyDomainEvent<SessionLogEntry, T> { }
 
@@ -108,7 +122,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     @Property(
             domainEvent = SessionId.DomainEvent.class,
             editing = Editing.DISABLED,
-            maxLength = SessionId.MAX_LENGTH
+            maxLength = SessionId.MAX_LENGTH,
+            optionality = Optionality.MANDATORY
     )
     @PropertyLayout(
             fieldSetId="identity",
@@ -116,17 +131,16 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             sequence = "1"
     )
     @Parameter(
-            maxLength = SessionId.MAX_LENGTH
-    )
-    @ParameterLayout(
-            named = "Session Id"
+            maxLength = SessionId.MAX_LENGTH,
+            optionality = Optionality.MANDATORY
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface SessionId {
-        int MAX_LENGTH = 15;
-
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = 32; // to hold UUID.randomUuid().toString()
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
     @SessionId
     public abstract String getSessionId();
@@ -135,27 +149,21 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
 
     @Property(
-            domainEvent = Username.DomainEvent.class,
-            editing = Editing.DISABLED,
-            maxLength = Username.MAX_LENGTH
+            domainEvent = Username.DomainEvent.class
     )
     @PropertyLayout(
             fieldSetId="Identity",
             hidden = Where.PARENTED_TABLES,
             sequence = "2"
     )
-    @Parameter(
-            maxLength = Username.MAX_LENGTH
-    )
-    @ParameterLayout(
-            named = "Username"
-    )
+    @HasUsername.Username
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Username {
-        int MAX_LENGTH = 120;
-
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = HasUsername.Username.MAX_LENGTH;
+        boolean NULLABLE = HasUsername.Username.NULLABLE;
+        String ALLOWS_NULL = HasUsername.Username.ALLOWS_NULL;
     }
     @Username
     public abstract String getUsername();
@@ -165,12 +173,16 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
     @Property(
             domainEvent = LoginTimestamp.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            optionality = Optionality.MANDATORY
     )
     @PropertyLayout(
             fieldSetId="Identity",
             hidden = Where.PARENTED_TABLES,
             sequence = "3"
+    )
+    @Parameter(
+            optionality = Optionality.MANDATORY
     )
     @ParameterLayout(
             named = "Login timestamp"
@@ -179,6 +191,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     @Retention(RetentionPolicy.RUNTIME)
     public @interface LoginTimestamp {
         class DomainEvent extends PropertyDomainEvent<String> {}
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
     @LoginTimestamp
     public abstract Timestamp getLoginTimestamp();
@@ -207,6 +221,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     @Retention(RetentionPolicy.RUNTIME)
     public @interface LogoutTimestamp {
         class DomainEvent extends PropertyDomainEvent<String> {}
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
     @LogoutTimestamp
     public abstract Timestamp getLogoutTimestamp();
@@ -216,11 +232,15 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
     @Property(
             domainEvent = CausedBy.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            optionality = Optionality.MANDATORY
     )
     @PropertyLayout(
             fieldSetId="Details",
             sequence = "1"
+    )
+    @Parameter(
+            optionality = Optionality.MANDATORY
     )
     @ParameterLayout(
             named = "Caused by"
@@ -229,9 +249,9 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     @Retention(RetentionPolicy.RUNTIME)
     public @interface CausedBy {
         class DomainEvent extends PropertyDomainEvent<String> {}
-
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
-
     @CausedBy
     public abstract SessionLogService.CausedBy getCausedBy();
     public abstract void setCausedBy(SessionLogService.CausedBy causedBy);

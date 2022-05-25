@@ -15,11 +15,14 @@ import org.springframework.data.jpa.repository.Query;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.session.SessionLogService;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.sessionlog.applib.dom.SessionLogEntry.Nq;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(
@@ -102,7 +105,7 @@ import lombok.NoArgsConstructor;
                 name  = Nq.FIND_ACTIVE_SESSIONS,
                 query = "SELECT e"
                       + "  FROM SessionLogEntry e "
-                      + " WHERE e.logoutTimestamp == null "
+                      + " WHERE e.logoutTimestamp IS null "
                       + " ORDER BY e.loginTimestamp ASC"),
         @NamedQuery(
                 name  = Nq.FIND_RECENT_BY_USERNAME,
@@ -134,74 +137,34 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
 
 
     @Id
-    @Column(nullable = false, length=15)
+    @Column(nullable = SessionId.NULLABLE, length = SessionId.MAX_LENGTH)
+    @SessionId
+    @Getter @Setter
     private String sessionId;
 
-    @Override
-    @SessionId
-    public String getSessionId() {
-        return sessionId;
-    }
-    @Override
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
 
-
-
-    @Column(nullable = false, length = Username.MAX_LENGTH)
-    private String username;
-    @Override
+    @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
     @Username
-    public String getUsername() {
-        return username;
-    }
-    @Override
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    @Getter @Setter
+    private String username;
 
 
-
-    @Column(nullable = false)
-    private Timestamp loginTimestamp;
-    @Override
+    @Column(nullable = LoginTimestamp.NULLABLE)
     @LoginTimestamp
-    public Timestamp getLoginTimestamp() {
-        return loginTimestamp;
-    }
-    @Override
-    public void setLoginTimestamp(Timestamp loginTimestamp) {
-        this.loginTimestamp = loginTimestamp;
-    }
+    @Getter @Setter
+    private Timestamp loginTimestamp;
 
 
-
-    @Column(nullable = true)
-    private Timestamp logoutTimestamp;
-    @Override
+    @Column(nullable = LogoutTimestamp.NULLABLE)
     @LogoutTimestamp
-    public Timestamp getLogoutTimestamp() {
-        return logoutTimestamp;
-    }
-    @Override
-    public void setLogoutTimestamp(Timestamp logoutTimestamp) {
-        this.logoutTimestamp = logoutTimestamp;
-    }
+    @Getter @Setter
+    private Timestamp logoutTimestamp;
 
 
-
-    @Column(nullable = false)
-    private SessionLogService.CausedBy causedBy;
-    @Override
+    @Column(nullable = CausedBy.NULLABLE)
     @CausedBy
-    public SessionLogService.CausedBy getCausedBy() {
-        return causedBy;
-    }
-    @Override
-    public void setCausedBy(SessionLogService.CausedBy causedBy) {
-        this.causedBy = causedBy;
-    }
+    @Getter @Setter
+    private SessionLogService.CausedBy causedBy;
 
 
 }

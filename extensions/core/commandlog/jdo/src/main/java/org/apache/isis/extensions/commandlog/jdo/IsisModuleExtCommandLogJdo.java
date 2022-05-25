@@ -22,12 +22,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.ICommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.subscriber.CommandSubscriberForCommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.ui.CommandLogServiceMenu;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
+import org.apache.isis.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
+import org.apache.isis.extensions.commandlog.applib.app.CommandLogServiceMenu;
+import org.apache.isis.extensions.commandlog.jdo.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.jdo.dom.CommandLogEntryRepository;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
@@ -36,16 +35,19 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
  */
 @Configuration
 @Import({
+        // modules
+        IsisModuleExtCommandLogApplib.class,
+
         // @DomainService's
         CommandLogServiceMenu.class,
 
         // @Service's
-        CommandJdoRepository.class,
-        CommandLog.TableColumnOrderDefault.class,
+        CommandLogEntryRepository.class,
+        org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry.TableColumnOrderDefault.class,
         CommandSubscriberForCommandLog.class,
 
         // entities
-        CommandJdo.class
+        CommandLogEntry.class
 })
 @ComponentScan(
         basePackageClasses= {
@@ -53,17 +55,18 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
         })
 public class IsisModuleExtCommandLogJdo {
 
-    public static final String NAMESPACE = "isis.ext.commandLog";
+    public static final String NAMESPACE = IsisModuleExtCommandLogApplib.NAMESPACE;
+    public static final String SCHEMA = IsisModuleExtCommandLogApplib.SCHEMA;
 
     /**
      * For tests that need to delete the command table first.
-     * Should be run in the @Before of the test.
+     * Should be run in the @BeforeEach of the test.
      */
     public FixtureScript getTeardownFixtureWillDelete() {
         return new TeardownFixtureJdoAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
-                deleteFrom(ICommandLog.class);
+                deleteFrom(CommandLogEntry.class);
             }
         };
     }

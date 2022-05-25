@@ -23,16 +23,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ObjectSupport;
@@ -69,8 +68,15 @@ import lombok.experimental.UtilityClass;
 /**
  * @since 2.0 {@index}
  */
-@Named(ApplicationUser.LOGICAL_TYPE_NAME)
-@DomainObject
+@DomainObject(
+        logicalTypeName = ApplicationUser.LOGICAL_TYPE_NAME
+)
+@DomainObjectLayout(
+        titleUiEvent = ApplicationUser.TitleUiEvent.class,
+        iconUiEvent = ApplicationUser.IconUiEvent.class,
+        cssClassUiEvent = ApplicationUser.CssClassUiEvent.class,
+        layoutUiEvent = ApplicationUser.LayoutUiEvent.class
+)
 public abstract class ApplicationUser
         implements HasUsername, HasAtPath, Comparable<ApplicationUser> {
 
@@ -85,6 +91,16 @@ public abstract class ApplicationUser
         public static final String FIND = ApplicationUser.LOGICAL_TYPE_NAME + ".find";
         public static final String FIND_BY_ATPATH = ApplicationUser.LOGICAL_TYPE_NAME + ".findByAtPath";
     }
+
+    // -- UI & DOMAIN EVENTS
+
+    public static class TitleUiEvent extends IsisModuleExtSecmanApplib.TitleUiEvent<ApplicationUser> { }
+    public static class IconUiEvent extends IsisModuleExtSecmanApplib.IconUiEvent<ApplicationUser> { }
+    public static class CssClassUiEvent extends IsisModuleExtSecmanApplib.CssClassUiEvent<ApplicationUser> { }
+    public static class LayoutUiEvent extends IsisModuleExtSecmanApplib.LayoutUiEvent<ApplicationUser> { }
+
+    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationUser, T> {}
+    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationUser, T> {}
 
     @Inject private transient ApplicationUserRepository applicationUserRepository;
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
@@ -118,10 +134,6 @@ public abstract class ApplicationUser
     }
 
 
-    // -- DOMAIN EVENTS
-
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationUser, T> {}
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationUser, T> {}
 
 
 
@@ -172,29 +184,22 @@ public abstract class ApplicationUser
     // -- USERNAME
 
     @Property(
-            domainEvent = Username.DomainEvent.class,
-            editing = Editing.DISABLED,
-            maxLength = Username.MAX_LENGTH
+            domainEvent = Username.DomainEvent.class
     )
     @PropertyLayout(
             fieldSetId="identity",
             hidden = Where.PARENTED_TABLES,
             sequence = "1"
     )
-    @Parameter(
-            maxLength = Username.MAX_LENGTH
-    )
-    @ParameterLayout(
-            named = "Username"
-    )
+    @HasUsername.Username
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Username {
-        int MAX_LENGTH = 120;
-
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = HasUsername.Username.MAX_LENGTH;
+        boolean NULLABLE = HasUsername.Username.NULLABLE;
+        String ALLOWS_NULL = HasUsername.Username.ALLOWS_NULL;
     }
-
     @Override
     @Username
     public abstract String getUsername();
@@ -224,11 +229,11 @@ public abstract class ApplicationUser
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface FamilyName {
-        int MAX_LENGTH = 120;
-
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = 120;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
-
     @FamilyName
     public abstract String getFamilyName();
     public abstract void setFamilyName(String familyName);
@@ -257,11 +262,11 @@ public abstract class ApplicationUser
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface GivenName {
-        int MAX_LENGTH = 120;
-
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = 120;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
-
     @GivenName
     public abstract String getGivenName();
     public abstract void setGivenName(String givenName);
@@ -290,11 +295,11 @@ public abstract class ApplicationUser
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface KnownAs {
-        int MAX_LENGTH = 120;
-
         class KnownAsDomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = 120;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
-
     @KnownAs
     public abstract String getKnownAs();
     public abstract void setKnownAs(String knownAs);
@@ -305,14 +310,16 @@ public abstract class ApplicationUser
     @Property(
             domainEvent = EmailAddress.DomainEvent.class,
             editing = Editing.DISABLED,
-            maxLength = EmailAddress.MAX_LENGTH
+            maxLength = EmailAddress.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
             fieldSetName = "Contact Details",
             sequence = "3.1"
     )
     @Parameter(
-            maxLength = EmailAddress.MAX_LENGTH
+            maxLength = EmailAddress.MAX_LENGTH,
+            optionality = Optionality.OPTIONAL
     )
     @ParameterLayout(
             named = "Email"
@@ -320,11 +327,11 @@ public abstract class ApplicationUser
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface EmailAddress {
-        int MAX_LENGTH = 120;
-
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = 120;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
-
     @EmailAddress
     public abstract String getEmailAddress();
     public abstract void setEmailAddress(String emailAddress);
@@ -351,11 +358,11 @@ public abstract class ApplicationUser
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface PhoneNumber {
-        int MAX_LENGTH = 120;
-
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = 120;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
-
     @PhoneNumber
     public abstract String getPhoneNumber();
     public abstract void setPhoneNumber(String phoneNumber);
@@ -384,20 +391,22 @@ public abstract class ApplicationUser
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface FaxNumber {
-        int MAX_LENGTH = 120;
-
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = 120;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
-
     @FaxNumber
     public abstract String getFaxNumber();
     public abstract void setFaxNumber(String faxNumber);
 
-    // -- LOCALE
+
+    // -- LOCALEs
 
     @Property(
-            domainEvent = UserLocale.DomainEvent.class,
-            editing = Editing.DISABLED //  edit via update button
+            domainEvent = Locale.DomainEvent.class,
+            editing = Editing.DISABLED, //  edit via update button
+            optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
             fieldSetId = "regional"
@@ -407,67 +416,106 @@ public abstract class ApplicationUser
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface UserLocale {
-        class DomainEvent extends PropertyDomainEvent<Locale> {}
+    public @interface Locale {
+        class DomainEvent extends PropertyDomainEvent<java.util.Locale> {}
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
 
-    @UserLocale
-    public abstract Locale getLanguage();
-    public abstract void setLanguage(Locale locale);
-
-    @UserLocale
-    public abstract Locale getNumberFormat();
-    public abstract void setNumberFormat(Locale locale);
-
-    @UserLocale
-    public abstract Locale getTimeFormat();
-    public abstract void setTimeFormat(Locale locale);
-
-    // -- AT PATH
 
     @Property(
-            domainEvent = AtPath.DomainEvent.class,
-            editing = Editing.DISABLED,
-            optionality = Optionality.OPTIONAL
+            domainEvent = Locale.DomainEvent.class
+    )
+    @Locale
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Language {
+        class DomainEvent extends Locale.DomainEvent {}
+        boolean NULLABLE = Locale.NULLABLE;
+        String ALLOWS_NULL = Locale.ALLOWS_NULL;
+    }
+    @Language
+    public abstract java.util.Locale getLanguage();
+    public abstract void setLanguage(java.util.Locale locale);
+
+
+    @Property(
+            domainEvent = NumberFormat.DomainEvent.class
+    )
+    @Locale
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface NumberFormat {
+        class DomainEvent extends Locale.DomainEvent {}
+        boolean NULLABLE = Locale.NULLABLE;
+        String ALLOWS_NULL = Locale.ALLOWS_NULL;
+    }
+    @NumberFormat
+    public abstract java.util.Locale getNumberFormat();
+    public abstract void setNumberFormat(java.util.Locale locale);
+
+
+    @Property(
+            domainEvent = TimeFormat.DomainEvent.class
+    )
+    @Locale
+    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimeFormat {
+        class DomainEvent extends Locale.DomainEvent {}
+        boolean NULLABLE = Locale.NULLABLE;
+        String ALLOWS_NULL = Locale.ALLOWS_NULL;
+    }
+    @TimeFormat
+    public abstract java.util.Locale getTimeFormat();
+    public abstract void setTimeFormat(java.util.Locale locale);
+
+
+
+    @Property(
+            domainEvent = AtPath.DomainEvent.class
     )
     @PropertyLayout(
             fieldSetId = "access",
             sequence = "4"
     )
-    @Parameter(
-            optionality = Optionality.OPTIONAL
-    )
-    @ParameterLayout(
-            named = "AtPath"
-    )
+    @HasAtPath.AtPath
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface AtPath {
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = HasAtPath.AtPath.MAX_LENGTH;
+        boolean NULLABLE = HasAtPath.AtPath.NULLABLE;
+        String ALLOWS_NULL = HasAtPath.AtPath.ALLOWS_NULL;
     }
-
     @Override
     @AtPath
     public abstract String getAtPath();
     public abstract void setAtPath(String atPath);
 
 
+
     // -- ACCOUNT TYPE
 
     @Property(
             domainEvent = AccountType.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            optionality = Optionality.MANDATORY
     )
     @PropertyLayout(
             fieldSetId = "access",
             sequence = "2"
     )
+    @Parameter(
+            optionality = Optionality.MANDATORY
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface AccountType {
         class DomainEvent extends PropertyDomainEvent<AccountType> {}
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
-
     @AccountType
     public abstract org.apache.isis.extensions.secman.applib.user.dom.AccountType getAccountType();
     public abstract void setAccountType(org.apache.isis.extensions.secman.applib.user.dom.AccountType accountType);
@@ -477,18 +525,23 @@ public abstract class ApplicationUser
 
     @Property(
             domainEvent = Status.DomainEvent.class,
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            optionality = Optionality.MANDATORY
     )
     @PropertyLayout(
             fieldSetId = "access",
             sequence = "1"
     )
+    @Parameter(
+            optionality = Optionality.MANDATORY
+    )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Status {
         class DomainEvent extends PropertyDomainEvent<ApplicationUserStatus> {}
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
-
     @Status
     public abstract ApplicationUserStatus getStatus();
     public abstract void setStatus(ApplicationUserStatus disabled);
@@ -496,14 +549,16 @@ public abstract class ApplicationUser
 
     // -- ENCRYPTED PASSWORD
 
-    @PropertyLayout(
+    @Property(
             hidden = Where.EVERYWHERE
     )
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface EncryptedPassword {
+        int MAX_LENGTH = 255;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
-
     @EncryptedPassword
     public abstract String getEncryptedPassword();
     public abstract void setEncryptedPassword(String encryptedPassword);
@@ -551,6 +606,13 @@ public abstract class ApplicationUser
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Roles {
         class RolesDomainEvent extends CollectionDomainEvent<ApplicationRole> {}
+
+        @UtilityClass
+        class Persistence {
+            public static final String TABLE = "ApplicationUserRoles";
+            public static final String JOIN_COLUMN = "userId";
+            public static final String INVERSE_JOIN_COLUMN = "roleId";
+        }
     }
 
     @Roles

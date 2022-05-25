@@ -188,6 +188,19 @@ public class IsisModuleExtSecmanApplib {
     public static final String NAMESPACE = "isis.ext.secman";
     public static final String SCHEMA = "isisExtensionsSecman";
 
+    public abstract static class TitleUiEvent<S>
+            extends org.apache.isis.applib.events.ui.TitleUiEvent<S> { }
+
+    public abstract static class IconUiEvent<S>
+            extends org.apache.isis.applib.events.ui.IconUiEvent<S> { }
+
+    public abstract static class CssClassUiEvent<S>
+            extends org.apache.isis.applib.events.ui.CssClassUiEvent<S> { }
+
+    public abstract static class LayoutUiEvent<S>
+            extends org.apache.isis.applib.events.ui.LayoutUiEvent<S> { }
+
+
     public abstract static class ActionDomainEvent<S>
     extends org.apache.isis.applib.events.domain.ActionDomainEvent<S> {}
 

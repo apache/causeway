@@ -43,6 +43,9 @@ import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermis
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
         schema = ApplicationPermission.SCHEMA,
@@ -110,84 +113,38 @@ public class ApplicationPermission
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission";
 
 
-    // -- ROLE
-
-    @Column(name = "roleId", allowsNull = "false")
-    private org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole role;
-
+    @Column(name = Role.NAME, allowsNull = Role.ALLOWS_NULL)
     @Role
-    @Override
-    public ApplicationRole getRole() {
-        return role;
-    }
+    @Getter
+    private org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole role;
     @Override
     public void setRole(final ApplicationRole role) {
         this.role = _Casts.uncheckedCast(role);
     }
 
 
-    // -- RULE
-
-    @Column(allowsNull = "false")
+    @Column(allowsNull = Rule.ALLOWS_NULL)
+    @Rule
+    @Getter @Setter
     private ApplicationPermissionRule rule;
 
-    @Override
-    @Rule
-    public ApplicationPermissionRule getRule() {
-        return rule;
-    }
-    @Override
-    public void setRule(final ApplicationPermissionRule rule) {
-        this.rule = rule;
-    }
 
-
-    // -- MODE
-
-    @Column(allowsNull = "false")
+    @Column(allowsNull = Mode.ALLOWS_NULL)
+    @Mode
+    @Getter @Setter
     private ApplicationPermissionMode mode;
 
-    @Mode
-    @Override
-    public ApplicationPermissionMode getMode() {
-        return mode;
-    }
-    @Override
-    public void setMode(final ApplicationPermissionMode mode) {
-        this.mode = mode;
-    }
 
-
-    // -- FEATURE SORT
-
-    @Column(allowsNull = "false")
+    @Column(allowsNull = FeatureSort.ALLOWS_NULL)
+    @FeatureSort
+    @Getter @Setter
     private ApplicationFeatureSort featureSort;
 
-    @Programmatic
-    @Override
-    public ApplicationFeatureSort getFeatureSort() {
-        return featureSort;
-    }
-    @Override
-    public void setFeatureSort(final ApplicationFeatureSort featureSort) {
-        this.featureSort = featureSort;
-    }
 
-
-    // -- FQN
-
-    @Column(allowsNull = "false")
-    private String featureFqn;
-
+    @Column(allowsNull = FeatureFqn.ALLOWS_NULL)
     @FeatureFqn
-    @Override
-    public String getFeatureFqn() {
-        return featureFqn;
-    }
-    @Override
-    public void setFeatureFqn(final String featureFqn) {
-        this.featureFqn = featureFqn;
-    }
+    @Getter @Setter
+    private String featureFqn;
 
 
 }

@@ -136,7 +136,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      */
     @ToString.Exclude
     @Getter
-    private CommandDto commandDto;
+    private org.apache.isis.schema.cmd.v2.CommandDto commandDto;
 
     /**
      * Derived from {@link #getCommandDto()}, is the {@link Bookmark} of

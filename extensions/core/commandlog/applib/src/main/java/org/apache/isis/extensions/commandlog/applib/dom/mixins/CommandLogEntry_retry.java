@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.applib.command.mixins;
+package org.apache.isis.extensions.commandlog.applib.dom.mixins;
 
 import javax.inject.Inject;
 
@@ -32,35 +32,35 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.dom.ReplayState;
 
 import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
-    domainEvent = CommandLog_retry.ActionDomainEvent.class,
+    domainEvent = CommandLogEntry_retry.ActionDomainEvent.class,
     commandPublishing = Publishing.DISABLED
 )
 @ActionLayout(associateWith = "executeIn", sequence = "1")
 @RequiredArgsConstructor
-public class CommandLog_retry {
+public class CommandLogEntry_retry {
 
-    private final CommandLog commandLog;
+    private final CommandLogEntry commandLogEntry;
 
     public static class ActionDomainEvent
-        extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLog_retry> { }
+        extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLogEntry_retry> { }
 
     @MemberSupport
-    public CommandLog act() {
+    public CommandLogEntry act() {
 
-        commandLog.setReplayState(ReplayState.PENDING);
-        commandLog.setResult(null);
-        commandLog.setException((Exception)null);
-        commandLog.setStartedAt(null);
-        commandLog.setCompletedAt(null);
+        commandLogEntry.setReplayState(ReplayState.PENDING);
+        commandLogEntry.setResult(null);
+        commandLogEntry.setException((Exception)null);
+        commandLogEntry.setStartedAt(null);
+        commandLogEntry.setCompletedAt(null);
 
-        return commandLog;
+        return commandLogEntry;
     }
 
     @Inject InteractionService interactionService;

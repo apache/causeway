@@ -40,6 +40,9 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 @Entity
 @Table(
@@ -79,71 +82,38 @@ import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.N
 public class ApplicationTenancy
     extends org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy {
 
-
     @Version
     private Long version;
 
 
-    // -- NAME
-
-    @Column(nullable = false, length = Name.MAX_LENGTH)
+    @Column(nullable = Name.NULLABLE, length = Name.MAX_LENGTH)
+    @Name
+    @Getter @Setter
     private String name;
 
-    @Name
-    @Override
-    public String getName() {
-        return name;
-    }
-    @Override
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-
-    // -- PATH
 
     @Id
-    @Column(nullable = false, length = Path.MAX_LENGTH)
+    @Column(nullable = Path.NULLABLE, length = Path.MAX_LENGTH)
+    @Path
+    @Getter @Setter
     private String path;
 
-    @Path
-    @Override
-    public String getPath() {
-        return path;
-    }
-    @Override
-    public void setPath(final String path) {
-        this.path = path;
-    }
-
-
-    // -- PARENT
 
     @ManyToOne
-    @JoinColumn(name="parentPath", nullable = true)
-    private ApplicationTenancy parent;
-
+    @JoinColumn(name=Parent.NAME, nullable = Parent.NULLABLE)
     @Parent
-    @Override
-    public org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy getParent() {
-        return parent;
-    }
+    @Getter
+    private ApplicationTenancy parent;
     @Override
     public void setParent(org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
         this.parent = _Casts.uncheckedCast(parent);
     }
 
 
-    // -- CHILDREN
-
-    @OneToMany(mappedBy = "parent")
-    private Set<ApplicationTenancy> children = new TreeSet<>();
-
+    @OneToMany(mappedBy = Children.MAPPED_BY)
     @Children
-    @Override
-    public Set<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> getChildren() {
-        return _Casts.uncheckedCast(children);
-    }
+    @Getter
+    private Set<ApplicationTenancy> children = new TreeSet<>();
     public void setChildren(final Set<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
         this.children = _Casts.uncheckedCast(children);
     }

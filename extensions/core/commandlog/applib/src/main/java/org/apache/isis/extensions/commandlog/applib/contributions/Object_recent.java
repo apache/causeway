@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.mixins;
+package org.apache.isis.extensions.commandlog.applib.contributions;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,43 +25,44 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Collection(
-    domainEvent = T_recent.CollectionDomainEvent.class
+    domainEvent = Object_recent.CollectionDomainEvent.class
 )
 @CollectionLayout(
     defaultView = "table"
 )
-public abstract class T_recent<T> {
+@RequiredArgsConstructor
+public abstract class Object_recent {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<T_recent, CommandJdo> { }
+            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<Object_recent, CommandLogEntry> { }
 
-    private final T domainObject;
-    public T_recent(final T domainObject) {
-        this.domainObject = domainObject;
-    }
+    private final Object domainObject;
 
-    public List<CommandJdo> coll() {
+    @MemberSupport public List<CommandLogEntry> coll() {
         return findRecent();
     }
 
-    private List<CommandJdo> findRecent() {
+    private List<CommandLogEntry> findRecent() {
         return bookmarkService.bookmarkFor(domainObject)
         .map(bookmark->queryResultsCache.execute(
-                () -> commandJdoRepository.findRecentByTarget(bookmark)
-                , T_recent.class
-                , "findRecentByTarget"
+                () -> commandLogEntryRepository.findRecentByTarget(bookmark)
+                , Object_recent.class
+                , "findRecent"
                 , domainObject))
         .orElse(Collections.emptyList());
     }
 
-    @Inject CommandJdoRepository commandJdoRepository;
+    @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
     @Inject BookmarkService bookmarkService;
     @Inject QueryResultsCache queryResultsCache;
 

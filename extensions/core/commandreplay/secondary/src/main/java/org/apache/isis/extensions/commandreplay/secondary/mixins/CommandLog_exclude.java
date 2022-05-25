@@ -27,8 +27,8 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.ReplayState;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.dom.ReplayState;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 
 import lombok.RequiredArgsConstructor;
@@ -49,19 +49,19 @@ public class CommandLog_exclude {
     public static class ActionDomainEvent
             extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLog_exclude> { }
 
-    final CommandLog commandLog;
+    final CommandLogEntry commandLogEntry;
 
     @MemberSupport
-    public CommandLog act() {
-        commandLog.setReplayState(ReplayState.EXCLUDED);
-        return commandLog;
+    public CommandLogEntry act() {
+        commandLogEntry.setReplayState(ReplayState.EXCLUDED);
+        return commandLogEntry;
     }
     @MemberSupport public boolean hideAct() {
         return !secondaryConfig.isPresent() || !secondaryConfig.get().isConfigured() ;
     }
     @MemberSupport public String disableAct() {
         final boolean notInError =
-                commandLog.getReplayState() == null || !commandLog.getReplayState().isFailed();
+                commandLogEntry.getReplayState() == null || !commandLogEntry.getReplayState().isFailed();
         return notInError
                 ? "This command is not in error, so cannot be excluded."
                 : null;

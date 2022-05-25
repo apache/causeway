@@ -19,7 +19,6 @@
 package org.apache.isis.extensions.secman.applib.user.dom.mixins;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -31,7 +30,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.locale.LocaleChoiceProvider;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.UserLocale;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Locale;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateLocale.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
@@ -59,15 +58,15 @@ public class ApplicationUser_updateLocale {
     // typed tuple made of all the action parameters
     @lombok.Value @Accessors(fluent = true)
     public static class Parameters {
-        final Locale language;
-        final Locale numberFormat;
-        final Locale timeFormat;
+        final java.util.Locale language;
+        final java.util.Locale numberFormat;
+        final java.util.Locale timeFormat;
     }
 
     @MemberSupport public ApplicationUser act(
-            @UserLocale final Locale language,
-            @UserLocale final Locale numberFormat,
-            @UserLocale final Locale timeFormat) {
+            @Locale final java.util.Locale language,
+            @Locale final java.util.Locale numberFormat,
+            @Locale final java.util.Locale timeFormat) {
         mixee.setLanguage(language);
         mixee.setNumberFormat(numberFormat);
         mixee.setTimeFormat(timeFormat);
@@ -80,32 +79,32 @@ public class ApplicationUser_updateLocale {
 
     // -- LANGUAGE
 
-    @MemberSupport public Locale defaultLanguage(final Parameters p) {
+    @MemberSupport public java.util.Locale defaultLanguage(final Parameters p) {
         return mixee.getLanguage();
     }
-    @MemberSupport public List<Locale> choicesLanguage(final Parameters p) {
+    @MemberSupport public List<java.util.Locale> choicesLanguage(final Parameters p) {
         return localeChoiceProvider.getAvailableLocales();
     }
 
     // -- NUMBER FORMAT
 
-    @MemberSupport public Locale defaultNumberFormat(final Parameters p) {
+    @MemberSupport public java.util.Locale defaultNumberFormat(final Parameters p) {
         return mixee.getNumberFormat()!=null
                 ? mixee.getNumberFormat()
                 : p.language();
     }
-    @MemberSupport public List<Locale> choicesNumberFormat(final Parameters p) {
+    @MemberSupport public List<java.util.Locale> choicesNumberFormat(final Parameters p) {
         return localeChoiceProvider.getAvailableLocales();
     }
 
     // -- TIME FORMAT
 
-    @MemberSupport public Locale defaultTimeFormat(final Parameters p) {
+    @MemberSupport public java.util.Locale defaultTimeFormat(final Parameters p) {
         return mixee.getTimeFormat()!=null
                 ? mixee.getTimeFormat()
                 : p.language();
     }
-    @MemberSupport public List<Locale> choicesTimeFormat(final Parameters p) {
+    @MemberSupport public List<java.util.Locale> choicesTimeFormat(final Parameters p) {
         return localeChoiceProvider.getAvailableLocales();
     }
 

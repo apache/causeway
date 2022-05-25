@@ -47,6 +47,9 @@ import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import static org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.*;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(
         schema = ApplicationPermission.SCHEMA,
@@ -115,88 +118,40 @@ public class ApplicationPermission
     private Long version;
 
 
-    // -- ROLE
-
     @ManyToOne
-    @JoinColumn(name="roleId", nullable=false)
-    private org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole role;
-
+    @JoinColumn(name=Role.NAME, nullable=Role.NULLABLE)
     @Role
-    @Override
-    public ApplicationRole getRole() {
-        return role;
-    }
+    @Getter
+    private org.apache.isis.extensions.secman.jpa.role.dom.ApplicationRole role;
     @Override
     public void setRole(final ApplicationRole applicationRole) {
         role = _Casts.uncheckedCast(applicationRole);
     }
 
 
-    // -- RULE
-
-    @Column(nullable = false)
+    @Column(nullable = Rule.NULLABLE)
     @Enumerated(EnumType.STRING)
+    @Rule
+    @Getter @Setter
     private ApplicationPermissionRule rule;
 
-    @Override
-    @Rule
-    public ApplicationPermissionRule getRule() {
-        return rule;
-    }
-    @Override
-    public void setRule(final ApplicationPermissionRule rule) {
-        this.rule = rule;
-    }
 
-
-    // -- MODE
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Column(nullable = Mode.NULLABLE) @Enumerated(EnumType.STRING)
+    @Mode
+    @Getter @Setter
     private ApplicationPermissionMode mode;
 
-    @Mode
-    @Override
-    public ApplicationPermissionMode getMode() {
-        return mode;
-    }
-    @Override
-    public void setMode(final ApplicationPermissionMode mode) {
-        this.mode = mode;
-    }
 
-
-    // -- FEATURE SORT
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Column(nullable = FeatureSort.NULLABLE) @Enumerated(EnumType.STRING)
+    @FeatureSort
+    @Getter @Setter
     private ApplicationFeatureSort featureSort;
 
-    @Programmatic
-    @Override
-    public ApplicationFeatureSort getFeatureSort() {
-        return featureSort;
-    }
-    @Override
-    public void setFeatureSort(final ApplicationFeatureSort featureSort) {
-        this.featureSort = featureSort;
-    }
 
-
-    // -- FQN
-
-    @Column(nullable = false)
-    private String featureFqn;
-
+    @Column(nullable = FeatureFqn.NULLABLE)
     @FeatureFqn
-    @Override
-    public String getFeatureFqn() {
-        return featureFqn;
-    }
-    @Override
-    public void setFeatureFqn(final String featureFqn) {
-        this.featureFqn = featureFqn;
-    }
+    @Getter @Setter
+    private String featureFqn;
 
 
 }

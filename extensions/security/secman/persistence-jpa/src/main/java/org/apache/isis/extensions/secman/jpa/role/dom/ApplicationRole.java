@@ -44,6 +44,9 @@ import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(
         schema = ApplicationRole.SCHEMA,
@@ -86,51 +89,24 @@ public class ApplicationRole
     private Long version;
 
 
-    // -- NAME
-
-    @Column(nullable = false, length = Name.MAX_LENGTH)
+    @Column(nullable = Name.NULLABLE, length = Name.MAX_LENGTH)
+    @Name
+    @Getter @Setter
     private String name;
 
-    @Name
-    @Override
-    public String getName() {
-        return name;
-    }
-    @Override
-    public void setName(final String name) {
-        this.name = name;
-    }
 
-
-    // -- DESCRIPTION
-
-    @Column(nullable = true, length = Description.MAX_LENGTH)
+    @Column(nullable = Description.NULLABLE, length = Description.MAX_LENGTH)
+    @Description
+    @Getter @Setter
     private String description;
 
-    @Description
-    @Override
-    public String getDescription() {
-        return description;
-    }
-    @Override
-    public void setDescription(final String description) {
-        this.description = description;
-    }
 
-
-    // -- USERS
-
+    @ManyToMany(mappedBy = Users.MAPPED_BY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Users
-    @ManyToMany(mappedBy = "roles", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @Getter
     private Set<org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser> users = new TreeSet<>();
-
-    @Users
-    @Override
-    public Set<ApplicationUser> getUsers() {
-        return _Casts.uncheckedCast(users);
-    }
     // necessary for integration tests
-    public void addToUsers(final ApplicationUser applicationUser) {
+    public void addToUsers(final org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser applicationUser) {
         getUsers().add(applicationUser);
     }
 

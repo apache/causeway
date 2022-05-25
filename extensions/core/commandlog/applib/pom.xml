@@ -66,10 +66,6 @@
             <artifactId>isis-core-runtimeservices</artifactId>
         </dependency>
 
-		<dependency>
-		    <groupId>org.datanucleus</groupId>
-		    <artifactId>javax.jdo</artifactId>
-		</dependency>
 
         <!-- TESTING -->
 

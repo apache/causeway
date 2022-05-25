@@ -16,50 +16,47 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo.mixins;
+package org.apache.isis.extensions.commandreplay.secondary.mixins;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.mixins.security.HasUsername;
-import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo;
-import org.apache.isis.extensions.commandlog.jdo.entities.CommandJdoRepository;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
+import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
 
+import lombok.RequiredArgsConstructor;
 
 /**
  * @since 2.0 {@index}
  */
 @Collection(
-    domainEvent = HasUsername_recentCommandsByUser.CollectionDomainEvent.class
+    domainEvent = CommandLogEntry_replayQueue.CollectionDomainEvent.class
 )
 @CollectionLayout(
     defaultView = "table",
-    sequence = "3"
+    sequence = "100.100"
 )
-public class HasUsername_recentCommandsByUser {
+@RequiredArgsConstructor
+public class CommandLogEntry_replayQueue {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<HasUsername_recentCommandsByUser, CommandJdo> { }
+            extends IsisModuleExtCommandReplaySecondary.CollectionDomainEvent<CommandLogEntry_replayQueue, CommandLogEntry> { }
 
-    private final HasUsername hasUsername;
-    public HasUsername_recentCommandsByUser(final HasUsername hasUsername) {
-        this.hasUsername = hasUsername;
-    }
+    final CommandLogEntry commandLogEntry;
 
-    public List<CommandJdo> coll() {
-        final String username = hasUsername.getUsername();
-        return username != null
-                ? commandServiceRepository.findRecentByUsername(username)
-                : Collections.emptyList();
+    public List<CommandLogEntry> coll() {
+        return commandLogEntryRepository.findNotYetReplayed();
     }
     public boolean hideColl() {
-        return hasUsername.getUsername() == null;
+        return !secondaryConfig.isConfigured();
     }
 
-    @Inject CommandJdoRepository commandServiceRepository;
+    @Inject SecondaryConfig secondaryConfig;
+    @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
+
 }

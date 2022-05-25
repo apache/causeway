@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.applib.command.mixins;
+package org.apache.isis.extensions.commandlog.applib.dom.mixins;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,39 +25,39 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.command.CommandLog;
-import org.apache.isis.extensions.commandlog.applib.command.ICommandLogRepository;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Collection(
-    domainEvent = CommandLog_siblingCommands.CollectionDomainEvent.class
+    domainEvent = CommandLogEntry_siblingCommands.CollectionDomainEvent.class
 )
 @CollectionLayout(
     defaultView = "table",
     sequence = "100.110"
 )
 @RequiredArgsConstructor
-public class CommandLog_siblingCommands {
+public class CommandLogEntry_siblingCommands {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandLog_siblingCommands, CommandLog> { }
+            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<CommandLogEntry_siblingCommands, CommandLogEntry> { }
 
-    private final CommandLog commandLog;
+    private final CommandLogEntry commandLogEntry;
 
     @MemberSupport
-    public List<CommandLog> coll() {
-        final CommandLog parentJdo = commandLog.getParent();
+    public List<CommandLogEntry> coll() {
+        final CommandLogEntry parentJdo = commandLogEntry.getParent();
         if(parentJdo == null) {
             return Collections.emptyList();
         }
-        final List<CommandLog> siblingCommands = commandLogRepository.findByParent(parentJdo);
-        siblingCommands.remove(commandLog);
+        final List<CommandLogEntry> siblingCommands = commandLogEntryRepository.findByParent(parentJdo);
+        siblingCommands.remove(commandLogEntry);
         return siblingCommands;
     }
 
 
     @javax.inject.Inject
-    private ICommandLogRepository<CommandLog> commandLogRepository;
+    private CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
 
 }

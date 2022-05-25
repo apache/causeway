@@ -11,8 +11,12 @@ import javax.jdo.annotations.Query;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.session.SessionLogService;
 import org.apache.isis.sessionlog.applib.dom.SessionLogEntry.Nq;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @PersistenceCapable(
         identityType=IdentityType.APPLICATION,
@@ -122,73 +126,34 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
 
 
     @PrimaryKey
-    @Column(allowsNull = "false", length=15)
-    private String sessionId;
-    @Override
+    @Column(allowsNull = SessionId.ALLOWS_NULL, length = SessionId.MAX_LENGTH)
     @SessionId
-    public String getSessionId() {
-        return sessionId;
-    }
-    @Override
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
+    @Getter @Setter
+    private String sessionId;
 
 
-
-    @Column(allowsNull = "false", length = Username.MAX_LENGTH)
-    private String username;
-    @Override
+    @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)
     @Username
-    public String getUsername() {
-        return username;
-    }
-    @Override
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    @Getter @Setter
+    private String username;
 
 
-
-    @Column(allowsNull = "false")
-    private Timestamp loginTimestamp;
-    @Override
+    @Column(allowsNull = LoginTimestamp.ALLOWS_NULL)
     @LoginTimestamp
-    public Timestamp getLoginTimestamp() {
-        return loginTimestamp;
-    }
-    @Override
-    public void setLoginTimestamp(Timestamp loginTimestamp) {
-        this.loginTimestamp = loginTimestamp;
-    }
+    @Getter @Setter
+    private Timestamp loginTimestamp;
 
 
-
-    @Column(allowsNull = "true")
-    private Timestamp logoutTimestamp;
-    @Override
+    @Column(allowsNull = LogoutTimestamp.ALLOWS_NULL)
     @LogoutTimestamp
-    public Timestamp getLogoutTimestamp() {
-        return logoutTimestamp;
-    }
-    @Override
-    public void setLogoutTimestamp(Timestamp logoutTimestamp) {
-        this.logoutTimestamp = logoutTimestamp;
-    }
+    @Getter @Setter
+    private Timestamp logoutTimestamp;
 
 
-
-    @Column(allowsNull = "false")
-    private SessionLogService.CausedBy causedBy;
-    @Override
+    @Column(allowsNull = CausedBy.ALLOWS_NULL)
     @CausedBy
-    public SessionLogService.CausedBy getCausedBy() {
-        return causedBy;
-    }
-    @Override
-    public void setCausedBy(SessionLogService.CausedBy causedBy) {
-        this.causedBy = causedBy;
-    }
+    @Getter @Setter
+    private SessionLogService.CausedBy causedBy;
 
 
 }
