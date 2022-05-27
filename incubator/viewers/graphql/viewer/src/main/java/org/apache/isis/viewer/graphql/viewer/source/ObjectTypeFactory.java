@@ -18,14 +18,17 @@
  */
 package org.apache.isis.viewer.graphql.viewer.source;
 
+import java.awt.print.Book;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import graphql.schema.*;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.springframework.stereotype.Component;
@@ -49,20 +52,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import graphql.Scalars;
-import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLInputObjectField;
-import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLType;
-import graphql.schema.GraphQLTypeReference;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
@@ -199,7 +188,20 @@ public class ObjectTypeFactory {
 
                                                     if (argumentValue == null)
                                                         return ManagedObject.empty(elementType);
-                                                    return ManagedObject.of(elementType, argumentValue);
+                                                    switch (elementType.getBeanSort()){
+                                                        case ENTITY:
+                                                            return getManagedObjectFromInputType(elementType, argumentValue);
+
+                                                        case COLLECTION:
+                                                            /* TODO */
+                                                            throw new RuntimeException("Not yet implemented");
+
+                                                        case VALUE:
+                                                            return ManagedObject.of(elementType, argumentValue);
+
+                                                        default:
+                                                            throw new RuntimeException("Not yet implemented");
+                                                    }
 
 
                                                 }).collect(Can.toCan());
@@ -216,7 +218,13 @@ public class ObjectTypeFactory {
                 }
         );
 
+    }
 
+    private ManagedObject getManagedObjectFromInputType(ObjectSpecification elementType, Object argumentValue) {
+        LinkedHashMap map = (LinkedHashMap) argumentValue;
+        String identifier = (String) map.get("id");
+        Bookmark bookmark = Bookmark.forLogicalTypeNameAndIdentifier(elementType.getLogicalTypeName(), identifier);
+        return bookmarkService.lookup(bookmark).map(p->ManagedObject.of(elementType, p)).orElse(ManagedObject.empty(elementType));
     }
 
     void addTypeIfNotAlreadyPresent(

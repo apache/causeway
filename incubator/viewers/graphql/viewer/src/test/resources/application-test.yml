@@ -2,3 +2,8 @@ isis:
   persistence:
     schema:
       auto-create-schemas: "demo"
+
+spring:
+  graphql:
+    graphiql:
+      enabled: true

@@ -1,0 +1,16 @@
+{
+  "data" : {
+    "gqltestdomain_GQLTestDomainMenu" : {
+      "findE2" : {
+        "name" : "foo",
+        "_gql_mutations" : {
+          "changeE1" : {
+            "e1" : {
+              "name" : "alternativeE1"
+            }
+          }
+        }
+      }
+    }
+  }
+}
