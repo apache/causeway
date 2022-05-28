@@ -148,6 +148,11 @@ implements ObjectSpecification {
     }
 
     @Override
+    public Can<LogicalType> getAliases() {
+        return Can.empty();
+    }
+
+    @Override
     public String getIconName(final ManagedObject reference) {
         return null;
     }

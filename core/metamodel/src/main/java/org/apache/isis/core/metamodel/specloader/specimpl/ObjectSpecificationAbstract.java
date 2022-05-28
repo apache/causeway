@@ -64,6 +64,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactor
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.AliasedFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
@@ -183,6 +184,7 @@ implements ObjectSpecification {
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
     private NavigableParentFacet navigableParentFacet;
+    private AliasedFacet aliasedFacet;
     private CssClassFacet cssClassFacet;
 
     private IntrospectionState introspectionState = IntrospectionState.NOT_INTROSPECTED;
@@ -381,6 +383,7 @@ implements ObjectSpecification {
         iconFacet = getFacet(IconFacet.class);
         navigableParentFacet = getFacet(NavigableParentFacet.class);
         cssClassFacet = getFacet(CssClassFacet.class);
+        aliasedFacet = getFacet(AliasedFacet.class);
     }
 
     protected void postProcess() {
@@ -404,12 +407,12 @@ implements ObjectSpecification {
 
     @Override
     public String getIconName(final ManagedObject domainObject) {
-
         if(ManagedObjects.isSpecified(domainObject)) {
             _Assert.assertEquals(domainObject.getSpecification(), this);
         }
-
-        return iconFacet == null ? null : iconFacet.iconName(domainObject);
+        return iconFacet != null
+                ? iconFacet.iconName(domainObject)
+                : null;
     }
 
     @Override
@@ -420,14 +423,23 @@ implements ObjectSpecification {
 
     @Override
     public Object getNavigableParent(final Object object) {
-        return navigableParentFacet == null
-                ? null
-                : navigableParentFacet.navigableParent(object);
+        return navigableParentFacet != null
+                ? navigableParentFacet.navigableParent(object)
+                : null;
     }
 
     @Override
     public String getCssClass(final ManagedObject reference) {
-        return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);
+        return cssClassFacet != null
+                ? cssClassFacet.cssClass(reference)
+                : null;
+    }
+
+    @Override
+    public Can<LogicalType> getAliases() {
+        return aliasedFacet != null
+                ? aliasedFacet.getAliases()
+                : Can.empty();
     }
 
     @Override

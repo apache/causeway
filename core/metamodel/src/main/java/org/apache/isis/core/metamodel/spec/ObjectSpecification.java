@@ -29,9 +29,13 @@ import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.id.HasLogicalType;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -169,7 +173,6 @@ extends
 
     /**
      * Returns an (immutable) "full" identifier for this specification.
-     *
      * <p>
      * This will be the fully qualified name of the Class object that this
      * object represents (i.e. it includes the package name).
@@ -178,12 +181,20 @@ extends
 
     /**
      * Returns an (immutable) "short" identifier for this specification.
-     *
      * <p>
      * This will be the class name without the package; any text up to and
      * including the last period is removed.
      */
     String getShortIdentifier();
+
+    /**
+     * Immutable set of {@link LogicalType} aliases for corresponding
+     * domain object or service.
+     * <p>
+     * Corresponds to {@link DomainService#aliased()} and
+     * {@link DomainObject#aliased()}.
+     */
+    Can<LogicalType> getAliases();
 
     /**
      * Returns the (singular) name for objects of this specification.
