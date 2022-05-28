@@ -18,15 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
-
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
 
+public class DomainServiceFacetForAnnotation extends DomainServiceFacetAbstract {
 
-public class DomainServiceFacetAnnotation extends DomainServiceFacetAbstract {
-
-    public DomainServiceFacetAnnotation(
+    public DomainServiceFacetForAnnotation(
             final FacetHolder facetHolder,
             final NatureOfService natureOfService) {
         super(facetHolder, natureOfService);

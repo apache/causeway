@@ -16,43 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainobject;
+package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.domainservice.annotation.AliasedFacetForDomainServiceAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.AliasedFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.AliasedFacet;
 import org.apache.isis.core.metamodel.facets.object.logicaltype.AliasedFacetAbstract;
 
 /**
- * AliasedFacet based on presence of {@link DomainObject#aliased()}.
+ * AliasedFacet based on presence of {@link DomainService#aliased()}.
  * <p>
  * Analogous to {@link AliasedFacetForDomainServiceAnnotation}.
- * @see AliasedFacetForDomainServiceAnnotation
+ * @see AliasedFacetForDomainObjectAnnotation
  */
-public class AliasedFacetForDomainObjectAnnotation
+public class AliasedFacetForDomainServiceAnnotation
 extends AliasedFacetAbstract {
 
     public static Optional<AliasedFacet> create(
-            final Optional<DomainObject> domainObjectIfAny,
+            final Optional<DomainService> domainServiceIfAny,
             final Class<?> correspondingClass,
             final FacetHolder holder) {
 
-        return domainObjectIfAny
+        return domainServiceIfAny
                 .map(annot->annot.aliased())
                 .map(Can::ofArray)
                 .filter(Can::isNotEmpty)
-                .map(aliasNames -> new AliasedFacetForDomainObjectAnnotation(
+                .map(aliasNames -> new AliasedFacetForDomainServiceAnnotation(
                         aliasNames
                             .map(aliasName->LogicalType.eager(correspondingClass, aliasName)),
                         holder));
     }
 
-    private AliasedFacetForDomainObjectAnnotation(
+    private AliasedFacetForDomainServiceAnnotation(
             final Can<LogicalType> aliases,
             final FacetHolder holder) {
         super(aliases, holder);
