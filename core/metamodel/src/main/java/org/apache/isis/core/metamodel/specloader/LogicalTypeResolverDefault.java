@@ -45,30 +45,33 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
     }
 
     @Override
-    public void register(final @NonNull ObjectSpecification spec) {
+    public ObjectSpecification register(final @NonNull ObjectSpecification spec) {
+
+        val logicalTypeName = spec.getLogicalTypeName();
+
+        if(logicalTypeByName.containsKey(logicalTypeName)) {
+            return spec;
+        }
 
         // collect concrete classes (do not collect abstract or anonymous types or interfaces)
         if(!spec.isAbstract()
                 && hasTypeIdentity(spec)) {
 
-            val key = spec.getLogicalTypeName();
-
-            val previousMapping = logicalTypeByName.put(key, spec.getLogicalType());
-
-            if(previousMapping!=null) {
-
-                val msg = String.format("Overriding existing mapping\n"
-                        + "%s -> %s,\n"
-                        + "with\n "
-                        + "%s -> %s\n "
-                        + "This will result in the meta-model validation to fail.",
-                        key, previousMapping.getCorrespondingClass(),
-                        key, spec.getCorrespondingClass());
-
-                log.warn(msg);
-
-            }
+            putWithWarnOnOverride(logicalTypeName, spec);
         }
+        return spec;
+    }
+
+    @Override
+    public ObjectSpecification registerAliases(final @NonNull ObjectSpecification spec) {
+
+        // adding aliases to the lookup map
+        spec.getAliases()
+        .forEach(alias->{
+                putWithWarnOnOverride(alias.getLogicalTypeName(), spec);
+        });
+
+        return spec;
     }
 
     // -- HELPER
@@ -77,6 +80,27 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
         // anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
         // don't have type identity; hence the guard.
         return spec.getCorrespondingClass().getCanonicalName()!=null;
+    }
+
+    private void putWithWarnOnOverride(
+            final String logicalTypeName,
+            final ObjectSpecification spec) {
+
+        final LogicalType previousMapping =
+                logicalTypeByName.put(logicalTypeName, spec.getLogicalType());
+
+        if(previousMapping!=null
+                && !spec.getLogicalType().equals(previousMapping)) {
+            val msg = String.format("Overriding existing mapping\n"
+                    + "%s -> %s,\n"
+                    + "with\n "
+                    + "%s -> %s\n "
+                    + "This will result in the meta-model validation to fail.",
+                    logicalTypeName, previousMapping.getCorrespondingClass(),
+                    logicalTypeName, spec.getCorrespondingClass());
+            log.warn(msg);
+        }
+
     }
 
 }

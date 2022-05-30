@@ -450,7 +450,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             return logicalType;
         }
 
-        //TODO[2533] if the logicalTypeName is not available and instead a fqcn was passed in, that should also be supported
+        //XXX[2533] if the logicalTypeName is not available and instead a fqcn was passed in, that should also be supported
 
         // falling back assuming the logicalTypeName equals the fqn of the corresponding class
         // which might not always be true,
@@ -558,13 +558,23 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         val substitutedType = substitute.apply(type);
 
-        val spec = cache.computeIfAbsent(substitutedType, __->{
-            val newSpec = createSpecification(beanClassifier.apply(substitutedType));
-            logicalTypeResolver.register(newSpec);
-            return newSpec;
-        });
+        val spec = cache.computeIfAbsent(substitutedType, _spec->
+            logicalTypeResolver
+                .register(
+                        createSpecification(beanClassifier.apply(substitutedType))));
 
         spec.introspectUpTo(upTo);
+
+        if(spec.getAliases().isNotEmpty()) {
+            //XXX[3063] hitting this a couple of times (~10) per spec (with aliases)
+            // even though already registered;
+            // room for performance optimizations, but at the time of writing
+            // don't want to add a ObjectSpecification flag to keep track of alias registered state;
+            // as an alternative purge the aliased facets and introspect aliased attributes from annotations
+            // much earlier in the bootstrap process, same as we do with @Named processing
+            logicalTypeResolver
+                .registerAliases(spec);
+        }
 
         return spec;
     }

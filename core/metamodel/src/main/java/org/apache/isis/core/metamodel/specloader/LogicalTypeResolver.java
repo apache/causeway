@@ -47,13 +47,23 @@ interface LogicalTypeResolver {
     /**
      * Collects concrete types, ignores abstract types and interfaces.
      * Allows types to override their concrete super types.
+     * <p>
+     * Acts as an identity operator with side-effects.
      * @param spec - type's ObjectSpecification
      */
-    void register(@NonNull ObjectSpecification spec);
+    ObjectSpecification register(@NonNull ObjectSpecification spec);
 
     /**
      * Removes all entries from the lookup table.
      */
     void clear();
+
+    /**
+     * Collects aliases for concrete types, ignores abstract types and interfaces.
+     * <p>
+     * Acts as an identity operator with side-effects.
+     * @param spec - type's ObjectSpecification
+     */
+    ObjectSpecification registerAliases(@NonNull ObjectSpecification spec);
 
 }
