@@ -3028,6 +3028,13 @@ public class IsisConfiguration {
              */
             private UserMenuMeActionPolicy userMenuMeActionPolicy = UserMenuMeActionPolicy.HIDE;
         }
+
+        private final SessionLog sessionLog = new SessionLog();
+        @Data
+        public static class SessionLog {
+            boolean autoLogoutOnRestart = true;
+        }
+
     }
 
     private static List<String> listOf(final String ...values) {

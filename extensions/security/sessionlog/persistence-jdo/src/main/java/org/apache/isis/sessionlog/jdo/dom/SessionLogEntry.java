@@ -131,6 +131,9 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
         super(sessionGuid, httpSessionId, username, causedBy, loginTimestamp);
     }
 
+    public SessionLogEntry() {
+        super(null, null, null, null, null);
+    }
 
     @PrimaryKey
     @Column(allowsNull = SessionGuidStr.ALLOWS_NULL, length = SessionGuidStr.MAX_LENGTH)

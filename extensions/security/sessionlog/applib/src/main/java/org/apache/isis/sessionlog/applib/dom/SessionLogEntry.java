@@ -89,7 +89,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             final String username,
             final SessionLogService.CausedBy causedBy,
             final Timestamp loginTimestamp) {
-        setSessionGuidStr(sessionGuid.toString());
+        setSessionGuidStr(sessionGuid != null ? sessionGuid.toString() : null);
         setHttpSessionId(httpSessionId);
         setUsername(username);
         setCausedBy(causedBy);
@@ -309,12 +309,11 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             return !after.isEmpty() ? after.get(0) : SessionLogEntry.this;
         }
 
-        @MemberSupport public String disableNext() {
-            val next = factoryService.mixin(next.class, SessionLogEntry.this);
-            return next.act() == SessionLogEntry.this ? "None after": null;
+        @MemberSupport public String disableAct() {
+            return act() == SessionLogEntry.this ? "None after": null;
         }
 
-        @Inject FactoryService factoryService;
+        @Inject SessionLogEntryRepository sessionLogEntryRepository;
     }
 
 
@@ -337,12 +336,11 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             return !before.isEmpty() ? before.get(0) : SessionLogEntry.this;
         }
 
-        @MemberSupport public String disablePrevious() {
-            val previous = factoryService.mixin(previous.class, SessionLogEntry.this);
-            return previous.act() == SessionLogEntry.this ? "None before": null;
+        @MemberSupport public String disableAct() {
+            return act() == SessionLogEntry.this ? "None before": null;
         }
 
-        @Inject FactoryService factoryService;
+        @Inject SessionLogEntryRepository sessionLogEntryRepository;
     }
 
 
@@ -351,7 +349,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             ObjectContracts.contract(SessionLogEntry.class)
                     .thenUse("loginTimestamp", SessionLogEntry::getLoginTimestamp)
                     .thenUse("username", SessionLogEntry::getUsername)
-                    .thenUse("sessionId", SessionLogEntry::getSessionGuidStr)
+                    .thenUse("sessionGuid", SessionLogEntry::getSessionGuidStr)
+                    .thenUse("httpSessionId", SessionLogEntry::getHttpSessionId)
                     .thenUse("logoutTimestamp", SessionLogEntry::getLogoutTimestamp)
                     .thenUse("causedBy", SessionLogEntry::getCausedBy)
             ;
@@ -368,6 +367,5 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     }
 
 
-    @Inject SessionLogEntryRepository sessionLogEntryRepository;
 
 }
