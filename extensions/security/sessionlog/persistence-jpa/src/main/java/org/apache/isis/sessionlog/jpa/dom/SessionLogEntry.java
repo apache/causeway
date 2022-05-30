@@ -24,8 +24,8 @@ import lombok.Setter;
 @Entity
 @Table(
         schema = SessionLogEntry.SCHEMA,
-        name = SessionLogEntry.TABLE)
-
+        name = SessionLogEntry.TABLE
+)
 @NamedQueries( {
         @NamedQuery(
                 name  = Nq.FIND_BY_SESSION_GUID_STR,

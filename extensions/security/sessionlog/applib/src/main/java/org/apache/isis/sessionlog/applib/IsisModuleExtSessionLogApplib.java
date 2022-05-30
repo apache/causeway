@@ -1,18 +1,18 @@
 package org.apache.isis.sessionlog.applib;
 
+import org.eclipse.persistence.logging.SessionLog;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.sessionlog.applib.app.SessionLogMenu;
 import org.apache.isis.sessionlog.applib.spiimpl.SessionLogServiceDefault;
-import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.isis.sessionlog.applib.spiimpl.SessionLogServiceInitializer;
 
 
 @Configuration
 @Import({
-        IsisModuleTestingFixturesApplib.class,
-
         SessionLogMenu.class,
+        SessionLogServiceInitializer.class,
         SessionLogServiceDefault.class
 })
 public class IsisModuleExtSessionLogApplib {

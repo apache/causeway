@@ -13,6 +13,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.session.SessionLogService;
+import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.NonNull;
 import lombok.val;
