@@ -85,6 +85,7 @@ import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstra
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testdomain.model.good.ProperMemberSupportDiscovery;
+import org.apache.isis.testdomain.model.good.ProperObjectWithAlias;
 import org.apache.isis.testdomain.model.good.ProperServiceWithAlias;
 import org.apache.isis.testdomain.model.good.ProperServiceWithMixin;
 import org.apache.isis.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport;
@@ -527,6 +528,26 @@ class DomainModelTest_usingGoodDomain {
                 .orElse(null));
         assertEquals(objectSpec,
                 specificationLoader.specForLogicalTypeName("testdomain.v2.ProperServiceWithAlias")
+                .orElse(null));
+    }
+
+    @Test
+    void aliasesOnDomainObjects_shouldBeHonored() {
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ProperObjectWithAlias.class);
+        assertTrue(objectSpec.isViewModel());
+        assertTrue(objectSpec.getAction("now").isPresent());
+
+        assertEquals(Can.of(
+                "testdomain.v1.ProperObjectWithAlias",
+                "testdomain.v2.ProperObjectWithAlias"),
+                objectSpec.getAliases().map(LogicalType::getLogicalTypeName));
+
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.v1.ProperObjectWithAlias")
+                .orElse(null));
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.v2.ProperObjectWithAlias")
                 .orElse(null));
     }
 

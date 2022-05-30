@@ -565,13 +565,18 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         spec.introspectUpTo(upTo);
 
-        if(spec.getAliases().isNotEmpty()) {
-            //XXX[3063] hitting this a couple of times (~10) per spec (with aliases)
-            // even though already registered;
+        if(spec.getAliases().isNotEmpty()
+            // this bool. expr. is an optimization, not strictly required ... a bit of hack though
+            && upTo == IntrospectionState.TYPE_INTROSPECTED) {
+
+            //XXX[3063] hitting this a couple of times
+            //(~5 see org.apache.isis.testdomain.domainmodel.DomainModelTest_usingGoodDomain.aliasesOnDomainServices_shouldBeHonored())
+            // per spec (with aliases), even though already registered;
             // room for performance optimizations, but at the time of writing
             // don't want to add a ObjectSpecification flag to keep track of alias registered state;
             // as an alternative purge the aliased facets and introspect aliased attributes from annotations
             // much earlier in the bootstrap process, same as we do with @Named processing
+
             logicalTypeResolver
                 .registerAliases(spec);
         }
