@@ -464,6 +464,9 @@ public final class ProgrammingModelConstants {
                 + "Consider importing type ${type} with Spring's @Import annotation. "
                 + "Types of sort VALUE should instead register a ValueSemanticsProvider with Spring, "
                 + "to be properly understood by the framework."),
+        NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS("Logical type name (or alias) ${logicalTypeName} "
+                + "mapped to multiple non-abstract classes:\n"
+                + "${csv}"),
         ;
         private final String template;
         public String getMessage(final Identifier featureIdentifier) {

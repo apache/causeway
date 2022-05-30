@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,7 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -585,68 +587,70 @@ implements
         addValidatorToEnsureUniqueLogicalTypeNames(programmingModel);
     }
 
-    private void addValidatorToEnsureUniqueLogicalTypeNames(final ProgrammingModel pm) {
+    private void addValidatorToEnsureUniqueLogicalTypeNames(final ProgrammingModel programmingModel) {
 
-        final _Multimaps.ListMultimap<String, ObjectSpecification> collidingSpecsByLogicalTypeName =
-                _Multimaps.newConcurrentListMultimap();
+        programmingModel
+        .addValidator(
+            new MetaModelVisitingValidatorAbstract(programmingModel.getMetaModelContext()){
 
-        final MetaModelVisitingValidatorAbstract ensureUniqueObjectIds =
-                new MetaModelVisitingValidatorAbstract(pm.getMetaModelContext()){
+                final _Multimaps.ListMultimap<String, ObjectSpecification> specsByLogicalTypeName =
+                        _Multimaps.newConcurrentListMultimap();
 
-                    @Override
-                    public void validate(final ObjectSpecification objSpec) {
+                @Override
+                public void validate(final ObjectSpecification objSpec) {
 
-                        // @DomainObject(logicalTypeName=...) must be unique among non-abstract types
-                        // Eg. having an ApplicationUser interface and a concrete ApplicationUser (JDO)
-                        // that have the same @DomainObject(logicalTypeName=...) should be allowed.
-                        // A hard constraint that applies, is that there cannot be multiple bookmark-able
-                        // types that share the same @DomainObject(logicalTypeName=...).
-                        // This must be guaranteed by MM validation.
-                        // - see also LogicalTypeResolver.register(...)
+                    // @DomainObject(logicalTypeName=...) must be unique among non-abstract types
+                    // Eg. having an ApplicationUser interface and a concrete ApplicationUser (JDO)
+                    // that have the same @DomainObject(logicalTypeName=...) should be allowed.
+                    // A hard constraint that applies, is that there cannot be multiple bookmark-able
+                    // types that share the same @DomainObject(logicalTypeName=...).
+                    // This must be guaranteed by MM validation.
+                    // - see also LogicalTypeResolver.register(...)
 
-                        if(objSpec.isAbstract()) {
-                            return;
+                    if(objSpec.isAbstract()) {
+                        return;
+                    }
+                    specsByLogicalTypeName.putElement(objSpec.getLogicalTypeName(), objSpec);
+
+                    // also adding aliases to the multi-map
+                    objSpec.getAliases()
+                    .forEach(alias->
+                        specsByLogicalTypeName.putElement(alias.getLogicalTypeName(), objSpec));
+                }
+
+                @Override
+                public void summarize() {
+
+                    specsByLogicalTypeName.forEach((logicalTypeName, collidingSpecs)->{
+                        if(isObjectTypeCollision(collidingSpecs)) {
+                            val csv = asCsv(collidingSpecs);
+                            collidingSpecs.forEach(spec->{
+                                ValidationFailure.raiseFormatted(spec,
+                                        ProgrammingModelConstants.Validation
+                                        .NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS
+                                        .getMessage(Map.of(
+                                                "logicalTypeName", spec.getLogicalTypeName(),
+                                                "csv", csv)));
+                            });
                         }
-                        collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName(), objSpec);
-                    }
+                    });
 
-                    @Override
-                    public void summarize() {
-                        for (val logicalTypeName : collidingSpecsByLogicalTypeName.keySet()) {
-                            val collidingSpecs = collidingSpecsByLogicalTypeName.get(logicalTypeName);
-                            if(isObjectTypeCollision(collidingSpecs)) {
-                                val csv = asCsv(collidingSpecs);
+                    // clean-up
+                    specsByLogicalTypeName.clear();
+                }
 
-                                collidingSpecs.forEach(spec->{
-                                    ValidationFailure.raiseFormatted(
-                                            spec,
-                                            "Logical type name '%s' mapped to multiple non-abstract classes:\n"
-                                            + "%s",
-                                            logicalTypeName,
-                                            csv);
-                                });
+                private boolean isObjectTypeCollision(final List<ObjectSpecification> specs) {
+                    return specs.size()>1;
+                }
 
+                private String asCsv(final List<ObjectSpecification> specList) {
+                    return stream(specList)
+                            .map(ObjectSpecification::getFullIdentifier)
+                            .sorted()
+                            .collect(Collectors.joining(", "));
+                }
 
-                            }
-                        }
-                        // so can be revalidated again if necessary.
-                        collidingSpecsByLogicalTypeName.clear();
-                    }
-
-                    private boolean isObjectTypeCollision(final List<ObjectSpecification> specs) {
-                        return specs.size()>1;
-                    }
-
-                    private String asCsv(final List<ObjectSpecification> specList) {
-                        return stream(specList)
-                                .map(ObjectSpecification::getFullIdentifier)
-                                .sorted()
-                                .collect(Collectors.joining(", "));
-                    }
-
-                };
-
-        pm.addValidator(ensureUniqueObjectIds);
+            });
     }
 
 
