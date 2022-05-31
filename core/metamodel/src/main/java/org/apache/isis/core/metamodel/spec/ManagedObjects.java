@@ -716,7 +716,8 @@ public final class ManagedObjects {
 
             // handles deleted entities
             if(isNullOrUnspecifiedOrEmpty(reattached)) {
-                return managedObject;
+                // returns the 'emptied' ManagedObject from above
+                return reattached;
             }
 
             val newState = EntityUtil.getEntityState(reattached);
