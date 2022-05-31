@@ -64,12 +64,6 @@ class _DomainResourceHelper {
         return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainObjectLinkTo());
     }
 
-//    public static _DomainResourceHelper ofServiceResource(
-//            final IResourceContext resourceContext,
-//            final ManagedObject objectAdapter) {
-//        return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainServiceLinkTo());
-//    }
-
     public static _DomainResourceHelper ofServiceResource(
             final IResourceContext resourceContext,
             final String serviceIdOrAlias) {

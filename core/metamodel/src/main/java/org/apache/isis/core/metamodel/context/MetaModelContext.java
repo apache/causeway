@@ -113,7 +113,10 @@ public interface MetaModelContext {
 
     /**
      * Recovers an object (graph) from given {@code bookmark}.
-     * Also resolves injection-points for the result.
+     * <p>
+     * Resolves injection-points for the result.
+     * <p>
+     * Supports alias lookup.
      */
     default Optional<ManagedObject> loadObject(final @Nullable Bookmark bookmark) {
         if(bookmark==null) {

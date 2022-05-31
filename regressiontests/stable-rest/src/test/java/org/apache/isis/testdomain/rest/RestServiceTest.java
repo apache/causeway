@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.rest.RestEndpointService;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
@@ -149,6 +150,26 @@ class RestServiceTest {
         for(val book : multipleBooks) {
             assertEquals("MultipleBooksTest", book.getName());
         }
+
+    }
+
+    @Test
+    void inventoryAsJaxbVm_viaRestEndpoint() {
+
+        assertTrue(restService.getPort()>0);
+
+        val useRequestDebugLogging = false;
+        val restfulClient = restService.newClient(useRequestDebugLogging);
+
+        val digest = restService.getInventoryAsJaxbVm(restfulClient)
+                .ifFailure(Assertions::fail);
+
+        final JdoInventoryJaxbVm inventoryAsJaxbVm = digest.getValue().orElseThrow();
+
+        assertNotNull(inventoryAsJaxbVm);
+        assertEquals("Bookstore", inventoryAsJaxbVm.getName());
+
+        //TODO test whether we can call an action eg. listBooks() on the VM via REST
 
     }
 

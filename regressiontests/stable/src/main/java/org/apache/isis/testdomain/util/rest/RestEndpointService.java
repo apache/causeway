@@ -33,6 +33,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
+import org.apache.isis.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.util.dto.BookDto;
@@ -196,6 +197,19 @@ public class RestEndpointService {
 
         val response = request.post(args);
         val digest = client.digestList(response, BookDto.class, new GenericType<List<BookDto>>() {});
+
+        return digest;
+    }
+
+    public Try<JdoInventoryJaxbVm> getInventoryAsJaxbVm(final RestfulClient client) {
+
+        val request = newInvocationBuilder(client,
+                INVENTORY_RESOURCE + "/actions/inventoryAsJaxbVm/invoke");
+        val args = client.arguments()
+                .build();
+
+        val response = request.post(args);
+        val digest = client.digest(response, JdoInventoryJaxbVm.class);
 
         return digest;
     }

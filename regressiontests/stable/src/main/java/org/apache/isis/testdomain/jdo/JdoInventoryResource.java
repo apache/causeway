@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -53,6 +54,7 @@ import lombok.val;
 public class JdoInventoryResource {
 
     final RepositoryService repository;
+    final FactoryService factoryService;
 
     @Action
     public List<JdoProduct> listProducts() {
@@ -150,5 +152,18 @@ public class JdoInventoryResource {
         return books;
     }
 
+    @Action
+    public JdoInventoryJaxbVm inventoryAsJaxbVm() {
+        val inventoryJaxbVm = factoryService.viewModel(new JdoInventoryJaxbVm());
+        val books = _NullSafe.isEmpty(inventoryJaxbVm.listBooks())
+                ? multipleBooks(3)
+                : inventoryJaxbVm.listBooks();
+        if(_NullSafe.size(books)>0) {
+            inventoryJaxbVm.setName("Bookstore");
+            inventoryJaxbVm.setBooks(books);
+            inventoryJaxbVm.setFavoriteBook(books.get(0));
+        }
+        return inventoryJaxbVm;
+    }
 
 }
