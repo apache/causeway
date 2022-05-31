@@ -59,12 +59,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class CommandLogServiceMenu {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLogServiceMenu";
+    public static final String LOGICAL_TYPE_NAME =
+            IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLogServiceMenu";
 
-    public static abstract class ActionDomainEvent extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLogServiceMenu> { }
+    public static abstract class ActionDomainEvent
+        extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLogServiceMenu> { }
 
 
-    final CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
+    final CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     final ClockService clockService;
 
 
@@ -77,7 +79,7 @@ public class CommandLogServiceMenu {
     public class activeCommands {
         public class DomainEvent extends ActionDomainEvent { }
 
-        @MemberSupport public List<CommandLogEntry> act() {
+        @MemberSupport public List<? extends CommandLogEntry> act() {
             return commandLogEntryRepository.findCurrent();
         }
     }
@@ -94,7 +96,7 @@ public class CommandLogServiceMenu {
 
     public class DomainEvent extends ActionDomainEvent { }
 
-        @MemberSupport public List<CommandLogEntry> act(
+        @MemberSupport public List<? extends CommandLogEntry> act(
                 final @Nullable LocalDate from,
                 final @Nullable LocalDate to) {
             return commandLogEntryRepository.findByFromAndTo(from, to);
