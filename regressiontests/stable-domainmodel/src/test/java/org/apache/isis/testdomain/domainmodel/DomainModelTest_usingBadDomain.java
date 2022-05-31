@@ -62,10 +62,12 @@ import org.apache.isis.testdomain.model.bad.InvalidActionOverloading;
 import org.apache.isis.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.isis.testdomain.model.bad.InvalidDomainObjectOnInterface;
 import org.apache.isis.testdomain.model.bad.InvalidMemberOverloadingWhenInherited;
+import org.apache.isis.testdomain.model.bad.InvalidObjectWithAlias;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
 import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
+import org.apache.isis.testdomain.model.bad.InvalidServiceWithAlias;
 import org.apache.isis.testdomain.model.bad.OrphanedMemberSupportDetection;
 import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
@@ -155,6 +157,19 @@ class DomainModelTest_usingBadDomain {
 
         tester.assertValidationFailureOnMember(
                 ProgrammingModelConstants.Validation.ORPHANED_METHOD, "hideMe()");
+    }
+
+    @Test
+    void aliasesOnDomainObjectsAndServices_shouldBeUnique() {
+        validator.assertAnyFailuresContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidServiceWithAlias.class)),
+                "Logical type name (or alias) testdomain.InvalidServiceWithAlias mapped to multiple non-abstract classes:");
+                //org.apache.isis.testdomain.model.bad.InvalidObjectWithAlias, org.apache.isis.testdomain.model.bad.InvalidServiceWithAlias
+
+        validator.assertAnyFailuresContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidObjectWithAlias.class)),
+                "Logical type name (or alias) testdomain.InvalidObjectWithAlias mapped to multiple non-abstract classes:");
+                //org.apache.isis.testdomain.model.bad.InvalidObjectWithAlias, org.apache.isis.testdomain.model.bad.InvalidServiceWithAlias
     }
 
     @Test
