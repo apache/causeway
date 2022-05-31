@@ -203,10 +203,47 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
 
         E2 e2Modified = e2List.get(0);
 
-        //TODO: implement ...
-//        assertEquals("bar", e2Modified.getName());
-//
-//        Approvals.verify(response, new Options());
+        assertEquals("bar", e2Modified.getName());
+
+        Approvals.verify(response, gqlOptions());
+
+    }
+
+    @Test
+    @UseReporter(TextWebReporter.class)
+    void changeE1() throws Exception {
+
+        // given
+        List<E1> e1List = new ArrayList<>();
+        List<E2> e2List = new ArrayList<>();
+
+        transactionService.runTransactional(Propagation.REQUIRED, () -> {
+            E1 e1 = testEntityRepository.createE1("e1", null);
+            e1List.add(e1);
+            e1List.add(testEntityRepository.createE1("alternativeE1", null));
+            e2List.add(testEntityRepository.createE2("foo", e1));
+
+        });
+
+        E1 e1 = e1List.get(0);
+        assertEquals("e1", e1.getName());
+        E1 e1Alt = e1List.get(1);
+        assertEquals("alternativeE1", e1Alt.getName());
+
+
+        E2 e2 = e2List.get(0);
+        assertEquals("foo", e2.getName());
+        assertEquals(e1, e2.getE1());
+
+        // when
+        String response = transactionService.callTransactional(Propagation.REQUIRED, () -> {
+
+            return submit();
+
+        }).ifFailureFail().getValue().get();
+
+        Approvals.verify(response, gqlOptions());
+
 
     }
 

@@ -4,8 +4,10 @@
       "findE2" : {
         "name" : "foo",
         "_gql_mutations" : {
-          "changeName" : {
-            "name" : "bar"
+          "changeE1" : {
+            "e1" : {
+              "name" : "alternativeE1"
+            }
           }
         }
       }
