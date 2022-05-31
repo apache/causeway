@@ -699,11 +699,25 @@ public final class ManagedObjects {
             val objectManager = managedObject.getObjectManager();
 
             val reattached = bookmark(managedObject)
-            .map(bookmark->objectManager.loadObject(
+            .map(bookmark->
                     ObjectLoader.Request.of(
                                     spec,
-                                    bookmark)))
+                                    bookmark))
+            .map(loadRequest->Try.call(
+                    ()->objectManager.loadObject(loadRequest)))
+            .map(loadResult->
+                    // a valid scenario for entities: not found eg. after deletion,
+                    // which will fail the load request
+                    loadResult.isFailure()
+                            ? ManagedObject.empty(managedObject.getSpecification())
+                            : loadResult.getValue().get()
+            )
             .orElse(managedObject);
+
+            // handles deleted entities
+            if(isNullOrUnspecifiedOrEmpty(reattached)) {
+                return managedObject;
+            }
 
             val newState = EntityUtil.getEntityState(reattached);
             _Assert.assertTrue(newState.isAttached());
