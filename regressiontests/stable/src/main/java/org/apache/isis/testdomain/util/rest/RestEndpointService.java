@@ -69,7 +69,7 @@ public class RestEndpointService {
         return port;
     }
 
-    private static final String INVENTORY_RESOURCE = "services/testdomain.jdo.InventoryResource";
+    private static final String INVENTORY_RESOURCE = "services/testdomain.jdo.InventoryResourceAlias";
 
     // -- NEW CLIENT
 
@@ -85,7 +85,8 @@ public class RestEndpointService {
         val restRootPath =
                 String.format("http://localhost:%d%s/",
                         getPort(),
-                        webAppContextPath.prependContextPath(this.restEasyConfiguration.getJaxrs().getDefaultPath())
+                        webAppContextPath
+                            .prependContextPath(this.restEasyConfiguration.getJaxrs().getDefaultPath())
                 );
 
         log.debug("new restful client created for {}", restRootPath);
@@ -119,7 +120,8 @@ public class RestEndpointService {
 
     public Try<JdoBook> getRecommendedBookOfTheWeek(final RestfulClient client) {
 
-        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeek/invoke");
+        val request = newInvocationBuilder(client,
+                INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeek/invoke");
         val args = client.arguments()
                 .build();
 
@@ -131,7 +133,8 @@ public class RestEndpointService {
 
     public Try<BookDto> getRecommendedBookOfTheWeekDto(final RestfulClient client) {
 
-        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekDto/invoke");
+        val request = newInvocationBuilder(client,
+                INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekDto/invoke");
         val args = client.arguments()
                 .build();
 
@@ -143,7 +146,8 @@ public class RestEndpointService {
 
     public Try<Can<JdoBook>> getMultipleBooks(final RestfulClient client) throws JAXBException {
 
-        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/multipleBooks/invoke");
+        val request = newInvocationBuilder(client,
+                INVENTORY_RESOURCE + "/actions/multipleBooks/invoke");
         val args = client.arguments()
                 .addActionParameter("nrOfBooks", 2)
                 .build();
@@ -157,7 +161,8 @@ public class RestEndpointService {
 
     public Try<JdoBook> storeBook(final RestfulClient client, final JdoBook newBook) throws JAXBException {
 
-        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/storeBook/invoke");
+        val request = newInvocationBuilder(client,
+                INVENTORY_RESOURCE + "/actions/storeBook/invoke");
         val args = client.arguments()
                 .addActionParameter("newBook", BookDto.from(newBook).encode())
                 .build();
@@ -170,7 +175,8 @@ public class RestEndpointService {
 
     public Try<BookDto> getRecommendedBookOfTheWeekAsDto(final RestfulClient client) {
 
-        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekAsDto/invoke");
+        val request = newInvocationBuilder(client,
+                INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekAsDto/invoke");
         val args = client.arguments()
                 .build();
 
@@ -182,7 +188,8 @@ public class RestEndpointService {
 
     public Try<Can<BookDto>> getMultipleBooksAsDto(final RestfulClient client) throws JAXBException {
 
-        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/multipleBooksAsDto/invoke");
+        val request = newInvocationBuilder(client,
+                INVENTORY_RESOURCE + "/actions/multipleBooksAsDto/invoke");
         val args = client.arguments()
                 .addActionParameter("nrOfBooks", 2)
                 .build();
@@ -196,7 +203,8 @@ public class RestEndpointService {
 
     public Try<String> getHttpSessionInfo(final RestfulClient client) {
 
-        val request = newInvocationBuilder(client, INVENTORY_RESOURCE + "/actions/httpSessionInfo/invoke");
+        val request = newInvocationBuilder(client,
+                INVENTORY_RESOURCE + "/actions/httpSessionInfo/invoke");
         val args = client.arguments()
                 .build();
 

@@ -45,7 +45,8 @@ import lombok.val;
 
 @Named("testdomain.jdo.InventoryResource")
 @DomainService(
-        nature = NatureOfService.REST
+        nature = NatureOfService.REST,
+        aliased = "testdomain.jdo.InventoryResourceAlias" // <-- as tested with RestEndpointService
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })

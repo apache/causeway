@@ -151,7 +151,7 @@ implements DomainServiceResource {
 
         val serviceAdapter = getServiceAdapter(serviceId);
 
-        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(resourceContext, null, JsonRepresentation.newMap());
+        val renderer = new DomainObjectReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())
         .with(serviceAdapter)
         .includesSelf();

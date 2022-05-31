@@ -53,7 +53,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     @Override
-    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(String id) {
+    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(final String id) {
         return Optional.ofNullable(managedBeansById.get().get(id));
     }
 
@@ -68,9 +68,14 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     }
 
     @Override
-    public <T> Can<T> select(Class<T> type, Annotation[] qualifiers) {
+    public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
         return isisSystemEnvironment.getIocContainer()
                 .select(type, qualifiers);
+    }
+
+    @Override
+    public void clearRegisteredBeans() {
+        managedBeansById.clear();
     }
 
     // -- HELPER
@@ -79,26 +84,17 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
             _Lazy.threadSafe(this::enumerateManagedBeans);
 
     private Map<String, _ManagedBeanAdapter> enumerateManagedBeans() {
-
         val managedBeanAdapterByName = _Maps.<String, _ManagedBeanAdapter>newHashMap();
         val managedBeansContributing = isisBeanTypeRegistry.getManagedBeansContributing().keySet();
 
-        isisSystemEnvironment.getIocContainer().streamAllBeans()
+        isisSystemEnvironment.getIocContainer()
+        .streamAllBeans()
         .filter(_NullSafe::isPresent)
         .filter(bean->managedBeansContributing.contains(bean.getBeanClass())) // do not register unknown sort
-        .forEach(bean->{
-            val id = bean.getId();
-            managedBeanAdapterByName.put(id, bean);
-        });
+        .forEach(bean->
+            managedBeanAdapterByName.put(bean.getId(), bean));
 
         return managedBeanAdapterByName;
     }
-
-    @Override
-    public void clearRegisteredBeans() {
-        managedBeansById.clear();
-    }
-
-
 
 }

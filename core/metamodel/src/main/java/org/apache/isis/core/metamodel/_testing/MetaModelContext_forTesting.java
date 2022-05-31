@@ -190,10 +190,10 @@ implements MetaModelContext {
 
     // -- LOOKUP
 
-    @Override
-    public <T> T getSingletonElseFail(final Class<T> type) {
-        return getSystemEnvironment().ioc().getSingletonElseFail(type);
-    }
+//    @Override
+//    public <T> T getSingletonElseFail(final Class<T> type) {
+//        return getSystemEnvironment().ioc().getSingletonElseFail(type);
+//    }
 
     private Stream<Object> streamSingletons() {
 

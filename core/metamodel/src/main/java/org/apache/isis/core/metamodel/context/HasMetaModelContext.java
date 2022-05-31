@@ -136,10 +136,6 @@ public interface HasMetaModelContext {
         return getMetaModelContext().lookupServiceAdapterById(serviceId);
     }
 
-    default <T> T getSingletonElseFail(final Class<T> type) {
-        return getMetaModelContext().getSingletonElseFail(type);
-    }
-
     default Stream<ManagedObject> streamServiceAdapters() {
         return getMetaModelContext().streamServiceAdapters();
     }
