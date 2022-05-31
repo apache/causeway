@@ -22,8 +22,11 @@ import java.util.concurrent.atomic.LongAdder;
 
 import javax.ws.rs.core.Response;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.functional.Railway;
@@ -61,10 +64,17 @@ class _DomainResourceHelper {
         return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainObjectLinkTo());
     }
 
+//    public static _DomainResourceHelper ofServiceResource(
+//            final IResourceContext resourceContext,
+//            final ManagedObject objectAdapter) {
+//        return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainServiceLinkTo());
+//    }
+
     public static _DomainResourceHelper ofServiceResource(
             final IResourceContext resourceContext,
-            final ManagedObject objectAdapter) {
-        return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainServiceLinkTo());
+            final String serviceIdOrAlias) {
+        return new _DomainResourceHelper(resourceContext,
+                getServiceAdapter(resourceContext, serviceIdOrAlias), new DomainServiceLinkTo());
     }
 
     private _DomainResourceHelper(
@@ -308,11 +318,22 @@ class _DomainResourceHelper {
     // dependencies (from context)
     // //////////////////////////////////////
 
-    public ManagedObject getServiceAdapter(final String serviceId) {
-        final ManagedObject serviceAdapter = resourceContext.getMetaModelContext().lookupServiceAdapterById(serviceId);
+    //TODO pretty low level stuff; maybe move the logic to metamodel module
+    static ManagedObject getServiceAdapter(
+            final IResourceContext resourceContext,
+            final @Nullable String serviceIdOrAlias) {
+
+        val mmc = resourceContext.getMetaModelContext();
+
+        final ManagedObject serviceAdapter = mmc.getSpecificationLoader()
+                .lookupLogicalType(serviceIdOrAlias)
+                .map(LogicalType::getLogicalTypeName)
+                .map(mmc::lookupServiceAdapterById)
+                .orElse(null);
+
         if(serviceAdapter==null) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND,
-                    "Could not locate service '%s'", serviceId);
+                    "Could not locate service '%s'", serviceIdOrAlias);
         }
         return serviceAdapter;
     }

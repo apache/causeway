@@ -165,15 +165,6 @@ public abstract class ResourceAbstract {
                                 bookmark)));
     }
 
-    protected ManagedObject getServiceAdapter(final String serviceId) {
-        final ManagedObject serviceAdapter = metaModelContext.lookupServiceAdapterById(serviceId);
-        if(serviceAdapter==null) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND,
-                    "Could not locate service '%s'", serviceId);
-        }
-        return serviceAdapter;
-    }
-
     protected SpecificationLoader getSpecificationLoader() {
         return metaModelContext.getSpecificationLoader();
     }
