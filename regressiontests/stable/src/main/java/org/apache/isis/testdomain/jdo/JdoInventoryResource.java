@@ -90,7 +90,7 @@ public class JdoInventoryResource {
     public List<JdoBook> multipleBooks(
             @ParameterLayout(named = "")
             final int nrOfBooks) {
-        return listBooks();//createMultipleBooks("MultipleBooksTest", nrOfBooks, repository::persist);
+        return listBooks();
     }
 
     @Action //TODO improve the REST client such that the param can be of type Book
@@ -139,7 +139,7 @@ public class JdoInventoryResource {
     @Action
     public JdoInventoryJaxbVm inventoryAsJaxbVm() {
         val inventoryJaxbVm = factoryService.viewModel(new JdoInventoryJaxbVm());
-        val books = listBooks();//createMultipleBooks("InventoryAsJaxbVmTest", 3, repository::persist);
+        val books = listBooks();
         if(_NullSafe.size(books)>0) {
             inventoryJaxbVm.setName("Bookstore");
             inventoryJaxbVm.setBooks(books);

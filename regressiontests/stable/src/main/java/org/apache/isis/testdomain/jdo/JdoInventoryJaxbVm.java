@@ -59,7 +59,10 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("testdomain.jdo.JdoInventoryJaxbVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL)
+        nature=Nature.VIEW_MODEL,
+        aliased={
+            "testdomain.jdo.JdoInventoryJaxbVmAlias"
+        })
 public class JdoInventoryJaxbVm {
 
     @XmlTransient @Inject

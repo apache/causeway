@@ -29,11 +29,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.client.SuppressionType;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.testdomain.jdo.JdoInventoryJaxbVm;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.ldap.LdapConstants;
 import org.apache.isis.testdomain.util.dto.BookDto;
@@ -42,26 +44,20 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.isis.viewer.restfulobjects.client.log.ClientConversationFilter;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class RestEndpointService {
 
     private final Environment environment;
     private final RestEasyConfiguration restEasyConfiguration;
     private final WebAppContextPath webAppContextPath;
-
-    @Inject
-    public RestEndpointService(
-            final Environment environment,
-            final RestEasyConfiguration restEasyConfiguration,
-            final WebAppContextPath webAppContextPath) {
-        this.environment = environment;
-        this.restEasyConfiguration = restEasyConfiguration;
-        this.webAppContextPath = webAppContextPath;
-    }
+    private final JdoTestFixtures jdoTestFixtures;
+    private final InteractionService interactionService;
 
     public int getPort() {
         if(port==null) {
@@ -113,8 +109,8 @@ public class RestEndpointService {
 
     // -- NEW REQUEST BUILDER
 
-    public Invocation.Builder newInvocationBuilder(final RestfulClient client, final String actionPath) {
-        return client.request(actionPath, SuppressionType.ALL);
+    public Invocation.Builder newInvocationBuilder(final RestfulClient client, final String endpointPath) {
+        return client.request(endpointPath, SuppressionType.ALL);
     }
 
     // -- ENDPOINTS
@@ -210,10 +206,27 @@ public class RestEndpointService {
 
         val response = request.post(args);
         val digest = client.digest(response, JdoInventoryJaxbVm.class);
-
         return digest;
     }
 
+    public Try<Can<JdoBook>> getBooksFromInventoryAsJaxbVm(final RestfulClient client) {
+
+        val objectId = interactionService.callAnonymous(
+                ()->jdoTestFixtures.getJdoInventoryJaxbVmAsBookmark().getIdentifier());
+
+        // using domain object alias ...
+        val request = newInvocationBuilder(client,
+                "objects/testdomain.jdo.JdoInventoryJaxbVmAlias/"
+                        + objectId + "/actions/listBooks/invoke");
+
+        val args = client.arguments()
+                .build();
+
+        val response = request.post(args);
+        val digest = client.digestList(response, JdoBook.class, new GenericType<List<JdoBook>>() {});
+
+        return digest;
+    }
 
     public Try<String> getHttpSessionInfo(final RestfulClient client) {
 
@@ -228,7 +241,6 @@ public class RestEndpointService {
         return digest;
     }
 
-
     // -- HELPER
 
     private Integer port;
@@ -237,6 +249,5 @@ public class RestEndpointService {
         // spring embedded web server port
         port = Integer.parseInt(environment.getProperty("local.server.port"));
     }
-
 
 }

@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.events.metamodel.MetamodelListener;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
@@ -116,6 +117,10 @@ public class JdoTestFixtures implements MetamodelListener {
         inventory.getProducts()
         .add(JdoBook.of("Sample Book-1", "A sample book for testing.", 39., "Sample Author", "ISBN-A",
                 "Sample Publisher"));
+    }
+
+    public Bookmark getJdoInventoryJaxbVmAsBookmark() {
+        return bookmarkService.bookmarkForElseFail(setUpViewmodelWith3Books());
     }
 
     public JdoInventoryJaxbVm setUpViewmodelWith3Books() {

@@ -55,6 +55,23 @@ class RestServiceTest {
     @LocalServerPort int port; // just for reference (not used)
     @Inject RestEndpointService restService;
 
+    @Test
+    void httpSessionInfo() {
+
+        val useRequestDebugLogging = false;
+        val restfulClient = restService.newClient(useRequestDebugLogging);
+
+        val digest = restService.getHttpSessionInfo(restfulClient)
+                .ifFailure(Assertions::fail);
+
+        val httpSessionInfo = digest.getValue().orElseThrow();
+
+        assertNotNull(httpSessionInfo);
+
+        // NB: this works only because we excluded wicket viewer from the app.
+        assertEquals("no http-session", httpSessionInfo);
+
+    }
 
     @Test
     void bookOfTheWeek_viaRestEndpoint() {
@@ -169,26 +186,29 @@ class RestServiceTest {
         assertNotNull(inventoryAsJaxbVm);
         assertEquals("Bookstore", inventoryAsJaxbVm.getName());
 
-        //TODO test whether we can call an action eg. listBooks() on the VM via REST
-
     }
 
     @Test
-    void httpSessionInfo() {
+    void listBooks_fromInventoryAsJaxbVm_viaRestEndpoint() {
+
+        assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
-        val digest = restService.getHttpSessionInfo(restfulClient)
+        val digest = restService.getBooksFromInventoryAsJaxbVm(restfulClient)
                 .ifFailure(Assertions::fail);
 
-        val httpSessionInfo = digest.getValue().orElseThrow();
+        val books = digest.getValue().orElseThrow();
 
-        assertNotNull(httpSessionInfo);
+        val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
 
-        // NB: this works only because we excluded wicket viewer from the app.
-        assertEquals("no http-session", httpSessionInfo);
+        val multipleBooks = books
+                .filter(book->expectedBookTitles.contains(book.getName()));
+
+        assertEquals(3, multipleBooks.size());
 
     }
+
 
 }
