@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javautil.uuids.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaUtilUuidEntity"
-)
+@Named("demo.JavaUtilUuidEntity")
+@DomainObject
 public class JavaUtilUuidJdo                                          // <.>
         extends JavaUtilUuidEntity {
 
 //end::class[]
-    public JavaUtilUuidJdo(java.util.UUID initialValue) {
+    public JavaUtilUuidJdo(final java.util.UUID initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

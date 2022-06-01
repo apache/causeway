@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.primitive.floats.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.primitive.floats.holder.PrimitiveFloatHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.PrimitiveFloatEntity" // shared permissions with concrete sub class
-)
+@Named("demo.PrimitiveFloatEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class PrimitiveFloatEntity
 implements
     HasAsciiDocDescription,

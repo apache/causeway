@@ -18,6 +18,8 @@
  */
 package demoapp.dom.domain.objects.other.mixins;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
@@ -30,12 +32,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+@Named("demo.FibonacciNumberVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        editing = Editing.DISABLED,
-        logicalTypeName = "demo.FibonacciNumberVm"
-)
+        editing = Editing.DISABLED)
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 public class FibonacciNumberVm {

@@ -20,6 +20,7 @@ package demoapp.dom.featured.customui.vm;
 
 import java.io.Serializable;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -41,8 +42,12 @@ import demoapp.dom.featured.customui.latlng.Zoom;
 @XmlRootElement(name = "demo.CustomUiVm")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.CustomUiVm")
-public class WhereInTheWorldVm implements HasAsciiDocDescription, Serializable {
+@Named("demo.CustomUiVm")
+@DomainObject(nature=Nature.VIEW_MODEL)
+public class WhereInTheWorldVm
+implements HasAsciiDocDescription, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Title
     @Getter @Setter

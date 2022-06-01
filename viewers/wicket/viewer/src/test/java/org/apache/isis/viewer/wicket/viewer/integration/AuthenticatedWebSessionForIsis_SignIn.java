@@ -35,7 +35,7 @@ import static org.hamcrest.Matchers.is;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.session.SessionLoggingService;
+import org.apache.isis.applib.services.session.SessionLogService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -80,7 +80,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
                 allowing(mockCommonContext).getServiceRegistry();
                 will(returnValue(mockServiceRegistry));
 
-                allowing(mockServiceRegistry).select(SessionLoggingService.class);
+                allowing(mockServiceRegistry).select(SessionLogService.class);
                 will(returnValue(Can.empty()));
 
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionService.class);

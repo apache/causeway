@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javamath.bigdecimals.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,9 +43,8 @@ import demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalEnti
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaMathBigDecimalEntity"
-)
+@Named("demo.JavaMathBigDecimalEntity")
+@DomainObject
 public class JavaMathBigDecimalJdo                                          // <.>
         extends JavaMathBigDecimalEntity {
 

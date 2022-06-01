@@ -66,7 +66,12 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 @Component @Scope("prototype")
 public @interface DomainObject {
 
-    // ...
+    /**
+     * Alternative logical type name(s) for the annotated type.
+     * @see Bookmark
+     * @see Named
+     */
+    String[] aliased() default {};
 
     /**
      * The class of the domain service that provides an <code>autoComplete(String)</code> method.
@@ -185,9 +190,10 @@ public @interface DomainObject {
      * (same concept as a URN).
      * Otherwise, if not specified, the fully qualified class name is used instead.
      * </p>
-     *
+     * @deprecated use {@link Named} instead
      * @see Named
      */
+    @Deprecated(forRemoval = true, since = "2.0.0-RC1")
     String logicalTypeName()
             default "";
 

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.longs.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javalang.longs.persistence.WrapperLongEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.WrapperLongEntity"
-)
+@Named("demo.WrapperLongEntity")
+@DomainObject
 public class WrapperLongJdo                                          // <.>
         extends WrapperLongEntity {
 
 //end::class[]
-    public WrapperLongJdo(Long initialValue) {
+    public WrapperLongJdo(final Long initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

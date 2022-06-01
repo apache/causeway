@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.isisext.cal.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
@@ -26,9 +28,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.isisext.cal.holder.IsisCalendarEventHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.CalendarEventEntity" // shared permissions with concrete sub class
-)
+@Named("demo.CalendarEventEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class IsisCalendarEventEntity
 implements
     HasAsciiDocDescription,

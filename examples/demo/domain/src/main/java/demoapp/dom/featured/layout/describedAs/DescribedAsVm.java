@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -57,7 +58,8 @@ import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.Tooltip")
+@Named("demo.Tooltip")
+@DomainObject(nature=Nature.VIEW_MODEL)
 public class DescribedAsVm implements HasAsciiDocDescription {
 
     @XmlTransient

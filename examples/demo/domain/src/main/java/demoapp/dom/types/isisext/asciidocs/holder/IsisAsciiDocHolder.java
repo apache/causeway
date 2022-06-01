@@ -18,10 +18,11 @@
  */
 package demoapp.dom.types.isisext.asciidocs.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
+
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-@LogicalTypeName("demo.IsisAsciiDocHolder")
+@Named("demo.IsisAsciiDocHolder")
 //tag::class[]
 public interface IsisAsciiDocHolder {
 

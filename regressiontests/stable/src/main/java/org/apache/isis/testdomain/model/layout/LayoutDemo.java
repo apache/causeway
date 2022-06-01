@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.model.layout;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -36,7 +37,8 @@ import lombok.Setter;
 @XmlRootElement(name = "LayoutDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName="regressiontests.LayoutDemo", editing=Editing.ENABLED)
+@Named("regressiontests.LayoutDemo")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 public class LayoutDemo {
 
     @Property

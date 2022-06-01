@@ -53,8 +53,8 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetHolder.getFacet(DomainServiceFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof DomainServiceFacetAnnotation);
-        DomainServiceFacetAnnotation domainServiceFacet = (DomainServiceFacetAnnotation) facet;
+        assertTrue(facet instanceof DomainServiceFacetForAnnotation);
+        DomainServiceFacetForAnnotation domainServiceFacet = (DomainServiceFacetForAnnotation) facet;
         assertNotNull(domainServiceFacet);
 
         assertNoMethodsRemoved();

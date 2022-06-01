@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.jpa.entities;
 
 import java.util.Set;
 
+import javax.inject.Named;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,8 +44,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
+@Named("testdomain.jpa.Inventory")
 @DomainObject(
-        logicalTypeName = "testdomain.jpa.Inventory",
         entityChangePublishing = Publishing.ENABLED)
 @NamedQuery(
         name = "JpaInventory.findAffordableProducts",

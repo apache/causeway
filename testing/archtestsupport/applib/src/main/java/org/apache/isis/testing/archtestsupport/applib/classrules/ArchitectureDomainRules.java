@@ -26,7 +26,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -58,7 +57,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -73,15 +71,16 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ArchitectureDomainRules {
 
-    /**
-     * This rule requires that classes annotated with the {@link DomainObject} annotation must specify their
-     * {@link DomainObject#logicalTypeName() logicalTypeName}.
-     */
-    public static ArchRule every_DomainObject_must_specify_logicalTypeName() {
+    /*
+     * This rule requires that classes annotated with the {@link DomainObject} annotation must specify a
+     * {@link Named#value() logicalTypeName}.
+     * TODO we deprecated DomainObject#logicalTypeName
+     *//*
+    public static ArchRule every_DomainObject_must_specify_named() {
         return classes()
                 .that().areAnnotatedWith(DomainObject.class)
                 .should().beAnnotatedWith(DomainObject_logicalTypeName());
-    }
+    }*/
 
 // Spring takes care of naming Beans it manages!
 //    /**
@@ -107,31 +106,14 @@ public class ArchitectureDomainRules {
                 .and(new DescribedPredicate<>("have an logicalTypeName") {
                     @Override
                     public boolean apply(final JavaClass javaClass) {
-                        val domainObjectIfAny = javaClass.tryGetAnnotationOfType(DomainObject.class);
-                        if (domainObjectIfAny.isPresent() && !_Strings.isNullOrEmpty(domainObjectIfAny.get().logicalTypeName())) {
-                            return true;
-                        }
-                        val namedIfAny = javaClass.tryGetAnnotationOfType(Named.class);
-                        if (namedIfAny.isPresent() && !_Strings.isNullOrEmpty(namedIfAny.get().value())) {
-                            return true;
-                        }
-
-                        return false;
+                        return _LogicalNaming.hasExplicitLogicalName(javaClass);
                     }
                 })
                 .should(new ArchCondition<>("be unique") {
                     @Override
                     public void check(final JavaClass javaClass, final ConditionEvents conditionEvents) {
-                        val domainObjectIfAny = javaClass.tryGetAnnotationOfType(DomainObject.class);
-                        String logicalTypeName = null;
-                        if (domainObjectIfAny.isPresent()) {
-                            logicalTypeName = domainObjectIfAny.get().logicalTypeName();
-                        } else {
-                            val namedIfAny = javaClass.tryGetAnnotationOfType(Named.class);
-                            if (namedIfAny.isPresent()) {
-                                logicalTypeName = namedIfAny.get().value();
-                            }
-                        }
+                        val logicalTypeName = _LogicalNaming.logicalNameFor(javaClass);
+
                         final JavaClass existing = javaClassByLogicalTypeName.get(logicalTypeName);
                         if (existing != null) {
                             conditionEvents.add(

@@ -27,10 +27,12 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
@@ -47,23 +49,40 @@ import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermis
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * @since 2.0 {@index}
  */
-@DomainObject(
-        logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME
+@Named(ApplicationRole.LOGICAL_TYPE_NAME)
+@DomainObject
+@DomainObjectLayout(
+        titleUiEvent = ApplicationRole.TitleUiEvent.class,
+        iconUiEvent = ApplicationRole.IconUiEvent.class,
+        cssClassUiEvent = ApplicationRole.CssClassUiEvent.class,
+        layoutUiEvent = ApplicationRole.LayoutUiEvent.class
 )
 public abstract class ApplicationRole implements Comparable<ApplicationRole> {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRole";
+    public static final String SCHEMA = IsisModuleExtSecmanApplib.SCHEMA;
+    public static final String TABLE = "ApplicationRole";
 
-    public static final String NAMED_QUERY_FIND_BY_NAME = "ApplicationRole.findByName";
-    public static final String NAMED_QUERY_FIND_BY_NAME_CONTAINING = "ApplicationRole.findByNameContaining";
+    @UtilityClass
+    public static class Nq {
+        public static final String FIND_BY_NAME = ApplicationRole.LOGICAL_TYPE_NAME + ".findByName";
+        public static final String FIND_BY_NAME_CONTAINING = ApplicationRole.LOGICAL_TYPE_NAME + ".findByNameContaining";
+    }
 
     @Inject transient private ApplicationPermissionRepository applicationPermissionRepository;
 
 
-    // -- EVENTS
+    // -- UI & DOMAIN EVENTS
+
+    public static class TitleUiEvent extends IsisModuleExtSecmanApplib.TitleUiEvent<ApplicationRole> { }
+    public static class IconUiEvent extends IsisModuleExtSecmanApplib.IconUiEvent<ApplicationRole> { }
+    public static class CssClassUiEvent extends IsisModuleExtSecmanApplib.CssClassUiEvent<ApplicationRole> { }
+    public static class LayoutUiEvent extends IsisModuleExtSecmanApplib.LayoutUiEvent<ApplicationRole> { }
 
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApplib.PropertyDomainEvent<ApplicationRole, T> {}
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApplib.CollectionDomainEvent<ApplicationRole, T> {}
@@ -98,12 +117,12 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Name {
+        class DomainEvent extends PropertyDomainEvent<String> {}
         int MAX_LENGTH = 120;
         int TYPICAL_LENGTH = 30;
-
-        public static class DomainEvent extends PropertyDomainEvent<String> {}
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
-
     @Name
     public abstract String getName();
     public abstract void setName(String name);
@@ -134,12 +153,12 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Description {
+        class DomainEvent extends PropertyDomainEvent<String> {}
         int MAX_LENGTH = 254;
         int TYPICAL_LENGTH = 50;
-
-        public class DomainEvent extends PropertyDomainEvent<String> {}
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
-
     @Description
     public abstract String getDescription();
     public abstract void setDescription(String description);
@@ -157,9 +176,9 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Users {
-        public static class DomainEvent extends CollectionDomainEvent<ApplicationUser> {}
+        class DomainEvent extends CollectionDomainEvent<ApplicationUser> {}
+        String MAPPED_BY = "roles";
     }
-
     @Users
     public abstract Set<ApplicationUser> getUsers();
 
@@ -177,7 +196,7 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Permissions {
-        public static class DomainEvent extends CollectionDomainEvent<ApplicationPermission> {}
+        class DomainEvent extends CollectionDomainEvent<ApplicationPermission> {}
     }
 
 

@@ -19,6 +19,7 @@
 package org.apache.isis.testing.fixtures.applib.fixturescripts;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -43,10 +44,9 @@ import lombok.Setter;
 /**
  * @since 1.x {@index}
  */
+@Named(FixtureResult.LOGICAL_TYPE_NAME)
 @DomainObject(
-        nature = Nature.VIEW_MODEL,
-        logicalTypeName = FixtureResult.LOGICAL_TYPE_NAME
-        )
+        nature = Nature.VIEW_MODEL)
 @DomainObjectLayout(paged=500)
 @XmlRootElement(name = "fixtureResult")
 @XmlType(
@@ -83,7 +83,7 @@ public class FixtureResult {
         return bookmarkService.lookup(Bookmark.parse(objectBookmark).orElse(null)).orElse(null);
     }
 
-    public void setObject(Object object) {
+    public void setObject(final Object object) {
         this.objectBookmark = bookmarkService.bookmarkForElseFail(object).toString();
     }
 

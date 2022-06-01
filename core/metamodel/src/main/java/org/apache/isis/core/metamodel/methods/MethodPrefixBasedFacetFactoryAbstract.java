@@ -82,7 +82,7 @@ implements MethodPrefixBasedFacetFactory {
             @Override
             public void validate(final ObjectSpecification spec) {
 
-                if(spec.isManagedBean()) {
+                if(spec.isInjectable()) {
                     return;
                 }
 

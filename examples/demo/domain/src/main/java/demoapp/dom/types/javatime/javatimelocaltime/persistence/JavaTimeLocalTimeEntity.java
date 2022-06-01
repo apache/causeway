@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.javatime.javatimelocaltime.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javatime.javatimelocaltime.holder.JavaTimeLocalTimeHolder3;
 
-@DomainObject(
-        logicalTypeName = "demo.JavaTimeLocalTimeEntity" // shared permissions with concrete sub class
-)
+@Named("demo.JavaTimeLocalTimeEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class JavaTimeLocalTimeEntity
 implements
     HasAsciiDocDescription,

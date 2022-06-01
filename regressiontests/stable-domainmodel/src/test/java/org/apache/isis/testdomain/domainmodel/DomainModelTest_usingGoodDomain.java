@@ -41,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Introspection.MemberAnnotationPolicy;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.Config;
@@ -84,6 +85,8 @@ import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstra
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testdomain.model.good.ProperMemberSupportDiscovery;
+import org.apache.isis.testdomain.model.good.ProperObjectWithAlias;
+import org.apache.isis.testdomain.model.good.ProperServiceWithAlias;
 import org.apache.isis.testdomain.model.good.ProperServiceWithMixin;
 import org.apache.isis.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport;
 import org.apache.isis.testdomain.model.good.ViewModelWithEncapsulatedMembers;
@@ -506,6 +509,46 @@ class DomainModelTest_usingGoodDomain {
                 })
                 .count());
 
+    }
+
+    @Test
+    void aliasesOnDomainServices_shouldBeHonored() {
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ProperServiceWithAlias.class);
+        assertTrue(objectSpec.isInjectable());
+        assertTrue(objectSpec.getAction("now").isPresent());
+
+        assertEquals(Can.of(
+                "testdomain.v1.ProperServiceWithAlias",
+                "testdomain.v2.ProperServiceWithAlias"),
+                objectSpec.getAliases().map(LogicalType::getLogicalTypeName));
+
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.v1.ProperServiceWithAlias")
+                .orElse(null));
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.v2.ProperServiceWithAlias")
+                .orElse(null));
+    }
+
+    @Test
+    void aliasesOnDomainObjects_shouldBeHonored() {
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ProperObjectWithAlias.class);
+        assertTrue(objectSpec.isViewModel());
+        assertTrue(objectSpec.getAction("now").isPresent());
+
+        assertEquals(Can.of(
+                "testdomain.v1.ProperObjectWithAlias",
+                "testdomain.v2.ProperObjectWithAlias"),
+                objectSpec.getAliases().map(LogicalType::getLogicalTypeName));
+
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.v1.ProperObjectWithAlias")
+                .orElse(null));
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.v2.ProperObjectWithAlias")
+                .orElse(null));
     }
 
     @Test

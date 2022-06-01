@@ -41,13 +41,6 @@
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-applib</artifactId>
-			<scope>test</scope>
-			<type>test-jar</type>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-integration</artifactId>
 		</dependency>
 
@@ -75,14 +68,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-integtestsupport-applib</artifactId>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-applib</artifactId>
 			<scope>test</scope>
+			<type>test-jar</type>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-fixtures-applib</artifactId>
+			<artifactId>isis-testing-integtestsupport-applib</artifactId>
 			<scope>test</scope>
 		</dependency>
 

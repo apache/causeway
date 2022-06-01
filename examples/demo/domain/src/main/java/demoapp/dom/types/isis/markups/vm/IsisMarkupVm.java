@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isis.markups.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,10 +45,9 @@ import demoapp.dom.types.isis.markups.holder.IsisMarkupHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.IsisMarkupVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.IsisMarkupVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class IsisMarkupVm
         implements HasAsciiDocDescription, IsisMarkupHolder2 {

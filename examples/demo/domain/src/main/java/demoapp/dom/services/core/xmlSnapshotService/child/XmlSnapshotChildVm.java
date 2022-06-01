@@ -18,6 +18,7 @@
  */
 package demoapp.dom.services.core.xmlSnapshotService.child;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -40,14 +41,13 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.XmlSnapshotChildVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.XmlSnapshotChildVm"
-)
+        nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 public class XmlSnapshotChildVm implements HasAsciiDocDescription {
 
-    public XmlSnapshotChildVm(String value) {
+    public XmlSnapshotChildVm(final String value) {
         setValue(value);
     }
 

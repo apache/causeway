@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javasql.javasqldate.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateEntity;
       name = "JavaSqlDateJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.JavaSqlDateEntity"
-)
+@Named("demo.JavaSqlDateEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaSqlDateJpa
         extends JavaSqlDateEntity {

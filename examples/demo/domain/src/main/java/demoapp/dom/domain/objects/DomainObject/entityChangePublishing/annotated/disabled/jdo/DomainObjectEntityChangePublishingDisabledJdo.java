@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -41,9 +42,9 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@Named("demo.DomainObjectEntityChangePublishingDisabledEntity")
 @DomainObject(
     nature=Nature.ENTITY
-    , logicalTypeName = "demo.DomainObjectEntityChangePublishingDisabledEntity"
     , entityChangePublishing = Publishing.DISABLED           // <.>
     , bounding = Bounding.BOUNDED
 )
@@ -55,7 +56,7 @@ public class DomainObjectEntityChangePublishingDisabledJdo
     // ...
 //end::class[]
 
-    public DomainObjectEntityChangePublishingDisabledJdo(String initialValue) {
+    public DomainObjectEntityChangePublishingDisabledJdo(final String initialValue) {
         this.property = initialValue;
         this.propertyUpdatedByAction = initialValue;
     }

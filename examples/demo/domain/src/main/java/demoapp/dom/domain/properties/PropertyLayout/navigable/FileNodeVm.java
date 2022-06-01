@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.PropertyLayout.navigable;
 import java.io.File;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -42,7 +43,8 @@ import lombok.val;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name="FileNode")
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.FileNode")
+@Named("demo.FileNode")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @ToString
 @NoArgsConstructor
 public class FileNodeVm implements HasAsciiDocDescription {

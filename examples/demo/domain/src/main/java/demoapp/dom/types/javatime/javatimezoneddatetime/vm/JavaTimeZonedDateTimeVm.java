@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimezoneddatetime.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,16 +45,15 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDate
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.JavaTimeZonedDateTimeVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.JavaTimeZonedDateTimeVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeZonedDateTimeVm
         implements HasAsciiDocDescription, JavaTimeZonedDateTimeHolder3 {
 
 //end::class[]
-    public JavaTimeZonedDateTimeVm(java.time.ZonedDateTime initialValue) {
+    public JavaTimeZonedDateTimeVm(final java.time.ZonedDateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

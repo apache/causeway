@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.position;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -40,9 +41,9 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.ActionLayoutPositionVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.ActionLayoutPositionVm"
+        nature=Nature.VIEW_MODEL
 )
 public class ActionLayoutPositionVm implements HasAsciiDocDescription {
 

@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.primitive.doubles.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.PrimitiveDoubleHolder")
+@Named("demo.PrimitiveDoubleHolder")
 //tag::class[]
 public interface PrimitiveDoubleHolder {
 

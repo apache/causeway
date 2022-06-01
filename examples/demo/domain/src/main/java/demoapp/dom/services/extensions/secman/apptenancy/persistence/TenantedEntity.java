@@ -18,13 +18,14 @@
  */
 package demoapp.dom.services.extensions.secman.apptenancy.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.values.ValueHolder;
 
-@DomainObject(
-        logicalTypeName = "demo.TenantedEntity" // shared permissions with concrete sub class
-)
+@Named("demo.TenantedEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class TenantedEntity
 implements ValueHolder<String>{
 

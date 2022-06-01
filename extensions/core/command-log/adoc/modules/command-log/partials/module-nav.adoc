@@ -1,6 +1,0 @@
-
-
-
-** xref:userguide:command-log:about.adoc[Command Log]
-
-

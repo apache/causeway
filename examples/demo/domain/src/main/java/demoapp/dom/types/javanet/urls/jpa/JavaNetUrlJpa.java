@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javanet.urls.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javanet.urls.persistence.JavaNetUrlEntity;
       name = "JavaNetUrlJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.JavaNetUrlEntity"
-)
+@Named("demo.JavaNetUrlEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaNetUrlJpa
         extends JavaNetUrlEntity {

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.bytes.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javalang.bytes.persistence.WrapperByteEntity;
       name = "WrapperByteJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.WrapperByteEntity"
-)
+@Named("demo.WrapperByteEntity")
+@DomainObject
 @NoArgsConstructor
 public class WrapperByteJpa
         extends WrapperByteEntity {

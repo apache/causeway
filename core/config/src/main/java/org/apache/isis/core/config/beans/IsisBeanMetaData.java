@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.config.beans;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 
 import lombok.NonNull;
@@ -26,8 +27,61 @@ import lombok.Value;
 @Value(staticConstructor = "of")
 public class IsisBeanMetaData {
 
-    private final @NonNull Class<?> correspondingClass;
+    public enum ManagedBy {
+        UNSPECIFIED,
+        SPRING,
+        ISIS;
+        public boolean isUnspecified() {return this == ManagedBy.UNSPECIFIED; }
+        public boolean isSpring() {return this == ManagedBy.SPRING; }
+        public boolean isIsis() {return this == ManagedBy.ISIS; }
+        /**
+         * Whether Spring should make that underlying bean injectable.
+         * @implNote if not managed by Isis, let ultimately Spring decide
+         */
+        public boolean isInjectable() {
+            return !isIsis();
+        }
+    }
+
     private final @NonNull BeanSort beanSort;
-    private final @NonNull String beanName;
+    private final @NonNull LogicalType logicalType;
+    private @NonNull ManagedBy managedBy;
+
+    public Class<?> getCorrespondingClass() {
+        return logicalType.getCorrespondingClass();
+    }
+
+    public String getBeanName() {
+        return logicalType.getLogicalTypeName();
+    }
+
+    // -- FACTORIES
+
+    public static IsisBeanMetaData injectable(
+            final @NonNull BeanSort beanSort,
+            final @NonNull LogicalType logicalType) {
+        return of(beanSort, logicalType, ManagedBy.SPRING);
+    }
+
+    /**
+     * Let <i>Spring</i> decide.
+     */
+    public static IsisBeanMetaData indifferent(
+            final @NonNull BeanSort beanSort,
+            final @NonNull Class<?> type) {
+        return of(beanSort, LogicalType.infer(type), ManagedBy.UNSPECIFIED);
+    }
+
+    public static IsisBeanMetaData isisManaged(
+            final @NonNull BeanSort beanSort,
+            final @NonNull LogicalType logicalType) {
+        return of(beanSort, logicalType, ManagedBy.ISIS);
+    }
+
+    public static IsisBeanMetaData isisManaged(
+            final @NonNull BeanSort beanSort,
+            final @NonNull Class<?> type) {
+        return isisManaged(beanSort, LogicalType.infer(type));
+    }
 
 }

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.actions.Action.associateWith.child;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -40,9 +41,9 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.ActionAssociateWithChildVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.ActionAssociateWithChildVm"
+        nature=Nature.VIEW_MODEL
 )
 @NoArgsConstructor
 public class ActionAssociateWithChildVm implements HasAsciiDocDescription {

@@ -19,6 +19,7 @@
 package demoapp.dom.types.isisext.markdowns.jdo;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -46,9 +47,8 @@ import demoapp.dom.types.isisext.markdowns.persistence.IsisMarkdownEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.IsisMarkdownEntity"
-)
+@Named("demo.IsisMarkdownEntity")
+@DomainObject
 public class IsisMarkdownJdo                                          // <.>
         extends IsisMarkdownEntity {
 

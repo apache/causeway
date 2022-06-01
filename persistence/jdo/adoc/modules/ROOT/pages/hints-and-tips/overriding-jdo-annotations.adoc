@@ -28,7 +28,7 @@ The second approach (using an `.orm` file) is therefore often more useful than t
 
 A typical use case is to change the database schema for an entity.
 For example, various extension modules use schemas for each entity.
-For example, the `AuditEntry` entity in the xref:security:audit-trail:about.adoc[audit trail] security module is annotated as:
+For example, the `AuditEntry` entity in the xref:security:audittrail:about.adoc[audit trail] security module is annotated as:
 
 [source,java]
 ----

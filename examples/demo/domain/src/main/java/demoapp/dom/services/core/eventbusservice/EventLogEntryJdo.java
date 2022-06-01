@@ -21,6 +21,7 @@ package demoapp.dom.services.core.eventbusservice;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -43,7 +44,8 @@ import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonE
 @Profile("demo-jdo")
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(logicalTypeName = "demo.EventLogEntry")
+@Named("demo.EventLogEntry")
+@DomainObject
 public class EventLogEntryJdo
 extends EventLogEntry {
 

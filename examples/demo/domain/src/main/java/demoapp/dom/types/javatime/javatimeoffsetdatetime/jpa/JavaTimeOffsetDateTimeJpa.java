@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimeoffsetdatetime.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOff
       name = "JavaTimeOffsetDateTimeJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.JavaTimeOffsetDateTimeEntity"
-)
+@Named("demo.JavaTimeOffsetDateTimeEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaTimeOffsetDateTimeJpa
         extends JavaTimeOffsetDateTimeEntity {

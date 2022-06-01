@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.jpa.role.dom;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,13 +40,17 @@ import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq;
+import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(
-        schema = "isisExtensionsSecman",
-        name = "ApplicationRole",
+        schema = ApplicationRole.SCHEMA,
+        name = ApplicationRole.TABLE,
         uniqueConstraints =
             @UniqueConstraint(
                     name = "ApplicationRole_name_UNQ",
@@ -53,20 +58,20 @@ import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 )
 @NamedQueries({
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME,
+            name = Nq.FIND_BY_NAME,
             query = "SELECT r "
                   + "FROM ApplicationRole r "
                   + "WHERE r.name = :name"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.NAMED_QUERY_FIND_BY_NAME_CONTAINING,
+            name = Nq.FIND_BY_NAME_CONTAINING,
             query = "SELECT r "
                   + "FROM ApplicationRole r "
                   + "WHERE r.name LIKE :regex"),
 })
 @EntityListeners(IsisEntityListener.class)
+@Named(ApplicationRole.LOGICAL_TYPE_NAME)
 @DomainObject(
         bounding = Bounding.BOUNDED,
-        logicalTypeName = ApplicationRole.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationRoleRepository.class,
         autoCompleteMethod = "findMatching"
         )
@@ -84,49 +89,27 @@ public class ApplicationRole
     private Long version;
 
 
-    // -- NAME
-
-    @Column(nullable = false, length = Name.MAX_LENGTH)
+    @Column(nullable = Name.NULLABLE, length = Name.MAX_LENGTH)
+    @Name
+    @Getter @Setter
     private String name;
 
-    @Name
-    @Override
-    public String getName() {
-        return name;
-    }
-    @Override
-    public void setName(final String name) {
-        this.name = name;
-    }
 
-
-    // -- DESCRIPTION
-
-    @Column(nullable = true, length = Description.MAX_LENGTH)
+    @Column(nullable = Description.NULLABLE, length = Description.MAX_LENGTH)
+    @Description
+    @Getter @Setter
     private String description;
 
-    @Description
-    @Override
-    public String getDescription() {
-        return description;
-    }
-    @Override
-    public void setDescription(final String description) {
-        this.description = description;
-    }
 
-
-    // -- USERS
-
+    @ManyToMany(mappedBy = Users.MAPPED_BY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Users
-    @ManyToMany(mappedBy = "roles", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser> users = new TreeSet<>();
+    private Set<ApplicationUser> users = new TreeSet<>();
 
-    @Users
     @Override
-    public Set<ApplicationUser> getUsers() {
+    public Set<org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser> getUsers() {
         return _Casts.uncheckedCast(users);
     }
+
     // necessary for integration tests
     public void addToUsers(final ApplicationUser applicationUser) {
         getUsers().add(applicationUser);

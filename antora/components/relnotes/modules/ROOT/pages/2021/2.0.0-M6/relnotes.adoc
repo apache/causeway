@@ -290,7 +290,7 @@ No code changes were made to close these tickets:
 
 
 * link:https://issues.apache.org/jira/browse/ISIS-2555[ISIS-2555] - [WON'T FIX] EntityChanges (as consumed by EntityChangesSubscriber) should associate with transaction, not interaction?
-* link:https://issues.apache.org/jira/browse/ISIS-2514[ISIS-2514] - [DUPLICATE] add JPA support command-log extension
+* link:https://issues.apache.org/jira/browse/ISIS-2514[ISIS-2514] - [DUPLICATE] add JPA support commandlog extension
 * link:https://issues.apache.org/jira/browse/ISIS-2603[ISIS-2603] - [WON'T FIX] Simplify layout styles (that are available for download when prototyping)
 * link:https://issues.apache.org/jira/browse/ISIS-2574[ISIS-2574] - [WON'T FIX] Swagger: Harmonize dependencies of metamodel and vaadin viewer
 

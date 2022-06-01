@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.jdo;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -33,6 +34,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -45,13 +47,16 @@ import lombok.val;
 
 @Named("testdomain.jdo.InventoryResource")
 @DomainService(
-        nature = NatureOfService.REST
+        nature = NatureOfService.REST,
+        aliased = "testdomain.jdo.InventoryResourceAlias" // <-- as tested with RestEndpointService
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class JdoInventoryResource {
 
     final RepositoryService repository;
+    final FactoryService factoryService;
+    final JdoTestFixtures jdoTestFixtures;
 
     @Action
     public List<JdoProduct> listProducts() {
@@ -83,20 +88,9 @@ public class JdoInventoryResource {
 
     @Action
     public List<JdoBook> multipleBooks(
-
-            @ParameterLayout(named = "") final
-            int nrOfBooks
-
-            ) {
-
-        val books = _Lists.<JdoBook>newArrayList();
-
-        // for this test we do not care if we generate duplicates
-        for(int i=0; i<nrOfBooks; ++i) {
-            val book = JdoBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN-"+i, "Publisher");
-            books.add(repository.persist(book));
-        }
-        return books;
+            @ParameterLayout(named = "")
+            final int nrOfBooks) {
+        return listBooks();
     }
 
     @Action //TODO improve the REST client such that the param can be of type Book
@@ -127,27 +121,50 @@ public class JdoInventoryResource {
     @Action
     public BookDto recommendedBookOfTheWeekAsDto() {
         // for this test we do not care if we generate duplicates
-        val book = JdoBook.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
+        val book = JdoBook
+                .of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
         return BookDto.from(book);
     }
 
     @Action
     public List<BookDto> multipleBooksAsDto(
-
             @ParameterLayout(named = "") final
-            int nrOfBooks
-
-            ) {
+            int nrOfBooks) {
 
         val books = _Lists.<BookDto>newArrayList();
-
-        // for this test we do not care if we generate duplicates
-        for(int i=0; i<nrOfBooks; ++i) {
-            val book = JdoBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
-            books.add(BookDto.from(book));
-        }
+        createMultipleBooks("MultipleBooksAsDtoTest", nrOfBooks, newBook->books.add(BookDto.from(newBook)));
         return books;
     }
 
+    @Action
+    public JdoInventoryJaxbVm inventoryAsJaxbVm() {
+        val inventoryJaxbVm = factoryService.viewModel(new JdoInventoryJaxbVm());
+        val books = listBooks();
+        if(_NullSafe.size(books)>0) {
+            inventoryJaxbVm.setName("Bookstore");
+            inventoryJaxbVm.setBooks(books);
+            inventoryJaxbVm.setFavoriteBook(books.get(0));
+        }
+        return inventoryJaxbVm;
+    }
+
+    // -- HELPER
+
+    private List<JdoBook> createMultipleBooks(
+            final String bookTitle,
+            final int nrOfBooks,
+            final Consumer<JdoBook> onNewBook) {
+
+        val books = _Lists.<JdoBook>newArrayList();
+
+        // for this test we do not care if we generate duplicates
+        for(int i=0; i<nrOfBooks; ++i) {
+            val book = JdoBook
+                    .of(bookTitle, "An awesome Book["+i+"]", 12, "Author", "ISBN-"+i, "Publisher");
+            onNewBook.accept(book);
+            books.add(book);
+        }
+        return books;
+    }
 
 }

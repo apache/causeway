@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -51,9 +52,9 @@ import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWith
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.ActionAssociateWithVm")
 @DomainObject(
-    nature=Nature.VIEW_MODEL,
-    logicalTypeName = "demo.ActionAssociateWithVm"
+    nature=Nature.VIEW_MODEL
 )
 @NoArgsConstructor
 //tag::class-properties[]

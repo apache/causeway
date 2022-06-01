@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import java.util.UUID;
 
+import javax.inject.Named;
+
 import org.jmock.Expectations;
 import org.junit.After;
 import org.junit.Assert;
@@ -33,6 +35,7 @@ import static org.junit.Assert.assertFalse;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
@@ -40,7 +43,6 @@ import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
@@ -50,12 +52,11 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.editing.Immutab
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetFromConfiguration;
-import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.AliasedFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 
@@ -556,7 +557,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     public static class LogicalTypeName extends DomainObjectAnnotationFacetFactoryTest {
 
-        @DomainObject(logicalTypeName = "CUS")
+        @Named("CUS")
+        @DomainObject
         class CustomerWithDomainObjectAndObjectTypeSet {
         }
 
@@ -573,18 +575,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         @Test
         public void whenDomainObjectAndObjectTypeSetToTrue() {
-
-            facetFactory.process(new ProcessObjectTypeContext(CustomerWithDomainObjectAndObjectTypeSet.class, facetHolder));
-
-            final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
-            Assert.assertNotNull(facet);
-
-            Assert.assertTrue(facet instanceof LogicalTypeFacetForDomainObjectAnnotation);
-            final LogicalTypeFacetForDomainObjectAnnotation facetForDomainObjectAnnotation =
-                    (LogicalTypeFacetForDomainObjectAnnotation) facet;
-
-            assertThat(facetForDomainObjectAnnotation.value(), is("CUS"));
-
+            assertThat(LogicalType.infer(CustomerWithDomainObjectAndObjectTypeSet.class).getLogicalTypeName(),
+                    is("CUS"));
             expectNoMethodsRemoved();
         }
 
@@ -594,7 +586,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             facetFactory.process(ProcessClassContext
                     .forTesting(CustomerWithDomainObjectButNoObjectType.class, mockMethodRemover, facetHolder));
 
-            final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
+            final Facet facet = facetHolder.getFacet(AliasedFacet.class);
             Assert.assertNull(facet);
 
             expectNoMethodsRemoved();
@@ -606,7 +598,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
             facetFactory.process(ProcessClassContext
                     .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
-            final Facet facet = facetHolder.getFacet(LogicalTypeFacet.class);
+            final Facet facet = facetHolder.getFacet(AliasedFacet.class);
             Assert.assertNull(facet);
 
             expectNoMethodsRemoved();

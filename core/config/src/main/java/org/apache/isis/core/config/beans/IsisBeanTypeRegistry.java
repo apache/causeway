@@ -20,7 +20,6 @@ package org.apache.isis.core.config.beans;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
@@ -35,11 +34,11 @@ public interface IsisBeanTypeRegistry {
     Stream<IsisBeanMetaData> streamIntrospectableTypes();
 
     Map<Class<?>, IsisBeanMetaData> getManagedBeansContributing();
-    Set<Class<?>> getEntityTypes();
-    Set<Class<?>> getMixinTypes();
-    Set<Class<?>> getViewModelTypes();
+    Map<Class<?>, IsisBeanMetaData> getEntityTypes();
+    Map<Class<?>, IsisBeanMetaData> getMixinTypes();
+    Map<Class<?>, IsisBeanMetaData> getViewModelTypes();
     /** discovered per {@code @Value} annotation (vs. registered using a {@link ValueSemanticsProvider})*/
-    Set<Class<?>> getDiscoveredValueTypes();
+    Map<Class<?>, IsisBeanMetaData> getDiscoveredValueTypes();
 
     // -- LOOKUPS
 

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isis.clobs.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -43,16 +44,15 @@ import demoapp.dom.types.isis.clobs.holder.IsisClobHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.IsisClobVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.IsisClobVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class IsisClobVm
         implements HasAsciiDocDescription, IsisClobHolder2 {
 
 //end::class[]
-    public IsisClobVm(Clob initialValue) {
+    public IsisClobVm(final Clob initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

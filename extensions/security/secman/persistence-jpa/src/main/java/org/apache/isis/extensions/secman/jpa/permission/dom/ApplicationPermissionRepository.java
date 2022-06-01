@@ -18,21 +18,11 @@
  */
 package org.apache.isis.extensions.secman.jpa.permission.dom;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepositoryAbstract;
-import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
-import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
-
-import lombok.NonNull;
 
 @Repository
 @Named("isis.ext.secman.ApplicationPermissionRepository")

@@ -21,6 +21,7 @@ package demoapp.dom.domain.actions.progmodel.depargs;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -44,7 +45,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.DependentArgs", editing=Editing.ENABLED)
+@Named("demo.DependentArgs")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 public class DependentArgsActionDemo implements HasAsciiDocDescription {
 
     public String title() {
@@ -85,8 +87,6 @@ public class DependentArgsActionDemo implements HasAsciiDocDescription {
     @Collection
     @Getter
     private final Set<DemoItem> items = new LinkedHashSet<>();
-
-
 
 }
 

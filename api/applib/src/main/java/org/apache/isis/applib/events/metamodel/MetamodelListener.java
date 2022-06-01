@@ -26,12 +26,15 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Convenience interface to listen on {@link MetamodelEvent}s.
+ *
  * <p>
  * Provided as an alternative to directly listening to these events.
+ * </p>
+ *
  * <p>
- * Using precedence {@link Order} {@link PriorityPrecedence#MIDPOINT}.
- * For fine grained precedence control,
- * services need to directly listen to these events instead.
+ * Uses a precedence {@link Order} of {@link PriorityPrecedence#MIDPOINT}.
+ * For fine grained precedence control, instead listen directly to these events rather than implementing this interface.
+ * </p>
  *
  * @since 2.0
  */
@@ -40,12 +43,27 @@ public interface MetamodelListener {
 
     /**
      * Emitted by the framework, once the <i>Metamodel</i> is populated.
+     *
      * <p>
-     * Most common use-case is to seed database values,
+     * A common use-case is to seed database values,
      * right after the <i>Metamodel</i> was loaded.
+     * </p>
+     *
+     * <p>
+     *     NOTE that this callback is called without any
+     *     {@link org.apache.isis.applib.services.iactnlayer.InteractionLayer interaction} (aka persistence session)
+     *     set up; use {@link org.apache.isis.applib.services.iactnlayer.InteractionService} to create one if required.
+     * </p>
      */
     void onMetamodelLoaded();
 
+    /**
+     * <p>
+     *     NOTE that this callback is called without any
+     *     {@link org.apache.isis.applib.services.iactnlayer.InteractionLayer interaction} (aka persistence session)
+     *     set up; use {@link org.apache.isis.applib.services.iactnlayer.InteractionService} to create one if required.
+     * </p>
+     */
     default void onMetamodelAboutToBeLoaded() {}
 
     @EventListener(MetamodelEvent.class)

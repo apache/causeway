@@ -20,6 +20,7 @@ package demoapp.dom.domain.properties.PropertyLayout.renderDay;
 
 import java.time.LocalDate;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -37,20 +38,20 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PropertyLayoutRenderDayVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PropertyLayoutRenderDayVm",
-        editing = Editing.ENABLED
-)
+        editing = Editing.ENABLED)
 @NoArgsConstructor
 public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
 

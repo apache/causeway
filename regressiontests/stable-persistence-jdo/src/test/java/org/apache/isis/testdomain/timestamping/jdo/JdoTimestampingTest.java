@@ -20,7 +20,6 @@ package org.apache.isis.testdomain.timestamping.jdo;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,18 +28,16 @@ import static org.junit.Assert.assertNotNull;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.jdo.entities.JdoProductComment;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJdo.class
-        }, 
+        },
         properties = {
 //                "logging.config=log4j2-debug-persistence.xml",
 //                IsisPresets.DebugPersistence,
@@ -48,22 +45,11 @@ import lombok.val;
 @Transactional
 class JdoTimestampingTest extends IsisIntegrationTestAbstract {
 
-    @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
-
-    @BeforeEach
-    void setUp() {
-
-        // cleanup
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-
-        // given
-        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-    }
 
     @Test
     void updatedByAt_shouldBeFilledInByTheTimestampingService() {
-        
+
         val product = repository.allInstances(JdoProduct.class).listIterator().next();
         assertNotNull(product);
 
@@ -72,10 +58,10 @@ class JdoTimestampingTest extends IsisIntegrationTestAbstract {
         comment.setComment("Awesome Book!");
 
         repository.persist(comment);
-            
+
         assertNotNull(comment.getUpdatedAt());
         assertNotNull(comment.getUpdatedBy());
-        
+
     }
 
 }

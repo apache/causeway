@@ -18,14 +18,15 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 
+@Named("simple.Bar")
 @DomainObject(
-        nature = Nature.VIEW_MODEL,
-        logicalTypeName = "simple.Bar"
-        )
+        nature = Nature.VIEW_MODEL)
 public class Bar {
 
     @Action

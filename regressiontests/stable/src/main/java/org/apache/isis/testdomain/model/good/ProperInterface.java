@@ -18,10 +18,11 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Property;
 
-@LogicalTypeName("isis.testdomain.ProperInterface")
+@Named("isis.testdomain.ProperInterface")
 public interface ProperInterface {
 
     // -- read/write exemplar

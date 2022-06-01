@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.Property.projecting;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -46,11 +47,10 @@ import demoapp.dom.domain.properties.Property.projecting.child.PropertyProjectin
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PropertyProjectingVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PropertyProjectingVm",
-        editing = Editing.ENABLED
-)
+        editing = Editing.ENABLED)
 @NoArgsConstructor
 public class PropertyProjectingVm implements HasAsciiDocDescription {
 

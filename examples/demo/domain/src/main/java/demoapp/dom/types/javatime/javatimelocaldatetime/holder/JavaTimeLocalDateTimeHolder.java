@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javatime.javatimelocaldatetime.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.JavaTimeLocalDateTimeHolder")
+@Named("demo.JavaTimeLocalDateTimeHolder")
 //tag::class[]
 public interface JavaTimeLocalDateTimeHolder {
 

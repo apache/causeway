@@ -106,7 +106,7 @@ class MetaModelServiceDefaultTest {
                 allowing(mockSpec).subclasses(Hierarchical.Depth.DIRECT);
                 will(returnValue(Can.empty()));
 
-                allowing(mockSpec).isManagedBean();
+                allowing(mockSpec).isInjectable();
                 will(returnValue(true));
             }
         });

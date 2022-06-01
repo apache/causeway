@@ -70,7 +70,7 @@ implements ApplicationTenancyRepository {
             return Collections.emptySortedSet();
         }
         val regex = regexReplacer.asRegex(search);
-        return repository.allMatches(Query.named(this.applicationTenancyClass, ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING)
+        return repository.allMatches(Query.named(this.applicationTenancyClass, ApplicationTenancy.Nq.FIND_BY_NAME_OR_PATH_MATCHING)
                 .withParameter("regex", regex))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
@@ -86,7 +86,7 @@ implements ApplicationTenancyRepository {
     }
 
     public ApplicationTenancy findByName(final String name) {
-        return repository.uniqueMatch(Query.named(this.applicationTenancyClass, ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME)
+        return repository.uniqueMatch(Query.named(this.applicationTenancyClass, ApplicationTenancy.Nq.FIND_BY_NAME)
                 .withParameter("name", name)).orElse(null);
     }
 
@@ -105,7 +105,7 @@ implements ApplicationTenancyRepository {
         if (path == null) {
             return null;
         }
-        return repository.uniqueMatch(Query.named(this.applicationTenancyClass, ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH)
+        return repository.uniqueMatch(Query.named(this.applicationTenancyClass, ApplicationTenancy.Nq.FIND_BY_PATH)
                 .withParameter("path", path))
                 .orElse(null);
     }

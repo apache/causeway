@@ -23,6 +23,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -34,9 +36,8 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 /**
  * @since 2.x  {@index}
  */
-@DomainObject(
-        logicalTypeName = ApplicationTypeAction.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationTypeAction.LOGICAL_TYPE_NAME)
+@DomainObject
 @DomainObjectLayout(
         paged = 100
 )

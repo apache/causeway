@@ -58,6 +58,7 @@ import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerFo
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault;
+import org.apache.isis.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.isis.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.isis.core.runtimeservices.sitemap.SitemapServiceDefault;
 import org.apache.isis.core.runtimeservices.spring.SpringBeansService;
@@ -94,6 +95,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         ImpersonateMenuAdvisorDefault.class,
         InteractionDtoFactoryDefault.class,
         InteractionServiceDefault.class,
+        InteractionIdGenerator.class,
         JaxbServiceDefault.class,
         LocaleChoiceProviderDefault.class,
         LanguageProviderDefault.class,

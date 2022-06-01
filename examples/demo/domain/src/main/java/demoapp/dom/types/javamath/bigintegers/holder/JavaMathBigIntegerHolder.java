@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javamath.bigintegers.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.JavaMathBigIntegerHolder")
+@Named("demo.JavaMathBigIntegerHolder")
 //tag::class[]
 public interface JavaMathBigIntegerHolder {
 

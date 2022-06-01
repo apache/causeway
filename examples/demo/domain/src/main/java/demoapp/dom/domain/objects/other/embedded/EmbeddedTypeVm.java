@@ -21,6 +21,7 @@ package demoapp.dom.domain.objects.other.embedded;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -32,7 +33,8 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntity;
 
 // tag::class[]
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.EmbeddedTypeVm")
+@Named("demo.EmbeddedTypeVm")
+@DomainObject(nature=Nature.VIEW_MODEL)
 public class EmbeddedTypeVm implements HasAsciiDocDescription {
 
     // ...

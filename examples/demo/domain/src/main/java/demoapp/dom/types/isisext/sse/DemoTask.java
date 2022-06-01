@@ -20,6 +20,8 @@ package demoapp.dom.types.isisext.sse;
 
 import java.util.concurrent.atomic.LongAdder;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
@@ -30,7 +32,8 @@ import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 
 import lombok.RequiredArgsConstructor;
 
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.AsyncDemoTask", editing=Editing.DISABLED)
+@Named("demo.AsyncDemoTask")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.DISABLED)
 @RequiredArgsConstructor(staticName="of")
 public class DemoTask implements SseSource {
 

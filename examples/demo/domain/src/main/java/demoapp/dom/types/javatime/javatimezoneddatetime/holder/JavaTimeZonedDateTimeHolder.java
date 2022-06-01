@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javatime.javatimezoneddatetime.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.JavaTimeZonedDateTimeHolder")
+@Named("demo.JavaTimeZonedDateTimeHolder")
 //tag::class[]
 public interface JavaTimeZonedDateTimeHolder {
 

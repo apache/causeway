@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.menu;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.layout.menubars.MenuBars;
@@ -37,7 +39,8 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  */
 public interface MenuBarsService {
 
-    @Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.menu.MenuBarsService.Type")
+    @Named(IsisModuleApplib.NAMESPACE + ".services.menu.MenuBarsService.Type")
+    @Value
     enum Type {
 
         /**
@@ -74,7 +77,7 @@ public interface MenuBarsService {
         return new MenuBarsService() {
 
             @Override
-            public MenuBars menuBars(Type type) {
+            public MenuBars menuBars(final Type type) {
                 throw _Exceptions.unsupportedOperation();
             }
 

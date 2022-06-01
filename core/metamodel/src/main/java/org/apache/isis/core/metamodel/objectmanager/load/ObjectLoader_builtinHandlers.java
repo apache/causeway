@@ -82,7 +82,7 @@ final class ObjectLoader_builtinHandlers {
         public boolean isHandling(final ObjectLoader.Request objectLoadRequest) {
 
             val spec = objectLoadRequest.getObjectSpecification();
-            return spec.isManagedBean();
+            return spec.isInjectable();
         }
 
         @Override

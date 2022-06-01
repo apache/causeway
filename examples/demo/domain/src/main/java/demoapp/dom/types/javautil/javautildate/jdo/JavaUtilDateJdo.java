@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javautil.javautildate.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javautil.javautildate.persistence.JavaUtilDateEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaUtilDateEntity"
-)
+@Named("demo.JavaUtilDateEntity")
+@DomainObject
 public class JavaUtilDateJdo                                          // <.>
         extends JavaUtilDateEntity {
 
 //end::class[]
-    public JavaUtilDateJdo(java.util.Date initialValue) {
+    public JavaUtilDateJdo(final java.util.Date initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

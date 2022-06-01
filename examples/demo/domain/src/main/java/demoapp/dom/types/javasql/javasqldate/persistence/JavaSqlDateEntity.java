@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.javasql.javasqldate.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javasql.javasqldate.holder.JavaSqlDateHolder3;
 
-@DomainObject(
-        logicalTypeName = "demo.JavaSqlDateEntity" // shared permissions with concrete sub class
-)
+@Named("demo.JavaSqlDateEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class JavaSqlDateEntity
 implements
     HasAsciiDocDescription,

@@ -27,6 +27,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import javax.inject.Named;
+
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
@@ -59,13 +61,11 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
+@Named(UserMemento.LOGICAL_TYPE_NAME)
 @DomainObject(
-        nature = Nature.VIEW_MODEL,
-        logicalTypeName = UserMemento.LOGICAL_TYPE_NAME
-)
+        nature = Nature.VIEW_MODEL)
 @DomainObjectLayout(
-        titleUiEvent = UserMemento.TitleUiEvent.class
-)
+        titleUiEvent = UserMemento.TitleUiEvent.class)
 @lombok.Value @lombok.Builder
 public class UserMemento
 implements Serializable {

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimezoneddatetime.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.persistence.JavaTimeZone
       name = "JavaTimeZonedDateTimeJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.JavaTimeZonedDateTimeEntity"
-)
+@Named("demo.JavaTimeZonedDateTimeEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaTimeZonedDateTimeJpa
         extends JavaTimeZonedDateTimeEntity {

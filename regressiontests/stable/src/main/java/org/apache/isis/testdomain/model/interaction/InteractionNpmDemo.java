@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.model.interaction;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -34,7 +35,8 @@ import org.apache.isis.applib.annotation.Nature;
 @XmlRootElement(name = "InteractionNpmDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName="regressiontests.InteractionNpmDemo", editing=Editing.ENABLED)
+@Named("regressiontests.InteractionNpmDemo")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 public class InteractionNpmDemo {
 
 }

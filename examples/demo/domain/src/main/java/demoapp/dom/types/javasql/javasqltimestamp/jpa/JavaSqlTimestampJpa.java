@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javasql.javasqltimestamp.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampEn
       name = "JavaSqlTimestampJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.JavaSqlTimestampEntity"
-)
+@Named("demo.JavaSqlTimestampEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaSqlTimestampJpa
         extends JavaSqlTimestampEntity {

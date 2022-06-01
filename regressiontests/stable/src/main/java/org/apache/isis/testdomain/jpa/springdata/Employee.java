@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.jpa.springdata;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -32,7 +33,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@DomainObject(logicalTypeName = "testdomain.jpa.springdata.Employee")
+@Named("testdomain.jpa.springdata.Employee")
+@DomainObject
 @Getter @Setter @ToString @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Employee {
@@ -45,7 +47,7 @@ public class Employee {
 
     private String lastName;
 
-    public Employee(String firstName, String lastName) {
+    public Employee(final String firstName, final String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }

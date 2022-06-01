@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.chars.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -47,9 +48,8 @@ import demoapp.dom.types.primitive.chars.persistence.PrimitiveCharEntity;
       name = "PrimitiveCharJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.PrimitiveCharEntity"
-)
+@Named("demo.PrimitiveCharEntity")
+@DomainObject
 @NoArgsConstructor
 public class PrimitiveCharJpa
     extends PrimitiveCharEntity {

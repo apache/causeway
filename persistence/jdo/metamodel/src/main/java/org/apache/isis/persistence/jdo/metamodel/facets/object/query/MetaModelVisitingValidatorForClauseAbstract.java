@@ -46,7 +46,7 @@ extends MetaModelVisitingValidatorAbstract {
     @Override
     public void validate(final ObjectSpecification objectSpec) {
 
-        if(objectSpec.isManagedBean()) {
+        if(objectSpec.isInjectable()) {
             return;
         }
 

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.floats.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javalang.floats.persistence.WrapperFloatEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.WrapperFloatEntity"
-)
+@Named("demo.WrapperFloatEntity")
+@DomainObject
 public class WrapperFloatJdo                                          // <.>
         extends WrapperFloatEntity {
 
 //end::class[]
-    public WrapperFloatJdo(Float initialValue) {
+    public WrapperFloatJdo(final Float initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

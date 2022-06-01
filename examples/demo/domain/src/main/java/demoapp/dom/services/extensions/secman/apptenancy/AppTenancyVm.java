@@ -21,6 +21,7 @@ package demoapp.dom.services.extensions.secman.apptenancy;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -45,10 +46,9 @@ import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEnt
 @XmlRootElement(name = "root")
 @XmlType()
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.SecManVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL
-        , logicalTypeName = "demo.SecManVm"
-)
+        nature=Nature.VIEW_MODEL)
 public class AppTenancyVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

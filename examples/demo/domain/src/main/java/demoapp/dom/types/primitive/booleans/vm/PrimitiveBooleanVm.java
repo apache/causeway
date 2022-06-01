@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.booleans.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,16 +41,15 @@ import demoapp.dom.types.primitive.booleans.holder.PrimitiveBooleanHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PrimitiveBooleanVm")
 @DomainObject(
-        nature= Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PrimitiveBooleanVm"
-)
+        nature= Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                               // <.>
 public class PrimitiveBooleanVm
         implements HasAsciiDocDescription, PrimitiveBooleanHolder2 {
 
 //end::class[]
-    public PrimitiveBooleanVm(boolean initialValue) {
+    public PrimitiveBooleanVm(final boolean initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

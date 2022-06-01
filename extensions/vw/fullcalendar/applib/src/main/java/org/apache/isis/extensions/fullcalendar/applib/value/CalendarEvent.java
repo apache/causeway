@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -44,8 +45,8 @@ import lombok.With;
  * @since 2.0 {@index}
  * @apiNote implements Comparable<CalendarEvent> based on epochMillis
  */
-@org.apache.isis.applib.annotation.Value(
-        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.CalendarEvent")
+@Named(IsisModuleApplib.NAMESPACE + ".value.CalendarEvent")
+@org.apache.isis.applib.annotation.Value
 @XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class)
 @Getter @With
 @ToString @EqualsAndHashCode

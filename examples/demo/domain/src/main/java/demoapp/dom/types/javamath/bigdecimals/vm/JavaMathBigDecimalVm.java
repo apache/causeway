@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javamath.bigdecimals.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -33,6 +34,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -42,16 +44,15 @@ import demoapp.dom.types.javamath.bigdecimals.holder.JavaMathBigDecimalHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.JavaMathBigDecimalVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.JavaMathBigDecimalVm"
-)
-@lombok.NoArgsConstructor                                                       // <.>
+        nature=Nature.VIEW_MODEL)
+@NoArgsConstructor                                                       // <.>
 public class JavaMathBigDecimalVm
         implements HasAsciiDocDescription, JavaMathBigDecimalHolder2 {
 
 //end::class[]
-    public JavaMathBigDecimalVm(java.math.BigDecimal initialValue) {
+    public JavaMathBigDecimalVm(final java.math.BigDecimal initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

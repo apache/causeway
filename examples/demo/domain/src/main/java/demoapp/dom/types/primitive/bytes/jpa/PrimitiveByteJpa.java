@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.bytes.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -47,9 +48,8 @@ import demoapp.dom.types.primitive.bytes.persistence.PrimitiveByteEntity;
       name = "PrimitiveByteJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.PrimitiveByteEntity"
-)
+@Named("demo.PrimitiveByteEntity")
+@DomainObject
 @NoArgsConstructor
 public class PrimitiveByteJpa
         extends PrimitiveByteEntity {

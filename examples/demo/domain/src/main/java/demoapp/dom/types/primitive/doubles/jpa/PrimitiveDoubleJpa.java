@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.doubles.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -47,9 +48,8 @@ import demoapp.dom.types.primitive.doubles.persistence.PrimitiveDoubleEntity;
       name = "PrimitiveDoubleJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.PrimitiveDoubleEntity"
-)
+@Named("demo.PrimitiveDoubleEntity")
+@DomainObject
 @NoArgsConstructor
 public class PrimitiveDoubleJpa
         extends PrimitiveDoubleEntity {

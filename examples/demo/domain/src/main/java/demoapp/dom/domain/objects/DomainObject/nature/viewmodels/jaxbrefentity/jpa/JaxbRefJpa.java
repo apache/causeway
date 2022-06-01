@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -45,9 +46,9 @@ import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.J
     name = "JaxbRefJpa"
 )
 @EntityListeners(IsisEntityListener.class)
+@Named("demo.JaxbRefEntity")
 @DomainObject(
-        bounding = Bounding.BOUNDED
-        , logicalTypeName = "demo.JaxbRefEntity")
+        bounding = Bounding.BOUNDED)
 @NoArgsConstructor
 public class JaxbRefJpa
         extends JaxbRefEntity {

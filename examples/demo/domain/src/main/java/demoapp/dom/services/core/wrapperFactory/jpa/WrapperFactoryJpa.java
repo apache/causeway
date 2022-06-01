@@ -19,6 +19,7 @@
 package demoapp.dom.services.core.wrapperFactory.jpa;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -58,9 +59,9 @@ import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePrope
   name = "WrapperFactoryJpa"
 )
 @EntityListeners(IsisEntityListener.class)
+@Named("demo.WrapperFactoryEntity")
 @DomainObject(
         nature=Nature.ENTITY
-        , logicalTypeName = "demo.WrapperFactoryEntity"
         , editing = Editing.DISABLED
 )
 @NoArgsConstructor

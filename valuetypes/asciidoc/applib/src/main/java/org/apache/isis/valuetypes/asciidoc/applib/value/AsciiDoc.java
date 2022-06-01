@@ -21,6 +21,7 @@ package org.apache.isis.valuetypes.asciidoc.applib.value;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
@@ -36,8 +37,8 @@ import lombok.experimental.Accessors;
  *
  * @since 2.0 {@index}
  */
-@org.apache.isis.applib.annotation.Value(
-        logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.AsciiDoc")
+@Named(IsisModuleApplib.NAMESPACE + ".value.AsciiDoc")
+@org.apache.isis.applib.annotation.Value
 @EqualsAndHashCode
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
 public final class AsciiDoc implements Serializable {

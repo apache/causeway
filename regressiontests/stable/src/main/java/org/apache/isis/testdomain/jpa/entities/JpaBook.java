@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.jpa.entities;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -56,9 +57,9 @@ import lombok.extern.log4j.Log4j2;
 @Entity
 @EntityListeners(IsisEntityListener.class)
 @DiscriminatorValue("Book")
+@Named("testdomain.jpa.Book")
 @DomainObject(
-        logicalTypeName = "testdomain.jpa.Book"
-        , entityChangePublishing = Publishing.ENABLED
+        entityChangePublishing = Publishing.ENABLED
 
         , actionDomainEvent = JpaBook.ActionDomainEvent.class
         , propertyDomainEvent = JpaBook.PropertyDomainEvent.class

@@ -358,7 +358,7 @@ under the License.
 
 		<cucumber.version>7.3.4</cucumber.version>
 
-		<cxf-rt-rs-client.version>3.5.2</cxf-rt-rs-client.version>
+		<cxf-rt-rs-client.version>3.5.2-jbossorg-1</cxf-rt-rs-client.version>
 
 		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
@@ -375,7 +375,7 @@ under the License.
 		<docx4j.version>11.3.2</docx4j.version>
 
 		<easymock.version>4.3</easymock.version>
-		<error_prone_annotations.version>2.13.1</error_prone_annotations.version>
+		<error_prone_annotations.version>2.14.0</error_prone_annotations.version>
 
 		<git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
 		<guava.version>31.1-jre</guava.version>
@@ -439,7 +439,7 @@ under the License.
 
 		<togglz.version>3.2.0</togglz.version>
 
-		<vaadin.version>23.0.9</vaadin.version>
+		<vaadin.version>23.0.10</vaadin.version>
 
 		<wicket.version>9.10.0</wicket.version>
 		<wicket-bootstrap.version>6.0.0-M6</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
@@ -566,7 +566,7 @@ under the License.
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-invoker-plugin</artifactId>
-					<version>3.2.2</version>
+					<version>3.3.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -629,7 +629,7 @@ under the License.
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-scm-plugin</artifactId>
-					<version>1.12.2</version>
+					<version>1.13.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

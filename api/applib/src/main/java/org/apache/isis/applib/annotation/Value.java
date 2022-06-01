@@ -48,10 +48,10 @@ public @interface Value {
      * <p>
      * If not specified, the fully qualified class name is used instead.
      * </p>
-     *
-     * @see DomainObject#logicalTypeName()
+      * @deprecated use {@link Named} instead
      * @see Named
      */
+    @Deprecated(forRemoval = true, since = "2.0.0-RC1")
     String logicalTypeName()
             default "";
 

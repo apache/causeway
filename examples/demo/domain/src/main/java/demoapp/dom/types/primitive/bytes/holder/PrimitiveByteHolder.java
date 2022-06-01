@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.primitive.bytes.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.PrimitiveByteHolder")
+@Named("demo.PrimitiveByteHolder")
 //tag::class[]
 public interface PrimitiveByteHolder {
 

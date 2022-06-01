@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.primitive.longs.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.PrimitiveLongHolder")
+@Named("demo.PrimitiveLongHolder")
 //tag::class[]
 public interface PrimitiveLongHolder {
 

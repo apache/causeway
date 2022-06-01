@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.viewers.jdo.wkt;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -40,6 +41,7 @@ import org.apache.isis.testdomain.conf.Configuration_usingWicket;
 import org.apache.isis.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.model.valuetypes.composite.CalendarEventJaxbVm;
+import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 /**
@@ -52,6 +54,9 @@ import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
     // UI (Wicket Viewer)
     IsisModuleViewerWicketViewer.class,
+
+    IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
+
 
     XrayEnable.class // for debugging only
 })
@@ -68,10 +73,9 @@ public class TestAppJdoWkt extends SpringBootServletInitializer {
         SpringApplication.run(new Class[] { TestAppJdoWkt.class }, args);
     }
 
+    @Named("testdomain.jdo.TestHomePage")
     @DomainObject(
-            nature=Nature.VIEW_MODEL,
-            logicalTypeName = "testdomain.jdo.TestHomePage"
-            )
+            nature=Nature.VIEW_MODEL)
     @HomePage
     public static class TestHomePage {
 
@@ -85,7 +89,7 @@ public class TestAppJdoWkt extends SpringBootServletInitializer {
 
         @Action @ActionLayout(sequence = "0.1")
         public TestHomePage setup() {
-            testFixtures.setUp3Books();
+            //testFixtures.install();
             return this;
         }
 

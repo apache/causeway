@@ -25,6 +25,8 @@ import java.lang.annotation.Target;
 import java.util.List;
 import java.util.SortedSet;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -37,9 +39,8 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 /**
  * @since 2.x  {@index}
  */
-@DomainObject(
-        logicalTypeName = ApplicationNamespace.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationNamespace.LOGICAL_TYPE_NAME)
+@DomainObject
 @DomainObjectLayout(paged=100)
 public class ApplicationNamespace extends ApplicationFeatureViewModel {
 

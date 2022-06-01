@@ -19,6 +19,7 @@
 package demoapp.dom.types.isis.markups.jpa;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,9 +58,8 @@ import demoapp.dom.types.isis.markups.persistence.IsisMarkupEntity;
       name = "IsisMarkupJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.IsisMarkupEntity"
-)
+@Named("demo.IsisMarkupEntity")
+@DomainObject
 @NoArgsConstructor
 public class IsisMarkupJpa
         extends IsisMarkupEntity {

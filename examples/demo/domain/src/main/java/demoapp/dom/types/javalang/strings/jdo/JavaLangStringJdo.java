@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.strings.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javalang.strings.persistence.JavaLangStringEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaLangStringEntity"
-)
+@Named("demo.JavaLangStringEntity")
+@DomainObject
 public class JavaLangStringJdo                                                  // <.>
         extends JavaLangStringEntity {
 
 //end::class[]
-    public JavaLangStringJdo(String initialValue) {
+    public JavaLangStringJdo(final String initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

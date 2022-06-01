@@ -21,6 +21,7 @@ package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.usingjaxb;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -51,10 +52,9 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")                              // <.>
 @XmlType                                                    // <.>
 @XmlAccessorType(XmlAccessType.FIELD)                       // <.>
+@Named("demo.StatefulVmUsingJaxb")
 @DomainObject(
-        nature=Nature.VIEW_MODEL
-        , logicalTypeName = "demo.StatefulVmUsingJaxb"
-)
+        nature=Nature.VIEW_MODEL)
 public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
@@ -71,9 +71,9 @@ public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
     @XmlRootElement
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
+    @Named("demo.StatefulViewModelUsingJaxb.Child")
     @DomainObject(
-            nature=Nature.VIEW_MODEL
-            , logicalTypeName = "demo.StatefulVmUsingJaxb.Child")
+            nature=Nature.VIEW_MODEL)
     @Data
     public static class Child {
         @Title

@@ -22,7 +22,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -35,10 +34,8 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryManager;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
@@ -51,19 +48,9 @@ import lombok.val;
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 class JdoWrapperSyncTest extends IsisIntegrationTestAbstract {
 
-    @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
     @Inject private FactoryService facoryService;
     @Inject private WrapperFactory wrapper;
-
-    @BeforeEach
-    void setUp() {
-        // cleanup
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-
-        // given
-        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-    }
 
     @Test
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
@@ -74,14 +61,12 @@ class JdoWrapperSyncTest extends IsisIntegrationTestAbstract {
                 .mapToDouble(JdoProduct::getPrice)
                 .sum();
 
-        assertEquals(39d, sumOfPrices, 1E-6);
+        assertEquals(167d, sumOfPrices, 1E-6);
 
         val products = wrapper.wrap(inventoryManager).listAllProducts();
 
-        assertEquals(1, products.size());
+        assertEquals(3, products.size());
         assertEquals(JdoBook.class, products.get(0).getClass());
     }
-
-
 
 }

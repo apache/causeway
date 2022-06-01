@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.javatime.javatimezoneddatetime.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDateTimeHolder3;
 
-@DomainObject(
-        logicalTypeName = "demo.JavaTimeZonedDateTimeEntity" // shared permissions with concrete sub class
-)
+@Named("demo.JavaTimeZonedDateTimeEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class JavaTimeZonedDateTimeEntity
 implements
     HasAsciiDocDescription,

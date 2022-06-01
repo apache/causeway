@@ -21,10 +21,11 @@ package org.apache.isis.core.metamodel.specloader;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import javax.inject.Named;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.LogicalTypeName;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
@@ -150,7 +151,7 @@ public interface SpecificationLoader {
 
     /**
      * The lookup may also fail (result with null), when there is no concrete or abstract resolvable type,
-     * that matches given {@code logicalTypeName}. Eg. when using {@link LogicalTypeName} on an interface,
+     * that matches given {@code logicalTypeName}. Eg. when using {@link Named} on an interface,
      * while overriding with a different logical-type-name on the concrete or abstract type.
      */
     @Nullable

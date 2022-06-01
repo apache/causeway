@@ -20,7 +20,6 @@ package org.apache.isis.core.config.beans;
 
 import java.util.Map;
 
-import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -70,43 +69,34 @@ implements IsisComponentScanInterceptor {
     // -- FILTER
 
     @Override
-    public void intercept(final ScannedTypeMetaData typeMeta) {
+    public void intercept(final ScannedTypeMetaData scanMeta) {
 
-        val classOrFailure = typeMeta.getUnderlyingClassOrFailure();
+        val classOrFailure = scanMeta.getUnderlyingClass();
         if(classOrFailure.isFailure()) {
             log.warn(classOrFailure.getFailure());
             return;
         }
 
-        val type = classOrFailure.getUnderlyingClass();
-        val classification = isisBeanTypeClassifier.classify(type);
+        val correspondingClass = classOrFailure.getValue().get();
+        val typeMeta = isisBeanTypeClassifier.classify(correspondingClass);
 
-        val delegated = classification.isDelegateLifecycleManagement();
-        typeMeta.setInjectable(delegated);
-        if(delegated) {
-            typeMeta.setBeanNameOverride(classification.getExplicitLogicalTypeName());
+        scanMeta.setInjectable(typeMeta.getManagedBy().isInjectable());
+        if(typeMeta.getManagedBy().isIsis()) {
+            // otherwise we don't interfere with naming strategies
+            scanMeta.setBeanNameOverride(typeMeta.getLogicalType().getLogicalTypeName());
         }
 
-        val beanSort = classification.getBeanSort();
-
+        val beanSort = typeMeta.getBeanSort();
         if(beanSort.isToBeIntrospected()) {
-            addIntrospectableType(beanSort, typeMeta);
-
+            introspectableTypes.put(correspondingClass, typeMeta);
             if(log.isDebugEnabled()) {
                 log.debug("to-be-introspected: {} [{}]",
-                                type,
+                                correspondingClass,
                                 beanSort.name());
             }
         }
 
     }
 
-    // -- HELPER
-
-    private void addIntrospectableType(final BeanSort sort, final ScannedTypeMetaData typeMeta) {
-        val correspondingClass = typeMeta.getUnderlyingClassOrFailure().getUnderlyingClass();
-        val type = IsisBeanMetaData.of(correspondingClass, sort, typeMeta.getEffectiveBeanName());
-        introspectableTypes.put(correspondingClass, type);
-    }
 
 }

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.properties.Property.projecting.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -42,9 +43,9 @@ import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyPro
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@Named("demo.PropertyProjectingChildJdo")
 @DomainObject(
         nature=Nature.ENTITY
-        , logicalTypeName = "demo.PropertyProjectingChildJdo"
         , editing = Editing.DISABLED
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)

@@ -18,10 +18,13 @@
  */
 package demoapp.dom.services.core.eventbusservice;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.ObjectSupport;
 
-@DomainObject(logicalTypeName = "demo.EventLogEntry")
+@Named("demo.EventLogEntry")
+@DomainObject
 public abstract class EventLogEntry {
 
     @ObjectSupport public String title() {

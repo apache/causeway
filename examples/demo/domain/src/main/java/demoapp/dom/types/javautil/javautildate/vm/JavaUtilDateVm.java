@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javautil.javautildate.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,16 +45,15 @@ import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder3;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.JavaUtilDateVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.JavaUtilDateVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaUtilDateVm
         implements HasAsciiDocDescription, JavaUtilDateHolder3 {
 
 //end::class[]
-    public JavaUtilDateVm(java.util.Date initialValue) {
+    public JavaUtilDateVm(final java.util.Date initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

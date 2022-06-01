@@ -18,6 +18,7 @@
  */
 package demoapp.dom.services.core.xmlSnapshotService.peer.child;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -40,14 +41,13 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.XmlSnapshotPeerChildVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.XmlSnapshotPeerChildVm"
-)
+        nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 public class XmlSnapshotPeerChildVm implements HasAsciiDocDescription {
 
-    public XmlSnapshotPeerChildVm(String value) {
+    public XmlSnapshotPeerChildVm(final String value) {
         setValue(value);
     }
 

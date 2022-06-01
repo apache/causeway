@@ -18,8 +18,11 @@
  */
 package org.apache.isis.commons.internal.base;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BooleanSupplier;
 import java.util.function.IntUnaryOperator;
 import java.util.function.LongUnaryOperator;
 import java.util.function.Supplier;
@@ -57,6 +60,10 @@ public final class _Refs {
         return new BooleanReference(value);
     }
 
+    public static BooleanAtomicReference booleanAtomicRef(final boolean value) {
+        return new BooleanAtomicReference(value);
+    }
+
     public static IntReference intRef(final int value) {
         return new IntReference(value);
     }
@@ -89,7 +96,7 @@ public final class _Refs {
         private boolean value;
 
         public boolean update(final @NonNull BooleanUnaryOperator operator) {
-            return value=operator.applyAsBoolean(value);
+            return value = operator.applyAsBoolean(value);
         }
 
         public boolean isTrue() {
@@ -100,6 +107,66 @@ public final class _Refs {
             return !value;
         }
     }
+
+    /**
+     * Serializable thread-safe boolean reference.
+     * @apiNote unfortunately {@link AtomicBoolean} does not quite provide
+     * conditional thread-safe value update
+     */
+    @AllArgsConstructor
+    public static final class BooleanAtomicReference implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private boolean value;
+        private final Object $lock = new Object[0]; // serializable lock
+
+        public boolean compute(final @NonNull BooleanUnaryOperator operator) {
+            synchronized ($lock) {
+                return value = operator.applyAsBoolean(value);
+            }
+        }
+
+        public boolean computeIfFalse(final @NonNull BooleanSupplier supplier) {
+            synchronized ($lock) {
+                return value==false
+                        ? value = supplier.getAsBoolean()
+                        : true;
+            }
+        }
+
+        public boolean computeIfTrue(final @NonNull BooleanSupplier supplier) {
+            synchronized ($lock) {
+                return value==true
+                        ? value = supplier.getAsBoolean()
+                        : false;
+            }
+        }
+
+        public boolean isTrue() {
+            synchronized ($lock) {
+                return value;
+            }
+        }
+
+        public boolean isFalse() {
+            synchronized ($lock) {
+                return !value;
+            }
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            return obj instanceof BooleanAtomicReference
+                ? this.isTrue() == ((BooleanAtomicReference)obj).isTrue()
+                : false;
+        }
+
+        @Override
+        public int hashCode() {
+            return isTrue() ? 1 : -1;
+        }
+
+    }
+
 
     /**
      * Holder of a mutable primitive {@code int} value.

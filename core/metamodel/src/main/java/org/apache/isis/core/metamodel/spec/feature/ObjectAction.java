@@ -263,7 +263,7 @@ public interface ObjectAction extends ObjectMember {
     default PromptStyle getPromptStyle() {
         val promptStyle = lookupFacet(PromptStyleFacet.class)
                 .map(PromptStyleFacet::value);
-        if(getDeclaringType().isManagedBean() // <-- menu actions
+        if(getDeclaringType().isInjectable() // <-- menu actions
                 // no-arg DIALOG is correctly handled,
                 // whereas for INLINE it would render a form with no fields
                 || getParameterCount() == 0) {

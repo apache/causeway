@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javalang.doubles.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.WrapperDoubleHolder")
+@Named("demo.WrapperDoubleHolder")
 //tag::class[]
 public interface WrapperDoubleHolder {
 

@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.transactions.jdo;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,11 +33,11 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures.Lock;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.interaction.InteractionBoundaryProbe;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 @SpringBootTest(
         classes = {
@@ -50,11 +51,12 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
  */
 class JdoTransactionScopeListenerTest {
 
-    @Inject private FixtureScripts fixtureScripts;
+    @Inject private JdoTestFixtures jdoTestFixtures;
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
     @Inject private InteractionService interactionService;
     @Inject private KVStoreForTesting kvStoreForTesting;
+    private Lock lock;
 
     /* Expectations:
      * 1. for each InteractionScope there should be a new InteractionBoundaryProbe instance
@@ -67,15 +69,15 @@ class JdoTransactionScopeListenerTest {
 
     @BeforeEach
     void setUp() {
-
         // new InteractionScope with a new transaction (#1)
-        interactionService.runAnonymous(()->{
+        // clear repository
+        lock = jdoTestFixtures.clearAndAquireLock();
+    }
 
-            // cleanup
-            fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-
-        });
-
+    @AfterEach
+    void restore() {
+        // restore repository
+        lock.release();
     }
 
     @Test
@@ -90,21 +92,20 @@ class JdoTransactionScopeListenerTest {
 
             // reuse transaction (#2)
             transactionService.runWithinCurrentTransactionElseCreateNew(()->{
-
-                fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-
+                // + 1 interaction + 1 transaction
+                jdoTestFixtures.install(lock);
             });
 
             // expected post condition
             // reuse transaction (#2)
-            assertEquals(1, repository.allInstances(JdoBook.class).size());
+            assertEquals(3, repository.allInstances(JdoBook.class).size());
 
         });
 
-        assertEquals(2, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
-        assertEquals(2, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
-        assertEquals(2, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
-        assertEquals(2, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
+        assertEquals(3, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
+        assertEquals(3, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
+        assertEquals(3, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
+        assertEquals(3, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
 
     }
 

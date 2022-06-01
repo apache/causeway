@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.bytes.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -40,14 +41,13 @@ import demoapp.dom.types.primitive.bytes.persistence.PrimitiveByteEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.PrimitiveByteEntity"
-)
+@Named("demo.PrimitiveByteEntity")
+@DomainObject
 public class PrimitiveByteJdo                                       // <.>
         extends PrimitiveByteEntity {
 
 //end::class[]
-    public PrimitiveByteJdo(byte initialValue) {
+    public PrimitiveByteJdo(final byte initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

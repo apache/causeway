@@ -21,6 +21,7 @@ package org.apache.isis.applib.value;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
@@ -33,7 +34,8 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.Placeholder
  *
  * @since 1.x {@index}
  */
-@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Password")
+@Named(IsisModuleApplib.NAMESPACE + ".value.Password")
+@Value
 @XmlAccessorType(XmlAccessType.FIELD)
 // @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class) // TODO: not automatically registered because not secure enough.  Instead we should set up some sort of mechanism to encrypt.
 @lombok.Value

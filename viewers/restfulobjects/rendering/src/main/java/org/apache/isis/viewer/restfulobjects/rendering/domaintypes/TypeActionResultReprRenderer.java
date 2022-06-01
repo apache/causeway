@@ -71,7 +71,7 @@ extends ReprRendererAbstract<ObjectSpecification> {
     }
 
     protected void putExtensionsIfService() {
-        getExtensions().mapPut("isService", objectSpecification.isManagedBean());
+        getExtensions().mapPut("isService", objectSpecification.isInjectable());
     }
 
 }

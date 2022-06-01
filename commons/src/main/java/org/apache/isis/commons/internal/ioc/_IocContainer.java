@@ -112,7 +112,7 @@ public interface _IocContainer {
      * @return IoC managed singleton
      * @throws NoSuchElementException - if the singleton is not resolvable
      */
-    public default <T> T getSingletonElseFail(final @NonNull Class<T> type) {
+    default <T> T getSingletonElseFail(final @NonNull Class<T> type) {
 
         val candidates = select(type);
         if (candidates.getCardinality() == Cardinality.ZERO) {

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isis.passwords.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -50,9 +51,8 @@ import demoapp.dom.types.isis.passwords.persistence.IsisPasswordEntity;
       name = "IsisPasswordJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.IsisPasswordEntity"
-)
+@Named("demo.IsisPasswordEntity")
+@DomainObject
 @NoArgsConstructor
 public class IsisPasswordJpa
         extends IsisPasswordEntity {

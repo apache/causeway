@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.longs.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javalang.longs.persistence.WrapperLongEntity;
       name = "WrapperLongJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.WrapperLongEntity"
-)
+@Named("demo.WrapperLongEntity")
+@DomainObject
 @NoArgsConstructor
 public class WrapperLongJpa
         extends WrapperLongEntity {

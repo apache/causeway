@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.confview;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -45,10 +46,9 @@ import lombok.Setter;
                 "value"
         }
 )
+@Named(ConfigurationProperty.LOGICAL_TYPE_NAME)
 @DomainObject(
-        editing = Editing.DISABLED,
-        logicalTypeName = ConfigurationProperty.LOGICAL_TYPE_NAME
-        )
+        editing = Editing.DISABLED)
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObjectLayout(paged = 999)
 @NoArgsConstructor

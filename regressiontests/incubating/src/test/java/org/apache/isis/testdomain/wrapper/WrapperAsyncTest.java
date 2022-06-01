@@ -49,9 +49,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryManager;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returning;
@@ -60,7 +58,7 @@ import lombok.Getter;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJdo.class,
                 WrapperAsyncTest.ActionDomainEventListener.class
         }
@@ -69,12 +67,12 @@ import lombok.val;
 @DirtiesContext // because of the temporary installed ActionDomainEventListener
 class WrapperAsyncTest extends IsisIntegrationTestAbstract {
 
-    @Inject private FixtureScripts fixtureScripts;
+//    @Inject private FixtureScripts fixtureScripts;
     @Inject private RepositoryService repository;
     @Inject private FactoryService factoryService;
     @Inject private WrapperFactory wrapper;
     @Inject private ActionDomainEventListener actionDomainEventListener;
-    
+
     @Configuration
     public class Config {
         // so that we get a new ApplicationContext.
@@ -82,11 +80,11 @@ class WrapperAsyncTest extends IsisIntegrationTestAbstract {
 
     @BeforeEach
     void setUp() {
-        // cleanup
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-
-        // given
-        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+//        // cleanup
+//        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+//
+//        // given
+//        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
     }
 
     @AfterEach
@@ -142,7 +140,7 @@ class WrapperAsyncTest extends IsisIntegrationTestAbstract {
         // then
         assertEquals(123d, productRefreshed.getPrice(), 1E-6);
     }
-    
+
 
     @Service
     public static class ActionDomainEventListener {
@@ -151,7 +149,7 @@ class WrapperAsyncTest extends IsisIntegrationTestAbstract {
         private final List<JdoInventoryManager.UpdateProductPriceEvent> events = new ArrayList<>();
 
         @EventListener(JdoInventoryManager.UpdateProductPriceEvent.class)
-        public void onDomainEvent(JdoInventoryManager.UpdateProductPriceEvent event) {
+        public void onDomainEvent(final JdoInventoryManager.UpdateProductPriceEvent event) {
             events.add(event);
         }
 

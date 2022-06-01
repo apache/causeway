@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -45,10 +46,9 @@ import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.ActionTypeOfVm")
 @DomainObject(
-    nature=Nature.VIEW_MODEL,
-    logicalTypeName = "demo.ActionTypeOfVm"
-)
+    nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 //tag::class-collections-children[]
 public class ActionTypeOfVm implements HasAsciiDocDescription {
