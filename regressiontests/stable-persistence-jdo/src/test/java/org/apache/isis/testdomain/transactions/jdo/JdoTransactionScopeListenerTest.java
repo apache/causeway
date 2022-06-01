@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.transactions.jdo;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +34,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures.Lock;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.interaction.InteractionBoundaryProbe;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -54,6 +56,7 @@ class JdoTransactionScopeListenerTest {
     @Inject private RepositoryService repository;
     @Inject private InteractionService interactionService;
     @Inject private KVStoreForTesting kvStoreForTesting;
+    private Lock lock;
 
     /* Expectations:
      * 1. for each InteractionScope there should be a new InteractionBoundaryProbe instance
@@ -68,7 +71,13 @@ class JdoTransactionScopeListenerTest {
     void setUp() {
         // new InteractionScope with a new transaction (#1)
         // clear repository
-        jdoTestFixtures.clear();
+        lock = jdoTestFixtures.clearAndAquireLock();
+    }
+
+    @AfterEach
+    void restore() {
+        // restore repository
+        lock.release();
     }
 
     @Test
@@ -84,7 +93,7 @@ class JdoTransactionScopeListenerTest {
             // reuse transaction (#2)
             transactionService.runWithinCurrentTransactionElseCreateNew(()->{
                 // + 1 interaction + 1 transaction
-                jdoTestFixtures.install();
+                jdoTestFixtures.install(lock);
             });
 
             // expected post condition

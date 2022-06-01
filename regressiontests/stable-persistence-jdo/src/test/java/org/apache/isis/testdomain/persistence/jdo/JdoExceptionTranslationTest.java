@@ -65,8 +65,6 @@ class JdoExceptionTranslationTest extends RegressionTestAbstract {
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown
 
-        jdoTestFixtures.install();
-
         assertThrows(DataAccessException.class, ()->{
 
             run(()->{

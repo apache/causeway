@@ -67,9 +67,6 @@ class JdoQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(1)
     void sampleInventory_shouldBeSetUpWith3Books() {
 
-        //testFixtures.setUp3Books();
-        jdoTestFixtures.install();
-
         // when
 
         val inventories = repositoryService.allInstances(JdoInventory.class);

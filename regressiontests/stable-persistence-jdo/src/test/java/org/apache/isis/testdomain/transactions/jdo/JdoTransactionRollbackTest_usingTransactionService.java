@@ -35,6 +35,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures.Lock;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 
 import lombok.val;
@@ -50,15 +51,17 @@ class JdoTransactionRollbackTest_usingTransactionService {
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
 
+    private Lock lock;
+
     @BeforeEach
     void setUp() {
         // clear repository
-        jdoTestFixtures.clear();
+        lock = jdoTestFixtures.clearAndAquireLock();
     }
 
     @AfterEach
     void restore() {
-        jdoTestFixtures.reinstall(()->{});
+        lock.release();
     }
 
     @Test
@@ -68,7 +71,7 @@ class JdoTransactionRollbackTest_usingTransactionService {
             // expected pre condition
             assertEquals(0, repository.allInstances(JdoBook.class).size());
 
-            jdoTestFixtures.install();
+            jdoTestFixtures.install(lock);
 
             // expected post condition
             assertEquals(1, repository.allInstances(JdoBook.class).size());
@@ -86,7 +89,7 @@ class JdoTransactionRollbackTest_usingTransactionService {
 
         val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
             //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-            jdoTestFixtures.install();
+            jdoTestFixtures.install(lock);
             throw _Exceptions.unrecoverable("Test: force current tx to rollback");
         });
 

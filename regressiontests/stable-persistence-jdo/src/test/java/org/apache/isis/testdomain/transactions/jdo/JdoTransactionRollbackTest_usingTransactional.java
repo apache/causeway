@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,6 +35,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures.Lock;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 
 /**
@@ -62,10 +62,12 @@ class JdoTransactionRollbackTest_usingTransactional {
     @Inject private JdoTestFixtures jdoTestFixtures;
     @Inject private RepositoryService repository;
     @Inject private InteractionService interactionService;
+    private static Lock lock;
 
     @Test @Order(1) @Commit
     void clearRepository() {
-        jdoTestFixtures.clear();
+        // clear repository
+        lock = jdoTestFixtures.clearAndAquireLock();
     }
 
     @Test @Order(2)
@@ -80,7 +82,7 @@ class JdoTransactionRollbackTest_usingTransactional {
 
             _Probe.errOut("before fixture");
 
-            jdoTestFixtures.install();
+            jdoTestFixtures.install(lock);
             //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
             _Probe.errOut("after fixture");
@@ -107,9 +109,9 @@ class JdoTransactionRollbackTest_usingTransactional {
 
     }
 
-    @Test @Order(4) @Rollback(false)
+    @Test @Order(4) @Commit
     void restoreDefaultCondition() {
-        jdoTestFixtures.reinstall(()->{});
+        lock.release();
     }
 
 }

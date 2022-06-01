@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures.Lock;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.CommitListener;
 import org.apache.isis.testdomain.util.dto.BookDto;
@@ -81,12 +82,16 @@ extends PublishingTestFactoryAbstract {
 
     @Named("transaction-aware-pmf-proxy")
     private final PersistenceManagerFactory pmf;
+    private Lock lock = null;
 
     // -- TEST SETUP
 
     @Override
     protected void releaseContext(final PublishingTestContext context) {
-
+        if(lock!=null) {
+            lock.release();
+            lock = null;
+        }
     }
 
     @Override
@@ -100,7 +105,7 @@ extends PublishingTestFactoryAbstract {
         case ENTITY_PERSISTING:
 
             // given
-            jdoTestFixtures.clear();
+            lock = jdoTestFixtures.clearAndAquireLock();
             break;
 
         case ENTITY_LOADING:
@@ -109,7 +114,7 @@ extends PublishingTestFactoryAbstract {
         case ENTITY_REMOVAL:
 
             // given
-            jdoTestFixtures.install();
+            //jdoTestFixtures.install(lock);
             break;
         default:
             throw _Exceptions.unmatchedCase(context.getScenario());
@@ -140,7 +145,7 @@ extends PublishingTestFactoryAbstract {
 
             context.runGiven();
             //when
-            jdoTestFixtures.install();
+            jdoTestFixtures.install(lock);
             break;
 
         case ENTITY_LOADING:

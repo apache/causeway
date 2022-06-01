@@ -47,8 +47,6 @@ class JdoJaxbTest extends RegressionTestAbstract {
     @Test
     void inventoryJaxbVm_shouldRoundtripProperly() {
 
-        jdoTestFixtures.install();
-
         val xml = call(()->{
             val inventoryJaxbVm = jdoTestFixtures.setUpViewmodelWith3Books();
             // assert initial reference is populated as expected

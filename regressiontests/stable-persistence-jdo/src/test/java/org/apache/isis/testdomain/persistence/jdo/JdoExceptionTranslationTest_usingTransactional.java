@@ -73,12 +73,6 @@ extends RegressionTestAbstract {
     }
 
     @Test @Order(1)
-    @Transactional @Rollback(false)
-    void booksUniqueByIsbn_setupPhase() {
-        //testFixtures.install();
-    }
-
-    @Test @Order(2)
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
         // when adding a book for which one with same ISBN already exists in the database,
@@ -103,7 +97,7 @@ extends RegressionTestAbstract {
 
     }
 
-    @Test @Order(3)
+    @Test @Order(2)
     @Transactional @Rollback(false)
     void booksUniqueByIsbn_verifyPhase() {
 
@@ -125,12 +119,6 @@ extends RegressionTestAbstract {
 
         });
 
-    }
-
-    @Test @Order(4)
-    @Transactional @Rollback(false)
-    void booksUniqueByIsbn_cleanupPhase() {
-        testFixtures.install(); // keep fixtures installed for other tests
     }
 
 }
