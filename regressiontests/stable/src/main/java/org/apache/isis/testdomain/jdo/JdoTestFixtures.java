@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.jdo;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -32,11 +33,15 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.events.metamodel.MetamodelListener;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Refs.BooleanAtomicReference;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
@@ -46,21 +51,58 @@ import org.apache.isis.testdomain.util.dto.BookDto;
 import lombok.val;
 
 @Service
-public class JdoTestFixtures {
+public class JdoTestFixtures implements MetamodelListener {
 
     @Inject private RepositoryService repository;
     @Inject private FactoryService factoryService;
     @Inject private BookmarkService bookmarkService;
+    @Inject private InteractionService interactionService;
 
-    public void cleanUpRepository() {
+    private BooleanAtomicReference isInstalled = _Refs.booleanAtomicRef(false);
+
+    @Override
+    public void onMetamodelLoaded() {
+        install();
+    }
+
+    public void reinstall(final Runnable onBeforeInstall) {
+        isInstalled.compute(isInst->{
+            interactionService.runAnonymous(()->{
+                cleanUpRepository();
+                onBeforeInstall.run();
+                setUp3Books();
+            });
+            return false;
+        });
+    }
+
+    public void install() {
+        isInstalled.computeIfFalse(()->{
+            interactionService.runAnonymous(()->{
+                cleanUpRepository();
+                setUp3Books();
+            });
+            return true;
+        });
+    }
+
+    public void clear() {
+        isInstalled.computeIfTrue(()->{
+            interactionService.runAnonymous(()->{
+                cleanUpRepository();
+            });
+            return false;
+        });
+    }
+
+    private void cleanUpRepository() {
         repository.allInstances(JdoInventory.class).forEach(repository::remove);
         repository.allInstances(JdoBook.class).forEach(repository::remove);
         repository.allInstances(JdoProduct.class).forEach(repository::remove);
     }
 
-    public void setUp3Books() {
+    private void setUp3Books() {
 
-        cleanUpRepository();
         // given - expected pre condition: no inventories
         assertEquals(0, repository.allInstances(JdoInventory.class).size());
 
@@ -139,5 +181,12 @@ public class JdoTestFixtures {
         assertTrue(id>-2, ()->String.format("expected valid id; got %d", id));
         //System.err.printf("%s%n", bookmark);
     }
+
+    public static Set<String> expectedBookTitles() {
+        val expectedTitles = Set.of("Dune", "The Foundation", "The Time Machine");
+        return expectedTitles;
+    }
+
+
 
 }

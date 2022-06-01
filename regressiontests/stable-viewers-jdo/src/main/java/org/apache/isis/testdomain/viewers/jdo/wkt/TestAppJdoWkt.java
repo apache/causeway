@@ -85,7 +85,7 @@ public class TestAppJdoWkt extends SpringBootServletInitializer {
 
         @Action @ActionLayout(sequence = "0.1")
         public TestHomePage setup() {
-            testFixtures.setUp3Books();
+            //testFixtures.install();
             return this;
         }
 

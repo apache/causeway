@@ -56,7 +56,7 @@ import lombok.val;
 class JdoQueryTest extends IsisIntegrationTestAbstract {
 
  //   @Inject private JdoSupportService jdoSupport;
-    @Inject private JdoTestFixtures testFixtures;
+    @Inject private JdoTestFixtures jdoTestFixtures;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -67,7 +67,8 @@ class JdoQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(1)
     void sampleInventory_shouldBeSetUpWith3Books() {
 
-        testFixtures.setUp3Books();
+        //testFixtures.setUp3Books();
+        jdoTestFixtures.install();
 
         // when
 
@@ -82,19 +83,19 @@ class JdoQueryTest extends IsisIntegrationTestAbstract {
         assertNotNull(inventory.getProducts());
         assertEquals(3, inventory.getProducts().size());
 
-        testFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
+        jdoTestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
     }
 
     @Test @Order(2) @Disabled("broken won't fix")
     void sampleInventory_shouldSupportQueryCount() {
 
-        testFixtures.setUp3Books();
+        //testFixtures.setUp3Books();
 
-        testFixtures.assertInventoryHasBooks(repositoryService
+        jdoTestFixtures.assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)),
                 1, 2, 3);
 
-        testFixtures.assertInventoryHasBooks(repositoryService
+        jdoTestFixtures.assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)
                         .withLimit(2)),
                 1, 2);
@@ -103,14 +104,14 @@ class JdoQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(3) @Disabled("start not supported, should throw unsupported exception maybe?")
     void sampleInventory_shouldSupportQueryStart() {
 
-        testFixtures.setUp3Books();
+        //testFixtures.setUp3Books();
 
-        testFixtures.assertInventoryHasBooks(repositoryService
+        jdoTestFixtures.assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)
                         .withStart(1)),
                 2, 3);
 
-        testFixtures.assertInventoryHasBooks(repositoryService
+        jdoTestFixtures.assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)
                         .withRange(1, 1)),
                 2);
@@ -119,13 +120,13 @@ class JdoQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(4) @Disabled("broken won't fix")
     void sampleInventory_shouldSupportNamedQueriesThroughApplib() {
 
-        testFixtures.setUp3Books();
+        //testFixtures.setUp3Books();
 
         val query = Query.named(JdoBook.class, "findAffordableBooks")
                 .withParameter("priceUpperBound", 60.);
 
         val affordableBooks = repositoryService.allMatches(query);
-        testFixtures.assertInventoryHasBooks(affordableBooks, 1, 2);
+        jdoTestFixtures.assertInventoryHasBooks(affordableBooks, 1, 2);
     }
 
 //    @Test @Order(4)

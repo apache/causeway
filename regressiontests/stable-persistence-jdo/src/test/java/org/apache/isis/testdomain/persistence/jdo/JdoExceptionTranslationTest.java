@@ -51,7 +51,7 @@ import lombok.val;
 //@Transactional ... we manage transaction ourselves
 class JdoExceptionTranslationTest extends RegressionTestAbstract {
 
-    @Inject private JdoTestFixtures testFixtures;
+    @Inject private JdoTestFixtures jdoTestFixtures;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -62,10 +62,10 @@ class JdoExceptionTranslationTest extends RegressionTestAbstract {
     @Test
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
-        run(()->testFixtures.setUp3Books());
-
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown
+
+        jdoTestFixtures.install();
 
         assertThrows(DataAccessException.class, ()->{
 
@@ -81,7 +81,7 @@ class JdoExceptionTranslationTest extends RegressionTestAbstract {
 
 
                 // add a conflicting book (unique ISBN violation)
-                testFixtures.addABookTo(inventory);
+                jdoTestFixtures.addABookTo(inventory);
 
             });
 
@@ -101,7 +101,7 @@ class JdoExceptionTranslationTest extends RegressionTestAbstract {
             assertNotNull(inventory.getProducts());
             assertEquals(3, inventory.getProducts().size());
 
-            testFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
+            jdoTestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
         });
 
     }

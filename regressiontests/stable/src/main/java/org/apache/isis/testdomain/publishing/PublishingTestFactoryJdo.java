@@ -18,14 +18,12 @@
  */
 package org.apache.isis.testdomain.publishing;
 
-import java.util.HashSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
 import org.springframework.context.annotation.Import;
@@ -41,20 +39,16 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
-import org.apache.isis.testdomain.jdo.entities.JdoInventory;
-import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.publishing.PublishingTestFactoryAbstract.CommitListener;
 import org.apache.isis.testdomain.util.dto.BookDto;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
 
@@ -75,9 +69,9 @@ extends PublishingTestFactoryAbstract {
     private final RepositoryService repository;
     private final WrapperFactory wrapper;
     private final ObjectManager objectManager;
-    private final FixtureScripts fixtureScripts;
     private final CommitListener commitListener;
     private final FactoryService factoryService;
+    private final JdoTestFixtures jdoTestFixtures;
 
     @Getter(onMethod_ = {@Override}, value = AccessLevel.PROTECTED)
     private final InteractionService interactionService;
@@ -106,7 +100,7 @@ extends PublishingTestFactoryAbstract {
         case ENTITY_PERSISTING:
 
             // given
-            fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+            jdoTestFixtures.clear();
             break;
 
         case ENTITY_LOADING:
@@ -115,7 +109,7 @@ extends PublishingTestFactoryAbstract {
         case ENTITY_REMOVAL:
 
             // given
-            setupBookForJdo();
+            jdoTestFixtures.install();
             break;
         default:
             throw _Exceptions.unmatchedCase(context.getScenario());
@@ -146,7 +140,7 @@ extends PublishingTestFactoryAbstract {
 
             context.runGiven();
             //when
-            setupBookForJdo();
+            jdoTestFixtures.install();
             break;
 
         case ENTITY_LOADING:
@@ -399,37 +393,6 @@ extends PublishingTestFactoryAbstract {
     }
 
     // -- TEST SETUP
-
-    private void setupBookForJdo() {
-
-        val pm = pmf.getPersistenceManager();
-
-        // cleanup
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-
-        // given Inventory with 1 Book
-
-        val products = new HashSet<JdoProduct>();
-
-        val detachedNewBook = JdoBook.fromDto(BookDto.sample());
-
-        products.add(detachedNewBook);
-
-        val inventory = JdoInventory.of("Sample Inventory", products);
-        pm.makePersistent(inventory);
-
-        inventory.getProducts().forEach(product->{
-            val prod = pm.makePersistent(product);
-
-            _Probe.errOut("PROD ID: %s", JDOHelper.getObjectId(prod));
-
-        });
-
-        //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-
-        pm.flush();
-
-    }
 
     @SneakyThrows
     private void withBookDo(final CheckedConsumer<JdoBook> transactionalBookConsumer) {

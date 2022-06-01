@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.entitychangetracking.jdo;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +30,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryManager;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityChangesPublishing;
@@ -40,7 +37,6 @@ import org.apache.isis.testdomain.publishing.conf.Configuration_usingEntityPrope
 import org.apache.isis.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting;
 import org.apache.isis.testdomain.util.interaction.InteractionBoundaryProbe;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
 
@@ -50,7 +46,7 @@ import lombok.val;
                 Configuration_usingEntityPropertyChangePublishing.class,
                 Configuration_usingEntityChangesPublishing.class,
                 InteractionBoundaryProbe.class,
-        }, 
+        },
         properties = {
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
                 "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG"
@@ -61,7 +57,7 @@ import lombok.val;
 })
 class JdoEntityChangePublishingTest extends InteractionTestAbstract {
 
-    @Inject protected FixtureScripts fixtureScripts;
+    //@Inject protected FixtureScripts fixtureScripts;
 
     @BeforeEach
     void setUp() {
@@ -71,10 +67,10 @@ class JdoEntityChangePublishingTest extends InteractionTestAbstract {
         EntityPropertyChangeSubscriberForTesting.clearPropertyChangeEntries(kvStoreForTesting);
 
         // given
-        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+        //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
         // each test runs in its own interaction context (check)
-        val testRunNr = (long)kvStoreForTesting.incrementCounter(JdoEntityChangePublishingTest.class, "test-run");
+        val testRunNr = kvStoreForTesting.incrementCounter(JdoEntityChangePublishingTest.class, "test-run");
         assertEquals(testRunNr, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
 
         assertJdoBookCreatePropertyChanges();
@@ -87,7 +83,7 @@ class JdoEntityChangePublishingTest extends InteractionTestAbstract {
         System.err.println("===BEFORE TEARDOWN");
 
         // cleanup
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+        //fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
 
         assertJdoBookDeletePropertyChanges();
 
@@ -102,11 +98,11 @@ class JdoEntityChangePublishingTest extends InteractionTestAbstract {
         val inventoryManager = factoryService.create(JdoInventoryManager.class);
 
         assertEquals(99., book.getPrice(), 1E-3);
-        
+
         System.err.println("=1==BEFORE  TX");
 
         // spawns its own transactional boundary (check)
-        val product = assertTransactional( 
+        val product = assertTransactional(
                 ()->wrapper.wrap(inventoryManager).updateProductPrice(book, 12.));
 
         System.err.println("=1==AFTER  TX");
@@ -115,30 +111,30 @@ class JdoEntityChangePublishingTest extends InteractionTestAbstract {
 
         assertNoChangedObjectsPending();
         assertJdoBookPriceChangePropertyChanges();
-        
+
     }
 
-    @Test 
+    @Test
     void actionInteraction_shouldSpawnSingleTransaction() {
 
         // given
         val book = getBookSample();
-        
+
         assertEquals(99., book.getPrice(), 1E-3);
 
         System.err.println("=2==BEFORE  TX");
 
-        // spawns its own transactional boundary (check) 
-        val product = (JdoProduct) assertTransactional( 
+        // spawns its own transactional boundary (check)
+        val product = (JdoProduct) assertTransactional(
                 ()->invokeAction(JdoInventoryManager.class, "updateProductPrice", _Lists.of(book, 12.)));
 
         System.err.println("=2==AFTER  TX");
 
-        assertEquals(12., product.getPrice(), 1E-3);                
+        assertEquals(12., product.getPrice(), 1E-3);
 
         assertNoChangedObjectsPending();
         assertJdoBookPriceChangePropertyChanges();
-        
+
     }
 
     // -- HELPER

@@ -18,47 +18,47 @@
  */
 package org.apache.isis.testdomain.transactions.jdo;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_usingJdo.class,
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
-class JdoTransactionRollbackTest_usingTransactionService
-{
+class JdoTransactionRollbackTest_usingTransactionService {
 
-    @Inject private FixtureScripts fixtureScripts;
+    @Inject private JdoTestFixtures jdoTestFixtures;
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
 
     @BeforeEach
     void setUp() {
-        
-        transactionService.runWithinCurrentTransactionElseCreateNew(()->{
-            // cleanup
-            fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-            
-        });
+        // clear repository
+        jdoTestFixtures.clear();
+    }
+
+    @AfterEach
+    void restore() {
+        jdoTestFixtures.reinstall(()->{});
     }
 
     @Test
@@ -68,8 +68,8 @@ class JdoTransactionRollbackTest_usingTransactionService
             // expected pre condition
             assertEquals(0, repository.allInstances(JdoBook.class).size());
 
-            fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-        
+            jdoTestFixtures.install();
+
             // expected post condition
             assertEquals(1, repository.allInstances(JdoBook.class).size());
         });
@@ -85,10 +85,11 @@ class JdoTransactionRollbackTest_usingTransactionService
         });
 
         val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
-            fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-            throw _Exceptions.unrecoverable("Test: force current tx to rollback");            
-        });    
-        
+            //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+            jdoTestFixtures.install();
+            throw _Exceptions.unrecoverable("Test: force current tx to rollback");
+        });
+
         assertTrue(result.isFailure());
 
         transactionService.runWithinCurrentTransactionElseCreateNew(()->{

@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryJaxbVm;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.rest.RestEndpointService;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
@@ -53,6 +54,7 @@ class RestServiceTest {
 
     @LocalServerPort int port; // just for reference (not used)
     @Inject RestEndpointService restService;
+
 
     @Test
     void bookOfTheWeek_viaRestEndpoint() {
@@ -104,14 +106,12 @@ class RestServiceTest {
         val digest = restService.getMultipleBooks(restfulClient)
                 .ifFailure(Assertions::fail);
 
-        val multipleBooks = digest.getValue().orElseThrow();
+        val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
 
-        assertEquals(2, multipleBooks.size());
+        val multipleBooks = digest.getValue().orElseThrow()
+                .filter(book->expectedBookTitles.contains(book.getName()));
 
-        for(val book : multipleBooks) {
-            assertEquals("MultipleBooksTest", book.getName());
-        }
-
+        assertEquals(3, multipleBooks.size());
     }
 
     @Test
@@ -148,12 +148,12 @@ class RestServiceTest {
         assertEquals(2, multipleBooks.size());
 
         for(val book : multipleBooks) {
-            assertEquals("MultipleBooksTest", book.getName());
+            assertEquals("MultipleBooksAsDtoTest", book.getName());
         }
 
     }
 
-    //@Test //FIXME
+    @Test
     void inventoryAsJaxbVm_viaRestEndpoint() {
 
         assertTrue(restService.getPort()>0);

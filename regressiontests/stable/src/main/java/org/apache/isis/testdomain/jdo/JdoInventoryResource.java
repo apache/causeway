@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.jdo;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -55,6 +56,7 @@ public class JdoInventoryResource {
 
     final RepositoryService repository;
     final FactoryService factoryService;
+    final JdoTestFixtures jdoTestFixtures;
 
     @Action
     public List<JdoProduct> listProducts() {
@@ -86,20 +88,9 @@ public class JdoInventoryResource {
 
     @Action
     public List<JdoBook> multipleBooks(
-
-            @ParameterLayout(named = "") final
-            int nrOfBooks
-
-            ) {
-
-        val books = _Lists.<JdoBook>newArrayList();
-
-        // for this test we do not care if we generate duplicates
-        for(int i=0; i<nrOfBooks; ++i) {
-            val book = JdoBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN-"+i, "Publisher");
-            books.add(repository.persist(book));
-        }
-        return books;
+            @ParameterLayout(named = "")
+            final int nrOfBooks) {
+        return listBooks();//createMultipleBooks("MultipleBooksTest", nrOfBooks, repository::persist);
     }
 
     @Action //TODO improve the REST client such that the param can be of type Book
@@ -130,40 +121,50 @@ public class JdoInventoryResource {
     @Action
     public BookDto recommendedBookOfTheWeekAsDto() {
         // for this test we do not care if we generate duplicates
-        val book = JdoBook.of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
+        val book = JdoBook
+                .of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
         return BookDto.from(book);
     }
 
     @Action
     public List<BookDto> multipleBooksAsDto(
-
             @ParameterLayout(named = "") final
-            int nrOfBooks
-
-            ) {
+            int nrOfBooks) {
 
         val books = _Lists.<BookDto>newArrayList();
-
-        // for this test we do not care if we generate duplicates
-        for(int i=0; i<nrOfBooks; ++i) {
-            val book = JdoBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
-            books.add(BookDto.from(book));
-        }
+        createMultipleBooks("MultipleBooksAsDtoTest", nrOfBooks, newBook->books.add(BookDto.from(newBook)));
         return books;
     }
 
     @Action
     public JdoInventoryJaxbVm inventoryAsJaxbVm() {
         val inventoryJaxbVm = factoryService.viewModel(new JdoInventoryJaxbVm());
-        val books = _NullSafe.isEmpty(inventoryJaxbVm.listBooks())
-                ? multipleBooks(3)
-                : inventoryJaxbVm.listBooks();
+        val books = listBooks();//createMultipleBooks("InventoryAsJaxbVmTest", 3, repository::persist);
         if(_NullSafe.size(books)>0) {
             inventoryJaxbVm.setName("Bookstore");
             inventoryJaxbVm.setBooks(books);
             inventoryJaxbVm.setFavoriteBook(books.get(0));
         }
         return inventoryJaxbVm;
+    }
+
+    // -- HELPER
+
+    private List<JdoBook> createMultipleBooks(
+            final String bookTitle,
+            final int nrOfBooks,
+            final Consumer<JdoBook> onNewBook) {
+
+        val books = _Lists.<JdoBook>newArrayList();
+
+        // for this test we do not care if we generate duplicates
+        for(int i=0; i<nrOfBooks; ++i) {
+            val book = JdoBook
+                    .of(bookTitle, "An awesome Book["+i+"]", 12, "Author", "ISBN-"+i, "Publisher");
+            onNewBook.accept(book);
+            books.add(book);
+        }
+        return books;
     }
 
 }

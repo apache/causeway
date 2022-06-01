@@ -75,11 +75,7 @@ extends RegressionTestAbstract {
     @Test @Order(1)
     @Transactional @Rollback(false)
     void booksUniqueByIsbn_setupPhase() {
-        interactionService.runAnonymous(()->{
-
-            testFixtures.setUp3Books();
-
-        });
+        //testFixtures.install();
     }
 
     @Test @Order(2)
@@ -134,14 +130,7 @@ extends RegressionTestAbstract {
     @Test @Order(4)
     @Transactional @Rollback(false)
     void booksUniqueByIsbn_cleanupPhase() {
-
-        interactionService.runAnonymous(()->{
-
-            testFixtures.cleanUpRepository();
-
-        });
-
+        testFixtures.install(); // keep fixtures installed for other tests
     }
-
 
 }

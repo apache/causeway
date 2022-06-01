@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,9 +35,8 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 /**
  * These tests use the {@code @Transactional} annotation as provided by Spring.
@@ -57,18 +57,15 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 @Transactional
 //@TestPropertySource(IsisPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoTransactionRollbackTest_usingTransactional
-{
+class JdoTransactionRollbackTest_usingTransactional {
 
-    @Inject private FixtureScripts fixtureScripts;
+    @Inject private JdoTestFixtures jdoTestFixtures;
     @Inject private RepositoryService repository;
     @Inject private InteractionService interactionService;
 
     @Test @Order(1) @Commit
-    void cleanup_justInCase() {
-
-        // cleanup just in case
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
+    void clearRepository() {
+        jdoTestFixtures.clear();
     }
 
     @Test @Order(2)
@@ -83,12 +80,13 @@ class JdoTransactionRollbackTest_usingTransactional
 
             _Probe.errOut("before fixture");
 
-            fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
+            jdoTestFixtures.install();
+            //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
 
             _Probe.errOut("after fixture");
 
             // expected post condition
-            assertEquals(1, repository.allInstances(JdoBook.class).size());
+            assertEquals(3, repository.allInstances(JdoBook.class).size());
 
 
         });
@@ -107,6 +105,11 @@ class JdoTransactionRollbackTest_usingTransactional
 
         });
 
+    }
+
+    @Test @Order(4) @Rollback(false)
+    void restoreDefaultCondition() {
+        jdoTestFixtures.reinstall(()->{});
     }
 
 }
