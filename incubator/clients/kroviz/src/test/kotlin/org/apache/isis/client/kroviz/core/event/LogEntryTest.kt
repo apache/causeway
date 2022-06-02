@@ -28,10 +28,8 @@ class LogEntryTest {
     fun testTitle() {
         // given
         val url = "https://kroki.io"
-
         // when
         val le = LogEntry(ResourceSpecification(url))
-
         // then
         assertFalse(le.title.startsWith("/"))
     }
@@ -39,16 +37,15 @@ class LogEntryTest {
     @Test
     fun testCalculate() {
         // given
-        val le = LogEntry(ResourceSpecification("http://test/url"))
-
+        val rs = ResourceSpecification("http://test/url")
+        val le = LogEntry(rs)
         // when
         le.setSuccess()
-
         // then
         assertTrue(0 <= le.duration)
 
         if (le.duration < 0 && le.cacheHits == 0) {
-            //TODO add assert
+//            assertEquals(EventState.SUCCESS_JS, le.state)
         }
     }
 

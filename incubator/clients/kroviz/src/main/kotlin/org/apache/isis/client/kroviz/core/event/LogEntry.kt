@@ -125,6 +125,7 @@ data class LogEntry(
         calculate()
         fault = error
         state = EventState.ERROR
+        type = Represention.ERROR.type
     }
 
     fun setUndefined(error: String) {
@@ -143,7 +144,8 @@ data class LogEntry(
         responseLength = response.length
         if (responseLength == 0) {
             // it's a blob
-            responseLength = blob?.size as Int
+            val size = blob?.size ?: 0
+            responseLength = size.toInt()
         }
         state = when {
             url.startsWith(Constants.krokiUrl) -> EventState.SUCCESS_IMG
@@ -178,6 +180,7 @@ data class LogEntry(
     }
 
     fun setTransferObject(to: TransferObject) {
+        console.log("[LE.setTransferObject]")
         this.obj = to
         when (to) {
             is WithLinks -> {
@@ -195,8 +198,20 @@ data class LogEntry(
             is Menubars -> {
                 this.type = Represention.LAYOUT_MENUBARS.type
             }
+            is HttpError -> {
+                this.type = Represention.ERROR.type
+            }
+            is TObject -> {
+                when {
+                    to == null -> {
+                        this.state = EventState.MISSING
+                        this.type = Represention.ERROR.type
+                        console.log("to == null for response:")
+                        console.log(response)
+                    }
+                }
+            }
             else -> {
-                console.log("[LE.setTransferObject]")
                 console.log(to)
             }
         }
@@ -232,11 +247,15 @@ data class LogEntry(
 
     fun retrieveResponse(): String {
         lastAccessedAt = Date()
-        cacheHits++
+        incrementCacheHits()
         return response
     }
 
 //end region response
+
+    fun incrementCacheHits() {
+        cacheHits++
+    }
 
     fun isSuccess(): Boolean {
         return state.name.startsWith("SUCCESS")
@@ -276,7 +295,6 @@ data class LogEntry(
 
     fun addAggregator(aggregator: BaseAggregator) {
         if (aggregator is ActionDispatcher) {
-//            console.log("[LE.addAggregator] is ActionDispatcher")
             ViewManager.setBusyCursor()
         }
         aggregators.add(aggregator)

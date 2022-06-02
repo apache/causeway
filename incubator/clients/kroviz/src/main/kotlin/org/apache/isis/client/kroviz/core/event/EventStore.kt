@@ -58,7 +58,7 @@ class EventStore {
         rs: ResourceSpecification,
         method: String,
         body: String = "",
-        aggregator: BaseAggregator? = null
+        aggregator: BaseAggregator? = null,
     ): LogEntry {
         val entry = LogEntry(rs = rs, method = method, request = body)
         if (aggregator != null) {
@@ -149,11 +149,11 @@ class EventStore {
     }
 
     internal fun updateStatus(entry: LogEntry) {
-        val successNo = log.count { le -> le.isSuccess() }
-        val runningNo = countRunning()
-        val errorNo = log.count { le -> le.isError() }
-        val viewNo = log.count { le -> le.isView() }
-        val status = StatusPo(successNo, runningNo, errorNo, viewNo)
+        val successCnt = log.count { le -> le.isSuccess() }
+        val runningCnt = countRunning()
+        val errorCnt = log.count { le -> le.isError() }
+        val viewCnt = log.count { le -> le.isView() }
+        val status = StatusPo(successCnt, runningCnt, errorCnt, viewCnt, 0)
         ViewManager.updateStatus(status)
     }
 
@@ -217,6 +217,13 @@ class EventStore {
             it.obj is Menubars && it.url.startsWith(baseUrl)
         }
     }
+
+    fun findAll(reSpec: ResourceSpecification): List<LogEntry> {
+        return log.filter {
+            it.matches(reSpec)
+        }
+    }
+
 
     //public for test
     fun findExact(reSpec: ResourceSpecification): LogEntry? {

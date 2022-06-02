@@ -30,6 +30,7 @@ import org.apache.isis.client.kroviz.snapshots.Response
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.SessionManager
+import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.utils.XmlHelper
 import org.w3c.xhr.XMLHttpRequest
 
@@ -38,6 +39,12 @@ import org.w3c.xhr.XMLHttpRequest
 open class IntegrationTest {
 
     fun isAppAvailable(): Boolean {
+        val app = App()
+        app.start()
+        ViewManager.app = app
+console.log("[IT.isAppAvailable]")
+        console.log(ViewManager.getRoApp())
+
         val user = "sven"
         val pw = "pass"
         val url = "http://${user}:${pw}@localhost:8080/restful/"
@@ -56,8 +63,7 @@ open class IntegrationTest {
         } finally {
 
         }
-        val answer = xhr.status.equals(200)
-        return answer
+        return xhr.status.equals(200)
     }
 
     fun mockResponse(response: Response, aggregator: BaseAggregator?): LogEntry {
@@ -69,10 +75,10 @@ open class IntegrationTest {
         val reSpec = ResourceSpecification(response.url, subType)
         val es = EventStore()
         es.start(
-                reSpec,
-                Method.GET.operation,
-                "",
-                aggregator)
+            reSpec,
+            Method.GET.operation,
+            "",
+            aggregator)
         val le = es.end(reSpec, str)!!
         ResponseHandler.handle(le)
         wait(100)

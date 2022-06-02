@@ -122,7 +122,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     private fun handleProperty(property: Property) {
         console.log("[OA.handleProperty]")
         console.log(property)
-        throw Throwable("[ObjectAggregator.handleProperty] not implemented yet")
+//        throw Throwable("[ObjectAggregator.handleProperty] not implemented yet")
     }
 
     private fun handleGrid(grid: Grid) {

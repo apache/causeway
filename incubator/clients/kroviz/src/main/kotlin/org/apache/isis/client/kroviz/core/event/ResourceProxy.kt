@@ -61,7 +61,8 @@ class ResourceProxy {
               isRest: Boolean = true,
               referrer: String = "") {
         val rs = ResourceSpecification(link.href, subType = subType, referrerUrl = referrer)
-        val isCached = when (val le = SessionManager.getEventStore().findBy(rs)) {
+        val le = findAndSetupLogEntry(rs)
+        val isCached = when (le) {
             null -> false
             else -> le.isCached(rs, link.method)
         }
@@ -70,6 +71,28 @@ class ResourceProxy {
             !isCached && isRest -> process(aggregator, link, subType, referrer)
             !isCached && !isRest -> RoXmlHttpRequest(aggregator).processNonREST(link, subType)
         }
+    }
+
+    // in case of a race condition (many similar requests started within millis),
+    // it could happen, that similar entries are written to the log in parallel,
+    // although they should have been taken from the cache.
+    private fun findAndSetupLogEntry(rs: ResourceSpecification): LogEntry? {
+        val leList = SessionManager.getEventStore().findAll(rs)
+        val first = leList.firstOrNull()
+        if (first?.state == EventState.DUPLICATE) {
+            when (rs.subType) {
+                Constants.subTypeJson -> first.state = EventState.SUCCESS_JS
+                Constants.subTypeXml -> first.state = EventState.SUCCESS_XML
+                else -> first.state = EventState.SUCCESS_IMG
+            }
+        }
+        leList.forEachIndexed { index, logEntry ->
+            if (index > 0 && logEntry.state != EventState.DUPLICATE) {
+                logEntry.state = EventState.DUPLICATE
+                first?.incrementCacheHits()
+            }
+        }
+        return first
     }
 
     private fun process(aggregator: BaseAggregator?, link: Link, subType: String, referrer: String) {
