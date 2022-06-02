@@ -106,12 +106,6 @@ extends ModelAbstract<ManagedObject> {
                         .orElseGet(()->adapter.getElementSpecification().get().getLogicalType()));
     }
 
-    public final Bookmark asHintingBookmarkIfSupported() {
-        return memento!=null
-                ? memento.asHintingBookmarkIfSupported()
-                : null;
-    }
-
     public final Bookmark asBookmarkIfSupported() {
         return memento!=null
                 ? memento.asBookmarkIfSupported()

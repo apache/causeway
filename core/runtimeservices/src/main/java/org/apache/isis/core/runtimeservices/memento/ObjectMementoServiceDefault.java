@@ -169,6 +169,11 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         private final _ObjectMemento delegate;
 
         @Override
+        public Bookmark bookmark() {
+            return delegate.asPseudoBookmark();
+        }
+
+        @Override
         public Bookmark asPseudoBookmark() {
             return delegate.asPseudoBookmark();
         }
@@ -176,11 +181,6 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         @Override
         public Bookmark asBookmarkIfSupported() {
             return delegate.asBookmark();
-        }
-
-        @Override
-        public Bookmark asHintingBookmarkIfSupported() {
-            return delegate.asHintingBookmark();
         }
 
         @Override

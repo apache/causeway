@@ -44,12 +44,12 @@ public final class ObjectMementoCollection implements ObjectMemento {
     @NonNull private final LogicalType logicalType;
 
     @Override
-    public Bookmark asPseudoBookmark() {
+    public Bookmark bookmark() {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
 
     @Override
-    public Bookmark asHintingBookmarkIfSupported() {
+    public Bookmark asPseudoBookmark() {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
 

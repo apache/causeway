@@ -393,7 +393,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
     /**
      * Only populated for {@link ManagedObject#getPojo() domain object}s that implement {@link HintIdProvider}.
      */
-    private String hintId;
+    //private String hintId;
 
     /**
      * populated only if {@link #getCardinality() sort} is {@link Cardinality#VECTOR vector}
@@ -447,17 +447,22 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
         this.recreateStrategy = RecreateStrategy.VALUE;
     }
 
-
     private void init(final ManagedObject adapter) {
 
         val spec = adapter.getSpecification();
 
         if(spec.isIdentifiable() || spec.isParented() ) {
+            val hintId = adapter.getPojo() instanceof HintIdProvider
+                 ? ((HintIdProvider) adapter.getPojo()).hintId()
+                 : null;
+
             bookmark = ManagedObjects.bookmarkElseFail(adapter);
+            bookmark = hintId != null
+                    && bookmark != null
+                        ? bookmark.withHintId(hintId)
+                        : bookmark;
+
             persistentOidStr = bookmark.stringify();
-            if(adapter.getPojo() instanceof HintIdProvider) {
-                this.hintId = ((HintIdProvider) adapter.getPojo()).hintId();
-            }
             recreateStrategy = RecreateStrategy.LOOKUP;
             return;
         }
@@ -494,13 +499,6 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
     Bookmark asBookmark() {
         ensureScalar();
         return bookmark;
-    }
-
-    Bookmark asHintingBookmark() {
-        val bookmark = asBookmark();
-        return hintId != null && bookmark != null
-                ? bookmark.withHintId(hintId)
-                : bookmark;
     }
 
     /**

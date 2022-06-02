@@ -26,13 +26,14 @@ import java.util.Optional;
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.commons.collections.Cardinality;
 import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * @since 2.0
  */
-public interface ObjectMemento extends HasLogicalType, Serializable {
+public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializable {
 
     /**
      * In a strict sense, bookmarks are only available for viewmodels, entities and managed beans,
@@ -51,14 +52,6 @@ public interface ObjectMemento extends HasLogicalType, Serializable {
      * Returns {@code null} otherwise.
      */
     Bookmark asBookmarkIfSupported();
-
-    /**
-     * Returns a bookmark only if
-     * {@link org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoWkt.RecreateStrategy#LOOKUP} and
-     * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
-     * Returns {@code null} otherwise.
-     */
-    Bookmark asHintingBookmarkIfSupported();
 
     // -- FACTORIES
 
