@@ -144,8 +144,7 @@ implements
     }
 
     public boolean isEmpty() {
-        final ObjectMemento curr = this.memento();
-        return curr == null;
+        return memento() == null;
     }
 
     public void clear() {

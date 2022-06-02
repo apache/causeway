@@ -57,6 +57,7 @@ import org.apache.isis.core.metamodel.facets.members.publish.execution.Execution
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -88,6 +89,7 @@ import org.apache.isis.testdomain.model.good.ProperMemberSupportDiscovery;
 import org.apache.isis.testdomain.model.good.ProperObjectWithAlias;
 import org.apache.isis.testdomain.model.good.ProperServiceWithAlias;
 import org.apache.isis.testdomain.model.good.ProperServiceWithMixin;
+import org.apache.isis.testdomain.model.good.ProperViewModelInferredFromNotBeingAnEntity;
 import org.apache.isis.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport;
 import org.apache.isis.testdomain.model.good.ViewModelWithEncapsulatedMembers;
 import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
@@ -407,6 +409,14 @@ class DomainModelTest_usingGoodDomain {
         assertHasAction(abstractCollSpec, "abstractAction");
         assertHasProperty(abstractCollSpec, "abstractProp");
 
+    }
+
+    @Test
+    void domainObjects_ifNatureNotSpecified_shouldConsiderBeanTypeClassifier() {
+        val vmSpec = specificationLoader.specForTypeElseFail(ProperViewModelInferredFromNotBeingAnEntity.class);
+
+        assertEquals(BeanSort.VIEW_MODEL, vmSpec.getBeanSort());
+        assertNotNull(vmSpec.getFacet(ViewModelFacet.class));
     }
 
     @Test
