@@ -58,6 +58,19 @@ public final class Bookmark implements Oid {
 
     // -- FACTORIES
 
+    public static Bookmark empty(
+            final @NonNull LogicalType logicalType) {
+        return emptyForLogicalTypeName(logicalType.getLogicalTypeName());
+    }
+
+    public static Bookmark emptyForLogicalTypeName(
+            final @NonNull String logicalTypeName) {
+        return new Bookmark(
+                logicalTypeName,
+                /*identifier*/null,
+                /*hintId*/null);
+    }
+
     public static Bookmark forLogicalTypeNameAndIdentifier(
             final @NonNull String logicalTypeName,
             final @NonNull String identifier) {
@@ -110,6 +123,10 @@ public final class Bookmark implements Oid {
         }
         val tokenizer = new StringTokenizer(str, SEPARATOR);
         int tokenCount = tokenizer.countTokens();
+        if(tokenCount==1) {
+            return Optional.of(Bookmark.emptyForLogicalTypeName(
+                    tokenizer.nextToken()));
+        }
         if(tokenCount==2) {
             return Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(
                     tokenizer.nextToken(),
@@ -192,12 +209,19 @@ public final class Bookmark implements Oid {
                 : stringify(identifier);
     }
 
+    /**
+     * Whether represents {@code null}.
+     */
+    public boolean isEmpty() {
+        return identifier==null;
+    }
+
     // -- HELPER
 
     private String stringify(final String id) {
-        return logicalTypeName + SEPARATOR + id;
+        return !isEmpty()
+                ? logicalTypeName + SEPARATOR + id
+                : logicalTypeName;
     }
-
-
 
 }
