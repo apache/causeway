@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.booleans.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -47,9 +48,8 @@ import demoapp.dom.types.primitive.booleans.persistence.PrimitiveBooleanEntity;
       name = "PrimitiveBooleanJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.PrimitiveBooleanEntity"
-)
+@Named("demo.PrimitiveBooleanEntity")
+@DomainObject
 @NoArgsConstructor
 public class PrimitiveBooleanJpa
         extends PrimitiveBooleanEntity {

@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.primitive.bytes.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.PrimitiveByteEntity" // shared permissions with concrete sub class
-)
+@Named("demo.PrimitiveByteEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class PrimitiveByteEntity
 implements
     HasAsciiDocDescription,

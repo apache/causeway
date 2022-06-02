@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -36,7 +37,8 @@ import lombok.EqualsAndHashCode;
  *
  * @since 2.0 {@index}
  */
-@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.Markup")
+@Named(IsisModuleApplib.NAMESPACE + ".value.Markup")
+@Value
 @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support
 @EqualsAndHashCode
 public final class Markup implements Serializable {

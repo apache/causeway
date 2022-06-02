@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.persistence.jpa.metamodel.object.domainobject.objectspecid.LogicalTypeFacetForTableAnnotation;
 
 import lombok.val;
 
@@ -64,18 +63,11 @@ implements ObjectTypeFacetFactory {
 
         val facetHolder = processClassContext.getFacetHolder();
 
-        val jdoPersistenceCapableFacet =
         FacetUtil.addFacet(
                 new JpaTableFacetAnnotationImpl(
                     annotationSchemaAttribute,
                     annotationTableAttribute,
                     facetHolder));
-
-        FacetUtil.addFacetIfPresent(
-                LogicalTypeFacetForTableAnnotation
-                .create(jdoPersistenceCapableFacet, cls, facetHolder));
-
-        return;
     }
 
 

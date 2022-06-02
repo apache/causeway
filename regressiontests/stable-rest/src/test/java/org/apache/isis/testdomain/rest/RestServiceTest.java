@@ -24,7 +24,7 @@ import javax.xml.bind.JAXBException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
@@ -34,6 +34,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.jdo.JdoInventoryJaxbVm;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.rest.RestEndpointService;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
@@ -52,6 +54,24 @@ class RestServiceTest {
 
     @LocalServerPort int port; // just for reference (not used)
     @Inject RestEndpointService restService;
+
+    @Test
+    void httpSessionInfo() {
+
+        val useRequestDebugLogging = false;
+        val restfulClient = restService.newClient(useRequestDebugLogging);
+
+        val digest = restService.getHttpSessionInfo(restfulClient)
+                .ifFailure(Assertions::fail);
+
+        val httpSessionInfo = digest.getValue().orElseThrow();
+
+        assertNotNull(httpSessionInfo);
+
+        // NB: this works only because we excluded wicket viewer from the app.
+        assertEquals("no http-session", httpSessionInfo);
+
+    }
 
     @Test
     void bookOfTheWeek_viaRestEndpoint() {
@@ -103,14 +123,12 @@ class RestServiceTest {
         val digest = restService.getMultipleBooks(restfulClient)
                 .ifFailure(Assertions::fail);
 
-        val multipleBooks = digest.getValue().orElseThrow();
+        val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
 
-        assertEquals(2, multipleBooks.size());
+        val multipleBooks = digest.getValue().orElseThrow()
+                .filter(book->expectedBookTitles.contains(book.getName()));
 
-        for(val book : multipleBooks) {
-            assertEquals("MultipleBooksTest", book.getName());
-        }
-
+        assertEquals(3, multipleBooks.size());
     }
 
     @Test
@@ -147,27 +165,50 @@ class RestServiceTest {
         assertEquals(2, multipleBooks.size());
 
         for(val book : multipleBooks) {
-            assertEquals("MultipleBooksTest", book.getName());
+            assertEquals("MultipleBooksAsDtoTest", book.getName());
         }
 
     }
 
     @Test
-    void httpSessionInfo() {
+    void inventoryAsJaxbVm_viaRestEndpoint() {
+
+        assertTrue(restService.getPort()>0);
 
         val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
-        val digest = restService.getHttpSessionInfo(restfulClient)
+        val digest = restService.getInventoryAsJaxbVm(restfulClient)
                 .ifFailure(Assertions::fail);
 
-        val httpSessionInfo = digest.getValue().orElseThrow();
+        final JdoInventoryJaxbVm inventoryAsJaxbVm = digest.getValue().orElseThrow();
 
-        assertNotNull(httpSessionInfo);
-
-        // NB: this works only because we excluded wicket viewer from the app.
-        assertEquals("no http-session", httpSessionInfo);
+        assertNotNull(inventoryAsJaxbVm);
+        assertEquals("Bookstore", inventoryAsJaxbVm.getName());
 
     }
+
+    @Test
+    void listBooks_fromInventoryAsJaxbVm_viaRestEndpoint() {
+
+        assertTrue(restService.getPort()>0);
+
+        val useRequestDebugLogging = false;
+        val restfulClient = restService.newClient(useRequestDebugLogging);
+
+        val digest = restService.getBooksFromInventoryAsJaxbVm(restfulClient)
+                .ifFailure(Assertions::fail);
+
+        val books = digest.getValue().orElseThrow();
+
+        val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
+
+        val multipleBooks = books
+                .filter(book->expectedBookTitles.contains(book.getName()));
+
+        assertEquals(3, multipleBooks.size());
+
+    }
+
 
 }

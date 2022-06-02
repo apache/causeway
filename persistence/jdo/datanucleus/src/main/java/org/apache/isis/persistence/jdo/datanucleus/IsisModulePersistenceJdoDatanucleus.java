@@ -18,6 +18,9 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.inject.Provider;
 import javax.jdo.JDOException;
 import javax.jdo.PersistenceManagerFactory;
@@ -36,14 +39,14 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
-import org.apache.isis.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener;
-import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
+import org.apache.isis.persistence.jdo.datanucleus.config.DatanucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
@@ -51,6 +54,7 @@ import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleu
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
 import org.apache.isis.persistence.jdo.integration.IsisModulePersistenceJdoIntegration;
+import org.apache.isis.persistence.jdo.provider.config.JdoEntityDiscoveryListener;
 import org.apache.isis.persistence.jdo.spring.integration.JdoDialect;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
@@ -69,7 +73,6 @@ import lombok.extern.log4j.Log4j2;
     IsisModulePersistenceJdoIntegration.class,
 
     // @Component's
-    DnEntityDiscoveryListener.class,
     DnEntityStateProvider.class,
 
     // @Mixin's
@@ -81,7 +84,7 @@ import lombok.extern.log4j.Log4j2;
     JdoSupportServiceDefault.class,
 
 })
-@EnableConfigurationProperties(DnSettings.class)
+@EnableConfigurationProperties(DatanucleusSettings.class)
 @Log4j2
 public class IsisModulePersistenceJdoDatanucleus {
 
@@ -105,7 +108,7 @@ public class IsisModulePersistenceJdoDatanucleus {
             final EventBusService eventBusService,
             final Provider<EntityChangeTracker> entityChangeTrackerProvider,
             final IsisBeanTypeRegistry beanTypeRegistry,
-            final DnSettings dnSettings) {
+            final DatanucleusSettings dnSettings) {
 
         _Assert.assertNotNull(dataSource, "a datasource is required");
 
@@ -136,15 +139,21 @@ public class IsisModulePersistenceJdoDatanucleus {
     @Bean @Primary
     public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(
             final MetaModelContext metaModelContext,
-            final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean) {
+            final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean,
+            final IsisBeanTypeRegistry beanTypeRegistry,
+            final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners,
+            final DatanucleusSettings dnSettings) {
 
         val pmf = localPmfBean.getObject(); // created once per application lifecycle
+
+        notifyJdoEntityDiscoveryListeners(pmf, beanTypeRegistry, jdoEntityDiscoveryListeners, dnSettings);
 
         val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy(metaModelContext);
         tapmfProxy.setTargetPersistenceManagerFactory(pmf);
         tapmfProxy.setAllowCreate(false);
         return tapmfProxy;
     }
+
 
     @Qualifier("jdo-platform-transaction-manager")
     @Bean @Primary
@@ -199,6 +208,27 @@ public class IsisModulePersistenceJdoDatanucleus {
 
     // -- HELPER
 
+    private static void notifyJdoEntityDiscoveryListeners(
+            final PersistenceManagerFactory pmf,
+            final IsisBeanTypeRegistry beanTypeRegistry,
+            final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners,
+            final DatanucleusSettings dnSettings) {
+
+        if(_NullSafe.isEmpty(jdoEntityDiscoveryListeners)) {
+            return;
+        }
+        // assuming, as we instantiate a DN PMF, all entities discovered are JDO entities
+        val jdoEntityTypes = beanTypeRegistry.getEntityTypes();
+        if(_NullSafe.isEmpty(jdoEntityTypes)) {
+            return;
+        }
+        val jdoEntityTypesView = Collections.unmodifiableSet(jdoEntityTypes.keySet());
+        val dnProps = Collections.unmodifiableMap(dnSettings.getAsProperties());
+        jdoEntityDiscoveryListeners
+            .forEach(listener->
+                    listener.onEntitiesDiscovered(pmf, jdoEntityTypesView, dnProps));
+    }
+
     /**
      * integrates with settings from isis.persistence.schema.*
      */
@@ -236,7 +266,7 @@ public class IsisModulePersistenceJdoDatanucleus {
         val pumd = new PersistenceUnitMetaData(
                 "dynamic-unit", "RESOURCE_LOCAL", null);
         pumd.setExcludeUnlistedClasses(false);
-        beanTypeRegistry.getEntityTypes().stream()
+        beanTypeRegistry.getEntityTypes().keySet().stream()
         .map(Class::getName)
         .forEach(pumd::addClassName);
         return pumd;

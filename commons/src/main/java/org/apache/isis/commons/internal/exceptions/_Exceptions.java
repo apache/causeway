@@ -80,6 +80,13 @@ public final class _Exceptions {
         return new IllegalArgumentException(String.format(format, args));
     }
 
+    public static final IllegalArgumentException illegalArgument(
+            final @NonNull Throwable cause,
+            final @NonNull String format,
+            final @Nullable Object ... args) {
+        return new IllegalArgumentException(String.format(format, args), cause);
+    }
+
     // -- ILLEGAL STATE
 
     public static IllegalStateException illegalState(
@@ -141,13 +148,18 @@ public final class _Exceptions {
         return new RuntimeException(String.format("unrecoverable error: '%s'", msg));
     }
 
-    public static RuntimeException unrecoverable(final String msg, final Throwable cause) {
+    public static RuntimeException unrecoverable(final Throwable cause, final String msg) {
         return new RuntimeException(String.format("unrecoverable error: '%s' with cause ...", msg), cause);
     }
 
-    public static RuntimeException unrecoverableFormatted(final String format, final Object ...args) {
+    public static RuntimeException unrecoverable(final String format, final Object ...args) {
         return new RuntimeException(String.format("unrecoverable error: '%s'",
                 String.format(format, args)));
+    }
+
+    public static RuntimeException unrecoverable(final Throwable cause, final String format, final Object ...args) {
+        return new RuntimeException(String.format("unrecoverable error: '%s' with cause ...",
+                String.format(format, args)), cause);
     }
 
     // -- UNSUPPORTED

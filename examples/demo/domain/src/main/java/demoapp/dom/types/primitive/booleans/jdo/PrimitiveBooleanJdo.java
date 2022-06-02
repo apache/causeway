@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.booleans.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -40,9 +41,8 @@ import demoapp.dom.types.primitive.booleans.persistence.PrimitiveBooleanEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.PrimitiveBooleanEntity"
-)
+@Named("demo.PrimitiveBooleanEntity")
+@DomainObject
 public class PrimitiveBooleanJdo                                        // <.>
         extends PrimitiveBooleanEntity {
 

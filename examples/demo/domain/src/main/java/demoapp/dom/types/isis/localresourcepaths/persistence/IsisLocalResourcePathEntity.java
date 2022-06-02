@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.isis.localresourcepaths.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.value.LocalResourcePath;
 
@@ -25,9 +27,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.isis.localresourcepaths.holder.IsisLocalResourcePathHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.IsisLocalResourcePathEntity" // shared permissions with concrete sub class
-)
+@Named("demo.IsisLocalResourcePathEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class IsisLocalResourcePathEntity
 implements
     HasAsciiDocDescription,

@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javalang.integers.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.WrapperIntegerHolder")
+@Named("demo.WrapperIntegerHolder")
 //tag::class[]
 public interface WrapperIntegerHolder {
 

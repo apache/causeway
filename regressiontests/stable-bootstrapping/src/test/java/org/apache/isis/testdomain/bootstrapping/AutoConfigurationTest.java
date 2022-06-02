@@ -33,12 +33,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.context.MetaModelContexts;
+import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 import org.apache.isis.testdomain.conf.Configuration_usingStereotypes;
 import org.apache.isis.testdomain.model.stereotypes.MyObject;
 import org.apache.isis.testdomain.model.stereotypes.MyObject_mixin;
@@ -48,12 +50,13 @@ import org.apache.isis.testdomain.model.stereotypes.MyView;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 IsisSystemEnvironment.class,
                 MetaModelContexts.class,
                 IsisBeanFactoryPostProcessorForSpring.class,
                 IsisBeanTypeRegistryDefault.class,
-                Configuration_usingStereotypes.class
+                Configuration_usingStereotypes.class,
+                ServiceRegistryDefault.class
         },
         properties = {
                 // "isis.core.meta-model.introspector.parallelize=false",
@@ -65,10 +68,11 @@ import lombok.val;
     IsisPresets.UseLog4j2Test,
 })
 class AutoConfigurationTest {
-    
+
     @Inject private ApplicationContext applicationContext;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
+    @Inject private ServiceRegistry serviceRegistry;
 
     //XXX for debugging and experimenting
     @Component
@@ -76,54 +80,47 @@ class AutoConfigurationTest {
 
         // simply return the instantiated bean as-is
         @Override
-        public Object postProcessBeforeInitialization(Object bean, String beanName) {
+        public Object postProcessBeforeInitialization(final Object bean, final String beanName) {
             return bean; // we could potentially return any object reference here...
         }
 
         @Override
-        public Object postProcessAfterInitialization(Object bean, String beanName) {
+        public Object postProcessAfterInitialization(final Object bean, final String beanName) {
             System.out.println("Bean '" + beanName + "' created : " + bean.toString());
             return bean;
         }
     }
-    
+
     @BeforeEach
     void beforeEach() {
         assertNotNull(applicationContext);
         assertNotNull(isisSystemEnvironment);
     }
-    
+
     @Test
     void domainObjects_shouldBeDiscovered() {
-
         for(val cls : nonManaged()) {
             val type = isisBeanTypeRegistry.lookupIntrospectableType(cls);
             assertTrue(type.isPresent());
         }
-        
     }
 
     @Test
     void domainObjects_shouldNotBeManaged() {
-        
         for(val cls : nonManaged()) {
             assertThrows(NoSuchBeanDefinitionException.class, ()->{
                 applicationContext.getBean(cls);
-            });    
+            });
         }
-        
     }
-    
+
     @Test
     void domainServices_shouldBeManaged() {
-        
         val myService = applicationContext.getBean(MyService.class);
         assertNotNull(myService);
-        assertNotNull(isisSystemEnvironment.getIocContainer().getSingletonElseFail(MyService.class));
-        
+        assertTrue(serviceRegistry.lookupService(MyService.class).isPresent());
     }
-    
-    
+
     // we don't want those managed by Spring
     private static Class<?>[] nonManaged() {
         val nonManaged = new Class<?>[] {MyObject.class, MyObject_mixin.class, MyView.class};

@@ -61,7 +61,7 @@ public class FactoryServiceDefault implements FactoryService {
     @Override
     public <T> T getOrCreate(final @NonNull Class<T> requiredType) {
         val spec = loadSpec(requiredType);
-        if(spec.isManagedBean()) {
+        if(spec.isInjectable()) {
             return get(requiredType);
         }
         return create(requiredType);
@@ -142,7 +142,7 @@ public class FactoryServiceDefault implements FactoryService {
     public <T> T create(final @NonNull Class<T> domainClass) {
         val spec = loadSpec(domainClass);
 
-        if(spec.isManagedBean()) {
+        if(spec.isInjectable()) {
             throw _Exceptions.illegalArgument(
                     "Class '%s' is managed by IoC container, use get() instead", domainClass.getName());
         }

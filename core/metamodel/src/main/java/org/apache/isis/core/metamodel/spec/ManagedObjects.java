@@ -52,12 +52,12 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStack;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -354,11 +354,15 @@ public final class ManagedObjects {
     }
 
     public static String titleOf(final ManagedObject adapter) {
-        return adapter!=null?adapter.titleString():"";
+        return adapter!=null
+                ? adapter.titleString()
+                : "";
     }
 
     private static String abbreviated(final String str, final int maxLength, final String suffix) {
-        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + suffix;
+        return str.length() < maxLength
+                ? str
+                : str.substring(0, maxLength - 3) + suffix;
     }
 
     // -- COMMON SUPER TYPE FINDER
@@ -699,11 +703,26 @@ public final class ManagedObjects {
             val objectManager = managedObject.getObjectManager();
 
             val reattached = bookmark(managedObject)
-            .map(bookmark->objectManager.loadObject(
+            .map(bookmark->
                     ObjectLoader.Request.of(
                                     spec,
-                                    bookmark)))
+                                    bookmark))
+            .map(loadRequest->Try.call(
+                    ()->objectManager.loadObject(loadRequest)))
+            .map(loadResult->
+                    // a valid scenario for entities: not found eg. after deletion,
+                    // which will fail the load request
+                    loadResult.isFailure()
+                            ? ManagedObject.empty(managedObject.getSpecification())
+                            : loadResult.getValue().get()
+            )
             .orElse(managedObject);
+
+            // handles deleted entities
+            if(isNullOrUnspecifiedOrEmpty(reattached)) {
+                // returns the 'emptied' ManagedObject from above
+                return reattached;
+            }
 
             val newState = EntityUtil.getEntityState(reattached);
             _Assert.assertTrue(newState.isAttached());

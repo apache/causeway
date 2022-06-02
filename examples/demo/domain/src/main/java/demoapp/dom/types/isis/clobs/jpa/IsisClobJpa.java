@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isis.clobs.jpa;
 
+import javax.inject.Named;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -52,9 +53,8 @@ import demoapp.dom.types.isis.clobs.persistence.IsisClobEntity;
       name = "IsisClobJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.IsisClobEntity"
-)
+@Named("demo.IsisClobEntity")
+@DomainObject
 @NoArgsConstructor
 public class IsisClobJpa
         extends IsisClobEntity {

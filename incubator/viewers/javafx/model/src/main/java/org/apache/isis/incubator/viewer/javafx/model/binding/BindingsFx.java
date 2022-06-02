@@ -206,16 +206,15 @@ public class BindingsFx {
                     e2.addSuppressed(e);
                     left.removeListener(this);
                     right.removeListener(this);
-                    throw _Exceptions.unrecoverableFormatted(
+                    throw _Exceptions.unrecoverable(e2,
                             "Bidirectional binding failed with an attempt to restore the "
                             + "Observable to the previous value. "
                             + "Removing the bidirectional binding from bindables %s and %s",
                             ""+left,
-                            ""+right,
-                            e2);
+                            ""+right);
                 }
-                throw _Exceptions.unrecoverable(
-                        "Bidirectional binding failed, setting to the previous value", e);
+                throw _Exceptions.unrecoverable(e,
+                        "Bidirectional binding failed, setting to the previous value");
             } finally {
                 updating = false;
             }

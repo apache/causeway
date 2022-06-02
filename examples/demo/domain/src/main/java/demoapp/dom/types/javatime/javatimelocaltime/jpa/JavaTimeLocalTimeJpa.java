@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimelocaltime.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -35,10 +36,11 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
-import demoapp.dom.types.javatime.javatimelocaltime.persistence.JavaTimeLocalTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.types.javatime.javatimelocaltime.persistence.JavaTimeLocalTimeEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -48,9 +50,8 @@ import lombok.Setter;
       name = "JavaTimeLocalTimeJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.JavaTimeLocalTimeEntity"
-)
+@Named("demo.JavaTimeLocalTimeEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaTimeLocalTimeJpa
         extends JavaTimeLocalTimeEntity {

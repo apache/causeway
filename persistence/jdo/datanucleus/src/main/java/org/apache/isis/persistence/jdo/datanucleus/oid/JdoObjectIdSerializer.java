@@ -213,8 +213,8 @@ public final class JdoObjectIdSerializer {
                                 final Object dnOid = cons.newInstance(keyStr);
                                 return dnOid.toString();
                             } catch (ClassNotFoundException | IllegalArgumentException | InstantiationException | IllegalAccessException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
-                                throw _Exceptions.unrecoverableFormatted(
-                                        "failed to instantiate %s with arg %s", clsName, keyStr, e);
+                                throw _Exceptions.unrecoverable(e,
+                                        "failed to instantiate %s with arg %s", clsName, keyStr);
                             }
                         })
                 );

@@ -20,7 +20,6 @@ package org.apache.isis.core.config.beans;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
@@ -35,11 +34,11 @@ public interface IsisBeanTypeRegistry {
     Stream<IsisBeanMetaData> streamIntrospectableTypes();
 
     Map<Class<?>, IsisBeanMetaData> getManagedBeansContributing();
-    Set<Class<?>> getEntityTypes();
-    Set<Class<?>> getMixinTypes();
-    Set<Class<?>> getViewModelTypes();
+    Map<Class<?>, IsisBeanMetaData> getEntityTypes();
+    Map<Class<?>, IsisBeanMetaData> getMixinTypes();
+    Map<Class<?>, IsisBeanMetaData> getViewModelTypes();
     /** discovered per {@code @Value} annotation (vs. registered using a {@link ValueSemanticsProvider})*/
-    Set<Class<?>> getDiscoveredValueTypes();
+    Map<Class<?>, IsisBeanMetaData> getDiscoveredValueTypes();
 
     // -- LOOKUPS
 
@@ -55,5 +54,18 @@ public interface IsisBeanTypeRegistry {
                 .map(IsisBeanMetaData::getBeanName);
     }
 
+    /**
+     * Returns either 'JDO' or 'JPA' based on what {@link IsisBeanTypeClassifier} we find
+     * registered with <i>Spring</i>.
+     * Alternative implementations could be considered, however this works for now.
+     */
+    default PersistenceStack determineCurrentPersistenceStack() {
+        return IsisBeanTypeClassifier.get().stream()
+                .map(IsisBeanTypeClassifier::getClass)
+                .map(Class::getSimpleName)
+                .anyMatch(classifierName->classifierName.startsWith("Jdo"))
+                ? PersistenceStack.JDO
+                : PersistenceStack.JPA;
+    }
 
 }

@@ -18,10 +18,11 @@
  */
 package demoapp.dom.types.isis.blobs.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
+
 import org.apache.isis.applib.value.Blob;
 
-@LogicalTypeName("demo.IsisBlobHolder")
+@Named("demo.IsisBlobHolder")
 //tag::class[]
 public interface IsisBlobHolder {
 

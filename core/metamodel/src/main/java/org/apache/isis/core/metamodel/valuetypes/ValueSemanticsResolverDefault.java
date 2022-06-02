@@ -29,8 +29,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
@@ -60,22 +60,10 @@ implements ValueSemanticsResolver {
     }
 
     @Override
-    public <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(final Class<T> _valueType) {
-        final var valueType = ClassUtils.resolvePrimitiveIfNecessary(_valueType);
-//        val resolvableType = ResolvableType
-//                .forClassWithGenerics(ValueSemanticsProvider.class, valueType);
+    public <T> Stream<ValueSemanticsProvider<T>> streamValueSemantics(final Class<T> valueType) {
         return Stream.<ValueSemanticsProvider<T>>concat(
-
-                _NullSafe.stream(valueSemanticsProviders)
-                //.filter(resolvableType::isInstance) //does not work for eg. TreeNode<?> ... Spring believes there is a wildcard mismatch
-                .filter(vs->vs.getCorrespondingClass().isAssignableFrom(valueType))
-                .map(provider->_Casts.<ValueSemanticsProvider<T>>uncheckedCast(provider)),
-
-                // if we have an Enum, append default Enum semantics to the stream,
-                // as these are not yet managed by Spring
-                valueType.isEnum()
-                    ? Stream.of(getDefaultEnumSemantics(_valueType))
-                    : Stream.empty());
+                streamExplicitValueSemantics(valueType),
+                streamEnumValueSemantics(valueType));
     }
 
     @Override
@@ -95,12 +83,28 @@ implements ValueSemanticsResolver {
 
     // -- HELPER
 
+    private <T> Stream<ValueSemanticsProvider<T>> streamExplicitValueSemantics(final Class<T> valueType) {
+        final var nonPrimitiveValueType = ClassUtils.resolvePrimitiveIfNecessary(valueType);
+        return _NullSafe.stream(valueSemanticsProviders)
+        //.filter(resolvableType::isInstance) //does not work for eg. TreeNode<?> ... Spring believes there is a wildcard mismatch
+        .filter(vs->vs.getCorrespondingClass().isAssignableFrom(nonPrimitiveValueType))
+        .map(provider->provider.castTo(valueType));
+    }
+
+    private <T> Stream<ValueSemanticsProvider<T>> streamEnumValueSemantics(final Class<T> valueType) {
+        // if we have an Enum, append default Enum semantics to the stream,
+        // as these are not yet managed by Spring
+        return valueType.isEnum()
+            ? Stream.of(defaultEnumSemantics(_Casts.uncheckedCast(valueType)).castTo(valueType))
+            : Stream.empty();
+    }
+
     // managed by Isis
     @SuppressWarnings("rawtypes")
     private Map<Class<?>, ValueSemanticsProvider> enumSemantics = _Maps.newConcurrentHashMap();
 
     @SuppressWarnings("unchecked")
-    public <T> ValueSemanticsProvider<T> getDefaultEnumSemantics(final Class<T> enumType) {
+    private <T extends Enum<T>> ValueSemanticsProvider<T> defaultEnumSemantics(final Class<T> enumType) {
         return enumSemantics.computeIfAbsent(enumType, t->
                 EnumValueSemanticsAbstract
                   .create(
@@ -109,5 +113,7 @@ implements ValueSemanticsResolver {
                           IntrospectionPolicy.ENCAPSULATION_ENABLED,
                   enumType));
     }
+
+
 
 }

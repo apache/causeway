@@ -75,11 +75,11 @@ public interface MetaModelContext {
 
     SpecificationLoader getSpecificationLoader();
 
-    public default Optional<ObjectSpecification> specForType(final @Nullable Class<?> type) {
+    default Optional<ObjectSpecification> specForType(final @Nullable Class<?> type) {
         return getSpecificationLoader().specForType(type);
     }
 
-    public default ObjectSpecification specForTypeElseFail(final @Nullable Class<?> type) {
+    default ObjectSpecification specForTypeElseFail(final @Nullable Class<?> type) {
         return getSpecificationLoader().specForTypeElseFail(type);
     }
 
@@ -105,28 +105,18 @@ public interface MetaModelContext {
 
     ManagedObject getHomePageAdapter();
 
+    // cannot move to ServiceRegistry, because applib does not know ManagedObject
     Stream<ManagedObject> streamServiceAdapters();
 
+    // cannot move to ServiceRegistry, because applib does not know ManagedObject
     ManagedObject lookupServiceAdapterById(String serviceId);
 
     /**
-     * Requires that there is AT LEAST one implementation of the service, and returns it.
-     *
-     * <p>
-     *     If there is more than one implementation, then the one with the &quot;highest&quot;
-     *     priority (either annotated with {@link org.springframework.context.annotation.Primary},
-     *     else with encountered with earliest {@link org.apache.isis.applib.annotation.PriorityPrecedence precedence})
-     *     is used instead.
-     * </p>
-     *
-     * @param type
-     * @param <T>
-     */
-    <T> T getSingletonElseFail(Class<T> type);
-
-    /**
      * Recovers an object (graph) from given {@code bookmark}.
-     * Also resolves injection-points for the result.
+     * <p>
+     * Resolves injection-points for the result.
+     * <p>
+     * Supports alias lookup.
      */
     default Optional<ManagedObject> loadObject(final @Nullable Bookmark bookmark) {
         if(bookmark==null) {

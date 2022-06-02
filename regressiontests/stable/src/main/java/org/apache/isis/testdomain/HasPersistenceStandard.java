@@ -19,7 +19,7 @@
 package org.apache.isis.testdomain;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStack;
+import org.apache.isis.core.config.beans.PersistenceStack;
 
 public interface HasPersistenceStandard {
 

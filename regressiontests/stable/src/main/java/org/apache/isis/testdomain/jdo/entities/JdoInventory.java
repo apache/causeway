@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.jdo.entities;
 
 import java.util.Set;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -43,8 +44,8 @@ import lombok.ToString;
 @PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "testdomain")
 @DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
 @Version(strategy= VersionStrategy.DATE_TIME, column="version")
+@Named("testdomain.jdo.Inventory")
 @DomainObject(
-        logicalTypeName = "testdomain.jdo.Inventory",
         entityChangePublishing = Publishing.ENABLED)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor @AllArgsConstructor(staticName = "of") @ToString

@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.inspect.model;
 
 import java.util.stream.Stream;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,6 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
@@ -35,10 +37,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+@Named(PropertyNode.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        logicalTypeName = PropertyNode.LOGICAL_TYPE_NAME
-)
+        introspection = Introspection.ANNOTATION_REQUIRED)
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
@@ -49,6 +51,8 @@ public class PropertyNode extends MMNode {
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private org.apache.isis.schema.metamodel.v2.Property property;
 
+    @Getter @Setter private boolean mixedIn;
+
     @Override
     public String createTitle() {
         return String.format("%s: %s", property.getId(), typeToString(property.getType()));
@@ -56,7 +60,7 @@ public class PropertyNode extends MMNode {
 
     @Override
     protected String iconSuffix() {
-        return "";
+        return isMixedIn() ? "mixedin" : "";
     }
 
     // -- TREE NODE STUFF

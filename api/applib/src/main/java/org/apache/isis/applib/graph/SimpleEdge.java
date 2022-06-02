@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.graph;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
 
@@ -30,7 +32,8 @@ import org.apache.isis.applib.annotation.Value;
  * @param <T> type constraint for values contained by this edge's vertices
  */
 @lombok.Value(staticConstructor = "of")
-@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".graph.SimpleEdge")
+@Named(IsisModuleApplib.NAMESPACE + ".graph.SimpleEdge")
+@Value
 public class SimpleEdge<T> implements Edge<T> {
 
     Vertex<T> from;

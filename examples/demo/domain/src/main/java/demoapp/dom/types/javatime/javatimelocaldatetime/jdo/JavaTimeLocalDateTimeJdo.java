@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimelocaldatetime.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javatime.javatimelocaldatetime.persistence.JavaTimeLoca
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaTimeLocalDateTimeEntity"
-)
+@Named("demo.JavaTimeLocalDateTimeEntity")
+@DomainObject
 public class JavaTimeLocalDateTimeJdo                                          // <.>
         extends JavaTimeLocalDateTimeEntity {
 
 //end::class[]
-    public JavaTimeLocalDateTimeJdo(java.time.LocalDateTime initialValue) {
+    public JavaTimeLocalDateTimeJdo(final java.time.LocalDateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

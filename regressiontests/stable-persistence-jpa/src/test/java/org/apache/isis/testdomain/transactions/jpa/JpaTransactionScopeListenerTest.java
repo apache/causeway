@@ -112,7 +112,7 @@ class JpaTransactionScopeListenerTest {
 
         });
 
-        final int expectedIaCount = 2;
+        final int expectedIaCount = 3;
 
         assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsStarted(kvStore));
         assertEquals(expectedIaCount, InteractionBoundaryProbe.totalInteractionsEnded(kvStore));

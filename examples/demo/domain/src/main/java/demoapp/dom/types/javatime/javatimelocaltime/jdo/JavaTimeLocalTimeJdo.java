@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimelocaltime.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -33,17 +34,17 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 
-import demoapp.dom.types.javatime.javatimelocaltime.persistence.JavaTimeLocalTimeEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.javatime.javatimelocaltime.persistence.JavaTimeLocalTimeEntity;
 
 @Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaTimeLocalTimeEntity"
-)
+@Named("demo.JavaTimeLocalTimeEntity")
+@DomainObject
 public class JavaTimeLocalTimeJdo
         extends JavaTimeLocalTimeEntity {
 

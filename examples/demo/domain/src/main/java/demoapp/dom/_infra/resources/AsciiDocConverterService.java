@@ -24,9 +24,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
-import org.asciidoctor.OptionsBuilder;
 import org.asciidoctor.SafeMode;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.IncludeProcessor;
@@ -50,14 +49,14 @@ public class AsciiDocConverterService {
     public AsciiDocConverterService(final ResourceReaderService resourceReaderService) {
         this.resourceReaderService = resourceReaderService;
         this.asciidoctor = createAsciidoctor();
-        this.options = OptionsBuilder.options()
+        this.options = Options.builder()
                 .safe(SafeMode.UNSAFE)
                 .toFile(false)
-                .attributes(AttributesBuilder.attributes()
+                .attributes(Attributes.builder()
                         .sourceHighlighter("prism")
                         .icons("font")
-                        .get())
-                .get();
+                        .build())
+                .build();
 
     }
 
@@ -74,7 +73,7 @@ public class AsciiDocConverterService {
             public void process(final Document document, final PreprocessorReader reader, final String target, final Map<String, Object> attributes) {
                 val contextClass = context.get();
                 val content = resourceReaderService.readResource(contextClass, target, attributes);
-                reader.push_include(content, target, target, 1, attributes);
+                reader.pushInclude(content, target, target, 1, attributes);
             }
         }
 

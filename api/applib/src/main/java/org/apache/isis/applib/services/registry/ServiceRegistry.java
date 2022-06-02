@@ -67,7 +67,7 @@ public interface ServiceRegistry {
     /**
      * Streams all registered bean adapters implementing the requested type.
      */
-    default Stream<_ManagedBeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType) {
+    default Stream<_ManagedBeanAdapter> streamRegisteredBeansOfType(final Class<?> requiredType) {
 
         return streamRegisteredBeans()
                 .filter(beanAdapter->beanAdapter.isCandidateFor(requiredType));
@@ -90,7 +90,7 @@ public interface ServiceRegistry {
      *
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
-    default _ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(String id) {
+    default _ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(final String id) {
         return lookupRegisteredBeanById(id).orElseThrow(
                 ()->_Exceptions.unrecoverable(
                         "Failed to lookup BeanAdapter by id '" + id + "'"));
@@ -118,7 +118,7 @@ public interface ServiceRegistry {
      * If this lookup is ambiguous, then the provided comparator is used.
      * </p>
      */
-    default <T> Optional<T> lookupService(Class<T> serviceClass, Comparator<Object> comparator) {
+    default <T> Optional<T> lookupService(final Class<T> serviceClass, final Comparator<Object> comparator) {
         val bin = select(serviceClass);
         if(bin.isEmpty()) {
             return Optional.empty();
@@ -149,12 +149,9 @@ public interface ServiceRegistry {
      * @param <T>
      */
     default <T> T lookupServiceElseFail(final Class<T> serviceClass) {
-
         return lookupService(serviceClass)
                 .orElseThrow(()->
                 new NoSuchElementException("Could not locate service of type '" + serviceClass + "'"));
-
-        // ...
     }
 
     /**
@@ -163,6 +160,5 @@ public interface ServiceRegistry {
      * a meta-model instance, that is, purging the {@link ObjectSpecification} cache.
      */
     void clearRegisteredBeans();
-
 
 }

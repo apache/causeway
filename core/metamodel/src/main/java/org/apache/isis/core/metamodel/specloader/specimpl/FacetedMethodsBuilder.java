@@ -32,9 +32,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -118,8 +116,6 @@ implements HasMetaModelContext {
 
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
-    private final boolean isMemberAnnotationsRequired;
-
     // -- CONSTRUCTOR
 
     public FacetedMethodsBuilder(
@@ -135,9 +131,6 @@ implements HasMetaModelContext {
         this.classSubstitutorRegistry = classSubstitutorRegistry;
         this.inspectedTypeSpec = inspectedTypeSpec;
         this.introspectedClass = inspectedTypeSpec.getCorrespondingClass();
-
-        this.isMemberAnnotationsRequired =
-                introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired();
 
         val classCache = _ClassCache.getInstance();
         val methodsRemaining = introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
@@ -425,59 +418,17 @@ implements HasMetaModelContext {
         val hasActionAnnotation = _Annotations
                 .isPresent(actionMethod, Action.class);
 
-        // just an optimization, not strictly required:
-        // return false if both are true
-        // 1. actionMethod has no @Action annotation
-        // 2. actionMethod does not identify as a mixin's main method
-        if(isMemberAnnotationsRequired) {
-
-            // even though when @Action is mandatory for action methods,
-            // mixins now can contribute methods,
-            // that do not need to be annotated (see ISIS-1998)
-
-            if(!hasActionAnnotation) {
-                // omitting the @Action annotation at given method is only allowed, when the
-                // type is a mixin, and the mixin's main method identifies as the given actionMethod
-                val type = actionMethod.getDeclaringClass();
-
-                //XXX for given type we do this for every method, could cache the result!
-                val mixedInMethodName = _Annotations.synthesize(type, DomainObject.class)
-                .filter(domainObject->Nature.MIXIN.equals(domainObject.nature()))
-                .map(DomainObject::mixinMethod)
-                .orElse(null);
-
-                if(mixedInMethodName!=null) {
-                    // we have a mixin type
-                    if(!Objects.equals(actionMethod.getName(), mixedInMethodName)) {
-                        // the actionMethod does not identify as the mixin's main method
-                        return false;
-                    }
-                }
-            }
-
-            // else fall through
-
-        }
-
-        val specLoader = getSpecificationLoader();
-
+        // ensure we can load returned element type; otherwise ignore method
         val anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
-        .map(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED))
+        .map(typeToLoad->getSpecificationLoader().loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED))
         .anyMatch(Objects::isNull);
-
         if (anyLoadedAsNull) {
             return false;
         }
 
-        // ensure we can load specs for all the params
-//don't!! has side effect of pulling in all param types
-//even those that should be ignored by the metamodel
-//        if (!loadParamSpecs(actionMethod)) {
-//            return false;
-//        }
-
         if(isMixinMain(actionMethod)) {
-            // we are introspecting a mixin type, so accept this method for further processing
+            // we are introspecting a mixin type and its main method,
+            // so accept this method for further processing
             log.debug("  identified mixin-main action {}", actionMethod);
             return true;
         }
@@ -494,12 +445,13 @@ implements HasMetaModelContext {
             return false;
         }
 
-        if(isMemberAnnotationsRequired) {
+        if(introspectionPolicy().getMemberAnnotationPolicy().isMemberAnnotationsRequired()) {
             // we have no @Action, so dismiss
+            log.debug("  dismissing non-action method {}", actionMethod);
             return false;
         }
 
-        // we have a valid action candidate, so fall through
+        // we have a valid action candidate, so accept
         log.debug("  identified action {}", actionMethod);
         return true;
     }

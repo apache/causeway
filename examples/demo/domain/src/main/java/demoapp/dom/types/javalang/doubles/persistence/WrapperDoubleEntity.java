@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.javalang.doubles.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.doubles.holder.WrapperDoubleHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.WrapperDoubleEntity" // shared permissions with concrete sub class
-)
+@Named("demo.WrapperDoubleEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class WrapperDoubleEntity
 implements
     HasAsciiDocDescription,

@@ -64,8 +64,6 @@ class JpaExceptionTranslationTest extends RegressionTestAbstract {
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
 
-        run(()->testFixtures.setUp3Books());
-
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown
 

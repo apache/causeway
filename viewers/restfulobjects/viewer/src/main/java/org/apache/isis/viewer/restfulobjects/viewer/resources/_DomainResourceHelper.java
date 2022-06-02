@@ -22,8 +22,12 @@ import java.util.concurrent.atomic.LongAdder;
 
 import javax.ws.rs.core.Response;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
@@ -34,7 +38,9 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
@@ -60,8 +66,9 @@ class _DomainResourceHelper {
 
     public static _DomainResourceHelper ofServiceResource(
             final IResourceContext resourceContext,
-            final ManagedObject objectAdapter) {
-        return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainServiceLinkTo());
+            final String serviceIdOrAlias) {
+        return new _DomainResourceHelper(resourceContext,
+                getServiceAdapter(resourceContext, serviceIdOrAlias), new DomainServiceLinkTo());
     }
 
     private _DomainResourceHelper(
@@ -305,8 +312,32 @@ class _DomainResourceHelper {
     // dependencies (from context)
     // //////////////////////////////////////
 
+    //TODO pretty low level stuff; maybe move the logic to metamodel module
+    static ManagedObject getServiceAdapter(
+            final IResourceContext resourceContext,
+            final @Nullable String serviceIdOrAlias) {
+
+        val mmc = resourceContext.getMetaModelContext();
+
+        final ManagedObject serviceAdapter = mmc.getSpecificationLoader()
+                .lookupLogicalType(serviceIdOrAlias)
+                .map(LogicalType::getLogicalTypeName)
+                .map(mmc::lookupServiceAdapterById)
+                .orElse(null);
+
+        if(serviceAdapter==null) {
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND,
+                    "Could not locate service '%s'", serviceIdOrAlias);
+        }
+        return serviceAdapter;
+    }
+
     private <T> T lookupService(final Class<T> serviceType) {
-        return resourceContext.getMetaModelContext().getServiceRegistry().lookupServiceElseFail(serviceType);
+        return getServiceRegistry().lookupServiceElseFail(serviceType);
+    }
+
+    private ServiceRegistry getServiceRegistry() {
+        return resourceContext.getMetaModelContext().getServiceRegistry();
     }
 
 }

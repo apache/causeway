@@ -78,7 +78,7 @@ public class DependentArgsActionDemo_useAutoComplete {
 
     @MemberSupport public Collection<DemoItem> autoComplete1Act(
             final Parameters params,
-            @MinLength(3) final String search) {
+            @MinLength(2) final String search) {
 
         val parity = params.parity(); // <-- the refining parameter from the dialog above
 

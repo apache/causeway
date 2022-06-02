@@ -18,15 +18,16 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.domain._changes.ExposeCapturedChanges;
 
-@DomainObject(
-        logicalTypeName = "demo.DomainObjectEntityChangePublishingEntity"
-)
+@Named("demo.DomainObjectEntityChangePublishingEntity")
+@DomainObject
 //tag::class[]
 public abstract class DomainObjectEntityChangePublishingEntity
 implements

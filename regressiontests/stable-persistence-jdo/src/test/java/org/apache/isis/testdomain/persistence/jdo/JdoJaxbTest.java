@@ -20,7 +20,6 @@ package org.apache.isis.testdomain.persistence.jdo;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -42,21 +41,16 @@ import lombok.val;
 //@Transactional
 class JdoJaxbTest extends RegressionTestAbstract {
 
-    @Inject private JdoTestFixtures testFixtures;
+    @Inject private JdoTestFixtures jdoTestFixtures;
     @Inject private JaxbService jaxbService;
-
-    @BeforeEach
-    void setUp() throws InterruptedException {
-        run(()->testFixtures.setUp3Books());
-    }
 
     @Test
     void inventoryJaxbVm_shouldRoundtripProperly() {
 
         val xml = call(()->{
-            val inventoryJaxbVm = testFixtures.setUpViewmodelWith3Books();
+            val inventoryJaxbVm = jdoTestFixtures.setUpViewmodelWith3Books();
             // assert initial reference is populated as expected
-            testFixtures.assertPopulatedWithDefaults(inventoryJaxbVm);
+            jdoTestFixtures.assertPopulatedWithDefaults(inventoryJaxbVm);
             // start round-trip
             return jaxbService.toXml(inventoryJaxbVm);
         });
@@ -66,7 +60,7 @@ class JdoJaxbTest extends RegressionTestAbstract {
             val recoveredVm =
                     serviceInjector.injectServicesInto(
                             jaxbService.fromXml(JdoInventoryJaxbVm.class, xml));
-            testFixtures.assertPopulatedWithDefaults(recoveredVm);
+            jdoTestFixtures.assertPopulatedWithDefaults(recoveredVm);
         });
     }
 

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.ints.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,16 +41,15 @@ import demoapp.dom.types.primitive.ints.holder.PrimitiveIntHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PrimitiveIntVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PrimitiveIntVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                           // <.>
 public class PrimitiveIntVm
         implements HasAsciiDocDescription, PrimitiveIntHolder2 {
 
 //end::class[]
-    public PrimitiveIntVm(int initialValue) {
+    public PrimitiveIntVm(final int initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

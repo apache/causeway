@@ -27,6 +27,8 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import javax.inject.Named;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
@@ -48,7 +50,8 @@ import lombok.SneakyThrows;
  *
  * @param <T> type constraint for values contained by this node
  */
-@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".graph.tree.TreeNode")
+@Named(IsisModuleApplib.NAMESPACE + ".graph.tree.TreeNode")
+@Value
 public class TreeNode<T> implements Vertex<T> {
 
     private final TreeState sharedState;

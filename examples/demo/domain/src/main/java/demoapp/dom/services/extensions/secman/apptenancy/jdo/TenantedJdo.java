@@ -18,6 +18,7 @@
  */
 package demoapp.dom.services.extensions.secman.apptenancy.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -44,9 +45,8 @@ import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEnt
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.TenantedEntity"
-)
+@Named("demo.TenantedEntity")
+@DomainObject
 public class TenantedJdo
         extends TenantedEntity {
 

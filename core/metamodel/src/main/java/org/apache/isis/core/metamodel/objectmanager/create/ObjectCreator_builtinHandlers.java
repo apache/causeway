@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.objectmanager.create;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
 import org.apache.isis.commons.internal._Constants;
@@ -103,8 +102,8 @@ final class ObjectCreator_builtinHandlers {
                 return newInstance;
 
             } catch (Exception  e) {
-                throw _Exceptions.unrecoverable(
-                        "Failed to create instance of type " + spec.getFullIdentifier(), e);
+                throw _Exceptions.unrecoverable(e,
+                        "Failed to create instance of type %s", spec.getFullIdentifier());
             }
 
         }

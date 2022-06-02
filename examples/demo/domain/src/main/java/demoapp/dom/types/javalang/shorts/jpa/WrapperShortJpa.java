@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.shorts.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javalang.shorts.persistence.WrapperShortEntity;
       name = "WrapperShortJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.WrapperShortEntity"
-)
+@Named("demo.WrapperShortEntity")
+@DomainObject
 @NoArgsConstructor
 public class WrapperShortJpa
         extends WrapperShortEntity {

@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.javalang.integers.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.integers.holder.WrapperIntegerHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.WrapperIntegerEntity" // shared permissions with concrete sub class
-)
+@Named("demo.WrapperIntegerEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class WrapperIntegerEntity
 implements
     HasAsciiDocDescription,

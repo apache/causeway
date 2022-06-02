@@ -41,10 +41,10 @@ content:
       start_path: extensions/applib/excel/adoc # extensions
       branches: HEAD
     - url: .
-      start_path: extensions/core/command-log/adoc # extensions
+      start_path: extensions/core/commandlog/adoc # extensions
       branches: HEAD
     - url: .
-      start_path: extensions/core/command-replay/adoc # extensions
+      start_path: extensions/core/commandreplay/adoc # extensions
       branches: HEAD
     - url: .
       start_path: extensions/core/flyway/adoc # userguide

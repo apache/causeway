@@ -19,10 +19,8 @@
 package org.apache.isis.core.config.beans;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.annotation.Priority;
@@ -45,7 +43,8 @@ import lombok.val;
 @Named("isis.config.IsisBeanTypeRegistryImpl")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
-public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
+public class IsisBeanTypeRegistryDefault
+implements IsisBeanTypeRegistry {
 
     /**
      * (immutable) scan result, as used by the SpecificationLoader for introspection
@@ -56,16 +55,25 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
 
     // -- DISTINCT CATEGORIES OF BEAN SORTS
 
-    @Getter(onMethod_ = {@Override}) private final Map<Class<?>, IsisBeanMetaData> managedBeansContributing = new HashMap<>();
-    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypes = new HashSet<>();
-    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> mixinTypes = new HashSet<>();
-    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> viewModelTypes = new HashSet<>();
-    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> discoveredValueTypes = new HashSet<>();
+    @Getter(onMethod_ = {@Override})
+    private final Map<Class<?>, IsisBeanMetaData> managedBeansContributing = new HashMap<>();
+
+    @Getter(onMethod_ = {@Override})
+    private final Map<Class<?>, IsisBeanMetaData> entityTypes = new HashMap<>();
+
+    @Getter(onMethod_ = {@Override})
+    private final Map<Class<?>, IsisBeanMetaData> mixinTypes = new HashMap<>();
+
+    @Getter(onMethod_ = {@Override})
+    private final Map<Class<?>, IsisBeanMetaData> viewModelTypes = new HashMap<>();
+
+    @Getter(onMethod_ = {@Override})
+    private final Map<Class<?>, IsisBeanMetaData> discoveredValueTypes = new HashMap<>();
 
     // -- LOOKUPS
 
     @Override
-    public Optional<IsisBeanMetaData> lookupIntrospectableType(Class<?> type) {
+    public Optional<IsisBeanMetaData> lookupIntrospectableType(final Class<?> type) {
         return Optional.ofNullable(introspectableTypesByClass.get(type));
     }
 
@@ -82,27 +90,27 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
     public IsisBeanTypeRegistryDefault(final @NonNull Can<IsisBeanMetaData> introspectableTypes) {
         this.introspectableTypes = introspectableTypes;
 
-        introspectableTypes.forEach(type->{
+        introspectableTypes.forEach(typeMeta->{
 
-            val cls = type.getCorrespondingClass();
+            val cls = typeMeta.getCorrespondingClass();
 
-            introspectableTypesByClass.put(type.getCorrespondingClass(), type);
+            introspectableTypesByClass.put(typeMeta.getCorrespondingClass(), typeMeta);
 
-            switch (type.getBeanSort()) {
+            switch (typeMeta.getBeanSort()) {
             case MANAGED_BEAN_CONTRIBUTING:
-                managedBeansContributing.put(cls, type);
+                managedBeansContributing.put(cls, typeMeta);
                 return;
             case MIXIN:
-                mixinTypes.add(cls);
+                mixinTypes.put(cls, typeMeta);
                 return;
             case ENTITY:
-                entityTypes.add(cls);
+                entityTypes.put(cls, typeMeta);
                 return;
             case VIEW_MODEL:
-                viewModelTypes.add(cls);
+                viewModelTypes.put(cls, typeMeta);
                 return;
             case VALUE:
-                discoveredValueTypes.add(cls);
+                discoveredValueTypes.put(cls, typeMeta);
                 return;
 
             // skip introspection for these
@@ -116,5 +124,7 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
         });
 
     }
+
+
 
 }

@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.model.valuetypes.composite;
 
 import java.util.List;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -50,10 +51,9 @@ import lombok.val;
         propOrder = {"nextEvent", "events"}
 )
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("testdomain.val.CalendarEventJaxbVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL
-        , logicalTypeName = "testdomain.val.CalendarEventJaxbVm"
-)
+        nature=Nature.VIEW_MODEL)
 public class CalendarEventJaxbVm {
 
     @Property(editing = Editing.ENABLED)

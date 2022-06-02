@@ -30,13 +30,13 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.beans.IsisBeanMetaData;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -76,11 +76,6 @@ public class ObjectSpecificationDefault
 extends ObjectSpecificationAbstract
 implements FacetHolder {
 
-    private static String determineShortName(final Class<?> introspectedClass) {
-        final String name = introspectedClass.getName();
-        return name.substring(name.lastIndexOf('.') + 1);
-    }
-
     // -- constructor, fields
 
     /**
@@ -95,27 +90,24 @@ implements FacetHolder {
     @Getter(onMethod_ = {@Override})
     private final IntrospectionPolicy introspectionPolicy;
 
-    /**
-     * available only for managed-beans
-     */
-    private final String nameIfIsManagedBean;
-
     public ObjectSpecificationDefault(
-            final Class<?> correspondingClass,
-            final BeanSort beanSort,
+            final IsisBeanMetaData typeMeta,
             final MetaModelContext mmc,
             final FacetProcessor facetProcessor,
-            final String nameIfIsManagedBean,
+
             final PostProcessor postProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
-        super(correspondingClass, determineShortName(correspondingClass), beanSort, facetProcessor, postProcessor);
+        super(typeMeta.getCorrespondingClass(),
+                typeMeta.getLogicalType(),
+                typeMeta.getLogicalType().getLogicalTypeSimpleName(),
+                typeMeta.getBeanSort(), facetProcessor, postProcessor);
 
-        this.nameIfIsManagedBean = nameIfIsManagedBean;
+        this.injectable = typeMeta.getManagedBy().isSpring();
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)
-        facetProcessor.processObjectType(correspondingClass, this);
+        facetProcessor.processObjectType(typeMeta.getCorrespondingClass(), this);
 
         // naturally supports attribute inheritance from the type's hierarchy
         final IntrospectionPolicy introspectionPolicy =
@@ -129,8 +121,10 @@ implements FacetHolder {
 
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
-
     }
+
+    @Getter(onMethod_ = {@Override})
+    private final boolean injectable;
 
     @Override
     protected void introspectTypeHierarchy() {
@@ -250,13 +244,6 @@ implements FacetHolder {
         } else {
             return null;
         }
-    }
-
-    // -- PREDICATES
-
-    @Override
-    public String getManagedBeanName() {
-        return nameIfIsManagedBean;
     }
 
     // -- getObjectAction
@@ -396,7 +383,5 @@ implements FacetHolder {
                 ? valueFacetMemoized
                 : lookupFacet(ValueFacet.class);
     }
-
-    // --
 
 }

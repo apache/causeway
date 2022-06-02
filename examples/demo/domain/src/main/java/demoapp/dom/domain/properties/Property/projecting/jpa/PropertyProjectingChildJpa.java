@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.properties.Property.projecting.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -48,10 +49,9 @@ import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyPro
     name = "PropertyProjectingChildJpa"
 )
 @EntityListeners(IsisEntityListener.class)
+@Named("demo.PropertyProjectingChildJpa")
 @DomainObject(
-    logicalTypeName = "demo.PropertyProjectingChildJpa"
-    , editing = Editing.DISABLED
-)
+    editing = Editing.DISABLED)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor
 public class PropertyProjectingChildJpa

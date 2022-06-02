@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.AliasedFacet;
 
 public enum IntrospectionState implements Comparable<IntrospectionState> {
     /**

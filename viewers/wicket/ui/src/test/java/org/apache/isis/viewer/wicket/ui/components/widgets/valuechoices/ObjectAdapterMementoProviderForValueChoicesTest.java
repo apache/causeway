@@ -32,6 +32,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -113,8 +114,8 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
             allowing(mock).getLogicalType();
             will(returnValue(logicalType));
 
-            allowing(mock).asString();
-            will(returnValue(id));
+            allowing(mock).bookmark();
+            will(returnValue(Bookmark.forLogicalTypeAndIdentifier(logicalType, id)));
         }});
         return mock;
     }

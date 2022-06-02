@@ -25,32 +25,22 @@ import java.util.Optional;
 
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.collections.Cardinality;
+import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * @since 2.0
  */
-public interface ObjectMemento extends HasLogicalType, Serializable {
-
-    String asString();
+public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializable {
 
     /**
-     * Returns a bookmark only if
-     * {@link org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoWkt.RecreateStrategy#LOOKUP} and
-     * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
-     * Returns {@code null} otherwise.
+     * The object's title for rendering (before translation).
+     * Corresponds to {@link ManagedObject#titleString()}.
+     * <p>
+     * Directly support choice rendering, without the need to (re-)fetch entire object graphs.
      */
-    Bookmark asBookmarkIfSupported();
-
-    /**
-     * Returns a bookmark only if
-     * {@link org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoWkt.RecreateStrategy#LOOKUP} and
-     * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
-     * Returns {@code null} otherwise.
-     */
-    Bookmark asHintingBookmarkIfSupported();
+    String getTitle();
 
     // -- FACTORIES
 

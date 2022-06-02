@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.javalang.booleans.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.booleans.holder.WrapperBooleanHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.WrapperBooleanEntity" // shared permissions with concrete sub class
-)
+@Named("demo.WrapperBooleanEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class WrapperBooleanEntity
 implements
     HasAsciiDocDescription,

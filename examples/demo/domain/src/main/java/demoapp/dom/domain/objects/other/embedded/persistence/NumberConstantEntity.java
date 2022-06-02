@@ -18,15 +18,16 @@
  */
 package demoapp.dom.domain.objects.other.embedded.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
 
-@DomainObject(
-        logicalTypeName = "demo.NumberConstantEntity" // shared permissions with concrete sub class
-)
+@Named("demo.NumberConstantEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class NumberConstantEntity
 implements
     HasAsciiDocDescription,

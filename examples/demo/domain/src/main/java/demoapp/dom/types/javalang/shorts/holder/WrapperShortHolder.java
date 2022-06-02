@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javalang.shorts.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.WrapperShortHolder")
+@Named("demo.WrapperShortHolder")
 //tag::class[]
 public interface WrapperShortHolder {
 

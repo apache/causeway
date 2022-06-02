@@ -18,16 +18,20 @@
  */
 package org.apache.isis.viewer.graphql.viewer;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.graphql.GraphQlAutoConfiguration;
+import org.springframework.boot.autoconfigure.graphql.GraphQlCorsProperties;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
+import org.springframework.boot.autoconfigure.graphql.servlet.GraphQlWebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.graphql.execution.BatchLoaderRegistry;
+import org.springframework.graphql.execution.DefaultBatchLoaderRegistry;
 
 import org.apache.isis.viewer.graphql.model.IsisModuleIncViewerGraphqlModel;
-import org.apache.isis.viewer.graphql.viewer.spring.GraphQlAutoConfiguration;
-import org.apache.isis.viewer.graphql.viewer.spring.GraphQlCorsProperties;
-import org.apache.isis.viewer.graphql.viewer.spring.GraphQlProperties;
-import org.apache.isis.viewer.graphql.viewer.spring.GraphQlWebMvcAutoConfiguration;
 
 @Configuration
 @Import({
@@ -45,5 +49,11 @@ import org.apache.isis.viewer.graphql.viewer.spring.GraphQlWebMvcAutoConfigurati
 })
 @ComponentScan
 public class IsisModuleIncViewerGraphqlViewer {
+
+    @Bean
+    @ConditionalOnMissingBean
+    public BatchLoaderRegistry batchLoaderRegistry() {
+        return new DefaultBatchLoaderRegistry();
+    }
 }
 

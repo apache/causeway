@@ -25,6 +25,8 @@ import java.lang.annotation.Target;
 import java.util.List;
 import java.util.SortedSet;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Collection;
@@ -36,9 +38,8 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 /**
  * @since 2.x  {@index}
  */
-@DomainObject(
-        logicalTypeName = ApplicationType.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationType.LOGICAL_TYPE_NAME)
+@DomainObject
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT,
         paged=100

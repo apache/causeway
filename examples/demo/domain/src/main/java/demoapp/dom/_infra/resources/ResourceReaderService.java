@@ -38,10 +38,10 @@ import lombok.val;
 @Named("demo.ResourceReaderService")
 public class ResourceReaderService {
 
-    public String readResource(Class<?> aClass, String resourceName) {
+    public String readResource(final Class<?> aClass, final String resourceName) {
         return readResource(aClass, resourceName, Collections.emptyMap());
     }
-    public String readResource(Class<?> aClass, String resourceName, Map<String, Object> attributes) {
+    public String readResource(final Class<?> aClass, final String resourceName, final Map<String, Object> attributes) {
         InputStream resourceStream = aClass.getResourceAsStream(resourceName);
         if(resourceStream==null) {
             // horrendous hack...
@@ -57,16 +57,16 @@ public class ResourceReaderService {
         }
     }
 
-    /**
-     * Read the given {@code input} into a String, while also pre-processing placeholders.
-     *
-     * @param input
-     * @return
-     * @throws IOException
-     */
-    private String read(InputStream input) throws IOException {
-        return read(input, Collections.emptyMap());
-    }
+//    /**
+//     * Read the given {@code input} into a String, while also pre-processing placeholders.
+//     *
+//     * @param input
+//     * @return
+//     * @throws IOException
+//     */
+//    private String read(InputStream input) throws IOException {
+//        return read(input, Collections.emptyMap());
+//    }
 
     /**
      * Read the given {@code input} into a String, while also pre-processing placeholders.
@@ -75,7 +75,7 @@ public class ResourceReaderService {
      * @return
      * @throws IOException
      */
-    private String read(InputStream input, Map<String, Object> attributes) throws IOException {
+    private String read(final InputStream input, final Map<String, Object> attributes) throws IOException {
         val in = new InputStreamReader(input);
         val tagHandler = new TagHandler(attributes);
         try (val bufferReader = new BufferedReader(in)) {

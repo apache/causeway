@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.booleans.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javalang.booleans.persistence.WrapperBooleanEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.WrapperBooleanEntity"
-)
+@Named("demo.WrapperBooleanEntity")
+@DomainObject
 public class WrapperBooleanJdo                                          // <.>
         extends WrapperBooleanEntity {
 
 //end::class[]
-    public WrapperBooleanJdo(Boolean initialValue) {
+    public WrapperBooleanJdo(final Boolean initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

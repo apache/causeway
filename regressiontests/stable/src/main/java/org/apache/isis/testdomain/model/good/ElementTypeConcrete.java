@@ -18,9 +18,12 @@
  */
 package org.apache.isis.testdomain.model.good;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
-@DomainObject(logicalTypeName = "isis.testdomain.ElementTypeConcrete")
+@Named("isis.testdomain.ElementTypeConcrete")
+@DomainObject
 public class ElementTypeConcrete
 extends ElementTypeAbstract
 implements ElementTypeInterface {

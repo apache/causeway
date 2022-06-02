@@ -99,6 +99,9 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
 
     @Override
     public ObjectMemento mementoForParameter(@NonNull final ManagedObject paramAdapter) {
+        if(paramAdapter instanceof PackedManagedObject) {
+            return mementoForObjects((PackedManagedObject) paramAdapter);
+        }
         val mementoAdapter = _ObjectMemento.createOrNull(paramAdapter);
         if(mementoAdapter==null) {
             return new ObjectMementoForEmpty(paramAdapter.getSpecification().getLogicalType());
@@ -155,7 +158,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
             return objectMementoAdapter.reconstructObject(mmc);
         }
 
-        throw _Exceptions.unrecoverableFormatted("unsupported ObjectMemento type %s", memento.getClass());
+        throw _Exceptions.unrecoverable("unsupported ObjectMemento type %s", memento.getClass());
     }
 
     @RequiredArgsConstructor(staticName = "of")
@@ -166,18 +169,13 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         private final _ObjectMemento delegate;
 
         @Override
-        public String asString() {
-            return delegate.asString();
+        public String getTitle() {
+            return delegate.getTitleString();
         }
 
         @Override
-        public Bookmark asBookmarkIfSupported() {
+        public Bookmark bookmark() {
             return delegate.asBookmark();
-        }
-
-        @Override
-        public Bookmark asHintingBookmarkIfSupported() {
-            return delegate.asHintingBookmark();
         }
 
         @Override
@@ -187,11 +185,6 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
 
         ManagedObject reconstructObject(final MetaModelContext mmc) {
             return delegate.reconstructObject(mmc);
-        }
-
-        @Override
-        public String toString() {
-            return delegate.toString();
         }
 
     }

@@ -58,6 +58,13 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 public @interface DomainService {
 
     /**
+     * Alternative logical type name(s) for the annotated type.
+     * @see Bookmark
+     * @see Named
+     */
+    String[] aliased() default {};
+
+    /**
      * The nature of this service, either in the UI or REST only
      *
      * @see DomainObject#nature()
@@ -76,7 +83,6 @@ public @interface DomainService {
      * Otherwise, if not specified, the default Spring Bean name is used instead.
      * </p>
      * @deprecated use Spring semantics instead, eg. {@link Named} or equivalent
-     * @see DomainObject#logicalTypeName()
      * @see Named
      */
     @Deprecated(forRemoval = true, since = "2.0.0-RC1")

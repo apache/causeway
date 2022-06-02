@@ -69,7 +69,7 @@ implements MixinFacet {
     @Override
     public Object instantiate(final Object mixee) {
         if(constructor == null) {
-            throw _Exceptions.unrecoverableFormatted(
+            throw _Exceptions.unrecoverable(
                     "Failed to instantiate mixin. "
                     + "Invalid mix-in declaration of type %s, missing contructor", mixinType);
         }
@@ -88,7 +88,7 @@ implements MixinFacet {
             getServiceInjector().injectServicesInto(mixinPojo);
             return mixinPojo;
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            throw _Exceptions.unrecoverableFormatted(
+            throw _Exceptions.unrecoverable(e,
                     "Failed to instantiate mixin. "
                     + "Invalid mix-in declaration of type %s, "
                     + "failing instance construction with %s", mixinType, e);

@@ -38,12 +38,11 @@ import org.apache.isis.commons.internal.primitives._Longs.Bound;
 import org.apache.isis.commons.internal.primitives._Longs.Range;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
@@ -64,19 +63,15 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 class JdoEntityInjectingTest extends IsisIntegrationTestAbstract {
 
-    @Inject private FixtureScripts fixtureScripts;
+    @Inject private JdoTestFixtures jdoTestFixtures;
     @Inject private RepositoryService repository;
     @Inject private KVStoreForTesting kvStore;
 
     @Test @Order(0) @Rollback(false)
     void init() {
-        // cleanup
-        fixtureScripts.runPersona(JdoTestDomainPersona.PurgeAll);
-        kvStore.clear(JdoBook.class);
-
         // given
-        fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-        assertInjectCountRange(1, 3); //TODO there is some injection redundancy
+        jdoTestFixtures.reinstall(()->kvStore.clear(JdoBook.class));
+        assertInjectCountRange(3, 9); //TODO there is some injection redundancy
     }
 
 
@@ -133,7 +128,7 @@ class JdoEntityInjectingTest extends IsisIntegrationTestAbstract {
 
     private JdoBook getSampleBook() {
         val books = repository.allInstances(JdoProduct.class);
-        assertEquals(1, books.size(), "book count");
+        assertEquals(3, books.size(), "book count");
         val book = books.get(0);
         assertEquals(BookDto.sample().getName(), book.getName(), "book name");
         return (JdoBook)book;

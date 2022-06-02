@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.bytes.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javalang.bytes.persistence.WrapperByteEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.WrapperByteEntity"
-)
+@Named("demo.WrapperByteEntity")
+@DomainObject
 public class WrapperByteJdo                                          // <.>
         extends WrapperByteEntity {
 
 //end::class[]
-    public WrapperByteJdo(Byte initialValue) {
+    public WrapperByteJdo(final Byte initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

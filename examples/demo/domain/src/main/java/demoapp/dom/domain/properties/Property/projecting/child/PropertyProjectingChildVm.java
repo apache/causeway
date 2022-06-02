@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.properties.Property.projecting.child;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -46,10 +47,9 @@ import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyPro
 @XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PropertyProjectingChildVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PropertyProjectingChildVm"
-)
+        nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 public class PropertyProjectingChildVm implements HasAsciiDocDescription {
 

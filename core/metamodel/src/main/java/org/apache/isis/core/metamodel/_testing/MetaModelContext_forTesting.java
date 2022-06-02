@@ -190,11 +190,6 @@ implements MetaModelContext {
 
     // -- LOOKUP
 
-    @Override
-    public <T> T getSingletonElseFail(final Class<T> type) {
-        return getSystemEnvironment().ioc().getSingletonElseFail(type);
-    }
-
     private Stream<Object> streamSingletons() {
 
         val fields = Stream.of(
@@ -484,7 +479,7 @@ implements MetaModelContext {
     private final Optional<ManagedObject> toManagedObject(final _ManagedBeanAdapter managedBeanAdapter) {
 
         val servicePojo = managedBeanAdapter.getInstance().getFirst()
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                .orElseThrow(()->_Exceptions.unrecoverable(
                         "Cannot get service instance of type '%s'",
                         managedBeanAdapter.getBeanClass()));
 

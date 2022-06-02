@@ -101,7 +101,7 @@ public enum ActionResultResponseHandlingStrategy {
                         scheduleJs(target, javascriptFor_sameWindow(fullUrl), 100);
                     }
                 } else {
-                    throw _Exceptions.unrecoverableFormatted(
+                    throw _Exceptions.unrecoverable(
                             "no logic implemented to handle IRequestHandler of type %s",
                             requestHandler.getClass().getName());
                 }

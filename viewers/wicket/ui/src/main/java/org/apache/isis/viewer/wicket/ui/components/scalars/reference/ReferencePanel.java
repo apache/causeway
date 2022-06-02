@@ -75,7 +75,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     @Override
     protected String obtainOutputFormat() {
-        return select2.obtainInlinePromptModel().getObject();
+        return select2.obtainOutputFormatModel().getObject();
     }
 
     @Override

@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.objectmanager.memento;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -34,19 +35,13 @@ public class ObjectMementoForEmpty implements ObjectMemento {
     @NonNull private LogicalType logicalType;
 
     @Override
-    public String asString() {
-        return getLogicalTypeName();
+    public String getTitle() {
+        return ValueSemanticsAbstract.PlaceholderLiteral.NULL_REPRESENTATION.getLiteral();
     }
 
     @Override
-    public Bookmark asBookmarkIfSupported() {
-        return null;
+    public Bookmark bookmark() {
+        return Bookmark.empty(logicalType);
     }
-
-    @Override
-    public Bookmark asHintingBookmarkIfSupported() {
-        return null;
-    }
-
 
 }

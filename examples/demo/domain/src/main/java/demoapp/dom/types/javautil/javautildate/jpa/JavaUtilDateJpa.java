@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javautil.javautildate.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javautil.javautildate.persistence.JavaUtilDateEntity;
       name = "JavaUtilDateJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.JavaUtilDateEntity"
-)
+@Named("demo.JavaUtilDateEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaUtilDateJpa
         extends JavaUtilDateEntity {

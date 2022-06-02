@@ -74,20 +74,20 @@ extends FixtureScript implements FixtureScriptWithExecutionStrategy {
 
     // -- RUN PERSONAS
 
-    public T objectFor(
-            final PersonaWithBuilderScript<T, BuilderScriptAbstract<T>> persona,
-            final ExecutionContext executionContext) {
-
+    public <P extends PersonaWithBuilderScript<X, B>, X, B extends BuilderScriptAbstract<X>> X objectFor(
+            final P persona,
+            final FixtureScript.ExecutionContext ec) {
         if(persona == null) {
             return null;
         }
-        final BuilderScriptAbstract<T> fixtureScript = persona.builder();
-        return executionContext.executeChildT(this, fixtureScript).getObject();
+        final B fixtureScript = persona.builder();
+        return ec.executeChildT(this, fixtureScript).getObject();
     }
+
 
     // -- RUN FINDERS
 
-    public T findUsing(final PersonaWithFinder<T> persona) {
+    public <P extends PersonaWithFinder<X>, X> X findUsing(final P persona) {
         if(persona == null) {
             return null;
         }

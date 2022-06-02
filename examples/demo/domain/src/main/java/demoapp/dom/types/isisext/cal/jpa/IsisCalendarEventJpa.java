@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isisext.cal.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -50,9 +51,8 @@ import demoapp.dom.types.isisext.cal.persistence.IsisCalendarEventEntity;
       name = "IsisCalendarEventJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.IsisCalendarEventEntity"
-)
+@Named("demo.IsisCalendarEventEntity")
+@DomainObject
 @NoArgsConstructor
 public class IsisCalendarEventJpa
         extends IsisCalendarEventEntity {

@@ -84,8 +84,12 @@ implements MultiselectChoices {
         if(!(actionResult instanceof PackedManagedObject)) {
             throw _Exceptions.unexpectedCodeReach();
         }
+
+        val elements = ((PackedManagedObject)actionResult).unpack();
+        elements.forEach(ManagedObject::getBookmark);
+
         return new DataTableModel(managedAction, managedAction.getWhere(),
-                ()->((PackedManagedObject)actionResult).unpack());
+                ()->elements);
     }
 
     // -- CONSTRUCTION

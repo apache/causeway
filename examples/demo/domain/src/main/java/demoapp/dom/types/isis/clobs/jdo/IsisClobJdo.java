@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isis.clobs.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -44,14 +45,13 @@ import demoapp.dom.types.isis.clobs.persistence.IsisClobEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.IsisClobEntity"
-)
+@Named("demo.IsisClobEntity")
+@DomainObject
 public class IsisClobJdo                                          // <.>
         extends IsisClobEntity {
 
 //end::class[]
-    public IsisClobJdo(Clob initialValue) {
+    public IsisClobJdo(final Clob initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

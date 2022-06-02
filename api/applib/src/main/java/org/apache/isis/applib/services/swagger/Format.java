@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.swagger;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
 
@@ -26,7 +28,8 @@ import org.apache.isis.applib.annotation.Value;
  *
  * @since 1.x {@index}
  */
-@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.swagger.Format")
+@Named(IsisModuleApplib.NAMESPACE + ".services.swagger.Format")
+@Value
 public enum Format {
     /**
      * Generate a format in JSON (<code>text/json</code> media type).

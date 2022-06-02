@@ -19,7 +19,7 @@
 package org.apache.isis.applib.services.hint;
 
 /**
- * Provides an SPI for view models to implement to represent
+ * Provides a SPI for view models to implement to represent
  * their "logical" identity (stable even if the view model's state changes).
  *
  * <p>

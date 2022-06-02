@@ -45,12 +45,18 @@ import lombok.val;
 public abstract class FacetHolderAbstract
 implements FacetHolder {
 
-    // -- FACTORY
+    // -- FACTORIES
 
-    public static FacetHolderAbstract simple(final MetaModelContext mmc, final Identifier featureIdentifier) {
-        final FacetHolderAbstract facetHolder = new FacetHolderAbstract(mmc) {};
-        facetHolder.featureIdentifier = featureIdentifier;
-        return facetHolder;
+    public static FacetHolderAbstract simple(
+            final MetaModelContext mmc,
+            final Identifier featureIdentifier) {
+        return new FacetHolderAbstract(mmc, featureIdentifier) {};
+    }
+
+    public static FacetHolderAbstract layered(
+            final Identifier featureIdentifier,
+            final FacetHolder parentLayer) {
+        return new FacetHolderLayered(featureIdentifier, parentLayer);
     }
 
     // -- FIELDS

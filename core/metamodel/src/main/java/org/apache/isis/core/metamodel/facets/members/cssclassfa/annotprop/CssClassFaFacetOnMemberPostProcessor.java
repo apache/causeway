@@ -26,9 +26,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
@@ -41,38 +38,19 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification) {
-    }
-
-    @Override
     protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
 
         if(objectAction.isDeclaredOnMixin()) {
             return; // don't process mixin main method, instead process its peer
         }
 
-        val hasExplicitFaIcon = objectAction
-                .lookupNonFallbackFacet(CssClassFaFacet.class)
-                .isPresent();
+        val hasExplicitFaIcon = objectAction.containsNonFallbackFacet(CssClassFaFacet.class);
 
         if(!hasExplicitFaIcon) {
             FacetUtil.addFacetIfPresent(
                     CssClassFaFacetOnMemberFromConfiguredRegex
                     .create(objectSpecification, objectAction));
         }
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction,
-            final ObjectActionParameter param) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
     }
 
 }

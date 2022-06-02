@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOff
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaTimeOffsetDateTimeEntity"
-)
+@Named("demo.JavaTimeOffsetDateTimeEntity")
+@DomainObject
 public class JavaTimeOffsetDateTimeJdo                                          // <.>
         extends JavaTimeOffsetDateTimeEntity {
 
 //end::class[]
-    public JavaTimeOffsetDateTimeJdo(java.time.OffsetDateTime initialValue) {
+    public JavaTimeOffsetDateTimeJdo(final java.time.OffsetDateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

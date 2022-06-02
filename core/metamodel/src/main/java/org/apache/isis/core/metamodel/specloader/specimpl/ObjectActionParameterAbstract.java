@@ -132,7 +132,7 @@ implements
         return lookupFacet(ParamNamedFacet.class)
         .map(ParamNamedFacet::translated)
         .orElseThrow(()->_Exceptions
-                .unrecoverableFormatted("action parameters must have a ParamNamedFacet %s", this));
+                .unrecoverable("action parameters must have a ParamNamedFacet %s", this));
     }
 
     @Override

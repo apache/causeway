@@ -18,10 +18,13 @@
  */
 package org.apache.isis.testing.archtestsupport.applib.domain.dom;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 
-@DomainObject(logicalTypeName = "foo")
+@Named("foo")
+@DomainObject
 @DomainObjectLayout()
 public class SomeDomainObject {
 }

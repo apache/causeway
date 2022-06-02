@@ -21,6 +21,7 @@ package demoapp.dom.types.javalang.booleans;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -46,7 +47,8 @@ import demoapp.dom.types.javalang.booleans.vm.WrapperBooleanVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.WrapperBooleans", editing=Editing.ENABLED)
+@Named("demo.WrapperBooleans")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 //@Log4j2
 public class WrapperBooleans implements HasAsciiDocDescription {
 

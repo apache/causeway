@@ -20,6 +20,8 @@ package org.apache.isis.applib.services.user;
 
 import java.io.Serializable;
 
+import javax.inject.Named;
+
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 
@@ -40,10 +42,9 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
+@Named(RoleMemento.LOGICAL_TYPE_NAME)
 @DomainObject(
-        nature = Nature.VIEW_MODEL,
-        logicalTypeName = RoleMemento.LOGICAL_TYPE_NAME
-)
+        nature = Nature.VIEW_MODEL)
 @DomainObjectLayout(
         titleUiEvent = RoleMemento.TitleUiEvent.class
 )

@@ -100,6 +100,7 @@ implements
     final ConfigurableBeanFactory beanFactory;
 
     final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
+    final InteractionIdGenerator interactionIdGenerator;
 
     // to allow implementations to have dependencies back on this service.
     @Inject @Lazy List<TransactionBoundaryAware> transactionBoundaryAwareBeans;
@@ -112,7 +113,8 @@ implements
             final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler,
             final ClockService clockService,
             final Provider<CommandPublisher> commandPublisherProvider,
-            final ConfigurableBeanFactory beanFactory) {
+            final ConfigurableBeanFactory beanFactory,
+            final InteractionIdGenerator interactionIdGenerator) {
         this.runtimeEventService = runtimeEventService;
         this.specificationLoader = specificationLoader;
         this.serviceInjector = serviceInjector;
@@ -120,6 +122,7 @@ implements
         this.clockService = clockService;
         this.commandPublisherProvider = commandPublisherProvider;
         this.beanFactory = beanFactory;
+        this.interactionIdGenerator = interactionIdGenerator;
 
         this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor.lookupScope(beanFactory);
     }
@@ -216,9 +219,11 @@ implements
 
         final Stack<InteractionLayer> interactionLayers = interactionLayerStack.get();
         return interactionLayers.isEmpty()
-    			? new IsisInteraction(UUID.randomUUID())
+    			? new IsisInteraction(interactionIdGenerator.interactionId())
 				: _Casts.uncheckedCast(interactionLayers.firstElement().getInteraction());
     }
+
+
 
     @Override
     public void closeInteractionLayers() {
@@ -392,7 +397,7 @@ implements
         if(interaction instanceof IsisInteraction) {
             return (IsisInteraction) interaction;
         }
-        throw _Exceptions.unrecoverableFormatted("the framework does not recognice "
+        throw _Exceptions.unrecoverable("the framework does not recognice "
                 + "this implementation of an Interaction: %s", interaction.getClass().getName());
     }
 

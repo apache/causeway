@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.javalang.bytes.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.bytes.holder.WrapperByteHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.WrapperByteEntity" // shared permissions with concrete sub class
-)
+@Named("demo.WrapperByteEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class WrapperByteEntity
 implements
     HasAsciiDocDescription,

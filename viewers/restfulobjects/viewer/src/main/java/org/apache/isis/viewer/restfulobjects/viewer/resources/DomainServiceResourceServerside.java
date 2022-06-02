@@ -149,9 +149,9 @@ implements DomainServiceResource {
         val resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        val serviceAdapter = getServiceAdapter(serviceId);
+        val serviceAdapter = _DomainResourceHelper.getServiceAdapter(resourceContext, serviceId);
 
-        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(resourceContext, null, JsonRepresentation.newMap());
+        val renderer = new DomainObjectReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())
         .with(serviceAdapter)
         .includesSelf();
@@ -214,8 +214,7 @@ implements DomainServiceResource {
         val resourceContext = createResourceContext(
                 RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 
         return _EndpointLogging.response(log, "GET /services/{}/actions/{}", serviceId, actionId,
                 domainResourceHelper.actionPrompt(actionId));
@@ -284,8 +283,7 @@ implements DomainServiceResource {
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 
         return _EndpointLogging.response(log, "GET /services/{}/actions/{}/invoke", serviceId, actionId,
                 domainResourceHelper.invokeActionQueryOnly(actionId, arguments));
@@ -311,8 +309,7 @@ implements DomainServiceResource {
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 
         return _EndpointLogging.response(log, "PUT /services/{}/actions/{}/invoke", serviceId, actionId,
                 domainResourceHelper.invokeActionIdempotent(actionId, arguments));
@@ -337,8 +334,7 @@ implements DomainServiceResource {
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        val serviceAdapter = getServiceAdapter(serviceId);
-        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceAdapter);
+        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 
         return _EndpointLogging.response(log, "POST /services/{}/actions/{}/invoke", serviceId, actionId,
                 domainResourceHelper.invokeAction(actionId, arguments));
@@ -356,7 +352,5 @@ implements DomainServiceResource {
                         RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
                         "Deleting an action invocation resource is not allowed."));
     }
-
-
 
 }

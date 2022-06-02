@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.bytes.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -42,16 +43,15 @@ import demoapp.dom.types.javalang.bytes.holder.WrapperByteHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.WrapperByteVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.WrapperByteVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class WrapperByteVm
         implements HasAsciiDocDescription, WrapperByteHolder2 {
 
 //end::class[]
-    public WrapperByteVm(Byte initialValue) {
+    public WrapperByteVm(final Byte initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

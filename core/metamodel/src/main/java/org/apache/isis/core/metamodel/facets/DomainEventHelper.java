@@ -421,8 +421,8 @@ public class DomainEventHelper {
             return constructor.newInstance(args);
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException e) {
-            throw _Exceptions.unrecoverableFormatted(
-                    "failed to invoke constructor %s", constructor, e);
+            throw _Exceptions.unrecoverable(e,
+                    "failed to invoke constructor %s", constructor);
         }
     }
 

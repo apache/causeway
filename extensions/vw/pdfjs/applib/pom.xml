@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>isis-extensions-pdfjs-applib</artifactId>
-    <name>Apache Isis Ext - Wicket Viewer - pdf.js (applib)</name>
+    <name>Apache Isis Ext - pdf.js - Applib</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.pdfjs.applib</jar-plugin.automaticModuleName>
@@ -37,15 +37,13 @@
     <dependencies>
 
         <dependency>
+            <groupId>org.apache.isis.commons</groupId>
+            <artifactId>isis-commons</artifactId>
+        </dependency>
+        
+        <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-applib</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>wicket-bootstrap-core</artifactId>
-            <!-- to avoid polluting the classpath -->
-            <optional>true</optional>
         </dependency>
 
     </dependencies>

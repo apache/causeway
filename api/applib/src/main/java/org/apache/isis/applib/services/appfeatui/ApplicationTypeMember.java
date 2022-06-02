@@ -23,6 +23,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -36,9 +38,8 @@ import lombok.NoArgsConstructor;
 /**
  * @since 2.x  {@index}
  */
-@DomainObject(
-        logicalTypeName = ApplicationTypeMember.LOGICAL_TYPE_NAME
-)
+@Named(ApplicationTypeMember.LOGICAL_TYPE_NAME)
+@DomainObject
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
 )

@@ -23,11 +23,31 @@ import java.util.Set;
 
 import javax.jdo.PersistenceManagerFactory;
 
+import org.apache.isis.core.config.DatanucleusConfiguration;
+
+import lombok.NonNull;
+
+/**
+ * Any implementations will be called during bootstrapping, after the {@link PersistenceManagerFactory} has been
+ * created.
+ *
+ * <p>
+ *     This is a good way to perform any eager initialization.  However, for the specific use case of creating the
+ *     database tables (eg if integration testing) a better approach is to simply set the
+ *     {@link DatanucleusConfiguration.Schema.GenerateDatabase#setMode(String) datanucleus.schema.generate-database.mode}
+ *     configuration property; there's no need to implement a listener for this use case.
+ * </p>
+ */
 public interface JdoEntityDiscoveryListener {
 
+    /**
+     * Called during bootstrapping
+     *
+     * @param properties - both "datanucleus.*" and "javax.jdo.*".
+     */
     public void onEntitiesDiscovered(
             PersistenceManagerFactory persistenceManagerFactory,
-            Set<Class<?>> entityTypes,
-            Map<String, String> dnSettings);
+            @NonNull Set<Class<?>> entityTypes,
+            @NonNull Map<String, Object> properties);
 
 }

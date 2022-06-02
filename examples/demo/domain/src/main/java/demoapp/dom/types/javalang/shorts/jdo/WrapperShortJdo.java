@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.shorts.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javalang.shorts.persistence.WrapperShortEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.WrapperShortEntity"
-)
+@Named("demo.WrapperShortEntity")
+@DomainObject
 public class WrapperShortJdo                                          // <.>
         extends WrapperShortEntity {
 
 //end::class[]
-    public WrapperShortJdo(Short initialValue) {
+    public WrapperShortJdo(final Short initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

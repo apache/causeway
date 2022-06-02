@@ -67,4 +67,10 @@ public class PageRedirectRequest<T extends IRequestablePage> {
         requestCycle.setResponsePage(pageClass);
     }
 
+    @Override
+    public String toString() {
+        return String.format("PageRedirectRequest[pageClass=%s,pageParameters=%s]",
+                pageClass.getName(), pageParameters);
+    }
+
 }

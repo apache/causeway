@@ -49,6 +49,17 @@ implements
         return new ValueDecomposition(Either.right(typedTupleDto));
     }
 
+    /**
+     * In support of JAXB de-serialization, 
+     * returns an unspecified type.
+     * (Introduced for the CalendarEvent demo to work.)
+     * @deprecated not sure why we are hitting this; remove eventually
+     */
+    @Deprecated
+    public ValueDecomposition() {
+        this(Either.left(new ValueWithTypeDto()));
+    }
+
     @Getter private final Either<ValueWithTypeDto, TypedTupleDto> either;
 
     // used by RO-Viewer to render values

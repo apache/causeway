@@ -18,7 +18,7 @@
  */
 package org.apache.isis.testdomain.jdo;
 
-import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStack;
+import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.testdomain.HasPersistenceStandard;
 
 public interface HasPersistenceStandardJdo

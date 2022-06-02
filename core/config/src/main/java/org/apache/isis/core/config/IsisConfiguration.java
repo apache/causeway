@@ -41,6 +41,7 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import javax.activation.DataSource;
+import javax.inject.Named;
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -54,8 +55,6 @@ import org.springframework.validation.annotation.Validated;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -69,8 +68,6 @@ import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Core;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -1404,7 +1401,7 @@ public class IsisConfiguration {
 
                 /**
                  * Whether to ensure that the logical-type-name of all objects must be specified explicitly, using either
-                 * {@link DomainObject#logicalTypeName()} or {@link DomainService#logicalTypeName()}.
+                 * {@link Named}.
                  *
                  * <p>
                  *     It is <i>highly advisable</i> to leave this set as enabled (the default). These logical-type-names
@@ -1884,12 +1881,6 @@ public class IsisConfiguration {
              * Whether the Ajax debug should be shown, by default this is disabled.
              */
             private boolean ajaxDebugMode = false;
-
-            /**
-             * Which major JQuery version the <i>Wicket Viewer</i> should use, default is 3.
-             * @see org.apache.wicket.resource.JQueryResourceReference
-             */
-            private int jQueryVersion = 3;
 
             /**
              * The base path at which the Wicket viewer is mounted.
@@ -3037,6 +3028,13 @@ public class IsisConfiguration {
              */
             private UserMenuMeActionPolicy userMenuMeActionPolicy = UserMenuMeActionPolicy.HIDE;
         }
+
+        private final SessionLog sessionLog = new SessionLog();
+        @Data
+        public static class SessionLog {
+            boolean autoLogoutOnRestart = true;
+        }
+
     }
 
     private static List<String> listOf(final String ...values) {

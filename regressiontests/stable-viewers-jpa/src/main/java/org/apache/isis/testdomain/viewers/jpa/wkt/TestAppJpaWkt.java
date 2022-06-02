@@ -19,6 +19,7 @@
 package org.apache.isis.testdomain.viewers.jpa.wkt;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -53,6 +54,7 @@ import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
     // UI (Wicket Viewer)
     IsisModuleViewerWicketViewer.class,
+    //IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
     XrayEnable.class // for debugging only
 })
@@ -72,10 +74,9 @@ public class TestAppJpaWkt extends SpringBootServletInitializer {
         SpringApplication.run(new Class[] { TestAppJpaWkt.class }, args);
     }
 
+    @Named("testdomain.jpa.TestHomePage")
     @DomainObject(
-            nature=Nature.VIEW_MODEL,
-            logicalTypeName = "testdomain.jpa.TestHomePage"
-            )
+            nature=Nature.VIEW_MODEL)
     @HomePage
     public static class TestHomePage {
 
@@ -89,7 +90,6 @@ public class TestAppJpaWkt extends SpringBootServletInitializer {
 
         @Action @ActionLayout(sequence = "0.1")
         public TestHomePage setup() {
-            testFixtures.setUp3Books();
             return this;
         }
 

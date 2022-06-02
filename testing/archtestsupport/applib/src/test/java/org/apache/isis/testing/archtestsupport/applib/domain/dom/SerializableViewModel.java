@@ -21,12 +21,14 @@ package org.apache.isis.testing.archtestsupport.applib.domain.dom;
 import java.io.Serializable;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
 
-@DomainObject(nature = Nature.VIEW_MODEL, logicalTypeName = "SerializableViewModel")
+@Named("SerializableViewModel")
+@DomainObject(nature = Nature.VIEW_MODEL)
 @DomainObjectLayout()
 public class SerializableViewModel implements Serializable {
 

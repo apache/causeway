@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -46,9 +47,9 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.extensions.excel.applib.dom.ExcelService;
-import org.apache.isis.extensions.excel.applib.dom.WorksheetContent;
-import org.apache.isis.extensions.excel.applib.dom.WorksheetSpec;
+import org.apache.isis.extensions.excel.applib.ExcelService;
+import org.apache.isis.extensions.excel.applib.WorksheetContent;
+import org.apache.isis.extensions.excel.applib.WorksheetSpec;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
@@ -60,10 +61,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
+@Named("libExcelFixture.BulkUpdateManagerForDemoToDoItem")
 @DomainObject(
-        nature = Nature.VIEW_MODEL,
-        logicalTypeName = "libExcelFixture.BulkUpdateManagerForDemoToDoItem"
-)
+        nature = Nature.VIEW_MODEL)
 @DomainObjectLayout(
         named ="Import/export manager",
         bookmarking = BookmarkPolicy.AS_ROOT

@@ -866,12 +866,6 @@
 				<version>${jopt-simple.version}</version>
 			</dependency>
 
-			<dependency>
-				<groupId>net.ftlines.wicket-fullcalendar</groupId>
-				<artifactId>wicket-fullcalendar-core</artifactId>
-				<version>${wicket-fullcalendar.version}</version>
-			</dependency>
-
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>ognl</groupId>
@@ -1384,7 +1378,7 @@
 					<plugin>
 						<groupId>org.jvnet.jaxb2.maven2</groupId>
 						<artifactId>maven-jaxb2-plugin</artifactId>
-						<version>0.14.0</version>
+						<version>0.15.1</version>
 						<configuration>
 							<removeOldOutput>true</removeOldOutput>
 							<episode>true</episode>

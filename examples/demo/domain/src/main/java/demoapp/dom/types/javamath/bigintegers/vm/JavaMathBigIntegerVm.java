@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javamath.bigintegers.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -42,16 +43,15 @@ import demoapp.dom.types.javamath.bigintegers.holder.JavaMathBigIntegerHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.JavaMathBigIntegerVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.JavaMathBigIntegerVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaMathBigIntegerVm
         implements HasAsciiDocDescription, JavaMathBigIntegerHolder2 {
 
 //end::class[]
-    public JavaMathBigIntegerVm(java.math.BigInteger initialValue) {
+    public JavaMathBigIntegerVm(final java.math.BigInteger initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

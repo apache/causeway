@@ -30,7 +30,7 @@ implements TypeOfFacet {
         return TypeOfFacet.class;
     }
 
-    public TypeOfFacetAbstract(final Class<?> type, final FacetHolder holder) {
+    protected TypeOfFacetAbstract(final Class<?> type, final FacetHolder holder) {
         super(type(), holder, type);
     }
 

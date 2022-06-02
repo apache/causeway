@@ -18,6 +18,7 @@
  */
 package demoapp.dom.featured.layout.tabs;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -39,7 +40,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.Tab")
+@Named("demo.Tab")
+@DomainObject(nature=Nature.VIEW_MODEL)
 public class TabDemo implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

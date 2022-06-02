@@ -29,7 +29,6 @@
 
     <artifactId>isis-extensions-secman-integration</artifactId>
     <name>Apache Isis Ext - Sec Man Integration</name>
-    <description></description>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.integration</jar-plugin.automaticModuleName>
@@ -39,14 +38,14 @@
     <dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
-			<scope>provided</scope>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-applib</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-applib</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-runtime</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
     </dependencies>

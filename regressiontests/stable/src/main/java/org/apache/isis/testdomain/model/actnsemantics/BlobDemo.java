@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.model.actnsemantics;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -43,7 +44,8 @@ import lombok.extern.log4j.Log4j2;
 @XmlRootElement(name = "BlobDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName="regressiontests.BlobDemo")
+@Named("regressiontests.BlobDemo")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @Log4j2
 public class BlobDemo {
 

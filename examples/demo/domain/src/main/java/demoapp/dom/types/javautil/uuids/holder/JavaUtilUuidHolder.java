@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javautil.uuids.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.JavaUtilUuidHolder")
+@Named("demo.JavaUtilUuidHolder")
 //tag::class[]
 public interface JavaUtilUuidHolder {
 

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javasql.javasqldate.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaSqlDateEntity"
-)
+@Named("demo.JavaSqlDateEntity")
+@DomainObject
 public class JavaSqlDateJdo                                             // <.>
         extends JavaSqlDateEntity {
 
 //end::class[]
-    public JavaSqlDateJdo(java.sql.Date initialValue) {
+    public JavaSqlDateJdo(final java.sql.Date initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

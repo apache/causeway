@@ -183,7 +183,7 @@ class ResponseDigest<T> {
 
         } catch (Exception e) {
             entities = Can.empty();
-            failureCause = _Exceptions.unrecoverable("failed to read JAX-RS response content", e);
+            failureCause = _Exceptions.unrecoverable(e, "failed to read JAX-RS response content");
         }
 
         return this;

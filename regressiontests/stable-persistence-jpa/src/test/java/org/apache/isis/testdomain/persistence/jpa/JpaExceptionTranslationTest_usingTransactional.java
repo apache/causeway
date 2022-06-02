@@ -72,15 +72,6 @@ extends RegressionTestAbstract {
         // Util_H2Console.main(null);
     }
 
-    @Test @Order(1)
-    @Transactional @Rollback(false)
-    void booksUniqueByIsbn_setupPhase() {
-        interactionService.runAnonymous(()->{
-
-            testFixtures.setUp3Books();
-
-        });
-    }
 
     @Test @Order(2)
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
@@ -131,17 +122,7 @@ extends RegressionTestAbstract {
 
     }
 
-    @Test @Order(4)
-    @Transactional @Rollback(false)
-    void booksUniqueByIsbn_cleanupPhase() {
 
-        interactionService.runAnonymous(()->{
-
-            testFixtures.cleanUpRepository();
-
-        });
-
-    }
 
 
 }

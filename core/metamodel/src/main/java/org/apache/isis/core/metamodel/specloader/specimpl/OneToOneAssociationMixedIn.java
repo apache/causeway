@@ -80,9 +80,9 @@ implements MixedInMember {
                     _MixedInMemberNamingStrategy.determineIdFrom(mixinAction)),
                 mixinAction.getFacetedMethod(), mixinAction.getReturnType());
 
-        this.facetHolder = FacetHolderAbstract.simple(
-                mixeeSpec.getMetaModelContext(),
-                super.getFeatureIdentifier());
+        this.facetHolder = FacetHolderAbstract.layered(
+                super.getFeatureIdentifier(),
+                mixinAction.getFacetedMethod());
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
@@ -92,15 +92,6 @@ implements MixedInMember {
         // ensure the contributed property cannot be modified
         //
         FacetUtil.addFacet(disabledFacet());
-
-        //
-        // in addition, copy over facets from contributed to own.
-        //
-        // These could include everything under @Property(...) because the
-        // PropertyAnnotationFacetFactory is also run against actions.
-        //
-
-        FacetUtil.copyFacetsTo(mixinAction.getFacetedMethod(), facetHolder);
 
         // adjust name if necessary
         val isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)

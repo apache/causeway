@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-pdfjs</artifactId>
-    <name>Apache Isis Ext - Wicket Viewer - pdf.js (parent)</name>
+    <name>Apache Isis Ext - pdf.js - Parent</name>
     <packaging>pom</packaging>
 
     <description>
@@ -41,7 +41,7 @@
 <!--
         <module>fixtures</module>
 -->
-        <module>ui</module>
+        <module>wicket</module>
     </modules>
 
 </project>

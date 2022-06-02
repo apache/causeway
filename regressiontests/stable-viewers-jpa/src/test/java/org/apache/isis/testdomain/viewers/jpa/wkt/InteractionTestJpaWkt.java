@@ -70,12 +70,7 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
 
     @BeforeEach
     void setUp() throws InterruptedException {
-
         wktTester = wicketTesterFactory.createTester(JpaBook::fromDto);
-
-        run(()->{
-            testFixtures.setUp3Books();
-        });
     }
 
     @AfterEach

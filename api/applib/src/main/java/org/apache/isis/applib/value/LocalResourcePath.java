@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.function.UnaryOperator;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -50,7 +51,8 @@ import lombok.NonNull;
  * @since 2.0 {@index}
  * @see OpenUrlStrategy
  */
-@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".value.LocalResourcePath")
+@Named(IsisModuleApplib.NAMESPACE + ".value.LocalResourcePath")
+@Value
 @XmlJavaTypeAdapter(LocalResourcePath.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class LocalResourcePath implements Serializable {
 

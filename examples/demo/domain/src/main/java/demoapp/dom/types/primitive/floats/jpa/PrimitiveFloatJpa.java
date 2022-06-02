@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.floats.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -47,9 +48,8 @@ import demoapp.dom.types.primitive.floats.persistence.PrimitiveFloatEntity;
       name = "PrimitiveFloatJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.PrimitiveFloatEntity"
-)
+@Named("demo.PrimitiveFloatEntity")
+@DomainObject
 @NoArgsConstructor
 public class PrimitiveFloatJpa
         extends PrimitiveFloatEntity {

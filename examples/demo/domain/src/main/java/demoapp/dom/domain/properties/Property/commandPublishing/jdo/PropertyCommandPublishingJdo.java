@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.properties.Property.commandPublishing.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -44,9 +45,9 @@ import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandP
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@Named("demo.PropertyCommandPublishingEntity")
 @DomainObject(
         nature=Nature.ENTITY
-        , logicalTypeName = "demo.PropertyCommandPublishingEntity"
         , editing = Editing.ENABLED
 )
 public class PropertyCommandPublishingJdo

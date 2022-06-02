@@ -25,7 +25,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import org.apache.isis.viewer.wicket.ui.util.SSESupport;
+import org.apache.isis.viewer.wicket.ui.pages.common.serversentevents.js.ServerSentEventsJsReference;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -62,8 +62,9 @@ public class ServiceActionsPanel extends MenuActionPanel {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        response.render(CssHeaderItem.forReference(new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
-        SSESupport.renderHead(response);
+        response.render(CssHeaderItem.forReference(
+                new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
+        response.render(ServerSentEventsJsReference.asHeaderItem());
     }
 
 }

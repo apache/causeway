@@ -95,7 +95,7 @@ public class DomainMemberDefault implements DomainMember {
         val isService = Stream.concat(
                     Stream.of(spec),
                     spec.subclasses(Hierarchical.Depth.DIRECT).stream())
-                .anyMatch(ObjectSpecification::isManagedBean);
+                .anyMatch(ObjectSpecification::isInjectable);
 
         return isService
                     ? "2 Service"

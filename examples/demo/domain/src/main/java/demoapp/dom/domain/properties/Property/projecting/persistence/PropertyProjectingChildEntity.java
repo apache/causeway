@@ -18,14 +18,15 @@
  */
 package demoapp.dom.domain.properties.Property.projecting.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
-@DomainObject(
-        logicalTypeName = "demo.PropertyProjectingChildEntity" // shared permissions with concrete sub class
-)
+@Named("demo.PropertyProjectingChildEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class PropertyProjectingChildEntity
 implements
     HasAsciiDocDescription,

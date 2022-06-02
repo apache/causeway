@@ -23,15 +23,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.extensions.excel.applib.ExcelService;
 import org.apache.isis.extensions.excel.applib.IsisModuleExtExcelApplib;
-import org.apache.isis.extensions.excel.applib.dom.ExcelService;
-import org.apache.isis.extensions.excel.applib.dom.WorksheetSpec;
+import org.apache.isis.extensions.excel.applib.WorksheetSpec;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
@@ -45,9 +46,8 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
-@DomainObject(
-        logicalTypeName = ExcelFixture2.LOGICAL_TYPE_NAME
-)
+@Named(ExcelFixture2.LOGICAL_TYPE_NAME)
+@DomainObject
 public class ExcelFixture2 extends FixtureScript {
 
     public final static String LOGICAL_TYPE_NAME = IsisModuleExtExcelApplib.NAMESPACE + ".ExcelFixture2";

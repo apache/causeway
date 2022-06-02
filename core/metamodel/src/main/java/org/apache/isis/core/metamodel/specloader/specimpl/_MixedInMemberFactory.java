@@ -23,7 +23,6 @@ import java.util.function.Function;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /** package private utility */
@@ -37,8 +36,8 @@ class _MixedInMemberFactory {
             final Class<?> mixinType,
             final String mixinMethodName) {
 
-        return mixinTypeAction -> new ObjectActionMixedIn(
-                mixinType, mixinMethodName, mixinTypeAction, mixinTypeSpec);
+        return mixinAction -> new ObjectActionMixedIn(
+                mixinType, mixinMethodName, mixinAction, mixinTypeSpec);
     }
 
     Function<ObjectActionDefault, ObjectAssociation> mixedInAssociation(
@@ -46,19 +45,12 @@ class _MixedInMemberFactory {
             final Class<?> mixinType,
             final String mixinMethodName) {
 
-        return mixinAction -> {
-            val returnType = mixinAction.getReturnType();
-            if (returnType.isScalar()) {
-                return new OneToOneAssociationMixedIn(
+        return mixinAction ->
+            mixinAction.getReturnType().isScalar()
+                ? new OneToOneAssociationMixedIn(
+                        mixinAction, mixinTypeSpec, mixinType, mixinMethodName)
+                : new OneToManyAssociationMixedIn(
                         mixinAction, mixinTypeSpec, mixinType, mixinMethodName);
-            }
-            return new OneToManyAssociationMixedIn(
-                    mixinAction, mixinTypeSpec, mixinType, mixinMethodName);
-        };
     }
-
-
-
-
 
 }

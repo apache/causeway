@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.objects.other.embedded.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,7 +43,8 @@ import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntit
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(logicalTypeName = "demo.NumberConstantEntity")
+@Named("demo.NumberConstantEntity")
+@DomainObject
 public class NumberConstantJdo
         extends NumberConstantEntity {
 

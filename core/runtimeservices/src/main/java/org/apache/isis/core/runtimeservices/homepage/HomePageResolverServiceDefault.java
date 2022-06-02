@@ -58,7 +58,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
     @PostConstruct
     public void init() {
         val viewModelTypes = isisBeanTypeRegistry.getViewModelTypes();
-        viewModelTypeForHomepage = viewModelTypes.stream()
+        viewModelTypeForHomepage = viewModelTypes.keySet().stream()
                 .filter(viewModelType -> _Annotations.isPresent(viewModelType, HomePage.class))
                 .findFirst();
     }

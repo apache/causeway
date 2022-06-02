@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javatime.javatimeoffsetdatetime.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.JavaTimeOffsetDateTimeHolder")
+@Named("demo.JavaTimeOffsetDateTimeHolder")
 //tag::class[]
 public interface JavaTimeOffsetDateTimeHolder {
 

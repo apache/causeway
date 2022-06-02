@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.permission.dom;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -38,46 +39,48 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.Nq;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
-        schema = "isisExtensionsSecman",
-        table = "ApplicationPermission")
-@Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@Version(
-        strategy = VersionStrategy.VERSION_NUMBER,
-        column = "version")
+        schema = ApplicationPermission.SCHEMA,
+        table = ApplicationPermission.TABLE)
+@Uniques({
+        @Unique(
+                name = "ApplicationPermission_role_feature_rule_UNQ",
+                members = { "role", "featureSort", "featureFqn", "rule" })
+})
 @Queries( {
     @Query(
-            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE,
+            name = Nq.FIND_BY_ROLE,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN
                     + " WHERE role == :role"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_USER,
+            name = Nq.FIND_BY_USER,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN
                     + " WHERE (u.roles.contains(role) && u.username == :username) "
                     + "VARIABLES org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser u"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_NAMES,
+            name = Nq.FIND_BY_ROLE_NAMES,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN
                     + " WHERE :roleNames.contains(role.name) "),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_FEATURE,
+            name = Nq.FIND_BY_FEATURE,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN
                     + " WHERE featureSort == :featureSort "
                     + "   && featureFqn == :featureFqn"),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN,
+            name = Nq.FIND_BY_ROLE_RULE_FEATURE_FQN,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN
                     + " WHERE role == :role "
@@ -85,21 +88,22 @@ import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
                     + "   && featureSort == :featureSort "
                     + "   && featureFqn == :featureFqn "),
     @Query(
-            name = org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE,
+            name = Nq.FIND_BY_ROLE_RULE_FEATURE,
             value = "SELECT "
                     + "FROM " + ApplicationPermission.FQCN
                     + " WHERE role == :role "
                     + "   && rule == :rule "
                     + "   && featureSort == :featureSort "),
 })
-@Uniques({
-    @Unique(
-            name = "ApplicationPermission_role_feature_rule_UNQ",
-            members = { "role", "featureSort", "featureFqn", "rule" })
-})
-@DomainObject(
-        logicalTypeName = ApplicationPermission.LOGICAL_TYPE_NAME
-)
+@Inheritance(
+        strategy = InheritanceStrategy.NEW_TABLE)
+@DatastoreIdentity(
+        strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@Version(
+        strategy = VersionStrategy.VERSION_NUMBER,
+        column = "version")
+@Named(ApplicationPermission.LOGICAL_TYPE_NAME)
+@DomainObject()
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
 )
@@ -109,84 +113,38 @@ public class ApplicationPermission
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.permission.dom.ApplicationPermission";
 
 
-    // -- ROLE
-
-    @Column(name = "roleId", allowsNull = "false")
-    private org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole role;
-
+    @Column(name = Role.NAME, allowsNull = Role.ALLOWS_NULL)
     @Role
+    @Getter
+    private org.apache.isis.extensions.secman.jdo.role.dom.ApplicationRole role;
     @Override
-    public ApplicationRole getRole() {
-        return role;
-    }
-    @Override
-    public void setRole(ApplicationRole role) {
+    public void setRole(final ApplicationRole role) {
         this.role = _Casts.uncheckedCast(role);
     }
 
 
-    // -- RULE
-
-    @Column(allowsNull = "false")
+    @Column(allowsNull = Rule.ALLOWS_NULL)
+    @Rule
+    @Getter @Setter
     private ApplicationPermissionRule rule;
 
-    @Override
-    @Rule
-    public ApplicationPermissionRule getRule() {
-        return rule;
-    }
-    @Override
-    public void setRule(ApplicationPermissionRule rule) {
-        this.rule = rule;
-    }
 
-
-    // -- MODE
-
-    @Column(allowsNull = "false")
+    @Column(allowsNull = Mode.ALLOWS_NULL)
+    @Mode
+    @Getter @Setter
     private ApplicationPermissionMode mode;
 
-    @Mode
-    @Override
-    public ApplicationPermissionMode getMode() {
-        return mode;
-    }
-    @Override
-    public void setMode(ApplicationPermissionMode mode) {
-        this.mode = mode;
-    }
 
-
-    // -- FEATURE SORT
-
-    @Column(allowsNull = "false")
+    @Column(allowsNull = FeatureSort.ALLOWS_NULL)
+    @FeatureSort
+    @Getter @Setter
     private ApplicationFeatureSort featureSort;
 
-    @Programmatic
-    @Override
-    public ApplicationFeatureSort getFeatureSort() {
-        return featureSort;
-    }
-    @Override
-    public void setFeatureSort(ApplicationFeatureSort featureSort) {
-        this.featureSort = featureSort;
-    }
 
-
-    // -- FQN
-
-    @Column(allowsNull = "false")
-    private String featureFqn;
-
+    @Column(allowsNull = FeatureFqn.ALLOWS_NULL)
     @FeatureFqn
-    @Override
-    public String getFeatureFqn() {
-        return featureFqn;
-    }
-    @Override
-    public void setFeatureFqn(String featureFqn) {
-        this.featureFqn = featureFqn;
-    }
+    @Getter @Setter
+    private String featureFqn;
 
 
 }

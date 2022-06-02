@@ -31,10 +31,10 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom.domain.properties.PropertyLayout.cssClass.PropertyLayoutCssClassVm;
 import demoapp.dom.domain.properties.PropertyLayout.describedAs.PropertyLayoutDescribedAsVm;
@@ -55,7 +55,7 @@ import demoapp.dom.types.Samples;
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-@Log4j2
+//@Log4j2
 public class PropertyLayoutMenu {
 
     final ClockService clockService;
@@ -155,7 +155,7 @@ public class PropertyLayoutMenu {
         val vm = new PropertyLayoutRepaintingVm();
         vm.setEditMe("Modify this field to see if repainting occurs...");
         samples.stream()
-                .filter(x -> x.getName().endsWith(".pdf"))
+                .filter(x -> CommonMimeType.PDF.matches(x.getMimeType()))
                 .findFirst()
                 .ifPresent(pdfBlob -> {
                     vm.setPropertyUsingAnnotation(pdfBlob);

@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.javanet.urls.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javanet.urls.holder.JavaNetUrlHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.JavaNetUrlEntity" // shared permissions with concrete sub class
-)
+@Named("demo.JavaNetUrlEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class JavaNetUrlEntity
 implements
     HasAsciiDocDescription,

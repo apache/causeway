@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.jpa.entities;
 
 import java.util.List;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -55,8 +56,8 @@ import lombok.ToString;
 @DiscriminatorColumn(
         name="product_type",
         discriminatorType = DiscriminatorType.STRING)
-@DomainObject(
-        logicalTypeName = "testdomain.jpa.Product")
+@Named("testdomain.jpa.Product")
+@DomainObject
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString

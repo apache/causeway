@@ -44,23 +44,17 @@ public final class ObjectMementoCollection implements ObjectMemento {
     @NonNull private final LogicalType logicalType;
 
     @Override
-    public String asString() {
-        return getContainer().toString();
-    }
-
-    @Override
-    public Bookmark asHintingBookmarkIfSupported() {
+    public String getTitle() {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
 
     @Override
-    public Bookmark asBookmarkIfSupported() {
+    public Bookmark bookmark() {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
 
     public ArrayList<ObjectMemento> unwrapList() {
         return getContainer();
     }
-
 
 }

@@ -65,11 +65,11 @@ implements
         return ValueType.ENUM;
     }
 
-    public static EnumValueSemanticsAbstract create(
+    public static <T extends Enum<T>> EnumValueSemanticsAbstract<T> create(
             final TranslationService translationService,
             final IntrospectionPolicy introspectionPolicy,
-            final Class<?> correspondingClass) {
-        return new EnumValueSemanticsAbstract(
+            final Class<T> correspondingClass) {
+        return new EnumValueSemanticsAbstract<>(
                 translationService,
                 introspectionPolicy,
                 correspondingClass){};

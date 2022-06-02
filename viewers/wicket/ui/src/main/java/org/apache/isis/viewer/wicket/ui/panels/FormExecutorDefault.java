@@ -180,7 +180,9 @@ implements FormExecutor {
                 .handleResults(getCommonContext(), resultResponse);
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("[EXECUTOR] ... return");
+                _Debug.log("[EXECUTOR] ... return\n"
+                        + " - %s\n",
+                        resultResponse.toStringMultiline());
             });
 
             return FormExecutionOutcome.SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; // success (valid args), allow redirect

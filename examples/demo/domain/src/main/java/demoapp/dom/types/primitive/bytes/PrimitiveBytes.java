@@ -21,6 +21,7 @@ package demoapp.dom.types.primitive.bytes;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -46,11 +47,10 @@ import demoapp.dom.types.primitive.bytes.vm.PrimitiveByteVm;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PrimitiveBytes")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PrimitiveBytes",
-        editing=Editing.ENABLED
-)
+        editing=Editing.ENABLED)
 //@Log4j2
 public class PrimitiveBytes implements HasAsciiDocDescription {
 

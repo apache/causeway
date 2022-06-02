@@ -48,6 +48,11 @@ public enum RepresentationTypeSimplifiedV2 {
     OBJECT_COLLECTION("object-collection"),
 
     /**
+     * The media type used as content-Type header when an object property is rendered.
+     */
+    OBJECT_PROPERTY("object-property"),
+
+    /**
      * The media type used as content-Type header when a standalone collection is rendered.
      */
     LIST("list"),
@@ -76,6 +81,7 @@ public enum RepresentationTypeSimplifiedV2 {
 
     public boolean isObject()               { return this == OBJECT; }
     public boolean isObjectCollection()     { return this == OBJECT_COLLECTION; }
+    public boolean isObjectProperty()       { return this == OBJECT_PROPERTY; }
     public boolean isList()                 { return this == LIST; }
     public boolean isValue()                { return this == VALUE; }
     public boolean isValues()               { return this == VALUES; }
@@ -117,10 +123,12 @@ public enum RepresentationTypeSimplifiedV2 {
     }
 
     private static Optional<String> extractReprType(final @NonNull Stream<String> stringStream) {
+
         return stringStream
-                //.peek(System.out::println)//debug
+                //.peek(System.err::println)//debug
         .map(String::trim)
         .filter(_Strings::isNotEmpty)
+        //.map(s->s.replace("profile=\"urn:org.restfulobjects:repr-types/", "repr-type=\""))
         .filter(s->s.startsWith("repr-type"))
         .map(s->_Strings.parseKeyValuePair(s, '=').orElse(null))
         .filter(Objects::nonNull)

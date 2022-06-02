@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<svg
+   aria-hidden="true"
+   focusable="false"
+   data-prefix="far"
+   data-icon="square"
+   class="svg-inline--fa fa-square fa-w-14"
+   role="img"
+   viewBox="0 0 448 512"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="PropertyNode-mixedin.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8">
+    <filter
+       height="1.0000096"
+       y="-4.8000001e-06"
+       width="1.0000096"
+       x="-4.8000001e-06"
+       id="filter3410"
+       style="color-interpolation-filters:sRGB"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur3412"
+         stdDeviation="0.00089600001"
+         inkscape:collect="always" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     inkscape:document-rotation="0"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1706"
+     inkscape:window-height="1163"
+     id="namedview6"
+     showgrid="false"
+     inkscape:zoom="1.3921165"
+     inkscape:cx="116.36957"
+     inkscape:cy="320.73465"
+     inkscape:window-x="1763"
+     inkscape:window-y="152"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4"
+     inkscape:pagecheckerboard="0" />
+  <path
+     fill="currentColor"
+     d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"
+     id="path2"
+     style="fill:#6caa59;fill-opacity:1;opacity:1;filter:url(#filter3410)" />
+  <path
+     style="fill:#e9f5e4;fill-opacity:1;stroke:none;stroke-width:3.59165;stroke-linejoin:round"
+     d="m 49.275798,430.33746 -1.561876,-1.66254 V 256.91934 c 0,-94.46556 0.200796,-172.278836 0.446213,-172.918384 1.313879,-3.423912 -7.23172,-3.264671 175.197195,-3.264671 128.3901,0 171.07525,0.207079 172.25546,0.835665 0.86295,0.459616 1.9628,1.34855 2.44409,1.975409 0.6821,0.888418 0.8801,39.015681 0.89791,172.903491 l 0.0228,171.76374 -1.48879,1.89271 L 396,432 H 223.41885 50.837675 Z"
+     id="path869" />
+  <text
+     id="text857-3"
+     y="310.81378"
+     x="31.641605"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;line-height:0.95;font-family:Bahnschrift;-inkscape-font-specification:Bahnschrift;letter-spacing:0px;word-spacing:0px;fill:#488f31;fill-opacity:1;stroke:none;stroke-width:4.13695"
+     xml:space="preserve"><tspan
+       id="tspan859-3"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;font-family:Bahnschrift;-inkscape-font-specification:Bahnschrift;fill:#488f31;fill-opacity:1;stroke-width:4.13695"
+       y="310.81378"
+       x="31.641605"
+       sodipodi:role="line">prop</tspan></text>
+  <rect
+     style="font-variation-settings:'wght' 700;opacity:0.981;fill:#e9f5e4;fill-opacity:1;stroke:none;stroke-width:4.25086;stroke-linejoin:round"
+     id="rect1192"
+     width="82.608032"
+     height="49.324234"
+     x="96.939987"
+     y="31.858223" />
+  <rect
+     style="font-variation-settings:'wght' 700;opacity:0.981;fill:#e9f5e4;fill-opacity:1;stroke:none;stroke-width:4.23022;stroke-linejoin:round"
+     id="rect1192-3"
+     width="82.608032"
+     height="48.846489"
+     x="268.08002"
+     y="32.335968" />
+  <rect
+     style="font-variation-settings:'wght' 700;opacity:0.981;fill:#e9f5e4;fill-opacity:1;stroke:none;stroke-width:4.44061;stroke-linejoin:round"
+     id="rect1192-6"
+     width="82.608032"
+     height="53.826168"
+     x="90.858772"
+     y="427.15649" />
+  <rect
+     style="font-variation-settings:'wght' 700;opacity:0.981;fill:#e9f5e4;fill-opacity:1;stroke:none;stroke-width:4.35286;stroke-linejoin:round"
+     id="rect1192-6-0"
+     width="82.608032"
+     height="51.71981"
+     x="123.2048"
+     y="-50.361767"
+     transform="rotate(90)" />
+  <rect
+     style="font-variation-settings:'wght' 700;opacity:0.981;fill:#e9f5e4;fill-opacity:1;stroke:none;stroke-width:4.23022;stroke-linejoin:round"
+     id="rect1192-6-0-8"
+     width="82.608032"
+     height="48.846489"
+     x="301.35083"
+     y="-47.488461"
+     transform="rotate(90)" />
+  <rect
+     style="font-variation-settings:'wght' 700;opacity:0.981;fill:#e9f5e4;fill-opacity:1;stroke:none;stroke-width:4.32253;stroke-linejoin:round"
+     id="rect1192-6-0-3"
+     width="82.608032"
+     height="51.00148"
+     x="133.97977"
+     y="-449.5986"
+     transform="rotate(90)" />
+  <rect
+     style="font-variation-settings:'wght' 700;opacity:0.981;fill:#e9f5e4;fill-opacity:1;stroke:none;stroke-width:4.38298;stroke-linejoin:round"
+     id="rect1192-6-0-8-6"
+     width="82.608032"
+     height="52.438141"
+     x="312.12579"
+     y="-449.59863"
+     transform="rotate(90)" />
+  <rect
+     style="font-variation-settings:'wght' 700;opacity:0.981;fill:#e9f5e4;fill-opacity:1;stroke:none;stroke-width:4.59973;stroke-linejoin:round"
+     id="rect1192-3-6"
+     width="82.608032"
+     height="57.752747"
+     x="261.99878"
+     y="423.22992" />
+</svg>

@@ -89,7 +89,9 @@ public class GraphQlSourceForIsis implements GraphQlSource {
 
         Set<GraphQLType> graphQLObjectTypes = new HashSet<>();
 
-        specificationLoader.forEach(objectSpecification -> {
+        specificationLoader.snapshotSpecifications()
+        .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
+        .forEach(objectSpecification -> {
 
             val logicalTypeName = objectSpecification.getLogicalTypeName();
             String logicalTypeNameSanitized = _Utils.logicalTypeNameSanitized(logicalTypeName);
@@ -120,7 +122,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                 case UNKNOWN:
                     break;
             }
-        }, false);
+        });
 
         val query_numServices = newFieldDefinition()
                 .name("numServices")

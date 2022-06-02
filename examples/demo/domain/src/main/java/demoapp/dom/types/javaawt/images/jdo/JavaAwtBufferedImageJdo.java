@@ -20,6 +20,7 @@ package demoapp.dom.types.javaawt.images.jdo;
 
 import java.awt.image.BufferedImage;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -43,9 +44,8 @@ import demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaAwtBufferedImageEntity"
-)
+@Named("demo.JavaAwtBufferedImageEntity")
+@DomainObject
 public class JavaAwtBufferedImageJdo
         extends JavaAwtBufferedImageEntity
 //end::class[]

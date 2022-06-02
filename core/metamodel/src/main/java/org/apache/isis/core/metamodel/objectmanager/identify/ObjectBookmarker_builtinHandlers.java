@@ -63,7 +63,7 @@ class ObjectBookmarker_builtinHandlers {
 
         @Override
         public boolean isHandling(final ManagedObject managedObject) {
-            return managedObject.getSpecification().isManagedBean();
+            return managedObject.getSpecification().isInjectable();
         }
 
         @Override

@@ -447,8 +447,8 @@ public final class ProgrammingModelConstants {
                 + "(for de-serialization from memento string)."),
         DOMAIN_OBJECT_MISSING_A_NAMESPACE("${type}: the object type must declare a namespace, "
                 + "yet there was none found in '${logicalTypeName}'; "
-                + "eg. @DomainObject(logicalTypeName=\"Customer\") is considered invalid, "
-                + "whereas @DomainObject(logicalTypeName=\"sales.Customer\") is valid."),
+                + "eg. @Named(\"Customer\") is considered invalid, "
+                + "whereas @Named(\"sales.Customer\") is valid."),
         DOMAIN_SERVICE_MISSING_A_NAMESPACE("${type}: the service type must declare a namespace, "
                 + "yet there was none found in '${logicalTypeName}'; "
                 + "Spring supports various naming strategies @Named(...) being one of them, "
@@ -464,6 +464,9 @@ public final class ProgrammingModelConstants {
                 + "Consider importing type ${type} with Spring's @Import annotation. "
                 + "Types of sort VALUE should instead register a ValueSemanticsProvider with Spring, "
                 + "to be properly understood by the framework."),
+        NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS("Logical type name (or alias) ${logicalTypeName} "
+                + "mapped to multiple non-abstract classes:\n"
+                + "${csv}"),
         ;
         private final String template;
         public String getMessage(final Identifier featureIdentifier) {

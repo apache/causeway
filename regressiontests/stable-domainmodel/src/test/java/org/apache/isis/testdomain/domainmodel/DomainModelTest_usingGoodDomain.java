@@ -32,8 +32,16 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.isis.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.isis.applib.annotation.Introspection.MemberAnnotationPolicy;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.Config;
@@ -50,9 +58,10 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
-import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterChoicesFacetFromParentedCollection;
-import org.apache.isis.core.metamodel.postprocessors.collparam.ActionParameterDefaultsFacetFromAssociatedCollection;
+import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterChoicesFacetFromParentedCollection;
+import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -64,6 +73,8 @@ import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.isis.testdomain.model.good.ElementTypeAbstract;
 import org.apache.isis.testdomain.model.good.ElementTypeConcrete;
 import org.apache.isis.testdomain.model.good.ElementTypeInterface;
+import org.apache.isis.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference;
+import org.apache.isis.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString;
 import org.apache.isis.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.isis.testdomain.model.good.ProperElementTypeVm;
 import org.apache.isis.testdomain.model.good.ProperFullyImpl;
@@ -74,18 +85,13 @@ import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstra
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testdomain.model.good.ProperMemberSupportDiscovery;
+import org.apache.isis.testdomain.model.good.ProperObjectWithAlias;
+import org.apache.isis.testdomain.model.good.ProperServiceWithAlias;
 import org.apache.isis.testdomain.model.good.ProperServiceWithMixin;
 import org.apache.isis.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport;
 import org.apache.isis.testdomain.model.good.ViewModelWithEncapsulatedMembers;
 import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.val;
 
@@ -436,8 +442,39 @@ class DomainModelTest_usingGoodDomain {
                 param0.lookupFacet(ActionParameterDefaultsFacet.class)
                     .map(Object::getClass)
                     .orElse(null));
-
     }
+
+    @Test
+    void actionParamChoices_shouldBeAvailable_whenMixedInActionHasParamSupportingMethodTypeOfString() {
+
+        val spec = specificationLoader.specForTypeElseFail(ProperChoicesWhenActionHasParamSupportingMethodTypeOfString.class);
+
+        val action = spec.getActionElseFail("remove");
+        val param0 = action.getParameters().getFirstOrFail();
+
+        assertEquals(
+                ActionParameterChoicesFacetViaMethod.class,
+                param0.lookupFacet(ActionParameterChoicesFacet.class)
+                    .map(Object::getClass)
+                    .orElse(null));
+    }
+
+    @Test
+    void actionParamChoices_shouldBeAvailable_whenMixedInActionHasParamSupportingMethodTypeOfReference() {
+
+        val spec = specificationLoader
+                .specForTypeElseFail(ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference.class);
+
+        val action = spec.getActionElseFail("remove");
+        val param0 = action.getParameters().getFirstOrFail();
+
+        assertEquals(
+                ActionParameterChoicesFacetViaMethod.class,
+                param0.lookupFacet(ActionParameterChoicesFacet.class)
+                    .map(Object::getClass)
+                    .orElse(null));
+    }
+
 
     @ParameterizedTest
     @MethodSource("provideImperativelyNamed")
@@ -472,6 +509,46 @@ class DomainModelTest_usingGoodDomain {
                 })
                 .count());
 
+    }
+
+    @Test
+    void aliasesOnDomainServices_shouldBeHonored() {
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ProperServiceWithAlias.class);
+        assertTrue(objectSpec.isInjectable());
+        assertTrue(objectSpec.getAction("now").isPresent());
+
+        assertEquals(Can.of(
+                "testdomain.v1.ProperServiceWithAlias",
+                "testdomain.v2.ProperServiceWithAlias"),
+                objectSpec.getAliases().map(LogicalType::getLogicalTypeName));
+
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.v1.ProperServiceWithAlias")
+                .orElse(null));
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.v2.ProperServiceWithAlias")
+                .orElse(null));
+    }
+
+    @Test
+    void aliasesOnDomainObjects_shouldBeHonored() {
+
+        val objectSpec = specificationLoader.specForTypeElseFail(ProperObjectWithAlias.class);
+        assertTrue(objectSpec.isViewModel());
+        assertTrue(objectSpec.getAction("now").isPresent());
+
+        assertEquals(Can.of(
+                "testdomain.v1.ProperObjectWithAlias",
+                "testdomain.v2.ProperObjectWithAlias"),
+                objectSpec.getAliases().map(LogicalType::getLogicalTypeName));
+
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.v1.ProperObjectWithAlias")
+                .orElse(null));
+        assertEquals(objectSpec,
+                specificationLoader.specForLogicalTypeName("testdomain.v2.ProperObjectWithAlias")
+                .orElse(null));
     }
 
     @Test

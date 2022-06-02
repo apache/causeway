@@ -26,8 +26,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktLinks;
 
 import lombok.val;
@@ -82,7 +82,7 @@ extends PanelAbstract<List<LinkAndLabel>, ListOfLinksModel> {
 
         Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, getModel(), item->{
             val linkAndLabel = item.getModelObject();
-            item.addOrReplace(WktLinks.asAdditionalLink(ID_ADDITIONAL_LINK_TITLE, linkAndLabel));
+            item.addOrReplace(WktLinks.asAdditionalLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel));
         });
     }
 

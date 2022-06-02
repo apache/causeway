@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.objects.other.mixins;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -38,7 +39,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.MixinVm")
+@Named("demo.MixinVm")
+@DomainObject(nature=Nature.VIEW_MODEL)
 public class MixinVm implements HasAsciiDocDescription, CountHolder {
 
     @ObjectSupport public String title() {

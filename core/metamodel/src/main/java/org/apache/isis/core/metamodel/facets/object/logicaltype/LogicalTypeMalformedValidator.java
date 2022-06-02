@@ -45,16 +45,12 @@ implements MetaModelRefiner {
         programmingModel.addVisitingValidator(spec->{
 
             if(!spec.isEntityOrViewModel()
-                    && !spec.isManagedBean() ) {
+                    && !spec.isInjectable() ) {
                 return;
             }
 
-            val logicalTypeFacet = spec.getFacet(LogicalTypeFacet.class);
-            if(logicalTypeFacet == null) {
-                return;
-            }
-
-            val logicalTypeName = logicalTypeFacet.value();
+            val logicalType = spec.getLogicalType();
+            val logicalTypeName = logicalType.getLogicalTypeName();
 
             val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
                     .collect(Can.toCan());
@@ -63,7 +59,7 @@ implements MetaModelRefiner {
                     || nameParts.stream()
                         .anyMatch(String::isEmpty)) {
 
-                val validationResponse = spec.isManagedBean()
+                val validationResponse = spec.isInjectable()
                         ? ProgrammingModelConstants.Validation.DOMAIN_SERVICE_MISSING_A_NAMESPACE
                         : ProgrammingModelConstants.Validation.DOMAIN_OBJECT_MISSING_A_NAMESPACE;
 

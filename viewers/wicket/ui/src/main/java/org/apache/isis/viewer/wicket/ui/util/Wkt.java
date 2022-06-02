@@ -38,8 +38,10 @@ import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -62,8 +64,10 @@ import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
@@ -93,11 +97,15 @@ import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.jquery.Key;
+
+import static de.agilecoders.wicket.jquery.JQuery.$;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -113,6 +121,16 @@ public class Wkt {
     public <T extends Behavior> T add(final Component component, final T behavior) {
         component.add((Behavior)behavior);
         return behavior;
+    }
+
+    // -- AJAX ENABLER
+
+    /**
+     * Requirement for AJAX updates to work.
+     */
+    public <T extends Component> T ajaxEnable(final T component) {
+        component.setOutputMarkupId(true);
+        return component;
     }
 
     // -- ATTRIBUTES
@@ -208,6 +226,10 @@ public class Wkt {
         return new ReplaceDisabledTagWithReadonlyTagBehavior();
     }
 
+    public Behavior behaviorConfirm(final ConfirmationConfig config) {
+        return new ConfirmationBehavior(config);
+    }
+
     public Behavior behaviorAddOnClick(
             final Component component,
             final SerializableConsumer<AjaxRequestTarget> onClick) {
@@ -218,6 +240,12 @@ public class Wkt {
             final Component component,
             final SerializableConsumer<AjaxRequestTarget> onRespond) {
         return add(component, behaviorFireOnEscapeKey(onRespond));
+    }
+
+    public Behavior behaviorAddConfirm(
+            final Component component,
+            final ConfirmationConfig config) {
+        return add(component, behaviorConfirm(config));
     }
 
     public void behaviorAddReplaceDisabledTagWithReadonlyTag(final @Nullable Component component) {
@@ -374,14 +402,16 @@ public class Wkt {
         .withThreeState(!required);
 
         final CheckBoxX checkBox = new CheckBoxX(id, checkedModel) {
-
             private static final long serialVersionUID = 1L;
-
-            @Override
-            public CheckBoxXConfig getConfig() {
+            @Override public CheckBoxXConfig getConfig() {
                 return config;
             }
-
+            //override to don't express FontAwesome twice, we already do that for all pages
+            @Override public void renderHead(final IHeaderResponse response) {
+                response.render(CssHeaderItem.forReference(new CssResourceReference(CheckBoxX.class, "css/checkbox-x.css")));
+                response.render(JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(CheckBoxX.class, "js/checkbox-x.js")));
+                response.render(OnDomReadyHeaderItem.forScript($(this).chain("checkboxX", getConfig()).get()));
+            }
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
                 //
@@ -401,8 +431,7 @@ public class Wkt {
                 tag.put("type", "xx");
             }
         };
-        checkBox.setOutputMarkupId(true); // allows AJAX updates to work
-        return checkBox;
+        return ajaxEnable(checkBox);
     }
 
     public static AjaxCheckBox checkbox(
@@ -994,7 +1023,7 @@ public class Wkt {
 
         maxLength.get()
         .ifPresent(maxLen->{
-            // for TextArea in conjunction with javascript in jquery.isis.wicket.viewer.js
+            // for TextArea in conjunction with javascript in IsisWicketViewerJsResourceReference
             // see http://stackoverflow.com/questions/4459610/set-maxlength-in-html-textarea
 
             Wkt.attributeReplace(formComponent, "maxlength", maxLen);
@@ -1037,7 +1066,5 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
-
-
 
 }

@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.isisext.asciidocs.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
@@ -25,9 +27,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.isisext.asciidocs.holder.IsisAsciiDocHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.IsisAsciiDocEntity" // shared permissions with concrete sub class
-)
+@Named("demo.IsisAsciiDocEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class IsisAsciiDocEntity
 implements
     HasAsciiDocDescription,

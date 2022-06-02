@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.javalang.characters.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javalang.characters.holder.WrapperCharacterHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.WrapperCharacterEntity" // shared permissions with concrete sub class
-)
+@Named("demo.WrapperCharacterEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class WrapperCharacterEntity
 implements
     HasAsciiDocDescription,

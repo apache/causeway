@@ -18,23 +18,15 @@
  */
 package org.apache.isis.testdomain.jdo;
 
-import java.util.HashSet;
-
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
-import org.apache.isis.testdomain.jdo.entities.JdoBook;
-import org.apache.isis.testdomain.jdo.entities.JdoInventory;
-import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.ldap.LdapConstants;
-import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptAbstract;
-import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithResult;
 import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithoutResult;
 import org.apache.isis.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
@@ -43,55 +35,55 @@ import lombok.val;
 public enum JdoTestDomainPersona
 implements PersonaWithBuilderScript<Object, BuilderScriptAbstract<Object>>  {
 
-    PurgeAll {
-        @Override
-        public BuilderScriptWithoutResult builder() {
-            return new BuilderScriptWithoutResult() {
-
-                @Override
-                protected void execute(final ExecutionContext ec) {
-
-                    repository.allInstances(JdoInventory.class)
-                    .forEach(repository::remove);
-
-                    repository.allInstances(JdoBook.class)
-                    .forEach(repository::remove);
-
-                    repository.allInstances(JdoProduct.class)
-                    .forEach(repository::remove);
-
-                }
-
-                @Inject private RepositoryService repository;
-
-            };
-        }
-    },
-
-    InventoryWith1Book {
-        @Override
-        public BuilderScriptWithResult<Object> builder() {
-            return new BuilderScriptWithResult<Object>() {
-
-                @Override
-                protected Object buildResult(final ExecutionContext ec) {
-
-                    val products = new HashSet<JdoProduct>();
-
-                    products.add(JdoBook.fromDto(BookDto.sample()));
-
-                    val inventory = JdoInventory.of("Sample Inventory", products);
-                    repository.persist(inventory);
-
-                    return inventory;
-
-                }
-
-                @Inject private RepositoryService repository;
-
-            };
-        }
-    },
+//    PurgeAll {
+//        @Override
+//        public BuilderScriptWithoutResult builder() {
+//            return new BuilderScriptWithoutResult() {
+//
+//                @Override
+//                protected void execute(final ExecutionContext ec) {
+//
+//                    repository.allInstances(JdoInventory.class)
+//                    .forEach(repository::remove);
+//
+//                    repository.allInstances(JdoBook.class)
+//                    .forEach(repository::remove);
+//
+//                    repository.allInstances(JdoProduct.class)
+//                    .forEach(repository::remove);
+//
+//                }
+//
+//                @Inject private RepositoryService repository;
+//
+//            };
+//        }
+//    },
+//
+//    InventoryWith1Book {
+//        @Override
+//        public BuilderScriptWithResult<Object> builder() {
+//            return new BuilderScriptWithResult<Object>() {
+//
+//                @Override
+//                protected Object buildResult(final ExecutionContext ec) {
+//
+//                    val products = new HashSet<JdoProduct>();
+//
+//                    products.add(JdoBook.fromDto(BookDto.sample()));
+//
+//                    val inventory = JdoInventory.of("Sample Inventory", products);
+//                    repository.persist(inventory);
+//
+//                    return inventory;
+//
+//                }
+//
+//                @Inject private RepositoryService repository;
+//
+//            };
+//        }
+//    },
 
     SvenApplicationUser {
         @Override

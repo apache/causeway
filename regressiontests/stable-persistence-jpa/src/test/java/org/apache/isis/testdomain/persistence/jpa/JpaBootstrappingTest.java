@@ -20,8 +20,6 @@ package org.apache.isis.testdomain.persistence.jpa;
 
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -42,12 +40,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
+import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.jpa.JpaTestFixtures;
-import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -71,22 +70,6 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
     static void beforeAll() throws SQLException {
         // launch H2Console for troubleshooting ...
         // Util_H2Console.main(null);
-    }
-
-    void cleanUp() {
-        testFixtures.cleanUpRepository();
-    }
-
-    void setUp() {
-
-        // setup sample Inventory
-        SortedSet<JpaProduct> products = new TreeSet<>();
-
-        products.add(JpaBook.of("Sample Book", "A sample book for testing.", 99., "Sample Author", "Sample ISBN",
-                "Sample Publisher"));
-
-        val inventory = new JpaInventory("Sample Inventory", products);
-        repositoryService.persistAndFlush(inventory);
     }
 
     @Test @Order(0)
@@ -129,12 +112,8 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
         // given - expected pre condition: no inventories
 
-        cleanUp();
-        assertEquals(0, repositoryService.allInstances(JpaInventory.class).size());
-
-        // when
-
-        setUp();
+        testFixtures.reinstall(()->
+            assertEquals(0, repositoryService.allInstances(JpaInventory.class).size()));
 
         // then - expected post condition: ONE inventory
 
@@ -144,12 +123,18 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
         val inventory = inventories.get(0);
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());
-        assertEquals(1, inventory.getProducts().size());
+        assertEquals(3, inventory.getProducts().size());
 
-        val product = inventory.getProducts().iterator().next();
-        assertEquals("Sample Book", product.getName());
+        val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
 
-        testFixtures.assertHasPersistenceId(product);
+        val multipleBooks = Can.ofCollection(inventory.getProducts())
+                .filter(book->expectedBookTitles.contains(book.getName()));
+
+        assertEquals(3, multipleBooks.size());
+
+        val firstProduct = inventory.getProducts().iterator().next();
+
+        testFixtures.assertHasPersistenceId(firstProduct);
     }
 
     @Test @Order(2) @Rollback(false)

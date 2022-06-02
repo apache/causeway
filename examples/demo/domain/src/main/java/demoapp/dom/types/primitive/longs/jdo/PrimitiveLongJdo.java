@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.longs.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -40,14 +41,13 @@ import demoapp.dom.types.primitive.longs.persistence.PrimitiveLongEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.PrimitiveLongEntity"
-)
+@Named("demo.PrimitiveLongEntity")
+@DomainObject
 public class PrimitiveLongJdo                                       // <.>
         extends PrimitiveLongEntity {
 
 //end::class[]
-    public PrimitiveLongJdo(long initialValue) {
+    public PrimitiveLongJdo(final long initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

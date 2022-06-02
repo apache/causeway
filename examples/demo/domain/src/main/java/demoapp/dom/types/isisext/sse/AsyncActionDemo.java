@@ -19,6 +19,7 @@
 package demoapp.dom.types.isisext.sse;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -46,7 +47,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.AsyncAction", editing=Editing.DISABLED)
+@Named("demo.AsyncAction")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.DISABLED)
 public class AsyncActionDemo implements HasAsciiDocDescription {
 
     @XmlTransient

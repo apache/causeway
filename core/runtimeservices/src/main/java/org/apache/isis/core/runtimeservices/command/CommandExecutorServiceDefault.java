@@ -234,7 +234,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 val targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
 
                 if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
-                    throw _Exceptions.unrecoverableFormatted("cannot recreate ManagedObject from bookmark %s",
+                    throw _Exceptions.unrecoverable("cannot recreate ManagedObject from bookmark %s",
                             Bookmark.forOidDto(targetOidDto));
                 }
 

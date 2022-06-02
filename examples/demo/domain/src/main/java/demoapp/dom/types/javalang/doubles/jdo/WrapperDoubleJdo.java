@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.doubles.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javalang.doubles.persistence.WrapperDoubleEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.WrapperDoubleEntity"
-)
+@Named("demo.WrapperDoubleEntity")
+@DomainObject
 public class WrapperDoubleJdo                                          // <.>
         extends WrapperDoubleEntity {
 
 //end::class[]
-    public WrapperDoubleJdo(Double initialValue) {
+    public WrapperDoubleJdo(final Double initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

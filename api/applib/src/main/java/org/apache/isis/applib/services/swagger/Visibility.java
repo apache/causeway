@@ -18,8 +18,15 @@
  */
 package org.apache.isis.applib.services.swagger;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.RestrictTo;
+import org.apache.isis.applib.annotation.Value;
 
 /**
  * Specifies which elements of the metamodel are included within the generated
@@ -27,7 +34,8 @@ import org.apache.isis.applib.annotation.*;
  *
  * @since 1.x {@index}
  */
-@Value(logicalTypeName = IsisModuleApplib.NAMESPACE + ".services.swagger.Visibility")
+@Named(IsisModuleApplib.NAMESPACE + ".services.swagger.Visibility")
+@Value
 public enum Visibility {
 
     /**

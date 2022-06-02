@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-fullcalendar</artifactId>
-    <name>Apache Isis Ext - Wicket Viewer - fullcalendar (parent)</name>
+    <name>Apache Isis Ext - FullCalendar (parent)</name>
     <packaging>pom</packaging>
 
     <description>
@@ -37,7 +37,7 @@
 
     <modules>
         <module>applib</module>
-        <module>ui</module>
+        <module>wicket</module>
     </modules>
 
 </project>

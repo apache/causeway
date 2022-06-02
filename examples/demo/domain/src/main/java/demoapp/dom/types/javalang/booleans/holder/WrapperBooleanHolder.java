@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javalang.booleans.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.WrapperBooleanHolder")
+@Named("demo.WrapperBooleanHolder")
 //tag::class[]
 public interface WrapperBooleanHolder {
 

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.postprocessors.all.i18n;
 
-
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -108,6 +107,5 @@ extends ObjectSpecificationPostProcessorAbstract {
         .map(HasMemoizableTranslation.class::cast)
         .forEach(HasMemoizableTranslation::memoizeTranslations);
     }
-
 
 }

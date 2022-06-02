@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.postprocessors.all.i18n;
 
-
 import javax.inject.Inject;
 
 import org.apache.isis.commons.collections.Can;
@@ -32,10 +31,6 @@ import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.val;
 
@@ -51,7 +46,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     protected void doPostProcess(final ObjectSpecification objectSpecification) {
 
         if(!(objectSpecification.isEntityOrViewModelOrAbstract()
-                || objectSpecification.isManagedBean())) {
+                || objectSpecification.isInjectable())) {
             return;
         }
 
@@ -87,22 +82,6 @@ extends ObjectSpecificationPostProcessorAbstract {
                         objectSpecification)
                 );
 
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter param) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
-    }
-
-    @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
     }
 
     // -- HELEPR

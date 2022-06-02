@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.characters.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javalang.characters.persistence.WrapperCharacterEntity;
       name = "WrapperCharacterJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.WrapperCharacterEntity"
-)
+@Named("demo.WrapperCharacterEntity")
+@DomainObject
 @NoArgsConstructor
 public class WrapperCharacterJpa
         extends WrapperCharacterEntity {

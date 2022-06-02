@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javalang.floats.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.WrapperFloatHolder")
+@Named("demo.WrapperFloatHolder")
 //tag::class[]
 public interface WrapperFloatHolder {
 

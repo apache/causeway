@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isis.localresourcepaths.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -44,14 +45,13 @@ import demoapp.dom.types.isis.localresourcepaths.persistence.IsisLocalResourcePa
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.IsisLocalResourcePathEntity"
-)
+@Named("demo.IsisLocalResourcePathEntity")
+@DomainObject
 public class IsisLocalResourcePathJdo                                   // <.>
         extends IsisLocalResourcePathEntity {
 
 //end::class[]
-    public IsisLocalResourcePathJdo(LocalResourcePath initialValue) {
+    public IsisLocalResourcePathJdo(final LocalResourcePath initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

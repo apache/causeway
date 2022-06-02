@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -38,12 +39,16 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
 @Table(
-        schema = "isisExtensionsSecman",
-        name = "ApplicationTenancy",
+        schema = ApplicationTenancy.SCHEMA,
+        name = ApplicationTenancy.TABLE,
         uniqueConstraints =
             @UniqueConstraint(
                     name = "ApplicationTenancy_name_UNQ",
@@ -51,24 +56,24 @@ import org.apache.isis.commons.internal.base._Casts;
 )
 @NamedQueries({
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
+            name = Nq.FIND_BY_PATH,
             query = "SELECT t "
                   + "  FROM ApplicationTenancy t "
                   + " WHERE t.path = :path"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
+            name = Nq.FIND_BY_NAME,
             query = "SELECT t "
                   + "  FROM ApplicationTenancy t "
                   + " WHERE t.name = :name"),
     @NamedQuery(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
+            name = Nq.FIND_BY_NAME_OR_PATH_MATCHING,
             query = "SELECT t "
                   + "  FROM ApplicationTenancy t "
                   + " WHERE t.name LIKE :regex "
                   + "    OR t.path LIKE :regex"),
 })
+@Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = ApplicationTenancy.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteMethod = "findMatching"
         )
@@ -78,72 +83,43 @@ import org.apache.isis.commons.internal.base._Casts;
 public class ApplicationTenancy
     extends org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy {
 
-
     @Version
     private Long version;
 
 
-    // -- NAME
-
-    @Column(nullable = false, length = Name.MAX_LENGTH)
+    @Column(nullable = Name.NULLABLE, length = Name.MAX_LENGTH)
+    @Name
+    @Getter @Setter
     private String name;
 
-    @Name
-    @Override
-    public String getName() {
-        return name;
-    }
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-    // -- PATH
 
     @Id
-    @Column(nullable = false, length = Path.MAX_LENGTH)
+    @Column(nullable = Path.NULLABLE, length = Path.MAX_LENGTH)
+    @Path
+    @Getter @Setter
     private String path;
 
-    @Path
-    @Override
-    public String getPath() {
-        return path;
-    }
-    @Override
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-
-    // -- PARENT
 
     @ManyToOne
-    @JoinColumn(name="parentPath", nullable = true)
-    private ApplicationTenancy parent;
-
+    @JoinColumn(name=Parent.NAME, nullable = Parent.NULLABLE)
     @Parent
-    @Override
-    public org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy getParent() {
-        return parent;
-    }
+    @Getter
+    private ApplicationTenancy parent;
     @Override
     public void setParent(org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
         this.parent = _Casts.uncheckedCast(parent);
     }
 
 
-    // -- CHILDREN
-
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = Children.MAPPED_BY)
+    @Children
     private Set<ApplicationTenancy> children = new TreeSet<>();
 
-    @Children
     @Override
     public Set<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> getChildren() {
         return _Casts.uncheckedCast(children);
     }
-    public void setChildren(SortedSet<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
+    public void setChildren(final Set<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
         this.children = _Casts.uncheckedCast(children);
     }
     // necessary for integration tests

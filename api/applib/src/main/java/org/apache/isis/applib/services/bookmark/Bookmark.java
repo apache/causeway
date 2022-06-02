@@ -22,6 +22,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
+import javax.inject.Named;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
@@ -42,8 +44,8 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@org.apache.isis.applib.annotation.Value(
-        logicalTypeName = IsisModuleApplib.NAMESPACE + ".Bookmark")
+@Named(IsisModuleApplib.NAMESPACE + ".Bookmark")
+@org.apache.isis.applib.annotation.Value
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Bookmark implements Oid {
 
@@ -55,6 +57,19 @@ public final class Bookmark implements Oid {
     private final int hashCode;
 
     // -- FACTORIES
+
+    public static Bookmark empty(
+            final @NonNull LogicalType logicalType) {
+        return emptyForLogicalTypeName(logicalType.getLogicalTypeName());
+    }
+
+    public static Bookmark emptyForLogicalTypeName(
+            final @NonNull String logicalTypeName) {
+        return new Bookmark(
+                logicalTypeName,
+                /*identifier*/null,
+                /*hintId*/null);
+    }
 
     public static Bookmark forLogicalTypeNameAndIdentifier(
             final @NonNull String logicalTypeName,
@@ -89,7 +104,6 @@ public final class Bookmark implements Oid {
             final String logicalTypeName,
             final String identifier,
             final String hintId) {
-
         this.logicalTypeName = logicalTypeName;
         this.identifier = identifier;
         this.hintId = hintId;
@@ -103,11 +117,18 @@ public final class Bookmark implements Oid {
      */
     public static Optional<Bookmark> parse(final @Nullable String str) {
 
-        if(str==null) {
+        if(_Strings.isNullOrEmpty(str)) {
             return Optional.empty();
         }
         val tokenizer = new StringTokenizer(str, SEPARATOR);
         int tokenCount = tokenizer.countTokens();
+        if(tokenCount==1) {
+            return str.endsWith(SEPARATOR)
+                    || str.startsWith(SEPARATOR)
+                    ? Optional.empty() // invalid
+                    : Optional.of(Bookmark.emptyForLogicalTypeName(
+                            tokenizer.nextToken()));
+        }
         if(tokenCount==2) {
             return Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(
                     tokenizer.nextToken(),
@@ -190,12 +211,19 @@ public final class Bookmark implements Oid {
                 : stringify(identifier);
     }
 
+    /**
+     * Whether represents {@code null}.
+     */
+    public boolean isEmpty() {
+        return identifier==null;
+    }
+
     // -- HELPER
 
     private String stringify(final String id) {
-        return logicalTypeName + SEPARATOR + id;
+        return !isEmpty()
+                ? logicalTypeName + SEPARATOR + id
+                : logicalTypeName;
     }
-
-
 
 }

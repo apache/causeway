@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.bytes.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,16 +41,15 @@ import demoapp.dom.types.primitive.bytes.holder.PrimitiveByteHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PrimitiveByteVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PrimitiveByteVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                           // <.>
 public class PrimitiveByteVm
         implements HasAsciiDocDescription, PrimitiveByteHolder2 {
 
 //end::class[]
-    public PrimitiveByteVm(byte initialValue) {
+    public PrimitiveByteVm(final byte initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

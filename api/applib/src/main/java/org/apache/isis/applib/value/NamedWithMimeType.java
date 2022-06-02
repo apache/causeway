@@ -203,6 +203,10 @@ extends
             }
         }
 
+        public boolean matches(final MimeType otherMimeType) {
+            return mimeType.match(otherMimeType);
+        }
+
     }
 
 }

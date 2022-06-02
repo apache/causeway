@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isis.blobs.jpa;
 
+import javax.inject.Named;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -52,15 +53,14 @@ import demoapp.dom.types.isis.blobs.persistence.IsisBlobEntity;
       name = "IsisBlobJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.IsisBlobEntity"
-)
+@Named("demo.IsisBlobEntity")
+@DomainObject
 @NoArgsConstructor
 public class IsisBlobJpa
         extends IsisBlobEntity {
 
 //end::class[]
-    public IsisBlobJpa(Blob initialValue) {
+    public IsisBlobJpa(final Blob initialValue) {
         setReadOnlyProperty(initialValue);
         setReadWriteProperty(initialValue);
     }
@@ -78,11 +78,13 @@ public class IsisBlobJpa
     @Embedded
     private BlobJpaEmbeddable readOnlyProperty;
 
+    @Override
     @Title(prepend = "Blob JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     public Blob getReadOnlyProperty() {
         return BlobJpaEmbeddable.toBlob(readOnlyProperty);
     }
+    @Override
     public void setReadOnlyProperty(final Blob readOnlyProperty) {
         this.readOnlyProperty = BlobJpaEmbeddable.fromBlob(readOnlyProperty);
     }
@@ -95,12 +97,14 @@ public class IsisBlobJpa
     @Embedded
     private BlobJpaEmbeddable readWriteProperty;
 
+    @Override
     @Property(editing = Editing.ENABLED)                            // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     public Blob getReadWriteProperty() {
         return BlobJpaEmbeddable.toBlob(readWriteProperty);
     }
 
+    @Override
     public void setReadWriteProperty(final Blob readWriteProperty) {
         this.readWriteProperty = BlobJpaEmbeddable.fromBlob(readWriteProperty);
     }
@@ -113,12 +117,14 @@ public class IsisBlobJpa
     @Embedded
     private BlobJpaEmbeddable readOnlyOptionalProperty;
 
+    @Override
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     public Blob getReadOnlyOptionalProperty() {
         return BlobJpaEmbeddable.toBlob(readOnlyOptionalProperty);
     }
 
+    @Override
     public void setReadOnlyOptionalProperty(final Blob readOnlyOptionalProperty) {
         this.readOnlyOptionalProperty = BlobJpaEmbeddable.fromBlob(readOnlyOptionalProperty);
     }
@@ -132,12 +138,14 @@ public class IsisBlobJpa
     @Embedded
     private BlobJpaEmbeddable readWriteOptionalProperty;
 
+    @Override
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     public Blob getReadWriteOptionalProperty() {
         return BlobJpaEmbeddable.toBlob(readWriteOptionalProperty);
     }
 
+    @Override
     public void setReadWriteOptionalProperty(final Blob readWriteOptionalProperty) {
         this.readWriteOptionalProperty = BlobJpaEmbeddable.fromBlob(readWriteOptionalProperty);
     }

@@ -151,7 +151,7 @@ public interface ManagedObject {
     public default String htmlString(
             final @Nullable ObjectFeature feature) {
 
-        if(getSpecification()==null) {
+        if(!ManagedObjects.isSpecified(this)) {
             return "";
         }
 

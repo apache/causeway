@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.floats.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javalang.floats.persistence.WrapperFloatEntity;
       name = "WrapperFloatJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.WrapperFloatEntity"
-)
+@Named("demo.WrapperFloatEntity")
+@DomainObject
 @NoArgsConstructor
 public class WrapperFloatJpa
         extends WrapperFloatEntity {

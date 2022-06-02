@@ -31,6 +31,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.applib.role.dom.mixins.ApplicationRole_removeUsers;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_removeRoles.DomainEvent;
@@ -60,7 +61,7 @@ public class ApplicationUser_removeRoles {
     private final ApplicationUser target;
 
 
-    @MemberSupport public ApplicationUser act(Collection<ApplicationRole> roles) {
+    @MemberSupport public ApplicationUser act(final Collection<ApplicationRole> roles) {
 
         _NullSafe.stream(roles)
         .filter(this::canRemove)
@@ -69,7 +70,7 @@ public class ApplicationUser_removeRoles {
         return target;
     }
 
-    // same logic in ApplicationRole_removeUsers
+    /** similar logic in {@link ApplicationRole_removeUsers} */
     public boolean canRemove(
             final ApplicationRole applicationRole) {
 

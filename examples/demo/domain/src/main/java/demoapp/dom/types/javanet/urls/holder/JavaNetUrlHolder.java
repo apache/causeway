@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javanet.urls.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.JavaNetUrlHolder")
+@Named("demo.JavaNetUrlHolder")
 //tag::class[]
 public interface JavaNetUrlHolder {
 

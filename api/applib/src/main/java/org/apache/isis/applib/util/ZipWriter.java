@@ -44,7 +44,7 @@ import lombok.val;
  * Typical use:
  * <pre>
  * val zipWriter = ZipWriter.newInstance();
- * 
+ *
  * for (Map.Entry<String, String> entry : schemaMap.entrySet()) {
  *      val namespaceUri = entry.getKey();
  *      val schemaText = entry.getValue();
@@ -52,10 +52,10 @@ import lombok.val;
  *     	    writer.write(schemaText);
  *      });
  * }
- *  
+ *
  * return BlobClobFactory.blobZip(fileName, zipWriter.toBytes());
  * </pre>
- * 
+ *
  * @since 2.0 {@index}
  * @apiNote Implementation is <em>not</em> thread safe.
  *
@@ -66,21 +66,21 @@ public class ZipWriter {
     @Value(staticConstructor = "of")
     public static class ZipOutputStreamWrapper {
         private final @NonNull ZipOutputStream zipOutputStream;
-        
+
         public void writeCharactersUtf8(final @Nullable CharSequence chars) throws IOException {
             writeCharacters(chars, StandardCharsets.UTF_8);
         }
-        
+
         public void writeCharacters(
-                final @Nullable CharSequence chars, 
+                final @Nullable CharSequence chars,
                 final @NonNull Charset charset) throws IOException {
-            if(chars==null 
+            if(chars==null
                     || chars.length()==0) {
                 return; // no-op
             }
             zipOutputStream.write(_Strings.toBytes(chars.toString(), charset));
         }
-        
+
         public void writeBytes(final @Nullable byte bytes[]) throws IOException {
             if(_NullSafe.isEmpty(bytes)) {
                 return; // no-op
@@ -88,15 +88,15 @@ public class ZipWriter {
             zipOutputStream.write(bytes);
         }
 
-        public void writeBytes(final @Nullable byte bytes[], int off, int len) throws IOException {
+        public void writeBytes(final @Nullable byte bytes[], final int off, final int len) throws IOException {
             if(_NullSafe.isEmpty(bytes)) {
                 return; // no-op
             }
             zipOutputStream.write(bytes, off, len);
         }
-        
+
     }
-    
+
     @FunctionalInterface
     public interface OnZipEntry {
         public void accept(ZipOutputStreamWrapper writer) throws IOException;
@@ -106,7 +106,7 @@ public class ZipWriter {
         return ofFailureMessage("Unable to create zip");
     }
 
-    public static ZipWriter ofFailureMessage(String failureMessage) {
+    public static ZipWriter ofFailureMessage(final String failureMessage) {
         val baos = new ByteArrayOutputStream();
         val zos = new ZipOutputStream(baos);
         val writer = new ZipOutputStreamWrapper(zos);
@@ -121,12 +121,12 @@ public class ZipWriter {
 
     /**
      * Adds a new zipEntry with given {@code zipEntryName}, and provides the
-     * {@link OutputStreamWriter} via {@link OnZipEntry} for the consumer to 
-     * write the actual (uncompressed) zip-entry content. 
+     * {@link OutputStreamWriter} via {@link OnZipEntry} for the consumer to
+     * write the actual (uncompressed) zip-entry content.
      * @param zipEntryName
      * @param onZipEntry
      */
-    public void nextEntry(String zipEntryName, OnZipEntry onZipEntry) {
+    public void nextEntry(final String zipEntryName, final OnZipEntry onZipEntry) {
         if(zippedBytes!=null) {
             throw new IllegalStateException("Cannot create a new ZipEntry an a closed ZipWriter");
         }
@@ -135,13 +135,13 @@ public class ZipWriter {
             onZipEntry.accept(writer);
             zos.closeEntry();
         } catch (final IOException e) {
-            throw _Exceptions.unrecoverable(failureMessage, e);
+            throw _Exceptions.unrecoverable(e, failureMessage);
         }
     }
 
     /**
-     * Terminal operation, closes the writer. 
-     * Calling this operation multiple times, will return the same array instance object. 
+     * Terminal operation, closes the writer.
+     * Calling this operation multiple times, will return the same array instance object.
      * @return the byte array created by the underlying ZipOutputStream
      */
     public byte[] toBytes() {
@@ -149,7 +149,7 @@ public class ZipWriter {
             try {
                 zos.close();
             } catch (IOException e) {
-                throw _Exceptions.unrecoverable(failureMessage, e);
+                throw _Exceptions.unrecoverable(e, failureMessage);
             }
             zippedBytes = baos.toByteArray();
         }

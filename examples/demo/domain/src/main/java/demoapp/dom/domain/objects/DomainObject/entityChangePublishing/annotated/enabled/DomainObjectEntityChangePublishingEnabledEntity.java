@@ -18,13 +18,14 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntity;
 
-@DomainObject(
-        logicalTypeName = "demo.DomainObjectEntityChangePublishingEnabledEntity" // shared permissions with concrete sub class
-)
+@Named("demo.DomainObjectEntityChangePublishingEnabledEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class DomainObjectEntityChangePublishingEnabledEntity
 extends DomainObjectEntityChangePublishingEntity {
 

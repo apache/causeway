@@ -29,7 +29,6 @@ import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -81,15 +80,12 @@ implements MixedInMember {
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod(), false);
 
-        this.facetHolder = FacetHolderAbstract.simple(
-                mixedInType.getMetaModelContext(),
-                super.getFeatureIdentifier());
+        this.facetHolder = FacetHolderAbstract.layered(
+                super.getFeatureIdentifier(),
+                mixinAction.getFacetedMethod());
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
         this.mixedInType = mixedInType;
-
-        // copy over facets from mixin action to self
-        FacetUtil.copyFacetsTo(mixinAction.getFacetedMethod(), facetHolder);
 
         // adjust name if necessary
 

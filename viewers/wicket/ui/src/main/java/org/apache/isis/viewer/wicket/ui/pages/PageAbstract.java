@@ -20,8 +20,8 @@ package org.apache.isis.viewer.wicket.ui.pages;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -33,7 +33,6 @@ import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.devutils.debugbar.IDebugBarContributor;
 import org.apache.wicket.devutils.debugbar.InspectorDebugPanel;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -44,15 +43,16 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.PackageResource;
-import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Refs.ObjectReference;
+import org.apache.isis.commons.internal.base._Timing;
+import org.apache.isis.commons.internal.debug._Debug;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
@@ -73,18 +73,18 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.util.FontAwesomeCssReferenceWkt;
+import org.apache.isis.viewer.wicket.ui.pages.common.bootstrap.css.BootstrapOverridesCssResourceReference;
+import org.apache.isis.viewer.wicket.ui.pages.common.fontawesome.FontAwesomeCssReferenceWkt;
+import org.apache.isis.viewer.wicket.ui.pages.common.livequery.js.LiveQueryJsResourceReference;
+import org.apache.isis.viewer.wicket.ui.pages.common.sidebar.css.SidebarCssResourceReference;
+import org.apache.isis.viewer.wicket.ui.pages.common.viewer.js.IsisWicketViewerJsResourceReference;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import de.agilecoders.wicket.core.Bootstrap;
-// import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
-import de.agilecoders.wicket.core.settings.IBootstrapSettings;
-import de.agilecoders.wicket.core.settings.ITheme;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
@@ -96,15 +96,7 @@ implements ActionPromptProvider {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
-     */
-    private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS =
-            new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
-    private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS =
-            new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
-
-    // not to be confused with the bootstrap theme...
+        // not to be confused with the bootstrap theme...
     // is simply a CSS class derived from the application's name
     private static final String ID_THEME = "theme";
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
@@ -248,17 +240,19 @@ implements ActionPromptProvider {
 
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance())));
+        response.render(FontAwesomeCssReferenceWkt.asHeaderItem());
 
-        response.render(CssHeaderItem.forReference(FontAwesomeCssReferenceWkt.instance()));
-        response.render(CssHeaderItem.forReference(new BootstrapOverridesCssResourceReference()));
-        response.render(CssHeaderItem.forReference(new SidebarCssResourceReference()));
-        contributeThemeSpecificOverrides(response);
+        response.render(BootstrapOverridesCssResourceReference.asHeaderItem());
+        BootstrapOverridesCssResourceReference
+            .contributeThemeSpecificOverrides(getApplication(), response);
 
-        response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
-        response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));
+        response.render(SidebarCssResourceReference.asHeaderItem());
 
-        final JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour(getCommonContext());
-        jGrowlBehaviour.renderFeedbackMessages(response);
+        response.render(LiveQueryJsResourceReference.asHeaderItem());
+        response.render(IsisWicketViewerJsResourceReference.asHeaderItem());
+
+        new JGrowlBehaviour(getCommonContext())
+            .renderFeedbackMessages(response);
 
         getConfiguration().getViewer().getWicket().getApplication().getCss()
         .ifPresent(applicationCss -> {
@@ -268,9 +262,10 @@ implements ActionPromptProvider {
         getConfiguration().getViewer().getWicket().getApplication().getJs()
         .ifPresent(applicationJs -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
-        } );
+        });
 
-        getConfiguration().getViewer().getWicket().getLiveReloadUrl().ifPresent(liveReloadUrl -> {
+        getConfiguration().getViewer().getWicket().getLiveReloadUrl()
+        .ifPresent(liveReloadUrl -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
         });
 
@@ -309,22 +304,6 @@ implements ActionPromptProvider {
         response.render(new BootlintHeaderItem(
                 "bootlint.showLintReportForCurrentDocument(['E042'], {'problemFree': false});"));
                 */
-    }
-
-    /**
-     * Contributes theme specific Bootstrap CSS overrides if there is such resource
-     *
-     * @param response The header response to contribute to
-     */
-    private void contributeThemeSpecificOverrides(final IHeaderResponse response) {
-        final IBootstrapSettings bootstrapSettings = Bootstrap.getSettings(getApplication());
-        final ITheme activeTheme = bootstrapSettings.getActiveThemeProvider().getActiveTheme();
-        final String name = activeTheme.name().toLowerCase(Locale.ENGLISH);
-        final String themeSpecificOverride = "bootstrap-overrides-" + name + ".css";
-        final ResourceReference.Key themeSpecificOverrideKey = new ResourceReference.Key(PageAbstract.class.getName(), themeSpecificOverride, null, null, null);
-        if (PackageResource.exists(themeSpecificOverrideKey)) {
-            response.render(CssHeaderItem.forReference(new CssResourceReference(themeSpecificOverrideKey)));
-        }
     }
 
     /**
@@ -496,5 +475,57 @@ implements ActionPromptProvider {
     }
 
 
+    // -- RE-ATTACH ENTITIES
+
+    @Override
+    public void renderPage() {
+        if(XrayUi.isXrayEnabled()){
+            _Debug.log("about to render %s ..", this.getClass().getSimpleName());
+            val stopWatch = _Timing.now();
+            onNewRequestCycle();
+            super.renderPage();
+            stopWatch.stop();
+            _Debug.log(".. rendering took %s", stopWatch.toString());
+        } else {
+            onNewRequestCycle();
+            super.renderPage();
+        }
+    }
+
+    /**
+     * Hook to re-fetch entities for view-models, usually required once at begin of request.
+     * @apiNote ideally we would not need that hook at all;
+     * this is a hack that came after re-designing the entity-model
+     */
+    public void onNewRequestCycle() {
+        // implemented only by EntityPage
+    }
+
+    // -- HELPER
+
+    private transient ObjectReference<UUID> interactionId;
+    private ObjectReference<UUID> interactionIdRef() {
+        if(interactionId==null) {
+            interactionId = _Refs.objectRef(null);
+        }
+        return interactionId;
+    }
+
+    protected boolean isAlreadyRefreshedWithinThisInteraction() {
+        val currentInteractionId = getCommonContext()
+                .getInteractionProvider().getInteractionId().orElseThrow();
+
+        val alreadyRefreshedForThisInteraction =
+            interactionIdRef().getValue()
+            .map(currentInteractionId::equals)
+            .orElse(false);
+
+        if(alreadyRefreshedForThisInteraction) {
+            return true;
+        }
+
+        interactionIdRef().setValue(currentInteractionId);
+        return false;
+    }
 
 }

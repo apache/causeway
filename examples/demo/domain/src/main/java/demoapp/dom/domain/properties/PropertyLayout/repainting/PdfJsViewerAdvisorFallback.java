@@ -20,26 +20,26 @@ package demoapp.dom.domain.properties.PropertyLayout.repainting;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.spi.PdfJsViewerAdvisor;
+import org.apache.isis.extensions.pdfjs.applib.config.Scale;
+import org.apache.isis.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 
 @Service
 public class PdfJsViewerAdvisorFallback implements PdfJsViewerAdvisor {
 
     @Override
-    public Advice advise(InstanceKey instanceKey) {
-        return new Advice(1, new Advice.TypeAdvice(Scale._1_00, 400));
+    public Advice advise(final InstanceKey instanceKey) {
+        return new Advice(1, Scale._1_00, 400);
     }
 
     @Override
-    public void pageNumChangedTo(InstanceKey instanceKey, int pageNum) {
+    public void pageNumChangedTo(final InstanceKey instanceKey, final int pageNum) {
     }
 
     @Override
-    public void scaleChangedTo(InstanceKey instanceKey, Scale scale) {
+    public void scaleChangedTo(final InstanceKey instanceKey, final Scale scale) {
     }
 
     @Override
-    public void heightChangedTo(InstanceKey instanceKey, int height) {
+    public void heightChangedTo(final InstanceKey instanceKey, final int height) {
     }
 }

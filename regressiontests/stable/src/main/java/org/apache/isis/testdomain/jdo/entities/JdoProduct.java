@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.jdo.entities;
 
 import java.util.List;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.Discriminator;
@@ -52,10 +53,8 @@ import lombok.ToString;
 @DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.INCREMENT,
         column="id")
-@DomainObject(
-        logicalTypeName = "testdomain.jdo.Product"
-        )
-
+@Named("testdomain.jdo.Product")
+@DomainObject
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString

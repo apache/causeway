@@ -1,13 +1,9 @@
 package org.apache.isis.testing.fixtures.applib.personas.fixtures;
 
-import javax.inject.Inject;
+import javax.resource.spi.work.ExecutionContext;
 
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.personas.BuilderScriptWithResult;
-import org.apache.isis.testing.fixtures.applib.personas.dom.Customer;
-import org.apache.isis.testing.fixtures.applib.personas.dom.CustomerRepository;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.isis.testing.fixtures.applib.personas.dom.Person;
 
 
 public class ScenarioFixtureScript extends FixtureScript {
@@ -16,9 +12,10 @@ public class ScenarioFixtureScript extends FixtureScript {
     protected void execute(ExecutionContext executionContext) {
 
         // build it ..
-        Customer steve = Customer_persona.SteveSingle.build(this, executionContext);
+        Person steve = Person_persona.SteveSingle.build(this, executionContext);
 
         // ... look it up
-        Customer steve2 = Customer_persona.SteveSingle.findUsing(serviceRegistry);
+        Person steve2 = Person_persona.SteveSingle.findUsing(serviceRegistry);
+
     }
 }

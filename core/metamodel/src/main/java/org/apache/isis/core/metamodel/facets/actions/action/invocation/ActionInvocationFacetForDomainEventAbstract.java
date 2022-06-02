@@ -205,6 +205,7 @@ implements ImperativeFacet {
 
             // invoke method
             val resultPojo = invokeMethodElseFromCache(head, argsAfterEventPolling);
+            getServiceInjector().injectServicesInto(resultPojo);
 
             // ... post the executed event
 
@@ -214,7 +215,11 @@ implements ImperativeFacet {
                     owningAction, owningAction, head, argsAfterEventPolling,
                     resultPojo);
 
-            return actionDomainEvent.getReturnValue();
+            // probably superfluous, but does no harm...
+            Object actualReturnValue = actionDomainEvent.getReturnValue();  // usually the same as resultPojo
+            getServiceInjector().injectServicesInto(actualReturnValue);
+
+            return actualReturnValue;
         }
 
     }

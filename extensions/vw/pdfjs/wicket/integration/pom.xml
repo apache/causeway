@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis.extensions</groupId>
+		<artifactId>isis-extensions-pdfjs-wicket</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>isis-extensions-pdfjs-wicket-integration</artifactId>
+	<name>Apache Isis Ext - pdf.js - Wicket (Integration)</name>
+	<description>Integrates pdf.js with Wicket</description>
+
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.pdfjs.wicket.integration</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/pdfjs/wicket/integration</git-plugin.propertiesDir>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<!-- can be removed, once isis-viewer-wicket-ui does no longer need this 
+					switch -->
+				<!-- overrides defaults as configured in our core pom, to make javadoc 
+					failures non fatal and let the build continue; this we can set on a per module 
+					basis, to apply only to those, we don't know how to fix otherwise -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<failOnError>false</failOnError>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-pdfjs-applib</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>isis-viewer-wicket-ui</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.webjars.npm</groupId>
+		    <artifactId>pdfjs-dist</artifactId>
+		    <!--  keep in sync with o.a.i.extensions.pdfjs.wkt.integration.PdfJsVersion -->
+		    <version>2.13.216</version>
+		</dependency>
+
+		<!-- pdf.js v1 legacy -->		
+		<dependency>
+		    <groupId>org.webjars.bowergithub.mozilla</groupId>
+		    <artifactId>pdfjs-dist</artifactId>
+		    <version>1.10.100</version>
+		</dependency>
+		
+	</dependencies>
+
+</project>

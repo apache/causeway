@@ -126,7 +126,7 @@ implements
     }
 
     @Bean("isis.bean-meta-data")
-    public Can<IsisBeanMetaData> getIsisComponentScanInterceptor() {
+    public Can<IsisBeanMetaData> getComponentScanResult() {
         return isisComponentScanInterceptor.getAndDrainIntrospectableTypes();
     }
 

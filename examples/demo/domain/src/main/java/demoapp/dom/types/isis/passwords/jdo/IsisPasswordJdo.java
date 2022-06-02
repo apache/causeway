@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isis.passwords.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -43,14 +44,13 @@ import demoapp.dom.types.isis.passwords.persistence.IsisPasswordEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.IsisPasswordEntity"
-)
+@Named("demo.IsisPasswordEntity")
+@DomainObject
 public class IsisPasswordJdo                                          // <.>
         extends IsisPasswordEntity {
 
 //end::class[]
-    public IsisPasswordJdo(Password initialValue) {
+    public IsisPasswordJdo(final Password initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

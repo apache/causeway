@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.properties.Property.hidden.child;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -43,10 +44,9 @@ import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenVm;
 @XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PropertyHiddenChildVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PropertyHiddenChildVm"
-)
+        nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 public class PropertyHiddenChildVm implements HasAsciiDocDescription {
 

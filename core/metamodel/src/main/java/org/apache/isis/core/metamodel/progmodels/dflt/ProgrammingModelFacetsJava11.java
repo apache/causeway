@@ -45,7 +45,6 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.enums.ChoicesFacetFromEnumFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.domainobject.logicaltype.LogicalTypeFacetForLogicalTypeNameAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
@@ -86,18 +85,16 @@ import org.apache.isis.core.metamodel.facets.value.semantics.ValueSemanticsAnnot
 import org.apache.isis.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
 import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.all.DeriveDescribedAsFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.all.DescribedAsFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.collparam.DeriveCollectionParamDefaultsAndChoicesPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.members.navigation.DeriveNavigationFacetFromHiddenTypePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.object.DeriveProjectionFacetsPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.properties.DeriveDisabledFromImmutablePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveChoicesFromExistingChoicesPostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveDefaultFromTypePostProcessor;
-import org.apache.isis.core.metamodel.postprocessors.propparam.DeriveTypicalLengthFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.object.ProjectionFacetsPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.param.ChoicesAndDefaultsPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.param.TypicalLengthFromTypePostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.properties.DisabledFromImmutablePostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
@@ -193,8 +190,6 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ViewModelFacetFactory(mmc, postConstructMethodsCache));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new JaxbFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new LogicalTypeFacetForLogicalTypeNameAnnotationFacetFactory(mmc, postConstructMethodsCache));
-
         // must come after RecreatableObjectFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DomainObjectAnnotationFacetFactory(mmc, postConstructMethodsCache));
 
@@ -260,20 +255,18 @@ extends ProgrammingModelAbstract {
         // requires member names to have settled
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new CssClassFaFacetOnMemberPostProcessor(mmc));
 
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDescribedAsFromTypePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveTypicalLengthFromTypePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDefaultFromTypePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveChoicesFromExistingChoicesPostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveDisabledFromImmutablePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveCollectionParamDefaultsAndChoicesPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DescribedAsFromTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TypicalLengthFromTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new ChoicesAndDefaultsPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DisabledFromImmutablePostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TweakDomainEventsForMixinPostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveProjectionFacetsPostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DeriveNavigationFacetFromHiddenTypePostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new ProjectionFacetsPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new NavigationFacetFromHiddenTypePostProcessor(mmc));
 
         // must be after all named facets and description facets have been installed
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TranslationPostProcessor(mmc));
 
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new AuthorizationFacetPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new AuthorizationPostProcessor(mmc));
     }
 
     private void addValidators() {

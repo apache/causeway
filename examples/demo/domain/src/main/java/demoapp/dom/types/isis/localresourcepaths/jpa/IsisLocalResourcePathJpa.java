@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.isis.localresourcepaths.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -50,9 +51,8 @@ import demoapp.dom.types.isis.localresourcepaths.persistence.IsisLocalResourcePa
       name = "IsisLocalResourcePathJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.IsisLocalResourcePathEntity"
-)
+@Named("demo.IsisLocalResourcePathEntity")
+@DomainObject
 @NoArgsConstructor
 public class IsisLocalResourcePathJpa
         extends IsisLocalResourcePathEntity {

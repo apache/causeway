@@ -64,7 +64,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactor
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.logicaltype.LogicalTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.logicaltype.AliasedFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
@@ -177,22 +177,23 @@ implements ObjectSpecification {
     private final String shortName;
     private final boolean isAbstract;
 
-    // derived lazily, cached since immutable
-    private _Lazy<LogicalType> logicalTypeLazy = _Lazy.threadSafe(this::lookupLogicalType);
+    private final LogicalType logicalType;
 
     private ObjectSpecification superclassSpec;
 
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
     private NavigableParentFacet navigableParentFacet;
+    private AliasedFacet aliasedFacet;
     private CssClassFacet cssClassFacet;
 
     private IntrospectionState introspectionState = IntrospectionState.NOT_INTROSPECTED;
 
 
     // -- Constructor
-    public ObjectSpecificationAbstract(
+    protected ObjectSpecificationAbstract(
             final Class<?> introspectedClass,
+            final LogicalType logicalType,
             final String shortName,
             final BeanSort beanSort,
             final FacetProcessor facetProcessor,
@@ -201,16 +202,13 @@ implements ObjectSpecification {
         super(facetProcessor.getMetaModelContext());
 
         this.correspondingClass = introspectedClass;
+        this.logicalType = logicalType;
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;
         this.beanSort = beanSort;
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
-
-        super.featureIdentifier = Identifier.classIdentifier(
-                LogicalType.lazy(
-                        introspectedClass,
-                        ()->logicalTypeLazy.get().getLogicalTypeName()));
+        super.featureIdentifier = Identifier.classIdentifier(logicalType);
 
         this.facetProcessor = facetProcessor;
         this.postProcessor = postProcessor;
@@ -224,15 +222,7 @@ implements ObjectSpecification {
 
     @Override
     public final LogicalType getLogicalType() {
-        return logicalTypeLazy.get();
-    }
-
-    private LogicalType lookupLogicalType() {
-        val logicalTypeFacet = getFacet(LogicalTypeFacet.class);
-        if(logicalTypeFacet == null) {
-            throw new IllegalStateException("could not find an LogicalTypeFacet for " + this.getFullIdentifier());
-        }
-        return logicalTypeFacet.getLogicalType();
+        return logicalType;
     }
 
     @Override
@@ -377,6 +367,7 @@ implements ObjectSpecification {
             this.objectActions.addAll(orderedActions);
             unmodifiableActions.clear(); // invalidate
 
+            // rebuild objectActionsByType multi-map
             for (val actionType : ActionScope.values()) {
                 val objectActionForType = objectActionsByType.getOrElseNew(actionType);
                 objectActionForType.clear();
@@ -392,6 +383,7 @@ implements ObjectSpecification {
         iconFacet = getFacet(IconFacet.class);
         navigableParentFacet = getFacet(NavigableParentFacet.class);
         cssClassFacet = getFacet(CssClassFacet.class);
+        aliasedFacet = getFacet(AliasedFacet.class);
     }
 
     protected void postProcess() {
@@ -407,7 +399,7 @@ implements ObjectSpecification {
                 return titleString;
             }
         }
-        val prefix = this.isManagedBean()
+        val prefix = this.isInjectable()
                 ? ""
                 : "Untitled ";
         return prefix + getSingularName();
@@ -415,12 +407,12 @@ implements ObjectSpecification {
 
     @Override
     public String getIconName(final ManagedObject domainObject) {
-
         if(ManagedObjects.isSpecified(domainObject)) {
             _Assert.assertEquals(domainObject.getSpecification(), this);
         }
-
-        return iconFacet == null ? null : iconFacet.iconName(domainObject);
+        return iconFacet != null
+                ? iconFacet.iconName(domainObject)
+                : null;
     }
 
     @Override
@@ -431,14 +423,23 @@ implements ObjectSpecification {
 
     @Override
     public Object getNavigableParent(final Object object) {
-        return navigableParentFacet == null
-                ? null
-                : navigableParentFacet.navigableParent(object);
+        return navigableParentFacet != null
+                ? navigableParentFacet.navigableParent(object)
+                : null;
     }
 
     @Override
     public String getCssClass(final ManagedObject reference) {
-        return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);
+        return cssClassFacet != null
+                ? cssClassFacet.cssClass(reference)
+                : null;
+    }
+
+    @Override
+    public Can<LogicalType> getAliases() {
+        return aliasedFacet != null
+                ? aliasedFacet.getAliases()
+                : Can.empty();
     }
 
     @Override
@@ -641,7 +642,7 @@ implements ObjectSpecification {
     public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        createMixedInAssociations(); // only if not already
+        mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort); // only if not already
 
         synchronized(unmodifiableAssociations) {
             return stream(unmodifiableAssociations.get())
@@ -684,7 +685,7 @@ implements ObjectSpecification {
             final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
-        createMixedInActions(); // only if not already
+        mixedInActionAdder.trigger(this::createMixedInActionsAndResort);
 
         return actionScopes.stream()
                 .flatMap(actionScope->stream(objectActionsByType.get(actionScope)))
@@ -694,14 +695,14 @@ implements ObjectSpecification {
     // -- mixin associations (properties and collections)
 
     private void createMixedInAssociations(final Consumer<ObjectAssociation> onNewMixedInAssociation) {
-        if (isManagedBean() || isValue()) {
+        if (isInjectable() || isValue()) {
             return;
         }
         val mixinTypes = getIsisBeanTypeRegistry().getMixinTypes();
         if(_NullSafe.isEmpty(mixinTypes)) {
             return;
         }
-        for (val mixinType : mixinTypes) {
+        for (val mixinType : mixinTypes.keySet()) {
             forEachMixedInAssociation(mixinType, onNewMixedInAssociation);
         }
     }
@@ -744,7 +745,7 @@ implements ObjectSpecification {
         if(_NullSafe.isEmpty(mixinTypes)) {
             return;
         }
-        for (val mixinType : mixinTypes) {
+        for (val mixinType : mixinTypes.keySet()) {
             forEachMixedInAction(mixinType, onNewMixedInAction);
         }
     }
@@ -844,41 +845,37 @@ implements ObjectSpecification {
 
     // -- MIXIN ADDER ONESHOTs
 
-    private final _Oneshot mixedInAssociationAdder = new _Oneshot();
     private final _Oneshot mixedInActionAdder = new _Oneshot();
+    private final _Oneshot mixedInAssociationAdder = new _Oneshot();
 
     /**
-     * one-shot: ignored if already created
+     * one-shot: must be no-op, if already created
      */
-    private void createMixedInActions() {
-        mixedInAssociationAdder.trigger(()->{
-            val actions = _Lists.newArrayList(this.objectActions);
-            if (isEntityOrViewModelOrAbstract()
-                    || getBeanSort().isManagedBeanContributing()
-                    // in support of composite value-type constructor mixins
-                    || getBeanSort().isValue()) {
-                createMixedInActions(actions::add);
-            }
-            sortCacheAndUpdateActions(actions);
-        });
+    private void createMixedInActionsAndResort() {
+        val newActions = _Lists.newArrayList(objectActions);
+        if (isEntityOrViewModelOrAbstract()
+                || getBeanSort().isManagedBeanContributing()
+                // in support of composite value-type constructor mixins
+                || getBeanSort().isValue()) {
+            createMixedInActions(newActions::add);
+        }
+        sortCacheAndUpdateActions(newActions);
     }
 
     /**
-     * one-shot: ignored if already created
+     * one-shot: must be no-op, if already created
      */
-    private void createMixedInAssociations() {
-        mixedInActionAdder.trigger(()->{
-            val associations = _Lists.newArrayList(this.associations);
-            if(isEntityOrViewModelOrAbstract()) {
-                createMixedInAssociations(associations::add);
-            }
-            sortAndUpdateAssociations(associations);
-        });
+    private void createMixedInAssociationsAndResort() {
+        val newAssociations = _Lists.newArrayList(associations);
+        if(isEntityOrViewModelOrAbstract()) {
+            createMixedInAssociations(newAssociations::add);
+        }
+        sortAndUpdateAssociations(newAssociations);
     }
 
-    protected IsisBeanTypeRegistry getIsisBeanTypeRegistry() {
-        return getServiceRegistry()
+    @Getter(lazy = true)
+    private final IsisBeanTypeRegistry isisBeanTypeRegistry =
+        getServiceRegistry()
                 .lookupServiceElseFail(IsisBeanTypeRegistry.class);
-    }
 
 }

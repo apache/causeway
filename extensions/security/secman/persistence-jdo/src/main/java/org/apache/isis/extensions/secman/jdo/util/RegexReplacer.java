@@ -22,6 +22,8 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.commons.internal.base._Strings;
+
 import lombok.val;
 
 @Component
@@ -30,7 +32,7 @@ public class RegexReplacer implements org.apache.isis.extensions.secman.applib.u
 
     @Override
     public String asRegex(String str) {
-        val search = str.replace("*", ".*").replace("?", ".");
+        val search = _Strings.nullToEmpty(str).replace("*", ".*").replace("?", ".");
         return String.format("(?i).*%s.*", search);
     }
 

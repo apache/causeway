@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.jdo.tenancy.dom;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -41,12 +42,38 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq;
+import org.apache.isis.extensions.secman.applib.tenancy.dom.HasAtPath;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 @PersistenceCapable(
         identityType = IdentityType.APPLICATION,
-        schema = "isisExtensionsSecman",
-        table = "ApplicationTenancy")
+        schema = ApplicationTenancy.SCHEMA,
+        table = ApplicationTenancy.TABLE)
+@Uniques({
+    @Unique(
+            name = "ApplicationTenancy_name_UNQ",
+            members = { "name" })
+})
+@Queries( {
+    @Query(
+            name = Nq.FIND_BY_PATH,
+            value = "SELECT "
+                    + "FROM " + ApplicationTenancy.FQCN
+                    + " WHERE path == :path"),
+    @Query(
+            name = Nq.FIND_BY_NAME,
+            value = "SELECT "
+                    + "FROM " + ApplicationTenancy.FQCN
+                    + " WHERE name == :name"),
+    @Query(
+            name = Nq.FIND_BY_NAME_OR_PATH_MATCHING,
+            value = "SELECT "
+                    + "FROM " + ApplicationTenancy.FQCN
+                    + " WHERE name.matches(:regex) || path.matches(:regex) ")})
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
 @DatastoreIdentity(
@@ -54,28 +81,8 @@ import org.apache.isis.commons.internal.base._Casts;
 @Version(
         strategy = VersionStrategy.VERSION_NUMBER,
         column = "version")
-@Uniques({
-    @Unique(
-            name = "ApplicationTenancy_name_UNQ", members = { "name" })
-})
-@Queries( {
-    @Query(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_PATH,
-            value = "SELECT "
-                    + "FROM " + ApplicationTenancy.FQCN
-                    + " WHERE path == :path"),
-    @Query(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME,
-            value = "SELECT "
-                    + "FROM " + ApplicationTenancy.FQCN
-                    + " WHERE name == :name"),
-    @Query(
-            name = org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.NAMED_QUERY_FIND_BY_NAME_OR_PATH_MATCHING,
-            value = "SELECT "
-                    + "FROM " + ApplicationTenancy.FQCN
-                    + " WHERE name.matches(:regex) || path.matches(:regex) ")})
+@Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
 @DomainObject(
-        logicalTypeName = ApplicationTenancy.LOGICAL_TYPE_NAME,
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteMethod = "findMatching"
 )
@@ -88,67 +95,37 @@ public class ApplicationTenancy
     protected final static String FQCN = "org.apache.isis.extensions.secman.jdo.tenancy.dom.ApplicationTenancy";
 
 
-    // -- NAME
-
-    @Column(allowsNull  ="false", length = Name.MAX_LENGTH)
+    @Column(allowsNull = Name.ALLOWS_NULL, length = Name.MAX_LENGTH)
+    @Name
+    @Getter @Setter
     private String name;
 
-    @Name
-    @Override
-    public String getName() {
-        return name;
-    }
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-    // -- PATH
 
     @PrimaryKey
-    @Column(allowsNull = "false", length = Path.MAX_LENGTH)
+    @Column(allowsNull = Path.ALLOWS_NULL, length = Path.MAX_LENGTH)
+    @Path
+    @Getter @Setter
     private String path;
 
-    @Path
-    @Override
-    public String getPath() {
-        return path;
-    }
-    @Override
-    public void setPath(String path) {
-        this.path = path;
-    }
 
-
-    // -- PARENT
-
-
-    @Column(name = "parentPath", allowsNull = "true")
-    private ApplicationTenancy parent;
-
+    @Column(name = Parent.NAME, allowsNull = Parent.ALLOWS_NULL)
     @Parent
-    @Override
-    public org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy getParent() {
-        return parent;
-    }
+    @Getter
+    private ApplicationTenancy parent;
     @Override
     public void setParent(org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
         this.parent = _Casts.uncheckedCast(parent);
     }
 
 
-    // -- CHILDREN
-
-    @Persistent(mappedBy = "parent")
-    private SortedSet<ApplicationTenancy> children = new TreeSet<>();
-
+    @Persistent(mappedBy = Children.MAPPED_BY)
     @Children
+    private SortedSet<ApplicationTenancy> children = new TreeSet<>();
     @Override
     public SortedSet<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> getChildren() {
         return _Casts.uncheckedCast(children);
     }
-    public void setChildren(SortedSet<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
+    public void setChildren(final SortedSet<org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy> children) {
         this.children = _Casts.uncheckedCast(children);
     }
     // necessary for integration tests

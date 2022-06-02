@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.inspect.model;
 
 import java.util.stream.Stream;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,6 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
@@ -36,9 +38,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+@Named(CollectionNode.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        logicalTypeName = CollectionNode.LOGICAL_TYPE_NAME
+        introspection = Introspection.ANNOTATION_REQUIRED
 )
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -50,6 +53,8 @@ public class CollectionNode extends MMNode {
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Collection collection;
 
+    @Getter @Setter private boolean mixedIn;
+
     @Override
     public String createTitle() {
         return String.format("%s: %s", collection.getId(), typeToString(collection.getType()));
@@ -57,7 +62,7 @@ public class CollectionNode extends MMNode {
 
     @Override
     protected String iconSuffix() {
-        return "";
+        return isMixedIn() ? "mixedin" : "";
     }
 
     // -- TREE NODE STUFF

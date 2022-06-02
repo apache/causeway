@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.actions.Action.commandPublishing.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -54,10 +55,9 @@ import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishi
     name = "ActionCommandPublishingJpa"
 )
 @EntityListeners(IsisEntityListener.class)
+@Named("demo.ActionCommandPublishingEntity")
 @DomainObject(
-    logicalTypeName = "demo.ActionCommandPublishingEntity"
-    , editing = Editing.DISABLED
-)
+    editing = Editing.DISABLED)
 @NoArgsConstructor
 public class ActionCommandPublishingJpa
         extends ActionCommandPublishingEntity {

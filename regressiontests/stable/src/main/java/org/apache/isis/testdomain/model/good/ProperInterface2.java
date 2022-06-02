@@ -18,10 +18,11 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.Property;
 
-@LogicalTypeName("isis.testdomain.ProperInterface2")
+@Named("isis.testdomain.ProperInterface2")
 public interface ProperInterface2
 extends ProperInterface {
 

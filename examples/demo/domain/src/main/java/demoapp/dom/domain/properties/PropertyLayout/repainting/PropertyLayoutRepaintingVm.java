@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.repainting;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -33,7 +34,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
+import org.apache.isis.extensions.pdfjs.applib.annotations.PdfJsViewer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,10 +45,9 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PropertyLayoutRepaintingVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PropertyLayoutRepaintingVm"
-)
+        nature=Nature.VIEW_MODEL)
 public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

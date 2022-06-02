@@ -18,15 +18,16 @@
  */
 package demoapp.dom.types.jodatime.jodalocaltime.persistence;
 
+import javax.inject.Named;
+
 import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.jodatime.jodalocaltime.holder.JodaLocalTimeHolder2;
 
-@DomainObject(
-        logicalTypeName = "demo.JodaLocalTimeEntity" // shared permissions with concrete sub class
-)
+@Named("demo.JodaLocalTimeEntity") // shared permissions with concrete sub class
+@DomainObject
 public abstract class JodaLocalTimeEntity
 implements
     HasAsciiDocDescription,

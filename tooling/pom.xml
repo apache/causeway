@@ -40,11 +40,11 @@
 		<jar-plugin.automaticModuleName>org.apache.isis.tooling</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/tooling</git-plugin.propertiesDir>
 
-		<asciidoctorj.version>2.5.3</asciidoctorj.version>
+		<asciidoctorj.version>2.5.4</asciidoctorj.version>
 		<gradle-tooling.version>7.1.1</gradle-tooling.version>
 		<maven-model-builder.version>3.8.5</maven-model-builder.version>
 		<picocli.version>4.6.3</picocli.version>
-		<jsoup.version>1.14.3</jsoup.version>
+		<jsoup.version>1.15.1</jsoup.version>
 		<structurizr.version>1.6.2</structurizr.version>
 
 	</properties>
@@ -274,7 +274,7 @@
         <dependency>
 		    <groupId>org.checkerframework</groupId>
 		    <artifactId>checker-qual</artifactId>
-		    <version>3.22.0</version>
+		    <version>3.22.1</version>
 		</dependency>
 
 		<!-- LOGGING -->

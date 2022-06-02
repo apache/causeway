@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.javalang.characters.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.WrapperCharacterHolder")
+@Named("demo.WrapperCharacterHolder")
 //tag::class[]
 public interface WrapperCharacterHolder {
 

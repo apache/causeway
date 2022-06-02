@@ -18,10 +18,11 @@
  */
 package demoapp.dom.types.isisext.cal.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
+
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 
-@LogicalTypeName("demo.IsisCalendarEventHolder")
+@Named("demo.IsisCalendarEventHolder")
 //tag::class[]
 public interface IsisCalendarEventHolder {
 

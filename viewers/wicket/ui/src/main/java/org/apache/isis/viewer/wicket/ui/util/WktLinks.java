@@ -56,8 +56,12 @@ public final class WktLinks {
 
     /**
      * For rendering {@link LinkAndLabel} within additional-link panels or drop-downs.
+     * @param tooltipReceiver
      */
-    public AbstractLink asAdditionalLink(final String titleId, final LinkAndLabel linkAndLabel) {
+    public AbstractLink asAdditionalLink(
+            final ListItem<LinkAndLabel> tooltipReceiver,
+            final String titleId,
+            final LinkAndLabel linkAndLabel) {
 
         val link = linkAndLabel.getUiComponent();
         val action = linkAndLabel.getManagedAction().getAction();
@@ -66,7 +70,7 @@ public final class WktLinks {
                 ? _Strings.isNotEmpty(((ActionLink)link).getReasonDisabledIfAny())
                 : false;
 
-        WktTooltips.addTooltip(link, hasDisabledReason
+        WktTooltips.addTooltip(tooltipReceiver, hasDisabledReason
                 ? ((ActionLink) link).getReasonDisabledIfAny()
                 : linkAndLabel.getDescription().orElse(null));
 

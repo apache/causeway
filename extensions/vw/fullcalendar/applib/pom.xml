@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>isis-extensions-fullcalendar-applib</artifactId>
-    <name>Apache Isis Ext - Wicket Viewer - fullcalendar (applib)</name>
+    <name>Apache Isis Ext - FullCalendar (applib)</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.fullcalendar.applib</jar-plugin.automaticModuleName>

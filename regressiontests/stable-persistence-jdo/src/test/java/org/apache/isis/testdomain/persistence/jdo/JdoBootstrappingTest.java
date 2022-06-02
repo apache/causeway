@@ -19,8 +19,6 @@
 package org.apache.isis.testdomain.persistence.jdo;
 
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -37,12 +35,11 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
-import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
-import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
@@ -64,33 +61,12 @@ class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
         // Util_H2Console.main(null);
     }
 
-    void cleanUp() {
-        testFixtures.cleanUpRepository();
-    }
-
-    void setUp() {
-
-        // setup sample Inventory
-        Set<JdoProduct> products = new HashSet<>();
-
-        products.add(JdoBook.of("Sample Book", "A sample book for testing.", 99., "Sample Author", "Sample ISBN",
-                "Sample Publisher"));
-
-        val inventory = JdoInventory.of("Sample Inventory", products);
-        repositoryService.persist(inventory);
-    }
-
     @Test @Order(1) @Rollback(false)
     void sampleInventoryShouldBeSetUp() {
 
-        // given - expected pre condition: no inventories
-
-        cleanUp();
-        assertEquals(0, repositoryService.allInstances(JdoInventory.class).size());
-
-        // when
-
-        setUp();
+        // when - expected condition before install: no inventories
+        testFixtures.reinstall(()->
+            assertEquals(0, repositoryService.allInstances(JdoInventory.class).size()));
 
         // then - expected post condition: ONE inventory
 
@@ -100,12 +76,18 @@ class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
         val inventory = inventories.get(0);
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());
-        assertEquals(1, inventory.getProducts().size());
+        assertEquals(3, inventory.getProducts().size());
 
-        val product = inventory.getProducts().iterator().next();
-        assertEquals("Sample Book", product.getName());
+        val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
 
-        testFixtures.assertHasPersistenceId(product);
+        val multipleBooks = Can.ofCollection(inventory.getProducts())
+                .filter(book->expectedBookTitles.contains(book.getName()));
+
+        assertEquals(3, multipleBooks.size());
+
+        val firstProduct = inventory.getProducts().iterator().next();
+
+        testFixtures.assertHasPersistenceId(firstProduct);
     }
 
     @Test @Order(2) @Rollback(false)

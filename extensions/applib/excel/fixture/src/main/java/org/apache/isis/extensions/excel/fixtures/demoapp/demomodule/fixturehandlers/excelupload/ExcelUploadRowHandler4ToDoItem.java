@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -35,21 +36,20 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.extensions.excel.testing.ExcelFixture;
-import org.apache.isis.extensions.excel.testing.ExcelFixtureRowHandler;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
+import org.apache.isis.extensions.excel.testing.ExcelFixture;
+import org.apache.isis.extensions.excel.testing.ExcelFixtureRowHandler;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
 import lombok.Setter;
 
+@Named("libExcelFixture.ExcelUploadRowHandler4ToDoItem")
 @DomainObject(
-        logicalTypeName = "libExcelFixture.ExcelUploadRowHandler4ToDoItem",
-        nature = Nature.VIEW_MODEL
-)
+        nature = Nature.VIEW_MODEL)
 @XmlRootElement(name = "BulkUpdateLineItemForDemoToDoItem")
 @XmlType(
         propOrder = {

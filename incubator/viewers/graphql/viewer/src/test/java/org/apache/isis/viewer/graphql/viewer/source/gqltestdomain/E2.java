@@ -18,15 +18,31 @@
  */
 package org.apache.isis.viewer.graphql.viewer.source.gqltestdomain;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.isis.applib.annotation.*;
-
-import javax.inject.Inject;
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.SemanticsOf;
+
+import lombok.Getter;
+import lombok.Setter;
 
 //@Profile("demo-jpa")
 @Entity
@@ -34,7 +50,8 @@ import java.util.stream.Collectors;
         schema = "public",
         name = "E2"
 )
-@DomainObject(nature = Nature.ENTITY, logicalTypeName = "gqltestdomain.E2")
+@Named("gqltestdomain.E2")
+@DomainObject(nature = Nature.ENTITY)
 public class E2 implements TestEntity{
 
     @Id

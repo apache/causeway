@@ -110,7 +110,7 @@ implements
         val namedFacet = getFacet(MemberNamedFacet.class);
 
         if(namedFacet==null) {
-            throw _Exceptions.unrecoverableFormatted("no MemberNamedFacet preset on %s", getFeatureIdentifier());
+            throw _Exceptions.unrecoverable("no MemberNamedFacet preset on %s", getFeatureIdentifier());
         }
 
         return namedFacet

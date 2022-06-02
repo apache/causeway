@@ -1,5 +1,6 @@
 package org.apache.isis.testing.fixtures.applib.personas.fixtures;
 
+
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.testing.fixtures.applib.personas.Persona;
 import org.apache.isis.testing.fixtures.applib.personas.dom.Customer;

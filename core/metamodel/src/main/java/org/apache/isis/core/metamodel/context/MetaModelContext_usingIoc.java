@@ -132,11 +132,6 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     getSingletonElseFail(MemberExecutorService.class);
 
 
-//    @Override
-//    public final TransactionState getTransactionState() {
-//        return getTransactionService().currentTransactionState();
-//    }
-
     @Override
     public final ManagedObject getHomePageAdapter() {
         final Object pojo = getHomePageResolverService().getHomePage();
@@ -155,15 +150,11 @@ class MetaModelContext_usingIoc implements MetaModelContext {
         return objectAdaptersForBeansOfKnownSort.get().get(serviceId);
     }
 
-    // -- LOOKUP
+    // -- HELPER
 
-    @Override
-    public <T> T getSingletonElseFail(final Class<T> type) {
+    private <T> T getSingletonElseFail(final Class<T> type) {
         return iocContainer.getSingletonElseFail(type);
     }
-
-
-    // -- HELPER
 
     private final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =
             _Lazy.threadSafe(this::collectBeansOfKnownSort);
@@ -177,15 +168,12 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     }
 
     private ManagedObject toManagedObject(final _ManagedBeanAdapter managedBeanAdapter) {
-
         val servicePojo = managedBeanAdapter.getInstance().getFirst()
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                .orElseThrow(()->_Exceptions.unrecoverable(
                         "Cannot get service instance of type '%s'",
                         managedBeanAdapter.getBeanClass()));
 
         return ManagedObject.lazy(getSpecificationLoader(), servicePojo);
-
     }
-
 
 }

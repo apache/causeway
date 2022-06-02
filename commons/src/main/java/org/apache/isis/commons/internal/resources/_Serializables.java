@@ -64,7 +64,7 @@ public class _Serializables {
         try(val ois = new ObjectInputStream(content)){
             val pojo = ois.readObject();
             if(!(requiredClass.isAssignableFrom(pojo.getClass()))) {
-                throw _Exceptions.unrecoverableFormatted(
+                throw _Exceptions.unrecoverable(
                         "de-serializion of input stream did not yield an object of required type %s",
                         requiredClass.getName());
             }

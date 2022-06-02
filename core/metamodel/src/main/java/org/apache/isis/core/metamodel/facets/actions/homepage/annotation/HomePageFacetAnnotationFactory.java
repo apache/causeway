@@ -84,7 +84,7 @@ implements MetaModelRefiner {
 
             @Override
             public void validate(final @NonNull ObjectSpecification spec) {
-                if(spec.isManagedBean()) {
+                if(spec.isInjectable()) {
                     return;
                 }
 

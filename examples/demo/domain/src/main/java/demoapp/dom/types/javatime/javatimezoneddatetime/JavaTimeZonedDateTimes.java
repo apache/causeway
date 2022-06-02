@@ -22,6 +22,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -47,7 +48,8 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.vm.JavaTimeZonedDateTime
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "demo.JavaTimeZonedDateTimes", editing=Editing.ENABLED)
+@Named("demo.JavaTimeZonedDateTimes")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 //@Log4j2
 public class JavaTimeZonedDateTimes implements HasAsciiDocDescription {
 

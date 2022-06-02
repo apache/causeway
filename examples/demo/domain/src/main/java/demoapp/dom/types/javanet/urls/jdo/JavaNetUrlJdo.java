@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javanet.urls.jdo;
 
+import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -42,14 +43,13 @@ import demoapp.dom.types.javanet.urls.persistence.JavaNetUrlEntity;
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject(
-        logicalTypeName = "demo.JavaNetUrlEntity"
-)
+@Named("demo.JavaNetUrlEntity")
+@DomainObject
 public class JavaNetUrlJdo                                          // <.>
         extends JavaNetUrlEntity {
 
 //end::class[]
-    public JavaNetUrlJdo(java.net.URL initialValue) {
+    public JavaNetUrlJdo(final java.net.URL initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.primitive.doubles.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,16 +41,15 @@ import demoapp.dom.types.primitive.doubles.holder.PrimitiveDoubleHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PrimitiveDoubleVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PrimitiveDoubleVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                           // <.>
 public class PrimitiveDoubleVm
         implements HasAsciiDocDescription, PrimitiveDoubleHolder2 {
 
 //end::class[]
-    public PrimitiveDoubleVm(double initialValue) {
+    public PrimitiveDoubleVm(final double initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

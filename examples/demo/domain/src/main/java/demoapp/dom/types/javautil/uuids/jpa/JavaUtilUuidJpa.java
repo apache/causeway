@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javautil.uuids.jpa;
 
+import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -49,9 +50,8 @@ import demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidEntity;
       name = "JavaUtilUuidJpa"
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(
-      logicalTypeName = "demo.JavaUtilUuidEntity"
-)
+@Named("demo.JavaUtilUuidEntity")
+@DomainObject
 @NoArgsConstructor
 public class JavaUtilUuidJpa
         extends JavaUtilUuidEntity {

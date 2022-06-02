@@ -168,7 +168,7 @@ public final class _VersionedList<T> {
      * Also handles concurrent additions that occur during traversal.
      * @param action
      */
-    public void forEachParallel(final Consumer<T> action) {
+    public void forEachConcurrent(final Consumer<T> action) {
         val snapshot = snapshot();
         snapshot.forEachParallel(action);
         Snapshot<T> delta = deltaSince(snapshot);

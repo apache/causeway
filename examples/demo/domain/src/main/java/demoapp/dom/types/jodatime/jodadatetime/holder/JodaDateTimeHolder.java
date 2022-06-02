@@ -18,9 +18,9 @@
  */
 package demoapp.dom.types.jodatime.jodadatetime.holder;
 
-import org.apache.isis.applib.annotation.LogicalTypeName;
+import javax.inject.Named;
 
-@LogicalTypeName("demo.JodaDateTimeHolder")
+@Named("demo.JodaDateTimeHolder")
 //tag::class[]
 public interface JodaDateTimeHolder {
 

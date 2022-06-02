@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javalang.shorts.vm;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -42,16 +43,15 @@ import demoapp.dom.types.javalang.shorts.holder.WrapperShortHolder2;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.WrapperShortVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.WrapperShortVm"
-)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class WrapperShortVm
         implements HasAsciiDocDescription, WrapperShortHolder2 {
 
 //end::class[]
-    public WrapperShortVm(Short initialValue) {
+    public WrapperShortVm(final Short initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }

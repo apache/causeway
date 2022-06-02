@@ -86,6 +86,7 @@ import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -239,7 +240,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         Stream
             .concat(
-                isisBeanTypeRegistry.getDiscoveredValueTypes().stream(),
+                isisBeanTypeRegistry.getDiscoveredValueTypes().keySet().stream(),
                 valueSemanticsResolver.get().streamClassesWithValueSemantics())
             .forEach(valueType -> {
                 val valueSpec = loadSpecification(valueType, IntrospectionState.NOT_INTROSPECTED);
@@ -255,18 +256,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         val mixinSpecs = _Lists.<ObjectSpecification>newArrayList();
 
         isisBeanTypeRegistry.streamIntrospectableTypes()
-        .forEach(type->{
+        .forEach(typeMeta->{
 
-            val cls = type.getCorrespondingClass();
-            val sort = type.getBeanSort();
-
-            val spec = primeSpecification(cls, sort);
+            val spec = primeSpecification(typeMeta);
             if(spec==null) {
                 //XXX only ever happens when the class substitutor vetoes
                 return;
             }
 
             knownSpecs.add(spec);
+
+            val sort = typeMeta.getBeanSort();
 
             if(sort.isManagedBean() || sort.isEntity() || sort.isViewModel() ) {
                 domainObjectSpecs.add(spec);
@@ -295,7 +295,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         log.info(" - introspecting {} entities ({})",
                 isisBeanTypeRegistry.getEntityTypes().size(),
-                _Util.persistenceLayerName());
+                isisBeanTypeRegistry.determineCurrentPersistenceStack().name());
 
         log.info(" - introspecting {} view models", isisBeanTypeRegistry.getViewModelTypes().size());
 
@@ -335,11 +335,25 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     @Override
     public void disposeMetaModel() {
+        waitForValidationToFinish();
         logicalTypeResolver.clear();
         cache.clear();
         validationResult.clear();
         serviceRegistry.clearRegisteredBeans();
         log.info("Metamodel disposed.");
+    }
+
+    /**
+     * [ISIS-3066] wait for validation (if any) to finish (max 5s)
+     */
+    @SneakyThrows
+    private void waitForValidationToFinish() {
+        int maxRetry = 50;
+        while(!validationQueue.isEmpty()
+                && maxRetry>0) {
+            Thread.sleep(100);
+            --maxRetry;
+        }
     }
 
     @PreDestroy
@@ -434,8 +448,14 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     @Override
-    public void forEach(final Consumer<ObjectSpecification> onSpec, final boolean shouldRunConcurrent) {
-        cache.forEach(onSpec, shouldRunConcurrent);
+    public void forEach(final Consumer<ObjectSpecification> onSpec) {
+        val shouldRunConcurrent = isisConfiguration.getCore().getMetaModel().getValidator().isParallelize();
+        if(shouldRunConcurrent) {
+            cache.forEachConcurrent(onSpec);
+        } else {
+            cache.forEach(onSpec);
+        }
+
     }
 
     @Override
@@ -445,7 +465,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             return logicalType;
         }
 
-        //TODO[2533] if the logicalTypeName is not available and instead a fqcn was passed in, that should also be supported
+        //XXX[2533] if the logicalTypeName is not available and instead a fqcn was passed in, that should also be supported
 
         // falling back assuming the logicalTypeName equals the fqn of the corresponding class
         // which might not always be true,
@@ -518,30 +538,28 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
      * however as a fallback we might need to classify types that escaped eager introspection
      * here.
      */
-    private BeanSort classify(final @Nullable Class<?> type) {
+    private IsisBeanMetaData classify(final @Nullable Class<?> type) {
         return isisBeanTypeRegistry
                 .lookupIntrospectableType(type)
-                .map(IsisBeanMetaData::getBeanSort)
                 .orElseGet(()->
                     valueSemanticsResolver.get().hasValueSemantics(type)
-                    ? BeanSort.VALUE
+                    ? IsisBeanMetaData.isisManaged(BeanSort.VALUE, LogicalType.infer(type))
                     : isisBeanTypeClassifier.classify(type)
-                            .getBeanSort()
                 );
     }
 
     @Nullable
     private ObjectSpecification primeSpecification(
-            final @Nullable Class<?> type,
-            final @NonNull BeanSort sort) {
-        return _loadSpecification(type, __->sort, IntrospectionState.NOT_INTROSPECTED);
+            final @NonNull IsisBeanMetaData typeMeta) {
+        return _loadSpecification(
+                typeMeta.getCorrespondingClass(), type->typeMeta, IntrospectionState.NOT_INTROSPECTED);
 
     }
 
     @Nullable
     private ObjectSpecification _loadSpecification(
             final @Nullable Class<?> type,
-            final @NonNull Function<Class<?>, BeanSort> beanClassifier,
+            final @NonNull Function<Class<?>, IsisBeanMetaData> beanClassifier,
             final @NonNull IntrospectionState upTo) {
 
         if(type==null) {
@@ -555,13 +573,28 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
         val substitutedType = substitute.apply(type);
 
-        final ObjectSpecification spec = cache.computeIfAbsent(substitutedType, __->{
-            val newSpec = createSpecification(substitutedType, beanClassifier.apply(substitutedType));
-            logicalTypeResolver.register(newSpec);
-            return newSpec;
-        });
+        val spec = cache.computeIfAbsent(substitutedType, _spec->
+            logicalTypeResolver
+                .register(
+                        createSpecification(beanClassifier.apply(substitutedType))));
 
         spec.introspectUpTo(upTo);
+
+        if(spec.getAliases().isNotEmpty()
+            // this bool. expr. is an optimization, not strictly required ... a bit of hack though
+            && upTo == IntrospectionState.TYPE_INTROSPECTED) {
+
+            //XXX[3063] hitting this a couple of times
+            //(~5 see org.apache.isis.testdomain.domainmodel.DomainModelTest_usingGoodDomain.aliasesOnDomainServices_shouldBeHonored())
+            // per spec (with aliases), even though already registered;
+            // room for performance optimizations, but at the time of writing
+            // don't want to add a ObjectSpecification flag to keep track of alias registered state;
+            // as an alternative purge the aliased facets and introspect aliased attributes from annotations
+            // much earlier in the bootstrap process, same as we do with @Named processing
+
+            logicalTypeResolver
+                .registerAliases(spec);
+        }
 
         return spec;
     }
@@ -585,18 +618,16 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
-    private ObjectSpecification createSpecification(final Class<?> cls, final BeanSort beanSort) {
+    private ObjectSpecification createSpecification(final IsisBeanMetaData typeMeta) {
 
-        guardAgainstMetamodelLockedAfterFullIntrospection(cls);
+        guardAgainstMetamodelLockedAfterFullIntrospection(typeMeta.getCorrespondingClass());
 
         // ... and create the specs
 
         val objectSpec = new ObjectSpecificationDefault(
-                        cls,
-                        beanSort,
+                        typeMeta,
                         metaModelContext,
                         facetProcessor,
-                        isisBeanTypeRegistry.lookupManagedBeanNameForType(cls).orElse(null),
                         postProcessor,
                         classSubstitutorRegistry);
 
@@ -652,7 +683,5 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             spec = spec.superclass();
         }
     }
-
-
 
 }

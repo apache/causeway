@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.cssClass;
 
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -41,11 +42,10 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PropertyLayoutCssClassVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        logicalTypeName = "demo.PropertyLayoutCssClassVm",
-        editing = Editing.ENABLED
-)
+        editing = Editing.ENABLED)
 public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

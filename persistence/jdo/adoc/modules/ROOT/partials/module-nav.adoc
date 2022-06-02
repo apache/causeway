@@ -12,3 +12,4 @@
 
 * xref:pjdo:ROOT:dependency-injection.adoc[Dependency Injection]
 * xref:pjdo:ROOT:hints-and-tips.adoc[Hints-n-Tips]
+* xref:pjdo:ROOT:spis.adoc[SPIs (hooks)]
