@@ -118,14 +118,17 @@ public final class Bookmark implements Oid {
      */
     public static Optional<Bookmark> parse(final @Nullable String str) {
 
-        if(str==null) {
+        if(_Strings.isNullOrEmpty(str)) {
             return Optional.empty();
         }
         val tokenizer = new StringTokenizer(str, SEPARATOR);
         int tokenCount = tokenizer.countTokens();
         if(tokenCount==1) {
-            return Optional.of(Bookmark.emptyForLogicalTypeName(
-                    tokenizer.nextToken()));
+            return str.endsWith(SEPARATOR)
+                    || str.startsWith(SEPARATOR)
+                    ? Optional.empty() // invalid
+                    : Optional.of(Bookmark.emptyForLogicalTypeName(
+                            tokenizer.nextToken()));
         }
         if(tokenCount==2) {
             return Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(
