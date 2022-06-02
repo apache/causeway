@@ -48,16 +48,6 @@ public final class ObjectMementoCollection implements ObjectMemento {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
 
-    @Override
-    public Bookmark asPseudoBookmark() {
-        throw _Exceptions.notImplemented(); // please unwrap at call-site
-    }
-
-    @Override
-    public Bookmark asBookmarkIfSupported() {
-        throw _Exceptions.notImplemented(); // please unwrap at call-site
-    }
-
     public ArrayList<ObjectMemento> unwrapList() {
         return getContainer();
     }

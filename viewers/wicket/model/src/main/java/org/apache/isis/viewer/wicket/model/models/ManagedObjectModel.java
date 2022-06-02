@@ -108,7 +108,7 @@ extends ModelAbstract<ManagedObject> {
 
     public final Bookmark asBookmarkIfSupported() {
         return memento!=null
-                ? memento.asBookmarkIfSupported()
+                ? memento.bookmark()
                 : null;
     }
 

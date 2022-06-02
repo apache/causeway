@@ -170,16 +170,6 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
 
         @Override
         public Bookmark bookmark() {
-            return delegate.asPseudoBookmark();
-        }
-
-        @Override
-        public Bookmark asPseudoBookmark() {
-            return delegate.asPseudoBookmark();
-        }
-
-        @Override
-        public Bookmark asBookmarkIfSupported() {
             return delegate.asBookmark();
         }
 

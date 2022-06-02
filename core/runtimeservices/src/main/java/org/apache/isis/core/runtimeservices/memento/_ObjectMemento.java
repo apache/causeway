@@ -39,6 +39,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -496,9 +497,34 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
         return cardinality;
     }
 
-    Bookmark asBookmark() {
+    public Bookmark asBookmark() {
+        val bookmark = asStrictBookmark();
+        return bookmark!=null
+                ? bookmark
+                : asPseudoBookmark();
+    }
+
+    /**
+     * Returns a bookmark only if
+     * {@link org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoWkt.RecreateStrategy#LOOKUP} and
+     * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
+     * Returns {@code null} otherwise.
+     */
+    private Bookmark asStrictBookmark() {
         ensureScalar();
         return bookmark;
+    }
+
+    /**
+     * In a strict sense, bookmarks are only available for viewmodels, entities and managed beans,
+     * not for values or enums. However, the {@link Bookmark} as an immutable value,
+     * is also perfectly suitable to represent an enum value or any value type.
+     * @apiNote this is an intermediate refactoring step,
+     * possibly providing a way of getting rid of {@link ObjectMemento} entirely,
+     * with {@link Bookmark} being the replacement
+     */
+    private Bookmark asPseudoBookmark() {
+        return cardinality.asPseudoBookmark(this);
     }
 
     /**
@@ -526,10 +552,6 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
         }
 
         return cardinality.asAdapter(this, mmc);
-    }
-
-    public Bookmark asPseudoBookmark() {
-        return cardinality.asPseudoBookmark(this);
     }
 
     @Override

@@ -114,7 +114,7 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
             allowing(mock).getLogicalType();
             will(returnValue(logicalType));
 
-            allowing(mock).asPseudoBookmark();
+            allowing(mock).bookmark();
             will(returnValue(Bookmark.forLogicalTypeAndIdentifier(logicalType, id)));
         }});
         return mock;

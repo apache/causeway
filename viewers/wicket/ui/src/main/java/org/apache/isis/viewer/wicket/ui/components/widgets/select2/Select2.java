@@ -170,7 +170,7 @@ implements
         return LambdaModel.<String>of(()->{
             val memento = memento();
             return memento != null
-                    ? memento.asPseudoBookmark().getIdentifier()
+                    ? memento.bookmark().getIdentifier()
                     : null;
         });
     }

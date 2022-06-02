@@ -35,17 +35,7 @@ public class ObjectMementoForEmpty implements ObjectMemento {
 
     @Override
     public Bookmark bookmark() {
-        return asPseudoBookmark();
-    }
-
-    @Override
-    public Bookmark asPseudoBookmark() {
         return Bookmark.empty(logicalType);
-    }
-
-    @Override
-    public Bookmark asBookmarkIfSupported() {
-        return null;
     }
 
 }

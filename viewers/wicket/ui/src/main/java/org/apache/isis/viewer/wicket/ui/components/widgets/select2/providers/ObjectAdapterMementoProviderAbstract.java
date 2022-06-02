@@ -76,7 +76,7 @@ extends ChoiceProvider<ObjectMemento> {
         if (choiceMemento == null) {
             return PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate);
         }
-        return choiceMemento.asPseudoBookmark().stringify();
+        return choiceMemento.bookmark().stringify();
     }
 
     @Override
