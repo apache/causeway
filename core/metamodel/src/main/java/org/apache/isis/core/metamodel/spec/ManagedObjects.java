@@ -354,11 +354,15 @@ public final class ManagedObjects {
     }
 
     public static String titleOf(final ManagedObject adapter) {
-        return adapter!=null?adapter.titleString():"";
+        return adapter!=null
+                ? adapter.titleString()
+                : "";
     }
 
     private static String abbreviated(final String str, final int maxLength, final String suffix) {
-        return str.length() < maxLength ? str : str.substring(0, maxLength - 3) + suffix;
+        return str.length() < maxLength
+                ? str
+                : str.substring(0, maxLength - 3) + suffix;
     }
 
     // -- COMMON SUPER TYPE FINDER

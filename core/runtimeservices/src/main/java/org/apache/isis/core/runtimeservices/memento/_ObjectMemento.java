@@ -392,9 +392,9 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
     private Bookmark bookmark;
 
     /**
-     * Only populated for {@link ManagedObject#getPojo() domain object}s that implement {@link HintIdProvider}.
+     * Untranslated String for rendering.
      */
-    //private String hintId;
+    private String titleString;
 
     /**
      * populated only if {@link #getCardinality() sort} is {@link Cardinality#VECTOR vector}
@@ -450,6 +450,8 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
     private void init(final ManagedObject adapter) {
 
+        titleString = ManagedObjects.titleOf(adapter);
+
         val spec = adapter.getSpecification();
 
         if(spec.isIdentifiable() || spec.isParented() ) {
@@ -495,6 +497,10 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
     private Cardinality getCardinality() {
         return cardinality;
+    }
+
+    public String getTitleString() {
+        return titleString;
     }
 
     public Bookmark asBookmark() {

@@ -155,22 +155,8 @@ implements
     public IModel<String> obtainOutputFormatModel() {
         return LambdaModel.<String>of(()->{
             val memento = memento();
-            if(memento == null) {
-                return null;
-            }
-            val adapter = getCommonContext().reconstructObject(memento);
-            return adapter != null
-                    ? adapter.titleString()
-                    : null;
-        });
-    }
-
-    @Deprecated // value case should be handled by obtainInlinePromptModel()
-    public IModel<String> obtainOutputFormatModelForValue() {
-        return LambdaModel.<String>of(()->{
-            val memento = memento();
-            return memento != null
-                    ? memento.bookmark().getIdentifier()
+            return memento!=null
+                    ? memento.getTitle()
                     : null;
         });
     }

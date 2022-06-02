@@ -35,7 +35,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -64,11 +63,7 @@ extends ChoiceProvider<ObjectMemento> {
                 || choiceMemento instanceof ObjectMementoForEmpty) {
             return PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate);
         }
-        val choice = getCommonContext().reconstructObject(choiceMemento);
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(choice)) {
-            return "Internal error: broken memento " + choiceMemento;
-        }
-        return translate(choice.titleString());
+        return translate(choiceMemento.getTitle());
     }
 
     @Override

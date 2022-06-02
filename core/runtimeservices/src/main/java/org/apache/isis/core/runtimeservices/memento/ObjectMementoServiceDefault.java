@@ -169,6 +169,11 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         private final _ObjectMemento delegate;
 
         @Override
+        public String getTitle() {
+            return delegate.getTitleString();
+        }
+
+        @Override
         public Bookmark bookmark() {
             return delegate.asBookmark();
         }

@@ -27,11 +27,20 @@ import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * @since 2.0
  */
 public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializable {
+
+    /**
+     * The object's title for rendering (before translation).
+     * Corresponds to {@link ManagedObject#titleString()}.
+     * <p>
+     * Directly support choice rendering, without the need to (re-)fetch entire object graphs.
+     */
+    String getTitle();
 
     // -- FACTORIES
 
