@@ -34,8 +34,8 @@ public class ObjectMementoForEmpty implements ObjectMemento {
     @NonNull private LogicalType logicalType;
 
     @Override
-    public String asString() {
-        return getLogicalTypeName();
+    public Bookmark asPseudoBookmark() {
+        return Bookmark.empty(logicalType);
     }
 
     @Override
@@ -47,6 +47,5 @@ public class ObjectMementoForEmpty implements ObjectMemento {
     public Bookmark asHintingBookmarkIfSupported() {
         return null;
     }
-
 
 }

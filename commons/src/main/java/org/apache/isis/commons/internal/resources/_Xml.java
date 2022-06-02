@@ -182,7 +182,8 @@ public final class _Xml {
 
                 if(_NullSafe.size(errors)>0) {
 
-                    return _Exceptions.unrecoverable(String.format("Error %s, "
+                    return _Exceptions.unrecoverable(e,
+                            "Error %s, "
                             + "due to illegal annotations on object class '%s'; "
                             + "%d error(s) reported: %s",
                             doingWhat,
@@ -190,8 +191,7 @@ public final class _Xml {
                             errors.size(),
                             errors.stream()
                                 .map(Exception::getMessage)
-                                .collect(Collectors.joining("; "))),
-                            e);
+                                .collect(Collectors.joining("; ")));
                 }
 
             } catch (Exception ex) {
@@ -199,8 +199,8 @@ public final class _Xml {
             }
         }
 
-        return _Exceptions.unrecoverable(String.format("Error %s; "
-                + "object class is '%s'", doingWhat, dtoClassName), e);
+        return _Exceptions.unrecoverable(e,
+                "Error %s; object class is '%s'", doingWhat, dtoClassName);
     }
 
     private static boolean isIllegalAnnotationsException(final Exception e) {

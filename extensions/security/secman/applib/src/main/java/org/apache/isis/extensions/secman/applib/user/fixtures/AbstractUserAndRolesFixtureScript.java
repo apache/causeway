@@ -148,7 +148,7 @@ public abstract class AbstractUserAndRolesFixtureScript extends FixtureScript {
             }
 
             if(applicationUser == null) {
-                throw _Exceptions.unrecoverableFormatted("failed to create user '%s'", username);
+                throw _Exceptions.unrecoverable("failed to create user '%s'", username);
             }
 
             // update tenancy (repository checks for null)
@@ -166,7 +166,7 @@ public abstract class AbstractUserAndRolesFixtureScript extends FixtureScript {
 
     }
 
-    private static <T> Supplier<T> nullSafe(Supplier<T> supplier) {
+    private static <T> Supplier<T> nullSafe(final Supplier<T> supplier) {
         return supplier != null ? supplier : () -> null;
     }
 

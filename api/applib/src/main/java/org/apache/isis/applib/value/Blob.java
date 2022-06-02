@@ -227,7 +227,7 @@ public final class Blob implements NamedWithMimeType {
                     unzippedBytes = _Bytes.of(zipInputStream);
                 } catch (IOException e) {
                     throw _Exceptions
-                        .unrecoverable(String.format("failed to read zip entry %s", zipEntry.getName()), e);
+                        .unrecoverable(e, "failed to read zip entry %s", zipEntry.getName());
                 }
                 return Blob.of(zipEntry.getName(), resultingMimeType, unzippedBytes);
             })

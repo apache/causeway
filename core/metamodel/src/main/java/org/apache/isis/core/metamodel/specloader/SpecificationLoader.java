@@ -133,7 +133,7 @@ public interface SpecificationLoader {
 
     default LogicalType lookupLogicalTypeElseFail(@NonNull final String logicalTypeName) {
         return lookupLogicalType(logicalTypeName)
-        .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+        .orElseThrow(()->_Exceptions.unrecoverable(
                 "Lookup of logical-type-name '%s' failed, also found no matching fully qualified "
                         + "class name to use instead. This indicates, that the class we are not finding here"
                         + " is not discovered by Spring during bootstrapping of this application.",

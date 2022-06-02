@@ -104,7 +104,6 @@ public final class Bookmark implements Oid {
             final String logicalTypeName,
             final String identifier,
             final String hintId) {
-
         this.logicalTypeName = logicalTypeName;
         this.identifier = identifier;
         this.hintId = hintId;

@@ -87,8 +87,12 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
             public ManagedObject asAdapter(
                     final _ObjectMemento memento,
                     final MetaModelContext mmc) {
-
                 return memento.recreateStrategy.recreateObject(memento, mmc);
+            }
+
+            @Override
+            public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
+                return memento.recreateStrategy.asPseudoBookmark(memento);
             }
 
             @Override
@@ -107,11 +111,6 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                 }
                 return memento.recreateStrategy.equals(memento, otherMemento);
             }
-
-            @Override
-            public String asString(final _ObjectMemento memento) {
-                return memento.recreateStrategy.toString(memento);
-            }
         },
         /**
          * represents a list of objects
@@ -126,6 +125,13 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                 final List<Object> listOfPojos =
                         _Lists.map(memento.list, Functions.toPojo(mmc));
                 return ManagedObject.lazy(mmc.getSpecificationLoader(), listOfPojos);
+            }
+
+            @Override
+            public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
+                return Bookmark.forLogicalTypeNameAndIdentifier(
+                        memento.getLogicalTypeName(),
+                        memento.list.toString());
             }
 
             @Override
@@ -145,10 +151,6 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                 return memento.list.equals(otherMemento.list);
             }
 
-            @Override
-            public String asString(final _ObjectMemento memento) {
-                return memento.list.toString();
-            }
         };
 
         void ensure(final Cardinality sort) {
@@ -166,7 +168,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
         public abstract boolean equals(_ObjectMemento memento, Object other);
 
-        public abstract String asString(_ObjectMemento memento);
+        public abstract Bookmark asPseudoBookmark(_ObjectMemento memento);
     }
 
     private enum RecreateStrategy {
@@ -184,11 +186,18 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                 val valueSerializer = mmc.getSpecificationLoader()
                         .specForLogicalType(memento.logicalType)
                         .flatMap(spec->Facets.valueSerializer(spec, spec.getCorrespondingClass()))
-                        .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                        .orElseThrow(()->_Exceptions.unrecoverable(
                                 "logical type %s is expected to have a ValueFacet", memento.logicalType));
 
                 return mmc.getObjectManager().adapt(
                         valueSerializer.fromEncodedString(Format.JSON, memento.encodableValue));
+            }
+
+            @Override
+            public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
+                return Bookmark.forLogicalTypeNameAndIdentifier(
+                        memento.getLogicalTypeName(),
+                        memento.encodableValue);
             }
 
             @Override
@@ -203,11 +212,6 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
             @Override
             public int hashCode(final _ObjectMemento memento) {
                 return memento.encodableValue.hashCode();
-            }
-
-            @Override
-            public String toString(final _ObjectMemento memento) {
-                return memento.encodableValue;
             }
 
             @Override
@@ -261,6 +265,11 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
             }
 
             @Override
+            public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
+                return memento.asBookmark();
+            }
+
+            @Override
             public boolean equals(final _ObjectMemento oam, final _ObjectMemento other) {
                 return other.recreateStrategy == LOOKUP
                         && oam.persistentOidStr.equals(other.persistentOidStr);
@@ -269,11 +278,6 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
             @Override
             public int hashCode(final _ObjectMemento oam) {
                 return oam.persistentOidStr.hashCode();
-            }
-
-            @Override
-            public String toString(final _ObjectMemento oam) {
-                return oam.persistentOidStr;
             }
 
         },
@@ -307,8 +311,10 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
             }
 
             @Override
-            public String toString(final _ObjectMemento memento) {
-                return "ObjectMementoWkt {SERIALIZABLE " + memento.getLogicalTypeName() + "}";
+            public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
+                return Bookmark.forLogicalTypeNameAndIdentifier(
+                        memento.getLogicalTypeName(),
+                        "SERIALIZABLE");
             }
 
             @Override
@@ -329,7 +335,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
         public abstract int hashCode(_ObjectMemento memento);
 
-        public abstract String toString(_ObjectMemento memento);
+        public abstract Bookmark asPseudoBookmark(_ObjectMemento memento);
 
         public abstract void resetVersion(
                 _ObjectMemento memento,
@@ -408,7 +414,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
         // -- // TODO[2112] do we ever need to create ENCODEABLE here?
         val logicalTypeName = bookmark.getLogicalTypeName();
         val spec = specificationLoader.specForLogicalTypeName(logicalTypeName)
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                .orElseThrow(()->_Exceptions.unrecoverable(
                         "cannot recreate spec from logicalTypeName %s", logicalTypeName));
 
         this.cardinality = Cardinality.SCALAR;
@@ -524,6 +530,10 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
         return cardinality.asAdapter(this, mmc);
     }
 
+    public Bookmark asPseudoBookmark() {
+        return cardinality.asPseudoBookmark(this);
+    }
+
     @Override
     public int hashCode() {
         return cardinality.hashCode(this);
@@ -532,16 +542,6 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
     @Override
     public boolean equals(final Object obj) {
         return cardinality.equals(this, obj);
-    }
-
-
-    @Override
-    public String toString() {
-        return asString();
-    }
-
-    public String asString() {
-        return cardinality.asString(this);
     }
 
     // -- FUNCTIONS
@@ -570,6 +570,5 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
     private void ensureScalar() {
         getCardinality().ensure(Cardinality.SCALAR);
     }
-
 
 }

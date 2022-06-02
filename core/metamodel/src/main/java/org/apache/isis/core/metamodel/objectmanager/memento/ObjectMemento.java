@@ -34,7 +34,15 @@ import org.apache.isis.commons.internal.collections._Lists;
  */
 public interface ObjectMemento extends HasLogicalType, Serializable {
 
-    String asString();
+    /**
+     * In a strict sense, bookmarks are only available for viewmodels, entities and managed beans,
+     * not for values or enums. However, the {@link Bookmark} as an immutable value,
+     * is also perfectly suitable to represent an enum value or any value type.
+     * @apiNote this is an intermediate refactoring step,
+     * possibly providing a way of getting rid of {@link ObjectMemento} entirely,
+     * with {@link Bookmark} being the replacement
+     */
+    Bookmark asPseudoBookmark();
 
     /**
      * Returns a bookmark only if

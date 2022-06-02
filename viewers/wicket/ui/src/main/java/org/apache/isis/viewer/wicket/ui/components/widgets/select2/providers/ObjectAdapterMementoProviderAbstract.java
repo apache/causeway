@@ -76,18 +76,7 @@ extends ChoiceProvider<ObjectMemento> {
         if (choiceMemento == null) {
             return PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate);
         }
-        val logicalType = choiceMemento.getLogicalType();
-        val spec = getCommonContext().getSpecificationLoader()
-                .specForLogicalType(logicalType)
-                .orElse(null);
-
-        // support enums that are implementing an interface; only know this late in the day
-        // TODO: this is a hack, really should push this deeper so that Encodeable OAMs also prefix themselves with their logicalTypeName
-        if(spec != null && spec.isValue()) {
-            return logicalType.getLogicalTypeName() + ":" + choiceMemento.asString();
-        } else {
-            return choiceMemento.asString();
-        }
+        return choiceMemento.asPseudoBookmark().stringify();
     }
 
     @Override

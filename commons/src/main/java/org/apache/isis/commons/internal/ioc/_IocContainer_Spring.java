@@ -57,7 +57,7 @@ final class _IocContainer_Spring implements _IocContainer {
         try {
             return Optional.ofNullable(provider.getIfUnique());
         } catch (Exception cause) {
-            throw _Exceptions.unrecoverable("Failed to create an instance of type " + requiredType, cause);
+            throw _Exceptions.unrecoverable(cause, "Failed to create an instance of type %s", requiredType);
         }
     }
 

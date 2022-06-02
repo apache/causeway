@@ -33,7 +33,7 @@ import lombok.val;
 abstract class InternalBidirectionalBinding<T>
 implements ChangeListener<T>, InternalUtil.WeakListener {
 
-    public static <T> InternalBidirectionalBinding<T> bind(Bindable<T> left, Bindable<T> right) {
+    public static <T> InternalBidirectionalBinding<T> bind(final Bindable<T> left, final Bindable<T> right) {
         checkParameters(left, right);
         val binding = new GenericBidirectionalBinding<T>(left, right);
         left.setValue(right.getValue());
@@ -42,14 +42,14 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
         return binding;
     }
 
-    public static <T> void unbind(Bindable<T> left, Bindable<T> right) {
+    public static <T> void unbind(final Bindable<T> left, final Bindable<T> right) {
         checkParameters(left, right);
         val binding = new UntypedBidirectionalBinding(left, right);
         left.removeListener(binding);
         right.removeListener(binding);
     }
 
-    public static void unbind(Object left, Object right) {
+    public static void unbind(final Object left, final Object right) {
         checkParameters(left, right);
         val binding = new UntypedBidirectionalBinding(left, right);
         if (left instanceof Observable) {
@@ -76,7 +76,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -107,7 +107,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
 
     // -- HELPER
 
-    private static void checkParameters(@NonNull Object left, @NonNull Object right) {
+    private static void checkParameters(@NonNull final Object left, @NonNull final Object right) {
         if (left == right) {
             throw _Exceptions.illegalArgument("Cannot bind to self");
         }
@@ -115,7 +115,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
 
     private final int cachedHash;
 
-    private InternalBidirectionalBinding(Object left, Object right) {
+    private InternalBidirectionalBinding(final Object left, final Object right) {
         cachedHash = left.hashCode() * right.hashCode();
     }
 
@@ -125,7 +125,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
         private final WeakReference<Bindable<T>> rightRef;
         private boolean updating = false;
 
-        private GenericBidirectionalBinding(Bindable<T> left, Bindable<T> right) {
+        private GenericBidirectionalBinding(final Bindable<T> left, final Bindable<T> right) {
             super(left, right);
             leftRef = new WeakReference<Bindable<T>>(left);
             rightRef = new WeakReference<Bindable<T>>(right);
@@ -176,16 +176,15 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
                 } catch (Exception e2) {
                     e2.addSuppressed(e);
                     unbind(left, right);
-                    throw _Exceptions.unrecoverableFormatted(
+                    throw _Exceptions.unrecoverable(e2,
                             "Bidirectional binding failed with an attempt to restore the "
                             + "Observable to the previous value. "
                             + "Removing the bidirectional binding from bindables %s and %s",
                             ""+left,
-                            ""+right,
-                            e2);
+                            ""+right);
                 }
-                throw _Exceptions.unrecoverable(
-                        "Bidirectional binding failed, setting to the previous value", e);
+                throw _Exceptions.unrecoverable(e,
+                        "Bidirectional binding failed, setting to the previous value");
             } finally {
                 updating = false;
             }
@@ -198,14 +197,14 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
         @Getter private final Object left;
         @Getter private final Object right;
 
-        public UntypedBidirectionalBinding(Object left, Object right) {
+        public UntypedBidirectionalBinding(final Object left, final Object right) {
             super(left, right);
             this.left = left;
             this.right = right;
         }
 
         @Override
-        public void changed(Observable<? extends Object> sourceProperty, Object oldValue, Object newValue) {
+        public void changed(final Observable<? extends Object> sourceProperty, final Object oldValue, final Object newValue) {
             throw _Exceptions.unexpectedCodeReach();
         }
     }

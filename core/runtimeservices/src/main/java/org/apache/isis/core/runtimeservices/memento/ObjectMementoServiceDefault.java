@@ -158,7 +158,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
             return objectMementoAdapter.reconstructObject(mmc);
         }
 
-        throw _Exceptions.unrecoverableFormatted("unsupported ObjectMemento type %s", memento.getClass());
+        throw _Exceptions.unrecoverable("unsupported ObjectMemento type %s", memento.getClass());
     }
 
     @RequiredArgsConstructor(staticName = "of")
@@ -169,8 +169,8 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         private final _ObjectMemento delegate;
 
         @Override
-        public String asString() {
-            return delegate.asString();
+        public Bookmark asPseudoBookmark() {
+            return delegate.asPseudoBookmark();
         }
 
         @Override
@@ -190,11 +190,6 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
 
         ManagedObject reconstructObject(final MetaModelContext mmc) {
             return delegate.reconstructObject(mmc);
-        }
-
-        @Override
-        public String toString() {
-            return delegate.toString();
         }
 
     }

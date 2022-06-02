@@ -32,9 +32,11 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos.EncoderDecoder;
 import org.apache.isis.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
@@ -105,7 +107,10 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
 
     // -- PARSER
 
-    static Memento parse(final @NonNull EncoderDecoder codec, final SerializingAdapter serializer, final @Nullable String str) {
+    static Memento parse(
+            final @NonNull EncoderDecoder codec,
+            final SerializingAdapter serializer,
+            final @Nullable String str) {
         if(_NullSafe.isEmpty(str)) {
             return null;
         }
@@ -123,7 +128,9 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
             final HashMap<String, Serializable> valuesByKey = _Casts.uncheckedCast(ois.readObject());
             return new _Mementos_MementoDefault(codec, serializer, valuesByKey);
         } catch (Exception e) {
-            throw new IllegalArgumentException("failed to parse memento from serialized string", e);
+            throw _Exceptions.illegalArgument(e,
+                    "failed to parse memento from serialized string '%s'",
+                    _Strings.ellipsifyAtEnd(str, 200, "..."));
         }
     }
 

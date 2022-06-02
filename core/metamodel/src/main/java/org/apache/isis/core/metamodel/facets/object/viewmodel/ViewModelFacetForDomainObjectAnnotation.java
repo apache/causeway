@@ -82,7 +82,7 @@ extends ViewModelFacetAbstract {
 
         val viewmodel = viewmodelSpec.createObject();
 
-        val memento = parseMemento(bookmark.getIdentifier());
+        val memento = parseMemento(bookmark);
         val mementoKeys = memento.keySet();
 
         if(mementoKeys.isEmpty()) {
@@ -157,9 +157,9 @@ extends ViewModelFacetAbstract {
         return _Mementos.create(codec, serializer);
     }
 
-    private _Mementos.Memento parseMemento(final String input) {
+    private _Mementos.Memento parseMemento(final Bookmark bookmark) {
         ensureDependenciesInited();
-        return _Mementos.parse(codec, serializer, input);
+        return _Mementos.parse(codec, serializer, bookmark.getIdentifier());
     }
 
 }

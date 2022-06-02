@@ -479,7 +479,7 @@ implements MetaModelContext {
     private final Optional<ManagedObject> toManagedObject(final _ManagedBeanAdapter managedBeanAdapter) {
 
         val servicePojo = managedBeanAdapter.getInstance().getFirst()
-                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                .orElseThrow(()->_Exceptions.unrecoverable(
                         "Cannot get service instance of type '%s'",
                         managedBeanAdapter.getBeanClass()));
 

@@ -105,7 +105,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
         if(request.isFeatureTypeEqualTo(java.util.Date.class)) {
             return TemporalCharacteristic.DATE_TIME;
         }
-        throw _Exceptions.unrecoverableFormatted("type %s not handled", request.getFeatureType());
+        throw _Exceptions.unrecoverable("type %s not handled", request.getFeatureType());
     }
 
     private OffsetCharacteristic getOffsetCharacteristic(final ComponentRequest request) {
@@ -119,7 +119,7 @@ public class TemporalFieldFactory implements UiComponentHandlerVaa {
         if(request.isFeatureTypeEqualTo(java.util.Date.class)) {
             return OffsetCharacteristic.LOCAL;
         }
-        throw _Exceptions.unrecoverableFormatted("type %s not handled", request.getFeatureType());
+        throw _Exceptions.unrecoverable("type %s not handled", request.getFeatureType());
     }
 
     private Optional<TemporalValueSemantics<?>> getTemporalValueSemantics(final ComponentRequest request) {

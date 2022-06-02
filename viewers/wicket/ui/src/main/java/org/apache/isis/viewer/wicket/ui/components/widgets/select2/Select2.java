@@ -152,21 +152,26 @@ implements
         mementoModel().setObject(null);
     }
 
-    public IModel<String> obtainInlinePromptModel() {
+    public IModel<String> obtainOutputFormatModel() {
         return LambdaModel.<String>of(()->{
-            val memento = mementoModel().getObject();
+            val memento = memento();
             if(memento == null) {
                 return null;
             }
             val adapter = getCommonContext().reconstructObject(memento);
-            return adapter != null ? adapter.titleString() : null;
+            return adapter != null
+                    ? adapter.titleString()
+                    : null;
         });
     }
 
-    public IModel<String> obtainInlinePromptModel2() {
+    @Deprecated // value case should be handled by obtainInlinePromptModel()
+    public IModel<String> obtainOutputFormatModelForValue() {
         return LambdaModel.<String>of(()->{
-            final ObjectMemento inlinePromptMemento = this.memento();
-            return inlinePromptMemento != null ? inlinePromptMemento.asString(): null;
+            val memento = memento();
+            return memento != null
+                    ? memento.asPseudoBookmark().getIdentifier()
+                    : null;
         });
     }
 

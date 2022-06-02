@@ -397,7 +397,7 @@ implements
         if(interaction instanceof IsisInteraction) {
             return (IsisInteraction) interaction;
         }
-        throw _Exceptions.unrecoverableFormatted("the framework does not recognice "
+        throw _Exceptions.unrecoverable("the framework does not recognice "
                 + "this implementation of an Interaction: %s", interaction.getClass().getName());
     }
 

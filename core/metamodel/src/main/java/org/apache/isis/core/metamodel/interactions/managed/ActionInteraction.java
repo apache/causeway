@@ -273,7 +273,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
     // -- HELPER
 
     private static RuntimeException onMissingDefaultsProvider(final ObjectFeature feature) {
-        return _Exceptions.unrecoverableFormatted("Could not find a DefaultsProvider for ObjectFeature %s",
+        return _Exceptions.unrecoverable("Could not find a DefaultsProvider for ObjectFeature %s",
                 feature.getFeatureIdentifier());
     }
 

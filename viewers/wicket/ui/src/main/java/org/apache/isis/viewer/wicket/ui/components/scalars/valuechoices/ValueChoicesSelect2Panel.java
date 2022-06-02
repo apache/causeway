@@ -76,7 +76,7 @@ extends ScalarPanelSelectAbstract {
 
     @Override
     protected String obtainOutputFormat() {
-        return select2.obtainInlinePromptModel2().getObject();
+        return select2.obtainOutputFormatModelForValue().getObject();
     }
 
     // --

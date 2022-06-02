@@ -87,7 +87,7 @@ public class J2AdocContext {
         val unitKey = LookupKey.of(unit.getResourceCoordinates());
         val previousKey = unitIndex.put(unitKey, unit);
         if(previousKey!=null) {
-            throw _Exceptions.unrecoverableFormatted(
+            throw _Exceptions.unrecoverable(
                     "J2AUnit index entries must be unique, "
                     + "index key collision on \nexists: %s\nnew:    %s",
                     previousKey,

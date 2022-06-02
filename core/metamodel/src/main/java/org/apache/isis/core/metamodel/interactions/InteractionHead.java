@@ -77,12 +77,12 @@ public class InteractionHead {
     private static InteractionHead of(final @NonNull ManagedObject owner, final @NonNull ManagedObject target) {
         if(ManagedObjects.isSpecified(owner)
                 && owner.getSpecification().getBeanSort().isMixin()) {
-            throw _Exceptions.unrecoverableFormatted("unexpected: owner is a mixin %s", owner);
+            throw _Exceptions.unrecoverable("unexpected: owner is a mixin %s", owner);
         }
         if(ManagedObjects.isSpecified(target)
                 && target.getSpecification().getBeanSort().isMixin()
                 && target.getPojo()==null) {
-            throw _Exceptions.unrecoverableFormatted("target not spec. %s", target);
+            throw _Exceptions.unrecoverable("target not spec. %s", target);
         }
         return new InteractionHead(owner, target);
     }
