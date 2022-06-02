@@ -350,7 +350,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private void waitForValidationToFinish() {
         int maxRetry = 50;
         while(!validationQueue.isEmpty()
-                && maxRetry<0) {
+                && maxRetry>0) {
             Thread.sleep(100);
             --maxRetry;
         }
