@@ -86,6 +86,7 @@ import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -334,11 +335,25 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     @Override
     public void disposeMetaModel() {
+        waitForValidationToFinish();
         logicalTypeResolver.clear();
         cache.clear();
         validationResult.clear();
         serviceRegistry.clearRegisteredBeans();
         log.info("Metamodel disposed.");
+    }
+
+    /**
+     * [ISIS-3066] wait for validation (if any) to finish (max 5s)
+     */
+    @SneakyThrows
+    private void waitForValidationToFinish() {
+        int maxRetry = 50;
+        while(!validationQueue.isEmpty()
+                && maxRetry<0) {
+            Thread.sleep(100);
+            --maxRetry;
+        }
     }
 
     @PreDestroy
