@@ -72,7 +72,6 @@ class InteractionTestJdoWkt extends RegressionTestAbstract {
     @BeforeEach
     void setUp() throws InterruptedException {
         wktTester = wicketTesterFactory.createTester(JdoBook::fromDto);
-        //testFixtures.install();
     }
 
     @AfterEach

@@ -39,12 +39,11 @@ import org.apache.isis.commons.internal.primitives._Longs.Bound;
 import org.apache.isis.commons.internal.primitives._Longs.Range;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
-import org.apache.isis.testdomain.jpa.JpaTestDomainPersona;
+import org.apache.isis.testdomain.jpa.JpaTestFixtures;
 import org.apache.isis.testdomain.jpa.entities.JpaBook;
 import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
@@ -64,20 +63,16 @@ import lombok.extern.log4j.Log4j2;
 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
 
-    @Inject private FixtureScripts fixtureScripts;
+    @Inject private JpaTestFixtures jpaTestFixtures;
     @Inject private RepositoryService repository;
     @Inject private KVStoreForTesting kvStore;
 
     @Test @Order(1) @Rollback(false)
     void setup() {
 
-        // cleanup
-        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
-        kvStore.clear(JpaBook.class);
-
         // given
-        fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
-        assertInjectCountRange(1, 2);
+        jpaTestFixtures.reinstall(()->kvStore.clear(JpaBook.class));
+        assertInjectCountRange(3, 9); //TODO there is some injection redundancy
     }
 
 
@@ -135,7 +130,7 @@ class JpaEntityInjectingTest extends IsisIntegrationTestAbstract {
 
     private JpaBook getSampleBook() {
         val books = repository.allInstances(JpaProduct.class);
-        assertEquals(1, books.size(), "book count");
+        assertEquals(3, books.size(), "book count");
         val book = books.get(0);
         assertEquals(BookDto.sample().getName(), book.getName(), "book name");
         return (JpaBook)book;

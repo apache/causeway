@@ -23,7 +23,6 @@ import java.sql.SQLException;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -62,7 +61,6 @@ class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
         // Util_H2Console.main(null);
     }
 
-    @Disabled
     @Test @Order(1) @Rollback(false)
     void sampleInventoryShouldBeSetUp() {
 
@@ -92,7 +90,6 @@ class JdoBootstrappingTest extends IsisIntegrationTestAbstract {
         testFixtures.assertHasPersistenceId(firstProduct);
     }
 
-    @Disabled
     @Test @Order(2) @Rollback(false)
     void aSecondRunShouldWorkAsWell() {
         sampleInventoryShouldBeSetUp();

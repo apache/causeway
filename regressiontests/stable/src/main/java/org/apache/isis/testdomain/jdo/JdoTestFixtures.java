@@ -74,9 +74,7 @@ public class JdoTestFixtures implements MetamodelListener {
     }
 
     private BooleanAtomicReference isInstalled = _Refs.booleanAtomicRef(false);
-
     private LinkedBlockingQueue<Lock> lockQueue = new LinkedBlockingQueue<>(1);
-
 
     @Override
     public void onMetamodelLoaded() {
@@ -190,9 +188,6 @@ public class JdoTestFixtures implements MetamodelListener {
     // -- HELPER
 
     private void clear() {
-
-
-
         isInstalled.computeIfTrue(()->{
             interactionService.runAnonymous(()->{
                 cleanUpRepository();

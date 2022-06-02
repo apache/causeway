@@ -77,7 +77,6 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
 
         final boolean inInteraction = interactionService.isInInteraction();
         Assertions.assertThat(inInteraction).isTrue();
-        testFixtures.setUp3Books();
 
         // when
 
@@ -98,8 +97,6 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(2)
     void sampleInventory_shouldSupportQueryCount() {
 
-        testFixtures.setUp3Books();
-
         testFixtures.assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JpaBook.class)),
                 1, 2, 3);
@@ -112,8 +109,6 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
 
     @Test @Order(3) @Disabled("start not supported, should throw unsupported exception maybe?")
     void sampleInventory_shouldSupportQueryStart() {
-
-        testFixtures.setUp3Books();
 
         testFixtures.assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JpaBook.class)
@@ -129,8 +124,6 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(4)
     void sampleInventory_shouldSupportNamedQueries() {
 
-        testFixtures.setUp3Books();
-
         val query = Query.named(JpaBook.class, "JpaInventory.findAffordableProducts")
                 .withParameter("priceUpperBound", 60.);
 
@@ -140,8 +133,6 @@ class JpaQueryTest extends IsisIntegrationTestAbstract {
 
     @Test @Order(5)
     void sampleInventory_shouldSupportJpaCriteria() {
-
-        testFixtures.setUp3Books();
 
         val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
 

@@ -20,7 +20,6 @@ package org.apache.isis.testdomain.persistence.jpa;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -44,11 +43,6 @@ class JpaJaxbTest extends RegressionTestAbstract {
 
     @Inject private JpaTestFixtures testFixtures;
     @Inject private JaxbService jaxbService;
-
-    @BeforeEach
-    void setUp() {
-        run(()->testFixtures.setUp3Books());
-    }
 
     @Test
     void inventoryJaxbVm_shouldRoundtripProperly() {

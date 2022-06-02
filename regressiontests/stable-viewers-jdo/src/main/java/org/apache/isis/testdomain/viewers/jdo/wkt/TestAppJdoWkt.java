@@ -41,7 +41,6 @@ import org.apache.isis.testdomain.conf.Configuration_usingWicket;
 import org.apache.isis.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.isis.testdomain.jdo.JdoTestFixtures;
 import org.apache.isis.testdomain.model.valuetypes.composite.CalendarEventJaxbVm;
-import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 /**
@@ -54,9 +53,7 @@ import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
     // UI (Wicket Viewer)
     IsisModuleViewerWicketViewer.class,
-
-    IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
-
+    //IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
     XrayEnable.class // for debugging only
 })
@@ -89,7 +86,6 @@ public class TestAppJdoWkt extends SpringBootServletInitializer {
 
         @Action @ActionLayout(sequence = "0.1")
         public TestHomePage setup() {
-            //testFixtures.install();
             return this;
         }
 

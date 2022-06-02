@@ -54,6 +54,7 @@ import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
     // UI (Wicket Viewer)
     IsisModuleViewerWicketViewer.class,
+    //IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,
 
     XrayEnable.class // for debugging only
 })
@@ -89,7 +90,6 @@ public class TestAppJpaWkt extends SpringBootServletInitializer {
 
         @Action @ActionLayout(sequence = "0.1")
         public TestHomePage setup() {
-            testFixtures.setUp3Books();
             return this;
         }
 
