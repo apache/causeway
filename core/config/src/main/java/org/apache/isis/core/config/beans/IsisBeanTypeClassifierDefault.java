@@ -105,7 +105,7 @@ implements IsisBeanTypeClassifier {
             val logicalType = LogicalType.infer(type);
             // overrides Spring naming strategy
             return IsisBeanMetaData
-                        .injectable(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
+                        .injectableNamedByIsis(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
         }
 
         // allow ServiceLoader plugins to have a say, eg. when classifying entity types
@@ -130,9 +130,8 @@ implements IsisBeanTypeClassifier {
             switch (aDomainObject.nature()) {
             case BEAN:
                 val logicalType = LogicalType.infer(type);
-                return IsisBeanMetaData.injectable(
-                        BeanSort.MANAGED_BEAN_CONTRIBUTING,
-                        logicalType);
+                return IsisBeanMetaData
+                        .injectableNamedByIsis(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
             case MIXIN:
                 return IsisBeanMetaData.isisManaged(BeanSort.MIXIN, type);
             case ENTITY:

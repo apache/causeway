@@ -54,7 +54,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(final String id) {
-        return Optional.ofNullable(managedBeansById.get().get(id));
+        return Optional.ofNullable(contributingDomainServicesById.get().get(id));
     }
 
     @Override
@@ -64,7 +64,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public Stream<_ManagedBeanAdapter> streamRegisteredBeans() {
-        return managedBeansById.get().values().stream();
+        return contributingDomainServicesById.get().values().stream();
     }
 
     @Override
@@ -75,15 +75,15 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public void clearRegisteredBeans() {
-        managedBeansById.clear();
+        contributingDomainServicesById.clear();
     }
 
     // -- HELPER
 
-    private final _Lazy<Map<String, _ManagedBeanAdapter>> managedBeansById =
-            _Lazy.threadSafe(this::enumerateManagedBeans);
+    private final _Lazy<Map<String, _ManagedBeanAdapter>> contributingDomainServicesById =
+            _Lazy.threadSafe(this::enumerateContributingDomainServices);
 
-    private Map<String, _ManagedBeanAdapter> enumerateManagedBeans() {
+    private Map<String, _ManagedBeanAdapter> enumerateContributingDomainServices() {
         val managedBeanAdapterByName = _Maps.<String, _ManagedBeanAdapter>newHashMap();
         val managedBeansContributing = isisBeanTypeRegistry.getManagedBeansContributing().keySet();
 
