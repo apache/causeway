@@ -334,7 +334,7 @@ under the License.
 
 		<lombok.version>1.18.24</lombok.version> <!-- overriding Spring -->
 		<delombok.output>${project.build.directory}/delombok</delombok.output>
-		<surefire.version>3.0.0-M6</surefire.version>
+		<surefire.version>3.0.0-M7</surefire.version>
 		<surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
 		<!-- APACHE ISIS customisation 4/15: end -->
 
