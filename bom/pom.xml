@@ -410,7 +410,7 @@ under the License.
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
 
 		<maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-		<maven-release-plugin.version>3.0.0-M5</maven-release-plugin.version>
+		<maven-release-plugin.version>3.0.0-M6</maven-release-plugin.version>
 		<maven-war-plugin.version>3.3.2</maven-war-plugin.version>
 
 		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts)
