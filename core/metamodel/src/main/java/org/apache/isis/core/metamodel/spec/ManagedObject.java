@@ -410,8 +410,6 @@ public interface ManagedObject {
 
         /**
          * Introduced, so we can re-fetch detached entity pojos in place.
-         * @apiNote should be package private, and not publicly exposed
-         * (but the <i>Java</i> language is not there yet)
          */
         abstract void replacePojo(UnaryOperator<Object> replacer);
 
