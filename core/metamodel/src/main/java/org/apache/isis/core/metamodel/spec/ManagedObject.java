@@ -18,7 +18,9 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -35,6 +37,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -66,15 +69,6 @@ public interface ManagedObject {
     Object getPojo();
 
     /**
-     * Introduced, so we can re-fetch detached entity pojos in place.
-     * @apiNote should be package private, and not publicly exposed
-     * (but the <i>Java</i> language is not there yet)
-     */
-    void replacePojo(UnaryOperator<Object> replacer);
-
-    void replaceBookmark(UnaryOperator<Bookmark> replacer);
-
-    /**
      * Returns the object's bookmark as identified by the ObjectManager.
      * Bookmarks are considered immutable, hence will be memoized once fetched.
      */
@@ -91,39 +85,11 @@ public interface ManagedObject {
     Optional<Bookmark> getBookmarkRefreshed();
 
     /**
-     * Reload current viewmodel object from memoized bookmark, otherwise does nothing.
+     * If the underlying domain object is a viewmodel, refreshes any referenced entities.
+     * (Acts as a no-op otherwise.)
+     * @apiNote usually should be sufficient to refresh once per interaction.
      */
-    default void reloadViewmodelFromMemoizedBookmark() {
-        val spec = getSpecification();
-        if(isBookmarkMemoized()
-                && spec.isViewModel()) {
-
-            val bookmark = getBookmark().get();
-            val viewModelClass = spec.getCorrespondingClass();
-
-            val recreatedViewmodel =
-                    getMetaModelContext().getFactoryService().viewModel(viewModelClass, bookmark);
-
-            _XrayEvent.event("Viewmodel '%s' recreated from memoized bookmark.", viewModelClass.getName());
-
-            replacePojo(old->recreatedViewmodel);
-        }
-    }
-
-    default void reloadViewmodelFromBookmark(final @NonNull Bookmark bookmark) {
-        val spec = getSpecification();
-        if(spec.isViewModel()) {
-            val viewModelClass = spec.getCorrespondingClass();
-
-            val recreatedViewmodel =
-                    getMetaModelContext().getFactoryService().viewModel(viewModelClass, bookmark);
-
-            _XrayEvent.event("Viewmodel '%s' recreated from provided bookmark.", viewModelClass.getName());
-
-            replacePojo(old->recreatedViewmodel);
-            replaceBookmark(old->bookmark);
-        }
-    }
+    void refreshViewmodel(@Nullable Supplier<Bookmark> bookmarkSupplier);
 
     boolean isBookmarkMemoized();
 
@@ -341,8 +307,7 @@ public interface ManagedObject {
             return getBookmark();
         }
 
-        @Override
-        public final void replaceBookmark(final UnaryOperator<Bookmark> replacer) {
+        private void replaceBookmark(final UnaryOperator<Bookmark> replacer) {
             final Bookmark old = bookmarkLazy.isMemoized()
                     ? bookmarkLazy.get().orElse(null)
                     : null;
@@ -366,6 +331,89 @@ public interface ManagedObject {
                     .map(MetaModelContext::getObjectManager)
                     .map(objectManager->objectManager.bookmarkObject(adapter));
         }
+
+        // -- REFRESH OPTIMIZATION
+
+        private UUID interactionId = null;
+
+        @Override
+        public final void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
+            val spec = getSpecification();
+            if(spec.isViewModel()) {
+                val viewModelFacet = spec.getFacet(ViewModelFacet.class);
+                if(viewModelFacet.containsEntities()) {
+
+                    val shouldRefresh = spec.getMetaModelContext().getInteractionProvider().getInteractionId()
+                    .map(this::shouldRefresh)
+                    .orElse(true); // if there is no current interaction, refresh regardless; unexpected state, might fail later
+
+                    if(!shouldRefresh) {
+                        return;
+                    }
+
+                    if(isBookmarkMemoized()) {
+                        reloadViewmodelFromMemoizedBookmark();
+                    } else {
+                        val bookmark = bookmarkSupplier!=null
+                                ? bookmarkSupplier.get()
+                                : null;
+                        if(bookmark!=null) {
+                            reloadViewmodelFromBookmark(bookmark);
+                        }
+                    }
+                }
+            }
+        }
+
+        private boolean shouldRefresh(final @NonNull UUID interactionId) {
+            if(Objects.equals(this.interactionId, interactionId)) {
+                return false; // already refreshed within current interaction
+            }
+            this.interactionId = interactionId;
+            return true;
+        }
+
+        /**
+         * Reload current viewmodel object from memoized bookmark, otherwise does nothing.
+         */
+        private void reloadViewmodelFromMemoizedBookmark() {
+            val spec = getSpecification();
+            if(isBookmarkMemoized()
+                    && spec.isViewModel()) {
+
+                val bookmark = getBookmark().get();
+                val viewModelClass = spec.getCorrespondingClass();
+
+                val recreatedViewmodel =
+                        getMetaModelContext().getFactoryService().viewModel(viewModelClass, bookmark);
+
+                _XrayEvent.event("Viewmodel '%s' recreated from memoized bookmark.", viewModelClass.getName());
+
+                replacePojo(old->recreatedViewmodel);
+            }
+        }
+
+        private void reloadViewmodelFromBookmark(final @NonNull Bookmark bookmark) {
+            val spec = getSpecification();
+            if(spec.isViewModel()) {
+                val viewModelClass = spec.getCorrespondingClass();
+
+                val recreatedViewmodel =
+                        getMetaModelContext().getFactoryService().viewModel(viewModelClass, bookmark);
+
+                _XrayEvent.event("Viewmodel '%s' recreated from provided bookmark.", viewModelClass.getName());
+
+                replacePojo(old->recreatedViewmodel);
+                replaceBookmark(old->bookmark);
+            }
+        }
+
+        /**
+         * Introduced, so we can re-fetch detached entity pojos in place.
+         * @apiNote should be package private, and not publicly exposed
+         * (but the <i>Java</i> language is not there yet)
+         */
+        abstract void replacePojo(UnaryOperator<Object> replacer);
 
     }
 
