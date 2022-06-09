@@ -21,6 +21,7 @@ package org.apache.isis.applib.value;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.stream.Collectors;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -29,6 +30,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Text;
 
 import lombok.EqualsAndHashCode;
 
@@ -65,7 +67,15 @@ public final class Markup implements Serializable {
 
     @Override
     public String toString() {
-        return "Markup[length="+html.length()+"]";
+        return String.format("Markup[length=%d,content=%s]",
+                html.length(), summarizeHtmlAsTitle(html));
+    }
+
+    public static String summarizeHtmlAsTitle(final String html) {
+        return _Strings.ellipsifyAtEnd(
+                _Text.normalize(_Text.getLines(html)).stream()
+                .collect(Collectors.joining(" ")),
+                255, "...");
     }
 
     public static final class JaxbToStringAdapter extends XmlAdapter<String, Markup> {
