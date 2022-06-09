@@ -1232,6 +1232,12 @@ ul.navbar-wrap {
   margin-right: auto !important;
 }
 
+/* SELECT 2 */
+
+.select2-container {
+  margin-bottom: 5px;
+}
+
 /* TOOLTIPS */
 
 .tooltip {
