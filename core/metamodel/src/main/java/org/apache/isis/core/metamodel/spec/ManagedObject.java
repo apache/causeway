@@ -334,7 +334,7 @@ public interface ManagedObject {
 
         // -- REFRESH OPTIMIZATION
 
-        private UUID interactionId = null;
+        private UUID interactionIdDuringWhichRefreshed = null;
 
         @Override
         public final void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
@@ -366,10 +366,10 @@ public interface ManagedObject {
         }
 
         private boolean shouldRefresh(final @NonNull UUID interactionId) {
-            if(Objects.equals(this.interactionId, interactionId)) {
+            if(Objects.equals(this.interactionIdDuringWhichRefreshed, interactionId)) {
                 return false; // already refreshed within current interaction
             }
-            this.interactionId = interactionId;
+            this.interactionIdDuringWhichRefreshed = interactionId;
             return true;
         }
 

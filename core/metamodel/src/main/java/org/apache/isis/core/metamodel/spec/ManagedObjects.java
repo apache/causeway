@@ -1126,7 +1126,6 @@ public final class ManagedObjects {
     public static void refreshViewmodel(
             final @Nullable ManagedObject viewmodel,
             final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-
         if(isNullOrUnspecifiedOrEmpty(viewmodel)) {
             return; // do nothing
         }
