@@ -25,6 +25,7 @@ import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.value.Markup;
 import org.apache.isis.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
 import lombok.AccessLevel;
@@ -74,7 +75,8 @@ public final class AsciiDoc implements Serializable {
 
     @Override
     public String toString() {
-        return "AsciiDoc[length=" + adoc.length() + "]";
+        return String.format("AsciiDoc[length=%d,content=%s]",
+                adoc.length(), Markup.summarizeHtmlAsTitle(adoc));
     }
 
     // -- UTILITY

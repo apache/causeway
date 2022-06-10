@@ -44,13 +44,12 @@ import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Objects;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.debug._Debug;
-import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
@@ -59,12 +58,12 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
+import org.apache.isis.core.metamodel.spec.ManagedObject.ManagedObjectWithBookmark;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.NonNull;
@@ -510,15 +509,8 @@ public final class ManagedObjects {
         }
 
         @Override
-        public void replacePojo(final UnaryOperator<Object> replacer) {
-        }
-
-        @Override
-        public void replaceBookmark(final UnaryOperator<Bookmark> replacer) {
-        }
-
-        @Override
-        public void reloadViewmodelFromMemoizedBookmark() {
+        public void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
+            // noop; only available for viewmodels
         }
     };
 
@@ -727,7 +719,9 @@ public final class ManagedObjects {
             val newState = EntityUtil.getEntityState(reattached);
             _Assert.assertTrue(newState.isAttached());
 
-            managedObject.replacePojo(old->reattached.getPojo());
+            _Casts.castTo(ManagedObjectWithBookmark.class, managedObject)
+            .ifPresent(obj->obj.replacePojo(old->reattached.getPojo()));
+
             return managedObject;
         }
 
@@ -1132,33 +1126,10 @@ public final class ManagedObjects {
     public static void refreshViewmodel(
             final @Nullable ManagedObject viewmodel,
             final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-
         if(isNullOrUnspecifiedOrEmpty(viewmodel)) {
             return; // do nothing
         }
-
-        val spec = viewmodel.getSpecification();
-        if(spec.isViewModel()) {
-            val viewModelFacet = spec.getFacet(ViewModelFacet.class);
-            if(viewModelFacet.containsEntities()) {
-
-                _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                    _Debug.log("about to refresh viewmodel ..");
-                });
-
-                if(viewmodel.isBookmarkMemoized()) {
-                    viewmodel.reloadViewmodelFromMemoizedBookmark();
-                } else {
-                    val bookmark = bookmarkSupplier!=null
-                            ? bookmarkSupplier.get()
-                            : null;
-                    if(bookmark!=null) {
-                        viewmodel.reloadViewmodelFromBookmark(bookmark);
-                    }
-                }
-            }
-        }
+        viewmodel.refreshViewmodel(bookmarkSupplier);
     }
-
 
 }

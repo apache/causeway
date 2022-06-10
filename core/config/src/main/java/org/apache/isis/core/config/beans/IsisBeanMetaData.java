@@ -29,17 +29,32 @@ public class IsisBeanMetaData {
 
     public enum ManagedBy {
         UNSPECIFIED,
+        ISIS,
         SPRING,
-        ISIS;
-        public boolean isUnspecified() {return this == ManagedBy.UNSPECIFIED; }
-        public boolean isSpring() {return this == ManagedBy.SPRING; }
-        public boolean isIsis() {return this == ManagedBy.ISIS; }
+        /** @deprecated in support of deprecated {@code @DomainService(logicalTypeName=...)}*/
+        @Deprecated
+        SPRING_NAMED_BY_ISIS,
+        ;
+        public boolean isUnspecified() {return this == UNSPECIFIED; }
+        public boolean isIsis() { return this == ISIS; }
+        public boolean isSpring() {
+            return this == SPRING
+                || this == SPRING_NAMED_BY_ISIS;
+        }
         /**
          * Whether Spring should make that underlying bean injectable.
          * @implNote if not managed by Isis, let ultimately Spring decide
          */
         public boolean isInjectable() {
             return !isIsis();
+        }
+
+        /**
+         * Whether we interfere with Spring's naming strategy.
+         */
+        public boolean isBeanNameOverride() {
+            return this == ISIS
+                    || this == SPRING_NAMED_BY_ISIS;
         }
     }
 
@@ -61,6 +76,14 @@ public class IsisBeanMetaData {
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
         return of(beanSort, logicalType, ManagedBy.SPRING);
+    }
+
+    /** @deprecated in support of deprecated {@code @DomainService(logicalTypeName=...)}*/
+    @Deprecated
+    public static IsisBeanMetaData injectableNamedByIsis(
+            final @NonNull BeanSort beanSort,
+            final @NonNull LogicalType logicalType) {
+        return of(beanSort, logicalType, ManagedBy.SPRING_NAMED_BY_ISIS);
     }
 
     /**

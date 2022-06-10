@@ -214,8 +214,8 @@ extends ScalarPanelAbstract {
 
         // add clear-field-button (only if feature is not required and not already cleared)
         val isClearFieldButtonVisible =
-                scalarModel().proposedValue().isPresent()
-                    && !scalarModel().isRequired();
+                !scalarModel().isRequired()
+                    && scalarModel().proposedValue().isPresent();
 
         if(isClearFieldButtonVisible) {
             val clearFieldButton = Wkt.linkAddWithBody(buttonContainer,

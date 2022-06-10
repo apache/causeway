@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap;
 
-import java.util.Stack;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -28,8 +26,6 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
-
-import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.Draggable;
@@ -43,8 +39,6 @@ extends Modal<T>
 implements ActionPrompt {
 
     private static final long serialVersionUID = 1L;
-
-    private final Stack<Component> nestedPanelStack = new Stack<>();
 
     public ModalDialog(final String markupId) {
         this(markupId, null);
@@ -66,10 +60,6 @@ implements ActionPrompt {
 
     @Override
     public void setPanel(final Component component, final AjaxRequestTarget target) {
-        if(!nestedPanelStack.isEmpty()) {
-            addJavaScriptForClosing(target);
-        }
-        nestedPanelStack.add(component);
         addOrReplace(component);
         showPrompt(target);
     }
@@ -93,18 +83,8 @@ implements ActionPrompt {
 
     @Override
     public void closePrompt(final AjaxRequestTarget target) {
-        if(!nestedPanelStack.isEmpty()) {
-            nestedPanelStack.pop();
-        }
-
         addJavaScriptForClosing(target);
         setVisible(false);
-
-        if(!nestedPanelStack.isEmpty()) {
-            val parentDialogContent = nestedPanelStack.peek();
-            addOrReplace(parentDialogContent);
-            showPrompt(target);
-        }
     }
 
     @Override

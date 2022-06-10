@@ -115,7 +115,6 @@ public class EntityPage extends PageAbstract {
             final EntityModel entityModel) {
         super(pageParameters, null/*titleString*/, ComponentType.ENTITY);
         this.model = entityModel;
-        isAlreadyRefreshedWithinThisInteraction();
     }
 
     @Override
@@ -204,14 +203,10 @@ public class EntityPage extends PageAbstract {
 
     }
 
-    // -- RE-ATTACH ENTITIES
+    // -- REFRESH ENTITIES
 
     @Override
     public void onNewRequestCycle() {
-        // optimization, not strictly required
-        if(isAlreadyRefreshedWithinThisInteraction()) {
-            return;
-        }
         val entityModel = (EntityModel) getUiHintContainerIfAny();
         ManagedObjects.refreshViewmodel(entityModel.getObject(),
                 ()->PageParameterUtils

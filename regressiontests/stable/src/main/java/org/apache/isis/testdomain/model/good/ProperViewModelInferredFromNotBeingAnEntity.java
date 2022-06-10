@@ -16,22 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.param.name;
+package org.apache.isis.testdomain.model.good;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacetAbstract;
+import javax.inject.Named;
 
-/**
- *
- * @since 2.0
- */
-public class NamedFacetForParameterUsingReflection
-extends ParamNamedFacetAbstract {
+import org.apache.isis.applib.annotation.DomainObject;
 
-    public NamedFacetForParameterUsingReflection(
-            final String named,
-            final FacetHolder holder) {
-        super(named, holder, Precedence.LOW); // allow facets inferred from annotations to override
-    }
+//[ISIS-3068] if nature is no specified, consider what the BeanTypeClassifier has come up with
+@Named("testdomain.ProperViewModelInferredFromNotBeingAnEntity")
+@DomainObject
+public class ProperViewModelInferredFromNotBeingAnEntity {
 
 }

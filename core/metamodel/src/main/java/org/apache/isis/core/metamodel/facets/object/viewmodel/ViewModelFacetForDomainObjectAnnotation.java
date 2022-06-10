@@ -23,7 +23,9 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -49,17 +51,30 @@ extends ViewModelFacetAbstract {
                 .map(DomainObject::nature)
                 .map(nature -> {
                     switch (nature) {
-                    case NOT_SPECIFIED:
                     case BEAN:
                     case ENTITY:
                     case MIXIN:
-                        // not a recreatable object, so no facet
+                        // not a ViewModel, so no ViewModelFacet
                         return null;
+                    case NOT_SPECIFIED:
+
+                        //[ISIS-3068] consider what the BeanTypeClassifier has come up with
+                        final boolean isClassifiedAsViewModel =
+                            _Casts.castTo(ObjectSpecification.class, holder)
+                            .map(ObjectSpecification::getBeanSort)
+                            .map(BeanSort::isViewModel)
+                            .orElse(false);
+
+                        if(!isClassifiedAsViewModel) {
+                            // not a ViewModel, so no ViewModelFacet
+                            return null;
+                        }
+                        // else fall through
                     case VIEW_MODEL:
                         return new ViewModelFacetForDomainObjectAnnotation(
                                 holder, postConstructMethodCache);
                     }
-                    // shouldn't happen, the above switch should match all cases.
+                    // shouldn't happen, the above switch should match all cases
                     throw new IllegalArgumentException("nature of '" + nature + "' not recognized");
                 })
                 .filter(Objects::nonNull);

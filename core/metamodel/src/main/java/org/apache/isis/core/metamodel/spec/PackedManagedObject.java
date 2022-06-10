@@ -20,13 +20,14 @@ package org.apache.isis.core.metamodel.spec;
 
 import java.util.Collections;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,16 +56,6 @@ public final class PackedManagedObject implements ManagedObject {
                 .collect(Collectors.toList()));
     }
 
-    @Override
-    public void replacePojo(final UnaryOperator<Object> replacer) {
-        throw _Exceptions.unsupportedOperation();
-    }
-
-    @Override
-    public void replaceBookmark(final UnaryOperator<Bookmark> replacer) {
-        throw _Exceptions.unsupportedOperation();
-    }
-
     private final _Lazy<Optional<Bookmark>> bookmarkLazy =
             _Lazy.threadSafe(()->{
                 return Optional.of(getSpecification().getMetaModelContext().getObjectManager().bookmarkObject(this));
@@ -87,6 +78,11 @@ public final class PackedManagedObject implements ManagedObject {
 
     public Can<ManagedObject> unpack(){
         return nonScalar;
+    }
+
+    @Override
+    public void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
+        // noop; only available for viewmodels
     }
 
 }

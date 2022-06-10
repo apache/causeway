@@ -25,6 +25,7 @@ import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.value.Markup;
 import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
 
 import lombok.AccessLevel;
@@ -74,7 +75,8 @@ public class Markdown implements Serializable {
 
     @Override
     public String toString() {
-        return "Markdown[length=" + markdown.length() + "]";
+        return String.format("Markdown[length=%d,content=%s]",
+                markdown.length(), Markup.summarizeHtmlAsTitle(markdown));
     }
 
 }
