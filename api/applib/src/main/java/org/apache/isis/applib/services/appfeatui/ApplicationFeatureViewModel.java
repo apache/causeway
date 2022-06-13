@@ -51,6 +51,7 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 
@@ -84,9 +85,15 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             final ApplicationFeatureId featureId,
             final ApplicationFeatureRepository applicationFeatureRepository,
             final FactoryService factoryService) {
-        final Class<? extends ApplicationFeatureViewModel> cls =
+        final Class<? extends ApplicationFeatureViewModel> vmClass =
                 viewModelClassFor(featureId, applicationFeatureRepository);
-        return factoryService.viewModel(cls,
+
+        if(featureId.getSort().isNamespace()) {
+            _Assert.assertEquals(vmClass, ApplicationNamespace.class);
+            return factoryService.viewModel(new ApplicationNamespace(featureId));
+        }
+
+        return factoryService.viewModel(vmClass,
                 Bookmark.forLogicalTypeNameAndIdentifier(
                         featureId.getLogicalTypeName(),
                         featureId.asEncodedString()));
