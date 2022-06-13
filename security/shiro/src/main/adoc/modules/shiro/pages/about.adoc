@@ -25,7 +25,7 @@ Configuring this realm is described <<shiro-ini-realm,below>>
 TIP: The xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps are both configured to use this realm.
 
 A more sophisticated option is the LDAP realm.
-Shiro has its own implementation which is extended in the  provides the xref:security:shiro-realm-ldap:about.adoc[LDAP realm]
+Shiro has its own implementation which is extended in the xref:security:shiro-realm-ldap:about.adoc[LDAP realm]
 This realm also supports permissions.
 
 Permissions are ultimately represented as strings, and their interpretation of them is the responsibility of `AuthorizorShiro`.
@@ -102,7 +102,7 @@ Another option alternative is the xref:security:shiro-realm-ldap:about.adoc[LDAP
 As noted above, as well as realms many other aspects of configuration can be specified in this file:
 
 * enable caching for performance; discussed <<caching,below>>
-* leverage Apache Isis' <<enhanced-wildcard-permission,enhanced wildcard permissions>>,by specifying the Apache Isis permission resolver; discussed <<permission-resolver-configuration,below>>.
+* leverage Apache Isis' <<enhanced-wildcard-permission,enhanced wildcard permissions>>, by specifying the Apache Isis permission resolver; discussed <<permission-resolver-configuration,below>>.
 
 
 [#shiro-ini-realm]
@@ -180,9 +180,9 @@ where:
 
 * `logicalTypeNamespace` is the namespace portion of the domain object's logical type name ...
 
-* \... and `logicalTypeSimpleName` is the last portion of hte domain object's logical type name.
+* \... and `logicalTypeSimpleName` is the last portion of the domain object's logical type name.
 +
-For example, if `@DomainObject(logicalTypeName = "myapp.customer.Customer")`, then the the namespace is "myapp.customer" and the simple type name is "Customer".
+For example, if `@Named("myapp.customer.Customer")`, then the namespace is "myapp.customer" and the simple type name is "Customer".
 
 * `memberName` is the property, collection or action name.
 * `r` indicates that the member is visible
@@ -297,7 +297,7 @@ The string representation of the `IsisPermission` uses the following format:
 where:
 
 * the optional `!` prefix indicates this permission is a vetoing permission
-* the optional `xxx/` prefix is a permission group that scopes any vetoing permissions
+* the mandatory `xxx/` prefix is a permission group that scopes any vetoing permissions
 * the remainder of the string is the permission (possibly wild-carded, with :rw as optional suffix)
 
 TIP: Use an online regex tester, eg link:https://regex101.com/[] to get an idea of how this works.
@@ -308,9 +308,9 @@ For example:
 ----
 user_role   = !reg/myapp.api,\
               !reg/myapp.webapp.services.admin,\
-              reg/* ; \
-api_role    = myapp.api ;\
-admin_role = adm/*
+              reg/*
+api_role    = myapp.api
+admin_role  = adm/*
 ----
 
 sets up:
@@ -324,7 +324,7 @@ This is probably best explained by an example.
 Suppose that a user has both `admin_role` and `user_role`; we would want the `admin_role` to trump the vetos of the `user_role`, in other words to give the user access to everything.
 
 :asterisk: *
-Because of the permission groups, the two `!reg/...` vetos in `user_role` only veto out selected permissions granted by the ``reg/{asterisk}`` permissions, but they do not veto the permissions granted by a different scope, namely `adm/*`.
+Because of the permission groups, the two `!reg/...` vetos in `user_role` only veto out selected permissions granted by the ``reg/{asterisk}`` permissions, but they do not veto the permissions granted by a different scope, namely `adm/*`. In this case the prefixes in ``reg/{asterisk}`` and ``adm/{asterisk}`` are required to make the patterns unique.
 
 The net effect is therefore what we would want: that a user with both `admin_role` and `user_role` would have access to everything, irrespective of those two veto permissions of the `user_role`.
 

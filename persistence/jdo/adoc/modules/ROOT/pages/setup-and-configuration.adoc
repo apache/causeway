@@ -17,7 +17,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleJpaEclipselink.class,
+        IsisModulePersistenceJdoDatanucleus.class,
         ...
 })
 public class AppManifest {
@@ -71,7 +71,7 @@ For example:
     schema="SIMPLE",                                // <.>
     ...
 )
-@DomainObject(logicalTypeName = "simple.SimpleObject")   // <.>
+@Named("simple.SimpleObject")   // <.>
 ...
 public class SimpleObject ... {
 

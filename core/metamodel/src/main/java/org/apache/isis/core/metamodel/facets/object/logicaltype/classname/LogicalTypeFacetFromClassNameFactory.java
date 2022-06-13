@@ -98,7 +98,7 @@ implements
                                 + "Defaulting the object type from the package/class/package name can lead "
                                 + "to data migration issues for apps deployed to production (if the class is "
                                 + "subsequently refactored). "
-                                + "Use @Discriminator, @DomainObject(logicalTypeName=...) or "
+                                + "Use @Discriminator, @Named or "
                                 + "@PersistenceCapable(schema=...) to specify explicitly.",
                         objectSpec.getFullIdentifier(),
                         "isis.core.meta-model.validator.explicit-logical-type-names");

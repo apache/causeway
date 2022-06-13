@@ -104,7 +104,8 @@ mvn -pl spring-boot:run
     }
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(logicalTypeName = "visits.Visit", entityChangePublishing = Publishing.ENABLED)
+@Named("visits.Visit")
+@DomainObject(entityChangePublishing = Publishing.ENABLED)
 @DomainObjectLayout()
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)

@@ -58,7 +58,8 @@ public @interface PetName {
     }
 )
 @EntityListeners(IsisEntityListener.class)
-@DomainObject(logicalTypeName = "pets.Pet", entityChangePublishing = Publishing.ENABLED)
+@Named("pets.Pet")
+@DomainObject(entityChangePublishing = Publishing.ENABLED)
 @DomainObjectLayout()
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
