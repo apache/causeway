@@ -94,8 +94,10 @@ public @interface DomainService {
      * Otherwise, if not specified, the fully qualified class name is used instead.
      * </p>
      *
+     * @Deprecated use @Named instead
      * @see DomainObject#logicalTypeName()
      */
+    @Deprecated
     String logicalTypeName()
             default "";
 }
