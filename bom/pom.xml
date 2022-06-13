@@ -348,7 +348,7 @@ under the License.
 		<asm.version>9.3</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
 		<approvaltests.version>15.8.0</approvaltests.version>
 
-		<assertj-guava.version>3.4.0</assertj-guava.version>
+		<assertj-guava.version>3.5.0</assertj-guava.version>
 
 		<camel.version>3.14.3</camel.version>
 
