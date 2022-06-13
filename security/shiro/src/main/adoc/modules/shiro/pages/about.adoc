@@ -324,7 +324,8 @@ This is probably best explained by an example.
 Suppose that a user has both `admin_role` and `user_role`; we would want the `admin_role` to trump the vetos of the `user_role`, in other words to give the user access to everything.
 
 :asterisk: *
-Because of the permission groups, the two `!reg/...` vetos in `user_role` only veto out selected permissions granted by the ``reg/{asterisk}`` permissions, but they do not veto the permissions granted by a different scope, namely `adm/*`. In this case the prefixes in ``reg/{asterisk}`` and ``adm/{asterisk}`` are required to make the patterns unique.
+Because of the permission groups, the two `!reg/...` vetos in `user_role` only veto out selected permissions granted by the ``reg/{asterisk}`` permissions, but they do not veto the permissions granted by a different scope, namely `adm/*`.
+In this case the prefixes in ``reg/{asterisk}`` and ``adm/{asterisk}`` are required to make the patterns unique.
 
 The net effect is therefore what we would want: that a user with both `admin_role` and `user_role` would have access to everything, irrespective of those two veto permissions of the `user_role`.
 
