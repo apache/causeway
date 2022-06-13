@@ -689,7 +689,7 @@ under the License.
 				<plugin>
 					<groupId>org.apache.rat</groupId>
 					<artifactId>apache-rat-plugin</artifactId>
-					<version>0.13</version>
+					<version>0.14</version>
 
 					<!-- APACHE ISIS customisation 5/15: start -->
 					<configuration>
