@@ -129,9 +129,10 @@ public class ExceptionStackTracePanel extends Panel {
                     pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
                     pageParameters = entityModel.getPageParameters();
                 } else {
+                    pageClass = pageClassRegistry.getPageClass(PageType.HOME);
                     pageParameters = null;
-                    pageClass = HomePage.class;
                 }
+
                 final AbstractLink link = WktLinks.newBookmarkablePageLink("continueButton", pageParameters, pageClass);
                 add(link);
 
