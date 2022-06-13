@@ -48,7 +48,7 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
 
     public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationNamespace, T> {}
 
-    // -- constructors
+    // -- CONSTRUCTORS
 
     public ApplicationNamespace() { }
     public ApplicationNamespace(final ApplicationFeatureId featureId) {
@@ -58,9 +58,7 @@ public class ApplicationNamespace extends ApplicationFeatureViewModel {
         super(memento);
     }
 
-
-
-    // -- contents (collection, for namespaces only)
+    // -- CONTENTS (collection, for namespaces only)
 
     @Collection(
             domainEvent = Contents.DomainEvent.class

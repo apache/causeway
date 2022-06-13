@@ -346,9 +346,9 @@ under the License.
         <!-- LIBRARY DEPENDENCIES -->
 		<archunit.version>0.23.1</archunit.version>
 		<asm.version>9.3</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
-		<approvaltests.version>15.7.0</approvaltests.version>
+		<approvaltests.version>15.8.0</approvaltests.version>
 
-		<assertj-guava.version>3.4.0</assertj-guava.version>
+		<assertj-guava.version>3.5.0</assertj-guava.version>
 
 		<camel.version>3.14.3</camel.version>
 
@@ -689,7 +689,7 @@ under the License.
 				<plugin>
 					<groupId>org.apache.rat</groupId>
 					<artifactId>apache-rat-plugin</artifactId>
-					<version>0.13</version>
+					<version>0.14</version>
 
 					<!-- APACHE ISIS customisation 5/15: start -->
 					<configuration>

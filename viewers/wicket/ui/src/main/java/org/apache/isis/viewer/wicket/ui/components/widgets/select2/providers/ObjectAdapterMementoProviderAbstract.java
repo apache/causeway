@@ -69,7 +69,7 @@ extends ChoiceProvider<ObjectMemento> {
     @Override
     public String getIdValue(final ObjectMemento choiceMemento) {
         if (choiceMemento == null) {
-            return PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate);
+            return NULL_PLACEHOLDER;
         }
         return choiceMemento.bookmark().stringify();
     }
