@@ -1,0 +1,186 @@
+= Migrating from M7 to M8
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+(This page will be added to as development progresses).
+
+== Programming Model
+
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| `@DomainService.logicalTypeName` deprecated for removal
+| use `@Named` or any other semantics supported by Spring
++
+Behavioral change: `@DomainService.logicalTypeName` can now be left empty, which is interpreted as _unspecified/indifferent_ 
+
+| `RecreatableDomainObject` interface removed
+| use `ViewModel` interface instead
+
+| `ViewModel.viewModelInit(String memento)` removed
+| use a single (String) argument constructor instead; this will allow Java Records to be used as viewmodels (future work)
+
+| `MetamodelEvent` as provided with _metamodel_ moved
+| moved to _applib_; we introduced _interface_ `MetamodelListener` for convenience to maybe use instead
+[source, java]
+.Example
+----
+@Service
+public class SeedService implements MetamodelListener {
+/..
+    @Override
+    public void onMetamodelLoaded() {
+        // seed database entities
+    }
+}
+---- 
+
+| Factory method `Identifier.propertyOrCollectionIdentifier(..)`
+| was slit up into `Identifier.propertyIdentifier(..)` and `Identifier.collectionIdentifier(..)`
+
+|===
+
+== Commons
+
+The following changed:
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| `Result<T>` removed
+| replaced by `Try<T>`; also promoting `Either<L, R>` to non-internal, 
+and introducing `Railway<F, S>` 
+
+|===
+
+== Configuration
+
+The following changed:
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| (non-essential) object meta-data mixins were split out of `IsisModuleApplib` 
+| need to be explicitly imported via `IsisModuleApplibObjectMetadataMixins`
+
+| default logging subscribers were split out of `IsisModuleApplib` 
+| need to be explicitly imported via `IsisModuleApplibChangeAndExecutionLoggers`
+
+|===
+
+== Other
+
+=== Bill of Material / Parent POM
+
+Folder moved `/isis-parent` -> `/bom` 
+
+[source, xml]
+.Bill of Material
+----
+<!-- renamed
+<groupId>org.apache.isis</groupId>
+<artifactId>isis-parent</artifactId>
+-->
+
+<groupId>org.apache.isis</groupId>
+<artifactId>isis-bom</artifactId>
+----
+
+=== Restclient
+
+[source, java]
+.Restclient Package Names
+----
+// renamed ...
+//import org.apache.isis.extensions.restclient.RestfulClient;
+//import org.apache.isis.extensions.restclient.RestfulClientConfig;
+import org.apache.isis.viewer.restfulobjects.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
+----
+
+[source, xml]
+.Restclient Artifacts
+----
+<!-- renamed
+<groupId>org.apache.isis.mappings</groupId>
+<artifactId>isis-mappings-restclient-applib</artifactId>
+-->
+
+<groupId>org.apache.isis.viewer</groupId>
+<artifactId>isis-viewer-restfulobjects-client</artifactId>
+----
+
+[source, java]
+.Restclient Usage
+----
+// DigestResponse is no longer publicly visible, instead returning Try<T>  
+<T> Try<T> digest(Response response, Class<T> entityType);
+
+// DigestResponse is no longer publicly visible, instead returning Try<Can<T>>
+<T> Try<Can<T>> digestList(Response response, Class<T> entityType, GenericType<List<T>> genericType);
+----
+
+=== Mappings
+
+[source, xml]
+.Mappings
+----
+<!-- all removed
+<groupId>org.apache.isis.mappings</groupId>
+<artifactId>isis-mappings-...</artifactId>
+-->
+----
+
+=== Mavendeps
+
+[source, xml]
+.integtests
+----
+<!-- removed
+<groupId>org.apache.isis.mavendeps</groupId>
+<artifactId>isis-mavendeps-integtests</artifactId>
+<type>pom</type>
+-->
+
+<!-- instead use directly as required ... -->
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-integtestsupport-applib</artifactId>
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-fakedata-applib</artifactId>
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-fixtures-applib</artifactId>
+----
+
+[source, xml]
+.unittests
+----
+<!-- removed
+<groupId>org.apache.isis.mavendeps</groupId>
+<artifactId>isis-mavendeps-unittests</artifactId>
+<type>pom</type>
+-->
+
+<!-- instead use directly as required ... -->
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-unittestsupport-applib</artifactId>
+
+<groupId>org.apache.isis.testing</groupId>
+<artifactId>isis-testing-fakedata-applib</artifactId>
+----
+
+

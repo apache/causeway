@@ -26,15 +26,15 @@ This table summarises all releases of Apache Isis v2.0 to date.
 * xref:relnotes:ROOT:2022/2.0.0-RC1/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2022/2.0.0-RC1/mignotes.adoc[Migration Notes]
 
-| 2.0.0-RC1
+| 2.0.0-M8
 | not released yet (upcoming)
-| First release candidate for Apache Isis 2.0.0
+| Eighth milestone release for Apache Isis 2.0.0
 | ?
 | ?
 | ?
 |
-* xref:relnotes:ROOT:2022/2.0.0-RC1/relnotes.adoc[Release Notes]
-* xref:relnotes:ROOT:2022/2.0.0-RC1/mignotes.adoc[Migration Notes]
+* xref:relnotes:ROOT:2022/2.0.0-M8/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2022/2.0.0-M8/mignotes.adoc[Migration Notes]
 
 | 2.0.0-M7
 | 28-02-2022
