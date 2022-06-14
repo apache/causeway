@@ -255,10 +255,6 @@ table.tableblock.grid-all td.tableblock {
     padding: 5px;
 }
 
-div.exceptionStackTracePanel div.errorInfo h2.mainMessage {
-    margin-left: -32px;
-}
-
 div.listingblock div.title {
     font-style: italic;
     color: darkred;
