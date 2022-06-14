@@ -38,7 +38,7 @@ import javax.inject.Named;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Deprecated(forRemoval = true, since = "2.0.0-RC1")
+@Deprecated(forRemoval = true, since = "2.0.0-M8")
 public @interface LogicalTypeName {
 
     /**

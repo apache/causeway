@@ -85,7 +85,7 @@ public @interface DomainService {
      * @deprecated use Spring semantics instead, eg. {@link Named} or equivalent
      * @see Named
      */
-    @Deprecated(forRemoval = true, since = "2.0.0-RC1")
+    @Deprecated(forRemoval = true, since = "2.0.0-M8")
     // commented out: let the IsisBeanFactoryPostProcessorForSpring take care of that!
     //@AliasFor(annotation = Named.class, attribute = "value")
     String logicalTypeName()

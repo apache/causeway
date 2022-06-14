@@ -51,7 +51,7 @@ public @interface Value {
       * @deprecated use {@link Named} instead
      * @see Named
      */
-    @Deprecated(forRemoval = true, since = "2.0.0-RC1")
+    @Deprecated(forRemoval = true, since = "2.0.0-M8")
     String logicalTypeName()
             default "";
 

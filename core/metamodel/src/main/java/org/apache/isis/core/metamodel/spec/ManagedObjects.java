@@ -514,6 +514,17 @@ public final class ManagedObjects {
         }
     };
 
+    // -- VIEWMODEL UTILITIES
+
+    public static void refreshViewmodel(
+            final @Nullable ManagedObject viewmodel,
+            final @Nullable Supplier<Bookmark> bookmarkSupplier) {
+        if(isNullOrUnspecifiedOrEmpty(viewmodel)) {
+            return; // do nothing
+        }
+        viewmodel.refreshViewmodel(bookmarkSupplier);
+    }
+
     // -- TITLE UTILITIES
 
     @UtilityClass
@@ -1121,15 +1132,6 @@ public final class ManagedObjects {
                     .collect(_Sets.toUnmodifiable());
         }
 
-    }
-
-    public static void refreshViewmodel(
-            final @Nullable ManagedObject viewmodel,
-            final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-        if(isNullOrUnspecifiedOrEmpty(viewmodel)) {
-            return; // do nothing
-        }
-        viewmodel.refreshViewmodel(bookmarkSupplier);
     }
 
 }
