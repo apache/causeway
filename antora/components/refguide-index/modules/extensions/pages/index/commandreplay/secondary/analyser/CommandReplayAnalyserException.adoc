@@ -8,7 +8,7 @@
 ----
 class CommandReplayAnalyserException {
   void init()
-  String analyzeReplay(ICommandLog commandLog)
+  String analyzeReplay(CommandLogEntry commandLogEntry)
 }
 ----
 

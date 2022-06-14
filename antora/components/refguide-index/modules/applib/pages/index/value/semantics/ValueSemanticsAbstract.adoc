@@ -7,7 +7,6 @@
 .ValueSemanticsAbstract.java
 ----
 class ValueSemanticsAbstract<T> {
-  public static final String NULL_REPRESENTATION;
   OrderRelation<T, ?> getOrderRelation()
   Converter<T, ?> getConverter()
   Renderer<T> getRenderer()

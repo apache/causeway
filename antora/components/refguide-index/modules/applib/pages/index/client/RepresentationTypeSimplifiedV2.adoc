@@ -9,6 +9,7 @@
 enum RepresentationTypeSimplifiedV2 {
   OBJECT     // <.>
   OBJECT_COLLECTION     // <.>
+  OBJECT_PROPERTY     // <.>
   LIST     // <.>
   VALUE     // <.>
   VALUES     // <.>
@@ -17,6 +18,7 @@ enum RepresentationTypeSimplifiedV2 {
 final String typeLiteral;
   boolean isObject()
   boolean isObjectCollection()
+  boolean isObjectProperty()
   boolean isList()
   boolean isValue()
   boolean isValues()
@@ -36,6 +38,11 @@ The media type used as content-Type header when a domain object is rendered.
 +
 --
 The media type used as content-Type header when a parented collection is rendered.
+--
+<.> xref:#OBJECT_PROPERTY[OBJECT_PROPERTY]
++
+--
+The media type used as content-Type header when an object property is rendered.
 --
 <.> xref:#LIST[LIST]
 +
@@ -69,6 +76,11 @@ The media type used as content-Type header when a domain object is rendered.
 === OBJECT_COLLECTION
 
 The media type used as content-Type header when a parented collection is rendered.
+
+[#OBJECT_PROPERTY]
+=== OBJECT_PROPERTY
+
+The media type used as content-Type header when an object property is rendered.
 
 [#LIST]
 === LIST

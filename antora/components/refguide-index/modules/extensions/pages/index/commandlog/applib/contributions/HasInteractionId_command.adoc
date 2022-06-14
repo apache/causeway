@@ -1,23 +1,24 @@
-= Object_recentCommands
+= HasInteractionId_command
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-This mixin contributes a `recentCommands` action to any domain object (unless also xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] - commands don't themselves have commands).
+This mixin contributes a `command` action to any (non-command) implementation of xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] ; that is: audit entries, and published events. Thus, it is possible to navigate from the effect back to the cause.
 
 == API
 
 [source,java]
-.Object_recentCommands.java
+.HasInteractionId_command.java
 ----
-class Object_recentCommands {
-  List<CommandJdo> act()
+class HasInteractionId_command {
+  CommandLogEntry act()
   boolean hideAct()     // <.>
+  String disableAct()
 }
 ----
 
 <.> xref:#hideAct__[hideAct()]
 +
 --
-Hide if the mixee is itself xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] (commands don't have commands).
+Hide if the contributee is a xref:refguide:applib:index/services/command/Command.adoc[Command] , because xref:refguide:applib:index/services/command/Command.adoc[Command] s already have a _Command#getParent() parent_ property.
 --
 
 == Members
@@ -25,4 +26,4 @@ Hide if the mixee is itself xref:refguide:applib:index/mixins/system/HasInteract
 [#hideAct__]
 === hideAct()
 
-Hide if the mixee is itself xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] (commands don't have commands).
+Hide if the contributee is a xref:refguide:applib:index/services/command/Command.adoc[Command] , because xref:refguide:applib:index/services/command/Command.adoc[Command] s already have a _Command#getParent() parent_ property.

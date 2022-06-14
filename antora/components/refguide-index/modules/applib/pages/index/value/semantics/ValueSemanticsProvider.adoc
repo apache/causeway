@@ -22,6 +22,7 @@ interface ValueSemanticsProvider<T> {
   Renderer<T> getRenderer()     // <.>
   Parser<T> getParser()     // <.>
   DefaultsProvider<T> getDefaultsProvider()     // <.>
+  ValueSemanticsProvider<X> castTo(Class<X> cls)
   boolean isEnumType()
   boolean isNumberType()
   boolean isTemporalType()

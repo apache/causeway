@@ -1,0 +1,49 @@
+= @PdfJsViewer
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+An annotation that can be applied on a _Property_ or a _Parameter_ of type _org.apache.isis.applib.value.Blob_ . Such property/parameter will be visualized withPDF.jsviewer.
+
+== API
+
+[source,java]
+.PdfJsViewer.java
+----
+@interface PdfJsViewer {
+  int initialPageNum() default 1;     // <.>
+  Scale initialScale() default Scale._1_00;     // <.>
+  int initialHeight() default 800;     // <.>
+}
+----
+
+<.> xref:#initialPageNum[initialPageNum]
++
+--
+The page (number) to render, when this particular domain object('s property) is rendered the first time.
+--
+<.> xref:#initialScale[initialScale]
++
+--
+The scale to render; defaults to 100%.
+--
+<.> xref:#initialHeight[initialHeight]
++
+--
+The (pixel) height of the panel; defaults to 800px.
+--
+
+== Members
+
+[#initialPageNum]
+=== initialPageNum
+
+The page (number) to render, when this particular domain object('s property) is rendered the first time.
+
+[#initialScale]
+=== initialScale
+
+The scale to render; defaults to 100%.
+
+[#initialHeight]
+=== initialHeight
+
+The (pixel) height of the panel; defaults to 800px.

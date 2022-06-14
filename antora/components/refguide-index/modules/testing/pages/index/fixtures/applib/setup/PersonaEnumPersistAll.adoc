@@ -6,7 +6,7 @@
 [source,java]
 .PersonaEnumPersistAll.java
 ----
-class PersonaEnumPersistAll<E, T> {
+class PersonaEnumPersistAll<T, E, B> {
   PersonaEnumPersistAll(Class<E> personaEnumClass)
   Integer getNumber()
   void setNumber(Integer number)

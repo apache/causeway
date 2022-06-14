@@ -1,0 +1,60 @@
+= PdfJsViewerAdvisor _(interface)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+SPI service interface.
+
+== API
+
+[source,java]
+.PdfJsViewerAdvisor.java
+----
+interface PdfJsViewerAdvisor {
+  Advice advise(InstanceKey instanceKey)     // <.>
+  void pageNumChangedTo(InstanceKey instanceKey, int pageNum)     // <.>
+  void scaleChangedTo(InstanceKey instanceKey, Scale scale)     // <.>
+  void heightChangedTo(InstanceKey instanceKey, int height)     // <.>
+}
+----
+
+<.> xref:#advise__InstanceKey[advise(InstanceKey)]
++
+--
+The main SPI called by the viewer.
+--
+<.> xref:#pageNumChangedTo__InstanceKey_int[pageNumChangedTo(InstanceKey, int)]
++
+--
+Updates the service implementation whenever the user updates the page number, for a particular object/property/user (ie ViewerKey).
+--
+<.> xref:#scaleChangedTo__InstanceKey_Scale[scaleChangedTo(InstanceKey, Scale)]
++
+--
+Updates the service implementation whenever the user updates the scale, for a particular object/property/user (ie ViewerKey).
+--
+<.> xref:#heightChangedTo__InstanceKey_int[heightChangedTo(InstanceKey, int)]
++
+--
+Updates the service implementation whenever the user updates the height, for a particular object/property/user (ie ViewerKey).
+--
+
+== Members
+
+[#advise__InstanceKey]
+=== advise(InstanceKey)
+
+The main SPI called by the viewer.
+
+[#pageNumChangedTo__InstanceKey_int]
+=== pageNumChangedTo(InstanceKey, int)
+
+Updates the service implementation whenever the user updates the page number, for a particular object/property/user (ie ViewerKey).
+
+[#scaleChangedTo__InstanceKey_Scale]
+=== scaleChangedTo(InstanceKey, Scale)
+
+Updates the service implementation whenever the user updates the scale, for a particular object/property/user (ie ViewerKey).
+
+[#heightChangedTo__InstanceKey_int]
+=== heightChangedTo(InstanceKey, int)
+
+Updates the service implementation whenever the user updates the height, for a particular object/property/user (ie ViewerKey).

@@ -3,7 +3,7 @@
 
 Optional SPI service that allows a xref:refguide:extensions:index/fullcalendar/applib/Calendarable.adoc[Calendarable] or xref:refguide:extensions:index/fullcalendar/applib/CalendarEventable.adoc[CalendarEventable] object to be translated/dereferenced to some other object, typically its owner. The markers on the calendar then open up the dereferenced object, rather than the original xref:refguide:extensions:index/fullcalendar/applib/Calendarable.adoc[Calendarable] or xref:refguide:extensions:index/fullcalendar/applib/CalendarEventable.adoc[CalendarEventable] object.
 
-For example, the `incode-module-commchannel` 's `Note` implements `CalendarEventable` , but this service allows the _owner_ of the `Note` (ie the `Notable` ) sto be shown instead.
+For example, the `incode-module-commchannel` 's `Note` implements `CalendarEventable` , but this service allows the _owner_ of the `Note` (ie the `Notable` ) to be shown instead.
 
 == API
 

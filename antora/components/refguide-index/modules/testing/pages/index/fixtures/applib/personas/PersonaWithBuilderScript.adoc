@@ -10,8 +10,8 @@ Intended for persona enums to implement, to provide an instance of a xref:refgui
 [source,java]
 .PersonaWithBuilderScript.java
 ----
-interface PersonaWithBuilderScript<T> {
-  T builder()     // <.>
+interface PersonaWithBuilderScript<T, B> {
+  B builder()     // <.>
 }
 ----
 

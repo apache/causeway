@@ -23,8 +23,8 @@ public static final String LOGICAL_TYPE_NAME;
   Object recreateObjectsAndReturnFirst()     // <.>
   boolean hideRecreateObjectsAndReturnFirst()
   void run(FixtureScript... fixtureScriptList)
-  void runPersonas(PersonaWithBuilderScript<? extends BuilderScriptAbstract<?>>... personaScripts)
-  T runPersona(PersonaWithBuilderScript<? extends BuilderScriptAbstract<? extends T>> persona)
+  void runPersonas(PersonaWithBuilderScript<?, ? extends BuilderScriptAbstract<?>>... personaScripts)
+  T runPersona(PersonaWithBuilderScript<T, ? extends BuilderScriptAbstract<? extends T>> persona)
   T runBuilder(BuilderScriptAbstract<T> builderScript)     // <.>
   T runBuilderScriptNonTransactional(BuilderScriptAbstract<T> builderScript)     // <.>
   String findFixtureScriptNameFor(Class<? extends FixtureScript> fixtureScriptClass)

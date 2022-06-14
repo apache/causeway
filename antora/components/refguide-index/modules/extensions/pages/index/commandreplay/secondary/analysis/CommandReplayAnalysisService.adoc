@@ -7,11 +7,11 @@
 .CommandReplayAnalysisService.java
 ----
 class CommandReplayAnalysisService {
-  void analyse(ICommandLog commandLog)     // <.>
+  void analyse(CommandLogEntry commandLogEntry)     // <.>
 }
 ----
 
-<.> xref:#analyse__ICommandLog[analyse(ICommandLog)]
+<.> xref:#analyse__CommandLogEntry[analyse(CommandLogEntry)]
 +
 --
 if hit an issue with the command having been replayed, then mark this as in error. This will effectively block the running of any further commands until the administrator fixes the issue.
@@ -19,7 +19,7 @@ if hit an issue with the command having been replayed, then mark this as in erro
 
 == Members
 
-[#analyse__ICommandLog]
-=== analyse(ICommandLog)
+[#analyse__CommandLogEntry]
+=== analyse(CommandLogEntry)
 
 if hit an issue with the command having been replayed, then mark this as in error. This will effectively block the running of any further commands until the administrator fixes the issue.

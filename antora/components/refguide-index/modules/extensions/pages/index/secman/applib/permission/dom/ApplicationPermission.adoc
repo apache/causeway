@@ -17,12 +17,8 @@ For a given permission, there is an interaction between the xref:refguide:extens
 ----
 class ApplicationPermission {
   public static final String LOGICAL_TYPE_NAME;
-  public static final String NAMED_QUERY_FIND_BY_FEATURE;
-  public static final String NAMED_QUERY_FIND_BY_ROLE;
-  public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE;
-  public static final String NAMED_QUERY_FIND_BY_ROLE_RULE_FEATURE_FQN;
-  public static final String NAMED_QUERY_FIND_BY_USER;
-  public static final String NAMED_QUERY_FIND_BY_ROLE_NAMES;
+  public static final String SCHEMA;
+  public static final String TABLE;
   String title()
   String getSort()
   ApplicationFeature findFeature(ApplicationFeatureId featureId)

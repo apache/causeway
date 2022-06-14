@@ -9,6 +9,8 @@ String representation of any persistable or re-creatable object managed by the f
 .Bookmark.java
 ----
 class Bookmark {
+  Bookmark empty(LogicalType logicalType)
+  Bookmark emptyForLogicalTypeName(String logicalTypeName)
   Bookmark forLogicalTypeNameAndIdentifier(String logicalTypeName, String identifier)
   Bookmark forLogicalTypeAndIdentifier(LogicalType logicalType, String identifier)
   Bookmark forOidDto(OidDto oidDto)
@@ -23,6 +25,7 @@ class Bookmark {
   int hashCode()
   String toString()
   String stringifyHonoringHintIfAny()     // <.>
+  boolean isEmpty()     // <.>
 }
 ----
 
@@ -36,6 +39,11 @@ Round-trip with _#stringify()_ representation.
 --
 Analogous to _#stringify()_ , but replaces the _identifier_ string with the _hintId_ if present and not empty.
 --
+<.> xref:#isEmpty__[isEmpty()]
++
+--
+Whether represents _null_ .
+--
 
 == Members
 
@@ -48,3 +56,8 @@ Round-trip with _#stringify()_ representation.
 === stringifyHonoringHintIfAny()
 
 Analogous to _#stringify()_ , but replaces the _identifier_ string with the _hintId_ if present and not empty.
+
+[#isEmpty__]
+=== isEmpty()
+
+Whether represents _null_ .

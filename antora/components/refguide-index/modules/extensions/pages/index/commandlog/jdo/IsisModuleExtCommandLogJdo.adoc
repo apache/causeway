@@ -8,6 +8,7 @@
 ----
 class IsisModuleExtCommandLogJdo {
   public static final String NAMESPACE;
+  public static final String SCHEMA;
   FixtureScript getTeardownFixtureWillDelete()     // <.>
 }
 ----
@@ -15,7 +16,7 @@ class IsisModuleExtCommandLogJdo {
 <.> xref:#getTeardownFixtureWillDelete__[getTeardownFixtureWillDelete()]
 +
 --
-For tests that need to delete the command table first. Should be run in the @Before of the test.
+For tests that need to delete the command table first. Should be run in the @BeforeEach of the test.
 --
 
 == Members
@@ -23,4 +24,4 @@ For tests that need to delete the command table first. Should be run in the @Bef
 [#getTeardownFixtureWillDelete__]
 === getTeardownFixtureWillDelete()
 
-For tests that need to delete the command table first. Should be run in the @Before of the test.
+For tests that need to delete the command table first. Should be run in the @BeforeEach of the test.

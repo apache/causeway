@@ -8,10 +8,8 @@
 ----
 class ApplicationUser {
   public static final String LOGICAL_TYPE_NAME;
-  public static final String NAMED_QUERY_FIND_BY_USERNAME;
-  public static final String NAMED_QUERY_FIND_BY_EMAIL_ADDRESS;
-  public static final String NAMED_QUERY_FIND;
-  public static final String NAMED_QUERY_FIND_BY_ATPATH;
+  public static final String SCHEMA;
+  public static final String TABLE;
   String title()
   String iconName()
   String getName()

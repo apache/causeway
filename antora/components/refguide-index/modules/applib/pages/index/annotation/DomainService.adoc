@@ -11,12 +11,18 @@ Also indicates whether the domain service acts as a repository for an entity, an
 .DomainService.java
 ----
 @interface DomainService {
+  String[] aliased() default {};     // <.>
   NatureOfService nature() default NatureOfService.VIEW;     // <.>
-  @Deprecated(forRemoval = true, since = "2.0.0-RC1")
+  @Deprecated(forRemoval = true, since = "2.0.0-M8")
 String logicalTypeName() default "";     // <.>
 }
 ----
 
+<.> xref:#aliased[aliased]
++
+--
+Alternative logical type name(s) for the annotated type.
+--
 <.> xref:#nature[nature]
 +
 --
@@ -36,6 +42,11 @@ The logical name of this object's type, that uniquely and fully qualifies it. Th
 --
 
 == Members
+
+[#aliased]
+=== aliased
+
+Alternative logical type name(s) for the annotated type.
 
 [#nature]
 === nature

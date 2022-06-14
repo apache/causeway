@@ -55,10 +55,10 @@ class ExecutionContext {
   T addResult(FixtureScript script, T object)
   T addResult(FixtureScript script, String key, T object)
   T lookup(String key, Class<T> cls)
-  void executeChild(FixtureScript callingFixtureScript, PersonaWithBuilderScript<?> personaWithBuilderScript)
-  T executeChildT(FixtureScript callingFixtureScript, PersonaWithBuilderScript<F> personaWithBuilderScript)
+  void executeChild(FixtureScript callingFixtureScript, PersonaWithBuilderScript<?, ?> personaWithBuilderScript)
+  T executeChildT(FixtureScript callingFixtureScript, PersonaWithBuilderScript<T, F> personaWithBuilderScript)
   void executeChild(FixtureScript callingFixtureScript, FixtureScript childFixtureScript)     // <.>
-  void executeChildren(FixtureScript callingFixtureScript, PersonaWithBuilderScript<?>... personaWithBuilderScripts)
+  void executeChildren(FixtureScript callingFixtureScript, PersonaWithBuilderScript<?, ?>... personaWithBuilderScripts)
   void executeChildren(FixtureScript callingFixtureScript, Class<T> personaClass)
   void executeChildren(FixtureScript callingFixtureScript, FixtureScript... fixtureScripts)
   void executeChildren(FixtureScript callingFixtureScript, List<FixtureScript> fixtureScripts)

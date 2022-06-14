@@ -12,10 +12,10 @@ interface DomainChangeRecord {
   ChangeType getType()     // <.>
   UUID getInteractionId()     // <.>
   String getUsername()     // <.>
-  Timestamp getTimestamp()     // <.>
+  java.sql.Timestamp getTimestamp()     // <.>
   String getTargetObjectType()     // <.>
   Bookmark getTarget()     // <.>
-  String getTargetMember()     // <.>
+  String getTargetMember()
   String getPreValue()     // <.>
   String getPostValue()     // <.>
 }
@@ -29,7 +29,7 @@ Distinguishes commands from audit entries from published events/interactions (wh
 <.> xref:#getInteractionId__[getInteractionId()]
 +
 --
-The unique identifier (a GUID) of the _org.apache.isis.applib.services.iactn.Interaction_ within which this change occurred.
+The unique identifier of the _org.apache.isis.applib.services.iactn.Interaction_ within which this change occurred.
 --
 <.> xref:#getUsername__[getUsername()]
 +
@@ -50,11 +50,6 @@ The object type of the domain object being changed.
 +
 --
 The xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
---
-<.> xref:#getTargetMember__[getTargetMember()]
-+
---
-The member interaction (ie action invocation or property edit) which caused the domain object to be changed.
 --
 <.> xref:#getPreValue__[getPreValue()]
 +
@@ -77,7 +72,7 @@ Distinguishes commands from audit entries from published events/interactions (wh
 [#getInteractionId__]
 === getInteractionId()
 
-The unique identifier (a GUID) of the _org.apache.isis.applib.services.iactn.Interaction_ within which this change occurred.
+The unique identifier of the _org.apache.isis.applib.services.iactn.Interaction_ within which this change occurred.
 
 [#getUsername__]
 === getUsername()
@@ -98,13 +93,6 @@ The object type of the domain object being changed.
 === getTarget()
 
 The xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
-
-[#getTargetMember__]
-=== getTargetMember()
-
-The member interaction (ie action invocation or property edit) which caused the domain object to be changed.
-
-Populated for commands and for published events that represent action invocations or property edits.
 
 [#getPreValue__]
 === getPreValue()

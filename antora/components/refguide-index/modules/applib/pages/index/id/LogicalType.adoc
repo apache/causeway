@@ -16,6 +16,7 @@ class LogicalType {
   LogicalType lazy(Class<?> correspondingClass, Supplier<String> logicalNameProvider)     // <.>
   LogicalType eager(Class<?> correspondingClass, String logicalName)     // <.>
   LogicalType fqcn(Class<?> correspondingClass)     // <.>
+  LogicalType infer(Class<?> correspondingClass)     // <.>
   String getClassName()     // <.>
   String getLogicalTypeName()     // <.>
   String getLogicalTypeSimpleName()     // <.>
@@ -42,6 +43,11 @@ Returns a new TypeIdentifier based on the corresponding class and (ahead of time
 +
 --
 Use the corresponding class's fully qualified name for the _logicalName_ . Most likely used in testing scenarios.
+--
+<.> xref:#infer__Class[infer(Class)]
++
+--
+Infer from annotations.
 --
 <.> xref:#getClassName__[getClassName()]
 +
@@ -85,6 +91,11 @@ Returns a new TypeIdentifier based on the corresponding class and (ahead of time
 === fqcn(Class)
 
 Use the corresponding class's fully qualified name for the _logicalName_ . Most likely used in testing scenarios.
+
+[#infer__Class]
+=== infer(Class)
+
+Infer from annotations.
 
 [#getClassName__]
 === getClassName()

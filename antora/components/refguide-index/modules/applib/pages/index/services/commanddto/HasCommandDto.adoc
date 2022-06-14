@@ -9,7 +9,7 @@ Objects implementing this interface will be processed automatically by _org.apac
 .HasCommandDto.java
 ----
 interface HasCommandDto {
-  CommandDto getCommandDto()
+  org.apache.isis.schema.cmd.v2.CommandDto getCommandDto()
 }
 ----
 

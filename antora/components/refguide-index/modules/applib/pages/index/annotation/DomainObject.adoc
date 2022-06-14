@@ -9,6 +9,7 @@ Domain semantics for domain objects (entities and view models; for services see 
 .DomainObject.java
 ----
 @interface DomainObject {
+  String[] aliased() default {};     // <.>
   Class<?> autoCompleteRepository() default Object.class;     // <.>
   String autoCompleteMethod() default "autoComplete";     // <.>
   Bounding bounding() default Bounding.NOT_SPECIFIED;     // <.>
@@ -18,7 +19,8 @@ Domain semantics for domain objects (entities and view models; for services see 
   Introspection introspection() default Introspection.NOT_SPECIFIED;     // <.>
   String mixinMethod() default "$$";     // <.>
   Nature nature() default Nature.NOT_SPECIFIED;     // <.>
-  String logicalTypeName() default "";     // <.>
+  @Deprecated(forRemoval = true, since = "2.0.0-M8")
+String logicalTypeName() default "";     // <.>
   Class<? extends ObjectCreatedEvent<?>> createdLifecycleEvent() default ObjectCreatedEvent.Default.class;     // <.>
   Class<? extends ObjectPersistingEvent<?>> persistingLifecycleEvent() default ObjectPersistingEvent.Default.class;     // <.>
   Class<? extends ObjectPersistedEvent<?>> persistedLifecycleEvent() default ObjectPersistedEvent.Default.class;     // <.>
@@ -32,6 +34,11 @@ Domain semantics for domain objects (entities and view models; for services see 
 }
 ----
 
+<.> xref:#aliased[aliased]
++
+--
+Alternative logical type name(s) for the annotated type.
+--
 <.> xref:#autoCompleteRepository[autoCompleteRepository]
 +
 --
@@ -80,6 +87,13 @@ The nature of this domain object.
 <.> xref:#logicalTypeName[logicalTypeName]
 +
 --
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _Named_ instead
+====
+
 The logical name of this object's type, that uniquely and fully qualifies it. The logical name is analogous to - but independent of - the actual fully qualified class name. eg. _sales.Customer_ for a class 'org.mycompany.dom.Customer'
 --
 <.> xref:#createdLifecycleEvent[createdLifecycleEvent]
@@ -134,6 +148,11 @@ Indicates that changes to _any_ collection of the domain object (that do not the
 --
 
 == Members
+
+[#aliased]
+=== aliased
+
+Alternative logical type name(s) for the annotated type.
 
 [#autoCompleteRepository]
 === autoCompleteRepository
@@ -196,6 +215,13 @@ The nature of this domain object.
 
 [#logicalTypeName]
 === logicalTypeName
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _Named_ instead
+====
 
 The logical name of this object's type, that uniquely and fully qualifies it. The logical name is analogous to - but independent of - the actual fully qualified class name. eg. _sales.Customer_ for a class 'org.mycompany.dom.Customer'
 

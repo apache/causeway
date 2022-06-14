@@ -12,8 +12,8 @@ The xref:refguide:testing:index/fixtures/applib/personas/PersonaWithBuilderScrip
 ----
 class BuilderScriptAbstract<T> {
   BuilderScriptAbstract<T> build(FixtureScript parentFixtureScript, ExecutionContext executionContext)
-  T objectFor(PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona, ExecutionContext executionContext)
-  T findUsing(PersonaWithFinder<T> persona)
+  X objectFor(P persona, FixtureScript.ExecutionContext ec)
+  X findUsing(P persona)
 }
 ----
 
