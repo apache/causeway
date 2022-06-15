@@ -58,8 +58,10 @@ import org.apache.isis.applib.value.Clob;
 public @interface Action {
 
     /**
-     * References a collection of a certain element type, for an action with a collection parameter of that
-     * element type; the action's choices will be automatically populated from checkboxes rendered in the collection.
+     * References a collection of a certain element type (by its member-id), 
+     * for an action with scalar or collection parameters of that element type; 
+     * the action's choices will be automatically populated from checkboxes rendered in the collection
+     * (multi-select).
      *
      * <p>
      *     This will also result in the action being rendered near to the collection, similar to the way in
