@@ -90,7 +90,9 @@ implements ScalarModelSubscriber {
         COMPOSITE,
         TRISTATE,
         BLOB,
-        BADGE
+        BADGE,
+        /** render output un-escaped; careful not to allow XSS vulnerabilities*/
+        NO_OUTPUT_ESCAPE
     }
 
     public enum Repaint {

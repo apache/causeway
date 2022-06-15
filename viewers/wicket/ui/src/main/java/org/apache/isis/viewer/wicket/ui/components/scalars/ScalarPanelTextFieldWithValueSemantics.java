@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.EnumSet;
+
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
@@ -50,6 +52,11 @@ extends ScalarPanelTextFieldAbstract<T> {
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {
         return new ConverterBasedOnValueSemantics<>(propOrParam, scalarRepresentation);
+    }
+
+    @Override
+    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
+        modifiers.add(FormatModifier.NO_OUTPUT_ESCAPE);
     }
 
 }

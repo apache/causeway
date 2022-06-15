@@ -107,11 +107,7 @@ implements
         if(input==null) {
             return null;
         }
-        try {
-            return new java.net.URL(input);
-        } catch (final MalformedURLException ex) {
-            throw new IllegalArgumentException("Not parseable as an URL ('" + input + "')", ex);
-        }
+        return _Strings.toUrlWithXssGuard(input).orElse(null);
     }
 
     @Override

@@ -19,7 +19,6 @@
 package org.apache.isis.applib.value;
 
 import java.io.Serializable;
-import java.net.URISyntaxException;
 import java.util.function.UnaryOperator;
 
 import javax.inject.Named;
@@ -30,6 +29,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.commons.internal.base._Blackhole;
+import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -120,9 +121,9 @@ public final class LocalResourcePath implements Serializable {
             return;
         }
         try {
-            // used for syntax testing
-            new java.net.URI("http://localhost/"+path);
-        } catch (URISyntaxException e) {
+            // path syntax check
+            _Blackhole.consume(_Strings.toUrlWithXssGuard("http://localhost/"+path));
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(String.format("the given local path has an invalid syntax: '%s'", path), e);
         }
     }

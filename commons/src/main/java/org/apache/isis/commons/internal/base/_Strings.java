@@ -21,6 +21,8 @@ package org.apache.isis.commons.internal.base;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -533,6 +535,43 @@ public final class _Strings {
     public static Stream<String> grep(final @Nullable String input, final @Nullable String contains){
         final Predicate<String> matcher = contains!=null ? line->line.contains(contains) : _Predicates.alwaysTrue();
         return grep(input, matcher);
+    }
+
+    // -- XSS GUARDS
+
+    /**
+     * @throws IllegalArgumentException - when an XSS attack is encountered, or the URL is not parseable
+     * @implNote unfortunately has potential for false positives; but shall do for now
+     */
+    public static Optional<URL> toUrlWithXssGuard(final @Nullable String urlString) {
+        if(urlString==null) {
+            return Optional.empty();
+        }
+        if(_Strings.condenseWhitespaces(urlString.toLowerCase(), "").contains("javascript:")) {
+            // simple guard against XSS attacks like javascript:alert(document)
+            throw new IllegalArgumentException("Not parseable as an URL ('" + urlString + "').");
+        }
+        try {
+            return Optional.of(new java.net.URL(urlString));
+        } catch (final MalformedURLException ex) {
+            throw new IllegalArgumentException("Not parseable as an URL ('" + urlString + "').", ex);
+        }
+    }
+
+    /**
+     * @throws IllegalArgumentException - when scripts are encountered
+     * @implNote unfortunately has potential for false positives; but shall do for now
+     */
+    public static String htmlNoScript(final @Nullable String html) {
+        if(html==null) {
+            return null;
+        }
+        val condensed = _Strings.condenseWhitespaces(html.toLowerCase(), "");
+        if(condensed.contains("javascript:")
+                || condensed.contains("<script")) {
+            throw new IllegalArgumentException("Not parseable as html free of scripts content.");
+        }
+        return html;
     }
 
 

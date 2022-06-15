@@ -136,7 +136,9 @@ extends ScalarPanelAbstract {
         }
         return CompactFragment.LABEL
                     .createFragment(id, this, scalarValueId->
-                        Wkt.label(scalarValueId, this::obtainOutputFormat));
+                        getFormatModifiers().contains(FormatModifier.NO_OUTPUT_ESCAPE)
+                            ? Wkt.markup(scalarValueId, this::obtainOutputFormat)
+                            : Wkt.label(scalarValueId, this::obtainOutputFormat));
     }
 
     private boolean isUsingTextarea() {
