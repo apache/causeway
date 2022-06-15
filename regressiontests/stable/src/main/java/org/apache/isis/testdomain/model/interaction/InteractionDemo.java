@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.model.interaction;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -92,10 +93,10 @@ public class InteractionDemo {
     @XmlTransient
     private final _Lazy<List<InteractionDemoItem>> lazyItems = _Lazy.threadSafe(()->
         List.of(
-                InteractionDemoItem.of("first"),
-                InteractionDemoItem.of("second"),
-                InteractionDemoItem.of("third"),
-                InteractionDemoItem.of("last"))
+                InteractionDemoItem.of("first", LocalDate.of(2022, 01, 01)),
+                InteractionDemoItem.of("second", LocalDate.of(2022, 01, 02)),
+                InteractionDemoItem.of("third", LocalDate.of(2022, 01, 03)),
+                InteractionDemoItem.of("last", LocalDate.of(2022, 01, 04)))
     );
 
     @Collection
@@ -111,7 +112,7 @@ public class InteractionDemo {
             // choicesFrom = "items"
             final Set<InteractionDemoItem> items0,
 
-            // choicesFrom = "items"
+            // choicesFrom = "items" (repeated)
             final Set<InteractionDemoItem> items1) {
 
         if(items0!=null) {

@@ -19,7 +19,7 @@
 package org.apache.isis.testdomain.model.interaction;
 
 import java.io.Serializable;
-import java.time.Duration;
+import java.time.LocalDate;
 
 import javax.inject.Named;
 
@@ -51,18 +51,11 @@ public class InteractionDemoItem implements Serializable {
     }
 
     @Property(editing = Editing.DISABLED)
-    @PropertyLayout(describedAs="The name of this 'DemoItem'.")
+    @PropertyLayout(describedAs="The name of this 'DemoItem'.", sequence = "1.0")
     @Getter @Setter private String name;
 
-    // table row decomposition
-    @DomainObject(nature=Nature.VIEW_MODEL)
-    @Named("testdomain.InteractionDemoItem.Projection")
-    @lombok.Data
-    public class DataRowProjection {
-        String itemName;
-        Duration duration;
-        String title;
-        String description;
-    }
+    @Property(editing = Editing.DISABLED)
+    @PropertyLayout(describedAs="The date of this 'DemoItem'.", sequence = "2.0")
+    @Getter @Setter private LocalDate date;
 
 }
