@@ -58,7 +58,6 @@ extends GenericColumnAbstract {
 
     private final EntityCollectionModel.Variant collectionVariant;
     private final String propertyId;
-    private final boolean escaped;
     private final String parentTypeName;
     private final String describedAs;
 
@@ -68,23 +67,20 @@ extends GenericColumnAbstract {
             final IModel<String> columnNameModel,
             final String sortProperty,
             final String propertyId,
-            final boolean escaped,
             final String parentTypeName,
             final Optional<String> describedAs) {
 
         super(commonContext, columnNameModel, sortProperty);
         this.collectionVariant = collectionVariant;
         this.propertyId = propertyId;
-        this.escaped = escaped;
         this.parentTypeName = parentTypeName;
         this.describedAs = describedAs.orElse(null);
-
     }
 
     @Override
     public Component getHeader(final String componentId) {
         final Label label = new Label(componentId, getDisplayModel());
-        label.setEscapeModelStrings(escaped);
+        label.setEscapeModelStrings(true); // the default anyway
         if(describedAs!=null) {
             WktTooltips.addTooltip(label, describedAs);
         }

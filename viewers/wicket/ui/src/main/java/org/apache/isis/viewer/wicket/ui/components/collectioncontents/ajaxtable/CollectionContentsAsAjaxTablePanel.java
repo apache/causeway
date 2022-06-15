@@ -156,8 +156,6 @@ implements CollectionCountProvider {
 
         val collectionModel = getModel();
 
-        final boolean escaped = true;
-
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
 
         val commonContext = super.getCommonContext();
@@ -168,7 +166,6 @@ implements CollectionCountProvider {
                 Model.of(property.getCanonicalFriendlyName()),
                 property.getId(),
                 property.getId(),
-                escaped,
                 parentTypeName,
                 property.getCanonicalDescription());
     }
