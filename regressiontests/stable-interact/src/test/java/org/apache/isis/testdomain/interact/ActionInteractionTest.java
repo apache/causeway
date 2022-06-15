@@ -373,6 +373,33 @@ class ActionInteractionTest extends InteractionTestAbstract {
     }
 
     @Test
+    void actionAnnotation_withChoicesFrom_shouldProvideChoices() {
+
+        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "doSomethingWithItems", Where.OBJECT_FORMS)
+                .checkVisibility()
+                .checkUsability();
+
+        assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
+
+        val managedAction = actionInteraction.getManagedAction().get();
+        val pendingArgs = managedAction.startParameterNegotiation();
+
+        val param0Choices = pendingArgs.getObservableParamChoices(0); // observable
+        val param1Choices = pendingArgs.getObservableParamChoices(1); // observable
+
+        assertFalse(param0Choices.getValue().isEmpty());
+        assertFalse(param1Choices.getValue().isEmpty());
+
+        assertComponentWiseUnwrappedEquals(
+                new InteractionDemo().getItems(),
+                param0Choices.getValue());
+
+        assertComponentWiseUnwrappedEquals(
+                new InteractionDemo().getItems(),
+                param1Choices.getValue());
+    }
+
+    @Test
     void shouldProvideParameterBinding() {
 
         val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)

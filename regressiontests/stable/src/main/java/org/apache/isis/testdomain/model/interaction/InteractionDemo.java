@@ -44,7 +44,6 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.testdomain.model.interaction.InteractionDemoItem.CalendarEntry;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -93,10 +92,10 @@ public class InteractionDemo {
     @XmlTransient
     private final _Lazy<List<InteractionDemoItem>> lazyItems = _Lazy.threadSafe(()->
         List.of(
-                InteractionDemoItem.of("first", CalendarEntry.randomSample()),
-                InteractionDemoItem.of("second", CalendarEntry.randomSample()),
-                InteractionDemoItem.of("third", CalendarEntry.randomSample()),
-                InteractionDemoItem.of("last", CalendarEntry.randomSample()))
+                InteractionDemoItem.of("first"),
+                InteractionDemoItem.of("second"),
+                InteractionDemoItem.of("third"),
+                InteractionDemoItem.of("last"))
     );
 
     @Collection
@@ -109,12 +108,14 @@ public class InteractionDemo {
     @Action(choicesFrom = "items")
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
     public InteractionDemo doSomethingWithItems(
+            // choicesFrom = "items"
+            final Set<InteractionDemoItem> items0,
 
-            // bulk selection
-            final Set<InteractionDemoItem> items) {
+            // choicesFrom = "items"
+            final Set<InteractionDemoItem> items1) {
 
-        if(items!=null) {
-            items.forEach(item->System.out.println(item.getName()));
+        if(items0!=null) {
+            items0.forEach(item->System.out.println(item.getName()));
         }
         return this;
     }

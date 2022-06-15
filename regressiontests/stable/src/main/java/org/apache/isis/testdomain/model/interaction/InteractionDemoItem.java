@@ -20,11 +20,6 @@ package org.apache.isis.testdomain.model.interaction;
 
 import java.io.Serializable;
 import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.concurrent.ThreadLocalRandom;
 
 import javax.inject.Named;
 
@@ -34,16 +29,13 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Value;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.val;
 
 @DomainObject(nature=Nature.VIEW_MODEL)
 @Named("testdomain.InteractionDemoItem")
@@ -61,55 +53,6 @@ public class InteractionDemoItem implements Serializable {
     @Property(editing = Editing.DISABLED)
     @PropertyLayout(describedAs="The name of this 'DemoItem'.")
     @Getter @Setter private String name;
-
-    @Property(editing = Editing.DISABLED)
-    @ToString.Exclude
-    @Getter @Setter private CalendarEntry calendarEntry;
-
-    // demo tuple type
-    @Value
-    @Named("testdomain.InteractionDemoItem.CalendarEntry")
-    @lombok.Value @Builder
-    public static class CalendarEntry implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        // presentation
-        LocalDateTime instant;
-        Duration duration;
-        String title;
-        String description;
-
-        // storage representation / dto
-        @lombok.Data @lombok.Builder
-        public static class Dto {
-            long instant;
-            long duration;
-            ChronoUnit durationUnit;
-            String title;
-            String description;
-        }
-
-        public static CalendarEntry randomSample() {
-            val rand = ThreadLocalRandom.current();
-            val dto = Dto.builder()
-            .instant(rand.nextLong())
-            .duration(rand.nextLong(600))
-            .durationUnit(ChronoUnit.MINUTES)
-            .title("title-" + Integer.toHexString(rand.nextInt()))
-            .description("description-" + Integer.toHexString(rand.nextInt()))
-            .build();
-            return fromDto(dto);
-        }
-
-        public static CalendarEntry fromDto(final CalendarEntry.Dto dto) {
-            return CalendarEntry.builder()
-                    .instant(LocalDateTime.ofInstant(Instant.ofEpochMilli(dto.instant), ZoneId.systemDefault()))
-                    .duration(Duration.of(dto.duration, dto.durationUnit))
-                    .build();
-        }
-
-    }
 
     // table row decomposition
     @DomainObject(nature=Nature.VIEW_MODEL)
