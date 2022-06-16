@@ -382,7 +382,7 @@ under the License.
 
 		<htmlparser.version>2.1</htmlparser.version>
 
-		<jakarta.annotation-api.version>2.1.0</jakarta.annotation-api.version>
+		<jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
 		<jakartaee.version>8.0.0</jakartaee.version>
 		<javafaker.version>1.0.2</javafaker.version>
 		<javassist.version>3.29.0-GA</javassist.version>
