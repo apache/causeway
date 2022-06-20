@@ -1,19 +1,28 @@
 /**
+ * Renames project from 'isis' to '...'
+ *
+ * usage:
+ * <pre>
+ *    pushd scripts/rename/src
+ *    groovy Rename.groovy
+ *    popd
+ * </pre>
+ *
+ * <p>
  * This doesn't rewrite the contents of the following (binary) extensions:
  *
- * .jar
- * .zip
- *
- * .pptx
- * .docx
- * .xlsx
- *
- * .odt
- * .rtf
- * .pdf
- *
+ * <ul>
+ *     <li>.jar
+ *     <li> .zip
+ *     <li> .pptx
+ *     <li> .docx
+ *     <li> .xlsx
+ *     <li> .odt
+ *     <li> .rtf
+ *     <li> .pdf
+ * </ul>
  */
-class RenameAndRewrite {
+class Rename {
 
   // root of the repo
   static final ROOT_DIR = "../../.."
@@ -165,12 +174,11 @@ class RenameAndRewrite {
 
 }
 
-
-
 static void main(String[] args) {
-  def rr = new RenameAndRewrite()
+  def rr = new Rename()
 
   rr.renameAllFiles()
   rr.rewriteAllFileContents()
 }
+
 
