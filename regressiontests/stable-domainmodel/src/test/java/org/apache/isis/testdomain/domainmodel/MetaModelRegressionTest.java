@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.assertj.core.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -87,6 +88,9 @@ class MetaModelRegressionTest {
     @Test
     @SneakyThrows
     void metaModelDiff_compareWithLastKnownGood() {
+
+        Assumptions.assumeThat(getClass().getName()).contains("isis");  // disable if rename, as the .zip file needs to be updated.
+
         val downloadMetaModelDiff =
                 factoryService.mixin(MetaModelServiceMenu.downloadMetaModelDiff.class, metaModelServiceMenu);
         val metamodelExport =
