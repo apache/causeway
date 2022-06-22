@@ -57,15 +57,15 @@ Also raised for view models.
 
 
 |xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent]
-|xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[updatingLifecycleEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#updatedLifecycleEvent[updatedLifecycleEvent()]
 |entity has just been updated in the database.
-|xref:refguide:applib-methods:lifecycle.adoc#updating[updating()]
+|xref:refguide:applib-methods:lifecycle.adoc#updated[updated()]
 
 
 |xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent]
-|xref:refguide:applib:index/annotation/DomainObject.adoc#updatedLifecycleEvent[updatedLifecycleEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[updatingLifecycleEvent()]
 |entity is about to be updated in the database.
-|xref:refguide:applib-methods:lifecycle.adoc#updated[updated()]
+|xref:refguide:applib-methods:lifecycle.adoc#updating[updating()]
 
 
 |xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent]
