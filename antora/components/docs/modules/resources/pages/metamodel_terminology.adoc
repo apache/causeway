@@ -1,0 +1,45 @@
+# metamodel_terminology
+.metamodel_terminology
+[plantuml,file="metamodel_terminology.png"]
+--
+@startuml
+
+skinparam nodesep 20
+skinparam ranksep 1
+
+together {
+    (Domain\nObject) as DO
+    (Entity) as E
+    (View\nModel) as VM
+    DO <-d- VM : is a
+    DO <-d- E : is a
+    (Isis) as FW
+    FW .u.> VM : manages
+    (Persistence\nLayer) as PL
+    PL .u.> E : manages
+}
+
+together {
+    (Member) as MB
+    (Property) as P
+    (Collection) as C
+    (Action) as A
+    P -u-> MB : is a
+    C -u-> MB : is a
+    A -u-> MB : is a
+}
+DO --> MB : has \n at \n least \n one
+
+(Mixin) as M
+(Mixee) as ME
+
+M ..> MB : contributes
+M -> ME : to
+DO -> ME : can \n act \n as
+
+(Service) as S
+(Domain\nService) as DS
+DS -u-> S : is a
+DS --> A : contribute \n according \n to <i>Nature</i>
+@enduml
+--

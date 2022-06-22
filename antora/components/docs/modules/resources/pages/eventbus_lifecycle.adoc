@@ -1,0 +1,42 @@
+# eventbus_lifecycle
+.eventbus_lifecycle
+[plantuml,file="eventbus_lifecycle.png"]
+--
+@startuml
+
+(Event\nBus) as EB
+(Event\nListener) as EL
+EL --> EB : listens
+
+(<i>Object</i>\nLifecyleEvent) as LCE
+LCE -> EB : published to
+(Created\nEvent) as C
+C -u-> LCE : is a
+(Loaded\nEvent) as L
+L -u-> LCE : is a
+
+(Persisting\nEvent) as PNG
+PNG -u-> LCE : is a
+(Persisted\nEvent) as PED
+PED -u-> LCE : is a
+
+(Updating\nEvent) as UNG
+UNG -u-> LCE : is a
+(Updated\nEvent) as UED
+UED -u-> LCE : is a
+
+(Removing\nEvent) as RNG
+RNG -u-> LCE : is a
+
+(Factory\nService) as FS
+FS -u-> C :emits
+(Repository\nService) as RS
+RS -u-> L :emits
+RS -u-> PNG :emits
+RS -u-> PED :emits
+RS -u-> UNG :emits
+RS -u-> UED :emits
+RS -u-> RNG :emits
+
+@enduml
+--
