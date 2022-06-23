@@ -41,18 +41,18 @@ public class _Hardening {
      * @throws IllegalArgumentException - when an XSS attack is encountered, or the URL is not parseable
      * @implNote unfortunately has potential for false positives; but shall do for now
      */
-    public static Optional<URL> toUrlWithXssGuard(final @Nullable String urlString) {
-        if(urlString==null) {
+    public static Optional<URL> toUrlWithXssGuard(final @Nullable String untrustedUrl) {
+        if(_Strings.isEmpty(untrustedUrl)) {
             return Optional.empty();
         }
-        if(_Strings.condenseWhitespaces(urlString.toLowerCase(), "").contains("javascript:")) {
+        if(_Strings.condenseWhitespaces(untrustedUrl.toLowerCase(), "").contains("javascript:")) {
             // simple guard against XSS attacks like javascript:alert(document)
-            throw new IllegalArgumentException("Not parseable as an URL ('" + urlString + "').");
+            throw new IllegalArgumentException("Not parseable as an URL ('" + untrustedUrl + "').");
         }
         try {
-            return Optional.of(new java.net.URL(urlString));
+            return Optional.of(new java.net.URL(untrustedUrl));
         } catch (final MalformedURLException ex) {
-            throw new IllegalArgumentException("Not parseable as an URL ('" + urlString + "').", ex);
+            throw new IllegalArgumentException("Not parseable as an URL ('" + untrustedUrl + "').", ex);
         }
     }
 
