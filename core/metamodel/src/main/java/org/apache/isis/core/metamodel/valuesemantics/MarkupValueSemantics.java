@@ -29,6 +29,7 @@ import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.hardening._Hardening;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
@@ -83,7 +84,7 @@ implements
     @Override
     public Markup parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
         return text!=null
-                ? new Markup(text)
+                ? new Markup(_Hardening.toSafeHtml(text))
                 : null;
     }
 

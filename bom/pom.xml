@@ -404,6 +404,7 @@ under the License.
 		<jquery-ui.version>1.13.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
 		<jsr305.version>3.0.2</jsr305.version>
+		<jsoup.version>1.15.1</jsoup.version>
 		<junit-jupiter.version>5.8.2</junit-jupiter.version> <!-- overrides spring -->
 		<junit-platform.version>1.8.2</junit-platform.version>
 

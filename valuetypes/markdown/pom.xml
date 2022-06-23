@@ -48,13 +48,6 @@
 				</property>
 			</activation>
 			<dependencyManagement>
-				<dependencies>
-					<dependency>
-						<groupId>org.jsoup</groupId>
-						<artifactId>jsoup</artifactId>
-						<version>1.15.1</version>
-					</dependency>
-				</dependencies>
 			</dependencyManagement>
 		</profile>
 	</profiles>

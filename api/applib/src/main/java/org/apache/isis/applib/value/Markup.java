@@ -31,7 +31,6 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._Text;
-import org.apache.isis.commons.internal.hardening._Hardening;
 
 import lombok.EqualsAndHashCode;
 
@@ -59,7 +58,7 @@ public final class Markup implements Serializable {
     }
 
     public Markup(final String html) {
-        this.html = validate(html!=null ? html : "");
+        this.html = html!=null ? html : "";
     }
 
     public String asHtml() {
@@ -77,10 +76,6 @@ public final class Markup implements Serializable {
                 _Text.normalize(_Text.getLines(html)).stream()
                 .collect(Collectors.joining(" ")),
                 255, "...");
-    }
-
-    private String validate(final String html) {
-        return _Hardening.htmlNoScript(html);
     }
 
     public static final class JaxbToStringAdapter extends XmlAdapter<String, Markup> {

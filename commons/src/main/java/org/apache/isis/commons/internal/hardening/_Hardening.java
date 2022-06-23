@@ -22,11 +22,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
-
-import lombok.val;
 
 /**
  * Various hardening utilities.
@@ -57,19 +57,13 @@ public class _Hardening {
     }
 
     /**
-     * @throws IllegalArgumentException - when scripts are encountered
-     * @implNote unfortunately has potential for false positives; but shall do for now
+     * @see "https://jsoup.org/cookbook/cleaning-html/safelist-sanitizer"
      */
-    public static String htmlNoScript(final @Nullable String html) {
-        if(html==null) {
-            return null;
+    public static String toSafeHtml(final @Nullable String untrustedHtml) {
+        if(_Strings.isEmpty(untrustedHtml)) {
+            return untrustedHtml;
         }
-        val condensed = _Strings.condenseWhitespaces(html.toLowerCase(), "");
-        if(condensed.contains("javascript:")
-                || condensed.contains("<script")) {
-            throw new IllegalArgumentException("Not parseable as html free of scripts content.");
-        }
-        return html;
+        return Jsoup.clean(untrustedHtml, Safelist.basic());
     }
 
 }
