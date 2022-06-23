@@ -30,7 +30,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Blackhole;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.hardening._Hardening;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -122,7 +122,7 @@ public final class LocalResourcePath implements Serializable {
         }
         try {
             // path syntax check
-            _Blackhole.consume(_Strings.toUrlWithXssGuard("http://localhost/"+path));
+            _Blackhole.consume(_Hardening.toUrlWithXssGuard("http://localhost/"+path));
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(String.format("the given local path has an invalid syntax: '%s'", path), e);
         }

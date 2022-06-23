@@ -32,6 +32,7 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.hardening._Hardening;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.SneakyThrows;
@@ -107,7 +108,7 @@ implements
         if(input==null) {
             return null;
         }
-        return _Strings.toUrlWithXssGuard(input).orElse(null);
+        return _Hardening.toUrlWithXssGuard(input).orElse(null);
     }
 
     @Override
