@@ -1,0 +1,76 @@
+# eventbus_domain
+.eventbus_domain
+[plantuml,file="eventbus_domain.png"]
+
+--
+@startuml
+
+skinparam nodesep 20
+
+together {
+    (Domain\nService) as DS
+    (Domain\nObject) as DO
+    (Domain\nEvent) as DE
+}
+(Member) as MB
+together {
+    (Property) as P
+    (Action) as A
+    (Collection) as C
+}
+P -u-> MB : is a
+A -u-> MB : is a
+C -u-> MB : is a
+
+DO -d-> MB : has
+DS -d--> A : has
+
+DE -d-> MB : can be \n declared \n for
+
+(Execution) as EX
+P -->  EX : change \n is an
+A --> EX : invocation \n is an
+
+(Event\nBus) as EB
+(Spring) as SPRING
+SPRING .l.> EB : provides/\nmanages
+EX -> EB : is published as: \n * before event (executing)\n * after event (executed)
+
+(Event\nListener) as EL
+EL --> EB : listens
+EL -u-> MB : can check/modify: \nvisibility (hide), \nusability (disable), \nvalidity (validate)
+
+note right of DE
+Phases are:
+* EXECUTING / EXECUTED
+* VALIDATING
+* DISABLING
+* HIDING
+end note
+
+note bottom of EX #pink
+When an Action is invoked or a Property is changed, events are published via the bus.
+This implies that DomainEvents have been declared on the member before?
+end note
+
+note bottom of EB #pink
+* How are events for phases VALIDATING, DISABLING, HIDING created?
+* How are events published on the bus?
+end note
+
+note right of EL #pink
+* How are 'subscriptions' created?
+* Are they declared via DomainEvents as well?
+end note
+@enduml
+--
+
+We call the change of a DomainObject's Property or the invocation of a DomainObject's or DomainServices' Action an Execution.
+Executions are broadcast as events on the event-bus.
+The framework provides several publisher/subscriber models to listen for specific execution data (readonly).
+In addition developers can declare Domain Events specific to Actions, Properties and Collections, that allow event listeners to modify visibility (whether is visible) or usability (whether can change).
+In addition there are UI Events, that allow listeners to modify the viewer's use of title, icon, css-class and layout file.
+The event-bus is provided/managed by Spring.
+
+event listener can check: visibility (hide), usability (disable), validity (validate) ... aka "see it, use it, do it".
+It can also listen to executing (before) and executed (after).

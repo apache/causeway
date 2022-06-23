@@ -1,6 +1,6 @@
-# eventbus_terminology
-.eventbus_terminology
-[plantuml,file="eventbus_terminology.png"]
+# eventbus_ui
+.eventbus_ui
+[plantuml,file="eventbus_ui.png"]
 --
 @startuml
 

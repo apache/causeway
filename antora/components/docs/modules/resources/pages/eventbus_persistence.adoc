@@ -1,10 +1,12 @@
-# eventbus_lifecycle
-.eventbus_lifecycle
-[plantuml,file="eventbus_lifecycle.png"]
+# eventbus_persistence
+.eventbus_persistence
+[plantuml,file="eventbus_persistence.png"]
 --
 @startuml
 
 (Event\nBus) as EB
+(Spring) as SPRING
+SPRING .l.> EB : provides/\nmanages
 (Event\nListener) as EL
 EL --> EB : listens
 
@@ -37,6 +39,14 @@ RS -u-> PED :emits
 RS -u-> UNG :emits
 RS -u-> UED :emits
 RS -u-> RNG :emits
+
+note top of RNG
+JDO/Datanucleus
+does not support
+something like a
+"Removed Event".
+Hence not implemented.
+end note
 
 @enduml
 --
