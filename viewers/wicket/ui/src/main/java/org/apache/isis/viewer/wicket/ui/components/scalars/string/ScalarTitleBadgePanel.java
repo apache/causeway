@@ -48,7 +48,7 @@ public class ScalarTitleBadgePanel<T> extends ScalarPanelTextFieldWithValueSeman
     @Override
     protected Component createComponentForOutput(final String id) {
         return CompactFragment.BADGE.createFragment(id, this, scalarValueId->
-            Wkt.label(scalarValueId, this::obtainOutputFormat));
+            Wkt.label(scalarValueId, this::outputFormatAsString));
     }
 
 }

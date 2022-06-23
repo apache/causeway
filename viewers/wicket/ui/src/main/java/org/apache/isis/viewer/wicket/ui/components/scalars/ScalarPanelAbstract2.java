@@ -29,7 +29,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.viewer.common.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
@@ -125,7 +125,7 @@ extends ScalarPanelAbstract {
         if(isUsingTextarea()) {
             return PromptFragment.TEXTAREA
                     .createFragment(id, this, scalarValueId->{
-                        val textArea = Wkt.textAreaNoTab(scalarValueId, this::obtainOutputFormat);
+                        val textArea = Wkt.textAreaNoTab(scalarValueId, this::outputFormatAsString);
                         val scalarModel = scalarModel();
                         Wkt.setFormComponentAttributes(textArea,
                                 scalarModel::multilineNumberOfLines,
@@ -137,8 +137,8 @@ extends ScalarPanelAbstract {
         return CompactFragment.LABEL
                     .createFragment(id, this, scalarValueId->
                         getFormatModifiers().contains(FormatModifier.NO_OUTPUT_ESCAPE)
-                            ? Wkt.markup(scalarValueId, this::obtainOutputFormat)
-                            : Wkt.label(scalarValueId, this::obtainOutputFormat));
+                            ? Wkt.markup(scalarValueId, this::outputFormatAsString)
+                            : Wkt.labelWithDynamicEscaping(scalarValueId, this::obtainOutputFormat));
     }
 
     private boolean isUsingTextarea() {
@@ -152,18 +152,27 @@ extends ScalarPanelAbstract {
     }
 
     /**
+     * @see #obtainOutputFormat()
+     */
+    protected final String outputFormatAsString() {
+        return obtainOutputFormat().getString();
+    }
+
+    /**
      * Output format (usually HTML) as String, for any non editing scenario.
      * <p>
      * Usually HTML, except for (non-empty) text-areas or badges (that are already modeled in HTML).
      */
-    protected String obtainOutputFormat() {
-        return _Strings.nonEmpty(
-                    isUsingTextarea()
-                    || getFormatModifiers().contains(FormatModifier.BADGE)
-                        ? scalarModel().proposedValue().getValueAsTitle().getValue()
-                        : scalarModel().proposedValue().getValueAsHtml().getValue())
-                .orElseGet(()->
-                    PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
+    protected StringForRendering obtainOutputFormat() {
+        val proposedValue = scalarModel().proposedValue();
+        if(!proposedValue.isPresent()) {
+            return StringForRendering.markup(PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
+        }
+        val useText = isUsingTextarea()
+                || getFormatModifiers().contains(FormatModifier.BADGE);
+        return useText
+                        ? StringForRendering.text(proposedValue.getValueAsTitle().getValue())
+                        : StringForRendering.markup(proposedValue.getValueAsHtml().getValue());
     }
 
     /**

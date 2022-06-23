@@ -35,6 +35,7 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.Placeholder
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.Facets;
+import org.apache.isis.viewer.common.model.StringForRendering;
 import org.apache.isis.viewer.common.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
@@ -74,8 +75,8 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     }
 
     @Override
-    protected String obtainOutputFormat() {
-        return select2.obtainOutputFormatModel().getObject();
+    protected StringForRendering obtainOutputFormat() {
+        return StringForRendering.text(select2.obtainOutputFormatModel().getObject());
     }
 
     @Override

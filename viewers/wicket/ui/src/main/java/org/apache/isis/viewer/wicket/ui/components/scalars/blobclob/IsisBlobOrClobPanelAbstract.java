@@ -33,6 +33,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
+import org.apache.isis.viewer.common.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
@@ -75,7 +76,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     protected FormComponent createFormComponent(final String id, final ScalarModel scalarModel) {
-        val initialCaption = obtainOutputFormat();
+        val initialCaption = outputFormatAsString();
         val fileUploadField = Wkt.fileUploadField(id, initialCaption, fileUploadModel());
         addAcceptFilterTo(fileUploadField);
         return fileUploadField;
@@ -84,18 +85,19 @@ extends ScalarPanelFormFieldAbstract<T> {
     // -- OUTPUT FORMAT
 
     @Override
-    protected String obtainOutputFormat() {
-        return getBlobOrClobFromModel()
+    protected StringForRendering obtainOutputFormat() {
+        val caption = getBlobOrClobFromModel()
                 .map(NamedWithMimeType::getName)
                 .orElseGet(()->
                     PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate));
+        return StringForRendering.text(caption);
     }
 
     @Override
     protected Component createComponentForOutput(final String id) {
         val link = CompactFragment.LINK
                 .createFragment(id, this, scalarValueId->
-                    createDownloadLink(scalarValueId, this::obtainOutputFormat));
+                    createDownloadLink(scalarValueId, this::outputFormatAsString));
         return link;
     }
 

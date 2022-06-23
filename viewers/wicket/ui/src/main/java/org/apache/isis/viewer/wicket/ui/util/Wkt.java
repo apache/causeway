@@ -83,7 +83,9 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.commons.internal.functions._Functions.SerializableFunction;
+import org.apache.isis.commons.internal.functions._Functions.SerializableSupplier;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.isis.viewer.common.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -674,6 +676,22 @@ public class Wkt {
 
     public Label label(final String id, final IModel<String> labelModel) {
         return new Label(id, labelModel);
+    }
+
+    /**
+     *  Whether to escape the underlying String for rendering
+     *  is dynamically based on the provided {@link StringForRendering}.
+     */
+    public Label labelWithDynamicEscaping(final String id, final SerializableSupplier<StringForRendering> labelModel) {
+        val label = new Label(id, ()->labelModel.get().getString()) {
+            private static final long serialVersionUID = 1L;
+            // we are using this method as a hook to update the ESCAPE flag before rendering
+            @Override public <C> IConverter<C> getConverter(final Class<C> type) {
+                setEscapeModelStrings(!labelModel.get().isMarkup());
+                return super.getConverter(type);
+            }
+        };
+        return label;
     }
 
     public Label labelNoTab(final String id, final IModel<String> labelModel) {
