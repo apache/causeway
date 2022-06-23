@@ -22,9 +22,8 @@ import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 
 /**
- * Functional UI mixin for {@link ActionInteraction}.
+ * UI mixin for {@link ActionInteraction}.
  */
-@FunctionalInterface
 public interface HasActionInteraction
 extends HasManagedAction {
 

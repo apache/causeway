@@ -30,6 +30,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
 import org.apache.isis.viewer.wicket.model.models.interaction.act.ParameterUiModelWkt;
@@ -81,6 +82,11 @@ implements ActionModel {
     }
 
     // --
+
+    @Override
+    public ObjectAction getAction() {
+        return delegate.getMetaModel();
+    }
 
     @Override
     public ActionInteraction getActionInteraction() {

@@ -30,8 +30,10 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @RequiredArgsConstructor
+@ToString
 public final class PackedManagedObject implements ManagedObject {
 
     final ObjectSpecification elementSpec;

@@ -45,37 +45,29 @@ extends Function<ObjectAction, LinkAndLabel> {
 
     public static LinkAndLabelFactory forMenu(
             final EntityModel serviceModel) {
-
-        val linkFactory = new MenuLinkFactory();
-
         return action -> LinkAndLabel.of(
                 ActionModelImpl.forEntity(
                         serviceModel,
                         action.getFeatureIdentifier(),
                         Where.ANYWHERE,
                         null, null, null),
-                linkFactory);
+                new MenuLinkFactory());
     }
 
     public static LinkAndLabelFactory forEntity(
             final EntityModel parentEntityModel) {
-
         guardAgainstNotBookmarkable(parentEntityModel.getBookmarkedOwner());
-        val linkFactory = new AdditionalLinkFactory();
-
         return action -> LinkAndLabel.of(
                 ActionModelImpl.forEntity(
                         parentEntityModel,
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
                         null, null, null),
-                linkFactory);
+                new AdditionalLinkFactory());
     }
 
     public static LinkAndLabelFactory forCollection(
             final EntityCollectionModelParented collectionModel) {
-
-        val linkFactory = new AdditionalLinkFactory();
 
         return action -> LinkAndLabel.of(
                 ActionModelImpl.forEntity(
@@ -83,7 +75,7 @@ extends Function<ObjectAction, LinkAndLabel> {
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
                         null, null, collectionModel),
-                linkFactory);
+                new AdditionalLinkFactory());
     }
 
     public static LinkAndLabelFactory forPropertyOrParameter(
@@ -95,36 +87,30 @@ extends Function<ObjectAction, LinkAndLabel> {
 
     public static LinkAndLabelFactory forProperty(
             final ScalarPropertyModel propertyModel) {
-
-        val linkFactory = new AdditionalLinkFactory();
-
         return action -> LinkAndLabel.of(
                 ActionModelImpl.forEntity(
                         propertyModel.getParentUiModel(),
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
                         propertyModel, null, null),
-                linkFactory);
+                new AdditionalLinkFactory());
     }
 
     public static LinkAndLabelFactory forParameter(
             final ScalarParameterModel parameterModel) {
-
-        // only supported, when parameter type is scalar and also is a value-type
-        if(!parameterModel.getMetaModel().isScalar()
-                ||!parameterModel.getMetaModel().getElementType().isValue()) {
-            return action -> null;
+        //XXX[ISIS-3080] only supported, when parameter type is a scalar composite value-type
+        val param = parameterModel.getMetaModel();
+        if(param.isScalar()
+                && param.getElementType().isCompositeValue()) {
+            return action -> LinkAndLabel.of(
+                    ActionModelImpl.forEntity(
+                            parameterModel.getParentUiModel(),
+                            action.getFeatureIdentifier(),
+                            Where.OBJECT_FORMS,
+                            null, parameterModel, null),
+                    new AdditionalLinkFactory());
         }
-
-        val linkFactory = new AdditionalLinkFactory();
-
-        return action -> LinkAndLabel.of(
-                ActionModelImpl.forEntity(
-                        parameterModel.getParentUiModel(),
-                        action.getFeatureIdentifier(),
-                        Where.OBJECT_FORMS,
-                        null, parameterModel, null),
-                linkFactory);
+        return action -> null;
     }
 
     // -- HELPER

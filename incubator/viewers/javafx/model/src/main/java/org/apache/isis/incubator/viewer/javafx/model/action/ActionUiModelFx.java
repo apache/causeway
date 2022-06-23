@@ -19,6 +19,7 @@
 package org.apache.isis.incubator.viewer.javafx.model.action;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 
@@ -38,6 +39,11 @@ implements ActionUiModel<MenuItem, Node> {
 
     @Getter
     private final ManagedAction managedAction;
+
+    @Override
+    public ObjectAction getAction() {
+        return managedAction.getMetaModel();
+    }
 
     @Override
     public MenuItem createMenuUiComponent() {

@@ -365,6 +365,14 @@ extends
     }
 
     /**
+     * Whether objects of this type are composite values.
+     */
+    default boolean isCompositeValue() {
+        return getBeanSort().isValue()
+                && valueFacet().map(ValueFacet::isCompositeValueType).orElse(false);
+    }
+
+    /**
      * Determines if objects of this type are parented (a parented collection, or an aggregated entity).
      *
      * <p>

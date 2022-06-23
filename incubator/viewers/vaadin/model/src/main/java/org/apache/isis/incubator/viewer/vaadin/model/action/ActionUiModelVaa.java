@@ -22,6 +22,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
 import org.apache.isis.viewer.common.model.action.ActionUiModel;
 
@@ -34,6 +35,11 @@ public class ActionUiModelVaa implements ActionUiModel<Component, Component> {
 
     @Getter
     private final ManagedAction managedAction;
+
+    @Override
+    public ObjectAction getAction() {
+        return managedAction.getMetaModel();
+    }
 
     @Override
     public Component createMenuUiComponent() {

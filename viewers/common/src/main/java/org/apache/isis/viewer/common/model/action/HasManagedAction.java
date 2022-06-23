@@ -36,16 +36,19 @@ import org.apache.isis.viewer.common.model.decorators.IconDecorator.FontAwesomeD
 import lombok.val;
 
 /**
- * Functional UI mixin for {@link ManagedAction}.
+ * UI mixin for {@link ManagedAction}.
  */
-@FunctionalInterface
 public interface HasManagedAction {
 
     ManagedAction getManagedAction();
 
-    default ObjectAction getAction() {
-        return getManagedAction().getAction();
-    }
+    /**
+     * Metamodel of the represented {@link ManagedAction}.
+     * @apiNote implementing classes may provide this more directly 
+     *  than having to conjure up a ManagedAction only to provide its metamodel;
+     *  in other words: this is not strictly required but provides optimization opportunities   
+     */
+    ObjectAction getAction();
 
     /**
      * Action's owner.

@@ -25,8 +25,10 @@ import java.util.function.Predicate;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 
 import org.apache.isis.applib.annotation.ActionLayout.Position;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.action.HasManagedAction;
 import org.apache.isis.viewer.common.model.mixin.HasUiComponent;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -47,6 +49,7 @@ implements
     public static LinkAndLabel of(
             final ActionModel actionModel,
             final ActionLinkUiComponentFactoryWkt uiComponentFactory) {
+        _Assert.assertNotNull(actionModel.getAction(), "LinkAndLabel requires an Action");
         return new LinkAndLabel(actionModel, uiComponentFactory);
     }
 
@@ -56,6 +59,11 @@ implements
     @Override
     public ManagedAction getManagedAction() {
         return actionModel.getManagedAction();
+    }
+
+    @Override
+    public  ObjectAction getAction() {
+        return actionModel.getAction();
     }
 
     /**
@@ -71,7 +79,7 @@ implements
     @Override
     public String toString() {
         return Optional.ofNullable(named).orElse("") +
-                " ~ " + actionModel.getAction().getFeatureIdentifier().getFullIdentityString();
+                " ~ " + getAction().getFeatureIdentifier().getFullIdentityString();
     }
 
     // -- RULE CHECKING SHORTCUTS

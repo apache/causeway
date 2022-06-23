@@ -136,7 +136,9 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     }
 
     public final ObjectAction getMetaModel() {
-        return actionInteraction().getMetamodel().orElseThrow();
+        return actionInteraction().getMetamodel()
+                .orElseThrow(()->_Exceptions
+                        .noSuchElement("could not resolve action by memberId '%s'", memberId));
     }
 
     public Optional<ScalarPropertyModel> associatedWithProperty() {
