@@ -18,13 +18,16 @@
  */
 package org.apache.isis.viewer.graphql.viewer.source;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import graphql.schema.*;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +59,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
     private final ExecutionStrategyResolvingWithinInteraction executionStrategy;
     private final ObjectTypeFactory objectTypeFactory;
     private final QueryFieldFactory queryFieldFactory;
+    private final BookmarkService bookmarkService;
 
     @PostConstruct
     public void init() {
@@ -87,6 +91,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
         Set<GraphQLType> graphQLObjectTypes = new HashSet<>();
 
         GraphQLObjectType.Builder queryLookupTypeBuilder = newObject().name("_gql_Query_lookup");
+        final List<ObjectSpecification> entityObjectSpecs = new ArrayList<>();
 
         specificationLoader.forEach(objectSpecification -> {
 
@@ -113,6 +118,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                             .argument(GraphQLArgument.newArgument().name("id").type(nonNull(Scalars.GraphQLString)).build())
                             .build();
                     queryLookupTypeBuilder.field(fd);
+                    entityObjectSpecs.add(objectSpecification);
 
                     objectTypeFactory
                         .objectTypeFromObjectSpecification(objectSpecification, graphQLObjectTypes, codeRegistryBuilder);
@@ -153,6 +159,26 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                 .field(gql_query_lookup)
                 .build();
 
+        codeRegistryBuilder.dataFetcher(coordinates(query.getName(), gql_query_lookup.getName()), (DataFetcher<Object>) environment -> {
+            return entityObjectSpecs;
+        });
+
+        entityObjectSpecs.forEach(entity->{
+            String s = _Utils.logicalTypeNameSanitized(entity.getLogicalTypeName());
+            codeRegistryBuilder.dataFetcher((coordinates(gql_query_lookup.getName(), s)), new DataFetcher<Object>() {
+
+                @Override
+                public Object get(DataFetchingEnvironment environment) throws Exception {
+
+                    Map<String, Object> arguments = environment.getArguments();
+                    String objectId = (String) arguments.get("id");
+                    Bookmark bookmark = Bookmark.forLogicalTypeNameAndIdentifier(entity.getLogicalTypeName(), objectId);
+                    return bookmarkService.lookup(bookmark).map(p->ManagedObject.of(entity, p).getPojo()).orElse(null);
+                }
+
+            });
+
+        });
 
         val codeRegistry = codeRegistryBuilder
                 .dataFetcher(coordinates(query.getName(), query_numServices.getName()),

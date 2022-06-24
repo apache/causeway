@@ -1,5 +1,12 @@
 {
   "data" : {
-    "_gql_Query_lookup" : null
+    "_gql_Query_lookup" : {
+      "gqltestdomain_E1" : {
+        "_gql_meta" : {
+          "id" : "1"
+        },
+        "name" : "e1"
+      }
+    }
   }
 }
