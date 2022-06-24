@@ -21,7 +21,6 @@ package org.apache.isis.testdomain.interact;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -106,7 +105,8 @@ class CollectionInteractionTest extends InteractionTestAbstract {
 
     }
 
-    @Test @Disabled("fails when model has more than 1 param") //FIXME[ISIS-3049]
+    @Test
+    //@Disabled("fails when model has more than 1 param") //FIXME[ISIS-3049]
     void choicesFromMultiselect() {
 
         val collTester =
@@ -141,8 +141,8 @@ class CollectionInteractionTest extends InteractionTestAbstract {
 
         // verify param defaults are seeded with choices from selection
         actTester.assertParameterValues(true,
-                arg0->assertEquals(expectedParamDefault, arg0),
-                arg1->assertEquals(expectedParamDefault, arg1));
+                arg0->assertEquals(expectedParamDefault, arg0, ()->"param 0 mismatch"),
+                arg1->assertEquals(expectedParamDefault, arg1, ()->"param 1 mismatch"));
     }
 
 }

@@ -121,18 +121,10 @@ implements HasMetaModel<ObjectAction> {
         // third pass ... verify we have found a fixed point
         final int maxIterations = 3;
 
-        val params = getMetaModel().getParameters();
-
         val fixedPoint = fixedPointSearch(
                 getEmptyParameterValues(),
                 // vector of packed values - where each is either scalar or non-scalar
-                paramVector->
-                    params
-                    .map(param->param
-                            .getDefault(
-                                    ParameterNegotiationModel
-                                    .of(managedAction, paramVector)))
-                ,
+                paramVector->iterate(managedAction, paramVector),
                 maxIterations);
 
         if(fixedPoint.isRight()) {
@@ -140,7 +132,7 @@ implements HasMetaModel<ObjectAction> {
                     + "parameter defaults on action {}.", getMetaModel());
         }
 
-        return modelForParamValues(managedAction,
+        return ParameterNegotiationModel.of(managedAction,
                 fixedPoint.fold(
                 left->left,
                 right->right));
@@ -148,14 +140,21 @@ implements HasMetaModel<ObjectAction> {
 
     // -- HELPER
 
-    private ParameterNegotiationModel modelForParamValues(
-            final ManagedAction managedAction,
-            @NonNull final Can<ManagedObject> paramValues) {
-        return ParameterNegotiationModel.of(managedAction, paramValues);
+    /**
+     * (defaults) fixed point search iteration step
+     */
+    private Can<ManagedObject> iterate(
+            final @NonNull ManagedAction managedAction,
+            final @NonNull Can<ManagedObject> paramVector) {
+
+        val pendingParamModel = ParameterNegotiationModel.of(managedAction, paramVector);
+
+        return getMetaModel().getParameters()
+            .map(param->param.getDefault(pendingParamModel));
     }
 
     /**
-     * Returns either a fixed point or the last iteration.
+     * Returns either a fixed point (left) or the last iteration (right).
      */
     private static <T> Either<T, T> fixedPointSearch(
             final T start,

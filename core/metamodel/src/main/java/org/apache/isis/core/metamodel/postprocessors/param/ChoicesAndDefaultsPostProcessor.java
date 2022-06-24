@@ -48,7 +48,13 @@ import lombok.val;
  * {@link ActionParameterDefaultsFacet} and {@link ActionParameterChoicesFacet},
  * as well as
  * {@link PropertyDefaultFacet} and {@link PropertyChoicesFacet}.
+ *
+ * @deprecated this post-processor should be converted into a facet factory instead,
+ * as we now have a notion facet precedence e.g. install
+ * ActionParameterDefaultsFacetFromAssociatedCollection with LOW precedence
+ * and everything should just work fine
  */
+@Deprecated
 public class ChoicesAndDefaultsPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
@@ -157,9 +163,7 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     private static void addCollectionParamDefaultsFacetIfNoneAlready(
             final ObjectActionParameter collectionParam) {
-        // with current programming model this can only be the first parameter of an action dialog
-        if(collectionParam.getParameterIndex()==0
-                && !hasMemberLevelDefaults(collectionParam)) {
+        if(!hasMemberLevelDefaults(collectionParam)) {
             FacetUtil.addFacet(
                     ActionParameterDefaultsFacetFromAssociatedCollection
                     .create(collectionParam));
