@@ -50,7 +50,7 @@ import lombok.val;
  * {@link PropertyDefaultFacet} and {@link PropertyChoicesFacet}.
  *
  * @deprecated this post-processor should be converted into a facet factory instead,
- * as we now have a notion facet precedence e.g. install
+ * as we now have a notion of facet precedence e.g. install
  * ActionParameterDefaultsFacetFromAssociatedCollection with LOW precedence
  * and everything should just work fine
  */
