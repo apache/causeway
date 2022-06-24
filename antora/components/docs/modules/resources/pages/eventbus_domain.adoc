@@ -10,9 +10,9 @@ skinparam nodesep 20
 together {
     (Domain\nService) as DS
     (Domain\nObject) as DO
-    (Domain\nEvent) as DE
+    (<i>Domain\n<i>Event) as DE
 }
-(Member) as MB
+(<i>Member</i>) as MB
 together {
     (Property) as P
     (Action) as A
@@ -28,49 +28,43 @@ DS -d--> A : has
 DE -d-> MB : can be \n declared \n for
 
 (Execution) as EX
-P -->  EX : change \n is an
-A --> EX : invocation \n is an
+P "edit \n is an"-->  EX
+A "invocation \n is an"--> EX
 
 (Event\nBus) as EB
 (Spring) as SPRING
 SPRING .l.> EB : provides/\nmanages
-EX -> EB : is published as: \n * before event (executing)\n * after event (executed)
+EX -> EB : is published as: \n * before event (phase: EXECUTING)\n * after event (phase: EXECUTED)
 
 (Event\nListener) as EL
-EL --> EB : listens
+EL --> EB : listens \n on
 EL -u-> MB : can check/modify: \nvisibility (hide), \nusability (disable), \nvalidity (validate)
 
 note right of DE
 Phases are:
-* EXECUTING / EXECUTED
-* VALIDATING
-* DISABLING
 * HIDING
+* DISABLING
+* VALIDATING
+* EXECUTING
+* EXECUTED
+The framework automatically sends out
+events with the phases in the order listed.
 end note
 
-note bottom of EX #pink
-When an Action is invoked or a Property is changed, events are published via the bus.
-This implies that DomainEvents have been declared on the member before?
+note right of MB
+<i>DomainEvent</i> is declared as an
+annotation type element in a member annotation, e.g.
+<b>@Action(
+        <b>domainEvent=<i>Custom</i>ActionDomainEvent.class).
 end note
 
-note bottom of EB #pink
-* How are events for phases VALIDATING, DISABLING, HIDING created?
-* How are events published on the bus?
-end note
-
-note right of EL #pink
-* How are 'subscriptions' created?
-* Are they declared via DomainEvents as well?
+note right of EL
+EventListeners can be declared on
+any public Spring bean method, e.g.
+<b>@EventListener(
+       <b><i>Custom</i>ActionDomainEvent.class).
+Via <i>DomainEvent</i>.getEventPhase(),
+further filtering can be applied.
 end note
 @enduml
 --
-
-We call the change of a DomainObject's Property or the invocation of a DomainObject's or DomainServices' Action an Execution.
-Executions are broadcast as events on the event-bus.
-The framework provides several publisher/subscriber models to listen for specific execution data (readonly).
-In addition developers can declare Domain Events specific to Actions, Properties and Collections, that allow event listeners to modify visibility (whether is visible) or usability (whether can change).
-In addition there are UI Events, that allow listeners to modify the viewer's use of title, icon, css-class and layout file.
-The event-bus is provided/managed by Spring.
-
-event listener can check: visibility (hide), usability (disable), validity (validate) ... aka "see it, use it, do it".
-It can also listen to executing (before) and executed (after).
