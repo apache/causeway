@@ -1,0 +1,10 @@
+{
+  _gql_Query_lookup {
+    gqltestdomain_E1(id:"1") {
+      _gql_meta {
+        id
+      },
+      name
+    }
+  }
+}

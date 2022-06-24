@@ -24,6 +24,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import graphql.schema.*;
 import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
@@ -38,14 +39,10 @@ import lombok.val;
 
 import graphql.GraphQL;
 import graphql.Scalars;
-import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLCodeRegistry;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLSchema;
-import graphql.schema.GraphQLType;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 @Service()
@@ -89,9 +86,9 @@ public class GraphQlSourceForIsis implements GraphQlSource {
 
         Set<GraphQLType> graphQLObjectTypes = new HashSet<>();
 
-        specificationLoader.snapshotSpecifications()
-        .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
-        .forEach(objectSpecification -> {
+        GraphQLObjectType.Builder queryLookupTypeBuilder = newObject().name("_gql_Query_lookup");
+
+        specificationLoader.forEach(objectSpecification -> {
 
             val logicalTypeName = objectSpecification.getLogicalTypeName();
             String logicalTypeNameSanitized = _Utils.logicalTypeNameSanitized(logicalTypeName);
@@ -100,11 +97,26 @@ public class GraphQlSourceForIsis implements GraphQlSource {
 
                 case ABSTRACT:
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
-                case ENTITY:    // @DomainObject(nature=ENTITY)
 
                     // TODO: App interface should mapp to gql interfaces?
                     objectTypeFactory
+                            .objectTypeFromObjectSpecification(objectSpecification, graphQLObjectTypes, codeRegistryBuilder);
+
+
+                    break;
+
+                case ENTITY:    // @DomainObject(nature=ENTITY)
+
+                    GraphQLFieldDefinition fd = newFieldDefinition()
+                            .name(logicalTypeNameSanitized)
+                            .type(GraphQLTypeReference.typeRef(logicalTypeNameSanitized))
+                            .argument(GraphQLArgument.newArgument().name("id").type(nonNull(Scalars.GraphQLString)).build())
+                            .build();
+                    queryLookupTypeBuilder.field(fd);
+
+                    objectTypeFactory
                         .objectTypeFromObjectSpecification(objectSpecification, graphQLObjectTypes, codeRegistryBuilder);
+
 
                     break;
 
@@ -122,7 +134,14 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                 case UNKNOWN:
                     break;
             }
-        });
+        }, false);
+
+        GraphQLObjectType queryLookupType = queryLookupTypeBuilder.build();
+        graphQLObjectTypes.add(queryLookupType);
+        val gql_query_lookup = newFieldDefinition()
+                .name("_gql_Query_lookup")
+                .type(queryLookupType)
+                .build();
 
         val query_numServices = newFieldDefinition()
                 .name("numServices")
@@ -131,6 +150,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
 
         GraphQLObjectType query = queryBuilder
                 .field(query_numServices)
+                .field(gql_query_lookup)
                 .build();
 
 

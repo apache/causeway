@@ -1,3 +1,9 @@
+"Marks the field, argument, input field or enum value as deprecated"
+directive @deprecated(
+    "The reason for the deprecation"
+    reason: String = "No longer supported"
+  ) on FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM_VALUE | INPUT_FIELD_DEFINITION
+
 "Directs the executor to include this field or fragment only when the `if` argument is true"
 directive @include(
     "Included when true."
@@ -10,12 +16,6 @@ directive @skip(
     if: Boolean!
   ) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
 
-"Marks the field, argument, input field or enum value as deprecated"
-directive @deprecated(
-    "The reason for the deprecation"
-    reason: String = "No longer supported"
-  ) on FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM_VALUE | INPUT_FIELD_DEFINITION
-
 "Exposes a URL that specifies the behaviour of this scalar."
 directive @specifiedBy(
     "The URL that specifies the behaviour of this scalar."
@@ -23,11 +23,17 @@ directive @specifiedBy(
   ) on SCALAR
 
 type Query {
+  _gql_Query_lookup: _gql_Query_lookup
   gqltestdomain_GQLTestDomainMenu: gqltestdomain_GQLTestDomainMenu
   isis_applib_UserMenu: isis_applib_UserMenu
   isis_conf_ConfigurationMenu: isis_conf_ConfigurationMenu
   isis_security_LogoutMenu: isis_security_LogoutMenu
   numServices: Int
+}
+
+type _gql_Query_lookup {
+  gqltestdomain_E1(id: String!): gqltestdomain_E1
+  gqltestdomain_E2(id: String!): gqltestdomain_E2
 }
 
 type gqltestdomain_E1 {
@@ -49,7 +55,7 @@ type gqltestdomain_E2 {
   _gql_mutations: gqltestdomain_E2__DomainObject_mutators
   e1: gqltestdomain_E1
   logicalTypeName: String
-  name: String!
+  name: String
   objectIdentifier: String
   otherE2List: [gqltestdomain_E2]
   otherEntities: [org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity]
@@ -73,6 +79,7 @@ type gqltestdomain_GQLTestDomainMenu {
   findAllE1: [gqltestdomain_E1]
   findAllE2: [gqltestdomain_E2]
   findAllTestEntities: [org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity]
+  findE2(name: String): gqltestdomain_E2
 }
 
 type isis_applib_ActionNode {
@@ -99,7 +106,6 @@ type isis_applib_CollectionNode {
   collection: String!
   logicalTypeName: String
   objectIdentifier: String
-  parentNode: isis_applib_TypeNode!
 }
 
 type isis_applib_CollectionNode__DomainObject_meta {
@@ -120,6 +126,7 @@ type isis_applib_DomainObjectList {
   elementTypeFqcn: String!
   logicalTypeName: String
   objectIdentifier: String
+  title: String!
 }
 
 type isis_applib_DomainObjectList__DomainObject_meta {
@@ -188,7 +195,6 @@ type isis_applib_ParameterNode {
   logicalTypeName: String
   objectIdentifier: String
   parameter: String!
-  parentNode: isis_applib_ActionNode!
 }
 
 type isis_applib_ParameterNode__DomainObject_meta {
@@ -253,7 +259,6 @@ type isis_applib_TypeNode__DomainObject_mutators {
 
 type isis_applib_UserMemento {
   _gql_meta: isis_applib_UserMemento__DomainObject_meta
-  _gql_mutations: isis_applib_UserMemento__DomainObject_mutators
   authenticationCode: String!
   authenticationSource: String!
   avatarUrl: String
@@ -272,10 +277,6 @@ type isis_applib_UserMemento {
 type isis_applib_UserMemento__DomainObject_meta {
   id: String!
   logicalTypeName: String!
-}
-
-type isis_applib_UserMemento__DomainObject_mutators {
-  isCurrentUser(userName: String): Boolean
 }
 
 type isis_applib_UserMenu {
@@ -472,22 +473,6 @@ type java_util_stream_Stream__DomainObject_meta {
   logicalTypeName: String!
 }
 
-type org_apache_isis_applib_services_inject_ServiceInjector {
-  _gql_meta: org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_meta
-  _gql_mutations: org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_mutators
-  logicalTypeName: String
-  objectIdentifier: String
-}
-
-type org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_meta {
-  id: String!
-  logicalTypeName: String!
-}
-
-type org_apache_isis_applib_services_inject_ServiceInjector__DomainObject_mutators {
-  injectServicesInto(domainObject: String): String
-}
-
 type org_apache_isis_core_metamodel_inspect_model_MMNode {
   _gql_meta: org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_meta
   logicalTypeName: String
@@ -609,6 +594,37 @@ input _gql_input__isis_feat_ApplicationTypeMember {
 }
 
 input _gql_input__isis_feat_ApplicationTypeProperty {
+  id: ID!
+}
+
+input _gql_input__isis_security_LoginRedirect {
+  id: ID!
+}
+
+input _gql_input__isis_testing_fixtures_FixtureResult {
+  id: ID!
+}
+
+input _gql_input__java_util_SortedMap {
+  id: ID!
+}
+
+input _gql_input__java_util_stream_Stream {
+  id: ID!
+}
+
+input _gql_input__org_apache_isis_core_metamodel_inspect_model_MMNode {
+  id: ID!
+}
+
+input _gql_input__org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript {
+  id: ID!
+}
+
+input _gql_input__org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
+  id: ID!
+}
+__isis_feat_ApplicationTypeProperty {
   id: ID!
 }
 
