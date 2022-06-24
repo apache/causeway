@@ -106,7 +106,6 @@ class CollectionInteractionTest extends InteractionTestAbstract {
     }
 
     @Test
-    //@Disabled("fails when model has more than 1 param") //FIXME[ISIS-3049]
     void choicesFromMultiselect() {
 
         val collTester =
