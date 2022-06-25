@@ -6,54 +6,52 @@
 @startuml
 
 skinparam nodesep 20
-'skinparam ranksep 1
-
-together {
-    (Member) as MB
-    (Presentation) as PST
-}
-
-(Domain\nObject) as DO
-(Property) as P
-(Action) as A
-(Collection) as C
-P -u-> MB : is a
-A -u-> MB : is a
-C -u-> MB : is a
-
-(Domain\nService) as DS
-DO -d-> MB : has
-DS -d--> A : has
-
-(Domain\nEvent) as DE
-DE -d-> MB : can be \n declared \n for
-
-(Execution) as EX
-P -->  EX : change \n is an
-A --> EX : invocation \n is an
 
 (Event\nBus) as EB
 (Spring) as SPRING
 SPRING .l.> EB : provides/\nmanages
-EX -> EB : is broadcast as: \n * before event (executing) \n * after event (executed)
-
 (Event\nListener) as EL
-EL --> EB : listens
+EL --> EB : listens to \n (is subscribed to)
+
+(UI\nEvent) as UIE
+UIE -r-> EB : is \n published \n to
+
+(Title\nUIEvent) as TUIE
+TUIE -u-> UIE : is a
+(Icon\nUIEvent) as IUIE
+IUIE -u-> UIE : is a
+
+(CssClass\nUIEvent) as CCUIE
+CCUIE -u-> UIE : is a
+(Layout\nUIEvent) as LUIE
+LUIE -u-> UIE : is a
+
+
+(Domain\nObject) as DO
+DO "when \n rendered, \n leads to \n emission \nof"-d-> UIE
+
+(Presentation) as PST
+DO -u-> PST : has
+EL -u-> PST : can modify
+note right of EL
+When DomainObject implements
+respective supporting methods itself (
+* title(),
+* iconName(),
+* cssClass(),
+* layout()),
+modification is not possible.
+end note
+
+@enduml
+--
+
+DE -d-> MB : can be \n declared \n for
+
+
 EL -u-> MB : can modify/check: \nvisibility (hide), \nusability (disable), \nvalidity (validate)
 
 DO ->"title \n icon \n cssClass \n layout" PST
 (UI\nEvent) as UIE
 EL --> PST : modify
 UIE --> EL : receive
-
-@enduml
---
-
-We call the change of a DomainObject's Property or the invocation of a DomainObject's or DomainServices' Action an Execution. Executions are broadcast as events on the event-bus. The framework provides several publisher/subscriber models to listen for specific execution data (readonly).
-In addition developers can declare Domain Events specific to Actions, Properties and Collections, that allow event listeners to modify visibility (whether is visible) or usability (whether can change).
-In addition there are UI Events, that allow listeners to modify the viewer's use of title, icon, css-class and layout file.
-The event-bus is provided/managed by Spring.
-
-event listener can check: visibility (hide), usability (disable), validity (validate)  ... aka "see it, use it, do it".  It can also listen to executing (before) and executed (after).
-
-UIEvent is not published on the EventBus, correct?
