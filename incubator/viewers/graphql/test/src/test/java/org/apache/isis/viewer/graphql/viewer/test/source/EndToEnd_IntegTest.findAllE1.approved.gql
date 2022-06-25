@@ -4,7 +4,7 @@
       "findAllE1" : [ {
         "name" : "foo",
         "_gql_meta" : {
-          "id" : "2",
+          "id" : "1",
           "logicalTypeName" : "gqltestdomain.E1",
           "version" : null
         }

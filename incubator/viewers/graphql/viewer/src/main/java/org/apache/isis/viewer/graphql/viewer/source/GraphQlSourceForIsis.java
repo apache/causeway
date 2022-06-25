@@ -115,7 +115,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                     GraphQLFieldDefinition fd = newFieldDefinition()
                             .name(logicalTypeNameSanitized)
                             .type(GraphQLTypeReference.typeRef(logicalTypeNameSanitized))
-                            .argument(GraphQLArgument.newArgument().name("id").type(nonNull(Scalars.GraphQLString)).build())
+                            .argument(GraphQLArgument.newArgument().name("id").type(nonNull(Scalars.GraphQLID)).build())
                             .build();
                     queryLookupTypeBuilder.field(fd);
                     entityObjectSpecs.add(objectSpecification);

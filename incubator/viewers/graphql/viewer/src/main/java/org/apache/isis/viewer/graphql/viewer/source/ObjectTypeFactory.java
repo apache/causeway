@@ -66,7 +66,7 @@ public class ObjectTypeFactory {
     private final SpecificationLoader specificationLoader;
 
     private static GraphQLFieldDefinition idField = newFieldDefinition()
-            .name("id").type(nonNull(Scalars.GraphQLString)).build();
+            .name("id").type(nonNull(Scalars.GraphQLID)).build();
 
     private static GraphQLFieldDefinition logicalTypeNameField = newFieldDefinition()
             .name("logicalTypeName").type(nonNull(Scalars.GraphQLString)).build();
