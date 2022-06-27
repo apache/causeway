@@ -363,7 +363,7 @@ under the License.
 		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
 
-		<datanucleus-api-jdo.version>6.0.0-m5</datanucleus-api-jdo.version>
+		<datanucleus-api-jdo.version>6.0.0-release</datanucleus-api-jdo.version>
 		<datanucleus-api-jpa.version>6.0.0-m5</datanucleus-api-jpa.version>
 		<datanucleus-core.version>6.0.0-m5</datanucleus-core.version>
 		<datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
