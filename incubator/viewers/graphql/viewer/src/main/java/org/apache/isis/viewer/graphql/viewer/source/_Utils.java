@@ -20,8 +20,12 @@ package org.apache.isis.viewer.graphql.viewer.source;
 
 final class _Utils {
 
+    public static final String SINGLE_PARAM_META_DATA_TYPENAME = "Param_Meta_Data";
     final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
     final static String GQL_MUTATTIONS_FIELDNAME = "_gql_mutations";
+    final static String FIELD_META_DATA_TYPENAME = "Fields_Meta_Data";
+    final static String MUTATOR_META_DATA_TYPENAME = "Mutator_Meta_Data";
+    static final String PARAMS_META_DATA_TYPENAME = "Params_Meta_Data";
 
     static String metaTypeName(final String logicalTypeNameSanitized){
         return logicalTypeNameSanitized + "__DomainObject_meta";
@@ -29,6 +33,14 @@ final class _Utils {
 
     static String mutatorsTypeName(final String logicalTypeNameSanitized){
         return logicalTypeNameSanitized + "__DomainObject_mutators";
+    }
+
+    static String metaFieldsTypeName(final String logicalTypeNameSanitized){
+        return logicalTypeNameSanitized + "__DomainObject_fields";
+    }
+
+    static String metaMutationsTypeName(final String logicalTypeNameSanitized){
+        return logicalTypeNameSanitized + "__DomainObject_mutations";
     }
 
     static String logicalTypeNameSanitized(final String logicalTypeName) {
