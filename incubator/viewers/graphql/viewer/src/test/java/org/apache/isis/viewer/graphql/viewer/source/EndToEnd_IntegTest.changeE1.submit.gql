@@ -3,7 +3,7 @@
     findE2(name:"foo") {
       name,
       _gql_mutations {
-        changeE1(e1 : {id : 2} ) {
+        changeE1(e1 : {id : 5} ) {
           e1 {
             name
           }

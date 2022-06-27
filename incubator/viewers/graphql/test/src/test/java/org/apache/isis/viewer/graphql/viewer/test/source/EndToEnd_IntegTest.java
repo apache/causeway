@@ -127,8 +127,8 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
 
         // given
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
-            E1 foo = testEntityRepository.createE1("foo", null);
-            testEntityRepository.createE2("bar", null);
+            E1 foo = testEntityRepository.createE1(Long.valueOf(1),"foo", null);
+            testEntityRepository.createE2(Long.valueOf(2),"bar", null);
             transactionService.flushTransaction();
             List<E1> allE1 = testEntityRepository.findAllE1();
             assertTrue(allE1.size()==1);
@@ -181,7 +181,7 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
 
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
 
-            e2List.add(testEntityRepository.createE2("foo", null));
+            e2List.add(testEntityRepository.createE2(Long.valueOf(3), "foo", null));
 
         });
 
@@ -220,10 +220,10 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
         List<E2> e2List = new ArrayList<>();
 
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
-            E1 e1 = testEntityRepository.createE1("e1", null);
+            E1 e1 = testEntityRepository.createE1(Long.valueOf(4), "e1", null);
             e1List.add(e1);
-            e1List.add(testEntityRepository.createE1("alternativeE1", null));
-            e2List.add(testEntityRepository.createE2("foo", e1));
+            e1List.add(testEntityRepository.createE1(Long.valueOf(5), "alternativeE1", null));
+            e2List.add(testEntityRepository.createE2(Long.valueOf(6),"foo", e1));
 
         });
 
@@ -258,10 +258,10 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
         List<E2> e2List = new ArrayList<>();
 
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
-            E1 e1 = testEntityRepository.createE1("e1", null);
+            E1 e1 = testEntityRepository.createE1(Long.valueOf(7),"e1", null);
             e1List.add(e1);
-            e1List.add(testEntityRepository.createE1("alternativeE1", null));
-            e2List.add(testEntityRepository.createE2("foo", e1));
+            e1List.add(testEntityRepository.createE1(Long.valueOf(8), "alternativeE1", null));
+            e2List.add(testEntityRepository.createE2(Long.valueOf(9), "foo", e1));
 
         });
 

@@ -42,7 +42,7 @@ public class GQLTestDomainMenu {
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
     public E1 createE1(final String name, @Nullable final E2 e2){
-        return testEntityRepository.createE1(name, e2);
+        return testEntityRepository.createE1(Long.valueOf(234), name, e2);
     }
 
     @Action(semantics = SemanticsOf.SAFE)

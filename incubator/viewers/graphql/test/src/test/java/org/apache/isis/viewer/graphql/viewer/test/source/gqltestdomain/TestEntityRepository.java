@@ -34,16 +34,18 @@ public class TestEntityRepository {
     @Inject
     private RepositoryService repositoryService;
 
-    public E1 createE1(final String name, @Nullable final E2 e2) {
+    public E1 createE1(final Long id, final String name, @Nullable final E2 e2) {
         E1 e1 = new E1();
+        e1.setId(id);
         e1.setName(name);
         e1.setE2(e2);
         repositoryService.persistAndFlush(e1);
         return e1;
     }
 
-    public E2 createE2(final String name, @Nullable final E1 e1) {
+    public E2 createE2(final Long id, final String name, @Nullable final E1 e1) {
         E2 e2 = new E2();
+        e2.setId(id);
         e2.setName(name);
         e2.setE1(e1);
         repositoryService.persistAndFlush(e2);
@@ -66,6 +68,8 @@ public class TestEntityRepository {
     }
 
     public void removeAll(){
+        findAllE1().forEach(e1->e1.setE2(null));
+        findAllE2().forEach(e2->e2.setE1(null));
         repositoryService.removeAll(E1.class);
         repositoryService.removeAll(E2.class);
     }

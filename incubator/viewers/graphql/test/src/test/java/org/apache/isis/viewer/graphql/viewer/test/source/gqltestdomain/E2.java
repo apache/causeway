@@ -16,33 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.graphql.viewer.test.source.gqltestdomain;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.SemanticsOf;
+package org.apache.isis.viewer.graphql.viewer.source.gqltestdomain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.isis.applib.annotation.*;
+
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 //@Profile("demo-jpa")
 @Entity
@@ -55,7 +40,7 @@ import lombok.Setter;
 public class E2 implements TestEntity{
 
     @Id
-    @GeneratedValue
+    @Setter
     private Long id;
 
     @Getter @Setter
@@ -106,11 +91,11 @@ public class E2 implements TestEntity{
     private List<Integer> zintList = new ArrayList<>();
 
     @Action(semantics = SemanticsOf.SAFE)
-    public List<TestEntity> otherEntities(){
+    public List<TestEntity> otherEntities(@Nullable final String name){
         List<TestEntity> result = new ArrayList<>();
         result.addAll(testEntityRepository.findAllE1());
         result.addAll(testEntityRepository.findAllE2().stream().filter(e2->e2!=this).collect(Collectors.toList()));
-        return result;
+        return name == null ? result : result.stream().filter(e->e.getName().contains(name)).collect(Collectors.toList());
     }
 
     @Inject

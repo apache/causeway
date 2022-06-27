@@ -46,7 +46,7 @@ import graphql.com.google.common.collect.ComparisonChain;
 public class E1 implements TestEntity, Comparable {
 
     @Id
-    @GeneratedValue
+    @Setter
     private Long id;
 
     @Getter @Setter
