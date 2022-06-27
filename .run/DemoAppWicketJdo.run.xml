@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="DemoAppWicketJdo" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="demo-wicket-jdo" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="demoapp.webapp.wicket.jdo.DemoAppWicketJdo" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <method v="2">

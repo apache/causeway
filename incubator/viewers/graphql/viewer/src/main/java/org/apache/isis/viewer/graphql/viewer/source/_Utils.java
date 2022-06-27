@@ -23,9 +23,10 @@ final class _Utils {
     public static final String SINGLE_PARAM_META_DATA_TYPENAME = "Param_Meta_Data";
     final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
     final static String GQL_MUTATTIONS_FIELDNAME = "_gql_mutations";
-    final static String FIELD_META_DATA_TYPENAME = "Fields_Meta_Data";
+    final static String FIELD_META_DATA_TYPENAME = "_gql_Field_Meta_Data";
+    final static String FIELD_META_DATA_TYPENAME_SUFFIX = "__Field_metadata";
     final static String MUTATOR_META_DATA_TYPENAME = "Mutator_Meta_Data";
-    static final String PARAMS_META_DATA_TYPENAME = "Params_Meta_Data";
+    static final String PARAMS_META_DATA_TYPENAME_SUFFIX = "__Params_Meta_Data";
 
     static String metaTypeName(final String logicalTypeNameSanitized){
         return logicalTypeNameSanitized + "__DomainObject_meta";
@@ -41,6 +42,14 @@ final class _Utils {
 
     static String metaMutationsTypeName(final String logicalTypeNameSanitized){
         return logicalTypeNameSanitized + "__DomainObject_mutations";
+    }
+
+    static String parameterizedFieldMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){
+        return logicalTypeNameSanitized + "_" + fieldName + FIELD_META_DATA_TYPENAME_SUFFIX;
+    }
+
+    static String parametersMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){
+        return logicalTypeNameSanitized + "_" + fieldName + PARAMS_META_DATA_TYPENAME_SUFFIX;
     }
 
     static String logicalTypeNameSanitized(final String logicalTypeName) {

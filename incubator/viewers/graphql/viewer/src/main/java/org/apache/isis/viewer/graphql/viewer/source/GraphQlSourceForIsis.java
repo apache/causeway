@@ -151,17 +151,10 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                 .field(newFieldDefinition().name("validate").argument(GraphQLArgument.newArgument().name("we_call_value_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLString).build())
                 .build();
         graphQLObjectTypes.add(paramMetaDataType);
-        GraphQLObjectType paramsMetaDataType = newObject().name(_Utils.PARAMS_META_DATA_TYPENAME)
+        GraphQLObjectType paramsMetaDataType = newObject().name(_Utils.PARAMS_META_DATA_TYPENAME_SUFFIX)
                 .field(newFieldDefinition().name("object_action_name").type(paramMetaDataType).build())
                 .build();
         graphQLObjectTypes.add(paramsMetaDataType);
-        GraphQLObjectType fieldMetaDataType = newObject().name(_Utils.FIELD_META_DATA_TYPENAME)
-                .field(newFieldDefinition().name("params").type(paramsMetaDataType).build())
-                .field(newFieldDefinition().name("validate").type(Scalars.GraphQLString).build())
-                .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())
-                .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
-                .build();
-        graphQLObjectTypes.add(fieldMetaDataType);
         GraphQLObjectType mutatorMetaDataType = newObject().name(_Utils.MUTATOR_META_DATA_TYPENAME)
                 .field(newFieldDefinition().name("params").type(paramsMetaDataType).build())
                 .field(newFieldDefinition().name("validate").type(Scalars.GraphQLString).build())
@@ -169,6 +162,14 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                 .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
                 .build();
         graphQLObjectTypes.add(mutatorMetaDataType);
+
+        // can remain 'static' for all fields / collections (having no params)
+        GraphQLObjectType fieldMetaDataType = newObject().name(_Utils.FIELD_META_DATA_TYPENAME)
+                .field(newFieldDefinition().name("validate").type(Scalars.GraphQLString).build())
+                .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())
+                .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
+                .build();
+        graphQLObjectTypes.add(fieldMetaDataType);
 
         GraphQLObjectType queryLookupType = queryLookupTypeBuilder.build();
         graphQLObjectTypes.add(queryLookupType);
