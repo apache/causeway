@@ -53,6 +53,7 @@ import demoapp.dom.types.javalang.booleans.jpa.WrapperBooleanJpa;
 import demoapp.dom.types.javalang.bytes.jpa.WrapperByteJpa;
 import demoapp.dom.types.javalang.characters.jpa.WrapperCharacterJpa;
 import demoapp.dom.types.javalang.doubles.jpa.WrapperDoubleJpa;
+import demoapp.dom.types.javalang.enums.jpa.JavaLangEnumJpa;
 import demoapp.dom.types.javalang.floats.jpa.WrapperFloatJpa;
 import demoapp.dom.types.javalang.integers.jpa.WrapperIntegerJpa;
 import demoapp.dom.types.javalang.longs.jpa.WrapperLongJpa;
@@ -101,6 +102,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
 
         JavaAwtBufferedImageJpa.class,
 
+        JavaLangEnumJpa.class,
         JavaLangStringJpa.class,
 
         JavaMathBigDecimalJpa.class,

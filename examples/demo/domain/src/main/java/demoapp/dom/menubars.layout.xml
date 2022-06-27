@@ -167,6 +167,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             </mb3:section>
             <mb3:section>
                 <mb3:named>Common</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="enums"/>
                 <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="strings"/>
                 <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="voids"/>
             </mb3:section>

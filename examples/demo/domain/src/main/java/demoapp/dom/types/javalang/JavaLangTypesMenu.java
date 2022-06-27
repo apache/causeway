@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import demoapp.dom.types.javalang.enums.JavaLangEnums;
 import demoapp.dom.types.javalang.strings.JavaLangStrings;
 import demoapp.dom.types.javalang.voids.JavaLangVoids;
 
@@ -41,6 +42,12 @@ import demoapp.dom.types.javalang.voids.JavaLangVoids;
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class JavaLangTypesMenu {
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-solid fa-ellipsis-vertical")
+    public JavaLangEnums enums(){
+        return new JavaLangEnums();
+    }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-font")

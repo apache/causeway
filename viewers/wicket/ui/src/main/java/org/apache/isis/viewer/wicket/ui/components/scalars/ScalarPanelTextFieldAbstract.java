@@ -93,8 +93,9 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     protected final IModel<T> unwrappedModel() {
         _Assert.assertTrue(scalarModel().getScalarTypeSpec().isAssignableFrom(type), ()->
-            String.format("[%s] cannot possibly unwrap model of type %s into target type %s",
+            String.format("[%s:%s] cannot possibly unwrap model of type %s into target type %s",
                     this.getClass().getSimpleName(),
+                    scalarModel().getIdentifier(),
                     scalarModel().getScalarTypeSpec().getCorrespondingClass(),
                     type));
 
