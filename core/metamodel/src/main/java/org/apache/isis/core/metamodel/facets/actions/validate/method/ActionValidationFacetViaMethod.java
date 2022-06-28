@@ -51,8 +51,7 @@ implements ImperativeFacet {
 
         super(holder);
         this.methods = ImperativeFacet.singleMethod(method);
-        this.translationContext =
-                TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier());
+        this.translationContext = holder.getTranslationContext();
         this.patConstructor = patConstructor;
     }
 

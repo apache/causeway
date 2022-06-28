@@ -18,10 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.param.choices.enums;
 
+import java.util.Optional;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
@@ -31,8 +32,20 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public class ActionParameterChoicesFacetFromChoicesFacet
 extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetFromChoicesFacet(final FacetHolder holder) {
+    public static Optional<ActionParameterChoicesFacetAbstract> create(
+            final Optional<ChoicesFacet> choicesFacet,
+            final FacetHolder facetHolder) {
+        return choicesFacet
+        .map(choicesFct->new ActionParameterChoicesFacetFromChoicesFacet(choicesFct, facetHolder));
+    }
+
+    private final ChoicesFacet choicesFacet;
+
+    private ActionParameterChoicesFacetFromChoicesFacet(
+            final ChoicesFacet choicesFacet,
+            final FacetHolder holder) {
         super(holder, Precedence.INFERRED);
+        this.choicesFacet = choicesFacet;
     }
 
     @Override
@@ -41,14 +54,6 @@ extends ActionParameterChoicesFacetAbstract {
             final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
-        final FacetHolder facetHolder = getFacetHolder();
-        final TypedHolder paramPeer = (TypedHolder) facetHolder;
-        final ObjectSpecification noSpec = specForTypeElseFail(paramPeer.getType());
-        final ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
-        if (choicesFacet == null) {
-            return Can.empty();
-        }
         return choicesFacet.getChoices(head.getTarget(), interactionInitiatedBy);
     }
 

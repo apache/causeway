@@ -60,9 +60,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         this.getterFacetIfAny = getterFacetIfAny;
 
         this.translationService = getTranslationService();
-        // sadness: same as in TranslationFactory
-        this.translationContext = TranslationContext.forTranslationContextHolder(
-                holder.getFeatureIdentifier());
+        this.translationContext = holder.getTranslationContext();
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
@@ -87,7 +85,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
     }
 
     @Override
-    public String hides(VisibilityContext ic) {
+    public String hides(final VisibilityContext ic) {
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
@@ -102,7 +100,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
     }
 
     @Override
-    public String disables(UsabilityContext ic) {
+    public String disables(final UsabilityContext ic) {
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
@@ -121,7 +119,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
     }
 
     @Override
-    public String invalidates(ValidityContext ic) {
+    public String invalidates(final ValidityContext ic) {
 
         if(getterFacetIfAny == null) {
             return null;

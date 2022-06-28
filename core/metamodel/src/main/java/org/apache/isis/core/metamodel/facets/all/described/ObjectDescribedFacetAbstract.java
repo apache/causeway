@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.all.described;
 
-import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.i8n.staatic.HasStaticTextFacetAbstract;
 
@@ -38,7 +37,7 @@ implements ObjectDescribedFacet {
             final String originalText,
             final FacetHolder holder) {
         super(type(),
-                TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier()),
+                holder.getTranslationContext(),
                 originalText,
                 holder);
     }

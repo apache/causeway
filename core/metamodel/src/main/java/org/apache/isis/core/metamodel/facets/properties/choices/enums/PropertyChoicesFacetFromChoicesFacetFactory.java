@@ -21,9 +21,12 @@ package org.apache.isis.core.metamodel.facets.properties.choices.enums;
 import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+
+import lombok.val;
 
 public class PropertyChoicesFacetFromChoicesFacetFactory
 extends FacetFactoryAbstract {
@@ -38,12 +41,12 @@ extends FacetFactoryAbstract {
 
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
 
-        if(!getSpecificationLoader().loadSpecification(returnType).containsNonFallbackFacet(ChoicesFacet.class)) {
-            return;
-        }
+        val choicesFacetIfAny = getSpecificationLoader().loadSpecification(returnType)
+                .lookupNonFallbackFacet(ChoicesFacet.class);
 
-        addFacet(
-                new PropertyChoicesFacetFromChoicesFacet(processMethodContext.getFacetHolder()));
+        FacetUtil.addFacetIfPresent(
+                PropertyChoicesFacetFromChoicesFacet
+                .create(choicesFacetIfAny, processMethodContext.getFacetHolder()));
     }
 
 }

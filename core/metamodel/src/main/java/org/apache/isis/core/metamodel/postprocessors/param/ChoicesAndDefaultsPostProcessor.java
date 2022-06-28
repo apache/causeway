@@ -69,10 +69,15 @@ extends ObjectSpecificationPostProcessorAbstract {
             final ObjectAction objectAction,
             final ObjectActionParameter param) {
         if(!hasMemberLevelChoices(param)) {
-            param.getElementType()
-            .lookupNonFallbackFacet(ChoicesFacet.class)
-            .ifPresent(choicesFacet -> FacetUtil
-                    .addFacet(new ActionParameterChoicesFacetFromChoicesFacet(peerFor(param))));
+
+            //TODO not used: ActionParameterChoicesFacetFromChoicesFacetFactory
+
+            val choicesFacetIfAny = param.getElementType()
+                    .lookupNonFallbackFacet(ChoicesFacet.class);
+
+            FacetUtil.addFacetIfPresent(
+                    ActionParameterChoicesFacetFromChoicesFacet
+                    .create(choicesFacetIfAny, peerFor(param)));
         }
     }
 
@@ -87,10 +92,15 @@ extends ObjectSpecificationPostProcessorAbstract {
                                         specFacet, facetedMethodFor(prop))));
         }
         if(!hasMemberLevelChoices(prop)) {
-            prop.getElementType()
-            .lookupNonFallbackFacet(ChoicesFacet.class)
-            .ifPresent(specFacet -> FacetUtil
-                    .addFacet(new PropertyChoicesFacetFromChoicesFacet(facetedMethodFor(prop))));
+
+            //TODO not used: PropertyChoicesFacetFromChoicesFacetFactory
+
+            val choicesFacetIfAny = prop.getElementType()
+                    .lookupNonFallbackFacet(ChoicesFacet.class);
+
+            FacetUtil.addFacetIfPresent(
+                    PropertyChoicesFacetFromChoicesFacet
+                    .create(choicesFacetIfAny, facetedMethodFor(prop)));
         }
     }
 

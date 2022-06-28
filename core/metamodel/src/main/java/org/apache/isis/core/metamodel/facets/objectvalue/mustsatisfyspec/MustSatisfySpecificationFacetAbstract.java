@@ -59,9 +59,7 @@ implements MustSatisfySpecificationFacet {
         this.specifications = specifications;
 
         final TranslationService translationService = getTranslationService();
-        // sadness: same as in TranslationFactory
-        final TranslationContext translationContext = TranslationContext.forTranslationContextHolder(
-                holder.getFeatureIdentifier()); // .getTranslationContext();
+        final TranslationContext translationContext = holder.getTranslationContext();
 
         specificationEvaluator = new SpecificationEvaluator(translationService, translationContext);
     }

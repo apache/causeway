@@ -192,7 +192,7 @@ implements
                         ? "(" + memberParameterClassNames.stream().collect(Collectors.joining(",")) + ")"
                         : "");
 
-        this.translationContext = TranslationContext.ofName(
+        this.translationContext = TranslationContext.named(
                 className + "#" + memberLogicalName + (type.isAction() ? "()" : ""));
 
         this.fullIdentityString = _Strings.isEmpty(memberLogicalName)

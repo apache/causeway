@@ -80,7 +80,7 @@ implements MixedInMember {
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod(), false);
 
-        this.facetHolder = FacetHolderAbstract.layered(
+        this.facetHolder = FacetHolderAbstract.delegated(
                 super.getFeatureIdentifier(),
                 mixinAction.getFacetedMethod());
         this.mixinType = mixinType;

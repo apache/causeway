@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.all.described;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -51,7 +50,7 @@ implements MemberDescribedFacet {
             final Method method,
             final FacetHolder holder) {
         super(type(),
-                TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier()),
+                holder.getTranslationContext(),
                 method,
                 holder);
     }

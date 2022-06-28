@@ -88,10 +88,10 @@ public interface ComponentFactoryRegistry {
     Component addOrReplaceComponent(MarkupContainer markupContainer, String id, ComponentType componentType, IModel<?> model);
 
     /**
-     * As per {@link #createComponent(ComponentType, String, IModel)}, but with
+     * As per {@link #createComponent(String, ComponentType, IModel)}, but with
      * the wicket id derived from the {@link ComponentType}.
      *
-     * @see #createComponent(ComponentType, String, IModel)
+     * @see #createComponent(String, ComponentType, IModel)
      */
     Component createComponent(ComponentType componentType, IModel<?> model);
 

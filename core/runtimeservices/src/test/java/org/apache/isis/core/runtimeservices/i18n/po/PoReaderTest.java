@@ -80,7 +80,7 @@ public class PoReaderTest {
     public void singleContext() throws Exception {
 
         // given
-        final TranslationContext context = TranslationContext.ofName(
+        final TranslationContext context = TranslationContext.named(
                 "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
         final String msgId = "Work of art";
         final String msgStr = "Objet d'art";
@@ -107,9 +107,9 @@ public class PoReaderTest {
     public void multipleContext() throws Exception {
 
         // given
-        final TranslationContext context1 = TranslationContext.ofName(
+        final TranslationContext context1 = TranslationContext.named(
                 "fixture.simple.SimpleObjectsFixturesService#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)");
-        final TranslationContext context2 = TranslationContext.ofName(
+        final TranslationContext context2 = TranslationContext.named(
                 "org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)");
         final String msgId = "Parameters";
         final String msgStr = "Paramètres";
@@ -142,12 +142,12 @@ public class PoReaderTest {
     public void multipleBlocks() throws Exception {
 
         // given
-        final TranslationContext context1 = TranslationContext.ofName(
+        final TranslationContext context1 = TranslationContext.named(
                 "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
         final String msgid1 = "Work of art";
         final String msgstr1 = "Objet d'art";
 
-        final TranslationContext context2 = TranslationContext.ofName(
+        final TranslationContext context2 = TranslationContext.named(
                 "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#lookup()");
         final String msgid2 = "Lookup";
         final String msgstr2 = "Look up";
@@ -189,7 +189,7 @@ public class PoReaderTest {
     public void withPlurals() throws Exception {
 
         // given
-        final TranslationContext context = TranslationContext.ofName(
+        final TranslationContext context = TranslationContext.named(
                 "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
         final String msgid = "Work of art";
         final String msgid_plural = "Works of art";
@@ -236,7 +236,7 @@ public class PoReaderTest {
             }
         };
 
-        TranslationContext context = TranslationContext.ofName("someContext");
+        TranslationContext context = TranslationContext.named("someContext");
 
         // when
         final String translated = poReader.translate(context, "Something to translate");

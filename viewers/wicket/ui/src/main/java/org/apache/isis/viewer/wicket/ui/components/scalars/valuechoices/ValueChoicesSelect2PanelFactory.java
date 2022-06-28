@@ -43,7 +43,7 @@ public class ValueChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
         }
         val scalarModel = (ScalarModel) model;
 
-        // autoComplete not supported on values, only references
+        // autoComplete not supported for values, only for references
         // this is because there is no easy way in the ChoiceProvider to convert the list of Ids (strings)
         // into corresponding ObjectAdapterMemento's.
         // see subclasses of ObjectAdapterMementoProviderAbstract

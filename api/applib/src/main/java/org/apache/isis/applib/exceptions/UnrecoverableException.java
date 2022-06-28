@@ -82,7 +82,7 @@ implements TranslatableException {
         super(message, cause);
         this.translatableMessage = translatableMessage;
         this.translationContext = translationContextClass != null
-                ? TranslationContext.ofName(
+                ? TranslationContext.named(
                         translationContextClass.getName() 
                         + (_Strings.isNotEmpty(translationContextMethod)
                                 ? "#" + translationContextMethod

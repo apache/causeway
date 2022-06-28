@@ -23,6 +23,8 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.i18n.HasTranslationContext;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 
 import lombok.NonNull;
@@ -32,7 +34,8 @@ import lombok.val;
  * Anything in the metamodel (which also includes peers in the reflector) that
  * can be extended.
  */
-public interface FacetHolder extends HasMetaModelContext {
+public interface FacetHolder
+extends HasMetaModelContext, HasTranslationContext {
 
     /**
      * Identifier of the feature this holder represents or is associated with.
@@ -118,5 +121,12 @@ public interface FacetHolder extends HasMetaModelContext {
 
     Stream<FacetRanking> streamFacetRankings();
     Optional<FacetRanking> getFacetRanking(Class<? extends Facet> facetType);
+
+    // -- TRANSLATION CONTEXT
+
+    @Override
+    default TranslationContext getTranslationContext() {
+        return getFeatureIdentifier().getTranslationContext();
+    }
 
 }

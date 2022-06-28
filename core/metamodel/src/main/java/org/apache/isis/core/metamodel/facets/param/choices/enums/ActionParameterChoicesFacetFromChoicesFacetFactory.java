@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.param.choices.enums;
 import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
@@ -40,12 +41,12 @@ extends FacetFactoryAbstract {
 
         val paramType = processParameterContext.getParameterType();
 
-        if(!getSpecificationLoader().loadSpecification(paramType).containsNonFallbackFacet(ChoicesFacet.class)) {
-            return;
-        }
+        val choicesFacetIfAny = getSpecificationLoader().loadSpecification(paramType)
+                .lookupNonFallbackFacet(ChoicesFacet.class);
 
-        val facetHolder = processParameterContext.getFacetHolder();
-        addFacet(new ActionParameterChoicesFacetFromChoicesFacet(facetHolder));
+        FacetUtil.addFacetIfPresent(
+                ActionParameterChoicesFacetFromChoicesFacet
+                .create(choicesFacetIfAny, processParameterContext.getFacetHolder()));
     }
 
 

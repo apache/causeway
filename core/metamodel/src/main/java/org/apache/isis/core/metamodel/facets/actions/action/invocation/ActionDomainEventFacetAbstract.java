@@ -56,9 +56,7 @@ implements ActionDomainEventFacet {
         setEventType(eventType);
 
         this.translationService = getTranslationService();
-        // sadness: same as in TranslationFactory
-        this.translationContext = TranslationContext.forTranslationContextHolder(
-                holder.getFeatureIdentifier());
+        this.translationContext = holder.getTranslationContext();
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }

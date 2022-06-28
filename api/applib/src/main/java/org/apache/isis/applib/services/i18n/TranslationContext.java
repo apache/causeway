@@ -32,7 +32,7 @@ import lombok.val;
 /**
  * @since 2.x {@index}
  */
-@Value(staticConstructor = "ofName")
+@Value(staticConstructor = "named")
 public final class TranslationContext
 implements Serializable {
 
@@ -40,21 +40,12 @@ implements Serializable {
 
     @Getter private final String name;
 
-    //XXX this guard could be removed if non-null is guaranteed
-    public static TranslationContext forTranslationContextHolder(
-            final @Nullable HasTranslationContext hasTranslationContext) {
-
-        return hasTranslationContext!=null
-                ? hasTranslationContext.getTranslationContext()
-                : EMPTY;
-    }
-
     //XXX no logical type name supported
     public static TranslationContext forClassName(
             final @Nullable Class<?> contextClass) {
 
         return contextClass!=null
-                ? ofName(contextClass.getName())
+                ? named(contextClass.getName())
                 : EMPTY;
     }
 
@@ -66,7 +57,7 @@ implements Serializable {
         val classContext = forClassName(contextClass);
         return _Strings.isNullOrEmpty(contextMethodName)
                 ? classContext
-                : ofName(classContext.getName() + "#" + contextMethodName + "()");
+                : named(classContext.getName() + "#" + contextMethodName + "()");
     }
 
     //XXX no logical type name supported
@@ -74,7 +65,7 @@ implements Serializable {
             final @Nullable Method method) {
 
         return method!=null
-                ? ofName(method.getDeclaringClass().getName() + "#" + method.getName() + "()")
+                ? named(method.getDeclaringClass().getName() + "#" + method.getName() + "()")
                 : EMPTY;
     }
 
@@ -83,13 +74,13 @@ implements Serializable {
             final @Nullable Enum<?> objectAsEnum) {
 
         return objectAsEnum!=null
-                ? ofName(objectAsEnum.getClass().getName() + "#" + objectAsEnum.name())
+                ? named(objectAsEnum.getClass().getName() + "#" + objectAsEnum.name())
                 : EMPTY;
     }
 
 	// -- EMPTY
 
-	private final static TranslationContext EMPTY = TranslationContext.ofName("default");
+	private final static TranslationContext EMPTY = TranslationContext.named("default");
 
     public static TranslationContext empty() {
         return EMPTY;

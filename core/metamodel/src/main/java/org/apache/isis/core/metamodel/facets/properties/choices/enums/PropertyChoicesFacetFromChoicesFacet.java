@@ -18,34 +18,38 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.choices.enums;
 
+import java.util.Optional;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
-import lombok.val;
-
-public class PropertyChoicesFacetFromChoicesFacet 
+public class PropertyChoicesFacetFromChoicesFacet
 extends PropertyChoicesFacetAbstract {
 
-    public PropertyChoicesFacetFromChoicesFacet(final FacetHolder holder) {
-        super(holder);
+    public static Optional<PropertyChoicesFacetAbstract> create(
+            final Optional<ChoicesFacet> choicesFacet,
+            final FacetHolder facetHolder) {
+        return choicesFacet
+        .map(choicesFct->new PropertyChoicesFacetFromChoicesFacet(choicesFct, facetHolder));
+    }
+
+    private final ChoicesFacet choicesFacet;
+
+    private PropertyChoicesFacetFromChoicesFacet(
+            final ChoicesFacet choicesFacet,
+            final FacetHolder holder) {
+        super(holder, Precedence.INFERRED);
+        this.choicesFacet = choicesFacet;
     }
 
     @Override
     public Can<ManagedObject> getChoices(
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
-        val facetedMethod = (FacetedMethod) getFacetHolder();
-        val methodSpec = specForTypeElseFail(facetedMethod.getType());
-        val choicesFacet = methodSpec.getFacet(ChoicesFacet.class);
-        if (choicesFacet == null) {
-            return Can.empty();
-        }
         return choicesFacet.getChoices(adapter, interactionInitiatedBy);
     }
 

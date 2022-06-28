@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.value.fallback;
 
+
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
@@ -36,7 +37,8 @@ extends ComponentFactoryScalarAbstract {
     private static final long serialVersionUID = 1L;
 
     public ValueFallbackPanelFactory() {
-        super(ValueFallbackPanel.class); // not asking the supertype to validate types, so no value types need be provided.
+        // not asking the super-type to validate types, so no value types need be provided.
+        super(ValueFallbackPanel.class);
     }
 
     @Override
@@ -48,8 +50,9 @@ extends ComponentFactoryScalarAbstract {
         if(!scalarModel.getScalarTypeSpec().isValue()) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
+
         final boolean hasChoices = scalarModel.hasChoices();
-        // autoComplete not supported on values, only references
+        // autoComplete not supported for values, only for references
         // final boolean hasAutoComplete = scalarModel.hasAutoComplete();
         return appliesIf( !(hasChoices /*|| hasAutoComplete*/) );
     }

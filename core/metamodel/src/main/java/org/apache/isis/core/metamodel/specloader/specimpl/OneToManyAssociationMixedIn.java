@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromActionReturn;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -97,7 +96,7 @@ implements MixedInMember {
                     _MixedInMemberNamingStrategy.determineIdFrom(mixinAction)),
                 mixinAction.getFacetedMethod(), typeOfSpec(mixinAction));
 
-        this.facetHolder = FacetHolderAbstract.layered(
+        this.facetHolder = FacetHolderAbstract.delegated(
                 super.getFeatureIdentifier(),
                 mixinAction.getFacetedMethod());
 
@@ -106,11 +105,10 @@ implements MixedInMember {
         this.mixeeSpec = mixeeSpec;
 
         //
-        // ensure the mixedIn collection cannot be modified, and derive its TypeOfFaccet
+        // ensure the mixedIn collection cannot be modified, and infer its TypeOfFaccet
         //
         FacetUtil.addFacet(new SnapshotExcludeFacetFromImmutableMember(this));
         FacetUtil.addFacet(disabledFacet());
-        FacetUtil.addFacet(new TypeOfFacetFromActionReturn(getElementType().getCorrespondingClass(), this));
 
         // adjust name if necessary
         val isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)

@@ -40,8 +40,7 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
     		final FacetHolder holder) {
         super(holder);
         this.method = method;
-        this.translationContext =
-                TranslationContext.forTranslationContextHolder(holder.getFeatureIdentifier());
+        this.translationContext = holder.getTranslationContext();
     }
 
     /**

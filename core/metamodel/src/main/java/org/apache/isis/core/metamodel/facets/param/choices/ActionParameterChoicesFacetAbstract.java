@@ -30,11 +30,11 @@ implements ActionParameterChoicesFacet {
         return ActionParameterChoicesFacet.class;
     }
 
-    public ActionParameterChoicesFacetAbstract(FacetHolder holder) {
+    protected ActionParameterChoicesFacetAbstract(final FacetHolder holder) {
         super(type(), holder);
     }
 
-    public ActionParameterChoicesFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
+    protected ActionParameterChoicesFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
         super(type(), holder, precedence);
     }
 
