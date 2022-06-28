@@ -29,7 +29,6 @@ import javax.inject.Inject;
 import org.assertj.core.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -66,7 +65,7 @@ import lombok.val;
     IsisPresets.SilenceProgrammingModel
 })
 //uncomment if intended only for manual verification.
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+//@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
 class MetaModelRegressionTest {
 
     @Inject MetaModelServiceMenu metaModelServiceMenu;
@@ -83,7 +82,7 @@ class MetaModelRegressionTest {
         }
 
         //for maintenance
-        //createReferenceMetaModelFile(new File("d:/tmp/_scratch/metamodel.xml.zip"));
+        // createReferenceMetaModelFile(new File("d:/tmp/_scratch/metamodel.xml.zip"));
     }
 
     @Test
