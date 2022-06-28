@@ -24,8 +24,6 @@ import java.util.stream.Stream;
 
 import org.springframework.util.ClassUtils;
 
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
@@ -72,10 +70,7 @@ implements Facet, HasMetaModelContext {
 
     @Override
     public String toString() {
-        val className = ClassUtils.getShortName(getClass());
-        return getClass() == facetType()
-                ? String.format("%s[%s]", className, attributesAsString())
-                : String.format("%s[type=%s; %s]", className, ClassUtils.getShortName(facetType()), attributesAsString());
+        return FacetUtil.toString(this);
     }
 
     @Override
@@ -114,21 +109,6 @@ implements Facet, HasMetaModelContext {
         .filter(marker->marker.isAssignableFrom(getClass()))
         .map(Class::getSimpleName)
         .collect(Collectors.joining(delimiter));
-    }
-
-    // -- HELPER
-
-    protected final Stream<_Strings.KeyValuePair> streamAttributes() {
-        final var keyValuePairs = _Lists.<_Strings.KeyValuePair>newArrayList();
-        visitAttributes((k, v)->keyValuePairs.add(_Strings.pair(k, ""+v)));
-        return keyValuePairs.stream();
-    }
-
-    private String attributesAsString() {
-        return streamAttributes()
-                .filter(kv->!kv.getKey().equals("facet")) // skip superfluous attribute
-                .map(_Strings.KeyValuePair::toString)
-                .collect(Collectors.joining("; "));
     }
 
 }

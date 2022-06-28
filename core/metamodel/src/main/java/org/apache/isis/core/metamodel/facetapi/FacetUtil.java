@@ -21,9 +21,14 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.util.snapshot.XmlSchema;
 
 import lombok.NonNull;
@@ -131,5 +136,29 @@ public final class FacetUtil {
         .ifPresent(ranking->ranking.purgeIf(facetType, filter));
     }
 
+    // -- FACET ATTRIBUTES
+
+    public static String attributesAsString(final Facet facet) {
+        return streamAttributes(facet)
+                .filter(kv->!kv.getKey().equals("facet")) // skip superfluous attribute
+                .map(_Strings.KeyValuePair::toString)
+                .collect(Collectors.joining("; "));
+    }
+
+    public static Stream<_Strings.KeyValuePair> streamAttributes(final Facet facet) {
+        final var keyValuePairs = _Lists.<_Strings.KeyValuePair>newArrayList();
+        facet.visitAttributes((k, v)->keyValuePairs.add(_Strings.pair(k, ""+v)));
+        return keyValuePairs.stream();
+    }
+
+    // -- FACET TO STRING
+
+    public static String toString(final Facet facet) {
+        val className = ClassUtils.getShortName(facet.getClass());
+        val attributesAsString = attributesAsString(facet);
+        return facet.getClass() == facet.facetType()
+                ? String.format("%s[%s]", className, attributesAsString)
+                : String.format("%s[type=%s; %s]", className, ClassUtils.getShortName(facet.facetType()), attributesAsString);
+    }
 
 }

@@ -23,11 +23,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -89,7 +86,9 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         if (featureType.isProperty()) {
             addFacet(new MaxLengthFacetUnlimited(facetedMethod));
             addFacet(new MultiLineFacetNone(facetedMethod));
-            addFacet(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getApplib().getAnnotation().getPropertyLayout()));
+            addFacet(new LabelAtFacetFromLayoutConfiguration(
+                    getConfiguration().getApplib().getAnnotation().getPropertyLayout().getLabelPosition(),
+                    facetedMethod));
         }
         if (featureType.isAction()) {
             // none
@@ -105,23 +104,14 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-
         final TypedHolder typedHolder = processParameterContext.getFacetHolder();
         if (typedHolder.getFeatureType().isActionParameter()) {
             addFacet(new MultiLineFacetNone(typedHolder));
             addFacet(new MaxLengthFacetUnlimited(typedHolder));
-
-            addFacet(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout", getConfiguration().getApplib().getAnnotation().getParameterLayout()));
+            addFacet(new LabelAtFacetFromLayoutConfiguration(
+                    getConfiguration().getApplib().getAnnotation().getParameterLayout().getLabelPosition(),
+                    typedHolder));
         }
-
     }
 
-    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey, final IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
-        final LabelPosition labelPosition = from(configPropsHolder);
-        return new LabelAtFacetFromLayoutConfiguration(labelPosition, facetHolder);
-    }
-
-    private static LabelPosition from(final IsisConfiguration.Applib.Annotation.ConfigPropsForPropertyOrParameterLayout configPropsHolder) {
-        return configPropsHolder.getLabelPosition();
-    }
 }
