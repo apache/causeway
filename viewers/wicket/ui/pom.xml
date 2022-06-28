@@ -303,6 +303,10 @@
 					<groupId>org.apache.wicket</groupId>
 					<artifactId>wicket-core</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.webjars</groupId>
+					<artifactId>popper.js</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
