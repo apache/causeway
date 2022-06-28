@@ -18,11 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facetapi;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationContext;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
@@ -87,7 +89,7 @@ implements FacetHolder {
             return shared.getFacetCount();
         }
         // cannot simply add up shared and local
-        return (int)streamFacets().count();
+        return (int)streamPopulatedFacetTypes().count();
     }
 
     @Override
@@ -110,9 +112,11 @@ implements FacetHolder {
         if(localFacet.semanticEquals(sharedFacet)) {
             return localFacet; // arbitrarily picking one
         }
-        return localFacet; // have the local win, this is safe for layout.xml stuff, but not for future use-cases
+        // semantic conflict
+        // have the local win, this is safe for layout.xml stuff, but probably not for future use-cases
+        return localFacet;
 
-//        // semantic conflict (unfortunately semanticEquals() is not always implemented yet)
+//        unfortunately semanticEquals() is not always implemented yet, otherwise we could throw ...
 //        throw _Exceptions.illegalState("conflicting facet semantics between shared %s and local %s",
 //                FacetUtil.toString(sharedFacet),
 //                FacetUtil.toString(localFacet));
@@ -126,20 +130,55 @@ implements FacetHolder {
 
     @Override
     public Stream<Facet> streamFacets() {
-        //FIXME[ISIS-3049] concat with local
-        return shared.streamFacets();
+        // optimization, not strictly required
+        if(local.getFacetCount()==0) {
+            return shared.streamFacets();
+        }
+        return streamPopulatedFacetTypes()
+                .<Facet>map(facetType->getFacet(facetType))
+                .filter(_NullSafe::isPresent);
     }
 
     @Override
     public Stream<FacetRanking> streamFacetRankings() {
-        //FIXME[ISIS-3049] concat with local
-        return shared.streamFacetRankings();
+        // optimization, not strictly required
+        if(local.getFacetCount()==0) {
+            return shared.streamFacetRankings();
+        }
+        return streamPopulatedFacetTypes()
+                .map(facetType->getFacetRanking(facetType).orElseThrow());
     }
 
     @Override
     public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
-        //FIXME[ISIS-3049] concat with local
-        return shared.getFacetRanking(facetType);
+        val localFacetRanking = local.getFacetRanking(facetType);
+        val sharedFacetRanking = shared.getFacetRanking(facetType);
+
+        if(localFacetRanking.isEmpty()) {
+            return sharedFacetRanking;
+        }
+        if(sharedFacetRanking.isEmpty()) {
+            return localFacetRanking;
+        }
+
+        val combinedFacetRanking = new FacetRanking(facetType);
+        // arbitrarily picking order: shared first and local last, such that if in conflict local wins
+        combinedFacetRanking.addAll(sharedFacetRanking.get());
+        combinedFacetRanking.addAll(localFacetRanking.get());
+
+        return Optional.of(combinedFacetRanking);
+    }
+
+    // -- HELPER
+
+    private Stream<Class<? extends Facet>> streamPopulatedFacetTypes() {
+        val facetTypes = new HashSet<Class<? extends Facet>>();
+        Stream.concat(
+                shared.streamFacets(),
+                local.streamFacets())
+        .map(Facet::facetType)
+        .forEach(facetTypes::add);
+        return facetTypes.stream();
     }
 
 }

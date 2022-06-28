@@ -121,6 +121,11 @@ public final class FacetRanking {
         return changesTopRank;
     }
 
+    public void addAll(final @NonNull FacetRanking facetRanking) {
+        facetRanking.facetsByPrecedence.asNavigableMapElseFail()
+            .forEach((k, facets)->facets.forEach(this::add));
+    }
+
     /**
      * Optionally returns the winning facet, considering the event facet (if any) and the top rank,
      * based on whether there was any added that has given facetType.
@@ -277,6 +282,8 @@ public final class FacetRanking {
         }
 
     }
+
+
 
 
 }

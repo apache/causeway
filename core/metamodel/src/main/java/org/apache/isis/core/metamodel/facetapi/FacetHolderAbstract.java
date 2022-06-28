@@ -70,14 +70,14 @@ implements FacetHolder {
     private final Object $lock = new Object();
 
     @Override
-    public boolean containsFacet(final Class<? extends Facet> facetType) {
+    public final boolean containsFacet(final Class<? extends Facet> facetType) {
         synchronized($lock) {
             return snapshot.get().containsKey(facetType);
         }
     }
 
     @Override
-    public void addFacet(final @NonNull Facet facet) {
+    public final void addFacet(final @NonNull Facet facet) {
         synchronized($lock) {
 
             val ranking = rankingByType.computeIfAbsent(facet.facetType(), FacetRanking::new);
@@ -88,15 +88,17 @@ implements FacetHolder {
         }
     }
 
+    //TODO should be made final - however, overridden by ObjectSpecificationAbstract,
+    // which potentially leads to inconsistent behavior with facet and facet-ranking streaming
     @Override
-    public <T extends Facet> T getFacet(final Class<T> facetType) {
+    public /*final*/ <T extends Facet> T getFacet(final Class<T> facetType) {
         synchronized($lock) {
             return uncheckedCast(snapshot.get().get(facetType));
         }
     }
 
     @Override
-    public Stream<Facet> streamFacets() {
+    public final Stream<Facet> streamFacets() {
         synchronized($lock) {
             // consumers should play nice and don't take too long (as we have a lock)
             return snapshot.get().values().stream();
@@ -104,7 +106,7 @@ implements FacetHolder {
     }
 
     @Override
-    public int getFacetCount() {
+    public final int getFacetCount() {
         synchronized($lock) {
             return snapshot.get().size();
         }
@@ -113,12 +115,12 @@ implements FacetHolder {
     // -- VALIDATION SUPPORT
 
     @Override
-    public Stream<FacetRanking> streamFacetRankings() {
+    public final Stream<FacetRanking> streamFacetRankings() {
         return rankingByType.values().stream();
     }
 
     @Override
-    public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
+    public final Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
         return Optional.ofNullable(rankingByType.get(facetType));
     }
 
