@@ -53,7 +53,7 @@ implements FacetHolder {
         return new FacetHolderAbstract(mmc, featureIdentifier) {};
     }
 
-    public static FacetHolder delegated(
+    public static FacetHolder layered(
             final Identifier featureIdentifier,
             final FacetHolder parentLayer) {
         return new FacetHolderLayered(featureIdentifier, parentLayer);

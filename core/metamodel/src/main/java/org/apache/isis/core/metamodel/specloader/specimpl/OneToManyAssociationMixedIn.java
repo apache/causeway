@@ -96,7 +96,7 @@ implements MixedInMember {
                     _MixedInMemberNamingStrategy.determineIdFrom(mixinAction)),
                 mixinAction.getFacetedMethod(), typeOfSpec(mixinAction));
 
-        this.facetHolder = FacetHolderAbstract.delegated(
+        this.facetHolder = FacetHolderAbstract.layered(
                 super.getFeatureIdentifier(),
                 mixinAction.getFacetedMethod());
 
