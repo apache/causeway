@@ -56,7 +56,7 @@ implements FacetHolder {
     public static FacetHolder delegated(
             final Identifier featureIdentifier,
             final FacetHolder parentLayer) {
-        return new FacetHolderDelegated(featureIdentifier, parentLayer);
+        return new FacetHolderLayered(featureIdentifier, parentLayer);
     }
 
     // -- FIELDS

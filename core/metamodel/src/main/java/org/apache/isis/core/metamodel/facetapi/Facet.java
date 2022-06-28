@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 
@@ -168,5 +169,21 @@ extends
      * On same precedence, its unspecified, which one wins. (Warnings should be logged.)
      */
     public Precedence getPrecedence();
+
+    /**
+     * Whether this {@link Facet} can be installed on a mixed-in {@link FacetedMethod},
+     * and hence effectively be shared among multiple (target) <i>Mixee</i> types.
+     * <p>
+     * Regularly {@link Facet}s for <i>Members</i> are installed on the <i>Member's</i> {@link FacetedMethod}.
+     * However, for mixed-in <i>Members</i>, the {@link FacetedMethod} is a shared one,
+     * which usually shall not receive any {@link Facet}s,
+     * that eg. originate from <i>layout.xml</i> file introspection.
+     * Those instead would be installed on a synthetic {@link FacetHolder} specifically created
+     * for the associated <i>Mixee</i> type.
+     * @see FacetHolderLayered
+     */
+    public default boolean isAllowedToBeSharedWhenMixedIn() {
+        return true;
+    }
 
 }
