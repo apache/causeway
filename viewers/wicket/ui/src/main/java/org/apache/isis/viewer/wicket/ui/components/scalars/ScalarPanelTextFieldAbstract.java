@@ -59,6 +59,7 @@ extends ScalarPanelFormFieldAbstract<T> {
             final ScalarModel scalarModel,
             final Class<T> type) {
         super(id, scalarModel, type);
+        guardAgainstIncompatibleScalarType();
     }
 
     // -- CONVERSION
@@ -92,13 +93,6 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     protected final IModel<T> unwrappedModel() {
-        _Assert.assertTrue(scalarModel().getScalarTypeSpec().isAssignableFrom(type), ()->
-            String.format("[%s:%s] cannot possibly unwrap model of type %s into target type %s",
-                    this.getClass().getSimpleName(),
-                    scalarModel().getIdentifier(),
-                    scalarModel().getScalarTypeSpec().getCorrespondingClass(),
-                    type));
-
         return scalarModel().unwrapped(type);
     }
 
@@ -137,6 +131,15 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     // -- HELPER
+
+    private void guardAgainstIncompatibleScalarType() {
+        _Assert.assertTrue(scalarModel().getScalarTypeSpec().isAssignableFrom(type), ()->
+            String.format("[%s:%s] cannot possibly unwrap model of type %s into target type %s",
+                    this.getClass().getSimpleName(),
+                    scalarModel().getIdentifier(),
+                    scalarModel().getScalarTypeSpec().getCorrespondingClass(),
+                    type));
+    }
 
     <F extends FormComponent<?>> F applyFormComponentAttributes(final F formComponent) {
         val scalarModel = scalarModel();

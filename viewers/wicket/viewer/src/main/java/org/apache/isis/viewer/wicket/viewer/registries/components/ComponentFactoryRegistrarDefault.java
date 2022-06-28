@@ -225,17 +225,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new IsisBlobPanelFactory());
         componentFactories.add(new IsisClobPanelFactory());
 
-        val registeredScalarTypes =
-            componentFactories.stream(ComponentFactoryScalarAbstract.class)
-            .flatMap(f->f.getScalarTypes().stream())
-            .collect(Collectors.toSet());
-
-        valueSemanticsResolver.streamClassesWithValueSemantics()
-            .filter(_Predicates.not(registeredScalarTypes::contains))
-            .flatMap(valueSemanticsResolver::streamValueSemantics)
-            //.peek(valueSemantics->System.err.printf("%s -> %s%n", valueSemantics, valueSemantics.getCorrespondingClass().getName()))
-            .map(valueSemantics->createForValueSemantics((ValueSemanticsProvider)valueSemantics))
-            .forEach(componentFactories::add);
+        // install after explicit values, but before fallbacks
+        addGenericComponentFactoriesForScalar(componentFactories);
 
         componentFactories.add(new ValueFallbackPanelFactory());
 
@@ -289,99 +280,116 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     createForValueSemantics(final ValueSemanticsProvider<T> valueSemantics) {
 
         if(valueSemantics.isNumberType()) {
-            return createScalarPanelUsingNumberField(valueSemantics.getCorrespondingClass());
+            return new ScalarPanelFactoryForNumberField<T>(valueSemantics.getCorrespondingClass());
         }
 
         if(valueSemantics.isTemporalType()) {
-            return createScalarPanelUsingTemporalPicker(valueSemantics.getCorrespondingClass());
+            return new ScalarPanelFactoryForTemporalPicker<T>(valueSemantics.getCorrespondingClass());
         }
 
         if(valueSemantics.isCompositeType()) {
-            return createScalarPanelForComposite(valueSemantics.getCorrespondingClass());
+            return new ScalarPanelFactoryForCompositeValue<T>(valueSemantics.getCorrespondingClass());
         }
 
-        return createScalarPanelUsingTextField(valueSemantics.getCorrespondingClass());
+        return new ScalarPanelFactoryForTextField<T>(valueSemantics.getCorrespondingClass());
     }
 
-    public static <T extends Serializable> ComponentFactoryScalarAbstract
-    createScalarPanelUsingTextField(final Class<T> valueTypeClass) {
+    public static class ScalarPanelFactoryForTextField<T extends Serializable>
+    extends ComponentFactoryScalarAbstract {
 
-        var valueTypeClasses = withPrimitiveVariant(valueTypeClass);
+        private static final long serialVersionUID = 1L;
 
-        return new ComponentFactoryScalarAbstract(
-                ScalarPanelTextFieldWithValueSemantics.class,
-                valueTypeClasses) {
+        private final Class<T> valueTypeClass;
 
-            private static final long serialVersionUID = 1L;
+        protected ScalarPanelFactoryForTextField(final Class<T> valueTypeClass) {
+            super(ScalarPanelTextFieldWithValueSemantics.class, withPrimitiveVariant(valueTypeClass));
+            this.valueTypeClass = valueTypeClass;
+        }
 
-            @Override
-            public Component createComponent(final String id, final ScalarModel scalarModel) {
-                return new ScalarPanelTextFieldWithValueSemantics<T>(id, scalarModel, valueTypeClass);
-            }
-
-        };
+        @Override
+        public Component createComponent(final String id, final ScalarModel scalarModel) {
+            return new ScalarPanelTextFieldWithValueSemantics<T>(id, scalarModel, valueTypeClass);
+        }
     }
 
-    public static <T extends Serializable> ComponentFactoryScalarAbstract
-    createScalarPanelUsingNumberField(final Class<T> valueTypeClass) {
 
-        var valueTypeClasses = withPrimitiveVariant(valueTypeClass);
+    public static class ScalarPanelFactoryForNumberField<T extends Serializable>
+    extends ComponentFactoryScalarAbstract {
 
-        return new ComponentFactoryScalarAbstract(
-                ScalarPanelTextFieldNumeric.class,
-                valueTypeClasses) {
+        private static final long serialVersionUID = 1L;
 
-            private static final long serialVersionUID = 1L;
+        private final Class<T> valueTypeClass;
 
-            @Override
-            public Component createComponent(final String id, final ScalarModel scalarModel) {
-                return new ScalarPanelTextFieldNumeric<T>(id, scalarModel, valueTypeClass);
-            }
+        protected ScalarPanelFactoryForNumberField(final Class<T> valueTypeClass) {
+            super(ScalarPanelTextFieldNumeric.class, withPrimitiveVariant(valueTypeClass));
+            this.valueTypeClass = valueTypeClass;
+        }
 
-        };
+        @Override
+        public Component createComponent(final String id, final ScalarModel scalarModel) {
+            return new ScalarPanelTextFieldNumeric<T>(id, scalarModel, valueTypeClass);
+        }
     }
 
-    public static <T extends Serializable> ComponentFactoryScalarAbstract
-    createScalarPanelUsingTemporalPicker(final Class<T> valueTypeClass) {
+    public static class ScalarPanelFactoryForTemporalPicker<T extends Serializable>
+    extends ComponentFactoryScalarAbstract {
 
-        // assuming there is no primitive temporal type
-        val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
+        private static final long serialVersionUID = 1L;
 
-        return new ComponentFactoryScalarAbstract(
-                ScalarPanelTextFieldWithTemporalPicker.class,
-                valueTypeClasses) {
+        private final Class<T> valueTypeClass;
 
-            private static final long serialVersionUID = 1L;
+        protected ScalarPanelFactoryForTemporalPicker(final Class<T> valueTypeClass) {
+            super(ScalarPanelTextFieldWithTemporalPicker.class,
+                    // assuming there is no primitive temporal type
+                    Can.<Class<?>>ofSingleton(valueTypeClass));
+            this.valueTypeClass = valueTypeClass;
+        }
 
-            @Override
-            public Component createComponent(final String id, final ScalarModel scalarModel) {
-                return new ScalarPanelTextFieldWithTemporalPicker<T>(id, scalarModel, valueTypeClass);
-            }
-
-        };
+        @Override
+        public Component createComponent(final String id, final ScalarModel scalarModel) {
+            return new ScalarPanelTextFieldWithTemporalPicker<T>(id, scalarModel, valueTypeClass);
+        }
     }
 
-    public static <T extends Serializable> ComponentFactoryScalarAbstract
-    createScalarPanelForComposite(final Class<T> valueTypeClass) {
+    public static class ScalarPanelFactoryForCompositeValue<T extends Serializable>
+    extends ComponentFactoryScalarAbstract {
 
-        // assuming there is no primitive composite type
-        val valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
+        private static final long serialVersionUID = 1L;
 
-        return new ComponentFactoryScalarAbstract(
-                CompositeValuePanel.class,
-                valueTypeClasses) {
+        private final Class<T> valueTypeClass;
 
-            private static final long serialVersionUID = 1L;
+        protected ScalarPanelFactoryForCompositeValue(final Class<T> valueTypeClass) {
+            super(CompositeValuePanel.class,
+                    // assuming there is no primitive composite type
+                    Can.<Class<?>>ofSingleton(valueTypeClass));
+            this.valueTypeClass = valueTypeClass;
+        }
 
-            @Override
-            public Component createComponent(final String id, final ScalarModel scalarModel) {
-                return new CompositeValuePanel<T>(id, scalarModel, valueTypeClass);
-            }
-
-        };
+        @Override
+        public Component createComponent(final String id, final ScalarModel scalarModel) {
+            return new CompositeValuePanel<T>(id, scalarModel, valueTypeClass);
+        }
     }
 
     // -- HELPER
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private void addGenericComponentFactoriesForScalar(
+            final ComponentFactoryList componentFactories) {
+
+        // collect those registered up to this point, so we don't override with generic ones at steps below
+        val registeredScalarTypes =
+                componentFactories.stream(ComponentFactoryScalarAbstract.class)
+                .flatMap(f->f.getScalarTypes().stream())
+                .collect(Collectors.toSet());
+
+        valueSemanticsResolver.streamClassesWithValueSemantics()
+            .filter(_Predicates.not(registeredScalarTypes::contains))
+            .flatMap(valueSemanticsResolver::streamValueSemantics)
+            //.peek(valueSemantics->System.err.printf("%s -> %s%n", valueSemantics, valueSemantics.getCorrespondingClass().getName()))
+            .map(valueSemantics->createForValueSemantics((ValueSemanticsProvider)valueSemantics))
+            .forEach(componentFactories::add);
+    }
 
     private static Can<Class<?>> withPrimitiveVariant(final @NonNull Class<?> valueTypeClass) {
         var valueTypeClasses = Can.<Class<?>>ofSingleton(valueTypeClass);
