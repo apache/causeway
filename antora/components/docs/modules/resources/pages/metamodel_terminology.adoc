@@ -1,0 +1,46 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+# metamodel_terminology
+.metamodel_terminology
+[plantuml,file="metamodel_terminology.png"]
+--
+@startuml
+
+skinparam nodesep 20
+skinparam ranksep 1
+
+together {
+    (Domain\nObject) as DO
+    (Entity) as E
+    (View\nModel) as VM
+    DO <-d-"is a" VM
+    DO <-d-"is a" E
+    (Isis) as FW
+    FW .u.> VM : manages
+    (Persistence\nLayer) as PL
+    PL .u.> E : manages
+}
+
+together {
+    (Member) as MB
+    (Property) as P
+    (Collection) as C
+    (Action) as A
+    P "is a"-u-> MB
+    C "is a"-u-> MB
+    A "is a"-u-> MB
+}
+DO --> MB : has 1..*
+
+(Mixin) as M
+(Mixee) as ME
+
+M "contributes"..> MB
+M "to"-> ME
+DO -> ME : can \n act \n as
+
+(Service) as S
+(Domain\nService) as DS
+DS "is a"-u-> S
+DS --> A : contribute \n according \n to <i>Nature</i>
+@enduml
+--

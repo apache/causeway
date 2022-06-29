@@ -94,8 +94,10 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     }
 
     /**
-     * Subtypes can define a one-arg constructor (for nested non-static classes of nested non-static mixins);
-     * the framework sets state via (non-API) setters.
+     * Subtypes can define a one-arg constructor; the framework sets state via (non-API) setters.
+     * This is useful where the domain event is declared in a mixin, which itself is nested as a non-static class within a parent type.
+     * In such a case the Java compiler implicitly adds a one-arg constructor of the parent type to the mixin, which means that the mixin contributes to its parent.
+     * The domain event defined within the mixin must also be non-static, and the compiler will again implicit add a one-arg constructor taking the mixin instance as <i>its</i> source.
      */
     public ActionDomainEvent(final S source) {
         super(source);

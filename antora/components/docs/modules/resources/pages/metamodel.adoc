@@ -1,0 +1,103 @@
+# metamodel
+.metamodel
+[plantuml,file="metamodel.png"]
+--
+@startuml
+!include <logos/java>
+!include <tupadr3/font-awesome/at>
+!include <tupadr3/font-awesome/envira>
+!include <office/Databases/database_cube>
+!include <material/xml.puml>
+
+legend top
+|= notation |= explanation |
+| ""__underline__"" | DDD Pattern|
+endlegend
+
+together {
+    rectangle "<$database_cube><$at>\n<<Annotation>>\nORM (JPA/JDO)" as PERS
+    rectangle "<$envira><$at>\n<<Annotation>>\nSpring" as SPRING
+    rectangle "<img:https://isis.apache.org/_/img/home/isis-logo-56x64.png><$at>\n<<Annotation>>\nApache Isis" as FW
+    rectangle "<img:https://isis.apache.org/_/img/home/isis-logo-56x64.png><$java>\n<<Supprting Methods>>\nApache Isis" as SM
+    rectangle "<$java><$ma_xml><$at>\n<<Annotation>>\nJAXB" as JAXB
+
+    SPRING -[hidden]- PERS
+    PERS -[hidden]- FW
+    FW -[hidden]- SM
+    SM -[hidden]- JAXB
+
+    note left of SPRING
+        * __Repository__
+        * Name (@Named)
+        * Service (via FW @DomainService)
+        * Component (via FW @DomainObject)
+    end note
+
+    note left of PERS
+        * Cardinality
+        * TableName
+        * Column
+        ** Name
+        ** Length
+        ** Type
+    end note
+
+    note left of FW
+        * __Entitiy__
+        ** Property
+        ** Collection
+        ** Action
+        * __Factory__
+        * Layout
+        ** Property Sequence
+            (Table and Forms)
+        ** Action Sequence (Menu)
+        ** Styles (cssClass)
+        * ViewModel
+        * Mixin
+    end note
+
+    note left of SM
+        * autoComplete…()
+        * choices…()
+        * default…()
+        * disable…()
+        * get…()
+        * hide…()
+        * iconName()
+        * set…()
+        * title()
+        * validate…()
+    end note
+
+    note left of JAXB
+        * @XmlAccessorType
+        * @XmlJavaTypeAdapter
+        * @XmlRootElement
+    end note
+}
+
+rectangle "<img:https://isis.apache.org/_/img/home/isis-logo-56x64.png>\nMetaModel" as MM
+
+SPRING -> MM
+PERS -> MM
+FW -> MM
+SM -> MM
+JAXB -> MM
+
+(MetaModelValidation) as MMV
+MM <- MMV : perform \n consistency \n check
+
+rectangle "WicketViewer" as UI
+database DB
+interface "Restful\nObjects" as REST
+MM -d-> UI : generate
+MM -d-> DB : generate
+MM -d-> REST : generate
+
+@enduml
+--
+note left of UI
+File | Edit | Help
+end note
+

@@ -1,0 +1,71 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+# eventbus_domain
+.eventbus_domain
+[plantuml,file="eventbus_domain.png"]
+
+--
+@startuml
+
+skinparam nodesep 20
+
+together {
+    (Domain\nService) as DS
+    (Domain\nObject) as DO
+    (<i>Domain\n<i>Event) as DE
+}
+(<i>Member</i>) as MB
+together {
+    (Property) as P
+    (Action) as A
+    (Collection) as C
+}
+P -u-> MB : is a
+A -u-> MB : is a
+C -u-> MB : is a
+
+DO -d-> MB : has
+DS -d--> A : has
+
+DE -d-> MB : can be \n declared \n for
+
+(Execution) as EX
+P "edit \n is an"-->  EX
+A "invocation \n is an"--> EX
+
+(Event\nBus) as EB
+(Spring) as SPRING
+SPRING .l.> EB : provides/\nmanages
+EX -> EB : is published as: \n * before event (phase: EXECUTING)\n * after event (phase: EXECUTED)
+
+(Event\nListener) as EL
+EL --> EB : listens \n on
+EL -u-> MB : can check/modify: \nvisibility (hide), \nusability (disable), \nvalidity (validate)
+
+note right of DE
+Phases are:
+* HIDING
+* DISABLING
+* VALIDATING
+* EXECUTING
+* EXECUTED
+The framework automatically sends out
+events with the phases in the order listed.
+end note
+
+note right of MB
+<i>DomainEvent</i> is declared as an
+annotation type element in a member annotation, e.g.
+<b>@Action(
+        <b>domainEvent=<i>Custom</i>ActionDomainEvent.class).
+end note
+
+note right of EL
+EventListeners can be declared on
+any public Spring bean method, e.g.
+<b>@EventListener(
+       <b><i>Custom</i>ActionDomainEvent.class).
+Via <i>DomainEvent</i>.getEventPhase(),
+further filtering can be applied.
+end note
+@enduml
+--
