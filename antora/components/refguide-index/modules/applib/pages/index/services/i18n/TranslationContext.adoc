@@ -7,7 +7,6 @@
 .TranslationContext.java
 ----
 class TranslationContext {
-  TranslationContext forTranslationContextHolder(HasTranslationContext hasTranslationContext)
   TranslationContext forClassName(Class<?> contextClass)
   TranslationContext forMethod(Class<?> contextClass, String contextMethodName)
   TranslationContext forMethod(Method method)

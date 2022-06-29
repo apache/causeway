@@ -26,7 +26,7 @@ void.class;     // <.>
 <.> xref:#choicesFrom[choicesFrom]
 +
 --
-References a collection of a certain element type, for an action with a collection parameter of that element type; the action's choices will be automatically populated from checkboxes rendered in the collection.
+References a collection of a certain element type (by its member-id), for an action with scalar or collection parameters of that element type; the action's choices will be automatically populated from checkboxes rendered in the collection (multi-select).
 --
 <.> xref:#commandDtoProcessor[commandDtoProcessor]
 +
@@ -79,7 +79,7 @@ For downloading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguid
 [#choicesFrom]
 === choicesFrom
 
-References a collection of a certain element type, for an action with a collection parameter of that element type; the action's choices will be automatically populated from checkboxes rendered in the collection.
+References a collection of a certain element type (by its member-id), for an action with scalar or collection parameters of that element type; the action's choices will be automatically populated from checkboxes rendered in the collection (multi-select).
 
 This will also result in the action being rendered near to the collection, similar to the way in which _ActionLayout#associateWith()_ does.
 

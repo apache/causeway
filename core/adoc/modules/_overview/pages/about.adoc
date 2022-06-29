@@ -568,7 +568,7 @@ Directory: /testing/specsupport/applib
 io.cucumber:cucumber-java:jar:<managed> +
 io.cucumber:cucumber-junit-platform-engine:jar:<managed> +
 io.cucumber:cucumber-spring:jar:<managed> +
-io.cucumber:messages:jar:19.0.0 +
+io.cucumber:messages:jar:19.1.2 +
 org.apache.isis.testing:isis-testing-fakedata-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed> +
@@ -866,6 +866,10 @@ demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoEntities +
 demoapp.dom.types.javalang.doubles.jpa.WrapperDoubleJpaEntities +
 demoapp.dom.types.javalang.doubles.persistence.WrapperDoubleSeeding +
 demoapp.dom.types.javalang.doubles.samples.WrapperDoubleSamples +
+demoapp.dom.types.javalang.enums.jdo.JavaLangEnumJdoEntities +
+demoapp.dom.types.javalang.enums.jpa.JavaLangEnumJpaEntities +
+demoapp.dom.types.javalang.enums.persistence.JavaLangEnumSeeding +
+demoapp.dom.types.javalang.enums.samples.JavaLangEnumSamples +
 demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoEntities +
 demoapp.dom.types.javalang.floats.jpa.WrapperFloatJpaEntities +
 demoapp.dom.types.javalang.floats.persistence.WrapperFloatSeeding +
@@ -1283,6 +1287,7 @@ com.fasterxml.jackson.core:jackson-databind:jar:<managed> +
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
 org.apache.isis.core:isis-jdk-supplemental:pom:<managed> +
 org.jdom:jdom2:jar:<managed> +
+org.jsoup:jsoup:jar:<managed> +
 org.junit.jupiter:junit-jupiter-api:jar:<managed> +
 org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
 org.junit.jupiter:junit-jupiter-params:jar:<managed> +
@@ -2644,7 +2649,7 @@ o.a.i.viewer.common.model.userprofile.UserProfileUiModelProviderDefault +
 ****
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
-org.webjars:font-awesome:jar:6.1.0 +
+org.webjars:font-awesome:jar:6.1.1 +
 ****
 
 .Document Index Entries
@@ -5415,11 +5420,11 @@ eg. code mining, automated documentation.
 
 .Dependencies
 ****
-org.checkerframework:checker-qual:jar:3.22.1 +
+org.checkerframework:checker-qual:jar:3.22.2 +
 org.junit.jupiter:junit-jupiter-api:jar:<managed> +
 org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
 org.junit.vintage:junit-vintage-engine:jar:<managed> +
-org.mapstruct:mapstruct-processor:jar:1.5.1.Final +
+org.mapstruct:mapstruct-processor:jar:1.5.2.Final +
 org.projectlombok:lombok:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
 org.springframework.boot:spring-boot-starter-log4j2:jar:<managed> +

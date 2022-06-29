@@ -87,10 +87,13 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     }
 
     /**
-     * Subtypes can define a one-arg constructor; the framework sets state via (non-API) setters.
-     * This is useful where the domain event is declared in a mixin, which itself is nested as a non-static class within a parent type.
-     * In such a case the Java compiler implicitly adds a one-arg constructor of the parent type to the mixin, which means that the mixin contributes to its parent.
-     * The domain event defined within the mixin must also be non-static, and the compiler will again implicit add a one-arg constructor taking the mixin instance as <i>its</i> source.
+     * Subtypes can define a one-arg constructor; the framework sets state
+     * via (non-API) setters.
+     * <p>
+     * A one-arg constructor is particularly useful in the context of non-static
+     * DomainEvent class nesting.
+     * @apiNote The Java compiler implicitly adds a constructor
+     * to the non-static nested class, receiving the parent type as single argument.
      */
     public PropertyDomainEvent(final S source) {
         super(source);
