@@ -358,7 +358,7 @@ under the License.
 
 		<cucumber.version>7.4.1</cucumber.version>
 
-		<cxf-rt-rs-client.version>3.5.2-jbossorg-2</cxf-rt-rs-client.version>
+		<cxf-rt-rs-client.version>3.5.3</cxf-rt-rs-client.version>
 
 		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
