@@ -12,9 +12,11 @@
 skinparam nodesep 20
 skinparam ranksep 1
 
-(Domain\nObject) as DO
-(Entity) as E
-(View\nModel) as VM
+together {
+	(Domain\nObject) as DO
+	(Entity) as E
+	(View\nModel) as VM
+}
 (<i>Apache Isis</i>) as FW
 (Persistence\nLayer) as PL
 together {
@@ -24,23 +26,22 @@ together {
 (Service) as S
 (Domain\nService) as DS
 (<i>Spring</i>) as SPRING
-(Member) as MB
-(Property) as P
-(Collection) as C
-(Action) as A
-
 together {
-    DO <-d-"is a" VM
-    DO <-d-"is a" E
-    FW .u.> VM : manages
-    PL .u.> E : manages
+	(Member) as MB
+	(Property) as P
+	(Collection) as C
+	(Action) as A
 }
 
-together {
-    P "is a"-u-> MB
-    C "is a"-u-> MB
-    A "is a"-u-> MB
-}
+DO <-d-"is a" VM
+DO <-d-"is a" E
+FW .u.> VM : manages
+PL .u.> E : manages
+
+P "is a"-u-> MB
+C "is a"-u-> MB
+A "is a"-u-> MB
+
 DO --> MB : has 1..*
 
 M "contributes\n a"..> MB
@@ -49,24 +50,25 @@ DO -> ME : can \n act \n as
 
 SPRING ..> S : manages
 DS "is a"-u-> S
-DS --> A : contributes\n 1..*\n
+DS --> A : has 1..*
 @enduml
 --
 
-*_Viewmodels_* and *_Entities_* are specializations of *_Domain-Objects_*. 
+*_Viewmodels_* and *_Entities_* are specializations of *_Domain Objects_*. 
 
-_Domain-Objects_ have *_Properties_*, *_Collections_* and *_Actions_*, 
+_Domain Objects_ have *_Properties_*, *_Collections_* and *_Actions_*, 
 while _Viewmodels_ are (lifecycle-) managed by _Apache Isis_, 
 _Entities_ are managed by the configured persistence layer 
 (either JDO or JPA).
 
-*_Services_* in general are (lifecycle-) managed by _Spring_. 
-We distinguish between _Services_ that *_contribute_* to the metamodel
-and those that don't. Contributing _Services_ we call *_Domain-Services_*. 
-Those do contribute _Actions_ to the metamodel. 
+*_Services_* in general are (lifecycle-) managed by _Spring_.
+We distinguish between _Services_ that are *_included_* in the metamodel
+and those that are not. Included _Services_ we call *_Domain Services_*,
+and their _Actions_ (like _Domain Objects_) are part of the metamodel.
+
 Those _Actions_ are either visible as _Menu Actions_ in the UI 
 and/or made available for the _Restful Objects Viewer_. 
 (As indicated by the so called _Service's_ *_Nature_*.)
 
-*_Mixins_* do contribute either a _Property_, a _Collection_ 
+*_Mixins_* do *_contribute_* either a _Property_, a _Collection_ 
 or an _Action_ to their *_Mixee_* (-type). 
