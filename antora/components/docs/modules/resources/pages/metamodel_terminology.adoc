@@ -49,7 +49,7 @@ DO -> ME : can \n act \n as
 
 SPRING ..> S : manages
 DS "is a"-u-> S
-DS --> A : contributes\n an\n
+DS --> A : contributes\n 1..*\n
 @enduml
 --
 
