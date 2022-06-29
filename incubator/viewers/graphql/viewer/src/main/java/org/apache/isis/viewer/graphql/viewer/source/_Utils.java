@@ -20,36 +20,41 @@ package org.apache.isis.viewer.graphql.viewer.source;
 
 final class _Utils {
 
-    public static final String SINGLE_PARAM_META_DATA_TYPENAME = "Param_Meta_Data";
     final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
     final static String GQL_MUTATTIONS_FIELDNAME = "_gql_mutations";
-    final static String FIELD_META_DATA_TYPENAME = "_gql_Field_Meta_Data";
-    final static String FIELD_META_DATA_TYPENAME_SUFFIX = "__Field_metadata";
-    final static String MUTATOR_META_DATA_TYPENAME = "Mutator_Meta_Data";
-    static final String PARAMS_META_DATA_TYPENAME_SUFFIX = "__Params_Meta_Data";
+    final static String GQL_DOMAINOBJECT_STRUCTURE_TYPENAME = "_gql__DomainObject_meta_structure";
+    final static String FIELD_META_DATA_TYPENAME = "_gql__DomainObject_meta_fields_data";
+
+    final public static String SINGLE_PARAM_META_DATA_TYPENAME = "Param_Meta_Data"; //TODO: should go
+    final static String MUTATOR_META_DATA_TYPENAME = "Mutator_Meta_Data"; //TODO: should go
+    static final String PARAMS_META_DATA_TYPENAME_SUFFIX = "__Params_Meta_Data"; //TODO: should go
 
     static String metaTypeName(final String logicalTypeNameSanitized){
         return logicalTypeNameSanitized + "__DomainObject_meta";
     }
 
-    static String mutatorsTypeName(final String logicalTypeNameSanitized){
-        return logicalTypeNameSanitized + "__DomainObject_mutators";
-    }
-
-    static String metaFieldsTypeName(final String logicalTypeNameSanitized){
-        return logicalTypeNameSanitized + "__DomainObject_fields";
-    }
-
-    static String metaMutationsTypeName(final String logicalTypeNameSanitized){
+    static String mutationsTypeName(final String logicalTypeNameSanitized){
         return logicalTypeNameSanitized + "__DomainObject_mutations";
     }
 
+    static String metaFieldsTypeName(final String logicalTypeNameSanitized){
+        return metaTypeName(logicalTypeNameSanitized) + "_fields";
+    }
+
+    static String metaMutationsTypeName(final String logicalTypeNameSanitized){
+        return metaTypeName(logicalTypeNameSanitized) + "_mutations";
+    }
+
     static String parameterizedFieldMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){
-        return logicalTypeNameSanitized + "_" + fieldName + FIELD_META_DATA_TYPENAME_SUFFIX;
+        return metaFieldsTypeName(logicalTypeNameSanitized) + "_" + fieldName;
     }
 
     static String parametersMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){
-        return logicalTypeNameSanitized + "_" + fieldName + PARAMS_META_DATA_TYPENAME_SUFFIX;
+        return parameterizedFieldMetaDataTypeName(logicalTypeNameSanitized, fieldName) + "_" + "params";
+    }
+
+    static String parameterMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName, final String paramName){
+        return parametersMetaDataTypeName(logicalTypeNameSanitized, fieldName) + "_" + paramName;
     }
 
     static String logicalTypeNameSanitized(final String logicalTypeName) {

@@ -103,7 +103,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                 case ABSTRACT:
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
 
-                    // TODO: App interface should mapp to gql interfaces?
+                    // TODO: App interface should map to gql interfaces?
                     objectTypeFactory
                             .objectTypeFromObjectSpecification(objectSpecification, graphQLObjectTypes, codeRegistryBuilder);
 
@@ -162,10 +162,21 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                 .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
                 .build();
         graphQLObjectTypes.add(mutatorMetaDataType);
+        // END TODO: make all dynamic
+
+
+        GraphQLObjectType structureType = newObject().name(_Utils.GQL_DOMAINOBJECT_STRUCTURE_TYPENAME)
+                .field(newFieldDefinition().name("properties").type(GraphQLList.list(Scalars.GraphQLString)))
+                .field(newFieldDefinition().name("collections").type(GraphQLList.list(Scalars.GraphQLString)))
+                .field(newFieldDefinition().name("safeActions").type(GraphQLList.list(Scalars.GraphQLString)))
+                .field(newFieldDefinition().name("idempotentActions").type(GraphQLList.list(Scalars.GraphQLString)))
+                .field(newFieldDefinition().name("nonIdempotentActions").type(GraphQLList.list(Scalars.GraphQLString)))
+                .field(newFieldDefinition().name("layoutXml").type(Scalars.GraphQLString))
+                .build();
+        graphQLObjectTypes.add(structureType);
 
         // can remain 'static' for all fields / collections (having no params)
         GraphQLObjectType fieldMetaDataType = newObject().name(_Utils.FIELD_META_DATA_TYPENAME)
-                .field(newFieldDefinition().name("validate").type(Scalars.GraphQLString).build())
                 .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())
                 .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
                 .build();
