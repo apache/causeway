@@ -545,67 +545,68 @@ implements DomainObjectResource {
                 domainResourceHelper.collectionDetails(collectionId, ManagedMember.RepresentationMode.READ));
     }
 
-    @Override
-    @PUT
-    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response addToSet(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("collectionId") final String collectionId,
-            final InputStream body) {
-
-        throw _EndpointLogging.error(log, "POST /objects/{}/{}/collections/{}", domainType, instanceId, collectionId,
-                RestfulObjectsApplicationException
-                .createWithMessage(
-                        HttpStatusCode.METHOD_NOT_ALLOWED,
-                        "The framework no longer supports mutable collections."));
-    }
-
-    @Override
-    @POST
-    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response addToList(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("collectionId") final String collectionId,
-            final InputStream body) {
-
-        throw _EndpointLogging.error(log, "POST /objects/{}/{}/collections/{}", domainType, instanceId, collectionId,
-                RestfulObjectsApplicationException
-                .createWithMessage(
-                        HttpStatusCode.METHOD_NOT_ALLOWED,
-                        "The framework no longer supports mutable collections."));
-    }
-
-    @Override
-    @DELETE
-    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response removeFromCollection(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("collectionId") final String collectionId) {
-
-        throw _EndpointLogging.error(log, "DELETE /objects/{}/{}/collections/{}", domainType, instanceId, collectionId,
-                RestfulObjectsApplicationException
-                .createWithMessage(
-                        HttpStatusCode.METHOD_NOT_ALLOWED,
-                        "The framework no longer supports mutable collections."));
-    }
+    //XXX[ISIS-3084] - removal of (direct) collection modification - business logic should handle that via actions instead
+//    @Override
+//    @PUT
+//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
+//    @Consumes({ MediaType.WILDCARD })
+//    @Produces({
+//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+//    })
+//    public Response addToSet(
+//            @PathParam("domainType") final String domainType,
+//            @PathParam("instanceId") final String instanceId,
+//            @PathParam("collectionId") final String collectionId,
+//            final InputStream body) {
+//
+//        throw _EndpointLogging.error(log, "POST /objects/{}/{}/collections/{}", domainType, instanceId, collectionId,
+//                RestfulObjectsApplicationException
+//                .createWithMessage(
+//                        HttpStatusCode.METHOD_NOT_ALLOWED,
+//                        "The framework no longer supports mutable collections."));
+//    }
+//
+//    @Override
+//    @POST
+//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
+//    @Consumes({ MediaType.WILDCARD })
+//    @Produces({
+//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+//    })
+//    public Response addToList(
+//            @PathParam("domainType") final String domainType,
+//            @PathParam("instanceId") final String instanceId,
+//            @PathParam("collectionId") final String collectionId,
+//            final InputStream body) {
+//
+//        throw _EndpointLogging.error(log, "POST /objects/{}/{}/collections/{}", domainType, instanceId, collectionId,
+//                RestfulObjectsApplicationException
+//                .createWithMessage(
+//                        HttpStatusCode.METHOD_NOT_ALLOWED,
+//                        "The framework no longer supports mutable collections."));
+//    }
+//
+//    @Override
+//    @DELETE
+//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
+//    @Consumes({ MediaType.WILDCARD })
+//    @Produces({
+//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+//    })
+//    public Response removeFromCollection(
+//            @PathParam("domainType") final String domainType,
+//            @PathParam("instanceId") final String instanceId,
+//            @PathParam("collectionId") final String collectionId) {
+//
+//        throw _EndpointLogging.error(log, "DELETE /objects/{}/{}/collections/{}", domainType, instanceId, collectionId,
+//                RestfulObjectsApplicationException
+//                .createWithMessage(
+//                        HttpStatusCode.METHOD_NOT_ALLOWED,
+//                        "The framework no longer supports mutable collections."));
+//    }
 
     // //////////////////////////////////////////////////////////
     // domain object action

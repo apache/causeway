@@ -207,7 +207,7 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
         return "one, field two ,three, five";
     }
 
-    // tests the hide method with same set of paramaters
+    // tests the hide method with same set of parameters
     public static boolean alwaysHideHiddenAction(final String param) {
         return true;
     }
@@ -215,7 +215,7 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
     public void hiddenAction(final String param) {
     }
 
-    // tests the hide method with no paramaters
+    // tests the hide method with no parameters
     public static boolean alwaysHideHiddenAction2() {
         return true;
     }

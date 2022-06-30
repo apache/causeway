@@ -40,8 +40,11 @@ For domain objects (not mixins), the wrapper can be interacted with as follows:
 
 * a `get...()` method for properties or collections
 * a `set...()` method for properties
-* an `addTo...()` or `removeFrom...()` method for collections
 * any action
+
+NOTE: with ISIS-3084, `addTo...()` and `removeFrom...()` methods for collections were removed;
+ the notion (direct) collection modification was deprecated as any specific business logic 
+ should by handled via actions instead;
 
 Calling any of the above methods may result in a (subclass of) `InteractionException` if the object disallows it.
 For example, if a property is annotated with xref:refguide:applib:index/annotation/ActionLayout.adoc#hidden[@ActionLayout#hidden] then a `HiddenException` will be thrown.

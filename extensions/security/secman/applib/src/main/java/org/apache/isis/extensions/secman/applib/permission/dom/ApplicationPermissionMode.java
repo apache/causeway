@@ -30,32 +30,23 @@ import org.apache.isis.commons.internal.base._Strings;
 public enum ApplicationPermissionMode {
     /**
      * Whether the user/role can view (or is prevented from viewing) the application feature (class member).
-     *
      * <p>
      * The {@link ApplicationPermissionRule rule} of the
      * {@link ApplicationPermission} indicates whether access is being
      * granted or denied.
-     * </p>
      */
     VIEWING,
     /**
      * Whether can user/role can change (or is prevented from changing) the state of the system using the application feature (class member).
-     *
      * <p>
-     * In other words, whether they can execute (if an action, modify/clear (if a property), addTo/removeFrom
-     * (if a collection).
-     * </p>
-     *
+     * In other words, whether they can execute (if an action, modify/clear (if a property), [addTo/removeFrom
+     * (if a collection) ... see note below].
      * <p>
      * The {@link ApplicationPermissionRule rule} of the
      * {@link ApplicationPermission} indicates whether access is being
      * granted or denied.
-     * </p>
-     *
      * <p>
-     * Note that the Wicket viewer does not at the time of writing (Isis 1.6.0) support the notion of
-     * mutable collections.  The RO viewer does, however.
-     * </p>
+     * Note: as of ISIS-3084 the notion of mutable collections was removed
      */
     CHANGING;
 
