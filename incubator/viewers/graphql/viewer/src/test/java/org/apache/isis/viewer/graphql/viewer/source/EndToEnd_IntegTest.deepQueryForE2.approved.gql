@@ -3,18 +3,31 @@
     "gqltestdomain_GQLTestDomainMenu" : {
       "findAllE2" : [ {
         "_gql_meta" : {
+          "__typename" : "gqltestdomain_E2__DomainObject_meta",
           "id" : "10",
           "logicalTypeName" : "gqltestdomain.E2",
-          "version" : null,
+          "version" : "not yet implemented",
           "structure" : {
+            "__typename" : "_gql__DomainObject_meta_structure",
             "properties" : [ "e1", "name", "logicalTypeName", "objectIdentifier" ],
             "collections" : [ "otherE2List", "stringList", "zintList" ],
             "safeActions" : [ "otherEntities" ],
             "idempotentActions" : [ "changeE1", "changeName", "otherEntities" ],
             "nonIdempotentActions" : [ "remove" ],
             "layoutXml" : "<xml>todo: implement .... </xml>"
-          }
-        }
+          },
+          "iconName" : "not yet implemented",
+          "title" : "Untitled E2",
+          "fields" : null
+        },
+        "e1" : null,
+        "logicalTypeName" : "gqltestdomain.E2",
+        "name" : "e2",
+        "objectIdentifier" : "10",
+        "otherE2List" : [ ],
+        "otherEntities" : null,
+        "stringList" : [ ],
+        "zintList" : [ ]
       } ]
     }
   }

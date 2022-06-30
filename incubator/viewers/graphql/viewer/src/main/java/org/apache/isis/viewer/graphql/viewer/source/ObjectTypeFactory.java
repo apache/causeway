@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import graphql.Scalars;
 
@@ -80,8 +79,7 @@ public class ObjectTypeFactory {
     public void objectTypeFromObjectSpecification(
             final ObjectSpecification objectSpecification,
             final Set<GraphQLType> graphQLTypes,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final GraphQLObjectType structureType) {
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
         ObjectTypeDataCollector objectTypeDataCollector = new ObjectTypeDataCollector(); //may be removed or slimmed down later
         objectTypeDataCollector.setObjectSpecification(objectSpecification);
 
@@ -700,6 +698,16 @@ public class ObjectTypeFactory {
             }
         });
 
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, titleField), new DataFetcher<Object>() {
+            @Override
+            public Object get(final DataFetchingEnvironment environment) throws Exception {
+
+                GQLMeta gqlMeta = environment.getSource();
+
+                return gqlMeta.title();
+            }
+        });
+
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, structureField), new DataFetcher<Object>() {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
@@ -720,7 +728,7 @@ public class ObjectTypeFactory {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
 
-                GQLStructure gqlStructure = environment.getSource();
+                GQLMetaStructure gqlStructure = environment.getSource();
 
                 return gqlStructure.properties();
             }
@@ -730,7 +738,7 @@ public class ObjectTypeFactory {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
 
-                GQLStructure gqlStructure = environment.getSource();
+                GQLMetaStructure gqlStructure = environment.getSource();
 
                 return gqlStructure.collections();
             }
@@ -740,7 +748,7 @@ public class ObjectTypeFactory {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
 
-                GQLStructure gqlStructure = environment.getSource();
+                GQLMetaStructure gqlStructure = environment.getSource();
 
                 return gqlStructure.safeActions();
             }
@@ -750,7 +758,7 @@ public class ObjectTypeFactory {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
 
-                GQLStructure gqlStructure = environment.getSource();
+                GQLMetaStructure gqlStructure = environment.getSource();
 
                 return gqlStructure.idempotentActions();
             }
@@ -760,7 +768,7 @@ public class ObjectTypeFactory {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
 
-                GQLStructure gqlStructure = environment.getSource();
+                GQLMetaStructure gqlStructure = environment.getSource();
 
                 return gqlStructure.nonIdempotentActions();
             }
@@ -770,9 +778,9 @@ public class ObjectTypeFactory {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
 
-                GQLStructure gqlStructure = environment.getSource();
+                GQLMetaStructure gqlMetaStructure = environment.getSource();
 
-                return gqlStructure.layoutXml();
+                return gqlMetaStructure.layoutXml();
             }
         });
 

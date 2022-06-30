@@ -115,7 +115,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
 
                     // TODO: App interface should map to gql interfaces?
                     objectTypeFactory
-                            .objectTypeFromObjectSpecification(objectSpecification, graphQLObjectTypes, codeRegistryBuilder, structureType);
+                            .objectTypeFromObjectSpecification(objectSpecification, graphQLObjectTypes, codeRegistryBuilder);
 
 
                     break;
@@ -131,7 +131,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                     entityObjectSpecs.add(objectSpecification);
 
                     objectTypeFactory
-                        .objectTypeFromObjectSpecification(objectSpecification, graphQLObjectTypes, codeRegistryBuilder, structureType);
+                        .objectTypeFromObjectSpecification(objectSpecification, graphQLObjectTypes, codeRegistryBuilder);
 
 
                     break;

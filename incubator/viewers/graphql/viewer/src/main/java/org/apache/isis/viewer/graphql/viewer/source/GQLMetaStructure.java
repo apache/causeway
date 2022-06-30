@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import static org.apache.isis.applib.services.metamodel.BeanSort.*;
 
 @Data
-public class GQLStructure {
+public class GQLMetaStructure {
 
     private final ObjectSpecification objectSpecification;
 

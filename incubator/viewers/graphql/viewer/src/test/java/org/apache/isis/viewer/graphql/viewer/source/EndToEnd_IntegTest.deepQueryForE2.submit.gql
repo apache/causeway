@@ -1,0 +1,85 @@
+{
+  gqltestdomain_GQLTestDomainMenu {
+  findAllE2 {
+  _gql_meta {
+  __typename
+  id
+  logicalTypeName
+  version
+  structure {
+  __typename
+  properties
+  collections
+  safeActions
+  idempotentActions
+  nonIdempotentActions
+  layoutXml
+}
+iconName
+title
+fields {
+  e1 {
+  __typename
+  hide
+  disable
+}
+logicalTypeName {
+  __typename
+  hide
+  disable
+}
+name {
+  __typename
+  hide
+  disable
+}
+objectIdentifier{
+  __typename
+  hide
+  disable
+}
+otherE2List {
+  __typename
+  hide
+  disable
+}
+zintList {
+  __typename
+  hide
+  disable
+}
+otherEntities {
+  __typename
+  hide
+  disable
+  validate
+  params {
+  __typename
+  name {
+  autocomplete
+  choices
+  default
+  optionality
+  validate
+}
+}
+}
+}
+}
+e1 {
+name
+}
+logicalTypeName
+name
+objectIdentifier
+otherE2List {
+name
+}
+otherEntities(name : ""){
+name
+}
+stringList
+zintList
+}
+}
+}

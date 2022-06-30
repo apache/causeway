@@ -22,6 +22,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 
 import lombok.Data;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 @Data
@@ -44,16 +46,27 @@ public class GQLMeta {
         if (domainObject == null) return null;
 
         // TODO: implement; we would like to be this independent of the persistence mechanism
-        return null;
+        return "not yet implemented";
     }
 
     public String iconName(){
         //Todo : implement
-        return null;
+        return "not yet implemented";
     }
 
-    public GQLStructure structure(){
-        return new GQLStructure(objectSpecification);
+    public GQLMetaStructure structure(){
+        return new GQLMetaStructure(objectSpecification);
     };
+
+    public String title(){
+        Object domainObject = bookmarkService.lookup(bookmark).orElse(null);
+        if (domainObject == null) return null;
+        return objectSpecification.getTitleService().titleOf(domainObject);
+    }
+
+    public GQLMetaFields fields(){
+        //TODO: this is dynamic Maybe pass in ObjectTypeDataCollector (also in GQLMutations)
+        return new GQLMetaFields();
+    }
 
 }

@@ -278,7 +278,7 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
 
     @Test
     @UseReporter(TextWebReporter.class)
-    void gqlMeta() {
+    void deepQueryForE2() {
 
         // given
 
