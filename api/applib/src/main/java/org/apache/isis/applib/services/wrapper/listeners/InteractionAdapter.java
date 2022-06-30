@@ -23,9 +23,7 @@ import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
-import org.apache.isis.applib.services.wrapper.events.CollectionAddToEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionMethodEvent;
-import org.apache.isis.applib.services.wrapper.events.CollectionRemoveFromEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ObjectTitleEvent;
@@ -71,13 +69,14 @@ public class InteractionAdapter implements InteractionListener {
     public void collectionAccessed(final CollectionAccessEvent ev) {
     }
 
-    @Override
-    public void collectionAddedTo(final CollectionAddToEvent ev) {
-    }
-
-    @Override
-    public void collectionRemovedFrom(final CollectionRemoveFromEvent ev) {
-    }
+//XXX[ISIS-3084] - removal of collection modification events
+//    @Override
+//    public void collectionAddedTo(final CollectionAddToEvent ev) {
+//    }
+//
+//    @Override
+//    public void collectionRemovedFrom(final CollectionRemoveFromEvent ev) {
+//    }
 
     @Override
     public void collectionMethodInvoked(final CollectionMethodEvent interactionEvent) {

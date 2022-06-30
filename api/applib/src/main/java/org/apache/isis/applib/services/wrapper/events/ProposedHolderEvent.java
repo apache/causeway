@@ -19,10 +19,13 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
+
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> makes it easier to process different events that hold a single proposed
- * argument (such as {@link CollectionAddToEvent} and
- * {@link PropertyModifyEvent}).
+ * Supported only by {@link WrapperFactory},
+ * makes it easier to process different events that hold a single proposed
+ * argument (such as {@link PropertyModifyEvent}).
+ *
  * @since 1.x {@index}
  */
 public interface ProposedHolderEvent {

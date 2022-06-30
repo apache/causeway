@@ -22,10 +22,10 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link WrapperFactory} service, </i> represents a 
+ * Supported only by {@link WrapperFactory},
+ * represents a
  * check to determine whether a member of an object is visible or
  * has been hidden.
- *
  * <p>
  * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is
  * invisible.

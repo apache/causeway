@@ -101,11 +101,9 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
      * </p>
      */
     @Override
-    public AsyncControl with(final ExceptionHandler exceptionHandler) {
+    public AsyncControl<R> with(final ExceptionHandler exceptionHandler) {
         return super.with(exceptionHandler);
     }
-
-
 
     @Getter @NonNull
     private ExecutorService executorService =
@@ -161,8 +159,6 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         // ...
     }
 
-
-
     @Getter
     private UserMemento user;
     /**
@@ -213,5 +209,4 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         return buf.toString();
     }
 
-    // ...
 }

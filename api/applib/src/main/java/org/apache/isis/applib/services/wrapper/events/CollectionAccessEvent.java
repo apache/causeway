@@ -21,12 +21,11 @@ package org.apache.isis.applib.services.wrapper.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a collection.
- *
+ * Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory},
+ * represents an access (reading) of a collection.
  * <p>
- * Analogous to {@link CollectionAddToEvent} or
- * {@link CollectionRemoveFromEvent}, however the {@link #getReason()} will
- * always be <tt>null</tt>. (If access is not allowed then a vetoing
+ * The {@link #getReason()} will always be <tt>null</tt>.
+ * (If access is not allowed then a vetoing
  * {@link CollectionVisibilityEvent} would have been fired).
  *
  * @since 1.x {@index}

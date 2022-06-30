@@ -19,9 +19,11 @@
 package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an interaction with a collection object itself.
+ * Supported only by {@link WrapperFactory},
+ * represents an interaction with a collection object itself.
  *
  * @since 1.x {@index}
  */

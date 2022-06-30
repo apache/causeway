@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 
+ *
  * @since 2.0 {@index}
  */
 public class ControlAbstract<T extends ControlAbstract<T>> {
@@ -55,24 +55,21 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
     public T withCheckRules() {
         checkRules = true;
         return _Casts.uncheckedCast(this);
-        // ...
     }
     public T withSkipRules() {
         checkRules = false;
         return _Casts.uncheckedCast(this);
-        // ...
     }
-    
+
     private ExceptionHandler exceptionHandler;
-   
+
     public Optional<ExceptionHandler> getExceptionHandler() {
         return Optional.ofNullable(exceptionHandler);
     }
-                      
-    public T with(ExceptionHandler exceptionHandler) {
+
+    public T with(final ExceptionHandler exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
         return _Casts.uncheckedCast(this);
-        // ...
     }
 
     /**

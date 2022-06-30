@@ -14,7 +14,7 @@ class AsyncControl<R> {
   AsyncControl<Void> returningVoid()     // <.>
   AsyncControl<X> returning(Class<X> cls)     // <.>
   AsyncControl<R> withSkipRules()     // <.>
-  AsyncControl with(ExceptionHandler exceptionHandler)     // <.>
+  AsyncControl<R> with(ExceptionHandler exceptionHandler)     // <.>
   AsyncControl<R> with(ExecutorService executorService)     // <.>
   AsyncControl<R> withClock(VirtualClock clock)
   AsyncControl<R> withLocale(Locale locale)

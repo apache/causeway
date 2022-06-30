@@ -19,10 +19,11 @@
 package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a property.
- *
+ * Supported only by {@link WrapperFactory},
+ * represents an access (reading) of a property.
  * <p>
  * Analogous to {@link PropertyModifyEvent}, however the {@link #getReason()}
  * will always be <tt>null</tt>. (If access is not allowed then a

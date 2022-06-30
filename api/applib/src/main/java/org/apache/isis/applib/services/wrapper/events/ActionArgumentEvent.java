@@ -19,18 +19,18 @@
 package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular argument for an action is valid
+ * Supported only by {@link WrapperFactory},
+ * represents a check as to whether a particular argument for an action is valid
  * or not.
- *
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * argument is invalid; otherwise the argument is valid.
- *
  * <p>
  * Called once per argument, and before {@link ActionInvocationEvent}.
- * 
+ *
  * @since 1.x {@index}
  */
 public class ActionArgumentEvent extends ValidityEvent {
@@ -39,7 +39,11 @@ public class ActionArgumentEvent extends ValidityEvent {
     private final int position;
     private final Object proposed;
 
-    public ActionArgumentEvent(final Object source, final Identifier actionIdentifier, final Object[] args, final int position) {
+    public ActionArgumentEvent(
+            final Object source,
+            final Identifier actionIdentifier,
+            final Object[] args,
+            final int position) {
         super(source, actionIdentifier);
         this.args = args;
         this.position = position;
@@ -64,7 +68,8 @@ public class ActionArgumentEvent extends ValidityEvent {
 
     @Override
     public String getReasonMessage() {
-        return String.format("Invalid action argument. Position: %s. Proposed value: %s. Reason: %s", this.getPosition(), this.getProposed(), super.getReasonMessage());
+        return String.format("Invalid action argument. Position: %s. Proposed value: %s. Reason: %s",
+                this.getPosition(), this.getProposed(), super.getReasonMessage());
     }
 
 }

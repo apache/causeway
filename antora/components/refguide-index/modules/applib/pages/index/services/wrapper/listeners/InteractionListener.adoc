@@ -18,8 +18,6 @@ interface InteractionListener {
   void collectionVisible(CollectionVisibilityEvent ev)     // <.>
   void collectionUsable(CollectionUsabilityEvent ev)     // <.>
   void collectionAccessed(CollectionAccessEvent ev)     // <.>
-  void collectionAddedTo(CollectionAddToEvent ev)     // <.>
-  void collectionRemovedFrom(CollectionRemoveFromEvent ev)     // <.>
   void collectionMethodInvoked(CollectionMethodEvent interactionEvent)     // <.>
   void actionVisible(ActionVisibilityEvent interactionEvent)     // <.>
   void actionUsable(ActionUsabilityEvent ev)     // <.>
@@ -72,16 +70,6 @@ A check was made to determine if a collection was usable.
 +
 --
 A collection was read.
---
-<.> xref:#collectionAddedTo__CollectionAddToEvent[collectionAddedTo(CollectionAddToEvent)]
-+
---
-An object was added to the collection (or an attempt to add it was made).
---
-<.> xref:#collectionRemovedFrom__CollectionRemoveFromEvent[collectionRemovedFrom(CollectionRemoveFromEvent)]
-+
---
-An object was removed from the collection (or an attempt to remove it was made).
 --
 <.> xref:#collectionMethodInvoked__CollectionMethodEvent[collectionMethodInvoked(CollectionMethodEvent)]
 +
@@ -157,7 +145,7 @@ Will be fired prior to _#collectionUsable(CollectionUsabilityEvent)_ .
 
 A check was made to determine if a collection was usable.
 
-Will be fired prior to either _#collectionAccessed(CollectionAccessEvent)_ or _#collectionAddedTo(CollectionAddToEvent)_ or _#collectionRemovedFrom(CollectionRemoveFromEvent)_ .
+Will be fired prior to either _#collectionAccessed(CollectionAccessEvent)_
 
 [#collectionAccessed__CollectionAccessEvent]
 === collectionAccessed(CollectionAccessEvent)
@@ -165,16 +153,6 @@ Will be fired prior to either _#collectionAccessed(CollectionAccessEvent)_ or _#
 A collection was read.
 
 Unlike most other events, a xref:refguide:applib:index/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent] will never have been vetoed (that is, _CollectionAccessEvent#isVeto()_ will always be `false` ).
-
-[#collectionAddedTo__CollectionAddToEvent]
-=== collectionAddedTo(CollectionAddToEvent)
-
-An object was added to the collection (or an attempt to add it was made).
-
-[#collectionRemovedFrom__CollectionRemoveFromEvent]
-=== collectionRemovedFrom(CollectionRemoveFromEvent)
-
-An object was removed from the collection (or an attempt to remove it was made).
 
 [#collectionMethodInvoked__CollectionMethodEvent]
 === collectionMethodInvoked(CollectionMethodEvent)

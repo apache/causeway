@@ -22,13 +22,12 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link WrapperFactory} service, </i> represents a check as 
- * to whether an action is visible or has been hidden.
- *
+ * Supported only by {@link WrapperFactory},
+ * represents a check as to whether an action is visible or has been hidden.
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * action is invisible; otherwise action is visible.
- * 
+ *
  * @since 1.x {@index}
  */
 public class ActionVisibilityEvent extends VisibilityEvent {

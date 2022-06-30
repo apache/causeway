@@ -25,7 +25,7 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 /**
  * Implemented by all objects that have been viewed as per
  * {@link WrapperFactory#wrap(Object)}.
- * 
+ *
  * @since 1.x {@index}
  */
 public interface WrappingObject {
@@ -60,7 +60,7 @@ public interface WrappingObject {
     Object __isis_wrapped();
 
     /**
-     * The {@link EnumSet<ExecutionMode> execution modes} inferred from the
+     * The {@link ExecutionMode}(s) inferred from the
      * {@link SyncControl} with which this wrapper was
      * {@link WrapperFactory#wrap(Object, SyncControl) created}.
      *

@@ -19,16 +19,17 @@
 package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether the current values of the
+ * Supported only by {@link WrapperFactory},
+ * represents a check as to whether the current values of the
  * properties/collections of an object are valid (for example, prior to saving
  * that object).
- *
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * object is invalid, otherwise ok.
- * 
+ *
  * @since 1.x {@index}
  */
 public class ObjectValidityEvent extends ValidityEvent {

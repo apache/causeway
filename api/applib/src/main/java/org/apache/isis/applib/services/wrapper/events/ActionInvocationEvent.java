@@ -22,17 +22,15 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link WrapperFactory} service, </i> represents a check 
+ * Supported only by {@link WrapperFactory}</i>, represents a check
  * as to whether a particular argument for an action is valid
  * or not.
- *
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * set of arguments are invalid; otherwise the arguments are valid.
- *
  * <p>
  * Called after each of the {@link ActionArgumentEvent}s.
- * 
+ *
  * @since 1.x {@index}
  */
 public class ActionInvocationEvent extends ValidityEvent {

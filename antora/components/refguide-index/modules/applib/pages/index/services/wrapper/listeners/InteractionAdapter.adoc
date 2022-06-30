@@ -16,8 +16,6 @@ class InteractionAdapter {
   void collectionVisible(CollectionVisibilityEvent ev)
   void collectionUsable(CollectionUsabilityEvent ev)
   void collectionAccessed(CollectionAccessEvent ev)
-  void collectionAddedTo(CollectionAddToEvent ev)
-  void collectionRemovedFrom(CollectionRemoveFromEvent ev)
   void collectionMethodInvoked(CollectionMethodEvent interactionEvent)
   void actionVisible(ActionVisibilityEvent interactionEvent)
   void actionUsable(ActionUsabilityEvent ev)

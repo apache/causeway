@@ -39,7 +39,6 @@ public class SyncControl extends ControlAbstract<SyncControl> {
         });
     }
 
-
     /**
      * Skip checking business rules (hide/disable/validate) before
      * executing the underlying property or action
@@ -48,7 +47,6 @@ public class SyncControl extends ControlAbstract<SyncControl> {
     public SyncControl withSkipRules() {
         return super.withSkipRules();
     }
-
 
     /**
      * How to handle exceptions if they occur, using the provided
@@ -59,10 +57,9 @@ public class SyncControl extends ControlAbstract<SyncControl> {
      * </p>
      */
     @Override
-    public SyncControl with(ExceptionHandler exceptionHandler) {
+    public SyncControl with(final ExceptionHandler exceptionHandler) {
         return super.with(exceptionHandler);
     }
-
 
     private boolean execute = true;
 
@@ -72,7 +69,6 @@ public class SyncControl extends ControlAbstract<SyncControl> {
     public SyncControl withExecute() {
         execute = true;
         return this;
-        // ...
     }
 
     /**
@@ -82,12 +78,12 @@ public class SyncControl extends ControlAbstract<SyncControl> {
     public SyncControl withNoExecute() {
         execute = false;
         return this;
-        // ...
     }
 
     /**
      * Not API.
      */
+    @Override
     public ImmutableEnumSet<ExecutionMode> getExecutionModes() {
         EnumSet<ExecutionMode> modes = EnumSet.copyOf(super.getExecutionModes().toEnumSet());
         if(!execute) {

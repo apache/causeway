@@ -65,9 +65,7 @@ import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
-import org.apache.isis.applib.services.wrapper.events.CollectionAddToEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionMethodEvent;
-import org.apache.isis.applib.services.wrapper.events.CollectionRemoveFromEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
@@ -146,8 +144,9 @@ public class WrapperFactoryDefault implements WrapperFactory {
         putDispatcher(CollectionVisibilityEvent.class, InteractionListener::collectionVisible);
         putDispatcher(CollectionUsabilityEvent.class, InteractionListener::collectionUsable);
         putDispatcher(CollectionAccessEvent.class, InteractionListener::collectionAccessed);
-        putDispatcher(CollectionAddToEvent.class, InteractionListener::collectionAddedTo);
-        putDispatcher(CollectionRemoveFromEvent.class, InteractionListener::collectionRemovedFrom);
+//XXX[ISIS-3084] - removal of collection modification events
+//        putDispatcher(CollectionAddToEvent.class, InteractionListener::collectionAddedTo);
+//        putDispatcher(CollectionRemoveFromEvent.class, InteractionListener::collectionRemovedFrom);
         putDispatcher(ActionVisibilityEvent.class, InteractionListener::actionVisible);
         putDispatcher(ActionUsabilityEvent.class, InteractionListener::actionUsable);
         putDispatcher(ActionArgumentEvent.class, InteractionListener::actionArgument);

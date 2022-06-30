@@ -23,9 +23,7 @@ import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
-import org.apache.isis.applib.services.wrapper.events.CollectionAddToEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionMethodEvent;
-import org.apache.isis.applib.services.wrapper.events.CollectionRemoveFromEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.CollectionVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ObjectTitleEvent;
@@ -110,9 +108,7 @@ public interface InteractionListener {
      *
      * <p>
      * Will be fired prior to either
-     * {@link #collectionAccessed(CollectionAccessEvent)} or
-     * {@link #collectionAddedTo(CollectionAddToEvent)} or
-     * {@link #collectionRemovedFrom(CollectionRemoveFromEvent)}.
+     * {@link #collectionAccessed(CollectionAccessEvent)}
      *
      * @param ev
      */
@@ -130,20 +126,21 @@ public interface InteractionListener {
      */
     void collectionAccessed(CollectionAccessEvent ev);
 
-    /**
-     * An object was added to the collection (or an attempt to add it was made).
-     *
-     * @param ev
-     */
-    void collectionAddedTo(CollectionAddToEvent ev);
-
-    /**
-     * An object was removed from the collection (or an attempt to remove it was
-     * made).
-     *
-     * @param ev
-     */
-    void collectionRemovedFrom(CollectionRemoveFromEvent ev);
+//XXX[ISIS-3084] - removal of collection modification events
+//    /**
+//     * An object was added to the collection (or an attempt to add it was made).
+//     *
+//     * @param ev
+//     */
+//    void collectionAddedTo(CollectionAddToEvent ev);
+//
+//    /**
+//     * An object was removed from the collection (or an attempt to remove it was
+//     * made).
+//     *
+//     * @param ev
+//     */
+//    void collectionRemovedFrom(CollectionRemoveFromEvent ev);
 
     /**
      * A method of a collection (such as <tt>isEmpty()</tt> or <tt>size()</tt>) has been invoked.

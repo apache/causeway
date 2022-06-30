@@ -19,15 +19,15 @@
 package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether the proposed values of the value type is
- * valid.
- *
+ * Supported only by {@link WrapperFactory},
+ * represents a check as to whether the proposed values of the value type is valid.
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * proposed value is invalid, otherwise the new value is acceptable.
- * 
+ *
  * @since 1.x {@index}
  */
 public class ParseValueEvent extends ValidityEvent {

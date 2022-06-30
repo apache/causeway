@@ -1,30 +1,17 @@
-= CollectionAddToEvent
+= CollectionVisibilityEvent
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
- _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents a check as to whether a particular object to be added to a collection is valid or not.
+Supported only by xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] , represents a check as to whether a collection is visible or has been hidden.
 
-If _#getReason()_ is not `null` then provides the reason why the object is invalid; otherwise the object is valid.
+If _#getReason()_ is not `null` then provides the reason why the collection is invisible; otherwise collection is visible.
 
 == API
 
 [source,java]
-.CollectionAddToEvent.java
+.CollectionVisibilityEvent.java
 ----
-class CollectionAddToEvent {
-  CollectionAddToEvent(Object source, Identifier collectionIdentifier, Object proposed)
-  Object getProposed()     // <.>
+class CollectionVisibilityEvent {
+  CollectionVisibilityEvent(Object source, Identifier identifier)
 }
 ----
 
-<.> xref:#getProposed__[getProposed()]
-+
---
-The object that is being added.
---
-
-== Members
-
-[#getProposed__]
-=== getProposed()
-
-The object that is being added.

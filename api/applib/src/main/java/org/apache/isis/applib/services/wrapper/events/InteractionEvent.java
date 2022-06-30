@@ -20,13 +20,13 @@ package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.EventObjectBase;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.collections.Can;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i>
+ * Supported only by {@link WrapperFactory},
  * represents an interaction with a domain object or a particular feature
  * (property, collection, action) of a domain object.
- *
  * <p>
  * Many of the interactions are checks for {@link VisibilityEvent visibility},
  * {@link UsabilityEvent usability} and {@link ValidityEvent validity}.

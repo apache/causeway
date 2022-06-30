@@ -19,11 +19,12 @@
 package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check to determine whether a member of an object is usable or
+ * Supported only by {@link WrapperFactory},
+ * represents a check to determine whether a member of an object is usable or
  * has been disabled.
- *
  * <p>
  * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is
  * disabled.

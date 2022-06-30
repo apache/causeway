@@ -19,11 +19,11 @@
 package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i>
+ * Supported only by {@link WrapperFactory} service,
  * represents an access (reading) of an object's title.
- *
  * <p>
  * The {@link #getReason()} will always be <tt>null</tt>; access is always
  * allowed.

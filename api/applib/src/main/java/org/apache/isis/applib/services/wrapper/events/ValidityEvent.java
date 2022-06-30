@@ -19,10 +19,11 @@
 package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check to determine whether a proposed change is valid.
- *
+ * Supported only by {@link WrapperFactory},
+ * represents a check to determine whether a proposed change is valid.
  * <p>
  * Multiple subclasses, including:
  * <ul>
@@ -32,7 +33,6 @@ import org.apache.isis.applib.Identifier;
  * <li>checking all arguments for an action invocation</li>
  * <li>checking all properties for an object before saving</li>
  * </ul>
- *
  * <p>
  * If {@link #getReason()} is <tt>null</tt>, then is usable; otherwise is
  * disabled.
