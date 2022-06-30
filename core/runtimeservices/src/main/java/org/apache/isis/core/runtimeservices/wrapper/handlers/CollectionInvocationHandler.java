@@ -21,36 +21,34 @@ package org.apache.isis.core.runtimeservices.wrapper.handlers;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.commons.ObjectExtensions;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-class CollectionInvocationHandler<T, R> extends AbstractCollectionInvocationHandler<T, R> {
+import lombok.val;
+
+class CollectionInvocationHandler<T, C extends Collection<?>>
+extends NonScalarInvocationHandlerAbstract<T, C> {
 
     public CollectionInvocationHandler(
-            final R collectionToProxy,
+            final C collectionToProxy,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
         super(collectionToProxy, handler, otma);
 
-        try {
-            intercept(ObjectExtensions.getMethod(collectionToProxy, "contains", Object.class));
-            intercept(ObjectExtensions.getMethod(collectionToProxy, "size"));
-            intercept(ObjectExtensions.getMethod(collectionToProxy, "isEmpty"));
-            if (collectionToProxy instanceof List) {
-                intercept(ObjectExtensions.getMethod(collectionToProxy, "get", int.class));
-            }
-            veto(ObjectExtensions.getMethod(collectionToProxy, "add", Object.class));
-            veto(ObjectExtensions.getMethod(collectionToProxy, "remove", Object.class));
-            veto(ObjectExtensions.getMethod(collectionToProxy, "addAll", Collection.class));
-            veto(ObjectExtensions.getMethod(collectionToProxy, "removeAll", Collection.class));
-            veto(ObjectExtensions.getMethod(collectionToProxy, "retainAll", Collection.class));
-            veto(ObjectExtensions.getMethod(collectionToProxy, "clear"));
-        } catch (final NoSuchMethodException e) {
-            // ///CLOVER:OFF
-            throw new RuntimeException("A Collection method could not be found: " + e.getMessage());
-            // ///CLOVER:ON
-        }
+        _Assert.assertTrue(collectionToProxy.getClass().isAssignableFrom(Collection.class),
+                ()->String.format("Cannot use %s for type %s, these are not compatible.",
+                        this.getClass().getName(),
+                        collectionToProxy.getClass()));
+
+        val methodSets = (collectionToProxy instanceof List)
+                ? ProgrammingModelConstants.WrapperFactoryProxy.LIST
+                : ProgrammingModelConstants.WrapperFactoryProxy.COLLECTION;
+
+        methodSets.getIntercepted().forEach(this::intercept);
+        methodSets.getVetoed().forEach(this::veto);
+
     }
 
 }

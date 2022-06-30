@@ -20,14 +20,22 @@ package org.apache.isis.core.runtimeservices.wrapper.handlers;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.events.CollectionMethodEvent;
-import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-abstract class AbstractCollectionInvocationHandler<T, C>
-extends DelegatingInvocationHandlerDefault<C> {
+import lombok.val;
+
+/**
+ * Base class in support of non-scalar types to be proxied up.
+ *
+ * @param <T> Domain Object type
+ * @param <P> non-scalar type (eg. {@link Collection} or {@link Map}) to be proxied
+ */
+abstract class NonScalarInvocationHandlerAbstract<T, P>
+extends DelegatingInvocationHandlerDefault<P> {
 
     private final List<Method> interceptedMethods = _Lists.newArrayList();
     private final List<Method> vetoedMethods = _Lists.newArrayList();
@@ -35,8 +43,8 @@ extends DelegatingInvocationHandlerDefault<C> {
     private final OneToManyAssociation oneToManyAssociation;
     private final T domainObject;
 
-    public AbstractCollectionInvocationHandler(
-            final C collectionOrMapToProxy,
+    protected NonScalarInvocationHandlerAbstract(
+            final P collectionOrMapToProxy,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
@@ -48,11 +56,21 @@ extends DelegatingInvocationHandlerDefault<C> {
         this.domainObject = handler.getDelegate();
     }
 
+    /**
+     * Adds given method to the list of intercepted methods,
+     * those which will trigger {@link CollectionMethodEvent}(s)
+     * on invocation.
+     */
     protected Method intercept(final Method method) {
         this.interceptedMethods.add(method);
         return method;
     }
 
+    /**
+     * Adds given method to the list of vetoed methods,
+     * those which will cause an {@link UnsupportedOperationException}
+     * on invocation.
+     */
     protected Method veto(final Method method) {
         this.vetoedMethods.add(method);
         return method;
@@ -76,13 +94,21 @@ extends DelegatingInvocationHandlerDefault<C> {
 
             resolveIfRequired(domainObject);
 
-            final InteractionEvent ev = new CollectionMethodEvent(getDelegate(), getCollection().getFeatureIdentifier(), getDomainObject(), method.getName(), args, returnValueObj);
-            notifyListeners(ev);
+            val event =
+                    new CollectionMethodEvent(
+                            getDelegate(),
+                            getCollection().getFeatureIdentifier(),
+                            getDomainObject(),
+                            method.getName(),
+                            args,
+                            returnValueObj);
+            notifyListeners(event);
             return returnValueObj;
         }
 
         if (vetoedMethods.contains(method)) {
-            throw new UnsupportedOperationException(String.format("Method '%s' may not be called directly.", method.getName()));
+            throw new UnsupportedOperationException(
+                    String.format("Method '%s' may not be called directly.", method.getName()));
         }
 
         return returnValueObj;

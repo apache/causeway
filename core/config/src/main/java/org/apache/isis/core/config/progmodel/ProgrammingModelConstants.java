@@ -28,6 +28,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -52,6 +53,7 @@ import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.commons.internal.reflection._Reflect;
@@ -62,6 +64,7 @@ import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramC
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 public final class ProgrammingModelConstants {
@@ -503,6 +506,61 @@ public final class ProgrammingModelConstants {
         };
         public abstract <T> Optional<Constructor<T>> get(Class<T> correspondingClass);
 
+    }
+
+    //TODO needs an update to reflect Java 7->11 Language changes
+    @RequiredArgsConstructor
+    public static enum WrapperFactoryProxy {
+        COLLECTION(
+                List.of(
+                        getMethod(Collection.class, "contains", Object.class),
+                        getMethod(Collection.class, "size"),
+                        getMethod(Collection.class, "isEmpty")
+                ),
+                List.of(
+                        getMethod(Collection.class, "add", Object.class),
+                        getMethod(Collection.class, "remove", Object.class),
+                        getMethod(Collection.class, "addAll", Collection.class),
+                        getMethod(Collection.class, "removeAll", Collection.class),
+                        getMethod(Collection.class, "retainAll", Collection.class),
+                        getMethod(Collection.class, "clear")
+                )),
+        LIST(
+                _Lists.concat(
+                        WrapperFactoryProxy.COLLECTION.intercepted,
+                        List.of(
+                                getMethod(List.class, "get", int.class)
+                        )
+                ),
+                _Lists.concat(
+                        WrapperFactoryProxy.COLLECTION.vetoed,
+                        List.of(
+                        )
+                )),
+        MAP(
+                List.of(
+                        getMethod(Map.class, "containsKey", Object.class),
+                        getMethod(Map.class, "containsValue", Object.class),
+                        getMethod(Map.class, "size"),
+                        getMethod(Map.class, "isEmpty")
+                ),
+                List.of(
+                        getMethod(Map.class, "put", Object.class, Object.class),
+                        getMethod(Map.class, "remove", Object.class),
+                        getMethod(Map.class, "putAll", Map.class),
+                        getMethod(Map.class, "clear")
+                ))
+        ;
+        @Getter private final List<Method> intercepted;
+        @Getter private final List<Method> vetoed;
+        // -- HELPER
+        @SneakyThrows
+        private static Method getMethod(
+                final Class<?> cls,
+                final String methodName,
+                final Class<?>... parameterClass) {
+            return cls.getMethod(methodName, parameterClass);
+        }
     }
 
     // -- HELPER

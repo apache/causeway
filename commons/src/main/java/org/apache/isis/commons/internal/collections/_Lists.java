@@ -37,6 +37,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.commons.internal.base._NullSafe;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -68,6 +69,30 @@ public final class _Lists {
             return Optional.empty();
         }
         return Optional.ofNullable(list.get(list.size()-1));
+    }
+
+    // -- LIST CONCATENATION
+
+    /**
+     * Returns an unmodifiable list containing all elements from given list
+     * and the specified element.
+     */
+    public static <T> List<T> append(final List<T> list, final T element) {
+        val resultList = new ArrayList<T>(list.size() + 1);
+        resultList.addAll(list);
+        resultList.add(element);
+        return Collections.unmodifiableList(resultList);
+    }
+
+    /**
+     * Returns an unmodifiable list containing all elements from given lists
+     * list1 and list2.
+     */
+    public static <T> List<T> concat(final List<T> list1, final List<T> list2) {
+        val resultList = new ArrayList<T>(list1.size() + list2.size());
+        resultList.addAll(list1);
+        resultList.addAll(list2);
+        return Collections.unmodifiableList(resultList);
     }
 
     // -- UNMODIFIABLE LIST
@@ -205,7 +230,5 @@ public final class _Lists {
     Collector<T, ?, List<T>> toUnmodifiable() {
         return toUnmodifiable(ArrayList::new);
     }
-
-
 
 }

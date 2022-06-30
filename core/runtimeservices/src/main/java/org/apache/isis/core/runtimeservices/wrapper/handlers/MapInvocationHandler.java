@@ -20,33 +20,32 @@ package org.apache.isis.core.runtimeservices.wrapper.handlers;
 
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.commons.ObjectExtensions;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-class MapInvocationHandler<T, C>
-extends AbstractCollectionInvocationHandler<T, C> {
+class MapInvocationHandler<T, M extends Map<?,?>>
+extends NonScalarInvocationHandlerAbstract<T, M> {
 
     public MapInvocationHandler(
-            final C collectionToProxy,
+            final M mapToProxy,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
-        super(collectionToProxy, handler, otma);
+        super(mapToProxy, handler, otma);
 
-        try {
-            intercept(ObjectExtensions.getMethod(collectionToProxy, "containsKey", Object.class));
-            intercept(ObjectExtensions.getMethod(collectionToProxy, "containsValue", Object.class));
-            intercept(ObjectExtensions.getMethod(collectionToProxy, "size"));
-            intercept(ObjectExtensions.getMethod(collectionToProxy, "isEmpty"));
-            veto(ObjectExtensions.getMethod(collectionToProxy, "put", Object.class, Object.class));
-            veto(ObjectExtensions.getMethod(collectionToProxy, "remove", Object.class));
-            veto(ObjectExtensions.getMethod(collectionToProxy, "putAll", Map.class));
-            veto(ObjectExtensions.getMethod(collectionToProxy, "clear"));
-        } catch (final NoSuchMethodException e) {
-            // ///CLOVER:OFF
-            throw new RuntimeException("A Collection method could not be found: " + e.getMessage());
-            // ///CLOVER:ON
-        }
+        _Assert.assertTrue(mapToProxy.getClass().isAssignableFrom(Map.class),
+                ()->String.format("Cannot use %s for type %s, these are not compatible.",
+                        this.getClass().getName(),
+                        mapToProxy.getClass()));
+
+        ProgrammingModelConstants.WrapperFactoryProxy.MAP
+        .getIntercepted()
+        .forEach(this::intercept);
+
+        ProgrammingModelConstants.WrapperFactoryProxy.MAP
+        .getVetoed()
+        .forEach(this::veto);
     }
 
 }
