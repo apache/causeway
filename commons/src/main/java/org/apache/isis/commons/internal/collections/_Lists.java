@@ -77,7 +77,10 @@ public final class _Lists {
      * Returns an unmodifiable list containing all elements from given list
      * and the specified element.
      */
-    public static <T> List<T> append(final List<T> list, final T element) {
+    public static <T> List<T> append(final @Nullable List<T> list, final @Nullable T element) {
+        if(_NullSafe.isEmpty(list)) {
+            return Collections.singletonList(element);
+        }
         val resultList = new ArrayList<T>(list.size() + 1);
         resultList.addAll(list);
         resultList.add(element);
@@ -88,7 +91,21 @@ public final class _Lists {
      * Returns an unmodifiable list containing all elements from given lists
      * list1 and list2.
      */
-    public static <T> List<T> concat(final List<T> list1, final List<T> list2) {
+    public static <T> List<T> concat(final @Nullable List<T> list1, final @Nullable List<T> list2) {
+        val isEmpty1 = _NullSafe.isEmpty(list1);
+        val isEmpty2 = _NullSafe.isEmpty(list2);
+
+        if(isEmpty1) {
+            return isEmpty2
+                    ? Collections.emptyList()
+                    : Collections.unmodifiableList(new ArrayList<T>(list2));
+        }
+
+        if(isEmpty2) {
+            // at this point list1 is not empty
+            return Collections.unmodifiableList(new ArrayList<T>(list1));
+        }
+
         val resultList = new ArrayList<T>(list1.size() + list2.size());
         resultList.addAll(list1);
         resultList.addAll(list2);
