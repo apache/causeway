@@ -508,15 +508,17 @@ public final class ProgrammingModelConstants {
 
     }
 
-    //TODO needs an update to reflect Java 7->11 Language changes
+    //TODO perhaps needs an update to reflect Java 7->11 Language changes
     @RequiredArgsConstructor
     public static enum WrapperFactoryProxy {
         COLLECTION(
+                // intercepted ...
                 List.of(
                         getMethod(Collection.class, "contains", Object.class),
                         getMethod(Collection.class, "size"),
                         getMethod(Collection.class, "isEmpty")
                 ),
+                // vetoed ...
                 List.of(
                         getMethod(Collection.class, "add", Object.class),
                         getMethod(Collection.class, "remove", Object.class),
@@ -526,24 +528,28 @@ public final class ProgrammingModelConstants {
                         getMethod(Collection.class, "clear")
                 )),
         LIST(
+                // intercepted ...
                 _Lists.concat(
-                        WrapperFactoryProxy.COLLECTION.intercepted,
+                        COLLECTION.intercepted,
                         List.of(
                                 getMethod(List.class, "get", int.class)
                         )
                 ),
+                // vetoed ...
                 _Lists.concat(
-                        WrapperFactoryProxy.COLLECTION.vetoed,
+                        COLLECTION.vetoed,
                         List.of(
                         )
                 )),
         MAP(
+                // intercepted ...
                 List.of(
                         getMethod(Map.class, "containsKey", Object.class),
                         getMethod(Map.class, "containsValue", Object.class),
                         getMethod(Map.class, "size"),
                         getMethod(Map.class, "isEmpty")
                 ),
+                // vetoed ...
                 List.of(
                         getMethod(Map.class, "put", Object.class, Object.class),
                         getMethod(Map.class, "remove", Object.class),
