@@ -1,0 +1,21 @@
+{
+  "data" : {
+    "gqltestdomain_GQLTestDomainMenu" : {
+      "findAllE2" : [ {
+        "_gql_meta" : {
+          "id" : "10",
+          "logicalTypeName" : "gqltestdomain.E2",
+          "version" : null,
+          "structure" : {
+            "properties" : [ "e1", "name", "logicalTypeName", "objectIdentifier" ],
+            "collections" : [ "otherE2List", "stringList", "zintList" ],
+            "safeActions" : [ "otherEntities" ],
+            "idempotentActions" : [ "changeE1", "changeName", "otherEntities" ],
+            "nonIdempotentActions" : [ "remove" ],
+            "layoutXml" : "<xml>todo: implement .... </xml>"
+          }
+        }
+      } ]
+    }
+  }
+}

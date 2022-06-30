@@ -22,12 +22,14 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 
 import lombok.Data;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 @Data
 public class GQLMeta {
 
     private final Bookmark bookmark;
     private final BookmarkService bookmarkService;
+    private final ObjectSpecification objectSpecification;
 
     public String logicalTypeName(){
         return bookmark.getLogicalTypeName();
@@ -44,5 +46,14 @@ public class GQLMeta {
         // TODO: implement; we would like to be this independent of the persistence mechanism
         return null;
     }
+
+    public String iconName(){
+        //Todo : implement
+        return null;
+    }
+
+    public GQLStructure structure(){
+        return new GQLStructure(objectSpecification);
+    };
 
 }

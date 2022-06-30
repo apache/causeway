@@ -27,7 +27,7 @@ final class _Utils {
 
     final public static String SINGLE_PARAM_META_DATA_TYPENAME = "Param_Meta_Data"; //TODO: should go
     final static String MUTATOR_META_DATA_TYPENAME = "Mutator_Meta_Data"; //TODO: should go
-    static final String PARAMS_META_DATA_TYPENAME_SUFFIX = "__Params_Meta_Data"; //TODO: should go
+    static final String PARAMS_META_DATA_TYPENAME_SUFFIX = "_Params_Meta_Data"; //TODO: should go
 
     static String metaTypeName(final String logicalTypeNameSanitized){
         return logicalTypeNameSanitized + "__DomainObject_meta";

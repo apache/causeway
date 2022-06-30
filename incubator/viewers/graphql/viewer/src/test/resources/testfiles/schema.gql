@@ -25,7 +25,7 @@ directive @specifiedBy(
 type Mutator_Meta_Data {
   disable: String
   hide: Boolean
-  params: __Params_Meta_Data
+  params: _Params_Meta_Data
   validate: String
 }
 
@@ -44,6 +44,10 @@ type Query {
   isis_conf_ConfigurationMenu: isis_conf_ConfigurationMenu
   isis_security_LogoutMenu: isis_security_LogoutMenu
   numServices: Int
+}
+
+type _Params_Meta_Data {
+  object_action_name: Param_Meta_Data
 }
 
 type _gql_Query_lookup {
@@ -147,11 +151,13 @@ type gqltestdomain_E2__DomainObject_meta_fields_otherEntities_params_name {
 type gqltestdomain_E2__DomainObject_meta_mutations {
   changeE1: Mutator_Meta_Data
   changeName: Mutator_Meta_Data
+  remove: Mutator_Meta_Data
 }
 
 type gqltestdomain_E2__DomainObject_mutations {
   changeE1(e1: _gql_input__gqltestdomain_E1!): gqltestdomain_E2
   changeName(newName: String!): gqltestdomain_E2
+  remove: String
 }
 
 type gqltestdomain_GQLTestDomainMenu {
@@ -1063,15 +1069,7 @@ input _gql_input__org_apache_isis_testing_fixtures_applib_fixturescripts_Fixture
 input _gql_input__org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
   id: ID!
 }
-ta_mutations {
-  noop: Mutator_Meta_Data
-}
-
-input _gql_input__gqltestdomain_E1 {
-  id: ID!
-}
-
-input _gql_input__gqltestdomain_E2 {
+__gqltestdomain_E2 {
   id: ID!
 }
 

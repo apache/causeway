@@ -276,6 +276,30 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
 
     }
 
+    @Test
+    @UseReporter(TextWebReporter.class)
+    void gqlMeta() {
+
+        // given
+
+        List<E2> e2List = new ArrayList<>();
+
+        transactionService.runTransactional(Propagation.REQUIRED, () -> {
+            E2 e2 = testEntityRepository.createE2(Long.valueOf(10),"e2", null);
+            e2List.add(e2);
+        });
+
+        // when
+        String response = transactionService.callTransactional(Propagation.REQUIRED, () -> {
+
+            return submit();
+
+        }).ifFailureFail().getValue().get();
+
+        Approvals.verify(response, gqlOptions());
+
+    }
+
 
     private String submit() throws Exception{
         val httpRequest = buildRequestWithResource();

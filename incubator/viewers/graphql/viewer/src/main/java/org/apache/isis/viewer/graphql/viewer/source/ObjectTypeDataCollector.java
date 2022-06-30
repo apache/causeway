@@ -1,9 +1,6 @@
 package org.apache.isis.viewer.graphql.viewer.source;
 
-import graphql.Scalars;
-import graphql.schema.*;
 import lombok.Setter;
-import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -13,14 +10,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLNonNull.nonNull;
-import static graphql.schema.GraphQLObjectType.newObject;
 import static org.apache.isis.applib.services.metamodel.BeanSort.*;
-import static org.apache.isis.viewer.graphql.viewer.source._Utils.*;
-import static org.apache.isis.viewer.graphql.viewer.source._Utils.MUTATOR_META_DATA_TYPENAME;
 
 @Setter
 public class ObjectTypeDataCollector {

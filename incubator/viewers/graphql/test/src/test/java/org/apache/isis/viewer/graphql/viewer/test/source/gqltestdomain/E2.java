@@ -21,6 +21,8 @@ package org.apache.isis.viewer.graphql.viewer.source.gqltestdomain;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.repository.RepositoryService;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -98,8 +100,17 @@ public class E2 implements TestEntity{
         return name == null ? result : result.stream().filter(e->e.getName().contains(name)).collect(Collectors.toList());
     }
 
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
+    public void remove(){
+        repositoryService.removeAndFlush(this);
+    }
+
     @Inject
     @Transient
     TestEntityRepository testEntityRepository;
+
+    @Inject
+    @Transient
+    RepositoryService repositoryService;
 
 }

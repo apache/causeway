@@ -79,8 +79,9 @@ public class ObjectTypeFactory {
 
     public void objectTypeFromObjectSpecification(
             final ObjectSpecification objectSpecification,
-            final Set<GraphQLType> graphQLObjectTypes,
-            final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+            final Set<GraphQLType> graphQLTypes,
+            final GraphQLCodeRegistry.Builder codeRegistryBuilder,
+            final GraphQLObjectType structureType) {
         ObjectTypeDataCollector objectTypeDataCollector = new ObjectTypeDataCollector(); //may be removed or slimmed down later
         objectTypeDataCollector.setObjectSpecification(objectSpecification);
 
@@ -108,7 +109,7 @@ public class ObjectTypeFactory {
 //                .field(newFieldDefinition().name("autocomplete").argument(GraphQLArgument.newArgument().name("we_call_search_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLBoolean).build()) // for now
 //                .field(newFieldDefinition().name("validate").argument(GraphQLArgument.newArgument().name("we_call_value_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLString).build())
 //                .build();
-//        graphQLObjectTypes.add(paramMetaDataType);
+//        graphQLTypes.add(paramMetaDataType);
 
 //        GraphQLObjectType mutatorMetaDataType = newObject().name(_Utils.MUTATOR_META_DATA_TYPENAME)
 //                .field(newFieldDefinition().name("params").type(paramsMetaDataType).build())
@@ -116,11 +117,11 @@ public class ObjectTypeFactory {
 //                .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())
 //                .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
 //                .build();
-//        graphQLObjectTypes.add(mutatorMetaDataType);
+//        graphQLTypes.add(mutatorMetaDataType);
 
         BeanSort objectSpecificationBeanSort = objectSpecification.getBeanSort();
 //        GraphQLObjectType metaType =
-//                createAndRegisterMetaType(logicalTypeNameSanitized, objectSpecificationBeanSort, graphQLObjectTypes, fields, mutations);
+//                createAndRegisterMetaType(logicalTypeNameSanitized, objectSpecificationBeanSort, graphQLTypes, fields, mutations);
 
         String metaTypeName = metaTypeName(logicalTypeNameSanitized);
         GraphQLObjectType.Builder metaTypeBuilder = newObject().name(metaTypeName);
@@ -148,7 +149,7 @@ public class ObjectTypeFactory {
                         .type(nonNull(Scalars.GraphQLID))
                         .build());
         GraphQLInputType inputType = inputTypeBuilder.build();
-        addTypeIfNotAlreadyPresent(graphQLObjectTypes, inputType, inputTypeName);
+        addTypeIfNotAlreadyPresent(graphQLTypes, inputType, inputTypeName);
 
         // add fields
         if (metaFieldsTypeBuilder != null) {
@@ -162,27 +163,27 @@ public class ObjectTypeFactory {
 
         // add actions TODO: maybe split into 2: safe actions and non-safe actions?
         MutatorsDataForEntity mutatorsDataForEntity =
-                addActions(logicalTypeNameSanitized, objectSpecification, objectTypeBuilder, graphQLObjectTypes, metaTypeBuilder, metaFieldsTypeBuilder, metaMutationsTypeBuilder);
+                addActions(logicalTypeNameSanitized, objectSpecification, objectTypeBuilder, graphQLTypes, metaTypeBuilder, metaFieldsTypeBuilder, metaMutationsTypeBuilder);
 
         // adds types for meta
         if (metaFieldsTypeBuilder != null) {
-            graphQLObjectTypes.add(metaFieldsTypeBuilder.build());
+            graphQLTypes.add(metaFieldsTypeBuilder.build());
         }
         if (metaMutationsTypeBuilder != null) {
-            graphQLObjectTypes.add(metaMutationsTypeBuilder.build());
+            graphQLTypes.add(metaMutationsTypeBuilder.build());
         }
 
         // build and register object type
         GraphQLObjectType graphQLObjectType = objectTypeBuilder.build();
-        addTypeIfNotAlreadyPresent(graphQLObjectTypes, graphQLObjectType, logicalTypeNameSanitized);
+        addTypeIfNotAlreadyPresent(graphQLTypes, graphQLObjectType, logicalTypeNameSanitized);
 
         // build and regoster meta type
         GraphQLObjectType metaType = metaTypeBuilder.build();
-        addTypeIfNotAlreadyPresent(graphQLObjectTypes, metaType, logicalTypeNameSanitized);
+        addTypeIfNotAlreadyPresent(graphQLTypes, metaType, logicalTypeNameSanitized);
 
         // create and register data fetchers
         createAndRegisterDataFetchersForMetaData(
-                codeRegistryBuilder, objectSpecificationBeanSort, metaType, gql_meta, graphQLObjectType);
+                codeRegistryBuilder, objectSpecification, metaType, gql_meta, graphQLObjectType, graphQLTypes);
         if (mutatorsDataForEntity != null) createAndRegisterDataFetchersForMutators(
                 codeRegistryBuilder, objectSpecificationBeanSort, mutatorsDataForEntity, graphQLObjectType);
         createAndRegisterDataFetchersForField(objectSpecification, codeRegistryBuilder, graphQLObjectType);
@@ -640,10 +641,11 @@ public class ObjectTypeFactory {
 
     void createAndRegisterDataFetchersForMetaData(
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BeanSort objectSpecificationBeanSort,
+            final ObjectSpecification objectSpecification,
             final GraphQLObjectType metaType,
             final GraphQLFieldDefinition gql_meta,
-            final GraphQLObjectType graphQLObjectType) {
+            final GraphQLObjectType graphQLObjectType,
+            final Set<GraphQLType> types) {
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, gql_meta), new DataFetcher<Object>() {
             @Override
@@ -651,7 +653,7 @@ public class ObjectTypeFactory {
 
                 Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
                 if (bookmark == null) return null; //TODO: is this correct ?
-                return new GQLMeta(bookmark, bookmarkService);
+                return new GQLMeta(bookmark, bookmarkService, objectSpecification);
             }
         });
 
@@ -675,7 +677,7 @@ public class ObjectTypeFactory {
             }
         });
 
-        if (objectSpecificationBeanSort == BeanSort.ENTITY) {
+        if (objectSpecification.getBeanSort() == BeanSort.ENTITY) {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, versionField), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
@@ -694,9 +696,87 @@ public class ObjectTypeFactory {
 
                 GQLMeta gqlMeta = environment.getSource();
 
-                return gqlMeta.version();
+                return gqlMeta.iconName();
             }
         });
+
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, structureField), new DataFetcher<Object>() {
+            @Override
+            public Object get(final DataFetchingEnvironment environment) throws Exception {
+
+                GQLMeta gqlMeta = environment.getSource();
+
+                return gqlMeta.structure();
+            }
+        });
+
+        GraphQLObjectType structureType = types.stream()
+                .filter(t -> t.getClass().isAssignableFrom(GraphQLObjectType.class))
+                .map(GraphQLObjectType.class::cast)
+                .filter(ot -> ot.getName().equals(GQL_DOMAINOBJECT_STRUCTURE_TYPENAME))
+                .findFirst().orElse(null);
+
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(structureType, "properties"), new DataFetcher<Object>() {
+            @Override
+            public Object get(final DataFetchingEnvironment environment) throws Exception {
+
+                GQLStructure gqlStructure = environment.getSource();
+
+                return gqlStructure.properties();
+            }
+        });
+
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(structureType, "collections"), new DataFetcher<Object>() {
+            @Override
+            public Object get(final DataFetchingEnvironment environment) throws Exception {
+
+                GQLStructure gqlStructure = environment.getSource();
+
+                return gqlStructure.collections();
+            }
+        });
+
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(structureType, "safeActions"), new DataFetcher<Object>() {
+            @Override
+            public Object get(final DataFetchingEnvironment environment) throws Exception {
+
+                GQLStructure gqlStructure = environment.getSource();
+
+                return gqlStructure.safeActions();
+            }
+        });
+
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(structureType, "idempotentActions"), new DataFetcher<Object>() {
+            @Override
+            public Object get(final DataFetchingEnvironment environment) throws Exception {
+
+                GQLStructure gqlStructure = environment.getSource();
+
+                return gqlStructure.idempotentActions();
+            }
+        });
+
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(structureType, "nonIdempotentActions"), new DataFetcher<Object>() {
+            @Override
+            public Object get(final DataFetchingEnvironment environment) throws Exception {
+
+                GQLStructure gqlStructure = environment.getSource();
+
+                return gqlStructure.nonIdempotentActions();
+            }
+        });
+
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(structureType, "layoutXml"), new DataFetcher<Object>() {
+            @Override
+            public Object get(final DataFetchingEnvironment environment) throws Exception {
+
+                GQLStructure gqlStructure = environment.getSource();
+
+                return gqlStructure.layoutXml();
+            }
+        });
+
+
     }
 
 }
