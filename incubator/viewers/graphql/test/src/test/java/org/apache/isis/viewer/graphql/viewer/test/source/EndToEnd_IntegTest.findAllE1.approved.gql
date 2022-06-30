@@ -6,7 +6,7 @@
         "_gql_meta" : {
           "id" : "1",
           "logicalTypeName" : "gqltestdomain.E1",
-          "version" : null
+          "version" : "not yet implemented"
         }
       } ]
     }

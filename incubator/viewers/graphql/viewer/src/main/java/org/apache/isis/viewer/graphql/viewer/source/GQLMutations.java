@@ -30,6 +30,6 @@ public class GQLMutations {
 
     private final Bookmark bookmark;
     private final BookmarkService bookmarkService;
-    private final List<String> mutatorFieldNames;
+    private final ObjectTypeDataCollector dataCollector;
 
 }

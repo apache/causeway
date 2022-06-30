@@ -160,8 +160,7 @@ public class ObjectTypeFactory {
         }
 
         // add actions TODO: maybe split into 2: safe actions and non-safe actions?
-        MutatorsDataForEntity mutatorsDataForEntity =
-                addActions(logicalTypeNameSanitized, objectSpecification, objectTypeBuilder, graphQLTypes, metaTypeBuilder, metaFieldsTypeBuilder, metaMutationsTypeBuilder);
+        addActions(logicalTypeNameSanitized, objectSpecification, objectTypeBuilder, graphQLTypes, metaTypeBuilder, metaFieldsTypeBuilder, metaMutationsTypeBuilder, objectTypeDataCollector);
 
         // adds types for meta
         if (metaFieldsTypeBuilder != null) {
@@ -181,9 +180,9 @@ public class ObjectTypeFactory {
 
         // create and register data fetchers
         createAndRegisterDataFetchersForMetaData(
-                codeRegistryBuilder, objectSpecification, metaType, gql_meta, graphQLObjectType, graphQLTypes);
-        if (mutatorsDataForEntity != null) createAndRegisterDataFetchersForMutators(
-                codeRegistryBuilder, objectSpecificationBeanSort, mutatorsDataForEntity, graphQLObjectType);
+                codeRegistryBuilder, objectSpecification, metaType, gql_meta, graphQLObjectType, graphQLTypes, objectTypeDataCollector);
+        if (!objectTypeDataCollector.mutatorActions().isEmpty()) createAndRegisterDataFetchersForMutators(
+                codeRegistryBuilder, graphQLObjectType, objectTypeDataCollector, graphQLTypes);
         createAndRegisterDataFetchersForField(objectSpecification, codeRegistryBuilder, graphQLObjectType);
         createAndRegisterDataFetchersForCollection(objectSpecification, codeRegistryBuilder, graphQLObjectType);
 
@@ -192,11 +191,11 @@ public class ObjectTypeFactory {
 
     private void createAndRegisterDataFetchersForMutators(
             final GraphQLCodeRegistry.Builder codeRegistryBuilder,
-            final BeanSort objectSpecificationBeanSort,
-            final MutatorsDataForEntity mutatorsDataForEntity,
-            final GraphQLObjectType graphQLObjectType) {
+            final GraphQLObjectType graphQLObjectType,
+            final ObjectTypeDataCollector dataCollector,
+            final Set<GraphQLType> graphQLTypes) {
 
-        List<String> mutatorsTypeFields = mutatorsDataForEntity.getMutatorsTypeFields().stream().map(f -> f.getName()).collect(Collectors.toList());
+
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, _Utils.GQL_MUTATTIONS_FIELDNAME), new DataFetcher<Object>() {
 
@@ -205,78 +204,74 @@ public class ObjectTypeFactory {
 
                 Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
                 if (bookmark == null) return null;
-                return new GQLMutations(bookmark, bookmarkService, mutatorsTypeFields);
+                return new GQLMutations(bookmark, bookmarkService, dataCollector);
 
             }
 
         });
 
-        GraphQLObjectType mutatorsType = mutatorsDataForEntity.getMutatorsType();
-        ObjectSpecification objectSpecification = mutatorsDataForEntity.getObjectSpecification();
-        mutatorsDataForEntity.getMutatorsTypeFields().forEach(
-                mf -> {
-                    Optional<ObjectAction> action = objectSpecification.getAction(mf.getName());
-                    if (action.isPresent()) {
-                        ObjectAction objectAction = action.get();
-                        codeRegistryBuilder
-                                .dataFetcher(
-                                        FieldCoordinates.coordinates(mutatorsType, mf.getName()),
-                                        new DataFetcher<Object>() {
+        GraphQLObjectType mutatorsType = ObjectTypeDataCollector.getObjectTypeFor(dataCollector.getMutatorsTypeName(), graphQLTypes);
+        dataCollector.mutatorActions().forEach(
+            action -> {
+                codeRegistryBuilder
+                    .dataFetcher(
+                        FieldCoordinates.coordinates(mutatorsType, action.getId()),
+                        new DataFetcher<Object>() {
 
-                                            @Override
-                                            public Object get(final DataFetchingEnvironment dataFetchingEnvironment) throws Exception {
+                            @Override
+                            public Object get(final DataFetchingEnvironment dataFetchingEnvironment) throws Exception {
 
-                                                GQLMutations gqlMutations = dataFetchingEnvironment.getSource();
+                                GQLMutations gqlMutations = dataFetchingEnvironment.getSource();
 
-                                                Optional<Object> optionalDomainObject = bookmarkService.lookup(gqlMutations.getBookmark());
+                                Optional<Object> optionalDomainObject = bookmarkService.lookup(gqlMutations.getBookmark());
 
-                                                if (!optionalDomainObject.isPresent()) return null;
-                                                Object domainObject = optionalDomainObject.get();
+                                if (!optionalDomainObject.isPresent()) return null;
+                                Object domainObject = optionalDomainObject.get();
 
-                                                Class<?> domainObjectInstanceClass = domainObject.getClass();
-                                                ObjectSpecification specification = specificationLoader
-                                                        .loadSpecification(domainObjectInstanceClass);
+                                Class<?> domainObjectInstanceClass = domainObject.getClass();
+                                ObjectSpecification specification = specificationLoader
+                                        .loadSpecification(domainObjectInstanceClass);
 
-                                                ManagedObject owner = ManagedObject.of(specification, domainObject);
+                                ManagedObject owner = ManagedObject.of(specification, domainObject);
 
-                                                ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
+                                ActionInteractionHead actionInteractionHead = action.interactionHead(owner);
 
-                                                Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
-                                                Can<ObjectActionParameter> parameters = objectAction.getParameters();
-                                                Can<ManagedObject> canOfParams = parameters.stream().map(oap -> {
-                                                    Object argumentValue = arguments.get(oap.getId());
-                                                    ObjectSpecification elementType = oap.getElementType();
+                                Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
+                                Can<ObjectActionParameter> parameters = action.getParameters();
+                                Can<ManagedObject> canOfParams = parameters.stream().map(oap -> {
+                                    Object argumentValue = arguments.get(oap.getId());
+                                    ObjectSpecification elementType = oap.getElementType();
 
-                                                    if (argumentValue == null)
-                                                        return ManagedObject.empty(elementType);
-                                                    switch (elementType.getBeanSort()){
-                                                        case ENTITY:
-                                                            return getManagedObjectFromInputType(elementType, argumentValue);
+                                    if (argumentValue == null)
+                                        return ManagedObject.empty(elementType);
+                                    switch (elementType.getBeanSort()){
+                                        case ENTITY:
+                                            return getManagedObjectFromInputType(elementType, argumentValue);
 
-                                                        case COLLECTION:
-                                                            /* TODO */
-                                                            throw new RuntimeException("Not yet implemented");
+                                        case COLLECTION:
+                                            /* TODO */
+                                            throw new RuntimeException("Not yet implemented");
 
-                                                        case VALUE:
-                                                            return ManagedObject.of(elementType, argumentValue);
+                                        case VALUE:
+                                            return ManagedObject.of(elementType, argumentValue);
 
-                                                        default:
-                                                            throw new RuntimeException("Not yet implemented");
-                                                    }
+                                        default:
+                                            throw new RuntimeException("Not yet implemented");
+                                    }
 
 
-                                                }).collect(Can.toCan());
+                                }).collect(Can.toCan());
 
-                                                ManagedObject managedObject = objectAction
-                                                        .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
+                                ManagedObject managedObject = action
+                                        .execute(actionInteractionHead, canOfParams, InteractionInitiatedBy.USER);
 
-                                                return managedObject.getPojo();
-                                            }
+                                return managedObject.getPojo();
+                            }
 
-                                        });
+                        });
 
-                    }
-                }
+
+            }
         );
 
     }
@@ -468,14 +463,15 @@ public class ObjectTypeFactory {
                 });
     }
 
-    MutatorsDataForEntity addActions(
+    void addActions(
             final String logicalTypeNameSanitized,
             final ObjectSpecification objectSpecification,
             final GraphQLObjectType.Builder objectTypeBuilder,
             final Set<GraphQLType> graphQLObjectTypes,
             final GraphQLObjectType.Builder metaTypeBuilder,
             final GraphQLObjectType.Builder metaTypeFieldsBuilder,
-            final GraphQLObjectType.Builder metaMutationsTypeBuilder) {
+            final GraphQLObjectType.Builder metaMutationsTypeBuilder,
+            final ObjectTypeDataCollector dataCollector) {
 
         String mutatorsTypeName = mutationsTypeName(logicalTypeNameSanitized);
         GraphQLObjectType.Builder mutatorsTypeBuilder = newObject().name(mutatorsTypeName);
@@ -571,6 +567,7 @@ public class ObjectTypeFactory {
 
         if (!mutatorsTypeFields.isEmpty()) {
             GraphQLObjectType mutatorsType = mutatorsTypeBuilder.build();
+            dataCollector.setMutatorsTypeName(mutatorsTypeName);
             addTypeIfNotAlreadyPresent(graphQLObjectTypes, mutatorsType, mutatorsTypeName);
             GraphQLFieldDefinition gql_mutations = newFieldDefinition()
                     .name(_Utils.GQL_MUTATTIONS_FIELDNAME)
@@ -578,23 +575,7 @@ public class ObjectTypeFactory {
                     .build();
             objectTypeBuilder.field(gql_mutations);
 
-            return new MutatorsDataForEntity(objectSpecification, mutatorsType, mutatorsTypeFields);
-
         }
-
-        return null;
-
-    }
-
-    @Data
-    @AllArgsConstructor
-    class MutatorsDataForEntity {
-
-        private ObjectSpecification objectSpecification;
-
-        private GraphQLObjectType mutatorsType;
-
-        private List<GraphQLFieldDefinition> mutatorsTypeFields;
 
     }
 
@@ -643,7 +624,8 @@ public class ObjectTypeFactory {
             final GraphQLObjectType metaType,
             final GraphQLFieldDefinition gql_meta,
             final GraphQLObjectType graphQLObjectType,
-            final Set<GraphQLType> types) {
+            final Set<GraphQLType> types,
+            final ObjectTypeDataCollector dataCollector) {
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(graphQLObjectType, gql_meta), new DataFetcher<Object>() {
             @Override
@@ -651,7 +633,7 @@ public class ObjectTypeFactory {
 
                 Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
                 if (bookmark == null) return null; //TODO: is this correct ?
-                return new GQLMeta(bookmark, bookmarkService, objectSpecification);
+                return new GQLMeta(bookmark, bookmarkService, dataCollector);
             }
         });
 

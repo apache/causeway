@@ -31,7 +31,7 @@ public class GQLMeta {
 
     private final Bookmark bookmark;
     private final BookmarkService bookmarkService;
-    private final ObjectSpecification objectSpecification;
+    private final ObjectTypeDataCollector dataCollector;
 
     public String logicalTypeName(){
         return bookmark.getLogicalTypeName();
@@ -55,13 +55,13 @@ public class GQLMeta {
     }
 
     public GQLMetaStructure structure(){
-        return new GQLMetaStructure(objectSpecification);
+        return new GQLMetaStructure(dataCollector);
     };
 
     public String title(){
         Object domainObject = bookmarkService.lookup(bookmark).orElse(null);
         if (domainObject == null) return null;
-        return objectSpecification.getTitleService().titleOf(domainObject);
+        return dataCollector.getObjectSpecification().getTitleService().titleOf(domainObject);
     }
 
     public GQLMetaFields fields(){
