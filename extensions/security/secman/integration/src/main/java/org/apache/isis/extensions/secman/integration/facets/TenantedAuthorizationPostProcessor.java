@@ -25,12 +25,14 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -64,7 +66,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     @Inject UserService userService;
     @Inject @Lazy ApplicationUserRepository userRepository;
     @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
-    @Inject List<ApplicationTenancyEvaluator> applicationTenancyEvaluators;
+    @Autowired(required=false) List<ApplicationTenancyEvaluator> applicationTenancyEvaluators;
 
     @Inject
     public TenantedAuthorizationPostProcessor(final MetaModelContext metaModelContext) {
@@ -103,8 +105,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             final Class<?> cls,
             final FacetHolder holder) {
 
-        val evaluators = applicationTenancyEvaluators
-                .stream()
+        val evaluators = _NullSafe.stream(applicationTenancyEvaluators)
                 .filter(evaluator -> evaluator.handles(cls))
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 
