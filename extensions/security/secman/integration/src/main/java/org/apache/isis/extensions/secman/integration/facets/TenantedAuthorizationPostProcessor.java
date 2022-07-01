@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.integration.facets;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     @Inject UserService userService;
     @Inject @Lazy ApplicationUserRepository userRepository;
     @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
+    @Inject List<ApplicationTenancyEvaluator> applicationTenancyEvaluators;
 
     @Inject
     public TenantedAuthorizationPostProcessor(final MetaModelContext metaModelContext) {
@@ -95,12 +97,13 @@ extends ObjectSpecificationPostProcessorAbstract {
         FacetUtil.addFacetIfPresent(createFacet(specification.getCorrespondingClass(), objectFeature));
     }
 
+
+
     private Optional<TenantedAuthorizationFacetDefault> createFacet(
             final Class<?> cls,
             final FacetHolder holder) {
 
-        val evaluators = serviceRegistry
-                .select(ApplicationTenancyEvaluator.class)
+        val evaluators = applicationTenancyEvaluators
                 .stream()
                 .filter(evaluator -> evaluator.handles(cls))
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());

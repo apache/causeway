@@ -29,4 +29,9 @@ import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 public interface TenantedAuthorizationFacet
 extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
 
+    @Override
+    public default boolean isAllowedToBeSharedWhenMixedIn() {
+        return false;
+    }
+
 }
