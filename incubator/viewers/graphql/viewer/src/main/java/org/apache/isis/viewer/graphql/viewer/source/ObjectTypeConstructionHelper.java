@@ -19,21 +19,49 @@ import java.util.stream.Collectors;
 import static org.apache.isis.applib.services.metamodel.BeanSort.*;
 
 @Setter @Getter
-public class ObjectTypeDataCollector {
+public class ObjectTypeConstructionHelper {
 
     private ObjectSpecification objectSpecification;
 
-    private String gqlObjectTypeName;
+    public String logicalTypeNameSanitized(){
+        return _Utils.logicalTypeNameSanitized(objectSpecification.getLogicalTypeName());
+    }
 
-    private String inputTypeName;
+    public String gqlObjectTypeName(){
+        return _Utils.logicalTypeNameSanitized(objectSpecification.getLogicalTypeName());
+    }
 
-    private String metaTypeName;
+    public String inputTypeName(){
+        return _Utils.GQL_INPUTTYPE_PREFIX + logicalTypeNameSanitized();
+    }
 
-    private String metaMutationsTypeName;
+    public String mutationsTypeName(){
+        return _Utils.mutationsTypeName(logicalTypeNameSanitized());
+    }
 
-    private String metaFieldsTypeName;
+    public String metaTypeName(){
+        return _Utils.metaTypeName(logicalTypeNameSanitized());
+    }
 
-    private String mutatorsTypeName;
+    public String metaMutationsTypeName(){
+        return _Utils.metaMutationsTypeName(logicalTypeNameSanitized());
+    }
+
+    public String metaFieldsTypeName(){
+        return _Utils.metaFieldsTypeName(logicalTypeNameSanitized());
+    }
+
+    public String parameterizedFieldMetaDataTypeName(final String parameterizedFieldName){
+        return _Utils.parameterizedFieldMetaDataTypeName(logicalTypeNameSanitized(), parameterizedFieldName);
+    }
+
+    public String parametersMetaDataTypeName(final String parameterizedFieldName){
+        return _Utils.parametersMetaDataTypeName(logicalTypeNameSanitized(), parameterizedFieldName);
+    }
+
+    public String parameterMetaDataTypeName(final String parameterizedFieldName, final String parameterName){
+        return _Utils.parameterMetaDataTypeName(logicalTypeNameSanitized(), parameterizedFieldName, parameterName);
+    }
 
     public static GraphQLObjectType getObjectTypeFor(String mutatorsTypeName, Set<GraphQLType> gqlTypes) {
         return gqlTypes.stream()
@@ -83,13 +111,6 @@ public class ObjectTypeDataCollector {
         return objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .filter(objectAction -> !objectAction.getSemantics().isSafeInNature())
                 .filter(objectAction -> !objectAction.getSemantics().isIdempotentInNature())
-                .map(ObjectAction::getId)
-                .collect(Collectors.toList());
-    }
-
-    public List<String> mutatorActionNames(){
-        return objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
-                .filter(objectAction -> !objectAction.getSemantics().isSafeInNature())
                 .map(ObjectAction::getId)
                 .collect(Collectors.toList());
     }

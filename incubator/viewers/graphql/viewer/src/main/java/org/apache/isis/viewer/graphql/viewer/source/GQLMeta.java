@@ -22,16 +22,13 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 
 import lombok.Data;
-import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 @Data
 public class GQLMeta {
 
     private final Bookmark bookmark;
     private final BookmarkService bookmarkService;
-    private final ObjectTypeDataCollector dataCollector;
+    private final ObjectTypeConstructionHelper constructionHelper;
 
     public String logicalTypeName(){
         return bookmark.getLogicalTypeName();
@@ -55,13 +52,13 @@ public class GQLMeta {
     }
 
     public GQLMetaStructure structure(){
-        return new GQLMetaStructure(dataCollector);
+        return new GQLMetaStructure(constructionHelper);
     };
 
     public String title(){
         Object domainObject = bookmarkService.lookup(bookmark).orElse(null);
         if (domainObject == null) return null;
-        return dataCollector.getObjectSpecification().getTitleService().titleOf(domainObject);
+        return constructionHelper.getObjectSpecification().getTitleService().titleOf(domainObject);
     }
 
     public GQLMetaFields fields(){

@@ -7,25 +7,25 @@ import java.util.List;
 @Data
 public class GQLMetaStructure {
 
-    private final ObjectTypeDataCollector dataCollector;
+    private final ObjectTypeConstructionHelper constructionHelper;
 
     public List<String> properties(){
-        return dataCollector.properties();
+        return constructionHelper.properties();
     }
 
     public List<String> collections(){
-        return dataCollector.collections();
+        return constructionHelper.collections();
     }
 
     public List<String> safeActions(){
-        return dataCollector.safeActions();
+        return constructionHelper.safeActions();
     }
 
     public List<String> idempotentActions(){
-        return dataCollector.idempotentActions();
+        return constructionHelper.idempotentActions();
     }
     public List<String> nonIdempotentActions(){
-        return dataCollector.nonIdempotentActionNames();
+        return constructionHelper.nonIdempotentActionNames();
     }
 
     public String layoutXml(){
