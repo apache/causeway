@@ -14,6 +14,29 @@
 | previously
 | new
 
+| For _Domain Objects_ we had support for (direct) _Collection_ modification (`addTo`, `removeFrom`). 
+
+As this is part of _Restful Object Specification 1.0_, it was implemented for the _RO Viewer_ and also the _WrapperFactory_.
+
+Specifically REST endpoints (removed):
+----
+DomainObjectResource
+  addToSet(...)
+  addToList(...)
+  removeFromCollection(...)
+---- 
+Events (removed)
+----
+CollectionAddToEvent
+CollectionRemoveFromEvent
+----
+| Has been removed without replacement. (An updated _Restful Object Specification 2.0_ is in preparation.)
+
+It has proven difficulty to define what an "execution" would mean for _Collection_ changes, hence we finally removed that notion.
+
+In some situations it however  makes sense to limit which objects can be *added to* or *removed from* a _Collection_.
+Thus, one would make the _Collection_ read only and then define _Actions_ that encapsulate the required business logic.
+
 | `@DomainService.logicalTypeName` deprecated for removal
 | use `@Named` or any other semantics supported by Spring
 +
