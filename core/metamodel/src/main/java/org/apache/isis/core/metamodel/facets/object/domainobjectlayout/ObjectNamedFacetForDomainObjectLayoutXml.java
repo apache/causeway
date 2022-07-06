@@ -66,8 +66,8 @@ extends ObjectNamedFacetAbstract {
     }
 
     @Override
-    public boolean isAllowedToBeSharedWhenMixedIn() {
-        return false;
+    public boolean isObjectTypeSpecific() {
+        return true;
     }
 
 }

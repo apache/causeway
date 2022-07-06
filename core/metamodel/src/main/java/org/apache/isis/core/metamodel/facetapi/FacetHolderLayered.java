@@ -71,9 +71,9 @@ implements FacetHolder {
     @Override
     public void addFacet(@NonNull final Facet facet) {
         // eg. if a Facet originates from layout.xml introspection, don't install it on the shared FacetHolder
-        val facetHolder = facet.isAllowedToBeSharedWhenMixedIn()
-                ? shared
-                : local;
+        val facetHolder = facet.isObjectTypeSpecific()
+                ? local
+                : shared;
         facetHolder.addFacet(facet);
     }
 

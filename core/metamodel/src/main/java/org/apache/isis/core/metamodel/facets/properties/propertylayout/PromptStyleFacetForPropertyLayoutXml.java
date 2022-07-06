@@ -50,8 +50,8 @@ extends PromptStyleFacetAbstract {
     }
 
     @Override
-    public boolean isAllowedToBeSharedWhenMixedIn() {
-        return false;
+    public boolean isObjectTypeSpecific() {
+        return true;
     }
 
     @Override
