@@ -72,35 +72,44 @@ public class ObjectTypeConstructionHelper {
     }
 
     public boolean objectHasMutations() {
-        return !nonIdempotentActionNames().isEmpty() || !idempotentActions().isEmpty();
+        return !nonIdempotentActionNames().isEmpty() || !idempotentActionNames().isEmpty();
     }
 
     public boolean objectHasFields() {
-        return !properties().isEmpty() || !collections().isEmpty() || !idempotentActions().isEmpty();
+        return !oneToOneAssociationNames().isEmpty() || !oneToManyAssociationNames().isEmpty() || !idempotentActionNames().isEmpty();
     }
 
-    public List<String> properties(){
+    public List<OneToOneAssociation> oneToOneAssociations() {
         return objectSpecification.streamProperties(MixedIn.INCLUDED)
                 .filter(otoa -> Arrays.asList(VIEW_MODEL, ENTITY, VALUE).contains(otoa.getElementType().getBeanSort()))
+                .collect(Collectors.toList());
+    }
+
+    public List<String> oneToOneAssociationNames(){
+        return oneToOneAssociations().stream()
                 .map(OneToOneAssociation::getId)
                 .collect(Collectors.toList());
     }
 
-    public List<String> collections(){
+    public List<OneToManyAssociation> oneToManyAssociations(){
         return objectSpecification.streamCollections(MixedIn.INCLUDED)
                 .filter(otom -> Arrays.asList(VIEW_MODEL, ENTITY, VALUE).contains(otom.getElementType().getBeanSort()))
+                .collect(Collectors.toList());
+    }
+
+    public List<String> oneToManyAssociationNames(){
+        return oneToManyAssociations().stream()
                 .map(OneToManyAssociation::getId)
                 .collect(Collectors.toList());
     }
 
-    public List<String> safeActions(){
+    public List<ObjectAction> safeActionNames(){
         return objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .filter(objectAction -> objectAction.getSemantics().isSafeInNature())
-                .map(ObjectAction::getId)
                 .collect(Collectors.toList());
     }
 
-    public List<String> idempotentActions(){
+    public List<String> idempotentActionNames(){
         return objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .filter(objectAction -> objectAction.getSemantics().isIdempotentInNature())
                 .map(ObjectAction::getId)
@@ -121,4 +130,7 @@ public class ObjectTypeConstructionHelper {
                 .collect(Collectors.toList());
     }
 
+    public List<String> safeActionsNames() {
+        return safeActionNames().stream().map(a->a.getId()).collect(Collectors.toList());
+    }
 }
