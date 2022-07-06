@@ -46,7 +46,7 @@ import lombok.val;
  *
  * @see Facet#isAllowedToBeSharedWhenMixedIn()
  */
-class FacetHolderLayered
+final class FacetHolderLayered
 implements FacetHolder {
 
     @Getter(onMethod_ = {@Override})

@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacet;
-import org.apache.isis.core.metamodel.facets.members.described.annotprop.DescribedAsFacetOnMemberFromType;
+import org.apache.isis.core.metamodel.facets.members.described.annotprop.MemberDescribedFacetFromType;
 import org.apache.isis.core.metamodel.facets.param.described.annotderived.DescribedAsFacetOnParameterFromType;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -51,7 +51,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         objectAction.getReturnType()
         .lookupNonFallbackFacet(ObjectDescribedFacet.class)
         .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(
-                DescribedAsFacetOnMemberFromType
+                MemberDescribedFacetFromType
                 .create(
                         specFacet,
                         facetedMethodFor(objectAction))));
@@ -90,7 +90,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         objectAssociation.getElementType()
         .lookupNonFallbackFacet(ObjectDescribedFacet.class)
         .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(
-                DescribedAsFacetOnMemberFromType
+                MemberDescribedFacetFromType
                 .create(specFacet, facetedMethodFor(objectAssociation))));
     }
 

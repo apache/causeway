@@ -26,7 +26,7 @@ import lombok.NonNull;
 /**
  * Provides a (simple) list of {@link Facet}s.
  */
-class FacetHolderSimple
+final class FacetHolderSimple
 extends FacetHolderAbstract {
 
     public FacetHolderSimple(

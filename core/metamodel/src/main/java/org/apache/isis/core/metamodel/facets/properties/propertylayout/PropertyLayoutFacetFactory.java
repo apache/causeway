@@ -53,7 +53,7 @@ extends FacetFactoryAbstract {
                 .create(propertyLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                DescribedAsFacetForPropertyLayoutAnnotation
+                MemberDescribedFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder));
 
         addFacetIfPresent(

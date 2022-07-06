@@ -23,10 +23,10 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithImperativeTextAbstract;
 
-public class DescribedAsFacetForMemberViaMethod
+public class MemberDescribedFacetViaMethod
 extends MemberDescribedFacetWithImperativeTextAbstract {
 
-    public DescribedAsFacetForMemberViaMethod(
+    public MemberDescribedFacetViaMethod(
             final Method describedMethod,
             final FacetHolder holder) {
         super(

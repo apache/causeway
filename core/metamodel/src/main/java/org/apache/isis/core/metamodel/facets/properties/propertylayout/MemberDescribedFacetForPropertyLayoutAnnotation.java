@@ -16,37 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.members.described.annotprop;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
-import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 
-import lombok.val;
-
-public class DescribedAsFacetOnMemberFromType
+public class MemberDescribedFacetForPropertyLayoutAnnotation
 extends MemberDescribedFacetWithStaticTextAbstract {
 
     public static Optional<MemberDescribedFacet> create(
-            final ObjectDescribedFacet objectDescribedFacet,
+            final Optional<PropertyLayout> propertyLayoutIfAny,
             final FacetHolder holder) {
 
-        val describedIfAny = _Strings.emptyToNull(objectDescribedFacet.text());
-
-        return Optional.ofNullable(describedIfAny)
-        .map(described->
-            new DescribedAsFacetOnMemberFromType(described, holder));
-
+        return propertyLayoutIfAny
+                .map(PropertyLayout::describedAs)
+                .filter(_Strings::isNotEmpty)
+                .map(describedAs -> new MemberDescribedFacetForPropertyLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetOnMemberFromType(
+    private MemberDescribedFacetForPropertyLayoutAnnotation(
             final String described,
             final FacetHolder holder) {
-        super(described, holder, Precedence.INFERRED);
+        super(described, holder);
     }
 
 }
