@@ -54,7 +54,7 @@ extends FacetFactoryAbstract {
                 .create(parameterLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                DescribedAsFacetForParameterLayoutAnnotation
+                ParamDescribedFacetForParameterLayoutAnnotation
                 .create(parameterLayoutIfAny, facetHolder));
 
         addFacetIfPresent(

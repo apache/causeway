@@ -16,36 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.param.described.annotderived;
+package org.apache.isis.core.metamodel.facets.param.layout;
 
 import java.util.Optional;
 
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacetAbstract;
 
-import lombok.val;
-
-public class DescribedAsFacetOnParameterFromType
+public class ParamDescribedFacetForParameterLayoutAnnotation
 extends ParamDescribedFacetAbstract {
 
     public static Optional<ParamDescribedFacet> create(
-            final ObjectDescribedFacet objectDescribedFacet,
+            final Optional<ParameterLayout> parameterLayoutIfAny,
             final FacetHolder holder) {
 
-        val describedIfAny = _Strings.emptyToNull(objectDescribedFacet.text());
-
-        return Optional.ofNullable(describedIfAny)
-        .map(described->
-            new DescribedAsFacetOnParameterFromType(described, holder));
+        return parameterLayoutIfAny
+                .map(ParameterLayout::describedAs)
+                .filter(_Strings::isNotEmpty)
+                .map(describedAs -> new ParamDescribedFacetForParameterLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetOnParameterFromType(
+    private ParamDescribedFacetForParameterLayoutAnnotation(
             final String described,
             final FacetHolder holder) {
-        super(described, holder, Precedence.INFERRED);
+        super(described, holder);
     }
-
 }
