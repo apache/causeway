@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacetAbstract;
 
-public class DescribedAsFacetForDomainObjectLayoutXml
+public class ObjectDescribedFacetForDomainObjectLayoutXml
 extends ObjectDescribedFacetAbstract {
 
     public static Optional<ObjectDescribedFacet> create(
@@ -37,11 +37,11 @@ extends ObjectDescribedFacetAbstract {
         }
         final String describedAs = _Strings.emptyToNull(domainObjectLayout.getDescribedAs());
         return describedAs != null
-                ? Optional.of(new DescribedAsFacetForDomainObjectLayoutXml(describedAs, holder))
+                ? Optional.of(new ObjectDescribedFacetForDomainObjectLayoutXml(describedAs, holder))
                 : Optional.empty();
     }
 
-    private DescribedAsFacetForDomainObjectLayoutXml(
+    private ObjectDescribedFacetForDomainObjectLayoutXml(
             final String described,
             final FacetHolder holder) {
         super(described, holder);

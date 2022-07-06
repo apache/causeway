@@ -16,55 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
+package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.i8n.noun.NounForms;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
 
-import lombok.val;
-
-public class NamedFacetForDomainObjectLayoutAnnotation
+public class ObjectNamedFacetForDomainServiceLayoutAnnotation
 extends ObjectNamedFacetAbstract {
 
     public static Optional<ObjectNamedFacet> create(
-            final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
-            final FacetHolder holder) {
+            final Optional<DomainServiceLayout> domainServiceLayoutIfAny,
+            final FacetHolder facetHolder) {
 
-        if(!domainObjectLayoutIfAny.isPresent()) {
-            return Optional.empty();
-        }
-
-        val domainObjectLayout = domainObjectLayoutIfAny.get();
-
-        val singular = _Strings.emptyToNull(domainObjectLayout.named());
-        val plural = _Strings.emptyToNull(domainObjectLayout.plural());
-
-        val nounForms = NounForms
-                .builder()
-                .singular(singular)
-                .plural(plural)
-                .build();
-
-        if(nounForms.getSupportedNounForms().isEmpty()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(
-                new NamedFacetForDomainObjectLayoutAnnotation(
-                            nounForms,
-                            holder));
+        return domainServiceLayoutIfAny
+                .map(DomainServiceLayout::named)
+                .filter(_Strings::isNotEmpty)
+                .map(serviceNamed->NounForms
+                        .builderSingular(serviceNamed)
+                        .build())
+                .map(nounForms->new ObjectNamedFacetForDomainServiceLayoutAnnotation(
+                        nounForms,
+                        facetHolder));
     }
 
-    private NamedFacetForDomainObjectLayoutAnnotation(
+    private ObjectNamedFacetForDomainServiceLayoutAnnotation(
             final NounForms nounForms,
             final FacetHolder holder) {
         super(nounForms, holder);
     }
+
 
 }

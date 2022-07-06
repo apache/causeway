@@ -25,21 +25,20 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacetAbstract;
 
-
-public class DescribedAsFacetForDomainObjectLayoutAnnotation
+public class ObjectDescribedFacetForDomainObjectLayoutAnnotation
 extends ObjectDescribedFacetAbstract {
 
-    public static Optional<DescribedAsFacetForDomainObjectLayoutAnnotation> create(
+    public static Optional<ObjectDescribedFacetForDomainObjectLayoutAnnotation> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::describedAs)
                 .filter(_Strings::isNotEmpty)
-                .map(describedAs -> new DescribedAsFacetForDomainObjectLayoutAnnotation(describedAs, holder));
+                .map(describedAs -> new ObjectDescribedFacetForDomainObjectLayoutAnnotation(describedAs, holder));
     }
 
-    private DescribedAsFacetForDomainObjectLayoutAnnotation(
+    private ObjectDescribedFacetForDomainObjectLayoutAnnotation(
             final String described,
             final FacetHolder holder) {
         super(described, holder);

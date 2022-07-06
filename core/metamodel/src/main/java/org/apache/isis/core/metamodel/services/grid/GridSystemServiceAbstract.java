@@ -61,7 +61,7 @@ import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFac
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFaFacetForDomainObjectLayoutXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectLayoutXml;
-import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DescribedAsFacetForDomainObjectLayoutXml;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.ObjectDescribedFacetForDomainObjectLayoutXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.ObjectNamedFacetForDomainObjectLayoutXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyLayoutXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyLayoutXml;
@@ -175,9 +175,9 @@ implements GridSystemService<G> {
                         CssClassFaFacetForDomainObjectLayoutXml.create(domainObjectLayoutData, objectSpec),
                         objectSpec);
                 updateFacet(
-                        DescribedAsFacetForDomainObjectLayoutXml.type(),
-                        DescribedAsFacetForDomainObjectLayoutXml.class::isInstance,
-                        DescribedAsFacetForDomainObjectLayoutXml.create(domainObjectLayoutData, objectSpec),
+                        ObjectDescribedFacetForDomainObjectLayoutXml.type(),
+                        ObjectDescribedFacetForDomainObjectLayoutXml.class::isInstance,
+                        ObjectDescribedFacetForDomainObjectLayoutXml.create(domainObjectLayoutData, objectSpec),
                         objectSpec);
                 updateFacet(
                         ObjectNamedFacetForDomainObjectLayoutXml.type(),
