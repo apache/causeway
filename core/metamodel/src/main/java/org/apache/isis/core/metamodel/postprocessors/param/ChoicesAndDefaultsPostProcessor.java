@@ -64,7 +64,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(
+    public void postProcessParameter(
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction,
             final ObjectActionParameter param) {
@@ -82,7 +82,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(
+    public void postProcessProperty(
             final ObjectSpecification objectSpecification,
             final OneToOneAssociation prop) {
         if(!hasMemberLevelDefaults(prop)) {
@@ -105,7 +105,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(
+    public void postProcessCollection(
             final ObjectSpecification objectSpecification,
             final OneToManyAssociation coll) {
 

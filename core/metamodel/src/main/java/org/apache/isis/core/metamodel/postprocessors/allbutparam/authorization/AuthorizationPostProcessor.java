@@ -37,22 +37,22 @@ public class AuthorizationPostProcessor
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification) {
+    public void postProcessObject(final ObjectSpecification objectSpecification) {
         addFacet(objectSpecification);
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
+    public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction act) {
         addFacet(act);
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
+    public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
         addFacet(prop);
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
+    public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         addFacet(coll);
     }
 

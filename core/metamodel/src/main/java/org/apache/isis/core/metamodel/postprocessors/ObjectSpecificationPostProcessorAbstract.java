@@ -22,13 +22,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 import lombok.Getter;
@@ -45,35 +40,6 @@ implements ObjectSpecificationPostProcessor {
         super();
         this.metaModelContext = metaModelContext;
     }
-
-    @Override
-    public final void postProcess(final ObjectSpecification objectSpecification) {
-
-        doPostProcess(objectSpecification);
-
-        objectSpecification.streamRuntimeActions(MixedIn.INCLUDED)
-        .forEach(act -> {
-
-            act.streamParameters()
-                .forEach(param -> doPostProcess(objectSpecification, act, param));
-
-            doPostProcess(objectSpecification, act);
-
-        });
-
-        objectSpecification.streamProperties(MixedIn.INCLUDED)
-        .forEach(prop -> doPostProcess(objectSpecification, prop));
-
-        objectSpecification.streamCollections(MixedIn.INCLUDED)
-        .forEach(coll -> doPostProcess(objectSpecification, coll));
-
-    }
-
-    protected void doPostProcess(final ObjectSpecification objSpec) {};
-    protected void doPostProcess(final ObjectSpecification objSpec, final ObjectAction act) {};
-    protected void doPostProcess(final ObjectSpecification objSpec, final ObjectAction act, final ObjectActionParameter param) {};
-    protected void doPostProcess(final ObjectSpecification objSpec, final OneToOneAssociation prop) {};
-    protected void doPostProcess(final ObjectSpecification objSpec, final OneToManyAssociation coll) {};
 
     /**
      * Use for domain-object-type agnostic facets only!

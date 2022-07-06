@@ -45,7 +45,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification) {
+    public void postProcessObject(final ObjectSpecification objectSpecification) {
         val projectionFacet = ProjectionFacetFromProjectingProperty.create(objectSpecification);
         if (projectionFacet == null) {
             return;

@@ -44,7 +44,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+    public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
         if(objectAction.containsNonFallbackFacet(MemberDescribedFacet.class)) {
             return;
         }
@@ -58,7 +58,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
+    public void postProcessParameter(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
         if(parameter.containsNonFallbackFacet(ParamDescribedFacet.class)) {
             return;
         }
@@ -72,12 +72,12 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
+    public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
         handle(prop);
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
+    public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         handle(coll);
     }
 

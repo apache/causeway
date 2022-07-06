@@ -40,7 +40,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(
+    public void postProcessParameter(
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction,
             final ObjectActionParameter parameter) {
@@ -57,7 +57,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(
+    public void postProcessProperty(
             final ObjectSpecification objectSpecification,
             final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(TypicalLengthFacet.class)) {

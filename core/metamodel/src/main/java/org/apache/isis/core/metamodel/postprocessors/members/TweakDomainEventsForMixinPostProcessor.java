@@ -63,7 +63,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+    public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
 
         if(objectAction instanceof ObjectActionMixedIn) {
             // unlike collection and property mixins, there is no need to create the DomainEventFacet, it will
@@ -86,7 +86,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+    public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
 
         if(property instanceof OneToOneAssociationMixedIn) {
             final OneToOneAssociationMixedIn propertyMixin = (OneToOneAssociationMixedIn) property;
@@ -127,7 +127,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
+    public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
 
         if(collection instanceof OneToManyAssociationMixedIn) {
             final OneToManyAssociationMixedIn collectionMixin = (OneToManyAssociationMixedIn) collection;

@@ -43,7 +43,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification) {
+    public void postProcessObject(final ObjectSpecification objectSpecification) {
 
         if(!(objectSpecification.isEntityOrViewModelOrAbstract()
                 || objectSpecification.isInjectable())) {

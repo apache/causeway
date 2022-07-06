@@ -84,7 +84,6 @@ import org.apache.isis.core.metamodel.facets.properties.validating.method.Proper
 import org.apache.isis.core.metamodel.facets.value.semantics.ValueSemanticsAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
-import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.DescribedAsFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
@@ -244,10 +243,6 @@ extends ProgrammingModelAbstract {
     private void addPostProcessors() {
 
         val mmc = getMetaModelContext();
-
-        addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, new DeriveMixinMembersPostProcessor(mmc));
-
-        // only after this point have any mixin members been resolved and are available on the ObjectSpecification.
 
         // must run before Object nouns are used
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeObjectNamingPostProcessor(mmc));

@@ -43,17 +43,17 @@ public class NavigationFacetFromHiddenTypePostProcessor extends ObjectSpecificat
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
+    public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction act) {
         addFacetIfRequired(act, act.getReturnType());
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
+    public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
         addFacetIfRequired(prop, prop.getElementType());
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
+    public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         addFacetIfRequired(coll, coll.getElementType());
     }
 

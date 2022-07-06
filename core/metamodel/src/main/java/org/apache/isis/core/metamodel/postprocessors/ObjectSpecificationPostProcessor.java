@@ -20,14 +20,22 @@ package org.apache.isis.core.metamodel.postprocessors;
 
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public interface ObjectSpecificationPostProcessor
 extends HasMetaModelContext {
 
-    void postProcess(ObjectSpecification objectSpecification);
-
     default boolean isEnabled() {
         return true;
     }
+
+    default void postProcessObject(final ObjectSpecification objSpec) {};
+    default void postProcessAction(final ObjectSpecification objSpec, final ObjectAction act) {};
+    default void postProcessParameter(final ObjectSpecification objSpec, final ObjectAction act, final ObjectActionParameter param) {};
+    default void postProcessProperty(final ObjectSpecification objSpec, final OneToOneAssociation prop) {};
+    default void postProcessCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll) {};
 
 }
