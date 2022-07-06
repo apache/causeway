@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.projection;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.Projecting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacet;
@@ -26,12 +28,21 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.val;
-
 public class ProjectionFacetFromProjectingProperty
 extends ProjectionFacetAbstract {
 
     private final OneToOneAssociation projectingProperty;
+
+    public static Optional<ProjectionFacet> create(final ObjectSpecification objectSpecification) {
+        return objectSpecification.streamProperties(MixedIn.EXCLUDED)
+        .filter(prop ->
+            prop.lookupNonFallbackFacet(ProjectingFacet.class)
+            .map(projectingFacet -> projectingFacet.value() == Projecting.PROJECTED)
+            .orElse(false)
+        )
+        .findFirst()
+        .map(prop -> new ProjectionFacetFromProjectingProperty(prop, objectSpecification));
+    }
 
     private ProjectionFacetFromProjectingProperty(
             final OneToOneAssociation projectingProperty,
@@ -39,19 +50,6 @@ extends ProjectionFacetAbstract {
 
         super(holder);
         this.projectingProperty = projectingProperty;
-    }
-
-    public static ProjectionFacet create(final ObjectSpecification objectSpecification) {
-        return objectSpecification.streamProperties(MixedIn.EXCLUDED)
-        .filter(propertySpec -> {
-            val projectingFacet = propertySpec.lookupNonFallbackFacet(ProjectingFacet.class)
-                    .orElse(null);
-            return projectingFacet != null
-                    && projectingFacet.value() == Projecting.PROJECTED;
-        })
-        .findFirst()
-        .map(propertySpec -> new ProjectionFacetFromProjectingProperty(propertySpec, objectSpecification))
-        .orElse(null);
     }
 
     @Override

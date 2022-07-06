@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacetFromProjectingProperty;
+import org.apache.isis.core.metamodel.facets.object.projection.ident.CssClassFacetFromProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ident.IconFacetFromProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ident.TitleFacetFromProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -46,7 +47,8 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
     public void postProcessObject(final ObjectSpecification objectSpecification) {
-        val projectionFacet = ProjectionFacetFromProjectingProperty.create(objectSpecification);
+        val projectionFacet = ProjectionFacetFromProjectingProperty.create(objectSpecification)
+                .orElse(null);
         if (projectionFacet == null) {
             return;
         }
@@ -61,7 +63,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
         val cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
         if(canOverwrite(cssClassFacet)) {
-            FacetUtil.addFacet(new IconFacetFromProjectionFacet(projectionFacet, objectSpecification));
+            FacetUtil.addFacet(new CssClassFacetFromProjectionFacet(projectionFacet, objectSpecification));
         }
     }
 
