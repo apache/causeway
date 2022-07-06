@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -57,10 +57,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 
+import lombok.Getter;
 import lombok.val;
 
 public class ObjectSpecificationStub
-extends FacetHolderAbstract
 implements ObjectSpecification {
 
     private ObjectAction action;
@@ -74,6 +74,8 @@ implements ObjectSpecification {
     private ObjectSpecification elementSpecification;
     private final Class<?> correspondingClass;
     private final String name;
+
+    @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
@@ -100,7 +102,7 @@ implements ObjectSpecification {
     }
 
     public ObjectSpecificationStub(final MetaModelContext mmc, final Class<?> correspondingClass) {
-        super(mmc);
+        this.facetHolder = FacetHolder.simple(mmc, null);
         this.correspondingClass = correspondingClass;
         this.logicalType = LogicalType.infer(correspondingClass);
         this.title = "";

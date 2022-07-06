@@ -28,12 +28,10 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaImperativeFacetAbstract;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaStaticFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -74,8 +72,8 @@ extends CssClassFaImperativeFacetAbstract {
     private CssClassFaFacetOnMemberFromConfiguredRegex(
             final ObjectSpecification objectSpecification,
             final MemberNamedFacet memberNamedFacet,
-            final FacetHolder holder) {
-        super(holder);
+            final FacetHolder facetHolder) {
+        super(facetHolder);
         this.objectSpecification = objectSpecification;
         this.faIconByPattern = getConfiguration()
                 .getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatternsAsMap();
@@ -136,7 +134,6 @@ extends CssClassFaImperativeFacetAbstract {
                 hasImperativeName->hasImperativeName.textElseNull(targetFor(domainObjectProvider)));
 
         return cssClassFaFactoryForMemberFriendlyName(memberFriendlyName);
-
     }
 
     private ManagedObject targetFor(final Supplier<ManagedObject> domainObjectProvider) {
@@ -153,10 +150,6 @@ extends CssClassFaImperativeFacetAbstract {
                 : ownerAdapter;
     }
 
-    /**
-     * @implNote because {@link CssClassFaStaticFacetAbstract} has all the fa-icon logic,
-     * we simply reuse it here by creating an anonymous instance
-     */
     private Optional<CssClassFaFactory> cssClassFaFactoryForMemberFriendlyName(
             final String memberFriendlyName) {
 
@@ -174,8 +167,7 @@ extends CssClassFaImperativeFacetAbstract {
                 faIcon = _faIcon;
                 position = CssClassFaPosition.LEFT;
             }
-            return new CssClassFaStaticFacetAbstract(
-                    faIcon, position, FacetHolderAbstract.simple(getMetaModelContext(), null)) {};
+            return CssClassFaFactory.ofIconAndPosition(faIcon, position);
         });
 
     }

@@ -16,28 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.core.metamodel.facetapi;
 
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+
+import lombok.NonNull;
 
 /**
- * Base interface for elements of the metamodel.
- *
- * <p>
- * The most significant sub-interfaces of this are {@link ObjectSpecification}
- * and {@link ObjectFeature} (which brings in {@link ObjectMember} and
- * {@link ObjectActionParameter}.
- *
- * <p>
- * Introduces so that viewers can deal with abstract Instances of said.
- *
+ * Provides a (simple) list of {@link Facet}s.
  */
-public interface Specification extends HasFacetHolder {
+class FacetHolderSimple
+extends FacetHolderAbstract {
 
-    FeatureType getFeatureType();
+    public FacetHolderSimple(
+            final @NonNull MetaModelContext metaModelContext,
+            final Identifier featureIdentifier) {
+        super(metaModelContext, featureIdentifier);
+    }
 
 }

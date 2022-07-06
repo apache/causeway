@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
@@ -63,8 +62,7 @@ import lombok.val;
 public abstract class ObjectMemberAbstract
 implements
     ObjectMember,
-    HasMetaModelContext,
-    HasFacetHolder {
+    HasMetaModelContext {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Identifier featureIdentifier;
     @Getter(onMethod_ = {@Override}) private final @NonNull FeatureType featureType;

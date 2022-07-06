@@ -21,6 +21,9 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
+
 public interface HasFacetHolder extends FacetHolder {
 
     // -- INTERFACE
@@ -28,6 +31,16 @@ public interface HasFacetHolder extends FacetHolder {
     FacetHolder getFacetHolder();
 
     // -- SHORTCUTS
+
+    @Override
+    default MetaModelContext getMetaModelContext() {
+        return getFacetHolder().getMetaModelContext();
+    }
+
+    @Override
+    default Identifier getFeatureIdentifier() {
+        return getFacetHolder().getFeatureIdentifier();
+    }
 
     @Override
     default int getFacetCount() {

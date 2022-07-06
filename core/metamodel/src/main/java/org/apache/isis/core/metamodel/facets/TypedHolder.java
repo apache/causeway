@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -28,7 +29,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * <p>
  * Used to represent class members when building up the metamodel.
  */
-public interface TypedHolder extends FacetHolder {
+public interface TypedHolder extends HasFacetHolder {
 
     public FeatureType getFeatureType();
 

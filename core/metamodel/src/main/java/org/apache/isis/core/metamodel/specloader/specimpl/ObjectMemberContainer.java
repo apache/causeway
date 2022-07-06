@@ -22,10 +22,12 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -34,6 +36,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -47,14 +51,18 @@ import lombok.val;
  * (current elegant recursive solution will then need some tweaks to be efficient)
  */
 public abstract class ObjectMemberContainer
-extends FacetHolderAbstract
 implements
+    HasFacetHolder,
     ObjectActionContainer,
     ObjectAssociationContainer,
     Hierarchical {
 
-    protected ObjectMemberContainer(final MetaModelContext metaModelContext) {
-        super(metaModelContext);
+    @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
+
+    protected ObjectMemberContainer(
+            final @NonNull MetaModelContext mmc,
+            final @NonNull Identifier featureIdentifier) {
+        this.facetHolder = FacetHolder.simple(mmc, featureIdentifier);
     }
 
     // -- ACTIONS

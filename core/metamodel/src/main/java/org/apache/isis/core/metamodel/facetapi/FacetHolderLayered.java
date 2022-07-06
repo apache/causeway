@@ -59,7 +59,7 @@ implements FacetHolder {
             final @NonNull FacetHolder shared) {
         this.featureIdentifier = featureIdentifier;
         this.shared = shared;
-        this.local = FacetHolderAbstract.simple(shared.getMetaModelContext(), featureIdentifier);
+        this.local = FacetHolder.simple(shared.getMetaModelContext(), featureIdentifier);
     }
 
     @Override

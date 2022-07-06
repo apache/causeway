@@ -25,7 +25,6 @@ import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -62,7 +61,7 @@ abstract class MixinIntendedAs {
 
     protected FacetHolder runTypeContextOn(final Class<?> type) {
 
-        val facetHolder = FacetHolderAbstract.simple(
+        val facetHolder = FacetHolder.simple(
                 metaModelContext,
                 Identifier.classIdentifier(LogicalType.fqcn(type)));
 

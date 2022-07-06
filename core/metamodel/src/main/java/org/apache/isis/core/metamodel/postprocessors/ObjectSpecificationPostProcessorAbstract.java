@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.postprocessors;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -75,6 +76,10 @@ implements ObjectSpecificationPostProcessor {
     protected void doPostProcess(final ObjectSpecification objSpec, final OneToOneAssociation prop) {};
     protected void doPostProcess(final ObjectSpecification objSpec, final OneToManyAssociation coll) {};
 
+    /**
+     * Use for domain-object-type agnostic facets only!
+     * @see Facet#isObjectTypeSpecific()
+     */
     protected static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
         val objectMemberImpl = (ObjectMemberAbstract) objectMember;

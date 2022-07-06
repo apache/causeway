@@ -199,7 +199,7 @@ implements ObjectSpecification {
             final FacetProcessor facetProcessor,
             final PostProcessor postProcessor) {
 
-        super(facetProcessor.getMetaModelContext());
+        super(facetProcessor.getMetaModelContext(), Identifier.classIdentifier(logicalType));
 
         this.correspondingClass = introspectedClass;
         this.logicalType = logicalType;
@@ -208,7 +208,6 @@ implements ObjectSpecification {
         this.beanSort = beanSort;
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
-        super.featureIdentifier = Identifier.classIdentifier(logicalType);
 
         this.facetProcessor = facetProcessor;
         this.postProcessor = postProcessor;

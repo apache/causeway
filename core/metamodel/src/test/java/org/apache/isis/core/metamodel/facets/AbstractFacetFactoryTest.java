@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel._testing.MethodRemover_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
@@ -103,7 +102,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
             will(returnValue(Optional.of(iaContext)));
         }});
 
-        facetHolder = FacetHolderAbstract.simple(
+        facetHolder = FacetHolder.simple(
                 metaModelContext,
                 Identifier.propertyIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
 

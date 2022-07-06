@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -58,8 +57,7 @@ import lombok.val;
 
 public abstract class ObjectActionParameterAbstract
 implements
-    ObjectActionParameter,
-    HasFacetHolder {
+    ObjectActionParameter {
 
     @Getter(onMethod_ = {@Override}) private final FeatureType featureType;
     @Getter(onMethod_ = {@Override}) private final int parameterIndex;

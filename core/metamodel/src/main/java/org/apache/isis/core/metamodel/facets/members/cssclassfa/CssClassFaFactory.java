@@ -49,7 +49,7 @@ public interface CssClassFaFactory {
      * Space separated (distinct) CSS-class strings.
      * @param additionalClasses - trimmed and filtered by non-empty, then added to the resulting string
      */
-    default String asSpaceSeparatedWithAdditional(String ... additionalClasses) {
+    default String asSpaceSeparatedWithAdditional(final String ... additionalClasses) {
 
         if(_NullSafe.size(additionalClasses)==0) {
             return asSpaceSeparated();
@@ -63,6 +63,15 @@ public interface CssClassFaFactory {
         .distinct()
         .collect(Collectors.joining(" "));
 
+    }
+
+    /**
+     * @implNote because {@link CssClassFaStaticFacetAbstract} has all the fa-icon logic,
+     * we simply reuse it here by creating an anonymous instance
+     */
+    public static CssClassFaFactory ofIconAndPosition(final String faIcon, final CssClassFaPosition position) {
+        return new CssClassFaStaticFacetAbstract(
+                faIcon, position, null) {};
     }
 
 }

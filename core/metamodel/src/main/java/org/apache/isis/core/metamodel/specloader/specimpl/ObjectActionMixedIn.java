@@ -28,7 +28,6 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
@@ -80,7 +79,7 @@ implements MixedInMember {
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod(), false);
 
-        this.facetHolder = FacetHolderAbstract.layered(
+        this.facetHolder = FacetHolder.layered(
                 super.getFeatureIdentifier(),
                 mixinAction.getFacetedMethod());
         this.mixinType = mixinType;
