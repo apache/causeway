@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -43,7 +42,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeF
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.fileaccept.FileAcceptFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionAnnotation;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
@@ -259,19 +258,16 @@ extends FacetFactoryAbstract {
 
     void processChoicesFrom(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        val facetedMethod = processMethodContext.getFacetHolder();
+        val holder = processMethodContext.getFacetHolder();
 
         // check for @Action(choicesFrom=...)
-        actionIfAny.ifPresent(action->{
-            val choicesFrom = action.choicesFrom();
-            if(_Strings.isNotEmpty(choicesFrom)) {
-                addFacet(new ChoicesFromFacetForActionAnnotation(choicesFrom, facetedMethod));
-            }
-        });
+        addFacetIfPresent(
+                ChoicesFromFacetForActionAnnotation
+                .create(actionIfAny, holder));
 
         addFacetIfPresent(
-                LayoutGroupFacetFromActionAnnotation
-                .create(actionIfAny, facetedMethod));
+                LayoutGroupFacetForActionAnnotation
+                .create(actionIfAny, holder));
 
     }
 

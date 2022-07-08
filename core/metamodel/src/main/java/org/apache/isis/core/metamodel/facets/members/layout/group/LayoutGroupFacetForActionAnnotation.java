@@ -23,19 +23,19 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class LayoutGroupFacetFromActionAnnotation
+public class LayoutGroupFacetForActionAnnotation
 extends LayoutGroupFacetAbstract {
 
-    public static Optional<LayoutGroupFacetFromActionAnnotation> create(
+    public static Optional<LayoutGroupFacetForActionAnnotation> create(
             final Optional<Action> actionIfAny,
             final FacetHolder holder) {
 
         return actionIfAny
             .flatMap(GroupIdAndName::forAction)
-            .map(groupIdAndName->new LayoutGroupFacetFromActionAnnotation(groupIdAndName, holder));
+            .map(groupIdAndName->new LayoutGroupFacetForActionAnnotation(groupIdAndName, holder));
     }
 
-    private LayoutGroupFacetFromActionAnnotation(final GroupIdAndName groupIdAndName, final FacetHolder holder) {
+    private LayoutGroupFacetForActionAnnotation(final GroupIdAndName groupIdAndName, final FacetHolder holder) {
         super(groupIdAndName, holder, Precedence.FALLBACK);
     }
 

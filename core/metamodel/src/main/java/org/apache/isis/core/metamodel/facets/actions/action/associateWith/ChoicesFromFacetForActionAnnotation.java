@@ -18,11 +18,26 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.action.associateWith;
 
+import java.util.Optional;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class ChoicesFromFacetForActionAnnotation extends ChoicesFromFacetAbstract {
+public class ChoicesFromFacetForActionAnnotation
+extends ChoicesFromFacetAbstract {
 
-    public ChoicesFromFacetForActionAnnotation(
+    public static Optional<ChoicesFromFacet> create(
+            final Optional<Action> actionIfAny,
+            final FacetHolder holder) {
+        return actionIfAny
+            .map(Action::choicesFrom)
+            .filter(_Strings::isNotEmpty)
+            .map(choicesFrom->
+                new ChoicesFromFacetForActionAnnotation(choicesFrom, holder));
+    }
+
+    private ChoicesFromFacetForActionAnnotation(
             final String value,
             final FacetHolder holder) {
         super(value, holder);
