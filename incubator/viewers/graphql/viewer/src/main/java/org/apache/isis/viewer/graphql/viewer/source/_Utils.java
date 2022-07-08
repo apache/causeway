@@ -21,10 +21,14 @@ package org.apache.isis.viewer.graphql.viewer.source;
 final class _Utils {
 
     final static String GQL_GENERIC_FIELDNAME = "_gql_generic";
+    final static String GQL_GENERIC_PROPERTIES_FIELDNAME = "properties";
+    final static String GQL_GENERIC_COLLECTIONS_FIELDNAME = "collections";
+    final static String GQL_GENERIC_ACTIONS_FIELDNAME = "actions";
     final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
     final static String GQL_MUTATTIONS_FIELDNAME = "_gql_mutations";
-    final static String GQL_DOMAINOBJECT_STRUCTURE_TYPENAME = "_gql__DomainObject_generic_structure";
-    final static String FIELD_GENERIC_DATA_TYPENAME = "_gql__DomainObject_generic_fields_data";
+    final static String GQL_GENERIC_STRUCTURE_TYPENAME = "_gql__DomainObject_generic_structure";
+    final static String GQL_GENERIC_PROPERTY_TYPENAME = "_gql__DomainObject_generic_property";
+    final static String GQL_GENERIC_COLLECTION_TYPENAME = "_gql__DomainObject_generic_collection";
 
     final public static String SINGLE_PARAM_META_DATA_TYPENAME = "Param_Meta_Data"; //TODO: should go
     final static String MUTATOR_META_DATA_TYPENAME = "Mutator_Meta_Data"; //TODO: should go
@@ -38,8 +42,12 @@ final class _Utils {
         return logicalTypeNameSanitized + "__DomainObject_mutations";
     }
 
-    static String metaFieldsTypeName(final String logicalTypeNameSanitized){
-        return genericTypeName(logicalTypeNameSanitized) + "_fields";
+    static String genericPropertiesTypeName(final String logicalTypeNameSanitized){
+        return genericTypeName(logicalTypeNameSanitized) + "_properties";
+    }
+
+    static String genericCollectionsTypeName(final String logicalTypeNameSanitized){
+        return genericTypeName(logicalTypeNameSanitized) + "_collections";
     }
 
     static String metaMutationsTypeName(final String logicalTypeNameSanitized){
@@ -47,7 +55,7 @@ final class _Utils {
     }
 
     static String parameterizedFieldMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){
-        return metaFieldsTypeName(logicalTypeNameSanitized) + "_" + fieldName;
+        return genericPropertiesTypeName(logicalTypeNameSanitized) + "_" + fieldName;
     }
 
     static String parametersMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){

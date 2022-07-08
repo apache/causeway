@@ -59,7 +59,7 @@ public class ObjectTypeFactory {
 
     // _gql_meta fields
     private static GraphQLFieldDefinition structureField = newFieldDefinition()
-            .name("structure").type(nonNull(GraphQLTypeReference.typeRef(GQL_DOMAINOBJECT_STRUCTURE_TYPENAME))).build();
+            .name("structure").type(nonNull(GraphQLTypeReference.typeRef(GQL_GENERIC_STRUCTURE_TYPENAME))).build();
 
     private static GraphQLFieldDefinition idField = newFieldDefinition()
             .name("id").type(nonNull(Scalars.GraphQLID)).build();
@@ -111,18 +111,23 @@ public class ObjectTypeFactory {
         GraphQLInputType inputType = inputTypeBuilder.build();
         addTypeIfNotAlreadyPresent(graphQLTypes, inputType, constructionHelper.inputTypeName());
 
-        GraphQLObjectType.Builder metaFieldsTypeBuilder = null;
-        if (constructionHelper.objectHasFields()) {
-            metaFieldsTypeBuilder = newObject().name(constructionHelper.genericFieldsTypeName());
+        GraphQLObjectType.Builder genericPropertiesTypeBuilder = null;
+        if (constructionHelper.objectHasProperties()) {
+            genericPropertiesTypeBuilder = newObject().name(constructionHelper.genericFieldsTypeName());
         }
         // add fields
-        addOneToOneAssociationsAsFields(objectTypeBuilder, genericTypeBuilder, metaFieldsTypeBuilder, constructionHelper);
+        addOneToOneAssociationsAsFields(objectTypeBuilder, genericTypeBuilder, genericPropertiesTypeBuilder, constructionHelper);
+
+        GraphQLObjectType.Builder genericCollectionsTypeBuilder = null;
+        if (constructionHelper.objectHasCollections()) {
+            genericCollectionsTypeBuilder = newObject().name(constructionHelper.genericCollectionsTypeName());
+        }
 
         // add collections
-        addOneToManyAssociationsAsFields(objectTypeBuilder, genericTypeBuilder, metaFieldsTypeBuilder, constructionHelper);
+        addOneToManyAssociationsAsFields(objectTypeBuilder, genericTypeBuilder, genericCollectionsTypeBuilder, constructionHelper);
 
         // add actions
-        addSafeActionsAsParametizedFields(objectTypeBuilder, graphQLTypes, genericTypeBuilder, metaFieldsTypeBuilder, constructionHelper);
+        addSafeActionsAsParametizedFields(objectTypeBuilder, graphQLTypes, genericTypeBuilder, genericPropertiesTypeBuilder, constructionHelper);
         GraphQLObjectType.Builder metaMutationsTypeBuilder = null;
         if (constructionHelper.objectHasMutations()) {
             metaMutationsTypeBuilder = newObject().name(constructionHelper.metaMutationsTypeName());
@@ -130,8 +135,11 @@ public class ObjectTypeFactory {
         addNonSafeActionsAsMutations(objectTypeBuilder, graphQLTypes, genericTypeBuilder, metaMutationsTypeBuilder, constructionHelper);
 
         // adds types for meta
-        if (metaFieldsTypeBuilder != null) {
-            graphQLTypes.add(metaFieldsTypeBuilder.build());
+        if (genericPropertiesTypeBuilder != null) {
+            graphQLTypes.add(genericPropertiesTypeBuilder.build());
+        }
+        if (genericCollectionsTypeBuilder != null) {
+            graphQLTypes.add(genericCollectionsTypeBuilder.build());
         }
         if (metaMutationsTypeBuilder != null) {
             graphQLTypes.add(metaMutationsTypeBuilder.build());
@@ -281,9 +289,17 @@ public class ObjectTypeFactory {
 
     void addFieldsFieldOnMetaTypeIfNotAlready(final GraphQLObjectType.Builder metaTypeBuilder, final String logicalTypeNameSanitized){
         GraphQLFieldDefinition fields =
-                newFieldDefinition().name("fields").type(GraphQLTypeReference.typeRef(metaFieldsTypeName(logicalTypeNameSanitized))).build();
-        if (!metaTypeBuilder.hasField("fields")){
+                newFieldDefinition().name(GQL_GENERIC_PROPERTIES_FIELDNAME).type(GraphQLTypeReference.typeRef(genericPropertiesTypeName(logicalTypeNameSanitized))).build();
+        if (!metaTypeBuilder.hasField(GQL_GENERIC_PROPERTIES_FIELDNAME)){
             metaTypeBuilder.field(fields);
+        }
+    }
+
+    void addCollectionsFieldOnMetaTypeIfNotAlready(final GraphQLObjectType.Builder metaTypeBuilder, final String logicalTypeNameSanitized){
+        GraphQLFieldDefinition field =
+                newFieldDefinition().name(GQL_GENERIC_COLLECTIONS_FIELDNAME).type(GraphQLTypeReference.typeRef(genericCollectionsTypeName(logicalTypeNameSanitized))).build();
+        if (!metaTypeBuilder.hasField(GQL_GENERIC_COLLECTIONS_FIELDNAME)){
+            metaTypeBuilder.field(field);
         }
     }
 
@@ -316,10 +332,10 @@ public class ObjectTypeFactory {
                         case VIEW_MODEL:
                         case ENTITY:
 
-                            // _gql_meta 'maintenance'
+                            // _gql_generic 'maintenance'
                             addFieldsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized);
-                            metaFieldsTypeBuilder.field(newFieldDefinition().name(otoa.getId()).type(GraphQLTypeReference.typeRef(FIELD_GENERIC_DATA_TYPENAME)).build());
-                            // END _gql_meta 'maintenance'
+                            metaFieldsTypeBuilder.field(newFieldDefinition().name(otoa.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_PROPERTY_TYPENAME)).build());
+                            // END _gql_generic 'maintenance'
 
                             String logicalTypeNameOfField = fieldObjectSpecification.getLogicalTypeName();
                             String logicalTypeNameOfFieldSanitized = logicalTypeNameSanitized(logicalTypeNameOfField);
@@ -337,10 +353,10 @@ public class ObjectTypeFactory {
 
                         case VALUE:
 
-                            // _gql_meta 'maintenance'
+                            // _gql_generic 'maintenance'
                             addFieldsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized);
-                            metaFieldsTypeBuilder.field(newFieldDefinition().name(otoa.getId()).type(GraphQLTypeReference.typeRef(FIELD_GENERIC_DATA_TYPENAME)).build());
-                            // END _gql_meta 'maintenance'
+                            metaFieldsTypeBuilder.field(newFieldDefinition().name(otoa.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_PROPERTY_TYPENAME)).build());
+                            // END _gql_generic 'maintenance'
 
                             // todo: map ...
                             GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
@@ -371,7 +387,7 @@ public class ObjectTypeFactory {
     void addOneToManyAssociationsAsFields(
             final GraphQLObjectType.Builder objectTypeBuilder,
             final GraphQLObjectType.Builder metaTypeBuilder,
-            final GraphQLObjectType.Builder metaTypeFieldsBuilder,
+            final GraphQLObjectType.Builder genericCollectionsTypeBuilder,
             ObjectTypeConstructionHelper constructionHelper) {
 
         if (constructionHelper.oneToManyAssociations().isEmpty()) return;
@@ -386,10 +402,10 @@ public class ObjectTypeFactory {
                 case VIEW_MODEL:
                 case ENTITY:
 
-                    // _gql_meta 'maintenance'
-                    addFieldsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized(objectSpecification.getLogicalTypeName()));
-                    metaTypeFieldsBuilder.field(newFieldDefinition().name(otom.getId()).type(GraphQLTypeReference.typeRef(FIELD_GENERIC_DATA_TYPENAME)).build());
-                    // END _gql_meta 'maintenance'
+                    // _gql_generic 'maintenance'
+                    addCollectionsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized(objectSpecification.getLogicalTypeName()));
+                    genericCollectionsTypeBuilder.field(newFieldDefinition().name(otom.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_COLLECTION_TYPENAME)).build());
+                    // END _gql_generic 'maintenance'
 
                     String logicalTypeNameOfField = elementType.getLogicalTypeName();
                     GraphQLFieldDefinition.Builder fieldBuilder = newFieldDefinition()
@@ -402,10 +418,10 @@ public class ObjectTypeFactory {
 
                 case VALUE:
 
-                    // _gql_meta 'maintenance'
-                    addFieldsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized(objectSpecification.getLogicalTypeName()));
-                    metaTypeFieldsBuilder.field(newFieldDefinition().name(otom.getId()).type(GraphQLTypeReference.typeRef(FIELD_GENERIC_DATA_TYPENAME)).build());
-                    // END _gql_meta 'maintenance'
+                    // _gql_generic 'maintenance'
+                    addCollectionsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized(objectSpecification.getLogicalTypeName()));
+                    genericCollectionsTypeBuilder.field(newFieldDefinition().name(otom.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_COLLECTION_TYPENAME)).build());
+                    // END _gql_generic 'maintenance'
 
                     GraphQLFieldDefinition.Builder valueBuilder = newFieldDefinition()
                             .name(otom.getId())
@@ -474,7 +490,7 @@ public class ObjectTypeFactory {
 
                     } else {
                         // treat as simple field
-                        metaTypeFieldsBuilder.field(newFieldDefinition().name(objectAction.getId()).type(GraphQLTypeReference.typeRef(FIELD_GENERIC_DATA_TYPENAME)).build());
+                        metaTypeFieldsBuilder.field(newFieldDefinition().name(objectAction.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_PROPERTY_TYPENAME)).build());
                     }
                     // END _gql_meta 'maintenance'
 
@@ -668,7 +684,7 @@ public class ObjectTypeFactory {
             }
         });
 
-        GraphQLObjectType structureType = ObjectTypeConstructionHelper.getObjectTypeFor(GQL_DOMAINOBJECT_STRUCTURE_TYPENAME, types);
+        GraphQLObjectType structureType = ObjectTypeConstructionHelper.getObjectTypeFor(GQL_GENERIC_STRUCTURE_TYPENAME, types);
 
         codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(structureType, "properties"), new DataFetcher<Object>() {
             @Override
@@ -710,9 +726,8 @@ public class ObjectTypeFactory {
             }
         });
 
-        GraphQLObjectType fieldGenericDataTypeName = ObjectTypeConstructionHelper.getObjectTypeFor(constructionHelper.genericFieldsTypeName(), types);
 
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, "fields"), new DataFetcher<Object>() {
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, GQL_GENERIC_PROPERTIES_FIELDNAME), new DataFetcher<Object>() {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
                 GQLGeneric source = environment.getSource();
@@ -720,6 +735,8 @@ public class ObjectTypeFactory {
             }
 
         });
+
+        GraphQLObjectType fieldGenericDataTypeName = ObjectTypeConstructionHelper.getObjectTypeFor(constructionHelper.genericFieldsTypeName(), types);
 
         for (OneToOneAssociation oneToOneAssociation : constructionHelper.oneToOneAssociations()) {
 
@@ -732,7 +749,7 @@ public class ObjectTypeFactory {
 
             });
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(FIELD_GENERIC_DATA_TYPENAME, "hide"), new DataFetcher<Object>() {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_PROPERTY_TYPENAME, "hide"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLFieldHideDisable source = environment.getSource();
@@ -741,7 +758,7 @@ public class ObjectTypeFactory {
 
             });
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(FIELD_GENERIC_DATA_TYPENAME, "disable"), new DataFetcher<Object>() {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_PROPERTY_TYPENAME, "disable"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLFieldHideDisable source = environment.getSource();
@@ -752,9 +769,20 @@ public class ObjectTypeFactory {
 
         }
 
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, GQL_GENERIC_COLLECTIONS_FIELDNAME), new DataFetcher<Object>() {
+            @Override
+            public Object get(final DataFetchingEnvironment environment) throws Exception {
+                GQLGeneric source = environment.getSource();
+                return new GQLGenericFieldsAndCollections(constructionHelper, source.getBookmark());
+            }
+
+        });
+
+        GraphQLObjectType genericCollectionsTypeName = ObjectTypeConstructionHelper.getObjectTypeFor(constructionHelper.genericCollectionsTypeName(), types);
+
         for (OneToManyAssociation oneToManyAssociation : constructionHelper.oneToManyAssociations()) {
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(fieldGenericDataTypeName, oneToManyAssociation.getId()), new DataFetcher<Object>() {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(genericCollectionsTypeName, oneToManyAssociation.getId()), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLGenericFieldsAndCollections source = environment.getSource();
@@ -763,7 +791,7 @@ public class ObjectTypeFactory {
 
             });
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(FIELD_GENERIC_DATA_TYPENAME, "hide"), new DataFetcher<Object>() {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_COLLECTION_TYPENAME, "hide"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLFieldHideDisable source = environment.getSource();
@@ -772,7 +800,7 @@ public class ObjectTypeFactory {
 
             });
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(FIELD_GENERIC_DATA_TYPENAME, "disable"), new DataFetcher<Object>() {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_COLLECTION_TYPENAME, "disable"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLFieldHideDisable source = environment.getSource();
@@ -794,7 +822,7 @@ public class ObjectTypeFactory {
 
             });
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(FIELD_GENERIC_DATA_TYPENAME, "hide"), new DataFetcher<Object>() {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_PROPERTY_TYPENAME, "hide"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLFieldHideDisable source = environment.getSource();
@@ -803,7 +831,7 @@ public class ObjectTypeFactory {
 
             });
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(FIELD_GENERIC_DATA_TYPENAME, "disable"), new DataFetcher<Object>() {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_PROPERTY_TYPENAME, "disable"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLFieldHideDisable source = environment.getSource();

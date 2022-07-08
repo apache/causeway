@@ -73,7 +73,11 @@ public class ObjectTypeConstructionHelper {
     }
 
     public String genericFieldsTypeName(){
-        return _Utils.metaFieldsTypeName(logicalTypeNameSanitized());
+        return _Utils.genericPropertiesTypeName(logicalTypeNameSanitized());
+    }
+
+    public String genericCollectionsTypeName(){
+        return _Utils.genericCollectionsTypeName(logicalTypeNameSanitized());
     }
 
     public String parameterizedFieldMetaDataTypeName(final String parameterizedFieldName){
@@ -100,8 +104,16 @@ public class ObjectTypeConstructionHelper {
         return !nonIdempotentActionNames().isEmpty() || !idempotentActionNames().isEmpty();
     }
 
-    public boolean objectHasFields() {
-        return !oneToOneAssociationNames().isEmpty() || !oneToManyAssociationNames().isEmpty() || !idempotentActionNames().isEmpty();
+    public boolean objectHasProperties() {
+        return !oneToOneAssociations().isEmpty();
+    }
+
+    public boolean objectHasCollections() {
+        return !oneToManyAssociations().isEmpty();
+    }
+
+    public boolean objectHasActions() {
+        return !allActionNames().isEmpty();
     }
 
     public List<OneToOneAssociation> oneToOneAssociations() {

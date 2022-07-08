@@ -290,7 +290,7 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
         });
 
         // when
-        String response = transactionService.callTransactional(Propagation.REQUIRED, () -> {
+            String response = transactionService.callTransactional(Propagation.REQUIRED, () -> {
 
             return submit();
 

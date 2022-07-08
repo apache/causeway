@@ -15,7 +15,7 @@
 }
 iconName
 title
-fields {
+properties {
   e1 {
   __typename
   hide
@@ -36,16 +36,6 @@ objectIdentifier {
   hide
   disable
 }
-otherE2List {
-  __typename
-  hide
-  disable
-}
-zintList {
-  __typename
-  hide
-  disable
-}
 otherEntities {
   __typename
   hide
@@ -61,6 +51,18 @@ otherEntities {
   validate
 }
 }
+}
+}
+collections {
+otherE2List {
+__typename
+hide
+disable
+}
+zintList {
+__typename
+hide
+disable
 }
 }
 }

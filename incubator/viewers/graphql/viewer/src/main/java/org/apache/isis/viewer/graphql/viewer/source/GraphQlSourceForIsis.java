@@ -90,7 +90,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
 
         Set<GraphQLType> graphQLObjectTypes = new HashSet<>();
 
-        GraphQLObjectType structureType = newObject().name(_Utils.GQL_DOMAINOBJECT_STRUCTURE_TYPENAME)
+        GraphQLObjectType structureType = newObject().name(_Utils.GQL_GENERIC_STRUCTURE_TYPENAME)
                 .field(newFieldDefinition().name("properties").type(GraphQLList.list(Scalars.GraphQLString)))
                 .field(newFieldDefinition().name("collections").type(GraphQLList.list(Scalars.GraphQLString)))
                 .field(newFieldDefinition().name("actions").type(GraphQLList.list(Scalars.GraphQLString)))
@@ -173,11 +173,17 @@ public class GraphQlSourceForIsis implements GraphQlSource {
         // END TODO: make all dynamic
 
         // can remain 'static' for all fields / collections (having no params)
-        GraphQLObjectType fieldMetaDataType = newObject().name(_Utils.FIELD_GENERIC_DATA_TYPENAME)
+        GraphQLObjectType propertiesGenericType = newObject().name(_Utils.GQL_GENERIC_PROPERTY_TYPENAME)
                 .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())
                 .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
                 .build();
-        graphQLObjectTypes.add(fieldMetaDataType);
+        graphQLObjectTypes.add(propertiesGenericType);
+
+        GraphQLObjectType collectionsGenericType = newObject().name(_Utils.GQL_GENERIC_COLLECTION_TYPENAME)
+                .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())
+                .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
+                .build();
+        graphQLObjectTypes.add(collectionsGenericType);
 
         GraphQLObjectType queryLookupType = queryLookupTypeBuilder.build();
         graphQLObjectTypes.add(queryLookupType);

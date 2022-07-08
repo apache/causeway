@@ -16,43 +16,45 @@
           },
           "iconName" : "not yet implemented",
           "title" : "Untitled E2",
-          "fields" : {
+          "properties" : {
             "e1" : {
-              "__typename" : "_gql__DomainObject_generic_fields_data",
+              "__typename" : "_gql__DomainObject_generic_property",
               "hide" : false,
               "disable" : "Disabled"
             },
             "logicalTypeName" : {
-              "__typename" : "_gql__DomainObject_generic_fields_data",
+              "__typename" : "_gql__DomainObject_generic_property",
               "hide" : false,
               "disable" : "Contributed property"
             },
             "name" : {
-              "__typename" : "_gql__DomainObject_generic_fields_data",
+              "__typename" : "_gql__DomainObject_generic_property",
               "hide" : false,
               "disable" : "Disabled"
             },
             "objectIdentifier" : {
-              "__typename" : "_gql__DomainObject_generic_fields_data",
+              "__typename" : "_gql__DomainObject_generic_property",
               "hide" : false,
               "disable" : "Contributed property"
             },
-            "otherE2List" : {
-              "__typename" : "_gql__DomainObject_generic_fields_data",
-              "hide" : true,
-              "disable" : null
-            },
-            "zintList" : {
-              "__typename" : "_gql__DomainObject_generic_fields_data",
-              "hide" : false,
-              "disable" : null
-            },
             "otherEntities" : {
-              "__typename" : "gqltestdomain_E2__DomainObject_generic_fields_otherEntities",
+              "__typename" : "gqltestdomain_E2__DomainObject_generic_properties_otherEntities",
               "hide" : false,
               "disable" : null,
               "validate" : null,
               "params" : null
+            }
+          },
+          "collections" : {
+            "otherE2List" : {
+              "__typename" : "_gql__DomainObject_generic_collection",
+              "hide" : true,
+              "disable" : null
+            },
+            "zintList" : {
+              "__typename" : "_gql__DomainObject_generic_collection",
+              "hide" : false,
+              "disable" : null
             }
           }
         },
