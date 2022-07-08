@@ -16,17 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.associateWith.child;
+package demoapp.dom.domain.actions.Action.associateWith;
 
 import java.util.List;
 import java.util.Objects;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 
+import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 import lombok.RequiredArgsConstructor;
-
-import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
 
 
 //tag::class[]
@@ -44,7 +44,7 @@ public class ActionAssociateWithVm_noLongerFavorites {
 
     private final ActionAssociateWithVm actionAssociateWithVm;
 
-    public ActionAssociateWithVm act(List<ActionAssociateWithChildVm> children) {
+    @MemberSupport public ActionAssociateWithVm act(final List<ActionAssociateWithChildVm> children) {
         children.forEach(childVm -> {
             actionAssociateWithVm.getFavorites()
                     .removeIf(y -> Objects.equals(childVm.getValue(), y.getValue()));

@@ -16,18 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.associateWith.child;
+package demoapp.dom.domain.actions.Action.associateWith;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 
+import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 import lombok.RequiredArgsConstructor;
-
-import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
-
 
 //tag::class[]
 @Action(
@@ -35,22 +33,23 @@ import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
 )
 @ActionLayout(
     describedAs =
-            "@Action(choicesFrom = \"favorites\") " +
-            "@ActionLayout(sequence = \"1\")"
-    , sequence = "1"                                            // <.>
+        "@Action(choicesFrom = \"favorites\") " +
+        "@ActionLayout(sequence = \"2\")"
+    , sequence = "2"                                            // <.>
 )
 @RequiredArgsConstructor
-public class ActionAssociateWithVm_makeFavorite {
+public class ActionAssociateWithVm_noLongerFavorite {
 
     private final ActionAssociateWithVm actionAssociateWithVm;
 
-    public ActionAssociateWithVm act(ActionAssociateWithChildVm childVm) {
-        actionAssociateWithVm.getFavorites().add(childVm);
-        actionAssociateWithVm.getChildren().removeIf(x -> Objects.equals(x.getValue(), childVm.getValue()));
+    @MemberSupport public ActionAssociateWithVm act(final ActionAssociateWithChildVm childVm) {
+        actionAssociateWithVm.getFavorites()
+                .removeIf(y -> Objects.equals(childVm.getValue(), y.getValue()));
+        actionAssociateWithVm.getChildren().add(childVm);
+
         return actionAssociateWithVm;
     }
-    public List<ActionAssociateWithChildVm> choices0Act() {     // <.>
-        return actionAssociateWithVm.getChildren();
-    }
+    // no choices or autoComplete required                      // <.>
+
 }
 //end::class[]

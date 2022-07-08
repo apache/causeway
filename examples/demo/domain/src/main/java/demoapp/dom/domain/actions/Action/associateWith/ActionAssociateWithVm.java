@@ -41,13 +41,12 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -70,7 +69,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     }
 
     @ObjectSupport public String title() {
-        return "Action#associateWith";
+        return "Action#choicesFrom/ActionLayout#associateWith";
     }
 
 //tag::class-properties[]
@@ -113,9 +112,8 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"text\") " +
-            "@ActionLayout(sequence = \"1\")"
-        , associateWith = "text"                // <.>
+            "@ActionLayout(associateWith = \"text\", sequence = \"1\")"
+        , associateWith = "text"   // <.>
         , sequence = "1"           // <.>
     )
     public ActionAssociateWithVm updateText(final String text) {
@@ -134,7 +132,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\") " +
+            "@Action(choicesFrom = \"children\") " +
             "@ActionLayout(sequence = \"1\")"
         , sequence = "1"                    // <.>
     )
@@ -153,7 +151,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\") " +
+            "@Action(choicesFrom = \"children\") " +
             "@ActionLayout(sequence = \"2\")"
         , sequence = "2"                   // <.>
     )
@@ -171,7 +169,7 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\") " +
+            "@Action(choicesFrom = \"children\")" +
             "@ActionLayout(sequence = \"3\")"
         , sequence = "3"                        // <.>
     )
