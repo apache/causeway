@@ -11,9 +11,7 @@
             "__typename" : "_gql__DomainObject_generic_structure",
             "properties" : [ "e1", "name", "logicalTypeName", "objectIdentifier" ],
             "collections" : [ "otherE2List", "stringList", "zintList" ],
-            "safeActions" : [ "otherEntities" ],
-            "idempotentActions" : [ "changeE1", "changeName", "otherEntities" ],
-            "nonIdempotentActions" : [ "remove" ],
+            "actions" : [ "otherEntities", "changeE1", "changeName", "otherEntities", "remove" ],
             "layoutXml" : "<xml>todo: implement .... </xml>"
           },
           "iconName" : "not yet implemented",

@@ -674,7 +674,7 @@ public class ObjectTypeFactory {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
 
-                GQLMetaStructure gqlStructure = environment.getSource();
+                GQLGenericStructure gqlStructure = environment.getSource();
 
                 return gqlStructure.properties();
             }
@@ -684,39 +684,19 @@ public class ObjectTypeFactory {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
 
-                GQLMetaStructure gqlStructure = environment.getSource();
+                GQLGenericStructure gqlStructure = environment.getSource();
 
                 return gqlStructure.collections();
             }
         });
 
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(structureType, "safeActions"), new DataFetcher<Object>() {
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(structureType, "actions"), new DataFetcher<Object>() {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
 
-                GQLMetaStructure gqlStructure = environment.getSource();
+                GQLGenericStructure gqlStructure = environment.getSource();
 
-                return gqlStructure.safeActions();
-            }
-        });
-
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(structureType, "idempotentActions"), new DataFetcher<Object>() {
-            @Override
-            public Object get(final DataFetchingEnvironment environment) throws Exception {
-
-                GQLMetaStructure gqlStructure = environment.getSource();
-
-                return gqlStructure.idempotentActions();
-            }
-        });
-
-        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(structureType, "nonIdempotentActions"), new DataFetcher<Object>() {
-            @Override
-            public Object get(final DataFetchingEnvironment environment) throws Exception {
-
-                GQLMetaStructure gqlStructure = environment.getSource();
-
-                return gqlStructure.nonIdempotentActions();
+                return gqlStructure.actions();
             }
         });
 
@@ -724,9 +704,9 @@ public class ObjectTypeFactory {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
 
-                GQLMetaStructure gqlMetaStructure = environment.getSource();
+                GQLGenericStructure gqlGenericStructure = environment.getSource();
 
-                return gqlMetaStructure.layoutXml();
+                return gqlGenericStructure.layoutXml();
             }
         });
 

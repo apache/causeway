@@ -159,6 +159,10 @@ public class ObjectTypeConstructionHelper {
         return safeActions().stream().map(a->a.getId()).collect(Collectors.toList());
     }
 
+    public List<String> allActionNames() {
+        return Stream.of(safeActionNames(), idempotentActionNames(), nonIdempotentActionNames()).flatMap(Collection::stream).collect(Collectors.toList());
+    }
+
     public List<String> fieldNames(){
         return Stream.of(oneToOneAssociationNames(), oneToManyAssociationNames(), safeActionNames())
                 .flatMap(Collection::stream)

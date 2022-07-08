@@ -51,8 +51,8 @@ public class GQLGeneric {
         return "not yet implemented";
     }
 
-    public GQLMetaStructure structure(){
-        return new GQLMetaStructure(constructionHelper);
+    public GQLGenericStructure structure(){
+        return new GQLGenericStructure(constructionHelper);
     };
 
     public String title(){

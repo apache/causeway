@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class GQLMetaStructure {
+public class GQLGenericStructure {
 
     private final ObjectTypeConstructionHelper constructionHelper;
 
@@ -17,15 +17,8 @@ public class GQLMetaStructure {
         return constructionHelper.oneToManyAssociationNames();
     }
 
-    public List<String> safeActions(){
-        return constructionHelper.safeActionNames();
-    }
-
-    public List<String> idempotentActions(){
-        return constructionHelper.idempotentActionNames();
-    }
-    public List<String> nonIdempotentActions(){
-        return constructionHelper.nonIdempotentActionNames();
+    public List<String> actions(){
+        return constructionHelper.allActionNames();
     }
 
     public String layoutXml(){

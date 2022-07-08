@@ -10,9 +10,7 @@
   __typename
   properties
   collections
-  safeActions
-  idempotentActions
-  nonIdempotentActions
+  actions
   layoutXml
 }
 iconName

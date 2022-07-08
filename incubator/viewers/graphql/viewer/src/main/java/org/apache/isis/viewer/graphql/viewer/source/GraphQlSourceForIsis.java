@@ -93,9 +93,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
         GraphQLObjectType structureType = newObject().name(_Utils.GQL_DOMAINOBJECT_STRUCTURE_TYPENAME)
                 .field(newFieldDefinition().name("properties").type(GraphQLList.list(Scalars.GraphQLString)))
                 .field(newFieldDefinition().name("collections").type(GraphQLList.list(Scalars.GraphQLString)))
-                .field(newFieldDefinition().name("safeActions").type(GraphQLList.list(Scalars.GraphQLString)))
-                .field(newFieldDefinition().name("idempotentActions").type(GraphQLList.list(Scalars.GraphQLString)))
-                .field(newFieldDefinition().name("nonIdempotentActions").type(GraphQLList.list(Scalars.GraphQLString)))
+                .field(newFieldDefinition().name("actions").type(GraphQLList.list(Scalars.GraphQLString)))
                 .field(newFieldDefinition().name("layoutXml").type(Scalars.GraphQLString))
                 .build();
         graphQLObjectTypes.add(structureType);
