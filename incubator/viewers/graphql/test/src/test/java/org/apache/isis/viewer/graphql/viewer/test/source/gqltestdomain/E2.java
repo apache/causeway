@@ -82,6 +82,7 @@ public class E2 implements TestEntity{
 
     @OneToMany
     @Getter @Setter
+    @Collection(hidden = Where.EVERYWHERE)
     private List<E2> otherE2List = new ArrayList<>();
 
     @Getter @Setter

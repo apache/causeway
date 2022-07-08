@@ -1,7 +1,7 @@
 {
   _gql_Query_lookup {
     gqltestdomain_E1(id:"7") {
-      _gql_meta {
+      _gql_generic {
         id
       },
       name

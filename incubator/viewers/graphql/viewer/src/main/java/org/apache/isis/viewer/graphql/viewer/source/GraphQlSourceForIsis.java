@@ -175,7 +175,7 @@ public class GraphQlSourceForIsis implements GraphQlSource {
         // END TODO: make all dynamic
 
         // can remain 'static' for all fields / collections (having no params)
-        GraphQLObjectType fieldMetaDataType = newObject().name(_Utils.FIELD_META_DATA_TYPENAME)
+        GraphQLObjectType fieldMetaDataType = newObject().name(_Utils.FIELD_GENERIC_DATA_TYPENAME)
                 .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())
                 .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
                 .build();

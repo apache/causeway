@@ -2,7 +2,7 @@
   gqltestdomain_GQLTestDomainMenu {
     findAllE1 {
       name
-      _gql_meta {
+      _gql_generic {
           id
           logicalTypeName
           version

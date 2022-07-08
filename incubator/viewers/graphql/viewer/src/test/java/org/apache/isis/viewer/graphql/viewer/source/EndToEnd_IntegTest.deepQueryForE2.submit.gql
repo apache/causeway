@@ -1,7 +1,7 @@
 {
-  gqltestdomain_GQLTestDomainMenu {
-  findAllE2 {
-  _gql_meta {
+  _gql_Query_lookup {
+  gqltestdomain_E2(id: 10) {
+  _gql_generic {
   __typename
   id
   logicalTypeName
@@ -33,7 +33,7 @@ name {
   hide
   disable
 }
-objectIdentifier{
+objectIdentifier {
   __typename
   hide
   disable
@@ -75,7 +75,7 @@ objectIdentifier
 otherE2List {
 name
 }
-otherEntities(name : ""){
+otherEntities(name: "") {
 name
 }
 stringList

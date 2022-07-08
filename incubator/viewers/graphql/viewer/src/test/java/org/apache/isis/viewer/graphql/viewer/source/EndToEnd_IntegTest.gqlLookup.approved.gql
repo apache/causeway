@@ -2,7 +2,7 @@
   "data" : {
     "_gql_Query_lookup" : {
       "gqltestdomain_E1" : {
-        "_gql_meta" : {
+        "_gql_generic" : {
           "id" : "7"
         },
         "name" : "e1"

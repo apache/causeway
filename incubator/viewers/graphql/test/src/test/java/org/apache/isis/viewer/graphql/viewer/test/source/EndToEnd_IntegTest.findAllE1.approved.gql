@@ -3,7 +3,7 @@
     "gqltestdomain_GQLTestDomainMenu" : {
       "findAllE1" : [ {
         "name" : "foo",
-        "_gql_meta" : {
+        "_gql_generic" : {
           "id" : "1",
           "logicalTypeName" : "gqltestdomain.E1",
           "version" : "not yet implemented"

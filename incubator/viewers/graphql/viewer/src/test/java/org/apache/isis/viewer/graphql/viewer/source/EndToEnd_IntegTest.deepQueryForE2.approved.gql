@@ -1,14 +1,14 @@
 {
   "data" : {
-    "gqltestdomain_GQLTestDomainMenu" : {
-      "findAllE2" : [ {
-        "_gql_meta" : {
-          "__typename" : "gqltestdomain_E2__DomainObject_meta",
+    "_gql_Query_lookup" : {
+      "gqltestdomain_E2" : {
+        "_gql_generic" : {
+          "__typename" : "gqltestdomain_E2__DomainObject_generic",
           "id" : "10",
           "logicalTypeName" : "gqltestdomain.E2",
           "version" : "not yet implemented",
           "structure" : {
-            "__typename" : "_gql__DomainObject_meta_structure",
+            "__typename" : "_gql__DomainObject_generic_structure",
             "properties" : [ "e1", "name", "logicalTypeName", "objectIdentifier" ],
             "collections" : [ "otherE2List", "stringList", "zintList" ],
             "safeActions" : [ "otherEntities" ],
@@ -18,7 +18,45 @@
           },
           "iconName" : "not yet implemented",
           "title" : "Untitled E2",
-          "fields" : null
+          "fields" : {
+            "e1" : {
+              "__typename" : "_gql__DomainObject_generic_fields_data",
+              "hide" : false,
+              "disable" : "Disabled"
+            },
+            "logicalTypeName" : {
+              "__typename" : "_gql__DomainObject_generic_fields_data",
+              "hide" : false,
+              "disable" : "Contributed property"
+            },
+            "name" : {
+              "__typename" : "_gql__DomainObject_generic_fields_data",
+              "hide" : false,
+              "disable" : "Disabled"
+            },
+            "objectIdentifier" : {
+              "__typename" : "_gql__DomainObject_generic_fields_data",
+              "hide" : false,
+              "disable" : "Contributed property"
+            },
+            "otherE2List" : {
+              "__typename" : "_gql__DomainObject_generic_fields_data",
+              "hide" : true,
+              "disable" : null
+            },
+            "zintList" : {
+              "__typename" : "_gql__DomainObject_generic_fields_data",
+              "hide" : false,
+              "disable" : null
+            },
+            "otherEntities" : {
+              "__typename" : "gqltestdomain_E2__DomainObject_generic_fields_otherEntities",
+              "hide" : false,
+              "disable" : null,
+              "validate" : null,
+              "params" : null
+            }
+          }
         },
         "e1" : null,
         "logicalTypeName" : "gqltestdomain.E2",
@@ -28,7 +66,7 @@
         "otherEntities" : null,
         "stringList" : [ ],
         "zintList" : [ ]
-      } ]
+      }
     }
   }
 }

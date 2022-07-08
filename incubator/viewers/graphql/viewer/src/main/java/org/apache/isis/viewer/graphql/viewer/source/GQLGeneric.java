@@ -24,7 +24,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import lombok.Data;
 
 @Data
-public class GQLMeta {
+public class GQLGeneric {
 
     private final Bookmark bookmark;
     private final BookmarkService bookmarkService;
@@ -59,11 +59,6 @@ public class GQLMeta {
         Object domainObject = bookmarkService.lookup(bookmark).orElse(null);
         if (domainObject == null) return null;
         return constructionHelper.getObjectSpecification().getTitleService().titleOf(domainObject);
-    }
-
-    public GQLMetaFields fields(){
-        //TODO: this is dynamic Maybe pass in ObjectTypeDataCollector (also in GQLMutations)
-        return new GQLMetaFields();
     }
 
 }

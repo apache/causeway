@@ -18,7 +18,7 @@ public class GQLMetaStructure {
     }
 
     public List<String> safeActions(){
-        return constructionHelper.safeActionsNames();
+        return constructionHelper.safeActionNames();
     }
 
     public List<String> idempotentActions(){

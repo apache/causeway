@@ -4,7 +4,12 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ActionScope;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -12,14 +17,34 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.apache.isis.applib.services.metamodel.BeanSort.*;
 
 @Setter @Getter
 public class ObjectTypeConstructionHelper {
+
+    public ObjectTypeConstructionHelper(BookmarkService bookmarkService, ObjectManager objectManager) {
+        this.bookmarkService = bookmarkService;
+        this.objectManager = objectManager;
+    }
+
+    private final BookmarkService bookmarkService;
+    private final ObjectManager objectManager;
+
+    public ManagedObject getManagedObject(final Bookmark bookmark) {
+        try {
+            ObjectLoader.Request request = ObjectLoader.Request.of(getObjectSpecification(), bookmark);
+            return objectManager.loadObject(request);
+        } catch (Exception e){
+
+        }
+        return null;
+    }
 
     private ObjectSpecification objectSpecification;
 
@@ -39,15 +64,15 @@ public class ObjectTypeConstructionHelper {
         return _Utils.mutationsTypeName(logicalTypeNameSanitized());
     }
 
-    public String metaTypeName(){
-        return _Utils.metaTypeName(logicalTypeNameSanitized());
+    public String genericTypeName(){
+        return _Utils.genericTypeName(logicalTypeNameSanitized());
     }
 
     public String metaMutationsTypeName(){
         return _Utils.metaMutationsTypeName(logicalTypeNameSanitized());
     }
 
-    public String metaFieldsTypeName(){
+    public String genericFieldsTypeName(){
         return _Utils.metaFieldsTypeName(logicalTypeNameSanitized());
     }
 
@@ -63,11 +88,11 @@ public class ObjectTypeConstructionHelper {
         return _Utils.parameterMetaDataTypeName(logicalTypeNameSanitized(), parameterizedFieldName, parameterName);
     }
 
-    public static GraphQLObjectType getObjectTypeFor(String mutatorsTypeName, Set<GraphQLType> gqlTypes) {
+    public static GraphQLObjectType getObjectTypeFor(String typeName, Set<GraphQLType> gqlTypes) {
         return gqlTypes.stream()
                 .filter(t->t.getClass().isAssignableFrom(GraphQLObjectType.class))
                 .map(GraphQLObjectType.class::cast)
-                .filter(ot->ot.getName().equals(mutatorsTypeName))
+                .filter(ot->ot.getName().equals(typeName))
                 .findFirst().orElse(null);
     }
 
@@ -103,7 +128,7 @@ public class ObjectTypeConstructionHelper {
                 .collect(Collectors.toList());
     }
 
-    public List<ObjectAction> safeActionNames(){
+    public List<ObjectAction> safeActions(){
         return objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .filter(objectAction -> objectAction.getSemantics().isSafeInNature())
                 .collect(Collectors.toList());
@@ -130,7 +155,13 @@ public class ObjectTypeConstructionHelper {
                 .collect(Collectors.toList());
     }
 
-    public List<String> safeActionsNames() {
-        return safeActionNames().stream().map(a->a.getId()).collect(Collectors.toList());
+    public List<String> safeActionNames() {
+        return safeActions().stream().map(a->a.getId()).collect(Collectors.toList());
+    }
+
+    public List<String> fieldNames(){
+        return Stream.of(oneToOneAssociationNames(), oneToManyAssociationNames(), safeActionNames())
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 }

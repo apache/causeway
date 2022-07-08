@@ -20,17 +20,18 @@ package org.apache.isis.viewer.graphql.viewer.source;
 
 final class _Utils {
 
+    final static String GQL_GENERIC_FIELDNAME = "_gql_generic";
     final static String GQL_INPUTTYPE_PREFIX = "_gql_input__";
     final static String GQL_MUTATTIONS_FIELDNAME = "_gql_mutations";
-    final static String GQL_DOMAINOBJECT_STRUCTURE_TYPENAME = "_gql__DomainObject_meta_structure";
-    final static String FIELD_META_DATA_TYPENAME = "_gql__DomainObject_meta_fields_data";
+    final static String GQL_DOMAINOBJECT_STRUCTURE_TYPENAME = "_gql__DomainObject_generic_structure";
+    final static String FIELD_GENERIC_DATA_TYPENAME = "_gql__DomainObject_generic_fields_data";
 
     final public static String SINGLE_PARAM_META_DATA_TYPENAME = "Param_Meta_Data"; //TODO: should go
     final static String MUTATOR_META_DATA_TYPENAME = "Mutator_Meta_Data"; //TODO: should go
     static final String PARAMS_META_DATA_TYPENAME_SUFFIX = "_Params_Meta_Data"; //TODO: should go
 
-    static String metaTypeName(final String logicalTypeNameSanitized){
-        return logicalTypeNameSanitized + "__DomainObject_meta";
+    static String genericTypeName(final String logicalTypeNameSanitized){
+        return logicalTypeNameSanitized + "__DomainObject_generic";
     }
 
     static String mutationsTypeName(final String logicalTypeNameSanitized){
@@ -38,11 +39,11 @@ final class _Utils {
     }
 
     static String metaFieldsTypeName(final String logicalTypeNameSanitized){
-        return metaTypeName(logicalTypeNameSanitized) + "_fields";
+        return genericTypeName(logicalTypeNameSanitized) + "_fields";
     }
 
     static String metaMutationsTypeName(final String logicalTypeNameSanitized){
-        return metaTypeName(logicalTypeNameSanitized) + "_mutations";
+        return genericTypeName(logicalTypeNameSanitized) + "_mutations";
     }
 
     static String parameterizedFieldMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){
