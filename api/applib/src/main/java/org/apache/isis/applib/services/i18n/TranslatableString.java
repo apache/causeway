@@ -24,13 +24,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * @since 1.x {@index}
  */
-@Value
+@Domain.Exclude
 public final class TranslatableString {
 
     // -- tr, trn (factory methods); constructor
@@ -217,7 +217,7 @@ public final class TranslatableString {
         return format(translatedText, argumentsByParameterName);
     }
 
-    static String format(String format, Map<String, Object> values)
+    static String format(final String format, final Map<String, Object> values)
     {
         StringBuilder formatter = new StringBuilder(format);
         List<Object> valueList = _Lists.newArrayList();

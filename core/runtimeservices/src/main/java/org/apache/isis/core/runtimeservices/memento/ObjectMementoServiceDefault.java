@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -161,6 +162,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         throw _Exceptions.unrecoverable("unsupported ObjectMemento type %s", memento.getClass());
     }
 
+    @Domain.Exclude
     @RequiredArgsConstructor(staticName = "of")
     private static class ObjectMementoAdapter implements ObjectMemento {
 
