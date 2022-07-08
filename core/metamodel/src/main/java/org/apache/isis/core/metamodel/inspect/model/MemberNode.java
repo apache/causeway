@@ -18,49 +18,48 @@
  */
 package org.apache.isis.core.metamodel.inspect.model;
 
-import javax.inject.Named;
+import java.util.stream.Stream;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-import org.apache.isis.applib.IsisModuleApplib;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Introspection;
-import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.schema.metamodel.v2.Member;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import lombok.experimental.Accessors;
 
-@Named(PropertyNode.LOGICAL_TYPE_NAME)
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        introspection = Introspection.ANNOTATION_REQUIRED)
-@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@ToString
-public class PropertyNode extends MemberNode {
+public abstract class MemberNode extends MMNode {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".PropertyNode";
+    // -- MIXIN STUFF
 
-    @Property(hidden = Where.EVERYWHERE)
-    @Getter @Setter private org.apache.isis.schema.metamodel.v2.Property property;
-
-    @Override
-    public String createTitle() {
-        return String.format("%s: %s%s",
-                property.getId(),
-                typeToString(property.getType()),
-                titleSuffix());
-    }
+    @Getter @Setter @Accessors(makeFinal = true)
+    private boolean mixedIn;
 
     @Override
-    protected Member member() {
-        return property;
+    protected final String iconSuffix() {
+        return isMixedIn() ? "mixedin" : "";
     }
+
+    protected final String titleSuffix() {
+        return isMixedIn() ? " (mixed in)" : "";
+    }
+
+    // -- TREE NODE STUFF
+
+    @XmlTransient
+    @Getter @Setter @Accessors(makeFinal = true)
+    private TypeNode parentNode;
+
+    @Override
+    public Stream<MMNode> streamChildNodes() {
+        return Stream.of(
+                MMNodeFactory.facetGroup(member().getFacets(), this));
+    }
+
+    protected abstract Member member();
 
 }
 
