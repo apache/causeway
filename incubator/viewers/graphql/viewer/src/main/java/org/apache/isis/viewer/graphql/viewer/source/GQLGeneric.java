@@ -27,7 +27,6 @@ import lombok.Data;
 public class GQLGeneric {
 
     private final Bookmark bookmark;
-    private final BookmarkService bookmarkService;
     private final ObjectTypeConstructionHelper constructionHelper;
 
     public String logicalTypeName(){
@@ -39,7 +38,7 @@ public class GQLGeneric {
     }
 
     public String version(){
-        Object domainObject = bookmarkService.lookup(bookmark).orElse(null);
+        Object domainObject = constructionHelper.getManagedObject(bookmark);
         if (domainObject == null) return null;
 
         // TODO: implement; we would like to be this independent of the persistence mechanism
@@ -56,7 +55,7 @@ public class GQLGeneric {
     };
 
     public String title(){
-        Object domainObject = bookmarkService.lookup(bookmark).orElse(null);
+        Object domainObject = constructionHelper.getManagedObject(bookmark);
         if (domainObject == null) return null;
         return constructionHelper.getObjectSpecification().getTitleService().titleOf(domainObject);
     }

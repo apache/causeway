@@ -459,7 +459,7 @@ public class ObjectTypeFactory {
 
                 if (objectAction.getSemantics().isSafeInNature()) {
 
-                    // _gql_meta 'maintenance' TODO: bring to separate method --
+                    // _gql_generic 'maintenance' TODO: bring to separate method --
                     addFieldsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized(constructionHelper.getObjectSpecification().getLogicalTypeName()));
 
                     if (objectAction.getParameters().isNotEmpty()) {
@@ -492,7 +492,7 @@ public class ObjectTypeFactory {
                         // treat as simple field
                         metaTypeFieldsBuilder.field(newFieldDefinition().name(objectAction.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_PROPERTY_TYPENAME)).build());
                     }
-                    // END _gql_meta 'maintenance'
+                    // END _gql_generic 'maintenance'
 
                     String fieldName = objectAction.getId();
                     GraphQLFieldDefinition.Builder builder = newFieldDefinition()
@@ -617,7 +617,7 @@ public class ObjectTypeFactory {
 
                 Bookmark bookmark = bookmarkService.bookmarkFor(environment.getSource()).orElse(null);
                 if (bookmark == null) return null; //TODO: is this correct ?
-                return new GQLGeneric(bookmark, bookmarkService, constructionHelper);
+                return new GQLGeneric(bookmark, constructionHelper);
             }
         });
 
