@@ -29,6 +29,7 @@ final class _Utils {
     final static String GQL_GENERIC_STRUCTURE_TYPENAME = "_gql__DomainObject_generic_structure";
     final static String GQL_GENERIC_PROPERTY_TYPENAME = "_gql__DomainObject_generic_property";
     final static String GQL_GENERIC_COLLECTION_TYPENAME = "_gql__DomainObject_generic_collection";
+    final static String GQL_GENERIC_ACTION_TYPENAME = "_gql__DomainObject_generic_action";
 
     final public static String SINGLE_PARAM_META_DATA_TYPENAME = "Param_Meta_Data"; //TODO: should go
     final static String MUTATOR_META_DATA_TYPENAME = "Mutator_Meta_Data"; //TODO: should go
@@ -50,16 +51,16 @@ final class _Utils {
         return genericTypeName(logicalTypeNameSanitized) + "_collections";
     }
 
-    static String metaMutationsTypeName(final String logicalTypeNameSanitized){
-        return genericTypeName(logicalTypeNameSanitized) + "_mutations";
+    static String genericActionsTypeName(final String logicalTypeNameSanitized){
+        return genericTypeName(logicalTypeNameSanitized) + "_actions";
     }
 
-    static String parameterizedFieldMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){
-        return genericPropertiesTypeName(logicalTypeNameSanitized) + "_" + fieldName;
+    static String actionsFieldMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){
+        return genericActionsTypeName(logicalTypeNameSanitized) + "_" + fieldName;
     }
 
     static String parametersMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){
-        return parameterizedFieldMetaDataTypeName(logicalTypeNameSanitized, fieldName) + "_" + "params";
+        return actionsFieldMetaDataTypeName(logicalTypeNameSanitized, fieldName) + "_" + "params";
     }
 
     static String parameterMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName, final String paramName){

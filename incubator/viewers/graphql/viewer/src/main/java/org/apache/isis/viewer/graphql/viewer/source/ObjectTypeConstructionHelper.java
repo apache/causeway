@@ -69,7 +69,7 @@ public class ObjectTypeConstructionHelper {
     }
 
     public String metaMutationsTypeName(){
-        return _Utils.metaMutationsTypeName(logicalTypeNameSanitized());
+        return _Utils.genericActionsTypeName(logicalTypeNameSanitized());
     }
 
     public String genericFieldsTypeName(){
@@ -80,8 +80,12 @@ public class ObjectTypeConstructionHelper {
         return _Utils.genericCollectionsTypeName(logicalTypeNameSanitized());
     }
 
+    public String genericActionsTypeName(){
+        return _Utils.genericActionsTypeName(logicalTypeNameSanitized());
+    }
+
     public String parameterizedFieldMetaDataTypeName(final String parameterizedFieldName){
-        return _Utils.parameterizedFieldMetaDataTypeName(logicalTypeNameSanitized(), parameterizedFieldName);
+        return _Utils.actionsFieldMetaDataTypeName(logicalTypeNameSanitized(), parameterizedFieldName);
     }
 
     public String parametersMetaDataTypeName(final String parameterizedFieldName){
@@ -149,6 +153,7 @@ public class ObjectTypeConstructionHelper {
     public List<String> idempotentActionNames(){
         return objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
                 .filter(objectAction -> objectAction.getSemantics().isIdempotentInNature())
+                .filter(objectAction -> !objectAction.getSemantics().isSafeInNature())
                 .map(ObjectAction::getId)
                 .collect(Collectors.toList());
     }
@@ -169,6 +174,10 @@ public class ObjectTypeConstructionHelper {
 
     public List<String> safeActionNames() {
         return safeActions().stream().map(a->a.getId()).collect(Collectors.toList());
+    }
+
+    public List<ObjectAction> allActions(){
+        return objectSpecification.streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED).collect(Collectors.toList());
     }
 
     public List<String> allActionNames() {

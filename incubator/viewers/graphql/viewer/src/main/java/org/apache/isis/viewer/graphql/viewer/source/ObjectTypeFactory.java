@@ -127,12 +127,12 @@ public class ObjectTypeFactory {
         addOneToManyAssociationsAsFields(objectTypeBuilder, genericTypeBuilder, genericCollectionsTypeBuilder, constructionHelper);
 
         // add actions
-        addSafeActionsAsParametizedFields(objectTypeBuilder, graphQLTypes, genericTypeBuilder, genericPropertiesTypeBuilder, constructionHelper);
-        GraphQLObjectType.Builder metaMutationsTypeBuilder = null;
-        if (constructionHelper.objectHasMutations()) {
-            metaMutationsTypeBuilder = newObject().name(constructionHelper.metaMutationsTypeName());
+        GraphQLObjectType.Builder genericActionsTypeBuilder = null;
+        if (constructionHelper.objectHasActions()) {
+            genericActionsTypeBuilder = newObject().name(constructionHelper.metaMutationsTypeName());
         }
-        addNonSafeActionsAsMutations(objectTypeBuilder, graphQLTypes, genericTypeBuilder, metaMutationsTypeBuilder, constructionHelper);
+        addSafeActionsAsParametizedFields(objectTypeBuilder, graphQLTypes, genericTypeBuilder, genericActionsTypeBuilder, constructionHelper);
+        addNonSafeActionsAsMutations(objectTypeBuilder, graphQLTypes, genericTypeBuilder, genericActionsTypeBuilder, constructionHelper);
 
         // adds types for meta
         if (genericPropertiesTypeBuilder != null) {
@@ -141,8 +141,8 @@ public class ObjectTypeFactory {
         if (genericCollectionsTypeBuilder != null) {
             graphQLTypes.add(genericCollectionsTypeBuilder.build());
         }
-        if (metaMutationsTypeBuilder != null) {
-            graphQLTypes.add(metaMutationsTypeBuilder.build());
+        if (genericActionsTypeBuilder != null) {
+            graphQLTypes.add(genericActionsTypeBuilder.build());
         }
 
         // build and register object type
@@ -287,34 +287,34 @@ public class ObjectTypeFactory {
         }
     }
 
-    void addFieldsFieldOnMetaTypeIfNotAlready(final GraphQLObjectType.Builder metaTypeBuilder, final String logicalTypeNameSanitized){
+    void addFieldsFieldOnGenericTypeIfNotAlready(final GraphQLObjectType.Builder genericTypeBuilder, final String logicalTypeNameSanitized){
         GraphQLFieldDefinition fields =
                 newFieldDefinition().name(GQL_GENERIC_PROPERTIES_FIELDNAME).type(GraphQLTypeReference.typeRef(genericPropertiesTypeName(logicalTypeNameSanitized))).build();
-        if (!metaTypeBuilder.hasField(GQL_GENERIC_PROPERTIES_FIELDNAME)){
-            metaTypeBuilder.field(fields);
+        if (!genericTypeBuilder.hasField(GQL_GENERIC_PROPERTIES_FIELDNAME)){
+            genericTypeBuilder.field(fields);
         }
     }
 
-    void addCollectionsFieldOnMetaTypeIfNotAlready(final GraphQLObjectType.Builder metaTypeBuilder, final String logicalTypeNameSanitized){
+    void addCollectionsFieldOnGenericTypeIfNotAlready(final GraphQLObjectType.Builder genericTypeBuilder, final String logicalTypeNameSanitized){
         GraphQLFieldDefinition field =
                 newFieldDefinition().name(GQL_GENERIC_COLLECTIONS_FIELDNAME).type(GraphQLTypeReference.typeRef(genericCollectionsTypeName(logicalTypeNameSanitized))).build();
-        if (!metaTypeBuilder.hasField(GQL_GENERIC_COLLECTIONS_FIELDNAME)){
-            metaTypeBuilder.field(field);
+        if (!genericTypeBuilder.hasField(GQL_GENERIC_COLLECTIONS_FIELDNAME)){
+            genericTypeBuilder.field(field);
         }
     }
 
-    void addMutationsOnMetaTypeIfNotAlready(GraphQLObjectType.Builder metaTypeBuilder, final String logicalTypeNameSanitized){
-        if (metaTypeBuilder==null) metaTypeBuilder = newObject().name(metaMutationsTypeName(logicalTypeNameSanitized));
+    void addActionsFieldOnGenericTypeIfNotAlready(GraphQLObjectType.Builder genericTypeBuilder, final String logicalTypeNameSanitized){
+        if (genericTypeBuilder==null) genericTypeBuilder = newObject().name(genericActionsTypeName(logicalTypeNameSanitized));
         GraphQLFieldDefinition mutations =
-                newFieldDefinition().name("mutations").type(GraphQLTypeReference.typeRef(metaMutationsTypeName(logicalTypeNameSanitized))).build();
-        if (!metaTypeBuilder.hasField("mutations")) {
-            metaTypeBuilder.field(mutations);
+                newFieldDefinition().name(GQL_GENERIC_ACTIONS_FIELDNAME).type(GraphQLTypeReference.typeRef(genericActionsTypeName(logicalTypeNameSanitized))).build();
+        if (!genericTypeBuilder.hasField(GQL_GENERIC_ACTIONS_FIELDNAME)) {
+            genericTypeBuilder.field(mutations);
         }
     }
 
     void addOneToOneAssociationsAsFields(
             final GraphQLObjectType.Builder objectTypeBuilder,
-            final GraphQLObjectType.Builder metaTypeBuilder,
+            final GraphQLObjectType.Builder genericTypeBuilder,
             final GraphQLObjectType.Builder metaFieldsTypeBuilder,
             ObjectTypeConstructionHelper constructionHelper) {
 
@@ -333,7 +333,7 @@ public class ObjectTypeFactory {
                         case ENTITY:
 
                             // _gql_generic 'maintenance'
-                            addFieldsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized);
+                            addFieldsFieldOnGenericTypeIfNotAlready(genericTypeBuilder, logicalTypeNameSanitized);
                             metaFieldsTypeBuilder.field(newFieldDefinition().name(otoa.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_PROPERTY_TYPENAME)).build());
                             // END _gql_generic 'maintenance'
 
@@ -354,7 +354,7 @@ public class ObjectTypeFactory {
                         case VALUE:
 
                             // _gql_generic 'maintenance'
-                            addFieldsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized);
+                            addFieldsFieldOnGenericTypeIfNotAlready(genericTypeBuilder, logicalTypeNameSanitized);
                             metaFieldsTypeBuilder.field(newFieldDefinition().name(otoa.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_PROPERTY_TYPENAME)).build());
                             // END _gql_generic 'maintenance'
 
@@ -386,7 +386,7 @@ public class ObjectTypeFactory {
 
     void addOneToManyAssociationsAsFields(
             final GraphQLObjectType.Builder objectTypeBuilder,
-            final GraphQLObjectType.Builder metaTypeBuilder,
+            final GraphQLObjectType.Builder genericTypeBuilder,
             final GraphQLObjectType.Builder genericCollectionsTypeBuilder,
             ObjectTypeConstructionHelper constructionHelper) {
 
@@ -403,7 +403,7 @@ public class ObjectTypeFactory {
                 case ENTITY:
 
                     // _gql_generic 'maintenance'
-                    addCollectionsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized(objectSpecification.getLogicalTypeName()));
+                    addCollectionsFieldOnGenericTypeIfNotAlready(genericTypeBuilder, logicalTypeNameSanitized(objectSpecification.getLogicalTypeName()));
                     genericCollectionsTypeBuilder.field(newFieldDefinition().name(otom.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_COLLECTION_TYPENAME)).build());
                     // END _gql_generic 'maintenance'
 
@@ -419,7 +419,7 @@ public class ObjectTypeFactory {
                 case VALUE:
 
                     // _gql_generic 'maintenance'
-                    addCollectionsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized(objectSpecification.getLogicalTypeName()));
+                    addCollectionsFieldOnGenericTypeIfNotAlready(genericTypeBuilder, logicalTypeNameSanitized(objectSpecification.getLogicalTypeName()));
                     genericCollectionsTypeBuilder.field(newFieldDefinition().name(otom.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_COLLECTION_TYPENAME)).build());
                     // END _gql_generic 'maintenance'
 
@@ -450,74 +450,70 @@ public class ObjectTypeFactory {
     void addSafeActionsAsParametizedFields(
             final GraphQLObjectType.Builder objectTypeBuilder,
             final Set<GraphQLType> graphQLObjectTypes,
-            final GraphQLObjectType.Builder metaTypeBuilder,
-            final GraphQLObjectType.Builder metaTypeFieldsBuilder,
+            final GraphQLObjectType.Builder genericTypeBuilder,
+            final GraphQLObjectType.Builder genericActionsTypeBuilder,
             final ObjectTypeConstructionHelper constructionHelper) {
 
         constructionHelper.safeActions()
             .forEach(objectAction -> {
 
-                if (objectAction.getSemantics().isSafeInNature()) {
+                // _gql_generic 'maintenance' TODO: bring to separate method --
+                addActionsFieldOnGenericTypeIfNotAlready(genericTypeBuilder, logicalTypeNameSanitized(constructionHelper.getObjectSpecification().getLogicalTypeName()));
 
-                    // _gql_generic 'maintenance' TODO: bring to separate method --
-                    addFieldsFieldOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized(constructionHelper.getObjectSpecification().getLogicalTypeName()));
+                if (objectAction.getParameters().isNotEmpty()) {
+                    GraphQLObjectType.Builder parameterizedFieldMetaDataTypeNameBuilder = newObject().name(constructionHelper.parameterizedFieldMetaDataTypeName(objectAction.getId()));
+                    parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("params").type(GraphQLTypeReference.typeRef(constructionHelper.parametersMetaDataTypeName(objectAction.getId()))).build());
+                    parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("validate").type(Scalars.GraphQLString).build());
+                    parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build());
+                    parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build());
 
-                    if (objectAction.getParameters().isNotEmpty()) {
-                        // treat as parameterized field
-                        GraphQLObjectType.Builder parameterizedFieldMetaDataTypeNameBuilder = newObject().name(constructionHelper.parameterizedFieldMetaDataTypeName(objectAction.getId()));
-                        parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("params").type(GraphQLTypeReference.typeRef(constructionHelper.parametersMetaDataTypeName(objectAction.getId()))).build());
-                        parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("validate").type(Scalars.GraphQLString).build());
-                        parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build());
-                        parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build());
+                    GraphQLFieldDefinition metaTypeFieldDefinition = newFieldDefinition().name(objectAction.getId()).type(parameterizedFieldMetaDataTypeNameBuilder).build();
+                    genericActionsTypeBuilder.field(metaTypeFieldDefinition);
 
-                        GraphQLFieldDefinition metaTypeFieldDefinition = newFieldDefinition().name(objectAction.getId()).type(parameterizedFieldMetaDataTypeNameBuilder).build();
-                        metaTypeFieldsBuilder.field(metaTypeFieldDefinition);
+                    GraphQLObjectType.Builder parametersMetaDataTypeNameBuilder = newObject().name(constructionHelper.parametersMetaDataTypeName(objectAction.getId()));
+                    objectAction.getParameters().forEach(p -> {
 
-                        GraphQLObjectType.Builder parametersMetaDataTypeNameBuilder = newObject().name(constructionHelper.parametersMetaDataTypeName(objectAction.getId()));
-                        objectAction.getParameters().forEach(p -> {
+                        GraphQLObjectType.Builder parameterMetaDataType = newObject().name(constructionHelper.parameterMetaDataTypeName(objectAction.getId(), p.getId()));
+                        parameterMetaDataType.field(newFieldDefinition().name("optionality").type(Scalars.GraphQLBoolean).build());
+                        parameterMetaDataType.field(newFieldDefinition().name("default").type(Scalars.GraphQLString).build()); // for now
+                        parameterMetaDataType.field(newFieldDefinition().name("choices").type(Scalars.GraphQLString).build()); // for now
+                        parameterMetaDataType.field(newFieldDefinition().name("autocomplete").argument(GraphQLArgument.newArgument().name("we_call_search_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLBoolean).build()); // for now
+                        parameterMetaDataType.field(newFieldDefinition().name("validate").argument(GraphQLArgument.newArgument().name("we_call_value_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLString).build());
 
-                            GraphQLObjectType.Builder parameterMetaDataType = newObject().name(constructionHelper.parameterMetaDataTypeName(objectAction.getId(), p.getId()));
-                            parameterMetaDataType.field(newFieldDefinition().name("optionality").type(Scalars.GraphQLBoolean).build());
-                            parameterMetaDataType.field(newFieldDefinition().name("default").type(Scalars.GraphQLString).build()); // for now
-                            parameterMetaDataType.field(newFieldDefinition().name("choices").type(Scalars.GraphQLString).build()); // for now
-                            parameterMetaDataType.field(newFieldDefinition().name("autocomplete").argument(GraphQLArgument.newArgument().name("we_call_search_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLBoolean).build()); // for now
-                            parameterMetaDataType.field(newFieldDefinition().name("validate").argument(GraphQLArgument.newArgument().name("we_call_value_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLString).build());
+                        parametersMetaDataTypeNameBuilder.field(newFieldDefinition().name(p.getId()).type(parameterMetaDataType));
 
-                            parametersMetaDataTypeNameBuilder.field(newFieldDefinition().name(p.getId()).type(parameterMetaDataType));
+                    });
+                    graphQLObjectTypes.add(parametersMetaDataTypeNameBuilder.build());
 
-                        });
-                        graphQLObjectTypes.add(parametersMetaDataTypeNameBuilder.build());
-
-                    } else {
-                        // treat as simple field
-                        metaTypeFieldsBuilder.field(newFieldDefinition().name(objectAction.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_PROPERTY_TYPENAME)).build());
-                    }
-                    // END _gql_generic 'maintenance'
-
-                    String fieldName = objectAction.getId();
-                    GraphQLFieldDefinition.Builder builder = newFieldDefinition()
-                            .name(fieldName)
-                            .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
-                    if (objectAction.getParameters().isNotEmpty()) {
-                        builder.arguments(objectAction.getParameters().stream()
-                                .map(objectActionParameter -> GraphQLArgument.newArgument()
-                                        .name(objectActionParameter.getId())
-                                        .type(objectActionParameter.isOptional()
-                                                ? TypeMapper.inputTypeFor(objectActionParameter)
-                                                : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
-                                        .build())
-                                .collect(Collectors.toList()));
-                    }
-                    objectTypeBuilder.field(builder);
+                } else {
+                    genericActionsTypeBuilder.field(newFieldDefinition().name(objectAction.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_ACTION_TYPENAME)).build());
                 }
+                // END _gql_generic 'maintenance'
+
+                String fieldName = objectAction.getId();
+                GraphQLFieldDefinition.Builder builder = newFieldDefinition()
+                        .name(fieldName)
+                        .type((GraphQLOutputType) TypeMapper.typeForObjectAction(objectAction));
+                if (objectAction.getParameters().isNotEmpty()) {
+                    builder.arguments(objectAction.getParameters().stream()
+                            .map(objectActionParameter -> GraphQLArgument.newArgument()
+                                    .name(objectActionParameter.getId())
+                                    .type(objectActionParameter.isOptional()
+                                            ? TypeMapper.inputTypeFor(objectActionParameter)
+                                            : nonNull(TypeMapper.inputTypeFor(objectActionParameter)))
+                                    .build())
+                            .collect(Collectors.toList()));
+                }
+                objectTypeBuilder.field(builder);
+
             });
     }
 
     void addNonSafeActionsAsMutations(
             final GraphQLObjectType.Builder objectTypeBuilder,
             final Set<GraphQLType> graphQLObjectTypes,
-            final GraphQLObjectType.Builder metaTypeBuilder,
-            final GraphQLObjectType.Builder metaMutationsTypeBuilder,
+            final GraphQLObjectType.Builder genericTypeBuilder,
+            final GraphQLObjectType.Builder genericActionsTypeBuilder,
             final ObjectTypeConstructionHelper constructionHelper) {
 
         // guard to prevent building mutations type without fields
@@ -525,10 +521,41 @@ public class ObjectTypeFactory {
 
         GraphQLObjectType.Builder mutationsTypeBuilder = newObject().name(constructionHelper.mutationsTypeName());
 
-        constructionHelper.getObjectSpecification().streamActions(ActionScope.PRODUCTION, MixedIn.INCLUDED)
+        constructionHelper.mutatorActions()
             .forEach(objectAction -> {
 
-                addMutationsOnMetaTypeIfNotAlready(metaTypeBuilder, logicalTypeNameSanitized(constructionHelper.getObjectSpecification().getLogicalTypeName()));
+                // _gql_generic 'maintenance' TODO: bring to separate method --
+                addActionsFieldOnGenericTypeIfNotAlready(genericTypeBuilder, logicalTypeNameSanitized(constructionHelper.getObjectSpecification().getLogicalTypeName()));
+
+                if (objectAction.getParameters().isNotEmpty()) {
+                    GraphQLObjectType.Builder parameterizedFieldMetaDataTypeNameBuilder = newObject().name(constructionHelper.parameterizedFieldMetaDataTypeName(objectAction.getId()));
+                    parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("params").type(GraphQLTypeReference.typeRef(constructionHelper.parametersMetaDataTypeName(objectAction.getId()))).build());
+                    parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("validate").type(Scalars.GraphQLString).build());
+                    parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build());
+                    parameterizedFieldMetaDataTypeNameBuilder.field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build());
+
+                    GraphQLFieldDefinition metaTypeFieldDefinition = newFieldDefinition().name(objectAction.getId()).type(parameterizedFieldMetaDataTypeNameBuilder).build();
+                    genericActionsTypeBuilder.field(metaTypeFieldDefinition);
+
+                    GraphQLObjectType.Builder parametersMetaDataTypeNameBuilder = newObject().name(constructionHelper.parametersMetaDataTypeName(objectAction.getId()));
+                    objectAction.getParameters().forEach(p -> {
+
+                        GraphQLObjectType.Builder parameterMetaDataType = newObject().name(constructionHelper.parameterMetaDataTypeName(objectAction.getId(), p.getId()));
+                        parameterMetaDataType.field(newFieldDefinition().name("optionality").type(Scalars.GraphQLBoolean).build());
+                        parameterMetaDataType.field(newFieldDefinition().name("default").type(Scalars.GraphQLString).build()); // for now
+                        parameterMetaDataType.field(newFieldDefinition().name("choices").type(Scalars.GraphQLString).build()); // for now
+                        parameterMetaDataType.field(newFieldDefinition().name("autocomplete").argument(GraphQLArgument.newArgument().name("we_call_search_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLBoolean).build()); // for now
+                        parameterMetaDataType.field(newFieldDefinition().name("validate").argument(GraphQLArgument.newArgument().name("we_call_value_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLString).build());
+
+                        parametersMetaDataTypeNameBuilder.field(newFieldDefinition().name(p.getId()).type(parameterMetaDataType));
+
+                    });
+                    graphQLObjectTypes.add(parametersMetaDataTypeNameBuilder.build());
+
+                } else {
+                    genericActionsTypeBuilder.field(newFieldDefinition().name(objectAction.getId()).type(GraphQLTypeReference.typeRef(GQL_GENERIC_ACTION_TYPENAME)).build());
+                }
+                // END _gql_generic 'maintenance'
 
                 String fieldName = objectAction.getId();
                 GraphQLFieldDefinition.Builder builder = newFieldDefinition()
@@ -548,15 +575,15 @@ public class ObjectTypeFactory {
                 GraphQLFieldDefinition fieldDefinition = builder.build();
                 mutationsTypeBuilder.field(fieldDefinition);
 
-                GraphQLFieldDefinition metaTypeMutatorDefinition = newFieldDefinition().name(objectAction.getId()).type(GraphQLTypeReference.typeRef(MUTATOR_META_DATA_TYPENAME)).build();
-                metaMutationsTypeBuilder.field(metaTypeMutatorDefinition);
+//                GraphQLFieldDefinition metaTypeMutatorDefinition = newFieldDefinition().name(objectAction.getId()).type(GraphQLTypeReference.typeRef(MUTATOR_META_DATA_TYPENAME)).build();
+//                genericMutationsTypeBuilder.field(metaTypeMutatorDefinition);
             });
 
 
         GraphQLObjectType mutationsType = mutationsTypeBuilder.build();
         addTypeIfNotAlreadyPresent(graphQLObjectTypes, mutationsType, constructionHelper.mutationsTypeName());
         GraphQLFieldDefinition gql_mutations = newFieldDefinition()
-                .name(_Utils.GQL_MUTATTIONS_FIELDNAME)
+                .name(GQL_MUTATTIONS_FIELDNAME)
                 .type(mutationsType)
                 .build();
         objectTypeBuilder.field(gql_mutations);
@@ -811,9 +838,20 @@ public class ObjectTypeFactory {
 
         }
 
-        for (ObjectAction objectAction : constructionHelper.safeActions()) {
+        codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(metaType, GQL_GENERIC_ACTIONS_FIELDNAME), new DataFetcher<Object>() {
+            @Override
+            public Object get(final DataFetchingEnvironment environment) throws Exception {
+                GQLGeneric source = environment.getSource();
+                return new GQLGenericFieldsAndCollections(constructionHelper, source.getBookmark());
+            }
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(fieldGenericDataTypeName, objectAction.getId()), new DataFetcher<Object>() {
+        });
+
+        GraphQLObjectType genericActionsTypeName = ObjectTypeConstructionHelper.getObjectTypeFor(constructionHelper.genericActionsTypeName(), types);
+
+        for (ObjectAction objectAction : constructionHelper.allActions()) {
+
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(genericActionsTypeName, objectAction.getId()), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLGenericFieldsAndCollections source = environment.getSource();
@@ -822,7 +860,7 @@ public class ObjectTypeFactory {
 
             });
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_PROPERTY_TYPENAME, "hide"), new DataFetcher<Object>() {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_ACTION_TYPENAME, "hide"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLFieldHideDisable source = environment.getSource();
@@ -831,7 +869,7 @@ public class ObjectTypeFactory {
 
             });
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_PROPERTY_TYPENAME, "disable"), new DataFetcher<Object>() {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_ACTION_TYPENAME, "disable"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLFieldHideDisable source = environment.getSource();

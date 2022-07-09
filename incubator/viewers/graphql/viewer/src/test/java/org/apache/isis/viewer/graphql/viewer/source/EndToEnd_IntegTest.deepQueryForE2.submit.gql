@@ -16,6 +16,7 @@
 iconName
 title
 properties {
+  __typename
   e1 {
   __typename
   hide
@@ -36,24 +37,9 @@ objectIdentifier {
   hide
   disable
 }
-otherEntities {
-  __typename
-  hide
-  disable
-  validate
-  params {
-  __typename
-  name {
-  autocomplete
-  choices
-  default
-  optionality
-  validate
-}
-}
-}
 }
 collections {
+__typename
 otherE2List {
 __typename
 hide
@@ -63,6 +49,37 @@ zintList {
 __typename
 hide
 disable
+}
+stringList {
+__typename
+hide
+disable
+}
+}
+actions {
+__typename
+otherEntities {
+__typename
+hide
+disable
+validate
+}
+remove {
+__typename
+hide
+disable
+}
+changeE1 {
+__typename
+hide
+disable
+validate
+}
+changeName {
+__typename
+hide
+disable
+validate
 }
 }
 }

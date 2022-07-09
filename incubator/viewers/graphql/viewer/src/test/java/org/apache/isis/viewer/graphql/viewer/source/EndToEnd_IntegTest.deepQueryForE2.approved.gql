@@ -11,12 +11,13 @@
             "__typename" : "_gql__DomainObject_generic_structure",
             "properties" : [ "e1", "name", "logicalTypeName", "objectIdentifier" ],
             "collections" : [ "otherE2List", "stringList", "zintList" ],
-            "actions" : [ "otherEntities", "changeE1", "changeName", "otherEntities", "remove" ],
+            "actions" : [ "otherEntities", "changeE1", "changeName", "remove" ],
             "layoutXml" : "<xml>todo: implement .... </xml>"
           },
           "iconName" : "not yet implemented",
           "title" : "Untitled E2",
           "properties" : {
+            "__typename" : "gqltestdomain_E2__DomainObject_generic_properties",
             "e1" : {
               "__typename" : "_gql__DomainObject_generic_property",
               "hide" : false,
@@ -36,16 +37,10 @@
               "__typename" : "_gql__DomainObject_generic_property",
               "hide" : false,
               "disable" : "Contributed property"
-            },
-            "otherEntities" : {
-              "__typename" : "gqltestdomain_E2__DomainObject_generic_properties_otherEntities",
-              "hide" : false,
-              "disable" : null,
-              "validate" : null,
-              "params" : null
             }
           },
           "collections" : {
+            "__typename" : "gqltestdomain_E2__DomainObject_generic_collections",
             "otherE2List" : {
               "__typename" : "_gql__DomainObject_generic_collection",
               "hide" : true,
@@ -55,6 +50,37 @@
               "__typename" : "_gql__DomainObject_generic_collection",
               "hide" : false,
               "disable" : null
+            },
+            "stringList" : {
+              "__typename" : "_gql__DomainObject_generic_collection",
+              "hide" : false,
+              "disable" : null
+            }
+          },
+          "actions" : {
+            "__typename" : "gqltestdomain_E2__DomainObject_generic_actions",
+            "otherEntities" : {
+              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_otherEntities",
+              "hide" : false,
+              "disable" : null,
+              "validate" : null
+            },
+            "remove" : {
+              "__typename" : "_gql__DomainObject_generic_action",
+              "hide" : false,
+              "disable" : null
+            },
+            "changeE1" : {
+              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_changeE1",
+              "hide" : false,
+              "disable" : null,
+              "validate" : null
+            },
+            "changeName" : {
+              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_changeName",
+              "hide" : false,
+              "disable" : null,
+              "validate" : null
             }
           }
         },
