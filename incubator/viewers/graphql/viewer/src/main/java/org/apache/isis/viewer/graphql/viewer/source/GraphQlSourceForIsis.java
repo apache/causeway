@@ -185,11 +185,11 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                 .build();
         graphQLObjectTypes.add(collectionsGenericType);
 
-        GraphQLObjectType actionsGenericType = newObject().name(_Utils.GQL_GENERIC_ACTION_TYPENAME)
-                .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())
-                .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
-                .build();
-        graphQLObjectTypes.add(actionsGenericType);
+//        GraphQLObjectType actionsGenericType = newObject().name(_Utils.GQL_GENERIC_ACTION_TYPENAME)
+//                .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())
+//                .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
+//                .build();
+//        graphQLObjectTypes.add(actionsGenericType);
 
         GraphQLObjectType queryLookupType = queryLookupTypeBuilder.build();
         graphQLObjectTypes.add(queryLookupType);

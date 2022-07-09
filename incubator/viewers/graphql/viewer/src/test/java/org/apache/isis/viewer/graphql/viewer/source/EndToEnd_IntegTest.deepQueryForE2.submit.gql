@@ -63,23 +63,71 @@ __typename
 hide
 disable
 validate
+params {
+__typename
+name {
+__typename
+optionality
+validate
+autocomplete
+default
+choices
+}
+}
 }
 remove {
 __typename
 hide
 disable
+validate
+}
+removeWithReason {
+__typename
+hide
+disable
+validate
+params {
+reason {
+__typename
+optionality
+validate
+autocomplete
+default
+choices
+}
+}
 }
 changeE1 {
 __typename
 hide
 disable
 validate
+params {
+e1 {
+__typename
+optionality
+validate
+autocomplete
+default
+choices
+}
+}
 }
 changeName {
 __typename
 hide
 disable
 validate
+params {
+newName {
+__typename
+optionality
+validate
+autocomplete
+default
+choices
+}
+}
 }
 }
 }

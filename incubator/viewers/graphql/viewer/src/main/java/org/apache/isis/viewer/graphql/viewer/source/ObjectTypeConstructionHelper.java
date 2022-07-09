@@ -6,20 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.feature.*;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -68,7 +63,7 @@ public class ObjectTypeConstructionHelper {
         return _Utils.genericTypeName(logicalTypeNameSanitized());
     }
 
-    public String metaMutationsTypeName(){
+    public String genericActionsTypename(){
         return _Utils.genericActionsTypeName(logicalTypeNameSanitized());
     }
 
@@ -80,12 +75,8 @@ public class ObjectTypeConstructionHelper {
         return _Utils.genericCollectionsTypeName(logicalTypeNameSanitized());
     }
 
-    public String genericActionsTypeName(){
-        return _Utils.genericActionsTypeName(logicalTypeNameSanitized());
-    }
-
-    public String parameterizedFieldMetaDataTypeName(final String parameterizedFieldName){
-        return _Utils.actionsFieldMetaDataTypeName(logicalTypeNameSanitized(), parameterizedFieldName);
+    public String actionGenericTypeName(final String actionName){
+        return _Utils.actionsFieldMetaDataTypeName(logicalTypeNameSanitized(), actionName);
     }
 
     public String parametersMetaDataTypeName(final String parameterizedFieldName){
@@ -189,4 +180,5 @@ public class ObjectTypeConstructionHelper {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
+
 }

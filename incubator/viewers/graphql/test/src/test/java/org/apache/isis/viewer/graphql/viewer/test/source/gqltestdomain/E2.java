@@ -106,6 +106,11 @@ public class E2 implements TestEntity{
         repositoryService.removeAndFlush(this);
     }
 
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
+    public void removeWithReason(final String reason){
+        repositoryService.removeAndFlush(this);
+    }
+
     @Inject
     @Transient
     TestEntityRepository testEntityRepository;
