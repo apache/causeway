@@ -59,11 +59,40 @@
           },
           "actions" : {
             "__typename" : "gqltestdomain_E2__DomainObject_generic_actions",
-            "otherEntities" : null,
-            "remove" : null,
-            "removeWithReason" : null,
-            "changeE1" : null,
-            "changeName" : null
+            "otherEntities" : {
+              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_otherEntities",
+              "hide" : false,
+              "disable" : null,
+              "validate" : "not yet implemented",
+              "params" : null
+            },
+            "remove" : {
+              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_remove",
+              "hide" : false,
+              "disable" : null,
+              "validate" : "not yet implemented"
+            },
+            "removeWithReason" : {
+              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_removeWithReason",
+              "hide" : false,
+              "disable" : null,
+              "validate" : "not yet implemented",
+              "params" : null
+            },
+            "changeE1" : {
+              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_changeE1",
+              "hide" : false,
+              "disable" : null,
+              "validate" : "not yet implemented",
+              "params" : null
+            },
+            "changeName" : {
+              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_changeName",
+              "hide" : false,
+              "disable" : null,
+              "validate" : "not yet implemented",
+              "params" : null
+            }
           }
         },
         "e1" : null,

@@ -3,7 +3,7 @@ package org.apache.isis.viewer.graphql.viewer.source;
 import lombok.Data;
 
 @Data
-public class GQLFieldHideDisable {
+public class GQLFieldOrCollectionHideDisable {
 
     private final boolean hide;
 

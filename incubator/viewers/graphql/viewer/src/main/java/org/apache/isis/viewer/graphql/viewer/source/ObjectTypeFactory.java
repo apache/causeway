@@ -733,7 +733,7 @@ public class ObjectTypeFactory {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLGenericFieldsAndCollections source = environment.getSource();
-                    return new GQLFieldHideDisable(source.hideOTOA(oneToOneAssociation), source.disableOTOA(oneToOneAssociation));
+                    return new GQLFieldOrCollectionHideDisable(source.hideOTOA(oneToOneAssociation), source.disableOTOA(oneToOneAssociation));
                 }
 
             });
@@ -741,7 +741,7 @@ public class ObjectTypeFactory {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_PROPERTY_TYPENAME, "hide"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLFieldHideDisable source = environment.getSource();
+                    GQLFieldOrCollectionHideDisable source = environment.getSource();
                     return source.isHide();
                 }
 
@@ -750,7 +750,7 @@ public class ObjectTypeFactory {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_PROPERTY_TYPENAME, "disable"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLFieldHideDisable source = environment.getSource();
+                    GQLFieldOrCollectionHideDisable source = environment.getSource();
                     return source.getDisable();
                 }
 
@@ -775,7 +775,7 @@ public class ObjectTypeFactory {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLGenericFieldsAndCollections source = environment.getSource();
-                    return new GQLFieldHideDisable(source.hide(oneToManyAssociation), source.disable(oneToManyAssociation));
+                    return new GQLFieldOrCollectionHideDisable(source.hideOTMA(oneToManyAssociation), source.disableOTMA(oneToManyAssociation));
                 }
 
             });
@@ -783,7 +783,7 @@ public class ObjectTypeFactory {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_COLLECTION_TYPENAME, "hide"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLFieldHideDisable source = environment.getSource();
+                    GQLFieldOrCollectionHideDisable source = environment.getSource();
                     return source.isHide();
                 }
 
@@ -792,7 +792,7 @@ public class ObjectTypeFactory {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_COLLECTION_TYPENAME, "disable"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLFieldHideDisable source = environment.getSource();
+                    GQLFieldOrCollectionHideDisable source = environment.getSource();
                     return source.getDisable();
                 }
 
@@ -804,38 +804,49 @@ public class ObjectTypeFactory {
             @Override
             public Object get(final DataFetchingEnvironment environment) throws Exception {
                 GQLGeneric source = environment.getSource();
-                return new GQLGenericFieldsAndCollections(constructionHelper, source.getBookmark());
+                return new GQLGenericActions(constructionHelper, source.getBookmark());
             }
 
         });
 
+        String genericActionsTypename = constructionHelper.genericActionsTypename();
+
         for (ObjectAction objectAction : constructionHelper.allActions()) {
 
-            GraphQLObjectType actionGenericType = ObjectTypeConstructionHelper.getObjectTypeFor(constructionHelper.actionGenericTypeName(objectAction.getId()), types);
-
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionGenericType, objectAction.getId()), new DataFetcher<Object>() {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(genericActionsTypename, objectAction.getId()), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLGenericFieldsAndCollections source = environment.getSource();
-                    return new GQLFieldHideDisable(source.hideAction(objectAction), source.disableAction(objectAction));
+                    GQLGenericActions source = environment.getSource();
+                    return new GQLActionHideDisableValidateEtc(source.hideAction(objectAction), source.disableAction(objectAction), source.validateAction(objectAction));
                 }
 
             });
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_ACTION_TYPENAME, "hide"), new DataFetcher<Object>() {
+            GraphQLObjectType actionGenericType = ObjectTypeConstructionHelper.getObjectTypeFor(constructionHelper.actionGenericTypeName(objectAction.getId()), types);
+
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionGenericType, "hide"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLFieldHideDisable source = environment.getSource();
+                    GQLActionHideDisableValidateEtc source = environment.getSource();
                     return source.isHide();
                 }
 
             });
 
-            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(GQL_GENERIC_ACTION_TYPENAME, "disable"), new DataFetcher<Object>() {
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionGenericType , "disable"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLFieldHideDisable source = environment.getSource();
+                    GQLActionHideDisableValidateEtc source = environment.getSource();
                     return source.getDisable();
+                }
+
+            });
+
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionGenericType , "validate"), new DataFetcher<Object>() {
+                @Override
+                public Object get(final DataFetchingEnvironment environment) throws Exception {
+                    GQLActionHideDisableValidateEtc source = environment.getSource();
+                    return source.getValidate();
                 }
 
             });

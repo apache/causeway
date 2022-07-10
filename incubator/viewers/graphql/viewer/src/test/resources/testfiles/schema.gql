@@ -55,47 +55,50 @@ type _gql_Query_lookup {
   gqltestdomain_E2(id: ID!): gqltestdomain_E2
 }
 
-type _gql__DomainObject_meta_fields_data {
+type _gql__DomainObject_generic_collection {
   disable: String
   hide: Boolean
 }
 
-type _gql__DomainObject_meta_structure {
+type _gql__DomainObject_generic_property {
+  disable: String
+  hide: Boolean
+}
+
+type _gql__DomainObject_generic_structure {
+  actions: [String]
   collections: [String]
-  idempotentActions: [String]
   layoutXml: String
-  nonIdempotentActions: [String]
   properties: [String]
-  safeActions: [String]
 }
 
 type gqltestdomain_E1 {
-  _gql_meta: gqltestdomain_E1__DomainObject_meta
+  _gql_generic: gqltestdomain_E1__DomainObject_generic
   e2: gqltestdomain_E2
   logicalTypeName: String
   name: String!
   objectIdentifier: String
 }
 
-type gqltestdomain_E1__DomainObject_meta {
-  fields: gqltestdomain_E1__DomainObject_meta_fields
+type gqltestdomain_E1__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: gqltestdomain_E1__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
   version: String
 }
 
-type gqltestdomain_E1__DomainObject_meta_fields {
-  e2: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  name: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type gqltestdomain_E1__DomainObject_generic_properties {
+  e2: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  name: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type gqltestdomain_E2 {
-  _gql_meta: gqltestdomain_E2__DomainObject_meta
+  _gql_generic: gqltestdomain_E2__DomainObject_generic
   _gql_mutations: gqltestdomain_E2__DomainObject_mutations
   e1: gqltestdomain_E1
   logicalTypeName: String
@@ -107,40 +110,38 @@ type gqltestdomain_E2 {
   zintList: [Int]
 }
 
-type gqltestdomain_E2__DomainObject_meta {
-  fields: gqltestdomain_E2__DomainObject_meta_fields
+type gqltestdomain_E2__DomainObject_generic {
+  actions: gqltestdomain_E2__DomainObject_generic_actions
+  collections: gqltestdomain_E2__DomainObject_generic_collections
   iconName: String
   id: ID!
   logicalTypeName: String!
-  mutations: gqltestdomain_E2__DomainObject_meta_mutations
-  structure: _gql__DomainObject_meta_structure!
+  properties: gqltestdomain_E2__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
   version: String
 }
 
-type gqltestdomain_E2__DomainObject_meta_fields {
-  e1: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  name: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  otherE2List: _gql__DomainObject_meta_fields_data
-  otherEntities: gqltestdomain_E2__DomainObject_meta_fields_otherEntities
-  stringList: _gql__DomainObject_meta_fields_data
-  zintList: _gql__DomainObject_meta_fields_data
+type gqltestdomain_E2__DomainObject_generic_actions {
+  changeE1: gqltestdomain_E2__DomainObject_generic_actions_changeE1
+  changeName: gqltestdomain_E2__DomainObject_generic_actions_changeName
+  otherEntities: gqltestdomain_E2__DomainObject_generic_actions_otherEntities
+  remove: gqltestdomain_E2__DomainObject_generic_actions_remove
+  removeWithReason: gqltestdomain_E2__DomainObject_generic_actions_removeWithReason
 }
 
-type gqltestdomain_E2__DomainObject_meta_fields_otherEntities {
+type gqltestdomain_E2__DomainObject_generic_actions_changeE1 {
   disable: String
   hide: Boolean
-  params: gqltestdomain_E2__DomainObject_meta_fields_otherEntities_params
+  params: gqltestdomain_E2__DomainObject_generic_actions_changeE1_params
   validate: String
 }
 
-type gqltestdomain_E2__DomainObject_meta_fields_otherEntities_params {
-  name: gqltestdomain_E2__DomainObject_meta_fields_otherEntities_params_name
+type gqltestdomain_E2__DomainObject_generic_actions_changeE1_params {
+  e1: gqltestdomain_E2__DomainObject_generic_actions_changeE1_params_e1
 }
 
-type gqltestdomain_E2__DomainObject_meta_fields_otherEntities_params_name {
+type gqltestdomain_E2__DomainObject_generic_actions_changeE1_params_e1 {
   autocomplete(we_call_search_for_now: String): Boolean
   choices: String
   default: String
@@ -148,16 +149,87 @@ type gqltestdomain_E2__DomainObject_meta_fields_otherEntities_params_name {
   validate(we_call_value_for_now: String): String
 }
 
-type gqltestdomain_E2__DomainObject_meta_mutations {
-  changeE1: Mutator_Meta_Data
-  changeName: Mutator_Meta_Data
-  remove: Mutator_Meta_Data
+type gqltestdomain_E2__DomainObject_generic_actions_changeName {
+  disable: String
+  hide: Boolean
+  params: gqltestdomain_E2__DomainObject_generic_actions_changeName_params
+  validate: String
+}
+
+type gqltestdomain_E2__DomainObject_generic_actions_changeName_params {
+  newName: gqltestdomain_E2__DomainObject_generic_actions_changeName_params_newName
+}
+
+type gqltestdomain_E2__DomainObject_generic_actions_changeName_params_newName {
+  autocomplete(we_call_search_for_now: String): Boolean
+  choices: String
+  default: String
+  optionality: Boolean
+  validate(we_call_value_for_now: String): String
+}
+
+type gqltestdomain_E2__DomainObject_generic_actions_otherEntities {
+  disable: String
+  hide: Boolean
+  params: gqltestdomain_E2__DomainObject_generic_actions_otherEntities_params
+  validate: String
+}
+
+type gqltestdomain_E2__DomainObject_generic_actions_otherEntities_params {
+  name: gqltestdomain_E2__DomainObject_generic_actions_otherEntities_params_name
+}
+
+type gqltestdomain_E2__DomainObject_generic_actions_otherEntities_params_name {
+  autocomplete(we_call_search_for_now: String): Boolean
+  choices: String
+  default: String
+  optionality: Boolean
+  validate(we_call_value_for_now: String): String
+}
+
+type gqltestdomain_E2__DomainObject_generic_actions_remove {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type gqltestdomain_E2__DomainObject_generic_actions_removeWithReason {
+  disable: String
+  hide: Boolean
+  params: gqltestdomain_E2__DomainObject_generic_actions_removeWithReason_params
+  validate: String
+}
+
+type gqltestdomain_E2__DomainObject_generic_actions_removeWithReason_params {
+  reason: gqltestdomain_E2__DomainObject_generic_actions_removeWithReason_params_reason
+}
+
+type gqltestdomain_E2__DomainObject_generic_actions_removeWithReason_params_reason {
+  autocomplete(we_call_search_for_now: String): Boolean
+  choices: String
+  default: String
+  optionality: Boolean
+  validate(we_call_value_for_now: String): String
+}
+
+type gqltestdomain_E2__DomainObject_generic_collections {
+  otherE2List: _gql__DomainObject_generic_collection
+  stringList: _gql__DomainObject_generic_collection
+  zintList: _gql__DomainObject_generic_collection
+}
+
+type gqltestdomain_E2__DomainObject_generic_properties {
+  e1: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  name: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type gqltestdomain_E2__DomainObject_mutations {
   changeE1(e1: _gql_input__gqltestdomain_E1!): gqltestdomain_E2
   changeName(newName: String!): gqltestdomain_E2
   remove: String
+  removeWithReason(reason: String!): String
 }
 
 type gqltestdomain_GQLTestDomainMenu {
@@ -169,7 +241,7 @@ type gqltestdomain_GQLTestDomainMenu {
 }
 
 type isis_applib_ActionNode {
-  _gql_meta: isis_applib_ActionNode__DomainObject_meta
+  _gql_generic: isis_applib_ActionNode__DomainObject_generic
   _gql_mutations: isis_applib_ActionNode__DomainObject_mutations
   action: String!
   logicalTypeName: String
@@ -177,26 +249,38 @@ type isis_applib_ActionNode {
   parentNode: isis_applib_TypeNode!
 }
 
-type isis_applib_ActionNode__DomainObject_meta {
-  fields: isis_applib_ActionNode__DomainObject_meta_fields
+type isis_applib_ActionNode__DomainObject_generic {
+  actions: isis_applib_ActionNode__DomainObject_generic_actions
   iconName: String
   id: ID!
   logicalTypeName: String!
-  mutations: isis_applib_ActionNode__DomainObject_meta_mutations
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_applib_ActionNode__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_applib_ActionNode__DomainObject_meta_fields {
-  action: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  parentNode: _gql__DomainObject_meta_fields_data
+type isis_applib_ActionNode__DomainObject_generic_actions {
+  createTitle: isis_applib_ActionNode__DomainObject_generic_actions_createTitle
+  streamChildNodes: isis_applib_ActionNode__DomainObject_generic_actions_streamChildNodes
 }
 
-type isis_applib_ActionNode__DomainObject_meta_mutations {
-  createTitle: Mutator_Meta_Data
-  streamChildNodes: Mutator_Meta_Data
+type isis_applib_ActionNode__DomainObject_generic_actions_createTitle {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_ActionNode__DomainObject_generic_actions_streamChildNodes {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_ActionNode__DomainObject_generic_properties {
+  action: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  parentNode: _gql__DomainObject_generic_property
 }
 
 type isis_applib_ActionNode__DomainObject_mutations {
@@ -205,32 +289,44 @@ type isis_applib_ActionNode__DomainObject_mutations {
 }
 
 type isis_applib_CollectionNode {
-  _gql_meta: isis_applib_CollectionNode__DomainObject_meta
+  _gql_generic: isis_applib_CollectionNode__DomainObject_generic
   _gql_mutations: isis_applib_CollectionNode__DomainObject_mutations
   collection: String!
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type isis_applib_CollectionNode__DomainObject_meta {
-  fields: isis_applib_CollectionNode__DomainObject_meta_fields
+type isis_applib_CollectionNode__DomainObject_generic {
+  actions: isis_applib_CollectionNode__DomainObject_generic_actions
   iconName: String
   id: ID!
   logicalTypeName: String!
-  mutations: isis_applib_CollectionNode__DomainObject_meta_mutations
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_applib_CollectionNode__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_applib_CollectionNode__DomainObject_meta_fields {
-  collection: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type isis_applib_CollectionNode__DomainObject_generic_actions {
+  createTitle: isis_applib_CollectionNode__DomainObject_generic_actions_createTitle
+  streamChildNodes: isis_applib_CollectionNode__DomainObject_generic_actions_streamChildNodes
 }
 
-type isis_applib_CollectionNode__DomainObject_meta_mutations {
-  createTitle: Mutator_Meta_Data
-  streamChildNodes: Mutator_Meta_Data
+type isis_applib_CollectionNode__DomainObject_generic_actions_createTitle {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_CollectionNode__DomainObject_generic_actions_streamChildNodes {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_CollectionNode__DomainObject_generic_properties {
+  collection: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type isis_applib_CollectionNode__DomainObject_mutations {
@@ -239,7 +335,7 @@ type isis_applib_CollectionNode__DomainObject_mutations {
 }
 
 type isis_applib_DomainObjectList {
-  _gql_meta: isis_applib_DomainObjectList__DomainObject_meta
+  _gql_generic: isis_applib_DomainObjectList__DomainObject_generic
   actionArguments: String
   actionId: String
   actionOwningFqcn: String
@@ -249,52 +345,64 @@ type isis_applib_DomainObjectList {
   title: String!
 }
 
-type isis_applib_DomainObjectList__DomainObject_meta {
-  fields: isis_applib_DomainObjectList__DomainObject_meta_fields
+type isis_applib_DomainObjectList__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_applib_DomainObjectList__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_applib_DomainObjectList__DomainObject_meta_fields {
-  actionArguments: _gql__DomainObject_meta_fields_data
-  actionId: _gql__DomainObject_meta_fields_data
-  actionOwningFqcn: _gql__DomainObject_meta_fields_data
-  elementTypeFqcn: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  title: _gql__DomainObject_meta_fields_data
+type isis_applib_DomainObjectList__DomainObject_generic_properties {
+  actionArguments: _gql__DomainObject_generic_property
+  actionId: _gql__DomainObject_generic_property
+  actionOwningFqcn: _gql__DomainObject_generic_property
+  elementTypeFqcn: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  title: _gql__DomainObject_generic_property
 }
 
 type isis_applib_FacetAttrNode {
-  _gql_meta: isis_applib_FacetAttrNode__DomainObject_meta
+  _gql_generic: isis_applib_FacetAttrNode__DomainObject_generic
   _gql_mutations: isis_applib_FacetAttrNode__DomainObject_mutations
   facetAttr: String!
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type isis_applib_FacetAttrNode__DomainObject_meta {
-  fields: isis_applib_FacetAttrNode__DomainObject_meta_fields
+type isis_applib_FacetAttrNode__DomainObject_generic {
+  actions: isis_applib_FacetAttrNode__DomainObject_generic_actions
   iconName: String
   id: ID!
   logicalTypeName: String!
-  mutations: isis_applib_FacetAttrNode__DomainObject_meta_mutations
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_applib_FacetAttrNode__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_applib_FacetAttrNode__DomainObject_meta_fields {
-  facetAttr: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type isis_applib_FacetAttrNode__DomainObject_generic_actions {
+  createTitle: isis_applib_FacetAttrNode__DomainObject_generic_actions_createTitle
+  streamChildNodes: isis_applib_FacetAttrNode__DomainObject_generic_actions_streamChildNodes
 }
 
-type isis_applib_FacetAttrNode__DomainObject_meta_mutations {
-  createTitle: Mutator_Meta_Data
-  streamChildNodes: Mutator_Meta_Data
+type isis_applib_FacetAttrNode__DomainObject_generic_actions_createTitle {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_FacetAttrNode__DomainObject_generic_actions_streamChildNodes {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_FacetAttrNode__DomainObject_generic_properties {
+  facetAttr: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type isis_applib_FacetAttrNode__DomainObject_mutations {
@@ -303,32 +411,44 @@ type isis_applib_FacetAttrNode__DomainObject_mutations {
 }
 
 type isis_applib_FacetGroupNode {
-  _gql_meta: isis_applib_FacetGroupNode__DomainObject_meta
+  _gql_generic: isis_applib_FacetGroupNode__DomainObject_generic
   _gql_mutations: isis_applib_FacetGroupNode__DomainObject_mutations
   facets: String!
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type isis_applib_FacetGroupNode__DomainObject_meta {
-  fields: isis_applib_FacetGroupNode__DomainObject_meta_fields
+type isis_applib_FacetGroupNode__DomainObject_generic {
+  actions: isis_applib_FacetGroupNode__DomainObject_generic_actions
   iconName: String
   id: ID!
   logicalTypeName: String!
-  mutations: isis_applib_FacetGroupNode__DomainObject_meta_mutations
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_applib_FacetGroupNode__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_applib_FacetGroupNode__DomainObject_meta_fields {
-  facets: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type isis_applib_FacetGroupNode__DomainObject_generic_actions {
+  createTitle: isis_applib_FacetGroupNode__DomainObject_generic_actions_createTitle
+  streamChildNodes: isis_applib_FacetGroupNode__DomainObject_generic_actions_streamChildNodes
 }
 
-type isis_applib_FacetGroupNode__DomainObject_meta_mutations {
-  createTitle: Mutator_Meta_Data
-  streamChildNodes: Mutator_Meta_Data
+type isis_applib_FacetGroupNode__DomainObject_generic_actions_createTitle {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_FacetGroupNode__DomainObject_generic_actions_streamChildNodes {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_FacetGroupNode__DomainObject_generic_properties {
+  facets: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type isis_applib_FacetGroupNode__DomainObject_mutations {
@@ -337,32 +457,44 @@ type isis_applib_FacetGroupNode__DomainObject_mutations {
 }
 
 type isis_applib_FacetNode {
-  _gql_meta: isis_applib_FacetNode__DomainObject_meta
+  _gql_generic: isis_applib_FacetNode__DomainObject_generic
   _gql_mutations: isis_applib_FacetNode__DomainObject_mutations
   facet: String!
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type isis_applib_FacetNode__DomainObject_meta {
-  fields: isis_applib_FacetNode__DomainObject_meta_fields
+type isis_applib_FacetNode__DomainObject_generic {
+  actions: isis_applib_FacetNode__DomainObject_generic_actions
   iconName: String
   id: ID!
   logicalTypeName: String!
-  mutations: isis_applib_FacetNode__DomainObject_meta_mutations
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_applib_FacetNode__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_applib_FacetNode__DomainObject_meta_fields {
-  facet: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type isis_applib_FacetNode__DomainObject_generic_actions {
+  createTitle: isis_applib_FacetNode__DomainObject_generic_actions_createTitle
+  streamChildNodes: isis_applib_FacetNode__DomainObject_generic_actions_streamChildNodes
 }
 
-type isis_applib_FacetNode__DomainObject_meta_mutations {
-  createTitle: Mutator_Meta_Data
-  streamChildNodes: Mutator_Meta_Data
+type isis_applib_FacetNode__DomainObject_generic_actions_createTitle {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_FacetNode__DomainObject_generic_actions_streamChildNodes {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_FacetNode__DomainObject_generic_properties {
+  facet: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type isis_applib_FacetNode__DomainObject_mutations {
@@ -371,32 +503,44 @@ type isis_applib_FacetNode__DomainObject_mutations {
 }
 
 type isis_applib_ParameterNode {
-  _gql_meta: isis_applib_ParameterNode__DomainObject_meta
+  _gql_generic: isis_applib_ParameterNode__DomainObject_generic
   _gql_mutations: isis_applib_ParameterNode__DomainObject_mutations
   logicalTypeName: String
   objectIdentifier: String
   parameter: String!
 }
 
-type isis_applib_ParameterNode__DomainObject_meta {
-  fields: isis_applib_ParameterNode__DomainObject_meta_fields
+type isis_applib_ParameterNode__DomainObject_generic {
+  actions: isis_applib_ParameterNode__DomainObject_generic_actions
   iconName: String
   id: ID!
   logicalTypeName: String!
-  mutations: isis_applib_ParameterNode__DomainObject_meta_mutations
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_applib_ParameterNode__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_applib_ParameterNode__DomainObject_meta_fields {
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  parameter: _gql__DomainObject_meta_fields_data
+type isis_applib_ParameterNode__DomainObject_generic_actions {
+  createTitle: isis_applib_ParameterNode__DomainObject_generic_actions_createTitle
+  streamChildNodes: isis_applib_ParameterNode__DomainObject_generic_actions_streamChildNodes
 }
 
-type isis_applib_ParameterNode__DomainObject_meta_mutations {
-  createTitle: Mutator_Meta_Data
-  streamChildNodes: Mutator_Meta_Data
+type isis_applib_ParameterNode__DomainObject_generic_actions_createTitle {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_ParameterNode__DomainObject_generic_actions_streamChildNodes {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_ParameterNode__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  parameter: _gql__DomainObject_generic_property
 }
 
 type isis_applib_ParameterNode__DomainObject_mutations {
@@ -405,32 +549,44 @@ type isis_applib_ParameterNode__DomainObject_mutations {
 }
 
 type isis_applib_PropertyNode {
-  _gql_meta: isis_applib_PropertyNode__DomainObject_meta
+  _gql_generic: isis_applib_PropertyNode__DomainObject_generic
   _gql_mutations: isis_applib_PropertyNode__DomainObject_mutations
   logicalTypeName: String
   objectIdentifier: String
   property: String!
 }
 
-type isis_applib_PropertyNode__DomainObject_meta {
-  fields: isis_applib_PropertyNode__DomainObject_meta_fields
+type isis_applib_PropertyNode__DomainObject_generic {
+  actions: isis_applib_PropertyNode__DomainObject_generic_actions
   iconName: String
   id: ID!
   logicalTypeName: String!
-  mutations: isis_applib_PropertyNode__DomainObject_meta_mutations
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_applib_PropertyNode__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_applib_PropertyNode__DomainObject_meta_fields {
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  property: _gql__DomainObject_meta_fields_data
+type isis_applib_PropertyNode__DomainObject_generic_actions {
+  createTitle: isis_applib_PropertyNode__DomainObject_generic_actions_createTitle
+  streamChildNodes: isis_applib_PropertyNode__DomainObject_generic_actions_streamChildNodes
 }
 
-type isis_applib_PropertyNode__DomainObject_meta_mutations {
-  createTitle: Mutator_Meta_Data
-  streamChildNodes: Mutator_Meta_Data
+type isis_applib_PropertyNode__DomainObject_generic_actions_createTitle {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_PropertyNode__DomainObject_generic_actions_streamChildNodes {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_PropertyNode__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  property: _gql__DomainObject_generic_property
 }
 
 type isis_applib_PropertyNode__DomainObject_mutations {
@@ -439,56 +595,68 @@ type isis_applib_PropertyNode__DomainObject_mutations {
 }
 
 type isis_applib_RoleMemento {
-  _gql_meta: isis_applib_RoleMemento__DomainObject_meta
+  _gql_generic: isis_applib_RoleMemento__DomainObject_generic
   description: String!
   logicalTypeName: String
   name: String!
   objectIdentifier: String
 }
 
-type isis_applib_RoleMemento__DomainObject_meta {
-  fields: isis_applib_RoleMemento__DomainObject_meta_fields
+type isis_applib_RoleMemento__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_applib_RoleMemento__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_applib_RoleMemento__DomainObject_meta_fields {
-  description: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  name: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type isis_applib_RoleMemento__DomainObject_generic_properties {
+  description: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  name: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type isis_applib_TypeNode {
-  _gql_meta: isis_applib_TypeNode__DomainObject_meta
+  _gql_generic: isis_applib_TypeNode__DomainObject_generic
   _gql_mutations: isis_applib_TypeNode__DomainObject_mutations
   domainClassDto: String!
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type isis_applib_TypeNode__DomainObject_meta {
-  fields: isis_applib_TypeNode__DomainObject_meta_fields
+type isis_applib_TypeNode__DomainObject_generic {
+  actions: isis_applib_TypeNode__DomainObject_generic_actions
   iconName: String
   id: ID!
   logicalTypeName: String!
-  mutations: isis_applib_TypeNode__DomainObject_meta_mutations
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_applib_TypeNode__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_applib_TypeNode__DomainObject_meta_fields {
-  domainClassDto: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type isis_applib_TypeNode__DomainObject_generic_actions {
+  createTitle: isis_applib_TypeNode__DomainObject_generic_actions_createTitle
+  streamChildNodes: isis_applib_TypeNode__DomainObject_generic_actions_streamChildNodes
 }
 
-type isis_applib_TypeNode__DomainObject_meta_mutations {
-  createTitle: Mutator_Meta_Data
-  streamChildNodes: Mutator_Meta_Data
+type isis_applib_TypeNode__DomainObject_generic_actions_createTitle {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_TypeNode__DomainObject_generic_actions_streamChildNodes {
+  disable: String
+  hide: Boolean
+  validate: String
+}
+
+type isis_applib_TypeNode__DomainObject_generic_properties {
+  domainClassDto: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type isis_applib_TypeNode__DomainObject_mutations {
@@ -497,7 +665,7 @@ type isis_applib_TypeNode__DomainObject_mutations {
 }
 
 type isis_applib_UserMemento {
-  _gql_meta: isis_applib_UserMemento__DomainObject_meta
+  _gql_generic: isis_applib_UserMemento__DomainObject_generic
   authenticationCode: String!
   authenticationSource: String!
   avatarUrl: String
@@ -513,29 +681,33 @@ type isis_applib_UserMemento {
   timeFormatLocale: String
 }
 
-type isis_applib_UserMemento__DomainObject_meta {
-  fields: isis_applib_UserMemento__DomainObject_meta_fields
+type isis_applib_UserMemento__DomainObject_generic {
+  collections: isis_applib_UserMemento__DomainObject_generic_collections
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_applib_UserMemento__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_applib_UserMemento__DomainObject_meta_fields {
-  authenticationCode: _gql__DomainObject_meta_fields_data
-  authenticationSource: _gql__DomainObject_meta_fields_data
-  avatarUrl: _gql__DomainObject_meta_fields_data
-  impersonating: _gql__DomainObject_meta_fields_data
-  languageLocale: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  multiTenancyToken: _gql__DomainObject_meta_fields_data
-  name: _gql__DomainObject_meta_fields_data
-  numberFormatLocale: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  realName: _gql__DomainObject_meta_fields_data
-  roles: _gql__DomainObject_meta_fields_data
-  timeFormatLocale: _gql__DomainObject_meta_fields_data
+type isis_applib_UserMemento__DomainObject_generic_collections {
+  roles: _gql__DomainObject_generic_collection
+}
+
+type isis_applib_UserMemento__DomainObject_generic_properties {
+  authenticationCode: _gql__DomainObject_generic_property
+  authenticationSource: _gql__DomainObject_generic_property
+  avatarUrl: _gql__DomainObject_generic_property
+  impersonating: _gql__DomainObject_generic_property
+  languageLocale: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  multiTenancyToken: _gql__DomainObject_generic_property
+  name: _gql__DomainObject_generic_property
+  numberFormatLocale: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  realName: _gql__DomainObject_generic_property
+  timeFormatLocale: _gql__DomainObject_generic_property
 }
 
 type isis_applib_UserMenu {
@@ -547,55 +719,59 @@ type isis_conf_ConfigurationMenu {
 }
 
 type isis_conf_ConfigurationProperty {
-  _gql_meta: isis_conf_ConfigurationProperty__DomainObject_meta
+  _gql_generic: isis_conf_ConfigurationProperty__DomainObject_generic
   key: String!
   logicalTypeName: String
   objectIdentifier: String
   value: String!
 }
 
-type isis_conf_ConfigurationProperty__DomainObject_meta {
-  fields: isis_conf_ConfigurationProperty__DomainObject_meta_fields
+type isis_conf_ConfigurationProperty__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_conf_ConfigurationProperty__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_conf_ConfigurationProperty__DomainObject_meta_fields {
-  key: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  value: _gql__DomainObject_meta_fields_data
+type isis_conf_ConfigurationProperty__DomainObject_generic_properties {
+  key: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  value: _gql__DomainObject_generic_property
 }
 
 type isis_conf_ConfigurationViewmodel {
-  _gql_meta: isis_conf_ConfigurationViewmodel__DomainObject_meta
+  _gql_generic: isis_conf_ConfigurationViewmodel__DomainObject_generic
   configuration: [isis_conf_ConfigurationProperty]
   environment: [isis_conf_ConfigurationProperty]
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type isis_conf_ConfigurationViewmodel__DomainObject_meta {
-  fields: isis_conf_ConfigurationViewmodel__DomainObject_meta_fields
+type isis_conf_ConfigurationViewmodel__DomainObject_generic {
+  collections: isis_conf_ConfigurationViewmodel__DomainObject_generic_collections
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_conf_ConfigurationViewmodel__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_conf_ConfigurationViewmodel__DomainObject_meta_fields {
-  configuration: _gql__DomainObject_meta_fields_data
-  environment: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type isis_conf_ConfigurationViewmodel__DomainObject_generic_collections {
+  configuration: _gql__DomainObject_generic_collection
+  environment: _gql__DomainObject_generic_collection
+}
+
+type isis_conf_ConfigurationViewmodel__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type isis_feat_ApplicationFeatureViewModel {
-  _gql_meta: isis_feat_ApplicationFeatureViewModel__DomainObject_meta
+  _gql_generic: isis_feat_ApplicationFeatureViewModel__DomainObject_generic
   logicalTypeName: String
   memberName: String!
   namespaceName: String!
@@ -603,25 +779,25 @@ type isis_feat_ApplicationFeatureViewModel {
   typeSimpleName: String!
 }
 
-type isis_feat_ApplicationFeatureViewModel__DomainObject_meta {
-  fields: isis_feat_ApplicationFeatureViewModel__DomainObject_meta_fields
+type isis_feat_ApplicationFeatureViewModel__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_feat_ApplicationFeatureViewModel__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_feat_ApplicationFeatureViewModel__DomainObject_meta_fields {
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  memberName: _gql__DomainObject_meta_fields_data
-  namespaceName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  typeSimpleName: _gql__DomainObject_meta_fields_data
+type isis_feat_ApplicationFeatureViewModel__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  memberName: _gql__DomainObject_generic_property
+  namespaceName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  typeSimpleName: _gql__DomainObject_generic_property
 }
 
 type isis_feat_ApplicationNamespace {
-  _gql_meta: isis_feat_ApplicationNamespace__DomainObject_meta
+  _gql_generic: isis_feat_ApplicationNamespace__DomainObject_generic
   logicalTypeName: String
   memberName: String!
   namespaceName: String!
@@ -629,25 +805,25 @@ type isis_feat_ApplicationNamespace {
   typeSimpleName: String!
 }
 
-type isis_feat_ApplicationNamespace__DomainObject_meta {
-  fields: isis_feat_ApplicationNamespace__DomainObject_meta_fields
+type isis_feat_ApplicationNamespace__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_feat_ApplicationNamespace__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_feat_ApplicationNamespace__DomainObject_meta_fields {
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  memberName: _gql__DomainObject_meta_fields_data
-  namespaceName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  typeSimpleName: _gql__DomainObject_meta_fields_data
+type isis_feat_ApplicationNamespace__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  memberName: _gql__DomainObject_generic_property
+  namespaceName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  typeSimpleName: _gql__DomainObject_generic_property
 }
 
 type isis_feat_ApplicationType {
-  _gql_meta: isis_feat_ApplicationType__DomainObject_meta
+  _gql_generic: isis_feat_ApplicationType__DomainObject_generic
   actions: [isis_feat_ApplicationTypeAction]
   collections: [isis_feat_ApplicationTypeCollection]
   logicalTypeName: String
@@ -659,7 +835,7 @@ type isis_feat_ApplicationType {
 }
 
 type isis_feat_ApplicationTypeAction {
-  _gql_meta: isis_feat_ApplicationTypeAction__DomainObject_meta
+  _gql_generic: isis_feat_ApplicationTypeAction__DomainObject_generic
   actionSemantics: String!
   logicalTypeName: String
   memberName: String!
@@ -669,27 +845,27 @@ type isis_feat_ApplicationTypeAction {
   typeSimpleName: String!
 }
 
-type isis_feat_ApplicationTypeAction__DomainObject_meta {
-  fields: isis_feat_ApplicationTypeAction__DomainObject_meta_fields
+type isis_feat_ApplicationTypeAction__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_feat_ApplicationTypeAction__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_feat_ApplicationTypeAction__DomainObject_meta_fields {
-  actionSemantics: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  memberName: _gql__DomainObject_meta_fields_data
-  namespaceName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  returnType: _gql__DomainObject_meta_fields_data
-  typeSimpleName: _gql__DomainObject_meta_fields_data
+type isis_feat_ApplicationTypeAction__DomainObject_generic_properties {
+  actionSemantics: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  memberName: _gql__DomainObject_generic_property
+  namespaceName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  returnType: _gql__DomainObject_generic_property
+  typeSimpleName: _gql__DomainObject_generic_property
 }
 
 type isis_feat_ApplicationTypeCollection {
-  _gql_meta: isis_feat_ApplicationTypeCollection__DomainObject_meta
+  _gql_generic: isis_feat_ApplicationTypeCollection__DomainObject_generic
   derived: String!
   elementType: String!
   logicalTypeName: String
@@ -699,27 +875,27 @@ type isis_feat_ApplicationTypeCollection {
   typeSimpleName: String!
 }
 
-type isis_feat_ApplicationTypeCollection__DomainObject_meta {
-  fields: isis_feat_ApplicationTypeCollection__DomainObject_meta_fields
+type isis_feat_ApplicationTypeCollection__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_feat_ApplicationTypeCollection__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_feat_ApplicationTypeCollection__DomainObject_meta_fields {
-  derived: _gql__DomainObject_meta_fields_data
-  elementType: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  memberName: _gql__DomainObject_meta_fields_data
-  namespaceName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  typeSimpleName: _gql__DomainObject_meta_fields_data
+type isis_feat_ApplicationTypeCollection__DomainObject_generic_properties {
+  derived: _gql__DomainObject_generic_property
+  elementType: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  memberName: _gql__DomainObject_generic_property
+  namespaceName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  typeSimpleName: _gql__DomainObject_generic_property
 }
 
 type isis_feat_ApplicationTypeMember {
-  _gql_meta: isis_feat_ApplicationTypeMember__DomainObject_meta
+  _gql_generic: isis_feat_ApplicationTypeMember__DomainObject_generic
   logicalTypeName: String
   memberName: String!
   namespaceName: String!
@@ -727,25 +903,25 @@ type isis_feat_ApplicationTypeMember {
   typeSimpleName: String!
 }
 
-type isis_feat_ApplicationTypeMember__DomainObject_meta {
-  fields: isis_feat_ApplicationTypeMember__DomainObject_meta_fields
+type isis_feat_ApplicationTypeMember__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_feat_ApplicationTypeMember__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_feat_ApplicationTypeMember__DomainObject_meta_fields {
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  memberName: _gql__DomainObject_meta_fields_data
-  namespaceName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  typeSimpleName: _gql__DomainObject_meta_fields_data
+type isis_feat_ApplicationTypeMember__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  memberName: _gql__DomainObject_generic_property
+  namespaceName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  typeSimpleName: _gql__DomainObject_generic_property
 }
 
 type isis_feat_ApplicationTypeProperty {
-  _gql_meta: isis_feat_ApplicationTypeProperty__DomainObject_meta
+  _gql_generic: isis_feat_ApplicationTypeProperty__DomainObject_generic
   derived: String!
   logicalTypeName: String
   maxLength: String
@@ -757,65 +933,69 @@ type isis_feat_ApplicationTypeProperty {
   typicalLength: String
 }
 
-type isis_feat_ApplicationTypeProperty__DomainObject_meta {
-  fields: isis_feat_ApplicationTypeProperty__DomainObject_meta_fields
+type isis_feat_ApplicationTypeProperty__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_feat_ApplicationTypeProperty__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_feat_ApplicationTypeProperty__DomainObject_meta_fields {
-  derived: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  maxLength: _gql__DomainObject_meta_fields_data
-  memberName: _gql__DomainObject_meta_fields_data
-  namespaceName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  returnType: _gql__DomainObject_meta_fields_data
-  typeSimpleName: _gql__DomainObject_meta_fields_data
-  typicalLength: _gql__DomainObject_meta_fields_data
+type isis_feat_ApplicationTypeProperty__DomainObject_generic_properties {
+  derived: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  maxLength: _gql__DomainObject_generic_property
+  memberName: _gql__DomainObject_generic_property
+  namespaceName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  returnType: _gql__DomainObject_generic_property
+  typeSimpleName: _gql__DomainObject_generic_property
+  typicalLength: _gql__DomainObject_generic_property
 }
 
-type isis_feat_ApplicationType__DomainObject_meta {
-  fields: isis_feat_ApplicationType__DomainObject_meta_fields
+type isis_feat_ApplicationType__DomainObject_generic {
+  collections: isis_feat_ApplicationType__DomainObject_generic_collections
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_feat_ApplicationType__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_feat_ApplicationType__DomainObject_meta_fields {
-  actions: _gql__DomainObject_meta_fields_data
-  collections: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  memberName: _gql__DomainObject_meta_fields_data
-  namespaceName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  properties: _gql__DomainObject_meta_fields_data
-  typeSimpleName: _gql__DomainObject_meta_fields_data
+type isis_feat_ApplicationType__DomainObject_generic_collections {
+  actions: _gql__DomainObject_generic_collection
+  collections: _gql__DomainObject_generic_collection
+  properties: _gql__DomainObject_generic_collection
+}
+
+type isis_feat_ApplicationType__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  memberName: _gql__DomainObject_generic_property
+  namespaceName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  typeSimpleName: _gql__DomainObject_generic_property
 }
 
 type isis_security_LoginRedirect {
-  _gql_meta: isis_security_LoginRedirect__DomainObject_meta
+  _gql_generic: isis_security_LoginRedirect__DomainObject_generic
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type isis_security_LoginRedirect__DomainObject_meta {
-  fields: isis_security_LoginRedirect__DomainObject_meta_fields
+type isis_security_LoginRedirect__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_security_LoginRedirect__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_security_LoginRedirect__DomainObject_meta_fields {
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type isis_security_LoginRedirect__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type isis_security_LogoutMenu {
@@ -823,7 +1003,7 @@ type isis_security_LogoutMenu {
 }
 
 type isis_testing_fixtures_FixtureResult {
-  _gql_meta: isis_testing_fixtures_FixtureResult__DomainObject_meta
+  _gql_generic: isis_testing_fixtures_FixtureResult__DomainObject_generic
   className: String!
   fixtureScriptClassName: String
   key: String!
@@ -831,127 +1011,127 @@ type isis_testing_fixtures_FixtureResult {
   objectIdentifier: String
 }
 
-type isis_testing_fixtures_FixtureResult__DomainObject_meta {
-  fields: isis_testing_fixtures_FixtureResult__DomainObject_meta_fields
+type isis_testing_fixtures_FixtureResult__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: isis_testing_fixtures_FixtureResult__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type isis_testing_fixtures_FixtureResult__DomainObject_meta_fields {
-  className: _gql__DomainObject_meta_fields_data
-  fixtureScriptClassName: _gql__DomainObject_meta_fields_data
-  key: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type isis_testing_fixtures_FixtureResult__DomainObject_generic_properties {
+  className: _gql__DomainObject_generic_property
+  fixtureScriptClassName: _gql__DomainObject_generic_property
+  key: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type java_util_SortedMap {
-  _gql_meta: java_util_SortedMap__DomainObject_meta
+  _gql_generic: java_util_SortedMap__DomainObject_generic
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type java_util_SortedMap__DomainObject_meta {
-  fields: java_util_SortedMap__DomainObject_meta_fields
+type java_util_SortedMap__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: java_util_SortedMap__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type java_util_SortedMap__DomainObject_meta_fields {
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type java_util_SortedMap__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type java_util_stream_Stream {
-  _gql_meta: java_util_stream_Stream__DomainObject_meta
+  _gql_generic: java_util_stream_Stream__DomainObject_generic
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type java_util_stream_Stream__DomainObject_meta {
-  fields: java_util_stream_Stream__DomainObject_meta_fields
+type java_util_stream_Stream__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: java_util_stream_Stream__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type java_util_stream_Stream__DomainObject_meta_fields {
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type java_util_stream_Stream__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type org_apache_isis_core_metamodel_inspect_model_MMNode {
-  _gql_meta: org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_meta
+  _gql_generic: org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_generic
   logicalTypeName: String
   objectIdentifier: String
 }
 
-type org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_meta {
-  fields: org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_meta_fields
+type org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_meta_fields {
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type org_apache_isis_core_metamodel_inspect_model_MMNode__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 type org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript {
-  _gql_meta: org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta
+  _gql_generic: org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_generic
   friendlyName: String!
   logicalTypeName: String
   objectIdentifier: String
   qualifiedName: String!
 }
 
-type org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta {
-  fields: org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta_fields
+type org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_meta_fields {
-  friendlyName: _gql__DomainObject_meta_fields_data
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
-  qualifiedName: _gql__DomainObject_meta_fields_data
+type org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript__DomainObject_generic_properties {
+  friendlyName: _gql__DomainObject_generic_property
+  logicalTypeName: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
+  qualifiedName: _gql__DomainObject_generic_property
 }
 
 type org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
-  _gql_meta: org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_meta
+  _gql_generic: org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_generic
   logicalTypeName: String
   name: String!
   objectIdentifier: String
 }
 
-type org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_meta {
-  fields: org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_meta_fields
+type org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_generic {
   iconName: String
   id: ID!
   logicalTypeName: String!
-  structure: _gql__DomainObject_meta_structure!
+  properties: org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_generic_properties
+  structure: _gql__DomainObject_generic_structure!
   title: String
 }
 
-type org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_meta_fields {
-  logicalTypeName: _gql__DomainObject_meta_fields_data
-  name: _gql__DomainObject_meta_fields_data
-  objectIdentifier: _gql__DomainObject_meta_fields_data
+type org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity__DomainObject_generic_properties {
+  logicalTypeName: _gql__DomainObject_generic_property
+  name: _gql__DomainObject_generic_property
+  objectIdentifier: _gql__DomainObject_generic_property
 }
 
 input _gql_input__gqltestdomain_E1 {
@@ -1069,298 +1249,7 @@ input _gql_input__org_apache_isis_testing_fixtures_applib_fixturescripts_Fixture
 input _gql_input__org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
   id: ID!
 }
-__gqltestdomain_E2 {
-  id: ID!
-}
-
-input _gql_input__isis_applib_ActionNode {
-  id: ID!
-}
-
-input _gql_input__isis_applib_CollectionNode {
-  id: ID!
-}
-
-input _gql_input__isis_applib_DomainObjectList {
-  id: ID!
-}
-
-input _gql_input__isis_applib_FacetAttrNode {
-  id: ID!
-}
-
-input _gql_input__isis_applib_FacetGroupNode {
-  id: ID!
-}
-
-input _gql_input__isis_applib_FacetNode {
-  id: ID!
-}
-
-input _gql_input__isis_applib_ParameterNode {
-  id: ID!
-}
-
-input _gql_input__isis_applib_PropertyNode {
-  id: ID!
-}
-
-input _gql_input__isis_applib_RoleMemento {
-  id: ID!
-}
-
-input _gql_input__isis_applib_TypeNode {
-  id: ID!
-}
-
-input _gql_input__isis_applib_UserMemento {
-  id: ID!
-}
-
-input _gql_input__isis_conf_ConfigurationProperty {
-  id: ID!
-}
-
-input _gql_input__isis_conf_ConfigurationViewmodel {
-  id: ID!
-}
-
-input _gql_input__isis_feat_ApplicationFeatureViewModel {
-  id: ID!
-}
-
-input _gql_input__isis_feat_ApplicationNamespace {
-  id: ID!
-}
-
-input _gql_input__isis_feat_ApplicationType {
-  id: ID!
-}
-
-input _gql_input__isis_feat_ApplicationTypeAction {
-  id: ID!
-}
-
-input _gql_input__isis_feat_ApplicationTypeCollection {
-  id: ID!
-}
-
-input _gql_input__isis_feat_ApplicationTypeMember {
-  id: ID!
-}
-
-input _gql_input__isis_feat_ApplicationTypeProperty {
-  id: ID!
-}
-
-input _gql_input__isis_security_LoginRedirect {
-  id: ID!
-}
-
-input _gql_input__isis_testing_fixtures_FixtureResult {
-  id: ID!
-}
-
-input _gql_input__java_util_SortedMap {
-  id: ID!
-}
-
-input _gql_input__java_util_stream_Stream {
-  id: ID!
-}
-
-input _gql_input__org_apache_isis_core_metamodel_inspect_model_MMNode {
-  id: ID!
-}
-
-input _gql_input__org_apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript {
-  id: ID!
-}
-
-input _gql_input__org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
-  id: ID!
-}
-apache_isis_testing_fixtures_applib_fixturescripts_FixtureScript {
-  id: ID!
-}
-
-input _gql_input__org_apache_isis_viewer_graphql_viewer_source_gqltestdomain_TestEntity {
-  id: ID!
-}
-mpleName: isis_feat_ApplicationTypeMember_typeSimpleName__Field_metadata
-}
-
-type isis_feat_ApplicationTypeMember__DomainObject_meta {
-  fields: isis_feat_ApplicationTypeMember__DomainObject_fields
-  iconName: String
-  id: ID!
-  logicalTypeName: String!
-  title: String
-}
-
-type isis_feat_ApplicationTypeMember__DomainObject_mutations {
-  noop: Mutator_Meta_Data
-}
-
-type isis_feat_ApplicationTypeMember_logicalTypeName__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeMember_memberName__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeMember_namespaceName__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeMember_objectIdentifier__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeMember_typeSimpleName__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeProperty {
-  _gql_meta: isis_feat_ApplicationTypeProperty__DomainObject_meta
-  derived: String!
-  logicalTypeName: String
-  maxLength: String
-  memberName: String!
-  namespaceName: String!
-  objectIdentifier: String
-  returnType: String!
-  typeSimpleName: String!
-  typicalLength: String
-}
-
-type isis_feat_ApplicationTypeProperty__DomainObject_fields {
-  derived: isis_feat_ApplicationTypeProperty_derived__Field_metadata
-  logicalTypeName: isis_feat_ApplicationTypeProperty_logicalTypeName__Field_metadata
-  maxLength: isis_feat_ApplicationTypeProperty_maxLength__Field_metadata
-  memberName: isis_feat_ApplicationTypeProperty_memberName__Field_metadata
-  namespaceName: isis_feat_ApplicationTypeProperty_namespaceName__Field_metadata
-  objectIdentifier: isis_feat_ApplicationTypeProperty_objectIdentifier__Field_metadata
-  returnType: isis_feat_ApplicationTypeProperty_returnType__Field_metadata
-  typeSimpleName: isis_feat_ApplicationTypeProperty_typeSimpleName__Field_metadata
-  typicalLength: isis_feat_ApplicationTypeProperty_typicalLength__Field_metadata
-}
-
-type isis_feat_ApplicationTypeProperty__DomainObject_meta {
-  fields: isis_feat_ApplicationTypeProperty__DomainObject_fields
-  iconName: String
-  id: ID!
-  logicalTypeName: String!
-  title: String
-}
-
-type isis_feat_ApplicationTypeProperty__DomainObject_mutations {
-  noop: Mutator_Meta_Data
-}
-
-type isis_feat_ApplicationTypeProperty_derived__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeProperty_logicalTypeName__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeProperty_maxLength__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeProperty_memberName__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeProperty_namespaceName__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeProperty_objectIdentifier__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeProperty_returnType__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeProperty_typeSimpleName__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationTypeProperty_typicalLength__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationType__DomainObject_fields {
-  actions: __Field_metadata
-  collections: __Field_metadata
-  logicalTypeName: isis_feat_ApplicationType_logicalTypeName__Field_metadata
-  memberName: isis_feat_ApplicationType_memberName__Field_metadata
-  namespaceName: isis_feat_ApplicationType_namespaceName__Field_metadata
-  objectIdentifier: isis_feat_ApplicationType_objectIdentifier__Field_metadata
-  properties: __Field_metadata
-  typeSimpleName: isis_feat_ApplicationType_typeSimpleName__Field_metadata
-}
-
-type isis_feat_ApplicationType__DomainObject_meta {
-  fields: isis_feat_ApplicationType__DomainObject_fields
-  iconName: String
-  id: ID!
-  logicalTypeName: String!
-  title: String
-}
-
-type isis_feat_ApplicationType__DomainObject_mutations {
-  noop: Mutator_Meta_Data
-}
-
-type isis_feat_ApplicationType_logicalTypeName__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationType_memberName__Field_metadata {
-  disable: String
-  hide: Boolean
-  validate: String
-}
-
-type isis_feat_ApplicationType_namespaceName__Field_metadata {
-  disable: String
-  hide: Boolean
+olean
   validate: String
 }
 

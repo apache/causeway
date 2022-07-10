@@ -11,40 +11,30 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 @Data
-public class GQLGenericFieldsAndCollections {
+public class GQLGenericActions {
 
     private final ObjectTypeConstructionHelper constructionHelper;
     private final Bookmark bookmark;
 
-    public boolean hideOTMA(OneToManyAssociation oneToManyAssociation) {
+    public boolean hideAction(final ObjectAction objectAction){
         ManagedObject managedObject = constructionHelper.getManagedObject(bookmark);
         if (managedObject == null) return true;
-        Consent visible = oneToManyAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visible.isAllowed()) return false;
-        return true;
+        return !objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed();
     }
 
-    public String disableOTMA(OneToManyAssociation oneToManyAssociation) {
+    public String disableAction(final ObjectAction objectAction){
         ManagedObject managedObject = constructionHelper.getManagedObject(bookmark);
         if (managedObject == null) return "No managed object found";
-        Consent usable = oneToManyAssociation.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        Consent usable = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (usable.isAllowed()) return usable.getReason();
         return usable.getReason();
     }
 
-    public boolean hideOTOA(OneToOneAssociation oneToOneAssociation) {
-        ManagedObject managedObject = constructionHelper.getManagedObject(bookmark);
-        if (managedObject == null) return true;
-        Consent visible = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visible.isAllowed()) return false;
-        return true;
-    }
-
-    public String disableOTOA(OneToOneAssociation oneToOneAssociation) {
+    public String validateAction(final ObjectAction objectAction){
         ManagedObject managedObject = constructionHelper.getManagedObject(bookmark);
         if (managedObject == null) return "No managed object found";
-        Consent usable = oneToOneAssociation.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usable.isAllowed()) return usable.getReason();
-        return usable.getReason();
+        // TODO: implement
+        return "not yet implemented";
     }
+
 }
