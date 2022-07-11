@@ -35,7 +35,8 @@ public class ProperMemberSupport_action6 {
 
     private final ProperMemberSupport mixee;
 
-    @MemberSupport public ProperMemberSupport act(final String p0) {
+    @MemberSupport public ProperMemberSupport act(
+            final String p0, final String p1) {
         return mixee;
     }
 
