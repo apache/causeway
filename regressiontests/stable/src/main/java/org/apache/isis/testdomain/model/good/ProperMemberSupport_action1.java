@@ -28,6 +28,9 @@ import org.apache.isis.applib.annotation.Publishing;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * For (test) mixin descriptions see {@link ProperMemberSupport}.
+ */
 @Action(executionPublishing = Publishing.ENABLED)
 @ActionLayout(named = "foo", describedAs = "bar")
 @RequiredArgsConstructor

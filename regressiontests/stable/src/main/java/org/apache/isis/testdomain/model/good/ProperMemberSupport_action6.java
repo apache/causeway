@@ -18,46 +18,25 @@
  */
 package org.apache.isis.testdomain.model.good;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Testing annotation provided 'choicesFrom' fallback,
+ * if no explicit choices member-support is given.
+ * <p>
  * For (test) mixin descriptions see {@link ProperMemberSupport}.
  */
-@Collection
-@CollectionLayout(named = "foo", describedAs = "bar")
+@Action(choicesFrom = "myColl")
 @RequiredArgsConstructor
-public class ProperMemberSupport_collection2 {
+public class ProperMemberSupport_action6 {
 
-    private final ProperMemberSupport holder;
+    private final ProperMemberSupport mixee;
 
-    //@Action(semantics=SAFE)   // <-- inferred (required)
-    //@ActionLayout(contributed=ASSOCIATION)  // <-- inferred (required)
-
-    @MemberSupport public List<String> coll() {
-        return Collections.singletonList(holder.toString());
+    @MemberSupport public ProperMemberSupport act(final String p0) {
+        return mixee;
     }
-
-    // -- PROPERLY DECLARED SUPPORTING METHODS
-
-    @MemberSupport public boolean hideColl() {
-        return false;
-    }
-
-    @MemberSupport public String disableColl() {
-        return null;
-    }
-
-    //TODO not documented with the support-matrix, what to do here?
-    @MemberSupport public String validateColl() {
-        return null;
-    }
-
 
 }

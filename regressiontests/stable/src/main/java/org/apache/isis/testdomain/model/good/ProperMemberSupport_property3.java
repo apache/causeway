@@ -24,6 +24,9 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * For (test) mixin descriptions see {@link ProperMemberSupport}.
+ */
 @Property
 @PropertyLayout(named= "foo", describedAs = "bar") // <-- overruled by imperative naming, but used for column naming and describing
 @RequiredArgsConstructor

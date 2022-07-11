@@ -49,7 +49,48 @@ import lombok.Setter;
  * named           x    x    x
  * validate        x         x   x
  * </pre>
- *
+ * <p>
+ * Mixins
+ * <table><tr>
+ * <td><b>action1</b></td><td>
+ * testing whether member-support methods are picked up when prefixed by param-index,
+ * also testing proper mixed-in member-id, also friendly name and description from annotation
+ * </td></tr><tr>
+ * <td><b>action2</b></td><td>
+ * testing whether has PublishedActionFacet
+ * </td></tr><tr>
+ * <td><b>action3</b></td><td>
+ * testing whether member-support methods are picked up when prefixed by param-index,
+ * (variant of action1, with non-scalar action parameters)
+ * </td></tr><tr>
+ * <td><b>action4</b></td><td>
+ * testing whether member-support methods are picked up when prefixed by param-name
+ * </td></tr><tr>
+ * <td><b>action5</b></td><td>
+ * testing imperative naming and describing
+ * </td></tr><tr>
+ * <td><b>action6</b></td><td>
+ * testing annotation provided 'choicesFrom' fallback,
+ * if no explicit choices member-support is given
+ * </td></tr><tr>
+ * <td><b>property1</b></td><td>
+ * analog to action1
+ * </td></tr><tr>
+ * <td><b>property2</b></td><td>
+ * analog to action2
+ * </td></tr><tr>
+ * <td><b>property3</b></td><td>
+ * testing imperative naming and describing
+ * </td></tr><tr>
+ * <td><b>collection1</b></td><td>
+ * analog to action1
+ * </td></tr><tr>
+ * <td><b>collection2</b></td><td>
+ * analog to action2
+ * </td></tr><tr>
+ * <td><b>collection3</b></td><td>
+ * testing imperative naming and describing
+ * </td></tr></table>
  */
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class ProperMemberSupport {

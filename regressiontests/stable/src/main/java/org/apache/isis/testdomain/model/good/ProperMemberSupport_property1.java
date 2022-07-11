@@ -27,6 +27,9 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * For (test) mixin descriptions see {@link ProperMemberSupport}.
+ */
 @Property
 @PropertyLayout(named = "foo", describedAs = "bar")
 @RequiredArgsConstructor
@@ -42,7 +45,7 @@ public class ProperMemberSupport_property1 {
 
     // -- PROPERLY DECLARED SUPPORTING METHODS
 
-    @MemberSupport public Set<String> autoCompleteProp(@MinLength(3) String search) {
+    @MemberSupport public Set<String> autoCompleteProp(@MinLength(3) final String search) {
         return null;
     }
 
