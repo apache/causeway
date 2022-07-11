@@ -16,32 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.postprocessors.param;
+package org.apache.isis.core.metamodel.facets.param.choices;
 
-import java.util.function.BiConsumer;
+import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-import lombok.val;
-
-public class ActionParameterChoicesFacetFromParentedCollection
+public class ActionParameterChoicesFacetFromChoicesFacet
 extends ActionParameterChoicesFacetAbstract {
 
-    private final OneToManyAssociation coll;
+    public static Optional<ActionParameterChoicesFacet> create(
+            final Optional<ChoicesFacet> choicesFacetIfAny,
+            final FacetHolder facetHolder) {
+        return choicesFacetIfAny
+        .map(choicesFacet->new ActionParameterChoicesFacetFromChoicesFacet(choicesFacet, facetHolder));
+    }
 
-    public ActionParameterChoicesFacetFromParentedCollection(
-            final FacetHolder holder,
-            final OneToManyAssociation coll) {
-        super(holder);
-        this.coll = coll;
+    private final ChoicesFacet choicesFacet;
+
+    private ActionParameterChoicesFacetFromChoicesFacet(
+            final ChoicesFacet choicesFacet,
+            final FacetHolder holder) {
+        super(holder, Precedence.INFERRED);
+        this.choicesFacet = choicesFacet;
     }
 
     @Override
@@ -50,14 +53,7 @@ extends ActionParameterChoicesFacetAbstract {
             final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
-        val collectionAsObject = coll.get(head.getOwner(), interactionInitiatedBy);
-        return CollectionFacet.streamAdapters(collectionAsObject).collect(Can.toCan());
+        return choicesFacet.getChoices(head.getTarget(), interactionInitiatedBy);
     }
 
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("oneToManyAssociation", coll.getId());
-    }
 }

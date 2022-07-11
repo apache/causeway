@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Obtain choices for each of the parameters of the action.
- *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
  * <tt>choicesNXxx</tt> support method for an action (where N is the 0-based
@@ -35,7 +34,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public interface ActionParameterChoicesFacet extends Facet {
 
-    public Can<ManagedObject> getChoices(
+    Can<ManagedObject> getChoices(
             ObjectSpecification requiredSpec,
             ActionInteractionHead head,
             Can<ManagedObject> pendingArgs,

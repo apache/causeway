@@ -16,30 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.param.choices;
+package org.apache.isis.core.metamodel.facets.actions.action.choicesfrom;
 
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import java.util.Optional;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class ActionParameterChoicesFacetNone
-extends ActionParameterChoicesFacetAbstract {
+public class ChoicesFromFacetForActionAnnotation
+extends ChoicesFromFacetAbstract {
 
-    public ActionParameterChoicesFacetNone(final FacetHolder holder) {
-        super(holder, Precedence.FALLBACK);
+    public static Optional<ChoicesFromFacet> create(
+            final Optional<Action> actionIfAny,
+            final FacetHolder holder) {
+        return actionIfAny
+            .map(Action::choicesFrom)
+            .filter(_Strings::isNotEmpty)
+            .map(choicesFrom->
+                new ChoicesFromFacetForActionAnnotation(choicesFrom, holder));
     }
 
-    @Override
-    public Can<ManagedObject> getChoices(
-            final ObjectSpecification requiredSpec,
-            final ActionInteractionHead head,
-            final Can<ManagedObject> pendingArgs,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-
-        return Can.empty();
+    private ChoicesFromFacetForActionAnnotation(
+            final String value,
+            final FacetHolder holder) {
+        super(value, holder);
     }
 
 }

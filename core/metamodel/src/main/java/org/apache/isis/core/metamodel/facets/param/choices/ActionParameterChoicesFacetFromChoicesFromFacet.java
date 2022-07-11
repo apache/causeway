@@ -16,36 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.param.choices.enums;
+package org.apache.isis.core.metamodel.facets.param.choices;
 
 import java.util.Optional;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
+import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-public class ActionParameterChoicesFacetFromChoicesFacet
+import lombok.val;
+
+public class ActionParameterChoicesFacetFromChoicesFromFacet
 extends ActionParameterChoicesFacetAbstract {
 
-    public static Optional<ActionParameterChoicesFacetAbstract> create(
-            final Optional<ChoicesFacet> choicesFacet,
+    public static Optional<ActionParameterChoicesFacet> create(
+            final Optional<ChoicesFromFacet> choicesFromFacetIfAny,
+            final ObjectSpecification actionOwnerSpec,
             final FacetHolder facetHolder) {
-        return choicesFacet
-        .map(choicesFct->new ActionParameterChoicesFacetFromChoicesFacet(choicesFct, facetHolder));
+        return choicesFromFacetIfAny
+                .map(ChoicesFromFacet::value)
+                .flatMap(actionOwnerSpec::getCollection)
+                .map(coll->
+                    new ActionParameterChoicesFacetFromChoicesFromFacet(coll, facetHolder));
     }
 
-    private final ChoicesFacet choicesFacet;
+    private final OneToManyAssociation choicesFromCollection;
 
-    private ActionParameterChoicesFacetFromChoicesFacet(
-            final ChoicesFacet choicesFacet,
+    private ActionParameterChoicesFacetFromChoicesFromFacet(
+            final OneToManyAssociation choicesFromCollection,
             final FacetHolder holder) {
-        super(holder, Precedence.INFERRED);
-        this.choicesFacet = choicesFacet;
+        super(holder, Precedence.LOW);
+        this.choicesFromCollection = choicesFromCollection;
     }
 
     @Override
@@ -54,7 +61,9 @@ extends ActionParameterChoicesFacetAbstract {
             final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return choicesFacet.getChoices(head.getTarget(), interactionInitiatedBy);
+
+        val collectionAsObject = choicesFromCollection.get(head.getOwner(), interactionInitiatedBy);
+        return CollectionFacet.streamAdapters(collectionAsObject).collect(Can.toCan());
     }
 
 }

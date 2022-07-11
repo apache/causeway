@@ -38,10 +38,10 @@ public class ProperChoicesWhenChoicesFrom {
     // expected to pass MM validation, even though there are no member-support methods
     // that would provide parameter choices (for 'input'), instead @Action(choicesFrom = "candidates")
     // should be sufficient to derive both
-    // 1. ActionParameterChoicesFacetFromParentedCollection
+    // 1. ActionParameterChoicesFacetFromChoicesFromFacet
     // 2. ActionParameterDefaultsFacetFromAssociatedCollection
     @Action(choicesFrom = "candidates")
-    public List<String> appendACharacterToCandidates(List<String> input) {
+    public List<String> appendACharacterToCandidates(final List<String> input) {
         return input.stream()
                 .map(candidate->candidate + "!")
                 .collect(Collectors.toList());

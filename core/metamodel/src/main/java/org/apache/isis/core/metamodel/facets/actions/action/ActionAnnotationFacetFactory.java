@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;

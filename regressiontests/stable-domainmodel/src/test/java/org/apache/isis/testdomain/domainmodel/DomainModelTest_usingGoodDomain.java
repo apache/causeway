@@ -60,9 +60,9 @@ import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionP
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
-import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterChoicesFacetFromParentedCollection;
 import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -434,6 +434,8 @@ class DomainModelTest_usingGoodDomain {
         assertHasProperty(i2Spec, "f");
     }
 
+    //FIXME[ISIS-3049]
+    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void actionParamChoices_shouldBeAllowed_toBeDerivedFromChoicesFrom() {
 
@@ -443,7 +445,7 @@ class DomainModelTest_usingGoodDomain {
         val param0 = action.getParameters().getFirstOrFail();
 
         assertEquals(
-                ActionParameterChoicesFacetFromParentedCollection.class,
+                ActionParameterChoicesFacetFromChoicesFromFacet.class,
                 param0.lookupFacet(ActionParameterChoicesFacet.class)
                     .map(Object::getClass)
                     .orElse(null));
@@ -486,8 +488,6 @@ class DomainModelTest_usingGoodDomain {
                     .orElse(null));
     }
 
-    //FIXME[ISIS-3049]
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     /**
      *  annotation provided 'choicesFrom' fallback, if no explicit choices member-support is given
      *  (that are params #1 and #3)
@@ -500,6 +500,24 @@ class DomainModelTest_usingGoodDomain {
                 .actionTester(ProperMemberSupport.class, "action6");
         actTester.assertExists(true);
 
+        // low-level MM inspection
+        {
+            val action = actTester.getActionMetaModelElseFail();
+            action.getParameters()
+            .forEach(param->{
+
+               assertTrue(param.getAction().isMixedIn(), ()->String.format(
+                       "param %d is expected to belong to a mixed-in action",
+                       param.getParameterIndex()));
+
+               val choicesFacet = param.getFacet(ActionParameterChoicesFacet.class);
+
+               assertNotNull(choicesFacet, ()->String.format(
+                       "param %d is expected to have a ActionParameterChoicesFacet",
+                       param.getParameterIndex()));
+            });
+        }
+
         val mixee = actTester.getActionOwnerAs(ProperMemberSupport.class);
         mixee.setMyColl(List.of(
                 "Hallo",
@@ -509,7 +527,7 @@ class DomainModelTest_usingGoodDomain {
                 "Hallo",
                 "World");
 
-        // verify param choices from 'choicesFrom' action annotation attribute
+        // verify param choices from 'choicesFrom' action annotation attribute (param params #1 and #3)
         actTester.assertParameterChoices(true, String.class,
                 choices0->assertEquals(expectedParamChoices, Can.ofIterable(choices0), ()->"param 0 choices mismatch"),
                 choices1->assertEquals(expectedParamChoices, Can.ofIterable(choices1), ()->"param 1 choices mismatch"),

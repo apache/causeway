@@ -39,7 +39,7 @@ import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
-import org.apache.isis.core.metamodel.facets.actions.action.associateWith.ChoicesFromFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
@@ -478,7 +478,7 @@ public interface ObjectAction extends ObjectMember {
 
             val elementType = collection.getElementType();
 
-            return new ChoicesFrom(collection)
+            return new HasChoicesFrom(collection)
                     .and(new HasParameterMatching(
                             new ObjectActionParameter.Predicates.CollectionParameter(elementType)
                             ));
@@ -486,14 +486,11 @@ public interface ObjectAction extends ObjectMember {
 
         // -- HELPER
 
-        private static class ChoicesFrom implements Predicate<ObjectAction> {
+        private static class HasChoicesFrom implements Predicate<ObjectAction> {
             private final @NonNull String memberId;
-//            private final @NonNull String memberName;
 
-            public ChoicesFrom(final @NonNull ObjectAssociation objectAssociation) {
-
+            public HasChoicesFrom(final @NonNull ObjectAssociation objectAssociation) {
                 this.memberId = _Strings.nullToEmpty(objectAssociation.getId()).toLowerCase();
-//                this.memberName = _Strings.nullToEmpty(objectAssociation.getName()).toLowerCase();
             }
 
             @Override
@@ -507,8 +504,6 @@ public interface ObjectAction extends ObjectMember {
                     return false;
                 }
                 val memberNameLowerCase = choicesFromMemberName.toLowerCase();
-//                return Objects.equals(memberName, memberNameLowerCase)
-//                        || Objects.equals(memberId, memberNameLowerCase);
                 return Objects.equals(memberId, memberNameLowerCase);
             }
 

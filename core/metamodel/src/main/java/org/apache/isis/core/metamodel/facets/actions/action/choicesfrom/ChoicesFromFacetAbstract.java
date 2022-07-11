@@ -16,14 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.actions.action.associateWith;
+package org.apache.isis.core.metamodel.facets.actions.action.choicesfrom;
 
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
 /**
  * Associates an action with a collection, for the purpose of defaulting
  * choices and defaults of parameters of the same type.
  */
-public interface ChoicesFromFacet extends SingleStringValueFacet {
+public abstract class ChoicesFromFacetAbstract
+extends SingleStringValueFacetAbstract
+implements ChoicesFromFacet {
+
+    private static final Class<? extends Facet> type() {
+        return ChoicesFromFacet.class;
+    }
+
+    public ChoicesFromFacetAbstract(
+            final String value,
+            final FacetHolder holder) {
+        super(type(), holder, value);
+    }
 
 }
