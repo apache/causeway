@@ -104,8 +104,6 @@ extends ObjectSpecificationPostProcessorAbstract {
         }
         if(!hasMemberLevelChoices(prop)) {
 
-            //TODO not used: PropertyChoicesFacetFromChoicesFacetFactory
-
             val choicesFacetIfAny = prop.getElementType()
                     .lookupNonFallbackFacet(ChoicesFacet.class);
 
