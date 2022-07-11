@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @Property
 @PropertyLayout(named = "foo", describedAs = "bar")
 @RequiredArgsConstructor
-public class ProperMemberSupport_property {
+public class ProperMemberSupport_property1 {
 
     private final ProperMemberSupport holder;
 

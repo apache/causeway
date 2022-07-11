@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @Collection
 @CollectionLayout(named = "foo", describedAs = "bar")
 @RequiredArgsConstructor
-public class ProperMemberSupport_collection {
+public class ProperMemberSupport_collection1 {
 
     private final ProperMemberSupport holder;
 

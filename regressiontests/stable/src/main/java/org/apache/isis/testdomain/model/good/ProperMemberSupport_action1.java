@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @Action(executionPublishing = Publishing.ENABLED)
 @ActionLayout(named = "foo", describedAs = "bar")
 @RequiredArgsConstructor
-public class ProperMemberSupport_action {
+public class ProperMemberSupport_action1 {
 
     private final ProperMemberSupport holder;
 

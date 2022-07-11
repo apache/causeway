@@ -180,9 +180,9 @@ class DomainModelTest_usingGoodDomain {
 
         val holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
 
-        val mx_action = holderSpec.getActionElseFail("action"); // when @Action at type level
+        val mx_action = holderSpec.getActionElseFail("action1"); // when @Action at type level
         assertNotNull(mx_action);
-        assertEquals("action", mx_action.getId());
+        assertEquals("action1", mx_action.getId());
         assertEquals("foo", mx_action.getStaticFriendlyName().get());
         assertEquals("bar", mx_action.getStaticDescription().get());
         assertHasPublishedActionFacet(mx_action);
@@ -191,9 +191,9 @@ class DomainModelTest_usingGoodDomain {
         assertNotNull(mx_action2);
         assertHasPublishedActionFacet(mx_action2);
 
-        val mx_property = holderSpec.getAssociationElseFail("property"); // when @Property at type level
+        val mx_property = holderSpec.getAssociationElseFail("property1"); // when @Property at type level
         assertNotNull(mx_property);
-        assertEquals("property", mx_property.getId());
+        assertEquals("property1", mx_property.getId());
         assertEquals("foo", mx_property.getStaticFriendlyName().get());
         assertEquals("bar", mx_property.getStaticDescription().get());
 
@@ -203,9 +203,9 @@ class DomainModelTest_usingGoodDomain {
         assertEquals("foo", mx_property2.getStaticFriendlyName().get());
         assertEquals("bar", mx_property2.getStaticDescription().get());
 
-        val mx_collection = holderSpec.getAssociationElseFail("collection"); // when @Collection at type level
+        val mx_collection = holderSpec.getAssociationElseFail("collection1"); // when @Collection at type level
         assertNotNull(mx_collection);
-        assertEquals("collection", mx_collection.getId());
+        assertEquals("collection1", mx_collection.getId());
         assertEquals("foo", mx_collection.getStaticFriendlyName().get());
         assertEquals("bar", mx_collection.getStaticDescription().get());
 

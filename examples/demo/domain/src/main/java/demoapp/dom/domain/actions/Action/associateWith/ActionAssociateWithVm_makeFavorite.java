@@ -25,9 +25,9 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 
-import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 import lombok.RequiredArgsConstructor;
 
+import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 
 //tag::class[]
 @Action
