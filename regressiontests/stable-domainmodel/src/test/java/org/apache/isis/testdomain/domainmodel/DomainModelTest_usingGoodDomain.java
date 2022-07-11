@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -485,6 +486,36 @@ class DomainModelTest_usingGoodDomain {
                     .orElse(null));
     }
 
+    //FIXME[ISIS-3049]
+    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+    /**
+     *  annotation provided 'choicesFrom' fallback, if no explicit choices member-support is given
+     *  (that are params #1 and #3)
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    void actionParamChoices_shouldBeAvailable_whenMixedInActionHasChoicesFromAnnotationAttribute() {
+
+        val actTester = testerFactory
+                .actionTester(ProperMemberSupport.class, "action6");
+        actTester.assertExists(true);
+
+        val mixee = actTester.getActionOwnerAs(ProperMemberSupport.class);
+        mixee.setMyColl(List.of(
+                "Hallo",
+                "World"));
+
+        val expectedParamChoices = Can.of(
+                "Hallo",
+                "World");
+
+        // verify param choices from 'choicesFrom' action annotation attribute
+        actTester.assertParameterChoices(true, String.class,
+                choices0->assertEquals(expectedParamChoices, Can.ofIterable(choices0), ()->"param 0 choices mismatch"),
+                choices1->assertEquals(expectedParamChoices, Can.ofIterable(choices1), ()->"param 1 choices mismatch"),
+                choices2->assertEquals(expectedParamChoices, Can.ofIterable(choices2), ()->"param 2 choices mismatch"),
+                choices3->assertEquals(expectedParamChoices, Can.ofIterable(choices3), ()->"param 3 choices mismatch"));
+    }
 
     @ParameterizedTest
     @MethodSource("provideImperativelyNamed")
