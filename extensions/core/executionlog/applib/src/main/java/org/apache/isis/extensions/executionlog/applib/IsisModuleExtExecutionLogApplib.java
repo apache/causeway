@@ -21,7 +21,6 @@ package org.apache.isis.extensions.executionlog.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.config.util.SpringProfileUtil;
 import org.apache.isis.extensions.executionlog.applib.app.ExecutionLogMenu;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.isis.extensions.executionlog.applib.spiimpl.ExecutionSubscriberForLog;

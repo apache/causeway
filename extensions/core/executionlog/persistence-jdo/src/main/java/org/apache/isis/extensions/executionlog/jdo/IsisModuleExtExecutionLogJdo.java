@@ -21,7 +21,6 @@ package org.apache.isis.extensions.executionlog.jdo;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
@@ -44,8 +43,8 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 })
 public class IsisModuleExtExecutionLogJdo {
 
-    public static final String NAMESPACE = IsisModuleExtCommandLogApplib.NAMESPACE;
-    public static final String SCHEMA = IsisModuleExtCommandLogApplib.SCHEMA;
+    public static final String NAMESPACE = IsisModuleExtExecutionLogApplib.NAMESPACE;
+    public static final String SCHEMA = IsisModuleExtExecutionLogApplib.SCHEMA;
 
     /**
      * For tests that need to delete the command table first.

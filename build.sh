@@ -18,10 +18,10 @@ usage() {
  echo ""                                                                                               >&2
  echo "  -p run 'git pull --ff-only' first"                                                            >&2
  echo "  -c include 'clean' goal"                                                                      >&2
- echo "  -s specify settings"                                                                          >&2
  echo "  -t add '-Dmaven-timeline.version=1.8-SNAPSHOT' for improved timeline output"                  >&2
- echo "  -y use 'verify' rather than 'install'.  Cannot combine with '-k'"                             >&2
+ echo "  -l single threaded, do NOT add '-T1C' flag"                                                   >&2
  echo "  -k use 'package' rather than 'install'.  Does not run integ tests.  Cannot combine with '-y'" >&2
+ echo "  -y use 'verify' rather than 'install'.  Cannot combine with '-k'"                             >&2
  echo "  -O do NOT add '-o' (offline) flag, ie bring down any new dependencies"                        >&2
  echo "  -F do NOT search for Failures and Errors at the end"                                          >&2
  echo "  -S do NOT print summary or last 50 lines at the end"                                          >&2
@@ -32,7 +32,6 @@ usage() {
 
 GIT_PULL=false
 CLEAN=false
-SETTINGS=false
 TIMELINE=false
 SKIP_OFFLINE=false
 PACKAGE_ONLY=false
@@ -45,12 +44,11 @@ VERBOSE=false
 
 MVN_LOG=/tmp/$BASENAME_0.$$.log
 
-while getopts 'prcstlkyOFSwvh' opt
+while getopts 'prctlkyOFSwvh' opt
 do
   case $opt in
     p) export GIT_PULL=true ;;
     c) export CLEAN=true ;;
-    s) export SETTINGS=true ;;
     t) export TIMELINE=true ;;
     O) export SKIP_OFFLINE=true ;;
     l) export SINGLE_THREADED=true ;;

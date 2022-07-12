@@ -30,7 +30,7 @@
 	<properties>
 		<maven.deploy.skip>true</maven.deploy.skip>
 		<sonar.skip>true</sonar.skip>
-		<spring.profiles.active>demo-jpa</spring.profiles.active> 
+		<spring.profiles.active>demo-jpa</spring.profiles.active>
 	</properties>
 
 	<dependencies>
@@ -42,12 +42,32 @@
 			<artifactId>demo-wicket-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<!-- PERSISTENCE -->
 
 		<dependency>
 			<groupId>org.apache.isis.persistence</groupId>
 			<artifactId>isis-persistence-jpa-eclipselink</artifactId>
+		</dependency>
+
+		<!-- Extensions -->
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-commandlog-persistence-jpa</artifactId>
+		</dependency>
+
+		<!-- Value types -->
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
 		</dependency>
 
 	</dependencies>

@@ -62,13 +62,6 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- WEB APPLICATION DEPENDENCY BUNDLE -->
-
-		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-webapp</artifactId>
-			<type>pom</type>
-		</dependency>
 
 		<!-- Wicket viewer components -->
 
@@ -103,7 +96,7 @@
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-pdfjs-wicket-ui</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-fullcalendar-wicket-ui</artifactId>
