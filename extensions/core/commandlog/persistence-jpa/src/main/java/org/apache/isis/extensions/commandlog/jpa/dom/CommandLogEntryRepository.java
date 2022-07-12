@@ -18,44 +18,13 @@
  */
 package org.apache.isis.extensions.commandlog.jpa.dom;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryRange;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.iactn.InteractionProvider;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.extensions.commandlog.applib.dom.ReplayState;
-import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogJpa;
-import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.cmd.v2.CommandsDto;
-import org.apache.isis.schema.cmd.v2.MapDto;
-import org.apache.isis.schema.common.v2.InteractionType;
-import org.apache.isis.schema.common.v2.OidDto;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
 
 /**
  * Provides supporting functionality for querying and persisting
@@ -68,7 +37,7 @@ import lombok.val;
 public class CommandLogEntryRepository
 extends org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository<CommandLogEntry> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogJpa.NAMESPACE + ".CommandLogEntryRepository";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogPersistenceJpa.NAMESPACE + ".CommandLogEntryRepository";
 
     public CommandLogEntryRepository() {
         super(CommandLogEntry.class);

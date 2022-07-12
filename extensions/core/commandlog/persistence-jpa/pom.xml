@@ -62,7 +62,14 @@
 
         <!-- TESTING -->
 
-		<dependency>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-commandlog-applib</artifactId>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
+
+        <dependency>
 			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-unittestsupport-applib</artifactId>
             <scope>test</scope>

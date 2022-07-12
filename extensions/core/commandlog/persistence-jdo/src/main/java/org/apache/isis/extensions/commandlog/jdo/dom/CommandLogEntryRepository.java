@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
+import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
 
 /**
  * Provides supporting functionality for querying and persisting
@@ -37,7 +37,7 @@ import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 public class CommandLogEntryRepository
 extends org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository<CommandLogEntry> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogJdo.NAMESPACE + ".CommandLogEntryRepository";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogPersistenceJdo.NAMESPACE + ".CommandLogEntryRepository";
 
     public CommandLogEntryRepository() {
         super(CommandLogEntry.class);

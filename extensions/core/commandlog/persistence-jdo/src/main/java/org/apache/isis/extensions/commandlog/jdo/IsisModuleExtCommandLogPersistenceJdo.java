@@ -16,15 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jpa;
+package org.apache.isis.extensions.commandlog.jdo;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntry;
-import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntryRepository;
+import org.apache.isis.extensions.commandlog.jdo.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.jdo.dom.CommandLogEntryRepository;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
 /**
  * @since 2.0 {@index}
@@ -40,13 +41,22 @@ import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntryRepository;
         // entities
         CommandLogEntry.class
 })
-@EntityScan(basePackageClasses = {
-    CommandLogEntry.class,
-})
-public class IsisModuleExtCommandLogJpa {
+public class IsisModuleExtCommandLogPersistenceJdo {
 
     public static final String NAMESPACE = IsisModuleExtCommandLogApplib.NAMESPACE;
     public static final String SCHEMA = IsisModuleExtCommandLogApplib.SCHEMA;
 
+    /**
+     * For tests that need to delete the command table first.
+     * Should be run in the @BeforeEach of the test.
+     */
+    public FixtureScript getTeardownFixtureWillDelete() {
+        return new TeardownFixtureJdoAbstract() {
+            @Override
+            protected void execute(final ExecutionContext executionContext) {
+                deleteFrom(CommandLogEntry.class);
+            }
+        };
+    }
 
 }

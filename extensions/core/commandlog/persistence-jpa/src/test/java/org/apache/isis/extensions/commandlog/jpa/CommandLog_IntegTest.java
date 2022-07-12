@@ -16,28 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom;
+package org.apache.isis.extensions.commandlog.jpa;
 
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
-import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.extensions.commandlog.applib.integtest.CommandLogIntegTestAbstract;
+import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
-@Configuration
-@Profile("demo-jdo")
-@Import({
-    DemoModuleCommon.class,
-    IsisModulePersistenceJdoDatanucleus.class,
-    IsisModuleExtCommandLogPersistenceJdo.class,
-})
-@PropertySources({
-    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
-})
-public class DemoModuleJdo {
+@SpringBootTest(
+        classes = CommandLog_IntegTest.AppManifest.class
+)
+@ActiveProfiles("test")
+public class CommandLog_IntegTest extends CommandLogIntegTestAbstract {
+
+
+    @SpringBootConfiguration
+    @EnableAutoConfiguration
+    @Import({
+            IsisModuleCoreRuntimeServices.class,
+            IsisModuleSecurityBypass.class,
+            IsisModuleExtCommandLogPersistenceJpa.class,
+    })
+    @PropertySources({
+            @PropertySource(IsisPresets.UseLog4j2Test),
+    })
+    public static class AppManifest {
+    }
+
 
 }
