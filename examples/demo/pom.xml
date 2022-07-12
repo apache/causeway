@@ -161,7 +161,7 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-exceldownload</artifactId>
+				<artifactId>isis-extensions</artifactId>
 				<version>${project.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
