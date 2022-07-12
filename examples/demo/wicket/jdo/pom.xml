@@ -59,6 +59,10 @@
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-commandlog-persistence-jdo</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-sessionlog-persistence-jdo</artifactId>
+		</dependency>
 
 		<!-- Value types -->
 		<dependency>
