@@ -37,10 +37,12 @@ import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
 import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.HasAtPath;
@@ -73,7 +75,9 @@ import lombok.Setter;
             name = Nq.FIND_BY_NAME_OR_PATH_MATCHING,
             value = "SELECT "
                     + "FROM " + ApplicationTenancy.FQCN
-                    + " WHERE name.matches(:regex) || path.matches(:regex) ")})
+                    + " WHERE name.matches(:regex) "
+                    + "    || path.matches(:regex) ")
+})
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
 @DatastoreIdentity(
@@ -81,6 +85,7 @@ import lombok.Setter;
 @Version(
         strategy = VersionStrategy.VERSION_NUMBER,
         column = "version")
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
 @DomainObject(
         autoCompleteRepository = ApplicationTenancyRepository.class,

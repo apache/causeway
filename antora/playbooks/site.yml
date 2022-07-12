@@ -118,6 +118,12 @@ content:
       start_path: extensions/core/commandreplay/adoc # extensions
       branches: HEAD
     - url: .
+      start_path: extensions/core/executionlog/adoc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/core/executionoutbox/adoc # extensions
+      branches: HEAD
+    - url: .
       start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
     - url: .

@@ -33,11 +33,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
@@ -100,6 +102,7 @@ import lombok.Setter;
                   + "   AND p.rule = :rule "
                   + "   AND p.featureSort = :featureSort "),
 })
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @EntityListeners(IsisEntityListener.class)
 @Named(ApplicationPermission.LOGICAL_TYPE_NAME)
 @DomainObject

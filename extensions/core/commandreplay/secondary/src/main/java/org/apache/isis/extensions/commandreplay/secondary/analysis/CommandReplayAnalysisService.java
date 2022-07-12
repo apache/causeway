@@ -30,6 +30,7 @@ import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.commandreplay.secondary.analyser.CommandReplayAnalyser;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -47,16 +48,15 @@ public class CommandReplayAnalysisService {
      * This will effectively block the running of any further commands until the administrator fixes the issue.
      */
     public void analyse(final CommandLogEntry commandLogEntry) {
-        final String analysis = analyseReplay(commandLogEntry);
-
+        val analysis = analyseReplay(commandLogEntry);
         commandLogEntry.saveAnalysis(analysis);
     }
 
     private String analyseReplay(final CommandLogEntry commandLogEntry) {
 
-        for (final CommandReplayAnalyser analyser : analysers) {
+        for (val analyser : analysers) {
             try {
-                String reason = analyser.analyzeReplay(commandLogEntry);
+                val reason = analyser.analyzeReplay(commandLogEntry);
                 if (reason != null) {
                     return reason;
                 }

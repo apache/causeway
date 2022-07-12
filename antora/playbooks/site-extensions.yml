@@ -47,14 +47,32 @@ content:
       start_path: extensions/core/commandreplay/adoc # extensions
       branches: HEAD
     - url: .
+      start_path: extensions/core/executionlog/adoc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/core/executionoutbox/adoc # extensions
+      branches: HEAD
+    - url: .
       start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
+    - url: .
+      start_path: extensions/core/quartz/adoc # userguide
+      branches: HEAD
 
+    - url: .
+      start_path: extensions/security/audittrail/adoc # security
+      branches: HEAD
     - url: .
       start_path: extensions/security/secman/adoc # security
       branches: HEAD
     - url: .
+      start_path: extensions/security/sessionlog/adoc # security
+      branches: HEAD
+    - url: .
       start_path: extensions/security/shiro-realm-ldap/adoc # security
+      branches: HEAD
+    - url: .
+      start_path: extensions/security/spring-oauth2/src/main/adoc # security
       branches: HEAD
 
     - url: .

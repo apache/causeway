@@ -34,20 +34,12 @@
                         <cpt:action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
                         <cpt:action id="openRestApi" position="PANEL_DROPDOWN"/>
                         <cpt:property id="type"/>
-                        <cpt:property id="interactionIdStr"/>
+                        <cpt:property id="interactionId"/>
                         <cpt:property id="logicalMemberIdentifier"/>
                     </cpt:fieldSet>
                     <cpt:fieldSet name="Who and When">
                         <cpt:property id="username"/>
                         <cpt:property id="timestamp"/>
-                    </cpt:fieldSet>
-                    <cpt:fieldSet name="Other" id="other" unreferencedProperties="true">
-                    </cpt:fieldSet>
-                </bs3:col>
-                <bs3:col span="0">
-                    <cpt:fieldSet name="Hidden" id="hidden">
-                        <cpt:property id="preValue" hidden="EVERYWHERE"/>
-                        <cpt:property id="postValue" hidden="EVERYWHERE"/>
                     </cpt:fieldSet>
                 </bs3:col>
             </bs3:row>
@@ -58,11 +50,9 @@
                             <bs3:row>
                                 <bs3:col span="12">
                                     <cpt:fieldSet name="Target" id="target">
-                                        <cpt:property id="targetObjectType"/>
-                                        <cpt:property id="localMember" hidden="OBJECT_FORMS"/>
+                                        <cpt:property id="targetLogicalTypeName"/>
                                         <cpt:property id="target"/>
                                     </cpt:fieldSet>
-                                    <cpt:fieldSet name="Notes" id="notes"/>
                                 </bs3:col>
                             </bs3:row>
                         </bs3:tab>
@@ -115,26 +105,25 @@
     <bs3:row>
         <bs3:col span="12">
             <bs3:tabGroup>
-                <bs3:tab name="Audit">
-                    <bs3:row>
-                        <bs3:col span="12">
-                            <cpt:collection id="auditEntriesInTransaction"/>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-                <bs3:tab name="Publishing">
-                    <bs3:row>
-                        <bs3:col span="12">
-                            <cpt:collection id="publishedEventsInTransaction"/>
-                            <cpt:collection id="statusMessagesInTransaction"/>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-                <bs3:tab name="Commands">
+                <bs3:tab name="Related Commands">
                     <bs3:row>
                         <bs3:col span="12">
                             <cpt:collection id="childCommands"/>
                             <cpt:collection id="siblingCommands"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Related Executions">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="executionLogEntries"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Related Audit">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="auditLogEntries"/>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid xsi:schemaLocation="http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd http://isis.apache.org/applib/layout/links http://isis.apache.org/applib/layout/links/links.xsd http://isis.apache.org/applib/layout/grid/bootstrap3 http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3" xmlns:cpt="http://isis.apache.org/applib/layout/component" xmlns:lnk="http://isis.apache.org/applib/layout/links" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <cpt:domainObject/>
+            <cpt:action id="links"/>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="4">
+            <bs3:row>
+                <bs3:col span="12">
+                    <cpt:fieldSet name="Identifiers" id="identifiers" unreferencedProperties="true">
+                        <cpt:action id="findChangesByDate" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="recentChanges" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="clearHints" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="recentAuditEntries" position="PANEL_DROPDOWN"/>
+                        <cpt:property id="type"/>
+                        <cpt:property id="eventType"/>
+                        <cpt:property id="interactionId"/>
+                        <cpt:property id="sequence"/>
+                        <cpt:property id="logicalMemberIdentifier"/>
+                    </cpt:fieldSet>
+                    <cpt:fieldSet name="Who and When">
+                        <cpt:property id="username"/>
+                        <cpt:property id="timestamp"/>
+                    </cpt:fieldSet>
+                    <cpt:fieldSet name="Target" id="target">
+                        <cpt:property id="targetClass"/>
+                        <cpt:property id="targetStr"/>
+                    </cpt:fieldSet>
+                </bs3:col>
+            </bs3:row>
+            <bs3:row>
+                <bs3:col span="12">
+                    <bs3:tabGroup>
+                        <bs3:tab name="Target">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <cpt:fieldSet name="Target" id="target">
+                                        <cpt:property id="targetLogicalTypeName"/>
+                                        <cpt:property id="target"/>
+                                    </cpt:fieldSet>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                    </bs3:tabGroup>
+                </bs3:col>
+            </bs3:row>
+        </bs3:col>
+        <bs3:col span="8">
+            <cpt:fieldSet name="Arguments" id="arguments">
+                <cpt:property id="interactionDto" multiLine="30" labelPosition="TOP"/>
+            </cpt:fieldSet>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="12">
+            <bs3:tabGroup>
+                <bs3:tab name="Related Command">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="">
+                                <cpt:property id="commandLogEntry"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Related Executions">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="siblingExecutions"/>
+                        </bs3:col>
+                        <bs3:col span="0">
+                            <cpt:collection id="executionLogEntriesInInteraction"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Related Audit Entries">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:collection id="auditLogEntriesInInteraction"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+        </bs3:col>
+    </bs3:row>
+
+    <bs3:row>
+        <bs3:col span="12" unreferencedCollections="true">
+        </bs3:col>
+    </bs3:row>
+</bs3:grid>

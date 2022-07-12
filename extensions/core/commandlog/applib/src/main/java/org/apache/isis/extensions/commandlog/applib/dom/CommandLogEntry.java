@@ -26,7 +26,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -69,7 +68,6 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
 
 import lombok.NoArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -81,7 +79,8 @@ import lombok.experimental.UtilityClass;
  * </p>
  *
  * Note that this class doesn't subclass from {@link Command} ({@link Command}
- * is not an interface).
+ * is not an interface), but it does implement {@link HasCommandDto}, providing access to
+ * {@link CommandDto}, a serialized representation of the {@link Command}.
  */
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
@@ -96,10 +95,10 @@ import lombok.experimental.UtilityClass;
 )
 @NoArgsConstructor
 public abstract class CommandLogEntry
-implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
+implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
     public final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLog";
-    public static final String SCHEMA = "isisExtensionsCommandLog";
+    public static final String SCHEMA = IsisModuleExtCommandLogApplib.SCHEMA;
     public static final String TABLE = "Command";
 
     public static class TitleUiEvent extends IsisModuleExtCommandLogApplib.TitleUiEvent<CommandLogEntry> { }
@@ -210,10 +209,10 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
 
     public String title() {
         return new TitleBuffer()
-            .append(formatter.format(getTimestamp().toLocalDateTime()))
-            .append(" ")
-            .append(getLogicalMemberIdentifier())
-            .toString();
+                .append(formatter.format(getTimestamp().toLocalDateTime()))
+                .append(" ")
+                .append(getLogicalMemberIdentifier())
+                .toString();
     }
 
 
@@ -222,13 +221,6 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
     public ChangeType getType() {
         return ChangeType.COMMAND;
     }
-
-
-
-    @InteractionIdStr
-    public abstract String getInteractionIdStr();
-    public abstract void setInteractionIdStr(String interactionIdStr);
-
 
 
     @Property(
@@ -245,6 +237,23 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
     public UUID getInteractionId() {
         return UUID.fromString(getInteractionIdStr());
     }
+
+
+    /**
+     * This is the persistence model for {@link #getInteractionId()}; hidden everywhere.
+     */
+    @HasInteractionId.InteractionIdStr // hidden everywhere
+    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface InteractionIdStr {
+        int MAX_LENGTH = HasInteractionId.InteractionIdStr.MAX_LENGTH;
+        boolean NULLABLE = HasInteractionId.InteractionIdStr.NULLABLE;
+        String ALLOWS_NULL = HasInteractionId.InteractionIdStr.ALLOWS_NULL;
+        String NAME = HasInteractionId.InteractionIdStr.NAME;
+    }
+    @InteractionIdStr
+    public abstract String getInteractionIdStr();
+    public abstract void setInteractionIdStr(String interactionIdStr);
 
 
 
@@ -286,52 +295,21 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
 
 
     @Property(
-            domainEvent = ReplayState.DomainEvent.class
+            domainEvent = Target.DomainEvent.class
     )
+    @DomainChangeRecord.Target
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface ReplayState {
-        class DomainEvent extends PropertyDomainEvent<org.apache.isis.extensions.commandlog.applib.dom.ReplayState> {}
-        int MAX_LENGTH = 10;
-        boolean NULLABLE = true;
-        String ALLOWS_NULL = "true";
+    public @interface Target {
+        class DomainEvent extends PropertyDomainEvent<Bookmark> {}
+        int MAX_LENGTH = DomainChangeRecord.Target.MAX_LENGTH;
+        boolean NULLABLE = DomainChangeRecord.Target.NULLABLE;
+        String ALLOWS_NULL = DomainChangeRecord.Target.ALLOWS_NULL;
     }
-    /**
-     * For a replayed command, what the outcome was.
-     */
-    @ReplayState
-    public abstract org.apache.isis.extensions.commandlog.applib.dom.ReplayState getReplayState();
-    public abstract void setReplayState(org.apache.isis.extensions.commandlog.applib.dom.ReplayState replayState);
-
-
-
-    @Property(
-            domainEvent = ReplayStateFailureReason.DomainEvent.class,
-            optionality = Optionality.OPTIONAL,
-            maxLength = ReplayStateFailureReason.MAX_LENGTH
-    )
-    @PropertyLayout(hidden = Where.ALL_TABLES, multiLine = 5)
-    @Parameter(
-            optionality = Optionality.OPTIONAL,
-            maxLength = ReplayStateFailureReason.MAX_LENGTH
-    )
-    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface ReplayStateFailureReason {
-        class DomainEvent extends PropertyDomainEvent<String> {}
-        int MAX_LENGTH = 255;
-        boolean NULLABLE = true;
-        String ALLOWS_NULL = "true";
-    }
-    /**
-     * For a {@link org.apache.isis.extensions.commandlog.applib.dom.ReplayState#FAILED failed} replayed command, what the reason was for the failure.
-     */
-    @ReplayStateFailureReason
-    public abstract String getReplayStateFailureReason();
-    public abstract void setReplayStateFailureReason(String replayStateFailureReason);
-    @MemberSupport public boolean hideReplayStateFailureReason() {
-        return getReplayState() == null || !getReplayState().isFailed();
-    }
+    @Override
+    @Target
+    public abstract Bookmark getTarget();
+    public abstract void setTarget(Bookmark target);
 
 
 
@@ -359,71 +337,6 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
 
 
 
-    @Property(
-            domainEvent = Target.DomainEvent.class
-    )
-    @DomainChangeRecord.Target
-    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Target {
-        class DomainEvent extends PropertyDomainEvent<Bookmark> {}
-        int MAX_LENGTH = DomainChangeRecord.Target.MAX_LENGTH;
-        boolean NULLABLE = DomainChangeRecord.Target.NULLABLE;
-        String ALLOWS_NULL = DomainChangeRecord.Target.ALLOWS_NULL;
-    }
-    @Override
-    @Target
-    public abstract Bookmark getTarget();
-    public abstract void setTarget(Bookmark target);
-
-
-
-    @Deprecated // TO DELETE IF UNUSED
-    private String getTargetStr() {
-        return Optional.ofNullable(getTarget()).map(Bookmark::toString).orElse(null);
-    }
-
-
-
-    @Property(
-            domainEvent = TargetMember.DomainEvent.class
-    )
-    @PropertyLayout(
-            hidden = Where.ALL_TABLES
-    )
-    @DomainChangeRecord.TargetMember
-    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface TargetMember {
-        class DomainEvent extends PropertyDomainEvent<String> {}
-    }
-    @TargetMember
-    @Override
-    public String getTargetMember() {
-        return getCommandDto().getMember().getLogicalMemberIdentifier();
-    }
-
-
-
-    @Property(
-            domainEvent = LocalMember.DomainEvent.class,
-            editing = Editing.DISABLED
-    )
-    @PropertyLayout(
-            named = "Member"
-    )
-    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface LocalMember {
-        class DomainEvent extends PropertyDomainEvent<String> {}
-    }
-    @LocalMember
-    public String getLocalMember() {
-        val targetMember = getTargetMember();
-        return targetMember.substring(targetMember.indexOf("#") + 1);
-    }
-
-
 
     @Property(
             domainEvent = LogicalMemberIdentifier.DomainEvent.class,
@@ -432,18 +345,19 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
     @PropertyLayout(
             hidden = Where.ALL_TABLES
     )
+    @DomainChangeRecord.LogicalMemberIdentifier
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface LogicalMemberIdentifier {
         class DomainEvent extends PropertyDomainEvent<String> {}
-        int MAX_LENGTH = 255;
-        boolean NULLABLE = false;
-        String ALLOWS_NULL = "false";
+        int MAX_LENGTH = DomainChangeRecord.LogicalMemberIdentifier.MAX_LENGTH;
+        boolean NULLABLE = DomainChangeRecord.LogicalMemberIdentifier.NULLABLE;
+        String ALLOWS_NULL = DomainChangeRecord.LogicalMemberIdentifier.ALLOWS_NULL;
+
     }
     @LogicalMemberIdentifier
     public abstract String getLogicalMemberIdentifier();
     public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
-
 
 
 
@@ -466,7 +380,6 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
 
 
 
-
     @Property(
             domainEvent = StartedAt.DomainEvent.class,
             editing = Editing.DISABLED,
@@ -482,6 +395,7 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
         boolean NULLABLE = true;
         String ALLOWS_NULL = "true";
     }
+    @StartedAt
     public abstract java.sql.Timestamp getStartedAt();
     public abstract void setStartedAt(java.sql.Timestamp startedAt);
 
@@ -502,6 +416,7 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
         boolean NULLABLE = true;
         String ALLOWS_NULL = "true";
     }
+    @CompletedAt
     public abstract java.sql.Timestamp getCompletedAt();
     public abstract void setCompletedAt(java.sql.Timestamp completedAt);
 
@@ -511,14 +426,17 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
             domainEvent = Duration.DomainEvent.class,
             editing = Editing.DISABLED
     )
-    @Digits(integer=5, fraction=3)
+    @Digits(integer=Duration.DIGITS_INTEGER, fraction=Duration.DIGITS_FRACTION)
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Duration {
         class DomainEvent extends PropertyDomainEvent<BigDecimal> {}
+        int DIGITS_INTEGER = 5;
+        int DIGITS_FRACTION = 3;
     }
     /**
-     * The number of seconds (to 3 decimal places) that this interaction lasted.
+     * The number of seconds (to 3 decimal places) that this command lasted, derived from
+     *      * {@link #getStartedAt()} and {@link #getCompletedAt()}.
      *
      * <p>
      * Populated only if it has {@link #getCompletedAt() completed}.
@@ -546,36 +464,6 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
     @IsComplete
     public boolean isComplete() {
         return getCompletedAt() != null;
-    }
-
-
-
-    @Property(
-            domainEvent = ResultSummary.DomainEvent.class,
-            editing = Editing.DISABLED
-    )
-    @PropertyLayout(
-            hidden = Where.OBJECT_FORMS,
-            named = "Result"
-    )
-    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface ResultSummary {
-        class DomainEvent extends PropertyDomainEvent<String> {}
-    }
-    @ResultSummary
-    public String getResultSummary() {
-        if(getCompletedAt() == null) {
-            return "";
-        }
-        if(!_Strings.isNullOrEmpty(getException())) {
-            return "EXCEPTION";
-        }
-        if(getResult() != null) {
-            return "OK";
-        } else {
-            return "OK (VOID)";
-        }
     }
 
 
@@ -635,6 +523,36 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
 
 
     @Property(
+            domainEvent = ResultSummary.DomainEvent.class,
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            hidden = Where.OBJECT_FORMS,
+            named = "Result"
+    )
+    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ResultSummary {
+        class DomainEvent extends PropertyDomainEvent<String> {}
+    }
+    @ResultSummary
+    public String getResultSummary() {
+        if(getCompletedAt() == null) {
+            return "";
+        }
+        if(!_Strings.isNullOrEmpty(getException())) {
+            return "EXCEPTION";
+        }
+        if(getResult() != null) {
+            return "OK";
+        } else {
+            return "OK (VOID)";
+        }
+    }
+
+
+
+    @Property(
             domainEvent = IsCaused.DomainEvent.class,
             editing = Editing.DISABLED
     )
@@ -652,34 +570,56 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
     }
 
 
-
-    @DomainChangeRecord.PreValue
+    @Property(
+            domainEvent = ReplayState.DomainEvent.class
+    )
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface PreValue {
-        class DomainEvent extends PropertyDomainEvent<String> {}
+    public @interface ReplayState {
+        class DomainEvent extends PropertyDomainEvent<org.apache.isis.extensions.commandlog.applib.dom.ReplayState> {}
+        int MAX_LENGTH = 10;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
-    @PreValue
-    @Override
-    public String getPreValue() {
-        return null;
-    }
+    /**
+     * For a replayed command, what the outcome was.
+     */
+    @ReplayState
+    public abstract org.apache.isis.extensions.commandlog.applib.dom.ReplayState getReplayState();
+    public abstract void setReplayState(org.apache.isis.extensions.commandlog.applib.dom.ReplayState replayState);
 
 
 
-    @DomainChangeRecord.PostValue
+    @Property(
+            domainEvent = ReplayStateFailureReason.DomainEvent.class,
+            optionality = Optionality.OPTIONAL,
+            maxLength = ReplayStateFailureReason.MAX_LENGTH
+    )
+    @PropertyLayout(hidden = Where.ALL_TABLES, multiLine = 5)
+    @Parameter(
+            optionality = Optionality.OPTIONAL,
+            maxLength = ReplayStateFailureReason.MAX_LENGTH
+    )
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface PostValue {
+    public @interface ReplayStateFailureReason {
         class DomainEvent extends PropertyDomainEvent<String> {}
+        int MAX_LENGTH = 255;
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
-    @PostValue
-    @Override
-    public String getPostValue() {
-        return null;
+    /**
+     * For a {@link org.apache.isis.extensions.commandlog.applib.dom.ReplayState#FAILED failed} replayed command, what the reason was for the failure.
+     */
+    @ReplayStateFailureReason
+    public abstract String getReplayStateFailureReason();
+    public abstract void setReplayStateFailureReason(String replayStateFailureReason);
+    @MemberSupport public boolean hideReplayStateFailureReason() {
+        return getReplayState() == null || !getReplayState().isFailed();
     }
 
 
+    @Programmatic
     public void saveAnalysis(final String analysis) {
         if (analysis == null) {
             setReplayState(org.apache.isis.extensions.commandlog.applib.dom.ReplayState.OK);
@@ -754,7 +694,7 @@ implements HasCommandDto, Comparable<CommandLogEntry>, DomainChangeRecord {
 
         private List<String> ordered(final List<String> propertyIds) {
             return Arrays.asList(
-                "timestamp", "target", "targetMember", "username", "complete", "resultSummary", "interactionIdStr"
+                "timestamp", "target", "logicalMemberIdentifier", "username", "complete", "resultSummary", "duration", "interactionId"
             );
         }
     }

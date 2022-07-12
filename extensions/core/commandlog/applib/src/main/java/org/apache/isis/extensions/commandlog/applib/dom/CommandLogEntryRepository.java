@@ -42,6 +42,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
@@ -72,10 +73,11 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
         this.commandLogClass = commandLogClass;
     }
 
-    /** Creates a transient (yet not persisted) {@link CommandLogEntry} instance. */
-    public C createCommandLog(final Command command) {
+    public C createEntryAndPersist(final Command command, CommandLogEntry parentEntryIfAny) {
         C c = factoryService.detachedEntity(commandLogClass);
         c.setCommandDto(command.getCommandDto());
+        c.setParent(parentEntryIfAny);
+        persist(c);
         return c;
     }
 
@@ -302,8 +304,8 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     }
 
 
-    public void persist(final C commandLog) {
-        repositoryService().persist(commandLog);
+    public void persist(final C commandLogEntry) {
+        repositoryService().persist(commandLogEntry);
     }
 
     public void truncateLog() {

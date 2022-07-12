@@ -34,11 +34,13 @@ import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq;
 import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
@@ -72,6 +74,7 @@ import lombok.Setter;
         strategy = InheritanceStrategy.NEW_TABLE)
 @DatastoreIdentity(
         strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @Named(ApplicationRole.LOGICAL_TYPE_NAME)
 @DomainObject(
         bounding = Bounding.BOUNDED,
