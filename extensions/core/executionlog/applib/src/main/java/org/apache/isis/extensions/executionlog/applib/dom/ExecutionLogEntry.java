@@ -33,13 +33,13 @@ import javax.validation.constraints.Digits;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -103,6 +103,18 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
 
     @UtilityClass
     public static class Nq {
+        public static final String FIND_BY_INTERACTION_ID = "findByInteractionId";
+        public static final String FIND_BY_INTERACTION_ID_AND_SEQUENCE = "findByInteractionIdAndSequence";
+        public static final String FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN = "findByTargetAndTimestampBetween";
+        public static final String FIND_BY_TARGET_AND_TIMESTAMP_AFTER = "findByTargetAndTimestampAfter";
+        public static final String FIND_BY_TARGET_AND_TIMESTAMP_BEFORE = "findByTargetAndTimestampBefore";
+        public static final String FIND_BY_TARGET = "findByTarget";
+        public static final String FIND_BY_TIMESTAMP_BETWEEN = "findByTimestampBetween";
+        public static final String FIND_BY_TIMESTAMP_AFTER = "findByTimestampAfter";
+        public static final String FIND_BY_TIMESTAMP_BEFORE = "findByTimestampBefore";
+        public static final String FIND = "find";
+        public static final String FIND_RECENT_BY_USERNAME = "findRecentByUsername";
+        public static final String FIND_RECENT_BY_TARGET = "findRecentByTarget";
     }
 
     @UtilityClass
@@ -113,9 +125,12 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     }
 
 
-
     public ExecutionLogEntry(@NonNull Execution<? extends MemberExecutionDto,?> execution) {
+        init(execution);
+    }
 
+    @Programmatic
+    public void init(Execution<? extends MemberExecutionDto, ?> execution) {
         val interactionId = execution.getInteraction().getInteractionId();
         setInteractionId(interactionId);
 

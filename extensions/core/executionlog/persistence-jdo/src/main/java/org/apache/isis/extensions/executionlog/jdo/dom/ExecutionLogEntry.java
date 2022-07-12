@@ -18,8 +18,6 @@
  */
 package org.apache.isis.extensions.executionlog.jdo.dom;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import javax.inject.Named;
@@ -32,18 +30,11 @@ import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
+import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry.Nq;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryPK;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryType;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
@@ -53,90 +44,90 @@ import lombok.Setter;
 
 @PersistenceCapable(
         identityType= IdentityType.APPLICATION,
-        schema = "isispublishmq",
-        table="PublishedEvent",
+        schema = ExecutionLogEntry.SCHEMA,
+        table = ExecutionLogEntry.TABLE,
         objectIdClass= ExecutionLogEntryPK.class)
 @Queries( {
     @Query(
-            name="findByTransactionId", language="JDOQL",
+            name= Nq.FIND_BY_INTERACTION_ID,
             value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "WHERE transactionId == :transactionId "
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "WHERE interactionId == :interactionId "
                     + "ORDER BY timestamp DESC, sequence DESC"),
     @Query(
-            name="findByTransactionIdAndSequence", language="JDOQL",
+            name= Nq.FIND_BY_INTERACTION_ID_AND_SEQUENCE,
             value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "WHERE transactionId == :transactionId "
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "WHERE interactionId == :interactionId "
                     + "&&    sequence      == :sequence "),
     @Query(
-            name="findByTargetAndTimestampBetween", language="JDOQL",
+            name= Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
             value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "WHERE targetStr == :targetStr "
-                    + "&& timestamp >= :from "
-                    + "&& timestamp <= :to "
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "WHERE target == :target "
+                    + "&& timestamp >= :timestampFrom "
+                    + "&& timestamp <= :timestampTo "
+                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
+    @Query(
+            name= Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER,
+            value="SELECT "
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "WHERE target == :target "
+                    + "&& timestamp >= :timestamp "
+                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
+    @Query(
+            name= Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE,
+            value="SELECT "
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "WHERE target == :target "
+                    + "&& timestamp <= :timestamp "
+                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
+    @Query(
+            name= Nq.FIND_BY_TARGET,
+            value="SELECT "
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "WHERE target == :target "
                     + "ORDER BY timestamp DESC, transactionId DESC, sequence DESC"),
     @Query(
-            name="findByTargetAndTimestampAfter", language="JDOQL",
+            name= Nq.FIND_BY_TIMESTAMP_BETWEEN,
             value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "WHERE targetStr == :targetStr "
-                    + "&& timestamp >= :from "
-                    + "ORDER BY timestamp DESC, transactionId DESC, sequence DESC"),
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "WHERE timestamp >= :timestampFrom "
+                    + "&&    timestamp <= :timestampTo "
+                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name="findByTargetAndTimestampBefore", language="JDOQL",
+            name= Nq.FIND_BY_TIMESTAMP_AFTER,
             value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "WHERE targetStr == :targetStr "
-                    + "&& timestamp <= :to "
-                    + "ORDER BY timestamp DESC, transactionId DESC, sequence DESC"),
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "WHERE timestamp >= :timestamp "
+                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name="findByTarget", language="JDOQL",
+            name= Nq.FIND_BY_TIMESTAMP_BEFORE,
             value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "WHERE targetStr == :targetStr "
-                    + "ORDER BY timestamp DESC, transactionId DESC, sequence DESC"),
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "WHERE timestamp <= :timestamp "
+                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name="findByTimestampBetween", language="JDOQL",
+            name= Nq.FIND,
             value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "WHERE timestamp >= :from "
-                    + "&&    timestamp <= :to "
-                    + "ORDER BY timestamp DESC, transactionId DESC, sequence DESC"),
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name="findByTimestampAfter", language="JDOQL",
+            name= Nq.FIND_RECENT_BY_USERNAME,
             value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "WHERE timestamp >= :from "
-                    + "ORDER BY timestamp DESC, transactionId DESC, sequence DESC"),
-    @Query(
-            name="findByTimestampBefore", language="JDOQL",
-            value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "WHERE timestamp <= :to "
-                    + "ORDER BY timestamp DESC, transactionId DESC, sequence DESC"),
-    @Query(
-            name="find", language="JDOQL",
-            value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "ORDER BY timestamp DESC, transactionId DESC, sequence DESC"),
-    @Query(
-            name="findRecentByUser", language="JDOQL",
-            value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "WHERE user == :user "
-                    + "ORDER BY timestamp DESC, transactionId DESC, sequence DESC "
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "WHERE username == :username "
+                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC "
                     + "RANGE 0,30"),
     @Query(
-            name="findRecentByTarget", language="JDOQL",
+            name= Nq.FIND_RECENT_BY_TARGET,
             value="SELECT "
-                    + "FROM com.ecpnv.platform.v1.extensions.executionlog.dom.jdo.events.PublishedEvent "
-                    + "WHERE targetStr == :targetStr "
-                    + "ORDER BY timestamp DESC, transactionId DESC, sequence DESC "
+                    + "FROM " + ExecutionLogEntry.FQCN + " "
+                    + "WHERE target == :target "
+                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC "
                     + "RANGE 0,30")
 })
-@Named("isispublishmq.PublishedEvent")
+@Named(ExecutionLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED
 )
@@ -144,6 +135,7 @@ import lombok.Setter;
 public class ExecutionLogEntry extends org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry {
 
 
+    public static final String FQCN = "org.apache.isis.extensions.executionlog.jdo.dom.ExecutionLogEntry";
     @PrimaryKey
     @InteractionId
     @Column(allowsNull = InteractionId.ALLOWS_NULL, length=InteractionId.MAX_LENGTH)
