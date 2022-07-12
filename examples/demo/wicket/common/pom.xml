@@ -75,7 +75,7 @@
 			<artifactId>isis-viewer-wicket-viewer</artifactId>
 		</dependency>
 
-		<!-- EXTENSIONS -->
+		<!-- VALUE TYPES -->
 
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
@@ -92,6 +92,7 @@
 			<artifactId>isis-valuetypes-sse-ui-wkt</artifactId>
 		</dependency>
 
+		<!-- EXTENSIONS -->
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-pdfjs-wicket-ui</artifactId>
