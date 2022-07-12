@@ -94,10 +94,11 @@ public class E2 implements TestEntity{
     private List<Integer> zintList = new ArrayList<>();
 
     @Action(semantics = SemanticsOf.SAFE)
-    public List<TestEntity> otherEntities(@Nullable final String name){
+    public List<TestEntity> otherEntities(@Nullable final String name, @Nullable final Integer numberOfResults){
         List<TestEntity> result = new ArrayList<>();
         result.addAll(testEntityRepository.findAllE1());
         result.addAll(testEntityRepository.findAllE2().stream().filter(e2->e2!=this).collect(Collectors.toList()));
+        // TODO: maybe make number of results functional; for we leave it
         return name == null ? result : result.stream().filter(e->e.getName().contains(name)).collect(Collectors.toList());
     }
 

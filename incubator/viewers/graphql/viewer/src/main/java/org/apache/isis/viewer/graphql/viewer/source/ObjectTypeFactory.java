@@ -468,7 +468,7 @@ public class ObjectTypeFactory {
                 String actionsGenericTypeName = constructionHelper.actionGenericTypeName(objectAction.getId());
                 GraphQLObjectType.Builder actionsGenericTypeBuilder = newObject().name(actionsGenericTypeName);
                 if (parameters.isNotEmpty()) {
-                    actionsGenericTypeBuilder.field(newFieldDefinition().name("params").type(GraphQLTypeReference.typeRef(constructionHelper.parametersMetaDataTypeName(objectAction.getId()))).build());
+                    actionsGenericTypeBuilder.field(newFieldDefinition().name("params").type(GraphQLTypeReference.typeRef(constructionHelper.objectActionGenericParamsTypeName(objectAction.getId()))).build());
                 }
                 actionsGenericTypeBuilder.field(newFieldDefinition().name("validate").type(Scalars.GraphQLString).build());
                 actionsGenericTypeBuilder.field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build());
@@ -479,16 +479,19 @@ public class ObjectTypeFactory {
                 genericActionsTypeBuilder.field(metaTypeFieldDefinition);
 
                 if (parameters.isNotEmpty()) {
-                    GraphQLObjectType.Builder parametersMetaDataTypeNameBuilder = newObject().name(constructionHelper.parametersMetaDataTypeName(objectAction.getId()));
+                    GraphQLObjectType.Builder parametersMetaDataTypeNameBuilder = newObject().name(constructionHelper.objectActionGenericParamsTypeName(objectAction.getId()));
                     parameters.forEach(p -> {
 
-                        GraphQLObjectType.Builder parameterMetaDataType = newObject().name(constructionHelper.parameterMetaDataTypeName(objectAction.getId(), p.getId()));
-                        parameterMetaDataType.field(newFieldDefinition().name("optionality").type(Scalars.GraphQLBoolean).build());
-                        parameterMetaDataType.field(newFieldDefinition().name("default").type(Scalars.GraphQLString).build()); // for now
-                        parameterMetaDataType.field(newFieldDefinition().name("choices").type(Scalars.GraphQLString).build()); // for now
-                        parameterMetaDataType.field(newFieldDefinition().name("autocomplete").argument(GraphQLArgument.newArgument().name("we_call_search_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLBoolean).build()); // for now
-                        parameterMetaDataType.field(newFieldDefinition().name("validate").argument(GraphQLArgument.newArgument().name("we_call_value_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLString).build());
+                        String objectActionParameterGenericTypeName = constructionHelper.objectActionParameterGenericTypeName(objectAction.getId(), p.getId());
+                        GraphQLObjectType.Builder parameterMetaDataTypeBuilder = newObject().name(objectActionParameterGenericTypeName);
+                        parameterMetaDataTypeBuilder.field(newFieldDefinition().name("optionality").type(Scalars.GraphQLBoolean).build());
+                        parameterMetaDataTypeBuilder.field(newFieldDefinition().name("default").type(Scalars.GraphQLString).build()); // for now
+                        parameterMetaDataTypeBuilder.field(newFieldDefinition().name("choices").type(Scalars.GraphQLString).build()); // for now
+                        parameterMetaDataTypeBuilder.field(newFieldDefinition().name("autocomplete").argument(GraphQLArgument.newArgument().name("we_call_search_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLBoolean).build()); // for now
+                        parameterMetaDataTypeBuilder.field(newFieldDefinition().name("validate").argument(GraphQLArgument.newArgument().name("we_call_value_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLString).build());
 
+                        GraphQLObjectType parameterMetaDataType = parameterMetaDataTypeBuilder.build();
+                        addTypeIfNotAlreadyPresent(graphQLObjectTypes, parameterMetaDataType, objectActionParameterGenericTypeName);
                         parametersMetaDataTypeNameBuilder.field(newFieldDefinition().name(p.getId()).type(parameterMetaDataType));
 
                     });
@@ -819,7 +822,7 @@ public class ObjectTypeFactory {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLGenericActions source = environment.getSource();
-                    return new GQLActionHideDisableValidateEtc(source.hideAction(objectAction), source.disableAction(objectAction), source.validateAction(objectAction), source.semanticsOf(objectAction));
+                    return new GQLActionHideDisableValidateEtc(source.hideAction(objectAction), source.disableAction(objectAction), source.validateAction(objectAction), source.semanticsOf(objectAction), source.paramsOf(objectAction));
                 }
 
             });
@@ -860,6 +863,28 @@ public class ObjectTypeFactory {
                     return semanticsEnumType.getValue(source.getSemantics()).getValue();
                 }
             });
+
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionGenericType , "params"), new DataFetcher<Object>() {
+                @Override
+                public Object get(final DataFetchingEnvironment environment) throws Exception {
+                    GQLActionHideDisableValidateEtc source = environment.getSource();
+                    return source.getParams();
+                }
+            });
+
+            for (ObjectActionParameter parameter : objectAction.getParameters()) {
+
+                String typeName = constructionHelper.objectActionParameterGenericTypeName(objectAction.getId(), parameter.getId());
+                GraphQLObjectType actionParamGenericType = ObjectTypeConstructionHelper.getObjectTypeFor(typeName, types);
+
+                codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionParamGenericType, parameter.getId()), new DataFetcher<Object>() {
+                    @Override
+                    public Object get(DataFetchingEnvironment environment) throws Exception {
+                        return null;
+                    }
+                });
+
+            }
 
         }
 

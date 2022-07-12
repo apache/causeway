@@ -162,28 +162,6 @@ public class GraphQlSourceForIsis implements GraphQlSource {
             }
         }, false);
 
-        // TODO: make all dynamic
-        GraphQLObjectType paramMetaDataType = newObject().name(_Utils.SINGLE_PARAM_META_DATA_TYPENAME)
-                .field(newFieldDefinition().name("optionality").type(Scalars.GraphQLBoolean).build())
-                .field(newFieldDefinition().name("default").type(Scalars.GraphQLString).build()) // for now
-                .field(newFieldDefinition().name("choices").type(Scalars.GraphQLString).build()) // for now
-                .field(newFieldDefinition().name("autocomplete").argument(GraphQLArgument.newArgument().name("we_call_search_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLBoolean).build()) // for now
-                .field(newFieldDefinition().name("validate").argument(GraphQLArgument.newArgument().name("we_call_value_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLString).build())
-                .build();
-        graphQLObjectTypes.add(paramMetaDataType);
-        GraphQLObjectType paramsMetaDataType = newObject().name(_Utils.PARAMS_META_DATA_TYPENAME_SUFFIX)
-                .field(newFieldDefinition().name("object_action_name").type(paramMetaDataType).build())
-                .build();
-        graphQLObjectTypes.add(paramsMetaDataType);
-        GraphQLObjectType mutatorMetaDataType = newObject().name(_Utils.MUTATOR_META_DATA_TYPENAME)
-                .field(newFieldDefinition().name("params").type(paramsMetaDataType).build())
-                .field(newFieldDefinition().name("validate").type(Scalars.GraphQLString).build())
-                .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())
-                .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
-                .build();
-        graphQLObjectTypes.add(mutatorMetaDataType);
-        // END TODO: make all dynamic
-
         // can remain 'static' for all fields / collections (having no params)
         GraphQLObjectType propertiesGenericType = newObject().name(_Utils.GQL_GENERIC_PROPERTY_TYPENAME)
                 .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())

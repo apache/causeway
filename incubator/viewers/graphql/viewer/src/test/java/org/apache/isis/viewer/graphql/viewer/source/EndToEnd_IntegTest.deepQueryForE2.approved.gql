@@ -65,7 +65,11 @@
               "disable" : null,
               "validate" : "not yet implemented",
               "semantics" : "SAFE",
-              "params" : null
+              "params" : {
+                "__typename" : "gqltestdomain_E2__otherEntities__ObjectAction_generic_params",
+                "name" : null,
+                "numberOfResults" : null
+              }
             },
             "remove" : {
               "__typename" : "gqltestdomain_E2__remove__ObjectAction_generic",
@@ -80,7 +84,9 @@
               "disable" : null,
               "validate" : "not yet implemented",
               "semantics" : "NON_IDEMPOTENT_ARE_YOU_SURE",
-              "params" : null
+              "params" : {
+                "reason" : null
+              }
             },
             "changeE1" : {
               "__typename" : "gqltestdomain_E2__changeE1__ObjectAction_generic",
@@ -88,7 +94,9 @@
               "disable" : null,
               "validate" : "not yet implemented",
               "semantics" : "IDEMPOTENT",
-              "params" : null
+              "params" : {
+                "e1" : null
+              }
             },
             "changeName" : {
               "__typename" : "gqltestdomain_E2__changeName__ObjectAction_generic",
@@ -96,18 +104,16 @@
               "disable" : null,
               "validate" : "not yet implemented",
               "semantics" : "IDEMPOTENT",
-              "params" : null
+              "params" : {
+                "newName" : null
+              }
             }
           }
         },
         "e1" : null,
         "logicalTypeName" : "gqltestdomain.E2",
         "name" : "e2",
-        "objectIdentifier" : "10",
-        "otherE2List" : [ ],
-        "otherEntities" : null,
-        "stringList" : [ ],
-        "zintList" : [ ]
+        "objectIdentifier" : "10"
       }
     }
   }

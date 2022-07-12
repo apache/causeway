@@ -79,12 +79,12 @@ public class ObjectTypeConstructionHelper {
         return _Utils.objectActionGenericTypeName(logicalTypeNameSanitized(), actionName);
     }
 
-    public String parametersMetaDataTypeName(final String parameterizedFieldName){
-        return _Utils.parametersMetaDataTypeName(logicalTypeNameSanitized(), parameterizedFieldName);
+    public String objectActionGenericParamsTypeName(final String objectActionname){
+        return _Utils.objectActionGenericParamsTypeName(logicalTypeNameSanitized(), objectActionname);
     }
 
-    public String parameterMetaDataTypeName(final String parameterizedFieldName, final String parameterName){
-        return _Utils.parameterMetaDataTypeName(logicalTypeNameSanitized(), parameterizedFieldName, parameterName);
+    public String objectActionParameterGenericTypeName(final String objectActionname, final String parameterName){
+        return _Utils.objectActionParameterGenericTypeName(logicalTypeNameSanitized(), objectActionname, parameterName);
     }
 
     public static GraphQLObjectType getObjectTypeFor(String typeName, Set<GraphQLType> gqlTypes) {

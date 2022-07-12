@@ -74,6 +74,14 @@ autocomplete
 default
 choices
 }
+numberOfResults {
+__typename
+optionality
+validate
+autocomplete
+default
+choices
+}
 }
 }
 remove {
@@ -142,14 +150,6 @@ name
 logicalTypeName
 name
 objectIdentifier
-otherE2List {
-name
-}
-otherEntities(name: "") {
-name
-}
-stringList
-zintList
 }
 }
 }
