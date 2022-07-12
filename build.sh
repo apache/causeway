@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
+
+#
+# example usage:
+#
+#     sh build.sh -ptOv -- -Dmodule-all-except-incubator
+#
+
 #
 # prereq for '-t' flag
 #
-# git clone https://gitlab.com/ecpnv.devops/infrastructure/maven-timeline.git
+# git clone https://github.com/danhaywood/maven-timeline.git
 # mvn clean install
 #
 #
@@ -75,7 +82,6 @@ echo ""
 if [ "$VERBOSE" = "true" ]; then
   echo "-p GIT_PULL                 : $GIT_PULL"
   echo "-c CLEAN                    : $CLEAN"
-  echo "-s SETTINGS                 : $SETTINGS"
   echo "-t TIMELINE                 : $TIMELINE"
   echo "-l SINGLE_THREADED          : $SINGLE_THREADED"
   echo "-k PACKAGE_ONLY             : $PACKAGE_ONLY"

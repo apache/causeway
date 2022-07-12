@@ -81,6 +81,11 @@
 			<artifactId>isis-testing-h2console-ui</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-sse-applib</artifactId>
+		</dependency>
+
 
 		<!-- JDO specific -->
 		<dependency>
