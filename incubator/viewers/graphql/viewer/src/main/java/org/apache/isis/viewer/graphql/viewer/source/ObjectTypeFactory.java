@@ -872,15 +872,28 @@ public class ObjectTypeFactory {
                 }
             });
 
+            String objectActionGenericParamsTypeName = constructionHelper.objectActionGenericParamsTypeName(objectAction.getId());
+            GraphQLObjectType objectActionGenericParamsType = ObjectTypeConstructionHelper.getObjectTypeFor(objectActionGenericParamsTypeName, types);
+
             for (ObjectActionParameter parameter : objectAction.getParameters()) {
 
                 String typeName = constructionHelper.objectActionParameterGenericTypeName(objectAction.getId(), parameter.getId());
                 GraphQLObjectType actionParamGenericType = ObjectTypeConstructionHelper.getObjectTypeFor(typeName, types);
 
-                codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionParamGenericType, parameter.getId()), new DataFetcher<Object>() {
+                codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(objectActionGenericParamsType, parameter.getId()), new DataFetcher<Object>() {
                     @Override
                     public Object get(DataFetchingEnvironment environment) throws Exception {
-                        return null;
+                        GQLGenericParameters params = environment.getSource();
+                        ObjectActionParameter objectActionParameter = params.parameters.stream().filter(p -> p.equals(parameter)).findFirst().orElse(null);
+                        return new GQLGenericParameter(objectActionParameter.isOptional());
+                    }
+                });
+
+                codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionParamGenericType, "optionality"), new DataFetcher<Object>() {
+                    @Override
+                    public Object get(DataFetchingEnvironment environment) throws Exception {
+                        GQLGenericParameter gqlGenericParameter = environment.getSource();
+                        return gqlGenericParameter.optionality;
                     }
                 });
 

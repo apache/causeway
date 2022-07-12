@@ -7,11 +7,15 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class GQLGenericActions {
@@ -36,16 +40,16 @@ public class GQLGenericActions {
     public String validateAction(final ObjectAction objectAction){
         ManagedObject managedObject = constructionHelper.getManagedObject(bookmark);
         if (managedObject == null) return "No managed object found";
-        // TODO: implement
-        return "not yet implemented";
+        // TODO: implement correctly
+        return objectAction.isArgumentSetValidForAction(InteractionHead.regular(managedObject), Can.empty(), InteractionInitiatedBy.USER).getReason();
     }
 
     public String semanticsOf(final ObjectAction objectAction){
         return objectAction.getSemantics().name();
     }
 
-    public Can<ObjectActionParameter> paramsOf(final ObjectAction objectAction){
-        return objectAction.getParameters();
+    public GQLGenericParameters paramsOf(final ObjectAction objectAction){
+        return new GQLGenericParameters(objectAction.getParameters());
     }
 
 }

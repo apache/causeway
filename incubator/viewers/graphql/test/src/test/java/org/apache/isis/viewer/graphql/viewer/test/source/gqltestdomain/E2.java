@@ -65,6 +65,11 @@ public class E2 implements TestEntity{
         return getName();
     }
 
+    public String validateChangeName(){
+        if (getName().equals("e2")) return "An the name of an object called e2 cannot be changed";
+        return null;
+    }
+
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     public E2 changeE1(final E1 e1){
         setE1(e1);

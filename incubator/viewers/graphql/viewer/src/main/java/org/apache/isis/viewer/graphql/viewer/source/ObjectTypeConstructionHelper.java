@@ -189,4 +189,12 @@ public class ObjectTypeConstructionHelper {
                 .collect(Collectors.toList());
     }
 
+    public GQLGenericParameter paramDataFor(final ObjectAction objectAction, final ObjectActionParameter actionParameter){
+        ObjectActionParameter objectActionParameter = objectAction.getParameters().stream()
+                .filter(p -> p.equals(actionParameter))
+                .findFirst().orElse(null);
+        if (objectActionParameter == null) return null;
+        return new GQLGenericParameter(objectActionParameter.isOptional());
+    }
+
 }

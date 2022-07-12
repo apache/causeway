@@ -5,6 +5,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
+import java.util.List;
+
 @Data
 public class GQLActionHideDisableValidateEtc {
 
@@ -16,6 +18,6 @@ public class GQLActionHideDisableValidateEtc {
 
     private final String semantics;
 
-    private final Can<ObjectActionParameter> params;
+    private final GQLGenericParameters params;
 
 }

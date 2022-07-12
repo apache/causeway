@@ -63,49 +63,84 @@
               "__typename" : "gqltestdomain_E2__otherEntities__ObjectAction_generic",
               "hide" : false,
               "disable" : null,
-              "validate" : "not yet implemented",
+              "validate" : null,
               "semantics" : "SAFE",
               "params" : {
                 "__typename" : "gqltestdomain_E2__otherEntities__ObjectAction_generic_params",
-                "name" : null,
-                "numberOfResults" : null
+                "name" : {
+                  "__typename" : "gqltestdomain_E2__otherEntities__name__ObjectActionParam_generic",
+                  "optionality" : true,
+                  "validate" : null,
+                  "autocomplete" : null,
+                  "default" : null,
+                  "choices" : null
+                },
+                "numberOfResults" : {
+                  "__typename" : "gqltestdomain_E2__otherEntities__numberOfResults__ObjectActionParam_generic",
+                  "optionality" : true,
+                  "validate" : null,
+                  "autocomplete" : null,
+                  "default" : null,
+                  "choices" : null
+                }
               }
             },
             "remove" : {
               "__typename" : "gqltestdomain_E2__remove__ObjectAction_generic",
               "hide" : false,
               "disable" : null,
-              "validate" : "not yet implemented",
+              "validate" : null,
               "semantics" : "NON_IDEMPOTENT_ARE_YOU_SURE"
             },
             "removeWithReason" : {
               "__typename" : "gqltestdomain_E2__removeWithReason__ObjectAction_generic",
               "hide" : false,
               "disable" : null,
-              "validate" : "not yet implemented",
+              "validate" : null,
               "semantics" : "NON_IDEMPOTENT_ARE_YOU_SURE",
               "params" : {
-                "reason" : null
+                "reason" : {
+                  "__typename" : "gqltestdomain_E2__removeWithReason__reason__ObjectActionParam_generic",
+                  "optionality" : false,
+                  "validate" : null,
+                  "autocomplete" : null,
+                  "default" : null,
+                  "choices" : null
+                }
               }
             },
             "changeE1" : {
               "__typename" : "gqltestdomain_E2__changeE1__ObjectAction_generic",
               "hide" : false,
               "disable" : null,
-              "validate" : "not yet implemented",
+              "validate" : "Already there",
               "semantics" : "IDEMPOTENT",
               "params" : {
-                "e1" : null
+                "e1" : {
+                  "__typename" : "gqltestdomain_E2__changeE1__e1__ObjectActionParam_generic",
+                  "optionality" : false,
+                  "validate" : null,
+                  "autocomplete" : null,
+                  "default" : null,
+                  "choices" : null
+                }
               }
             },
             "changeName" : {
               "__typename" : "gqltestdomain_E2__changeName__ObjectAction_generic",
               "hide" : false,
               "disable" : null,
-              "validate" : "not yet implemented",
+              "validate" : null,
               "semantics" : "IDEMPOTENT",
               "params" : {
-                "newName" : null
+                "newName" : {
+                  "__typename" : "gqltestdomain_E2__changeName__newName__ObjectActionParam_generic",
+                  "optionality" : false,
+                  "validate" : null,
+                  "autocomplete" : null,
+                  "default" : null,
+                  "choices" : null
+                }
               }
             }
           }
