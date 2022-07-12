@@ -510,7 +510,7 @@ class DomainModelTest_usingGoodDomain {
                val choicesFacet = param.getFacet(ActionParameterChoicesFacet.class);
 
                assertNotNull(choicesFacet, ()->String.format(
-                       "param %d is expected to have a ActionParameterChoicesFacet",
+                       "param %d is expected to have an ActionParameterChoicesFacet",
                        param.getParameterIndex()));
             });
         }

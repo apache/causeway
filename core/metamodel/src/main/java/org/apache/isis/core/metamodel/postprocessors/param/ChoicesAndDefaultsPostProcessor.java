@@ -140,7 +140,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             val compatibleCollectionParams = parameters.filter(whetherCollectionParamOfType);
             val compatibleScalarParams = parameters.filter(whetherScalarParamOfType);
 
-            // for collection parameters, install an defaults facet (if there isn't one already)
+            // for collection parameters, install a defaults facet (if there isn't one already)
             // this will cause the UI to render the collection with toggleboxes
             for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
                 addCollectionParamDefaultsFacetIfNoneAlready(collectionParam);
@@ -190,11 +190,11 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     private static void addCollectionParamChoicesFacetIfNoneAlready(
-            final OneToManyAssociation otma,
+            final OneToManyAssociation coll,
             final ObjectActionParameter param) {
         if(!hasMemberLevelChoices(param)) {
             FacetUtil.addFacet(
-                    new ActionParameterChoicesFacetFromParentedCollection(param, otma));
+                    new ActionParameterChoicesFacetFromParentedCollection(param, coll));
         }
     }
 
