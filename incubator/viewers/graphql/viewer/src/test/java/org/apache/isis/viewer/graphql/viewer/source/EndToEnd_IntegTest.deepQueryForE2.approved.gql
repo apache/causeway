@@ -60,7 +60,7 @@
           "actions" : {
             "__typename" : "gqltestdomain_E2__DomainObject_generic_actions",
             "otherEntities" : {
-              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_otherEntities",
+              "__typename" : "gqltestdomain_E2__otherEntities__ObjectAction_generic",
               "hide" : false,
               "disable" : null,
               "validate" : "not yet implemented",
@@ -68,14 +68,14 @@
               "params" : null
             },
             "remove" : {
-              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_remove",
+              "__typename" : "gqltestdomain_E2__remove__ObjectAction_generic",
               "hide" : false,
               "disable" : null,
               "validate" : "not yet implemented",
               "semantics" : "NON_IDEMPOTENT_ARE_YOU_SURE"
             },
             "removeWithReason" : {
-              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_removeWithReason",
+              "__typename" : "gqltestdomain_E2__removeWithReason__ObjectAction_generic",
               "hide" : false,
               "disable" : null,
               "validate" : "not yet implemented",
@@ -83,7 +83,7 @@
               "params" : null
             },
             "changeE1" : {
-              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_changeE1",
+              "__typename" : "gqltestdomain_E2__changeE1__ObjectAction_generic",
               "hide" : false,
               "disable" : null,
               "validate" : "not yet implemented",
@@ -91,7 +91,7 @@
               "params" : null
             },
             "changeName" : {
-              "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_changeName",
+              "__typename" : "gqltestdomain_E2__changeName__ObjectAction_generic",
               "hide" : false,
               "disable" : null,
               "validate" : "not yet implemented",

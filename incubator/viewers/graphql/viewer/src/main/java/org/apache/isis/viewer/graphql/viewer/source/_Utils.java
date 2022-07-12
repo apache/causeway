@@ -55,12 +55,12 @@ final class _Utils {
         return genericTypeName(logicalTypeNameSanitized) + "_actions";
     }
 
-    static String actionsFieldMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){
-        return genericActionsTypeName(logicalTypeNameSanitized) + "_" + fieldName;
+    static String objectActionGenericTypeName(final String logicalTypeNameSanitized, final String fieldName){
+        return logicalTypeNameSanitized + "__" + fieldName + "__ObjectAction_generic";
     }
 
     static String parametersMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName){
-        return actionsFieldMetaDataTypeName(logicalTypeNameSanitized, fieldName) + "_" + "params";
+        return objectActionGenericTypeName(logicalTypeNameSanitized, fieldName) + "_" + "params";
     }
 
     static String parameterMetaDataTypeName(final String logicalTypeNameSanitized, final String fieldName, final String paramName){

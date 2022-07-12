@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ActionScope;
@@ -77,7 +76,7 @@ public class ObjectTypeConstructionHelper {
     }
 
     public String actionGenericTypeName(final String actionName){
-        return _Utils.actionsFieldMetaDataTypeName(logicalTypeNameSanitized(), actionName);
+        return _Utils.objectActionGenericTypeName(logicalTypeNameSanitized(), actionName);
     }
 
     public String parametersMetaDataTypeName(final String parameterizedFieldName){
