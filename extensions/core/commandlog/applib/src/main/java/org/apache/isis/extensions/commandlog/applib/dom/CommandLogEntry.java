@@ -112,7 +112,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_INTERACTION_ID_STR = LOGICAL_TYPE_NAME + ".findByInteractionIdStr";
+        public static final String FIND_BY_INTERACTION_ID = LOGICAL_TYPE_NAME + ".findByInteractionId";
         public static final String FIND_BY_PARENT = LOGICAL_TYPE_NAME + ".findByParent";
         public static final String FIND_CURRENT = LOGICAL_TYPE_NAME + ".findCurrent";
         public static final String FIND_COMPLETED = LOGICAL_TYPE_NAME + ".findCompleted";
@@ -140,7 +140,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
      */
     public CommandLogEntry(final Command command) {
 
-        setInteractionIdStr(command.getInteractionId().toString());
+        setInteractionId(command.getInteractionId());
         setUsername(command.getUsername());
         setTimestamp(command.getTimestamp());
 
@@ -170,7 +170,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
             final org.apache.isis.extensions.commandlog.applib.dom.ReplayState replayState,
             final int targetIndex) {
 
-        setInteractionIdStr(commandDto.getInteractionId());
+        setInteractionId(UUID.fromString(commandDto.getInteractionId()));
         setUsername(commandDto.getUser());
         setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimestamp()));
 
@@ -231,30 +231,14 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface InteractionId {
         class DomainEvent extends PropertyDomainEvent<UUID> {}
+        int MAX_LENGTH = HasInteractionId.InteractionId.MAX_LENGTH;
+        boolean NULLABLE = HasInteractionId.InteractionId.NULLABLE;
+        String ALLOWS_NULL = HasInteractionId.InteractionId.ALLOWS_NULL;
     }
     @Override
     @InteractionId
-    public UUID getInteractionId() {
-        return UUID.fromString(getInteractionIdStr());
-    }
-
-
-    /**
-     * This is the persistence model for {@link #getInteractionId()}; hidden everywhere.
-     */
-    @HasInteractionId.InteractionIdStr // hidden everywhere
-    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface InteractionIdStr {
-        int MAX_LENGTH = HasInteractionId.InteractionIdStr.MAX_LENGTH;
-        boolean NULLABLE = HasInteractionId.InteractionIdStr.NULLABLE;
-        String ALLOWS_NULL = HasInteractionId.InteractionIdStr.ALLOWS_NULL;
-        String NAME = HasInteractionId.InteractionIdStr.NAME;
-    }
-    @InteractionIdStr
-    public abstract String getInteractionIdStr();
-    public abstract void setInteractionIdStr(String interactionIdStr);
-
+    public abstract UUID getInteractionId();
+    public abstract void setInteractionId(UUID interactionId);
 
 
     @Property(

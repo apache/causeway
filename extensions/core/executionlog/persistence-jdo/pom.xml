@@ -50,7 +50,7 @@
 
 	    <dependency>
 	        <groupId>org.apache.isis.extensions</groupId>
-	        <artifactId>isis-extensions-commandlog-applib</artifactId>
+	        <artifactId>isis-extensions-executionlog-applib</artifactId>
 	    </dependency>
 
         <!-- PERSISTENCE -->
@@ -73,6 +73,10 @@
 			<artifactId>isis-testing-integtestsupport-applib</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.extensions</groupId>
+            <artifactId>isis-extensions-executionlog-applib</artifactId>
+        </dependency>
 
     </dependencies>
 

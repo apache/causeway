@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.commandlog.jdo.dom;
 
+import java.util.UUID;
+
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
@@ -35,10 +37,9 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
-import static org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry.*;
+import static org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry.Nq;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,15 +52,15 @@ import lombok.Setter;
 @Indices({
         @Index(name = "Command__startedAt__timestamp__IDX", members = { "startedAt", "timestamp" }),
         @Index(name = "Command__timestamp__IDX", members = { "timestamp" }),
-//        @javax.jdo.annotations.Index(name = "CommandJdo__replayState__timestamp__startedAt_IDX", members = { "replayState", "timestamp", "startedAt"}),
-//        @javax.jdo.annotations.Index(name = "CommandJdo__replayState__startedAt__completedAt_IDX", members = {"startedAt", "replayState", "completedAt"}),
+//        @javax.jdo.annotations.Index(name = "Command__replayState__timestamp__startedAt_IDX", members = { "replayState", "timestamp", "startedAt"}),
+//        @javax.jdo.annotations.Index(name = "Command__replayState__startedAt__completedAt_IDX", members = {"startedAt", "replayState", "completedAt"}),
 })
 @Queries( {
     @Query(
-            name  = Nq.FIND_BY_INTERACTION_ID_STR,
+            name  = Nq.FIND_BY_INTERACTION_ID,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE interactionIdStr == :interactionIdStr "),
+                  + " WHERE interactionId == :interactionId "),
     @Query(
             name  = Nq.FIND_BY_PARENT,
             value = "SELECT "
@@ -229,10 +230,10 @@ extends org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry {
     }
 
     @PrimaryKey
-    @Column(allowsNull = InteractionIdStr.ALLOWS_NULL, name = InteractionIdStr.NAME, length = InteractionIdStr.MAX_LENGTH)
-    @InteractionIdStr
+    @Column(allowsNull = InteractionId.ALLOWS_NULL, length = InteractionId.MAX_LENGTH)
+    @InteractionId
     @Getter @Setter
-    private String interactionIdStr;
+    private UUID interactionId;
 
 
     @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)
@@ -313,6 +314,4 @@ extends org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry {
     @Getter @Setter
     private String replayStateFailureReason;
 
-
 }
-

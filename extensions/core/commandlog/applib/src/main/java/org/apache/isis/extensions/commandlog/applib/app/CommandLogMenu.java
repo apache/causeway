@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * @since 2.0 {@index}
  */
-@Named(CommandLogServiceMenu.LOGICAL_TYPE_NAME)
+@Named(CommandLogMenu.LOGICAL_TYPE_NAME)
 @DomainService(
     nature = NatureOfService.VIEW
 )
@@ -57,13 +57,13 @@ import lombok.RequiredArgsConstructor;
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class CommandLogServiceMenu {
+public class CommandLogMenu {
 
     public static final String LOGICAL_TYPE_NAME =
-            IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLogServiceMenu";
+            IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLogMenu";
 
     public static abstract class ActionDomainEvent
-        extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLogServiceMenu> { }
+        extends IsisModuleExtCommandLogApplib.ActionDomainEvent<CommandLogMenu> { }
 
 
     final CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;

@@ -23,8 +23,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.app.CommandLogServiceMenu;
-import org.apache.isis.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
 import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntry;
 import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntryRepository;
 
@@ -36,19 +34,14 @@ import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntryRepository;
         // modules
         IsisModuleExtCommandLogApplib.class,
 
-        // @DomainService's
-        CommandLogServiceMenu.class,
-
         // @Service's
         CommandLogEntryRepository.class,
-        org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry.TableColumnOrderDefault.class,
-        CommandSubscriberForCommandLog.class,
 
         // entities
         CommandLogEntry.class
 })
 @EntityScan(basePackageClasses = {
-        CommandLogEntry.class,
+    CommandLogEntry.class,
 })
 public class IsisModuleExtCommandLogJpa {
 

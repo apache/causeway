@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
@@ -83,8 +82,8 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     public Optional<C> findByInteractionId(final UUID interactionId) {
         return repositoryService().firstMatch(
-                Query.named(commandLogClass,  CommandLogEntry.Nq.FIND_BY_INTERACTION_ID_STR)
-                        .withParameter("interactionIdStr", interactionId.toString()));
+                Query.named(commandLogClass,  CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
+                        .withParameter("interactionId", interactionId));
     }
 
     public List<C> findByParent(final CommandLogEntry parent) {
@@ -277,14 +276,14 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
         final C commandJdo = factoryService.detachedEntity(commandLogClass);
 
-        commandJdo.setInteractionIdStr(dto.getInteractionId());
+        commandJdo.setInteractionId(UUID.fromString(dto.getInteractionId()));
         commandJdo.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(dto.getTimestamp()));
         commandJdo.setUsername(dto.getUser());
 
         commandJdo.setReplayState(ReplayState.PENDING);
 
-        final OidDto firstTarget = dto.getTargets().getOid().get(0);
-        commandJdo.setTarget(Bookmark.forOidDto(firstTarget));
+        val firstTargetOidDto = dto.getTargets().getOid().get(0);
+        commandJdo.setTarget(Bookmark.forOidDto(firstTargetOidDto));
         commandJdo.setCommandDto(dto);
         commandJdo.setLogicalMemberIdentifier(dto.getMember().getLogicalMemberIdentifier());
 
@@ -295,9 +294,9 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
 
     public List<C> saveForReplay(final CommandsDto commandsDto) {
-        List<CommandDto> commandDto = commandsDto.getCommandDto();
-        List<C> commands = new ArrayList<>();
-        for (final CommandDto dto : commandDto) {
+        val commandDtos = commandsDto.getCommandDto();
+        val commands = new ArrayList<C>();
+        for (val dto : commandDtos) {
             commands.add(saveForReplay(dto));
         }
         return commands;
@@ -329,8 +328,8 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
 
     private C findByInteractionIdElseNull(final UUID interactionId) {
-        val q = Query.named(commandLogClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID_STR)
-                .withParameter("interactionIdStr", interactionId.toString());
+        val q = Query.named(commandLogClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
+                .withParameter("interactionId", interactionId.toString());
         return repositoryService().uniqueMatch(q).orElse(null);
     }
 

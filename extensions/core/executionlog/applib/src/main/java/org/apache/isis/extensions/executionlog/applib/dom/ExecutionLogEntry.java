@@ -33,6 +33,7 @@ import javax.validation.constraints.Digits;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
@@ -104,16 +105,25 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     public static class Nq {
     }
 
+    @UtilityClass
+    protected static class Util {
+        public static String abbreviated(String str, int maxLength) {
+            return str != null ? (str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...") : null;
+        }
+    }
+
+
+
     public ExecutionLogEntry(@NonNull Execution<? extends MemberExecutionDto,?> execution) {
 
-        val interactionIdStr = execution.getInteraction().getInteractionId().toString();
-        setInteractionIdStr(interactionIdStr);
+        val interactionId = execution.getInteraction().getInteractionId();
+        setInteractionId(interactionId);
 
         val memberExecutionDto = execution.getDto();
         setSequence(memberExecutionDto.getSequence());
 
         val interactionDto = new InteractionDto();
-        interactionDto.setInteractionId(interactionIdStr);
+        interactionDto.setInteractionId(interactionId.toString());
         interactionDto.setExecution(memberExecutionDto);
         setInteractionDto(interactionDto);
 
@@ -156,6 +166,14 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     }
 
 
+    /**
+     * The unique identifier (a GUID) of the {@link org.apache.isis.applib.services.iactn.Interaction} in which this execution occurred.
+     *
+     * <p>
+     * The combination of ({@link #getInteractionId() interactionId}, {@link #getSequence() sequence}) makes up the
+     * primary key.
+     * </p>
+     */
     @Property(
             domainEvent = InteractionId.DomainEvent.class
     )
@@ -164,33 +182,25 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     @Retention(RetentionPolicy.RUNTIME)
     public @interface InteractionId {
         class DomainEvent extends PropertyDomainEvent<UUID> {}
+        int MAX_LENGTH = HasInteractionId.InteractionId.MAX_LENGTH;
+        boolean NULLABLE = HasInteractionId.InteractionId.NULLABLE;
+        String ALLOWS_NULL = HasInteractionId.InteractionId.ALLOWS_NULL;
     }
     @Override
     @InteractionId
-    public UUID getInteractionId() {
-        return UUID.fromString(getInteractionIdStr());
-    }
+    public abstract UUID getInteractionId();
+    public abstract void setInteractionId(UUID interactionId);
 
 
 
     /**
-     * This is the persistence model for {@link #getInteractionId()}; hidden everywhere.
+     * The 0-based additional identifier of an execution event within the given {@link #getInteractionId() interaction}.
+     *
+     * <p>
+     * The combination of ({@link #getInteractionId() interactionId}, {@link #getSequence() sequence}) makes up the
+     * primary key.
+     * </p>
      */
-    @HasInteractionId.InteractionIdStr // hidden everywhere
-    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface InteractionIdStr {
-        int MAX_LENGTH = HasInteractionId.InteractionIdStr.MAX_LENGTH;
-        boolean NULLABLE = HasInteractionId.InteractionIdStr.NULLABLE;
-        String ALLOWS_NULL = HasInteractionId.InteractionIdStr.ALLOWS_NULL;
-        String NAME = HasInteractionId.InteractionIdStr.NAME;
-    }
-    @InteractionIdStr
-    public abstract String getInteractionIdStr();
-    public abstract void setInteractionIdStr(String interactionIdStr);
-
-
-
     @Property(
             domainEvent = Sequence.DomainEvent.class
     )
@@ -218,6 +228,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
         class DomainEvent extends PropertyDomainEvent<ExecutionLogEntryType> {}
         boolean NULLABLE = false;
         String ALLOWS_NULL = "false";
+        int MAX_LENGTH = 30;
     }
     @ExecutionType
     public abstract ExecutionLogEntryType getExecutionType();
@@ -281,6 +292,14 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
 
 
 
+    /**
+     * String representation of the invoked action or edited property.
+     *
+     * <p>
+     * This is the <i>logical</i> member identifier because it does not matter whether the action/property is declared
+     * on the type or is contributed.
+     *
+     */
     @Property(
             domainEvent = LogicalMemberIdentifier.DomainEvent.class,
             editing = Editing.DISABLED
@@ -299,8 +318,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     @LogicalMemberIdentifier
     public abstract String getLogicalMemberIdentifier();
     public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
-
-
 
 
 
@@ -337,6 +354,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
         boolean NULLABLE = false;
         String ALLOWS_NULL = "false";
     }
+    @StartedAt
     public abstract java.sql.Timestamp getStartedAt();
     public abstract void setStartedAt(java.sql.Timestamp startedAt);
 
@@ -357,6 +375,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
         boolean NULLABLE = false;
         String ALLOWS_NULL = "false";
     }
+    @CompletedAt
     public abstract java.sql.Timestamp getCompletedAt();
     public abstract void setCompletedAt(java.sql.Timestamp completedAt);
 

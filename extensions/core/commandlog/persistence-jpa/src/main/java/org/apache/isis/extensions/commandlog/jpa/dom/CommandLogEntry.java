@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.commandlog.jpa.dom;
 
+import java.util.UUID;
+
 import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -43,6 +45,7 @@ import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
+import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.schema.v2.IsisCommandDtoConverter;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
@@ -63,10 +66,10 @@ import lombok.Setter;
 )
 @NamedQueries({
     @NamedQuery(
-            name  = Nq.FIND_BY_INTERACTION_ID_STR,
+            name  = Nq.FIND_BY_INTERACTION_ID,
             query = "SELECT cl "
                   + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.interactionIdStr = :interactionIdStr"),
+                  + " WHERE cl.interactionId = :interactionId"),
     @NamedQuery(
             name  = Nq.FIND_BY_PARENT,
             query = "SELECT cl "
@@ -219,10 +222,10 @@ public class CommandLogEntry extends org.apache.isis.extensions.commandlog.appli
     }
 
     @Id
-    @Column(nullable = InteractionIdStr.NULLABLE, name = InteractionIdStr.NAME, length = InteractionIdStr.MAX_LENGTH)
-    @InteractionIdStr
+    @Column(nullable = InteractionId.NULLABLE, length = InteractionId.MAX_LENGTH)
+    @InteractionId
     @Getter @Setter
-    private String interactionIdStr;
+    private UUID interactionId;
 
 
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
@@ -237,6 +240,7 @@ public class CommandLogEntry extends org.apache.isis.extensions.commandlog.appli
     private java.sql.Timestamp timestamp;
 
 
+    @Convert(converter = IsisBookmarkConverter.class)
     @Column(nullable = Target.NULLABLE, length = Target.MAX_LENGTH)
     @Target
     @Getter @Setter
@@ -260,9 +264,9 @@ public class CommandLogEntry extends org.apache.isis.extensions.commandlog.appli
     private String logicalMemberIdentifier;
 
 
+    @Convert(converter = IsisCommandDtoConverter.class)
     @Lob @Basic(fetch = FetchType.LAZY)
     @Column(nullable = CommandDtoAnnot.NULLABLE, columnDefinition = "CLOB")
-    @Convert(converter = IsisCommandDtoConverter.class)
     @CommandDtoAnnot
     @Getter @Setter
     private CommandDto commandDto;
@@ -280,6 +284,7 @@ public class CommandLogEntry extends org.apache.isis.extensions.commandlog.appli
     private java.sql.Timestamp completedAt;
 
 
+    @Convert(converter = IsisBookmarkConverter.class)
     @Column(nullable = Result.NULLABLE, length = Result.MAX_LENGTH)
     @Result
     @Getter @Setter
@@ -292,7 +297,8 @@ public class CommandLogEntry extends org.apache.isis.extensions.commandlog.appli
     @Getter @Setter
     private String exception;
 
-    @Column(nullable = ReplayState.NULLABLE, length = ReplayState.MAX_LENGTH) @Enumerated(EnumType.STRING)
+    @Column(nullable = ReplayState.NULLABLE, length = ReplayState.MAX_LENGTH)
+    @Enumerated(EnumType.STRING)
     @ReplayState
     @Getter @Setter
     private org.apache.isis.extensions.commandlog.applib.dom.ReplayState replayState;
@@ -302,7 +308,5 @@ public class CommandLogEntry extends org.apache.isis.extensions.commandlog.appli
     @ReplayStateFailureReason
     @Getter @Setter
     private String replayStateFailureReason;
-
-
 
 }

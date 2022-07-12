@@ -65,7 +65,6 @@ import lombok.val;
 @Named(CommandLogEntryRepository.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Jpa")
-//@Log4j2
 public class CommandLogEntryRepository
 extends org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository<CommandLogEntry> {
 

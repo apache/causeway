@@ -22,10 +22,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.config.util.SpringProfileUtil;
+import org.apache.isis.extensions.commandlog.applib.app.CommandLogMenu;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry.TableColumnOrderDefault;
+import org.apache.isis.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
 @Configuration
 @Import({
+        // @DomainService's
+        CommandLogMenu.class,
+        CommandSubscriberForCommandLog.class,
+        TableColumnOrderDefault.class,
 })
 public class IsisModuleExtCommandLogApplib
 implements ModuleWithFixtures {

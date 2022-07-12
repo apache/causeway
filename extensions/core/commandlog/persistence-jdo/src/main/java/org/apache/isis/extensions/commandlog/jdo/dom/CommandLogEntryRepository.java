@@ -34,7 +34,6 @@ import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
 @Named(CommandLogEntryRepository.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Jdo")
-//@Log4j2
 public class CommandLogEntryRepository
 extends org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository<CommandLogEntry> {
 
