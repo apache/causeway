@@ -48,8 +48,6 @@ import lombok.RequiredArgsConstructor;
 
 public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbstract {
 
-
-
     @BeforeEach
     void setUp() {
     }
