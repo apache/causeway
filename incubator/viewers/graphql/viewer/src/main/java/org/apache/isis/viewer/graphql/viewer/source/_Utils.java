@@ -29,7 +29,7 @@ final class _Utils {
     final static String GQL_GENERIC_STRUCTURE_TYPENAME = "_gql__DomainObject_generic_structure";
     final static String GQL_GENERIC_PROPERTY_TYPENAME = "_gql__DomainObject_generic_property";
     final static String GQL_GENERIC_COLLECTION_TYPENAME = "_gql__DomainObject_generic_collection";
-    final static String GQL_GENERIC_ACTION_TYPENAME = "_gql__DomainObject_generic_action";
+    final static String GQL_SEMANTICS_TYPENAME = "_gql__Semantics";
 
     final public static String SINGLE_PARAM_META_DATA_TYPENAME = "Param_Meta_Data"; //TODO: should go
     final static String MUTATOR_META_DATA_TYPENAME = "Mutator_Meta_Data"; //TODO: should go

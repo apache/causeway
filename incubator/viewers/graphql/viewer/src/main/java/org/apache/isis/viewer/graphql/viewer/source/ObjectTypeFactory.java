@@ -473,6 +473,7 @@ public class ObjectTypeFactory {
                 actionsGenericTypeBuilder.field(newFieldDefinition().name("validate").type(Scalars.GraphQLString).build());
                 actionsGenericTypeBuilder.field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build());
                 actionsGenericTypeBuilder.field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build());
+                actionsGenericTypeBuilder.field(newFieldDefinition().name("semantics").type(GraphQLTypeReference.typeRef(GQL_SEMANTICS_TYPENAME)).build()); //TODO: should be GQLEnum I think, but I do not know how to fetch yet ...
 
                 GraphQLFieldDefinition metaTypeFieldDefinition = newFieldDefinition().name(objectAction.getId()).type(GraphQLTypeReference.typeRef(actionsGenericTypeName)).build();
                 genericActionsTypeBuilder.field(metaTypeFieldDefinition);
@@ -768,6 +769,7 @@ public class ObjectTypeFactory {
         });
 
         GraphQLObjectType genericCollectionsTypeName = ObjectTypeConstructionHelper.getObjectTypeFor(constructionHelper.genericCollectionsTypeName(), types);
+        GraphQLEnumType semanticsEnumType = ObjectTypeConstructionHelper.getEnumTypeFor(GQL_SEMANTICS_TYPENAME, types);
 
         for (OneToManyAssociation oneToManyAssociation : constructionHelper.oneToManyAssociations()) {
 
@@ -817,7 +819,7 @@ public class ObjectTypeFactory {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLGenericActions source = environment.getSource();
-                    return new GQLActionHideDisableValidateEtc(source.hideAction(objectAction), source.disableAction(objectAction), source.validateAction(objectAction));
+                    return new GQLActionHideDisableValidateEtc(source.hideAction(objectAction), source.disableAction(objectAction), source.validateAction(objectAction), source.semanticsOf(objectAction));
                 }
 
             });
@@ -849,6 +851,14 @@ public class ObjectTypeFactory {
                     return source.getValidate();
                 }
 
+            });
+
+            codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionGenericType , "semantics"), new DataFetcher<Object>() {
+                @Override
+                public Object get(final DataFetchingEnvironment environment) throws Exception {
+                    GQLActionHideDisableValidateEtc source = environment.getSource();
+                    return semanticsEnumType.getValue(source.getSemantics()).getValue();
+                }
             });
 
         }

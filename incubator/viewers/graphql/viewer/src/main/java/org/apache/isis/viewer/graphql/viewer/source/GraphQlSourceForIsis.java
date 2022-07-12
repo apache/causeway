@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import graphql.schema.*;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -89,6 +90,17 @@ public class GraphQlSourceForIsis implements GraphQlSource {
         GraphQLCodeRegistry.Builder codeRegistryBuilder = GraphQLCodeRegistry.newCodeRegistry();
 
         Set<GraphQLType> graphQLObjectTypes = new HashSet<>();
+
+        GraphQLEnumType semanticsEnumType = GraphQLEnumType.newEnum().name(_Utils.GQL_SEMANTICS_TYPENAME)
+                .value(GraphQLEnumValueDefinition.newEnumValueDefinition().name("SAFE").value(SemanticsOf.SAFE).build())
+                .value(GraphQLEnumValueDefinition.newEnumValueDefinition().name("SAFE_AND_REQUEST_CACHEABLE").value(SemanticsOf.SAFE_AND_REQUEST_CACHEABLE).build())
+                .value(GraphQLEnumValueDefinition.newEnumValueDefinition().name("IDEMPOTENT").value(SemanticsOf.IDEMPOTENT).build())
+                .value(GraphQLEnumValueDefinition.newEnumValueDefinition().name("IDEMPOTENT_ARE_YOU_SURE").value(SemanticsOf.IDEMPOTENT_ARE_YOU_SURE).build())
+                .value(GraphQLEnumValueDefinition.newEnumValueDefinition().name("NON_IDEMPOTENT").value(SemanticsOf.NON_IDEMPOTENT).build())
+                .value(GraphQLEnumValueDefinition.newEnumValueDefinition().name("NON_IDEMPOTENT_ARE_YOU_SURE").value(SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE).build())
+                .value(GraphQLEnumValueDefinition.newEnumValueDefinition().name("NOT_SPECIFIED").value(SemanticsOf.NOT_SPECIFIED).build())
+                .build();
+        graphQLObjectTypes.add(semanticsEnumType);
 
         GraphQLObjectType structureType = newObject().name(_Utils.GQL_GENERIC_STRUCTURE_TYPENAME)
                 .field(newFieldDefinition().name("properties").type(GraphQLList.list(Scalars.GraphQLString)))
@@ -184,12 +196,6 @@ public class GraphQlSourceForIsis implements GraphQlSource {
                 .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
                 .build();
         graphQLObjectTypes.add(collectionsGenericType);
-
-//        GraphQLObjectType actionsGenericType = newObject().name(_Utils.GQL_GENERIC_ACTION_TYPENAME)
-//                .field(newFieldDefinition().name("hide").type(Scalars.GraphQLBoolean).build())
-//                .field(newFieldDefinition().name("disable").type(Scalars.GraphQLString).build())
-//                .build();
-//        graphQLObjectTypes.add(actionsGenericType);
 
         GraphQLObjectType queryLookupType = queryLookupTypeBuilder.build();
         graphQLObjectTypes.add(queryLookupType);

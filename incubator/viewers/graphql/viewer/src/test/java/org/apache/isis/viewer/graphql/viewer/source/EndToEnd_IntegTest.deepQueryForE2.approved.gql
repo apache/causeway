@@ -64,19 +64,22 @@
               "hide" : false,
               "disable" : null,
               "validate" : "not yet implemented",
+              "semantics" : "SAFE",
               "params" : null
             },
             "remove" : {
               "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_remove",
               "hide" : false,
               "disable" : null,
-              "validate" : "not yet implemented"
+              "validate" : "not yet implemented",
+              "semantics" : "NON_IDEMPOTENT_ARE_YOU_SURE"
             },
             "removeWithReason" : {
               "__typename" : "gqltestdomain_E2__DomainObject_generic_actions_removeWithReason",
               "hide" : false,
               "disable" : null,
               "validate" : "not yet implemented",
+              "semantics" : "NON_IDEMPOTENT_ARE_YOU_SURE",
               "params" : null
             },
             "changeE1" : {
@@ -84,6 +87,7 @@
               "hide" : false,
               "disable" : null,
               "validate" : "not yet implemented",
+              "semantics" : "IDEMPOTENT",
               "params" : null
             },
             "changeName" : {
@@ -91,6 +95,7 @@
               "hide" : false,
               "disable" : null,
               "validate" : "not yet implemented",
+              "semantics" : "IDEMPOTENT",
               "params" : null
             }
           }

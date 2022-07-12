@@ -1,5 +1,6 @@
 package org.apache.isis.viewer.graphql.viewer.source;
 
+import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
 import lombok.Getter;
@@ -91,6 +92,14 @@ public class ObjectTypeConstructionHelper {
         return gqlTypes.stream()
                 .filter(t->t.getClass().isAssignableFrom(GraphQLObjectType.class))
                 .map(GraphQLObjectType.class::cast)
+                .filter(ot->ot.getName().equals(typeName))
+                .findFirst().orElse(null);
+    }
+
+    public static GraphQLEnumType getEnumTypeFor(String typeName, Set<GraphQLType> gqlTypes) {
+        return gqlTypes.stream()
+                .filter(t->t.getClass().isAssignableFrom(GraphQLEnumType.class))
+                .map(GraphQLEnumType.class::cast)
                 .filter(ot->ot.getName().equals(typeName))
                 .findFirst().orElse(null);
     }

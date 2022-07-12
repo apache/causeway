@@ -11,4 +11,6 @@ public class GQLActionHideDisableValidateEtc {
 
     private final String validate;
 
+    private final String semantics;
+
 }

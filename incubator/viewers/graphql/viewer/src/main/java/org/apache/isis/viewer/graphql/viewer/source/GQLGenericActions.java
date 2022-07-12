@@ -1,6 +1,7 @@
 package org.apache.isis.viewer.graphql.viewer.source;
 
 import lombok.Data;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -35,6 +36,10 @@ public class GQLGenericActions {
         if (managedObject == null) return "No managed object found";
         // TODO: implement
         return "not yet implemented";
+    }
+
+    public String semanticsOf(final ObjectAction objectAction){
+        return objectAction.getSemantics().name();
     }
 
 }
