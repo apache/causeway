@@ -253,14 +253,11 @@ class ValueSemanticsTest {
                                     || valueType.equals(OffsetTime.class)
                                     || valueType.equals(ZonedDateTime.class)) {
 
-                                System.err.printf("DEBUG: stringified: %s%n", stringified);
-
                                 if(!stringified.contains("+")) {
+                                    //TODO debug yeah thats because time-zone might be zero on CI run .. 'Z', but why?
                                     System.err.printf("DEBUG: invalid stringified: %s%n", stringified);
                                     return;
                                 }
-
-                                /* fails on CI !? ... */
 
                                 val with4digitZone = _Strings.substring(stringified, 0, -6) + "+0200";
                                 val with2digitZone = _Strings.substring(stringified, 0, -6) + "+02";

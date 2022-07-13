@@ -426,11 +426,12 @@ public final class _Strings {
     }
 
     /**
-     * Returns a string that is a substring of this string.
+     * Returns a string that is a substring of given {@code str}.
      * The substring begins at the specified beginIndex and extends to the character at index endIndex - 1.
      * Thus the length of the substring is endIndex-beginIndex.
      * <p>
-     * Supports negative endIndex, as well as index overflow.
+     * Supports negative {@code endIndex}, as well as index overflow.
+     * If the endIndex is negative, it is understood as being relative to the end of the given {@code str}.
      */
     public static String substring(final @Nullable String str, final int beginIndex, final int endIndex) {
         if(isEmpty(str)) {
