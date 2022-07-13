@@ -36,6 +36,8 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
 
+import lombok.val;
+
 import de.agilecoders.wicket.core.util.Attributes;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
@@ -65,24 +67,41 @@ implements IConverter<T> {
             final IConverter<T> converter) {
 
         super(id, model, type);
-
-        DateTimeConfig config = new DateTimeConfig();
-
         setOutputMarkupId(true);
 
         this.converter = converter;
 
+        /* debug
+                new IConverter<T>() {
+
+            @Override
+            public T convertToObject(final String value, final Locale locale) throws ConversionException {
+                System.err.printf("convertToObject %s%n", value);
+                try {
+                    val obj = converter.convertToObject(value, locale);
+                    System.err.printf("convertedToObject %s%n", obj);
+                    return obj;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            public String convertToString(final T value, final Locale locale) {
+                val s =  converter.convertToString(value, locale);
+                System.err.printf("convertedToString %s%n", s);
+                return s;
+            }
+        };
+        */
+
+        val config = new DateTimeConfig();
+
         // if this text field is for a LocalDate, then the pattern obtained will just be a simple date format
         // (with no hour/minute components).
-        final String dateTimePattern = ((ConverterBasedOnValueSemantics<T>)this.converter).getEditingPattern();
-        final String pattern = convertToMomentJsFormat(dateTimePattern);
-        config.withFormat(pattern);
-
-//        boolean patternContainsTimeComponent = pattern.contains("HH");
-//        if (patternContainsTimeComponent) {
-//            // no longer do this, since for sidebar actions takes up too much real estate.
-//            //config.sideBySide(true);
-//        }
+        final String dateTimePattern = ((ConverterBasedOnValueSemantics<T>)converter).getEditingPattern();
+        config.withFormat(_TimeFormatUtil.convertToMomentJsFormat(dateTimePattern));
 
         config.calendarWeeks(true);
         config.useCurrent(false);
@@ -90,11 +109,8 @@ implements IConverter<T> {
         // seems not to do anything...
         //config.allowKeyboardNavigation(true);
 
-        final String datePickerMinDate = commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMinDate();
-        final String datePickerMaxDate = commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMaxDate();
-
-        config.minDate(datePickerMinDate);
-        config.maxDate(datePickerMaxDate);
+        config.minDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMinDate());
+        config.maxDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMaxDate());
         config.readonly(!this.isEnabled());
 
         this.config = config;
@@ -111,13 +127,6 @@ implements IConverter<T> {
                 // nothing to do
             }
         });
-    }
-
-    private String convertToMomentJsFormat(final String javaDateTimeFormat) {
-        String momentJsFormat = javaDateTimeFormat;
-        momentJsFormat = momentJsFormat.replace('d', 'D');
-        momentJsFormat = momentJsFormat.replace('y', 'Y');
-        return momentJsFormat;
     }
 
     @Override
