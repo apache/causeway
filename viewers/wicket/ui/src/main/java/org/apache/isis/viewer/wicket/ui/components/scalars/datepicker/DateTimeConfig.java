@@ -379,6 +379,9 @@ public class DateTimeConfig extends AbstractConfig {
         return this;
     }
 
+    /**
+     * @param value Whether on show, will set the picker to the current date/time.
+     */
     public DateTimeConfig useCurrent(final boolean value) {
         put(UseCurrent, value);
         return this;
@@ -425,7 +428,7 @@ public class DateTimeConfig extends AbstractConfig {
     private static class TodayButtonSerializer extends JsonSerializer<TodayButton> {
 
         @Override
-        public void serialize(TodayButton value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+        public void serialize(final TodayButton value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException {
             switch (value) {
             case TRUE:
                 jgen.writeBoolean(true);

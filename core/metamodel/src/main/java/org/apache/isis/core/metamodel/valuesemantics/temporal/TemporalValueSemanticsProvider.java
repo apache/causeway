@@ -291,7 +291,7 @@ implements TemporalValueSemantics<T> {
                 .orElseGet(IsisConfiguration.ValueTypes.Temporal::new);
     }
 
-    private TemporalEditingPattern temporalEditingPattern() {
+    protected TemporalEditingPattern temporalEditingPattern() {
         return temporalConfig().getEditing();
     }
 

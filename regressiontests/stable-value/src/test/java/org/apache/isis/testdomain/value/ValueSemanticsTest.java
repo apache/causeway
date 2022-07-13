@@ -18,6 +18,9 @@
  */
 package org.apache.isis.testdomain.value;
 
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,6 +56,7 @@ import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -202,12 +206,33 @@ class ValueSemanticsTest {
 
                         } else {
 
-                            System.err.printf("using %s trying to parse '%s'%n", valueType.getName(), stringified);
+                            //debug
+                            //System.err.printf("using %s trying to parse '%s'%n", valueType.getName(), stringified);
 
                             tester.assertValueEquals(
                                     example.getValue(),
                                     parser.parseTextRepresentation(context, stringified),
                                     "parser roundtrip failed");
+
+                            if(valueType.equals(OffsetDateTime.class)
+                                    || valueType.equals(OffsetTime.class)
+                                    || valueType.equals(ZonedDateTime.class)) {
+
+                                // test alternative time-zone format with 4 digits +-HHmm
+                                tester.assertValueEquals(
+                                        example.getValue(),
+                                        parser.parseTextRepresentation(context,
+                                                _Strings.substring(stringified, 0, -6) + "+0200"),
+                                        "parser roundtrip failed (alternative time-zone format with 4 digits +-HHmm)");
+
+                                // test alternative time-zone format with 2 digits +-HH
+                                tester.assertValueEquals(
+                                        example.getValue(),
+                                        parser.parseTextRepresentation(context,
+                                                _Strings.substring(stringified, 0, -6) + "+02"),
+                                        "parser roundtrip failed (alternative time-zone format with 2 digits +-HH)");
+                            }
+
                         }
                     }
                     @Override

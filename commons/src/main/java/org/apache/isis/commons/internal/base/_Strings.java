@@ -425,6 +425,32 @@ public final class _Strings {
         return nullToEmpty(str) + of(fillCount, c);
     }
 
+    /**
+     * Returns a string that is a substring of this string.
+     * The substring begins at the specified beginIndex and extends to the character at index endIndex - 1.
+     * Thus the length of the substring is endIndex-beginIndex.
+     * <p>
+     * Supports negative endIndex, as well as index overflow.
+     */
+    public static String substring(final @Nullable String str, final int beginIndex, final int endIndex) {
+        if(isEmpty(str)) {
+            return str;
+        }
+        final int maxIndex = str.length()-1; // >= 0
+
+        final int i1 = endIndex<0
+                ? str.length() + endIndex
+                : endIndex;
+
+        final int i0 = beginIndex>0
+                ? Math.min(beginIndex, maxIndex)
+                : 0;
+
+        return i0<i1
+                ? str.substring(i0, i1)
+                : "";
+    }
+
     // -- SPLITTING
 
     /**
