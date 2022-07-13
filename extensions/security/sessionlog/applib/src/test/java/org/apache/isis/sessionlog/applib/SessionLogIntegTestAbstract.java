@@ -66,7 +66,7 @@ public abstract class SessionLogIntegTestAbstract extends IsisIntegrationTestAbs
 
         List<? extends SessionLogEntry> sessions;
         SessionLogEntry session;
-        Optional<SessionLogEntry> sessionIfAny;
+        Optional<? extends SessionLogEntry> sessionIfAny;
 
         // given
         sessions = sessionLogEntryRepository.findActiveSessions();
@@ -138,6 +138,6 @@ public abstract class SessionLogIntegTestAbstract extends IsisIntegrationTestAbs
     }
 
     @Inject @Qualifier("default") SessionLogService sessionLogService;
-    @Inject SessionLogEntryRepository sessionLogEntryRepository;
+    @Inject SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
 
 }

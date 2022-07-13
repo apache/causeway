@@ -37,6 +37,7 @@ import org.apache.isis.applib.services.appfeatui.ApplicationTypeMember;
 import org.apache.isis.applib.services.appfeatui.ApplicationTypeProperty;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_object;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
@@ -92,6 +93,7 @@ import org.apache.isis.schema.IsisModuleSchema;
     UserMenu.class,
 
     // @Service(s)
+    BookmarkService.Stringifier.Noop.class,
     CommandDtoProcessorServiceIdentity.class,
     ContentMappingServiceForCommandDto.class,
     ContentMappingServiceForCommandsDto.class,

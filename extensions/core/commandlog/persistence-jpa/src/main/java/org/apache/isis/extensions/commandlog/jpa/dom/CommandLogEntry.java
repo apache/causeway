@@ -24,19 +24,23 @@ import javax.inject.Named;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -46,6 +50,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
+import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.schema.v2.IsisCommandDtoConverter;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
@@ -183,10 +188,10 @@ import lombok.Setter;
                   + "   AND cl.completedAt is not null "
                   + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 1
     @NamedQuery(
-            name  = Nq.FIND_NOT_YET_REPLAYED,
+            name  = Nq.FIND_BY_REPLAY_STATE,
             query = "SELECT cl "
                   + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.replayState = 'PENDING' "
+                  + " WHERE cl.replayState = :replayState "
                   + " ORDER BY cl.timestamp ASC"), // programmatic LIMIT 10
 })
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)
@@ -197,15 +202,6 @@ import lombok.Setter;
 @EntityListeners(IsisEntityListener.class)
 @NoArgsConstructor
 public class CommandLogEntry extends org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry {
-
-    /**
-     * Intended for use on primary system.
-     *
-     * @param command - representation of the action invocation or property edit to be performed
-     */
-    public CommandLogEntry(final Command command) {
-        super(command);
-    }
 
     /**
      * Intended for use on secondary (replay) system.
@@ -221,11 +217,18 @@ public class CommandLogEntry extends org.apache.isis.extensions.commandlog.appli
         super(commandDto, replayState, targetIndex);
     }
 
-    @Id
-    @Column(nullable = InteractionId.NULLABLE, length = InteractionId.MAX_LENGTH)
+    @Transient
     @InteractionId
-    @Getter @Setter
-    private UUID interactionId;
+    public UUID getInteractionId() {
+        return interactionId != null ? interactionId.getInteractionId() : null;
+    }
+    @Transient
+    public void setInteractionId(UUID interactionId) {
+        this.interactionId = new CommandLogEntryPK(interactionId);
+    }
+
+    @EmbeddedId
+    private CommandLogEntryPK interactionId;
 
 
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
@@ -248,7 +251,9 @@ public class CommandLogEntry extends org.apache.isis.extensions.commandlog.appli
 
 
     @ManyToOne
-    @JoinColumn(name = Parent.NAME, nullable = Parent.NULLABLE)
+    @JoinColumns({
+        @JoinColumn(name = Parent.NAME, nullable = Parent.NULLABLE, referencedColumnName = InteractionId.NAME)
+    })
     @Parent
     @Getter
     private CommandLogEntry parent;

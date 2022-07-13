@@ -24,9 +24,11 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.metamodel.EntityType;
 
+import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.data.jpa.repository.JpaContext;
 
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
@@ -34,6 +36,7 @@ import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
@@ -299,9 +302,22 @@ extends FacetFactoryAbstract {
                 return EntityState.PERSISTABLE_ATTACHED;
             }
 
-            val primaryKey = getPersistenceUnitUtil(entityManager).getIdentifier(pojo);
-            if(primaryKey == null) {
-                return EntityState.PERSISTABLE_DETACHED; // an optimization, not strictly required
+            try {
+                val primaryKey = getPersistenceUnitUtil(entityManager).getIdentifier(pojo);
+                if(primaryKey == null) {
+                    return EntityState.PERSISTABLE_DETACHED; // an optimization, not strictly required
+                }
+            } catch(PersistenceException ex) {
+                // horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
+                Throwable cause = ex.getCause();
+                if (cause instanceof DescriptorException) {
+                    DescriptorException descriptorException = (DescriptorException) cause;
+                    Throwable internalException = descriptorException.getInternalException();
+                    if(internalException instanceof NullPointerException) {
+                        return EntityState.PERSISTABLE_DETACHED;
+                    }
+                }
+                throw ex;
             }
 
             //XXX whether DETACHED or REMOVED is currently undecidable (JPA)
@@ -393,6 +409,12 @@ extends FacetFactoryAbstract {
                 return new ByteIdSerializer();
             }
         }
+        Can<BookmarkService.Stringifier> select = serviceRegistry.select(BookmarkService.Stringifier.class);
+        for (BookmarkService.Stringifier stringifier : select.toList()) {
+            if(stringifier.handles() == primaryKeyType) {
+                return new DelegatingSerializer(stringifier);
+            }
+        }
 
         val codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
         val serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
@@ -427,6 +449,15 @@ extends FacetFactoryAbstract {
         public ByteIdSerializer() { super(Byte.class); }
         @Override String stringify(final Byte id) { return id.toString(); }
         @Override Byte parse(final String stringifiedPrimaryKey) { return Byte.parseByte(stringifiedPrimaryKey); }
+    }
+    private static class DelegatingSerializer extends JpaObjectIdSerializer<Object> {
+        private final BookmarkService.Stringifier stringifier;
+        public DelegatingSerializer(BookmarkService.Stringifier stringifier) {
+            super(stringifier.handles());
+            this.stringifier = stringifier;
+        }
+        @Override String stringify(final Object value) { return stringifier.stringify(value); }
+        @Override Object parse(final String stringified) { return  stringifier.parse(stringified); }
     }
 
     private static class JpaObjectIdSerializerUsingMementos<T> extends JpaObjectIdSerializer<T> {

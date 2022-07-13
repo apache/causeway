@@ -56,6 +56,7 @@ import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPubl
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
@@ -64,6 +65,7 @@ import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -128,7 +130,7 @@ implements MemberExecutorService {
         val interaction = getInteractionElseFail();
         val command = interaction.getCommand();
 
-        CommandPublishingFacet.prepareCommandForPublishing(command, owningAction, facetHolder);
+        CommandPublishingFacet.prepareCommandForPublishing(command, head, owningAction, facetHolder);
 
         val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
@@ -204,7 +206,7 @@ implements MemberExecutorService {
             return head.getTarget();
         }
 
-        CommandPublishingFacet.prepareCommandForPublishing(command, owningProperty, facetHolder);
+        CommandPublishingFacet.prepareCommandForPublishing(command, head, owningProperty, facetHolder);
 
         val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, newValueAdapter);
 

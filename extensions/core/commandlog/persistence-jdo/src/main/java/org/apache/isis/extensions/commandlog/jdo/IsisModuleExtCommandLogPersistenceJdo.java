@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.jdo.dom.CommandLogEntry;
 import org.apache.isis.extensions.commandlog.jdo.dom.CommandLogEntryRepository;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
@@ -33,7 +34,9 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 @Configuration
 @Import({
         // modules
+        // IsisModuleTestingFixturesApplib.class,
         IsisModuleExtCommandLogApplib.class,
+        IsisModulePersistenceJdoDatanucleus.class,
 
         // @Service's
         CommandLogEntryRepository.class,

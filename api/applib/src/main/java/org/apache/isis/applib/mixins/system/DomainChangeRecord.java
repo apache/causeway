@@ -245,7 +245,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     default String getPropertyId() {
         return null;
     }
-    default boolean hidePropertyIds() {
+    default boolean hidePropertyId() {
         return getType() != ChangeType.AUDIT_ENTRY;
     }
 

@@ -26,6 +26,8 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -57,21 +59,30 @@ public class IdentifierUtil {
         return objectMember.getFeatureIdentifier().getFullIdentityString();
     }
 
-    public String logicalMemberIdentifierFor(final ObjectMember objectMember) {
+    /**
+     * This assumes that the member is declared, ie is not a mixin.
+     */
+    public String logicalMemberIdentifierForDeclaredMember(final ObjectMember objectMember) {
         if(objectMember instanceof ObjectAction) {
-            return logicalMemberIdentifierFor((ObjectAction)objectMember);
+            return logicalMemberIdentifierForDeclaredMember((ObjectAction)objectMember);
         }
         if(objectMember instanceof OneToOneAssociation) {
-            return logicalMemberIdentifierFor((OneToOneAssociation)objectMember);
+            return logicalMemberIdentifierForDeclaredMember((OneToOneAssociation)objectMember);
         }
         throw new IllegalArgumentException(objectMember.getClass() + " is not supported");
     }
 
-    public String logicalMemberIdentifierFor(final ObjectAction objectAction) {
+    /**
+     * This assumes that the member is declared, ie is not a mixin.
+     */
+    public String logicalMemberIdentifierForDeclaredMember(final ObjectAction objectAction) {
         return logicalMemberIdentifierFor(objectAction.getDeclaringType(), objectAction);
     }
 
-    public String logicalMemberIdentifierFor(final OneToOneAssociation otoa) {
+    /**
+     * This assumes that the member is declared, ie is not a mixin.
+     */
+    public String logicalMemberIdentifierForDeclaredMember(final OneToOneAssociation otoa) {
         return logicalMemberIdentifierFor(otoa.getDeclaringType(), otoa);
     }
 
@@ -109,18 +120,38 @@ public class IdentifierUtil {
     /**
      * Whether given command corresponds to given objectMember.
      * <p>
-     * Is related to {@link #logicalMemberIdentifierFor(ObjectMember)}.
+     * Is related to {@link #logicalMemberIdentifierForDeclaredMember(ObjectMember)}.
      */
     public boolean isCommandForMember(
             final @Nullable Command command,
+            final @NonNull InteractionHead interactionHead,
             final @Nullable ObjectMember objectMember) {
         return command!=null
                 && objectMember!=null
-                && logicalMemberIdentifierFor(objectMember)
+                && logicalMemberIdentifierFor(interactionHead, objectMember)
                     .equals(command.getLogicalMemberIdentifier());
     }
 
     // -- HELPER
+
+    private String logicalMemberIdentifierFor(
+            final @NonNull InteractionHead interactionHead,
+            final ObjectMember objectMember) {
+        if (objectMember instanceof ObjectAction) {
+            ObjectAction objectAction = (ObjectAction) objectMember;
+            if (objectAction.isDeclaredOnMixin()) {
+                if (interactionHead instanceof ActionInteractionHead) {
+                    ObjectAction objectActionOnMixee = ((ActionInteractionHead) interactionHead).getMetaModel();
+                    ObjectSpecification specificationOfMixee = interactionHead.getOwner().getSpecification();
+                    return logicalMemberIdentifierFor(specificationOfMixee, objectActionOnMixee);
+                }
+            }
+            // we fall through to the declared case, which isn't correct; but don't think it matters because
+            // effectively this would be contributed properties or collections, which don't emit commands.
+        }
+
+        return logicalMemberIdentifierForDeclaredMember(objectMember);
+    }
 
     private String logicalMemberIdentifierFor(
             final ObjectSpecification onType, final ObjectMember objectMember) {

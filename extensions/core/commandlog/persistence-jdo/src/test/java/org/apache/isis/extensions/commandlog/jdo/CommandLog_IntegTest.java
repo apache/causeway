@@ -21,6 +21,7 @@ package org.apache.isis.extensions.commandlog.jdo;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -29,6 +30,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.commandlog.applib.integtest.CommandLogIntegTestAbstract;
+import org.apache.isis.extensions.commandlog.applib.integtest.model.CommandLogTestDomainModel;
+import org.apache.isis.extensions.commandlog.jdo.model.Counter;
+import org.apache.isis.extensions.commandlog.jdo.model.CounterRepository;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
 @SpringBootTest(
@@ -46,10 +50,15 @@ public class CommandLog_IntegTest extends CommandLogIntegTestAbstract {
             IsisModuleExtCommandLogPersistenceJdo.class,
     })
     @PropertySources({
-            @PropertySource(IsisPresets.UseLog4j2Test),
+            @PropertySource(IsisPresets.UseLog4j2Test)
     })
+    @ComponentScan(basePackageClasses = {AppManifest.class, CommandLogTestDomainModel.class, CounterRepository.class})
     public static class AppManifest {
     }
 
+
+    protected org.apache.isis.extensions.commandlog.applib.integtest.model.Counter newCounter() {
+        return Counter.builder().name("Fred").build();
+    }
 
 }

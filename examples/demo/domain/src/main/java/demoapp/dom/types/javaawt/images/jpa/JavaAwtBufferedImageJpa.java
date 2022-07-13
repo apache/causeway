@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
-import org.apache.isis.persistence.jpa.integration.typeconverters.image.JavaAwtBufferedImageByteArrayConverter;
+import org.apache.isis.persistence.jpa.integration.typeconverters.java.awt.JavaAwtBufferedImageByteArrayConverter;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

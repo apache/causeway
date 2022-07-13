@@ -24,7 +24,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntryPK;
 import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntryRepository;
+import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
 
 /**
  * @since 2.0 {@index}
@@ -32,16 +34,19 @@ import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntryRepository;
 @Configuration
 @Import({
         // modules
+        // IsisModuleTestingFixturesApplib.class,
         IsisModuleExtCommandLogApplib.class,
+        IsisModulePersistenceJpaEclipselink.class,
 
         // @Service's
         CommandLogEntryRepository.class,
+        CommandLogEntryPK.Stringifier.class,
 
         // entities
         CommandLogEntry.class
 })
 @EntityScan(basePackageClasses = {
-    CommandLogEntry.class,
+    CommandLogEntry.class
 })
 public class IsisModuleExtCommandLogPersistenceJpa {
 

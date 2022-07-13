@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -128,7 +129,8 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     @Override
     public Bookmark bookmarkForElseFail(final @Nullable Object domainObject) {
         return bookmarkFor(domainObject)
-                .orElseThrow(()->_Exceptions.illegalArgument(
+                .orElseThrow(
+                        ()->_Exceptions.illegalArgument(
                         "cannot create bookmark for type %s",
                         domainObject!=null
                             ? specificationLoader.specForType(domainObject.getClass())
@@ -141,6 +143,14 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
 
     @Override
     public <T> T read(final Class<T> cls, final Serializable value) {
+        if (stringifiers != null) {
+            for (Stringifier<?> serializer : stringifiers) {
+                if (serializer.handles() == cls) {
+                    return (T) serializer.parse((String)value);
+                }
+            }
+        }
+
 
         if(Bookmark.class.equals(cls)) {
             return _Casts.uncheckedCast(value);
@@ -156,11 +166,23 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
 
     @Override
     public Serializable write(final Object value) {
+        if (stringifiers != null) {
+            for (Stringifier stringifier : stringifiers) {
+                if (stringifier.handles() == value.getClass()) {
+                    return stringified(stringifier, value);
+                }
+            }
+        }
+
         if(isPredefinedSerializable(value.getClass())) {
             return (Serializable) value;
         } else {
             return bookmarkForElseFail(value);
         }
+    }
+
+    private static <T> String stringified(Stringifier<T> stringifier, T value) {
+        return stringifier.stringify(value);
     }
 
     // -- HELPER
@@ -176,7 +198,8 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
             Integer[].class, int[].class,
             Long[].class, long[].class,
             Float[].class, float[].class,
-            Double[].class, double[].class
+            Double[].class, double[].class,
+            UUID.class
             );
 
     private static final List<Class<? extends Serializable>> serializableTypes = _Lists.of(
@@ -187,7 +210,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
             TreeState.class
             );
 
-    private static boolean isPredefinedSerializable(final Class<?> cls) {
+    private boolean isPredefinedSerializable(final Class<?> cls) {
         if(!Serializable.class.isAssignableFrom(cls)) {
             return false;
         }
@@ -205,8 +228,10 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
         if(serializableFinalTypes.contains(cls)) {
             return true;
         }
-        return serializableTypes.stream().anyMatch(t->t.isAssignableFrom(cls));
+        return serializableTypes.stream().anyMatch(t -> t.isAssignableFrom(cls));
     }
 
+
+    @Inject List<Stringifier> stringifiers;
 
 }

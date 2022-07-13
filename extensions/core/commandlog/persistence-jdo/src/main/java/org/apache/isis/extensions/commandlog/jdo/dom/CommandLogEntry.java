@@ -188,10 +188,10 @@ import lombok.Setter;
                                    // which SQL Server doesn't understand.  However, as workaround, SQL Server *does* understand FETCH NEXT 2 ROWS ONLY
 
     @Query(
-            name  = Nq.FIND_NOT_YET_REPLAYED,
+            name  = Nq.FIND_BY_REPLAY_STATE,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE replayState == 'PENDING' "
+                  + " WHERE replayState == :replayState "
                   + " ORDER BY this.timestamp ASC "
                   + " RANGE 0,10"),    // same as batch size
 })
@@ -206,14 +206,6 @@ extends org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry {
 
     protected final static String FQCN = "org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo";
 
-    /**
-     * Intended for use on primary system.
-     *
-     * @param command - framework's representation of the action invocation or property edit to be performed
-     */
-    public CommandLogEntry(final Command command) {
-        super(command);
-    }
 
     /**
      * Intended for use on secondary (replay) system.

@@ -42,6 +42,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
@@ -51,6 +52,7 @@ import lombok.Getter;
 import lombok.val;
 
 public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
+
 
     public static class NotFoundException extends RecoverableException {
         private static final long serialVersionUID = 1L;
@@ -64,6 +66,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     @Inject Provider<RepositoryService> repositoryServiceProvider;
     @Inject FactoryService factoryService;
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
     private final Class<C> commandLogEntryClass;
 
@@ -73,7 +76,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     public C createEntryAndPersist(final Command command, CommandLogEntry parentEntryIfAny) {
         C c = factoryService.detachedEntity(commandLogEntryClass);
-        c.setCommandDto(command.getCommandDto());
+        c.init(command);
         c.setParent(parentEntryIfAny);
         persist(c);
         return c;
@@ -82,7 +85,14 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     public Optional<C> findByInteractionId(final UUID interactionId) {
         return repositoryService().firstMatch(
                 Query.named(commandLogEntryClass,  CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
-                        .withParameter("interactionId", interactionId));
+                        .withParameter("interactionId", convert(interactionId)));
+    }
+
+    /**
+     * optional hook
+     */
+    protected Object convert(UUID interactionId) {
+        return interactionId;
     }
 
     public List<C> findByParent(final CommandLogEntry parent) {
@@ -258,7 +268,9 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     public List<C> findNotYetReplayed() {
         return repositoryService().allMatches(
-                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_NOT_YET_REPLAYED).withLimit(10));
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_REPLAY_STATE)
+                        .withParameter("replayState", ReplayState.PENDING)
+                        .withLimit(10));
     }
 
 
@@ -371,6 +383,15 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
                 : null;
     }
 
+    /**
+     * for testing purposes only
+     */
+    public void removeAll() {
+        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+            throw new IllegalStateException("Cannot removeAll in production systems");
+        }
+        repositoryService().removeAll(commandLogEntryClass);
+    }
 
 
 }

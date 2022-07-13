@@ -18,6 +18,9 @@
  */
 package org.apache.isis.extensions.commandlog.jpa.dom;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
+import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 
 /**
  * Provides supporting functionality for querying and persisting
@@ -43,5 +47,8 @@ extends org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryReposito
         super(CommandLogEntry.class);
     }
 
-
+    @Override
+    protected Object convert(UUID interactionId) {
+        return new CommandLogEntryPK(interactionId);
+    }
 }

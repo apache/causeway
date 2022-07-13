@@ -87,7 +87,7 @@ import lombok.experimental.UtilityClass;
         editing = Editing.DISABLED
 )
 @DomainObjectLayout(
-        named = "Command",
+        named = "CommandLogEntry",
         titleUiEvent = CommandLogEntry.TitleUiEvent.class,
         iconUiEvent = CommandLogEntry.IconUiEvent.class,
         cssClassUiEvent = CommandLogEntry.CssClassUiEvent.class,
@@ -97,9 +97,9 @@ import lombok.experimental.UtilityClass;
 public abstract class CommandLogEntry
 implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLog";
+    public final static String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogApplib.NAMESPACE + ".CommandLogEntry";
     public static final String SCHEMA = IsisModuleExtCommandLogApplib.SCHEMA;
-    public static final String TABLE = "Command";
+    public static final String TABLE = "CommandLogEntry";
 
     public static class TitleUiEvent extends IsisModuleExtCommandLogApplib.TitleUiEvent<CommandLogEntry> { }
     public static class IconUiEvent extends IsisModuleExtCommandLogApplib.IconUiEvent<CommandLogEntry> { }
@@ -130,15 +130,12 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         public static final String FIND_SINCE = LOGICAL_TYPE_NAME + ".findSince";
         public static final String FIND_MOST_RECENT_REPLAYED = LOGICAL_TYPE_NAME + ".findMostRecentReplayed";
         public static final String FIND_MOST_RECENT_COMPLETED = LOGICAL_TYPE_NAME + ".findMostRecentCompleted";
-        public static final String FIND_NOT_YET_REPLAYED = LOGICAL_TYPE_NAME + ".findNotYetReplayed";
+        public static final String FIND_BY_REPLAY_STATE = LOGICAL_TYPE_NAME + ".findNotYetReplayed";
     }
 
-    /**
-     * Intended for use on primary system.
-     *
-     * @param command
-     */
-    public CommandLogEntry(final Command command) {
+
+    @Programmatic
+    public void init(Command command) {
 
         setInteractionId(command.getInteractionId());
         setUsername(command.getUsername());
@@ -231,6 +228,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface InteractionId {
         class DomainEvent extends PropertyDomainEvent<UUID> {}
+        String NAME = "interactionId";
         int MAX_LENGTH = HasInteractionId.InteractionId.MAX_LENGTH;
         boolean NULLABLE = HasInteractionId.InteractionId.NULLABLE;
         String ALLOWS_NULL = HasInteractionId.InteractionId.ALLOWS_NULL;
@@ -311,7 +309,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Parent {
         class DomainEvent extends PropertyDomainEvent<CommandLogEntry> {}
-        String NAME = "parentId";
+        String NAME = "parentInteractionId";
         boolean NULLABLE = true;
         String ALLOWS_NULL = "true";
     }

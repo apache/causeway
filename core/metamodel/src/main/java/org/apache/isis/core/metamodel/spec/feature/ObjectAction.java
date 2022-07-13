@@ -102,8 +102,6 @@ public interface ObjectAction extends ObjectMember {
     /**
      * Invokes the action's method on the target object given the specified set
      * of parameters, checking the visibility, usability and validity first.
-     *
-     * @param mixedInAdapter - will be null for regular actions, and for mixin actions.  When a mixin action invokes its underlying mixedIn action, then will be populated (so that the ActionDomainEvent can correctly provide the underlying mixin)
      */
     ManagedObject executeWithRuleChecking(
             InteractionHead head,

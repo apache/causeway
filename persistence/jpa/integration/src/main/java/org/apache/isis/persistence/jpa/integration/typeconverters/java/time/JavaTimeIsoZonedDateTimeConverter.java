@@ -16,18 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jpa.integration.typeconverters.time;
+package org.apache.isis.persistence.jpa.integration.typeconverters.java.time;
 
-import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
 /**
  * @since 2.0 {@index}
  */
-public class IsoZonedDateTimeConverter implements AttributeConverter<ZonedDateTime, String> {
+@Converter(autoApply = true)
+public class JavaTimeIsoZonedDateTimeConverter implements AttributeConverter<ZonedDateTime, String> {
 
     private static final long serialVersionUID = 1L;
 

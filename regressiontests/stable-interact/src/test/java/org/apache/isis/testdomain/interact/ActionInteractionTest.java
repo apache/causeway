@@ -35,6 +35,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.DemoEnum;
@@ -45,6 +47,7 @@ import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiEnum;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_multiInt;
 import org.apache.isis.testdomain.util.interaction.InteractionTestAbstract;
 
+import lombok.NonNull;
 import lombok.val;
 
 @SpringBootTest(
@@ -134,7 +137,8 @@ class ActionInteractionTest extends InteractionTestAbstract {
 
         // test feature-identifier to command matching ...
         val act = tester.getActionMetaModelElseFail();
-        assertTrue(IdentifierUtil.isCommandForMember(command, act));
+        InteractionHead head = tester.getActionMetaModelElseFail().interactionHead(tester.getActionOwnerElseFail());
+        assertTrue(IdentifierUtil.isCommandForMember(command, head, act));
     }
 
     @Test
@@ -180,7 +184,8 @@ class ActionInteractionTest extends InteractionTestAbstract {
 
         // test feature-identifier to command matching ...
         val act = tester.getActionMetaModelElseFail();
-        assertTrue(IdentifierUtil.isCommandForMember(command, act));
+        InteractionHead head = tester.getActionMetaModelElseFail().interactionHead(tester.getActionOwnerElseFail());
+        assertTrue(IdentifierUtil.isCommandForMember(command, head, act));
     }
 
     @Test
