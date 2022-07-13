@@ -438,13 +438,16 @@ public final class _Strings {
         }
         final int maxIndex = str.length()-1; // >= 0
 
-        final int i1 = endIndex<0
-                ? str.length() + endIndex
-                : endIndex;
-
         final int i0 = beginIndex>0
                 ? Math.min(beginIndex, maxIndex)
                 : 0;
+
+        final int i1 = Math.min(
+                maxIndex+1,
+                endIndex<0
+                    ? str.length() + endIndex
+                    : endIndex
+                );
 
         return i0<i1
                 ? str.substring(i0, i1)

@@ -308,8 +308,6 @@ implements
                 .appendPattern(editingPattern
                         .getEditingFormatAsPattern(
                                 temporalCharacteristic, offsetCharacteristic, timePrecision, direction))
-                .parseLenient()
-                .parseCaseInsensitive()
                 .toFormatter(getUserLocale(context).getTimeFormatLocale());
     }
 
