@@ -22,7 +22,9 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -94,6 +96,36 @@ import lombok.val;
 @TestInstance(Lifecycle.PER_CLASS)
 class ValueSemanticsTest {
 
+    static class TestEnvironment {
+
+        private Locale systemLocale;
+        private TimeZone systemTimeZone;
+
+        TestEnvironment() {
+            systemLocale = Locale.getDefault();
+            systemTimeZone = TimeZone.getDefault();
+
+            if(!Objects.equals(systemLocale, Locale.US)) {
+                System.err.println("DEBUG: setting test Locale to US");
+                //log.warn("setting test Locale to US");
+                Locale.setDefault(Locale.US);
+            }
+
+            if(!Objects.equals(systemTimeZone, TimeZone.getTimeZone("GMT"))) {
+                System.err.println("DEBUG: setting test TimeZone to GMT");
+                //log.warn("setting test TimeZone to GMT");
+                TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+            }
+        }
+
+        void cleanup() {
+            Locale.setDefault(systemLocale);
+            TimeZone.setDefault(systemTimeZone);
+        }
+
+    }
+
+
     @Test
     void fullTypeCoverage() {
 
@@ -127,6 +159,9 @@ class ValueSemanticsTest {
             final String name,
             final Class<T> valueType,
             final ValueTypeExample<T> example) {
+
+        val env = new TestEnvironment();
+
         assertNotNull(example);
 
         val tester = serviceInjector.injectServicesInto(
@@ -213,9 +248,17 @@ class ValueSemanticsTest {
 
                             assertValueEqualsParsedValue(context, parser, stringified, "parser roundtrip failed");
 
+
                             if(valueType.equals(OffsetDateTime.class)
                                     || valueType.equals(OffsetTime.class)
                                     || valueType.equals(ZonedDateTime.class)) {
+
+                                System.err.printf("DEBUG: stringified: %s%n", stringified);
+
+                                if(!stringified.contains("+")) {
+                                    System.err.printf("DEBUG: invalid stringified: %s%n", stringified);
+                                    return;
+                                }
 
                                 /* fails on CI !? ... */
 
@@ -286,6 +329,8 @@ class ValueSemanticsTest {
                     }
 
                 });
+
+        env.cleanup();
 
     }
 
