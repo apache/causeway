@@ -30,9 +30,6 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.graph.tree.TreeState;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
@@ -43,28 +40,33 @@ import org.apache.isis.commons.internal.memento._Mementos;
 import lombok.NonNull;
 
 @Component
-@Priority(PriorityPrecedence.LATE + 100) // after the primitives
-public class IdStringifierForSerializable<T> extends IdStringifier.Abstract<Serializable> {
-    private final UrlEncodingService codec;
-    /**
-     * this is a Provider (to break bidirectional dependencies) because its implementation
-     * (<code>BookmarkServiceDefault</code>) in turn depends upon all injected {@link IdStringifier}s.
-     */
-    private final Provider<_Mementos.SerializingAdapter> serializerProvider;
+@Priority(PriorityPrecedence.LATE + 50) // after more specific stringifiers
+public class IdStringifierForSerializable extends IdStringifier.Abstract<Serializable> {
 
+    private final UrlEncodingService codec;
+    private final _Mementos.SerializingAdapter serializer;
 
     @Inject
     public IdStringifierForSerializable(
-            final @NonNull UrlEncodingService codec,
-            final @NonNull Provider<_Mementos.SerializingAdapter> serializerProvider) {
-        super(Serializable.class);
+            final @NonNull UrlEncodingService codec) {
+        super(Serializable.class, null);
         this.codec = codec;
-        this.serializerProvider = serializerProvider;
+        this.serializer = new _Mementos.SerializingAdapter() {
+            @Override
+            public Serializable write(Object value) {
+                return _Casts.uncheckedCast(value);
+            }
+
+            @Override
+            public <T> T read(Class<T> cls, Serializable value) {
+                return _Casts.uncheckedCast(value);
+            }
+        };
     }
 
     @Override
-    public boolean handles(Class<?> candidateClass) {
-        return isPredefinedSerializable(candidateClass);
+    public boolean handles(Class<?> candidateValueClass) {
+        return isPredefinedSerializable(candidateValueClass);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class IdStringifierForSerializable<T> extends IdStringifier.Abstract<Seri
     }
 
     @Override
-    public Serializable parse(final String stringified) {
+    public Serializable parse(final String stringified, Class<?> owningEntityType) {
         if (_Strings.isEmpty(stringified)) {
             return null;
         }
@@ -83,11 +85,11 @@ public class IdStringifierForSerializable<T> extends IdStringifier.Abstract<Seri
     // -- HELPER
 
     private _Mementos.Memento newMemento() {
-        return _Mementos.create(codec, serializerProvider.get());
+        return _Mementos.create(codec, serializer);
     }
 
     private _Mementos.Memento parseMemento(final String input) {
-        return _Mementos.parse(codec, serializerProvider.get(), input);
+        return _Mementos.parse(codec, serializer, input);
     }
 
     private static final Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(

@@ -19,10 +19,7 @@
 package org.apache.isis.core.runtimeservices.bookmarks;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -34,16 +31,14 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
-import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.services.bookmark.IdStringifierLookupService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -143,20 +138,23 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     // -- SERIALIZING ADAPTER IMPLEMENTATION
 
     @Override
-    public <T> T read(final Class<T> cls, final Serializable value) {
-        if (stringifiers != null) {
-            for (IdStringifier<?> serializer : stringifiers) {
-                if (serializer.handles(cls)) {
-                    return (T) serializer.parse((String)value);
-                }
-            }
-        }
+    public <T> T read(final Class<T> valueClass, final Serializable value) {
 
+// I suspect this would create an infinite loop, so commenting out for now to see what gives...
+//
+//        val idStringifierIfAny = idStringifierLookupService.lookup(valueClass, null);
+//        if(idStringifierIfAny.isPresent()) {
+//            IdStringifier<T> idStringifier = idStringifierIfAny.get();
+//            return idStringifier.parse((String)value, null);
+//        }
 
-        if(Bookmark.class.equals(cls)) {
+        // see if the value can be handled as a Bookmark
+        if(Bookmark.class.equals(valueClass)) {
             return _Casts.uncheckedCast(value);
         }
 
+        // otherwise, perhaps the value itself is a Bookmark, in which case we treat it as a
+        // reference to an Object (probably an entity) to be looked up.
         if(Bookmark.class.isAssignableFrom(value.getClass())) {
             final Bookmark valueAsBookmark = (Bookmark) value;
             return _Casts.uncheckedCast(lookup(valueAsBookmark).orElse(null));
@@ -165,26 +163,26 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
         return _Casts.uncheckedCast(value);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Serializable write(final Object value) {
-        if (stringifiers != null) {
-            for (IdStringifier stringifier : stringifiers) {
-                if (stringifier.handles(value.getClass())) {
-                    return stringified(stringifier, value);
-                }
-            }
-        }
+        return write(_Casts.uncheckedCast(value), value.getClass());
+    }
+
+    private <T> Serializable write(T value, Class<T> aClass) {
+
+// I suspect this would create an infinite loop, so commenting out for now to see what gives...
+//
+//        Optional<IdStringifier<T>> idStringifierIfAny = idStringifierLookupService.lookup(aClass, null);
+//        if(idStringifierIfAny.isPresent()) {
+//            IdStringifier<T> idStringifier = idStringifierIfAny.get();
+//            return idStringifier.stringify(value);
+//        }
 
         return bookmarkForElseFail(value);
     }
 
-    private static <T> String stringified(IdStringifier<T> stringifier, T value) {
-        return stringifier.stringify(value);
-    }
-
     // -- HELPER
 
-    @Inject List<IdStringifier<?>> stringifiers;
+    @Inject IdStringifierLookupService idStringifierLookupService;
 
 }

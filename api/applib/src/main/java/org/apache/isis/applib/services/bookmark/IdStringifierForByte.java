@@ -23,22 +23,17 @@ import javax.annotation.Priority;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForByte extends IdStringifier.Abstract<Byte> {
+public class IdStringifierForByte extends IdStringifier.AbstractWithPrefix<Byte> {
+
     public IdStringifierForByte() {
-        super(Byte.class, byte.class);
+        super(Byte.class, "b", byte.class);
     }
 
     @Override
-    public String stringify(final Byte id) {
-        return id.toString();
-    }
-
-    @Override
-    public Byte parse(final String stringified) {
+    protected Byte doParse(final String stringified, Class<?> owningEntityType) {
         return Byte.parseByte(stringified);
     }
 }

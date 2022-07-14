@@ -28,16 +28,21 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
+import javax.annotation.Priority;
 import javax.jdo.PersistenceManager;
 import javax.jdo.identity.ByteIdentity;
 import javax.jdo.identity.IntIdentity;
 import javax.jdo.identity.LongIdentity;
 import javax.jdo.identity.ObjectIdentity;
+import javax.jdo.identity.ShortIdentity;
 import javax.jdo.identity.StringIdentity;
 
 import org.datanucleus.identity.DatastoreId;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.base._Strings;
@@ -73,9 +78,9 @@ public final class JdoObjectIdSerializer {
 //                .map(JdoObjectIdSerializer::toOidIdentifier);
 //    }
 
-    public static String toOidIdentifier(final Object jdoOid) {
-        return encodingChain.handle(jdoOid);
-    }
+//    public static String toOidIdentifier(final Object jdoOid) {
+//        return encodingChain.handle(jdoOid);
+//    }
 
     public static Object toJdoObjectId(final ObjectSpecification spec, final Oid oid) {
         val request = JdoObjectIdDecodingRequest.parse(spec, oid.getIdentifier());

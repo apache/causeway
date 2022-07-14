@@ -18,22 +18,40 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
+import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
+
 import javax.annotation.Priority;
+import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.graph.tree.TreeState;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.memento._Mementos;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForShort extends IdStringifier.AbstractWithPrefix<Short> {
+public class IdStringifierForBookmark extends IdStringifier.Abstract<Bookmark> {
 
-    public IdStringifierForShort() {
-        super(Short.class, "s", short.class);
+    @Inject
+    public IdStringifierForBookmark() {
+        super(Bookmark.class, null);
+    }
+
+    public String stringify(final Bookmark object) {
+        return object.toString();
     }
 
     @Override
-    protected Short doParse(final String stringified, Class<?> owningEntityType) {
-        return Short.parseShort(stringified);
+    public Bookmark parse(final String stringified, Class<?> owningEntityType) {
+        return Bookmark.parseElseFail(stringified);
     }
+
+
 }

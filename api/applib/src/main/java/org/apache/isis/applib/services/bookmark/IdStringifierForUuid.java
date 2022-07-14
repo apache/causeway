@@ -25,22 +25,18 @@ import javax.annotation.Priority;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForUuid extends IdStringifier.Abstract<UUID> {
+public class IdStringifierForUuid extends IdStringifier.AbstractWithPrefix<UUID> {
+
     public IdStringifierForUuid() {
-        super(UUID.class);
+        super(UUID.class, "u");
     }
 
     @Override
-    public String stringify(final UUID id) {
-        return id.toString();
-    }
-
-    @Override
-    public UUID parse(final String stringified) {
+    public UUID doParse(final String stringified, Class<?> owningEntityType) {
         return UUID.fromString(stringified);
     }
+
 }

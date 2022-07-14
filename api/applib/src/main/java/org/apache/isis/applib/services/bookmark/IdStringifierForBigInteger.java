@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
+import java.math.BigInteger;
+
 import javax.annotation.Priority;
 
 import org.springframework.stereotype.Component;
@@ -26,14 +28,14 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForShort extends IdStringifier.AbstractWithPrefix<Short> {
+public class IdStringifierForBigInteger extends IdStringifier.AbstractWithPrefix<BigInteger> {
 
-    public IdStringifierForShort() {
-        super(Short.class, "s", short.class);
+    public IdStringifierForBigInteger() {
+        super(BigInteger.class, "I");
     }
 
     @Override
-    protected Short doParse(final String stringified, Class<?> owningEntityType) {
-        return Short.parseShort(stringified);
+    protected BigInteger doParse(final String stringified, Class<?> owningEntityType) {
+        return new BigInteger(stringified);
     }
 }

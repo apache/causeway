@@ -35,6 +35,7 @@ import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.services.bookmark.IdStringifierLookupService;
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -42,8 +43,8 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionalProcessor;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
@@ -81,7 +82,7 @@ implements EntityFacet {
     @Inject private ObjectManager objectManager;
     @Inject private ExceptionRecognizerService exceptionRecognizerService;
     @Inject private JdoFacetContext jdoFacetContext;
-    @Inject private List<IdStringifier> idStringifiers;
+    @Inject private IdStringifierLookupService idStringifierLookupService;
 
     public JdoEntityFacet(
             final FacetHolder holder) {
@@ -129,14 +130,11 @@ implements EntityFacet {
                     pojo.getClass().getName());
         }
 
-        final String identifier = JdoObjectIdSerializer.toOidIdentifier(primaryKey);
-        if(_Strings.isEmpty(identifier)) {
-            throw _Exceptions.illegalArgument(
-                    "JdoObjectIdSerializer failed to convert primary key %s to a String.",
-                    primaryKey.getClass().getName());
-        }
 
-        return identifier;
+        val primaryKeyType = primaryKey.getClass();
+        val idStringifier = _Casts.<IdStringifier<Object>>uncheckedCast(idStringifierLookupService.lookupElseFail(primaryKeyType, spec.getCorrespondingClass()));
+
+        return idStringifier.stringify(primaryKey);
     }
 
     @Override
@@ -150,6 +148,8 @@ implements EntityFacet {
 
         Object entityPojo;
         try {
+            // idStringifierLookupService.lookupElseFail(primaryKeyType, spec.getCorrespondingClass())
+
             val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, bookmark);
             val persistenceManager = getPersistenceManager();
             val entityClass = entitySpec.getCorrespondingClass();

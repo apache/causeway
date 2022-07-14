@@ -53,6 +53,13 @@ import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceD
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForByteIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForDatastoreId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForIntIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForLongIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForObjectIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForShortIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForStringIdentity;
 import org.apache.isis.persistence.jdo.integration.IsisModulePersistenceJdoIntegration;
 import org.apache.isis.persistence.jdo.provider.config.JdoEntityDiscoveryListener;
 import org.apache.isis.persistence.jdo.spring.integration.JdoDialect;
@@ -74,6 +81,13 @@ import lombok.extern.log4j.Log4j2;
 
     // @Component's
     DnEntityStateProvider.class,
+    IdStringifierForShortIdentity.class,
+    IdStringifierForLongIdentity.class,
+    IdStringifierForIntIdentity.class,
+    IdStringifierForByteIdentity.class,
+    IdStringifierForStringIdentity.class,
+    IdStringifierForObjectIdentity.class,
+    IdStringifierForDatastoreId.class,
 
     // @Mixin's
     Persistable_datanucleusVersionLong.class,

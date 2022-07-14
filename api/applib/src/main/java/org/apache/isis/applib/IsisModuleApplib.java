@@ -37,13 +37,18 @@ import org.apache.isis.applib.services.appfeatui.ApplicationTypeMember;
 import org.apache.isis.applib.services.appfeatui.ApplicationTypeProperty;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_object;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.services.bookmark.IdStringifierForBigDecimal;
+import org.apache.isis.applib.services.bookmark.IdStringifierForBigInteger;
+import org.apache.isis.applib.services.bookmark.IdStringifierForBookmark;
 import org.apache.isis.applib.services.bookmark.IdStringifierForByte;
+import org.apache.isis.applib.services.bookmark.IdStringifierForEntity;
 import org.apache.isis.applib.services.bookmark.IdStringifierForInteger;
 import org.apache.isis.applib.services.bookmark.IdStringifierForLong;
 import org.apache.isis.applib.services.bookmark.IdStringifierForSerializable;
 import org.apache.isis.applib.services.bookmark.IdStringifierForShort;
+import org.apache.isis.applib.services.bookmark.IdStringifierForString;
 import org.apache.isis.applib.services.bookmark.IdStringifierForUuid;
+import org.apache.isis.applib.services.bookmark.IdStringifierLookupService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
@@ -104,7 +109,13 @@ import org.apache.isis.schema.IsisModuleSchema;
     IdStringifierForInteger.class,
     IdStringifierForShort.class,
     IdStringifierForUuid.class,
+    IdStringifierForString.class,
+    IdStringifierForBigInteger.class,
+    IdStringifierForBigDecimal.class,
+    IdStringifierForBookmark.class,
     IdStringifierForSerializable.class,
+    IdStringifierForEntity.class,
+    IdStringifierLookupService.class,
 
     CommandDtoProcessorServiceIdentity.class,
     ContentMappingServiceForCommandDto.class,

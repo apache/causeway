@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jpa.integration.entity;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -36,10 +35,10 @@ import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.services.bookmark.IdStringifierLookupService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -62,7 +61,7 @@ public class JpaEntityFacet
 
     private final Class<?> entityClass;
     private final ServiceRegistry serviceRegistry;
-    private final List<IdStringifier<?>> idStringifiers;
+    private final IdStringifierLookupService idStringifierLookupService;
 
     protected JpaEntityFacet(
             final FacetHolder holder,
@@ -72,7 +71,7 @@ public class JpaEntityFacet
         super(EntityFacet.class, holder, Precedence.HIGH);
         this.entityClass = entityClass;
         this.serviceRegistry = serviceRegistry;
-        this.idStringifiers = _Casts.uncheckedCast(serviceRegistry.select(IdStringifier.class).toList());
+        this.idStringifierLookupService = serviceRegistry.lookupService(IdStringifierLookupService.class).orElseThrow();
 
     }
 
@@ -110,34 +109,20 @@ public class JpaEntityFacet
                     pojo.getClass().getName());
         }
 
-        return getObjectIdStringifier().stringify(primaryKey);
-
+        Class<?> primaryKeyType = getPrimaryKeyType();
+        return stringify2(_Casts.uncheckedCast(primaryKey), primaryKeyType);
     }
 
-    private final _Lazy<IdStringifier<Object>> objectIdStringifierRef = _Lazy.threadSafe(this::lookupIdStringifier);
-
-    protected IdStringifier<Object> getObjectIdStringifier() {
-        return objectIdStringifierRef.get();
+    private <T> String stringify2(T primaryKey, Class<T> primaryKeyType) {
+        val stringifier = lookupIdStringifier(primaryKeyType);
+        return stringifier.stringify(primaryKey);
     }
 
-    private IdStringifier<Object> lookupIdStringifier() {
-        val primaryKeyType = getJpaEntityType().getIdType().getJavaType();
-        return _Casts.uncheckedCast(lookupIdSerializer(primaryKeyType));
+    private <T> IdStringifier<T> lookupIdStringifier(Class<T> primaryKeyType) {
+        // unlike JDO, none of the JPA types need to know the parent entity type to stringify/parse
+        // so we just use null for the second arg.
+        return _Casts.uncheckedCast(idStringifierLookupService.lookupElseFail(primaryKeyType, null));
     }
-
-    private IdStringifier<?> lookupIdSerializer(
-            final @NonNull Class<?> primaryKeyType) {
-
-        for (val idStringifier : this.idStringifiers) {
-            if(idStringifier.handles(primaryKeyType)) {
-                return idStringifier;
-            }
-        }
-
-        throw new IllegalStateException(String.format("No IdStringifier could be found for '%s'", primaryKeyType));
-    }
-
-
 
     @Override
     public ManagedObject fetchByIdentifier(
@@ -148,7 +133,8 @@ public class JpaEntityFacet
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
-        val primaryKey = getObjectIdStringifier().parse(bookmark.getIdentifier());
+        val idStringifier = lookupIdStringifier(getPrimaryKeyType());
+        val primaryKey = idStringifier.parse(bookmark.getIdentifier(), entitySpec.getCorrespondingClass());
         val entityManager = getEntityManager();
         val entityPojo = entityManager.find(entityClass, primaryKey);
 
@@ -157,6 +143,10 @@ public class JpaEntityFacet
         }
 
         return ManagedObject.bookmarked(entitySpec, entityPojo, bookmark);
+    }
+
+    private Class<?> getPrimaryKeyType() {
+        return getJpaEntityType().getIdType().getJavaType();
     }
 
     @Override

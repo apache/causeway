@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
 usage() {
-  #echo "$(basename $0): [-a] [-c] [-e] [-m] [-o] [-s] " >&2
-  echo "$(basename $0): [-c] [-e] [-m] [-s] "           >&2
-  #echo "  -a : audit trail (extensions/security)"      >&2
-  echo "  -c : command log (extensions/core)"           >&2
-  echo "  -e : execution log (extensions/core)"         >&2
-  echo "  -m : secman (extensions/security)"            >&2
-  #echo "  -o : execution outbox (extensions/core)"     >&2
-  echo "  -s : session log (extensions/security)"       >&2
+  #echo "$(basename $0): [-a] [-c] [-e] [-m] [-o] [-s] [-d]" >&2
+  echo "$(basename $0): [-c] [-e] [-m] [-s] [-d]"           >&2
+  #echo "  -a : audit trail (extensions/security)"          >&2
+  echo "  -c : command log (extensions/core)"               >&2
+  echo "  -e : execution log (extensions/core)"             >&2
+  echo "  -m : secman (extensions/security)"                >&2
+  #echo "  -o : execution outbox (extensions/core)"         >&2
+  echo "  -s : session log (extensions/security)"           >&2
+  echo "  -d : demo (examples/demo/domain)"                 >&2
 }
 
 
 
 AUDITTRAIL=""
 COMMANDLOG=""
+DEMO=""
 EXECUTIONLOG=""
 EXECUTIONOUTBOX=""
 SECMAN=""
@@ -21,8 +23,8 @@ SESSIONLOG=""
 
 PATHS=()
 
-#while getopts ":acemosh" arg; do
-while getopts ":cemsh" arg; do
+#while getopts ":acdemosh" arg; do
+while getopts ":cdemsh" arg; do
   case $arg in
     h)
       usage
@@ -52,6 +54,10 @@ while getopts ":cemsh" arg; do
       SESSIONLOG="enhance"
       PATHS+=( "extensions/security/sessionlog/persistence-jdo" )
       ;;
+    d)
+      DEMO="enhance"
+      PATHS+=( "examples/demo/domain" )
+      ;;
     *)
       usage
       exit 1
@@ -67,6 +73,7 @@ echo "EXECUTIONLOG    : $EXECUTIONLOG"
 echo "EXECUTIONOUTBOX : $EXECUTIONOUTBOX"
 echo "SECMAN          : $SECMAN"
 echo "SESSIONLOG      : $SESSIONLOG"
+echo "DEMO            : $DEMO"
 
 
 printf -v PATHS_SPLATTED '%s,' "${PATHS[@]}"

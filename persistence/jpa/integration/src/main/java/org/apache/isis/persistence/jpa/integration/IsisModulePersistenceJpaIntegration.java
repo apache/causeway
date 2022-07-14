@@ -24,10 +24,6 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jpa.integration.changetracking.PersistenceMetricsServiceJpa;
-import org.apache.isis.applib.services.bookmark.IdStringifierForByte;
-import org.apache.isis.applib.services.bookmark.IdStringifierForInteger;
-import org.apache.isis.applib.services.bookmark.IdStringifierForLong;
-import org.apache.isis.applib.services.bookmark.IdStringifierForShort;
 import org.apache.isis.persistence.jpa.integration.entity.JpaEntityIntegration;
 import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsingSpring;
 import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
@@ -35,13 +31,13 @@ import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisLoc
 import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisMarkupConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisPasswordConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.awt.JavaAwtBufferedImageByteArrayConverter;
+import org.apache.isis.persistence.jpa.integration.typeconverters.java.time.JavaTimeIsoOffsetTimeConverter;
+import org.apache.isis.persistence.jpa.integration.typeconverters.java.time.JavaTimeIsoZonedDateTimeConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.schema.v2.IsisChangesDtoConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.schema.v2.IsisCommandDtoConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.schema.v2.IsisInteractionDtoConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.schema.v2.IsisOidDtoConverter;
-import org.apache.isis.persistence.jpa.integration.typeconverters.java.time.JavaTimeIsoOffsetTimeConverter;
-import org.apache.isis.persistence.jpa.integration.typeconverters.java.time.JavaTimeIsoZonedDateTimeConverter;
 import org.apache.isis.persistence.jpa.metamodel.IsisModulePersistenceJpaMetamodel;
 
 @Configuration
