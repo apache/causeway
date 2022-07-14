@@ -113,6 +113,9 @@ extends
          * Yielding {@link TimeFormatPrecision#NANO_SECOND}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternNanoSecond = "HH[:mm[:ss][.SSSSSSSSS]]";
@@ -122,6 +125,9 @@ extends
          * Yielding {@link TimeFormatPrecision#MICRO_SECOND}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternMicroSecond = "HH[:mm[:ss][.SSSSSS]]";
@@ -131,6 +137,9 @@ extends
          * Yielding {@link TimeFormatPrecision#MILLI_SECOND}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternMilliSecond = "HH[:mm[:ss][.SSS]]";
@@ -140,6 +149,9 @@ extends
          * Yielding {@link TimeFormatPrecision#SECOND}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternSecond = "HH[:mm[:ss]]";
@@ -149,6 +161,9 @@ extends
          * Yielding {@link TimeFormatPrecision#MINUTE}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternMinute = "HH[:mm]";
@@ -158,6 +173,9 @@ extends
          * Yielding {@link TimeFormatPrecision#HOUR}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternHour = "HH";
@@ -177,15 +195,18 @@ extends
          *</pre>
          *
          * @apiNote Yet only tested with {@literal XXX}, as there needs to be a format correspondence with
-         * <i>momentJs</i> supported formats for the <i>tempus-dominus</i> date/time-picker to work
+         * <i>momentJs</i> for the <i>tempus-dominus</i> date/time-picker to work
          * (as used by the <i>Wicket Viewer</i>).
-         * {@link org.apache.isis.viewer.wicket.ui.components.scalars.datepicker._TimeFormatUtil} does the format conversion.
+         * {@link org.apache.isis.viewer.wicket.ui.components.scalars.datepicker._TimeFormatUtil}
+         * does the format conversion.
          */
         @NotNull @NotEmpty
         private String zonePatternForOutput = "XXX";
 
         /**
          * Support both forms for parsing, with or without colon.
+         * <p>
+         * (Order of optional blocks matter, eg. {@literal [X][XXX]} would not work.)
          * @see "https://stackoverflow.com/questions/34637626/java-datetimeformatter-for-time-zone-with-an-optional-colon-separator"
          */
         @NotNull @NotEmpty

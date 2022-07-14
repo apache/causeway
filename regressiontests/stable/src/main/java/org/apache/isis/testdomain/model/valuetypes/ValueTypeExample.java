@@ -37,6 +37,8 @@ import java.util.stream.Stream;
 
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -54,6 +56,8 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemantics;
@@ -80,8 +84,17 @@ public abstract class ValueTypeExample<T> {
         setValue(value);
     }
 
+    @Autowired(required = false) List<ValueSemanticsAbstract<T>> semanticsList;
+    @Programmatic
+    public Can<T> getExamples() {
+        return Can.ofCollection(semanticsList)
+        .getFirst()
+        .map(semantics->semantics.getExamples())
+        .orElseGet(()->Can.of(getValue(), getUpdateValue()));
+    }
+
     @Collection
-    public final List<T> getValues() {
+    public List<T> getValues() {
         return List.of(getValue(), getUpdateValue());
     }
 
@@ -285,6 +298,12 @@ public abstract class ValueTypeExample<T> {
         private Float value = -63.1f;
         @Getter
         private Float updateValue = 0.f;
+
+        //FIXME does not handle example Float.MIN_VALUE well
+        @Deprecated // remove override once fixed
+        @Override public Can<Float> getExamples() {
+            return Can.of(value, updateValue);
+        }
     }
 
     @Named("isis.testdomain.valuetypes.ValueTypeExampleDouble")
@@ -296,6 +315,12 @@ public abstract class ValueTypeExample<T> {
         private Double value = -63.1;
         @Getter
         private Double updateValue = 0.;
+
+        //FIXME does not handle example Double.MIN_VALUE well
+        @Deprecated // remove override once fixed
+        @Override public Can<Double> getExamples() {
+            return Can.of(value, updateValue);
+        }
     }
 
     @Named("isis.testdomain.valuetypes.ValueTypeExampleBigInteger")
