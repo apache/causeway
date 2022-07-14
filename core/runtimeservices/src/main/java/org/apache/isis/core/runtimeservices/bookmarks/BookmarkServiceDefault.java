@@ -38,6 +38,7 @@ import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
@@ -144,8 +145,8 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     @Override
     public <T> T read(final Class<T> cls, final Serializable value) {
         if (stringifiers != null) {
-            for (Stringifier<?> serializer : stringifiers) {
-                if (serializer.handles() == cls) {
+            for (IdStringifier<?> serializer : stringifiers) {
+                if (serializer.handles(cls)) {
                     return (T) serializer.parse((String)value);
                 }
             }
@@ -157,81 +158,33 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
         }
 
         if(Bookmark.class.isAssignableFrom(value.getClass())) {
-            final Bookmark valueBookmark = (Bookmark) value;
-            return _Casts.uncheckedCast(lookup(valueBookmark).orElse(null));
+            final Bookmark valueAsBookmark = (Bookmark) value;
+            return _Casts.uncheckedCast(lookup(valueAsBookmark).orElse(null));
         }
 
         return _Casts.uncheckedCast(value);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Serializable write(final Object value) {
         if (stringifiers != null) {
-            for (Stringifier stringifier : stringifiers) {
-                if (stringifier.handles() == value.getClass()) {
+            for (IdStringifier stringifier : stringifiers) {
+                if (stringifier.handles(value.getClass())) {
                     return stringified(stringifier, value);
                 }
             }
         }
 
-        if(isPredefinedSerializable(value.getClass())) {
-            return (Serializable) value;
-        } else {
-            return bookmarkForElseFail(value);
-        }
+        return bookmarkForElseFail(value);
     }
 
-    private static <T> String stringified(Stringifier<T> stringifier, T value) {
+    private static <T> String stringified(IdStringifier<T> stringifier, T value) {
         return stringifier.stringify(value);
     }
 
     // -- HELPER
 
-    private static final Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(
-            String.class, String[].class,
-            Class.class, Class[].class,
-            Character.class, Character[].class, char[].class,
-            Boolean.class, Boolean[].class, boolean[].class,
-            // Numbers
-            Byte[].class, byte[].class,
-            Short[].class, short[].class,
-            Integer[].class, int[].class,
-            Long[].class, long[].class,
-            Float[].class, float[].class,
-            Double[].class, double[].class,
-            UUID.class
-            );
-
-    private static final List<Class<? extends Serializable>> serializableTypes = _Lists.of(
-            java.util.Date.class,
-            java.sql.Date.class,
-            Enum.class,
-            Bookmark.class,
-            TreeState.class
-            );
-
-    private boolean isPredefinedSerializable(final Class<?> cls) {
-        if(!Serializable.class.isAssignableFrom(cls)) {
-            return false;
-        }
-        // primitive ... boolean, byte, char, short, int, long, float, and double.
-        if(cls.isPrimitive() || Number.class.isAssignableFrom(cls)) {
-            return true;
-        }
-        //[ahuber] any non-scalar values could be problematic, so we are careful with wild-cards here
-        if(cls.getName().startsWith("java.time.")) {
-            return true;
-        }
-        if(cls.getName().startsWith("org.joda.time.")) {
-            return true;
-        }
-        if(serializableFinalTypes.contains(cls)) {
-            return true;
-        }
-        return serializableTypes.stream().anyMatch(t -> t.isAssignableFrom(cls));
-    }
-
-
-    @Inject List<Stringifier> stringifiers;
+    @Inject List<IdStringifier<?>> stringifiers;
 
 }

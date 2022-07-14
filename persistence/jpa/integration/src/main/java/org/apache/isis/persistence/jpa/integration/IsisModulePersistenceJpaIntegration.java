@@ -24,6 +24,10 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.persistence.jpa.integration.changetracking.PersistenceMetricsServiceJpa;
+import org.apache.isis.applib.services.bookmark.IdStringifierForByte;
+import org.apache.isis.applib.services.bookmark.IdStringifierForInteger;
+import org.apache.isis.applib.services.bookmark.IdStringifierForLong;
+import org.apache.isis.applib.services.bookmark.IdStringifierForShort;
 import org.apache.isis.persistence.jpa.integration.entity.JpaEntityIntegration;
 import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsingSpring;
 import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;

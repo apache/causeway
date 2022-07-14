@@ -25,7 +25,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This service provides a serializable 'bookmark' for any entity, and
@@ -94,38 +97,4 @@ public interface BookmarkService {
      */
     Bookmark bookmarkForElseFail(@Nullable Object domainObject);
 
-    /**
-     * SPI to allow other modules to extend the bookmarking mechanism.
-     *
-     * <p>
-     *     Originally introduced to allow JPA CommandLog implementation use CommandLogEntryPK for its primary key.
-     * </p>
-     */
-    interface Stringifier<T> {
-
-        Class<T> handles();
-
-        String stringify(final T value);
-        Object parse(final String stringified);
-
-        @Service
-        public class Noop implements Stringifier<Noop> {
-
-            @Override
-            public Class<Noop> handles() {
-                return Noop.class;
-            }
-
-            @Override
-            public String stringify(Noop value) {
-                throw new IllegalStateException("should never be called");
-            }
-
-            @Override
-            public Object parse(String stringified) {
-                throw new IllegalStateException("should never be called");
-            }
-        }
-
-    }
 }

@@ -37,7 +37,13 @@ import org.apache.isis.applib.services.appfeatui.ApplicationTypeMember;
 import org.apache.isis.applib.services.appfeatui.ApplicationTypeProperty;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_object;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.services.bookmark.IdStringifierForByte;
+import org.apache.isis.applib.services.bookmark.IdStringifierForInteger;
+import org.apache.isis.applib.services.bookmark.IdStringifierForLong;
+import org.apache.isis.applib.services.bookmark.IdStringifierForSerializable;
+import org.apache.isis.applib.services.bookmark.IdStringifierForShort;
+import org.apache.isis.applib.services.bookmark.IdStringifierForUuid;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
@@ -93,7 +99,13 @@ import org.apache.isis.schema.IsisModuleSchema;
     UserMenu.class,
 
     // @Service(s)
-    BookmarkService.Stringifier.Noop.class,
+    IdStringifierForByte.class,
+    IdStringifierForLong.class,
+    IdStringifierForInteger.class,
+    IdStringifierForShort.class,
+    IdStringifierForUuid.class,
+    IdStringifierForSerializable.class,
+
     CommandDtoProcessorServiceIdentity.class,
     ContentMappingServiceForCommandDto.class,
     ContentMappingServiceForCommandsDto.class,

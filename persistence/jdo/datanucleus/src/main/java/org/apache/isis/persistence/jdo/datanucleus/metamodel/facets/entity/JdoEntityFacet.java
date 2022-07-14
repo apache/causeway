@@ -34,6 +34,7 @@ import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -80,6 +81,7 @@ implements EntityFacet {
     @Inject private ObjectManager objectManager;
     @Inject private ExceptionRecognizerService exceptionRecognizerService;
     @Inject private JdoFacetContext jdoFacetContext;
+    @Inject private List<IdStringifier> idStringifiers;
 
     public JdoEntityFacet(
             final FacetHolder holder) {

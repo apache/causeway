@@ -9,7 +9,7 @@ import javax.persistence.Embeddable;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 
@@ -39,19 +39,18 @@ public class CommandLogEntryPK implements Serializable {
 
 
     @Component
-    public static class Stringifier implements BookmarkService.Stringifier {
-        @Override
-        public Class<?> handles() {
-            return CommandLogEntryPK.class;
+    public static class Stringifier extends IdStringifier.Abstract<CommandLogEntryPK> {
+        public Stringifier() {
+            super(CommandLogEntryPK.class);
         }
 
         @Override
-        public String stringify(Object value) {
-            return ((CommandLogEntryPK)value).getInteractionId().toString();
+        public String stringify(CommandLogEntryPK value) {
+            return value.getInteractionId().toString();
         }
 
         @Override
-        public Object parse(String stringified) {
+        public CommandLogEntryPK parse(String stringified) {
             return new CommandLogEntryPK(UUID.fromString(stringified));
         }
     }

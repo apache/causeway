@@ -53,25 +53,25 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class JdoObjectIdSerializer {
 
-    public static String identifierForElseFail(
-            final @NonNull PersistenceManager pm,
-            final @Nullable Object pojo) {
+//    public static String identifierForElseFail(
+//            final @NonNull PersistenceManager pm,
+//            final @Nullable Object pojo) {
+//
+//        return identifierFor(pm, pojo)
+//                .orElseThrow(()->_Exceptions
+//                        .illegalArgument(
+//                                "Pojo of type '%s' is not recognized by JDO.",
+//                                pojo.getClass().getName()));
+//    }
 
-        return identifierFor(pm, pojo)
-                .orElseThrow(()->_Exceptions
-                        .illegalArgument(
-                                "Pojo of type '%s' is not recognized by JDO.",
-                                pojo.getClass().getName()));
-    }
-
-    public static Optional<String> identifierFor(
-            final @NonNull PersistenceManager pm,
-            final @Nullable Object pojo) {
-
-        final Object jdoOid = pm.getObjectId(pojo);
-        return Optional.ofNullable(jdoOid)
-                .map(JdoObjectIdSerializer::toOidIdentifier);
-    }
+//    public static Optional<String> identifierFor(
+//            final @NonNull PersistenceManager pm,
+//            final @Nullable Object pojo) {
+//
+//        final Object jdoOid = pm.getObjectId(pojo);
+//        return Optional.ofNullable(jdoOid)
+//                .map(JdoObjectIdSerializer::toOidIdentifier);
+//    }
 
     public static String toOidIdentifier(final Object jdoOid) {
         return encodingChain.handle(jdoOid);
