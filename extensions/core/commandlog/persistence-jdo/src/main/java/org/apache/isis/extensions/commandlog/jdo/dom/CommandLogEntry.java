@@ -204,7 +204,7 @@ import lombok.Setter;
 public class CommandLogEntry
 extends org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry {
 
-    protected final static String FQCN = "org.apache.isis.extensions.commandlog.jdo.entities.CommandJdo";
+    protected final static String FQCN = "org.apache.isis.extensions.commandlog.jdo.dom.CommandLogEntry";
 
 
     /**

@@ -64,6 +64,8 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
 
     @BeforeEach
     void beforeEach() {
+        counterRepository.removeAll();
+        commandLogEntryRepository.removeAll();
 
         counter = createE1();
 
@@ -85,11 +87,6 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
 
     protected abstract Counter newCounter();
 
-    @AfterEach
-    void afterEach() {
-        counterRepository.remove(counter);
-        commandLogEntryRepository.removeAll();
-    }
 
     @Test
     void invoke_mixin() {

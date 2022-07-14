@@ -197,11 +197,11 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
      */
     @Property(
             editing = Editing.DISABLED,
-            optionality = Optionality.OPTIONAL,
+            optionality = Optionality.MANDATORY,
             maxLength = LogicalMemberIdentifier.MAX_LENGTH
     )
     @Parameter(
-            optionality = Optionality.OPTIONAL,
+            optionality = Optionality.MANDATORY,
             maxLength = LogicalMemberIdentifier.MAX_LENGTH
     )
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })

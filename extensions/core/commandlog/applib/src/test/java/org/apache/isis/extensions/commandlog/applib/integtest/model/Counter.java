@@ -13,9 +13,6 @@ import org.apache.isis.applib.annotation.Publishing;
 @DomainObject(nature = Nature.ENTITY)
 public abstract class Counter implements Comparable<Counter> {
 
-    public abstract Long getId();
-    public abstract void setId(Long id);
-
     @Property(editing = Editing.ENABLED, commandPublishing = Publishing.ENABLED)
     public abstract Long getNum();
     public abstract void setNum(Long num);

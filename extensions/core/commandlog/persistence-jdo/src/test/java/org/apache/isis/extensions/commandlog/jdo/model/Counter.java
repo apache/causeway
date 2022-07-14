@@ -24,17 +24,13 @@ import lombok.Setter;
         schema = "public",
         table = "Counter"
 )
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY)
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @Named("commandlog.test.Counter")
 @DomainObject(nature = Nature.ENTITY)
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Counter extends org.apache.isis.extensions.commandlog.applib.integtest.model.Counter {
-
-    @PrimaryKey
-    @Getter @Setter
-    private Long id;
 
     @Column(allowsNull = "false")
     @Getter @Setter

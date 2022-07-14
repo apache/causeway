@@ -17,13 +17,10 @@
 isis:
   persistence:
     schema:
-      auto-create-schemas: "ISISEXTCOMMANDLOG"
+      auto-create-schemas: "ISISEXTSESSIONLOG"
 
-  extensions:
-    session-log:
-      auto-logout-on-restart: false
 
-spring:
-  jpa:
-    show-sql: true
-
+datanucleus:
+  schema:
+    generate-database:
+      mode: "create"
