@@ -26,4 +26,6 @@ public class GQLGenericParameter {
 
     public final boolean optionality;
 
+    public final Object defaultValue;
+
 }

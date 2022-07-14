@@ -21,7 +21,6 @@ package org.apache.isis.viewer.graphql.viewer.source.gqltestdomain;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.isis.applib.annotation.*;
-import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 import javax.annotation.Nullable;
@@ -65,8 +64,8 @@ public class E2 implements TestEntity{
         return getName();
     }
 
-    public String validateChangeName(){
-        if (getName().equals("e2")) return "An the name of an object called e2 cannot be changed";
+    public String validateChangeName(final String newName){
+        if (getName().equals("e2")) return "The name of an object called e2 cannot be changed";
         return null;
     }
 
@@ -75,6 +74,11 @@ public class E2 implements TestEntity{
         setE1(e1);
         return this;
     }
+
+    //TODO: when testing, testEntityRepository is not injected resulting in a NPE
+//    public E1 default0ChangeE1(){
+//        return choices0ChangeE1().isEmpty() ? null : choices0ChangeE1().get(0);
+//    }
 
     public List<E1> choices0ChangeE1(){
         return testEntityRepository.findAllE1().stream().filter(e->e!=getE1()).collect(Collectors.toList());
@@ -105,6 +109,14 @@ public class E2 implements TestEntity{
         result.addAll(testEntityRepository.findAllE2().stream().filter(e2->e2!=this).collect(Collectors.toList()));
         // TODO: maybe make number of results functional; for we leave it
         return name == null ? result : result.stream().filter(e->e.getName().contains(name)).collect(Collectors.toList());
+    }
+
+    public String default0OtherEntities(){
+        return "e";
+    }
+
+    public Integer default1OtherEntities(){
+        return Integer.valueOf(10);
     }
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)

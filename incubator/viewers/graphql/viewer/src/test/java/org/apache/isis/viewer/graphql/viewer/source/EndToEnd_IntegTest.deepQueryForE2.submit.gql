@@ -120,7 +120,11 @@ __typename
 optionality
 validate
 autocomplete
-default
+default {
+__typename
+name
+objectIdentifier
+}
 choices
 }
 }

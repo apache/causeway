@@ -27,6 +27,8 @@ import graphql.schema.*;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.feature.*;
 import org.springframework.stereotype.Component;
@@ -485,7 +487,8 @@ public class ObjectTypeFactory {
                         String objectActionParameterGenericTypeName = constructionHelper.objectActionParameterGenericTypeName(objectAction.getId(), p.getId());
                         GraphQLObjectType.Builder parameterMetaDataTypeBuilder = newObject().name(objectActionParameterGenericTypeName);
                         parameterMetaDataTypeBuilder.field(newFieldDefinition().name("optionality").type(Scalars.GraphQLBoolean).build());
-                        parameterMetaDataTypeBuilder.field(newFieldDefinition().name("default").type(Scalars.GraphQLString).build()); // for now
+                        GraphQLOutputType graphQLType = (GraphQLOutputType) TypeMapper.outputTypeFor(p.getElementType());
+                        parameterMetaDataTypeBuilder.field(newFieldDefinition().name("default").type(graphQLType).build());
                         parameterMetaDataTypeBuilder.field(newFieldDefinition().name("choices").type(Scalars.GraphQLString).build()); // for now
                         parameterMetaDataTypeBuilder.field(newFieldDefinition().name("autocomplete").argument(GraphQLArgument.newArgument().name("we_call_search_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLBoolean).build()); // for now
                         parameterMetaDataTypeBuilder.field(newFieldDefinition().name("validate").argument(GraphQLArgument.newArgument().name("we_call_value_for_now").type(Scalars.GraphQLString).build()).type(Scalars.GraphQLString).build());
@@ -822,7 +825,7 @@ public class ObjectTypeFactory {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
                     GQLGenericActions source = environment.getSource();
-                    return new GQLActionHideDisableValidateEtc(source.hideAction(objectAction), source.disableAction(objectAction), source.validateAction(objectAction), source.semanticsOf(objectAction), source.paramsOf(objectAction));
+                    return source;
                 }
 
             });
@@ -832,8 +835,8 @@ public class ObjectTypeFactory {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionGenericType, "hide"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLActionHideDisableValidateEtc source = environment.getSource();
-                    return source.isHide();
+                    GQLGenericActions source = environment.getSource();
+                    return source.hideAction(objectAction);
                 }
 
             });
@@ -841,8 +844,8 @@ public class ObjectTypeFactory {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionGenericType , "disable"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLActionHideDisableValidateEtc source = environment.getSource();
-                    return source.getDisable();
+                    GQLGenericActions source = environment.getSource();
+                    return source.disableAction(objectAction);
                 }
 
             });
@@ -850,8 +853,8 @@ public class ObjectTypeFactory {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionGenericType , "validate"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLActionHideDisableValidateEtc source = environment.getSource();
-                    return source.getValidate();
+                    GQLGenericActions source = environment.getSource();
+                    return source.validateAction(objectAction);
                 }
 
             });
@@ -859,16 +862,16 @@ public class ObjectTypeFactory {
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionGenericType , "semantics"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLActionHideDisableValidateEtc source = environment.getSource();
-                    return semanticsEnumType.getValue(source.getSemantics()).getValue();
+                    GQLGenericActions source = environment.getSource();
+                    return semanticsEnumType.getValue(source.semanticsOf(objectAction)).getValue();
                 }
             });
 
             codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionGenericType , "params"), new DataFetcher<Object>() {
                 @Override
                 public Object get(final DataFetchingEnvironment environment) throws Exception {
-                    GQLActionHideDisableValidateEtc source = environment.getSource();
-                    return source.getParams();
+                    GQLGenericActions source = environment.getSource();
+                    return source;
                 }
             });
 
@@ -883,22 +886,27 @@ public class ObjectTypeFactory {
                 codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(objectActionGenericParamsType, parameter.getId()), new DataFetcher<Object>() {
                     @Override
                     public Object get(DataFetchingEnvironment environment) throws Exception {
-                        GQLGenericParameters params = environment.getSource();
-                        ObjectActionParameter objectActionParameter = params.parameters.stream().filter(p -> p.equals(parameter)).findFirst().orElse(null);
-                        return new GQLGenericParameter(objectActionParameter.isOptional());
+                        GQLGenericActions source = environment.getSource();
+                        return source;
                     }
                 });
 
                 codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionParamGenericType, "optionality"), new DataFetcher<Object>() {
                     @Override
                     public Object get(DataFetchingEnvironment environment) throws Exception {
-                        GQLGenericParameter gqlGenericParameter = environment.getSource();
-                        return gqlGenericParameter.optionality;
+                        return parameter.isOptional();
+                    }
+                });
+
+                codeRegistryBuilder.dataFetcher(FieldCoordinates.coordinates(actionParamGenericType, "default"), new DataFetcher<Object>() {
+                    @Override
+                    public Object get(DataFetchingEnvironment environment) throws Exception {
+                        GQLGenericActions source = environment.getSource();
+                        return source.defaultValueFor(objectAction, parameter);
                     }
                 });
 
             }
-
         }
 
     }

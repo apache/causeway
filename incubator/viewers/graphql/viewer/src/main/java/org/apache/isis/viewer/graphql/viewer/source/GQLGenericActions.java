@@ -1,21 +1,17 @@
 package org.apache.isis.viewer.graphql.viewer.source;
 
 import lombok.Data;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class GQLGenericActions {
@@ -23,14 +19,18 @@ public class GQLGenericActions {
     private final ObjectTypeConstructionHelper constructionHelper;
     private final Bookmark bookmark;
 
+    private ManagedObject getManagedObject() {
+        return constructionHelper.getManagedObject(bookmark);
+    }
+
     public boolean hideAction(final ObjectAction objectAction){
-        ManagedObject managedObject = constructionHelper.getManagedObject(bookmark);
+        ManagedObject managedObject = getManagedObject();
         if (managedObject == null) return true;
         return !objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed();
     }
 
     public String disableAction(final ObjectAction objectAction){
-        ManagedObject managedObject = constructionHelper.getManagedObject(bookmark);
+        ManagedObject managedObject = getManagedObject();
         if (managedObject == null) return "No managed object found";
         Consent usable = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (usable.isAllowed()) return usable.getReason();
@@ -38,7 +38,7 @@ public class GQLGenericActions {
     }
 
     public String validateAction(final ObjectAction objectAction){
-        ManagedObject managedObject = constructionHelper.getManagedObject(bookmark);
+        ManagedObject managedObject = getManagedObject();
         if (managedObject == null) return "No managed object found";
         // TODO: implement correctly
         return objectAction.isArgumentSetValidForAction(InteractionHead.regular(managedObject), Can.empty(), InteractionInitiatedBy.USER).getReason();
@@ -48,8 +48,21 @@ public class GQLGenericActions {
         return objectAction.getSemantics().name();
     }
 
-    public GQLGenericParameters paramsOf(final ObjectAction objectAction){
-        return new GQLGenericParameters(objectAction.getParameters());
+    public Object defaultValueFor(ObjectAction objectAction, ObjectActionParameter parameter) {
+        ManagedObject paramValue = getParamValue(objectAction, parameter);
+        BeanSort beanSort = parameter.getElementType().getBeanSort();
+        switch (beanSort){
+            case ABSTRACT:
+            case ENTITY:
+                return paramValue.getPojo();
+            case VALUE:
+                return parameter.getElementType().getCorrespondingClass().cast(paramValue.getPojo());
+        }
+        return null;
+    }
+
+    private ManagedObject getParamValue(ObjectAction objectAction, ObjectActionParameter parameter) {
+        return ManagedAction.of(getManagedObject(), objectAction, Where.ANYWHERE).startParameterNegotiation().getParamValue(parameter.getParameterIndex());
     }
 
 }
