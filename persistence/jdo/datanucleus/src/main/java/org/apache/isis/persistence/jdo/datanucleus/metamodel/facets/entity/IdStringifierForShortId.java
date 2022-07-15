@@ -38,7 +38,7 @@ public class IdStringifierForShortId extends IdStringifier.AbstractWithPrefix<Sh
     }
 
     @Override
-    protected ShortId doDestring(final String stringified, final @NonNull Class<?> owningEntityType) {
-        return new ShortId(owningEntityType, stringified);
+    protected ShortId doDestring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
+        return new ShortId(targetEntityClass, stringified);
     }
 }

@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.NonNull;
+
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class IdStringifierForString extends IdStringifier.Abstract<String> {
@@ -44,7 +46,7 @@ public class IdStringifierForString extends IdStringifier.Abstract<String> {
      * Not API, but publicly visible for adhoc reuse by other {@link IdStringifier} implementations.
      */
     @Override
-    public String enstring(final String id) {
+    public String enstring(final @NonNull String id) {
         if(NON_SAFE_URL_CHARS.stream().anyMatch(id::contains)) {
             return BASE64_PREFIX + _Strings.base64UrlEncode(id);
         }
@@ -55,7 +57,7 @@ public class IdStringifierForString extends IdStringifier.Abstract<String> {
      * Not API, but publicly visible for adhoc reuse by other {@link IdStringifier} implementations.
      */
     @Override
-    public String destring(final String stringified, Class<?> targetEntityClass) {
+    public String destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         if(stringified.startsWith(REGULAR_PREFIX)) {
             return stringified.substring(REGULAR_PREFIX.length());
         }

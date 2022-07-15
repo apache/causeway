@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 
+import lombok.NonNull;
+
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class IdStringifierForShort extends IdStringifier.AbstractWithPrefix<Short> {
@@ -33,7 +35,7 @@ public class IdStringifierForShort extends IdStringifier.AbstractWithPrefix<Shor
     }
 
     @Override
-    protected Short doDestring(final String stringified, Class<?> owningEntityType) {
+    protected Short doDestring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         return Short.parseShort(stringified);
     }
 }

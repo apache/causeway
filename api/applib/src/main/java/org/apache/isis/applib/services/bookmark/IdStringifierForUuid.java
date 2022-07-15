@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 
+import lombok.NonNull;
+
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class IdStringifierForUuid extends IdStringifier.AbstractWithPrefix<UUID> {
@@ -35,7 +37,7 @@ public class IdStringifierForUuid extends IdStringifier.AbstractWithPrefix<UUID>
     }
 
     @Override
-    public UUID doDestring(final String stringified, Class<?> owningEntityType) {
+    public UUID doDestring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         return UUID.fromString(stringified);
     }
 

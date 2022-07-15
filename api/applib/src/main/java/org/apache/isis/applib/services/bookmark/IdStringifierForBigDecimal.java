@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 
+import lombok.NonNull;
+
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class IdStringifierForBigDecimal extends IdStringifier.AbstractWithPrefix<BigDecimal> {
@@ -35,7 +37,7 @@ public class IdStringifierForBigDecimal extends IdStringifier.AbstractWithPrefix
     }
 
     @Override
-    protected BigDecimal doDestring(final String stringified, Class<?> owningEntityType) {
+    protected BigDecimal doDestring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         return new BigDecimal(stringified);
     }
 }

@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 
+import lombok.NonNull;
+
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class IdStringifierForLong extends IdStringifier.AbstractWithPrefix<Long> {
@@ -33,7 +35,7 @@ public class IdStringifierForLong extends IdStringifier.AbstractWithPrefix<Long>
     }
 
     @Override
-    protected Long doDestring(final String stringified, Class<?> owningEntityType) {
+    protected Long doDestring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         return Long.parseLong(stringified);
     }
 }

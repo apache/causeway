@@ -38,7 +38,7 @@ public interface IdStringifier<T> {
      *
      * @param candidateValueClass
      */
-    boolean handles(Class<?> candidateValueClass);
+    boolean handles(final @NonNull Class<?> candidateValueClass);
 
 
     /**
@@ -48,7 +48,7 @@ public interface IdStringifier<T> {
      * @see #destring(String, Class)
      * @see #handles(Class)
      */
-    String enstring(final T value);
+    String enstring(final @NonNull T value);
 
     /**
      * Convert a string representation of the identifier (as returned by {@link #enstring(Object)}) into an object
@@ -59,7 +59,7 @@ public interface IdStringifier<T> {
      *                            we always have this information available, and is needed (at least) by the JDO
      *                            implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
      */
-    T destring(final String stringified, Class<?> targetEntityClass);
+    T destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass);
 
     abstract class Abstract<T> implements IdStringifier<T> {
 
@@ -72,10 +72,10 @@ public interface IdStringifier<T> {
         /**
          * Allows for a Stringifier to handle (for example) both <code>Integer.class</code> and <code>int.class</code>.
          */
-        private final Optional<Class<T>> primitiveValueClass;
+        private final Class<T> primitiveValueClassIfAny;
 
         public Abstract(
-                final Class<T> handledClass) {
+                final @NonNull Class<T> handledClass) {
             this(handledClass, null);
         }
         public Abstract(
@@ -83,12 +83,12 @@ public interface IdStringifier<T> {
                 final @Nullable Class<T> primitiveClass
                 ) {
             this.valueClass = valueClass;
-            this.primitiveValueClass = Optional.ofNullable(primitiveClass);
+            this.primitiveValueClassIfAny = primitiveClass;
         }
 
         @Override
-        public boolean handles(Class<?> candidateValueClass) {
-            return valueClass.isAssignableFrom(candidateValueClass) || primitiveValueClass.isPresent() && primitiveValueClass.get().isAssignableFrom(candidateValueClass);
+        public boolean handles(final @NonNull Class<?> candidateValueClass) {
+            return valueClass.isAssignableFrom(candidateValueClass) || primitiveValueClassIfAny != null && primitiveValueClassIfAny.isAssignableFrom(candidateValueClass);
         }
     }
 
@@ -110,7 +110,7 @@ public interface IdStringifier<T> {
         }
 
         @Override
-        public final String enstring(T value) {
+        public final String enstring(final @NonNull T value) {
             return prefix + doStringify(value);
         }
 
@@ -122,10 +122,7 @@ public interface IdStringifier<T> {
         }
 
         @Override
-        public final T destring(final String stringified, final @Nullable Class<?> targetEntityClass) {
-            if (stringified == null) {
-                return null;
-            }
+        public final T destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
             val suffix = removePrefix(stringified);
             return doDestring(suffix, targetEntityClass);
         }
@@ -133,7 +130,7 @@ public interface IdStringifier<T> {
         /**
          * Mandatory hook
          */
-        protected abstract T doDestring(String idStr, Class<?> owningType);
+        protected abstract T doDestring(final @NonNull String idStr, final @NonNull Class<?> targetEntityClass);
 
         private String removePrefix(String str) {
             if (str.startsWith(prefix)) {

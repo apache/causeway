@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 
+import lombok.NonNull;
 import lombok.val;
 
 
@@ -50,11 +51,11 @@ public class IdStringifierForEntityDEFUNCT extends IdStringifier.Abstract<Object
     }
 
     @Override
-    public boolean handles(Class<?> candidateValueClass) {
+    public boolean handles(@NonNull Class<?> candidateValueClass) {
         return true;
     }
 
-    public String enstring(final Object object) {
+    public String enstring(final @NonNull Object object) {
         if (object == null) {
             return null;
         }
@@ -63,7 +64,7 @@ public class IdStringifierForEntityDEFUNCT extends IdStringifier.Abstract<Object
     }
 
     @Override
-    public Object destring(final String stringified, Class<?> targetEntityClass) {
+    public Object destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         val bookmark = idStringifierForBookmark.destring(stringified, targetEntityClass);
         return bookmarkService.lookup(bookmark).orElseThrow(() -> new IllegalArgumentException(String.format("Could not lookup object from '%s'", bookmark)));
     }

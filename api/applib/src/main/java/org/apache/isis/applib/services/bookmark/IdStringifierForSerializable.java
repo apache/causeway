@@ -64,17 +64,17 @@ public class IdStringifierForSerializable extends IdStringifier.Abstract<Seriali
     }
 
     @Override
-    public boolean handles(Class<?> candidateValueClass) {
+    public boolean handles(@NonNull Class<?> candidateValueClass) {
         return isPredefinedSerializable(candidateValueClass);
     }
 
     @Override
-    public String enstring(final Serializable id) {
+    public String enstring(final @NonNull Serializable id) {
         return newMemento().put("id", id).asString();
     }
 
     @Override
-    public Serializable destring(final String stringified, Class<?> targetEntityClass) {
+    public Serializable destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         if (_Strings.isEmpty(stringified)) {
             return null;
         }

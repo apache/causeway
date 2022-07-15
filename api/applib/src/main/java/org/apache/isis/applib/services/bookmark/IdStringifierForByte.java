@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 
+import lombok.NonNull;
+
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class IdStringifierForByte extends IdStringifier.AbstractWithPrefix<Byte> {
@@ -33,7 +35,7 @@ public class IdStringifierForByte extends IdStringifier.AbstractWithPrefix<Byte>
     }
 
     @Override
-    protected Byte doDestring(final String stringified, Class<?> owningEntityType) {
+    protected Byte doDestring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         return Byte.parseByte(stringified);
     }
 }

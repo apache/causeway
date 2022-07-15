@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.bookmark.IdStringifierForString;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.val;
 
 @Component
@@ -51,13 +52,13 @@ public class IdStringifierForStringId extends IdStringifier.Abstract<StringIdent
     }
 
     @Override
-    public String enstring(StringIdentity value) {
+    public String enstring(@NonNull StringIdentity value) {
         return idStringifierForString.enstring(value.getKey());
     }
 
     @Override
-    public StringIdentity destring(String stringified, Class<?> targetEntityClass) {
-        val idValue = idStringifierForString.destring(stringified, null);
+    public StringIdentity destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+        val idValue = idStringifierForString.destring(stringified, targetEntityClass);
         return new StringIdentity(targetEntityClass, idValue);
     }
 }

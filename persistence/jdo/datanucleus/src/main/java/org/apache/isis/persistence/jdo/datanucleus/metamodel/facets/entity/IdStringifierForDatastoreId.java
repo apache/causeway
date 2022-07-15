@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.context._Context;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 
 @Component
@@ -41,7 +42,7 @@ public class IdStringifierForDatastoreId extends IdStringifier.Abstract<Datastor
     }
 
     @Override
-    public String enstring(DatastoreId value) {
+    public String enstring(@NonNull DatastoreId value) {
         //
         // the JDO spec (5.4.3) requires that OIDs are serializable toString and
         // re-create-able through the constructor
@@ -52,7 +53,7 @@ public class IdStringifierForDatastoreId extends IdStringifier.Abstract<Datastor
 
     @SneakyThrows
     @Override
-    public DatastoreId destring(String stringified, Class<?> targetEntityClass) {
+    public DatastoreId destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         int idx = stringified.indexOf(SEPARATOR);
         String clsName = stringified.substring(0, idx);
         String keyStr = stringified.substring(idx + 1);

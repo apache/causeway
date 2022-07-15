@@ -37,7 +37,7 @@ public class IdStringifierForShortIdentity extends IdStringifier.AbstractWithPre
     }
 
     @Override
-    protected ShortIdentity doDestring(final String stringified, final @NonNull Class<?> owningEntityType) {
-        return new ShortIdentity(owningEntityType, stringified);
+    protected ShortIdentity doDestring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
+        return new ShortIdentity(targetEntityClass, stringified);
     }
 }

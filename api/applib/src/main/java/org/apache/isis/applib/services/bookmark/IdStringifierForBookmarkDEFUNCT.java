@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 
+import lombok.NonNull;
+
 /**
  * Hmm, not sure if this is really needed...  HAVE REMOVED FROM MODULE
  *
@@ -40,12 +42,12 @@ public class IdStringifierForBookmarkDEFUNCT extends IdStringifier.Abstract<Book
         super(Bookmark.class);
     }
 
-    public String enstring(final Bookmark object) {
+    public String enstring(final @NonNull Bookmark object) {
         return object.toString();
     }
 
     @Override
-    public Bookmark destring(final String stringified, Class<?> targetEntityClass) {
+    public Bookmark destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         return Bookmark.parseElseFail(stringified);
     }
 

@@ -38,7 +38,7 @@ public class IdStringifierForLongId extends IdStringifier.AbstractWithPrefix<Lon
     }
 
     @Override
-    protected LongId doDestring(final String stringified, final @NonNull Class<?> owningEntityType) {
-        return new LongId(owningEntityType, stringified);
+    protected LongId doDestring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
+        return new LongId(targetEntityClass, stringified);
     }
 }

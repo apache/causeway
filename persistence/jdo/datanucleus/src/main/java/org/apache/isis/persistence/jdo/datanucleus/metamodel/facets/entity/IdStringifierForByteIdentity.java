@@ -37,7 +37,7 @@ public class IdStringifierForByteIdentity extends IdStringifier.AbstractWithPref
     }
 
     @Override
-    protected ByteIdentity doDestring(final String stringified, final @NonNull Class<?> owningEntityType) {
-        return new ByteIdentity(owningEntityType, stringified);
+    protected ByteIdentity doDestring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
+        return new ByteIdentity(targetEntityClass, stringified);
     }
 }

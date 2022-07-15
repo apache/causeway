@@ -38,7 +38,7 @@ public class IdStringifierForIntId extends IdStringifier.AbstractWithPrefix<IntI
     }
 
     @Override
-    protected IntId doDestring(final String stringified, final @NonNull Class<?> owningEntityType) {
-        return new IntId(owningEntityType, stringified);
+    protected IntId doDestring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
+        return new IntId(targetEntityClass, stringified);
     }
 }

@@ -32,6 +32,7 @@ import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.bookmark.IdStringifierForUuid;
 
 import lombok.Builder;
+import lombok.NonNull;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
@@ -55,7 +56,7 @@ public class IdStringifierForObjectId extends IdStringifier.Abstract<ObjectId> {
     }
 
     @Override
-    public String enstring(ObjectId value) {
+    public String enstring(@NonNull ObjectId value) {
         Object keyAsObject = value.getKeyAsObject();
         if (keyAsObject instanceof UUID) {
             UUID uuid = (UUID) keyAsObject;
@@ -66,9 +67,9 @@ public class IdStringifierForObjectId extends IdStringifier.Abstract<ObjectId> {
     }
 
     @Override
-    public ObjectId destring(String stringified, Class<?> targetEntityClass) {
+    public ObjectId destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         if (idStringifierForUuid.recognizes(stringified)) {
-            UUID uuid = idStringifierForUuid.destring(stringified, null);
+            UUID uuid = idStringifierForUuid.destring(stringified, targetEntityClass);
             return new ObjectId(targetEntityClass, uuid);
         }
         return new ObjectId(targetEntityClass, stringified);

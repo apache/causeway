@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @EqualsAndHashCode(of = {"interactionId"})
 @NoArgsConstructor
@@ -51,7 +52,7 @@ public class CommandLogEntryPK implements Serializable {
         }
 
         @Override
-        protected CommandLogEntryPK doDestring(String stringified, Class<?> owningEntityType) {
+        protected CommandLogEntryPK doDestring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
             return new CommandLogEntryPK(UUID.fromString(stringified));
         }
     }
