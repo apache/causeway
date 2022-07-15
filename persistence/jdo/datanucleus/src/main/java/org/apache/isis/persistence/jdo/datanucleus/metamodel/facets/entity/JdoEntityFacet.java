@@ -27,17 +27,9 @@ import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.metadata.TypeMetadata;
 
-import org.datanucleus.ClassLoaderResolver;
-import org.datanucleus.ClassNameConstants;
-import org.datanucleus.ExecutionContext;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.enhancement.Persistable;
-import org.datanucleus.exceptions.NucleusException;
-import org.datanucleus.metadata.AbstractClassMetaData;
-import org.datanucleus.metadata.AbstractMemberMetaData;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
@@ -94,9 +86,12 @@ implements EntityFacet {
     @Inject private JdoFacetContext jdoFacetContext;
     @Inject private IdStringifierLookupService idStringifierLookupService;
 
+    private final Class<?> entityClass;
+
     public JdoEntityFacet(
-            final FacetHolder holder) {
+            final FacetHolder holder, final Class<?> entityClass) {
         super(EntityFacet.class, holder);
+        this.entityClass = entityClass;
     }
 
     @Override
@@ -105,12 +100,12 @@ implements EntityFacet {
     }
 
     @Override
-    public String identifierFor(final ObjectSpecification spec, final Object pojo) {
+    public String identifierFor(final Object pojo) {
 
         if(pojo==null) {
             throw _Exceptions.illegalArgument(
                     "The persistence layer cannot identify a pojo that is null (given type %s)",
-                    spec.getCorrespondingClass().getName());
+                    entityClass.getName());
         }
 
         if(!isPersistableType(pojo.getClass())) {
@@ -147,56 +142,10 @@ implements EntityFacet {
         return idStringifier.enstring(primaryKey);
     }
 
-    /**
-     * Adapted from {@link org.datanucleus.identity.IdentityUtils#getObjectFromPersistableIdentity(String, AbstractClassMetaData, ExecutionContext)},
-     * however we just want the primary key type, not to find the object.
-     */
-    public static Object getObjectIdentifierFromPersistableIdentity(String persistableId, AbstractClassMetaData cmd, ExecutionContext ec)
-    {
-        ClassLoaderResolver clr = ec.getClassLoaderResolver();
-        Object id = null;
-        if (cmd == null)
-        {
-            throw new NucleusException("Cannot get object from id=" + persistableId + " since class name was not supplied!");
-        }
-        if (cmd.getIdentityType() == org.datanucleus.metadata.IdentityType.DATASTORE)
-        {
-            id = ec.getNucleusContext().getIdentityManager().getDatastoreId(persistableId);
-        }
-        else if (cmd.getIdentityType() == org.datanucleus.metadata.IdentityType.APPLICATION)
-        {
-            if (cmd.usesSingleFieldIdentityClass())
-            {
-                String className = persistableId.substring(0, persistableId.indexOf(':'));
-                cmd = ec.getMetaDataManager().getMetaDataForClass(className, clr);
-
-                String idStr = persistableId.substring(persistableId.indexOf(':')+1);
-                if (cmd.getObjectidClass().equals(ClassNameConstants.IDENTITY_SINGLEFIELD_OBJECT))
-                {
-                    // For ObjectId we need to pass "PkFieldType:{id}" - see ObjectId.toString()
-                    // For all other SingleFieldId we pass "{id}" - see XXXId.toString()
-                    int[] pkMemberPositions = cmd.getPKMemberPositions();
-                    AbstractMemberMetaData pkMmd = cmd.getMetaDataForManagedMemberAtAbsolutePosition(pkMemberPositions[0]);
-                    idStr = pkMmd.getTypeName() + ":" + idStr;
-                }
-                id = ec.getNucleusContext().getIdentityManager().getApplicationId(clr, cmd, idStr);
-            }
-            else
-            {
-                Class cls = clr.classForName(cmd.getFullClassName());
-                id = ec.newObjectId(cls, persistableId);
-            }
-        }
-        return id;
-    }
-
 
     @Override
     public ManagedObject fetchByIdentifier(
-            final @NonNull ObjectSpecification entitySpec,
             final @NonNull Bookmark bookmark) {
-
-        _Assert.assertTrue(entitySpec.isEntity());
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
@@ -204,7 +153,6 @@ implements EntityFacet {
         try {
 
             val persistenceManager = getPersistenceManager();
-            val entityClass = entitySpec.getCorrespondingClass();
             val primaryKeyType = primaryKeyTypeFor(entityClass);
 
             val idStringifier = idStringifierLookupService.lookupElseFail(primaryKeyType);
@@ -269,11 +217,13 @@ implements EntityFacet {
         }
     }
 
+    private ObjectSpecification getEntitySpec() {
+        return getSpecificationLoader().specForType(entityClass)
+                .orElseThrow(() -> new IllegalStateException(String.format("Could not load specification for entity class '%s'", entityClass)));
+    }
+
     @Override
-    public Can<ManagedObject> fetchByQuery(final ObjectSpecification spec, final Query<?> query) {
-        if(!spec.isEntity()) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+    public Can<ManagedObject> fetchByQuery(final Query<?> query) {
 
         if (log.isDebugEnabled()) {
             log.debug("about to execute Query: {}", query.getDescription());
@@ -348,7 +298,7 @@ implements EntityFacet {
     }
 
     @Override
-    public void persist(final ObjectSpecification spec, final Object pojo) {
+    public void persist(final Object pojo) {
 
         if(pojo==null
                 || !isPersistableType(pojo.getClass())
@@ -368,7 +318,7 @@ implements EntityFacet {
     }
 
     @Override
-    public void delete(final ObjectSpecification spec, final Object pojo) {
+    public void delete(final Object pojo) {
 
         if(pojo==null || !isPersistableType(pojo.getClass())) {
             return; // nothing to do

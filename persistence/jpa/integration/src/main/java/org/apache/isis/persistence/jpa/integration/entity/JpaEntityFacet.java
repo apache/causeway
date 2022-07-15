@@ -39,7 +39,6 @@ import org.apache.isis.applib.services.bookmark.IdStringifierLookupService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -83,18 +82,12 @@ public class JpaEntityFacet
     }
 
     @Override
-    public String identifierFor(final ObjectSpecification spec, final Object pojo) {
+    public String identifierFor(final Object pojo) {
 
         if (pojo == null) {
             throw _Exceptions.illegalArgument(
                     "The persistence layer cannot identify a pojo that is null (given type %s)",
-                    spec.getCorrespondingClass().getName());
-        }
-
-        if (!spec.isEntity()) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer does not recognize given type %s",
-                    pojo.getClass().getName());
+                    entityClass.getName());
         }
 
         val entityManager = getEntityManager();
@@ -109,7 +102,7 @@ public class JpaEntityFacet
                     pojo.getClass().getName());
         }
 
-        Class<?> primaryKeyType = getPrimaryKeyType();
+        val primaryKeyType = getPrimaryKeyType();
         return identifierFor(primaryKeyType, _Casts.uncheckedCast(primaryKey));
     }
 
@@ -119,22 +112,17 @@ public class JpaEntityFacet
     }
 
     private <T> IdStringifier<T> lookupIdStringifier(Class<T> primaryKeyType) {
-        // unlike JDO, none of the JPA types need to know the parent entity type to stringify/parse
-        // so we just use null for the second arg.
         return _Casts.uncheckedCast(idStringifierLookupService.lookupElseFail(primaryKeyType));
     }
 
     @Override
     public ManagedObject fetchByIdentifier(
-            final @NonNull ObjectSpecification entitySpec,
             final @NonNull Bookmark bookmark) {
-
-        _Assert.assertTrue(entitySpec.isEntity());
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
         val idStringifier = lookupIdStringifier(getPrimaryKeyType());
-        val primaryKey = idStringifier.destring(bookmark.getIdentifier(), entitySpec.getCorrespondingClass());
+        val primaryKey = idStringifier.destring(bookmark.getIdentifier(), entityClass);
         val entityManager = getEntityManager();
         val entityPojo = entityManager.find(entityClass, primaryKey);
 
@@ -142,7 +130,13 @@ public class JpaEntityFacet
             throw new ObjectNotFoundException("" + bookmark);
         }
 
+        final ObjectSpecification entitySpec = getEntitySpec();
         return ManagedObject.bookmarked(entitySpec, entityPojo, bookmark);
+    }
+
+    private ObjectSpecification getEntitySpec() {
+        return getSpecificationLoader().specForType(entityClass)
+                            .orElseThrow(() -> new IllegalStateException(String.format("Could not load specification for entity class '%s'", entityClass)));
     }
 
     private Class<?> getPrimaryKeyType() {
@@ -150,7 +144,7 @@ public class JpaEntityFacet
     }
 
     @Override
-    public Can<ManagedObject> fetchByQuery(final ObjectSpecification spec, final Query<?> query) {
+    public Can<ManagedObject> fetchByQuery(final Query<?> query) {
 
         val range = query.getRange();
 
@@ -181,6 +175,7 @@ public class JpaEntityFacet
                 typedQuery.setMaxResults(range.getLimitAsInt());
             }
 
+            val spec = getEntitySpec();
             return Can.ofStream(
                     typedQuery.getResultStream()
                             .map(entity -> ManagedObject.of(spec, entity)));
@@ -207,6 +202,7 @@ public class JpaEntityFacet
                     .forEach((paramName, paramValue) ->
                             namedQuery.setParameter(paramName, paramValue));
 
+            val spec = getEntitySpec();
             return Can.ofStream(
                     namedQuery.getResultStream()
                             .map(entity -> ManagedObject.of(spec, entity)));
@@ -218,7 +214,7 @@ public class JpaEntityFacet
     }
 
     @Override
-    public void persist(final ObjectSpecification spec, final Object pojo) {
+    public void persist(final Object pojo) {
         if (pojo == null) {
             return; // nothing to do
         }
@@ -251,7 +247,7 @@ public class JpaEntityFacet
     }
 
     @Override
-    public void delete(final ObjectSpecification spec, final Object pojo) {
+    public void delete(final Object pojo) {
 
         if (pojo == null) {
             return; // nothing to do

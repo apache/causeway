@@ -28,7 +28,6 @@ import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Indicates that this class is managed by a persistence context.
@@ -36,16 +35,17 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public interface EntityFacet extends Facet {
 
-    String identifierFor(ObjectSpecification spec, Object pojo);
+    String identifierFor(Object pojo);
 
-    ManagedObject fetchByIdentifier(ObjectSpecification spec, Bookmark bookmark);
-    Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query);
+    ManagedObject fetchByIdentifier(Bookmark bookmark);
 
-    void persist(ObjectSpecification spec, Object pojo);
+    Can<ManagedObject> fetchByQuery(Query<?> query);
+
+    void persist(Object pojo);
 
     void refresh(Object pojo);
 
-    void delete(ObjectSpecification spec, Object pojo);
+    void delete(Object pojo);
 
     EntityState getEntityState(Object pojo);
 

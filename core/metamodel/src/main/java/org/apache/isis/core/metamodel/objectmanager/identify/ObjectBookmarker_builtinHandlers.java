@@ -122,7 +122,7 @@ class ObjectBookmarker_builtinHandlers {
                 throw _Exceptions.illegalArgument(msg);
             }
 
-            val identifier = entityFacet.identifierFor(spec, entityPojo);
+            val identifier = entityFacet.identifierFor(entityPojo);
             return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
         }
 
