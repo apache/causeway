@@ -70,11 +70,18 @@ extends
         LOCAL,
 
         /**
-         * Temporal value type has time-zone data.
+         * Temporal value type has time-zone offset data.
          */
-        OFFSET;
+        OFFSET,
+
+        /**
+         * Temporal value type has time-zone id data.
+         */
+        ZONED;
 
         public boolean isLocal() {return this == LOCAL;}
+        public boolean isOffset() {return this == OFFSET;}
+        public boolean isZoned() {return this == ZONED;}
     }
 
     TemporalCharacteristic getTemporalCharacteristic();

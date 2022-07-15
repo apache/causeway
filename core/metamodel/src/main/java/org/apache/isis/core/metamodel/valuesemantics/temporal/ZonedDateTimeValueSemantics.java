@@ -52,7 +52,7 @@ extends TemporalValueSemanticsProvider<ZonedDateTime> {
     }
 
     public ZonedDateTimeValueSemantics() {
-        super(TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.OFFSET,
+        super(TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.ZONED,
                 TYPICAL_LENGTH, MAX_LENGTH,
                 ZonedDateTime::from,
                 TemporalAdjust::adjustZonedDateTime);

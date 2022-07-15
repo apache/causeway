@@ -20,12 +20,10 @@ package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalQuery;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -37,8 +35,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.applib.locale.UserLocale;
-import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
@@ -50,9 +46,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatPrecisionFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
-import org.apache.isis.schema.common.v2.ValueType;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
@@ -150,46 +144,21 @@ implements TemporalValueSemantics<T> {
     public final String titlePresentation(
             final ValueSemanticsProvider.Context context,
             final T value) {
-        return renderTitle(value, getRenderingFormat(context)::format);
+        return renderTitle(value, getRenderingFormatter(context, UnaryOperator.identity()));
     }
 
     @Override
     public final String htmlPresentation(
             final ValueSemanticsProvider.Context context,
             final T value) {
-        return renderHtml(value, withTimeZoneBadge(context, getRenderingFormat(context)::format));
-    }
-
-    @Getter(lazy = true, value = AccessLevel.PRIVATE)
-    private final DateTimeFormatter isoTimeZoneFormat = new DateTimeFormatterBuilder()
-            .appendOffsetId()
-            .toFormatter(Locale.US); // arbitrarily picking a locale, just in case; (this is an ISO format)
-
-    private final DateTimeFormatter getLocalizedTimeZoneFormat(final ValueSemanticsProvider.Context context) {
-        return new DateTimeFormatterBuilder()
-            .appendPattern("VVx")
-            .toFormatter(Optional.ofNullable(context.getInteractionContext())
-                    .map(InteractionContext::getLocale)
-                    .map(UserLocale::getTimeFormatLocale)
-                    .orElseGet(Locale::getDefault));
+        return renderHtml(value, getRenderingFormatter(context, this::toBootstrapBadge));
     }
 
     /**
-     * Adds a html badge with time-zone information. If this is a local temporal,
-     * instead adds the translatable literal 'local' as a html badge.
      * @apiNote Ideally this logic would move to Wicket Viewer, as it depends on presence of <i>Bootstrap</i>.
      */
-    private Function<T, String> withTimeZoneBadge(
-            final ValueSemanticsProvider.Context context,
-            final Function<T, String> toString) {
-
-        return value->toString.apply(value)
-                + String.format(" <span class=\"badge bg-secondary\">%s</span>",
-                        this.getOffsetCharacteristic().isLocal()
-                        ? translate("local")
-                        : getSchemaValueType()==ValueType.ZONED_DATE_TIME
-                            ? getLocalizedTimeZoneFormat(context).format(value)
-                            : getIsoTimeZoneFormat().format(value));
+    private String toBootstrapBadge(final String text) {
+        return String.format("<span class=\"badge bg-secondary\">%s</span>", text);
     }
 
     // -- PARSER
@@ -230,14 +199,31 @@ implements TemporalValueSemantics<T> {
     /**
      * Format for pretty rendering, not used for parsing/editing.
      */
-    protected DateTimeFormatter getRenderingFormat(final ValueSemanticsProvider.Context context) {
+    protected Function<T, String> getRenderingFormatter(
+            final ValueSemanticsProvider.Context context,
+            final UnaryOperator<String> timeZoneDecorator) {
 
         val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
-        return getTemporalRenderingFormat(
-                context, temporalCharacteristic, offsetCharacteristic,
-                dateAndTimeFormatStyle.getDateFormatStyle(),
-                dateAndTimeFormatStyle.getTimeFormatStyle());
+        return time-> {
+
+                final var sb = new StringBuffer();
+
+                sb.append(
+                    getTemporalNoZoneRenderingFormat(
+                            context, temporalCharacteristic, offsetCharacteristic,
+                            dateAndTimeFormatStyle.getDateFormatStyle(),
+                            dateAndTimeFormatStyle.getTimeFormatStyle())
+                    .format(time));
+
+                getTemporalZoneOnlyRenderingFormat(
+                        context, temporalCharacteristic, offsetCharacteristic)
+                .ifPresent(zoneOnlyFormat->{
+                    sb.append(' ').append(timeZoneDecorator.apply(zoneOnlyFormat.format(time)));
+                });
+
+                return sb.toString();
+        };
     }
 
     /**
