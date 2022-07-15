@@ -13,7 +13,6 @@ import lombok.val;
 
 class IdStringifierForBigInteger_Test {
 
-
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
                 Arguments.of(BigInteger.ZERO),
@@ -28,6 +27,8 @@ class IdStringifierForBigInteger_Test {
         );
     }
 
+    static class Customer {}
+
     @ParameterizedTest
     @MethodSource()
     void roundtrip(BigInteger bigInteger) {
@@ -35,7 +36,7 @@ class IdStringifierForBigInteger_Test {
         val stringifier = new IdStringifierForBigInteger();
 
         String stringified = stringifier.enstring(bigInteger);
-        BigInteger parse = stringifier.destring(stringified, null);
+        BigInteger parse = stringifier.destring(stringified, Customer.class);
 
         assertThat(parse).isEqualTo(bigInteger);
     }

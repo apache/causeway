@@ -13,7 +13,6 @@ import lombok.val;
 
 class IdStringifierForBigDecimal_Test {
 
-
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
                 Arguments.of(BigDecimal.ZERO),
@@ -31,6 +30,8 @@ class IdStringifierForBigDecimal_Test {
         );
     }
 
+    static class Customer {}
+
     @ParameterizedTest
     @MethodSource()
     void roundtrip(BigDecimal bigDecimal) {
@@ -38,7 +39,7 @@ class IdStringifierForBigDecimal_Test {
         val stringifier = new IdStringifierForBigDecimal();
 
         String stringified = stringifier.enstring(bigDecimal);
-        BigDecimal parse = stringifier.destring(stringified, null);
+        BigDecimal parse = stringifier.destring(stringified, Customer.class);
 
         assertThat(parse).isEqualTo(bigDecimal);
     }

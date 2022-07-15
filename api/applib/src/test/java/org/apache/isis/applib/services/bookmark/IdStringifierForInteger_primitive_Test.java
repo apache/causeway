@@ -12,7 +12,6 @@ import lombok.val;
 
 class IdStringifierForInteger_primitive_Test {
 
-
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
                 Arguments.of(Integer.MAX_VALUE),
@@ -23,6 +22,8 @@ class IdStringifierForInteger_primitive_Test {
         );
     }
 
+    static class Customer {}
+
     @ParameterizedTest
     @MethodSource()
     void roundtrip(int value) {
@@ -30,7 +31,7 @@ class IdStringifierForInteger_primitive_Test {
         val stringifier = new IdStringifierForInteger();
 
         String stringified = stringifier.enstring(value);
-        Integer parse = stringifier.destring(stringified, null);
+        Integer parse = stringifier.destring(stringified, Customer.class);
 
         assertThat(parse).isEqualTo(value);
     }

@@ -13,7 +13,6 @@ import lombok.val;
 
 class IdStringifierForUuid_Test {
 
-
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
                 Arguments.of(UUID.randomUUID()),
@@ -22,6 +21,8 @@ class IdStringifierForUuid_Test {
         );
     }
 
+    static class Customer {}
+
     @ParameterizedTest
     @MethodSource()
     void roundtrip(UUID value) {
@@ -29,7 +30,7 @@ class IdStringifierForUuid_Test {
         val stringifier = new IdStringifierForUuid();
 
         String stringified = stringifier.enstring(value);
-        UUID parse = stringifier.destring(stringified, null);
+        UUID parse = stringifier.destring(stringified, Customer.class);
 
         assertThat(parse).isEqualTo(value);
     }

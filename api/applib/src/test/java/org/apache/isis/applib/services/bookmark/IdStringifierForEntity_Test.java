@@ -57,7 +57,7 @@ class IdStringifierForEntity_Test {
         val stringifier = new IdStringifierForEntityDEFUNCT(mockBookmarkService, new IdStringifierForBookmarkDEFUNCT());
 
         String stringified = stringifier.enstring(entity);
-        Object parse = stringifier.destring(stringified, null);
+        Object parse = stringifier.destring(stringified, entity.getClass());
 
         assertThat(parse).isSameAs(entity);
     }

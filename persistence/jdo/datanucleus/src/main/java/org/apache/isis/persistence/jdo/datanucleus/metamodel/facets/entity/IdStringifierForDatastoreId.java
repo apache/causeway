@@ -23,6 +23,7 @@ import java.lang.reflect.Constructor;
 import javax.annotation.Priority;
 
 import org.datanucleus.identity.DatastoreId;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -53,7 +54,7 @@ public class IdStringifierForDatastoreId extends IdStringifier.Abstract<Datastor
 
     @SneakyThrows
     @Override
-    public DatastoreId destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public DatastoreId destring(@NonNull String stringified, @Nullable Class<?> targetEntityClass) {
         int idx = stringified.indexOf(SEPARATOR);
         String clsName = stringified.substring(0, idx);
         String keyStr = stringified.substring(idx + 1);

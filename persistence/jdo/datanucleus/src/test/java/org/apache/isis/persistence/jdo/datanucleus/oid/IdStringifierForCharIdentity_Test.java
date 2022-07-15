@@ -10,6 +10,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.apache.isis.applib.services.bookmark.IdStringifierForCharacter;
 import org.apache.isis.applib.services.bookmark.IdStringifierForString;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharIdentity;
@@ -59,7 +61,7 @@ class IdStringifierForCharIdentity_Test {
         val stringified = stringifier.enstring(value);
         val parse = stringifier.destring(stringified, entityType);
 
-        Assertions.assertThat(parse).isEqualTo(value);
+        assertThat(parse).isEqualTo(value);
     }
 
 }

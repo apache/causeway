@@ -12,7 +12,6 @@ import lombok.val;
 
 class IdStringifierForLong_Test {
 
-
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
                 Arguments.of(Long.MAX_VALUE),
@@ -23,6 +22,8 @@ class IdStringifierForLong_Test {
         );
     }
 
+    static class Customer {}
+
     @ParameterizedTest
     @MethodSource()
     void roundtrip(Long value) {
@@ -30,7 +31,7 @@ class IdStringifierForLong_Test {
         val stringifier = new IdStringifierForLong();
 
         String stringified = stringifier.enstring(value);
-        Long parse = stringifier.destring(stringified, null);
+        Long parse = stringifier.destring(stringified, Customer.class);
 
         assertThat(parse).isEqualTo(value);
     }
