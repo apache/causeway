@@ -37,6 +37,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.locale.UserLocale;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
@@ -48,7 +50,9 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatPrecisionFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
+import org.apache.isis.schema.common.v2.ValueType;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
@@ -156,10 +160,19 @@ implements TemporalValueSemantics<T> {
         return renderHtml(value, withTimeZoneBadge(context, getRenderingFormat(context)::format));
     }
 
-    @Getter(lazy = true)
+    @Getter(lazy = true, value = AccessLevel.PRIVATE)
     private final DateTimeFormatter isoTimeZoneFormat = new DateTimeFormatterBuilder()
             .appendOffsetId()
             .toFormatter(Locale.US); // arbitrarily picking a locale, just in case; (this is an ISO format)
+
+    private final DateTimeFormatter getLocalizedTimeZoneFormat(final ValueSemanticsProvider.Context context) {
+        return new DateTimeFormatterBuilder()
+            .appendPattern("VVx")
+            .toFormatter(Optional.ofNullable(context.getInteractionContext())
+                    .map(InteractionContext::getLocale)
+                    .map(UserLocale::getTimeFormatLocale)
+                    .orElseGet(Locale::getDefault));
+    }
 
     /**
      * Adds a html badge with time-zone information. If this is a local temporal,
@@ -169,11 +182,14 @@ implements TemporalValueSemantics<T> {
     private Function<T, String> withTimeZoneBadge(
             final ValueSemanticsProvider.Context context,
             final Function<T, String> toString) {
+
         return value->toString.apply(value)
                 + String.format(" <span class=\"badge bg-secondary\">%s</span>",
                         this.getOffsetCharacteristic().isLocal()
                         ? translate("local")
-                        : getIsoTimeZoneFormat().format(value));
+                        : getSchemaValueType()==ValueType.ZONED_DATE_TIME
+                            ? getLocalizedTimeZoneFormat(context).format(value)
+                            : getIsoTimeZoneFormat().format(value));
     }
 
     // -- PARSER
