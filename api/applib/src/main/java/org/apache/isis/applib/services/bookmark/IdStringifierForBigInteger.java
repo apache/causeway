@@ -35,7 +35,7 @@ public class IdStringifierForBigInteger extends IdStringifier.AbstractWithPrefix
     }
 
     @Override
-    protected BigInteger doParse(final String stringified, Class<?> owningEntityType) {
+    protected BigInteger doDestring(final String stringified, Class<?> owningEntityType) {
         return new BigInteger(stringified);
     }
 }

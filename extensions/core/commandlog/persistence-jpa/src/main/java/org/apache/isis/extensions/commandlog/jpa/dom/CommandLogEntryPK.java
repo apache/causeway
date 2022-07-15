@@ -42,7 +42,7 @@ public class CommandLogEntryPK implements Serializable {
     public static class Stringifier extends IdStringifier.AbstractWithPrefix<CommandLogEntryPK> {
 
         public Stringifier() {
-            super(CommandLogEntryPK.class, null);
+            super(CommandLogEntryPK.class, "u");
         }
 
         @Override
@@ -51,7 +51,7 @@ public class CommandLogEntryPK implements Serializable {
         }
 
         @Override
-        protected CommandLogEntryPK doParse(String stringified, Class<?> owningEntityType) {
+        protected CommandLogEntryPK doDestring(String stringified, Class<?> owningEntityType) {
             return new CommandLogEntryPK(UUID.fromString(stringified));
         }
     }

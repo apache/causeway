@@ -39,10 +39,10 @@ import org.apache.isis.applib.services.bookmark.BookmarkHolder_lookup;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder_object;
 import org.apache.isis.applib.services.bookmark.IdStringifierForBigDecimal;
 import org.apache.isis.applib.services.bookmark.IdStringifierForBigInteger;
-import org.apache.isis.applib.services.bookmark.IdStringifierForBookmark;
+import org.apache.isis.applib.services.bookmark.IdStringifierForBookmarkDEFUNCT;
 import org.apache.isis.applib.services.bookmark.IdStringifierForByte;
 import org.apache.isis.applib.services.bookmark.IdStringifierForCharacter;
-import org.apache.isis.applib.services.bookmark.IdStringifierForEntity;
+import org.apache.isis.applib.services.bookmark.IdStringifierForEntityDEFUNCT;
 import org.apache.isis.applib.services.bookmark.IdStringifierForInteger;
 import org.apache.isis.applib.services.bookmark.IdStringifierForLong;
 import org.apache.isis.applib.services.bookmark.IdStringifierForSerializable;
@@ -114,9 +114,9 @@ import org.apache.isis.schema.IsisModuleSchema;
     IdStringifierForString.class,
     IdStringifierForBigInteger.class,
     IdStringifierForBigDecimal.class,
-    IdStringifierForBookmark.class,
     IdStringifierForSerializable.class,
-    IdStringifierForEntity.class,
+//    IdStringifierForBookmarkDEFUNCT.class,
+//    IdStringifierForEntityDEFUNCT.class,
     IdStringifierLookupService.class,
 
     CommandDtoProcessorServiceIdentity.class,

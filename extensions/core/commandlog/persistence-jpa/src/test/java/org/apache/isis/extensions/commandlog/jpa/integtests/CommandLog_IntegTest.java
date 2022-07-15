@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jdo;
+package org.apache.isis.extensions.commandlog.jpa.integtests;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -31,8 +32,8 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.commandlog.applib.integtest.CommandLogIntegTestAbstract;
 import org.apache.isis.extensions.commandlog.applib.integtest.model.CommandLogTestDomainModel;
-import org.apache.isis.extensions.commandlog.jdo.model.Counter;
-import org.apache.isis.extensions.commandlog.jdo.model.CounterRepository;
+import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
+import org.apache.isis.extensions.commandlog.jpa.integtests.model.Counter;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
 @SpringBootTest(
@@ -47,18 +48,19 @@ public class CommandLog_IntegTest extends CommandLogIntegTestAbstract {
     @Import({
             IsisModuleCoreRuntimeServices.class,
             IsisModuleSecurityBypass.class,
-            IsisModuleExtCommandLogPersistenceJdo.class,
+            IsisModuleExtCommandLogPersistenceJpa.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test)
     })
-    @ComponentScan(basePackageClasses = {AppManifest.class, CommandLogTestDomainModel.class, CounterRepository.class})
+    @EntityScan(basePackageClasses = {Counter.class})
+    @ComponentScan(basePackageClasses = {AppManifest.class, CommandLogTestDomainModel.class})
     public static class AppManifest {
     }
 
 
     protected org.apache.isis.extensions.commandlog.applib.integtest.model.Counter newCounter() {
-        return Counter.builder().name("bean-counter").build();
+        return Counter.builder().name("my-counter").build();
     }
 
 }

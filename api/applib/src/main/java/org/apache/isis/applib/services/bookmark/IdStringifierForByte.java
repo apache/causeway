@@ -33,7 +33,7 @@ public class IdStringifierForByte extends IdStringifier.AbstractWithPrefix<Byte>
     }
 
     @Override
-    protected Byte doParse(final String stringified, Class<?> owningEntityType) {
+    protected Byte doDestring(final String stringified, Class<?> owningEntityType) {
         return Byte.parseByte(stringified);
     }
 }

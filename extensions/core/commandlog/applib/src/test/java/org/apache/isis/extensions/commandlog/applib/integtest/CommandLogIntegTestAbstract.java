@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -258,7 +259,9 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
         // then
         assertThat(cleBookmarkIfAny).isPresent();
         Bookmark cleBookmark = cleBookmarkIfAny.get();
-        UUID.fromString(cleBookmark.getIdentifier()); // should not fail, ie check the format is as we expect
+        String identifier = cleBookmark.getIdentifier();
+        assertThat(identifier).startsWith("u_");
+        UUID.fromString(identifier.substring(2)); // should not fail, ie check the format is as we expect
 
         // when we start a new session and lookup from the bookmark
         interactionService.closeInteractionLayers();

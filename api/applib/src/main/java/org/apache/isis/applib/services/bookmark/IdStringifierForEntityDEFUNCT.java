@@ -21,31 +21,29 @@ package org.apache.isis.applib.services.bookmark;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Component;
-
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 
 import lombok.val;
 
 
 /**
- * Hmm, not sure if this is really needed...
+ * Hmm, not sure if this is really needed...  HAVE REMOVED FROM MODULE
  *
  * The responsibility and usage of IdStringifier is in the handling of PKs (either datastore-definde or application-defined)
  * into a string.  What neither JDO nor JPA support is the use of an arbitrary object (eg a reference to a Customer),
  * so I can't see that this would ever be called...
  */
-@Component
+// @Component
 @Priority(PriorityPrecedence.LATE + 100) // after the rest
-public class IdStringifierForEntity extends IdStringifier.Abstract<Object> {
+public class IdStringifierForEntityDEFUNCT extends IdStringifier.Abstract<Object> {
 
     private final BookmarkService bookmarkService;
-    private final IdStringifierForBookmark idStringifierForBookmark;
+    private final IdStringifierForBookmarkDEFUNCT idStringifierForBookmark;
 
     @Inject
-    public IdStringifierForEntity(
+    public IdStringifierForEntityDEFUNCT(
             final BookmarkService bookmarkService,
-            final IdStringifierForBookmark idStringifierForBookmark) {
+            final IdStringifierForBookmarkDEFUNCT idStringifierForBookmark) {
         super(Object.class);
         this.bookmarkService = bookmarkService;
         this.idStringifierForBookmark = idStringifierForBookmark;

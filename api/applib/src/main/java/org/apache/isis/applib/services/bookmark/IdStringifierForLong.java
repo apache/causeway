@@ -33,7 +33,7 @@ public class IdStringifierForLong extends IdStringifier.AbstractWithPrefix<Long>
     }
 
     @Override
-    protected Long doParse(final String stringified, Class<?> owningEntityType) {
+    protected Long doDestring(final String stringified, Class<?> owningEntityType) {
         return Long.parseLong(stringified);
     }
 }

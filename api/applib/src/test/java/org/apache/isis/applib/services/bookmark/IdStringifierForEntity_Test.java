@@ -54,7 +54,7 @@ class IdStringifierForEntity_Test {
 
         Mockito.when(mockBookmarkService.bookmarkFor(entity)).thenReturn(Optional.of(bookmark));
         Mockito.when(mockBookmarkService.lookup(bookmark)).thenReturn(Optional.of(entity));
-        val stringifier = new IdStringifierForEntity(mockBookmarkService, new IdStringifierForBookmark());
+        val stringifier = new IdStringifierForEntityDEFUNCT(mockBookmarkService, new IdStringifierForBookmarkDEFUNCT());
 
         String stringified = stringifier.enstring(entity);
         Object parse = stringifier.destring(stringified, null);

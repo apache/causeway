@@ -33,7 +33,7 @@ public class IdStringifierForInteger extends IdStringifier.AbstractWithPrefix<In
     }
 
     @Override
-    protected Integer doParse(final String stringified, Class<?> owningEntityType) {
+    protected Integer doDestring(final String stringified, Class<?> owningEntityType) {
         return Integer.parseInt(stringified);
     }
 }

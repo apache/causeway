@@ -37,7 +37,7 @@ public class IdStringifierForLongIdentity extends IdStringifier.AbstractWithPref
     }
 
     @Override
-    protected LongIdentity doParse(final String stringified, final @NonNull Class<?> owningEntityType) {
+    protected LongIdentity doDestring(final String stringified, final @NonNull Class<?> owningEntityType) {
         return new LongIdentity(owningEntityType, stringified);
     }
 }

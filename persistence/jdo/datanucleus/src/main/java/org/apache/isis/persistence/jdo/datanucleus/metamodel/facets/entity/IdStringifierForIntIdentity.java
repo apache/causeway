@@ -37,7 +37,7 @@ public class IdStringifierForIntIdentity extends IdStringifier.AbstractWithPrefi
     }
 
     @Override
-    protected IntIdentity doParse(final String stringified, final @NonNull Class<?> owningEntityType) {
+    protected IntIdentity doDestring(final String stringified, final @NonNull Class<?> owningEntityType) {
         return new IntIdentity(owningEntityType, stringified);
     }
 }

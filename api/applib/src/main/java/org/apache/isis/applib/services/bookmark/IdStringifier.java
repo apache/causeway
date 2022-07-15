@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -96,13 +97,13 @@ public interface IdStringifier<T> {
         private final String prefix;
 
         public AbstractWithPrefix(
-                final Class<T> handledClass,
-                final String typeCode) {
+                @NonNull final Class<T> handledClass,
+                @NonNull final String typeCode) {
             this(handledClass, typeCode, null);
         }
         public AbstractWithPrefix(
-                final Class<T> handledClass,
-                final String typeCode,
+                @NonNull final Class<T> handledClass,
+                @NonNull final String typeCode,
                 final @Nullable Class<T> primitiveClass) {
             super(handledClass, primitiveClass);
             this.prefix = typeCode + SEPARATOR;
@@ -126,13 +127,13 @@ public interface IdStringifier<T> {
                 return null;
             }
             val suffix = removePrefix(stringified);
-            return doParse(suffix, targetEntityClass);
+            return doDestring(suffix, targetEntityClass);
         }
 
         /**
          * Mandatory hook
          */
-        protected abstract T doParse(String idStr, Class<?> owningType);
+        protected abstract T doDestring(String idStr, Class<?> owningType);
 
         private String removePrefix(String str) {
             if (str.startsWith(prefix)) {

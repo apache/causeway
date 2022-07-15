@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.commandlog.jdo.model;
+package org.apache.isis.extensions.commandlog.jdo.integtests.model;
 
 import org.springframework.stereotype.Repository;
 

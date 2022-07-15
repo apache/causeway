@@ -50,7 +50,14 @@ import org.apache.isis.persistence.jdo.datanucleus.config.DatanucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForByteId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharId;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForIntId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForLongId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForObjectId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForShortId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForStringId;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
@@ -82,14 +89,22 @@ import lombok.extern.log4j.Log4j2;
 
     // @Component's
     DnEntityStateProvider.class,
-    IdStringifierForShortIdentity.class,
+
+    IdStringifierForDatastoreId.class, // datastore identity
+    IdStringifierForShortIdentity.class, // application-defined PK, javax.jdo.identity
     IdStringifierForLongIdentity.class,
     IdStringifierForIntIdentity.class,
     IdStringifierForByteIdentity.class,
     IdStringifierForCharIdentity.class,
     IdStringifierForStringIdentity.class,
     IdStringifierForObjectIdentity.class,
-    IdStringifierForDatastoreId.class,
+    IdStringifierForShortId.class,  // application-defined PK, org.datanucleus.identity
+    IdStringifierForLongId.class,
+    IdStringifierForIntId.class,
+    IdStringifierForByteId.class,
+    IdStringifierForCharId.class,
+    IdStringifierForStringId.class,
+    IdStringifierForObjectId.class,
 
     // @Mixin's
     Persistable_datanucleusVersionLong.class,

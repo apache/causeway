@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.commandlog.jpa.model;
+package org.apache.isis.extensions.commandlog.jpa.integtests.model;
 
 import javax.inject.Named;
 import javax.persistence.Column;

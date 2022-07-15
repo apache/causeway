@@ -18,35 +18,25 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.graph.tree.TreeState;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.memento._Mementos;
 
 /**
- * Hmm, not sure if this is really needed...
+ * Hmm, not sure if this is really needed...  HAVE REMOVED FROM MODULE
  *
  * The responsibility and usage of IdStringifier is in the handling of PKs (either datastore-definde or application-defined)
  * into a string.  So I can't see that this would ever be called...
  */
-@Component
+// @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForBookmark extends IdStringifier.Abstract<Bookmark> {
+public class IdStringifierForBookmarkDEFUNCT extends IdStringifier.Abstract<Bookmark> {
 
     @Inject
-    public IdStringifierForBookmark() {
+    public IdStringifierForBookmarkDEFUNCT() {
         super(Bookmark.class);
     }
 

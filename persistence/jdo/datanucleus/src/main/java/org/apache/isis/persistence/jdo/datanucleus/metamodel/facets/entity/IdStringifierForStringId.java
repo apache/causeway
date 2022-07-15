@@ -19,25 +19,45 @@
 package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
 import javax.annotation.Priority;
-import javax.jdo.identity.ByteIdentity;
+import javax.inject.Inject;
+import javax.jdo.identity.StringIdentity;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.services.bookmark.IdStringifierForString;
 
-import lombok.NonNull;
+import lombok.Builder;
+import lombok.val;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForByteIdentity extends IdStringifier.AbstractWithPrefix<ByteIdentity> {
+public class IdStringifierForStringId extends IdStringifier.Abstract<StringIdentity> {
 
-    public IdStringifierForByteIdentity() {
-        super(ByteIdentity.class, "b");
+    @Inject IdStringifierForString idStringifierForString;
+
+    public IdStringifierForStringId() {
+        super(StringIdentity.class);
+    }
+
+    /**
+     * for testing only
+     */
+    @Builder
+    IdStringifierForStringId(IdStringifierForString idStringifierForString) {
+        this();
+        this.idStringifierForString = idStringifierForString;
     }
 
     @Override
-    protected ByteIdentity doDestring(final String stringified, final @NonNull Class<?> owningEntityType) {
-        return new ByteIdentity(owningEntityType, stringified);
+    public String enstring(StringIdentity value) {
+        return idStringifierForString.enstring(value.getKey());
+    }
+
+    @Override
+    public StringIdentity destring(String stringified, Class<?> targetEntityClass) {
+        val idValue = idStringifierForString.destring(stringified, null);
+        return new StringIdentity(targetEntityClass, idValue);
     }
 }

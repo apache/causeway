@@ -35,7 +35,7 @@ public class IdStringifierForBigDecimal extends IdStringifier.AbstractWithPrefix
     }
 
     @Override
-    protected BigDecimal doParse(final String stringified, Class<?> owningEntityType) {
+    protected BigDecimal doDestring(final String stringified, Class<?> owningEntityType) {
         return new BigDecimal(stringified);
     }
 }

@@ -35,7 +35,7 @@ public class IdStringifierForUuid extends IdStringifier.AbstractWithPrefix<UUID>
     }
 
     @Override
-    public UUID doParse(final String stringified, Class<?> owningEntityType) {
+    public UUID doDestring(final String stringified, Class<?> owningEntityType) {
         return UUID.fromString(stringified);
     }
 
