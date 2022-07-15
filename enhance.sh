@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 usage() {
-  #echo "$(basename $0): [-a] [-c] [-e] [-m] [-o] [-s] [-d]" >&2
-  echo "$(basename $0): [-c] [-e] [-m] [-s] [-d]"           >&2
-  #echo "  -a : audit trail (extensions/security)"          >&2
-  echo "  -c : command log (extensions/core)"               >&2
-  echo "  -e : execution log (extensions/core)"             >&2
-  echo "  -m : secman (extensions/security)"                >&2
-  #echo "  -o : execution outbox (extensions/core)"         >&2
-  echo "  -s : session log (extensions/security)"           >&2
-  echo "  -d : demo (examples/demo/domain)"                 >&2
+  #echo "$(basename $0): [-a] [-c] [-e] [-m] [-o] [-s] [-d] [-t]"              >&2
+  echo "$(basename $0): [-c] [-e] [-m] [-s] [-d] [-t]"                        >&2
+  #echo "  -a : audit trail (extensions/security)"                            >&2
+  echo "  -c : command log (extensions/core)"                                 >&2
+  echo "  -e : execution log (extensions/core)"                               >&2
+  echo "  -m : secman (extensions/security)"                                  >&2
+  #echo "  -o : execution outbox (extensions/core)"                           >&2
+  echo "  -s : session log (extensions/security)"                             >&2
+  echo "  -d : demo (examples/demo/domain)"                                   >&2
+  echo "  -t : JDO regression tests (regressiontests/stable-persistence-jdo)" >&2
 }
 
 
@@ -18,13 +19,14 @@ COMMANDLOG=""
 DEMO=""
 EXECUTIONLOG=""
 EXECUTIONOUTBOX=""
+REGRESSIONTESTS=""
 SECMAN=""
 SESSIONLOG=""
 
 PATHS=()
 
-#while getopts ":acdemosh" arg; do
-while getopts ":cdemsh" arg; do
+#while getopts ":acdemosht" arg; do
+while getopts ":cdemsht" arg; do
   case $arg in
     h)
       usage
@@ -58,6 +60,10 @@ while getopts ":cdemsh" arg; do
       DEMO="enhance"
       PATHS+=( "examples/demo/domain" )
       ;;
+    t)
+      REGRESSIONTESTS="enhance"
+      PATHS+=( "regressiontests/stable-persistence-jdo" )
+      ;;
     *)
       usage
       exit 1
@@ -74,10 +80,15 @@ echo "EXECUTIONOUTBOX : $EXECUTIONOUTBOX"
 echo "SECMAN          : $SECMAN"
 echo "SESSIONLOG      : $SESSIONLOG"
 echo "DEMO            : $DEMO"
+echo "REGRESSIONTESTS : $REGRESSIONTESTS"
 
 
 printf -v PATHS_SPLATTED '%s,' "${PATHS[@]}"
 PL_ARG=$(echo "${PATHS_SPLATTED%,}")
+
+if [ "$REGRESSIONTESTS" = "enhance" ]; then
+  PL_ARG="$PL_ARG -Dmodule-all"
+fi
 
 
 echo mvn install -DskipTests -o -T1C -am -pl $PL_ARG

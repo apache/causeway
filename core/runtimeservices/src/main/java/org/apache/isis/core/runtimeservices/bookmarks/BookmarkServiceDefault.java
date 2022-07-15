@@ -140,13 +140,11 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     @Override
     public <T> T read(final Class<T> valueClass, final Serializable value) {
 
-// I suspect this would create an infinite loop, so commenting out for now to see what gives...
-//
-//        val idStringifierIfAny = idStringifierLookupService.lookup(valueClass, null);
-//        if(idStringifierIfAny.isPresent()) {
-//            IdStringifier<T> idStringifier = idStringifierIfAny.get();
-//            return idStringifier.parse((String)value, null);
-//        }
+        val idStringifierIfAny = idStringifierLookupService.lookup(valueClass);
+        if(idStringifierIfAny.isPresent()) {
+            IdStringifier<T> idStringifier = idStringifierIfAny.get();
+            return idStringifier.destring((String)value, null);
+        }
 
         // see if the value can be handled as a Bookmark
         if(Bookmark.class.equals(valueClass)) {
@@ -170,13 +168,11 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
 
     private <T> Serializable write(T value, Class<T> aClass) {
 
-// I suspect this would create an infinite loop, so commenting out for now to see what gives...
-//
-//        Optional<IdStringifier<T>> idStringifierIfAny = idStringifierLookupService.lookup(aClass, null);
-//        if(idStringifierIfAny.isPresent()) {
-//            IdStringifier<T> idStringifier = idStringifierIfAny.get();
-//            return idStringifier.stringify(value);
-//        }
+        Optional<IdStringifier<T>> idStringifierIfAny = idStringifierLookupService.lookup(aClass);
+        if(idStringifierIfAny.isPresent()) {
+            IdStringifier<T> idStringifier = idStringifierIfAny.get();
+            return idStringifier.enstring(value);
+        }
 
         return bookmarkForElseFail(value);
     }
