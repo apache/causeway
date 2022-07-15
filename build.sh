@@ -103,10 +103,6 @@ fi
 
 OPTS=""
 
-if [ "$SETTINGS" = "true" ]; then
-  OPTS="$OPTS -s _pipeline-resources/build/deployable/.m2/settings.xml"
-fi
-
 if [ "$CLEAN" = "true" ]; then
   OPTS="$OPTS clean"
 fi
@@ -177,15 +173,35 @@ else
   fi
 
   if [ "$SKIP_SEARCH_FOR_FAILURES" = "false" ]; then
+    if [ "$VERBOSE" = "true" ]; then
+      echo "searching for failures and errors (in $MVN_LOG) ..."
+    fi
     grep -in -E 'Failures:\s[1-9]+, Errors: [0-9]+, Skipped: [0-9]+$' -B 20 $MVN_LOG
     grep -in -E 'Failures:\s[0-9]+, Errors: [1-9]+, Skipped: [0-9]+$' -B 20 $MVN_LOG
+  else
+    if [ "$VERBOSE" = "true" ]; then
+      echo "NOT searching for failures and errors"
+    fi
   fi
 
   if [ "$SKIP_SUMMARY" = "false" ]; then
+    if [ "$VERBOSE" = "true" ]; then
+      echo "printing summary..."
+    fi
     if grep -n "Segment walltime" $MVN_LOG ; then
+      if [ "$VERBOSE" = "true" ]; then
+        echo "found 'Segment walltime' ......"
+      fi
       tail -n +$(grep -n "Segment walltime" $MVN_LOG | cut -f1 -d:) $MVN_LOG
     else
+      if [ "$VERBOSE" = "true" ]; then
+        echo "did NOT find 'Segment walltime', so printing last 50 lines of log"
+      fi
       tail -n 50 $MVN_LOG
+    fi
+  else
+    if [ "$VERBOSE" = "true" ]; then
+      echo "NOT printing any summary"
     fi
   fi
 fi

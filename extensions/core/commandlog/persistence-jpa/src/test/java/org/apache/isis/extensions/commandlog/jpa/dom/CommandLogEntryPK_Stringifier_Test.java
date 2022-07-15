@@ -21,6 +21,8 @@ class CommandLogEntryPK_Stringifier_Test {
         );
     }
 
+    static class Customer {}
+
     @ParameterizedTest
     @MethodSource()
     void roundtrip(UUID uuid) {
@@ -29,7 +31,7 @@ class CommandLogEntryPK_Stringifier_Test {
         val stringifier = new CommandLogEntryPK.Stringifier();
 
         String stringified = stringifier.enstring(value);
-        val parse = stringifier.destring(stringified, null);
+        val parse = stringifier.destring(stringified, Customer.class);
 
         assertThat(parse).isEqualTo(value);
     }
