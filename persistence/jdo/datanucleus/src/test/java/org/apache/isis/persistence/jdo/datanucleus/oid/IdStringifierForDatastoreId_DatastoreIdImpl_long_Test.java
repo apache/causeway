@@ -16,7 +16,7 @@ class IdStringifierForDatastoreId_DatastoreIdImpl_long_Test {
 
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
-                Arguments.of(1L, "1[OID]org.apache.isis.persistence.jdo.datanucleus.oid.IdStringifierForDatastoreId_DatastoreIdImpl_long_Test$Customer"),
+                Arguments.of(1L, "1"),
                 Arguments.of(0L, null),
                 Arguments.of(10L, null),
                 Arguments.of(Long.MAX_VALUE, null),
