@@ -20,6 +20,8 @@ package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
@@ -140,7 +142,7 @@ implements EntityFacet {
 
 
         val primaryKeyType = primaryKey.getClass();
-        val idStringifier = _Casts.<IdStringifier<Object>>uncheckedCast(idStringifierLookupService.lookupElseFail(primaryKeyType, spec.getCorrespondingClass()));
+        val idStringifier = _Casts.<IdStringifier<Object>>uncheckedCast(idStringifierLookupService.lookupElseFail(primaryKeyType));
 
         return idStringifier.enstring(primaryKey);
     }
@@ -201,13 +203,11 @@ implements EntityFacet {
         Object entityPojo;
         try {
 
-
-//            val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, bookmark);
             val persistenceManager = getPersistenceManager();
             val entityClass = entitySpec.getCorrespondingClass();
-            Class<?> valueClass = lookupPrimaryKeyType(persistenceManager, entityClass);
+            val primaryKeyType = primaryKeyTypeFor(entityClass);
 
-            val idStringifier = idStringifierLookupService.lookupElseFail(valueClass, null);
+            val idStringifier = idStringifierLookupService.lookupElseFail(primaryKeyType);
             val primaryKey = idStringifier.destring(bookmark.getIdentifier(), entityClass);
 
             val fetchPlan = persistenceManager.getFetchPlan();
@@ -236,31 +236,37 @@ implements EntityFacet {
         return ManagedObject.bookmarked(actualEntitySpec, entityPojo, bookmark);
     }
 
-    private Class<?> lookupPrimaryKeyType(PersistenceManager persistenceManager, Class<?> entityClass) {
+    private Map<Class<?>, Class<?>> primaryKeyClassByEntityClass = new ConcurrentHashMap<>();
+
+    private Class<?> primaryKeyTypeFor(Class<?> entityClass) {
+        return primaryKeyClassByEntityClass.computeIfAbsent(entityClass, this::lookupPrimaryKeyTypeFor);
+    }
+
+    private Class<?> lookupPrimaryKeyTypeFor(Class<?> entityClass) {
+
+        val persistenceManager = getPersistenceManager();
         val pmf = (JDOPersistenceManagerFactory) persistenceManager.getPersistenceManagerFactory();
         val nucleusContext = pmf.getNucleusContext();
 
-        ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
+        val contextLoader = Thread.currentThread().getContextClassLoader();
         val clr = nucleusContext.getClassLoaderResolver(contextLoader);
 
-        TypeMetadata metadata = pmf.getMetadata(entityClass.getName());
-        IdentityType identityType = metadata.getIdentityType();
-        Class<?> valueClass = null;
+        val typeMetadata = pmf.getMetadata(entityClass.getName());
+
+        val identityType = typeMetadata.getIdentityType();
         switch (identityType) {
             case APPLICATION:
-                String objectIdClass = metadata.getObjectIdClass();
-                valueClass = clr.classForName(objectIdClass);
-                break;
+                String objectIdClass = typeMetadata.getObjectIdClass();
+                return clr.classForName(objectIdClass);
             case DATASTORE:
-                valueClass = nucleusContext.getIdentityManager().getDatastoreIdClass();
-                break;
+                return nucleusContext.getIdentityManager().getDatastoreIdClass();
             case UNSPECIFIED:
             case NONDURABLE:
+            default:
                 throw new IllegalStateException(String.format(
                         "JdoEntityFacet has been incorrectly installed on '%s' which has an supported identityType of '%s'",
                         entityClass.getName(), identityType));
         }
-        return valueClass;
     }
 
     @Override

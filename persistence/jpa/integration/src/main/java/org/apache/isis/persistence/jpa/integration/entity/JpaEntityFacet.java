@@ -121,7 +121,7 @@ public class JpaEntityFacet
     private <T> IdStringifier<T> lookupIdStringifier(Class<T> primaryKeyType) {
         // unlike JDO, none of the JPA types need to know the parent entity type to stringify/parse
         // so we just use null for the second arg.
-        return _Casts.uncheckedCast(idStringifierLookupService.lookupElseFail(primaryKeyType, null));
+        return _Casts.uncheckedCast(idStringifierLookupService.lookupElseFail(primaryKeyType));
     }
 
     @Override

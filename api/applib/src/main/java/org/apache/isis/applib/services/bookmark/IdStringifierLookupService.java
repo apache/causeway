@@ -32,23 +32,25 @@ public class IdStringifierLookupService {
 
     @Inject
     private final List<IdStringifier<?>> idStringifiers;
-    private final Map<Key<?>, IdStringifier<?>> stringifierByClass = new ConcurrentHashMap<>();
+    private final Map<Class<?>, IdStringifier<?>> stringifierByClass = new ConcurrentHashMap<>();
 
-    public <T> IdStringifier<T> lookupElseFail(Class<T> candidateValueClass, Class<?> candidateEntityClassIfAny) {
-        val key = new Key<T>(candidateValueClass, candidateEntityClassIfAny);
-        return lookup(key)
-                .orElseThrow(() -> new IllegalStateException(String.format("Could not locate an IdStringifier to handle '%s'", key)));
-    }
-
-    public <T> Optional<IdStringifier<T>> lookup(Class<T> candidateValueClass, Class<?> candidateEntityClassIfAny) {
-        val key = new Key<T>(candidateValueClass, candidateEntityClassIfAny);
-        return lookup(key);
-    }
-
-    private <T> Optional<IdStringifier<T>> lookup(Key<T> key) {
-        val idStringifier = stringifierByClass.computeIfAbsent(key, aClass -> {
+    public <T> IdStringifier<T> lookupElseFail(Class<T> candidateValueClass) {
+        val idStringifier = stringifierByClass.computeIfAbsent(candidateValueClass, aClass -> {
             for (val candidateStringifier : idStringifiers) {
-                if (candidateStringifier.handles(key.valueClass)) {
+                if (candidateStringifier.handles(candidateValueClass)) {
+                    return candidateStringifier;
+                }
+            }
+            return null;
+        });
+        return Optional.<IdStringifier<T>>ofNullable(_Casts.uncheckedCast(idStringifier))
+                .orElseThrow(() -> new IllegalStateException(String.format("Could not locate an IdStringifier to handle '%s'", candidateValueClass)));
+    }
+
+    public <T> Optional<IdStringifier<T>> lookup(Class<T> candidateValueClass) {
+        val idStringifier = stringifierByClass.computeIfAbsent(candidateValueClass, aClass -> {
+            for (val candidateStringifier : idStringifiers) {
+                if (candidateStringifier.handles(candidateValueClass)) {
                     return candidateStringifier;
                 }
             }
@@ -61,14 +63,12 @@ public class IdStringifierLookupService {
     @ToString
     static class Key<T> {
         private final Class<T> valueClass;
-        private final Class<?> entityClassIAny;
 
         public Key(Class<T> valueClass) {
             this(valueClass, null);
         }
         public Key(Class<T> valueClass, Class<?> entityClassIAny) {
             this.valueClass = valueClass;
-            this.entityClassIAny = entityClassIAny;
         }
     }
 }
