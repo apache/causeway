@@ -35,6 +35,7 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
+import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.DateTimeConfig.TodayButton;
 
 import lombok.val;
 
@@ -51,6 +52,7 @@ import static de.agilecoders.wicket.jquery.JQuery.$;
  */
 public class TextFieldWithDateTimePicker<T>
 extends TextField<T>
+//extends AbstractDateTimePickerWithIcon<T>
 implements IConverter<T> {
 
     private static final long serialVersionUID = 1L;
@@ -98,20 +100,22 @@ implements IConverter<T> {
 
         val config = new DateTimeConfig();
 
+        // FIXME[ISIS-3085] some of the config options were already broken in TDv5, needs fixes for TDv6
+
         // if this text field is for a LocalDate, then the pattern obtained will just be a simple date format
         // (with no hour/minute components).
         final String dateTimePattern = ((ConverterBasedOnValueSemantics<T>)converter).getEditingPattern();
         config.withFormat(_TimeFormatUtil.convertToMomentJsFormat(dateTimePattern));
-
         config.calendarWeeks(true);
         config.useCurrent(false);
-
-        // seems not to do anything...
-        //config.allowKeyboardNavigation(true);
-
         config.minDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMinDate());
         config.maxDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMaxDate());
         config.readonly(!this.isEnabled());
+        config.highlightToday(true);
+        config.showTodayButton(TodayButton.TRUE);
+        config.clearButton(isInputNullable());
+        config.closeButton(true);
+        config.allowKeyboardNavigation(true);
 
         this.config = config;
 
@@ -197,6 +201,5 @@ implements IConverter<T> {
     private CharSequence createScript(final DateTimeConfig config) {
         return $(this).chain("datetimepicker", config).get();
     }
-
 
 }

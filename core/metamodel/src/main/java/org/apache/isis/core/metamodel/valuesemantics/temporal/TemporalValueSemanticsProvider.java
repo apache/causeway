@@ -20,12 +20,15 @@ package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalQuery;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
@@ -150,7 +153,27 @@ implements TemporalValueSemantics<T> {
     public final String htmlPresentation(
             final ValueSemanticsProvider.Context context,
             final T value) {
-        return renderHtml(value, getRenderingFormat(context)::format);
+        return renderHtml(value, withTimeZoneBadge(context, getRenderingFormat(context)::format));
+    }
+
+    @Getter(lazy = true)
+    private final DateTimeFormatter isoTimeZoneFormat = new DateTimeFormatterBuilder()
+            .appendOffsetId()
+            .toFormatter(Locale.US); // arbitrarily picking a locale, just in case; (this is an ISO format)
+
+    /**
+     * Adds a html badge with time-zone information. If this is a local temporal,
+     * instead adds the translatable literal 'local' as a html badge.
+     * @apiNote Ideally this logic would move to Wicket Viewer, as it depends on presence of <i>Bootstrap</i>.
+     */
+    private Function<T, String> withTimeZoneBadge(
+            final ValueSemanticsProvider.Context context,
+            final Function<T, String> toString) {
+        return value->toString.apply(value)
+                + String.format(" <span class=\"badge bg-secondary\">%s</span>",
+                        this.getOffsetCharacteristic().isLocal()
+                        ? translate("local")
+                        : getIsoTimeZoneFormat().format(value));
     }
 
     // -- PARSER
