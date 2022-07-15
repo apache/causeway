@@ -41,6 +41,7 @@ import org.apache.isis.applib.services.bookmark.IdStringifierForBigDecimal;
 import org.apache.isis.applib.services.bookmark.IdStringifierForBigInteger;
 import org.apache.isis.applib.services.bookmark.IdStringifierForBookmark;
 import org.apache.isis.applib.services.bookmark.IdStringifierForByte;
+import org.apache.isis.applib.services.bookmark.IdStringifierForCharacter;
 import org.apache.isis.applib.services.bookmark.IdStringifierForEntity;
 import org.apache.isis.applib.services.bookmark.IdStringifierForInteger;
 import org.apache.isis.applib.services.bookmark.IdStringifierForLong;
@@ -109,6 +110,7 @@ import org.apache.isis.schema.IsisModuleSchema;
     IdStringifierForInteger.class,
     IdStringifierForShort.class,
     IdStringifierForUuid.class,
+    IdStringifierForCharacter.class,
     IdStringifierForString.class,
     IdStringifierForBigInteger.class,
     IdStringifierForBigDecimal.class,

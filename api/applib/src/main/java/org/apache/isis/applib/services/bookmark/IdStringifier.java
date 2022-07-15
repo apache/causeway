@@ -4,71 +4,90 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.commons.internal.base._Strings;
-
-import lombok.Getter;
-import lombok.NonNull;
 import lombok.val;
 
 /**
- * SPI to allow other modules to extend the bookmarking mechanism.
+ * SPI to converts the identifier (primary key) of an entity, of a given type (eg Integer) into a string, and
+ * to convert back again into the key object used to actually look up the target entity instance; supported by both JDO
+ * and JPA persistence mechanisms.
  *
  * <p>
- * Also used internally so that simple values (such as numbers) are trivially serialized.
+ *     This is ultimately used by {@link BookmarkService} where we hold a persistent reference to an entity.  The
+ *     resultant string also appears in URLs of the Wicket viewer and Restful Objects viewers, and in mementos eg
+ *     in {@link org.apache.isis.schema.cmd.v2.CommandDto} and {@link org.apache.isis.schema.ixn.v2.InteractionDto}.
+ * </p>
+ *
+ * <p>
+ *     The framework provides default implementations of this SPI for JDO (data store and application identity) and
+ *     for JPA. Because this is an SPI, other modules or application code can provide their own implementations.
+ *     An example of such is the JPA implementation of the <code>commandlog</code> extension.
  * </p>
  */
 public interface IdStringifier<T> {
 
     /**
-     * Whether this {@link IdStringifier} is able to {@link #stringify(Object)} or {@link #parse(String, Class)} values
+     * Whether this {@link IdStringifier} is able to {@link #enstring(Object)} or {@link #destring(String, Class)} values
      * of this type.
      *
      * <p>
-     *     Even though some implementations also require the owning entity type in order to {@link #parse(String, Class)},
-     *     we do not consider that as part of this function; we assume that the entity type will be provided
-     *     when necessary (by the JDO entity facet, in fact).  This is sufficient.
+     * Even though some implementations also require the owning entity type in order to {@link #destring(String, Class)},
+     * we do not consider that as part of this function; we assume that the entity type will be provided
+     * when necessary (by the JDO entity facet, in fact).  This is sufficient.
      * </p>
+     *
      * @param candidateValueClass
      */
     boolean handles(Class<?> candidateValueClass);
 
-    Class<T> getHandledClass();
-
-    String stringify(final T value);
 
     /**
+     * Convert the value (which will be of the same type as is {@link #handles(Class) handled} into a string
+     * representation.
      *
-     * @param stringified - as returned by {@link #stringify(Object)}
-     * @param owningEntityType - optional, but if provided is a hint as to the type of the owning entity type of this identifier.  Used by JDO implementations for their opaque types <code>ByteIdentity</code> and similar).
+     * @see #destring(String, Class)
+     * @see #handles(Class)
      */
-    T parse(final String stringified, Class<?> owningEntityType);
+    String enstring(final T value);
+
+    /**
+     * Convert a string representation of the identifier (as returned by {@link #enstring(Object)}) into an object
+     * that can be used to retrieve.
+     *
+     * @param stringified - as returned by {@link #enstring(Object)}
+     * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
+     *                            we always have this information available, and is needed (at least) by the JDO
+     *                            implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
+     */
+    T destring(final String stringified, Class<?> targetEntityClass);
 
     abstract class Abstract<T> implements IdStringifier<T> {
 
         protected final static char SEPARATOR = '_';
 
-        @Getter
-        private final Class<T> handledClass;
+        /**
+         * eg <code>Integer.class</code>, or JDO-specific <code>DatastoreId</code>, or a custom class for application-defined PKs.
+         */
+        private final Class<T> valueClass;
         /**
          * Allows for a Stringifier to handle (for example) both <code>Integer.class</code> and <code>int.class</code>.
          */
-        @Getter
-        private final Optional<Class<T>> primitiveClass;
+        private final Optional<Class<T>> primitiveValueClass;
 
         public Abstract(
                 final Class<T> handledClass) {
             this(handledClass, null);
         }
         public Abstract(
-                final Class<T> handledClass,
-                final @Nullable Class<T> primitiveClass) {
-            this.handledClass = handledClass;
-            this.primitiveClass = Optional.ofNullable(primitiveClass);
+                final Class<T> valueClass,
+                final @Nullable Class<T> primitiveClass
+                ) {
+            this.valueClass = valueClass;
+            this.primitiveValueClass = Optional.ofNullable(primitiveClass);
         }
 
         @Override
         public boolean handles(Class<?> candidateValueClass) {
-            return handledClass.isAssignableFrom(candidateValueClass) || primitiveClass.isPresent() && primitiveClass.get().isAssignableFrom(candidateValueClass) ;
+            return valueClass.isAssignableFrom(candidateValueClass) || primitiveValueClass.isPresent() && primitiveValueClass.get().isAssignableFrom(candidateValueClass);
         }
     }
 
@@ -90,7 +109,7 @@ public interface IdStringifier<T> {
         }
 
         @Override
-        public final String stringify(T value) {
+        public final String enstring(T value) {
             return prefix + doStringify(value);
         }
 
@@ -102,12 +121,12 @@ public interface IdStringifier<T> {
         }
 
         @Override
-        public final T parse(final String stringified, final @Nullable Class<?> owningEntityType) {
+        public final T destring(final String stringified, final @Nullable Class<?> targetEntityClass) {
             if (stringified == null) {
                 return null;
             }
             val suffix = removePrefix(stringified);
-            return doParse(suffix, owningEntityType);
+            return doParse(suffix, targetEntityClass);
         }
 
         /**

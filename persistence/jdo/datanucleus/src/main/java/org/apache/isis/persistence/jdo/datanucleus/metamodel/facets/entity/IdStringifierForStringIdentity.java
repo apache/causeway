@@ -28,9 +28,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.bookmark.IdStringifierForString;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.val;
 
 @Component
@@ -53,13 +51,13 @@ public class IdStringifierForStringIdentity extends IdStringifier.Abstract<Strin
     }
 
     @Override
-    public String stringify(StringIdentity value) {
-        return idStringifierForString.doStringify(value.toString());
+    public String enstring(StringIdentity value) {
+        return idStringifierForString.enstring(value.getKey());
     }
 
     @Override
-    public StringIdentity parse(String stringified, Class<?> owningEntityType) {
-        val idValue = idStringifierForString.doParse(stringified, null);
-        return new StringIdentity(owningEntityType, idValue);
+    public StringIdentity destring(String stringified, Class<?> targetEntityClass) {
+        val idValue = idStringifierForString.destring(stringified, null);
+        return new StringIdentity(targetEntityClass, idValue);
     }
 }

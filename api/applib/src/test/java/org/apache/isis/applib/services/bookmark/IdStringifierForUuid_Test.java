@@ -28,8 +28,8 @@ class IdStringifierForUuid_Test {
 
         val stringifier = new IdStringifierForUuid();
 
-        String stringified = stringifier.stringify(value);
-        UUID parse = stringifier.parse(stringified, null);
+        String stringified = stringifier.enstring(value);
+        UUID parse = stringifier.destring(stringified, null);
 
         assertThat(parse).isEqualTo(value);
     }

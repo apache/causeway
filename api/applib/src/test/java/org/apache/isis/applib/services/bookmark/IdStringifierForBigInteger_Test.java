@@ -1,10 +1,8 @@
 package org.apache.isis.applib.services.bookmark;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.stream.Stream;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -36,8 +34,8 @@ class IdStringifierForBigInteger_Test {
 
         val stringifier = new IdStringifierForBigInteger();
 
-        String stringified = stringifier.stringify(bigInteger);
-        BigInteger parse = stringifier.parse(stringified, null);
+        String stringified = stringifier.enstring(bigInteger);
+        BigInteger parse = stringifier.destring(stringified, null);
 
         assertThat(parse).isEqualTo(bigInteger);
     }

@@ -110,12 +110,12 @@ public class JpaEntityFacet
         }
 
         Class<?> primaryKeyType = getPrimaryKeyType();
-        return stringify2(_Casts.uncheckedCast(primaryKey), primaryKeyType);
+        return identifierFor(primaryKeyType, _Casts.uncheckedCast(primaryKey));
     }
 
-    private <T> String stringify2(T primaryKey, Class<T> primaryKeyType) {
+    private <T> String identifierFor(Class<T> primaryKeyType, T primaryKey) {
         val stringifier = lookupIdStringifier(primaryKeyType);
-        return stringifier.stringify(primaryKey);
+        return stringifier.enstring(primaryKey);
     }
 
     private <T> IdStringifier<T> lookupIdStringifier(Class<T> primaryKeyType) {
@@ -134,7 +134,7 @@ public class JpaEntityFacet
         log.debug("fetchEntity; bookmark={}", bookmark);
 
         val idStringifier = lookupIdStringifier(getPrimaryKeyType());
-        val primaryKey = idStringifier.parse(bookmark.getIdentifier(), entitySpec.getCorrespondingClass());
+        val primaryKey = idStringifier.destring(bookmark.getIdentifier(), entitySpec.getCorrespondingClass());
         val entityManager = getEntityManager();
         val entityPojo = entityManager.find(entityClass, primaryKey);
 

@@ -29,8 +29,8 @@ class IdStringifierForByte_Test {
 
         val stringifier = new IdStringifierForByte();
 
-        String stringified = stringifier.stringify(value);
-        Byte parse = stringifier.parse(stringified, null);
+        String stringified = stringifier.enstring(value);
+        Byte parse = stringifier.destring(stringified, null);
 
         assertThat(parse).isEqualTo(value);
     }

@@ -35,8 +35,8 @@ class IdStringifierForIntIdentity_Test {
 
         val stringifier = new IdStringifierForIntIdentity();
 
-        val stringified = stringifier.stringify(new IntIdentity(entityType, value));
-        val parse = stringifier.parse(stringified, entityType);
+        val stringified = stringifier.enstring(new IntIdentity(entityType, value));
+        val parse = stringifier.destring(stringified, entityType);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);

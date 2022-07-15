@@ -28,8 +28,8 @@ class CommandLogEntryPK_Stringifier_Test {
 
         val stringifier = new CommandLogEntryPK.Stringifier();
 
-        String stringified = stringifier.stringify(value);
-        val parse = stringifier.parse(stringified, null);
+        String stringified = stringifier.enstring(value);
+        val parse = stringifier.destring(stringified, null);
 
         assertThat(parse).isEqualTo(value);
     }

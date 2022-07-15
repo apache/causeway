@@ -24,7 +24,6 @@ import java.util.Set;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.springframework.stereotype.Component;
 
@@ -49,7 +48,7 @@ public class IdStringifierForSerializable extends IdStringifier.Abstract<Seriali
     @Inject
     public IdStringifierForSerializable(
             final @NonNull UrlEncodingService codec) {
-        super(Serializable.class, null);
+        super(Serializable.class);
         this.codec = codec;
         this.serializer = new _Mementos.SerializingAdapter() {
             @Override
@@ -70,12 +69,12 @@ public class IdStringifierForSerializable extends IdStringifier.Abstract<Seriali
     }
 
     @Override
-    public String stringify(final Serializable id) {
+    public String enstring(final Serializable id) {
         return newMemento().put("id", id).asString();
     }
 
     @Override
-    public Serializable parse(final String stringified, Class<?> owningEntityType) {
+    public Serializable destring(final String stringified, Class<?> targetEntityClass) {
         if (_Strings.isEmpty(stringified)) {
             return null;
         }

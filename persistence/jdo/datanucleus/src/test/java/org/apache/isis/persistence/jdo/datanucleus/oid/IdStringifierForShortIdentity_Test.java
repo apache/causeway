@@ -35,8 +35,8 @@ class IdStringifierForShortIdentity_Test {
 
         val stringifier = new IdStringifierForShortIdentity();
 
-        val stringified = stringifier.stringify(new ShortIdentity(entityType, value));
-        val parse = stringifier.parse(stringified, entityType);
+        val stringified = stringifier.enstring(new ShortIdentity(entityType, value));
+        val parse = stringifier.destring(stringified, entityType);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);

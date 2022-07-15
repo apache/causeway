@@ -35,21 +35,27 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.memento._Mementos;
 
+/**
+ * Hmm, not sure if this is really needed...
+ *
+ * The responsibility and usage of IdStringifier is in the handling of PKs (either datastore-definde or application-defined)
+ * into a string.  So I can't see that this would ever be called...
+ */
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class IdStringifierForBookmark extends IdStringifier.Abstract<Bookmark> {
 
     @Inject
     public IdStringifierForBookmark() {
-        super(Bookmark.class, null);
+        super(Bookmark.class);
     }
 
-    public String stringify(final Bookmark object) {
+    public String enstring(final Bookmark object) {
         return object.toString();
     }
 
     @Override
-    public Bookmark parse(final String stringified, Class<?> owningEntityType) {
+    public Bookmark destring(final String stringified, Class<?> targetEntityClass) {
         return Bookmark.parseElseFail(stringified);
     }
 

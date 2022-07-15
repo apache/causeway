@@ -18,29 +18,23 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.graph.tree.TreeState;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.memento._Mementos;
 
-import lombok.NonNull;
 import lombok.val;
 
+
+/**
+ * Hmm, not sure if this is really needed...
+ *
+ * The responsibility and usage of IdStringifier is in the handling of PKs (either datastore-definde or application-defined)
+ * into a string.  What neither JDO nor JPA support is the use of an arbitrary object (eg a reference to a Customer),
+ * so I can't see that this would ever be called...
+ */
 @Component
 @Priority(PriorityPrecedence.LATE + 100) // after the rest
 public class IdStringifierForEntity extends IdStringifier.Abstract<Object> {
@@ -52,7 +46,7 @@ public class IdStringifierForEntity extends IdStringifier.Abstract<Object> {
     public IdStringifierForEntity(
             final BookmarkService bookmarkService,
             final IdStringifierForBookmark idStringifierForBookmark) {
-        super(Object.class, null);
+        super(Object.class);
         this.bookmarkService = bookmarkService;
         this.idStringifierForBookmark = idStringifierForBookmark;
     }
@@ -62,20 +56,17 @@ public class IdStringifierForEntity extends IdStringifier.Abstract<Object> {
         return true;
     }
 
-    public String stringify(final Object object) {
+    public String enstring(final Object object) {
         if (object == null) {
             return null;
         }
         val bookmark = bookmarkService.bookmarkFor(object).orElseThrow(() -> new IllegalArgumentException(String.format("Could not create bookmark for '%s'", object)));
-        return idStringifierForBookmark.stringify(bookmark);
+        return idStringifierForBookmark.enstring(bookmark);
     }
 
     @Override
-    public Object parse(final String stringified, Class<?> owningEntityType) {
-        if (_Strings.isNullOrEmpty(stringified)) {
-            return null;
-        }
-        val bookmark = idStringifierForBookmark.parse(stringified, owningEntityType);
+    public Object destring(final String stringified, Class<?> targetEntityClass) {
+        val bookmark = idStringifierForBookmark.destring(stringified, targetEntityClass);
         return bookmarkService.lookup(bookmark).orElseThrow(() -> new IllegalArgumentException(String.format("Could not lookup object from '%s'", bookmark)));
     }
 

@@ -29,8 +29,8 @@ class IdStringifierForShort_Test {
 
         val stringifier = new IdStringifierForShort();
 
-        String stringified = stringifier.stringify(value);
-        Short parse = stringifier.parse(stringified, null);
+        String stringified = stringifier.enstring(value);
+        Short parse = stringifier.destring(stringified, null);
 
         assertThat(parse).isEqualTo(value);
     }

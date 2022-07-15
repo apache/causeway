@@ -50,6 +50,7 @@ import org.apache.isis.persistence.jdo.datanucleus.config.DatanucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharIdentity;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
@@ -85,6 +86,7 @@ import lombok.extern.log4j.Log4j2;
     IdStringifierForLongIdentity.class,
     IdStringifierForIntIdentity.class,
     IdStringifierForByteIdentity.class,
+    IdStringifierForCharIdentity.class,
     IdStringifierForStringIdentity.class,
     IdStringifierForObjectIdentity.class,
     IdStringifierForDatastoreId.class,

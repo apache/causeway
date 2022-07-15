@@ -35,8 +35,8 @@ class IdStringifierForByteIdentity_Test {
 
         val stringifier = new IdStringifierForByteIdentity();
 
-        val stringified = stringifier.stringify(new ByteIdentity(entityType, value));
-        val parse = stringifier.parse(stringified, entityType);
+        val stringified = stringifier.enstring(new ByteIdentity(entityType, value));
+        val parse = stringifier.destring(stringified, entityType);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);

@@ -29,8 +29,8 @@ class IdStringifierForInteger_primitive_Test {
 
         val stringifier = new IdStringifierForInteger();
 
-        String stringified = stringifier.stringify(value);
-        Integer parse = stringifier.parse(stringified, null);
+        String stringified = stringifier.enstring(value);
+        Integer parse = stringifier.destring(stringified, null);
 
         assertThat(parse).isEqualTo(value);
     }

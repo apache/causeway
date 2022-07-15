@@ -18,58 +18,46 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
-import java.util.UUID;
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
-import javax.jdo.identity.ObjectIdentity;
+import javax.jdo.identity.CharIdentity;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.applib.services.bookmark.IdStringifierForUuid;
+import org.apache.isis.applib.services.bookmark.IdStringifierForCharacter;
 
 import lombok.Builder;
+import lombok.val;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-@Builder
-public class IdStringifierForObjectIdentity extends IdStringifier.Abstract<ObjectIdentity> {
+public class IdStringifierForCharIdentity extends IdStringifier.Abstract<CharIdentity> {
 
-    @Inject IdStringifierForUuid idStringifierForUuid;
+    @Inject IdStringifierForCharacter idStringifierForCharacter;
 
-    public IdStringifierForObjectIdentity() {
-        super(ObjectIdentity.class);
+    public IdStringifierForCharIdentity() {
+        super(CharIdentity.class);
     }
 
     /**
      * for testing only
-     * @param idStringifierForUuid
      */
     @Builder
-    IdStringifierForObjectIdentity(IdStringifierForUuid idStringifierForUuid) {
+    IdStringifierForCharIdentity(IdStringifierForCharacter idStringifierForCharacter) {
         this();
-        this.idStringifierForUuid = idStringifierForUuid;
+        this.idStringifierForCharacter = idStringifierForCharacter;
     }
 
     @Override
-    public String enstring(ObjectIdentity value) {
-        Object keyAsObject = value.getKeyAsObject();
-        if (keyAsObject instanceof UUID) {
-            UUID uuid = (UUID) keyAsObject;
-            return idStringifierForUuid.enstring(uuid);
-        }
-        // rely on JDO spec (5.4.3)
-        return value.toString();
+    public String enstring(CharIdentity value) {
+        return idStringifierForCharacter.enstring(value.getKey());
     }
 
     @Override
-    public ObjectIdentity destring(String stringified, Class<?> targetEntityClass) {
-        if (idStringifierForUuid.recognizes(stringified)) {
-            UUID uuid = idStringifierForUuid.destring(stringified, null);
-            return new ObjectIdentity(targetEntityClass, uuid);
-        }
-        return new ObjectIdentity(targetEntityClass, stringified);
+    public CharIdentity destring(String stringified, Class<?> targetEntityClass) {
+        val idValue = idStringifierForCharacter.destring(stringified, null);
+        return new CharIdentity(targetEntityClass, idValue);
     }
 }

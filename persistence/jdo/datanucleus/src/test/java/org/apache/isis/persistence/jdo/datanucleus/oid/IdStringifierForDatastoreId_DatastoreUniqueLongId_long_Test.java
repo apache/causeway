@@ -34,8 +34,8 @@ class IdStringifierForDatastoreId_DatastoreUniqueLongId_long_Test {
 
         val stringifier = new IdStringifierForDatastoreId();
 
-        val stringified = stringifier.stringify(new DatastoreUniqueLongId(value));
-        val parse = stringifier.parse(stringified, null); // no need to pass entityType
+        val stringified = stringifier.enstring(new DatastoreUniqueLongId(value));
+        val parse = stringifier.destring(stringified, null); // no need to pass entityType
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         // UnsupportedOperationException if attempt this.

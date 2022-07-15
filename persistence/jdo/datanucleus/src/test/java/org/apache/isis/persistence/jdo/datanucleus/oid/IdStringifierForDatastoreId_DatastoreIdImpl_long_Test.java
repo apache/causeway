@@ -34,8 +34,8 @@ class IdStringifierForDatastoreId_DatastoreIdImpl_long_Test {
 
         val stringifier = new IdStringifierForDatastoreId();
 
-        val stringified = stringifier.stringify(new DatastoreIdImpl(entityType.getName(), value));
-        val parse = stringifier.parse(stringified, entityType);
+        val stringified = stringifier.enstring(new DatastoreIdImpl(entityType.getName(), value));
+        val parse = stringifier.destring(stringified, entityType);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClassName()).isEqualTo(entityType.getName());

@@ -1,7 +1,5 @@
 package org.apache.isis.applib.services.bookmark;
 
-import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -14,11 +12,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.memento._Mementos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,8 +56,8 @@ class IdStringifierForEntity_Test {
         Mockito.when(mockBookmarkService.lookup(bookmark)).thenReturn(Optional.of(entity));
         val stringifier = new IdStringifierForEntity(mockBookmarkService, new IdStringifierForBookmark());
 
-        String stringified = stringifier.stringify(entity);
-        Object parse = stringifier.parse(stringified, null);
+        String stringified = stringifier.enstring(entity);
+        Object parse = stringifier.destring(stringified, null);
 
         assertThat(parse).isSameAs(entity);
     }

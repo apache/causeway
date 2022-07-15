@@ -29,8 +29,8 @@ class IdStringifierForLong_primitive_Test {
 
         val stringifier = new IdStringifierForLong();
 
-        String stringified = stringifier.stringify(value);
-        Long parse = stringifier.parse(stringified, null);
+        String stringified = stringifier.enstring(value);
+        Long parse = stringifier.destring(stringified, null);
 
         assertThat(parse).isEqualTo(value);
     }

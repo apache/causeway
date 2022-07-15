@@ -25,8 +25,17 @@ import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.metadata.TypeMetadata;
 
+import org.datanucleus.ClassLoaderResolver;
+import org.datanucleus.ClassNameConstants;
+import org.datanucleus.ExecutionContext;
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.enhancement.Persistable;
+import org.datanucleus.exceptions.NucleusException;
+import org.datanucleus.metadata.AbstractClassMetaData;
+import org.datanucleus.metadata.AbstractMemberMetaData;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
@@ -58,7 +67,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -134,8 +142,52 @@ implements EntityFacet {
         val primaryKeyType = primaryKey.getClass();
         val idStringifier = _Casts.<IdStringifier<Object>>uncheckedCast(idStringifierLookupService.lookupElseFail(primaryKeyType, spec.getCorrespondingClass()));
 
-        return idStringifier.stringify(primaryKey);
+        return idStringifier.enstring(primaryKey);
     }
+
+    /**
+     * Adapted from {@link org.datanucleus.identity.IdentityUtils#getObjectFromPersistableIdentity(String, AbstractClassMetaData, ExecutionContext)},
+     * however we just want the primary key type, not to find the object.
+     */
+    public static Object getObjectIdentifierFromPersistableIdentity(String persistableId, AbstractClassMetaData cmd, ExecutionContext ec)
+    {
+        ClassLoaderResolver clr = ec.getClassLoaderResolver();
+        Object id = null;
+        if (cmd == null)
+        {
+            throw new NucleusException("Cannot get object from id=" + persistableId + " since class name was not supplied!");
+        }
+        if (cmd.getIdentityType() == org.datanucleus.metadata.IdentityType.DATASTORE)
+        {
+            id = ec.getNucleusContext().getIdentityManager().getDatastoreId(persistableId);
+        }
+        else if (cmd.getIdentityType() == org.datanucleus.metadata.IdentityType.APPLICATION)
+        {
+            if (cmd.usesSingleFieldIdentityClass())
+            {
+                String className = persistableId.substring(0, persistableId.indexOf(':'));
+                cmd = ec.getMetaDataManager().getMetaDataForClass(className, clr);
+
+                String idStr = persistableId.substring(persistableId.indexOf(':')+1);
+                if (cmd.getObjectidClass().equals(ClassNameConstants.IDENTITY_SINGLEFIELD_OBJECT))
+                {
+                    // For ObjectId we need to pass "PkFieldType:{id}" - see ObjectId.toString()
+                    // For all other SingleFieldId we pass "{id}" - see XXXId.toString()
+                    int[] pkMemberPositions = cmd.getPKMemberPositions();
+                    AbstractMemberMetaData pkMmd = cmd.getMetaDataForManagedMemberAtAbsolutePosition(pkMemberPositions[0]);
+                    idStr = pkMmd.getTypeName() + ":" + idStr;
+                }
+                id = ec.getNucleusContext().getIdentityManager().getApplicationId(clr, cmd, idStr);
+            }
+            else
+            {
+                Class cls = clr.classForName(cmd.getFullClassName());
+                id = ec.newObjectId(cls, persistableId);
+            }
+        }
+        return id;
+    }
+
 
     @Override
     public ManagedObject fetchByIdentifier(
@@ -148,11 +200,16 @@ implements EntityFacet {
 
         Object entityPojo;
         try {
-            // idStringifierLookupService.lookupElseFail(primaryKeyType, spec.getCorrespondingClass())
 
-            val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, bookmark);
+
+//            val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, bookmark);
             val persistenceManager = getPersistenceManager();
             val entityClass = entitySpec.getCorrespondingClass();
+            Class<?> valueClass = lookupPrimaryKeyType(persistenceManager, entityClass);
+
+            val idStringifier = idStringifierLookupService.lookupElseFail(valueClass, null);
+            val primaryKey = idStringifier.destring(bookmark.getIdentifier(), entityClass);
+
             val fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
             entityPojo = persistenceManager.getObjectById(entityClass, primaryKey);
@@ -177,6 +234,33 @@ implements EntityFacet {
         getServiceInjector().injectServicesInto(entityPojo); // might be redundant
         //TODO integrate with entity change tracking
         return ManagedObject.bookmarked(actualEntitySpec, entityPojo, bookmark);
+    }
+
+    private Class<?> lookupPrimaryKeyType(PersistenceManager persistenceManager, Class<?> entityClass) {
+        val pmf = (JDOPersistenceManagerFactory) persistenceManager.getPersistenceManagerFactory();
+        val nucleusContext = pmf.getNucleusContext();
+
+        ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
+        val clr = nucleusContext.getClassLoaderResolver(contextLoader);
+
+        TypeMetadata metadata = pmf.getMetadata(entityClass.getName());
+        IdentityType identityType = metadata.getIdentityType();
+        Class<?> valueClass = null;
+        switch (identityType) {
+            case APPLICATION:
+                String objectIdClass = metadata.getObjectIdClass();
+                valueClass = clr.classForName(objectIdClass);
+                break;
+            case DATASTORE:
+                valueClass = nucleusContext.getIdentityManager().getDatastoreIdClass();
+                break;
+            case UNSPECIFIED:
+            case NONDURABLE:
+                throw new IllegalStateException(String.format(
+                        "JdoEntityFacet has been incorrectly installed on '%s' which has an supported identityType of '%s'",
+                        entityClass.getName(), identityType));
+        }
+        return valueClass;
     }
 
     @Override

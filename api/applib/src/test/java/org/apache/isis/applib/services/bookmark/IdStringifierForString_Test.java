@@ -16,12 +16,13 @@ class IdStringifierForString_Test {
                 Arguments.of("abc"),
                 Arguments.of("abcdefghijklmnopqrstuvwxyz"),
                 Arguments.of("this is a long string with spaces in it"),
-                Arguments.of("these characters ^&*()[],.; do not require encoding"),
+                Arguments.of("these characters ^*()[],.;_-+ do not require encoding"),
                 Arguments.of("this needs to be encoded because it contains a / within it"),
                 Arguments.of("this needs to be encoded because it contains a \\ within it"),
                 Arguments.of("this needs to be encoded because it contains a ? within it"),
                 Arguments.of("this needs to be encoded because it contains a : within it"),
                 Arguments.of("this needs to be encoded because it contains a & within it"),
+                Arguments.of("this needs to be encoded because it contains a + within it"),
                 Arguments.of("this needs to be encoded because it contains a % within it")
         );
     }
@@ -32,8 +33,8 @@ class IdStringifierForString_Test {
 
         val stringifier = new IdStringifierForString();
 
-        val stringified = stringifier.stringify(value);
-        val parse = stringifier.parse(stringified, null);
+        val stringified = stringifier.enstring(value);
+        val parse = stringifier.destring(stringified, null);
 
         Assertions.assertThat(parse).isEqualTo(value);
     }

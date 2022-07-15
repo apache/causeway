@@ -148,7 +148,7 @@ class ObjectBookmarker_builtinHandlers {
             ValueSemanticsProvider<Object> composer = (ValueSemanticsProvider) valueFacet.selectDefaultSemantics()
                     .orElseThrow(()->_Exceptions.illegalArgument(
                             "Cannot create a bookmark for the value type %s, "
-                          + "as no appropriate ValueComposer could be found.",
+                          + "as no appropriate ValueSemanticsProvider could be found.",
                           managedObject.getSpecification().getCorrespondingClass().getName()));
 
             val valueAsJson = composer.decompose(managedObject.getPojo())

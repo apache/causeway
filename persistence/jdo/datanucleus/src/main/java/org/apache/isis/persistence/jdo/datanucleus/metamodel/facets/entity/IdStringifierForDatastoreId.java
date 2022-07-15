@@ -41,7 +41,7 @@ public class IdStringifierForDatastoreId extends IdStringifier.Abstract<Datastor
     }
 
     @Override
-    public String stringify(DatastoreId value) {
+    public String enstring(DatastoreId value) {
         //
         // the JDO spec (5.4.3) requires that OIDs are serializable toString and
         // re-create-able through the constructor
@@ -52,7 +52,7 @@ public class IdStringifierForDatastoreId extends IdStringifier.Abstract<Datastor
 
     @SneakyThrows
     @Override
-    public DatastoreId parse(String stringified, Class<?> owningEntityType) {
+    public DatastoreId destring(String stringified, Class<?> targetEntityClass) {
         int idx = stringified.indexOf(SEPARATOR);
         String clsName = stringified.substring(0, idx);
         String keyStr = stringified.substring(idx + 1);
