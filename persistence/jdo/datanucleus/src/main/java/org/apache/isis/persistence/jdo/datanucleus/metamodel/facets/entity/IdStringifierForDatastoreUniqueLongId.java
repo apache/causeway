@@ -23,7 +23,7 @@ import java.lang.reflect.Constructor;
 import javax.annotation.Priority;
 
 import org.datanucleus.identity.DatastoreId;
-import org.datanucleus.identity.DatastoreIdImpl;
+import org.datanucleus.identity.DatastoreUniqueLongId;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -36,33 +36,22 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 
 @Component
-@Priority(PriorityPrecedence.LATE + 100) // after the implementations of DatastoreId; for a custom impl.
-public class IdStringifierForDatastoreId extends IdStringifier.Abstract<DatastoreId> {
+@Priority(PriorityPrecedence.LATE)
+public class IdStringifierForDatastoreUniqueLongId extends IdStringifier.Abstract<DatastoreUniqueLongId> {
 
-    public IdStringifierForDatastoreId() {
-        super(DatastoreId.class);
+    public IdStringifierForDatastoreUniqueLongId() {
+        super(DatastoreUniqueLongId.class);
     }
 
     @Override
-    public String enstring(@NonNull DatastoreId value) {
-        //
-        // the JDO spec (5.4.3) requires that OIDs are serializable toString and
-        // re-create-able through the constructor
-        //
-        // to do this, we also need to capture the class of the Id value class itself, followed by the value (as a string)
-        return value.getClass().getName() + SEPARATOR + value.toString();
+    public String enstring(@NonNull DatastoreUniqueLongId value) {
+        return value.toString();
     }
 
     @SneakyThrows
     @Override
-    public DatastoreId destring(@NonNull String stringified, @Nullable Class<?> targetEntityClass) {
-        int idx = stringified.indexOf(SEPARATOR);
-        String clsName = stringified.substring(0, idx);
-        String keyStr = stringified.substring(idx + 1);
-        final Class<?> cls = _Context.loadClass(clsName);
-        final Constructor<?> cons = cls.getConstructor(String.class);
-        final Object dnOid = cons.newInstance(keyStr);
-        return _Casts.uncheckedCast(dnOid);
+    public DatastoreUniqueLongId destring(@NonNull String stringified, @Nullable Class<?> targetEntityClass) {
+        return new DatastoreUniqueLongId(stringified);
     }
 
 

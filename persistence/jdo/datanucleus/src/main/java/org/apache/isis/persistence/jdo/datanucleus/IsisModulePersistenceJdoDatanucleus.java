@@ -53,6 +53,8 @@ import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceD
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForByteId;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharId;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForDatastoreId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForDatastoreUniqueLongId;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForIntId;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForLongId;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForObjectId;
@@ -62,7 +64,7 @@ import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleu
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForByteIdentity;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForDatastoreId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForDatastoreIdImpl;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForIntIdentity;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForLongIdentity;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForObjectIdentity;
@@ -90,7 +92,9 @@ import lombok.extern.log4j.Log4j2;
     // @Component's
     DnEntityStateProvider.class,
 
-    IdStringifierForDatastoreId.class, // datastore identity
+    IdStringifierForDatastoreIdImpl.class, // datastore identity
+    IdStringifierForDatastoreUniqueLongId.class,
+    IdStringifierForDatastoreId.class,
     IdStringifierForShortIdentity.class, // application-defined PK, javax.jdo.identity
     IdStringifierForLongIdentity.class,
     IdStringifierForIntIdentity.class,
