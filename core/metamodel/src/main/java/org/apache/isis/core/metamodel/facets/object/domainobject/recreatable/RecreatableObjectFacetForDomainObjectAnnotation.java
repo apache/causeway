@@ -48,6 +48,7 @@ public class RecreatableObjectFacetForDomainObjectAnnotation extends
         switch (nature)
         {
             case NOT_SPECIFIED:
+            case ENTITY:
             case JDO_ENTITY:
             case MIXIN:
                 // not a recreatable object, so no facet

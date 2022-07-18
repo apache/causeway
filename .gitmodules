@@ -1,3 +1,0 @@
-[submodule "_pipeline-resources"]
-	path = _pipeline-resources
-	url = ../../../infrastructure/pipeline-resources

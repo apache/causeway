@@ -137,11 +137,13 @@ class Generation {
                 continue;
             }
             if (visibility.isPublic() &&
+                    domainServiceFacet.getNatureOfService() != NatureOfService.REST &&
                     domainServiceFacet.getNatureOfService() != NatureOfService.VIEW_REST_ONLY) {
                 continue;
             }
             if (    domainServiceFacet.getNatureOfService() != NatureOfService.VIEW_MENU_ONLY &&
                     domainServiceFacet.getNatureOfService() != NatureOfService.VIEW &&
+                    domainServiceFacet.getNatureOfService() != NatureOfService.REST &&
                     domainServiceFacet.getNatureOfService() != NatureOfService.VIEW_REST_ONLY) {
                 continue;
             }

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.annotation;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * The different sorts of domain objects recognized by Isis.
  *
@@ -48,8 +46,12 @@ public enum Nature {
      * <p>
      *    Currently implies no additional semantics other than documentation.
      * </p>
+     * @Deprecated use ENTITY instead
      */
+    @Deprecated
     JDO_ENTITY,
+    // The v2 version:
+    ENTITY,
     /**
      * A domain entity that is a wrapper/proxy/stub to some externally managed entity.  Domain entities are
      * considered to be part of the domain model layer.
@@ -63,7 +65,9 @@ public enum Nature {
      *     Note that collections are ignored; if their state is required to fully identify the view model, use
      *     {@link XmlRootElement} annotation instead.
      * </p>
+     * @Deprecated use ENTITY instead
      */
+    @Deprecated
     EXTERNAL_ENTITY,
     /**
      * A domain entity that is a wrapper/proxy/stub to a &quot;synthetic&quot; entity, for example one that is
@@ -79,7 +83,9 @@ public enum Nature {
      *     Note that collections are ignored; if their state is required to fully identify the view model, use
      *     {@link XmlRootElement} annotation instead.
      * </p>
+     * @Deprecated use ENTITY instead
      */
+    @Deprecated
     INMEMORY_ENTITY,
     /**
      * An object that is conceptually part of the application layer, and which surfaces behaviour and/or state that
@@ -108,5 +114,7 @@ public enum Nature {
      *
      * @see Mixin
      */
-    MIXIN
+    MIXIN,
+    // New for V2:
+    BEAN
 }

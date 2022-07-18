@@ -31,7 +31,7 @@ public interface SwaggerService {
          *
          * <p>
          * Restricted only to view models ({@link ViewModel} or equivalent) and {@link DomainService} with a nature
-         * of {@link NatureOfService#VIEW_REST_ONLY}.
+         * of {@link NatureOfService#REST}.
          * </p>
          */
         PUBLIC,
