@@ -18,12 +18,16 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Provider;
 import javax.jdo.JDOException;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.annotations.PersistenceCapable;
 import javax.sql.DataSource;
 
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -134,6 +138,18 @@ public class IsisModulePersistenceJdoDatanucleus {
         return new DnJdoDialect(dataSource);
     }
 
+    private static boolean ignore(final Class<?> entityType) {
+        try {
+            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass() || entityType.isInterface()) {
+                return true;
+            }
+            val persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);
+            return persistenceCapable == null; // ignore if doesn't have @PersistenceCapable
+        } catch (NoClassDefFoundError ex) {
+            return true;
+        }
+    }
+
     @Qualifier("local-pmf-proxy")
     @Bean
     public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
@@ -146,6 +162,32 @@ public class IsisModulePersistenceJdoDatanucleus {
             final DatanucleusSettings dnSettings) {
 
         _Assert.assertNotNull(dataSource, "a datasource is required");
+
+        final Set<String> classNamesNotEnhanced = new LinkedHashSet<>();
+
+        if (false) {
+            for (Class<?> persistenceCapableType : beanTypeRegistry.getEntityTypes().keySet()) {
+                if(ignore(persistenceCapableType)) {
+                    continue;
+                }
+                if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(persistenceCapableType)) {
+                    classNamesNotEnhanced.add(persistenceCapableType.getCanonicalName());
+                }
+                classNamesNotEnhanced.add(persistenceCapableType.getCanonicalName());
+            }
+
+            if(!classNamesNotEnhanced.isEmpty()) {
+                val classNames = new ArrayList<>(classNamesNotEnhanced);
+                Collections.sort(classNames);
+                val classNamesNotEnhancedStr = String.join("\n* ", classNames);
+                val msg = String.format("Non-enhanced @PersistenceCapable classes found, will abort.  The classes in error are:\n\n* %s\n\nDid the DataNucleus enhancer run correctly?\n", classNamesNotEnhancedStr);
+                System.err.println("*******************************************************************************\n"+msg+"\n*******************************************************************************\n");
+                IllegalStateException ex = new IllegalStateException(msg);
+                ex.setStackTrace(new StackTraceElement[0]);
+                throw ex;
+            }
+        }
+
 
         autoCreateSchemas(dataSource, isisConfiguration);
 

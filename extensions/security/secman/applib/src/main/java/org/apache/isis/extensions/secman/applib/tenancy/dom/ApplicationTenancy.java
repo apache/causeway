@@ -67,9 +67,9 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_NAME = ApplicationTenancy."findByName";
-        public static final String FIND_BY_PATH = ApplicationTenancy."findByPath";
-        public static final String FIND_BY_NAME_OR_PATH_MATCHING = ApplicationTenancy."findByNameOrPathMatching";
+        public static final String FIND_BY_NAME = "findByName";
+        public static final String FIND_BY_PATH = "findByPath";
+        public static final String FIND_BY_NAME_OR_PATH_MATCHING = "findByNameOrPathMatching";
     }
 
 

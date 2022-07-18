@@ -70,8 +70,8 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_NAME = ApplicationRole."findByName";
-        public static final String FIND_BY_NAME_CONTAINING = ApplicationRole."findByNameContaining";
+        public static final String FIND_BY_NAME = "findByName";
+        public static final String FIND_BY_NAME_CONTAINING = "findByNameContaining";
     }
 
     @Inject transient private ApplicationPermissionRepository applicationPermissionRepository;

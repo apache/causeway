@@ -22,8 +22,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
-import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
-import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
+import org.apache.isis.extensions.executionlog.jdo.dom.ExecutionLogEntry;
+import org.apache.isis.extensions.executionlog.jdo.dom.ExecutionLogEntryPK;
+import org.apache.isis.extensions.executionlog.jdo.dom.ExecutionLogEntryRepository;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
@@ -39,6 +40,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 
         // @Service's
         ExecutionLogEntryRepository.class,
+        ExecutionLogEntryPK.Stringifier.class,
 
         // entities
         ExecutionLogEntry.class

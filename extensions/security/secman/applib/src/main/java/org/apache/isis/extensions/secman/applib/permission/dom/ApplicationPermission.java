@@ -101,12 +101,12 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_FEATURE = ApplicationPermission."findByFeature";
-        public static final String FIND_BY_ROLE = ApplicationPermission."findByRole";
-        public static final String FIND_BY_ROLE_RULE_FEATURE = ApplicationPermission."findByRoleAndRuleAndFeature";
-        public static final String FIND_BY_ROLE_RULE_FEATURE_FQN = ApplicationPermission."findByRoleAndRuleAndFeatureAndFqn";
-        public static final String FIND_BY_USER = ApplicationPermission."findByUser";
-        public static final String FIND_BY_ROLE_NAMES = ApplicationPermission."findByRoleNames";
+        public static final String FIND_BY_FEATURE = "findByFeature";
+        public static final String FIND_BY_ROLE = "findByRole";
+        public static final String FIND_BY_ROLE_RULE_FEATURE = "findByRoleAndRuleAndFeature";
+        public static final String FIND_BY_ROLE_RULE_FEATURE_FQN = "findByRoleAndRuleAndFeatureAndFqn";
+        public static final String FIND_BY_USER = "findByUser";
+        public static final String FIND_BY_ROLE_NAMES = "findByRoleNames";
     }
 
 

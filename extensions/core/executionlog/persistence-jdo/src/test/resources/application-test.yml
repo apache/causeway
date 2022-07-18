@@ -17,7 +17,7 @@
 isis:
   persistence:
     schema:
-      auto-create-schemas: "ISISEXTCOMMANDLOG"
+      auto-create-schemas: "ISISEXTEXECUTIONLOG"
 
 
 datanucleus:

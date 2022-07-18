@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.executionlog.jdo;
+package org.apache.isis.extensions.executionlog.jdo.integtests;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -31,7 +31,8 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.executionlog.applib.integtest.ExecutionLog_IntegTestAbstract;
 import org.apache.isis.extensions.executionlog.applib.integtest.model.ExecutionLogTestDomainModel;
-import org.apache.isis.extensions.executionlog.jdo.model.Counter;
+import org.apache.isis.extensions.executionlog.jdo.IsisModuleExtExecutionLogPersistenceJdo;
+import org.apache.isis.extensions.executionlog.jdo.integtests.model.Counter;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
 @SpringBootTest(

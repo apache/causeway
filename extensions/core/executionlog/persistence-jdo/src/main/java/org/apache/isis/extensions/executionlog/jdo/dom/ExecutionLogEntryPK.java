@@ -22,9 +22,14 @@ import java.io.Serializable;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
+import org.springframework.stereotype.Component;
+
+import org.apache.isis.applib.services.bookmark.IdStringifier;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
 
@@ -52,4 +57,21 @@ public class ExecutionLogEntryPK implements Serializable {
         return interactionId + SEPARATOR + sequence;
     }
 
+    @Component
+    public static class Stringifier extends IdStringifier.Abstract<ExecutionLogEntryPK> {
+
+        public Stringifier() {
+            super(ExecutionLogEntryPK.class);
+        }
+
+        @Override
+        public String enstring(ExecutionLogEntryPK value) {
+            return value.toString();
+        }
+
+        @Override
+        public ExecutionLogEntryPK destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+            return new ExecutionLogEntryPK(stringified);
+        }
+    }
 }
