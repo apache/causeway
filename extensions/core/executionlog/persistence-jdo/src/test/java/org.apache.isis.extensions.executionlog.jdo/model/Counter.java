@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.commandlog.jdo.integtests.model;
+package org.apache.isis.extensions.executionlog.jdo.model;
 
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
@@ -21,12 +21,12 @@ import lombok.Setter;
         table = "Counter"
 )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@Named("commandlog.test.Counter")
+@Named("executionlog.test.Counter")
 @DomainObject(nature = Nature.ENTITY)
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Counter extends org.apache.isis.extensions.commandlog.applib.integtest.model.Counter {
+public class Counter extends org.apache.isis.extensions.executionlog.applib.integtest.model.Counter {
 
     @Column(allowsNull = "false")
     @Getter @Setter

@@ -65,8 +65,8 @@
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-executionlog-applib</artifactId>
-            <scope>test</scope>
             <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
 
 		<dependency>
@@ -81,11 +81,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.testing</groupId>
-			<artifactId>isis-testing-fixtures-applib</artifactId>
-			<scope>test</scope>
-		</dependency>
 
     </dependencies>
 

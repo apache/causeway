@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ExecutionSubscriberForLog implements ExecutionSubscriber {
+public class ExecutionSubscriberForExecutionLog implements ExecutionSubscriber {
 
     final @Inject ExecutionLogEntryRepository repository;
 

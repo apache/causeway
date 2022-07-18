@@ -34,7 +34,6 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 @Configuration
 @Import({
         // modules
-        // IsisModuleTestingFixturesApplib.class,
         IsisModuleExtCommandLogApplib.class,
         IsisModulePersistenceJdoDatanucleus.class,
 

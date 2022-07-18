@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
@@ -34,6 +35,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 @Import({
         // modules
         IsisModuleExtExecutionLogApplib.class,
+        IsisModulePersistenceJdoDatanucleus.class,
 
         // @Service's
         ExecutionLogEntryRepository.class,
@@ -41,7 +43,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
         // entities
         ExecutionLogEntry.class
 })
-public class IsisModuleExtExecutionLogJdo {
+public class IsisModuleExtExecutionLogPersistenceJdo {
 
     public static final String NAMESPACE = IsisModuleExtExecutionLogApplib.NAMESPACE;
     public static final String SCHEMA = IsisModuleExtExecutionLogApplib.SCHEMA;

@@ -69,8 +69,7 @@ import lombok.experimental.UtilityClass;
 
 /**
  * A persistent representation of an {@link org.apache.isis.applib.services.iactn.Execution execution} (property edit or
- * action invocation), within a larger
- * {@link org.apache.isis.applib.services.iactn.Interaction interaction}.
+ * action invocation), within a wider {@link org.apache.isis.applib.services.iactn.Interaction interaction}.
  *
  *  Note that this class implements {@link HasInteractionDto}, providing access to
  *  {@link org.apache.isis.applib.services.iactn.Interaction}, a serialized representation containing the {@link org.apache.isis.applib.services.iactn.Execution}.
@@ -80,7 +79,7 @@ import lombok.experimental.UtilityClass;
         editing = Editing.DISABLED
 )
 @DomainObjectLayout(
-        named = "Execution",
+        named = "ExecutionLogEntry",
         titleUiEvent = ExecutionLogEntry.TitleUiEvent.class,
         iconUiEvent = ExecutionLogEntry.IconUiEvent.class,
         cssClassUiEvent = ExecutionLogEntry.CssClassUiEvent.class,
@@ -90,9 +89,9 @@ import lombok.experimental.UtilityClass;
 public abstract class ExecutionLogEntry
 implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAndSequence, HasInteractionDto {
 
-    public final static String LOGICAL_TYPE_NAME = IsisModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionLog";
+    public final static String LOGICAL_TYPE_NAME = IsisModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionLogEntry";
     public static final String SCHEMA = IsisModuleExtExecutionLogApplib.SCHEMA;
-    public static final String TABLE = "Execution";
+    public static final String TABLE = "ExecutionLogEntry";
 
     public static class TitleUiEvent extends IsisModuleExtExecutionLogApplib.TitleUiEvent<ExecutionLogEntry> { }
     public static class IconUiEvent extends IsisModuleExtExecutionLogApplib.IconUiEvent<ExecutionLogEntry> { }

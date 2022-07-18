@@ -53,20 +53,20 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_SESSION_GUID_STR =  SessionLogEntry.LOGICAL_TYPE_NAME + ".findBySessionGuidStr";
-        public static final String FIND_BY_HTTP_SESSION_ID =  SessionLogEntry.LOGICAL_TYPE_NAME + ".findByHttpSessionId";
-        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampBetween";
-        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampAfter";
-        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampBefore";
-        public static final String FIND_BY_USERNAME = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsername";
-        public static final String FIND_BY_TIMESTAMP_BETWEEN = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampBetween";
-        public static final String FIND_BY_TIMESTAMP_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampAfter";
-        public static final String FIND_BY_TIMESTAMP_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampBefore";
-        public static final String FIND = SessionLogEntry.LOGICAL_TYPE_NAME + ".find";
-        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampStrictlyBefore";
-        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampStrictlyAfter";
-        public static final String FIND_ACTIVE_SESSIONS = SessionLogEntry.LOGICAL_TYPE_NAME + ".findActiveSessions";
-        public static final String FIND_RECENT_BY_USERNAME = SessionLogEntry.LOGICAL_TYPE_NAME + ".findRecentByUsername";
+        public static final String FIND_BY_SESSION_GUID_STR =  "findBySessionGuidStr";
+        public static final String FIND_BY_HTTP_SESSION_ID =  "findByHttpSessionId";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN = "findByUsernameAndTimestampBetween";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_AFTER = "findByUsernameAndTimestampAfter";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE = "findByUsernameAndTimestampBefore";
+        public static final String FIND_BY_USERNAME = "findByUsername";
+        public static final String FIND_BY_TIMESTAMP_BETWEEN = "findByTimestampBetween";
+        public static final String FIND_BY_TIMESTAMP_AFTER = "findByTimestampAfter";
+        public static final String FIND_BY_TIMESTAMP_BEFORE = "findByTimestampBefore";
+        public static final String FIND = "find";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_BEFORE = "findByUsernameAndTimestampStrictlyBefore";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_AFTER = "findByUsernameAndTimestampStrictlyAfter";
+        public static final String FIND_ACTIVE_SESSIONS = "findActiveSessions";
+        public static final String FIND_RECENT_BY_USERNAME = "findRecentByUsername";
     }
 
     // -- UI & DOMAIN EVENTS

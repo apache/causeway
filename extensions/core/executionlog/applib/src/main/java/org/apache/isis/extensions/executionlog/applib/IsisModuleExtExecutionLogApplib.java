@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.executionlog.applib.app.ExecutionLogMenu;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
-import org.apache.isis.extensions.executionlog.applib.spiimpl.ExecutionSubscriberForLog;
+import org.apache.isis.extensions.executionlog.applib.spiimpl.ExecutionSubscriberForExecutionLog;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
 @Configuration
@@ -32,8 +32,8 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
         ExecutionLogMenu.class,
 
         // @Service's
-        ExecutionSubscriberForLog.class,
-        ExecutionLogEntry.TableColumnOrderDefault.class
+        ExecutionSubscriberForExecutionLog.class,
+        ExecutionLogEntry.TableColumnOrderDefault.class,
 })
 public class IsisModuleExtExecutionLogApplib
 implements ModuleWithFixtures {
@@ -58,6 +58,7 @@ implements ModuleWithFixtures {
 
     public abstract static class CollectionDomainEvent<S,T>
         extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> { }
+
     public abstract static class PropertyDomainEvent<S,T>
         extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> { }
 
