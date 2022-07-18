@@ -134,7 +134,7 @@ public class IdentifierUtil {
 
     // -- HELPER
 
-    private String logicalMemberIdentifierFor(
+    public String logicalMemberIdentifierFor(
             final @NonNull InteractionHead interactionHead,
             final ObjectMember objectMember) {
         if (objectMember instanceof ObjectAction) {

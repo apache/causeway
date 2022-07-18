@@ -94,12 +94,12 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final String currentUser = userService.currentUserNameElseNobody();
 
         final ActionDto actionDto = new ActionDto();
-        commandDtoServiceInternal.addActionArgs(objectAction, actionDto, argumentAdapters);
+        commandDtoServiceInternal.addActionArgs(head, objectAction, actionDto, argumentAdapters);
         final List<ParamDto> parameterDtos = CommandDtoUtils.parametersFor(actionDto).getParameter();
 
         return InteractionDtoUtils.newActionInvocation(
                 nextEventSequence, targetBookmark, targetTitle,
-                actionDto.getMemberIdentifier(),
+                actionDto.getLogicalMemberIdentifier(),
                 parameterDtos, currentUser
                 );
     }

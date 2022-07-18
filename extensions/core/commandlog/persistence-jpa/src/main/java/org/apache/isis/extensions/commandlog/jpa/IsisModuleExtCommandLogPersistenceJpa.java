@@ -34,7 +34,6 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclip
 @Configuration
 @Import({
         // modules
-        // IsisModuleTestingFixturesApplib.class,
         IsisModuleExtCommandLogApplib.class,
         IsisModulePersistenceJpaEclipselink.class,
 

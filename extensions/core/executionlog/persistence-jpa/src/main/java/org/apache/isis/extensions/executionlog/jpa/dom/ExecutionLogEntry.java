@@ -158,7 +158,7 @@ public class ExecutionLogEntry extends org.apache.isis.extensions.executionlog.a
     @InteractionId
     @Override
     public UUID getInteractionId() {
-        return pk.getInteractionId();
+        return pk != null ? pk.getInteractionId() : null;
     }
     @Transient
     @Override

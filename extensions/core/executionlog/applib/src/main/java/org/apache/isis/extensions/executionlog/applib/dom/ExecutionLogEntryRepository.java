@@ -29,10 +29,12 @@ import javax.inject.Provider;
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -44,7 +46,6 @@ import lombok.RequiredArgsConstructor;
  * Provides supporting functionality for querying and persisting
  * {@link ExecutionLogEntry command} entities.
  */
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
 
     public static class NotFoundException extends RecoverableException {
@@ -58,6 +59,15 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
     }
 
     private final Class<E> executionLogEntryClass;
+
+    @Inject Provider<RepositoryService> repositoryServiceProvider;
+    @Inject FactoryService factoryService;
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
+
+    protected ExecutionLogEntryRepository(Class<E> executionLogEntryClass) {
+        this.executionLogEntryClass = executionLogEntryClass;
+    }
+
 
     /**
      * for testing only.
@@ -171,7 +181,16 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         return repositoryServiceProvider.get();
     }
 
-    @Inject Provider<RepositoryService> repositoryServiceProvider;
-    @Inject FactoryService factoryService;
+
+    /**
+     * for testing purposes only
+     */
+    public void removeAll() {
+        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+            throw new IllegalStateException("Cannot removeAll in production systems");
+        }
+        repositoryService().removeAll(executionLogEntryClass);
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.commandlog.jpa.integtests.model;
+package org.apache.isis.extensions.executionlog.jpa.integtests.model;
 
 import javax.inject.Named;
 import javax.persistence.Column;
@@ -25,12 +25,12 @@ import lombok.Setter;
         schema = "public",
         name = "Counter"
 )
-@Named("commandlog.test.Counter")
+@Named("executionlog.test.Counter")
 @DomainObject(nature = Nature.ENTITY)
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Counter extends org.apache.isis.extensions.commandlog.applib.integtest.model.Counter {
+public class Counter extends org.apache.isis.extensions.executionlog.applib.integtest.model.Counter {
 
     @Id
     @GeneratedValue

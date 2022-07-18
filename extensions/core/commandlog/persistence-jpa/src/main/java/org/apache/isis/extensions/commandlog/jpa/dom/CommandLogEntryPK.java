@@ -47,7 +47,7 @@ public class CommandLogEntryPK implements Serializable {
         }
 
         @Override
-        public String doStringify(CommandLogEntryPK value) {
+        public String doEnstring(CommandLogEntryPK value) {
             return value.getInteractionId().toString();
         }
 

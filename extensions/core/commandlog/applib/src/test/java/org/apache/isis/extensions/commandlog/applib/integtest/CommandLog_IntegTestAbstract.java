@@ -18,7 +18,6 @@
  */
 package org.apache.isis.extensions.commandlog.applib.integtest;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,7 +39,6 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -61,7 +59,7 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 
 import lombok.val;
 
-public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAbstract {
 
 
     @BeforeAll
@@ -225,6 +223,7 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
         CommandDto commandDto = commandLogEntry.getCommandDto();
         assertThat(commandDto).isNotNull();
         assertThat(commandDto.getMember()).isInstanceOf(PropertyDto.class);
+        assertThat(commandDto.getMember().getLogicalMemberIdentifier()).isEqualTo(commandLogEntry.getLogicalMemberIdentifier());
     }
 
     @Test

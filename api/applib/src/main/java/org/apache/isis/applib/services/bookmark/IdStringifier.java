@@ -1,7 +1,5 @@
 package org.apache.isis.applib.services.bookmark;
 
-import java.util.Optional;
-
 import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
@@ -111,13 +109,13 @@ public interface IdStringifier<T> {
 
         @Override
         public final String enstring(final @NonNull T value) {
-            return prefix + doStringify(value);
+            return prefix + doEnstring(value);
         }
 
         /**
          * Overridable hook
          */
-        protected String doStringify(T value) {
+        protected String doEnstring(T value) {
             return value.toString();
         }
 

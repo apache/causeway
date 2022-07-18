@@ -18,14 +18,15 @@
  */
 package org.apache.isis.extensions.executionlog.jpa;
 
-import javax.resource.spi.work.ExecutionContext;
-
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
-import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
-import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
+import org.apache.isis.extensions.executionlog.jpa.dom.ExecutionLogEntry;
+import org.apache.isis.extensions.executionlog.jpa.dom.ExecutionLogEntryPK;
+import org.apache.isis.extensions.executionlog.jpa.dom.ExecutionLogEntryRepository;
+import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
 
 /**
  * @since 2.0 {@index}
@@ -34,14 +35,19 @@ import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepos
 @Import({
         // modules
         IsisModuleExtExecutionLogApplib.class,
+        IsisModulePersistenceJpaEclipselink.class,
 
         // @Service's
         ExecutionLogEntryRepository.class,
+        ExecutionLogEntryPK.Stringifier.class,
 
         // entities
         ExecutionLogEntry.class
 })
-public class IsisModuleExtExecutionLogJpa {
+@EntityScan(basePackageClasses = {
+        ExecutionLogEntry.class
+})
+public class IsisModuleExtExecutionLogPersistenceJpa {
 
     public static final String NAMESPACE = IsisModuleExtExecutionLogApplib.NAMESPACE;
     public static final String SCHEMA = IsisModuleExtExecutionLogApplib.SCHEMA;

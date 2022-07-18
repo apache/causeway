@@ -90,6 +90,7 @@ public interface CommandDtoFactory {
      * @see org.apache.isis.applib.services.iactn.Interaction
      */
     void addActionArgs(
+            final InteractionHead head,
             final ObjectAction objectAction,
             final ActionDto actionDto,
             final Can<ManagedObject> argAdapters);

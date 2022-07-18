@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Priority;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.Digits;
 
@@ -47,6 +48,7 @@ import org.apache.isis.applib.mixins.system.DomainChangeRecord;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.mixins.system.HasInteractionIdAndSequence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.HasInteractionDto;
@@ -124,6 +126,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
         }
     }
 
+    @Inject BookmarkService bookmarkService;
 
     public ExecutionLogEntry(@NonNull Execution<? extends MemberExecutionDto,?> execution) {
         init(execution);
@@ -148,7 +151,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
 
         setLogicalMemberIdentifier(memberExecutionDto.getLogicalMemberIdentifier());
 
-        setTarget(execution.getEvent().getSubject());
+        setTarget( bookmarkService.bookmarkFor(execution.getEvent().getSubject()).orElseThrow() );
         setUsername(memberExecutionDto.getUser());
 
         if(execution instanceof PropertyEdit) {

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jpa.integtests;
+package org.apache.isis.extensions.executionlog.jpa.integtests;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -30,36 +30,35 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.extensions.commandlog.applib.integtest.CommandLog_IntegTestAbstract;
-import org.apache.isis.extensions.commandlog.applib.integtest.model.CommandLogTestDomainModel;
-import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
-import org.apache.isis.extensions.commandlog.jpa.integtests.model.Counter;
+import org.apache.isis.extensions.executionlog.applib.integtest.ExecutionLog_IntegTestAbstract;
+import org.apache.isis.extensions.executionlog.applib.integtest.model.ExecutionLogTestDomainModel;
+import org.apache.isis.extensions.executionlog.jpa.IsisModuleExtExecutionLogPersistenceJpa;
+import org.apache.isis.extensions.executionlog.jpa.integtests.model.Counter;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
 @SpringBootTest(
-        classes = CommandLog_IntegTest.AppManifest.class
+        classes = ExecutionLog_IntegTest.AppManifest.class
 )
 @ActiveProfiles("test")
-public class CommandLog_IntegTest extends CommandLog_IntegTestAbstract {
-
+public class ExecutionLog_IntegTest extends ExecutionLog_IntegTestAbstract {
 
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
             IsisModuleCoreRuntimeServices.class,
             IsisModuleSecurityBypass.class,
-            IsisModuleExtCommandLogPersistenceJpa.class,
+            IsisModuleExtExecutionLogPersistenceJpa.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test)
     })
     @EntityScan(basePackageClasses = {Counter.class})
-    @ComponentScan(basePackageClasses = {AppManifest.class, CommandLogTestDomainModel.class})
+    @ComponentScan(basePackageClasses = {AppManifest.class, ExecutionLogTestDomainModel.class})
     public static class AppManifest {
     }
 
 
-    protected org.apache.isis.extensions.commandlog.applib.integtest.model.Counter newCounter(String name) {
+    protected org.apache.isis.extensions.executionlog.applib.integtest.model.Counter newCounter(String name) {
         return Counter.builder().name(name).build();
     }
 

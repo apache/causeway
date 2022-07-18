@@ -76,15 +76,16 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 
-        final CommandDto dto = asCommandDto(interactionId, targets);
+        val commandDto = asCommandDto(interactionId, targets);
 
-        final ActionDto actionDto = new ActionDto();
+        val actionDto = new ActionDto();
         actionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
-        dto.setMember(actionDto);
+        commandDto.setMember(actionDto);
 
-        addActionArgs(objectAction, actionDto, argAdapters);
+        val representativeHead = targets.getFirstOrFail(); // we expect all the targets to be of the same type, and there must be at least one.
+        addActionArgs(representativeHead, objectAction, actionDto, argAdapters);
 
-        return dto;
+        return commandDto;
     }
 
     @Override
@@ -107,11 +108,12 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     @Override
     public void addActionArgs(
+            final InteractionHead head,
             final ObjectAction objectAction,
             final ActionDto actionDto,
             final Can<ManagedObject> argAdapters) {
 
-        actionDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierForDeclaredMember(objectAction));
+        actionDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(head, objectAction));
         actionDto.setMemberIdentifier(IdentifierUtil.memberIdentifierFor(objectAction));
 
         val actionParameters = objectAction.getParameters();

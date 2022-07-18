@@ -29,7 +29,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.extensions.commandlog.applib.integtest.CommandLogIntegTestAbstract;
+import org.apache.isis.extensions.commandlog.applib.integtest.CommandLog_IntegTestAbstract;
 import org.apache.isis.extensions.commandlog.applib.integtest.model.CommandLogTestDomainModel;
 import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
 import org.apache.isis.extensions.commandlog.jdo.integtests.model.Counter;
@@ -40,7 +40,7 @@ import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
         classes = CommandLog_IntegTest.AppManifest.class
 )
 @ActiveProfiles("test")
-public class CommandLog_IntegTest extends CommandLogIntegTestAbstract {
+public class CommandLog_IntegTest extends CommandLog_IntegTestAbstract {
 
 
     @SpringBootConfiguration
