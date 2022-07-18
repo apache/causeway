@@ -16,12 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.executionlog.applib.dom;
+package org.apache.isis.extensions.executionlog.jpa.dom;
 
 import java.io.Serializable;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Embeddable;
+
+import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,15 +38,21 @@ import lombok.val;
 
 @EqualsAndHashCode(of = {"interactionId", "sequence"})
 @NoArgsConstructor
+@AllArgsConstructor
+@Embeddable
 public class ExecutionLogEntryPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static final String SEPARATOR = "_";
 
-    @Getter @Setter
-    public UUID interactionId;
-    @Getter @Setter
+    @Convert(converter = JavaUtilUuidConverter.class)
+    @Column(name = ExecutionLogEntry.InteractionId.NAME, nullable = ExecutionLogEntry.InteractionId.NULLABLE, length = ExecutionLogEntry.InteractionId.MAX_LENGTH)
+    @Getter(AccessLevel.PACKAGE)
+    private UUID interactionId;
+
+    @Column(name = ExecutionLogEntry.Sequence.NAME, nullable = ExecutionLogEntry.Sequence.NULLABLE)
+    @Getter(AccessLevel.PACKAGE)
     public int sequence;
 
     public ExecutionLogEntryPK(final String value) {

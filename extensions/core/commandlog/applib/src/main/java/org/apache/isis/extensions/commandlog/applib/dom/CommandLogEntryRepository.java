@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
@@ -86,14 +85,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     public Optional<C> findByInteractionId(final UUID interactionId) {
         return repositoryService().firstMatch(
                 Query.named(commandLogEntryClass,  CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
-                        .withParameter("interactionId", convert(interactionId)));
-    }
-
-    /**
-     * optional hook
-     */
-    protected Object convert(UUID interactionId) {
-        return interactionId;
+                        .withParameter("interactionId", interactionId));
     }
 
     public List<C> findByParent(final CommandLogEntry parent) {
@@ -176,7 +168,8 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     public List<C> findRecentByUsername(final String username) {
         return repositoryService().allMatches(
                 Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_RECENT_BY_USERNAME)
-                        .withParameter("username", username));
+                        .withParameter("username", username)
+                        .withLimit(30L));
     }
 
 
@@ -341,7 +334,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     private C findByInteractionIdElseNull(final UUID interactionId) {
         val q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
-                .withParameter("interactionId", convert(interactionId));
+                .withParameter("interactionId", interactionId);
         return repositoryService().uniqueMatch(q).orElse(null);
     }
 

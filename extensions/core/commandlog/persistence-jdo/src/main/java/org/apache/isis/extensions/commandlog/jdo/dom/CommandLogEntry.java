@@ -50,10 +50,8 @@ import lombok.Setter;
         schema = CommandLogEntry.SCHEMA,
         table = CommandLogEntry.TABLE)
 @Indices({
-        @Index(name = "Command__startedAt__timestamp__IDX", members = { "startedAt", "timestamp" }),
-        @Index(name = "Command__timestamp__IDX", members = { "timestamp" }),
-//        @javax.jdo.annotations.Index(name = "Command__replayState__timestamp__startedAt_IDX", members = { "replayState", "timestamp", "startedAt"}),
-//        @javax.jdo.annotations.Index(name = "Command__replayState__startedAt__completedAt_IDX", members = {"startedAt", "replayState", "completedAt"}),
+        @Index(name = "startedAt__timestamp__IDX", members = { "startedAt", "timestamp" }),
+        @Index(name = "timestamp__IDX", members = { "timestamp" }),
 })
 @Queries( {
     @Query(

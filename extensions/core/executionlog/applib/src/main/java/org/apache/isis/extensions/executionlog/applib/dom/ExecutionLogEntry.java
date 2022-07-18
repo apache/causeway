@@ -198,6 +198,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     public @interface InteractionId {
         class DomainEvent extends PropertyDomainEvent<UUID> {}
         int MAX_LENGTH = HasInteractionId.InteractionId.MAX_LENGTH;
+        String NAME = "interactionId";
         boolean NULLABLE = HasInteractionId.InteractionId.NULLABLE;
         String ALLOWS_NULL = HasInteractionId.InteractionId.ALLOWS_NULL;
     }
@@ -224,6 +225,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Sequence {
         class DomainEvent extends PropertyDomainEvent<Integer> {}
+        String NAME = "sequence";
         boolean NULLABLE = HasInteractionIdAndSequence.Sequence.NULLABLE;
         String ALLOWS_NULL = HasInteractionIdAndSequence.Sequence.ALLOWS_NULL;
     }

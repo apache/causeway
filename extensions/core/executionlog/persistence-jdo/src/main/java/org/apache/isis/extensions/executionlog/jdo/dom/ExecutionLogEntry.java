@@ -23,6 +23,8 @@ import java.util.UUID;
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Index;
+import javax.jdo.annotations.Indices;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -35,7 +37,6 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry.Nq;
-import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryPK;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryType;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
@@ -47,85 +48,90 @@ import lombok.Setter;
         schema = ExecutionLogEntry.SCHEMA,
         table = ExecutionLogEntry.TABLE,
         objectIdClass= ExecutionLogEntryPK.class)
+@Indices({
+        @Index(name = "timestamp__IDX", members = { "timestamp" }),
+        @Index(name = "target__timestamp__IDX", members = { "target", "timestamp" }),
+        @Index(name = "username__timestamp__IDX", members = { "username", "timestamp" }),
+})
 @Queries( {
     @Query(
-            name= Nq.FIND_BY_INTERACTION_ID,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "WHERE interactionId == :interactionId "
-                    + "ORDER BY timestamp DESC, sequence DESC"),
+            name = Nq.FIND_BY_INTERACTION_ID,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " WHERE interactionId == :interactionId "
+                  + " ORDER BY timestamp DESC, sequence DESC"),
     @Query(
-            name= Nq.FIND_BY_INTERACTION_ID_AND_SEQUENCE,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "WHERE interactionId == :interactionId "
-                    + "&&    sequence      == :sequence "),
+            name = Nq.FIND_BY_INTERACTION_ID_AND_SEQUENCE,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " WHERE interactionId == :interactionId "
+                  + "    && sequence      == :sequence "),
     @Query(
-            name= Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "WHERE target == :target "
-                    + "&& timestamp >= :timestampFrom "
-                    + "&& timestamp <= :timestampTo "
-                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
+            name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " WHERE target == :target "
+                  + "    && timestamp >= :timestampFrom "
+                  + "    && timestamp <= :timestampTo "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name= Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "WHERE target == :target "
-                    + "&& timestamp >= :timestamp "
-                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
+            name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " WHERE target == :target "
+                  + "    && timestamp >= :timestamp "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name= Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "WHERE target == :target "
-                    + "&& timestamp <= :timestamp "
-                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
+            name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " WHERE target == :target "
+                  + "    && timestamp <= :timestamp "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name= Nq.FIND_BY_TARGET,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "WHERE target == :target "
-                    + "ORDER BY timestamp DESC, transactionId DESC, sequence DESC"),
+            name = Nq.FIND_BY_TARGET,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " WHERE target == :target "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name= Nq.FIND_BY_TIMESTAMP_BETWEEN,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "WHERE timestamp >= :timestampFrom "
-                    + "&&    timestamp <= :timestampTo "
-                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
+            name = Nq.FIND_BY_TIMESTAMP_BETWEEN,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " WHERE timestamp >= :timestampFrom "
+                  + "    && timestamp <= :timestampTo "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name= Nq.FIND_BY_TIMESTAMP_AFTER,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "WHERE timestamp >= :timestamp "
-                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
+            name = Nq.FIND_BY_TIMESTAMP_AFTER,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " WHERE timestamp >= :timestamp "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name= Nq.FIND_BY_TIMESTAMP_BEFORE,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "WHERE timestamp <= :timestamp "
-                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
+            name = Nq.FIND_BY_TIMESTAMP_BEFORE,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " WHERE timestamp <= :timestamp "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name= Nq.FIND,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
+            name = Nq.FIND,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name= Nq.FIND_RECENT_BY_USERNAME,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "WHERE username == :username "
-                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC "
-                    + "RANGE 0,30"),
+            name = Nq.FIND_RECENT_BY_USERNAME,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " WHERE username == :username "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC "
+                  + " RANGE 0,30"),
     @Query(
-            name= Nq.FIND_RECENT_BY_TARGET,
-            value="SELECT "
-                    + "FROM " + ExecutionLogEntry.FQCN + " "
-                    + "WHERE target == :target "
-                    + "ORDER BY timestamp DESC, interactionId DESC, sequence DESC "
-                    + "RANGE 0,30")
+            name = Nq.FIND_RECENT_BY_TARGET,
+            value = "SELECT "
+                  + "  FROM " + ExecutionLogEntry.FQCN + " "
+                  + " WHERE target == :target "
+                  + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC "
+                  + " RANGE 0,30")
 })
 @Named(ExecutionLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(

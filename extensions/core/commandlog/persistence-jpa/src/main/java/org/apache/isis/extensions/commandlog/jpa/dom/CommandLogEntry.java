@@ -30,8 +30,6 @@ import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
@@ -47,14 +45,12 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
-import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.schema.v2.IsisCommandDtoConverter;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
-import static org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntry.*;
+import static org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntry.Nq;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -65,8 +61,10 @@ import lombok.Setter;
         schema = CommandLogEntry.SCHEMA,
         name = CommandLogEntry.TABLE,
         indexes = {
-                @Index(name = "Command__startedAt__timestamp__IDX", columnList = "startedAt, timestamp" ),
-                @Index(name = "Command__timestamp__IDX", columnList = "timestamp"),
+                @Index(name = "startedAt__timestamp__IDX", columnList = "startedAt, timestamp" ),
+                @Index(name = "timestamp__IDX", columnList = "timestamp"),
+                @Index(name = "target__IDX", columnList = "target"),
+                @Index(name = "target__startedAt__IDX", columnList = "target, startedAt"),
         }
 )
 @NamedQueries({
@@ -74,7 +72,7 @@ import lombok.Setter;
             name  = Nq.FIND_BY_INTERACTION_ID,
             query = "SELECT cl "
                   + "  FROM CommandLogEntry cl "
-                  + " WHERE cl.interactionId = :interactionId"),
+                  + " WHERE cl.pk.interactionId = :interactionId"),
     @NamedQuery(
             name  = Nq.FIND_BY_PARENT,
             query = "SELECT cl "
@@ -217,18 +215,22 @@ public class CommandLogEntry extends org.apache.isis.extensions.commandlog.appli
         super(commandDto, replayState, targetIndex);
     }
 
-    @Transient
-    @InteractionId
-    public UUID getInteractionId() {
-        return interactionId != null ? interactionId.getInteractionId() : null;
-    }
-    @Transient
-    public void setInteractionId(UUID interactionId) {
-        this.interactionId = new CommandLogEntryPK(interactionId);
-    }
 
     @EmbeddedId
-    private CommandLogEntryPK interactionId;
+    private CommandLogEntryPK pk;
+
+
+    @Transient
+    @InteractionId
+    @Override
+    public UUID getInteractionId() {
+        return pk != null ? pk.getInteractionId() : null;
+    }
+    @Transient
+    @Override
+    public void setInteractionId(UUID interactionId) {
+        this.pk = new CommandLogEntryPK(interactionId);
+    }
 
 
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
@@ -301,6 +303,7 @@ public class CommandLogEntry extends org.apache.isis.extensions.commandlog.appli
     @Exception
     @Getter @Setter
     private String exception;
+
 
     @Column(nullable = ReplayState.NULLABLE, length = ReplayState.MAX_LENGTH)
     @Enumerated(EnumType.STRING)

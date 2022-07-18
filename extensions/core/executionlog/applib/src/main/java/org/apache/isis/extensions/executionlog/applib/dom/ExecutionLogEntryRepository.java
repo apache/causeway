@@ -151,6 +151,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_RECENT_BY_USERNAME)
                         .withParameter("username", username)
+                        .withLimit(30)
         );
     }
 
@@ -158,6 +159,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_RECENT_BY_TARGET)
                         .withParameter("target", target)
+                        .withLimit(30)
         );
     }
 

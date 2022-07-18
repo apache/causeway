@@ -16,31 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.jpa.dom;
+package org.apache.isis.extensions.executionlog.jpa.dom;
 
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.extensions.executionlog.jpa.IsisModuleExtExecutionLogJpa;
 
-/**
- * Provides supporting functionality for querying and persisting
- * {@link CommandLogEntry command} entities.
- */
+import lombok.Builder;
+
 @Service
-@Named(CommandLogEntryRepository.LOGICAL_TYPE_NAME)
+@Named(ExecutionLogEntryRepository.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Jpa")
-public class CommandLogEntryRepository
-extends org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository<CommandLogEntry> {
+@Qualifier("Jdo")
+public class ExecutionLogEntryRepository
+extends org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepository<ExecutionLogEntry> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleExtCommandLogPersistenceJpa.NAMESPACE + ".CommandLogEntryRepository";
+    public static final String LOGICAL_TYPE_NAME = IsisModuleExtExecutionLogJpa.NAMESPACE + ".ExecutionLogEntryRepository";
 
-    public CommandLogEntryRepository() {
-        super(CommandLogEntry.class);
+    public ExecutionLogEntryRepository() {
+        super(ExecutionLogEntry.class);
+    }
+
+    /**
+     * for testing only
+     */
+    @Builder
+    ExecutionLogEntryRepository(
+            Class<ExecutionLogEntry> executionLogEntryClass,
+            Provider<RepositoryService> repositoryServiceProvider,
+            FactoryService factoryService) {
+        super(executionLogEntryClass, repositoryServiceProvider, factoryService);
     }
 
 }
