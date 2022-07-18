@@ -290,11 +290,11 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
         interactionService.openInteraction();
 
         // when
-        Optional<? extends CommandLogEntry> commandTarget1User1TodayIfAny = commandLogEntryRepository.findMostRecentCompleted();
+        Optional<? extends CommandLogEntry> commandTarget1User1IfAny = commandLogEntryRepository.findMostRecentCompleted();
 
         // then
-        Assertions.assertThat(commandTarget1User1TodayIfAny).isPresent();
-        var commandTarget1User1 = commandTarget1User1TodayIfAny.get();
+        Assertions.assertThat(commandTarget1User1IfAny).isPresent();
+        var commandTarget1User1 = commandTarget1User1IfAny.get();
         val commandTarget1User1Id = commandTarget1User1.getInteractionId();
 
         // given (different user, same target, same day)

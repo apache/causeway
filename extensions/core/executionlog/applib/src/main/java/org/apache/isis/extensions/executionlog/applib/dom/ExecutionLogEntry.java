@@ -114,7 +114,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
         public static final String FIND_BY_TIMESTAMP_BETWEEN = "findByTimestampBetween";
         public static final String FIND_BY_TIMESTAMP_AFTER = "findByTimestampAfter";
         public static final String FIND_BY_TIMESTAMP_BEFORE = "findByTimestampBefore";
-        public static final String FIND = "find";
+        public static final String FIND_MOST_RECENT = "findMostRecent";
         public static final String FIND_RECENT_BY_USERNAME = "findRecentByUsername";
         public static final String FIND_RECENT_BY_TARGET = "findRecentByTarget";
     }

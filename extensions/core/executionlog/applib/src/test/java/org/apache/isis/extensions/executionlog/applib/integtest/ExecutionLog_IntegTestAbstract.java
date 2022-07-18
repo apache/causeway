@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.executionlog.applib.integtest;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,18 +27,20 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.mixins.system.DomainChangeRecord;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.sudo.SudoService;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
@@ -48,12 +51,12 @@ import org.apache.isis.extensions.executionlog.applib.integtest.model.Counter;
 import org.apache.isis.extensions.executionlog.applib.integtest.model.CounterRepository;
 import org.apache.isis.extensions.executionlog.applib.integtest.model.Counter_bumpUsingMixin;
 import org.apache.isis.extensions.executionlog.applib.integtest.model.Counter_bumpUsingMixinWithExecutionPublishingDisabled;
-import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+
+import lombok.val;
 
 public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTestAbstract {
 
@@ -78,7 +81,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
 
         assertThat(counterRepository.find()).hasSize(2);
 
-        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.find();
+        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
         assertThat(all).isEmpty();
     }
 
@@ -95,7 +98,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         interactionService.openInteraction();
 
         // then
-        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.find();
+        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
         assertThat(all).hasSize(1);
 
         ExecutionLogEntry executionLogEntry = all.get(0);
@@ -126,7 +129,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         interactionService.openInteraction();
 
         // then
-        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.find();
+        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
         assertThat(all).hasSize(1);
 
         ExecutionLogEntry executionLogEntry = all.get(0);
@@ -157,7 +160,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         interactionService.openInteraction();
 
         // then
-        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.find();
+        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
         assertThat(all).isEmpty();
     }
 
@@ -171,7 +174,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         interactionService.openInteraction();
 
         // then
-        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.find();
+        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
         assertThat(all).isEmpty();
     }
 
@@ -187,7 +190,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         interactionService.openInteraction();
 
         // then
-        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.find();
+        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
         assertThat(all).hasSize(1);
 
         ExecutionLogEntry executionLogEntry = all.get(0);
@@ -217,7 +220,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         interactionService.openInteraction();
 
         // then
-        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.find();
+        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
         assertThat(all).isEmpty();
     }
 
@@ -230,7 +233,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         interactionService.closeInteractionLayers();    // to flush
 
         interactionService.openInteraction();
-        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.find();
+        List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
 
         ExecutionLogEntry executionLogEntry = all.get(0);
         InteractionDto interactionDto = executionLogEntry.getInteractionDto();
@@ -262,6 +265,153 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
     @Test
     void test_all_the_repository_methods() {
 
+        // given
+        sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
+            wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
+        });
+        interactionService.closeInteractionLayers();    // to flush
+        interactionService.openInteraction();
+
+        // when
+        List<? extends ExecutionLogEntry> executionTarget1User1IfAny = executionLogEntryRepository.findMostRecent(1);
+
+        // then
+        assertThat(executionTarget1User1IfAny).hasSize(1);
+        var executionTarget1User1 = executionTarget1User1IfAny.get(0);
+        val executionTarget1User1Id = executionTarget1User1.getInteractionId();
+
+        // given (different user, same target, same day)
+        counter1 = counterRepository.findByName("counter-1");
+        sudoService.run(
+                InteractionContext.switchUser(
+                        UserMemento.builder().name("user-2").build()),
+                () -> wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act()
+        );
+        interactionService.closeInteractionLayers();    // to flush
+        interactionService.openInteraction();
+
+        // when
+        List<? extends ExecutionLogEntry> executionTarget1User2IfAny = executionLogEntryRepository.findMostRecent(1);
+
+        // then
+        assertThat(executionTarget1User2IfAny).hasSize(1);
+        var executionTarget1User2 = executionTarget1User2IfAny.get(0);
+        val executionTarget1User2Id = executionTarget1User2.getInteractionId();
+
+
+        // given (same user, same target, yesterday)
+        counter1 = counterRepository.findByName("counter-1");
+        final UUID[] executionTarget1User1YesterdayIdHolder = new UUID[1];
+        sudoService.run(
+                InteractionContext.switchUser(
+                        UserMemento.builder().name("user-1").build()),
+                () -> {
+                    val yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
+                    sudoService.run(
+                            InteractionContext.switchClock(VirtualClock.nowAt(yesterday)),
+                            () -> {
+                                wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
+                                executionTarget1User1YesterdayIdHolder[0] = interactionLayerTracker.currentInteraction().get().getInteractionId();
+                                interactionService.closeInteractionLayers();    // to flush within changed time...
+                            }
+                    );
+                });
+        interactionService.openInteraction();
+
+        // when, then
+        final UUID executionTarget1User1YesterdayId = executionTarget1User1YesterdayIdHolder[0];
+
+        // given (same user, different target, same day)
+        counter2 = counterRepository.findByName("counter-2");
+        sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
+            wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter2).act();
+        });
+        interactionService.closeInteractionLayers();    // to flush
+        interactionService.openInteraction();
+
+        // when
+        List<? extends ExecutionLogEntry> executionTarget2User1IfAny = executionLogEntryRepository.findMostRecent(1);
+
+        // then
+        assertThat(executionTarget2User1IfAny).hasSize(1);
+        var executionTarget2User1 = executionTarget2User1IfAny.get(0);
+        val executionTarget2User1Id = executionTarget2User1.getInteractionId();
+
+        // when
+        Optional<? extends ExecutionLogEntry> executionTarget1User1ById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget1User1Id, 0);
+        Optional<? extends ExecutionLogEntry> executionTarget1User2ById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget1User2Id, 0);
+        Optional<? extends ExecutionLogEntry> executionTarget1User1YesterdayById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget1User1YesterdayId, 0);
+        Optional<? extends ExecutionLogEntry> executionTarget2User1ById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget2User1Id, 0);
+
+        // then
+        assertThat(executionTarget1User1ById).isPresent();
+        assertThat(executionTarget1User2ById).isPresent();
+        assertThat(executionTarget1User1YesterdayById).isPresent();
+        assertThat(executionTarget2User1ById).isPresent();
+        assertThat(executionTarget2User1ById.get()).isSameAs(executionTarget2User1);
+
+        // given
+        counter1 = counterRepository.findByName("counter-1");
+        executionTarget1User1 = executionTarget1User1ById.get();
+        executionTarget1User2 = executionTarget1User2ById.get();
+        val executionTarget1User1Yesterday = executionTarget1User1YesterdayById.get();
+        executionTarget2User1 = executionTarget2User1ById.get();
+
+        val target1 = executionTarget1User1.getTarget();
+        val username1 = executionTarget1User1.getUsername();
+        Timestamp from1 = executionTarget1User1.getStartedAt();
+        Timestamp to1 = Timestamp.valueOf(from1.toLocalDateTime().plusDays(1));
+        val bookmark1 = bookmarkService.bookmarkForElseFail(counter1);
+
+
+        // when
+        List<? extends ExecutionLogEntry> recentByTarget = executionLogEntryRepository.findByRecentByTarget(bookmark1);
+
+        // then
+        assertThat(recentByTarget).hasSize(3);
+
+
+        // when
+        List<? extends ExecutionLogEntry> byTargetAndTimestampBefore = executionLogEntryRepository.findByTargetAndTimestampBefore(bookmark1, from1);
+
+        // then
+        assertThat(byTargetAndTimestampBefore).hasSize(2); // yesterday, plus cmd1
+
+        // when
+        List<? extends ExecutionLogEntry> byTargetAndTimestampAfter = executionLogEntryRepository.findByTargetAndTimestampAfter(bookmark1, from1);
+
+        // then
+        assertThat(byTargetAndTimestampAfter).hasSize(2); // cmd1, 2nd
+
+        // when
+        List<? extends ExecutionLogEntry> byTargetAndTimestampBetween = executionLogEntryRepository.findByTargetAndTimestampBetween(bookmark1, from1, to1);
+
+        // then
+        assertThat(byTargetAndTimestampBetween).hasSize(2); // 1st and 2nd for this target
+
+        // when
+        List<? extends ExecutionLogEntry> byTimestampBefore = executionLogEntryRepository.findByTimestampBefore(from1);
+
+        // then
+        assertThat(byTimestampBefore).hasSize(2); // cmd1 plus yesterday
+
+        // when
+        List<? extends ExecutionLogEntry> byTimestampAfter = executionLogEntryRepository.findByTimestampAfter(from1);
+
+        // then
+        assertThat(byTimestampAfter).hasSize(3); // cmd1, 2nd, and for other target
+
+        // when
+        List<? extends ExecutionLogEntry> byTimestampBetween = executionLogEntryRepository.findByTimestampBetween(from1, to1);
+
+        // then
+        assertThat(byTimestampBetween).hasSize(3); // 1st and 2nd for this target, and other target
+
+        // when
+        List<? extends ExecutionLogEntry> byUsername = executionLogEntryRepository.findRecentByUsername(username1);
+
+        // then
+        assertThat(byUsername).hasSize(3);
 
     }
 

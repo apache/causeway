@@ -29,18 +29,12 @@ import javax.inject.Provider;
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.Execution;
-import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Provides supporting functionality for querying and persisting
@@ -99,9 +93,14 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         );
     }
 
-    public List<E> find() {
+    public List<E> findMostRecent() {
         return repositoryService().allMatches(
-                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND));
+                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_MOST_RECENT));
+    }
+
+    public List<E> findMostRecent(final int limit) {
+        return repositoryService().allMatches(
+                Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_MOST_RECENT).withLimit(limit));
     }
 
     public List<E> findByTarget(Bookmark target) {

@@ -114,7 +114,7 @@ import lombok.Setter;
                   + " WHERE timestamp <= :timestamp "
                   + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
     @Query(
-            name = Nq.FIND,
+            name = Nq.FIND_MOST_RECENT,
             value = "SELECT "
                   + "  FROM " + ExecutionLogEntry.FQCN + " "
                   + " ORDER BY timestamp DESC, interactionId DESC, sequence DESC"),
