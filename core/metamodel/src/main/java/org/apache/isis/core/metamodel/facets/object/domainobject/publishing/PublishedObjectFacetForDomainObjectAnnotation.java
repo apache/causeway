@@ -34,8 +34,10 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final Publishing publishing = domainObject != null ? domainObject.publishing() : Publishing.AS_CONFIGURED;
-
+        final Publishing publishing = domainObject != null ?
+                (domainObject.entityChangePublishing() == Publishing.DISABLED ? Publishing.DISABLED :
+                        domainObject.publishing())
+                : Publishing.AS_CONFIGURED;
         switch (publishing) {
             case AS_CONFIGURED:
 

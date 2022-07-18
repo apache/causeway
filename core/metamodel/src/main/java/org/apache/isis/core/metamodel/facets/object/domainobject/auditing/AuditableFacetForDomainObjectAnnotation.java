@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.auditing;
 
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
@@ -34,7 +35,9 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final Auditing auditing = domainObject != null ? domainObject.auditing() : Auditing.AS_CONFIGURED;
+        final Auditing auditing = domainObject != null ?
+                (domainObject.entityChangePublishing() == Publishing.DISABLED ? Auditing.DISABLED : domainObject.auditing())
+                : Auditing.AS_CONFIGURED;
         switch (auditing) {
             case AS_CONFIGURED:
 
