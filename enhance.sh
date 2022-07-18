@@ -90,6 +90,10 @@ if [ "$REGRESSIONTESTS" = "enhance" ]; then
   PL_ARG="$PL_ARG -Dmodule-all"
 fi
 
+if [ "$PL_ARG" = " " ]; then
+  usage
+  exit 1
+fi
 
 echo mvn install -DskipTests -o -T1C -am -pl $PL_ARG
 mvn install -DskipTests -o -T1C -am -pl $PL_ARG

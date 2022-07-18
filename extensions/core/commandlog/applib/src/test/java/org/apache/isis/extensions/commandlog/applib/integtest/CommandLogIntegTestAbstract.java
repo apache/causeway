@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.commandlog.applib.integtest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,19 +26,26 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.mixins.system.DomainChangeRecord;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.services.sudo.SudoService;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -61,39 +69,33 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
         IsisPresets.forcePrototyping();
     }
 
-    Counter counter;
+    Counter counter1;
+    Counter counter2;
 
     @BeforeEach
     void beforeEach() {
         counterRepository.removeAll();
         commandLogEntryRepository.removeAll();
 
-        counter = createE1();
+        assertThat(counterRepository.find()).isEmpty();
+
+        counter1 = counterRepository.persist(newCounter("counter-1"));
+        counter2 = counterRepository.persist(newCounter("counter-2"));
+
+        assertThat(counterRepository.find()).hasSize(2);
 
         Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
         assertThat(mostRecentCompleted).isEmpty();
     }
 
-    private Counter createE1() {
-        List<Counter> before = counterRepository.find();
-        assertThat(before).isEmpty();
-
-        val e1 = counterRepository.persist(newCounter());
-
-        List<Counter> after = counterRepository.find();
-        assertThat(after).hasSize(1);
-
-        return e1;
-    }
-
-    protected abstract Counter newCounter();
+    protected abstract Counter newCounter(String name);
 
 
     @Test
     void invoke_mixin() {
 
         // when
-        wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter).act();
+        wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         interactionService.closeInteractionLayers();    // to flush
 
         interactionService.openInteraction();
@@ -129,7 +131,7 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
     void invoke_direct() {
 
         // when
-        wrapperFactory.wrap(counter).bumpUsingDeclaredAction();
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
         interactionService.closeInteractionLayers();    // to flush
 
         interactionService.openInteraction();
@@ -165,7 +167,7 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
     void invoke_mixin_disabled() {
 
         // when
-        wrapperFactory.wrapMixin(Counter_bumpUsingMixinWithCommandPublishingDisabled.class, counter).act();
+        wrapperFactory.wrapMixin(Counter_bumpUsingMixinWithCommandPublishingDisabled.class, counter1).act();
         interactionService.closeInteractionLayers();    // to flush
 
         interactionService.openInteraction();
@@ -179,7 +181,7 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
     void invoke_direct_disabled() {
 
         // when
-        wrapperFactory.wrap(counter).bumpUsingDeclaredActionWithCommandPublishingDisabled();
+        wrapperFactory.wrap(counter1).bumpUsingDeclaredActionWithCommandPublishingDisabled();
         interactionService.closeInteractionLayers();    // to flush
 
         interactionService.openInteraction();
@@ -195,7 +197,7 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
     void edit() {
 
         // when
-        wrapperFactory.wrap(counter).setNum(99L);
+        wrapperFactory.wrap(counter1).setNum(99L);
         interactionService.closeInteractionLayers();    // to flush
 
         interactionService.openInteraction();
@@ -229,7 +231,7 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
     void edit_disabled() {
 
         // when
-        wrapperFactory.wrap(counter).setNum2(99L);
+        wrapperFactory.wrap(counter1).setNum2(99L);
         interactionService.closeInteractionLayers();    // to flush
 
         interactionService.openInteraction();
@@ -244,7 +246,7 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
     void roundtrip_CLE_bookmarks() {
 
         // given
-        wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter).act();
+        wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         interactionService.closeInteractionLayers();    // to flush
 
         interactionService.openInteraction();
@@ -278,11 +280,220 @@ public abstract class CommandLogIntegTestAbstract extends IsisIntegrationTestAbs
 
     }
 
+    @Test
+    void test_all_the_repository_methods() {
+
+        // given
+        sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
+            wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
+        });
+        interactionService.closeInteractionLayers();    // to flush
+        interactionService.openInteraction();
+
+        // when
+        Optional<? extends CommandLogEntry> commandTarget1User1TodayIfAny = commandLogEntryRepository.findMostRecentCompleted();
+
+        // then
+        Assertions.assertThat(commandTarget1User1TodayIfAny).isPresent();
+        var commandTarget1User1 = commandTarget1User1TodayIfAny.get();
+        val commandTarget1User1Id = commandTarget1User1.getInteractionId();
+
+        // given (different user, same target, same day)
+        counter1 = counterRepository.findByName("counter-1");
+        sudoService.run(
+                InteractionContext.switchUser(
+                        UserMemento.builder().name("user-2").build()),
+                () -> wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act()
+        );
+        interactionService.closeInteractionLayers();    // to flush
+        interactionService.openInteraction();
+
+        // when
+        Optional<? extends CommandLogEntry> commandTarget1User2IfAny = commandLogEntryRepository.findMostRecentCompleted();
+
+        // then
+        Assertions.assertThat(commandTarget1User2IfAny).isPresent();
+        var commandTarget1User2 = commandTarget1User2IfAny.get();
+        val commandTarget1User2Id = commandTarget1User2.getInteractionId();
+
+
+        // given (same user, same target, yesterday)
+        counter1 = counterRepository.findByName("counter-1");
+        final UUID[] commandTarget1User1YesterdayIdHolder = new UUID[1];
+        sudoService.run(
+                InteractionContext.switchUser(
+                        UserMemento.builder().name("user-1").build()),
+                () -> {
+                    val yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
+                    sudoService.run(
+                            InteractionContext.switchClock(VirtualClock.nowAt(yesterday)),
+                            () -> {
+                                wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
+                                commandTarget1User1YesterdayIdHolder[0] = interactionLayerTracker.currentInteraction().get().getInteractionId();
+                                interactionService.closeInteractionLayers();    // to flush within changed time...
+                            }
+                    );
+                });
+        interactionService.openInteraction();
+
+        // when, then
+        final UUID commandTarget1User1YesterdayId = commandTarget1User1YesterdayIdHolder[0];
+
+        // given (same user, different target, same day)
+        counter2 = counterRepository.findByName("counter-2");
+        sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
+            wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter2).act();
+        });
+        interactionService.closeInteractionLayers();    // to flush
+        interactionService.openInteraction();
+
+        // when
+        Optional<? extends CommandLogEntry> commandTarget2User1IfAny = commandLogEntryRepository.findMostRecentCompleted();
+
+        // then
+        Assertions.assertThat(commandTarget2User1IfAny).isPresent();
+        var commandTarget2User1 = commandTarget2User1IfAny.get();
+        val commandTarget2User1Id = commandTarget2User1.getInteractionId();
+
+        // when
+        Optional<? extends CommandLogEntry> commandTarget1User1ById = commandLogEntryRepository.findByInteractionId(commandTarget1User1Id);
+        Optional<? extends CommandLogEntry> commandTarget1User2ById = commandLogEntryRepository.findByInteractionId(commandTarget1User2Id);
+        Optional<? extends CommandLogEntry> commandTarget1User1YesterdayById = commandLogEntryRepository.findByInteractionId(commandTarget1User1YesterdayId);
+        Optional<? extends CommandLogEntry> commandTarget2User1ById = commandLogEntryRepository.findByInteractionId(commandTarget2User1Id);
+
+        // then
+        Assertions.assertThat(commandTarget1User1ById).isPresent();
+        Assertions.assertThat(commandTarget1User2ById).isPresent();
+        Assertions.assertThat(commandTarget1User1YesterdayById).isPresent();
+        Assertions.assertThat(commandTarget2User1ById).isPresent();
+        Assertions.assertThat(commandTarget2User1ById.get()).isSameAs(commandTarget2User1);
+
+        // given
+        commandTarget1User1 = commandTarget1User1ById.get();
+        commandTarget1User2 = commandTarget1User2ById.get();
+        val commandTarget1User1Yesterday = commandTarget1User1YesterdayById.get();
+        commandTarget2User1 = commandTarget2User1ById.get();
+
+        val target1 = commandTarget1User1.getTarget();
+        val username1 = commandTarget1User1.getUsername();
+        val from = commandTarget1User1.getStartedAt().toLocalDateTime().toLocalDate();
+        val to = from.plusDays(1);
+
+        // when
+        List<? extends CommandLogEntry> notYetReplayed = commandLogEntryRepository.findNotYetReplayed();
+
+        // then
+        Assertions.assertThat(notYetReplayed).isEmpty();
+
+        if (isisBeanTypeRegistry.determineCurrentPersistenceStack().isJdo()) {
+
+            // fails in JPA; possibly need to get the agent working for dirty tracking.
+
+            // given
+            commandTarget1User1.setReplayState(ReplayState.PENDING);
+
+            // when
+            List<? extends CommandLogEntry> notYetReplayed2 = commandLogEntryRepository.findNotYetReplayed();
+
+            // then
+            Assertions.assertThat(notYetReplayed2).hasSize(1);
+            Assertions.assertThat(notYetReplayed2.get(0).getInteractionId()).isEqualTo(commandTarget1User1.getInteractionId());
+        }
+
+        // when
+        List<? extends CommandLogEntry> byFromAndTo = commandLogEntryRepository.findByFromAndTo(from, to);
+
+        // then
+        Assertions.assertThat(byFromAndTo).hasSize(3);
+        Assertions.assertThat(byFromAndTo.get(0).getInteractionId()).isEqualTo(commandTarget2User1.getInteractionId()); // the more recent
+
+
+        // when
+        List<? extends CommandLogEntry> byTarget1AndFromAndTo = commandLogEntryRepository.findByTargetAndFromAndTo(target1, from, to);
+
+        // then
+        Assertions.assertThat(byTarget1AndFromAndTo).hasSize(2);
+        Assertions.assertThat(byTarget1AndFromAndTo.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // the more recent
+
+        // when
+        List<? extends CommandLogEntry> recentByTargetOfCommand1 = commandLogEntryRepository.findRecentByTarget(target1);
+
+        // then
+        Assertions.assertThat(recentByTargetOfCommand1).hasSize(3);
+        Assertions.assertThat(recentByTargetOfCommand1.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // the more recent
+
+        // when
+        List<? extends CommandLogEntry> recentByUsername = commandLogEntryRepository.findRecentByUsername(username1);
+
+        // then
+        Assertions.assertThat(recentByUsername).hasSize(3);
+        Assertions.assertThat(recentByUsername.get(0).getInteractionId()).isEqualTo(commandTarget2User1.getInteractionId()); // the more recent
+
+        // when
+        List<? extends CommandLogEntry> byParent = commandLogEntryRepository.findByParent(commandTarget1User1);
+
+        // then // TODO: would need nested executions for this to show up.
+        Assertions.assertThat(byParent).isEmpty();
+
+        // when
+        List<? extends CommandLogEntry> completed = commandLogEntryRepository.findCompleted();
+
+        // then
+        Assertions.assertThat(completed).hasSize(4);
+        Assertions.assertThat(completed.get(0).getInteractionId()).isEqualTo(commandTarget2User1.getInteractionId()); // the more recent
+
+        // when
+        List<? extends CommandLogEntry> current = commandLogEntryRepository.findCurrent();
+
+        // then // TODO: would need more sophistication in fixtures to test
+        Assertions.assertThat(current).isEmpty();
+
+        // when
+        List<? extends CommandLogEntry> since = commandLogEntryRepository.findSince(commandTarget1User1.getInteractionId(), 3);
+
+        // then
+        Assertions.assertThat(since).hasSize(2);
+        Assertions.assertThat(since.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // oldest first
+
+        // when
+        List<? extends CommandLogEntry> sinceWithBatchSize1 = commandLogEntryRepository.findSince(commandTarget1User1.getInteractionId(), 1);
+
+        // then
+        Assertions.assertThat(sinceWithBatchSize1).hasSize(1);
+        Assertions.assertThat(sinceWithBatchSize1.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // oldest fist
+
+        // when
+        Optional<? extends CommandLogEntry> mostRecentReplayedIfAny = commandLogEntryRepository.findMostRecentReplayed();
+
+        // then
+        Assertions.assertThat(mostRecentReplayedIfAny).isEmpty();
+
+        if (isisBeanTypeRegistry.determineCurrentPersistenceStack().isJdo()) {
+
+            // fails in JPA; possibly need to get the agent working for dirty tracking.
+
+            // given
+            commandTarget1User1.setReplayState(ReplayState.OK);
+
+            // when
+            Optional<? extends CommandLogEntry> mostRecentReplayedIfAny2 = commandLogEntryRepository.findMostRecentReplayed();
+
+            // then
+            Assertions.assertThat(mostRecentReplayedIfAny2).isPresent();
+            Assertions.assertThat(mostRecentReplayedIfAny2.get().getInteractionId()).isEqualTo(commandTarget1User1Id);
+        }
+
+    }
+
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject SudoService sudoService;
+    @Inject ClockService clockService;
     @Inject InteractionService interactionService;
+    @Inject InteractionLayerTracker interactionLayerTracker;
     @Inject CounterRepository counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
-    @Inject MetaModelService metaModelService;
+    @Inject TransactionService transactionService;
+    @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
 
 }

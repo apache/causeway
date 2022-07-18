@@ -42,6 +42,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
@@ -340,7 +341,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     private C findByInteractionIdElseNull(final UUID interactionId) {
         val q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
-                .withParameter("interactionId", interactionId.toString());
+                .withParameter("interactionId", convert(interactionId));
         return repositoryService().uniqueMatch(q).orElse(null);
     }
 

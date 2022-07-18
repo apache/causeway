@@ -1,6 +1,7 @@
 package org.apache.isis.extensions.commandlog.applib.integtest.model;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -28,4 +29,8 @@ public abstract class CounterRepository<X extends Counter> {
 
     @Inject RepositoryService repositoryService;
 
+    public Counter findByName(String name) {
+        List<X> xes = find();
+        return xes.stream().filter(x -> Objects.equals(x.getName(), name)).findFirst().orElseThrow();
+    }
 }

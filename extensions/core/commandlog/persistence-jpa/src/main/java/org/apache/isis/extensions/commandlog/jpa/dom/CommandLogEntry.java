@@ -178,7 +178,7 @@ import lombok.Setter;
             name  = Nq.FIND_MOST_RECENT_REPLAYED,
             query = "SELECT cl "
                   + "  FROM CommandLogEntry cl "
-                  + " WHERE (cl.replayState = 'OK' OR cl.replayState = 'FAILED') "
+                  + " WHERE (cl.replayState = org.apache.isis.extensions.commandlog.applib.dom.ReplayState.OK OR cl.replayState = org.apache.isis.extensions.commandlog.applib.dom.ReplayState.FAILED) "
                   + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 1
     @NamedQuery(
             name  = Nq.FIND_MOST_RECENT_COMPLETED,

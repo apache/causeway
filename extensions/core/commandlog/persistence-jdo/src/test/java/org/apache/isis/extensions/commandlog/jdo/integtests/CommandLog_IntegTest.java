@@ -58,8 +58,8 @@ public class CommandLog_IntegTest extends CommandLogIntegTestAbstract {
     }
 
 
-    protected org.apache.isis.extensions.commandlog.applib.integtest.model.Counter newCounter() {
-        return Counter.builder().name("bean-counter").build();
+    protected org.apache.isis.extensions.commandlog.applib.integtest.model.Counter newCounter(String name) {
+        return Counter.builder().name(name).build();
     }
 
 }
