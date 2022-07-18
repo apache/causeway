@@ -33,7 +33,7 @@
 			<cpt:collection id="commands"/>
 		</bs3:col>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Description" id="description" >
+			<cpt:fieldSet name="Description" id="description" unreferencedProperties="true">
 				<cpt:action id="clearHints" position="PANEL" />
 				<cpt:action id="downloadLayoutXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="rebuildMetamodel" position="PANEL"/>
