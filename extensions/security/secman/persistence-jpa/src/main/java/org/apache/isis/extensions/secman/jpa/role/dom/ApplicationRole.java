@@ -54,21 +54,19 @@ import lombok.Setter;
         schema = ApplicationRole.SCHEMA,
         name = ApplicationRole.TABLE,
         uniqueConstraints =
-            @UniqueConstraint(
-                    name = "ApplicationRole_name_UNQ",
-                    columnNames= { "name" })
+            @UniqueConstraint(name = "name__UNQ", columnNames= { "name" })
 )
 @NamedQueries({
     @NamedQuery(
             name = Nq.FIND_BY_NAME,
             query = "SELECT r "
-                  + "FROM ApplicationRole r "
-                  + "WHERE r.name = :name"),
+                  + "  FROM ApplicationRole r "
+                  + " WHERE r.name = :name"),
     @NamedQuery(
             name = Nq.FIND_BY_NAME_CONTAINING,
             query = "SELECT r "
-                  + "FROM ApplicationRole r "
-                  + "WHERE r.name LIKE :regex"),
+                  + "  FROM ApplicationRole r "
+                  + " WHERE r.name LIKE :regex"),
 })
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @EntityListeners(IsisEntityListener.class)

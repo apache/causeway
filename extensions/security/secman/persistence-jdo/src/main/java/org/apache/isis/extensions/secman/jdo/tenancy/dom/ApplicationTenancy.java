@@ -56,27 +56,25 @@ import lombok.Setter;
         schema = ApplicationTenancy.SCHEMA,
         table = ApplicationTenancy.TABLE)
 @Uniques({
-    @Unique(
-            name = "ApplicationTenancy_name_UNQ",
-            members = { "name" })
+    @Unique(name = "name__UNQ", members = { "name" })
 })
 @Queries( {
     @Query(
             name = Nq.FIND_BY_PATH,
             value = "SELECT "
-                    + "FROM " + ApplicationTenancy.FQCN
-                    + " WHERE path == :path"),
+                  + "  FROM " + ApplicationTenancy.FQCN
+                  + " WHERE path == :path"),
     @Query(
             name = Nq.FIND_BY_NAME,
             value = "SELECT "
-                    + "FROM " + ApplicationTenancy.FQCN
-                    + " WHERE name == :name"),
+                  + "  FROM " + ApplicationTenancy.FQCN
+                  + " WHERE name == :name"),
     @Query(
             name = Nq.FIND_BY_NAME_OR_PATH_MATCHING,
             value = "SELECT "
-                    + "FROM " + ApplicationTenancy.FQCN
-                    + " WHERE name.matches(:regex) "
-                    + "    || path.matches(:regex) ")
+                  + "  FROM " + ApplicationTenancy.FQCN
+                  + " WHERE name.matches(:regex) "
+                  + "    || path.matches(:regex) ")
 })
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)

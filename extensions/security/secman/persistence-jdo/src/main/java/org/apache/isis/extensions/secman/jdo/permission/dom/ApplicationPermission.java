@@ -54,48 +54,46 @@ import lombok.Setter;
         schema = ApplicationPermission.SCHEMA,
         table = ApplicationPermission.TABLE)
 @Uniques({
-        @Unique(
-                name = "ApplicationPermission_role_feature_rule_UNQ",
-                members = { "role", "featureSort", "featureFqn", "rule" })
+        @Unique(name = "role__feature__rule__UNQ", members = { "role", "featureSort", "featureFqn", "rule" })
 })
 @Queries( {
     @Query(
             name = Nq.FIND_BY_ROLE,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE role == :role"),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE role == :role"),
     @Query(
             name = Nq.FIND_BY_USER,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE (u.roles.contains(role) && u.username == :username) "
-                    + "VARIABLES org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser u"),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE (u.roles.contains(role) && u.username == :username) "
+                  + " VARIABLES org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser u"),
     @Query(
             name = Nq.FIND_BY_ROLE_NAMES,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE :roleNames.contains(role.name) "),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE :roleNames.contains(role.name) "),
     @Query(
             name = Nq.FIND_BY_FEATURE,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE featureSort == :featureSort "
-                    + "   && featureFqn == :featureFqn"),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE featureSort == :featureSort "
+                  + "    && featureFqn == :featureFqn"),
     @Query(
             name = Nq.FIND_BY_ROLE_RULE_FEATURE_FQN,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE role == :role "
-                    + "   && rule == :rule "
-                    + "   && featureSort == :featureSort "
-                    + "   && featureFqn == :featureFqn "),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE role == :role "
+                  + "    && rule == :rule "
+                  + "    && featureSort == :featureSort "
+                  + "    && featureFqn == :featureFqn "),
     @Query(
             name = Nq.FIND_BY_ROLE_RULE_FEATURE,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE role == :role "
-                    + "   && rule == :rule "
-                    + "   && featureSort == :featureSort "),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE role == :role "
+                  + "    && rule == :rule "
+                  + "    && featureSort == :featureSort "),
 })
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)

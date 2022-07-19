@@ -104,18 +104,18 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_INTERACTION_ID = "findByInteractionId";
-        public static final String FIND_BY_INTERACTION_ID_AND_SEQUENCE = "findByInteractionIdAndSequence";
-        public static final String FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN = "findByTargetAndTimestampBetween";
-        public static final String FIND_BY_TARGET_AND_TIMESTAMP_AFTER = "findByTargetAndTimestampAfter";
-        public static final String FIND_BY_TARGET_AND_TIMESTAMP_BEFORE = "findByTargetAndTimestampBefore";
-        public static final String FIND_BY_TARGET = "findByTarget";
-        public static final String FIND_BY_TIMESTAMP_BETWEEN = "findByTimestampBetween";
-        public static final String FIND_BY_TIMESTAMP_AFTER = "findByTimestampAfter";
-        public static final String FIND_BY_TIMESTAMP_BEFORE = "findByTimestampBefore";
-        public static final String FIND_MOST_RECENT = "findMostRecent";
-        public static final String FIND_RECENT_BY_USERNAME = "findRecentByUsername";
-        public static final String FIND_RECENT_BY_TARGET = "findRecentByTarget";
+        public static final String FIND_BY_INTERACTION_ID = LOGICAL_TYPE_NAME + ".findByInteractionId";
+        public static final String FIND_BY_INTERACTION_ID_AND_SEQUENCE = LOGICAL_TYPE_NAME + ".findByInteractionIdAndSequence";
+        public static final String FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN = LOGICAL_TYPE_NAME + ".findByTargetAndTimestampBetween";
+        public static final String FIND_BY_TARGET_AND_TIMESTAMP_AFTER = LOGICAL_TYPE_NAME + ".findByTargetAndTimestampAfter";
+        public static final String FIND_BY_TARGET_AND_TIMESTAMP_BEFORE = LOGICAL_TYPE_NAME + ".findByTargetAndTimestampBefore";
+        public static final String FIND_BY_TARGET = LOGICAL_TYPE_NAME + ".findByTarget";
+        public static final String FIND_BY_TIMESTAMP_BETWEEN = LOGICAL_TYPE_NAME + ".findByTimestampBetween";
+        public static final String FIND_BY_TIMESTAMP_AFTER = LOGICAL_TYPE_NAME + ".findByTimestampAfter";
+        public static final String FIND_BY_TIMESTAMP_BEFORE = LOGICAL_TYPE_NAME + ".findByTimestampBefore";
+        public static final String FIND_MOST_RECENT = LOGICAL_TYPE_NAME + ".findMostRecent";
+        public static final String FIND_RECENT_BY_USERNAME = LOGICAL_TYPE_NAME + ".findRecentByUsername";
+        public static final String FIND_RECENT_BY_TARGET = LOGICAL_TYPE_NAME + ".findRecentByTarget";
     }
 
     @UtilityClass

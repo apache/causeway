@@ -57,10 +57,7 @@ import lombok.Setter;
         schema = ApplicationUser.SCHEMA,
         table = ApplicationUser.TABLE)
 @Uniques({
-    @Unique(
-            name = "ApplicationUser_username_UNQ",
-            members = { "username" })
-})
+    @Unique(name = "username__UNQ", members = { "username" })})
 @Queries( {
     @Query(
             name = Nq.FIND_BY_USERNAME,

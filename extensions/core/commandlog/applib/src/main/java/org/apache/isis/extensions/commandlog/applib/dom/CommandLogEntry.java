@@ -111,25 +111,25 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_INTERACTION_ID = "findByInteractionId";
-        public static final String FIND_BY_PARENT = "findByParent";
-        public static final String FIND_CURRENT = "findCurrent";
-        public static final String FIND_COMPLETED = "findCompleted";
-        public static final String FIND_RECENT_BY_TARGET = "findRecentByTarget";
-        public static final String FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN = "findByTargetAndTimestampBetween";
-        public static final String FIND_BY_TARGET_AND_TIMESTAMP_AFTER = "findByTargetAndTimestampAfter";
-        public static final String FIND_BY_TARGET_AND_TIMESTAMP_BEFORE = "findByTargetAndTimestampBefore";
-        public static final String FIND_BY_TARGET = "findByTarget";
-        public static final String FIND_BY_TIMESTAMP_BETWEEN = "findByTimestampBetween";
-        public static final String FIND_BY_TIMESTAMP_AFTER = "findByTimestampAfter";
-        public static final String FIND_BY_TIMESTAMP_BEFORE = "findByTimestampBefore";
-        public static final String FIND = "find";
-        public static final String FIND_RECENT_BY_USERNAME = "findRecentByUsername";
-        public static final String FIND_FIRST = "findFirst";
-        public static final String FIND_SINCE = "findSince";
-        public static final String FIND_MOST_RECENT_REPLAYED = "findMostRecentReplayed";
-        public static final String FIND_MOST_RECENT_COMPLETED = "findMostRecentCompleted";
-        public static final String FIND_BY_REPLAY_STATE = "findNotYetReplayed";
+        public static final String FIND_BY_INTERACTION_ID = LOGICAL_TYPE_NAME + ".findByInteractionId";
+        public static final String FIND_BY_PARENT = LOGICAL_TYPE_NAME + ".findByParent";
+        public static final String FIND_CURRENT = LOGICAL_TYPE_NAME + ".findCurrent";
+        public static final String FIND_COMPLETED = LOGICAL_TYPE_NAME + ".findCompleted";
+        public static final String FIND_RECENT_BY_TARGET = LOGICAL_TYPE_NAME + ".findRecentByTarget";
+        public static final String FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN = LOGICAL_TYPE_NAME + ".findByTargetAndTimestampBetween";
+        public static final String FIND_BY_TARGET_AND_TIMESTAMP_AFTER = LOGICAL_TYPE_NAME + ".findByTargetAndTimestampAfter";
+        public static final String FIND_BY_TARGET_AND_TIMESTAMP_BEFORE = LOGICAL_TYPE_NAME + ".findByTargetAndTimestampBefore";
+        public static final String FIND_BY_TARGET = LOGICAL_TYPE_NAME + ".findByTarget";
+        public static final String FIND_BY_TIMESTAMP_BETWEEN = LOGICAL_TYPE_NAME + ".findByTimestampBetween";
+        public static final String FIND_BY_TIMESTAMP_AFTER = LOGICAL_TYPE_NAME + ".findByTimestampAfter";
+        public static final String FIND_BY_TIMESTAMP_BEFORE = LOGICAL_TYPE_NAME + ".findByTimestampBefore";
+        public static final String FIND = LOGICAL_TYPE_NAME + ".find";
+        public static final String FIND_RECENT_BY_USERNAME = LOGICAL_TYPE_NAME + ".findRecentByUsername";
+        public static final String FIND_FIRST = LOGICAL_TYPE_NAME + ".findFirst";
+        public static final String FIND_SINCE = LOGICAL_TYPE_NAME + ".findSince";
+        public static final String FIND_MOST_RECENT_REPLAYED = LOGICAL_TYPE_NAME + ".findMostRecentReplayed";
+        public static final String FIND_MOST_RECENT_COMPLETED = LOGICAL_TYPE_NAME + ".findMostRecentCompleted";
+        public static final String FIND_BY_REPLAY_STATE = LOGICAL_TYPE_NAME + ".findNotYetReplayed";
     }
 
 

@@ -54,21 +54,19 @@ import lombok.Setter;
         schema = ApplicationRole.SCHEMA,
         table = ApplicationRole.TABLE)
 @Uniques({
-    @Unique(
-            name = "ApplicationRole_name_UNQ",
-            members = { "name" })
+    @Unique(name = "name__UNQ", members = { "name" })
 })
 @Queries({
     @Query(
             name = Nq.FIND_BY_NAME,
             value = "SELECT "
-                    + "FROM " + ApplicationRole.FQCN
-                    + " WHERE name == :name"),
+                  + "  FROM " + ApplicationRole.FQCN
+                  + " WHERE name == :name"),
     @Query(
             name = Nq.FIND_BY_NAME_CONTAINING,
             value = "SELECT "
-                    + "FROM " + ApplicationRole.FQCN
-                    + " WHERE name.matches(:regex) ")
+                  + "  FROM " + ApplicationRole.FQCN
+                  + " WHERE name.matches(:regex) ")
 })
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)

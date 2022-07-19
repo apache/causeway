@@ -115,14 +115,14 @@ import lombok.Setter;
                     + "ORDER BY timestamp DESC")
 })
 //@Indices({
-//    @Index(name="AuditEntry_ak", unique="true",
+//    @Index(name="pk", unique="true",
 //            columns={
 //                @javax.jdo.annotations.Column(name="transactionId"),
 //                @javax.jdo.annotations.Column(name="sequence"),
 //                @javax.jdo.annotations.Column(name="target"),
 //                @javax.jdo.annotations.Column(name="propertyId")
 //                }),
-//    @Index(name="AuditEntry_target_ts_IDX", unique="false",
+//    @Index(name="target__timestamp__IDX", unique="false",
 //            members={ "targetStr", "timestamp" }),
 //})
 @DomainObject(

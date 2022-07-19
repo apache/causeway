@@ -104,8 +104,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_INTERACTION_ID_AND_SEQUENCE = "findByInteractionIdAndSequence";
-        public static final String FIND_OLDEST = "findOldest";
+        public static final String FIND_BY_INTERACTION_ID_AND_SEQUENCE = LOGICAL_TYPE_NAME + ".findByInteractionIdAndSequence";
+        public static final String FIND_OLDEST = LOGICAL_TYPE_NAME + ".findOldest";
     }
 
     @UtilityClass

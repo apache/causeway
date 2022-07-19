@@ -54,9 +54,7 @@ import lombok.Setter;
         schema = ApplicationTenancy.SCHEMA,
         name = ApplicationTenancy.TABLE,
         uniqueConstraints =
-            @UniqueConstraint(
-                    name = "ApplicationTenancy_name_UNQ",
-                    columnNames={"name"})
+            @UniqueConstraint(name = "name__UNQ", columnNames = { "name" })
 )
 @NamedQueries({
     @NamedQuery(

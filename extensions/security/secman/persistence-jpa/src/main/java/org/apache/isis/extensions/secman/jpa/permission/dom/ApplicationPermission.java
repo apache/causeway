@@ -57,9 +57,7 @@ import lombok.Setter;
         schema = ApplicationPermission.SCHEMA,
         name = ApplicationPermission.TABLE,
         uniqueConstraints=
-            @UniqueConstraint(
-                    name = "ApplicationPermission_role_feature_rule_UNQ",
-                    columnNames={"roleId", "featureSort", "featureFqn", "rule"})
+            @UniqueConstraint(name = "role__feature__rule__UNQ", columnNames={"roleId", "featureSort", "featureFqn", "rule"})
 )
 @NamedQueries({
     @NamedQuery(
@@ -70,16 +68,16 @@ import lombok.Setter;
     @NamedQuery(
             name = Nq.FIND_BY_USER,
             query = "SELECT perm "
-                  + "FROM ApplicationPermission perm "
-                  + "JOIN perm.role role "
-                  + "JOIN role.users user "
-                  + "WHERE user.username = :username"),
+                  + "  FROM ApplicationPermission perm "
+                  + "  JOIN perm.role role "
+                  + "  JOIN role.users user "
+                  + " WHERE user.username = :username"),
     @NamedQuery(
             name = Nq.FIND_BY_ROLE_NAMES,
             query = "SELECT perm "
-                  + "FROM ApplicationPermission perm "
-                  + "JOIN perm.role role "
-                  + "WHERE role.name IN :roleNames"),
+                  + "  FROM ApplicationPermission perm "
+                  + "  JOIN perm.role role "
+                  + " WHERE role.name IN :roleNames"),
     @NamedQuery(
             name = Nq.FIND_BY_FEATURE,
             query = "SELECT p "
