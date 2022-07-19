@@ -19,7 +19,7 @@ public class ContentMappingServiceForOutboxEvents implements ContentMappingServi
 
     @Override
     public Object map(final Object object, final List<MediaType> acceptableMediaTypes) {
-        final boolean supported = Util.isSupported(InteractionsDto.class, acceptableMediaTypes);
+        final boolean supported = isSupported(InteractionsDto.class, acceptableMediaTypes);
         if(!supported) {
             return null;
         }

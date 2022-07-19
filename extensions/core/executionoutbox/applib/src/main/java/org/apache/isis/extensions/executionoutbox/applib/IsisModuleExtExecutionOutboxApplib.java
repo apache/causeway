@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 import org.apache.isis.extensions.executionoutbox.applib.restapi.OutboxRestApi;
+import org.apache.isis.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents;
 import org.apache.isis.extensions.executionoutbox.applib.spiimpl.ExecutionSubscriberForExecutionOutbox;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
@@ -34,6 +35,7 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
         // @Service's
         ExecutionSubscriberForExecutionOutbox.class,
         ExecutionOutboxEntry.TableColumnOrderDefault.class,
+        ContentMappingServiceForOutboxEvents.class
 })
 public class IsisModuleExtExecutionOutboxApplib
 implements ModuleWithFixtures {

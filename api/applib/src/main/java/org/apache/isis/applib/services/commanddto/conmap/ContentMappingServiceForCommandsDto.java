@@ -34,7 +34,7 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 /**
- * 
+ *
  * @since 2.0 {@index}
  */
 @Service
@@ -45,7 +45,7 @@ public class ContentMappingServiceForCommandsDto implements ContentMappingServic
 
     @Override
     public Object map(Object object, final List<MediaType> acceptableMediaTypes) {
-        final boolean supported = Util.isSupported(CommandsDto.class, acceptableMediaTypes);
+        final boolean supported = isSupported(CommandsDto.class, acceptableMediaTypes);
         if(!supported) {
             return null;
         }

@@ -38,7 +38,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
- * 
+ *
  * @since 2.0 {@index}
  */
 @Service
@@ -49,7 +49,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
 
     @Override @Nullable
     public Object map(final Object object, final List<MediaType> acceptableMediaTypes) {
-        final boolean supported = Util.isSupported(CommandDto.class, acceptableMediaTypes);
+        final boolean supported = isSupported(CommandDto.class, acceptableMediaTypes);
         if(!supported) {
             return null;
         }
@@ -80,7 +80,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         if(commandDto == null) {
             return null;
         }
-        
+
         // global processors
         for (val commandDtoProcessorService : commandDtoProcessorServices) {
             commandDto = commandDtoProcessorService.process(domainObject, commandDto);

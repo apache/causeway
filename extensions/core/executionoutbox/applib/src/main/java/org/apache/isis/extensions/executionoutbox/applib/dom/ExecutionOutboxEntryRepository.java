@@ -95,7 +95,8 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
 
     public List<E> findOldest() {
         return repositoryService().allMatches(
-                Query.named(executionOutboxEntryClass, ExecutionOutboxEntry.Nq.FIND_OLDEST));
+                Query.named(executionOutboxEntryClass, ExecutionOutboxEntry.Nq.FIND_OLDEST)
+                        .withLimit(100));
     }
 
     public ExecutionOutboxEntry upsert(

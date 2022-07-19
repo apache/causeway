@@ -3,6 +3,7 @@ package org.apache.isis.extensions.executionoutbox.restclient.api;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -21,7 +22,6 @@ import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
 import lombok.Setter;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -44,6 +44,24 @@ public class OutboxClient {
         setPassword(password);
 
         init();
+    }
+
+    /**
+     * for debugging
+     * @param connectTimeoutInSecs
+     */
+    public OutboxClient withConnectTimeoutInSecs(int connectTimeoutInSecs) {
+        clientBuilder.connectTimeout(connectTimeoutInSecs, TimeUnit.SECONDS);
+        return this;
+    }
+
+    /**
+     * for debugging
+     * @param readTimeoutInSecs
+     */
+    public OutboxClient withReadTimeoutInSecs(int readTimeoutInSecs) {
+        clientBuilder.readTimeout(readTimeoutInSecs, TimeUnit.SECONDS);
+        return this;
     }
 
     private UriBuilder pendingUriBuilder;
@@ -85,7 +103,8 @@ public class OutboxClient {
 
             val invocationBuilder = webTarget.request()
                     .header("Authorization", "Basic " + encode(username, password))
-                    .accept(mediaTypeFor(InteractionsDto.class));
+                    .accept(mediaTypeFor(InteractionsDto.class))
+                    ;
 
             val invocation = invocationBuilder.buildGet();
             val response = invocation.invoke();
@@ -115,8 +134,8 @@ public class OutboxClient {
     }
 
 
-    public void delete(final String transactionId, final int sequence) {
-        val jsonable = new DeleteMessage(transactionId, sequence);
+    public void delete(final String interactionId, final int sequence) {
+        val jsonable = new DeleteMessage(interactionId, sequence);
         invoke(jsonable, deleteUriBuilder);
     }
 

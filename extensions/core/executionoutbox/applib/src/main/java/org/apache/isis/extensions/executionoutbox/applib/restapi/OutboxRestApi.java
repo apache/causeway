@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.executionoutbox.applib.restapi;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -65,7 +66,8 @@ public class OutboxRestApi  {
     )
     public OutboxEvents pending() {
         val outboxEvents = factoryService.viewModel(new OutboxEvents());
-        outboxEvents.getExecutions().addAll(entryRepository.findOldest());
+        List<? extends ExecutionOutboxEntry> entries = entryRepository.findOldest();
+        outboxEvents.getExecutions().addAll(entries);
         return outboxEvents;
     }
 
