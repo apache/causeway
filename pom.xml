@@ -266,6 +266,7 @@
 			<modules>
 				<module>valuetypes/asciidoc/ui/vaadin</module>
 				<module>incubator/clients/kroviz</module>
+				<module>incubator/extensions/core/commandreplay</module>
 				<module>incubator/viewers/graphql</module>
 				<module>incubator/viewers/javafx</module>
 				<module>incubator/viewers/vaadin</module>
@@ -281,6 +282,18 @@
 			</activation>
 			<modules>
 				<module>incubator/viewers/graphql</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>module-incubator-commandreplay</id>
+			<activation>
+				<property>
+					<name>module-incubator-commandreplay</name>
+				</property>
+			</activation>
+			<modules>
+				<module>incubator/extensions/core/commandreplay</module>
 			</modules>
 		</profile>
 

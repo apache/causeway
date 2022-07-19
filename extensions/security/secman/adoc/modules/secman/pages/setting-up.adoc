@@ -237,13 +237,15 @@ Browse the application features + permissions (from the "Prototyping" menu).
 +
 Download the JDO metamodel (from the "Prototyping" menu).
 
-** `IsisExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME`
-+
-Access to the command replay primary menu
-
-** `IsisExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME`
-+
-Access to the command replay secondary menu
+// moved to the incubator for the time being
+//** `IsisExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME`
+//+
+//Access to the command replay primary menu
+//
+//** `IsisExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME`
+//+
+//Access to the command replay secondary menu
+//
 
 ** `IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME`
 +

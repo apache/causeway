@@ -109,7 +109,7 @@ include::../ActionCommandPublishingEntity_mixinUpdatePropertyMetaAnnotationOverr
 <.> \... is overridden by the `@Action` annotation
 
 
-== CommandServiceListener
+== CommandSubscriber
 
 The demo includes the link:https://isis.apache.org/extensions/2.0.0-M3/commandlog/about.html[Command Log] extension, so every command is persisted.
 These can be viewed in the collection at the left bottom of the page.
@@ -135,32 +135,35 @@ In addition to globally enabling or disabling command reification, it is also po
 This enables commands for all actions except those that have safe (that is, query-only) semantics.
 In other words actions are reified to commands except for those that don't change (aren't declared as changing) the state of the system.
 
-== Command Replay
-
-The link:https://isis.apache.org/extensions/2.0.0-M3/commandlog/about.html[Command Log] extension provides an implementation of `CommandServiceListener` to allow xref:refguide:applib:index/services/command/Command.adoc[Command]s to be persisted.
-It also provides a RESTful endpoint to allow xref:refguide:applib:index/services/command/Command.adoc[Command]s to be queried.
-This is used by the link:https://isis.apache.org/extensions/2.0.0-M3/commandreplay/about.html[Command Replay] extension to allow commands to be replayed on a secondary system, for regression testing.
-
-The associated `commandDtoProcessor()` element allows the xref:refguide:applib:index/services/command/Command.adoc[Command] XML representation (as a `CommandDto`) to be processed before being surfaced through the REST endpoint.
-One use case is to allow data to be obfuscated for security, or to replace large payloads (such as Blobs) with a smaller dummy payload.
-As well as specifying DTO processing at the action level, it can be specified globally by implementing the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandDtoProcessorService.html[CommandDtoProcessorService] SPI.
-
-The command replay can be demonstrated by running a second instance of the demo app, using the "secondary" Spring Boot profile.
-This is most easily done by specifying a system property:
-
-    -Dspring.profiles.active=secondary
-
-This activates the `application-secondary.properties` configuration file:
-
-[source,properties]
-----
-isis.extensions.commandreplay.primary-access.base-url-restful=http://localhost:8080/restful/
-isis.extensions.commandreplay.primary-access.user=sven
-isis.extensions.commandreplay.primary-access.password=pass
-isis.extensions.commandreplay.primary-access.base-url-wicket=http://localhost:8080/wicket/
-
-server.port=9090
-----
-
-The secondary instance of demoapp is accessible at link:http://localhost:9090[].
-Since both primary and secondary start with the same initial state, any commands executed on the primary are replicated to the secondary and result in the same changes of state.
+//
+// command replay moved to the incubator for the time being
+//
+//== Command Replay
+//
+//The link:https://isis.apache.org/extensions/2.0.0-M3/commandlog/about.html[Command Log] extension provides an implementation of `CommandServiceListener` to allow xref:refguide:applib:index/services/command/Command.adoc[Command]s to be persisted.
+//It also provides a RESTful endpoint to allow xref:refguide:applib:index/services/command/Command.adoc[Command]s to be queried.
+//This is used by the link:https://isis.apache.org/extensions/2.0.0-M3/commandreplay/about.html[Command Replay] extension to allow commands to be replayed on a secondary system, for regression testing.
+//
+//The associated `commandDtoProcessor()` element allows the xref:refguide:applib:index/services/command/Command.adoc[Command] XML representation (as a `CommandDto`) to be processed before being surfaced through the REST endpoint.
+//One use case is to allow data to be obfuscated for security, or to replace large payloads (such as Blobs) with a smaller dummy payload.
+//As well as specifying DTO processing at the action level, it can be specified globally by implementing the link:https://isis.apache.org/refguide/2.0.0-M3/applib-svc/CommandDtoProcessorService.html[CommandDtoProcessorService] SPI.
+//
+//The command replay can be demonstrated by running a second instance of the demo app, using the "secondary" Spring Boot profile.
+//This is most easily done by specifying a system property:
+//
+//    -Dspring.profiles.active=secondary
+//
+//This activates the `application-secondary.properties` configuration file:
+//
+//[source,properties]
+//----
+//isis.extensions.commandreplay.primary-access.base-url-restful=http://localhost:8080/restful/
+//isis.extensions.commandreplay.primary-access.user=sven
+//isis.extensions.commandreplay.primary-access.password=pass
+//isis.extensions.commandreplay.primary-access.base-url-wicket=http://localhost:8080/wicket/
+//
+//server.port=9090
+//----
+//
+//The secondary instance of demoapp is accessible at link:http://localhost:9090[].
+//Since both primary and secondary start with the same initial state, any commands executed on the primary are replicated to the secondary and result in the same changes of state.

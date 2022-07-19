@@ -43,6 +43,9 @@ content:
     - url: .
       start_path: incubator/viewers/graphql/adoc # incubator
       branches: HEAD
+    - url: .
+      start_path: incubator/extensions/core/commandreplay/adoc # extensions
+      branches: HEAD
 #    - url: .
 #      start_path: incubator/viewers/javafx/adoc # incubator
 #      branches: HEAD
