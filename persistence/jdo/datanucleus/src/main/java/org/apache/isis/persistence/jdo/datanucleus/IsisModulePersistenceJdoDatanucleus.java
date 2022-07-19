@@ -165,30 +165,6 @@ public class IsisModulePersistenceJdoDatanucleus {
 
         final Set<String> classNamesNotEnhanced = new LinkedHashSet<>();
 
-        if (false) {
-            for (Class<?> persistenceCapableType : beanTypeRegistry.getEntityTypes().keySet()) {
-                if(ignore(persistenceCapableType)) {
-                    continue;
-                }
-                if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(persistenceCapableType)) {
-                    classNamesNotEnhanced.add(persistenceCapableType.getCanonicalName());
-                }
-                classNamesNotEnhanced.add(persistenceCapableType.getCanonicalName());
-            }
-
-            if(!classNamesNotEnhanced.isEmpty()) {
-                val classNames = new ArrayList<>(classNamesNotEnhanced);
-                Collections.sort(classNames);
-                val classNamesNotEnhancedStr = String.join("\n* ", classNames);
-                val msg = String.format("Non-enhanced @PersistenceCapable classes found, will abort.  The classes in error are:\n\n* %s\n\nDid the DataNucleus enhancer run correctly?\n", classNamesNotEnhancedStr);
-                System.err.println("*******************************************************************************\n"+msg+"\n*******************************************************************************\n");
-                IllegalStateException ex = new IllegalStateException(msg);
-                ex.setStackTrace(new StackTraceElement[0]);
-                throw ex;
-            }
-        }
-
-
         autoCreateSchemas(dataSource, isisConfiguration);
 
         val lpmfBean = new LocalPersistenceManagerFactoryBean() {
