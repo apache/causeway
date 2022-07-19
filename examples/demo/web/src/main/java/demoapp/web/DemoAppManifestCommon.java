@@ -26,8 +26,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
-import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.cors.impl.IsisModuleExtCors;
 import org.apache.isis.extensions.secman.encryption.spring.IsisModuleExtSecmanEncryptionSpring;
 import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
@@ -40,7 +38,6 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import demoapp.dom._infra.fixtures.DemoFixtureScript;
-import demoapp.web.replay.DemoReplayController;
 import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
 
 /**
@@ -48,12 +45,6 @@ import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
  */
 @Configuration
 @Import({
-    // @Configuration's
-
-    // commands
-    IsisModuleExtCommandReplayPrimary.class,
-    IsisModuleExtCommandReplaySecondary.class,
-
     // Security Manager Extension (secman)
     IsisModuleExtSecmanIntegration.class,
     IsisModuleExtSecmanEncryptionSpring.class,
@@ -69,7 +60,6 @@ import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
     IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
 
     // services
-    DemoReplayController.class,
     PrototypeActionsVisibilityAdvisor.class,
 
     // fixtures
