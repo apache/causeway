@@ -20,41 +20,23 @@ package org.apache.isis.applib.util.schema;
 
 import java.io.CharArrayWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.iactn.Execution;
-import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.util.JaxbUtil;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.schema.chg.v2.ChangesDto;
-import org.apache.isis.schema.cmd.v2.ParamDto;
-import org.apache.isis.schema.cmd.v2.ParamsDto;
-import org.apache.isis.schema.common.v2.InteractionType;
-import org.apache.isis.schema.common.v2.OidDto;
-import org.apache.isis.schema.common.v2.ValueDto;
-import org.apache.isis.schema.common.v2.ValueType;
-import org.apache.isis.schema.common.v2.ValueWithTypeDto;
-import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.InteractionsDto;
-import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
-import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
 import lombok.val;
 
@@ -121,24 +103,47 @@ public final class InteractionsDtoUtils {
 
     // -- other
 
-    public static InteractionsDto combine(List<InteractionDto> interactionDtos) {
-        InteractionsDto dto = new InteractionsDto();
-        interactionDtos.forEach(x -> {
-            promoteVersionToTop(dto, x);
-            dto.getInteractionDto().add(x);
+    public static List<InteractionDto> split(InteractionsDto interactionsDto) {
+        List<InteractionDto> interactionDtos = new ArrayList<>();
+        interactionsDto.getInteractionDto().forEach(interactionDto -> {
+            copyVersion(interactionsDto, interactionDto);
+            interactionDtos.add(interactionDto);
         });
-        return dto;
+        return interactionDtos;
     }
 
-    private static void promoteVersionToTop(InteractionsDto dto, InteractionDto x) {
-        val majorVersion = x.getMajorVersion();
-        val minorVersion = x.getMinorVersion();
+    private static void copyVersion(
+            final InteractionsDto from,
+            final InteractionDto to) {
+        val majorVersion = from.getMajorVersion();
+        val minorVersion = from.getMinorVersion();
+        if (!_Strings.isNullOrEmpty(majorVersion) && !_Strings.isNullOrEmpty(minorVersion)) {
+            to.setMajorVersion(majorVersion);
+            to.setMinorVersion(minorVersion);
+        }
+    }
+
+    public static InteractionsDto join(
+            final List<InteractionDto> interactionDtos) {
+        val interactionsDto = new InteractionsDto();
+        interactionDtos.forEach(interactionDto -> {
+            copyVersion(interactionDto, interactionsDto);
+            interactionsDto.getInteractionDto().add(interactionDto);
+        });
+        return interactionsDto;
+    }
+
+    private static void copyVersion(
+            final InteractionDto from,
+            final InteractionsDto dto) {
+        val majorVersion = from.getMajorVersion();
+        val minorVersion = from.getMinorVersion();
         if (!_Strings.isNullOrEmpty(majorVersion) && !_Strings.isNullOrEmpty(minorVersion)) {
             dto.setMajorVersion(majorVersion);
             dto.setMinorVersion(minorVersion);
         }
-        x.setMajorVersion(null);
-        x.setMinorVersion(null);
+        from.setMajorVersion(null);
+        from.setMinorVersion(null);
     }
 
 

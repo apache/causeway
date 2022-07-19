@@ -288,7 +288,6 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends IsisIntegrationT
     @Inject SudoService sudoService;
     @Inject ClockService clockService;
     @Inject InteractionService interactionService;
-    @Inject InteractionLayerTracker interactionLayerTracker;
     @Inject CounterRepository counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
