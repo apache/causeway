@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 usage() {
-  #echo "$(basename $0): [-a] [-c] [-e] [-m] [-o] [-s] [-d] [-t]"              >&2
-  echo "$(basename $0): [-c] [-e] [-m] [-s] [-d] [-t]"                        >&2
-  #echo "  -a : audit trail (extensions/security)"                            >&2
+  #echo "$(basename $0): [-a] [-c] [-e] [-o] [-m] [-s] [-d] [-t]"              >&2
+  echo "$(basename $0): [-c] [-e] [-o] [-m] [-s] [-d] [-t]"                   >&2
+  #echo "  -a : audit trail (extensions/security)"                             >&2
   echo "  -c : command log (extensions/core)"                                 >&2
   echo "  -e : execution log (extensions/core)"                               >&2
+  echo "  -o : execution outbox (extensions/core)"                            >&2
   echo "  -m : secman (extensions/security)"                                  >&2
-  #echo "  -o : execution outbox (extensions/core)"                           >&2
   echo "  -s : session log (extensions/security)"                             >&2
   echo "  -d : demo (examples/demo/domain)"                                   >&2
   echo "  -t : JDO regression tests (regressiontests/stable-persistence-jdo)" >&2
@@ -25,8 +25,8 @@ SESSIONLOG=""
 
 PATHS=()
 
-#while getopts ":acdemosht" arg; do
-while getopts ":cdemsht" arg; do
+#while getopts ":acdeomsht" arg; do
+while getopts ":cdeomsht" arg; do
   case $arg in
     h)
       usage
@@ -48,10 +48,10 @@ while getopts ":cdemsht" arg; do
       SECMAN="enhance"
       PATHS+=( "extensions/security/secman/persistence-jdo" )
       ;;
-#    o)
-#      EXECUTIONOUTBOX="enhance"
-#      PATHS+=( "extensions/core/executionoutbox/persistence-jdo" )
-#      ;;
+    o)
+      EXECUTIONOUTBOX="enhance"
+      PATHS+=( "extensions/core/executionoutbox/persistence-jdo" )
+      ;;
     s)
       SESSIONLOG="enhance"
       PATHS+=( "extensions/security/sessionlog/persistence-jdo" )

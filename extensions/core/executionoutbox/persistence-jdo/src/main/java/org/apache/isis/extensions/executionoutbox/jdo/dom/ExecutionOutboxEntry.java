@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryType;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
@@ -72,7 +73,7 @@ import lombok.Setter;
 @DomainObject(
         editing = Editing.DISABLED
 )
-@XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 public class ExecutionOutboxEntry extends org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry {
 
 

@@ -195,9 +195,9 @@ else
       tail -n +$(grep -n "Segment walltime" $MVN_LOG | cut -f1 -d:) $MVN_LOG
     else
       if [ "$VERBOSE" = "true" ]; then
-        echo "did NOT find 'Segment walltime', so printing last 50 lines of log"
+        echo "did NOT find 'Segment walltime', so printing last 120 lines of log"
       fi
-      tail -n 50 $MVN_LOG
+      tail -n 120 $MVN_LOG
     fi
   else
     if [ "$VERBOSE" = "true" ]; then

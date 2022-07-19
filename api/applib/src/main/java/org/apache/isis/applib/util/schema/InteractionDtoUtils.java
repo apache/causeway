@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.schema.cmd.v2.ParamDto;
@@ -50,8 +51,11 @@ import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
+import org.apache.isis.schema.ixn.v2.InteractionsDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
+
+import lombok.val;
 
 /**
  * @since 1.x {@index}
@@ -107,6 +111,26 @@ public final class InteractionDtoUtils {
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static InteractionsDto combine(List<InteractionDto> interactionDtos) {
+        InteractionsDto dto = new InteractionsDto();
+        interactionDtos.forEach(x -> {
+            promoteVersionToTop(dto, x);
+            dto.getInteractionDto().add(x);
+        });
+        return dto;
+    }
+
+    private static void promoteVersionToTop(InteractionsDto dto, InteractionDto x) {
+        val majorVersion = x.getMajorVersion();
+        val minorVersion = x.getMinorVersion();
+        if (!_Strings.isNullOrEmpty(majorVersion) && !_Strings.isNullOrEmpty(minorVersion)) {
+            dto.setMajorVersion(majorVersion);
+            dto.setMinorVersion(minorVersion);
+        }
+        x.setMajorVersion(null);
+        x.setMinorVersion(null);
     }
 
 

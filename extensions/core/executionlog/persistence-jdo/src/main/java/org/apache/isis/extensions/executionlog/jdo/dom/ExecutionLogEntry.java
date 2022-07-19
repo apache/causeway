@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry.Nq;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryType;
@@ -137,7 +138,7 @@ import lombok.Setter;
 @DomainObject(
         editing = Editing.DISABLED
 )
-@XmlJavaTypeAdapter(PersistentEntitiesAdapter.class)
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 public class ExecutionLogEntry extends org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry {
 
 

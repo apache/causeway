@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.executionlog.jpa.dom;
+package org.apache.isis.extensions.executionoutbox.jpa.dom;
 
 import java.util.UUID;
 
@@ -42,20 +42,21 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry.Nq;
-import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryType;
+import org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryType;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.schema.v2.IsisInteractionDtoConverter;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
+
+import static org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry.Nq;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(
-        schema = ExecutionLogEntry.SCHEMA,
-        name = ExecutionLogEntry.TABLE,
+        schema = ExecutionOutboxEntry.SCHEMA,
+        name = ExecutionOutboxEntry.TABLE,
         indexes = {
                 @Index(name = "timestamp__IDX", columnList = "timestamp"),
                 @Index(name = "target__timestamp__IDX", columnList = "target, timestamp"),
@@ -64,93 +65,28 @@ import lombok.Setter;
 )
 @NamedQueries( {
     @NamedQuery(
-            name = Nq.FIND_BY_INTERACTION_ID,
-            query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.pk.interactionId = :interactionId "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.sequence DESC"),
-    @NamedQuery(
             name = Nq.FIND_BY_INTERACTION_ID_AND_SEQUENCE,
             query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
+                  + "  FROM ExecutionOutboxEntry ele "
                   + " WHERE ele.pk.interactionId = :interactionId "
                   + "   AND ele.pk.sequence      = :sequence "),
     @NamedQuery(
-            name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
+            name = Nq.FIND_OLDEST,
             query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.target = :target "
-                  + "   AND ele.timestamp >= :timestampFrom "
-                  + "   AND ele.timestamp <= :timestampTo "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),
-    @NamedQuery(
-            name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER,
-            query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.target = :target "
-                  + "   AND ele.timestamp >= :timestamp "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),
-    @NamedQuery(
-            name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE,
-            query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.target = :target "
-                  + "   AND ele.timestamp <= :timestamp "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),
-    @NamedQuery(
-            name = Nq.FIND_BY_TARGET,
-            query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.target = :target "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),
-    @NamedQuery(
-            name = Nq.FIND_BY_TIMESTAMP_BETWEEN,
-            query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.timestamp >= :timestampFrom "
-                  + "   AND ele.timestamp <= :timestampTo "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),
-    @NamedQuery(
-            name = Nq.FIND_BY_TIMESTAMP_AFTER,
-            query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.timestamp >= :timestamp "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),
-    @NamedQuery(
-            name = Nq.FIND_BY_TIMESTAMP_BEFORE,
-            query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.timestamp <= :timestamp "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId, ele.pk.sequence DESC"),
-    @NamedQuery(
-            name = Nq.FIND_MOST_RECENT,
-            query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC"),
-    @NamedQuery(
-            name = Nq.FIND_RECENT_BY_USERNAME,
-            query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.username = :username "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC "), // programmatic limit 30
-    @NamedQuery(
-            name = Nq.FIND_RECENT_BY_TARGET,
-            query = "SELECT ele "
-                  + "  FROM ExecutionLogEntry ele "
-                  + " WHERE ele.target = :target "
-                  + " ORDER BY ele.timestamp DESC, ele.pk.interactionId DESC, ele.pk.sequence DESC ")  // programmatic limit 30
+                  + "  FROM ExecutionOutboxEntry ele "
+                  + " ORDER BY ele.timestamp ASC, ele.pk.interactionId ASC, ele.pk.sequence DESC"),  // programmatic range 0,100
 })
-@Named(ExecutionLogEntry.LOGICAL_TYPE_NAME)
+@Named(ExecutionOutboxEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @EntityListeners(IsisEntityListener.class)
-public class ExecutionLogEntry extends org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry {
+public class ExecutionOutboxEntry extends org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry {
 
 
     @EmbeddedId
-    ExecutionLogEntryPK pk;
+    ExecutionOutboxEntryPK pk;
 
 
     @Transient
@@ -162,7 +98,7 @@ public class ExecutionLogEntry extends org.apache.isis.extensions.executionlog.a
     @Transient
     @Override
     public void setInteractionId(UUID interactionId) {
-        pk = new ExecutionLogEntryPK(interactionId, getSequence());
+        pk = new ExecutionOutboxEntryPK(interactionId, getSequence());
     }
 
     @Transient
@@ -174,7 +110,7 @@ public class ExecutionLogEntry extends org.apache.isis.extensions.executionlog.a
     @Transient
     @Override
     public void setSequence(int sequence) {
-        pk = new ExecutionLogEntryPK(getInteractionId(), sequence);
+        pk = new ExecutionOutboxEntryPK(getInteractionId(), sequence);
     }
 
 
@@ -182,7 +118,7 @@ public class ExecutionLogEntry extends org.apache.isis.extensions.executionlog.a
     @Enumerated(EnumType.STRING)
     @ExecutionType
     @Getter @Setter
-    private ExecutionLogEntryType executionType;
+    private ExecutionOutboxEntryType executionType;
 
 
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
