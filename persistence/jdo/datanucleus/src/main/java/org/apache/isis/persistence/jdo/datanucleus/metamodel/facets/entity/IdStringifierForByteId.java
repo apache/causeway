@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
 import javax.annotation.Priority;
-import javax.jdo.identity.ByteIdentity;
 
 import org.datanucleus.identity.ByteId;
 import org.springframework.stereotype.Component;

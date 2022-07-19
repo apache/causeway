@@ -72,18 +72,17 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
     @Override
     public CommandDto asCommandDto(
             final UUID interactionId,
-            final Can<InteractionHead> targets,
+            final InteractionHead targetHead,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 
-        val commandDto = asCommandDto(interactionId, targets);
+        val commandDto = asCommandDto(interactionId, targetHead);
 
         val actionDto = new ActionDto();
         actionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
         commandDto.setMember(actionDto);
 
-        val representativeHead = targets.getFirstOrFail(); // we expect all the targets to be of the same type, and there must be at least one.
-        addActionArgs(representativeHead, objectAction, actionDto, argAdapters);
+        addActionArgs(targetHead, objectAction, actionDto, argAdapters);
 
         return commandDto;
     }
@@ -91,17 +90,17 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
     @Override
     public CommandDto asCommandDto(
             final UUID interactionId,
-            final Can<InteractionHead> targets,
+            final InteractionHead targetHead,
             final OneToOneAssociation property,
             final ManagedObject valueAdapter) {
 
-        final CommandDto dto = asCommandDto(interactionId, targets);
+        final CommandDto dto = asCommandDto(interactionId, targetHead);
 
         final PropertyDto propertyDto = new PropertyDto();
         propertyDto.setInteractionType(InteractionType.PROPERTY_EDIT);
         dto.setMember(propertyDto);
 
-        addPropertyValue(property, propertyDto, valueAdapter);
+        addPropertyValue(targetHead, property, propertyDto, valueAdapter);
 
         return dto;
     }
@@ -147,18 +146,19 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     @Override
     public void addPropertyValue(
+            final InteractionHead interactionHead,
             final OneToOneAssociation property,
             final PropertyDto propertyDto,
             final ManagedObject valueAdapter) {
 
-        propertyDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierForDeclaredMember(property));
+        propertyDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(interactionHead, property));
 
         valueMarshaller.recordPropertyValue(propertyDto, property, valueAdapter);
     }
 
     // -- HELPER
 
-    private CommandDto asCommandDto(final UUID interactionId, final Can<InteractionHead> targets) {
+    private CommandDto asCommandDto(final UUID interactionId, final InteractionHead targetHead) {
 
         val dto = new CommandDto();
         dto.setMajorVersion("2");
@@ -168,11 +168,10 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         dto.setUser(userService.currentUserNameElseNobody());
         dto.setTimestamp(clockService.getClock().nowAsXmlGregorianCalendar());
 
-        for (val targetHead : targets) {
-            final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
-            final OidsDto targetOids = CommandDtoUtils.targetsFor(dto);
-            targetOids.getOid().add(bookmark.toOidDto());
-        }
+        final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
+        final OidsDto targetOids = CommandDtoUtils.targetsFor(dto);
+        targetOids.getOid().add(bookmark.toOidDto());
+
         return dto;
     }
 

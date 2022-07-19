@@ -18,19 +18,14 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
-import java.lang.reflect.Constructor;
-
 import javax.annotation.Priority;
 
-import org.datanucleus.identity.DatastoreId;
 import org.datanucleus.identity.DatastoreUniqueLongId;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.context._Context;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;

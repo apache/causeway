@@ -312,7 +312,7 @@ implements OneToOneAssociation {
 
         setupCommand(head, interactionId ->
             getCommandDtoFactory()
-                .asCommandDto(interactionId, Can.ofSingleton(head), this, valueAdapter));
+                .asCommandDto(interactionId, head, this, valueAdapter));
     }
 
     @Getter(lazy=true, onMethod_ = {@Override})

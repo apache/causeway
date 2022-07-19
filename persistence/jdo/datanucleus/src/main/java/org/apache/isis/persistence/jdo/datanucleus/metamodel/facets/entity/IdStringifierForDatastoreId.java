@@ -23,7 +23,6 @@ import java.lang.reflect.Constructor;
 import javax.annotation.Priority;
 
 import org.datanucleus.identity.DatastoreId;
-import org.datanucleus.identity.DatastoreIdImpl;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 

@@ -368,19 +368,19 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val method = memberAndTarget.getMethod();
 
         val argAdapters = Can.ofArray(WrapperFactoryDefault.this.adaptersFor(args));
-        val targetList = Can.ofSingleton(InteractionHead.regular(targetAdapter));
+        val head = InteractionHead.regular(targetAdapter);
 
         CommandDto commandDto;
         switch (memberAndTarget.getType()) {
             case ACTION:
                 val action = memberAndTarget.getAction();
                 commandDto = commandDtoFactory
-                        .asCommandDto(commandInteractionId, targetList, action, argAdapters);
+                        .asCommandDto(commandInteractionId, head, action, argAdapters);
                 break;
             case PROPERTY:
                 val property = memberAndTarget.getProperty();
                 commandDto = commandDtoFactory
-                        .asCommandDto(commandInteractionId, targetList, property, argAdapters.getElseFail(0));
+                        .asCommandDto(commandInteractionId, head, property, argAdapters.getElseFail(0));
                 break;
             default:
                 // shouldn't happen, already catered for this case previously

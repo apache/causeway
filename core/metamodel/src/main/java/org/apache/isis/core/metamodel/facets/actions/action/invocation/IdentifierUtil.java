@@ -47,43 +47,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class IdentifierUtil {
 
-    public String targetClassNameFor(final ManagedObject targetAdapter) {
-        return targetClassNameFor(targetAdapter.getSpecification());
-    }
-
     public String targetClassNameFor(final ObjectSpecification spec) {
         return StringExtensions.asNaturalName2(spec.getSingularName());
-    }
-
-    public String memberIdentifierFor(final ObjectMember objectMember) {
-        return objectMember.getFeatureIdentifier().getFullIdentityString();
-    }
-
-    /**
-     * This assumes that the member is declared, ie is not a mixin.
-     */
-    public String logicalMemberIdentifierForDeclaredMember(final ObjectMember objectMember) {
-        if(objectMember instanceof ObjectAction) {
-            return logicalMemberIdentifierForDeclaredMember((ObjectAction)objectMember);
-        }
-        if(objectMember instanceof OneToOneAssociation) {
-            return logicalMemberIdentifierForDeclaredMember((OneToOneAssociation)objectMember);
-        }
-        throw new IllegalArgumentException(objectMember.getClass() + " is not supported");
-    }
-
-    /**
-     * This assumes that the member is declared, ie is not a mixin.
-     */
-    public String logicalMemberIdentifierForDeclaredMember(final ObjectAction objectAction) {
-        return logicalMemberIdentifierFor(objectAction.getDeclaringType(), objectAction);
-    }
-
-    /**
-     * This assumes that the member is declared, ie is not a mixin.
-     */
-    public String logicalMemberIdentifierForDeclaredMember(final OneToOneAssociation otoa) {
-        return logicalMemberIdentifierFor(otoa.getDeclaringType(), otoa);
     }
 
     /**
@@ -92,7 +57,7 @@ public class IdentifierUtil {
     @SneakyThrows
     public Identifier memberIdentifierFor(
             final @NonNull SpecificationLoader specLoader,
-            final @NonNull Identifier.Type indentifierType,
+            final @NonNull Identifier.Type identifierType,
             final @NonNull String logicalMemberIdentifier) {
 
         val ref = _Refs.stringRef(logicalMemberIdentifier);
@@ -101,20 +66,20 @@ public class IdentifierUtil {
         val typeSpec = specLoader.specForLogicalTypeNameElseFail(logicalTypeName);
         val logicalType = LogicalType.eager(typeSpec.getCorrespondingClass(), logicalTypeName);
 
-        if(indentifierType.isAction()) {
+        if(identifierType.isAction()) {
             return Identifier.actionIdentifier(logicalType, memberId);
         }
 
-        if(indentifierType.isProperty()) {
+        if(identifierType.isProperty()) {
             return Identifier.propertyIdentifier(logicalType, memberId);
         }
 
-        if(indentifierType.isCollection()) {
+        if(identifierType.isCollection()) {
             return Identifier.collectionIdentifier(logicalType, memberId);
         }
 
         throw _Exceptions.illegalArgument("unsupported identifier type %s (logicalMemberIdentifier=%s)",
-                indentifierType, logicalMemberIdentifier);
+                identifierType, logicalMemberIdentifier);
     }
 
     /**
@@ -132,7 +97,6 @@ public class IdentifierUtil {
                     .equals(command.getLogicalMemberIdentifier());
     }
 
-    // -- HELPER
 
     public String logicalMemberIdentifierFor(
             final @NonNull InteractionHead interactionHead,
@@ -146,8 +110,8 @@ public class IdentifierUtil {
                     return logicalMemberIdentifierFor(specificationOfMixee, objectActionOnMixee);
                 }
             }
-            // we fall through to the declared case, which isn't correct; but don't think it matters because
-            // effectively this would be contributed properties or collections, which don't emit commands.
+            // we fall through to the declared case; this should suffice because this method is only called by code
+            // relating to commands, and contributed properties or collections don't emit commands.
         }
 
         return logicalMemberIdentifierForDeclaredMember(objectMember);
@@ -159,5 +123,35 @@ public class IdentifierUtil {
         final String localId = objectMember.getFeatureIdentifier().getMemberLogicalName();
         return logicalTypeName + "#" + localId;
     }
+
+    // -- HELPER
+
+    /**
+     * This assumes that the member is declared, ie is not a mixin.
+     */
+    private String logicalMemberIdentifierForDeclaredMember(final ObjectMember objectMember) {
+        if(objectMember instanceof ObjectAction) {
+            return logicalMemberIdentifierForDeclaredMember((ObjectAction)objectMember);
+        }
+        if(objectMember instanceof OneToOneAssociation) {
+            return logicalMemberIdentifierForDeclaredMember((OneToOneAssociation)objectMember);
+        }
+        throw new IllegalArgumentException(objectMember.getClass() + " is not supported");
+    }
+
+    /**
+     * This assumes that the member is declared, ie is not a mixin.
+     */
+    private String logicalMemberIdentifierForDeclaredMember(final ObjectAction objectAction) {
+        return logicalMemberIdentifierFor(objectAction.getDeclaringType(), objectAction);
+    }
+
+    /**
+     * This assumes that the member is declared, ie is not a mixin.
+     */
+    private String logicalMemberIdentifierForDeclaredMember(final OneToOneAssociation otoa) {
+        return logicalMemberIdentifierFor(otoa.getDeclaringType(), otoa);
+    }
+
 
 }

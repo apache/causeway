@@ -54,11 +54,11 @@ public interface CommandDtoFactory {
      * an action on a target object (or target objects, to support the notion
      * of bulk actions).
      *
-     * @see #asCommandDto(UUID, Can, OneToOneAssociation, ManagedObject)
+     * @see #asCommandDto(UUID, InteractionHead, OneToOneAssociation, ManagedObject)
      */
     CommandDto asCommandDto(
             final UUID interactionId,
-            final Can<InteractionHead> targets,
+            final InteractionHead targetHead,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters);
 
@@ -67,11 +67,11 @@ public interface CommandDtoFactory {
      * (set or clear) a property on a target (or possibly many targets, for
      * symmetry with actions).
      *
-     * @see #asCommandDto(UUID, Can, ObjectAction, Can)
+     * @see #asCommandDto(UUID, InteractionHead, ObjectAction, Can)
      */
     CommandDto asCommandDto(
             final UUID interactionId,
-            final Can<InteractionHead> targets,
+            final InteractionHead targetHead,
             final OneToOneAssociation association,
             final ManagedObject valueAdapterOrNull);
 
@@ -109,7 +109,7 @@ public interface CommandDtoFactory {
      * @see org.apache.isis.applib.services.iactn.Interaction
      */
     void addPropertyValue(
-            final OneToOneAssociation property,
+            InteractionHead interactionHead, final OneToOneAssociation property,
             final PropertyDto propertyDto,
             final ManagedObject valueAdapter);
 

@@ -125,7 +125,8 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
     public PropertyEditDto asPropertyEditDto(
             final OneToOneAssociation property,
             final ManagedObject targetAdapter,
-            final ManagedObject newValueAdapterIfAny) {
+            final ManagedObject newValueAdapterIfAny,
+            final InteractionHead interactionHead) {
 
         final Interaction interaction = interactionProviderProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
@@ -136,7 +137,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final String currentUser = userService.currentUserNameElseNobody();
 
         final PropertyDto propertyDto = new PropertyDto();
-        commandDtoServiceInternal.addPropertyValue(property, propertyDto, newValueAdapterIfAny);
+        commandDtoServiceInternal.addPropertyValue(interactionHead, property, propertyDto, newValueAdapterIfAny);
         final ValueWithTypeDto newValue = propertyDto.getNewValue();
 
         return InteractionDtoUtils.newPropertyEdit(
