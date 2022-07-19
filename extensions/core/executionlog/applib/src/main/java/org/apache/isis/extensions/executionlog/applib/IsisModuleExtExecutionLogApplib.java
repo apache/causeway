@@ -22,6 +22,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.executionlog.applib.app.ExecutionLogMenu;
+import org.apache.isis.extensions.executionlog.applib.contributions.HasInteractionId_executionLogEntries;
+import org.apache.isis.extensions.executionlog.applib.contributions.Object_recentExecutions;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.isis.extensions.executionlog.applib.spiimpl.ExecutionSubscriberForExecutionLog;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
@@ -30,6 +32,10 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 @Import({
         // @DomainService's
         ExecutionLogMenu.class,
+
+        // mixins
+        HasInteractionId_executionLogEntries.class,
+        Object_recentExecutions.class,
 
         // @Service's
         ExecutionSubscriberForExecutionLog.class,

@@ -21,16 +21,21 @@ package org.apache.isis.extensions.executionoutbox.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
+import org.apache.isis.extensions.executionoutbox.applib.spiimpl.ExecutionSubscriberForExecutionOutbox;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
 @Configuration
 @Import({
+        // @Service's
+        ExecutionSubscriberForExecutionOutbox.class,
+        ExecutionOutboxEntry.TableColumnOrderDefault.class,
 })
 public class IsisModuleExtExecutionOutboxApplib
 implements ModuleWithFixtures {
 
-    public static final String NAMESPACE = "isis.ext.executionLog";
-    public static final String SCHEMA = "isisExtExecutionLog";
+    public static final String NAMESPACE = "isis.ext.executionOutbox";
+    public static final String SCHEMA = "isisExtExecutionOutbox";
 
     public abstract static class TitleUiEvent<S>
         extends org.apache.isis.applib.events.ui.TitleUiEvent<S> { }
@@ -49,6 +54,7 @@ implements ModuleWithFixtures {
 
     public abstract static class CollectionDomainEvent<S,T>
         extends org.apache.isis.applib.events.domain.CollectionDomainEvent<S,T> { }
+
     public abstract static class PropertyDomainEvent<S,T>
         extends org.apache.isis.applib.events.domain.PropertyDomainEvent<S,T> { }
 

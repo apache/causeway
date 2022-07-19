@@ -164,7 +164,7 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         );
     }
 
-    public List<E> findByRecentByTarget(Bookmark target) {
+    public List<E> findRecentByTarget(Bookmark target) {
         return repositoryService().allMatches(
                 Query.named(executionLogEntryClass,  ExecutionLogEntry.Nq.FIND_RECENT_BY_TARGET)
                         .withParameter("target", target)

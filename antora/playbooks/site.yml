@@ -124,6 +124,9 @@ content:
       start_path: extensions/core/executionoutbox/adoc # extensions
       branches: HEAD
     - url: .
+      start_path: extensions/core/executionreplay/adoc # extensions
+      branches: HEAD
+    - url: .
       start_path: extensions/core/flyway/adoc # userguide
       branches: HEAD
     - url: .

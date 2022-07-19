@@ -46,6 +46,11 @@ public class HasInteractionId_executionLogEntries {
         return executionLogEntryRepository.findByInteractionId(hasInteractionId.getInteractionId());
     }
 
+    public boolean hideAct() {
+        // for the ELE itself, we provide the 'siblingExecutions' mixin.
+        return hasInteractionId instanceof ExecutionLogEntry;
+    }
+
     @Inject ExecutionLogEntryRepository<ExecutionLogEntry> executionLogEntryRepository;
 
 }

@@ -56,7 +56,6 @@ import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPubl
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
@@ -65,7 +64,6 @@ import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -144,13 +142,10 @@ implements MemberExecutorService {
                 .map(UnwrapUtil::single)
                 .collect(_Lists.toUnmodifiable());
 
-        val targetMemberName = ObjectAction.Util.friendlyNameFor(owningAction, head);
-        val targetClass = IdentifierUtil.targetClassNameFor(targetAdapter);
-
         val actionInvocation =
                 new ActionInvocation(
-                        interaction, actionId, targetPojo, argumentPojos, targetMemberName,
-                        targetClass);
+                        interaction, actionId, targetPojo, argumentPojos
+                );
         val memberExecutor = actionExecutorFactory.createExecutor(owningAction, head, argumentAdapters);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
@@ -162,7 +157,7 @@ implements MemberExecutorService {
 
         val executionExceptionIfAny = priorExecution.getThrew();
 
-        // TODO: should also sync DTO's 'threw' attribute here...?
+        actionInvocation.setThrew(executionExceptionIfAny);
 
         if(executionExceptionIfAny != null) {
             throw executionExceptionIfAny instanceof RuntimeException
@@ -216,10 +211,7 @@ implements MemberExecutorService {
         val target = UnwrapUtil.single(targetManagedObject);
         val argValue = UnwrapUtil.single(newValueAdapter);
 
-        val targetMemberName = owningProperty.getFriendlyName(head::getTarget);
-        val targetClass = IdentifierUtil.targetClassNameFor(targetManagedObject);
-
-        val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass);
+        val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue);
         val executor = propertyExecutorFactory
                 .createExecutor(owningProperty, head, newValueAdapter,
                         interactionInitiatedBy, editingVariant);

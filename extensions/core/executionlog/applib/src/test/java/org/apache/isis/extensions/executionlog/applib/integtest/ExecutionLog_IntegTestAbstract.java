@@ -365,7 +365,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
 
 
         // when
-        List<? extends ExecutionLogEntry> recentByTarget = executionLogEntryRepository.findByRecentByTarget(bookmark1);
+        List<? extends ExecutionLogEntry> recentByTarget = executionLogEntryRepository.findRecentByTarget(bookmark1);
 
         // then
         assertThat(recentByTarget).hasSize(3);

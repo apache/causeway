@@ -57,8 +57,8 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderForCollectionTyp
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.base._BigDecimals;
 import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
-import org.apache.isis.extensions.executionlog.applib.util.BigDecimalUtils;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 
@@ -151,7 +151,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
         setLogicalMemberIdentifier(memberExecutionDto.getLogicalMemberIdentifier());
 
         setTarget( bookmarkService.bookmarkFor(execution.getEvent().getSubject()).orElseThrow() );
-        setUsername(memberExecutionDto.getUser());
+        setUsername(memberExecutionDto.getUsername());
 
         if(execution instanceof PropertyEdit) {
             setExecutionType(ExecutionLogEntryType.PROPERTY_EDIT);
@@ -418,7 +418,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
      */
     @Duration
     public BigDecimal getDuration() {
-        return BigDecimalUtils.durationBetween(getStartedAt(), getCompletedAt());
+        return _BigDecimals.durationBetween(getStartedAt(), getCompletedAt());
     }
 
 

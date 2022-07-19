@@ -37,10 +37,6 @@ import lombok.RequiredArgsConstructor;
 @Collection(
     domainEvent = CommandLogEntry_replayQueue.CollectionDomainEvent.class
 )
-@CollectionLayout(
-    defaultView = "table",
-    sequence = "100.100"
-)
 @RequiredArgsConstructor
 public class CommandLogEntry_replayQueue {
 

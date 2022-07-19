@@ -63,7 +63,7 @@ public class Object_recentCommands {
     public static class ActionDomainEvent
             extends IsisModuleExtCommandLogApplib.ActionDomainEvent<Object_recentCommands> { }
 
-    private final Object domainObject; // mixee
+    private final Object domainObject;
 
     @MemberSupport public List<CommandLogEntry> act() {
         return bookmarkService.bookmarkFor(domainObject)

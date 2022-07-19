@@ -59,11 +59,10 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.functional.Try;
+import org.apache.isis.commons.internal.base._BigDecimals;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.util.BigDecimalUtils;
-import org.apache.isis.extensions.commandlog.applib.util.StringUtils;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
 
@@ -426,7 +425,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     @Digits(integer=5, fraction=3)
     @Duration
     public BigDecimal getDuration() {
-        return BigDecimalUtils.durationBetween(getStartedAt(), getCompletedAt());
+        return _BigDecimals.durationBetween(getStartedAt(), getCompletedAt());
     }
 
 
@@ -607,7 +606,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
             setReplayState(org.apache.isis.extensions.commandlog.applib.dom.ReplayState.OK);
         } else {
             setReplayState(org.apache.isis.extensions.commandlog.applib.dom.ReplayState.FAILED);
-            setReplayStateFailureReason(StringUtils.trimmed(analysis, 255));
+            setReplayStateFailureReason(_Strings.trimmed(analysis, 255));
         }
 
     }

@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -11,6 +12,9 @@ import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepositor
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ */
 @Property(
         domainEvent = HasInteractionId_commandLogEntry.PropertyDomainEvent.class
 )
@@ -31,11 +35,15 @@ public class HasInteractionId_commandLogEntry {
         return commandLogEntryRepository.findByInteractionId(hasInteractionId.getInteractionId()).orElse(null);
     }
 
+    /**
+     * Hide if the contributee is a {@link CommandLogEntry}, because we don't want to navigate to ourselves, and there
+     * are other ways to navigate to the parent or child commands.
+     */
     public boolean hideProp() {
-        return prop() == hasInteractionId;
+        return (hasInteractionId instanceof CommandLogEntry);
     }
 
-    @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject QueryResultsCache queryResultsCache;
 
 }

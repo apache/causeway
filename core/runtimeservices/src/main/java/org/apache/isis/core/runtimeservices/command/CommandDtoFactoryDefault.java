@@ -114,7 +114,6 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final Can<ManagedObject> argAdapters) {
 
         actionDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(head, objectAction));
-        actionDto.setMemberIdentifier(IdentifierUtil.memberIdentifierFor(objectAction));
 
         val actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
@@ -153,7 +152,6 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final ManagedObject valueAdapter) {
 
         propertyDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierForDeclaredMember(property));
-        propertyDto.setMemberIdentifier(IdentifierUtil.memberIdentifierFor(property));
 
         valueMarshaller.recordPropertyValue(propertyDto, property, valueAdapter);
     }

@@ -19,7 +19,6 @@
     <bs3:row>
         <bs3:col span="12" unreferencedActions="true">
             <cpt:domainObject/>
-            <cpt:action id="clearHints" position="PANEL_DROPDOWN"/>
         </bs3:col>
     </bs3:row>
     <bs3:row>
@@ -27,14 +26,22 @@
             <bs3:row>
                 <bs3:col span="12">
                     <cpt:fieldSet name="Identifiers" id="identifiers">
-                        <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="clearHints" position="PANEL"/>
                         <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="downloadMetamodelXml" position="PANEL_DROPDOWN"/>
                         <cpt:action id="inspectMetamodel" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="downloadMetamodelXml" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
                         <cpt:action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="recentCommands" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="recentExecutions" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="recentAuditEntries" position="PANEL_DROPDOWN"/>
                         <cpt:action id="openRestApi" position="PANEL_DROPDOWN"/>
-                        <cpt:property id="type"/>
                         <cpt:property id="interactionId"/>
+                        <cpt:property id="type"/>
+                    </cpt:fieldSet>
+                    <cpt:fieldSet name="Target" id="target">
+                        <cpt:property id="target"/>
+                        <cpt:property id="targetLogicalTypeName"/>
                         <cpt:property id="logicalMemberIdentifier"/>
                     </cpt:fieldSet>
                     <cpt:fieldSet name="Who and When">
@@ -44,45 +51,18 @@
                     <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
                 </bs3:col>
             </bs3:row>
+        </bs3:col>
+        <bs3:col span="4">
+            <cpt:fieldSet name="Command DTO" id="commandDto">
+                <cpt:property id="commandDto" labelPosition="NONE" multiLine="20"/>
+            </cpt:fieldSet>
+        </bs3:col>
+        <bs3:col span="4">
             <bs3:row>
                 <bs3:col span="12">
-                    <bs3:tabGroup>
-                        <bs3:tab name="Target">
-                            <bs3:row>
-                                <bs3:col span="12">
-                                    <cpt:fieldSet name="Target" id="target">
-                                        <cpt:property id="targetLogicalTypeName"/>
-                                        <cpt:property id="target"/>
-                                    </cpt:fieldSet>
-                                </bs3:col>
-                            </bs3:row>
-                        </bs3:tab>
-                        <bs3:tab name="Target Audit Entries">
-                            <bs3:row>
-                                <bs3:col span="12">
-                                    <cpt:collection id="targetAuditEntries" paged="5">
-                                        <cpt:named>Target audit entries</cpt:named>
-                                        <cpt:describedAs>All audit entries for the target of this command</cpt:describedAs>
-                                    </cpt:collection>
-                                </bs3:col>
-                            </bs3:row>
-                        </bs3:tab>
-                    </bs3:tabGroup>
-                </bs3:col>
-            </bs3:row>
-        </bs3:col>
-        <bs3:col span="8">
-            <bs3:row>
-                <bs3:col span="6">
-                    <cpt:fieldSet name="DTO" id="arguments">
-                        <cpt:property id="commandDto" labelPosition="NONE" multiLine="20"/>
-                    </cpt:fieldSet>
-                </bs3:col>
-                <bs3:col span="6">
                     <cpt:fieldSet name="Execution" id="execution">
                         <cpt:action id="retry" cssClassFa="fa-repeat" cssClass="btn-warning"/>
                         <cpt:action id="exclude" cssClassFa="fa-ban" cssClass="btn-warning"/>
-                        <cpt:action id="replayNext" cssClassFa="fa-step-forward" cssClass="btn-success"/>
                         <cpt:property id="executeIn"/>
                         <cpt:property id="parent"/>
                         <cpt:property id="replayState"/>
@@ -114,17 +94,27 @@
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
-                <bs3:tab name="Related Executions">
+                <bs3:tab name="Related Execution Log Entries">
                     <bs3:row>
                         <bs3:col span="12">
                             <cpt:collection id="executionLogEntries"/>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
-                <bs3:tab name="Related Audit">
+                <bs3:tab name="Related Audit Trail Entries">
                     <bs3:row>
                         <bs3:col span="12">
-                            <cpt:collection id="auditLogEntries"/>
+                            <cpt:collection id="auditTrailEntries"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="User Activity">
+                    <bs3:row>
+                        <bs3:col span="6">
+                            <cpt:collection id="recentCommandsByUser"/>
+                        </bs3:col>
+                        <bs3:col span="6">
+                            <cpt:collection id="recentExecutionsByUser"/>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>

@@ -88,9 +88,6 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final Bookmark targetBookmark = owner.getBookmark()
                 .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", owner));
 
-        final String actionId = objectAction.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString();
-        final String targetTitle = targetBookmark.toString() + ": " + actionId;
-
         final String currentUser = userService.currentUserNameElseNobody();
 
         final ActionDto actionDto = new ActionDto();
@@ -98,7 +95,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final List<ParamDto> parameterDtos = CommandDtoUtils.parametersFor(actionDto).getParameter();
 
         return InteractionDtoUtils.newActionInvocation(
-                nextEventSequence, targetBookmark, targetTitle,
+                nextEventSequence, targetBookmark,
                 actionDto.getLogicalMemberIdentifier(),
                 parameterDtos, currentUser
                 );
@@ -136,9 +133,6 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final Bookmark targetBookmark = targetAdapter.getBookmark()
                 .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
 
-        final String propertyId = property.getFeatureIdentifier().getMemberLogicalName();
-        final String targetTitle = targetBookmark.toString() + ": " + propertyId;
-
         final String currentUser = userService.currentUserNameElseNobody();
 
         final PropertyDto propertyDto = new PropertyDto();
@@ -146,8 +140,8 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final ValueWithTypeDto newValue = propertyDto.getNewValue();
 
         return InteractionDtoUtils.newPropertyEdit(
-                nextEventSequence, targetBookmark, targetTitle,
-                propertyDto.getMemberIdentifier(),
+                nextEventSequence, targetBookmark,
+                propertyDto.getLogicalMemberIdentifier(),
                 newValue, currentUser
                 );
     }
