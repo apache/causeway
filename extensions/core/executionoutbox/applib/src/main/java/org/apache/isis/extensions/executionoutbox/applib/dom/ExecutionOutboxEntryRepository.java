@@ -19,12 +19,10 @@
 package org.apache.isis.extensions.executionoutbox.applib.dom;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.enterprise.inject.spi.EventMetadata;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -35,14 +33,12 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Provides supporting functionality for querying and persisting
@@ -149,7 +145,7 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
     protected abstract E newExecutionOutboxEntry();
 
     @Programmatic
-    public boolean deleteByInteactionIdAndSequence(final UUID interactionId, final int sequence) {
+    public boolean deleteByInteractionIdAndSequence(final UUID interactionId, final int sequence) {
         Optional<E> outboxEventIfAny = findByInteractionIdAndSequence(interactionId, sequence);
         if(outboxEventIfAny.isPresent()) {
             repositoryService().removeAndFlush(outboxEventIfAny.get());
