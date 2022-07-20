@@ -39,7 +39,6 @@ which indicates that the actions should appear on the menu of the xref:vw:ROOT:a
 which indicates that the actions should appear in the REST API provided by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], but not rendered by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
 
 It's also possible to define a "programmatic" domain service, meaning one that is instantiated and injected by Spring Boot, but is not visible in the UI or REST API.
-For example, the xref:subdomains:docx:about.adoc[Docx Library] provides a domain service that performs mail merge using MS Word, but this domain service is not intended to appear in the UI.
 Such programmatic services are usually annotated with Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Service.html[@Service] annotation or link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[@Repository].
 
 == Repository and Factory

@@ -261,7 +261,7 @@ public class OrderSubscriptions {
 
 == Object CSS Styling
 
-It is also possible for an object to return a xref:refguide:applib-methods:ui-hints.adoc#cssclass[CSS class].
+It is also possible for an object to return a xref:refguide:applib-methods:ui-hints.adoc#cssClass[CSS class].
 In conjunction with a viewer-specific customisation of CSS (eg for the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], see xref:vw:ROOT:customisation.adoc#custom-css[here]) this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 === Declarative style
@@ -277,7 +277,7 @@ One possible use case would be to render the most important object types with a 
 
 === Imperative style
 
-To specify a CSS class on an instance-by-instance basis, we implement the reserved xref:refguide:applib-methods:ui-hints.adoc#cssclass[cssClass()] method.
+To specify a CSS class on an instance-by-instance basis, we implement the reserved xref:refguide:applib-methods:ui-hints.adoc#cssClass[cssClass()] method.
 
 For example:
 

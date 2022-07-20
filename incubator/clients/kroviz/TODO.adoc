@@ -1,4 +1,4 @@
-# KVision
+= KVision
 
 * upgrade to 5.latest, kotlin to 1.5.10
 * revert patch to build.gradle.kts
@@ -7,5 +7,5 @@
 * https://github.com/rjaros/kvision/issues/299 (header footer access)
 * Remove duplicated / copied KV files
 
-# Long Term
+= Long Term
 * use docker for integration test

@@ -126,6 +126,7 @@ The representation returned by the domain object resource (link:https://www.rest
 Note that because of dynamic icons (the
 xref:refguide:applib-methods:ui-hints.adoc#iconName[iconName()] supporting method) the image returned can vary on an instance-by-instance basis.
 
+[#domain-object-layout]
 == Domain Object Layout
 
 The xref:refguide:applib:index/services/grid/GridService.adoc[GridService] provides an XML document which defines the layout of any of domain object.

@@ -257,6 +257,7 @@ git push origin $ISISBRANCH -u
 ----
 
 
+[#bump-code-to-isisrel]
 === Bump code to `$ISISREL`
 
 Search through the `.java` files for `{page-isisprev}`, and change to `{page-isisrel}`.

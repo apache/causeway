@@ -30,6 +30,9 @@ import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepos
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.x {@index}
+ */
 @Collection(
         domainEvent = HasInteractionId_executionLogEntries.CollectionDomainEvent.class
 )

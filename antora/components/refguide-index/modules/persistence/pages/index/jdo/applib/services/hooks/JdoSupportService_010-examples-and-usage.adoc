@@ -10,6 +10,7 @@ For service also provides access to the underlying JDO `PersistenceManager` for 
 
 The following sections discuss the functionality provided by the service, broken out into categories.
 
+[#executing-sql]
 === Executing SQL
 
 You can use the `JdoSupportService` to perform arbitrary SQL SELECTs or UPDATEs:

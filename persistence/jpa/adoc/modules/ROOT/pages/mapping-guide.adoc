@@ -47,7 +47,7 @@ The framework provides an `@Embeddable` classes for each of `Blob` and `Clob`, e
 
 ==== Blobs
 
-To map a xref:refguide:applib:index/value/Blob.adoc[Blob], use the xref:refguide:persistence:index/jpa/applib/types/BlobJpaEmbedded.adoc[BlobJpaEmbedded] class:
+To map a xref:refguide:applib:index/value/Blob.adoc[Blob], use the xref:refguide:persistence:index/jpa/applib/types/BlobJpaEmbeddable.adoc[BlobJpaEmbeddable] class:
 
 [source]
 .MyEntity.java
@@ -76,7 +76,7 @@ TIP: if you have multiple instancs of an `@Embedded` type, the `@javax.persisten
 
 ==== Clobs
 
-To map a xref:refguide:applib:index/value/Clob.adoc[Clob], use the xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbedded.adoc[ClobJpaEmbedded] class:
+To map a xref:refguide:applib:index/value/Clob.adoc[Clob], use the xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbeddable.adoc[ClobJpaEmbeddable] class:
 
 [source]
 .MyEntity.java

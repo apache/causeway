@@ -32,11 +32,11 @@ public interface HasUsername {
 }
 ----
 
-Some of the extension/mapping modules that have domain entity/ies that implement this interface are:
+Some of the extension modules that have domain entity/ies that implement this interface are:
 
 * xref:security:ROOT:about.adoc[SecMan extension]: `ApplicationUser` entity
-* xref:security:audittrail:about.adoc[Auditer] module: `AuditEntry` entity
-* xref:userguide:commandlog:about.adoc[Command Log] module: `CommandJdo` entity
+* xref:security:audittrail:about.adoc[AuditTrail] module: `AuditEntry` entity
+* xref:userguide:commandlog:about.adoc[Command Log] module: `CommandLogEntry` entity
+* xref:userguide:executionlog:about.adoc[Extension Log] module: `ExecutionLogEntry` entity
 * xref:security:sessionlog:about.adoc[Session Log] module: `SessionLogEntry` entity
-* xref:subdomains:settings:about.adoc[Settings] module: `UserSettingJdo` entity
 

@@ -43,7 +43,7 @@ For domain objects (not mixins), the wrapper can be interacted with as follows:
 * any action
 
 NOTE: with ISIS-3084, `addTo...()` and `removeFrom...()` methods for collections were removed;
- the notion (direct) collection modification was deprecated as any specific business logic 
+ the notion (direct) collection modification was deprecated as any specific business logic
  should by handled via actions instead;
 
 Calling any of the above methods may result in a (subclass of) `InteractionException` if the object disallows it.
@@ -95,7 +95,7 @@ Said another way: interactions are performed "as if" they are through the viewer
 
 One possible use case for the listener API would be to autogenerate documentation, for example a sequence diagram from tests.
 
-Such a feature would probably also use xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext], which builds up an execution call graph of interactions between (wrapped) objects.
+Such a feature would probably also use xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext], which builds up an execution call graph of interactions between (wrapped) objects.
 
 
 

@@ -112,6 +112,7 @@ And/or, you can go ahead and xref:comguide:ROOT:verifying-releases.adoc#casting-
 
 The next version of the website can be found at link:https://isis.staged.apache.org[].
 
+[#optional-creadur-tools]
 == (Optional) Creadur Tools
 
 The http://creadur.apache.org[Apache Creadur] project exists to provide a set of tools to ensure compliance with Apache's licensing standards.
@@ -131,6 +132,7 @@ Things to check include:
 
 In this report, each binary will have three links listed after its name '(licenses, notices, contents)'
 
+[#casting-a-vote]
 == Casting a Vote
 
 When you have made the above checks (and any other checks you think may be relevant), cast your vote by replying to the email thread on the mailing list.

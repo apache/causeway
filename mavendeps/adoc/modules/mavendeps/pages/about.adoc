@@ -23,7 +23,7 @@ For convenience, it includes all of the current components available:
 
 * Spring Boot (link:https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html#getting-started-first-application-dependencies[spring-boot-starter-web])
 
-* Apache Isis Core - the xref:refguide:ROOT:about.adoc[Applib] and underlying implementation (xref:core:runtime-services:about.adoc[Runtime Services])
+* Apache Isis Core - the xref:refguide:ROOT:about.adoc[Applib] and underlying implementation (the _Runtime Services_ module)
 
 * The xref:security:bypass:about.adoc[Bypass] security implementation.
 +

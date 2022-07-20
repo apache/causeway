@@ -33,7 +33,7 @@ import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepositor
 import lombok.RequiredArgsConstructor;
 
 /**
- *
+ * @since 2.x {@index}
  */
 @Property(
         domainEvent = HasInteractionId_commandLogEntry.PropertyDomainEvent.class

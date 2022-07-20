@@ -14,6 +14,7 @@ If you wish, you could combine this with BDD - the framework integrates with xre
 Once you've sketched out your domain model, you can then either start-over and deploy with one of the deployment options listed below.
 
 
+[#deploy-with-a-generic-ui]
 == Deploy with a generic UI
 
 One of the original motivations for Apache Isis was to be able automatically generate a user interface for a domain object model.
@@ -28,6 +29,7 @@ These are normally used with an RDBMS, though in principle could be used with No
 JDO/DataNucleus historically has link:https://www.datanucleus.org/products/accessplatform/datastores/datastores.html[extensive support] for NoSQL, though JPA/EclipseLink also has link:https://wiki.eclipse.org/EclipseLink/FAQ/NoSQL[some support] also.
 
 
+[#deploy-with-custom-controllers]
 == Deploy with custom controllers
 
 If the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]'s extensions are too restrictive, another option is to deploy custom controllers/views for specific use cases _alongside_ the generic viewer.

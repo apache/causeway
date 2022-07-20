@@ -6,6 +6,6 @@
 
 WARNING: TODO: v2 - to properly document.
 
-The _executionlog_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persists xref:refguide:applib:index/services/iactn/Execution[Execution]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
+The _executionlog_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persists xref:refguide:applib:index/services/iactn/Execution.adoc[Execution]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
 
 

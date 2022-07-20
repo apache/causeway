@@ -81,6 +81,7 @@ The `CommandsDto` DTO allows multiple commands to be marshalled together.
 This was introduced to support replication of commands in a master/slave arrangement (eg for regression testing).
 
 
+[#memberdto-and-subtypes]
 == `memberDto` and subtypes
 
 The `memberDto` complex type is an abstract type representing the intention to either invoke an action or to edit a property.

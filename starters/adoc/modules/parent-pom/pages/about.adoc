@@ -58,6 +58,7 @@ For the `isis-testing-xxx` modules (fixture scripts, unit test support, integ te
 These all set up `<dependencyManagement>/<dependencies>` entries for all of the modules, meaning that there's only one place to update the version to Apache Isis (the reference to the parent POM).
 
 
+[#surefire-configuration]
 == Surefire Configuration
 
 The parent pom configuresthe Maven surefire plugin to execute multiple times, based on test class suffix.

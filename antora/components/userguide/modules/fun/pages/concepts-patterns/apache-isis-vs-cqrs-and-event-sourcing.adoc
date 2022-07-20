@@ -6,6 +6,7 @@
 CQRS and Event Sourcing (ES) are two architectural patterns often used (and often used together) to implement domain driven design systems.
 This section explores the similarities and differences that Apache Isis has with these other architectural approaches.
 
+[#cqrs]
 == CQRS
 
 The link:https://martinfowler.com/bliki/CQRS.html[CQRS architectural pattern] (it stands for "Command Query Responsibility Separation") is the idea that the domain objects that mutate the state of the system - to which commands are sent and which then execute - should be separated from the mechanism by which the state of the system is queried (rendered).

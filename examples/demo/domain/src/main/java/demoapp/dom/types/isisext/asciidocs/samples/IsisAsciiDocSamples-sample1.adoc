@@ -1,5 +1,4 @@
-Asciidoctor Demo
-================
+= Asciidoctor Demo
 ////
 Big ol' comment
 

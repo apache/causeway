@@ -90,7 +90,6 @@ _Security_
 
 _For Use in Apps_
 
-*  xref:subdomains:ROOT:about.adoc[Subdomain Libraries]
 *  xref:valuetypes:ROOT:about.adoc[Value Type Catalog]
 
 _Extending the framework itself_

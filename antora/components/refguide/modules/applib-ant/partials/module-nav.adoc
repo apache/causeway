@@ -11,7 +11,6 @@
 ** xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout]
 ** xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService]
 ** xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[@DomainServiceLayout]
-** xref:refguide:applib:index/annotation/Facets.adoc[@Facets]
 ** xref:refguide:applib:index/annotation/HomePage.adoc[@HomePage]
 ** xref:refguide:applib:index/annotation/InteractionScope.adoc[@InteractionScope]
 ** xref:refguide:applib:index/annotation/MemberSupport.adoc[@MemberSupport]

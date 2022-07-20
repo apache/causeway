@@ -132,6 +132,8 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
 })
 public class IsisModuleCoreRuntimeServices {
 
+    public static final String NAMESPACE = "isis.runtimeservices";
+
     @Bean @Singleton // also used by _Spring utility
     public OrderComparator orderComparator() {
         return new AnnotationAwareOrderComparator();

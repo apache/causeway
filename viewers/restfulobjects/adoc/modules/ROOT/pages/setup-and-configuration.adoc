@@ -48,6 +48,7 @@ Security is discussed in more detail xref:security.adoc[here].
 
 
 
+[#deprecated]
 === Deprecated
 
 These configuration properties that can be used to suppress or simplify the default RO-spec representations.

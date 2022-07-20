@@ -192,7 +192,7 @@ This then allows for other classes - in particular domain services contributing 
 
 == Programmatic posting
 
-To programmatically post an event, simply call xref:refguide:applib:index/services/eventbus/EventBusService.adoc#post[EventBusService#post].
+To programmatically post an event, simply call xref:refguide:applib:index/services/eventbus/EventBusService.adoc#post__Object[EventBusService#post].
 
 The `LibraryMember` example described above could for example be rewritten into:
 

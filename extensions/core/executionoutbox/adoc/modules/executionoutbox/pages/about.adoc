@@ -6,7 +6,7 @@
 
 WARNING: TODO: v2 - to properly document.
 
-The _executionoutbox_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persists xref:refguide:applib:index/services/iactn/Execution[Execution]s into an "outbox" (using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store).
+The _executionoutbox_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persists xref:refguide:applib:index/services/iactn/Execution.adoc[Execution]s into an "outbox" (using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store).
 The purpose of the "outbox" is to act as a temporary store of executions to be propogated to other "downstream" systems.
 
 The module also provides a REST API, a rest client and DTOs to represent the payloads between these two services.

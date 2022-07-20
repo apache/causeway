@@ -54,12 +54,12 @@ The `interactionDto` root element is defined as:
 ----
 <1> the interaction schema has a namespace URI of "http://isis.apache.org/schema/ixn".
 Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
-<2> uses complex types defined in the xref:refguide:schema:common["common" schema] and also the xref:refguide:schema:about.adoc#cmd.adoc["cmd" schema]
+<2> uses complex types defined in the xref:refguide:schema:common.adoc["common" schema] and also the xref:refguide:schema:cmd.adoc["cmd" schema]
 <3> definition of the `interactionDto` root element.
 The corresponding XML will use this as its top-level element.
 <4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
 <5> unique identifier for the transaction in which this interaction is being executed.
-The transaction Id is used to correlate back to the xref:refguide:schema:command[command] that represented the intention to perform this execution, as well as to any xref:refguide:schema:about.adoc#changes.adoc[changes] to domain objects that occur as a side-effect of the interaction.
+The transaction Id is used to correlate back to the xref:refguide:schema:cmd.adoc[command] that represented the intention to perform this execution, as well as to any xref:refguide:schema:chg.adoc[changes] to domain objects that occur as a side-effect of the interaction.
 <6> the top-level `memberExecutionDto`, defined below, either an action invocation or edit of a property.
 
 The `InteractionDto` DTO corresponding to the `interactionDto` root element can be marshalled to/from XML using the `InteractionDtoUtils` class.
@@ -69,7 +69,7 @@ The `InteractionDto` DTO corresponding to the `interactionDto` root element can 
 == `memberExecutionDto`
 
 The `memberExecutionDto` complex type is an abstract type representing either the invocation an action or the editing of a property.
-It corresponds to the xref:refguide:schema:cmd/memberDto.adoc[memberDto] of the "cmd" schema; some elements are copied directly:
+It corresponds to the xref:refguide:schema:cmd.adoc#memberdto-and-subtypes[memberDto] of the "cmd" schema; some elements are copied directly:
 
 [source,xml]
 ----
