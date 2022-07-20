@@ -1,7 +1,7 @@
 = DomainChangeRecord _(interface)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Allows domain objects that represents some sort of recorded change to a domain object (commands, audit entries, published interactions) to act as a mixee in order that other modules can contribute behaviour.
+Allows domain objects that represents some sort of recorded change to a domain object (commands, executions, audit entries) to act as a mixee in order that other modules can contribute behaviour.
 
 == API
 
@@ -13,11 +13,16 @@ interface DomainChangeRecord {
   UUID getInteractionId()     // <.>
   String getUsername()     // <.>
   java.sql.Timestamp getTimestamp()     // <.>
-  String getTargetObjectType()     // <.>
+  String getTargetLogicalTypeName()     // <.>
   Bookmark getTarget()     // <.>
-  String getTargetMember()
+  String getLogicalMemberIdentifier()
+  boolean hideLogicalMemberIdentifier()
+  String getPropertyId()
+  boolean hidePropertyId()
   String getPreValue()     // <.>
+  boolean hidePreValue()
   String getPostValue()     // <.>
+  boolean hidePostValue()
 }
 ----
 
@@ -41,10 +46,10 @@ The user that caused the change.
 --
 The time that the change occurred.
 --
-<.> xref:#getTargetObjectType__[getTargetObjectType()]
+<.> xref:#getTargetLogicalTypeName__[getTargetLogicalTypeName()]
 +
 --
-The object type of the domain object being changed.
+The logical type name of the domain object being changed.
 --
 <.> xref:#getTarget__[getTarget()]
 +
@@ -84,10 +89,10 @@ The user that caused the change.
 
 The time that the change occurred.
 
-[#getTargetObjectType__]
-=== getTargetObjectType()
+[#getTargetLogicalTypeName__]
+=== getTargetLogicalTypeName()
 
-The object type of the domain object being changed.
+The logical type name of the domain object being changed.
 
 [#getTarget__]
 === getTarget()

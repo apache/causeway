@@ -1,6 +1,7 @@
 include::userguide:excel:partial$module-nav.adoc[]
 include::userguide:commandlog:partial$module-nav.adoc[]
-include::userguide:commandreplay:partial$module-nav.adoc[]
+// commandreplay moved to incubator for the time being
+//include::userguide:commandreplay:partial$module-nav.adoc[]
 include::userguide:flyway:partial$module-nav.adoc[]
 include::userguide:quartz:partial$module-nav.adoc[]
 

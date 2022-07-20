@@ -41,10 +41,10 @@ content:
       start_path: incubator/clients/kroviz/adoc # incubator
       branches: HEAD
     - url: .
-      start_path: incubator/viewers/graphql/adoc # incubator
+      start_path: incubator/extensions/core/commandreplay/adoc # incubator
       branches: HEAD
     - url: .
-      start_path: incubator/extensions/core/commandreplay/adoc # extensions
+      start_path: incubator/viewers/graphql/adoc # incubator
       branches: HEAD
 #    - url: .
 #      start_path: incubator/viewers/javafx/adoc # incubator

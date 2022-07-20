@@ -38,7 +38,7 @@ This required some extra steps in order to deal with CORS setup, see sections on
 Currently (2.0.0-M6) Demo is used as reference - at the moment  it's the only CORS enabled application.
 === Frontend
 
-==== Requirements
+=== Requirements
 
 Kotlin/JS uses `Gradle` for the build, for the JS runtime `NodeJS`, and for the JS dependency management part `npm`.
 You should have installed:
@@ -47,7 +47,7 @@ You should have installed:
 * Google Chrome (72.0.3626.81 or higher)
 * &lt;Moesif CORS Plugin (for Chrome)
 
-==== Build
+=== Build
 
 gradle can be run under Windows with git-bash:
 
@@ -75,7 +75,7 @@ If task npm-install hangs, try
 
 Helps in identifying thing that may go wrong (e.g. due to proxy settings).
 
-==== Run
+=== Run
 
 ----
 gradlew.bat -t run

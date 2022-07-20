@@ -41,6 +41,8 @@ import lombok.val;
  *     for JPA. Because this is an SPI, other modules or application code can provide their own implementations.
  *     An example of such is the JPA implementation of the <code>commandlog</code> extension.
  * </p>
+ *
+ * @since 2.x {@index}
  */
 public interface IdStringifier<T> {
 

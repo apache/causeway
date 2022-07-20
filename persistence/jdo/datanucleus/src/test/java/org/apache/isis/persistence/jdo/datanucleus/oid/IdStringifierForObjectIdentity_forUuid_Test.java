@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.isis.applib.services.bookmark.IdStringifierForUuid;
+import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForUuid;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForObjectIdentity;
 
 import lombok.val;

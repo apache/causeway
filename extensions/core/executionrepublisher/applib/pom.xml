@@ -20,7 +20,7 @@
     </parent>
 
     <artifactId>isis-extensions-executionrepublisher-applib</artifactId>
-    <name>Apache Isis Ext - Execution Outbox API</name>
+    <name>Apache Isis Ext - Execution Outbox Republisher</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.executionrepublisher.applib</jar-plugin.automaticModuleName>

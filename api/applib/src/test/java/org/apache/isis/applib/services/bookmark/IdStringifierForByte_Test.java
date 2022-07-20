@@ -28,6 +28,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForByte;
+
 import lombok.val;
 
 class IdStringifierForByte_Test {

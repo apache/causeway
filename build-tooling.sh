@@ -41,12 +41,15 @@ do
   esac
 done
 
+shift $((OPTIND-1))
+
 echo ""
 echo "SKIP_TESTS : $SKIP_TESTS"
 
-OPTS=""
+OPTS="$*"
 if [[ "$SKIP_TESTS" == "true" ]]; then
   OPTS="$OPTS -DskipTests "
 fi
 
+echo mvn -Dmodule-tooling -Dskip.essential $OPTS install
 mvn -Dmodule-tooling -Dskip.essential $OPTS install

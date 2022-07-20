@@ -23,19 +23,15 @@ package org.apache.isis.persistence.jdo.datanucleus.oid;
 import java.util.stream.Stream;
 
 import javax.jdo.identity.CharIdentity;
-import javax.jdo.identity.StringIdentity;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.*;
 
-import org.apache.isis.applib.services.bookmark.IdStringifierForCharacter;
-import org.apache.isis.applib.services.bookmark.IdStringifierForString;
+import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForCharacter;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharIdentity;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForStringIdentity;
 
 import lombok.val;
 

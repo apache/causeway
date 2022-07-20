@@ -7,7 +7,7 @@
 .PropertyEdit.java
 ----
 class PropertyEdit {
-  PropertyEdit(Interaction interaction, Identifier memberId, Object target, Object newValue, String targetMember, String targetClass)
+  PropertyEdit(Interaction interaction, Identifier memberId, Object target, Object newValue)
 }
 ----
 

@@ -29,6 +29,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForBigInteger;
+
 import lombok.val;
 
 class IdStringifierForBigInteger_Test {

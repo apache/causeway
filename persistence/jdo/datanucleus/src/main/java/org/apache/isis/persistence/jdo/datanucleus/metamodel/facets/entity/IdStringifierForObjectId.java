@@ -22,14 +22,13 @@ import java.util.UUID;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
-import javax.jdo.identity.ObjectIdentity;
 
 import org.datanucleus.identity.ObjectId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.applib.services.bookmark.IdStringifierForUuid;
+import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForUuid;
 
 import lombok.Builder;
 import lombok.NonNull;

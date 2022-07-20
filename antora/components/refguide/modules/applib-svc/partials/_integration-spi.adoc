@@ -14,14 +14,16 @@ The integration SPIs allow the framework to automate the exchange of data betwee
 
 
 
-|xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorService.adoc.adoc[CommandDtoProcessorService]
+|xref:refguide:applib:index/services/commanddto/processor/spi/CommandDtoProcessorService.adoc[CommandDtoProcessorService]
 |SPI to support representation of commands as XML over REST, in particular to support master/slave replay of commands.
 
 
 |xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService]
 |Service used to execute commands.
-One use case is to replay commands from a primary onto a secondary (see xref:userguide:commandreplay:about.adoc[Command Replay] ; another is in support of async commands (using
-xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] ).
+One use case isin support of async commands (using xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] ).
+
+// commandreplay moved to incubator for the time being
+//Another is to replay commands from a primary onto a secondary (see xref:userguide:commandreplay:about.adoc[Command Replay] ; another is
 
 
 |xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber]

@@ -29,7 +29,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import org.apache.isis.applib.services.bookmark.IdStringifierForString;
+import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForString;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForStringIdentity;
 
 import lombok.val;

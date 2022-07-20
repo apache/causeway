@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.applib.services.bookmark.IdStringifierForUuid;
+import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForUuid;
 
 import lombok.Builder;
 import lombok.NonNull;

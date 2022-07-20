@@ -44,16 +44,13 @@ content:
       start_path: extensions/core/commandlog/adoc # extensions
       branches: HEAD
     - url: .
-      start_path: extensions/core/commandreplay/adoc # extensions
-      branches: HEAD
-    - url: .
       start_path: extensions/core/executionlog/adoc # extensions
       branches: HEAD
     - url: .
       start_path: extensions/core/executionoutbox/adoc # extensions
       branches: HEAD
     - url: .
-      start_path: extensions/core/executionreplay/adoc # extensions
+      start_path: extensions/core/executionrepublisher/adoc # extensions
       branches: HEAD
     - url: .
       start_path: extensions/core/flyway/adoc # userguide

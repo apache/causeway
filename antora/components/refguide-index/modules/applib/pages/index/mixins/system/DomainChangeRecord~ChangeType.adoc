@@ -11,7 +11,7 @@ Enumerates the different types of changes recognised.
 enum ChangeType {
   COMMAND
   AUDIT_ENTRY
-  PUBLISHED_INTERACTION
+  EXECUTION
   String toString()
 }
 ----

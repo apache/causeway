@@ -28,7 +28,7 @@ datanucleus.cache.level2.mode
 
 The default (UNSPECIFIED) is the same as DISABLE_SELECTIVE.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
 
 
 |
@@ -40,7 +40,7 @@ datanucleus.cache.level2.type
 
 Can be used to interface with external caching products. Use "none" to turn off L2 caching; other values include "soft", "weak", "javax.cache".
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
 
 
 |
@@ -60,7 +60,7 @@ datanucleus.manage-relationships
 
 This process runs when flush()/commit() is called. You can set it to false if you always set both sides of a relation when persisting/updating.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs].
 
 
 |
@@ -74,7 +74,7 @@ commit
 
 This means that objects that were reachable at a call to makePersistent() but that are no longer persistent will be removed from persistence. For performance improvements, consider turning this off.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs].
 
 
 |
@@ -82,9 +82,13 @@ For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jd
 datanucleus.schema.auto-create-all
 
 | 
-| Whether to automatically generate any schema, tables, columns, constraints that don’t exist.
+| Whether to automatically (but lazily) generate any schema, tables, columns, constraints that don’t exist.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+For integration testing, it's generally better to use datanucleus.schema.generateDatabase.mode, which will eagerly create all tables on startup.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+@see #setAutoCreateColumns(boolean) @see #setAutoCreateConstraints(boolean) @see #setAutoCreateTables(boolean) @see GenerateDatabase#setMode(String)
 
 
 |
@@ -95,7 +99,9 @@ auto-create-columns
 | 
 | Whether to automatically generate any columns that don’t exist.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+@see #setAutoCreateAll(boolean) @see #setAutoCreateConstraints(boolean) @see #setAutoCreateTables(boolean) @see GenerateDatabase#setMode(String)
 
 
 |
@@ -106,7 +112,9 @@ auto-create-constraints
 | 
 | Whether to automatically generate any constraints that don’t exist.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+@see #setAutoCreateAll(boolean) @see #setAutoCreateColumns(boolean) @see #setAutoCreateTables(boolean) @see GenerateDatabase#setMode(String)
 
 
 |
@@ -117,7 +125,7 @@ auto-create-database
 | 
 | Whether to automatically generate any database (catalog/schema) that doesn’t exist. This depends very much on whether the datastore in question supports this operation.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 
 
 |
@@ -128,7 +136,24 @@ auto-create-tables
 | 
 | Whether to automatically generate any tables that don’t exist.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+@see #setAutoCreateAll(boolean) @see #setAutoCreateColumns(boolean) @see #setAutoCreateConstraints(boolean) @see GenerateDatabase#setMode(String)
+
+
+|
+[[datanucleus.schema.generate-database.mode]]
+datanucleus.schema. +
+generate-database.mode
+
+|  none
+| Whether to eagerly create all tables at startup.
+
+For integration testing, this is generally preferred to using datanucleus.schema.autoCreateAll, because the ``autoCreateAll`` will only create tables lazily, when first persisted to. While lazily initialization is potentially quicker, it can cause issues (eg with rollup mapping to super class tables).
+
+Valid values: `**none**`, ``create``, ``drop-and-create``, ``drop``.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 
 
 |
@@ -138,7 +163,7 @@ datanucleus.schema.validate-all
 | 
 | Alias for defining ``validateTables``, ``validateColumns`` and ``validateConstraints`` as true.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 
 
 |
@@ -149,7 +174,7 @@ validate-columns
 | 
 | Whether to validate columns against the persistence definition. This refers to the column detail structure and NOT to whether the column exists or not.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 
 
 |
@@ -160,7 +185,7 @@ validate-constraints
 | 
 | Whether to validate table constraints against the persistence definition.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 
 
 |
@@ -170,7 +195,7 @@ datanucleus.schema.validate-tables
 | 
 | Whether to validate tables against the persistence definition.
 
-For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 
 
 
