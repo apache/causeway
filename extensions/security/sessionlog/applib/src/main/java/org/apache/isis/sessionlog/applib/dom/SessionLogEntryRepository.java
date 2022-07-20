@@ -32,8 +32,7 @@ import org.joda.time.LocalDate;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.session.SessionLogService;
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.applib.services.session.SessionSubscriber;
 
 import lombok.NonNull;
 import lombok.val;
@@ -56,7 +55,7 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
         val allSessions = repositoryService.allMatches(
                 Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_ACTIVE_SESSIONS));
         for (val activeEntry : allSessions) {
-            activeEntry.setCausedBy(SessionLogService.CausedBy.RESTART);
+            activeEntry.setCausedBy(SessionSubscriber.CausedBy.RESTART);
             activeEntry.setLogoutTimestamp(logoutTimestamp);
         }
     }
@@ -65,7 +64,7 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
             final String username,
             final UUID sessionGuid,
             final String httpSessionId,
-            final SessionLogService.CausedBy causedBy,
+            final SessionSubscriber.CausedBy causedBy,
             final Timestamp timestamp) {
         E entry = factoryService.detachedEntity(sessionLogEntryClass);
         entry.setUsername(username);

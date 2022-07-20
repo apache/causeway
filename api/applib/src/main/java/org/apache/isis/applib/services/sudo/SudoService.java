@@ -29,6 +29,7 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
@@ -65,11 +66,13 @@ import lombok.val;
  * @since 1.x revised for 2.0 {@index}
  */
 @Service
-@Named("isis.applib.SudoService")
+@Named(SudoService.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SudoService {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".SudoService";
 
     /**
      * If included in the list of roles, then will disable security checks (can view and use all object members).

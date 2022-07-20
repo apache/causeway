@@ -15,10 +15,9 @@ These are generally of use to support development-time activities, for example c
 |Description
 
 
-|xref:refguide:applib:index/services/appfeat/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository]
-|Provides access to string representations of the features (package, class, class members) of the domain classes
-within the metamodel.
+|xref:refguide:applib:index/services/appfeat/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository] & xref:refguide:applib:index/services/appfeatui/ApplicationFeatureMenu.adoc[ApplicationFeatureMenu]
 
+|Provides access to string representations of the features (package, class, class members) of the domain classes within the metamodel.
 
 
 |xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService] &
@@ -26,16 +25,14 @@ xref:refguide:applib:index/services/layout/LayoutServiceMenu.adoc[LayoutServiceM
 |Use to obtain the resolved `Xxx.layout.xml` for a class, and the top-level `menubars.layout.xml` files.
 
 
-
-
-
 |xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[MetaModelService] & xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu]
 |Access to certain information from the Apache Isis metamodel.
 
 
-|xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry]
-|Methods to access and use other domain services.
+|xref:refguide:applib:index/services/sitemap/SitemapService.adoc[SitemapService] & xref:refguide:applib:index/services/sitemap/SitemapServiceMenu.adoc[SitemapServiceMenu]
+|Access to a downloadable site map of the application's features, as an Asciidoc document.
 
+The intention is to use this as the basis for a user guide or to develop a manual regression test plan.
 
 
 |xref:refguide:applib:index/services/swagger/SwaggerService.adoc[SwaggerService]

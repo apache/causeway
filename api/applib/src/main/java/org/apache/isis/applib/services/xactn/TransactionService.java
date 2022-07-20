@@ -34,6 +34,14 @@ import java.util.Optional;
  *     methods provided by this domain service can be useful.
  * </p>
  *
+ * <p>
+ *     NOTE: there is <i>no</i> method to close (which is to say to commit) an existing transaction, because of a
+ *     subtlety with the JPA transaction manager: if a transaction wasn't a new one, then closing the transaction
+ *     would actually mean to decrement the transaction counter (only when it hits zero should the transaction be
+ *     committed); but if the previous transaction was instead suspended, the commit the new transaction and then
+ *     resume the previous transaction.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 public interface TransactionService extends TransactionalProcessor {
@@ -60,15 +68,5 @@ public interface TransactionService extends TransactionalProcessor {
      * If there is no active transaction associated with the current thread, then does nothing.
      */
     void flushTransaction();
-
-
-    //XXX we removed the entire method, because of following subtlety with JpaTransactionManager's commit
-    // If the transaction wasn't a new one, omit the commit for proper participation in
-    // the surrounding transaction. If a previous transaction has been suspended to be
-    // able to create a new one, resume the previous transaction after committing the new one.
-//    /**
-//     * Commits the current thread's transaction (if there is one), and in any case begins a new one.
-//     */
-//    void nextTransaction();
 
 }

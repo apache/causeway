@@ -27,20 +27,25 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Simple implementation of {@link SessionSubscriber} that just logs to a debug log.
+ *
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.applib.SessionLoggingServiceLogging")
+@Named(SessionLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("logging")
 @Log4j2
-public class SessionLogServiceLogging implements SessionLogService {
+public class SessionLogger implements SessionSubscriber {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".SessionLogger";
 
     @Override
     public void log(

@@ -31,7 +31,7 @@ import java.util.UUID;
  *
  * @since 1.x {@index}
  */
-public interface SessionLogService {
+public interface SessionSubscriber {
 
     enum Type {
         LOGIN,

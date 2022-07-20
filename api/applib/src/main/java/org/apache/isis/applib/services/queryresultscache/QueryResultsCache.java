@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.base._Casts;
@@ -63,12 +64,14 @@ import lombok.extern.log4j.Log4j2;
  * @since 1.x {@index}
  */
 @Component
-@Named("isis.applib.QueryResultsCache")
+@Named(QueryResultsCache.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.EARLY)
 @InteractionScope
 @Qualifier("Default")
 @Log4j2
 public class QueryResultsCache implements DisposableBean {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".QueryResultsCache";
 
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
 

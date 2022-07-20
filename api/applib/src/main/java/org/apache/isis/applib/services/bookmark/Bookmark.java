@@ -44,10 +44,12 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE + ".Bookmark")
+@Named(Bookmark.LOGICAL_TYPE_NAME)
 @org.apache.isis.applib.annotation.Value
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Bookmark implements Oid {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".Bookmark";
 
     private static final long serialVersionUID = 3L;
 

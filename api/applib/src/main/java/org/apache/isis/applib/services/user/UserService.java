@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
@@ -70,11 +71,13 @@ import lombok.val;
  * @since 1.x revised in 2.0 {@index}
  */
 @Service
-@Named("isis.applib.UserService")
+@Named(UserService.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class UserService {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".UserService";
 
     /**
      * Default returned from {@link #currentUserNameElseNobody()}.

@@ -54,7 +54,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class ApplicationFeatureMenu {
 
-    public static final String LOGICAL_TYPE_NAME =
+    static final String LOGICAL_TYPE_NAME =
             IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureMenu";
 
     public static abstract class PropertyDomainEvent<T>

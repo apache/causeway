@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.commanddto.conmap;
 
 import lombok.val;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
@@ -42,10 +43,12 @@ import java.util.List;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.applib.ContentMappingServiceForCommandDto")
+@Named(ContentMappingServiceForCommandDto.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("CommandDto")
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ContentMappingServiceForCommandDto";
 
     @Override @Nullable
     public Object map(final Object object, final List<MediaType> acceptableMediaTypes) {

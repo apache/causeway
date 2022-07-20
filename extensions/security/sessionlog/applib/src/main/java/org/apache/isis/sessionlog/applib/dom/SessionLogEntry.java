@@ -47,12 +47,10 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.applib.mixins.security.HasUsername;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.session.SessionLogService;
+import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.sessionlog.applib.IsisModuleExtSessionLogApplib;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @Named(SessionLogEntry.LOGICAL_TYPE_NAME)
@@ -107,7 +105,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             final UUID sessionGuid,
             final String httpSessionId,
             final String username,
-            final SessionLogService.CausedBy causedBy,
+            final SessionSubscriber.CausedBy causedBy,
             final Timestamp loginTimestamp) {
         setSessionGuidStr(sessionGuid != null ? sessionGuid.toString() : null);
         setHttpSessionId(httpSessionId);
@@ -127,7 +125,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
                 format.format(getLoginTimestamp()),
                 getUsername(),
                 getLogoutTimestamp() == null ? "in": "out",
-                getCausedBy() == SessionLogService.CausedBy.SESSION_EXPIRATION ? "(session expired)" : "");
+                getCausedBy() == SessionSubscriber.CausedBy.SESSION_EXPIRATION ? "(session expired)" : "");
     }
 
     public String cssClass() {
@@ -137,7 +135,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     public String iconName() {
         return getLogoutTimestamp() == null
                 ? "login"
-                :getCausedBy() != SessionLogService.CausedBy.SESSION_EXPIRATION
+                :getCausedBy() != SessionSubscriber.CausedBy.SESSION_EXPIRATION
                     ? "logout"
                     : "expired";
     }
@@ -306,8 +304,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         String ALLOWS_NULL = "false";
     }
     @CausedBy
-    public abstract SessionLogService.CausedBy getCausedBy();
-    public abstract void setCausedBy(SessionLogService.CausedBy causedBy);
+    public abstract SessionSubscriber.CausedBy getCausedBy();
+    public abstract void setCausedBy(SessionSubscriber.CausedBy causedBy);
 
 
 

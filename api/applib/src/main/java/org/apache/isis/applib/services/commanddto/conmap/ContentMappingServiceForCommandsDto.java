@@ -28,6 +28,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -38,10 +39,12 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.applib.ContentMappingServiceForCommandsDto")
+@Named(ContentMappingServiceForCommandsDto.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("CommandsDto")
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ContentMappingServiceForCommandsDto";
 
     @Override
     public Object map(Object object, final List<MediaType> acceptableMediaTypes) {

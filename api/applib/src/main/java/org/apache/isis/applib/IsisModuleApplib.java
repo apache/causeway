@@ -56,7 +56,7 @@ import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.layout.LayoutServiceMenu;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.applib.services.session.SessionLogServiceLogging;
+import org.apache.isis.applib.services.session.SessionLogger;
 import org.apache.isis.applib.services.sitemap.SitemapServiceMenu;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
@@ -116,7 +116,7 @@ import org.apache.isis.schema.IsisModuleSchema;
     CommandDtoProcessorServiceIdentity.class,
     ContentMappingServiceForCommandDto.class,
     ContentMappingServiceForCommandsDto.class,
-    SessionLogServiceLogging.class,
+    SessionLogger.class,
     SudoService.class,
     UserService.class,
     UserMemento.UiSubscriber.class,

@@ -34,7 +34,7 @@ import javax.persistence.Table;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.services.session.SessionLogService;
+import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 import org.apache.isis.sessionlog.applib.dom.SessionLogEntry.Nq;
 
@@ -148,7 +148,7 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
             final UUID sessionGuid,
             final String httpSessionId,
             final String username,
-            final SessionLogService.CausedBy causedBy,
+            final SessionSubscriber.CausedBy causedBy,
             final Timestamp loginTimestamp) {
         super(sessionGuid, httpSessionId, username, causedBy, loginTimestamp);
     }
@@ -192,7 +192,7 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
     @Column(nullable = CausedBy.NULLABLE)
     @CausedBy
     @Getter @Setter
-    private SessionLogService.CausedBy causedBy;
+    private SessionSubscriber.CausedBy causedBy;
 
 
 }

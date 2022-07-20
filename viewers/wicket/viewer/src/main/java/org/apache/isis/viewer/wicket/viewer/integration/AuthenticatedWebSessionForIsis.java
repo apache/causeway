@@ -30,7 +30,7 @@ import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.session.SessionLogService;
+import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
@@ -103,7 +103,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
         this.authentication = getAuthenticationManager().authenticate(authenticationRequest);
         if (this.authentication != null) {
-            log(SessionLogService.Type.LOGIN, username, null);
+            log(SessionSubscriber.Type.LOGIN, username, null);
             return true;
         } else {
             return false;
@@ -139,11 +139,11 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         super.onInvalidate();
 
         val causedBy = RequestCycle.get() != null
-                ? SessionLogService.CausedBy.USER
-                : SessionLogService.CausedBy.SESSION_EXPIRATION;
+                ? SessionSubscriber.CausedBy.USER
+                : SessionSubscriber.CausedBy.SESSION_EXPIRATION;
 
 
-        log(SessionLogService.Type.LOGOUT, userName, causedBy);
+        log(SessionSubscriber.Type.LOGOUT, userName, causedBy);
     }
 
     /**
@@ -226,9 +226,9 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
     }
 
     private void log(
-            final SessionLogService.Type type,
+            final SessionSubscriber.Type type,
             final String username,
-            final SessionLogService.CausedBy causedBy) {
+            final SessionSubscriber.CausedBy causedBy) {
 
 
         val interactionFactory = getInteractionService();
@@ -251,8 +251,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
         }
     }
 
-    protected Can<SessionLogService> getSessionLoggingServices() {
-        return commonContext.getServiceRegistry().select(SessionLogService.class);
+    protected Can<SessionSubscriber> getSessionLoggingServices() {
+        return commonContext.getServiceRegistry().select(SessionSubscriber.class);
     }
 
     protected InteractionService getInteractionService() {
