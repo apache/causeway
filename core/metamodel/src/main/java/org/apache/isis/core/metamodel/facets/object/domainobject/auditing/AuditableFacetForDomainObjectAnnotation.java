@@ -35,9 +35,19 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final Auditing auditing = domainObject != null ?
-                (domainObject.entityChangePublishing() == Publishing.DISABLED ? Auditing.DISABLED : domainObject.auditing())
-                : Auditing.AS_CONFIGURED;
+        Auditing auditing = Auditing.AS_CONFIGURED;
+        if(domainObject!=null){
+            switch (domainObject.entityChangePublishing()){
+                case DISABLED:
+                    auditing=Auditing.DISABLED;
+                    break;
+                case ENABLED:
+                    auditing=Auditing.ENABLED;
+                    break;
+                default:
+                    auditing=domainObject.auditing();
+            }
+        }
         switch (auditing) {
             case AS_CONFIGURED:
 
