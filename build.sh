@@ -34,6 +34,7 @@ usage() {
  echo "  -S do NOT print summary or last 50 lines at the end"                                          >&2
  echo "  -w whatif - don't run the command but do print it out.  Implies -v (verbose)"                 >&2
  echo "  -v verbose"                                                                                   >&2
+ echo "  -e edit log file at end.  Cannot combine with '-v'"                                           >&2
  echo ""                                                                                               >&2
 }
 
@@ -47,11 +48,12 @@ WHATIF=false
 SINGLE_THREADED=false
 SKIP_SEARCH_FOR_FAILURES=false
 SKIP_SUMMARY=false
+EDIT=false
 VERBOSE=false
 
 MVN_LOG=/tmp/$BASENAME_0.$$.log
 
-while getopts 'prctlkyOFSwvh' opt
+while getopts 'prctlkyOFSwveh' opt
 do
   case $opt in
     p) export GIT_PULL=true ;;
@@ -65,6 +67,7 @@ do
     S) export SKIP_SUMMARY=true ;;
     w) export WHATIF=true ;;
     v) export VERBOSE=true ;;
+    e) export EDIT=true ;;
     h) usage
        exit 1
        ;;
@@ -96,6 +99,12 @@ fi
 
 if [ "$PACKAGE_ONLY" = "true" ] && [ "$VERIFY_ONLY" = "true" ]; then
   echo "$BASENAME_0 : cannot use '-y' and '-k' flags together"  >&2
+  usage
+  exit 1
+fi
+
+if [ "$VERBOSE" = "true" ] && [ "$EDIT" = "true" ]; then
+  echo "$BASENAME_0 : cannot use '-v' and '-e' flags together"  >&2
   usage
   exit 1
 fi
@@ -203,6 +212,10 @@ else
     if [ "$VERBOSE" = "true" ]; then
       echo "NOT printing any summary"
     fi
+  fi
+
+  if [ "$EDIT" = "true" ]; then
+    vi $MVN_LOG
   fi
 fi
 
