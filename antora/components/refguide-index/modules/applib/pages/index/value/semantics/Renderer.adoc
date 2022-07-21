@@ -12,12 +12,12 @@ interface Renderer<T> {
 }
 ----
 
-<.> xref:#titlePresentation__ValueSemanticsProvider.Context_T[titlePresentation(ValueSemanticsProvider.Context, T)]
+<.> xref:#titlePresentation__ValueSemanticsProviderContext_T[titlePresentation(ValueSemanticsProvider.Context, T)]
 +
 --
 The value in its read-only summarizing text presentation form. (title form)
 --
-<.> xref:#htmlPresentation__ValueSemanticsProvider.Context_T[htmlPresentation(ValueSemanticsProvider.Context, T)]
+<.> xref:#htmlPresentation__ValueSemanticsProviderContext_T[htmlPresentation(ValueSemanticsProvider.Context, T)]
 +
 --
 The value rendered as HTML.
@@ -25,12 +25,12 @@ The value rendered as HTML.
 
 == Members
 
-[#titlePresentation__ValueSemanticsProvider.Context_T]
+[#titlePresentation__ValueSemanticsProviderContext_T]
 === titlePresentation(ValueSemanticsProvider.Context, T)
 
 The value in its read-only summarizing text presentation form. (title form)
 
-[#htmlPresentation__ValueSemanticsProvider.Context_T]
+[#htmlPresentation__ValueSemanticsProviderContext_T]
 === htmlPresentation(ValueSemanticsProvider.Context, T)
 
 The value rendered as HTML.

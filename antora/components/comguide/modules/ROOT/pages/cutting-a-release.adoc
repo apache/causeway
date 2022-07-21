@@ -780,6 +780,7 @@ Once the artifacts have been uploaded, you can call a vote.
 In all cases, votes last for 72 hours and require a +3 (binding) vote from members.
 
 
+[#start-voting-thread-on-dev-mailing-list]
 === Start voting thread on dev mailing list
 
 That is, link:mailto:dev@apache.isis.org[]

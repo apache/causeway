@@ -76,7 +76,7 @@ Invalidates any cached service adapters that might hold a reference to the curre
 
 == Members
 
-[#select__Class_Annotation[]]
+[#select__Class_Annotation]
 === select(Class, Annotation[])
 
 Obtains a xref:refguide:commons:index/collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.

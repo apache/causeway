@@ -14,5 +14,5 @@ Can this be done?_
 
 Yes, it _is_ possible to internationalize both the Wicket viewer's labels as well as the regular translations of the domain object metadata using the `.po` translation files as supported by the xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService].
 
-Full details of the ``msgId``s that must be added to the `translations.po` file can be found in xref:userguide:btb:i18n.adoc#wicket-viewer[i18n] section of the xref:userguide:btb:about.adoc[beyond the basics] guide.
+Full details of the ``msgId``s that must be added to the `translations.po` file can be found in xref:userguide:btb:i18n.adoc[i18n] section of the xref:userguide:btb:about.adoc[beyond the basics] guide.
 

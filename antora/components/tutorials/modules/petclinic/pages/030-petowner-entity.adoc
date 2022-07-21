@@ -371,15 +371,15 @@ isis:
 
 The ``PetOwner``'s `firstName` and `lastName` properties are updated using the `updateName` action, but when the action's button is invoked, it only "replaces" the `lastName` property:
 
-image::Owner-updateName-prompt.png[width="400px",link="_images/Owner-updateName-prompt.png"]
+image::Owner-updateName-prompt.png[width="400px"]
 
 In this exercise we'll improve the UI by introducing a derived `name` property and then hiding the `firstName` and `lastName`:
 
-image::Owner-name.png[width="400px",link="_images/Owner-name.png"]
+image::Owner-name.png[width="400px"]
 
 When `PetOwner#updateName` is invoked, the prompt we'll want see is:
 
-image::Owner-name-updated.png[width="400px",link="_images/Owner-name-updated.png"]
+image::Owner-name-updated.png[width="400px"]
 
 
 === Solution

@@ -25,7 +25,7 @@ Obtains the serialized XML form of the layout (grid) for the specified domain cl
 --
 Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
 --
-<.> xref:#toMenuBarsXml__MenuBarsService.Type[toMenuBarsXml(MenuBarsService.Type)]
+<.> xref:#toMenuBarsXml__MenuBarsServiceType[toMenuBarsXml(MenuBarsService.Type)]
 +
 --
 Obtains the serialized XML form of the menu bars layout ( xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService] ).
@@ -43,7 +43,7 @@ Obtains the serialized XML form of the layout (grid) for the specified domain cl
 
 Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
 
-[#toMenuBarsXml__MenuBarsService.Type]
+[#toMenuBarsXml__MenuBarsServiceType]
 === toMenuBarsXml(MenuBarsService.Type)
 
 Obtains the serialized XML form of the menu bars layout ( xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService] ).

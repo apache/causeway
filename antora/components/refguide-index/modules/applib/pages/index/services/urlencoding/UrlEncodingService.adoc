@@ -18,7 +18,7 @@ interface UrlEncodingService {
 }
 ----
 
-<.> xref:#encode__byte[][encode(byte[])]
+<.> xref:#encode__byte[encode(byte[])]
 +
 --
 Converts the string (eg view model memento) into a string safe for use within an URL
@@ -31,7 +31,7 @@ Unconverts the string from its URL form into its original form URL.
 
 == Members
 
-[#encode__byte[]]
+[#encode__byte]
 === encode(byte[])
 
 Converts the string (eg view model memento) into a string safe for use within an URL

@@ -21,12 +21,13 @@ package org.apache.isis.tooling.javamodel.ast;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import lombok.NonNull;
+import lombok.val;
 
 //TODO effective public might require more context
 public final class CallableDeclarations {
 
     public static String asAnchor(final @NonNull CallableDeclaration<?> md) {
-        return nameAndParams(md, "__", "_", "");
+        return nameAndParams(md, "_", "_", "");
     }
 
     public static String asMethodSignature(final @NonNull CallableDeclaration<?> md) {
@@ -34,22 +35,26 @@ public final class CallableDeclarations {
     }
 
     private static String nameAndParams(@NonNull CallableDeclaration<?> md, String openParam, String comma, String closeParam) {
-        final StringBuilder sb = new StringBuilder();
+        val sb = new StringBuilder();
         sb.append(md.getName());
         sb.append(openParam);
-        boolean firstParam = true;
-        for (Parameter param : md.getParameters()) {
+        var firstParam = true;
+        for (val param : md.getParameters()) {
             if (firstParam) {
                 firstParam = false;
             } else {
                 sb.append(comma);
             }
-            final String paramType = param.getType().asString();
-            final String paramTypeNoWildcard = paramType.split("<")[0];
-            sb.append(paramTypeNoWildcard);
+            sb.append(sanitize(param.getType().asString()));
         }
         sb.append(closeParam);
         return sb.toString();
+    }
+
+    private static String sanitize(String paramType) {
+        val paramTypeNoWildcard = paramType.split("<")[0];
+        val paramTypeNoArray = paramTypeNoWildcard.split("\\[")[0];
+        return paramTypeNoArray;
     }
 
 }

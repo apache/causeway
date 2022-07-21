@@ -73,15 +73,11 @@ public class CompareCustomers {
 ----
 
 <.> The JAXB xref:refguide:applib-ant:XmlRootElement.adoc[@XmlRootElement] annotation indicates this is a view model to Apache Isis, which then uses JAXB to serialize the state of the view model between interactions
-
 <.> Optionally, the properties of the view model can be listed using the `XmlType#propOrder` attribute. +
 This is an all-or-nothing affair: either all properties must be listed, or else the annotation omitted.
-
 <.> Specifying field accessor type allows the Lombok `@Getter` and `@Setter` annotations to be used.
-
 <.> The `@XmlElement` indicates the property is part of the view model's state.
 For collections, the `@XmlElementWrapper` would also typically be used.
-
 <.> The `@XmlTransient` indicates that the property is derived and should be ignored by JAXB. +
 The derived properties could also have been implemented using xref:userguide:fun:overview.adoc#mixins[mixins].
 
@@ -323,33 +319,5 @@ In this case the entity with your Apache Isis application is a proxy or a facade
 +
 For example the entity might include a data structure that is best persisted in a custom datastore, for example a graph database such as neo4j.
 
-Because such entities are responsible for their own state management, the framework provides the xref:refguide:applib:index/RecreatableDomainObject.adoc[RecreatableDomainObject].
-This is almost identical to xref:refguide:applib:index/ViewModel.adoc[ViewModel]
+Because such entities are responsible for their own state management, they can be implemented as view models.
 
-For example:
-
-[source,java]
-.Gravatar.java
-----
-@DomainObject
-public class Gravatar implements RecreatableDomainObject {  // <.>
-
-    public String __isis_memento() {                        // <.>
-        return this.emailAddress;
-    }
-
-    public void __isis_recreate(String memento) {           // <.>
-        this.emailAddress = memento;
-        GravatarData gd =
-            gravatarService.lookupGravatar(emailAddress);
-        this.image = gd.image();
-    }
-
-    @Inject GravatarService gravatarService;
-}
-----
-
-<.> implements `RecreatableDomainObject`
-<.> returns a memento of the state of this object.
-
-Of course, you could also implement this as a JAXB view model or any of the other techniques described above.

@@ -23,6 +23,7 @@ package todoapp.app.viewmodels.todoitem.v1;                         // <.>
         titleUiEvent = TitleUiEvent.Doop.class                      // <.>
 )
 public class ToDoItemV1_1 implements Dto {                          // <.>
+
     @XmlElement(required = true, defaultValue = "1")                // <.>
     public final String getMajorVersion() { return "1"; }
     @XmlElement(required = true, defaultValue = "1")                // <.>
@@ -44,13 +45,13 @@ public class ToDoItemV1_1 implements Dto {                          // <.>
     protected List<ToDoItem> similarItems = Lists.newArrayList();
 }
 ----
-<.> package name encodes major version; see discussion on xref:userguide:fun:view-models.adoc#versioning[versioning]
+<.> package name encodes major version, so it can be serialized; see discussion on xref:#versioning[versioning below]
 <.> identifies this class as a view model and defines the root element for JAXB serialization
 <.> all properties in the class must be listed; (they can be ignored using `@XmlTransient`)
 <.> demonstrating use of UI events for a subscriber to provide the DTO's title; see xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[@DomainObjectLayout#titleUiEvent()].
-<.> class name encodes (major and) minor version; see discussion on xref:userguide:fun:view-models.adoc#versioning[versioning]
-<.> again, see discussion on xref:userguide:fun:view-models.adoc#versioning[versioning]
-<.> again, see discussion on xref:userguide:fun:view-models.adoc#versioning[versioning]
+<.> class name encodes (major and) minor version; see discussion on xref:#versioning[versioning]
+<.> again, see discussion on xref:#versioning[versioning]
+<.> again, see discussion on xref:#versioning[versioning]
 <.> simple scalar properties
 <.> reference to a persistent entity; discussed xref:userguide:fun:view-models.adoc#referencing-domain-entities[here]
 <.> reference to a collection of persistent entities; again discussed xref:userguide:fun:view-models.adoc#referencing-domain-entities[here]
@@ -107,14 +108,14 @@ Since these DTO classes will all be in the same package (as per the advice above
 
 [source,java]
 ----
-package todoapp.app.viewmodels.todoitem.v1;     // <1>
+package todoapp.app.viewmodels.todoitem.v1;     // <.>
 ...
-public class ToDoItemV1_1 implements Dto {      // <2>
+public class ToDoItemV1_1 implements Dto {      // <.>
     ...
 }
 ----
-<1> package contains the major version only
-<2> DTO class contains the (major and) minor version
+<.> package contains the major version only
+<.> DTO class contains the (major and) minor version
 
 
 We also recommend that each DTO instance should also specify the version of the XSD schema that it is logically compatible with.

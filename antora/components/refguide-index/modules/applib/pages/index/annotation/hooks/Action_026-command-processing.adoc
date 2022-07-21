@@ -2,6 +2,7 @@
 :page-partial:
 
 
+[#command-processing]
 === Command Processing
 
 Every action invocation (and xref:refguide:applib:index/annotation/Property.adoc#commandPublishing[property edit] for that matter) is normally reified into a concrete xref:refguide:applib:index/services/command/Command.adoc[Command] object, basically a wrapper around the xref:schema:cmd.adoc[CommandDto] that also captures some timing metrics about the execution as well as the outcome.

@@ -12,11 +12,6 @@
 
 This section (appendix) describes the prerequisites for the xref:comguide:ROOT:cutting-a-release.adoc[release process].
 
-== Configure toolchains plugin
-
-Apache Isis releases are built using Java 7, enforced using the maven toolchains plugin.
-Ensure that Java 7 is installed and the toolchains plugin is configured, as described in the xref:conguide:ROOT:building-apache-isis.adoc#configure-maven-toolchains-plugin[contributors' guide].
-
 == Public/private key
 
 The most important configuration you require is to set up public/private key pair.
