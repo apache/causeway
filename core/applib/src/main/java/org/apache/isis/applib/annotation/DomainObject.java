@@ -52,6 +52,7 @@ public @interface DomainObject {
      * registered with the framework.
      * </p>
      */
+    @Deprecated
     Auditing auditing() default Auditing.AS_CONFIGURED;
 
 
@@ -66,6 +67,7 @@ public @interface DomainObject {
      * registered with the framework.
      * </p>
      */
+    @Deprecated
     Publishing publishing() default Publishing.AS_CONFIGURED;
 
     /**
@@ -113,6 +115,7 @@ public @interface DomainObject {
      *     Takes precedence over auto-complete.
      * </p>
      */
+    @Deprecated
     boolean bounded() default false;
 
 
@@ -151,6 +154,17 @@ public @interface DomainObject {
      */
     String editingDisabledReason() default "Disabled";
 
+
+    /**
+     * COPIED FROM V2:
+     * Whether entity changes (persistent property updates) should be published to
+     * {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber}s
+     * and whether entity changes, captured as {@link org.apache.isis.applib.services.publishing.spi.EntityChanges},
+     * should be published to {@link org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber}s.
+     * @apiNote does only apply to entity objects
+     */
+    Publishing entityChangePublishing()
+            default Publishing.NOT_SPECIFIED;
 
     // //////////////////////////////////////
 
@@ -245,7 +259,9 @@ public @interface DomainObject {
      * </p>
      *
      * @see DomainService#logicalTypeName()
+     * @Deprecated use @Named instead
      */
+    @Deprecated
     String logicalTypeName()
             default "";
 

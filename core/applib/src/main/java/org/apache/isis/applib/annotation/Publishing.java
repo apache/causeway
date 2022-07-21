@@ -37,5 +37,12 @@ public enum Publishing {
     /**
      * Do not publish changes to this object (even if otherwise configured to enable publishing).
      */
-    DISABLED
+    DISABLED,
+
+    /**
+     * COPIED FROM V2:
+     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
+     * annotations or super-classes/interfaces).
+     */
+    NOT_SPECIFIED
 }

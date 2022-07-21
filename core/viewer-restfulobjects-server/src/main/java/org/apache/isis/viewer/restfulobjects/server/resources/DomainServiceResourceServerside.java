@@ -69,6 +69,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             final NatureOfService natureOfService = facet.getNatureOfService();
             return  natureOfService == NatureOfService.VIEW ||
                     natureOfService == NatureOfService.VIEW_MENU_ONLY ||
+                    natureOfService == NatureOfService.REST ||
                     natureOfService == NatureOfService.VIEW_REST_ONLY;
         }
     };

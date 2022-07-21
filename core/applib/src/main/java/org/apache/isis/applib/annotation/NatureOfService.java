@@ -35,6 +35,7 @@ public enum NatureOfService {
      * Equivalent to annotating all actions with (the now deprecated) {@link org.apache.isis.applib.annotation.NotContributed} annotation.
      * </p>
      */
+    @Deprecated
     VIEW_MENU_ONLY,
     /**
      * The service's actions can be contributed to domain objects as actions, properties or collections but do not
@@ -44,11 +45,15 @@ public enum NatureOfService {
      * Equivalent to annotating all actions with (the now deprecated) {@link org.apache.isis.applib.annotation.NotInServiceMenu} annotation.
      * </p>
      */
+    @Deprecated
     VIEW_CONTRIBUTIONS_ONLY,
     /**
      * The services actions should only be visible in the REST API exposed by the Restful Objects viewer.
      */
+    REST,
+    @Deprecated
     VIEW_REST_ONLY,
+
     /**
      * The service's actions do not appear on menus and are not contributed.
      *
@@ -56,26 +61,13 @@ public enum NatureOfService {
      * Equivalent to annotating all actions with both (the now deprecated) {@link org.apache.isis.applib.annotation.NotInServiceMenu} and {@link org.apache.isis.applib.annotation.NotContributed} annotations).
      * </p>
      */
+    @Deprecated
     DOMAIN;
 
-    boolean isViewRestOnly() {
-        return this == VIEW_REST_ONLY;
-    }
     boolean isView() {
         return this == VIEW;
     }
-    boolean isViewMenuOnly() {
-        return this == VIEW_MENU_ONLY;
+    boolean isRest() {
+        return this == REST || this == VIEW_REST_ONLY;
     }
-    boolean isViewContributionsOnly() {
-        return this == VIEW_CONTRIBUTIONS_ONLY;
-    }
-    boolean isDomain() {
-        return this == DOMAIN;
-    }
-
-    boolean isViewOrViewMenuOnly() {
-        return isView() || isViewMenuOnly();
-    }
-
 }

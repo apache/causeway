@@ -51,12 +51,24 @@ public interface FactoryService {
      * alternatively just <i>new()</i> up the object rather than call this
      * method.
      * </p>
+     * @Deprecated use detachedEntity instead
      */
     @Programmatic
+    @Deprecated
     <T> T instantiate(final Class<T> domainClass);
 
     @Programmatic
+    default <T> T detachedEntity(final Class<T> domainClass){
+        return instantiate( domainClass);
+    };
+
+    @Programmatic
     default <T> T create(final Class<T> domainClass){
+        return instantiate( domainClass);
+    };
+
+    @Programmatic
+    default <T> T getOrCreate(final Class<T> domainClass){
         return instantiate( domainClass);
     };
 
