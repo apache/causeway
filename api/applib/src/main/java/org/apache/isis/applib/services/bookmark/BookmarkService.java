@@ -18,11 +18,17 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * This service provides a serializable 'bookmark' for any entity, and

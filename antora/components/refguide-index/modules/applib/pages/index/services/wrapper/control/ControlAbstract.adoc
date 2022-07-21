@@ -15,7 +15,7 @@ class ControlAbstract<T> {
 }
 ----
 
-<.> xref:#getExecutionModes__[getExecutionModes()]
+<.> xref:#getExecutionModes_[getExecutionModes()]
 +
 --
 Not API.
@@ -23,7 +23,7 @@ Not API.
 
 == Members
 
-[#getExecutionModes__]
+[#getExecutionModes_]
 === getExecutionModes()
 
 Not API.

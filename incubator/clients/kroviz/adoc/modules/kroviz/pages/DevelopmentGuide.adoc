@@ -6,30 +6,31 @@ image::WheatFieldWithCrows.png[]
 == Quickstart
 
 . Build Isis with kroviz
-
-```
++
+----
 cd ~/isis
 mvn -T 1C clean install \
  -Dmodule-kroviz \
  -Dmaven.source.skip=true
-```
+----
 
-[start=2]
 . Start kroviz
-
-```
++
+[source]
+----
 cd ~/isis/incubator/clients/kroviz/
 #gradle build
 ./gradlew.sh -t run
-```
-
-[start=3]
+----
++
 . Start the Server App
 . Enter in the Browser:
-```
++
+[source]
+----
 http://localhost:3000
-```
-[start=5]
+----
+
 . Select 'Connect' in the Burger Menu
 
 
@@ -38,7 +39,7 @@ This required some extra steps in order to deal with CORS setup, see sections on
 Currently (2.0.0-M6) Demo is used as reference - at the moment  it's the only CORS enabled application.
 === Frontend
 
-==== Requirements
+=== Requirements
 
 Kotlin/JS uses `Gradle` for the build, for the JS runtime `NodeJS`, and for the JS dependency management part `npm`.
 You should have installed:
@@ -47,7 +48,7 @@ You should have installed:
 * Google Chrome (72.0.3626.81 or higher)
 * &lt;Moesif CORS Plugin (for Chrome)
 
-==== Build
+=== Build
 
 gradle can be run under Windows with git-bash:
 
@@ -75,7 +76,7 @@ If task npm-install hangs, try
 
 Helps in identifying thing that may go wrong (e.g. due to proxy settings).
 
-==== Run
+=== Run
 
 ----
 gradlew.bat -t run
@@ -180,7 +181,8 @@ There are some questionable setups in coporate settings that are based on SSL re
 In order to cope with it, you may try to import the Certificate into cacerts,
 see https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000094584-IDEA-Ultimate-2016-3-4-throwing-unable-to-find-valid-certification-path-to-requested-target-when-trying-to-refresh-gradle
 
-## Network Proxy
+== Network Proxy
+
  Depending on the network you are in, you may need to configure the proxy settings. Among the relevant files are:
  `bash
     ~/.npmrc

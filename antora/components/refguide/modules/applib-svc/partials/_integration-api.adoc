@@ -27,6 +27,8 @@ The integration APIs provide functionality to the domain objects to integrate wi
 |Marshal and unmarshal JAXB-annotated view models to/from XML.
 
 
+|xref:refguide:applib:index/services/xml/XmlService.adoc[XmlService]
+|Tools for working with W3C XML Documents.
 
 
 |xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService]

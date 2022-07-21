@@ -33,6 +33,8 @@ import org.apache.isis.applib.annotation.Property;
 import lombok.Getter;
 import lombok.Setter;
 
+import graphql.com.google.common.collect.ComparisonChain;
+
 //@Profile("demo-jpa")
 @Entity
 @Table(

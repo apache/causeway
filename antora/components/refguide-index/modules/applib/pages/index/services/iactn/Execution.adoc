@@ -22,37 +22,37 @@ class Execution<T, E> {
 }
 ----
 
-<.> xref:#setParent__Execution[setParent(Execution)]
+<.> xref:#setParent_Execution[setParent(Execution)]
 +
 --
  *NOT API* : intended to be called only by the framework.
 --
-<.> xref:#getChildren__[getChildren()]
+<.> xref:#getChildren_[getChildren()]
 +
 --
 The actions/property edits made in turn via the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] .
 --
-<.> xref:#setEvent__E[setEvent(E)]
+<.> xref:#setEvent_E[setEvent(E)]
 +
 --
  *NOT API* : intended to be called only by the framework.
 --
-<.> xref:#setCompletedAt__Timestamp_MetricsService[setCompletedAt(Timestamp, MetricsService)]
+<.> xref:#setCompletedAt_Timestamp_MetricsService[setCompletedAt(Timestamp, MetricsService)]
 +
 --
  *NOT API* : intended to be called only by the framework.
 --
-<.> xref:#setReturned__Object[setReturned(Object)]
+<.> xref:#setReturned_Object[setReturned(Object)]
 +
 --
  *NOT API* : intended to be called only by the framework.
 --
-<.> xref:#setThrew__Exception[setThrew(Exception)]
+<.> xref:#setThrew_Exception[setThrew(Exception)]
 +
 --
  *NOT API* : intended to be called only by the framework.
 --
-<.> xref:#setDto__T[setDto(T)]
+<.> xref:#setDto_T[setDto(T)]
 +
 --
  *NOT API* : Set by framework (implementation of _org.apache.isis.core.metamodel.execution.InternalInteraction.MemberExecutor_ )
@@ -60,37 +60,37 @@ The actions/property edits made in turn via the xref:refguide:applib:index/servi
 
 == Members
 
-[#setParent__Execution]
+[#setParent_Execution]
 === setParent(Execution)
 
  *NOT API* : intended to be called only by the framework.
 
-[#getChildren__]
+[#getChildren_]
 === getChildren()
 
 The actions/property edits made in turn via the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] .
 
-[#setEvent__E]
+[#setEvent_E]
 === setEvent(E)
 
  *NOT API* : intended to be called only by the framework.
 
-[#setCompletedAt__Timestamp_MetricsService]
+[#setCompletedAt_Timestamp_MetricsService]
 === setCompletedAt(Timestamp, MetricsService)
 
  *NOT API* : intended to be called only by the framework.
 
-[#setReturned__Object]
+[#setReturned_Object]
 === setReturned(Object)
 
  *NOT API* : intended to be called only by the framework.
 
-[#setThrew__Exception]
+[#setThrew_Exception]
 === setThrew(Exception)
 
  *NOT API* : intended to be called only by the framework.
 
-[#setDto__T]
+[#setDto_T]
 === setDto(T)
 
  *NOT API* : Set by framework (implementation of _org.apache.isis.core.metamodel.execution.InternalInteraction.MemberExecutor_ )

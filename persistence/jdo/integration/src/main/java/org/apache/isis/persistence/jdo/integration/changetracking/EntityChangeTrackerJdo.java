@@ -217,7 +217,7 @@ implements
     }
 
     private void enableCommandPublishing() {
-        val alreadySet = persitentChangesEncountered.getAndSet(true);
+        val alreadySet = persistentChangesEncountered.getAndSet(true);
         if(!alreadySet) {
             val command = currentInteraction().getCommand();
             command.updater().setSystemStateChanged(true);
@@ -410,6 +410,6 @@ implements
 
     private final LongAdder numberEntitiesLoaded = new LongAdder();
     private final LongAdder entityChangeEventCount = new LongAdder();
-    private final AtomicBoolean persitentChangesEncountered = new AtomicBoolean();
+    private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
 
 }

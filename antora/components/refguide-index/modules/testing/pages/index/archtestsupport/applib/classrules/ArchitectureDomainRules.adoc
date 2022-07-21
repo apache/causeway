@@ -30,72 +30,72 @@ class ArchitectureDomainRules {
 }
 ----
 
-<.> xref:#every_logicalTypeName_must_be_unique__[every_logicalTypeName_must_be_unique()]
+<.> xref:#every_logicalTypeName_must_be_unique_[every_logicalTypeName_must_be_unique()]
 +
 --
 This rule requires that classes annotated the `logicalTypeName` must be unique across all non-abstract xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] s and xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] s
 --
-<.> xref:#every_DomainObject_must_also_be_annotated_with_DomainObjectLayout__[every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()]
+<.> xref:#every_DomainObject_must_also_be_annotated_with_DomainObjectLayout_[every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()]
 +
 --
 This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout] annotation.
 --
-<.> xref:#every_DomainService_must_also_be_annotated_with_DomainServiceLayout__[every_DomainService_must_also_be_annotated_with_DomainServiceLayout()]
+<.> xref:#every_DomainService_must_also_be_annotated_with_DomainServiceLayout_[every_DomainService_must_also_be_annotated_with_DomainServiceLayout()]
 +
 --
 This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout] annotation.
 --
-<.> xref:#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL__[every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL()]
+<.> xref:#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL_[every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL()]
 +
 --
 This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotation/Nature.adoc[Nature] of _Nature#VIEW_MODEL VIEW_MODEL_ .
 --
-<.> xref:#every_Action_mixin_must_follow_naming_convention__[every_Action_mixin_must_follow_naming_convention()]
+<.> xref:#every_Action_mixin_must_follow_naming_convention_[every_Action_mixin_must_follow_naming_convention()]
 +
 --
 This rule requires that action mixin classes should follow the naming convention `ClassName_actionId` , where the `ClassName` is the parameter type of a 1-arg constructor. In addition, there should be a method to be invoked for the method (typically "act", but checked against _DomainObject#mixinMethod() @DomainObject#mixinMethod_ if overridden.
 --
-<.> xref:#every_Property_mixin_must_follow_naming_convention__[every_Property_mixin_must_follow_naming_convention()]
+<.> xref:#every_Property_mixin_must_follow_naming_convention_[every_Property_mixin_must_follow_naming_convention()]
 +
 --
 This rule requires that action mixin classes should follow the naming convention `ClassName_propertyId` , where the `ClassName` is the parameter type of a 1-arg constructor. In addition, there should be a method to be invoked for the method (typically "prop", but checked against _DomainObject#mixinMethod() @DomainObject#mixinMethod_ if overridden.
 --
-<.> xref:#every_Collection_mixin_must_follow_naming_convention__[every_Collection_mixin_must_follow_naming_convention()]
+<.> xref:#every_Collection_mixin_must_follow_naming_convention_[every_Collection_mixin_must_follow_naming_convention()]
 +
 --
 This rule requires that action mixin classes should follow the naming convention `ClassName_collectionId` , where the `ClassName` is the parameter type of a 1-arg constructor. In addition, there should be a method to be invoked for the method (typically "coll", but checked against _DomainObject#mixinMethod() @DomainObject#mixinMethod_ if overridden.
 --
-<.> xref:#every_Repository_must_follow_naming_conventions__[every_Repository_must_follow_naming_conventions()]
+<.> xref:#every_Repository_must_follow_naming_conventions_[every_Repository_must_follow_naming_conventions()]
 +
 --
 This rule requires that classes annotated with the _Repository_ annotation should follow the naming convention `XxxRepository` .
 --
-<.> xref:#every_Controller_must_be_follow_naming_conventions__[every_Controller_must_be_follow_naming_conventions()]
+<.> xref:#every_Controller_must_be_follow_naming_conventions_[every_Controller_must_be_follow_naming_conventions()]
 +
 --
 This rule requires that classes annotated with the _org.springframework.stereotype.Controller_ annotation should follow the naming convention `XxxController` .
 --
-<.> xref:#every_class_named_Repository_must_be_annotated_correctly__[every_class_named_Repository_must_be_annotated_correctly()]
+<.> xref:#every_class_named_Repository_must_be_annotated_correctly_[every_class_named_Repository_must_be_annotated_correctly()]
 +
 --
 This rule requires that classes named `XxxRepository` should also be annotated with the _org.springframework.stereotype.Repository_ annotation.
 --
-<.> xref:#every_class_named_Controller_must_be_annotated_correctly__[every_class_named_Controller_must_be_annotated_correctly()]
+<.> xref:#every_class_named_Controller_must_be_annotated_correctly_[every_class_named_Controller_must_be_annotated_correctly()]
 +
 --
 This rule requires that classes named `XxxController` should also be annotated with the _org.springframework.stereotype.Controller_ annotation.
 --
-<.> xref:#every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient__[every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient()]
+<.> xref:#every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient_[every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient()]
 +
 --
 This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _javax.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _javax.xml.bind.annotation.XmlTransient_ annotation.
 --
-<.> xref:#every_injected_field_of_serializable_view_model_must_be_transient__[every_injected_field_of_serializable_view_model_must_be_transient()]
+<.> xref:#every_injected_field_of_serializable_view_model_must_be_transient_[every_injected_field_of_serializable_view_model_must_be_transient()]
 +
 --
 This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _javax.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _javax.xml.bind.annotation.XmlTransient_ annotation.
 --
-<.> xref:#every_finder_method_in_Repository_must_return_either_Collection_or_Optional__[every_finder_method_in_Repository_must_return_either_Collection_or_Optional()]
+<.> xref:#every_finder_method_in_Repository_must_return_either_Collection_or_Optional_[every_finder_method_in_Repository_must_return_either_Collection_or_Optional()]
 +
 --
 This rule requires that finders of repos reutrn either _java.util.Collection_ s or _java.util.Optional_ s.
@@ -103,92 +103,92 @@ This rule requires that finders of repos reutrn either _java.util.Collection_ s 
 
 == Members
 
-[#every_logicalTypeName_must_be_unique__]
+[#every_logicalTypeName_must_be_unique_]
 === every_logicalTypeName_must_be_unique()
 
 This rule requires that classes annotated the `logicalTypeName` must be unique across all non-abstract xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] s and xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] s
 
-[#every_DomainObject_must_also_be_annotated_with_DomainObjectLayout__]
+[#every_DomainObject_must_also_be_annotated_with_DomainObjectLayout_]
 === every_DomainObject_must_also_be_annotated_with_DomainObjectLayout()
 
 This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[DomainObjectLayout] annotation.
 
-[#every_DomainService_must_also_be_annotated_with_DomainServiceLayout__]
+[#every_DomainService_must_also_be_annotated_with_DomainServiceLayout_]
 === every_DomainService_must_also_be_annotated_with_DomainServiceLayout()
 
 This rule requires that classes annotated with the xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[DomainServiceLayout] annotation.
 
-[#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL__]
+[#every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL_]
 === every_jaxb_view_model_must_also_be_annotated_with_DomainObject_nature_VIEW_MODEL()
 
 This rule requires that classes annotated with the _XmlRootElement_ annotation must also be annotated with the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying a xref:refguide:applib:index/annotation/Nature.adoc[Nature] of _Nature#VIEW_MODEL VIEW_MODEL_ .
 
 This is required because the framework uses Spring to detect entities and view models (the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation is actually a meta-annotation for Spring's _org.springframework.stereotype.Component_ annotation.
 
-[#every_Action_mixin_must_follow_naming_convention__]
+[#every_Action_mixin_must_follow_naming_convention_]
 === every_Action_mixin_must_follow_naming_convention()
 
 This rule requires that action mixin classes should follow the naming convention `ClassName_actionId` , where the `ClassName` is the parameter type of a 1-arg constructor. In addition, there should be a method to be invoked for the method (typically "act", but checked against _DomainObject#mixinMethod() @DomainObject#mixinMethod_ if overridden.
 
 The rationale is so that the pattern is easy to spot and to search for, with common programming model errors detected during unit testing rather tha relying on integration testing.
 
-[#every_Property_mixin_must_follow_naming_convention__]
+[#every_Property_mixin_must_follow_naming_convention_]
 === every_Property_mixin_must_follow_naming_convention()
 
 This rule requires that action mixin classes should follow the naming convention `ClassName_propertyId` , where the `ClassName` is the parameter type of a 1-arg constructor. In addition, there should be a method to be invoked for the method (typically "prop", but checked against _DomainObject#mixinMethod() @DomainObject#mixinMethod_ if overridden.
 
 The rationale is so that the pattern is easy to spot and to search for, with common programming model errors detected during unit testing rather tha relying on integration testing.
 
-[#every_Collection_mixin_must_follow_naming_convention__]
+[#every_Collection_mixin_must_follow_naming_convention_]
 === every_Collection_mixin_must_follow_naming_convention()
 
 This rule requires that action mixin classes should follow the naming convention `ClassName_collectionId` , where the `ClassName` is the parameter type of a 1-arg constructor. In addition, there should be a method to be invoked for the method (typically "coll", but checked against _DomainObject#mixinMethod() @DomainObject#mixinMethod_ if overridden.
 
 The rationale is so that the pattern is easy to spot and to search for, with common programming model errors detected during unit testing rather tha relying on integration testing.
 
-[#every_Repository_must_follow_naming_conventions__]
+[#every_Repository_must_follow_naming_conventions_]
 === every_Repository_must_follow_naming_conventions()
 
 This rule requires that classes annotated with the _Repository_ annotation should follow the naming convention `XxxRepository` .
 
 The rationale is so that the pattern is easy to spot and to search for,
 
-[#every_Controller_must_be_follow_naming_conventions__]
+[#every_Controller_must_be_follow_naming_conventions_]
 === every_Controller_must_be_follow_naming_conventions()
 
 This rule requires that classes annotated with the _org.springframework.stereotype.Controller_ annotation should follow the naming convention `XxxController` .
 
 The rationale is so that the pattern is easy to spot and to search for,
 
-[#every_class_named_Repository_must_be_annotated_correctly__]
+[#every_class_named_Repository_must_be_annotated_correctly_]
 === every_class_named_Repository_must_be_annotated_correctly()
 
 This rule requires that classes named `XxxRepository` should also be annotated with the _org.springframework.stereotype.Repository_ annotation.
 
 The rationale is so that the pattern is easy to spot and to search for,
 
-[#every_class_named_Controller_must_be_annotated_correctly__]
+[#every_class_named_Controller_must_be_annotated_correctly_]
 === every_class_named_Controller_must_be_annotated_correctly()
 
 This rule requires that classes named `XxxController` should also be annotated with the _org.springframework.stereotype.Controller_ annotation.
 
 The rationale is so that the pattern is easy to spot and to search for,
 
-[#every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient__]
+[#every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient_]
 === every_injected_field_of_jaxb_view_model_must_be_annotated_with_XmlTransient()
 
 This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _javax.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _javax.xml.bind.annotation.XmlTransient_ annotation.
 
 The rationale here is that injected services are managed by the runtime and are not/cannot be serialized to XML.
 
-[#every_injected_field_of_serializable_view_model_must_be_transient__]
+[#every_injected_field_of_serializable_view_model_must_be_transient_]
 === every_injected_field_of_serializable_view_model_must_be_transient()
 
 This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB _javax.xml.bind.annotation.XmlRootElement_ annotation) must also be annotated with JAXB _javax.xml.bind.annotation.XmlTransient_ annotation.
 
 The rationale here is that injected services are managed by the runtime and are not/cannot be serialized to XML.
 
-[#every_finder_method_in_Repository_must_return_either_Collection_or_Optional__]
+[#every_finder_method_in_Repository_must_return_either_Collection_or_Optional_]
 === every_finder_method_in_Repository_must_return_either_Collection_or_Optional()
 
 This rule requires that finders of repos reutrn either _java.util.Collection_ s or _java.util.Optional_ s.

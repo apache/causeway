@@ -697,6 +697,7 @@ public class ApplicationModule {
 <.> specifies this class' package as a root to scan for Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component]s.
 
 
+[#appmanifest]
 ==== AppManifest
 
 The "app manifest" is the top-level Spring `@Configuration`.

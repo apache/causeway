@@ -38,10 +38,8 @@ extends Execution<PropertyEditDto, PropertyDomainEvent<?, ?>> {
             final Interaction interaction,
             final Identifier memberId,
             final Object target,
-            final Object newValue,
-            final String targetMember,
-            final String targetClass) {
-        super(interaction, InteractionType.PROPERTY_EDIT, memberId, target, targetMember, targetClass);
+            final Object newValue) {
+        super(interaction, InteractionType.PROPERTY_EDIT, memberId, target);
         this.newValue = newValue;
     }
 

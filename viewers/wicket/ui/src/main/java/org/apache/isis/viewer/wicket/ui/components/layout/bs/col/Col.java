@@ -250,6 +250,10 @@ implements HasDynamicallyVisibleContent {
 
             for (CollectionLayoutData collection : collections) {
 
+                if (entityModel.getManagedObject().getSpecification().getAssociation(collection.getId()).isEmpty()) {
+                    continue;
+                }
+
                 final String id = collectionRv.newChildId();
 
                 // we successively trample over the layout data; but that's ok, this is synchronous code anyway...

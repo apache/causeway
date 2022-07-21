@@ -11,7 +11,7 @@ class Converter {
 }
 ----
 
-<.> xref:#mdToHtml__String[mdToHtml(String)]
+<.> xref:#mdToHtml_String[mdToHtml(String)]
 +
 --
 For syntax highlighting to work, the client/browser needs to load specific java-script and css.
@@ -19,7 +19,7 @@ For syntax highlighting to work, the client/browser needs to load specific java-
 
 == Members
 
-[#mdToHtml__String]
+[#mdToHtml_String]
 === mdToHtml(String)
 
 For syntax highlighting to work, the client/browser needs to load specific java-script and css.

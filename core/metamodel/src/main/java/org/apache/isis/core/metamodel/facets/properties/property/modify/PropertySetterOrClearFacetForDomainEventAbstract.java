@@ -189,7 +189,7 @@ implements
                 // update the current execution with the DTO (memento)
                 val propertyEditDto =
                         PropertySetterOrClearFacetForDomainEventAbstract.this.getInteractionDtoServiceInternal().asPropertyEditDto(
-                                owningProperty, head.getOwner(), newValueAdapterMutatable);
+                                owningProperty, head.getOwner(), newValueAdapterMutatable, head);
                 currentExecution.setDto(propertyEditDto);
 
                 // ... post the executing event

@@ -21,7 +21,7 @@ class AbstractSpecification2<T> {
 }
 ----
 
-<.> xref:#satisfiesTranslatable__Object[satisfiesTranslatable(Object)]
+<.> xref:#satisfiesTranslatable_Object[satisfiesTranslatable(Object)]
 +
 --
 Checks not null and is correct type, and delegates to _#satisfiesTranslatableSafely(Object)_ .
@@ -29,7 +29,7 @@ Checks not null and is correct type, and delegates to _#satisfiesTranslatableSaf
 
 == Members
 
-[#satisfiesTranslatable__Object]
+[#satisfiesTranslatable_Object]
 === satisfiesTranslatable(Object)
 
 Checks not null and is correct type, and delegates to _#satisfiesTranslatableSafely(Object)_ .

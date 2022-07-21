@@ -342,6 +342,7 @@ Finally, revert the last commit (backing out changes to `antora.yml` files):
 git revert HEAD
 ----
 
+[#update-index-html-site-yml-generate]
 === Update `index.html` & `site.yml` & generate
 
 Lastly, we update `index.html` and then `site.yml`

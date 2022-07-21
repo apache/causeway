@@ -51,7 +51,7 @@ From this the framework infers the `Customer` domain entity, which in turn has a
 `@Property` is not mandatory, though in many cases it will be present in order to specify additional semantics.
 
 `@PropertyLayout` is not mandatory either.
-Whether it is present or not depends to some extent on your preferred style: the UI semantics can be specified either in code within this annotation, or can be specified through the companion xref:userguide:fun:ui.adoc#layout-file[layout file].
+Whether it is present or not depends to some extent on your preferred style: the UI semantics can be specified either in code within this annotation, or can be specified through the companion xref:userguide:fun:ui.adoc#layout-file-styles[layout file].
 
 [TIP]
 ====
@@ -87,7 +87,7 @@ From this the framework infers the `orders` _collection_.
 As with properties, the `@Collection` annotation is not mandatory, though in many cases it will be present in order to specify additional semantics.
 
 Similarly, `@CollectionLayout` is not mandatory either.
-Whether it is present or not depends to some extent on your preferred style: the UI semantics can be specified either in code within this annotation, or can be specified through the companion xref:userguide:fun:ui.adoc#layout-file[layout file].
+Whether it is present or not depends to some extent on your preferred style: the UI semantics can be specified either in code within this annotation, or can be specified through the companion xref:userguide:fun:ui.adoc#layout-file-styles[layout file].
 
 [TIP]
 ====
@@ -146,7 +146,7 @@ From this the framework infers a the `placeOrder` _action_.
 
 Whether the `@Action` annotation is required to identify an action method is configurable; some teams prefer actions to be explicitly called out, others prefer that any "left over" public methods are identified as actions.
 
-The use of `@ActionLayout` is optional, the UI semantics can be specified either in code within this annotation, or can be specified through the companion xref:userguide:fun:ui.adoc#layout-file[layout file].
+The use of `@ActionLayout` is optional, the UI semantics can be specified either in code within this annotation, or can be specified through the companion xref:userguide:fun:ui.adoc#layout-file-styles[layout file].
 
 As with properties, both `@Parameter` and `@ParameterLayout` are also optional.
 Note though that UI hints for parameters _cannot_ be specified in the layout file.

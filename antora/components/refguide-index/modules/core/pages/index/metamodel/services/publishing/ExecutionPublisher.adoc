@@ -1,4 +1,4 @@
-= ExecutionPublisher _(interface)_
+= ExecutionPublisher
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Notifies xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s that an action has been executed or a property edited.
@@ -15,17 +15,17 @@ interface ExecutionPublisher {
 }
 ----
 
-<.> xref:#publishActionInvocation__Execution[publishActionInvocation(Execution)]
+<.> xref:#publishActionInvocation_Execution[publishActionInvocation(Execution)]
 +
 --
 Notifies xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s of an action invocation through the _ExecutionSubscriber#onExecution(Execution)_ callback.
 --
-<.> xref:#publishPropertyEdit__Execution[publishPropertyEdit(Execution)]
+<.> xref:#publishPropertyEdit_Execution[publishPropertyEdit(Execution)]
 +
 --
 Notifies xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s of a property edit through the _ExecutionSubscriber#onExecution(Execution)_ callback.
 --
-<.> xref:#withPublishingSuppressed__Supplier[withPublishingSuppressed(Supplier)]
+<.> xref:#withPublishingSuppressed_Supplier[withPublishingSuppressed(Supplier)]
 +
 --
 Slightly hokey wormhole (anti)pattern to disable publishing for mixin associations.
@@ -33,17 +33,17 @@ Slightly hokey wormhole (anti)pattern to disable publishing for mixin associatio
 
 == Members
 
-[#publishActionInvocation__Execution]
+[#publishActionInvocation_Execution]
 === publishActionInvocation(Execution)
 
 Notifies xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s of an action invocation through the _ExecutionSubscriber#onExecution(Execution)_ callback.
 
-[#publishPropertyEdit__Execution]
+[#publishPropertyEdit_Execution]
 === publishPropertyEdit(Execution)
 
 Notifies xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s of a property edit through the _ExecutionSubscriber#onExecution(Execution)_ callback.
 
-[#withPublishingSuppressed__Supplier]
+[#withPublishingSuppressed_Supplier]
 === withPublishingSuppressed(Supplier)
 
 Slightly hokey wormhole (anti)pattern to disable publishing for mixin associations.

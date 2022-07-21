@@ -57,17 +57,17 @@ enum Rel {
 }
 ----
 
-<.> xref:#getName__[getName()]
+<.> xref:#getName_[getName()]
 +
 --
 full spec name with rel-def and suffix, eg. _urn:org.apache.isis.restfulobjects:rels/menuBars_
 --
-<.> xref:#getSimpleName__[getSimpleName()]
+<.> xref:#getSimpleName_[getSimpleName()]
 +
 --
 suffix only, eg. _menuBars_
 --
-<.> xref:#andParam__String_String[andParam(String, String)]
+<.> xref:#andParam_String_String[andParam(String, String)]
 +
 --
 For those xref:refguide:viewer:index/restfulobjects/applib/Rel.adoc[Rel] s that also take a param
@@ -75,17 +75,17 @@ For those xref:refguide:viewer:index/restfulobjects/applib/Rel.adoc[Rel] s that 
 
 == Members
 
-[#getName__]
+[#getName_]
 === getName()
 
 full spec name with rel-def and suffix, eg. _urn:org.apache.isis.restfulobjects:rels/menuBars_
 
-[#getSimpleName__]
+[#getSimpleName_]
 === getSimpleName()
 
 suffix only, eg. _menuBars_
 
-[#andParam__String_String]
+[#andParam_String_String]
 === andParam(String, String)
 
 For those xref:refguide:viewer:index/restfulobjects/applib/Rel.adoc[Rel] s that also take a param

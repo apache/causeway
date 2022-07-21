@@ -25,7 +25,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.applib.IsisModuleApplibChangeAndExecutionLoggers;
-import org.apache.isis.applib.IsisModuleApplibObjectMetadataMixins;
+import org.apache.isis.applib.IsisModuleApplibMixins;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
@@ -33,7 +33,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 @Configuration
 @Import({
     IsisModuleApplibChangeAndExecutionLoggers.class,
-    IsisModuleApplibObjectMetadataMixins.class,
+    IsisModuleApplibMixins.class,
     IsisModuleCoreRuntimeServices.class,
     IsisModuleTestingFixturesApplib.class,
 })

@@ -62,7 +62,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-exceldownload-ui</artifactId>
+			<artifactId>isis-extensions-exceldownload-wicket-ui</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
@@ -74,20 +74,71 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-shiro-realm</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.testing</groupId>
 			<artifactId>isis-testing-h2console-ui</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-sse-applib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-metamodel</artifactId>
+		</dependency>
+
+
+		<!-- JDO specific -->
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-commandlog-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-sessionlog-persistence-jdo</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
+		</dependency>
+
+
+		<!-- JPA specific -->
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-commandlog-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-sessionlog-persistence-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
+		</dependency>
+
+
 
 		<!-- OTHER DEPENDENCIES -->
 
@@ -111,16 +162,6 @@
             <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-fullcalendar-applib</artifactId>
         </dependency>
-
-		<!-- Extensions -->
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-commandlog-jdo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-commandlog-jpa</artifactId>
-		</dependency>
 
 		<!-- test -->
 		<dependency>

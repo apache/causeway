@@ -9,7 +9,6 @@ View model identified by xref:refguide:applib:index/services/appfeat/Application
 .ApplicationFeatureViewModel.java
 ----
 class ApplicationFeatureViewModel {
-  public static final String LOGICAL_TYPE_NAME;
   ApplicationFeatureViewModel()
   ApplicationFeatureViewModel(ApplicationFeatureId featureId)
   ApplicationFeatureViewModel(String encodedMemento)
@@ -34,17 +33,17 @@ class ApplicationFeatureViewModel {
 }
 ----
 
-<.> xref:#title__[title()]
+<.> xref:#title_[title()]
 +
 --
 having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
 --
-<.> xref:#getMemberName__[getMemberName()]
+<.> xref:#getMemberName_[getMemberName()]
 +
 --
 For packages and class names, will be null.
 --
-<.> xref:#getParentNamespace__[getParentNamespace()]
+<.> xref:#getParentNamespace_[getParentNamespace()]
 +
 --
 The parent package feature of this class or package.
@@ -52,17 +51,17 @@ The parent package feature of this class or package.
 
 == Members
 
-[#title__]
+[#title_]
 === title()
 
 having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
 
-[#getMemberName__]
+[#getMemberName_]
 === getMemberName()
 
 For packages and class names, will be null.
 
-[#getParentNamespace__]
+[#getParentNamespace_]
 === getParentNamespace()
 
 The parent package feature of this class or package.

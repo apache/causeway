@@ -73,7 +73,7 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
      * Uniquely identifies the action or property.
      */
     @Getter
-    private final Identifier memberIdentifier;
+    private final Identifier logicalMemberIdentifier;
 
     /**
      * The target of the action invocation.
@@ -87,18 +87,6 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
     private final Object target;
 
     /**
-     * A human-friendly description of the class of the target object.
-     */
-    @Getter
-    private final String targetClass;
-
-    /**
-     * The human-friendly name of the action invoked/property edited on the target object.
-     */
-    @Getter
-    private final String targetMember;
-
-    /**
      * Captures metrics before the Execution Dto is present.
      */
     private int numberObjectsLoadedBefore;
@@ -110,17 +98,13 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
     protected Execution(
             final Interaction interaction,
             final InteractionType interactionType,
-            final Identifier memberIdentifier,
-            final Object target,
-            final String targetMember,
-            final String targetClass) {
+            final Identifier logicalMemberIdentifier,
+            final Object target) {
 
         this.interaction = interaction;
         this.interactionType = interactionType;
-        this.memberIdentifier = memberIdentifier;
+        this.logicalMemberIdentifier = logicalMemberIdentifier;
         this.target = target;
-        this.targetMember = targetMember;
-        this.targetClass = targetClass;
     }
 
 

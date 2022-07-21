@@ -18,6 +18,8 @@
  */
 package demoapp.web;
 
+import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
+import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
 import org.apache.isis.extensions.secman.jpa.IsisModuleExtSecmanPersistenceJpa;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -34,7 +36,7 @@ import demoapp.dom.DemoModuleJpa;
 
     // Security Manager Extension (secman)
     IsisModuleExtSecmanPersistenceJpa.class,
-
+    IsisModuleExtCommandLogPersistenceJpa.class
 })
 
 public class DemoAppManifestJpa {

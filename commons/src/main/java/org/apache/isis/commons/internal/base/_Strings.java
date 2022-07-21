@@ -84,6 +84,16 @@ public final class _Strings {
      */
     public static final String[] emptyArray = new String[0];
 
+    public static String trimmed(final String str, final int lengthOfField) {
+        if (str == null) {
+            return null;
+        }
+        if (str.length() > lengthOfField) {
+            return str.substring(0, lengthOfField - 3) + "...";
+        }
+        return str;
+    }
+
     // -- PAIR OF STRINGS
 
     public static interface KeyValuePair extends Map.Entry<String, String> {

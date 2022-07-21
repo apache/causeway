@@ -221,14 +221,13 @@ public final class InteractionDtoUtils {
     public static ActionInvocationDto newActionInvocation(
             final int sequence,
             final Bookmark targetBookmark,
-            final String targetTitle,
             final String actionIdentifier,
             final List<ParamDto> parameterDtos,
             final String user) {
 
         return (ActionInvocationDto) newMemberExecutionDto(
                 InteractionType.ACTION_INVOCATION, sequence,
-                targetBookmark, targetTitle, actionIdentifier,
+                targetBookmark, actionIdentifier,
                 parameterDtos, null,
                 user);
     }
@@ -236,13 +235,12 @@ public final class InteractionDtoUtils {
     public static PropertyEditDto newPropertyEdit(
             final int sequence,
             final Bookmark targetBookmark,
-            final String targetTitle,
             final String propertyIdentifier,
             final ValueWithTypeDto newValueDto,
             final String user) {
         return (PropertyEditDto) newMemberExecutionDto(
                 InteractionType.PROPERTY_EDIT, sequence,
-                targetBookmark, targetTitle, propertyIdentifier,
+                targetBookmark, propertyIdentifier,
                 null, newValueDto,
                 user);
     }
@@ -251,11 +249,10 @@ public final class InteractionDtoUtils {
             final InteractionType type,
             final int sequence,
             final Bookmark targetBookmark,
-            final String targetTitle,
             final String memberId,
             final List<ParamDto> parameterDtos,
             final ValueWithTypeDto newValueDto,
-            final String user) {
+            final String username) {
 
         final MemberExecutionDto executionDto;
         if(type == InteractionType.ACTION_INVOCATION) {
@@ -278,12 +275,10 @@ public final class InteractionDtoUtils {
         final OidDto target = targetBookmark.toOidDto();
         executionDto.setTarget(target);
 
-        executionDto.setTitle(targetTitle);
-        executionDto.setUser(user);
+        executionDto.setUsername(username);
 
         final String logicalMemberId = deriveLogicalMemberId(targetBookmark, memberId);
         executionDto.setLogicalMemberIdentifier(logicalMemberId);
-        executionDto.setMemberIdentifier(memberId);
         return executionDto;
     }
 

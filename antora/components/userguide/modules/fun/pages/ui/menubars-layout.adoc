@@ -155,7 +155,7 @@ For example, here's a fragment of that provided by the xref:docs:starters:simple
 <.> Menu on the menu bar
 <.> References an action of a domain service
 <.> Divider is placed between each section
-<.> Identifies the service through its xref:refguide:applib:index/annotation/DomainService.adoc#objectType[object type]
+<.> Identifies the service through its xref:refguide:applib:index/annotation/DomainService.adoc#logicalTypeName[logical type name]
 <.> Optionally override the name inferred from the action
 <.> Domain service actions not specified elsewhere are displayed on the "Other" menu (with `unreferencedActions` attribute set to `true`). +
 +

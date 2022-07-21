@@ -9,24 +9,16 @@
 The framework provides default implementations for many of the xref:refguide:applib-svc:about.adoc[domain services].
 This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
-For example, suppose you wanted to provide your own implementation of xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocaleProvider].
+For example, suppose you wanted to provide your own implementation of xref:refguide:applib:index/services/i18n/LanguageProvider.adoc[LanguageProvider].
 The trick is to use the `@javax.annotation.Priority` annotation.
 
 Here's how:
 
 [source,java]
 ----
-import org.springframework.stereotype.Service;
-import org.springframework.core.Ordered;
-
 @Service
 @Priority(PriorityPrecedence.EARLY)                                // <.>
-public class MyLocaleProvider implements LocaleProvider {
-    @Override
-    public Locale getLocale() {
-        // ...
-    }
-}
+public class MyLanguageProvider implements LanguageProvider { ... }
 ----
 <.> `PriorityPrecedence` (in the Apache Isis applib) provides some standard values.
 
@@ -37,22 +29,19 @@ It's sometimes useful to decorate the existing implementation (ie have your own 
 
 [source,java]
 ----
-import org.springframework.stereotype.Service;
-import org.springframework.core.Ordered;
-
 @Service
 @Priority(PriorityPrecedence.FIRST)                             // <.>
-public class MyLocaleProvider implements LocaleProvider {
+public class MyLanguageProvider implements LanguageProvider {
 
-    @Inject List<LocaleProvider> localeProviders;           // <.>
+    @Inject List<LocaleProvider> localeProviders;               // <.>
 
     @Override
-    public Locale getLocale() {
-        return localeProviders.stream()                     // <.>
-                .filter(x -> x != this)                     // <.>
-                .findFirst()                                // <.>
-                .map(LocaleProvider::getLocale)             // <.>
-                .orElseThrow(RuntimeException::new);        // <.>
+    public Optional<Locale> getPreferredLanguage() {
+        return localeProviders.stream()                         // <.>
+                .filter(x -> x != this)                         // <.>
+                .findFirst()                                    // <.>
+                .map(LanguageProvider::getPreferredLanguage)    // <.>
+                .orElseThrow(RuntimeException::new);            // <.>
     }
 }
 ----
@@ -66,5 +55,5 @@ public class MyLocaleProvider implements LocaleProvider {
 
 [TIP]
 ====
-None of the default implementations provided by the framework use `Ordered(OrderPrecedence.HIGHEST)`, so all can be overridden if required.
+None of the default implementations provided by the framework use `PriorityPrecedence(PriorityPrecedence.HIGHEST)`, so all can be overridden if required.
 ====

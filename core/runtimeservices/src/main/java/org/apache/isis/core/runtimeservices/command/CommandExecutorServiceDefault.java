@@ -179,7 +179,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 dto.getTimestamp(), dto.getInteractionId());
 
         final MemberDto memberDto = dto.getMember();
-        final String memberId = memberDto.getMemberIdentifier();
+        final String logicalMemberIdentifier = memberDto.getLogicalMemberIdentifier();
 
         final OidsDto oidsDto = CommandDtoUtils.targetsFor(dto);
         final List<OidDto> targetOidDtos = oidsDto.getOid();
@@ -192,7 +192,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             for (OidDto targetOidDto : targetOidDtos) {
 
                 val targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
-                final ObjectAction objectAction = findObjectAction(targetAdapter, memberId);
+                final ObjectAction objectAction = findObjectAction(targetAdapter, logicalMemberIdentifier);
 
                 // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
                 // it will switch the targetAdapter to be the mixedInAdapter transparently
@@ -238,7 +238,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                             Bookmark.forOidDto(targetOidDto));
                 }
 
-                final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, memberId);
+                final OneToOneAssociation property = findOneToOneAssociation(targetAdapter, logicalMemberIdentifier);
 
                 val newValueAdapter = valueMarshaller.recoverPropertyFrom(propertyDto);
 
@@ -289,14 +289,14 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private static ObjectAction findObjectAction(
             final ManagedObject targetAdapter,
-            final String fullyQualifiedActionId) throws RuntimeException {
+            final String logicalMemberIdentifier) throws RuntimeException {
 
         final ObjectSpecification specification = targetAdapter.getSpecification();
 
         // we use the local identifier because the fullyQualified version includes the class name.
         // that is a problem for us if the property is inherited, because it will be the class name of the declaring
         // superclass, rather than the concrete class of the target that we are inspecting here.
-        val localActionId = localPartOf(fullyQualifiedActionId);
+        val localActionId = localPartOf(logicalMemberIdentifier);
 
         final ObjectAction objectAction = findActionElseNull(specification, localActionId);
         if(objectAction == null) {
@@ -307,12 +307,12 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private static OneToOneAssociation findOneToOneAssociation(
             final ManagedObject targetAdapter,
-            final String fullyQualifiedPropertyId) throws RuntimeException {
+            final String logicalMemberIdentifier) throws RuntimeException {
 
         // we use the local identifier because the fullyQualified version includes the class name.
         // that is a problem for us if the property is inherited, because it will be the class name of the declaring
         // superclass, rather than the concrete class of the target that we are inspecting here.
-        val localPropertyId = localPartOf(fullyQualifiedPropertyId);
+        val localPropertyId = localPartOf(logicalMemberIdentifier);
 
         final ObjectSpecification specification = targetAdapter.getSpecification();
 

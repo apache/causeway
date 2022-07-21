@@ -14,12 +14,12 @@ class JobExecutionData {
 }
 ----
 
-<.> xref:#getString__String_String[getString(String, String)]
+<.> xref:#getString_String_String[getString(String, String)]
 +
 --
 Lookup property from the job detail.
 --
-<.> xref:#setString__String_String[setString(String, String)]
+<.> xref:#setString_String_String[setString(String, String)]
 +
 --
 Save key into the job detail obtained from context.
@@ -27,12 +27,12 @@ Save key into the job detail obtained from context.
 
 == Members
 
-[#getString__String_String]
+[#getString_String_String]
 === getString(String, String)
 
 Lookup property from the job detail.
 
-[#setString__String_String]
+[#setString_String_String]
 === setString(String, String)
 
 Save key into the job detail obtained from context.

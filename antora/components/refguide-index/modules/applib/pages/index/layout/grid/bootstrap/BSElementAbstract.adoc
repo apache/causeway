@@ -14,7 +14,7 @@ class BSElementAbstract {
 }
 ----
 
-<.> xref:#getCssClass__[getCssClass()]
+<.> xref:#getCssClass_[getCssClass()]
 +
 --
 Any additional CSS classes to render on the page element corresponding to this object, eg as per theBootstrap mixinsor just for custom styling.
@@ -22,7 +22,7 @@ Any additional CSS classes to render on the page element corresponding to this o
 
 == Members
 
-[#getCssClass__]
+[#getCssClass_]
 === getCssClass()
 
 Any additional CSS classes to render on the page element corresponding to this object, eg as per theBootstrap mixinsor just for custom styling.

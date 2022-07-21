@@ -62,10 +62,8 @@ import lombok.val;
  * @since 1.x revised for 2.0 {@index}
  */
 @Named(UserMemento.LOGICAL_TYPE_NAME)
-@DomainObject(
-        nature = Nature.VIEW_MODEL)
-@DomainObjectLayout(
-        titleUiEvent = UserMemento.TitleUiEvent.class)
+@DomainObject(nature = Nature.VIEW_MODEL)
+@DomainObjectLayout(titleUiEvent = UserMemento.TitleUiEvent.class)
 @lombok.Value @lombok.Builder
 public class UserMemento
 implements Serializable {

@@ -1,4 +1,4 @@
-= IResourceContext _(interface)_
+= IResourceContext
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Provides access to request-specific context (eg HTTP headers), session-specific context (eg authentication) and global context (eg configuration settings).
@@ -33,32 +33,32 @@ interface IResourceContext {
 }
 ----
 
-<.> xref:#restfulUrlFor__String[restfulUrlFor(String)]
+<.> xref:#restfulUrlFor_String[restfulUrlFor(String)]
 +
 --
 Prepends with the servlet's base URI
 --
-<.> xref:#applicationUrlFor__String[applicationUrlFor(String)]
+<.> xref:#applicationUrlFor_String[applicationUrlFor(String)]
 +
 --
 Prepends with the application's base URI.
 --
-<.> xref:#getAcceptableMediaTypes__[getAcceptableMediaTypes()]
+<.> xref:#getAcceptableMediaTypes_[getAcceptableMediaTypes()]
 +
 --
 Returns the _HttpHeaders#getAcceptableMediaTypes() acceptable media types_ as obtained from _HttpHeaders_ .
 --
-<.> xref:#getInteractionInitiatedBy__[getInteractionInitiatedBy()]
+<.> xref:#getInteractionInitiatedBy_[getInteractionInitiatedBy()]
 +
 --
 Whether this interaction was initiated directly by a _InteractionInitiatedBy#USER user_ (or indirectly by the _InteractionInitiatedBy#FRAMEWORK framework_ .
 --
-<.> xref:#canEagerlyRender__ManagedObject[canEagerlyRender(ManagedObject)]
+<.> xref:#canEagerlyRender_ManagedObject[canEagerlyRender(ManagedObject)]
 +
 --
 To avoid infinite loops when eagerly rendering graphs of objects as _DomainObjectReprRenderer#asEventSerialization() events_ .
 --
-<.> xref:#getIntent__[getIntent()]
+<.> xref:#getIntent_[getIntent()]
 +
 --
 Applies only when rendering a domain object.
@@ -66,32 +66,32 @@ Applies only when rendering a domain object.
 
 == Members
 
-[#restfulUrlFor__String]
+[#restfulUrlFor_String]
 === restfulUrlFor(String)
 
 Prepends with the servlet's base URI
 
-[#applicationUrlFor__String]
+[#applicationUrlFor_String]
 === applicationUrlFor(String)
 
 Prepends with the application's base URI.
 
-[#getAcceptableMediaTypes__]
+[#getAcceptableMediaTypes_]
 === getAcceptableMediaTypes()
 
 Returns the _HttpHeaders#getAcceptableMediaTypes() acceptable media types_ as obtained from _HttpHeaders_ .
 
-[#getInteractionInitiatedBy__]
+[#getInteractionInitiatedBy_]
 === getInteractionInitiatedBy()
 
 Whether this interaction was initiated directly by a _InteractionInitiatedBy#USER user_ (or indirectly by the _InteractionInitiatedBy#FRAMEWORK framework_ .
 
-[#canEagerlyRender__ManagedObject]
+[#canEagerlyRender_ManagedObject]
 === canEagerlyRender(ManagedObject)
 
 To avoid infinite loops when eagerly rendering graphs of objects as _DomainObjectReprRenderer#asEventSerialization() events_ .
 
-[#getIntent__]
+[#getIntent_]
 === getIntent()
 
 Applies only when rendering a domain object.

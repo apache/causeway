@@ -23,7 +23,7 @@ class BSMenuBars {
 }
 ----
 
-<.> xref:#getMetadataError__[getMetadataError()]
+<.> xref:#getMetadataError_[getMetadataError()]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
@@ -31,7 +31,7 @@ For diagnostics; populated by the framework if and only if a metadata error.
 
 == Members
 
-[#getMetadataError__]
+[#getMetadataError_]
 === getMetadataError()
 
 For diagnostics; populated by the framework if and only if a metadata error.

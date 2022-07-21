@@ -162,7 +162,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
                 return null;
             }
             @Override
-            public EntityFacet createEntityFacet(final FacetHolder facetHolder) {
+            public EntityFacet createEntityFacet(final FacetHolder facetHolder, Class<?> entityClass) {
                 return EntityFacet.forTesting(PersistenceStack.JDO, facetHolder);
             }
         };

@@ -7,6 +7,7 @@ Apache Isis' Restful Objects viewer provides a number of additional resource end
 
 This chapter provides details of these resources, the link ``Rel``s to access them, and the resultant representations.
 
+[#menubars]
 == MenuBars
 
 The xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService] provides the `menu.layout.xml` XML document which defines how to group the various domain service actions into menubars, menus and menu sections.
@@ -126,6 +127,7 @@ The representation returned by the domain object resource (link:https://www.rest
 Note that because of dynamic icons (the
 xref:refguide:applib-methods:ui-hints.adoc#iconName[iconName()] supporting method) the image returned can vary on an instance-by-instance basis.
 
+[#domain-object-layout]
 == Domain Object Layout
 
 The xref:refguide:applib:index/services/grid/GridService.adoc[GridService] provides an XML document which defines the layout of any of domain object.
@@ -246,7 +248,7 @@ The representation returned by this resource is essentially exactly the same as 
 
 == Static vs Dynamic Resources
 
-The xref:vro:ROOT:layout-resources.adoc#menu-layout[menu layout] representation includes all possible domain services; it does not follow that the current user has access to all of these actions (some may be hidden or disabled).
+The xref:vro:ROOT:layout-resources.adoc#menubars[menu layout] representation includes all possible domain services; it does not follow that the current user has access to all of these actions (some may be hidden or disabled).
 
 Similarly, the xref:vro:ROOT:layout-resources.adoc#domain-object-layout[domain object layout] representation include all _possible_ properties, collections and actions of the domain object; again, the current user may not have access to all of these members.
 It is also often the case that the domain object's internal state will determine which members to make available (eg, show only one of "lock" and "unlock" actions at any given time).

@@ -231,7 +231,7 @@ As here, it is often sufficient to provide a single instance (as it is compared 
 
 === XML Marshalling Support
 
-Apache Isis' unit testing support provides the xref:refguide:testing:index/unittestsupport/applib/matchers[JaxbMatchers] while the core applib also provides the useful xref:refguide:applib:index/util/JaxbUtil.adoc[JaxbUtil] class.
+Apache Isis' unit testing support provides the xref:refguide:testing:index/unittestsupport/applib/matchers/JaxbMatchers.adoc[JaxbMatchers] while the core applib also provides the useful xref:refguide:applib:index/util/JaxbUtil.adoc[JaxbUtil] class.
 
 These can be useful for example if you have example XML-serialized representations of the SOAP requests and response payloads and want to use these within your tests.
 

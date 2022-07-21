@@ -51,6 +51,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.applib.util.schema.InteractionsDtoUtils;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
@@ -140,6 +141,7 @@ implements
                 .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
                 .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
                 .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
+                .addRunnable("InteractionsDtoUtils::init", InteractionsDtoUtils::init)
                 .addRunnable("CommandDtoUtils::init", CommandDtoUtils::init)
                 ;
 

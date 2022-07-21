@@ -13,7 +13,7 @@ class JsonNodeUtils {
 }
 ----
 
-<.> xref:#walkNodeUpTo__ObjectNode_List[walkNodeUpTo(ObjectNode, List)]
+<.> xref:#walkNodeUpTo_ObjectNode_List[walkNodeUpTo(ObjectNode, List)]
 +
 --
 Walks the path, ensuring keys exist and are maps, or creating required maps as it goes.
@@ -21,7 +21,7 @@ Walks the path, ensuring keys exist and are maps, or creating required maps as i
 
 == Members
 
-[#walkNodeUpTo__ObjectNode_List]
+[#walkNodeUpTo_ObjectNode_List]
 === walkNodeUpTo(ObjectNode, List)
 
 Walks the path, ensuring keys exist and are maps, or creating required maps as it goes.

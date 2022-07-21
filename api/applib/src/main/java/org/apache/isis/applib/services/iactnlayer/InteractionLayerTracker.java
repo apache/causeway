@@ -27,7 +27,17 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 /**
  * Provides access to the current {@link InteractionLayer}.
  *
+ * <p>
+ *     The bottom-most interaction &quot;layer&quot; can be thought of as a short-lived session with the database.
+ *     A new layer can be started, for example using the {@link org.apache.isis.applib.services.sudo.SudoService},
+ *     or the {@link InteractionService}.  These allow the user (or the clock or other environmental aspects) to be
+ *     temporarily altered - similar to a &quot;su&quot; command in Unix.
+ * </p>
+ *
+ * @see Interaction
+ * @see InteractionLayer
  * @see InteractionService
+ * @see InteractionProvider
  * @see org.apache.isis.applib.services.sudo.SudoService
  * @see org.apache.isis.applib.services.clock.ClockService
  *

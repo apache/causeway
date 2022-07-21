@@ -1,4 +1,4 @@
-= CommandOutcomeHandler _(interface)_
+= CommandOutcomeHandler
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Used by xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService] , to update a xref:refguide:applib:index/services/command/Command.adoc[Command] after it has been executed.
@@ -17,22 +17,22 @@ interface CommandOutcomeHandler {
 }
 ----
 
-<.> xref:#getStartedAt__[getStartedAt()]
+<.> xref:#getStartedAt_[getStartedAt()]
 +
 --
 Reads the `startedAt` field from the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent)
 --
-<.> xref:#setStartedAt__Timestamp[setStartedAt(Timestamp)]
+<.> xref:#setStartedAt_Timestamp[setStartedAt(Timestamp)]
 +
 --
 Sets the `startedAt` field on the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent)
 --
-<.> xref:#setCompletedAt__Timestamp[setCompletedAt(Timestamp)]
+<.> xref:#setCompletedAt_Timestamp[setCompletedAt(Timestamp)]
 +
 --
 Sets the `completedAt` field on the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent)
 --
-<.> xref:#setResult__Try[setResult(Try)]
+<.> xref:#setResult_Try[setResult(Try)]
 +
 --
 Sets the result of the execute, represented as a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , on the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent).
@@ -40,24 +40,24 @@ Sets the result of the execute, represented as a xref:refguide:applib:index/serv
 
 == Members
 
-[#getStartedAt__]
+[#getStartedAt_]
 === getStartedAt()
 
 Reads the `startedAt` field from the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent)
 
 This is to ensure that it isn't overwritten by _#setStartedAt(Timestamp)_ .
 
-[#setStartedAt__Timestamp]
+[#setStartedAt_Timestamp]
 === setStartedAt(Timestamp)
 
 Sets the `startedAt` field on the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent)
 
-[#setCompletedAt__Timestamp]
+[#setCompletedAt_Timestamp]
 === setCompletedAt(Timestamp)
 
 Sets the `completedAt` field on the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent)
 
-[#setResult__Try]
+[#setResult_Try]
 === setResult(Try)
 
 Sets the result of the execute, represented as a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , on the underlying xref:refguide:applib:index/services/command/Command.adoc[Command] (or persistent equivalent).

@@ -24,32 +24,32 @@ class RepresentationService {
 }
 ----
 
-<.> xref:#objectRepresentation__IResourceContext_ManagedObject[objectRepresentation(IResourceContext, ManagedObject)]
+<.> xref:#objectRepresentation_IResourceContext_ManagedObject[objectRepresentation(IResourceContext, ManagedObject)]
 +
 --
 Returns a representation of a single object.
 --
-<.> xref:#propertyDetails__IResourceContext_ManagedProperty[propertyDetails(IResourceContext, ManagedProperty)]
+<.> xref:#propertyDetails_IResourceContext_ManagedProperty[propertyDetails(IResourceContext, ManagedProperty)]
 +
 --
 Returns a representation of a single property of an object.
 --
-<.> xref:#collectionDetails__IResourceContext_ManagedCollection[collectionDetails(IResourceContext, ManagedCollection)]
+<.> xref:#collectionDetails_IResourceContext_ManagedCollection[collectionDetails(IResourceContext, ManagedCollection)]
 +
 --
 Returns a representation of a single collection of an object.
 --
-<.> xref:#actionPrompt__IResourceContext_ManagedAction[actionPrompt(IResourceContext, ManagedAction)]
+<.> xref:#actionPrompt_IResourceContext_ManagedAction[actionPrompt(IResourceContext, ManagedAction)]
 +
 --
 Returns a representation of a single action (prompt) of an object.
 --
-<.> xref:#actionResult__IResourceContext_ObjectAndActionInvocation[actionResult(IResourceContext, ObjectAndActionInvocation)]
+<.> xref:#actionResult_IResourceContext_ObjectAndActionInvocation[actionResult(IResourceContext, ObjectAndActionInvocation)]
 +
 --
 Returns a representation of a single action invocation of an object.
 --
-<.> xref:#buildResponse__Function[buildResponse(Function)]
+<.> xref:#buildResponse_Function[buildResponse(Function)]
 +
 --
 Iterates over all _#contentNegotiationServices injected_ xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _Response.ResponseBuilder_ using the provided function.
@@ -57,42 +57,42 @@ Iterates over all _#contentNegotiationServices injected_ xref:refguide:viewer:in
 
 == Members
 
-[#objectRepresentation__IResourceContext_ManagedObject]
+[#objectRepresentation_IResourceContext_ManagedObject]
 === objectRepresentation(IResourceContext, ManagedObject)
 
 Returns a representation of a single object.
 
 By default this representation is as per section 14.4 of the RO spec, v1.0.
 
-[#propertyDetails__IResourceContext_ManagedProperty]
+[#propertyDetails_IResourceContext_ManagedProperty]
 === propertyDetails(IResourceContext, ManagedProperty)
 
 Returns a representation of a single property of an object.
 
 By default this representation is as per section 16.4 of the RO spec, v1.0.
 
-[#collectionDetails__IResourceContext_ManagedCollection]
+[#collectionDetails_IResourceContext_ManagedCollection]
 === collectionDetails(IResourceContext, ManagedCollection)
 
 Returns a representation of a single collection of an object.
 
 By default this representation is as per section 17.5 of the RO spec, v1.0.
 
-[#actionPrompt__IResourceContext_ManagedAction]
+[#actionPrompt_IResourceContext_ManagedAction]
 === actionPrompt(IResourceContext, ManagedAction)
 
 Returns a representation of a single action (prompt) of an object.
 
 By default this representation is as per section 18.2 of the RO spec, v1.0.
 
-[#actionResult__IResourceContext_ObjectAndActionInvocation]
+[#actionResult_IResourceContext_ObjectAndActionInvocation]
 === actionResult(IResourceContext, ObjectAndActionInvocation)
 
 Returns a representation of a single action invocation of an object.
 
 By default this representation is as per section 19.5 of the RO spec, v1.0.
 
-[#buildResponse__Function]
+[#buildResponse_Function]
 === buildResponse(Function)
 
 Iterates over all _#contentNegotiationServices injected_ xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _Response.ResponseBuilder_ using the provided function.

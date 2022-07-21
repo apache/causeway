@@ -19,9 +19,7 @@
 package org.apache.isis.core.runtimeservices.bookmarks;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -33,15 +31,14 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
-import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -128,7 +125,8 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     @Override
     public Bookmark bookmarkForElseFail(final @Nullable Object domainObject) {
         return bookmarkFor(domainObject)
-                .orElseThrow(()->_Exceptions.illegalArgument(
+                .orElseThrow(
+                        ()->_Exceptions.illegalArgument(
                         "cannot create bookmark for type %s",
                         domainObject!=null
                             ? specificationLoader.specForType(domainObject.getClass())
@@ -140,15 +138,24 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     // -- SERIALIZING ADAPTER IMPLEMENTATION
 
     @Override
-    public <T> T read(final Class<T> cls, final Serializable value) {
+    public <T> T read(final Class<T> valueClass, final Serializable value) {
 
-        if(Bookmark.class.equals(cls)) {
+        val idStringifierIfAny = idStringifierLookupService.lookup(valueClass);
+        if(idStringifierIfAny.isPresent()) {
+            IdStringifier<T> idStringifier = idStringifierIfAny.get();
+            return idStringifier.destring((String)value, null);
+        }
+
+        // see if the value can be handled as a Bookmark
+        if(Bookmark.class.equals(valueClass)) {
             return _Casts.uncheckedCast(value);
         }
 
+        // otherwise, perhaps the value itself is a Bookmark, in which case we treat it as a
+        // reference to an Object (probably an entity) to be looked up.
         if(Bookmark.class.isAssignableFrom(value.getClass())) {
-            final Bookmark valueBookmark = (Bookmark) value;
-            return _Casts.uncheckedCast(lookup(valueBookmark).orElse(null));
+            final Bookmark valueAsBookmark = (Bookmark) value;
+            return _Casts.uncheckedCast(lookup(valueAsBookmark).orElse(null));
         }
 
         return _Casts.uncheckedCast(value);
@@ -156,57 +163,22 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
 
     @Override
     public Serializable write(final Object value) {
-        if(isPredefinedSerializable(value.getClass())) {
-            return (Serializable) value;
-        } else {
-            return bookmarkForElseFail(value);
+        return write(_Casts.uncheckedCast(value), value.getClass());
+    }
+
+    private <T> Serializable write(T value, Class<T> aClass) {
+
+        Optional<IdStringifier<T>> idStringifierIfAny = idStringifierLookupService.lookup(aClass);
+        if(idStringifierIfAny.isPresent()) {
+            IdStringifier<T> idStringifier = idStringifierIfAny.get();
+            return idStringifier.enstring(value);
         }
+
+        return bookmarkForElseFail(value);
     }
 
     // -- HELPER
 
-    private static final Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(
-            String.class, String[].class,
-            Class.class, Class[].class,
-            Character.class, Character[].class, char[].class,
-            Boolean.class, Boolean[].class, boolean[].class,
-            // Numbers
-            Byte[].class, byte[].class,
-            Short[].class, short[].class,
-            Integer[].class, int[].class,
-            Long[].class, long[].class,
-            Float[].class, float[].class,
-            Double[].class, double[].class
-            );
-
-    private static final List<Class<? extends Serializable>> serializableTypes = _Lists.of(
-            java.util.Date.class,
-            java.sql.Date.class,
-            Enum.class,
-            Bookmark.class,
-            TreeState.class
-            );
-
-    private static boolean isPredefinedSerializable(final Class<?> cls) {
-        if(!Serializable.class.isAssignableFrom(cls)) {
-            return false;
-        }
-        // primitive ... boolean, byte, char, short, int, long, float, and double.
-        if(cls.isPrimitive() || Number.class.isAssignableFrom(cls)) {
-            return true;
-        }
-        //[ahuber] any non-scalar values could be problematic, so we are careful with wild-cards here
-        if(cls.getName().startsWith("java.time.")) {
-            return true;
-        }
-        if(cls.getName().startsWith("org.joda.time.")) {
-            return true;
-        }
-        if(serializableFinalTypes.contains(cls)) {
-            return true;
-        }
-        return serializableTypes.stream().anyMatch(t->t.isAssignableFrom(cls));
-    }
-
+    @Inject IdStringifierLookupService idStringifierLookupService;
 
 }

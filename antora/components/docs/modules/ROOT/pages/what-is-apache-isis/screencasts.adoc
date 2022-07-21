@@ -138,7 +138,7 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
-Implementing business logic using a (no-arg) action, and associating with a property using either the xref:refguide:applib:index/annotation/MemberOrder.adoc[@MemberOrder] annotations or using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts].
+Implementing business logic using a (no-arg) action, and associating with a property using either the `@MemberOrder` annotations or using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts].
 |X||||||||X||
 
 
@@ -154,7 +154,7 @@ include::screencasts/playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=CwM430UH5WE[014^] +
 
-Using the xref:refguide:applib-methods:ui-hints.adoc#title[title()], xref:refguide:applib-methods:ui-hints.adoc#iconName()] and xref:refguide:applib-methods:ui-hints.adoc#cssclass[cssClass()] so that end-users can distinguish domain objects within the UI.
+Using the xref:refguide:applib-methods:ui-hints.adoc#title[title()], xref:refguide:applib-methods:ui-hints.adoc#iconName()] and xref:refguide:applib-methods:ui-hints.adoc#cssClass[cssClass()] so that end-users can distinguish domain objects within the UI.
 |X||X||||||X||
 
 

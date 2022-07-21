@@ -19,6 +19,11 @@ The persistence layer SPIs influence how the framework persists domain objects, 
 |(Attempt to) map the returned data into the representation required by the client's HTTP `Accept` header.
 
 The framework will call all available implementations until a mapping is made (chain of responsibility pattern).
+The framework itself provides a couple of implementations:
+
+* xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto]
+* xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto]
+
 
 
 |xref:refguide:applib:index/services/userreg/EmailNotificationService.adoc[EmailNotificationService]
@@ -32,9 +37,11 @@ The framework will call all available implementations until a mapping is made (c
 |xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService]
 |Convert certain exceptions (eg foreign or unique key violation in the database) into a format that can be rendered to the end-user.
 
+All available implementations are called (chain of responsibility pattern).
 
 
-|xref:refguide:applib:index/services/hint/HintStore.adoc[HintIdProvider]
+
+|xref:refguide:applib:index/services/hint/HintIdProvider.adoc[HintIdProvider]
 |Provide a "logical" identity for view models such that UI hints can be stored for them.
 
 
@@ -42,9 +49,6 @@ The framework will call all available implementations until a mapping is made (c
 |Stores UI hints on a per-object basis.
 For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.
 
-
-|xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocaleProvider]
-|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService].
 
 
 |xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService]
@@ -63,7 +67,7 @@ xref:security:secman:about.adoc[SecMan] provides an implementation of this servi
 
 
 |xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService]
-|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocalProvider].
+|Translate an app's UI, messages and exceptions for the current user (as per the language provided by xref:refguide:applib:index/services/i18n/LanguageProvider.adoc[LanguageProvider].
 
 
 |xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService]

@@ -30,7 +30,6 @@ import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -56,22 +55,22 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override
-    public String identifierFor(final ObjectSpecification spec, final Object pojo) {
+    public String identifierFor(final Object pojo) {
         throw _Exceptions.unsupportedOperation();
     }
 
     @Override
-    public ManagedObject fetchByIdentifier(final ObjectSpecification spec, final Bookmark bookmark) {
+    public ManagedObject fetchByIdentifier(final Bookmark bookmark) {
         throw _Exceptions.unsupportedOperation();
     }
 
     @Override
-    public Can<ManagedObject> fetchByQuery(final ObjectSpecification spec, final Query<?> query) {
+    public Can<ManagedObject> fetchByQuery(final Query<?> query) {
         throw _Exceptions.unsupportedOperation();
     }
 
     @Override
-    public void persist(final ObjectSpecification spec, final Object pojo) {
+    public void persist(final Object pojo) {
         throw _Exceptions.unsupportedOperation();
     }
 
@@ -81,7 +80,7 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override
-    public void delete(final ObjectSpecification spec, final Object pojo) {
+    public void delete(final Object pojo) {
         throw _Exceptions.unsupportedOperation();
     }
 

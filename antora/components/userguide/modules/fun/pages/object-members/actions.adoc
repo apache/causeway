@@ -22,10 +22,10 @@ You can find further discussion on when and why you should write actions xref:ov
 
 == Defining actions
 
-If the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action.explicit[isis.applib.annotation.action.explicit] configuration property is not set (the default), then any "left-over" `public` methods will be considered to be actions.
+If the xref:refguide:config:sections/isis.core.meta-model.introspector.adoc#isis.core.meta-model.introspector.policy[isis.core.meta-model.introspector.policy] configuration property is set to xref:refguide:applib:index/annotation/Introspection.adoc#ANNOTATION_OPTIONAL[ANNOTATION_OPTIONAL] or is left unset (the default), then any "left-over" `public` methods will be considered to be actions.
 These are methods that do not represent properties or collections, and that are not recognised as xref:business-rules.adoc[supporting methods] (such as `hideXxx()` or `disableXxx()`).
 
-Conversely, if that xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action.explicit[isis.applib.annotation.action.explicit] configuration property _is_ set, then the xref:refguide:applib:index/annotation/Action.adoc[@Action] annotation must be applied for the method to be treated as an action.
+If the policy is set to xref:refguide:applib:index/annotation/Introspection.adoc#ANNOTATION_REQUIRED[ANNOTATION_REQUIRED], then the xref:refguide:applib:index/annotation/Action.adoc[@Action] annotation must be applied for the method to be treated as an action.
 The `@Action` annotation is also used to specify additional domain semantics, for example regarding idempotency.
 
 For example:
@@ -50,6 +50,9 @@ Otherwise, the type of the parameter is used.
 For the `product` parameter this is reasonable, but not so for the `quantity` parameter (which would by default show up with a name of "int".
 In such a case the xref:refguide:applib:index/annotation/ParameterLayout.adoc[@ParameterLayout] annotation can be used to provide the UI hint.
 
+The policy can also be set to xref:refguide:applib:index/annotation/Introspection.adoc#ENCAPSULATION_ENABLED[ENCAPSULATION_ENABLED].
+This is similar to xref:refguide:applib:index/annotation/Introspection.adoc#ANNOTATION_REQUIRED[ANNOTATION_REQUIRED], but methods can have any visibility, including `private`.
+Supporting methods (`hideXxx()` and the like)) must be annotated with xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport].
 
 
 [#reference-parameter-types]

@@ -24,22 +24,29 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
+import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
+ * Simple implementation of {@link EntityPropertyChangeSubscriber} that just logs out the {@link EntityPropertyChange}
+ * to a debug log.
+ *
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.applib.EntityPropertyChangeLogger")
+@Named(EntityPropertyChangeLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("logging")
 @Log4j2
 public class EntityPropertyChangeLogger implements EntityPropertyChangeSubscriber {
+
+    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".EntityPropertyChangeLogger";
 
     @Override
     public boolean isEnabled() {

@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.commanddto.conmap;
 
 import lombok.val;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
@@ -38,18 +39,20 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
- * 
+ *
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.applib.ContentMappingServiceForCommandDto")
+@Named(ContentMappingServiceForCommandDto.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("CommandDto")
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ContentMappingServiceForCommandDto";
+
     @Override @Nullable
     public Object map(final Object object, final List<MediaType> acceptableMediaTypes) {
-        final boolean supported = Util.isSupported(CommandDto.class, acceptableMediaTypes);
+        final boolean supported = isSupported(CommandDto.class, acceptableMediaTypes);
         if(!supported) {
             return null;
         }
@@ -80,7 +83,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         if(commandDto == null) {
             return null;
         }
-        
+
         // global processors
         for (val commandDtoProcessorService : commandDtoProcessorServices) {
             commandDto = commandDtoProcessorService.process(domainObject, commandDto);

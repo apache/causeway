@@ -16,7 +16,7 @@ class ValueSemanticsAbstract<T> {
 }
 ----
 
-<.> xref:#getExamples__[getExamples()]
+<.> xref:#getExamples_[getExamples()]
 +
 --
 JUnit support.
@@ -24,7 +24,7 @@ JUnit support.
 
 == Members
 
-[#getExamples__]
+[#getExamples_]
 === getExamples()
 
 JUnit support.

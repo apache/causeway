@@ -31,32 +31,32 @@ class FieldSet {
 }
 ----
 
-<.> xref:#getId__[getId()]
+<.> xref:#getId_[getId()]
 +
 --
 As per <div id="...">...</div> : must be unique across entire page.
 --
-<.> xref:#isUnreferencedActions__[isUnreferencedActions()]
+<.> xref:#isUnreferencedActions_[isUnreferencedActions()]
 +
 --
 Whether this fieldset should be used to hold any unreferenced actions (contributed or "native").
 --
-<.> xref:#isUnreferencedProperties__[isUnreferencedProperties()]
+<.> xref:#isUnreferencedProperties_[isUnreferencedProperties()]
 +
 --
 Whether this fieldset should be used to hold any unreferenced properties (contributed or "native").
 --
-<.> xref:#getName__[getName()]
+<.> xref:#getName_[getName()]
 +
 --
 Corresponds to the _PropertyLayout#fieldSetName()_ (when applied to properties).
 --
-<.> xref:#getOwner__[getOwner()]
+<.> xref:#getOwner_[getOwner()]
 +
 --
 Owner.
 --
-<.> xref:#getMetadataError__[getMetadataError()]
+<.> xref:#getMetadataError_[getMetadataError()]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
@@ -64,38 +64,38 @@ For diagnostics; populated by the framework if and only if a metadata error.
 
 == Members
 
-[#getId__]
+[#getId_]
 === getId()
 
 As per <div id="...">...</div> : must be unique across entire page.
 
-[#isUnreferencedActions__]
+[#isUnreferencedActions_]
 === isUnreferencedActions()
 
 Whether this fieldset should be used to hold any unreferenced actions (contributed or "native").
 
 Any layout must have precisely one fieldset or xref:refguide:applib:index/layout/grid/bootstrap/BSCol.adoc[BSCol] that has this attribute set.
 
-[#isUnreferencedProperties__]
+[#isUnreferencedProperties_]
 === isUnreferencedProperties()
 
 Whether this fieldset should be used to hold any unreferenced properties (contributed or "native").
 
 Any grid layout must have precisely one fieldset that has this attribute set.
 
-[#getName__]
+[#getName_]
 === getName()
 
 Corresponds to the _PropertyLayout#fieldSetName()_ (when applied to properties).
 
-[#getOwner__]
+[#getOwner_]
 === getOwner()
 
 Owner.
 
 Set programmatically by framework after reading in from XML.
 
-[#getMetadataError__]
+[#getMetadataError_]
 === getMetadataError()
 
 For diagnostics; populated by the framework if and only if a metadata error.

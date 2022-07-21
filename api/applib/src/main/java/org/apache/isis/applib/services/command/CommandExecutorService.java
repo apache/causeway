@@ -64,7 +64,7 @@ public interface CommandExecutorService {
          * user being taken from the {@link Command}.
          */
         SWITCH_USER_ONLY((interactionContext, commandDto) -> {
-            return interactionContext.withUser(UserMemento.ofName(commandDto.getUser()));
+            return interactionContext.withUser(UserMemento.ofName(commandDto.getUsername()));
         }),
 
         /**
@@ -76,7 +76,7 @@ public interface CommandExecutorService {
          * </p>
          */
         SWITCH_USER_AND_TIME((interactionContext, commandDto) -> {
-            return interactionContext.withUser(UserMemento.ofName(commandDto.getUser()))
+            return interactionContext.withUser(UserMemento.ofName(commandDto.getUsername()))
                                      .withClock(VirtualClock.nowAt(timestampOf(commandDto)));
         }),
         ;

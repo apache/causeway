@@ -44,7 +44,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 @DomainObjectLayout(paged=100)
 public class ApplicationNamespace extends ApplicationFeatureViewModel {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationNamespace";
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationNamespace";
 
     public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationNamespace, T> {}
 

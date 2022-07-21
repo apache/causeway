@@ -20,9 +20,9 @@ class WorksheetSpec {
 }
 ----
 
-<.> xref:#WorksheetSpec__Class_String[WorksheetSpec(Class, String)]
+<.> xref:#WorksheetSpec_Class_String[WorksheetSpec(Class, String)]
 
 == Members
 
-[#WorksheetSpec__Class_String]
+[#WorksheetSpec_Class_String]
 === WorksheetSpec(Class, String)

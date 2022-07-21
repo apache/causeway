@@ -17,13 +17,13 @@ class Recognition {
 }
 ----
 
-<.> xref:#of__Category_String[of(Category, String)]
-<.> xref:#toMessage__TranslationService[toMessage(TranslationService)]
+<.> xref:#of_Category_String[of(Category, String)]
+<.> xref:#toMessage_TranslationService[toMessage(TranslationService)]
 +
 --
 Translates the _#getReason() reason_ and prepends with a translation of _#getCategory() category_ , using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] ..
 --
-<.> xref:#toMessageNoCategory__TranslationService[toMessageNoCategory(TranslationService)]
+<.> xref:#toMessageNoCategory_TranslationService[toMessageNoCategory(TranslationService)]
 +
 --
 Translates the _#getReason() reason_ alone (ignoring the _#getCategory() category_ , using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] ..
@@ -31,15 +31,15 @@ Translates the _#getReason() reason_ alone (ignoring the _#getCategory() categor
 
 == Members
 
-[#of__Category_String]
+[#of_Category_String]
 === of(Category, String)
 
-[#toMessage__TranslationService]
+[#toMessage_TranslationService]
 === toMessage(TranslationService)
 
 Translates the _#getReason() reason_ and prepends with a translation of _#getCategory() category_ , using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] ..
 
-[#toMessageNoCategory__TranslationService]
+[#toMessageNoCategory_TranslationService]
 === toMessageNoCategory(TranslationService)
 
 Translates the _#getReason() reason_ alone (ignoring the _#getCategory() category_ , using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] ..

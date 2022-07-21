@@ -18,7 +18,16 @@ The persistence layer SPIs are to control persistence and caching of domain obje
 |xref:refguide:applib:index/services/queryresultscache/QueryResultsCacheControl.adoc[QueryResultsCacheControl]
 |Controls whether the xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache] is enabled.
 
+|xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier]
+|Converts the id (or primary key) of an entity into a string representation (and back again).
 
+This SPI affects the representation of the identity of the domain entity, for example within a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark].
+This id string also appears in URLs (of Wicket and REST API), and in mementos, for example of xref:refguide:applib:index/services/command/Command.adoc[Command]s and xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction]s.
+
+The framework provides default implementations for all of the standard value types used for Ids.
+
+Applications should use this SPI to provide persistence of application-defined primary keys.
+(An example of this can be found in the xref:userguide:executionlog:about.adoc[Execution Log] extension).
 
 |===
 

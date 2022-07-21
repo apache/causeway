@@ -48,6 +48,7 @@ Security is discussed in more detail xref:security.adoc[here].
 
 
 
+[#deprecated]
 === Deprecated
 
 These configuration properties that can be used to suppress or simplify the default RO-spec representations.
@@ -74,7 +75,7 @@ Nevertheless, those configuration properties are:
 
 [NOTE]
 ====
-If these configuration settings are set in conjunction with using the xref:vro:ROOT:content-negotiation/apache-isis-v2-profile.adoc#apache-isis-profile[Apache Isis profile], then the special `$$ro` property in the representations with reflect these settings.
+If these configuration settings are set in conjunction with using the xref:vro:ROOT:content-negotiation/apache-isis-v2-profile.adoc#apache-isis-v2-profile-simplified-representation[Apache Isis profile], then the special `$$ro` property in the representations with reflect these settings.
 ====
 
 

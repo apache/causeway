@@ -21,11 +21,29 @@ package org.apache.isis.extensions.commandlog.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.core.config.util.SpringProfileUtil;
+import org.apache.isis.extensions.commandlog.applib.app.CommandLogMenu;
+import org.apache.isis.extensions.commandlog.applib.contributions.HasInteractionId_commandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.contributions.HasUsername_recentCommandsByUser;
+import org.apache.isis.extensions.commandlog.applib.contributions.Object_recentCommands;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
 @Configuration
 @Import({
+        // @DomainService's
+        CommandLogMenu.class,
+
+        // mixins
+        HasInteractionId_commandLogEntry.class,
+        HasUsername_recentCommandsByUser.class,
+        Object_recentCommands.class,
+
+        // @Service's
+        CommandSubscriberForCommandLog.class,
+        CommandLogEntry.TableColumnOrderDefault.class,
 })
 public class IsisModuleExtCommandLogApplib
 implements ModuleWithFixtures {

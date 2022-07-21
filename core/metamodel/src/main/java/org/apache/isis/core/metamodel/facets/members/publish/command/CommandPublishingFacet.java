@@ -25,6 +25,7 @@ import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
@@ -56,10 +57,11 @@ public interface CommandPublishingFacet extends Facet {
      */
     public static void prepareCommandForPublishing(
             final @NonNull Command command,
+            final @NonNull InteractionHead interactionHead,
             final @NonNull ObjectMember objectMember,
             final @NonNull FacetHolder facetHolder) {
 
-        if(IdentifierUtil.isCommandForMember(command, objectMember)
+        if(IdentifierUtil.isCommandForMember(command, interactionHead, objectMember)
                 && isPublishingEnabled(facetHolder)) {
             command.updater().setPublishingPhase(CommandPublishingPhase.READY);
         }

@@ -49,9 +49,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
 /**
- *
- * Provides a UI to allow domain model metadata (obtained from
- * {@link MetaModelService} to be downloaded within the UI.
+ * Provides a UI to allow domain model metadata (obtained from {@link MetaModelService}) to be downloaded.
  *
  * @since 2.0 {@index}
  */
@@ -66,7 +64,7 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class MetaModelServiceMenu {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".MetaModelServiceMenu";
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".MetaModelServiceMenu";
 
     public static abstract class ActionDomainEvent<T> extends IsisModuleApplib.ActionDomainEvent<T> { }
 

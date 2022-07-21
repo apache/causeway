@@ -49,7 +49,7 @@ import lombok.val;
         },
         properties = {
                 "logging.level.org.apache.isis.testdomain.util.rest.KVStoreForTesting=DEBUG",
-                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG"
+                "logging.level.org.apache.isis.persistence.jdo.datanucleus.persistence.IsisTransactionJdo=DEBUG"
         })
 @TestPropertySource({
     IsisPresets.SilenceWicket

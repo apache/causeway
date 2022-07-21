@@ -53,6 +53,11 @@ public interface ObjectMember extends ObjectFeature {
     /**
      * Returns the {@link ObjectSpecification} representing the class or interface
      * that declares the member represented by this object.
+     *
+     * <p>
+     *     If the member is a regular member, declared on a class, then this returns that type.
+     *     But if the member is a mixin, then this will return the {@link ObjectSpecification} representing the mixin type.
+     * </p>
      */
     ObjectSpecification getDeclaringType();
 

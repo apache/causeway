@@ -33,16 +33,19 @@ import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.i18n.LanguageProvider;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named("isis.runtimeservices.LanguageProviderDefault")
+@Named(LanguageProviderDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class LanguageProviderDefault
 implements LanguageProvider {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleCoreRuntimeServices.NAMESPACE + ".LanguageProviderDefault";
 
     private final InteractionProvider interactionProvider;
 

@@ -144,7 +144,6 @@ image::eclipse-110-project-support.png[width="600px"]
 DataNucleus' enhancer uses the domain object model's own classpath to reference DataNucleus JARs.
 So, even though your domain objects are unlikely to depend on DataNucleus, these references must still be present.
 
-See the section in xref:setupguide:ROOT:hints-and-tips.adoc#datanucleus-enhancer[DataNucleus enhancer] for details of the contents of the `pom.xml`.
 If you've based your app on either the xref:docs:starters:helloworld.adoc[HelloWorld] or the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app, then it'll be set up already.
 
 Then, tell DataNucleus to use the project classpath:
@@ -194,6 +193,7 @@ If you consistently hit problems, then the final recourse is to disable the auto
 Not ideal, we know.
 Please feel free to contribute a better solution :-)
 
+[#running-the-app]
 == Running the App
 
 Create a launch configuration that runs the main class annotated with link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication].
@@ -207,18 +207,18 @@ You might want to do such that each domain project corresponds to a http://www.m
 If you do this, make sure that each project has its own `persistence.xml` file.
 And, remember also to configure Eclipse's DataNucleus plugin for these other domain projects.
 
-== Advanced
-
-In this section are a couple of options that will reduce the length of the change code/build/deploy/review feedback loop.
-
-=== Setting up DCEVM
-
-link:http://github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more reliable hot swapping of the implementation of existing methods.
-
-In the context of Apache Isis, this is very useful for contributed actions and mixins and also view models; you should then be able to write these actions and have them be picked up without restarting the application.
-
-Changing persisting domain entities is more problematic, for two reasons: the JDO/DataNucleus enhancer needs to run on domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.
-You may find that adding actions will work, but adding new properties or collections is much less likely to.
-
-For details of setting up DCEVM, see the xref:setupguide:intellij:hints-and-tips.adoc#setting-up-dcevm[corresponding section] in the IntelliJ documentation.
+//== Advanced
+//
+//In this section are a couple of options that will reduce the length of the change code/build/deploy/review feedback loop.
+//
+//=== Setting up DCEVM
+//
+//link:http://github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more reliable hot swapping of the implementation of existing methods.
+//
+//In the context of Apache Isis, this is very useful for contributed actions and mixins and also view models; you should then be able to write these actions and have them be picked up without restarting the application.
+//
+//Changing persisting domain entities is more problematic, for two reasons: the JDO/DataNucleus enhancer needs to run on domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.
+//You may find that adding actions will work, but adding new properties or collections is much less likely to.
+//
+//For details of setting up DCEVM, see the xref:setupguide:intellij:hints-and-tips.adoc#setting-up-dcevm[corresponding section] in the IntelliJ documentation.
 

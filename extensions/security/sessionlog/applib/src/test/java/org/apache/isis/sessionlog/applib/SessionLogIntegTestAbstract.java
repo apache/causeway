@@ -21,7 +21,6 @@ package org.apache.isis.sessionlog.applib;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.TemporalAmount;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.services.session.SessionLogService;
+import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.sessionlog.applib.dom.SessionLogEntry;
 import org.apache.isis.sessionlog.applib.dom.SessionLogEntryRepository;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -66,7 +65,7 @@ public abstract class SessionLogIntegTestAbstract extends IsisIntegrationTestAbs
 
         List<? extends SessionLogEntry> sessions;
         SessionLogEntry session;
-        Optional<SessionLogEntry> sessionIfAny;
+        Optional<? extends SessionLogEntry> sessionIfAny;
 
         // given
         sessions = sessionLogEntryRepository.findActiveSessions();
@@ -75,7 +74,7 @@ public abstract class SessionLogIntegTestAbstract extends IsisIntegrationTestAbs
         // when
         Session session1 = new Session("fred",  Instant.now().minus(Duration.ofDays(2)));
 
-        sessionLogService.log(SessionLogService.Type.LOGIN, session1.username, session1.getDate(), SessionLogService.CausedBy.USER, session1.sessionGuid, session1.httpSessionId);
+        sessionSubscriber.log(SessionSubscriber.Type.LOGIN, session1.username, session1.getDate(), SessionSubscriber.CausedBy.USER, session1.sessionGuid, session1.httpSessionId);
 
         // then
         sessions = sessionLogEntryRepository.findActiveSessions();
@@ -86,7 +85,7 @@ public abstract class SessionLogIntegTestAbstract extends IsisIntegrationTestAbs
         // when
         Session session2 = new Session("mary", Instant.now().minus(Duration.ofDays(1)));
 
-        sessionLogService.log(SessionLogService.Type.LOGIN, session2.username, session2.getDate(), SessionLogService.CausedBy.USER, session2.sessionGuid, session2.httpSessionId);
+        sessionSubscriber.log(SessionSubscriber.Type.LOGIN, session2.username, session2.getDate(), SessionSubscriber.CausedBy.USER, session2.sessionGuid, session2.httpSessionId);
 
         // then
         sessions = sessionLogEntryRepository.findActiveSessions();
@@ -121,14 +120,14 @@ public abstract class SessionLogIntegTestAbstract extends IsisIntegrationTestAbs
         Assertions.assertThat(sessions).hasSize(1);
 
         // when
-        sessionLogService.log(SessionLogService.Type.LOGOUT, null, session1.getDate(), SessionLogService.CausedBy.USER, session1.sessionGuid, null);
+        sessionSubscriber.log(SessionSubscriber.Type.LOGOUT, null, session1.getDate(), SessionSubscriber.CausedBy.USER, session1.sessionGuid, null);
 
         // then
         sessions = sessionLogEntryRepository.findActiveSessions();
         Assertions.assertThat(sessions).hasSize(1);
         Assertions.assertThat(sessions.get(0)).extracting(SessionLogEntry::getUsername).isEqualTo(session2.username);
 
-        sessionLogService.log(SessionLogService.Type.LOGOUT, null, session2.getDate(), SessionLogService.CausedBy.USER, session2.sessionGuid, null);
+        sessionSubscriber.log(SessionSubscriber.Type.LOGOUT, null, session2.getDate(), SessionSubscriber.CausedBy.USER, session2.sessionGuid, null);
 
         // then
         sessions = sessionLogEntryRepository.findActiveSessions();
@@ -137,7 +136,7 @@ public abstract class SessionLogIntegTestAbstract extends IsisIntegrationTestAbs
 
     }
 
-    @Inject @Qualifier("default") SessionLogService sessionLogService;
-    @Inject SessionLogEntryRepository sessionLogEntryRepository;
+    @Inject @Qualifier("default") SessionSubscriber sessionSubscriber;
+    @Inject SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
 
 }

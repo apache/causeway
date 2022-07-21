@@ -122,8 +122,8 @@ One reason for doing this is to provide a stable API between the domain model an
 
 == See Also
 
-* xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService~Snapshot.adoc[Snapshot]
-** xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService~Snapshot~Builder.adoc[Snapshot.Builder]
+* xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService_Snapshot.adoc[XmlSnapshotService~Snapshot]
+** xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService_Snapshot_Builder.adoc[Snapshot.Builder]
 
 * xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService]
 +

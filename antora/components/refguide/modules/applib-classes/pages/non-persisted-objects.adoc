@@ -8,5 +8,4 @@ The xref:refguide:applib:index/ViewModel.adoc[ViewModel] interface can be implem
 
 TIP: There is a more in-depth discussion on view models in the xref:userguide:fun:view-models.adoc[user guide] and the xref:userguide:fun:overview.adoc#view-models[user guide overview].
 
-The very similar xref:refguide:applib:index/RecreatableDomainObject.adoc[RecreatableDomainObject] also provides the same capability; the distinction is simply that the latter makes more sense for domain objects that conceptually are entities but are not to be persisted by JDO or JPA.
 

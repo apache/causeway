@@ -86,10 +86,10 @@ public abstract class ApplicationUser
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_USERNAME = ApplicationUser.LOGICAL_TYPE_NAME + ".findByUsername";
-        public static final String FIND_BY_EMAIL_ADDRESS = ApplicationUser.LOGICAL_TYPE_NAME + ".findByEmailAddress";
-        public static final String FIND = ApplicationUser.LOGICAL_TYPE_NAME + ".find";
-        public static final String FIND_BY_ATPATH = ApplicationUser.LOGICAL_TYPE_NAME + ".findByAtPath";
+        public static final String FIND_BY_USERNAME = LOGICAL_TYPE_NAME + ".findByUsername";
+        public static final String FIND_BY_EMAIL_ADDRESS = LOGICAL_TYPE_NAME + ".findByEmailAddress";
+        public static final String FIND = LOGICAL_TYPE_NAME + ".find";
+        public static final String FIND_BY_ATPATH = LOGICAL_TYPE_NAME + ".findByAtPath";
     }
 
     // -- UI & DOMAIN EVENTS

@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.xactn;
 
 import java.util.UUID;
 
-import org.apache.isis.applib.mixins.system.HasTransactionId;
+import org.apache.isis.applib.mixins.system.HasInteractionIdAndSequence;
 
 import lombok.Value;
 
@@ -41,7 +41,7 @@ import lombok.Value;
  * @since 2.0 {@index}
  */
 @Value(staticConstructor = "of")
-public class TransactionId implements HasTransactionId {
+public class TransactionId implements HasInteractionIdAndSequence {
 
     /**
      * The unique identifier of the outer
@@ -49,7 +49,7 @@ public class TransactionId implements HasTransactionId {
      *
      * <p>
      *     Together with {@link #getSequence()}, this makes up the
-     *     implementation of {@link org.apache.isis.applib.mixins.system.HasTransactionId}
+     *     implementation of {@link HasInteractionIdAndSequence}
      * </p>
      */
     UUID interactionId;
@@ -60,7 +60,7 @@ public class TransactionId implements HasTransactionId {
      *
      * <p>
      *     Together with {@link #getInteractionId()}, this makes up the
-     *     implementation of {@link org.apache.isis.applib.mixins.system.HasTransactionId}
+     *     implementation of {@link HasInteractionIdAndSequence}
      * </p>
      */
     int sequence;

@@ -50,6 +50,31 @@
 			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
 		</dependency>
 
+		<!-- Extensions -->
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-commandlog-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-sessionlog-persistence-jdo</artifactId>
+		</dependency>
+
+		<!-- Value types -->
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
+		</dependency>
+
+
 	</dependencies>
 
 	<profiles>

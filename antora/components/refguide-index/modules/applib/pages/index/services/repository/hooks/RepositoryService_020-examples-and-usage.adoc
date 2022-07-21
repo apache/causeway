@@ -26,9 +26,9 @@ repositoryService.persist(cust);
 ----
 
 
-You should be aware that by default the framework queues up calls to xref:refguide:applib:index/services/repository/RepositoryService.adoc#persist__T[#persist()] and xref:refguide:applib:index/services/repository/RepositoryService.adoc#remove__Object[#remove()].
+You should be aware that by default the framework queues up calls to xref:refguide:applib:index/services/repository/RepositoryService.adoc#persist_T[#persist()] and xref:refguide:applib:index/services/repository/RepositoryService.adoc#remove_Object[#remove()].
 These are then executed either when the request completes (and the transaction commits), or if the queue is flushed.
-This can be done either implicitly by the framework, or as the result of a direct call to xref:refguide:applib:index/services/xactn/TransactionService.adoc#flushTransaction__[TransactionService#flushTransaction].
+This can be done either implicitly by the framework, or as the result of a direct call to xref:refguide:applib:index/services/xactn/TransactionService.adoc#flushTransaction_[TransactionService#flushTransaction].
 
 By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`.
 However, this behaviour can be disabled using the  xref:refguide:config:sections/Other.adoc[]

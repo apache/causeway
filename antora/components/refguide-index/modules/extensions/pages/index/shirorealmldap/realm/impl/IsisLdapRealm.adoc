@@ -85,7 +85,7 @@ class IsisLdapRealm {
 }
 ----
 
-<.> xref:#setResourcePath__String[setResourcePath(String)]
+<.> xref:#setResourcePath_String[setResourcePath(String)]
 +
 --
 
@@ -93,7 +93,7 @@ class IsisLdapRealm {
 
 == Members
 
-[#setResourcePath__String]
+[#setResourcePath_String]
 === setResourcePath(String)
 
 ----

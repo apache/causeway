@@ -25,7 +25,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogJdo;
+import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 
 @Configuration
@@ -33,7 +33,7 @@ import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatan
 @Import({
     DemoModuleCommon.class,
     IsisModulePersistenceJdoDatanucleus.class,
-    IsisModuleExtCommandLogJdo.class,
+    IsisModuleExtCommandLogPersistenceJdo.class,
 })
 @PropertySources({
     @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),

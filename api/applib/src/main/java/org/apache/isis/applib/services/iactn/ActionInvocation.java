@@ -40,10 +40,8 @@ extends Execution<ActionInvocationDto, ActionDomainEvent<?>> {
             final Interaction interaction,
             final Identifier memberId,
             final Object target,
-            final List<Object> args,
-            final String targetMember,
-            final String targetClass) {
-        super(interaction, InteractionType.ACTION_INVOCATION, memberId, target, targetMember, targetClass);
+            final List<Object> args) {
+        super(interaction, InteractionType.ACTION_INVOCATION, memberId, target);
         this.args = args;
     }
     // ...

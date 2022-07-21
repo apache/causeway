@@ -38,10 +38,12 @@ import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
 import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
@@ -55,10 +57,7 @@ import lombok.Setter;
         schema = ApplicationUser.SCHEMA,
         table = ApplicationUser.TABLE)
 @Uniques({
-    @Unique(
-            name = "ApplicationUser_username_UNQ",
-            members = { "username" })
-})
+    @Unique(name = "username__UNQ", members = { "username" })})
 @Queries( {
     @Query(
             name = Nq.FIND_BY_USERNAME,
@@ -92,14 +91,15 @@ import lombok.Setter;
 @Version(
         strategy = VersionStrategy.VERSION_NUMBER,
         column = "version")
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @Named(ApplicationUser.LOGICAL_TYPE_NAME)
 @DomainObject(
         autoCompleteRepository = ApplicationUserRepository.class,
         autoCompleteMethod = "findMatching"
-)
+        )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
-)
+        )
 public class ApplicationUser
     extends org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser {
 

@@ -152,9 +152,9 @@ For example:
 
 [source,xml]
 ----
-<div class="entityPage com-mycompany-myapp-Customer">       <!--1-->
+<div class="entityPage com-mycompany-myapp-Customer">       <!--.-->
     ...
-    <div class="orders">                                    <!--2-->
+    <div class="orders">                                    <!--.-->
         <table>
             <tr>
                 <th class="title-column">...</th>
@@ -175,9 +175,9 @@ For example:
     ...
 </div>
 ----
-<1> the parent class identifier
-<2> the collection identifier.
-This element's class also has the entity type within the collection (as xref:vw:ROOT:customisation/custom-css.adoc#columns-in-tables_globally[discussed above]).
+<.> the parent class identifier
+<.> the collection identifier.
+This element's class also has the entity type within the collection (as discussed above).
 
 Using this, the `productRef` property could be targeted using:
 
@@ -196,7 +196,7 @@ For example:
 [source,xml]
 ----
 <div class="standaloneCollectionPage">
-    <div class="com-mycompany-myapp-Customer_mostRecentOrders ...">     <!--1-->
+    <div class="com-mycompany-myapp-Customer_mostRecentOrders ...">     <!--.-->
         ...
         <div class="orders">
             <table>
@@ -220,8 +220,8 @@ For example:
     </div>
 </div>
 ----
-<1> action identifier.
-This element's class also identifies the entity type within the collection (as xref:vw:ROOT:customisation/custom-css.adoc#columns-in-tables_globally[discussed above]).
+<.> action identifier.
+This element's class also identifies the entity type within the collection (as discussed above).
 
 Using this, the `quantity` property could be targeted using:
 

@@ -22,12 +22,12 @@ class BlobJpaEmbeddable {
 }
 ----
 
-<.> xref:#fromBlob__Blob[fromBlob(Blob)]
+<.> xref:#fromBlob_Blob[fromBlob(Blob)]
 +
 --
 Factory method to marshall a xref:refguide:applib:index/value/Blob.adoc[Blob] into a xref:refguide:persistence:index/jpa/applib/types/BlobJpaEmbeddable.adoc[BlobJpaEmbeddable]
 --
-<.> xref:#toBlob__BlobJpaEmbeddable[toBlob(BlobJpaEmbeddable)]
+<.> xref:#toBlob_BlobJpaEmbeddable[toBlob(BlobJpaEmbeddable)]
 +
 --
 Reciprocal method to marshall a xref:refguide:persistence:index/jpa/applib/types/BlobJpaEmbeddable.adoc[BlobJpaEmbeddable] into a xref:refguide:applib:index/value/Blob.adoc[Blob]
@@ -35,12 +35,12 @@ Reciprocal method to marshall a xref:refguide:persistence:index/jpa/applib/types
 
 == Members
 
-[#fromBlob__Blob]
+[#fromBlob_Blob]
 === fromBlob(Blob)
 
 Factory method to marshall a xref:refguide:applib:index/value/Blob.adoc[Blob] into a xref:refguide:persistence:index/jpa/applib/types/BlobJpaEmbeddable.adoc[BlobJpaEmbeddable]
 
-[#toBlob__BlobJpaEmbeddable]
+[#toBlob_BlobJpaEmbeddable]
 === toBlob(BlobJpaEmbeddable)
 
 Reciprocal method to marshall a xref:refguide:persistence:index/jpa/applib/types/BlobJpaEmbeddable.adoc[BlobJpaEmbeddable] into a xref:refguide:applib:index/value/Blob.adoc[Blob]

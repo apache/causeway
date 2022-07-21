@@ -1,7 +1,7 @@
-= DomainChangeRecord _(interface)_
+= DomainChangeRecord
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Allows domain objects that represents some sort of recorded change to a domain object (commands, audit entries, published interactions) to act as a mixee in order that other modules can contribute behaviour.
+Allows domain objects that represents some sort of recorded change to a domain object (commands, executions, audit entries) to act as a mixee in order that other modules can contribute behaviour.
 
 == API
 
@@ -13,50 +13,55 @@ interface DomainChangeRecord {
   UUID getInteractionId()     // <.>
   String getUsername()     // <.>
   java.sql.Timestamp getTimestamp()     // <.>
-  String getTargetObjectType()     // <.>
+  String getTargetLogicalTypeName()     // <.>
   Bookmark getTarget()     // <.>
-  String getTargetMember()
+  String getLogicalMemberIdentifier()
+  boolean hideLogicalMemberIdentifier()
+  String getPropertyId()
+  boolean hidePropertyId()
   String getPreValue()     // <.>
+  boolean hidePreValue()
   String getPostValue()     // <.>
+  boolean hidePostValue()
 }
 ----
 
-<.> xref:#getType__[getType()]
+<.> xref:#getType_[getType()]
 +
 --
 Distinguishes commands from audit entries from published events/interactions (when these are shown mixed together in a (standalone) table).
 --
-<.> xref:#getInteractionId__[getInteractionId()]
+<.> xref:#getInteractionId_[getInteractionId()]
 +
 --
 The unique identifier of the _org.apache.isis.applib.services.iactn.Interaction_ within which this change occurred.
 --
-<.> xref:#getUsername__[getUsername()]
+<.> xref:#getUsername_[getUsername()]
 +
 --
 The user that caused the change.
 --
-<.> xref:#getTimestamp__[getTimestamp()]
+<.> xref:#getTimestamp_[getTimestamp()]
 +
 --
 The time that the change occurred.
 --
-<.> xref:#getTargetObjectType__[getTargetObjectType()]
+<.> xref:#getTargetLogicalTypeName_[getTargetLogicalTypeName()]
 +
 --
-The object type of the domain object being changed.
+The logical type name of the domain object being changed.
 --
-<.> xref:#getTarget__[getTarget()]
+<.> xref:#getTarget_[getTarget()]
 +
 --
 The xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
 --
-<.> xref:#getPreValue__[getPreValue()]
+<.> xref:#getPreValue_[getPreValue()]
 +
 --
 The value of the property prior to it being changed.
 --
-<.> xref:#getPostValue__[getPostValue()]
+<.> xref:#getPostValue_[getPostValue()]
 +
 --
 The value of the property after it has changed.
@@ -64,44 +69,44 @@ The value of the property after it has changed.
 
 == Members
 
-[#getType__]
+[#getType_]
 === getType()
 
 Distinguishes commands from audit entries from published events/interactions (when these are shown mixed together in a (standalone) table).
 
-[#getInteractionId__]
+[#getInteractionId_]
 === getInteractionId()
 
 The unique identifier of the _org.apache.isis.applib.services.iactn.Interaction_ within which this change occurred.
 
-[#getUsername__]
+[#getUsername_]
 === getUsername()
 
 The user that caused the change.
 
-[#getTimestamp__]
+[#getTimestamp_]
 === getTimestamp()
 
 The time that the change occurred.
 
-[#getTargetObjectType__]
-=== getTargetObjectType()
+[#getTargetLogicalTypeName_]
+=== getTargetLogicalTypeName()
 
-The object type of the domain object being changed.
+The logical type name of the domain object being changed.
 
-[#getTarget__]
+[#getTarget_]
 === getTarget()
 
 The xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
 
-[#getPreValue__]
+[#getPreValue_]
 === getPreValue()
 
 The value of the property prior to it being changed.
 
 Populated only for audit entries.
 
-[#getPostValue__]
+[#getPostValue_]
 === getPostValue()
 
 The value of the property after it has changed.

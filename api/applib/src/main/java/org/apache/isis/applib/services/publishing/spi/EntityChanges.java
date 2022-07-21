@@ -23,7 +23,7 @@ import java.util.UUID;
 
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
-import org.apache.isis.applib.mixins.system.HasTransactionId;
+import org.apache.isis.applib.mixins.system.HasInteractionIdAndSequence;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 /**
@@ -38,11 +38,11 @@ import org.apache.isis.schema.chg.v2.ChangesDto;
  * @since 2.0 {@index}
  */
 public interface EntityChanges
-        extends HasTransactionId,
+        extends HasInteractionIdAndSequence,
                 HasUsername {
 
     /**
-     * inherited from {@link HasTransactionId} and transitively from
+     * inherited from {@link HasInteractionIdAndSequence} and transitively from
      * {@link HasInteractionId}, correlates back to the unique identifier of
      * the {@link org.apache.isis.applib.services.iactn.Interaction} in which
      * these objects were changed.
@@ -51,7 +51,7 @@ public interface EntityChanges
     UUID getInteractionId();
 
     /**
-     * inherited from {@link HasTransactionId}, with {@link #getInteractionId()}
+     * inherited from {@link HasInteractionIdAndSequence}, with {@link #getInteractionId()}
      * it identifies the transaction within the
      * {@link org.apache.isis.applib.services.iactn.Interaction} in which
      * these objects were changed.

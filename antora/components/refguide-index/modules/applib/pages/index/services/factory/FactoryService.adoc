@@ -1,4 +1,4 @@
-= FactoryService _(interface)_
+= FactoryService
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Collects together methods for instantiating domain objects, also injecting them with any domain services and calling lifecycle methods if defined.
@@ -21,47 +21,47 @@ interface FactoryService {
 }
 ----
 
-<.> xref:#getOrCreate__Class[getOrCreate(Class)]
+<.> xref:#getOrCreate_Class[getOrCreate(Class)]
 +
 --
 Gets an instance (possibly shared or independent) of the specified type, with injection points resolved and any life-cycle callback processed.
 --
-<.> xref:#get__Class[get(Class)]
+<.> xref:#get_Class[get(Class)]
 +
 --
 Gets an instance (possibly shared or independent) of the specified _requiredType_ , with injection points resolved and any life-cycle callback processed.
 --
-<.> xref:#detachedEntity__Class[detachedEntity(Class)]
+<.> xref:#detachedEntity_Class[detachedEntity(Class)]
 +
 --
 Creates a new detached entity instance, with injection points resolved and defaults applied.
 --
-<.> xref:#detachedEntity__T[detachedEntity(T)]
+<.> xref:#detachedEntity_T[detachedEntity(T)]
 +
 --
 Creates a new detached entity instance, with injection points resolved.
 --
-<.> xref:#mixin__Class_Object[mixin(Class, Object)]
+<.> xref:#mixin_Class_Object[mixin(Class, Object)]
 +
 --
 Creates a new Mixin instance, with injection points resolved.
 --
-<.> xref:#viewModel__Class_Bookmark[viewModel(Class, Bookmark)]
+<.> xref:#viewModel_Class_Bookmark[viewModel(Class, Bookmark)]
 +
 --
 Creates a new ViewModel instance, with injection points resolved, and initialized according to the given _bookmark_
 --
-<.> xref:#viewModel__Class[viewModel(Class)]
+<.> xref:#viewModel_Class[viewModel(Class)]
 +
 --
 Creates a new ViewModel instance, with injection points resolved and defaults applied.
 --
-<.> xref:#viewModel__T[viewModel(T)]
+<.> xref:#viewModel_T[viewModel(T)]
 +
 --
 Resolves injection points for given ViewModel instance.
 --
-<.> xref:#create__Class[create(Class)]
+<.> xref:#create_Class[create(Class)]
 +
 --
 Creates a new instance of the specified class, with injection points resolved and defaults applied.
@@ -69,49 +69,49 @@ Creates a new instance of the specified class, with injection points resolved an
 
 == Members
 
-[#getOrCreate__Class]
+[#getOrCreate_Class]
 === getOrCreate(Class)
 
 Gets an instance (possibly shared or independent) of the specified type, with injection points resolved and any life-cycle callback processed.
 
-[#get__Class]
+[#get_Class]
 === get(Class)
 
 Gets an instance (possibly shared or independent) of the specified _requiredType_ , with injection points resolved and any life-cycle callback processed.
 
-[#detachedEntity__Class]
+[#detachedEntity_Class]
 === detachedEntity(Class)
 
 Creates a new detached entity instance, with injection points resolved and defaults applied.
 
 The entity will be detacted, in other words not yet persisted.
 
-[#detachedEntity__T]
+[#detachedEntity_T]
 === detachedEntity(T)
 
 Creates a new detached entity instance, with injection points resolved.
 
-[#mixin__Class_Object]
+[#mixin_Class_Object]
 === mixin(Class, Object)
 
 Creates a new Mixin instance, with injection points resolved.
 
-[#viewModel__Class_Bookmark]
+[#viewModel_Class_Bookmark]
 === viewModel(Class, Bookmark)
 
 Creates a new ViewModel instance, with injection points resolved, and initialized according to the given _bookmark_
 
-[#viewModel__Class]
+[#viewModel_Class]
 === viewModel(Class)
 
 Creates a new ViewModel instance, with injection points resolved and defaults applied.
 
-[#viewModel__T]
+[#viewModel_T]
 === viewModel(T)
 
 Resolves injection points for given ViewModel instance.
 
-[#create__Class]
+[#create_Class]
 === create(Class)
 
 Creates a new instance of the specified class, with injection points resolved and defaults applied.

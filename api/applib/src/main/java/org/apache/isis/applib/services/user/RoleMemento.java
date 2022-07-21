@@ -51,9 +51,9 @@ import lombok.val;
 @Value
 public class RoleMemento implements Serializable {
 
-    public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<RoleMemento> {}
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".RoleMemento";
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".RoleMemento";
+    public static class TitleUiEvent extends IsisModuleApplib.TitleUiEvent<RoleMemento> {}
 
     private static final long serialVersionUID = -3876856609238378274L;
 

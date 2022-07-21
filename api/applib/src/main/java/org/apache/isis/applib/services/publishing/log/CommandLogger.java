@@ -24,6 +24,7 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
@@ -33,15 +34,19 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
+ * Simple implementation of {@link CommandSubscriber} that just logs out the {@link Command Command}'s
+ * {@link Command#getCommandDto() DTO} to a debug log.
  *
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.applib.CommandLogger")
+@Named(CommandLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Logging")
 @Log4j2
 public class CommandLogger implements CommandSubscriber {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".CommandLogger";
 
     @Override
     public boolean isEnabled() {
@@ -58,8 +63,6 @@ public class CommandLogger implements CommandSubscriber {
                 command.getLogicalMemberIdentifier(),
                 command.isSystemStateChanged(),
                 xml);
-
-        //log.debug("completed: {}", command);
     }
 
 }

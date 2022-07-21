@@ -38,8 +38,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
- * Simply provides a UI to allow layouts (obtained from {@link LayoutService}
- * to be downloaded within the UI.
+ * Provides a UI to allow layouts (obtained from {@link LayoutService}) to be downloaded.
  *
  * @since 1.x {@index}
  */

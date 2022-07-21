@@ -33,11 +33,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
@@ -55,9 +57,7 @@ import lombok.Setter;
         schema = ApplicationPermission.SCHEMA,
         name = ApplicationPermission.TABLE,
         uniqueConstraints=
-            @UniqueConstraint(
-                    name = "ApplicationPermission_role_feature_rule_UNQ",
-                    columnNames={"roleId", "featureSort", "featureFqn", "rule"})
+            @UniqueConstraint(name = "role__feature__rule__UNQ", columnNames={"roleId", "featureSort", "featureFqn", "rule"})
 )
 @NamedQueries({
     @NamedQuery(
@@ -68,16 +68,16 @@ import lombok.Setter;
     @NamedQuery(
             name = Nq.FIND_BY_USER,
             query = "SELECT perm "
-                  + "FROM ApplicationPermission perm "
-                  + "JOIN perm.role role "
-                  + "JOIN role.users user "
-                  + "WHERE user.username = :username"),
+                  + "  FROM ApplicationPermission perm "
+                  + "  JOIN perm.role role "
+                  + "  JOIN role.users user "
+                  + " WHERE user.username = :username"),
     @NamedQuery(
             name = Nq.FIND_BY_ROLE_NAMES,
             query = "SELECT perm "
-                  + "FROM ApplicationPermission perm "
-                  + "JOIN perm.role role "
-                  + "WHERE role.name IN :roleNames"),
+                  + "  FROM ApplicationPermission perm "
+                  + "  JOIN perm.role role "
+                  + " WHERE role.name IN :roleNames"),
     @NamedQuery(
             name = Nq.FIND_BY_FEATURE,
             query = "SELECT p "
@@ -100,6 +100,7 @@ import lombok.Setter;
                   + "   AND p.rule = :rule "
                   + "   AND p.featureSort = :featureSort "),
 })
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @EntityListeners(IsisEntityListener.class)
 @Named(ApplicationPermission.LOGICAL_TYPE_NAME)
 @DomainObject

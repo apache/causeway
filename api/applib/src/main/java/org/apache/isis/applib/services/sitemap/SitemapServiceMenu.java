@@ -35,8 +35,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
- * Simply provides a UI to allow a site-map (obtained from {@link SitemapService}
- * to be downloaded within the UI.
+ * Simply provides a UI to allow a site-map (obtained from {@link SitemapService}) to be downloaded.
  *
  * @since 2.x {@index}
  */

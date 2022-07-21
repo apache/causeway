@@ -13,7 +13,7 @@ class BuilderScriptWithoutResult {
 }
 ----
 
-<.> xref:#getObject__[getObject()]
+<.> xref:#getObject_[getObject()]
 +
 --
 Simply returns null.
@@ -21,7 +21,7 @@ Simply returns null.
 
 == Members
 
-[#getObject__]
+[#getObject_]
 === getObject()
 
 Simply returns null.

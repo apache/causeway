@@ -64,7 +64,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateStopMenu {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ImpersonateStopMenu";   // deliberately IS part of isis.applib
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ImpersonateStopMenu";   // deliberately IS part of isis.applib
 
     final UserService userService;
     final MessageService messageService;

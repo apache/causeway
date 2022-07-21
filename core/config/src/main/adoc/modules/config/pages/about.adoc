@@ -164,16 +164,16 @@ That means that it's not enough to just add the appropriate Maven module to the 
 
 == Configuration Properties
 
-NOTE: TODO mappings was removed
 The core framework has a large number of configuration properties, as do the various xref:about.adoc#specifying-components[components].
-For that matter, so do some of the xref:subdomains:ROOT:about.adoc[subdomain] libraries, bounded context xref:mappings:ROOT:about.adoc[mapping] libraries and xref:valuetypes:ROOT:about.adoc[value type] libraries.
+So do some of the xref:extensions::about.adoc[extensions] and xref:valuetypes:ROOT:about.adoc[value type] libraries.
 
 The remainder of this guide lists the various configuration properties available, broken out into logical sections.
 
+[#isisconfiguration-domain-service]
 === IsisConfiguration domain service
 
 Applications can discover the current configuration properties for the framework (under the `isis` top-level key) by injecting the `IsisConfiguration` domain service.
-There are similar domain services for xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] (`EclipselinkConfiguration`), xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] (`DatanucleusConfiguration`) and RestEasy (`RestEasyConfiguration`),  as used by xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
+There are similar domain services for xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] (`EclipselinkConfiguration`), xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] (`DatanucleusConfiguration`) and RestEasy (`RestEasyConfiguration`), as used by xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
 
 Applications can also create their own configuration properties file; the xref:docs:starters:simpleapp.adoc[simpleapp] starter app provides an example.
 

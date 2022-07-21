@@ -30,10 +30,10 @@ import org.apache.isis.core.config.util.SpringProfileUtil;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.pdfjs.wkt.ui.IsisModuleExtPdfjsWicketUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
-import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
+import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn.IsisModuleValAsciidocPersistenceJdoDn;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
 import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
-import org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.IsisModuleValMarkdownPersistenceJdoDn5;
+import org.apache.isis.valuetypes.markdown.persistence.jdo.dn.IsisModuleValMarkdownPersistenceJdoDn;
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
@@ -64,8 +64,8 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     DemoAppWicketCommon.class,
 
     // Persistence (JDO/DN5)
-    IsisModuleValAsciidocPersistenceJdoDn5.class,
-    IsisModuleValMarkdownPersistenceJdoDn5.class,
+    IsisModuleValAsciidocPersistenceJdoDn.class,
+    IsisModuleValMarkdownPersistenceJdoDn.class,
 
     // XrayEnable.class // for debugging only
 })

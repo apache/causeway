@@ -46,7 +46,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 )
 public class ApplicationType extends ApplicationFeatureViewModel {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationType";
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationType";
 
     public static abstract class CollectionDomainEvent<T>
             extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}

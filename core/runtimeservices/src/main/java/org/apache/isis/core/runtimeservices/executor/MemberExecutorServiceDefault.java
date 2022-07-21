@@ -128,7 +128,7 @@ implements MemberExecutorService {
         val interaction = getInteractionElseFail();
         val command = interaction.getCommand();
 
-        CommandPublishingFacet.prepareCommandForPublishing(command, owningAction, facetHolder);
+        CommandPublishingFacet.prepareCommandForPublishing(command, head, owningAction, facetHolder);
 
         val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
@@ -142,13 +142,10 @@ implements MemberExecutorService {
                 .map(UnwrapUtil::single)
                 .collect(_Lists.toUnmodifiable());
 
-        val targetMemberName = ObjectAction.Util.friendlyNameFor(owningAction, head);
-        val targetClass = IdentifierUtil.targetClassNameFor(targetAdapter);
-
         val actionInvocation =
                 new ActionInvocation(
-                        interaction, actionId, targetPojo, argumentPojos, targetMemberName,
-                        targetClass);
+                        interaction, actionId, targetPojo, argumentPojos
+                );
         val memberExecutor = actionExecutorFactory.createExecutor(owningAction, head, argumentAdapters);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
@@ -160,7 +157,7 @@ implements MemberExecutorService {
 
         val executionExceptionIfAny = priorExecution.getThrew();
 
-        // TODO: should also sync DTO's 'threw' attribute here...?
+        actionInvocation.setThrew(executionExceptionIfAny);
 
         if(executionExceptionIfAny != null) {
             throw executionExceptionIfAny instanceof RuntimeException
@@ -204,7 +201,7 @@ implements MemberExecutorService {
             return head.getTarget();
         }
 
-        CommandPublishingFacet.prepareCommandForPublishing(command, owningProperty, facetHolder);
+        CommandPublishingFacet.prepareCommandForPublishing(command, head, owningProperty, facetHolder);
 
         val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, newValueAdapter);
 
@@ -214,10 +211,7 @@ implements MemberExecutorService {
         val target = UnwrapUtil.single(targetManagedObject);
         val argValue = UnwrapUtil.single(newValueAdapter);
 
-        val targetMemberName = owningProperty.getFriendlyName(head::getTarget);
-        val targetClass = IdentifierUtil.targetClassNameFor(targetManagedObject);
-
-        val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass);
+        val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue);
         val executor = propertyExecutorFactory
                 .createExecutor(owningProperty, head, newValueAdapter,
                         interactionInitiatedBy, editingVariant);

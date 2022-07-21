@@ -21,6 +21,9 @@ package org.apache.isis.applib.services.layout;
 import javax.inject.Named;
 
 import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.layout.grid.Grid;
 
@@ -32,8 +35,6 @@ import org.apache.isis.applib.layout.grid.Grid;
  * content is assembled. Once a layout file is in place, its layout data takes precedence over any
  * conflicting layout data from annotations.
  * </p>
- *
- * TODO update for v2 - @MemberGroupLayout and @MemberOrder have been removed
  *
  * @since 1.x {@index}
  */
@@ -57,11 +58,6 @@ public enum Style {
      * properties/collections/actions also included included in the grid.
      * <p>
      * The intention here is that any layout metadata annotations can be removed from the code.
-     * <ul>
-     * <li>{@code @MemberGroupLayout}: <b>serialized as XML</b></li>
-     * <li>{@code @MemberOrder}: <b>serialized as XML</b></li>
-     * <li>{@code @ActionLayout, @PropertyLayout, @CollectionLayout}: <b>serialized as XML</b></li>
-     * </ul>
      */
     COMPLETE,
 
@@ -69,13 +65,9 @@ public enum Style {
      * Default, whereby missing properties/collections/actions are added to regions,
      * and unused/empty regions are removed/trimmed.
      * <p>
-     * It should be possible to remove any {@link MemberOrder} annotation but
-     * any property/collection/action layout annotations would need to be retained.
-     * <ul>
-     * <li>{@code @MemberGroupLayout}: <b>serialized as XML</b></li>
-     * <li>{@code @MemberOrder}: <b>serialized as XML</b></li>
-     * <li>{@code @ActionLayout, @PropertyLayout, @CollectionLayout}: <b>ignored</b></li>
-     * </ul>
+     * It should be possible to remove any {@link PropertyLayout#sequence()}, {@link CollectionLayout#sequence()} and
+     * {@link ActionLayout#sequence()} annotation attributes, but {@link PropertyLayout#fieldSetId()}/
+     * {@link PropertyLayout#fieldSetName()} annotation attributes would need to be retained.
      */
     NORMALIZED,
 
@@ -83,12 +75,8 @@ public enum Style {
      * As per {@link #NORMALIZED}, but with no properties/collections/actions.
      * <p>
      * The intention here is for layout annotations that &quot;bind&quot; the properties/collections/actions
-     * to the regions to be retained.
-     * <ul>
-     * <li>{@code @MemberGroupLayout}: <b>serialized as XML</b></li>
-     * <li>{@code @MemberOrder}: <b>ignored</b></li>
-     * <li>{@code @ActionLayout, @PropertyLayout, @CollectionLayout}: <b>ignored</b></li>
-     * </ul>
+     * to the regions to be retained; the <code>layout.xml</code> is used only to specify the positioning of the
+     * groups and tabs.
      */
     MINIMAL
 }

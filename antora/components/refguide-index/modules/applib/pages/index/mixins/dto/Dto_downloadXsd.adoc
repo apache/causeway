@@ -19,17 +19,17 @@ class Dto_downloadXsd {
 }
 ----
 
-<.> xref:#act__String_IsisSchemas[act(String, IsisSchemas)]
+<.> xref:#act_String_IsisSchemas[act(String, IsisSchemas)]
 +
 --
-The _IsisSchemas_ parameter can be used to optionally ignore the common Apache Isis schemas; useful if there is only one other XSD schema referenced by the DTO.
+The xref:refguide:applib:index/services/jaxb/IsisSchemas.adoc[IsisSchemas] parameter can be used to optionally ignore the common Apache Isis schemas; useful if there is only one other XSD schema referenced by the DTO.
 --
-<.> xref:#default0Act__[default0Act()]
+<.> xref:#default0Act_[default0Act()]
 +
 --
 Defaults to the fully qualified class name of the domain object.
 --
-<.> xref:#default1Act__[default1Act()]
+<.> xref:#default1Act_[default1Act()]
 +
 --
 Defaults to _IsisSchemas#IGNORE_
@@ -37,17 +37,17 @@ Defaults to _IsisSchemas#IGNORE_
 
 == Members
 
-[#act__String_IsisSchemas]
+[#act_String_IsisSchemas]
 === act(String, IsisSchemas)
 
-The _IsisSchemas_ parameter can be used to optionally ignore the common Apache Isis schemas; useful if there is only one other XSD schema referenced by the DTO.
+The xref:refguide:applib:index/services/jaxb/IsisSchemas.adoc[IsisSchemas] parameter can be used to optionally ignore the common Apache Isis schemas; useful if there is only one other XSD schema referenced by the DTO.
 
-[#default0Act__]
+[#default0Act_]
 === default0Act()
 
 Defaults to the fully qualified class name of the domain object.
 
-[#default1Act__]
+[#default1Act_]
 === default1Act()
 
 Defaults to _IsisSchemas#IGNORE_

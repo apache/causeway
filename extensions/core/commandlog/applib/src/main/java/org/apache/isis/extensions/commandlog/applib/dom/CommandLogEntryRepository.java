@@ -42,16 +42,17 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
 import org.apache.isis.schema.common.v2.InteractionType;
-import org.apache.isis.schema.common.v2.OidDto;
 
 import lombok.Getter;
 import lombok.val;
 
 public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
+
 
     public static class NotFoundException extends RecoverableException {
         private static final long serialVersionUID = 1L;
@@ -65,29 +66,31 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     @Inject Provider<RepositoryService> repositoryServiceProvider;
     @Inject FactoryService factoryService;
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
-    private final Class<C> commandLogClass;
+    private final Class<C> commandLogEntryClass;
 
-    protected CommandLogEntryRepository(Class<C> commandLogClass) {
-        this.commandLogClass = commandLogClass;
+    protected CommandLogEntryRepository(Class<C> commandLogEntryClass) {
+        this.commandLogEntryClass = commandLogEntryClass;
     }
 
-    /** Creates a transient (yet not persisted) {@link CommandLogEntry} instance. */
-    public C createCommandLog(final Command command) {
-        C c = factoryService.detachedEntity(commandLogClass);
-        c.setCommandDto(command.getCommandDto());
+    public C createEntryAndPersist(final Command command, CommandLogEntry parentEntryIfAny) {
+        C c = factoryService.detachedEntity(commandLogEntryClass);
+        c.init(command);
+        c.setParent(parentEntryIfAny);
+        persist(c);
         return c;
     }
 
     public Optional<C> findByInteractionId(final UUID interactionId) {
         return repositoryService().firstMatch(
-                Query.named(commandLogClass,  CommandLogEntry.Nq.FIND_BY_INTERACTION_ID_STR)
-                        .withParameter("interactionIdStr", interactionId.toString()));
+                Query.named(commandLogEntryClass,  CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
+                        .withParameter("interactionId", interactionId));
     }
 
     public List<C> findByParent(final CommandLogEntry parent) {
         return repositoryService().allMatches(
-                Query.named(commandLogClass, CommandLogEntry.Nq.FIND_BY_PARENT)
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_PARENT)
                         .withParameter("parent", parent));
     }
 
@@ -100,19 +103,19 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
         final Query<C> query;
         if(from != null) {
             if(to != null) {
-                query = Query.named(commandLogClass, CommandLogEntry.Nq.FIND_BY_TIMESTAMP_BETWEEN)
+                query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_TIMESTAMP_BETWEEN)
                         .withParameter("from", fromTs)
                         .withParameter("to", toTs);
             } else {
-                query = Query.named(commandLogClass, CommandLogEntry.Nq.FIND_BY_TIMESTAMP_AFTER)
+                query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_TIMESTAMP_AFTER)
                         .withParameter("from", fromTs);
             }
         } else {
             if(to != null) {
-                query = Query.named(commandLogClass, CommandLogEntry.Nq.FIND_BY_TIMESTAMP_BEFORE)
+                query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_TIMESTAMP_BEFORE)
                         .withParameter("to", toTs);
             } else {
-                query = Query.named(commandLogClass, CommandLogEntry.Nq.FIND);
+                query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND);
             }
         }
         return repositoryService().allMatches(query);
@@ -120,12 +123,12 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     public List<C> findCurrent() {
         return repositoryService().allMatches(
-                Query.named(commandLogClass, CommandLogEntry.Nq.FIND_CURRENT));
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_CURRENT));
     }
 
     public List<C> findCompleted() {
         return repositoryService().allMatches(
-                Query.named(commandLogClass, CommandLogEntry.Nq.FIND_COMPLETED));
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_COMPLETED));
     }
 
 
@@ -140,22 +143,22 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
         final Query<C> query;
         if(from != null) {
             if(to != null) {
-                query = Query.named(commandLogClass, CommandLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN)
+                query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN)
                         .withParameter("target", target)
                         .withParameter("from", fromTs)
                         .withParameter("to", toTs);
             } else {
-                query = Query.named(commandLogClass, CommandLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER)
+                query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER)
                         .withParameter("target", target)
                         .withParameter("from", fromTs);
             }
         } else {
             if(to != null) {
-                query = Query.named(commandLogClass, CommandLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE)
+                query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE)
                         .withParameter("target", target)
                         .withParameter("to", toTs);
             } else {
-                query = Query.named(commandLogClass, CommandLogEntry.Nq.FIND_BY_TARGET)
+                query = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_TARGET)
                         .withParameter("target", target);
             }
         }
@@ -164,15 +167,16 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     public List<C> findRecentByUsername(final String username) {
         return repositoryService().allMatches(
-                Query.named(commandLogClass, CommandLogEntry.Nq.FIND_RECENT_BY_USERNAME)
-                        .withParameter("username", username));
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_RECENT_BY_USERNAME)
+                        .withParameter("username", username)
+                        .withLimit(30L));
     }
 
 
 
     public List<C> findRecentByTarget(final Bookmark target) {
         return repositoryService().allMatches(
-                Query.named(commandLogClass, CommandLogEntry.Nq.FIND_RECENT_BY_TARGET)
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_RECENT_BY_TARGET)
                         .withParameter("target", target));
     }
 
@@ -220,7 +224,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     private List<C> findFirst() {
         Optional<C> firstCommandIfAny = repositoryService().firstMatch(
-                Query.named(commandLogClass, CommandLogEntry.Nq.FIND_FIRST));
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_FIRST));
         return firstCommandIfAny
                 .map(Collections::singletonList)
                 .orElse(Collections.emptyList());
@@ -237,7 +241,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
      */
     public Optional<C> findMostRecentReplayed() {
         return repositoryService().firstMatch(
-                Query.named(commandLogClass, CommandLogEntry.Nq.FIND_MOST_RECENT_REPLAYED));
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_MOST_RECENT_REPLAYED));
     }
 
     /**
@@ -253,12 +257,14 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
      */
     public Optional<C> findMostRecentCompleted() {
         return repositoryService().firstMatch(
-                Query.named(commandLogClass, CommandLogEntry.Nq.FIND_MOST_RECENT_COMPLETED));
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_MOST_RECENT_COMPLETED));
     }
 
     public List<C> findNotYetReplayed() {
         return repositoryService().allMatches(
-                Query.named(commandLogClass, CommandLogEntry.Nq.FIND_NOT_YET_REPLAYED).withLimit(10));
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_REPLAY_STATE)
+                        .withParameter("replayState", ReplayState.PENDING)
+                        .withLimit(10));
     }
 
 
@@ -273,16 +279,16 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
             }
         }
 
-        final C commandJdo = factoryService.detachedEntity(commandLogClass);
+        final C commandJdo = factoryService.detachedEntity(commandLogEntryClass);
 
-        commandJdo.setInteractionIdStr(dto.getInteractionId());
+        commandJdo.setInteractionId(UUID.fromString(dto.getInteractionId()));
         commandJdo.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(dto.getTimestamp()));
-        commandJdo.setUsername(dto.getUser());
+        commandJdo.setUsername(dto.getUsername());
 
         commandJdo.setReplayState(ReplayState.PENDING);
 
-        final OidDto firstTarget = dto.getTargets().getOid().get(0);
-        commandJdo.setTarget(Bookmark.forOidDto(firstTarget));
+        val firstTargetOidDto = dto.getTargets().getOid().get(0);
+        commandJdo.setTarget(Bookmark.forOidDto(firstTargetOidDto));
         commandJdo.setCommandDto(dto);
         commandJdo.setLogicalMemberIdentifier(dto.getMember().getLogicalMemberIdentifier());
 
@@ -293,21 +299,21 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
 
     public List<C> saveForReplay(final CommandsDto commandsDto) {
-        List<CommandDto> commandDto = commandsDto.getCommandDto();
-        List<C> commands = new ArrayList<>();
-        for (final CommandDto dto : commandDto) {
+        val commandDtos = commandsDto.getCommandDto();
+        val commands = new ArrayList<C>();
+        for (val dto : commandDtos) {
             commands.add(saveForReplay(dto));
         }
         return commands;
     }
 
 
-    public void persist(final C commandLog) {
-        repositoryService().persist(commandLog);
+    public void persist(final C commandLogEntry) {
+        repositoryService().persist(commandLogEntry);
     }
 
     public void truncateLog() {
-        repositoryService().removeAll(commandLogClass);
+        repositoryService().removeAll(commandLogEntryClass);
     }
 
     // --
@@ -327,8 +333,8 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
 
     private C findByInteractionIdElseNull(final UUID interactionId) {
-        val q = Query.named(commandLogClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID_STR)
-                .withParameter("interactionIdStr", interactionId.toString());
+        val q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
+                .withParameter("interactionId", interactionId);
         return repositoryService().uniqueMatch(q).orElse(null);
     }
 
@@ -340,7 +346,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
         // XXX that's a historic workaround, should rather be fixed upstream
         val needsTrimFix = batchSize != null && batchSize == 1;
 
-        val q = Query.named(commandLogClass, CommandLogEntry.Nq.FIND_SINCE)
+        val q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_SINCE)
                 .withParameter("timestamp", timestamp)
                 .withRange(QueryRange.limit(
                         needsTrimFix ? 2L : batchSize
@@ -371,6 +377,15 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
                 : null;
     }
 
+    /**
+     * for testing purposes only
+     */
+    public void removeAll() {
+        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+            throw new IllegalStateException("Cannot removeAll in production systems");
+        }
+        repositoryService().removeAll(commandLogEntryClass);
+    }
 
 
 }

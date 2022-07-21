@@ -97,6 +97,7 @@ public class AppManifest {
 ----
 
 
+[#cucumber-cli]
 === Cucumber CLI
 
 At the time of writing, the Maven Surefire does not support custom JUnit platform test engines.
@@ -249,7 +250,7 @@ package domainapp.webapp.bdd.stepdefs.infrastructure;       // <.>
 public class BootstrapStepDef
                 extends ApplicationIntegTestAbstract {      // <.>
 
-    @Before(order= OrderPrecedence.FIRST)                   // <.>
+    @Before(order= PriorityPrecedence.FIRST)                   // <.>
     public void bootstrap() {
         // empty                                            // <.>
     }
@@ -272,7 +273,7 @@ public class TransactionalStepDef {                         // <2>
 
     private Runnable afterScenario;
 
-    @Before(order = OrderPrecedence.EARLY)
+    @Before(order = PriorityPrecedence.EARLY)
     public void beforeScenario(){
         //open InteractionSession to be closed after scenario (see below)
         isisInteractionFactory.openInteraction(new InitialisationSession());
@@ -338,7 +339,7 @@ package domainapp.webapp.bdd.stepdefs.fixtures;                      // <.>
 
 public class DomainAppDemoStepDef {
 
-    @Before(value="@DomainAppDemo", order= OrderPrecedence.MIDPOINT) // <.>
+    @Before(value="@DomainAppDemo", order= PriorityPrecedence.MIDPOINT) // <.>
     public void runDomainAppDemo() {
         fixtureScripts.runFixtureScript(new DomainAppDemo(), null);  // <.>
     }

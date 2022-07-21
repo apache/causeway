@@ -1,4 +1,4 @@
-= Authorizor _(interface)_
+= Authorizor
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Represents a mechanism to evaluate whether the current user (as represented by xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] can either view or invoke the domain object feature (as represented by xref:refguide:applib:index/Identifier.adoc[Identifier] .
@@ -14,12 +14,12 @@ interface Authorizor {
 }
 ----
 
-<.> xref:#isVisible__InteractionContext_Identifier[isVisible(InteractionContext, Identifier)]
+<.> xref:#isVisible_InteractionContext_Identifier[isVisible(InteractionContext, Identifier)]
 +
 --
 Whether the current xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] can view the domain object feature (represented by xref:refguide:applib:index/Identifier.adoc[Identifier] ).
 --
-<.> xref:#isUsable__InteractionContext_Identifier[isUsable(InteractionContext, Identifier)]
+<.> xref:#isUsable_InteractionContext_Identifier[isUsable(InteractionContext, Identifier)]
 +
 --
 Whether the current xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] can invoke the domain object feature (represented by xref:refguide:applib:index/Identifier.adoc[Identifier] ).
@@ -27,12 +27,12 @@ Whether the current xref:refguide:applib:index/services/iactnlayer/InteractionCo
 
 == Members
 
-[#isVisible__InteractionContext_Identifier]
+[#isVisible_InteractionContext_Identifier]
 === isVisible(InteractionContext, Identifier)
 
 Whether the current xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] can view the domain object feature (represented by xref:refguide:applib:index/Identifier.adoc[Identifier] ).
 
-[#isUsable__InteractionContext_Identifier]
+[#isUsable_InteractionContext_Identifier]
 === isUsable(InteractionContext, Identifier)
 
 Whether the current xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] can invoke the domain object feature (represented by xref:refguide:applib:index/Identifier.adoc[Identifier] ).

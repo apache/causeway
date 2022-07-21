@@ -22,7 +22,7 @@ class BSTab {
 }
 ----
 
-<.> xref:#getOwner__[getOwner()]
+<.> xref:#getOwner_[getOwner()]
 +
 --
 Owner.
@@ -30,7 +30,7 @@ Owner.
 
 == Members
 
-[#getOwner__]
+[#getOwner_]
 === getOwner()
 
 Owner.

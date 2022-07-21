@@ -29,55 +29,55 @@ class ActionDomainEvent<S> {
 }
 ----
 
-<.> xref:#ActionDomainEvent__[ActionDomainEvent()]
+<.> xref:#ActionDomainEvent_[ActionDomainEvent()]
 +
 --
 Subtypes can define a no-arg constructor; the framework sets state via (non-API) setters.
 --
-<.> xref:#ActionDomainEvent__S[ActionDomainEvent(S)]
+<.> xref:#ActionDomainEvent_S[ActionDomainEvent(S)]
 +
 --
 Subtypes can define a one-arg constructor; the framework sets state via (non-API) setters.
 --
-<.> xref:#setReturnValue__Object[setReturnValue(Object)]
+<.> xref:#setReturnValue_Object[setReturnValue(Object)]
 +
 --
 Set by the framework.
 --
-<.> xref:#setSemantics__SemanticsOf[setSemantics(SemanticsOf)]
-<.> xref:#setParameterNames__List[setParameterNames(List)]
-<.> xref:#setParameterTypes__List[setParameterTypes(List)]
-<.> xref:#setMixedIn__Object[setMixedIn(Object)]
+<.> xref:#setSemantics_SemanticsOf[setSemantics(SemanticsOf)]
+<.> xref:#setParameterNames_List[setParameterNames(List)]
+<.> xref:#setParameterTypes_List[setParameterTypes(List)]
+<.> xref:#setMixedIn_Object[setMixedIn(Object)]
 
 == Members
 
-[#ActionDomainEvent__]
+[#ActionDomainEvent_]
 === ActionDomainEvent()
 
 Subtypes can define a no-arg constructor; the framework sets state via (non-API) setters.
 
-[#ActionDomainEvent__S]
+[#ActionDomainEvent_S]
 === ActionDomainEvent(S)
 
 Subtypes can define a one-arg constructor; the framework sets state via (non-API) setters.
 
 A one-arg constructor is particularly useful in the context of non-static DomainEvent class nesting.
 
-[#setReturnValue__Object]
+[#setReturnValue_Object]
 === setReturnValue(Object)
 
 Set by the framework.
 
 Event subscribers can replace the value with some other value if they wish, though only in the _AbstractDomainEvent.Phase#EXECUTED_ phase.
 
-[#setSemantics__SemanticsOf]
+[#setSemantics_SemanticsOf]
 === setSemantics(SemanticsOf)
 
-[#setParameterNames__List]
+[#setParameterNames_List]
 === setParameterNames(List)
 
-[#setParameterTypes__List]
+[#setParameterTypes_List]
 === setParameterTypes(List)
 
-[#setMixedIn__Object]
+[#setMixedIn_Object]
 === setMixedIn(Object)

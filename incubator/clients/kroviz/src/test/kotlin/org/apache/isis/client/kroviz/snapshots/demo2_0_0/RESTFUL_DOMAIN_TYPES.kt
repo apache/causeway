@@ -101,7 +101,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
         },
         {
             "rel": "urn:org.restfulobjects:rels/domain-type",
-            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusVersionTimestamp",
+            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.persistence.jdo.datanucleus.jdosupport.mixins.Persistable_datanucleusVersionTimestamp",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
         },
@@ -527,7 +527,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
         },
         {
             "rel": "urn:org.restfulobjects:rels/domain-type",
-            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusIdLong",
+            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.persistence.jdo.datanucleus.jdosupport.mixins.Persistable_datanucleusIdLong",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
         },
@@ -593,7 +593,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
         },
         {
             "rel": "urn:org.restfulobjects:rels/domain-type",
-            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_datanucleusVersionLong",
+            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.persistence.jdo.datanucleus.jdosupport.mixins.Persistable_datanucleusVersionLong",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
         },
@@ -881,7 +881,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
         },
         {
             "rel": "urn:org.restfulobjects:rels/domain-type",
-            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.persistence.jdo.datanucleus5.jdosupport.mixins.Persistable_downloadJdoMetadata",
+            "href": "http://localhost:8080/restful/domain-types/org.apache.isis.persistence.jdo.datanucleus.jdosupport.mixins.Persistable_downloadJdoMetadata",
             "method": "GET",
             "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
         },

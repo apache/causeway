@@ -22,6 +22,6 @@ repositoryService.persist(cust);
 +
 to just lookup existing domain services by type.
 
-* xref:refguide:applib:index/services/repository/RepositoryService.adoc#detachedEntity__T[RepositoryService#detachedEntity()]
+* xref:refguide:applib:index/services/repository/RepositoryService.adoc#detachedEntity_T[RepositoryService#detachedEntity()]
 
-* xref:refguide:applib:index/services/factory/FactoryService.adoc#detachedEntity__T[FactoryService#detachedEntity()]
+* xref:refguide:applib:index/services/factory/FactoryService.adoc#detachedEntity_T[FactoryService#detachedEntity()]

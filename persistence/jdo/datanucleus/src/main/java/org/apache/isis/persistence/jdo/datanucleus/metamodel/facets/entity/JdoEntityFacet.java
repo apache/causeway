@@ -20,12 +20,15 @@ package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
 import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
 
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
@@ -34,6 +37,8 @@ import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -41,8 +46,8 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionalProcessor;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
@@ -56,7 +61,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -80,10 +84,14 @@ implements EntityFacet {
     @Inject private ObjectManager objectManager;
     @Inject private ExceptionRecognizerService exceptionRecognizerService;
     @Inject private JdoFacetContext jdoFacetContext;
+    @Inject private IdStringifierLookupService idStringifierLookupService;
+
+    private final Class<?> entityClass;
 
     public JdoEntityFacet(
-            final FacetHolder holder) {
+            final FacetHolder holder, final Class<?> entityClass) {
         super(EntityFacet.class, holder);
+        this.entityClass = entityClass;
     }
 
     @Override
@@ -92,12 +100,12 @@ implements EntityFacet {
     }
 
     @Override
-    public String identifierFor(final ObjectSpecification spec, final Object pojo) {
+    public String identifierFor(final Object pojo) {
 
         if(pojo==null) {
             throw _Exceptions.illegalArgument(
                     "The persistence layer cannot identify a pojo that is null (given type %s)",
-                    spec.getCorrespondingClass().getName());
+                    entityClass.getName());
         }
 
         if(!isPersistableType(pojo.getClass())) {
@@ -127,30 +135,29 @@ implements EntityFacet {
                     pojo.getClass().getName());
         }
 
-        final String identifier = JdoObjectIdSerializer.toOidIdentifier(primaryKey);
-        if(_Strings.isEmpty(identifier)) {
-            throw _Exceptions.illegalArgument(
-                    "JdoObjectIdSerializer failed to convert primary key %s to a String.",
-                    primaryKey.getClass().getName());
-        }
 
-        return identifier;
+        val primaryKeyType = primaryKey.getClass();
+        val idStringifier = _Casts.<IdStringifier<Object>>uncheckedCast(idStringifierLookupService.lookupElseFail(primaryKeyType));
+
+        return idStringifier.enstring(primaryKey);
     }
+
 
     @Override
     public ManagedObject fetchByIdentifier(
-            final @NonNull ObjectSpecification entitySpec,
             final @NonNull Bookmark bookmark) {
-
-        _Assert.assertTrue(entitySpec.isEntity());
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
         Object entityPojo;
         try {
-            val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, bookmark);
+
             val persistenceManager = getPersistenceManager();
-            val entityClass = entitySpec.getCorrespondingClass();
+            val primaryKeyType = primaryKeyTypeFor(entityClass);
+
+            val idStringifier = idStringifierLookupService.lookupElseFail(primaryKeyType);
+            val primaryKey = idStringifier.destring(bookmark.getIdentifier(), entityClass);
+
             val fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
             entityPojo = persistenceManager.getObjectById(entityClass, primaryKey);
@@ -177,11 +184,46 @@ implements EntityFacet {
         return ManagedObject.bookmarked(actualEntitySpec, entityPojo, bookmark);
     }
 
-    @Override
-    public Can<ManagedObject> fetchByQuery(final ObjectSpecification spec, final Query<?> query) {
-        if(!spec.isEntity()) {
-            throw _Exceptions.unexpectedCodeReach();
+    private Map<Class<?>, Class<?>> primaryKeyClassByEntityClass = new ConcurrentHashMap<>();
+
+    private Class<?> primaryKeyTypeFor(Class<?> entityClass) {
+        return primaryKeyClassByEntityClass.computeIfAbsent(entityClass, this::lookupPrimaryKeyTypeFor);
+    }
+
+    private Class<?> lookupPrimaryKeyTypeFor(Class<?> entityClass) {
+
+        val persistenceManager = getPersistenceManager();
+        val pmf = (JDOPersistenceManagerFactory) persistenceManager.getPersistenceManagerFactory();
+        val nucleusContext = pmf.getNucleusContext();
+
+        val contextLoader = Thread.currentThread().getContextClassLoader();
+        val clr = nucleusContext.getClassLoaderResolver(contextLoader);
+
+        val typeMetadata = pmf.getMetadata(entityClass.getName());
+
+        val identityType = typeMetadata.getIdentityType();
+        switch (identityType) {
+            case APPLICATION:
+                String objectIdClass = typeMetadata.getObjectIdClass();
+                return clr.classForName(objectIdClass);
+            case DATASTORE:
+                return nucleusContext.getIdentityManager().getDatastoreIdClass();
+            case UNSPECIFIED:
+            case NONDURABLE:
+            default:
+                throw new IllegalStateException(String.format(
+                        "JdoEntityFacet has been incorrectly installed on '%s' which has an supported identityType of '%s'",
+                        entityClass.getName(), identityType));
         }
+    }
+
+    private ObjectSpecification getEntitySpec() {
+        return getSpecificationLoader().specForType(entityClass)
+                .orElseThrow(() -> new IllegalStateException(String.format("Could not load specification for entity class '%s'", entityClass)));
+    }
+
+    @Override
+    public Can<ManagedObject> fetchByQuery(final Query<?> query) {
 
         if (log.isDebugEnabled()) {
             log.debug("about to execute Query: {}", query.getDescription());
@@ -256,7 +298,7 @@ implements EntityFacet {
     }
 
     @Override
-    public void persist(final ObjectSpecification spec, final Object pojo) {
+    public void persist(final Object pojo) {
 
         if(pojo==null
                 || !isPersistableType(pojo.getClass())
@@ -276,7 +318,7 @@ implements EntityFacet {
     }
 
     @Override
-    public void delete(final ObjectSpecification spec, final Object pojo) {
+    public void delete(final Object pojo) {
 
         if(pojo==null || !isPersistableType(pojo.getClass())) {
             return; // nothing to do

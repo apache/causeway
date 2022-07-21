@@ -33,12 +33,12 @@ class ZipWriter {
 }
 ----
 
-<.> xref:#nextEntry__String_OnZipEntry[nextEntry(String, OnZipEntry)]
+<.> xref:#nextEntry_String_OnZipEntry[nextEntry(String, OnZipEntry)]
 +
 --
 Adds a new zipEntry with given _zipEntryName_ , and provides the _OutputStreamWriter_ via _OnZipEntry_ for the consumer to write the actual (uncompressed) zip-entry content.
 --
-<.> xref:#toBytes__[toBytes()]
+<.> xref:#toBytes_[toBytes()]
 +
 --
 Terminal operation, closes the writer. Calling this operation multiple times, will return the same array instance object.
@@ -46,12 +46,12 @@ Terminal operation, closes the writer. Calling this operation multiple times, wi
 
 == Members
 
-[#nextEntry__String_OnZipEntry]
+[#nextEntry_String_OnZipEntry]
 === nextEntry(String, OnZipEntry)
 
 Adds a new zipEntry with given _zipEntryName_ , and provides the _OutputStreamWriter_ via _OnZipEntry_ for the consumer to write the actual (uncompressed) zip-entry content.
 
-[#toBytes__]
+[#toBytes_]
 === toBytes()
 
 Terminal operation, closes the writer. Calling this operation multiple times, will return the same array instance object.

@@ -12,7 +12,7 @@ class CommandRetrievalOnPrimaryService {
 }
 ----
 
-<.> xref:#findCommandsOnPrimaryAsDto__UUID_Integer[findCommandsOnPrimaryAsDto(UUID, Integer)]
+<.> xref:#findCommandsOnPrimaryAsDto_UUID_Integer[findCommandsOnPrimaryAsDto(UUID, Integer)]
 +
 --
 TODO: outdated info ... These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 
@@ -20,7 +20,7 @@ TODO: outdated info ... These actions should be called with HTTP Accept Header s
 
 == Members
 
-[#findCommandsOnPrimaryAsDto__UUID_Integer]
+[#findCommandsOnPrimaryAsDto_UUID_Integer]
 === findCommandsOnPrimaryAsDto(UUID, Integer)
 
 TODO: outdated info ... These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 

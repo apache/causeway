@@ -18,12 +18,16 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Provider;
 import javax.jdo.JDOException;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.annotations.PersistenceCapable;
 import javax.sql.DataSource;
 
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -50,9 +54,26 @@ import org.apache.isis.persistence.jdo.datanucleus.config.DatanucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForByteId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForDatastoreId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForDatastoreUniqueLongId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForIntId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForLongId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForObjectId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForShortId;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForStringId;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForByteIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForDatastoreIdImpl;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForIntIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForLongIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForObjectIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForShortIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForStringIdentity;
 import org.apache.isis.persistence.jdo.integration.IsisModulePersistenceJdoIntegration;
 import org.apache.isis.persistence.jdo.provider.config.JdoEntityDiscoveryListener;
 import org.apache.isis.persistence.jdo.spring.integration.JdoDialect;
@@ -74,6 +95,24 @@ import lombok.extern.log4j.Log4j2;
 
     // @Component's
     DnEntityStateProvider.class,
+
+    IdStringifierForDatastoreIdImpl.class, // datastore identity
+    IdStringifierForDatastoreUniqueLongId.class,
+    IdStringifierForDatastoreId.class,
+    IdStringifierForShortIdentity.class, // application-defined PK, javax.jdo.identity
+    IdStringifierForLongIdentity.class,
+    IdStringifierForIntIdentity.class,
+    IdStringifierForByteIdentity.class,
+    IdStringifierForCharIdentity.class,
+    IdStringifierForStringIdentity.class,
+    IdStringifierForObjectIdentity.class,
+    IdStringifierForShortId.class,  // application-defined PK, org.datanucleus.identity
+    IdStringifierForLongId.class,
+    IdStringifierForIntId.class,
+    IdStringifierForByteId.class,
+    IdStringifierForCharId.class,
+    IdStringifierForStringId.class,
+    IdStringifierForObjectId.class,
 
     // @Mixin's
     Persistable_datanucleusVersionLong.class,
@@ -99,6 +138,18 @@ public class IsisModulePersistenceJdoDatanucleus {
         return new DnJdoDialect(dataSource);
     }
 
+    private static boolean ignore(final Class<?> entityType) {
+        try {
+            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass() || entityType.isInterface()) {
+                return true;
+            }
+            val persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);
+            return persistenceCapable == null; // ignore if doesn't have @PersistenceCapable
+        } catch (NoClassDefFoundError ex) {
+            return true;
+        }
+    }
+
     @Qualifier("local-pmf-proxy")
     @Bean
     public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
@@ -111,6 +162,8 @@ public class IsisModulePersistenceJdoDatanucleus {
             final DatanucleusSettings dnSettings) {
 
         _Assert.assertNotNull(dataSource, "a datasource is required");
+
+        final Set<String> classNamesNotEnhanced = new LinkedHashSet<>();
 
         autoCreateSchemas(dataSource, isisConfiguration);
 

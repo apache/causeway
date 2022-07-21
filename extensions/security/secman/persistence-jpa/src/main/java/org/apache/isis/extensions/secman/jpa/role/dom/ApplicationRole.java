@@ -34,11 +34,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq;
 import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser;
@@ -52,22 +54,21 @@ import lombok.Setter;
         schema = ApplicationRole.SCHEMA,
         name = ApplicationRole.TABLE,
         uniqueConstraints =
-            @UniqueConstraint(
-                    name = "ApplicationRole_name_UNQ",
-                    columnNames={"name"})
+            @UniqueConstraint(name = "name__UNQ", columnNames= { "name" })
 )
 @NamedQueries({
     @NamedQuery(
             name = Nq.FIND_BY_NAME,
             query = "SELECT r "
-                  + "FROM ApplicationRole r "
-                  + "WHERE r.name = :name"),
+                  + "  FROM ApplicationRole r "
+                  + " WHERE r.name = :name"),
     @NamedQuery(
             name = Nq.FIND_BY_NAME_CONTAINING,
             query = "SELECT r "
-                  + "FROM ApplicationRole r "
-                  + "WHERE r.name LIKE :regex"),
+                  + "  FROM ApplicationRole r "
+                  + " WHERE r.name LIKE :regex"),
 })
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @EntityListeners(IsisEntityListener.class)
 @Named(ApplicationRole.LOGICAL_TYPE_NAME)
 @DomainObject(

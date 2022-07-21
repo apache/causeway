@@ -21,6 +21,7 @@ package demoapp.web;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogPersistenceJdo;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 
 import demoapp.dom.DemoModuleJdo;
@@ -35,6 +36,8 @@ import demoapp.dom.DemoModuleJdo;
 
     // Security Manager Extension (secman)
     IsisModuleExtSecmanPersistenceJdo.class,
+    IsisModuleExtCommandLogPersistenceJdo.class
+
 })
 public class DemoAppManifestJdo {
 

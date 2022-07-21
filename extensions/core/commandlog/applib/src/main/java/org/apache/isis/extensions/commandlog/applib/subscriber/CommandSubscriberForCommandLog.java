@@ -21,7 +21,6 @@ package org.apache.isis.extensions.commandlog.applib.subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -52,9 +51,10 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onCompleted(final Command command) {
 
-        if(!command.isSystemStateChanged()) {
-            return;
-        }
+        // TODO: JPA does not yet support lifecycle listeners, so always would be false.
+//        if(!command.isSystemStateChanged()) {
+//            return;
+//        }
 
         val existingCommandJdoIfAny =
                 commandLogEntryRepository.findByInteractionId(command.getInteractionId());
@@ -72,16 +72,14 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
                 log.debug("proposed: \n{}", commandDtoXml);
             }
         } else {
-            val commandLogInstance = commandLogEntryRepository.createCommandLog(command);
             val parent = command.getParent();
-            val parentJdo =
+            val parentEntryIfAny =
                 parent != null
                     ? commandLogEntryRepository
                         .findByInteractionId(parent.getInteractionId())
                         .orElse(null)
                     : null;
-            commandLogInstance.setParent(parentJdo);
-            commandLogEntryRepository.persist(_Casts.uncheckedCast(commandLogInstance));
+            commandLogEntryRepository.createEntryAndPersist(command, parentEntryIfAny);
         }
     }
 

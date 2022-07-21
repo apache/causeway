@@ -20,9 +20,9 @@ class FileUtils {
 }
 ----
 
-<.> xref:#deleteFilesWithPrefix__String_String_Recursion[deleteFilesWithPrefix(String, String, Recursion)]
+<.> xref:#deleteFilesWithPrefix_String_String_Recursion[deleteFilesWithPrefix(String, String, Recursion)]
 
 == Members
 
-[#deleteFilesWithPrefix__String_String_Recursion]
+[#deleteFilesWithPrefix_String_String_Recursion]
 === deleteFilesWithPrefix(String, String, Recursion)

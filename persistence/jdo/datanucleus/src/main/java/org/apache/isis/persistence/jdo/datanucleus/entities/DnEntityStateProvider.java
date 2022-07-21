@@ -100,8 +100,8 @@ public class DnEntityStateProvider implements JdoFacetContext {
     }
 
     @Override
-    public EntityFacet createEntityFacet(final FacetHolder facetHolder) {
-        return new JdoEntityFacet(facetHolder);
+    public EntityFacet createEntityFacet(final FacetHolder facetHolder, Class<?> entityClass) {
+        return new JdoEntityFacet(facetHolder, entityClass);
     }
 
 }

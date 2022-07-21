@@ -20,12 +20,12 @@ class FixtureScriptsSpecification {
 }
 ----
 
-<.> xref:#FixtureScriptsSpecification__String_FixtureScripts.NonPersistedObjectsStrategy_FixtureScripts.MultipleExecutionStrategy_Class_Class[FixtureScriptsSpecification(String, FixtureScripts.NonPersistedObjectsStrategy, FixtureScripts.MultipleExecutionStrategy, Class, Class)]
+<.> xref:#FixtureScriptsSpecification_String_FixtureScripts_NonPersistedObjectsStrategy_FixtureScripts_MultipleExecutionStrategy_Class_Class[FixtureScriptsSpecification(String, FixtureScripts_NonPersistedObjectsStrategy, FixtureScripts_MultipleExecutionStrategy, Class, Class)]
 +
 --
 Typically preferable to use the create using the _FixtureScriptsSpecification.Builder_ (obtained from _#builder(Class)_ ).
 --
-<.> xref:#getMultipleExecutionStrategy__[getMultipleExecutionStrategy()]
+<.> xref:#getMultipleExecutionStrategy_[getMultipleExecutionStrategy()]
 +
 --
 Note that this can be overridden on a fixture-by-fixture basis if the fixture implements xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScriptWithExecutionStrategy.adoc[FixtureScriptWithExecutionStrategy] .
@@ -33,12 +33,12 @@ Note that this can be overridden on a fixture-by-fixture basis if the fixture im
 
 == Members
 
-[#FixtureScriptsSpecification__String_FixtureScripts.NonPersistedObjectsStrategy_FixtureScripts.MultipleExecutionStrategy_Class_Class]
-=== FixtureScriptsSpecification(String, FixtureScripts.NonPersistedObjectsStrategy, FixtureScripts.MultipleExecutionStrategy, Class, Class)
+[#FixtureScriptsSpecification_String_FixtureScripts_NonPersistedObjectsStrategy_FixtureScripts_MultipleExecutionStrategy_Class_Class]
+=== FixtureScriptsSpecification(String, FixtureScripts_NonPersistedObjectsStrategy, FixtureScripts_MultipleExecutionStrategy, Class, Class)
 
 Typically preferable to use the create using the _FixtureScriptsSpecification.Builder_ (obtained from _#builder(Class)_ ).
 
-[#getMultipleExecutionStrategy__]
+[#getMultipleExecutionStrategy_]
 === getMultipleExecutionStrategy()
 
 Note that this can be overridden on a fixture-by-fixture basis if the fixture implements xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScriptWithExecutionStrategy.adoc[FixtureScriptWithExecutionStrategy] .

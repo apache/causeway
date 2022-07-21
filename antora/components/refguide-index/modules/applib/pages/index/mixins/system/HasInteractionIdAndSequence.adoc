@@ -1,0 +1,44 @@
+= HasInteractionIdAndSequence
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Extends xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] to add a strictly monotonically increasing sequence number.
+
+There are two different use cases for this:
+
+* The first is to identify different transactions within the overall _org.apache.isis.applib.services.iactn.Interaction_ .
++
+--
+In the vast majority of cases there will only be a single transaction per _org.apache.isis.applib.services.iactn.Interaction_ , but this isn't _always_ the case as domain objects may on occasion need to explicitly manage transaction boundaries using _org.apache.isis.applib.services.xactn.TransactionService_ .
+--
+* The second is to identify different executions within the overall _org.apache.isis.applib.services.iactn.Interaction_ .
++
+--
+In the vast majority of cases there will only be a single execution per _org.apache.isis.applib.services.iactn.Interaction_ , but this isn't _always_ the case; sometimes a top-level execution will cause another execution to occur, using the _org.apache.isis.applib.services.wrapper.WrapperFactory_ .
+--
+
+These two different sequences are independent of each other.
+
+== API
+
+[source,java]
+.HasInteractionIdAndSequence.java
+----
+interface HasInteractionIdAndSequence {
+  int getSequence()     // <.>
+}
+----
+
+<.> xref:#getSequence_[getSequence()]
++
+--
+Holds the sequence number uniquely an "event" within the overall _org.apache.isis.applib.services.iactn.Interaction_ .
+--
+
+== Members
+
+[#getSequence_]
+=== getSequence()
+
+Holds the sequence number uniquely an "event" within the overall _org.apache.isis.applib.services.iactn.Interaction_ .
+
+The "event" could be a member execution (an action invocation or property edit), or could be a transaction.

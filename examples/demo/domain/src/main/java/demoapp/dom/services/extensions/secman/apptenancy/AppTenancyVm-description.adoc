@@ -41,7 +41,7 @@ For example:
 
 [source,java]
 ----
-include::SecManVm.java[tags=hideRegex]
+include::AppTenancyVm.java[tags=hideRegex]
 ----
 
 [IMPORTANT]

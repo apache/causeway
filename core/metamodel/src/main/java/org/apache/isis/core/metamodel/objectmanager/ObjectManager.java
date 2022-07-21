@@ -208,7 +208,7 @@ public interface ObjectManager {
             val entityFacet = spec.getFacet(EntityFacet.class);
             val state = entityFacet.getEntityState(pojo);
             if(state.isAttached()) {
-                val id = entityFacet.identifierFor(spec, pojo);
+                val id = entityFacet.identifierFor(pojo);
                 val bookmark = Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), id);
                 return ManagedObject.bookmarked(spec, pojo, bookmark);
             }

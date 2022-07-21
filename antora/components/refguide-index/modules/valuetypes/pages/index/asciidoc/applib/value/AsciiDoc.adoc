@@ -19,7 +19,7 @@ class AsciiDoc {
 }
 ----
 
-<.> xref:#loadJRuby__[loadJRuby()]
+<.> xref:#loadJRuby_[loadJRuby()]
 +
 --
 Not strictly required, but allows for eager loading. Is a one-shot, that may take about 5 seconds.
@@ -27,7 +27,7 @@ Not strictly required, but allows for eager loading. Is a one-shot, that may tak
 
 == Members
 
-[#loadJRuby__]
+[#loadJRuby_]
 === loadJRuby()
 
 Not strictly required, but allows for eager loading. Is a one-shot, that may take about 5 seconds.

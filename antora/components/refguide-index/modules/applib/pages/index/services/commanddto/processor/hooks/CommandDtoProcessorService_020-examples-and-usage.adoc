@@ -10,8 +10,9 @@ The conversion is performed by an in-built implementation of the xref:refguide:a
 
 The `CommandDtoProcessorService` SPI provides a mechanism to post-process the `CommandDto` of any objects being serialized across the network.
 
-For example, the xref:userguide:commandreplay:about.adoc[Command Replay] extension provides an implementation in order to copy information about the outcome of each command on the primary system into the `userData` map of `CommandDto`.
-Another use case is to strip out large blobs for performance reasons.
+One use case is to strip out large blobs for performance reasons.
+// commandreplay moved to incubator for the time being
+//Another is the xref:userguide:commandreplay:about.adoc[Command Replay] extension which provides an implementation in order to copy information about the outcome of each command on the primary system into the `userData` map of `CommandDto`.
 
 
 == See also

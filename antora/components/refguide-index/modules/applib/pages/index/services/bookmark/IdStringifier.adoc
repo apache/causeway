@@ -1,0 +1,55 @@
+= IdStringifier
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+SPI to converts the identifier (primary key) of an entity, of a given type (eg Integer) into a string, and to convert back again into the key object used to actually look up the target entity instance; supported by both JDO and JPA persistence mechanisms.
+
+This is ultimately used by xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService] where we hold a persistent reference to an entity. The resultant string also appears in URLs of the Wicket viewer and Restful Objects viewers, and in mementos eg in _org.apache.isis.schema.cmd.v2.CommandDto_ and _org.apache.isis.schema.ixn.v2.InteractionDto_ .
+
+The framework provides default implementations of this SPI for JDO (data store and application identity) and for JPA. Because this is an SPI, other modules or application code can provide their own implementations. An example of such is the JPA implementation of the `commandlog` extension.
+
+== API
+
+[source,java]
+.IdStringifier.java
+----
+interface IdStringifier<T> {
+  boolean handles(Class<?> candidateValueClass)     // <.>
+  String enstring(T value)     // <.>
+  T destring(String stringified, Class<?> targetEntityClass)     // <.>
+}
+----
+
+<.> xref:#handles_Class[handles(Class)]
++
+--
+Whether this xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier] is able to _#enstring(Object)_ or _#destring(String, Class)_ values of this type.
+--
+<.> xref:#enstring_T[enstring(T)]
++
+--
+Convert the value (which will be of the same type as is _#handles(Class) handled_ into a string representation.
+--
+<.> xref:#destring_String_Class[destring(String, Class)]
++
+--
+Convert a string representation of the identifier (as returned by _#enstring(Object)_ ) into an object that can be used to retrieve.
+--
+
+== Members
+
+[#handles_Class]
+=== handles(Class)
+
+Whether this xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier] is able to _#enstring(Object)_ or _#destring(String, Class)_ values of this type.
+
+Even though some implementations also require the owning entity type in order to _#destring(String, Class)_ , we do not consider that as part of this function; we assume that the entity type will be provided when necessary (by the JDO entity facet, in fact). This is sufficient.
+
+[#enstring_T]
+=== enstring(T)
+
+Convert the value (which will be of the same type as is _#handles(Class) handled_ into a string representation.
+
+[#destring_String_Class]
+=== destring(String, Class)
+
+Convert a string representation of the identifier (as returned by _#enstring(Object)_ ) into an object that can be used to retrieve.

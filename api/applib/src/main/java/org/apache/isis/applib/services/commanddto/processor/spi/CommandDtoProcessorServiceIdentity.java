@@ -22,6 +22,7 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
@@ -31,9 +32,11 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.applib.CommandDtoProcessorServiceIdentity")
+@Named(CommandDtoProcessorServiceIdentity.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.LAST)
 public class CommandDtoProcessorServiceIdentity implements CommandDtoProcessorService {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".CommandDtoProcessorServiceIdentity";
 
     @Override
     public CommandDto process(final Object domainObject, final CommandDto commandDto) {

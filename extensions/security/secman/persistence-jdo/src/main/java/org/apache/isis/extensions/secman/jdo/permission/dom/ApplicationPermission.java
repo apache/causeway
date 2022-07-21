@@ -32,11 +32,13 @@ import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
 import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.Nq;
@@ -52,48 +54,46 @@ import lombok.Setter;
         schema = ApplicationPermission.SCHEMA,
         table = ApplicationPermission.TABLE)
 @Uniques({
-        @Unique(
-                name = "ApplicationPermission_role_feature_rule_UNQ",
-                members = { "role", "featureSort", "featureFqn", "rule" })
+        @Unique(name = "role__feature__rule__UNQ", members = { "role", "featureSort", "featureFqn", "rule" })
 })
 @Queries( {
     @Query(
             name = Nq.FIND_BY_ROLE,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE role == :role"),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE role == :role"),
     @Query(
             name = Nq.FIND_BY_USER,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE (u.roles.contains(role) && u.username == :username) "
-                    + "VARIABLES org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser u"),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE (u.roles.contains(role) && u.username == :username) "
+                  + " VARIABLES org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser u"),
     @Query(
             name = Nq.FIND_BY_ROLE_NAMES,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE :roleNames.contains(role.name) "),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE :roleNames.contains(role.name) "),
     @Query(
             name = Nq.FIND_BY_FEATURE,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE featureSort == :featureSort "
-                    + "   && featureFqn == :featureFqn"),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE featureSort == :featureSort "
+                  + "    && featureFqn == :featureFqn"),
     @Query(
             name = Nq.FIND_BY_ROLE_RULE_FEATURE_FQN,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE role == :role "
-                    + "   && rule == :rule "
-                    + "   && featureSort == :featureSort "
-                    + "   && featureFqn == :featureFqn "),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE role == :role "
+                  + "    && rule == :rule "
+                  + "    && featureSort == :featureSort "
+                  + "    && featureFqn == :featureFqn "),
     @Query(
             name = Nq.FIND_BY_ROLE_RULE_FEATURE,
             value = "SELECT "
-                    + "FROM " + ApplicationPermission.FQCN
-                    + " WHERE role == :role "
-                    + "   && rule == :rule "
-                    + "   && featureSort == :featureSort "),
+                  + "  FROM " + ApplicationPermission.FQCN
+                  + " WHERE role == :role "
+                  + "    && rule == :rule "
+                  + "    && featureSort == :featureSort "),
 })
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
@@ -102,6 +102,7 @@ import lombok.Setter;
 @Version(
         strategy = VersionStrategy.VERSION_NUMBER,
         column = "version")
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @Named(ApplicationPermission.LOGICAL_TYPE_NAME)
 @DomainObject()
 @DomainObjectLayout(

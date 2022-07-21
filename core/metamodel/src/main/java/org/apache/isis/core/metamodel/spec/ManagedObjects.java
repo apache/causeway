@@ -641,14 +641,14 @@ public final class ManagedObjects {
             requiresEntity(managedObject);
             val spec = managedObject.getSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);
-            entityFacet.persist(spec, managedObject.getPojo());
+            entityFacet.persist(managedObject.getPojo());
         }
 
         public static void destroyInCurrentTransaction(final ManagedObject managedObject) {
             requiresEntity(managedObject);
             val spec = managedObject.getSpecification();
             val entityFacet = spec.getFacet(EntityFacet.class);
-            entityFacet.delete(spec, managedObject.getPojo());
+            entityFacet.delete(managedObject.getPojo());
         }
 
         public static void requiresEntity(final ManagedObject managedObject) {

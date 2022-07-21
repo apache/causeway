@@ -1032,7 +1032,7 @@ object RESTFUL_DOMAIN_TYPES : Response() {
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   }, {
     "rel" : "urn:org.restfulobjects:rels/domain-type",
-    "href" : "http://localhost:8080/restful/domain-types/org.apache.isis.persistence.jdo.datanucleus5.metrics.MetricsServiceForJdo",
+    "href" : "http://localhost:8080/restful/domain-types/org.apache.isis.persistence.jdo.datanucleus.metrics.MetricsServiceForJdo",
     "method" : "GET",
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   }, {

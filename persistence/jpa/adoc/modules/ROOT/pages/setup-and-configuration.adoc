@@ -79,7 +79,7 @@ is set to an Apache Isis implementation, to assist with dependency injection int
 
 Generally these should not be changed, though if there is a requirement, then provide a subclasse alternate implementation of `org.apache.isis.persistence.jpa.eclipselink.config.ElSettings` with an earlier `@Priority` precedence.
 
-To set other EclipseLink configuration properties, use a subclass of xref:refguide:persistence:index/jpa/eclipselink/IsisModuleJpaEclipselink.adoc[] and override `getVendorProperties()`.
+To set other EclipseLink configuration properties, use a subclass of xref:refguide:persistence:index/jpa/eclipselink/IsisModulePersistenceJpaEclipselink.adoc[] and override `getVendorProperties()`.
 
 
 == Other Configuration Properties

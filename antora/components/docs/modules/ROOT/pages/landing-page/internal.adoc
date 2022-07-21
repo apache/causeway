@@ -15,5 +15,4 @@ They include guides for day-to-day operations, as well as notes on the design/im
 == Design & Implementation
 
 *  xref:core:ROOT:about.adoc[Design Docs]
-*  xref:regressiontests:ROOT:about.adoc[Regression Tests]
 

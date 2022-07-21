@@ -1,4 +1,4 @@
-= MetaModelService _(interface)_
+= MetaModelService
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 This service provides a formal API into the framework's metamodel.
@@ -20,42 +20,42 @@ interface MetaModelService {
 }
 ----
 
-<.> xref:#lookupLogicalTypeByName__String[lookupLogicalTypeByName(String)]
+<.> xref:#lookupLogicalTypeByName_String[lookupLogicalTypeByName(String)]
 +
 --
 Provides a lookup by logicalTypeName of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
 --
-<.> xref:#lookupLogicalTypeByClass__Class[lookupLogicalTypeByClass(Class)]
+<.> xref:#lookupLogicalTypeByClass_Class[lookupLogicalTypeByClass(Class)]
 +
 --
 Provides a lookup by class of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ).
 --
-<.> xref:#rebuild__Class[rebuild(Class)]
+<.> xref:#rebuild_Class[rebuild(Class)]
 +
 --
 Invalidates and rebuilds the internal metadata for the specified domain type.
 --
-<.> xref:#getDomainModel__[getDomainModel()]
+<.> xref:#getDomainModel_[getDomainModel()]
 +
 --
 Returns a list of representations of each of member of each domain class.
 --
-<.> xref:#sortOf__Class_Mode[sortOf(Class, Mode)]
+<.> xref:#sortOf_Class_Mode[sortOf(Class, Mode)]
 +
 --
 What sort of object the domain type represents.
 --
-<.> xref:#sortOf__Bookmark_Mode[sortOf(Bookmark, Mode)]
+<.> xref:#sortOf_Bookmark_Mode[sortOf(Bookmark, Mode)]
 +
 --
 Override of _#sortOf(Class, Mode)_ , extracting the domain type from the provided xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] of a domain object instance.
 --
-<.> xref:#commandDtoProcessorFor__String[commandDtoProcessorFor(String)]
+<.> xref:#commandDtoProcessorFor_String[commandDtoProcessorFor(String)]
 +
 --
 Obtains the implementation of xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] (if any) as per _Action#commandDtoProcessor()_ or _Property#commandDtoProcessor()_ .
 --
-<.> xref:#exportMetaModel__Config[exportMetaModel(Config)]
+<.> xref:#exportMetaModel_Config[exportMetaModel(Config)]
 +
 --
 Exports the entire metamodel as a DTO, serializable into XML using JAXB.
@@ -63,22 +63,22 @@ Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 
 == Members
 
-[#lookupLogicalTypeByName__String]
+[#lookupLogicalTypeByName_String]
 === lookupLogicalTypeByName(String)
 
 Provides a lookup by logicalTypeName of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ). Will return an empty result if there is no such non-abstract class registered. (interfaces and abstract types are never added to the lookup table).
 
-[#lookupLogicalTypeByClass__Class]
+[#lookupLogicalTypeByClass_Class]
 === lookupLogicalTypeByClass(Class)
 
 Provides a lookup by class of a domain class' object type, as defined by _DomainObject#logicalTypeName()_ (or any other mechanism that corresponds to Isis' `ObjectTypeFacet` ).
 
-[#rebuild__Class]
+[#rebuild_Class]
 === rebuild(Class)
 
 Invalidates and rebuilds the internal metadata for the specified domain type.
 
-[#getDomainModel__]
+[#getDomainModel_]
 === getDomainModel()
 
 Returns a list of representations of each of member of each domain class.
@@ -87,24 +87,24 @@ Used by xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[
 
 Note that _MetaModelService#exportMetaModel(Config)_ provides a superset of the functionality provided by this method.
 
-[#sortOf__Class_Mode]
+[#sortOf_Class_Mode]
 === sortOf(Class, Mode)
 
 What sort of object the domain type represents.
 
-[#sortOf__Bookmark_Mode]
+[#sortOf_Bookmark_Mode]
 === sortOf(Bookmark, Mode)
 
 Override of _#sortOf(Class, Mode)_ , extracting the domain type from the provided xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] of a domain object instance.
 
-[#commandDtoProcessorFor__String]
+[#commandDtoProcessorFor_String]
 === commandDtoProcessorFor(String)
 
 Obtains the implementation of xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] (if any) as per _Action#commandDtoProcessor()_ or _Property#commandDtoProcessor()_ .
 
 This is used by framework-provided implementations of _org.apache.isis.applib.services.conmap.ContentMappingService_ .
 
-[#exportMetaModel__Config]
+[#exportMetaModel_Config]
 === exportMetaModel(Config)
 
 Exports the entire metamodel as a DTO, serializable into XML using JAXB.

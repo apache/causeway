@@ -1,4 +1,4 @@
-# metamodel_terminology
+= metamodel_terminology
 
 == Metamodel Terminology
 
@@ -54,11 +54,11 @@ DS --> A : has 1..*
 @enduml
 --
 
-*_Viewmodels_* and *_Entities_* are specializations of *_Domain Objects_*. 
+*_Viewmodels_* and *_Entities_* are specializations of *_Domain Objects_*.
 
-_Domain Objects_ have *_Properties_*, *_Collections_* and *_Actions_*, 
-while _Viewmodels_ are (lifecycle-) managed by _Apache Isis_, 
-_Entities_ are managed by the configured persistence layer 
+_Domain Objects_ have *_Properties_*, *_Collections_* and *_Actions_*,
+while _Viewmodels_ are (lifecycle-) managed by _Apache Isis_,
+_Entities_ are managed by the configured persistence layer
 (either JDO or JPA).
 
 *_Services_* in general are (lifecycle-) managed by _Spring_.
@@ -66,9 +66,9 @@ We distinguish between _Services_ that are *_included_* in the metamodel
 and those that are not. Included _Services_ we call *_Domain Services_*,
 and their _Actions_ (like _Domain Objects_) are part of the metamodel.
 
-Those _Actions_ are either visible as _Menu Actions_ in the UI 
-and/or made available for the _Restful Objects Viewer_. 
+Those _Actions_ are either visible as _Menu Actions_ in the UI
+and/or made available for the _Restful Objects Viewer_.
 (As indicated by the so called _Service's_ *_Nature_*.)
 
-*_Mixins_* do *_contribute_* either a _Property_, a _Collection_ 
-or an _Action_ to their *_Mixee_* (-type). 
+*_Mixins_* do *_contribute_* either a _Property_, a _Collection_
+or an _Action_ to their *_Mixee_* (-type).

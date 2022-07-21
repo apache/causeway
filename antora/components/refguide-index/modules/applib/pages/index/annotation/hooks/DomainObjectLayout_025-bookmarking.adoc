@@ -25,7 +25,7 @@ indicates that the `ToDoItem` class is bookmarkable:
 It is also possible to nest bookmarkable entities.
 For example:
 
-image::reference-annotations/DomainObjectLayout/bookmarking-nested.png[width="720px"]
+image::refguide:applib-ant:reference-annotations/DomainObjectLayout/bookmarking-nested.png[width="720px"]
 
 
 For example, the `Property` entity "[OXF] Oxford Super Mall" is a root bookmark, but the `Unit` child entity "[OXF-001] Unit 1" only appears as a bookmark _but only if_ its parent `Property` has already been bookmarked.

@@ -50,17 +50,17 @@ enum RepresentationType {
 }
 ----
 
-<.> xref:#getMediaType__String_String[getMediaType(String, String)]
+<.> xref:#getMediaType_String_String[getMediaType(String, String)]
 +
 --
 Clones the (immutable) _#getJsonMediaType() media type_ , adding in one additional parameter value.
 --
-<.> xref:#matchesXmlProfileWithParameter__List_String[matchesXmlProfileWithParameter(List, String)]
+<.> xref:#matchesXmlProfileWithParameter_List_String[matchesXmlProfileWithParameter(List, String)]
 +
 --
 whether any of the xref:refguide:viewer:index/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) XML _MediaType_ with specified parameter.
 --
-<.> xref:#matchesJsonProfileWithParameter__List_String[matchesJsonProfileWithParameter(List, String)]
+<.> xref:#matchesJsonProfileWithParameter_List_String[matchesJsonProfileWithParameter(List, String)]
 +
 --
 whether any of the xref:refguide:viewer:index/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) JSON _MediaType_ with specified parameter.
@@ -68,17 +68,17 @@ whether any of the xref:refguide:viewer:index/restfulobjects/applib/Representati
 
 == Members
 
-[#getMediaType__String_String]
+[#getMediaType_String_String]
 === getMediaType(String, String)
 
 Clones the (immutable) _#getJsonMediaType() media type_ , adding in one additional parameter value.
 
-[#matchesXmlProfileWithParameter__List_String]
+[#matchesXmlProfileWithParameter_List_String]
 === matchesXmlProfileWithParameter(List, String)
 
 whether any of the xref:refguide:viewer:index/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) XML _MediaType_ with specified parameter.
 
-[#matchesJsonProfileWithParameter__List_String]
+[#matchesJsonProfileWithParameter_List_String]
 === matchesJsonProfileWithParameter(List, String)
 
 whether any of the xref:refguide:viewer:index/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) JSON _MediaType_ with specified parameter.

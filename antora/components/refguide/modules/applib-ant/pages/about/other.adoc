@@ -13,10 +13,6 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |Purpose
 |Layer
 
-|xref:refguide:applib:index/annotation/Facets.adoc[@Facets]
-|Install arbitrary facets within the Apache Isis metamodel.
-|(any)
-
 |xref:refguide:applib:index/annotation/HomePage.adoc[@HomePage]
 |Query-only action (on domain service) to be invoked, result of which is rendered as the user's home page.
 |UI

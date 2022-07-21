@@ -43,7 +43,7 @@ xref:refguide:applib-ant:Column.adoc#nullability[@Column#allowsNull()].
 ====
 
 If more than one method is specified then the framework will validate that there are no incompatibilities (and fail to boot otherwise).
-This can also be verified using the xref:refguide:mvn:validate.adoc[validate goal] of the Apache Isis Maven plugin.
+
 
 
 

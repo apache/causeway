@@ -28,14 +28,14 @@
     <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-2.0.xsd"/>
     <xs:import namespace="http://isis.apache.org/schema/cmd" schemaLocation="../cmd/cmd-2.0.xsd"/>
 
-    <xs:element name="interactionDto">
+    <xs:element name="interactionsDto">
         <xs:annotation>
-            <xs:documentation>Represents v2.0 of this schema (as per majorVersion.minorVersion @default attribute, below); just updates to use cmd v1.4 schema.
+            <xs:documentation>A collection of interactions.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="2">
+                <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
                     <xs:annotation>
                         <xs:documentation>The major version of the schema that an XML instance was created using.
                         </xs:documentation>
@@ -47,16 +47,48 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
+                <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="interactionDto"/>
+                </xs:sequence>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="interactionDto">
+        <xs:annotation>
+            <xs:documentation>Represents an interaction, that is the execution of a command on a target object.
+                There is typically just a single execution per command.  In more complex cases though executions can be nested, whereby a top-level execution causes other executions, as invoked through a wrapper (Wrapperproxy obtained from the WrapperFactory service).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="majorVersion" type="xs:string" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The major version of the schema that an XML instance was created using.
+                            Omit if within a top-level interactionsDto.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="minorVersion" type="xs:string" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The minor version of the schema that an XML instance was created using.
+                            Omit if within a top-level interactionsDto.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element name="interactionId" type="xs:string">
                     <xs:annotation>
                         <xs:documentation>Unique identifier of the interaction which this member was interacted with (action invoked/property edited); can be used to locate the corresponding Command object (which may have been persisted).
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="execution" type="memberExecutionDto"/>
+                <xs:element name="execution" type="memberExecutionDto">
+                    <xs:annotation>
+                        <xs:documentation>Either an action invocation or a property edit.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
-
     </xs:element>
 
     <xs:complexType name="memberExecutionDto" abstract="true">
@@ -79,25 +111,13 @@
             </xs:element>
             <xs:element name="logicalMemberIdentifier" type="xs:string">
                 <xs:annotation>
-                    <xs:documentation>Logical formal identifier (object type, as per @DomainObject(objectType=), and member name) of the member being interacted with (action or property).
+                    <xs:documentation>Logical formal identifier of the member being interacted with (action or property).  Uses logicalTypeName, abstracts away whether the member is a declared member or a mixin.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="memberIdentifier" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>Formal identifier (class name and member name) of the member being interacted with (action or property).
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="user" type="xs:string">
+            <xs:element name="username" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>The name of the user that invoked this action.  Note that this isn't necessarily the user that initiated the original command; the SudoService may be being used to temporarily switch the effective user.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="title" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>User-friendly title of the 'target' object.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -178,7 +198,6 @@
                     <xs:documentation>How many objets were affected by the member interaction.
                     </xs:documentation>
                 </xs:annotation>
-
             </xs:element>
         </xs:sequence>
     </xs:complexType>
@@ -198,7 +217,6 @@
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
-
     </xs:complexType>
 
     <xs:complexType name="exceptionDto">

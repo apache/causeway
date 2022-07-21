@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="DemoAppWicketJdo" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" />
+    <module name="demo-wicket-jdo" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="demoapp.webapp.wicket.jdo.DemoAppWicketJdo" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

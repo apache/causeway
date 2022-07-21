@@ -11,9 +11,9 @@ class IsisModuleExtSecmanEncryptionSpring {
 }
 ----
 
-<.> xref:#passwordEncoder__[passwordEncoder()]
+<.> xref:#passwordEncoder_[passwordEncoder()]
 
 == Members
 
-[#passwordEncoder__]
+[#passwordEncoder_]
 === passwordEncoder()

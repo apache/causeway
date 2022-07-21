@@ -15,7 +15,7 @@ By convention, we have one Spring "logical" module in each Maven "physical" modu
 Thus, there will be a single top-level package corresponding to the module, and this will be aligned with the `<groupId>` and `<artifactId>` of the Maven module in which it resides.
 
 The framework's own modules follow this convention.
-For example, the xref:extensions:excel:about.adoc[Excel extension] module has several submodules, one of which is its applib.
+For example, the xref:vw:exceldownload:about.adoc[Excel extension] module has several submodules, one of which is its applib.
 This:
 
 * has a Maven

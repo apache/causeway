@@ -24,7 +24,10 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
@@ -33,21 +36,25 @@ import org.apache.isis.schema.chg.v2.ChangesDto;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
+ * Simple implementation of {@link EntityChangesSubscriber} that just logs out the {@link EntityChanges}'s
+ * {@link EntityChanges#getDto() DTO} to a debug log.
+ *
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.applib.EntityChangesLogger")
+@Named(EntityChangesLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Logging")
 @Log4j2
 public class EntityChangesLogger implements EntityChangesSubscriber {
 
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".EntityChangesLogger";
+
     @Override
     public boolean isEnabled() {
         return log.isDebugEnabled();
     }
-    
+
     @Override
     public void onChanging(final EntityChanges changingEntities) {
 

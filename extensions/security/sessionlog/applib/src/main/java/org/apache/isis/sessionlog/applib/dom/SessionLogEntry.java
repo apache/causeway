@@ -1,3 +1,23 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
+
 package org.apache.isis.sessionlog.applib.dom;
 
 import java.lang.annotation.ElementType;
@@ -27,12 +47,10 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.applib.mixins.security.HasUsername;
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.session.SessionLogService;
+import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.sessionlog.applib.IsisModuleExtSessionLogApplib;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @Named(SessionLogEntry.LOGICAL_TYPE_NAME)
@@ -53,20 +71,20 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_SESSION_GUID_STR =  SessionLogEntry.LOGICAL_TYPE_NAME + ".findBySessionGuidStr";
-        public static final String FIND_BY_HTTP_SESSION_ID =  SessionLogEntry.LOGICAL_TYPE_NAME + ".findByHttpSessionId";
-        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampBetween";
-        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampAfter";
-        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampBefore";
-        public static final String FIND_BY_USERNAME = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsername";
-        public static final String FIND_BY_TIMESTAMP_BETWEEN = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampBetween";
-        public static final String FIND_BY_TIMESTAMP_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampAfter";
-        public static final String FIND_BY_TIMESTAMP_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByTimestampBefore";
-        public static final String FIND = SessionLogEntry.LOGICAL_TYPE_NAME + ".find";
-        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_BEFORE = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampStrictlyBefore";
-        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_AFTER = SessionLogEntry.LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampStrictlyAfter";
-        public static final String FIND_ACTIVE_SESSIONS = SessionLogEntry.LOGICAL_TYPE_NAME + ".findActiveSessions";
-        public static final String FIND_RECENT_BY_USERNAME = SessionLogEntry.LOGICAL_TYPE_NAME + ".findRecentByUsername";
+        public static final String FIND_BY_SESSION_GUID_STR = LOGICAL_TYPE_NAME + ".findBySessionGuidStr";
+        public static final String FIND_BY_HTTP_SESSION_ID = LOGICAL_TYPE_NAME + ".findByHttpSessionId";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN = LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampBetween";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_AFTER = LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampAfter";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE = LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampBefore";
+        public static final String FIND_BY_USERNAME = LOGICAL_TYPE_NAME + ".findByUsername";
+        public static final String FIND_BY_TIMESTAMP_BETWEEN = LOGICAL_TYPE_NAME + ".findByTimestampBetween";
+        public static final String FIND_BY_TIMESTAMP_AFTER = LOGICAL_TYPE_NAME + ".findByTimestampAfter";
+        public static final String FIND_BY_TIMESTAMP_BEFORE = LOGICAL_TYPE_NAME + ".findByTimestampBefore";
+        public static final String FIND = LOGICAL_TYPE_NAME + ".find";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_BEFORE = LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampStrictlyBefore";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_STRICTLY_AFTER = LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampStrictlyAfter";
+        public static final String FIND_ACTIVE_SESSIONS = LOGICAL_TYPE_NAME + ".findActiveSessions";
+        public static final String FIND_RECENT_BY_USERNAME = LOGICAL_TYPE_NAME + ".findRecentByUsername";
     }
 
     // -- UI & DOMAIN EVENTS
@@ -87,7 +105,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             final UUID sessionGuid,
             final String httpSessionId,
             final String username,
-            final SessionLogService.CausedBy causedBy,
+            final SessionSubscriber.CausedBy causedBy,
             final Timestamp loginTimestamp) {
         setSessionGuidStr(sessionGuid != null ? sessionGuid.toString() : null);
         setHttpSessionId(httpSessionId);
@@ -107,7 +125,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
                 format.format(getLoginTimestamp()),
                 getUsername(),
                 getLogoutTimestamp() == null ? "in": "out",
-                getCausedBy() == SessionLogService.CausedBy.SESSION_EXPIRATION ? "(session expired)" : "");
+                getCausedBy() == SessionSubscriber.CausedBy.SESSION_EXPIRATION ? "(session expired)" : "");
     }
 
     public String cssClass() {
@@ -117,7 +135,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     public String iconName() {
         return getLogoutTimestamp() == null
                 ? "login"
-                :getCausedBy() != SessionLogService.CausedBy.SESSION_EXPIRATION
+                :getCausedBy() != SessionSubscriber.CausedBy.SESSION_EXPIRATION
                     ? "logout"
                     : "expired";
     }
@@ -286,8 +304,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         String ALLOWS_NULL = "false";
     }
     @CausedBy
-    public abstract SessionLogService.CausedBy getCausedBy();
-    public abstract void setCausedBy(SessionLogService.CausedBy causedBy);
+    public abstract SessionSubscriber.CausedBy getCausedBy();
+    public abstract void setCausedBy(SessionSubscriber.CausedBy causedBy);
 
 
 

@@ -54,7 +54,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ConfigurationProperty implements Comparable<ConfigurationProperty> {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationProperty";
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationProperty";
 
     public ConfigurationProperty(final String key, final String value){
         this.key = key;

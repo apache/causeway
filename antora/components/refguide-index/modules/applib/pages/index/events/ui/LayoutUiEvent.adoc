@@ -22,12 +22,12 @@ class LayoutUiEvent<S> {
 }
 ----
 
-<.> xref:#LayoutUiEvent__[LayoutUiEvent()]
+<.> xref:#LayoutUiEvent_[LayoutUiEvent()]
 +
 --
 If used then the framework will set state via (non-API) setters.
 --
-<.> xref:#setLayout__String[setLayout(String)]
+<.> xref:#setLayout_String[setLayout(String)]
 +
 --
 For subscribers to call to provide a layout for this object.
@@ -35,14 +35,14 @@ For subscribers to call to provide a layout for this object.
 
 == Members
 
-[#LayoutUiEvent__]
+[#LayoutUiEvent_]
 === LayoutUiEvent()
 
 If used then the framework will set state via (non-API) setters.
 
 Because the _EventObject_ superclass prohibits a null source, a dummy value is temporarily used.
 
-[#setLayout__String]
+[#setLayout_String]
 === setLayout(String)
 
 For subscribers to call to provide a layout for this object.
