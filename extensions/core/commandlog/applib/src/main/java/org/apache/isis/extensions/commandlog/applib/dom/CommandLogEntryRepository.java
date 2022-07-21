@@ -283,7 +283,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
         commandJdo.setInteractionId(UUID.fromString(dto.getInteractionId()));
         commandJdo.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(dto.getTimestamp()));
-        commandJdo.setUsername(dto.getUser());
+        commandJdo.setUsername(dto.getUsername());
 
         commandJdo.setReplayState(ReplayState.PENDING);
 

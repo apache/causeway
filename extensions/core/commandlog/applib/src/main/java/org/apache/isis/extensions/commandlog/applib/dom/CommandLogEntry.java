@@ -167,7 +167,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
             final int targetIndex) {
 
         setInteractionId(UUID.fromString(commandDto.getInteractionId()));
-        setUsername(commandDto.getUser());
+        setUsername(commandDto.getUsername());
         setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimestamp()));
 
         setCommandDto(commandDto);
