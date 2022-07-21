@@ -161,11 +161,11 @@ Note that the xref:testing:fakedata:about.adoc[Fakedata] testing module could al
 It's important that a wrapper class is used (ie `java.lang.Integer`, not `int`)
 <.> output property: the generated list of objects, for the calling test to grab
 <.> the mandatory `execute(...)` API.
-The xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc[ExecutionContext] parameter is discussed in more detail in the <<executioncontext,next section>>.
+The xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript_ExecutionContext.adoc[ExecutionContext] parameter is discussed in more detail in the <<executioncontext,next section>>.
 <.> the `defaultParam(...)` (inherited from `FixtureScript`) will default the `number` property (using Java's Reflection API) if none was specified
-<.> call another fixture script (`SimpleObjectsTearDown`) using the provided xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc[ExecutionContext].
+<.> call another fixture script (`SimpleObjectsTearDown`) using the provided xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript_ExecutionContext.adoc[ExecutionContext].
 There's no need to instantiate using the xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService].
-<.> calling another fixture script (`SimpleObjectCreate`) using the provided xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc[ExecutionContext]
+<.> calling another fixture script (`SimpleObjectCreate`) using the provided xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript_ExecutionContext.adoc[ExecutionContext]
 <.> adding the created object to the list, for the calling object to use.
 
 Because this script has exposed a "number" property, it's possible to set this from within the UI.
@@ -180,16 +180,16 @@ So, in this case, when the fixture script is executed we actually get 6 objects 
 [#executioncontext]
 == ExecutionContext
 
-The xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc[ExecutionContext] is passed to each `FixtureScript` as it is executed.
+The xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript_ExecutionContext.adoc[ExecutionContext] is passed to each `FixtureScript` as it is executed.
 It supports two main use cases:
 
-* to allow child fixture scripts to be executed, using xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript~ExecutionContext.adoc#executeChildT__FixtureScript_T[executeChild(...)] and its brethren.
+* to allow child fixture scripts to be executed, using xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript_ExecutionContext.adoc#executeChildT_FixtureScript_T[executeChild(...)] and its brethren.
 +
 This was demonstrated in the <<fixturescript, previous section>>
 
 * to read parameters obtained when the fixture script was first executed by the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc[FixtureScripts] domain service, discussed <<fixturescripts, above>>.
 
-The latter use case is much less frequently used, but can be helpful for example in demos, where the number of objects can be specified in the `parameters` parameter of the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc#runFixtureScript__String_String[run fixture script] action.
+The latter use case is much less frequently used, but can be helpful for example in demos, where the number of objects can be specified in the `parameters` parameter of the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc#runFixtureScript_String_String[run fixture script] action.
 
 
 == Personas and Builders

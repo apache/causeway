@@ -8,7 +8,7 @@ Note that this is a _FixtureScripts#getMultipleExecutionStrategy() global settin
 == API
 
 [source,java]
-.FixtureScripts~MultipleExecutionStrategy.java
+.FixtureScripts_MultipleExecutionStrategy.java
 ----
 enum MultipleExecutionStrategy {
   EXECUTE_ONCE_BY_CLASS     // <.>

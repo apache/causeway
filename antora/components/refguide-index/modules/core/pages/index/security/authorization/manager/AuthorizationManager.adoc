@@ -15,12 +15,12 @@ class AuthorizationManager {
 }
 ----
 
-<.> xref:#isUsable__InteractionContext_Identifier[isUsable(InteractionContext, Identifier)]
+<.> xref:#isUsable_InteractionContext_Identifier[isUsable(InteractionContext, Identifier)]
 +
 --
 Whether the user represented by the specified session is authorized to view the member of the class/object represented by the member identifier.
 --
-<.> xref:#isVisible__InteractionContext_Identifier[isVisible(InteractionContext, Identifier)]
+<.> xref:#isVisible_InteractionContext_Identifier[isVisible(InteractionContext, Identifier)]
 +
 --
 Whether the user represented by the specified session is authorized to change the field represented by the member identifier.
@@ -28,14 +28,14 @@ Whether the user represented by the specified session is authorized to change th
 
 == Members
 
-[#isUsable__InteractionContext_Identifier]
+[#isUsable_InteractionContext_Identifier]
 === isUsable(InteractionContext, Identifier)
 
 Whether the user represented by the specified session is authorized to view the member of the class/object represented by the member identifier.
 
 Normally the view of the specified field, or the display of the action will be suppress if this returns false.
 
-[#isVisible__InteractionContext_Identifier]
+[#isVisible_InteractionContext_Identifier]
 === isVisible(InteractionContext, Identifier)
 
 Whether the user represented by the specified session is authorized to change the field represented by the member identifier.

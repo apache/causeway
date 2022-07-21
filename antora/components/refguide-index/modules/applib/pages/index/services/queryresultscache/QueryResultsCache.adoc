@@ -25,12 +25,12 @@ class QueryResultsCache {
 }
 ----
 
-<.> xref:#execute__Callable_Class_String_Object[execute(Callable, Class, String, Object)]
+<.> xref:#execute_Callable_Class_String_Object[execute(Callable, Class, String, Object)]
 +
 --
 Executes the callable if not already cached for the supplied calling class, method and keys.
 --
-<.> xref:#onTransactionEnded__[onTransactionEnded()]
+<.> xref:#onTransactionEnded_[onTransactionEnded()]
 +
 --
 Not API: for framework to call at end of transaction, to clear out the cache.
@@ -38,12 +38,12 @@ Not API: for framework to call at end of transaction, to clear out the cache.
 
 == Members
 
-[#execute__Callable_Class_String_Object]
+[#execute_Callable_Class_String_Object]
 === execute(Callable, Class, String, Object)
 
 Executes the callable if not already cached for the supplied calling class, method and keys.
 
-[#onTransactionEnded__]
+[#onTransactionEnded_]
 === onTransactionEnded()
 
 Not API: for framework to call at end of transaction, to clear out the cache.

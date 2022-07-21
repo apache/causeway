@@ -13,7 +13,7 @@ class CommandFetcher {
 }
 ----
 
-<.> xref:#fetchCommand__CommandLogEntry[fetchCommand(CommandLogEntry)]
+<.> xref:#fetchCommand_CommandLogEntry[fetchCommand(CommandLogEntry)]
 +
 --
 Replicates a single command.
@@ -21,7 +21,7 @@ Replicates a single command.
 
 == Members
 
-[#fetchCommand__CommandLogEntry]
+[#fetchCommand_CommandLogEntry]
 === fetchCommand(CommandLogEntry)
 
 Replicates a single command.

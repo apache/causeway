@@ -1,4 +1,4 @@
-= RepositoryService _(interface)_
+= RepositoryService
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Collects together methods for creating, persisting and searching for entities from the underlying persistence store.
@@ -33,97 +33,97 @@ interface RepositoryService {
 }
 ----
 
-<.> xref:#getEntityState__Object[getEntityState(Object)]
+<.> xref:#getEntityState_Object[getEntityState(Object)]
 +
 --
 Returns the xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState] of given _object_ .
 --
-<.> xref:#detachedEntity__T[detachedEntity(T)]
+<.> xref:#detachedEntity_T[detachedEntity(T)]
 +
 --
 Usually called as a precursor to persisting a domain entity, this method verifies that the object is an entity and injects domain services into it.
 --
-<.> xref:#persist__T[persist(T)]
+<.> xref:#persist_T[persist(T)]
 +
 --
 Persist the specified object (or do nothing if already persistent).
 --
-<.> xref:#persistAndFlush__T[persistAndFlush(T)]
+<.> xref:#persistAndFlush_T[persistAndFlush(T)]
 +
 --
 Persist the specified object (or do nothing if already persistent) and flushes changes to the database.
 --
-<.> xref:#persistAndFlush__Object[persistAndFlush(Object)]
+<.> xref:#persistAndFlush_Object[persistAndFlush(Object)]
 +
 --
 Persist the specified objects (or do nothing if already persistent) and flushes changes to the database.
 --
-<.> xref:#remove__Object[remove(Object)]
+<.> xref:#remove_Object[remove(Object)]
 +
 --
 Remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
 --
-<.> xref:#removeAndFlush__Object[removeAndFlush(Object)]
+<.> xref:#removeAndFlush_Object[removeAndFlush(Object)]
 +
 --
 Deletes the domain object but only if is persistent, and flushes changes to the database (meaning the object is deleted immediately).
 --
-<.> xref:#removeAll__Class[removeAll(Class)]
+<.> xref:#removeAll_Class[removeAll(Class)]
 +
 --
 Removes all instances of the domain object.
 --
-<.> xref:#allInstances__Class[allInstances(Class)]
+<.> xref:#allInstances_Class[allInstances(Class)]
 +
 --
 Returns all persisted instances of specified type (including subtypes).
 --
-<.> xref:#allInstances__Class_long_long[allInstances(Class, long, long)]
+<.> xref:#allInstances_Class_long_long[allInstances(Class, long, long)]
 +
 --
 Overload of _#allInstances(Class)_ , returns a _page_ of persisted instances of specified type (including subtypes).
 --
-<.> xref:#allMatches__Class_Predicate[allMatches(Class, Predicate)]
+<.> xref:#allMatches_Class_Predicate[allMatches(Class, Predicate)]
 +
 --
 Returns all the instances of the specified type (including subtypes) that the predicate object accepts.
 --
-<.> xref:#allMatches__Class_Predicate_long_long[allMatches(Class, Predicate, long, long)]
+<.> xref:#allMatches_Class_Predicate_long_long[allMatches(Class, Predicate, long, long)]
 +
 --
 Overload of _#allMatches(Class, Predicate)_ , returns a _page_ of persisted instances of specified type (including subtypes).
 --
-<.> xref:#allMatches__Query[allMatches(Query)]
+<.> xref:#allMatches_Query[allMatches(Query)]
 +
 --
 Returns all the instances that match the given xref:refguide:applib:index/query/Query.adoc[Query] .
 --
-<.> xref:#uniqueMatch__Class_Predicate[uniqueMatch(Class, Predicate)]
+<.> xref:#uniqueMatch_Class_Predicate[uniqueMatch(Class, Predicate)]
 +
 --
 Finds the only instance of the specified type (including subtypes) that satifies the (client-side) predicate.
 --
-<.> xref:#uniqueMatch__Query[uniqueMatch(Query)]
+<.> xref:#uniqueMatch_Query[uniqueMatch(Query)]
 +
 --
 Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] .
 --
-<.> xref:#firstMatch__Class_Predicate[firstMatch(Class, Predicate)]
+<.> xref:#firstMatch_Class_Predicate[firstMatch(Class, Predicate)]
 +
 --
 Find the only instance of the specified type (including subtypes) that satifies the provided (client-side) predicate.
 --
-<.> xref:#firstMatch__Query[firstMatch(Query)]
+<.> xref:#firstMatch_Query[firstMatch(Query)]
 +
 --
 Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] , if any.
 --
-<.> xref:#refresh__T[refresh(T)]
+<.> xref:#refresh_T[refresh(T)]
 +
 --
 Reloads the domain entity from the database.
 --
-<.> xref:#detach__T[detach(T)]
+<.> xref:#detach_T[detach(T)]
 +
 --
 Explicitly detaches the entity from the current persistence session.
@@ -131,12 +131,12 @@ Explicitly detaches the entity from the current persistence session.
 
 == Members
 
-[#getEntityState__Object]
+[#getEntityState_Object]
 === getEntityState(Object)
 
 Returns the xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState] of given _object_ .
 
-[#detachedEntity__T]
+[#detachedEntity_T]
 === detachedEntity(T)
 
 Usually called as a precursor to persisting a domain entity, this method verifies that the object is an entity and injects domain services into it.
@@ -145,28 +145,28 @@ This approach allows the domain entity to have regular constructor (with paramet
 
 This is the same functionality as exposed by _org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Object)_ . It is provided in this service as a convenience because instantiating and _#persist(Object) persisting_ an object are often done together.
 
-[#persist__T]
+[#persist_T]
 === persist(T)
 
 Persist the specified object (or do nothing if already persistent).
 
 The persist isn't necessarily performed immediately; by default all pending changes are flushed to the database when the transaction completes.
 
-[#persistAndFlush__T]
+[#persistAndFlush_T]
 === persistAndFlush(T)
 
 Persist the specified object (or do nothing if already persistent) and flushes changes to the database.
 
 Flushing will also result in ORM-maintained bidirectional relationships being updated.
 
-[#persistAndFlush__Object]
+[#persistAndFlush_Object]
 === persistAndFlush(Object)
 
 Persist the specified objects (or do nothing if already persistent) and flushes changes to the database.
 
 Flushing will also result in ORM-maintained bidirectional relationships being updated.
 
-[#remove__Object]
+[#remove_Object]
 === remove(Object)
 
 Remove (ie delete) an object from the persistent object store (or do nothing if it has already been deleted).
@@ -175,21 +175,21 @@ The delete isn't necessarily performed immediately; by default all pending chang
 
 Note that this method is also a no-op if the domain object is not attached.
 
-[#removeAndFlush__Object]
+[#removeAndFlush_Object]
 === removeAndFlush(Object)
 
 Deletes the domain object but only if is persistent, and flushes changes to the database (meaning the object is deleted immediately).
 
 Flushing will also result in ORM-maintained bidirectional relationships being updated.
 
-[#removeAll__Class]
+[#removeAll_Class]
 === removeAll(Class)
 
 Removes all instances of the domain object.
 
 Intended primarily for testing purposes.
 
-[#allInstances__Class]
+[#allInstances_Class]
 === allInstances(Class)
 
 Returns all persisted instances of specified type (including subtypes).
@@ -198,14 +198,14 @@ Intended primarily for prototyping purposes, though is safe to use in production
 
 If there are no instances the list will be empty.
 
-[#allInstances__Class_long_long]
+[#allInstances_Class_long_long]
 === allInstances(Class, long, long)
 
 Overload of _#allInstances(Class)_ , returns a _page_ of persisted instances of specified type (including subtypes).
 
 If the optional range parameters are used, the dataset returned starts from (0 based) index, and consists of only up to count items.
 
-[#allMatches__Class_Predicate]
+[#allMatches_Class_Predicate]
 === allMatches(Class, Predicate)
 
 Returns all the instances of the specified type (including subtypes) that the predicate object accepts.
@@ -214,14 +214,14 @@ If there are no instances the list will be empty. This method creates a new _Lis
 
 This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#allMatches(Query)_ for production code.
 
-[#allMatches__Class_Predicate_long_long]
+[#allMatches_Class_Predicate_long_long]
 === allMatches(Class, Predicate, long, long)
 
 Overload of _#allMatches(Class, Predicate)_ , returns a _page_ of persisted instances of specified type (including subtypes).
 
 If the optional range parameters are used, the dataset returned starts from (0 based) index, and consists of only up to count items.
 
-[#allMatches__Query]
+[#allMatches_Query]
 === allMatches(Query)
 
 Returns all the instances that match the given xref:refguide:applib:index/query/Query.adoc[Query] .
@@ -230,7 +230,7 @@ This is the main API for server-side (performant) queries returning multiple ins
 
 It is also possible to specify an _org.apache.isis.applib.query.AllInstancesQuery_ . This is equivalent to using _#allInstances(Class, long, long)_ ; a range can also be specified.
 
-[#uniqueMatch__Class_Predicate]
+[#uniqueMatch_Class_Predicate]
 === uniqueMatch(Class, Predicate)
 
 Finds the only instance of the specified type (including subtypes) that satifies the (client-side) predicate.
@@ -239,7 +239,7 @@ This method is useful during exploration/prototyping, but - because the filterin
 
 If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances a run-time exception will be thrown.
 
-[#uniqueMatch__Query]
+[#uniqueMatch_Query]
 === uniqueMatch(Query)
 
 Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] .
@@ -248,7 +248,7 @@ This is the main API for server-side (performant) queries returning no more than
 
 If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances a run-time exception will be thrown.
 
-[#firstMatch__Class_Predicate]
+[#firstMatch_Class_Predicate]
 === firstMatch(Class, Predicate)
 
 Find the only instance of the specified type (including subtypes) that satifies the provided (client-side) predicate.
@@ -257,7 +257,7 @@ This method is useful during exploration/prototyping, but - because the filterin
 
 If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances then the first will be returned.
 
-[#firstMatch__Query]
+[#firstMatch_Query]
 === firstMatch(Query)
 
 Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] , if any.
@@ -266,12 +266,12 @@ This is the main API for server-side (performant) queries returning the first ma
 
 If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances then the first will be returned.
 
-[#refresh__T]
+[#refresh_T]
 === refresh(T)
 
 Reloads the domain entity from the database.
 
-[#detach__T]
+[#detach_T]
 === detach(T)
 
 Explicitly detaches the entity from the current persistence session.

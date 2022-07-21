@@ -23,7 +23,7 @@ As described in the introduction, the primary purpose of SecMan is to provide an
 
 * by "object member" we mean either an action, property or collection,as represented by an xref:refguide:applib:index/Identifier.adoc[Identifier]
 
-* by "access", we mean whether the object member is xref:refguide:core:index/security/authorization/Authorizor.adoc#isVisible__InteractionContext_Identifier] to the user, and if so whether it is xref:refguide:core:index/security/authorization/Authorizor.adoc#isUsable__InteractionContext_Identifier[usable] (not disabled) by the user.
+* by "access", we mean whether the object member is xref:refguide:core:index/security/authorization/Authorizor.adoc#isVisible__InteractionContext_Identifier] to the user, and if so whether it is xref:refguide:core:index/security/authorization/Authorizor.adoc#isUsable_InteractionContext_Identifier[usable] (not disabled) by the user.
 
 SecMan's xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] implementation uses domain entities to model users, roles and permissions.
 Each permission relates to an "object feature".

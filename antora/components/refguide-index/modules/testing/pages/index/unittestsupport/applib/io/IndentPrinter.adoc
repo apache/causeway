@@ -26,47 +26,47 @@ class IndentPrinter {
 }
 ----
 
-<.> xref:#IndentPrinter__[IndentPrinter()]
+<.> xref:#IndentPrinter_[IndentPrinter()]
 +
 --
 Creates an IndentPrinter backed by a PrintWriter pointing to System.out, with an indent of two spaces.
 --
-<.> xref:#IndentPrinter__Writer[IndentPrinter(Writer)]
+<.> xref:#IndentPrinter_Writer[IndentPrinter(Writer)]
 +
 --
 Creates an IndentPrinter backed by the supplied Writer, with an indent of two spaces.
 --
-<.> xref:#IndentPrinter__Writer_String[IndentPrinter(Writer, String)]
+<.> xref:#IndentPrinter_Writer_String[IndentPrinter(Writer, String)]
 +
 --
 Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting.
 --
-<.> xref:#IndentPrinter__Writer_String_boolean[IndentPrinter(Writer, String, boolean)]
+<.> xref:#IndentPrinter_Writer_String_boolean[IndentPrinter(Writer, String, boolean)]
 +
 --
 Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting and the ability to override newline handling.
 --
-<.> xref:#println__String[println(String)]
+<.> xref:#println_String[println(String)]
 +
 --
 Prints a string followed by an end of line character.
 --
-<.> xref:#print__String[print(String)]
+<.> xref:#print_String[print(String)]
 +
 --
 Prints a string.
 --
-<.> xref:#print__char[print(char)]
+<.> xref:#print_char[print(char)]
 +
 --
 Prints a character.
 --
-<.> xref:#printIndent__[printIndent()]
+<.> xref:#printIndent_[printIndent()]
 +
 --
 Prints the current indent level.
 --
-<.> xref:#println__[println()]
+<.> xref:#println_[println()]
 +
 --
 Prints an end-of-line character (if enabled via addNewLines property). Defaults to outputting a single '\n' character but by using a custom Writer, e.g. PlatformLineWriter, you can get platform-specific end-of-line characters.
@@ -74,47 +74,47 @@ Prints an end-of-line character (if enabled via addNewLines property). Defaults 
 
 == Members
 
-[#IndentPrinter__]
+[#IndentPrinter_]
 === IndentPrinter()
 
 Creates an IndentPrinter backed by a PrintWriter pointing to System.out, with an indent of two spaces.
 
-[#IndentPrinter__Writer]
+[#IndentPrinter_Writer]
 === IndentPrinter(Writer)
 
 Creates an IndentPrinter backed by the supplied Writer, with an indent of two spaces.
 
-[#IndentPrinter__Writer_String]
+[#IndentPrinter_Writer_String]
 === IndentPrinter(Writer, String)
 
 Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting.
 
-[#IndentPrinter__Writer_String_boolean]
+[#IndentPrinter_Writer_String_boolean]
 === IndentPrinter(Writer, String, boolean)
 
 Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting and the ability to override newline handling.
 
-[#println__String]
+[#println_String]
 === println(String)
 
 Prints a string followed by an end of line character.
 
-[#print__String]
+[#print_String]
 === print(String)
 
 Prints a string.
 
-[#print__char]
+[#print_char]
 === print(char)
 
 Prints a character.
 
-[#printIndent__]
+[#printIndent_]
 === printIndent()
 
 Prints the current indent level.
 
-[#println__]
+[#println_]
 === println()
 
 Prints an end-of-line character (if enabled via addNewLines property). Defaults to outputting a single '\n' character but by using a custom Writer, e.g. PlatformLineWriter, you can get platform-specific end-of-line characters.

@@ -23,12 +23,12 @@ class PropertyDomainEvent<S, T> {
 }
 ----
 
-<.> xref:#PropertyDomainEvent__[PropertyDomainEvent()]
+<.> xref:#PropertyDomainEvent_[PropertyDomainEvent()]
 +
 --
 Subtypes can define a no-arg constructor; the framework sets state via (non-API) setters.
 --
-<.> xref:#PropertyDomainEvent__S[PropertyDomainEvent(S)]
+<.> xref:#PropertyDomainEvent_S[PropertyDomainEvent(S)]
 +
 --
 Subtypes can define a one-arg constructor; the framework sets state via (non-API) setters.
@@ -36,12 +36,12 @@ Subtypes can define a one-arg constructor; the framework sets state via (non-API
 
 == Members
 
-[#PropertyDomainEvent__]
+[#PropertyDomainEvent_]
 === PropertyDomainEvent()
 
 Subtypes can define a no-arg constructor; the framework sets state via (non-API) setters.
 
-[#PropertyDomainEvent__S]
+[#PropertyDomainEvent_S]
 === PropertyDomainEvent(S)
 
 Subtypes can define a one-arg constructor; the framework sets state via (non-API) setters.

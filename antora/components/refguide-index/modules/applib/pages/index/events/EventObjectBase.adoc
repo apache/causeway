@@ -13,17 +13,17 @@ class EventObjectBase<T> {
 }
 ----
 
-<.> xref:#getSource__[getSource()]
+<.> xref:#getSource_[getSource()]
 +
 --
 The object on which the Event initially occurred.
 --
-<.> xref:#initSource__T[initSource(T)]
+<.> xref:#initSource_T[initSource(T)]
 +
 --
 A one-shot function. Only allowed to be called if a source has not already been set.
 --
-<.> xref:#toString__[toString()]
+<.> xref:#toString_[toString()]
 +
 --
 Returns a String representation of this EventObject.
@@ -31,17 +31,17 @@ Returns a String representation of this EventObject.
 
 == Members
 
-[#getSource__]
+[#getSource_]
 === getSource()
 
 The object on which the Event initially occurred.
 
-[#initSource__T]
+[#initSource_T]
 === initSource(T)
 
 A one-shot function. Only allowed to be called if a source has not already been set.
 
-[#toString__]
+[#toString_]
 === toString()
 
 Returns a String representation of this EventObject.

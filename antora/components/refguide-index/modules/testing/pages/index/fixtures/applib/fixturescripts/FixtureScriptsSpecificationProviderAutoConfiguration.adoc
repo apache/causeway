@@ -13,7 +13,7 @@ class FixtureScriptsSpecificationProviderAutoConfiguration {
 }
 ----
 
-<.> xref:#fixtureScriptsSpecificationProvider__IsisConfiguration[fixtureScriptsSpecificationProvider(IsisConfiguration)]
+<.> xref:#fixtureScriptsSpecificationProvider_IsisConfiguration[fixtureScriptsSpecificationProvider(IsisConfiguration)]
 +
 --
 Returns an implementation of _FixtureScriptsSpecificationProvider_ that uses configuration properties under `isis.testing.fixtures.fixture-scripts-specification` .
@@ -21,7 +21,7 @@ Returns an implementation of _FixtureScriptsSpecificationProvider_ that uses con
 
 == Members
 
-[#fixtureScriptsSpecificationProvider__IsisConfiguration]
+[#fixtureScriptsSpecificationProvider_IsisConfiguration]
 === fixtureScriptsSpecificationProvider(IsisConfiguration)
 
 Returns an implementation of _FixtureScriptsSpecificationProvider_ that uses configuration properties under `isis.testing.fixtures.fixture-scripts-specification` .

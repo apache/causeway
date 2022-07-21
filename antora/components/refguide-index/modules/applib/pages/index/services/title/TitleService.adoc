@@ -1,4 +1,4 @@
-= TitleService _(interface)_
+= TitleService
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Provides methods to programmatically obtain the title and icon of a domain object.
@@ -14,12 +14,12 @@ interface TitleService {
 }
 ----
 
-<.> xref:#titleOf__Object[titleOf(Object)]
+<.> xref:#titleOf_Object[titleOf(Object)]
 +
 --
 Returns the title of the object (as rendered in the UI by the framework's viewers).
 --
-<.> xref:#iconNameOf__Object[iconNameOf(Object)]
+<.> xref:#iconNameOf_Object[iconNameOf(Object)]
 +
 --
 Returns the icon name of the object (as rendered in the UI by the framework's viewers).
@@ -27,12 +27,12 @@ Returns the icon name of the object (as rendered in the UI by the framework's vi
 
 == Members
 
-[#titleOf__Object]
+[#titleOf_Object]
 === titleOf(Object)
 
 Returns the title of the object (as rendered in the UI by the framework's viewers).
 
-[#iconNameOf__Object]
+[#iconNameOf_Object]
 === iconNameOf(Object)
 
 Returns the icon name of the object (as rendered in the UI by the framework's viewers).

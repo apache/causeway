@@ -1,4 +1,4 @@
-= ApplicationPermissionRepository _(interface)_
+= ApplicationPermissionRepository
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 == API
@@ -25,23 +25,23 @@ interface ApplicationPermissionRepository {
 }
 ----
 
-<.> xref:#newApplicationPermission__[newApplicationPermission()]
-<.> xref:#newPermissionNoCheck__ApplicationRole_ApplicationPermissionRule_ApplicationPermissionMode_ApplicationFeatureSort_String[newPermissionNoCheck(ApplicationRole, ApplicationPermissionRule, ApplicationPermissionMode, ApplicationFeatureSort, String)]
+<.> xref:#newApplicationPermission_[newApplicationPermission()]
+<.> xref:#newPermissionNoCheck_ApplicationRole_ApplicationPermissionRule_ApplicationPermissionMode_ApplicationFeatureSort_String[newPermissionNoCheck(ApplicationRole, ApplicationPermissionRule, ApplicationPermissionMode, ApplicationFeatureSort, String)]
 +
 --
 Intended for use by fixture scripts.
 --
-<.> xref:#findByUser__ApplicationUser[findByUser(ApplicationUser)]
+<.> xref:#findByUser_ApplicationUser[findByUser(ApplicationUser)]
 +
 --
 Uses the xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole] s associated with the xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser] .
 --
-<.> xref:#findByUserMemento__UserMemento[findByUserMemento(UserMemento)]
+<.> xref:#findByUserMemento_UserMemento[findByUserMemento(UserMemento)]
 +
 --
 Uses the _UserMemento#getRoles() roles_ held within the provided xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
 --
-<.> xref:#findByRoleNames__List[findByRoleNames(List)]
+<.> xref:#findByRoleNames_List[findByRoleNames(List)]
 +
 --
 Returns the set of permissions associated with the provided list of roles (identified by their role name).
@@ -49,27 +49,27 @@ Returns the set of permissions associated with the provided list of roles (ident
 
 == Members
 
-[#newApplicationPermission__]
+[#newApplicationPermission_]
 === newApplicationPermission()
 
-[#newPermissionNoCheck__ApplicationRole_ApplicationPermissionRule_ApplicationPermissionMode_ApplicationFeatureSort_String]
+[#newPermissionNoCheck_ApplicationRole_ApplicationPermissionRule_ApplicationPermissionMode_ApplicationFeatureSort_String]
 === newPermissionNoCheck(ApplicationRole, ApplicationPermissionRule, ApplicationPermissionMode, ApplicationFeatureSort, String)
 
 Intended for use by fixture scripts.
 
-[#findByUser__ApplicationUser]
+[#findByUser_ApplicationUser]
 === findByUser(ApplicationUser)
 
 Uses the xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole] s associated with the xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser] .
 
-[#findByUserMemento__UserMemento]
+[#findByUserMemento_UserMemento]
 === findByUserMemento(UserMemento)
 
 Uses the _UserMemento#getRoles() roles_ held within the provided xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
 
 Added to support _org.apache.isis.applib.services.user.ImpersonateMenu.impersonateWithRoles#act(String, List, String) impersonation by role_ .
 
-[#findByRoleNames__List]
+[#findByRoleNames_List]
 === findByRoleNames(List)
 
 Returns the set of permissions associated with the provided list of roles (identified by their role name).

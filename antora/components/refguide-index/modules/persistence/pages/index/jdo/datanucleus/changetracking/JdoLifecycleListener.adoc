@@ -31,12 +31,12 @@ class JdoLifecycleListener {
 }
 ----
 
-<.> xref:#preClear__InstanceLifecycleEvent[preClear(InstanceLifecycleEvent)]
+<.> xref:#preClear_InstanceLifecycleEvent[preClear(InstanceLifecycleEvent)]
 +
 --
 Does nothing, not important event for Isis to track.
 --
-<.> xref:#postClear__InstanceLifecycleEvent[postClear(InstanceLifecycleEvent)]
+<.> xref:#postClear_InstanceLifecycleEvent[postClear(InstanceLifecycleEvent)]
 +
 --
 Does nothing, not important event for Isis to track.
@@ -44,12 +44,12 @@ Does nothing, not important event for Isis to track.
 
 == Members
 
-[#preClear__InstanceLifecycleEvent]
+[#preClear_InstanceLifecycleEvent]
 === preClear(InstanceLifecycleEvent)
 
 Does nothing, not important event for Isis to track.
 
-[#postClear__InstanceLifecycleEvent]
+[#postClear_InstanceLifecycleEvent]
 === postClear(InstanceLifecycleEvent)
 
 Does nothing, not important event for Isis to track.

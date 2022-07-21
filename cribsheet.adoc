@@ -1,0 +1,22 @@
+= Cribsheet
+
+... of sometimes used scripts.
+
+== Rebuild documentation from scratch
+
+* build tooling (as quickly as possible, without tests); generate all docs
+
+[source,bash]
+----
+sdk use java 11
+sh build-tooling.sh -- -T1C
+sh preview.sh
+----
+
+* build all, ``git pull``ing first, excluding incubator
+
+[source,bash]
+----
+sdk use java 11
+sh build.sh -p -- -Dmodule-all-except-incubator
+----

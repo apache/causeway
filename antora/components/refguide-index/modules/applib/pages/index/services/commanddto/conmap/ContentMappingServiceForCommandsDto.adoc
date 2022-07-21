@@ -12,7 +12,7 @@ class ContentMappingServiceForCommandsDto {
 }
 ----
 
-<.> xref:#map__Object[map(Object)]
+<.> xref:#map_Object[map(Object)]
 +
 --
 Not part of the xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] API.
@@ -20,7 +20,7 @@ Not part of the xref:refguide:applib:index/services/conmap/ContentMappingService
 
 == Members
 
-[#map__Object]
+[#map_Object]
 === map(Object)
 
 Not part of the xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] API.

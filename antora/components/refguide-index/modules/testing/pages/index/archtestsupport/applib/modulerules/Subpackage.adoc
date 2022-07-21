@@ -1,4 +1,4 @@
-= Subpackage _(interface)_
+= Subpackage
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Defines the rules for which subpackages or a module to check and whether the classes in those subpackages can access the classes in other subpackages either for the same module, or for modules that are referenced ( _org.springframework.context.annotation.Import_ ed) directly or transitively.
@@ -16,17 +16,17 @@ interface Subpackage {
 }
 ----
 
-<.> xref:#getName__[getName()]
+<.> xref:#getName_[getName()]
 +
 --
 The name of the subpackage, for example "dom", "api", "spi" or "fixtures".
 --
-<.> xref:#mayBeAccessedBySubpackagesInSameModule__[mayBeAccessedBySubpackagesInSameModule()]
+<.> xref:#mayBeAccessedBySubpackagesInSameModule_[mayBeAccessedBySubpackagesInSameModule()]
 +
 --
 A list of the (names of the) subpackages where classes in the same module as this package have access.
 --
-<.> xref:#mayBeAccessedBySubpackagesInReferencingModules__[mayBeAccessedBySubpackagesInReferencingModules()]
+<.> xref:#mayBeAccessedBySubpackagesInReferencingModules_[mayBeAccessedBySubpackagesInReferencingModules()]
 +
 --
 A list of the (names of the) subpackages where classes in the packages of other referencing modules may have access.
@@ -34,12 +34,12 @@ A list of the (names of the) subpackages where classes in the packages of other 
 
 == Members
 
-[#getName__]
+[#getName_]
 === getName()
 
 The name of the subpackage, for example "dom", "api", "spi" or "fixtures".
 
-[#mayBeAccessedBySubpackagesInSameModule__]
+[#mayBeAccessedBySubpackagesInSameModule_]
 === mayBeAccessedBySubpackagesInSameModule()
 
 A list of the (names of the) subpackages where classes in the same module as this package have access.
@@ -48,7 +48,7 @@ For example, the "dom" subpackage can probably be referenced from the "menu" sub
 
 The special value of "*" is a wildcard meaning that all subpackages (in the same module) can access.
 
-[#mayBeAccessedBySubpackagesInReferencingModules__]
+[#mayBeAccessedBySubpackagesInReferencingModules_]
 === mayBeAccessedBySubpackagesInReferencingModules()
 
 A list of the (names of the) subpackages where classes in the packages of other referencing modules may have access.

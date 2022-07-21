@@ -35,32 +35,32 @@ class Blob {
 }
 ----
 
-<.> xref:#of__String_CommonMimeType_byte[][of(String, CommonMimeType, byte[])]
+<.> xref:#of_String_CommonMimeType_byte[of(String, CommonMimeType, byte)]
 +
 --
 Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
 --
-<.> xref:#writeBytesTo__OutputStream[writeBytesTo(OutputStream)]
+<.> xref:#writeBytesTo_OutputStream[writeBytesTo(OutputStream)]
 +
 --
 Does not close the OutputStream.
 --
-<.> xref:#consume__Consumer[consume(Consumer)]
+<.> xref:#consume_Consumer[consume(Consumer)]
 +
 --
 The _InputStream_ involved is closed after consumption.
 --
-<.> xref:#digest__Function[digest(Function)]
+<.> xref:#digest_Function[digest(Function)]
 +
 --
 The _InputStream_ involved is closed after digestion.
 --
-<.> xref:#asImage__[asImage()]
+<.> xref:#asImage_[asImage()]
 
 == Members
 
-[#of__String_CommonMimeType_byte[]]
-=== of(String, CommonMimeType, byte[])
+[#of_String_CommonMimeType_byte]
+=== of(String, CommonMimeType, byte)
 
 Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
 
@@ -68,22 +68,22 @@ _name_ may or may not include the desired filename extension, it is guaranteed, 
 
 For more fine-grained control use one of the xref:refguide:applib:index/value/Blob.adoc[Blob] constructors directly.
 
-[#writeBytesTo__OutputStream]
+[#writeBytesTo_OutputStream]
 === writeBytesTo(OutputStream)
 
 Does not close the OutputStream.
 
-[#consume__Consumer]
+[#consume_Consumer]
 === consume(Consumer)
 
 The _InputStream_ involved is closed after consumption.
 
-[#digest__Function]
+[#digest_Function]
 === digest(Function)
 
 The _InputStream_ involved is closed after digestion.
 
-[#asImage__]
+[#asImage_]
 === asImage()
 
 include::hooks/Blob_usage-notes.adoc[]

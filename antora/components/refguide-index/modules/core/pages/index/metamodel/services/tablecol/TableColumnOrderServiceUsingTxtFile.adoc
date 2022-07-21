@@ -20,12 +20,12 @@ class TableColumnOrderServiceUsingTxtFile {
 }
 ----
 
-<.> xref:#orderParented__Object_String_Class_List[orderParented(Object, String, Class, List)]
+<.> xref:#orderParented_Object_String_Class_List[orderParented(Object, String, Class, List)]
 +
 --
 Reads propertyIds of the collection from a file named _ClassName#collectionId.columnOrder.txt_ . relative to the class itself.
 --
-<.> xref:#orderStandalone__Class_List[orderStandalone(Class, List)]
+<.> xref:#orderStandalone_Class_List[orderStandalone(Class, List)]
 +
 --
 Reads propertyIds of the standalone collection from a file named _ClassName.columnOrder.txt_ , relative to the class itself.
@@ -33,14 +33,14 @@ Reads propertyIds of the standalone collection from a file named _ClassName.colu
 
 == Members
 
-[#orderParented__Object_String_Class_List]
+[#orderParented_Object_String_Class_List]
 === orderParented(Object, String, Class, List)
 
 Reads propertyIds of the collection from a file named _ClassName#collectionId.columnOrder.txt_ . relative to the class itself.
 
 Additional files can be provided by overriding _#addResourceNames(Class, String, List)_ .
 
-[#orderStandalone__Class_List]
+[#orderStandalone_Class_List]
 === orderStandalone(Class, List)
 
 Reads propertyIds of the standalone collection from a file named _ClassName.columnOrder.txt_ , relative to the class itself.

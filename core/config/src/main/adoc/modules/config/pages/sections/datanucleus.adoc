@@ -35,7 +35,7 @@ For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jd
 [[datanucleus.cache.level2.type]]
 datanucleus.cache.level2.type
 
-|  soft
+| 
 | Name of the type of Level 2 Cache to use.
 
 Can be used to interface with external caching products. Use "none" to turn off L2 caching; other values include "soft", "weak", "javax.cache".
@@ -55,7 +55,7 @@ datanucleus.identifier.case
 [[datanucleus.manage-relationships]]
 datanucleus.manage-relationships
 
-|  true
+| 
 | Whether DataNucleus will try to manage bidirectional relations, correcting the input objects so that all relations are consistent.
 
 This process runs when flush()/commit() is called. You can set it to false if you always set both sides of a relation when persisting/updating.
@@ -69,7 +69,7 @@ datanucleus. +
 persistence-by-reachability-at- +
 commit
 
-|  true
+| 
 | Whether to run the "persistence-by-reachability" algorithm at commit time.
 
 This means that objects that were reachable at a call to makePersistent() but that are no longer persistent will be removed from persistence. For performance improvements, consider turning this off.
@@ -146,7 +146,7 @@ For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jd
 datanucleus.schema. +
 generate-database.mode
 
-|  none
+| 
 | Whether to eagerly create all tables at startup.
 
 For integration testing, this is generally preferred to using datanucleus.schema.autoCreateAll, because the ``autoCreateAll`` will only create tables lazily, when first persisted to. While lazily initialization is potentially quicker, it can cause issues (eg with rollup mapping to super class tables).

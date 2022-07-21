@@ -54,7 +54,8 @@ public final class CallableDeclarations {
     private static String sanitize(String paramType) {
         val paramTypeNoWildcard = paramType.split("<")[0];
         val paramTypeNoArray = paramTypeNoWildcard.split("\\[")[0];
-        return paramTypeNoArray;
+        val paramTypeNoDots = paramTypeNoArray.replace('.', '_');
+        return paramTypeNoDots;
     }
 
 }

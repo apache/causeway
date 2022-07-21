@@ -1,9 +1,11 @@
-= TransactionService _(interface)_
+= TransactionService
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Provides utilities to access active transactions associated with the current thread.
 
 This is a low-level service that domain objects will typically have little need to leverage; there will normally be a transaction started already by the framework at the beginning of an _org.apache.isis.applib.services.iactn.Interaction_ and committed at the end. On occasion though it can be useful to take explicit control over transaction boundaries, which is where the methods provided by this domain service can be useful.
+
+NOTE: there is _no_ method to close (which is to say to commit) an existing transaction, because of a subtlety with the JPA transaction manager: if a transaction wasn't a new one, then closing the transaction would actually mean to decrement the transaction counter (only when it hits zero should the transaction be committed); but if the previous transaction was instead suspended, the commit the new transaction and then resume the previous transaction.
 
 == API
 
@@ -17,17 +19,17 @@ interface TransactionService {
 }
 ----
 
-<.> xref:#currentTransactionId__[currentTransactionId()]
+<.> xref:#currentTransactionId_[currentTransactionId()]
 +
 --
 Optionally returns the unique identifier of the current thread's transaction, based on whether there is an active transaction associated with the current thread.
 --
-<.> xref:#currentTransactionState__[currentTransactionState()]
+<.> xref:#currentTransactionState_[currentTransactionState()]
 +
 --
 Returns the state of the current thread's transaction., or returns _TransactionState#NONE_ , if there is no active transaction associated with the current thread.
 --
-<.> xref:#flushTransaction__[flushTransaction()]
+<.> xref:#flushTransaction_[flushTransaction()]
 +
 --
 Flushes all changes to the object store.
@@ -35,17 +37,17 @@ Flushes all changes to the object store.
 
 == Members
 
-[#currentTransactionId__]
+[#currentTransactionId_]
 === currentTransactionId()
 
 Optionally returns the unique identifier of the current thread's transaction, based on whether there is an active transaction associated with the current thread.
 
-[#currentTransactionState__]
+[#currentTransactionState_]
 === currentTransactionState()
 
 Returns the state of the current thread's transaction., or returns _TransactionState#NONE_ , if there is no active transaction associated with the current thread.
 
-[#flushTransaction__]
+[#flushTransaction_]
 === flushTransaction()
 
 Flushes all changes to the object store.

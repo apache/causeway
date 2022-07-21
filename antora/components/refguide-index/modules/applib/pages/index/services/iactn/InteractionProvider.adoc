@@ -1,4 +1,4 @@
-= InteractionProvider _(interface)_
+= InteractionProvider
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Provides the current thread's xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] .
@@ -21,27 +21,27 @@ interface InteractionProvider {
 }
 ----
 
-<.> xref:#isInInteraction__[isInInteraction()]
+<.> xref:#isInInteraction_[isInInteraction()]
 +
 --
 Whether there is a currently active xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] for the calling thread.
 --
-<.> xref:#currentInteraction__[currentInteraction()]
+<.> xref:#currentInteraction_[currentInteraction()]
 +
 --
 Optionally, the currently active xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] for the calling thread.
 --
-<.> xref:#currentInteractionContext__[currentInteractionContext()]
+<.> xref:#currentInteractionContext_[currentInteractionContext()]
 +
 --
 Optionally, the currently active xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] for the calling thread.
 --
-<.> xref:#getInteractionId__[getInteractionId()]
+<.> xref:#getInteractionId_[getInteractionId()]
 +
 --
 Unique id of the current request- or test-scoped xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] .
 --
-<.> xref:#getInteractionLayerCount__[getInteractionLayerCount()]
+<.> xref:#getInteractionLayerCount_[getInteractionLayerCount()]
 +
 --
 interaction-layer-stack size
@@ -49,27 +49,27 @@ interaction-layer-stack size
 
 == Members
 
-[#isInInteraction__]
+[#isInInteraction_]
 === isInInteraction()
 
 Whether there is a currently active xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] for the calling thread.
 
-[#currentInteraction__]
+[#currentInteraction_]
 === currentInteraction()
 
 Optionally, the currently active xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] for the calling thread.
 
-[#currentInteractionContext__]
+[#currentInteractionContext_]
 === currentInteractionContext()
 
 Optionally, the currently active xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] for the calling thread.
 
-[#getInteractionId__]
+[#getInteractionId_]
 === getInteractionId()
 
 Unique id of the current request- or test-scoped xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] .
 
-[#getInteractionLayerCount__]
+[#getInteractionLayerCount_]
 === getInteractionLayerCount()
 
 interaction-layer-stack size

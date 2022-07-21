@@ -14,12 +14,12 @@ class TableColumnOrderForCollectionTypeAbstract<T> {
 }
 ----
 
-<.> xref:#orderParented__Object_String_Class_List[orderParented(Object, String, Class, List)]
+<.> xref:#orderParented_Object_String_Class_List[orderParented(Object, String, Class, List)]
 +
 --
 Ignores any request for collections not of the _#getCollectionType() type specified in the constructor_ , otherwise delegates to _#orderParented(Object, String, List)_ .
 --
-<.> xref:#orderStandalone__Class_List[orderStandalone(Class, List)]
+<.> xref:#orderStandalone_Class_List[orderStandalone(Class, List)]
 +
 --
 Ignores any request for collections not of the _#getCollectionType() type specified in the constructor_ , otherwise delegates to _#orderStandalone(List)_ .
@@ -27,12 +27,12 @@ Ignores any request for collections not of the _#getCollectionType() type specif
 
 == Members
 
-[#orderParented__Object_String_Class_List]
+[#orderParented_Object_String_Class_List]
 === orderParented(Object, String, Class, List)
 
 Ignores any request for collections not of the _#getCollectionType() type specified in the constructor_ , otherwise delegates to _#orderParented(Object, String, List)_ .
 
-[#orderStandalone__Class_List]
+[#orderStandalone_Class_List]
 === orderStandalone(Class, List)
 
 Ignores any request for collections not of the _#getCollectionType() type specified in the constructor_ , otherwise delegates to _#orderStandalone(List)_ .

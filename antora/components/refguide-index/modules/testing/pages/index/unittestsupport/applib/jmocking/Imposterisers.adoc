@@ -11,9 +11,9 @@ class Imposterisers {
 }
 ----
 
-<.> xref:#getDefault__[getDefault()]
+<.> xref:#getDefault_[getDefault()]
 
 == Members
 
-[#getDefault__]
+[#getDefault_]
 === getDefault()

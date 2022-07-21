@@ -19,12 +19,12 @@ class ContentNegotiationServiceXRoDomainType {
 }
 ----
 
-<.> xref:#buildResponse__IResourceContext_ManagedObject[buildResponse(IResourceContext, ManagedObject)]
+<.> xref:#buildResponse_IResourceContext_ManagedObject[buildResponse(IResourceContext, ManagedObject)]
 +
 --
 search for an accept header in form `application/xml;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto` 
 --
-<.> xref:#buildResponse__IResourceContext_ObjectAndActionInvocation[buildResponse(IResourceContext, ObjectAndActionInvocation)]
+<.> xref:#buildResponse_IResourceContext_ObjectAndActionInvocation[buildResponse(IResourceContext, ObjectAndActionInvocation)]
 +
 --
 search for an accept header in form `application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto` 
@@ -32,12 +32,12 @@ search for an accept header in form `application/xml;profile=urn:org.restfulobje
 
 == Members
 
-[#buildResponse__IResourceContext_ManagedObject]
+[#buildResponse_IResourceContext_ManagedObject]
 === buildResponse(IResourceContext, ManagedObject)
 
 search for an accept header in form `application/xml;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto` 
 
-[#buildResponse__IResourceContext_ObjectAndActionInvocation]
+[#buildResponse_IResourceContext_ObjectAndActionInvocation]
 === buildResponse(IResourceContext, ObjectAndActionInvocation)
 
 search for an accept header in form `application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto` 

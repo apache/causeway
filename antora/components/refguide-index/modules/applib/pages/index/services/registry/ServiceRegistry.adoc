@@ -1,4 +1,4 @@
-= ServiceRegistry _(interface)_
+= ServiceRegistry
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Collects together methods for injecting or looking up domain services (either provided by the framework or application-specific) currently known to the runtime.
@@ -23,52 +23,52 @@ interface ServiceRegistry {
 }
 ----
 
-<.> xref:#select__Class_Annotation[][select(Class, Annotation[])]
+<.> xref:#select_Class_Annotation[select(Class, Annotation)]
 +
 --
 Obtains a xref:refguide:commons:index/collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.
 --
-<.> xref:#select__Class[select(Class)]
+<.> xref:#select_Class[select(Class)]
 +
 --
 Obtains a xref:refguide:commons:index/collections/Can.adoc[Can] container containing any matching instances for the given required type.
 --
-<.> xref:#streamRegisteredBeansOfType__Class[streamRegisteredBeansOfType(Class)]
+<.> xref:#streamRegisteredBeansOfType_Class[streamRegisteredBeansOfType(Class)]
 +
 --
 Streams all registered bean adapters implementing the requested type.
 --
-<.> xref:#streamRegisteredBeans__[streamRegisteredBeans()]
+<.> xref:#streamRegisteredBeans_[streamRegisteredBeans()]
 +
 --
 Returns all bean adapters that have been registered.
 --
-<.> xref:#lookupRegisteredBeanById__String[lookupRegisteredBeanById(String)]
+<.> xref:#lookupRegisteredBeanById_String[lookupRegisteredBeanById(String)]
 +
 --
 Returns a registered bean of given _name_ .
 --
-<.> xref:#lookupRegisteredBeanByIdElseFail__String[lookupRegisteredBeanByIdElseFail(String)]
+<.> xref:#lookupRegisteredBeanByIdElseFail_String[lookupRegisteredBeanByIdElseFail(String)]
 +
 --
 Returns a registered bean of given _name_ , or throws when no such bean.
 --
-<.> xref:#lookupService__Class[lookupService(Class)]
+<.> xref:#lookupService_Class[lookupService(Class)]
 +
 --
 Returns a domain service implementing the requested type.
 --
-<.> xref:#lookupService__Class_Comparator[lookupService(Class, Comparator)]
+<.> xref:#lookupService_Class_Comparator[lookupService(Class, Comparator)]
 +
 --
 Returns a domain service implementing the requested type.
 --
-<.> xref:#lookupServiceElseFail__Class[lookupServiceElseFail(Class)]
+<.> xref:#lookupServiceElseFail_Class[lookupServiceElseFail(Class)]
 +
 --
 Looks up a domain service of the requested type (same as _#lookupService(Class)_ ) but throws a _NoSuchElementException_ if there are no such instances.
 --
-<.> xref:#clearRegisteredBeans__[clearRegisteredBeans()]
+<.> xref:#clearRegisteredBeans_[clearRegisteredBeans()]
 +
 --
 Invalidates any cached service adapters that might hold a reference to the current _SpecificationLoader_ . Particularly useful when discarding a meta-model instance, that is, purging the _ObjectSpecification_ cache.
@@ -76,56 +76,56 @@ Invalidates any cached service adapters that might hold a reference to the curre
 
 == Members
 
-[#select__Class_Annotation]
-=== select(Class, Annotation[])
+[#select_Class_Annotation]
+=== select(Class, Annotation)
 
 Obtains a xref:refguide:commons:index/collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.
 
-[#select__Class]
+[#select_Class]
 === select(Class)
 
 Obtains a xref:refguide:commons:index/collections/Can.adoc[Can] container containing any matching instances for the given required type.
 
-[#streamRegisteredBeansOfType__Class]
+[#streamRegisteredBeansOfType_Class]
 === streamRegisteredBeansOfType(Class)
 
 Streams all registered bean adapters implementing the requested type.
 
-[#streamRegisteredBeans__]
+[#streamRegisteredBeans_]
 === streamRegisteredBeans()
 
 Returns all bean adapters that have been registered.
 
-[#lookupRegisteredBeanById__String]
+[#lookupRegisteredBeanById_String]
 === lookupRegisteredBeanById(String)
 
 Returns a registered bean of given _name_ .
 
-[#lookupRegisteredBeanByIdElseFail__String]
+[#lookupRegisteredBeanByIdElseFail_String]
 === lookupRegisteredBeanByIdElseFail(String)
 
 Returns a registered bean of given _name_ , or throws when no such bean.
 
-[#lookupService__Class]
+[#lookupService_Class]
 === lookupService(Class)
 
 Returns a domain service implementing the requested type.
 
 If this lookup is ambiguous, the service annotated with highest priority is returned. see _Priority_
 
-[#lookupService__Class_Comparator]
+[#lookupService_Class_Comparator]
 === lookupService(Class, Comparator)
 
 Returns a domain service implementing the requested type.
 
 If this lookup is ambiguous, then the provided comparator is used.
 
-[#lookupServiceElseFail__Class]
+[#lookupServiceElseFail_Class]
 === lookupServiceElseFail(Class)
 
 Looks up a domain service of the requested type (same as _#lookupService(Class)_ ) but throws a _NoSuchElementException_ if there are no such instances.
 
-[#clearRegisteredBeans__]
+[#clearRegisteredBeans_]
 === clearRegisteredBeans()
 
 Invalidates any cached service adapters that might hold a reference to the current _SpecificationLoader_ . Particularly useful when discarding a meta-model instance, that is, purging the _ObjectSpecification_ cache.

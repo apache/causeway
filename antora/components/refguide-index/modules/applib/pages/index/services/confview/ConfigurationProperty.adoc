@@ -7,7 +7,6 @@
 .ConfigurationProperty.java
 ----
 class ConfigurationProperty {
-  public static final String LOGICAL_TYPE_NAME;
   ConfigurationProperty(String key, String value)
   int compareTo(ConfigurationProperty other)
 }

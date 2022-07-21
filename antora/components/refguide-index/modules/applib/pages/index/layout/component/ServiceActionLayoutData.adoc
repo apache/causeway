@@ -38,22 +38,22 @@ class ServiceActionLayoutData {
 }
 ----
 
-<.> xref:#getId__[getId()]
+<.> xref:#getId_[getId()]
 +
 --
 Method name.
 --
-<.> xref:#getOwner__[getOwner()]
+<.> xref:#getOwner_[getOwner()]
 +
 --
 Owner.
 --
-<.> xref:#getMetadataError__[getMetadataError()]
+<.> xref:#getMetadataError_[getMetadataError()]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
-<.> xref:#getLink__[getLink()]
+<.> xref:#getLink_[getLink()]
 +
 --
 The link to access this resource from the REST API (Restful Objects viewer).
@@ -61,26 +61,26 @@ The link to access this resource from the REST API (Restful Objects viewer).
 
 == Members
 
-[#getId__]
+[#getId_]
 === getId()
 
 Method name.
 
 Overloaded methods are not supported.
 
-[#getOwner__]
+[#getOwner_]
 === getOwner()
 
 Owner.
 
 Set programmatically by framework after reading in from XML.
 
-[#getMetadataError__]
+[#getMetadataError_]
 === getMetadataError()
 
 For diagnostics; populated by the framework if and only if a metadata error.
 
-[#getLink__]
+[#getLink_]
 === getLink()
 
 The link to access this resource from the REST API (Restful Objects viewer).

@@ -14,7 +14,7 @@ class Object_recentExecutions {
 }
 ----
 
-<.> xref:#hideAct__[hideAct()]
+<.> xref:#hideAct_[hideAct()]
 +
 --
 Hide if the mixee is itself xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] (commands don't have commands).
@@ -22,7 +22,7 @@ Hide if the mixee is itself xref:refguide:applib:index/mixins/system/HasInteract
 
 == Members
 
-[#hideAct__]
+[#hideAct_]
 === hideAct()
 
 Hide if the mixee is itself xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] (commands don't have commands).

@@ -19,12 +19,12 @@ class CollectionDomainEvent<S, T> {
 }
 ----
 
-<.> xref:#CollectionDomainEvent__[CollectionDomainEvent()]
+<.> xref:#CollectionDomainEvent_[CollectionDomainEvent()]
 +
 --
 Subtypes can define a no-arg constructor; the framework sets state via (non-API) setters.
 --
-<.> xref:#CollectionDomainEvent__S[CollectionDomainEvent(S)]
+<.> xref:#CollectionDomainEvent_S[CollectionDomainEvent(S)]
 +
 --
 Subtypes can define a one-arg constructor; the framework sets state via (non-API) setters.
@@ -32,12 +32,12 @@ Subtypes can define a one-arg constructor; the framework sets state via (non-API
 
 == Members
 
-[#CollectionDomainEvent__]
+[#CollectionDomainEvent_]
 === CollectionDomainEvent()
 
 Subtypes can define a no-arg constructor; the framework sets state via (non-API) setters.
 
-[#CollectionDomainEvent__S]
+[#CollectionDomainEvent_S]
 === CollectionDomainEvent(S)
 
 Subtypes can define a one-arg constructor; the framework sets state via (non-API) setters.

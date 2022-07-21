@@ -27,32 +27,32 @@ class ReasonBuffer2 {
 }
 ----
 
-<.> xref:#append__String[append(String)]
+<.> xref:#append_String[append(String)]
 +
 --
 Append a reason to the list of existing reasons.
 --
-<.> xref:#append__boolean_String[append(boolean, String)]
+<.> xref:#append_boolean_String[append(boolean, String)]
 +
 --
 Append a reason to the list of existing reasons if the condition flag is true.
 --
-<.> xref:#append__Condition_String[append(Condition, String)]
+<.> xref:#append_Condition_String[append(Condition, String)]
 +
 --
 Append a reason to the list of existing reasons if the condition flag is true.
 --
-<.> xref:#getReason__[getReason()]
+<.> xref:#getReason_[getReason()]
 +
 --
 Return the combined set of reasons, or `null` if there are none.
 --
-<.> xref:#appendReason__StringBuilder[appendReason(StringBuilder)]
+<.> xref:#appendReason_StringBuilder[appendReason(StringBuilder)]
 +
 --
 Appends reasons.
 --
-<.> xref:#plus__ReasonBuffer2[plus(ReasonBuffer2)]
+<.> xref:#plus_ReasonBuffer2[plus(ReasonBuffer2)]
 +
 --
 Combines sets of reasons from another.
@@ -60,32 +60,32 @@ Combines sets of reasons from another.
 
 == Members
 
-[#append__String]
+[#append_String]
 === append(String)
 
 Append a reason to the list of existing reasons.
 
-[#append__boolean_String]
+[#append_boolean_String]
 === append(boolean, String)
 
 Append a reason to the list of existing reasons if the condition flag is true.
 
-[#append__Condition_String]
+[#append_Condition_String]
 === append(Condition, String)
 
 Append a reason to the list of existing reasons if the condition flag is true.
 
-[#getReason__]
+[#getReason_]
 === getReason()
 
 Return the combined set of reasons, or `null` if there are none.
 
-[#appendReason__StringBuilder]
+[#appendReason_StringBuilder]
 === appendReason(StringBuilder)
 
 Appends reasons.
 
-[#plus__ReasonBuffer2]
+[#plus_ReasonBuffer2]
 === plus(ReasonBuffer2)
 
 Combines sets of reasons from another.

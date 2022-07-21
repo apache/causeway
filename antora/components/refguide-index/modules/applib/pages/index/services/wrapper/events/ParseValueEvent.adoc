@@ -17,7 +17,7 @@ class ParseValueEvent {
 }
 ----
 
-<.> xref:#getSource__[getSource()]
+<.> xref:#getSource_[getSource()]
 +
 --
 Will be the source provided in the _#ParseValueEvent(Object, Identifier, String) constructor_ if not null, otherwise will fallback to the proposed value.
@@ -25,7 +25,7 @@ Will be the source provided in the _#ParseValueEvent(Object, Identifier, String)
 
 == Members
 
-[#getSource__]
+[#getSource_]
 === getSource()
 
 Will be the source provided in the _#ParseValueEvent(Object, Identifier, String) constructor_ if not null, otherwise will fallback to the proposed value.

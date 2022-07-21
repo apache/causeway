@@ -7,7 +7,6 @@
 .ApplicationTypeProperty.java
 ----
 class ApplicationTypeProperty {
-  public static final String LOGICAL_TYPE_NAME;
   ApplicationTypeProperty()
   ApplicationTypeProperty(ApplicationFeatureId featureId)
   ApplicationTypeProperty(String memento)

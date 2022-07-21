@@ -10,7 +10,7 @@ The execution context is also a mechanism by which the results of the fixture sc
 == API
 
 [source,java]
-.FixtureScript~ExecutionContext.java
+.FixtureScript_ExecutionContext.java
 ----
 class ExecutionContext {
   public static final ExecutionContext NOOP;     // <.>
@@ -77,27 +77,27 @@ class ExecutionContext {
 --
 Null implementation, to assist with unit testing of xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] s.
 --
-<.> xref:#executeChild__FixtureScript_FixtureScript[executeChild(FixtureScript, FixtureScript)]
+<.> xref:#executeChild_FixtureScript_FixtureScript[executeChild(FixtureScript, FixtureScript)]
 +
 --
 Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that is derived from the fixture's class name.
 --
-<.> xref:#executeChildT__FixtureScript_T[executeChildT(FixtureScript, T)]
+<.> xref:#executeChildT_FixtureScript_T[executeChildT(FixtureScript, T)]
 +
 --
 Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that is derived from the fixture's class name.
 --
-<.> xref:#executeChild__FixtureScript_String_FixtureScript[executeChild(FixtureScript, String, FixtureScript)]
+<.> xref:#executeChild_FixtureScript_String_FixtureScript[executeChild(FixtureScript, String, FixtureScript)]
 +
 --
 Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
 --
-<.> xref:#executeChildT__FixtureScript_String_T[executeChildT(FixtureScript, String, T)]
+<.> xref:#executeChildT_FixtureScript_String_T[executeChildT(FixtureScript, String, T)]
 +
 --
 Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
 --
-<.> xref:#getPreviouslyExecuted__[getPreviouslyExecuted()]
+<.> xref:#getPreviouslyExecuted_[getPreviouslyExecuted()]
 +
 --
 Returns a list of the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] instances that have already been executed.
@@ -110,27 +110,27 @@ Returns a list of the xref:refguide:testing:index/fixtures/applib/fixturescripts
 
 Null implementation, to assist with unit testing of xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] s.
 
-[#executeChild__FixtureScript_FixtureScript]
+[#executeChild_FixtureScript_FixtureScript]
 === executeChild(FixtureScript, FixtureScript)
 
 Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that is derived from the fixture's class name.
 
-[#executeChildT__FixtureScript_T]
+[#executeChildT_FixtureScript_T]
 === executeChildT(FixtureScript, T)
 
 Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that is derived from the fixture's class name.
 
-[#executeChild__FixtureScript_String_FixtureScript]
+[#executeChild_FixtureScript_String_FixtureScript]
 === executeChild(FixtureScript, String, FixtureScript)
 
 Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
 
-[#executeChildT__FixtureScript_String_T]
+[#executeChildT_FixtureScript_String_T]
 === executeChildT(FixtureScript, String, T)
 
 Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
 
-[#getPreviouslyExecuted__]
+[#getPreviouslyExecuted_]
 === getPreviouslyExecuted()
 
 Returns a list of the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] instances that have already been executed.

@@ -19,17 +19,17 @@ class ReasonBuffer {
 }
 ----
 
-<.> xref:#append__String[append(String)]
+<.> xref:#append_String[append(String)]
 +
 --
 Append a reason to the list of existing reasons.
 --
-<.> xref:#appendOnCondition__boolean_String[appendOnCondition(boolean, String)]
+<.> xref:#appendOnCondition_boolean_String[appendOnCondition(boolean, String)]
 +
 --
 Append a reason to the list of existing reasons if the condition flag is true.
 --
-<.> xref:#getReason__[getReason()]
+<.> xref:#getReason_[getReason()]
 +
 --
 Return the combined set of reasons, or `null` if there are none.
@@ -37,17 +37,17 @@ Return the combined set of reasons, or `null` if there are none.
 
 == Members
 
-[#append__String]
+[#append_String]
 === append(String)
 
 Append a reason to the list of existing reasons.
 
-[#appendOnCondition__boolean_String]
+[#appendOnCondition_boolean_String]
 === appendOnCondition(boolean, String)
 
 Append a reason to the list of existing reasons if the condition flag is true.
 
-[#getReason__]
+[#getReason_]
 === getReason()
 
 Return the combined set of reasons, or `null` if there are none.

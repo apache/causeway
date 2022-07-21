@@ -6,7 +6,7 @@ Determines the xref:refguide:applib:index/services/iactnlayer/InteractionContext
 == API
 
 [source,java]
-.CommandExecutorService~InteractionContextPolicy.java
+.CommandExecutorService_InteractionContextPolicy.java
 ----
 enum InteractionContextPolicy {
   NO_SWITCH     // <.>

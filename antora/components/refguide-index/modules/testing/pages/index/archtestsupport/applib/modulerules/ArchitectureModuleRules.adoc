@@ -24,17 +24,17 @@ class ArchitectureModuleRules {
 }
 ----
 
-<.> xref:#analyzeClasses_packagesOf__Class[analyzeClasses_packagesOf(Class)]
+<.> xref:#analyzeClasses_packagesOf_Class[analyzeClasses_packagesOf(Class)]
 +
 --
 Utility method to aggregate the module classes (named "XxxModule") that are extracted from the _AnalyzeClasses_ annotation on the provided class.
 --
-<.> xref:#code_dependencies_follow_module_Imports__List[code_dependencies_follow_module_Imports(List)]
+<.> xref:#code_dependencies_follow_module_Imports_List[code_dependencies_follow_module_Imports(List)]
 +
 --
 Ensures that the actual dependencies between classes within modules honour the module dependency graph inferred from the _Import_ statements of each module.
 --
-<.> xref:#code_dependencies_follow_module_Imports_and_subpackage_rules__List_List[code_dependencies_follow_module_Imports_and_subpackage_rules(List, List)]
+<.> xref:#code_dependencies_follow_module_Imports_and_subpackage_rules_List_List[code_dependencies_follow_module_Imports_and_subpackage_rules(List, List)]
 +
 --
 Ensures that the actual dependencies between classes within modules honour the module dependency graph inferred from the _Import_ statements of each module AND also ensures that the subpackages within those rules only access the allowed subpackages of both their own &local;local&local; and the subpackages of other modules that they might reference.
@@ -42,19 +42,19 @@ Ensures that the actual dependencies between classes within modules honour the m
 
 == Members
 
-[#analyzeClasses_packagesOf__Class]
+[#analyzeClasses_packagesOf_Class]
 === analyzeClasses_packagesOf(Class)
 
 Utility method to aggregate the module classes (named "XxxModule") that are extracted from the _AnalyzeClasses_ annotation on the provided class.
 
 The result is intended to be passed into _#code_dependencies_follow_module_Imports(List)_ and _#code_dependencies_follow_module_Imports_and_subpackage_rules(List, List)_ .
 
-[#code_dependencies_follow_module_Imports__List]
+[#code_dependencies_follow_module_Imports_List]
 === code_dependencies_follow_module_Imports(List)
 
 Ensures that the actual dependencies between classes within modules honour the module dependency graph inferred from the _Import_ statements of each module.
 
-[#code_dependencies_follow_module_Imports_and_subpackage_rules__List_List]
+[#code_dependencies_follow_module_Imports_and_subpackage_rules_List_List]
 === code_dependencies_follow_module_Imports_and_subpackage_rules(List, List)
 
 Ensures that the actual dependencies between classes within modules honour the module dependency graph inferred from the _Import_ statements of each module AND also ensures that the subpackages within those rules only access the allowed subpackages of both their own &local;local&local; and the subpackages of other modules that they might reference.

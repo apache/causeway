@@ -21,7 +21,7 @@ class BSMenu {
 }
 ----
 
-<.> xref:#isUnreferencedActions__[isUnreferencedActions()]
+<.> xref:#isUnreferencedActions_[isUnreferencedActions()]
 +
 --
 Whether this menu should be used to hold any unreferenced actions.
@@ -29,7 +29,7 @@ Whether this menu should be used to hold any unreferenced actions.
 
 == Members
 
-[#isUnreferencedActions__]
+[#isUnreferencedActions_]
 === isUnreferencedActions()
 
 Whether this menu should be used to hold any unreferenced actions.

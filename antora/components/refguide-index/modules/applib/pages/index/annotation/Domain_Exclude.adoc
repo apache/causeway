@@ -8,7 +8,7 @@ Acts as the semantic counterpart to _Domain.Include_ .
 == API
 
 [source,java]
-.Domain~Exclude.java
+.Domain_Exclude.java
 ----
 @interface Exclude {
 }

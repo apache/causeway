@@ -1,4 +1,4 @@
-= Interaction _(interface)_
+= Interaction
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Represents an action invocation or property modification, resulting in some state change of the system. It captures not only the target object and arguments passed, but also builds up the call-graph, and captures metrics, eg for profiling.
@@ -22,22 +22,22 @@ interface Interaction {
 }
 ----
 
-<.> xref:#getInteractionId__[getInteractionId()]
+<.> xref:#getInteractionId_[getInteractionId()]
 +
 --
 The unique identifier of this interaction (inherited from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] )
 --
-<.> xref:#getCommand__[getCommand()]
+<.> xref:#getCommand_[getCommand()]
 +
 --
 Represents the _intention_ to perform this interaction.
 --
-<.> xref:#getCurrentExecution__[getCurrentExecution()]
+<.> xref:#getCurrentExecution_[getCurrentExecution()]
 +
 --
 The current (most recently pushed) xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] .
 --
-<.> xref:#getPriorExecution__[getPriorExecution()]
+<.> xref:#getPriorExecution_[getPriorExecution()]
 +
 --
 The execution that preceded the current one.
@@ -45,24 +45,24 @@ The execution that preceded the current one.
 
 == Members
 
-[#getInteractionId__]
+[#getInteractionId_]
 === getInteractionId()
 
 The unique identifier of this interaction (inherited from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] )
 
 This can be used to correlate audit records and transactions happening as a consequence or within the interaction.
 
-[#getCommand__]
+[#getCommand_]
 === getCommand()
 
 Represents the _intention_ to perform this interaction.
 
-[#getCurrentExecution__]
+[#getCurrentExecution_]
 === getCurrentExecution()
 
 The current (most recently pushed) xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] .
 
-[#getPriorExecution__]
+[#getPriorExecution_]
 === getPriorExecution()
 
 The execution that preceded the current one.

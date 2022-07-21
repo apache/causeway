@@ -9,18 +9,17 @@ Immutable serializable value held by xref:refguide:applib:index/services/user/Us
 .RoleMemento.java
 ----
 class RoleMemento {
-  public static final String LOGICAL_TYPE_NAME;
   RoleMemento(String name)     // <.>
   RoleMemento(String name, String description)     // <.>
 }
 ----
 
-<.> xref:#RoleMemento__String[RoleMemento(String)]
+<.> xref:#RoleMemento_String[RoleMemento(String)]
 +
 --
 Creates a new role with the specified name. Description is left blank.
 --
-<.> xref:#RoleMemento__String_String[RoleMemento(String, String)]
+<.> xref:#RoleMemento_String_String[RoleMemento(String, String)]
 +
 --
 Creates a new role with the specified name and description.
@@ -28,12 +27,12 @@ Creates a new role with the specified name and description.
 
 == Members
 
-[#RoleMemento__String]
+[#RoleMemento_String]
 === RoleMemento(String)
 
 Creates a new role with the specified name. Description is left blank.
 
-[#RoleMemento__String_String]
+[#RoleMemento_String_String]
 === RoleMemento(String, String)
 
 Creates a new role with the specified name and description.

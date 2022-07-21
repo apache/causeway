@@ -31,12 +31,12 @@ class InteractionDtoUtils {
 }
 ----
 
-<.> xref:#newInteractionDto__Execution[newInteractionDto(Execution)]
+<.> xref:#newInteractionDto_Execution[newInteractionDto(Execution)]
 +
 --
 Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).
 --
-<.> xref:#newInteractionDto__Execution_Strategy[newInteractionDto(Execution, Strategy)]
+<.> xref:#newInteractionDto_Execution_Strategy[newInteractionDto(Execution, Strategy)]
 +
 --
 Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).
@@ -44,12 +44,12 @@ Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:
 
 == Members
 
-[#newInteractionDto__Execution]
+[#newInteractionDto_Execution]
 === newInteractionDto(Execution)
 
 Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).
 
-[#newInteractionDto__Execution_Strategy]
+[#newInteractionDto_Execution_Strategy]
 === newInteractionDto(Execution, Strategy)
 
 Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).

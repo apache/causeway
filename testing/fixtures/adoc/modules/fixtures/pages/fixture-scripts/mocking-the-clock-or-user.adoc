@@ -76,4 +76,4 @@ val switchWhoAndWhen =
         );
 ----
 
-This can then be passed in as the first argument to `SudoService`'s xref:refguide:applib:index/services/sudo/SudoService.adoc#call__UnaryOperator_Callable[call(...)] or xref:refguide:applib:index/services/sudo/SudoService.adoc#run__UnaryOperator_ThrowingRunnable[run(...)] methods.
+This can then be passed in as the first argument to `SudoService`'s xref:refguide:applib:index/services/sudo/SudoService.adoc#call_UnaryOperator_Callable[call(...)] or xref:refguide:applib:index/services/sudo/SudoService.adoc#run_UnaryOperator_ThrowingRunnable[run(...)] methods.

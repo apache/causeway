@@ -20,7 +20,7 @@ class FixtureResultList {
 }
 ----
 
-<.> xref:#add__FixtureScript_String_T[add(FixtureScript, String, T)]
+<.> xref:#add_FixtureScript_String_T[add(FixtureScript, String, T)]
 +
 --
 Wraps the object within a xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureResult.adoc[FixtureResult] and add to this list.
@@ -28,7 +28,7 @@ Wraps the object within a xref:refguide:testing:index/fixtures/applib/fixturescr
 
 == Members
 
-[#add__FixtureScript_String_T]
+[#add_FixtureScript_String_T]
 === add(FixtureScript, String, T)
 
 Wraps the object within a xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureResult.adoc[FixtureResult] and add to this list.

@@ -7,7 +7,6 @@
 .ApplicationType.java
 ----
 class ApplicationType {
-  public static final String LOGICAL_TYPE_NAME;
   ApplicationType()
   ApplicationType(ApplicationFeatureId featureId)
   ApplicationType(String memento)

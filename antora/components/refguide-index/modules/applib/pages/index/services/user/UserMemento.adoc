@@ -33,47 +33,47 @@ class UserMemento {
 --
 Also used by the wicket-viewer and its AuthorizeInstantiation(...) annotations; the actual value is arbitrary; however, we use namespace style to clarify the origin
 --
-<.> xref:#system__[system()]
+<.> xref:#system_[system()]
 +
 --
 The framework's internal user with unrestricted privileges.
 --
-<.> xref:#ofName__String[ofName(String)]
+<.> xref:#ofName_String[ofName(String)]
 +
 --
 Creates a new user with the specified name and no roles.
 --
-<.> xref:#ofNameAndRoles__String_RoleMemento[ofNameAndRoles(String, RoleMemento)]
+<.> xref:#ofNameAndRoles_String_RoleMemento[ofNameAndRoles(String, RoleMemento)]
 +
 --
 Creates a new user with the specified name and assigned roles.
 --
-<.> xref:#ofNameAndRoleNames__String_String[ofNameAndRoleNames(String, String)]
+<.> xref:#ofNameAndRoleNames_String_String[ofNameAndRoleNames(String, String)]
 +
 --
 Creates a new user with the specified name and assigned role names.
 --
-<.> xref:#ofNameAndRoleNames__String_List[ofNameAndRoleNames(String, List)]
+<.> xref:#ofNameAndRoleNames_String_List[ofNameAndRoleNames(String, List)]
 +
 --
 Creates a new user with the specified name and assigned role names.
 --
-<.> xref:#ofNameAndRoleNames__String_Stream[ofNameAndRoleNames(String, Stream)]
+<.> xref:#ofNameAndRoleNames_String_Stream[ofNameAndRoleNames(String, Stream)]
 +
 --
 Creates a new user with the specified name and assigned role names.
 --
-<.> xref:#getRoles__[getRoles()]
+<.> xref:#getRoles_[getRoles()]
 +
 --
 The roles associated with this user.
 --
-<.> xref:#isCurrentUser__String[isCurrentUser(String)]
+<.> xref:#isCurrentUser_String[isCurrentUser(String)]
 +
 --
 Determine if the specified name is this user.
 --
-<.> xref:#isSystem__[isSystem()]
+<.> xref:#isSystem_[isSystem()]
 +
 --
 Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] represent the _system user_ .
@@ -86,47 +86,47 @@ Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemen
 
 Also used by the wicket-viewer and its AuthorizeInstantiation(...) annotations; the actual value is arbitrary; however, we use namespace style to clarify the origin
 
-[#system__]
+[#system_]
 === system()
 
 The framework's internal user with unrestricted privileges.
 
-[#ofName__String]
+[#ofName_String]
 === ofName(String)
 
 Creates a new user with the specified name and no roles.
 
-[#ofNameAndRoles__String_RoleMemento]
+[#ofNameAndRoles_String_RoleMemento]
 === ofNameAndRoles(String, RoleMemento)
 
 Creates a new user with the specified name and assigned roles.
 
-[#ofNameAndRoleNames__String_String]
+[#ofNameAndRoleNames_String_String]
 === ofNameAndRoleNames(String, String)
 
 Creates a new user with the specified name and assigned role names.
 
-[#ofNameAndRoleNames__String_List]
+[#ofNameAndRoleNames_String_List]
 === ofNameAndRoleNames(String, List)
 
 Creates a new user with the specified name and assigned role names.
 
-[#ofNameAndRoleNames__String_Stream]
+[#ofNameAndRoleNames_String_Stream]
 === ofNameAndRoleNames(String, Stream)
 
 Creates a new user with the specified name and assigned role names.
 
-[#getRoles__]
+[#getRoles_]
 === getRoles()
 
 The roles associated with this user.
 
-[#isCurrentUser__String]
+[#isCurrentUser_String]
 === isCurrentUser(String)
 
 Determine if the specified name is this user.
 
-[#isSystem__]
+[#isSystem_]
 === isSystem()
 
 Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] represent the _system user_ .

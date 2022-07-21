@@ -17,22 +17,22 @@ class Booleans {
 }
 ----
 
-<.> xref:#coinFlip__[coinFlip()]
+<.> xref:#coinFlip_[coinFlip()]
 +
 --
 Same as _#any()_ , 50:50 chance of true or false.
 --
-<.> xref:#either__[either()]
+<.> xref:#either_[either()]
 +
 --
 Same as _#any()_ , 50:50 chance of true or false.
 --
-<.> xref:#diceRollOf6__[diceRollOf6()]
+<.> xref:#diceRollOf6_[diceRollOf6()]
 +
 --
 A 1 in 6 chance of returning true.
 --
-<.> xref:#any__[any()]
+<.> xref:#any_[any()]
 +
 --
 50:50 chance of true or false.
@@ -40,22 +40,22 @@ A 1 in 6 chance of returning true.
 
 == Members
 
-[#coinFlip__]
+[#coinFlip_]
 === coinFlip()
 
 Same as _#any()_ , 50:50 chance of true or false.
 
-[#either__]
+[#either_]
 === either()
 
 Same as _#any()_ , 50:50 chance of true or false.
 
-[#diceRollOf6__]
+[#diceRollOf6_]
 === diceRollOf6()
 
 A 1 in 6 chance of returning true.
 
-[#any__]
+[#any_]
 === any()
 
 50:50 chance of true or false.

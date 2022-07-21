@@ -21,17 +21,17 @@ class ContentNegotiationServiceForRestfulObjectsV1_0 {
 }
 ----
 
-<.> xref:#buildResponseTo__IResourceContext_ManagedObject_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ManagedObject, JsonRepresentation, JsonRepresentation)]
+<.> xref:#buildResponseTo_IResourceContext_ManagedObject_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ManagedObject, JsonRepresentation, JsonRepresentation)]
 +
 --
 Not API
 --
-<.> xref:#buildResponseTo__IResourceContext_ManagedCollection_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ManagedCollection, JsonRepresentation, JsonRepresentation)]
+<.> xref:#buildResponseTo_IResourceContext_ManagedCollection_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ManagedCollection, JsonRepresentation, JsonRepresentation)]
 +
 --
 Not API
 --
-<.> xref:#buildResponseTo__IResourceContext_ObjectAndActionInvocation_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ObjectAndActionInvocation, JsonRepresentation, JsonRepresentation)]
+<.> xref:#buildResponseTo_IResourceContext_ObjectAndActionInvocation_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ObjectAndActionInvocation, JsonRepresentation, JsonRepresentation)]
 +
 --
 Not API
@@ -39,17 +39,17 @@ Not API
 
 == Members
 
-[#buildResponseTo__IResourceContext_ManagedObject_JsonRepresentation_JsonRepresentation]
+[#buildResponseTo_IResourceContext_ManagedObject_JsonRepresentation_JsonRepresentation]
 === buildResponseTo(IResourceContext, ManagedObject, JsonRepresentation, JsonRepresentation)
 
 Not API
 
-[#buildResponseTo__IResourceContext_ManagedCollection_JsonRepresentation_JsonRepresentation]
+[#buildResponseTo_IResourceContext_ManagedCollection_JsonRepresentation_JsonRepresentation]
 === buildResponseTo(IResourceContext, ManagedCollection, JsonRepresentation, JsonRepresentation)
 
 Not API
 
-[#buildResponseTo__IResourceContext_ObjectAndActionInvocation_JsonRepresentation_JsonRepresentation]
+[#buildResponseTo_IResourceContext_ObjectAndActionInvocation_JsonRepresentation_JsonRepresentation]
 === buildResponseTo(IResourceContext, ObjectAndActionInvocation, JsonRepresentation, JsonRepresentation)
 
 Not API

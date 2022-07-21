@@ -1,4 +1,4 @@
-= Try _(interface)_
+= Try
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 The xref:refguide:commons:index/functional/Try.adoc[Try] type represents a value of one of two possible types (a disjoint union) of _Success_ or _Failure_ .
@@ -35,67 +35,67 @@ interface Try<T> {
 }
 ----
 
-<.> xref:#getValue__[getValue()]
+<.> xref:#getValue_[getValue()]
 +
 --
 Optionally returns the contained _value_ based on presence, that is, if this is a _Success_ and the value is not _null_ .
 --
-<.> xref:#getFailure__[getFailure()]
+<.> xref:#getFailure_[getFailure()]
 +
 --
 Optionally returns the contained _failure_ based on presence, that is, if this is a _Failure_ .
 --
-<.> xref:#ifSuccess__Consumer[ifSuccess(Consumer)]
+<.> xref:#ifSuccess_Consumer[ifSuccess(Consumer)]
 +
 --
 Peeks into the _value_ if this is a _Success_ .
 --
-<.> xref:#ifFailure__Consumer[ifFailure(Consumer)]
+<.> xref:#ifFailure_Consumer[ifFailure(Consumer)]
 +
 --
 Peeks into the _failure_ if this is a _Failure_ .
 --
-<.> xref:#ifFailureFail__[ifFailureFail()]
+<.> xref:#ifFailureFail_[ifFailureFail()]
 +
 --
 Throws the contained failure if any.
 --
-<.> xref:#ifAbsentFail__[ifAbsentFail()]
+<.> xref:#ifAbsentFail_[ifAbsentFail()]
 +
 --
 Throws _NoSuchElementException_ if _value_ is _null_ .
 --
-<.> xref:#mapSuccess__Function[mapSuccess(Function)]
+<.> xref:#mapSuccess_Function[mapSuccess(Function)]
 +
 --
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Success_ . Otherwise if this is a _Failure_ acts as identity operator.
 --
-<.> xref:#mapFailure__UnaryOperator[mapFailure(UnaryOperator)]
+<.> xref:#mapFailure_UnaryOperator[mapFailure(UnaryOperator)]
 +
 --
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if its a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
 --
-<.> xref:#mapEmptyToFailure__[mapEmptyToFailure()]
+<.> xref:#mapEmptyToFailure_[mapEmptyToFailure()]
 +
 --
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if this is a _Success_ with an empty _value_ . Otherwise acts as identity operator.
 --
-<.> xref:#map__Function_Function[map(Function, Function)]
+<.> xref:#map_Function_Function[map(Function, Function)]
 +
 --
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to xref:refguide:commons:index/functional/Either.adoc[Either] using according mapping function _successMapper_ or _failureMapper_ .
 --
-<.> xref:#fold__Function_Function[fold(Function, Function)]
+<.> xref:#fold_Function_Function[fold(Function, Function)]
 +
 --
 Maps the contained _value_ or _failure_ to a new value of type _R_ using according mapping function _successMapper_ or _failureMapper_ .
 --
-<.> xref:#thenCall__Callable[thenCall(Callable)]
+<.> xref:#thenCall_Callable[thenCall(Callable)]
 +
 --
 If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Callable_ . Otherwise if its a _Failure_ acts as identity operator.
 --
-<.> xref:#thenRun__ThrowingRunnable[thenRun(ThrowingRunnable)]
+<.> xref:#thenRun_ThrowingRunnable[thenRun(ThrowingRunnable)]
 +
 --
 If this is a _Success_ , maps it to new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _ThrowingRunnable_ . Otherwise if its a _Failure_ acts as identity operator.
@@ -103,67 +103,67 @@ If this is a _Success_ , maps it to new xref:refguide:commons:index/functional/T
 
 == Members
 
-[#getValue__]
+[#getValue_]
 === getValue()
 
 Optionally returns the contained _value_ based on presence, that is, if this is a _Success_ and the value is not _null_ .
 
-[#getFailure__]
+[#getFailure_]
 === getFailure()
 
 Optionally returns the contained _failure_ based on presence, that is, if this is a _Failure_ .
 
-[#ifSuccess__Consumer]
+[#ifSuccess_Consumer]
 === ifSuccess(Consumer)
 
 Peeks into the _value_ if this is a _Success_ .
 
-[#ifFailure__Consumer]
+[#ifFailure_Consumer]
 === ifFailure(Consumer)
 
 Peeks into the _failure_ if this is a _Failure_ .
 
-[#ifFailureFail__]
+[#ifFailureFail_]
 === ifFailureFail()
 
 Throws the contained failure if any.
 
-[#ifAbsentFail__]
+[#ifAbsentFail_]
 === ifAbsentFail()
 
 Throws _NoSuchElementException_ if _value_ is _null_ .
 
-[#mapSuccess__Function]
+[#mapSuccess_Function]
 === mapSuccess(Function)
 
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Success_ . Otherwise if this is a _Failure_ acts as identity operator.
 
-[#mapFailure__UnaryOperator]
+[#mapFailure_UnaryOperator]
 === mapFailure(UnaryOperator)
 
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if its a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
 
-[#mapEmptyToFailure__]
+[#mapEmptyToFailure_]
 === mapEmptyToFailure()
 
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if this is a _Success_ with an empty _value_ . Otherwise acts as identity operator.
 
-[#map__Function_Function]
+[#map_Function_Function]
 === map(Function, Function)
 
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to xref:refguide:commons:index/functional/Either.adoc[Either] using according mapping function _successMapper_ or _failureMapper_ .
 
-[#fold__Function_Function]
+[#fold_Function_Function]
 === fold(Function, Function)
 
 Maps the contained _value_ or _failure_ to a new value of type _R_ using according mapping function _successMapper_ or _failureMapper_ .
 
-[#thenCall__Callable]
+[#thenCall_Callable]
 === thenCall(Callable)
 
 If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Callable_ . Otherwise if its a _Failure_ acts as identity operator.
 
-[#thenRun__ThrowingRunnable]
+[#thenRun_ThrowingRunnable]
 === thenRun(ThrowingRunnable)
 
 If this is a _Success_ , maps it to new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _ThrowingRunnable_ . Otherwise if its a _Failure_ acts as identity operator.

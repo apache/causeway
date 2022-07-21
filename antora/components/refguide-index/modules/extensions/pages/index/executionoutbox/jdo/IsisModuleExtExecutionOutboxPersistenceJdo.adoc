@@ -13,7 +13,7 @@ class IsisModuleExtExecutionOutboxPersistenceJdo {
 }
 ----
 
-<.> xref:#getTeardownFixtureWillDelete__[getTeardownFixtureWillDelete()]
+<.> xref:#getTeardownFixtureWillDelete_[getTeardownFixtureWillDelete()]
 +
 --
 For tests that need to delete the command table first. Should be run in the @BeforeEach of the test.
@@ -21,7 +21,7 @@ For tests that need to delete the command table first. Should be run in the @Bef
 
 == Members
 
-[#getTeardownFixtureWillDelete__]
+[#getTeardownFixtureWillDelete_]
 === getTeardownFixtureWillDelete()
 
 For tests that need to delete the command table first. Should be run in the @BeforeEach of the test.

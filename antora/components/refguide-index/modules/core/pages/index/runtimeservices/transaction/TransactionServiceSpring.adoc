@@ -18,17 +18,17 @@ class TransactionServiceSpring {
 }
 ----
 
-<.> xref:#beforeEnteringTransactionalBoundary__Interaction[beforeEnteringTransactionalBoundary(Interaction)]
+<.> xref:#beforeEnteringTransactionalBoundary_Interaction[beforeEnteringTransactionalBoundary(Interaction)]
 +
 --
 INTERACTION BEGIN BOUNDARY
 --
-<.> xref:#onTransactionEnded__TransactionAfterCompletionEvent[onTransactionEnded(TransactionAfterCompletionEvent)]
+<.> xref:#onTransactionEnded_TransactionAfterCompletionEvent[onTransactionEnded(TransactionAfterCompletionEvent)]
 +
 --
 TRANSACTION END BOUNDARY
 --
-<.> xref:#afterLeavingTransactionalBoundary__Interaction[afterLeavingTransactionalBoundary(Interaction)]
+<.> xref:#afterLeavingTransactionalBoundary_Interaction[afterLeavingTransactionalBoundary(Interaction)]
 +
 --
 INTERACTION END BOUNDARY
@@ -36,17 +36,17 @@ INTERACTION END BOUNDARY
 
 == Members
 
-[#beforeEnteringTransactionalBoundary__Interaction]
+[#beforeEnteringTransactionalBoundary_Interaction]
 === beforeEnteringTransactionalBoundary(Interaction)
 
 INTERACTION BEGIN BOUNDARY
 
-[#onTransactionEnded__TransactionAfterCompletionEvent]
+[#onTransactionEnded_TransactionAfterCompletionEvent]
 === onTransactionEnded(TransactionAfterCompletionEvent)
 
 TRANSACTION END BOUNDARY
 
-[#afterLeavingTransactionalBoundary__Interaction]
+[#afterLeavingTransactionalBoundary_Interaction]
 === afterLeavingTransactionalBoundary(Interaction)
 
 INTERACTION END BOUNDARY

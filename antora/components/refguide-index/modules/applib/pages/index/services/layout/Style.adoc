@@ -1,7 +1,7 @@
 = Style _(enum)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Mode of operation when downloading a layout file (while prototyping).TODO update for v2 - @MemberGroupLayout and @MemberOrder have been removed
+Mode of operation when downloading a layout file (while prototyping).
 
 It affects the way the file's content is assembled. Once a layout file is in place, its layout data takes precedence over any conflicting layout data from annotations.
 
@@ -55,28 +55,16 @@ As per _#NORMALIZED_ , but also with all (non-null) facets for all properties/co
 
 The intention here is that any layout metadata annotations can be removed from the code.
 
-* _@MemberGroupLayout_ : *serialized as XML*
-* _@MemberOrder_ : *serialized as XML*
-* _@ActionLayout, @PropertyLayout, @CollectionLayout_ : *serialized as XML*
-
 [#NORMALIZED]
 === NORMALIZED
 
 Default, whereby missing properties/collections/actions are added to regions, and unused/empty regions are removed/trimmed.
 
-It should be possible to remove any _MemberOrder_ annotation but any property/collection/action layout annotations would need to be retained.
-
-* _@MemberGroupLayout_ : *serialized as XML*
-* _@MemberOrder_ : *serialized as XML*
-* _@ActionLayout, @PropertyLayout, @CollectionLayout_ : *ignored*
+It should be possible to remove any _PropertyLayout#sequence()_ , _CollectionLayout#sequence()_ and _ActionLayout#sequence()_ annotation attributes, but _PropertyLayout#fieldSetId()_ / _PropertyLayout#fieldSetName()_ annotation attributes would need to be retained.
 
 [#MINIMAL]
 === MINIMAL
 
 As per _#NORMALIZED_ , but with no properties/collections/actions.
 
-The intention here is for layout annotations that "bind" the properties/collections/actions to the regions to be retained.
-
-* _@MemberGroupLayout_ : *serialized as XML*
-* _@MemberOrder_ : *ignored*
-* _@ActionLayout, @PropertyLayout, @CollectionLayout_ : *ignored*
+The intention here is for layout annotations that "bind" the properties/collections/actions to the regions to be retained; the `layout.xml` is used only to specify the positioning of the groups and tabs.

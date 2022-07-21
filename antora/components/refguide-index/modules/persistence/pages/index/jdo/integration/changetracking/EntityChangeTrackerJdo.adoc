@@ -25,7 +25,7 @@ class EntityChangeTrackerJdo {
 }
 ----
 
-<.> xref:#onTransactionCompleting__TransactionBeforeCompletionEvent[onTransactionCompleting(TransactionBeforeCompletionEvent)]
+<.> xref:#onTransactionCompleting_TransactionBeforeCompletionEvent[onTransactionCompleting(TransactionBeforeCompletionEvent)]
 +
 --
 TRANSACTION END BOUNDARY
@@ -33,7 +33,7 @@ TRANSACTION END BOUNDARY
 
 == Members
 
-[#onTransactionCompleting__TransactionBeforeCompletionEvent]
+[#onTransactionCompleting_TransactionBeforeCompletionEvent]
 === onTransactionCompleting(TransactionBeforeCompletionEvent)
 
 TRANSACTION END BOUNDARY

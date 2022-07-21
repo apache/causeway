@@ -13,7 +13,7 @@ class ThrowableMatchers {
 }
 ----
 
-<.> xref:#causedBy__Class[causedBy(Class)]
+<.> xref:#causedBy_Class[causedBy(Class)]
 +
 --
 Matches when the exception's causal chain contains the given _type_
@@ -21,7 +21,7 @@ Matches when the exception's causal chain contains the given _type_
 
 == Members
 
-[#causedBy__Class]
+[#causedBy_Class]
 === causedBy(Class)
 
 Matches when the exception's causal chain contains the given _type_

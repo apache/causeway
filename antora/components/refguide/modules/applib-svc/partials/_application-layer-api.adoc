@@ -34,7 +34,7 @@ The actions in this menu are restricted to non-production use only.
 |Request-scoped access to the current member execution (action invocation or property edit), represented as the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] context.
 
 |xref:refguide:applib:index/services/iactnlayer/InteractionLayerTracker.adoc[InteractionLayerTracker]
-|Access to the current xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer], where the lowest layer is in effect a short-lived session connected to the database, with a xref:refguide:applib:index/services/xactn/TransactionService.adoc#currentTransactionId__[transaction] started automatically.
+|Access to the current xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer], where the lowest layer is in effect a short-lived session connected to the database, with a xref:refguide:applib:index/services/xactn/TransactionService.adoc#currentTransactionId_[transaction] started automatically.
 
 
 |xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService]

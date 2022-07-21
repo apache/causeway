@@ -25,42 +25,42 @@ class ArchitectureJdoRules {
 }
 ----
 
-<.> xref:#every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY__[every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY()]
+<.> xref:#every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY_[every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY()]
 +
 --
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotation.Nature#ENTITY entity_ .
 --
-<.> xref:#every_jdo_PersistenceCapable_must_be_annotated_with_Version__[every_jdo_PersistenceCapable_must_be_annotated_with_Version()]
+<.> xref:#every_jdo_PersistenceCapable_must_be_annotated_with_Version_[every_jdo_PersistenceCapable_must_be_annotated_with_Version()]
 +
 --
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the JDO _javax.jdo.annotations.Version_ annotation (in support of optimistic locking checks).
 --
-<.> xref:#every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter__[every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter()]
+<.> xref:#every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter_[every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter()]
 +
 --
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Isis _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.isis.applib.jaxb.PersistentEntityAdapter_ `.class` .
 --
-<.> xref:#every_jdo_PersistenceCapable_must_implement_Comparable__[every_jdo_PersistenceCapable_must_implement_Comparable()]
+<.> xref:#every_jdo_PersistenceCapable_must_implement_Comparable_[every_jdo_PersistenceCapable_must_implement_Comparable()]
 +
 --
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also implement _Comparable_ .
 --
-<.> xref:#every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique__[every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique()]
+<.> xref:#every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique_[every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique()]
 +
 --
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation and is not a subtype entity, must also be annotated with the JDO _javax.jdo.annotations.Uniques_ or _javax.jdo.annotations.Unique_ constraints.
 --
-<.> xref:#every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity__[every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity()]
+<.> xref:#every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity_[every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity()]
 +
 --
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the JDO _javax.jdo.annotations.Uniques_ or _javax.jdo.annotations.Unique_ constraints.
 --
-<.> xref:#every_jdo_PersistenceCapable_must_have_schema__[every_jdo_PersistenceCapable_must_have_schema()]
+<.> xref:#every_jdo_PersistenceCapable_must_have_schema_[every_jdo_PersistenceCapable_must_have_schema()]
 +
 --
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must have the _javax.jdo.annotations.PersistenceCapable#schema() schema_ attribute set.
 --
-<.> xref:#every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent__[every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent()]
+<.> xref:#every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent_[every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent()]
 +
 --
 This rule requires that injected fields in classes annotated with the JDO _PersistenceCapable_ annotation must also be annotated with JDO _javax.jdo.annotations.NotPersistent_ annotation.
@@ -68,40 +68,40 @@ This rule requires that injected fields in classes annotated with the JDO _Persi
 
 == Members
 
-[#every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY__]
+[#every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY_]
 === every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY()
 
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Isis xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation specifying that its _DomainObject#nature() nature_ is an _org.apache.isis.applib.annotation.Nature#ENTITY entity_ .
 
-[#every_jdo_PersistenceCapable_must_be_annotated_with_Version__]
+[#every_jdo_PersistenceCapable_must_be_annotated_with_Version_]
 === every_jdo_PersistenceCapable_must_be_annotated_with_Version()
 
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the JDO _javax.jdo.annotations.Version_ annotation (in support of optimistic locking checks).
 
 The rule does _not_ apply to any entities that are subtype entities where there is a supertype entity.
 
-[#every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter__]
+[#every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter_]
 === every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter()
 
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Isis _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.isis.applib.jaxb.PersistentEntityAdapter_ `.class` .
 
 Tnis is so that entities can be transparently referenced from XML-style view models.
 
-[#every_jdo_PersistenceCapable_must_implement_Comparable__]
+[#every_jdo_PersistenceCapable_must_implement_Comparable_]
 === every_jdo_PersistenceCapable_must_implement_Comparable()
 
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also implement _Comparable_ .
 
 This is so that entities have a natural ordering and can safely be added to parented collections of type _java.util.SortedSet_ .
 
-[#every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique__]
+[#every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique_]
 === every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique()
 
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation and is not a subtype entity, must also be annotated with the JDO _javax.jdo.annotations.Uniques_ or _javax.jdo.annotations.Unique_ constraints.
 
 This is so that entities will have an alternative business key in addition to the system-defined surrogate key.
 
-[#every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity__]
+[#every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity_]
 === every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity()
 
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the JDO _javax.jdo.annotations.Uniques_ or _javax.jdo.annotations.Unique_ constraints.
@@ -110,14 +110,14 @@ This is so that entities will have an alternative business key in addition to th
 
 The rule does _not_ apply to any entities that are subtype entities where there is a supertype entity.
 
-[#every_jdo_PersistenceCapable_must_have_schema__]
+[#every_jdo_PersistenceCapable_must_have_schema_]
 === every_jdo_PersistenceCapable_must_have_schema()
 
 This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must have the _javax.jdo.annotations.PersistenceCapable#schema() schema_ attribute set.
 
 This is so that entity tables are organised into an appropriate structure (ideally mirroring that of the entities).
 
-[#every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent__]
+[#every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent_]
 === every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent()
 
 This rule requires that injected fields in classes annotated with the JDO _PersistenceCapable_ annotation must also be annotated with JDO _javax.jdo.annotations.NotPersistent_ annotation.

@@ -278,5 +278,5 @@ You can then remove all `@ActionLayout`, `@PropertyLayout` and `@CollectionLayou
 * if you want to use layout XML file ONLY to describe the grid, then download the "minimal" version.
 The grid regions will be empty in this version, and the framework will use the `@PropertyLayout#fieldSetId`, `@ActionLayout#fieldSetId`, `@ActionLayout#associateWith` and `@Action#choicesFrom` annotation attributes to bind object members to those regions.
 
-If you want to adjust the layout XML for a single domain object, then you can use the xref:refguide:applib-classes:mixees-and-mixins.adoc#[mixin action] (contributed to every domain object).
+If you want to adjust the layout XML for a single domain object, then you can use the xref:refguide:applib-classes:mixees-and-mixins.adoc[mixin action] (contributed to every domain object).
 
