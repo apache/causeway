@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.metamodel.commons.ToString;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -104,32 +103,29 @@ implements OneToOneAssociation {
 
     private ValidityContext createValidateInteractionContext(
             final ManagedObject ownerAdapter,
-            final ManagedObject proposedToReferenceAdapter,
+            final ManagedObject proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy) {
+
+        val head = headFor(ownerAdapter);
+
         return new PropertyModifyContext(
-                headFor(ownerAdapter),
+                head,
                 getFeatureIdentifier(),
-                proposedToReferenceAdapter,
-                ()->getFriendlyName(()->headFor(ownerAdapter).getTarget()),
+                proposedValue,
+                ()->getFriendlyName(head::getTarget),
                 interactionInitiatedBy);
     }
 
     @Override
     public Consent isAssociationValid(
             final ManagedObject ownerAdapter,
-            final ManagedObject proposedAdapter,
+            final ManagedObject proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return isAssociationValidResult(ownerAdapter, proposedAdapter, interactionInitiatedBy).createConsent();
-    }
-
-    private InteractionResult isAssociationValidResult(
-            final ManagedObject ownerAdapter,
-            final ManagedObject proposedToReferenceAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        final ValidityContext validityContext =
-                createValidateInteractionContext(
-                        ownerAdapter, proposedToReferenceAdapter, interactionInitiatedBy);
-        return InteractionUtils.isValidResult(this, validityContext);
+        return InteractionUtils.isValidResult(
+                    this,
+                    createValidateInteractionContext(
+                            ownerAdapter, proposedValue, interactionInitiatedBy))
+                .createConsent();
     }
 
     // -- INIT
@@ -168,9 +164,7 @@ implements OneToOneAssociation {
     @Override
     public boolean isEmpty(final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         final ManagedObject referencedObject = get(ownerAdapter, interactionInitiatedBy);
-        // TODO: perhaps this should instead check if it returns an empty ManagedObject.
-        //  however, that's a far-reaching change to make.
-        return referencedObject == null;
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(referencedObject);
     }
 
     // -- ACCESS (set)
