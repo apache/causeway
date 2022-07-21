@@ -132,7 +132,7 @@ final class _ChangingEntitiesFactory {
         changesDto.setInteractionId(interactionId.toString());
         changesDto.setSequence(transactionSequenceNum);
 
-        changesDto.setUser(userName);
+        changesDto.setUsername(userName);
         changesDto.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(completedAt));
 
         changesDto.setObjects(objectsDto);

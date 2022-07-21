@@ -165,7 +165,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         dto.setMinorVersion("0");
 
         dto.setInteractionId(interactionId.toString());
-        dto.setUser(userService.currentUserNameElseNobody());
+        dto.setUsername(userService.currentUserNameElseNobody());
         dto.setTimestamp(clockService.getClock().nowAsXmlGregorianCalendar());
 
         final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
