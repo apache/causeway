@@ -96,14 +96,14 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      * The user that created the command.
      *
      * <p>
-     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getUser()}
+     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getUsername()} ()}
      * </p>
      */
     @Override
     public String getUsername() {
         // ...
         return commandDto != null
-                ? commandDto.getUser()
+                ? commandDto.getUsername()
                 : null;
     }
 
@@ -127,7 +127,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      * <p>
      *     When the framework sets this (through an internal API), it is
      *     expected to have {@link CommandDto#getInteractionId()},
-     *     {@link CommandDto#getUser()}, {@link CommandDto#getTimestamp()},
+     *     {@link CommandDto#getUsername()}, {@link CommandDto#getTimestamp()},
      *     {@link CommandDto#getTargets()} and {@link CommandDto#getMember()}
      *     to be populated.  The {@link #getInteractionId()}, {@link #getUsername()},
      *     {@link #getTimestamp()} and {@link #getTarget()} are all derived
