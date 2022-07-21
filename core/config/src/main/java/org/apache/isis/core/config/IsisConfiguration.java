@@ -34,12 +34,6 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import javax.activation.DataSource;
 import javax.inject.Named;
 import javax.validation.Constraint;
@@ -68,6 +62,7 @@ import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -76,6 +71,12 @@ import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyP
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.web.DialogMode;
+
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import lombok.Data;
 import lombok.Getter;
@@ -2308,16 +2309,17 @@ public class IsisConfiguration {
                 public boolean isDefined() { return (name != null || image != null) && url != null; }
             }
 
+
             private final DatePicker datePicker = new DatePicker();
             @Data
             public static class DatePicker {
 
                 /**
                  * Defines the first date available in the date picker.
-                 *
                  * <p>
                  * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
-                 * </p>
+                 * <p>
+                 * Use time zone 'Z', as the date/time picker UI component is not wired up to support time-zones.
                  */
                 @NotEmpty @NotNull
                 private String minDate = "1900-01-01T00:00:00.000Z";
@@ -2326,10 +2328,27 @@ public class IsisConfiguration {
                  * Defines the first date available in the date picker.
                  * <p>
                  * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
-                 * </p>
+                 * <p>
+                 * Use time zone 'Z', as the date/time picker UI component is not wired up to support time-zones.
                  */
                 @NotEmpty @NotNull
                 private String maxDate = "2100-01-01T00:00:00.000Z";
+
+//XXX probably needed by TempusDominus 5+
+//                public final java.util.Date minDateAsJavaUtilDate() {
+//                    return asJavaUtilDate(getMinDate());
+//                }
+//
+//                public final java.util.Date maxDateAsJavaUtilDate() {
+//                    return asJavaUtilDate(getMaxDate());
+//                }
+//
+//                private static java.util.Date asJavaUtilDate(final String input) {
+//                    return new Date(
+//                            DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(input, OffsetDateTime::from)
+//                            .toEpochSecond());
+//                }
+
             }
 
             private final DevelopmentUtilities developmentUtilities = new DevelopmentUtilities();

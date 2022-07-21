@@ -27,6 +27,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
 
+import lombok.val;
+
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
  */
@@ -46,8 +48,11 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     @Override
     protected final TextField<T> createTextField(final String id) {
+
+        val scalarModel = scalarModel();
+
         return new TextFieldWithDateTimePicker<T>(
-                getCommonContext(), id, unwrappedModel(), type, getConverter(scalarModel()));
+                getCommonContext(), id, scalarModel, type, getConverter(scalarModel));
     }
 
     @Override

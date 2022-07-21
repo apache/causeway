@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.datepicker;
 
 import java.io.IOException;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -31,6 +32,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;
 import de.agilecoders.wicket.jquery.AbstractConfig;
 import de.agilecoders.wicket.jquery.IKey;
 
@@ -159,6 +162,8 @@ public class DateTimeConfig extends AbstractConfig {
      * Whether or not to show week numbers to the left of week rows.
      */
     private static final IKey<Boolean> CalendarWeeks = newKey("calendarWeeks", false);
+
+    private static final IKey<DatetimePickerIconConfig> Icons = newKey("icons", null);
 
     /**
      * holds all week days in a specific sort order.
@@ -367,28 +372,10 @@ public class DateTimeConfig extends AbstractConfig {
     }
 
     /**
-     * @param value Whether or not to display a 'clear' button, which allows for clearing the input field.
-     * @return this instance for chaining
-     */
-    public DateTimeConfig clearButton(final boolean value) {
-        put(ClearButton, value);
-        return this;
-    }
-
-    /**
-     * @param value Whether or not to display a 'clear' button, which allows for clearing the input field.
-     * @return this instance for chaining
-     */
-    public DateTimeConfig closeButton(final boolean value) {
-        put(CloseButton, value);
-        return this;
-    }
-
-    /**
      * @param value Whether or not to show week numbers to the left of week rows.
      * @return this instance for chaining
      */
-    public DateTimeConfig calendarWeeks(final boolean value) {
+    public DateTimeConfig useCalendarWeeks(final boolean value) {
         put(CalendarWeeks, value);
         return this;
     }
@@ -419,6 +406,35 @@ public class DateTimeConfig extends AbstractConfig {
      */
     public DateTimeConfig autoClose(final boolean value) {
         put(AutoClose, value);
+        return this;
+    }
+
+
+    /**
+     * Sets buttons.
+     *
+     * @param buttons buttons to show/hide
+     * @return config instance
+     */
+    public DateTimeConfig withButtons(final Map<String, Boolean> buttons) {
+        put(DatetimePickerConfig.newKey("buttons", null), Map.of(
+                DatetimePickerConfig.BTN_SHOW_TODAY,
+                Boolean.TRUE.equals(buttons.get(DatetimePickerConfig.BTN_SHOW_TODAY))
+                , DatetimePickerConfig.BTN_SHOW_CLEAR,
+                Boolean.TRUE.equals(buttons.get(DatetimePickerConfig.BTN_SHOW_CLEAR))
+                , DatetimePickerConfig.BTN_SHOW_CLOSE,
+                Boolean.TRUE.equals(buttons.get(DatetimePickerConfig.BTN_SHOW_CLOSE))));
+        return this;
+    }
+
+    /**
+     * Set icon config.
+     *
+     * @param iconConfig icon config
+     * @return config instance
+     */
+    public DateTimeConfig withIcons(final DatetimePickerIconConfig iconConfig) {
+        put(Icons, iconConfig);
         return this;
     }
 
