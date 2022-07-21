@@ -64,24 +64,10 @@ public enum NatureOfService {
     @Deprecated
     DOMAIN;
 
-    boolean isViewRestOnly() {
-        return this == VIEW_REST_ONLY || this == REST;
-    }
     boolean isView() {
         return this == VIEW;
     }
-    boolean isViewMenuOnly() {
-        return this == VIEW_MENU_ONLY;
+    boolean isRest() {
+        return this == REST || this == VIEW_REST_ONLY;
     }
-    boolean isViewContributionsOnly() {
-        return this == VIEW_CONTRIBUTIONS_ONLY;
-    }
-    boolean isDomain() {
-        return this == DOMAIN;
-    }
-
-    boolean isViewOrViewMenuOnly() {
-        return isView() || isViewMenuOnly();
-    }
-
 }
