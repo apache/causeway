@@ -25,23 +25,23 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
 import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.DateTimeConfig.TodayButton;
 
-import lombok.val;
+import static de.agilecoders.wicket.jquery.JQuery.$;
 
 import de.agilecoders.wicket.core.util.Attributes;
-
-import static de.agilecoders.wicket.jquery.JQuery.$;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerCssReference;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerJsReference;
+import lombok.val;
 
 /**
  * A text input field that is used as a date or date/time picker.
@@ -97,6 +97,8 @@ implements IConverter<T> {
             }
         };
         */
+
+        val cfv5 = new DatetimePickerConfig();
 
         val config = new DateTimeConfig();
 
@@ -181,15 +183,19 @@ implements IConverter<T> {
             return;
         }
 
-        response.render(CssHeaderItem.forReference(new CssResourceReference(TextFieldWithDateTimePicker.class, "css/fa-patch.css")));
-        response.render(CssHeaderItem.forReference(new CssResourceReference(TextFieldWithDateTimePicker.class, "css/tempusdominus-bootstrap-4.css")));
+        config.readonly(false);
 
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/moment-with-locales.js")));
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/tempusdominus-bootstrap-4.js")));
+        //TODO legacy calendar icon customization .. should now be possible via TD config
+        response.render(CssHeaderItem.forReference(
+                new CssResourceReference(TextFieldWithDateTimePicker.class, "css/tempusdominus-fa-patch.css")));
 
-        config.readonly(!isEnabled());
+        response.render(DatetimePickerCssReference.asHeaderItem());
+        response.render(DatetimePickerJsReference.asHeaderItem());
 
         response.render(OnDomReadyHeaderItem.forScript(createScript(config)));
+
+        //TODO using new config in DatetimePickerBehavior (wicket-stuff)
+        //response.render($(component).chain("datetimepicker", config).asDomReadyScript());
     }
 
 
