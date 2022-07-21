@@ -41,7 +41,7 @@ public class IsisBookmarkConverter implements AttributeConverter<Bookmark, Strin
     @Override
     public Bookmark convertToEntityAttribute(String datastoreValue) {
         return datastoreValue != null
-                ? Bookmark.parse(datastoreValue).orElse(null)
+                ? Bookmark.parseElseFail(datastoreValue)
                 : null;
     }
 }

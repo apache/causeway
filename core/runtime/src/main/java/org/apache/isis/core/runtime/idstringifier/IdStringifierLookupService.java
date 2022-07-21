@@ -87,17 +87,4 @@ public class IdStringifierLookupService {
         });
         return Optional.ofNullable(_Casts.uncheckedCast(idStringifier));
     }
-
-    @EqualsAndHashCode
-    @ToString
-    static class Key<T> {
-        private final Class<T> valueClass;
-
-        public Key(Class<T> valueClass) {
-            this(valueClass, null);
-        }
-        public Key(Class<T> valueClass, Class<?> entityClassIAny) {
-            this.valueClass = valueClass;
-        }
-    }
 }
