@@ -120,7 +120,7 @@ public class EndToEnd_IntegTest extends TestDomainModuleIntegTestAbstract {
     }
 
 
-    @Test
+    @Test @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @UseReporter(TextWebReporter.class)
     void findAllE1() throws Exception {
 
