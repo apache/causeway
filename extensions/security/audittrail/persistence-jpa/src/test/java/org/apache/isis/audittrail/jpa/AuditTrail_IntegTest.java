@@ -26,10 +26,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
+import org.apache.isis.audittrail.applib.AuditTrailIntegTestAbstract;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
-import org.apache.isis.sessionlog.applib.AuditTrailIntegTestAbstract;
 
 @SpringBootTest(
         classes = AuditTrail_IntegTest.AppManifest.class

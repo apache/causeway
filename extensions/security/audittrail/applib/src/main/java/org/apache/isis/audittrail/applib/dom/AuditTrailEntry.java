@@ -31,6 +31,7 @@ import javax.inject.Named;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -38,6 +39,7 @@ import org.apache.isis.applib.mixins.system.DomainChangeRecord;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.mixins.system.HasInteractionIdAndSequence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.audittrail.applib.IsisModuleExtAuditTrailApplib;
@@ -90,23 +92,17 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     public static abstract class ActionDomainEvent extends IsisModuleExtAuditTrailApplib.ActionDomainEvent<AuditTrailEntry> { }
 
 
-    protected AuditTrailEntry(
-            final java.sql.Timestamp timestamp,
-            final String username,
-            final Bookmark target,
-            final String logicalMemberIdentifier,
-            final String propertyId,
-            final String preValue,
-            final String postValue,
-            final UUID interactionId) {
-        setTimestamp(timestamp);
-        setUsername(username);
-        setTarget(target);
-        setLogicalMemberIdentifier(logicalMemberIdentifier);
-        setPropertyId(propertyId);
-        setPreValue(_Strings.trimmed(preValue, PreValue.MAX_LENGTH));
-        setPostValue(_Strings.trimmed(postValue, PostValue.MAX_LENGTH));
-        setInteractionId(interactionId);
+    @Programmatic
+    public void init(EntityPropertyChange change) {
+        setTimestamp(change.getTimestamp());
+        setUsername(change.getUsername());
+        setTarget(change.getTarget());
+        setLogicalMemberIdentifier(change.getLogicalMemberIdentifier());
+        setSequence(change.getSequence());
+        setPropertyId(change.getPropertyId());
+        setPreValue(_Strings.trimmed(change.getPreValue(), PreValue.MAX_LENGTH));
+        setPostValue(_Strings.trimmed(change.getPostValue(), PostValue.MAX_LENGTH));
+        setInteractionId(change.getInteractionId());
     }
 
 

@@ -84,13 +84,9 @@ import lombok.Setter;
                   + "    || knownAs.matches(:regex)"
                   + "    || emailAddress.matches(:regex)")
 })
-@Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@Version(
-        strategy = VersionStrategy.VERSION_NUMBER,
-        column = "version")
+@Inheritance(strategy = InheritanceStrategy.NEW_TABLE)
+@DatastoreIdentity(strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @Named(ApplicationUser.LOGICAL_TYPE_NAME)
 @DomainObject(

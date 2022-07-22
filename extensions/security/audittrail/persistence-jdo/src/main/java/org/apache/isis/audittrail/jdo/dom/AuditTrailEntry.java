@@ -34,6 +34,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 import javax.jdo.annotations.Version;
+import javax.jdo.annotations.VersionStrategy;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
@@ -47,8 +48,8 @@ import lombok.Getter;
 import lombok.Setter;
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
-        schema = AuditTrailEntryJdo.SCHEMA,
-        table = AuditTrailEntryJdo.TABLE)
+        schema = AuditTrailEntry.SCHEMA,
+        table = AuditTrailEntry.TABLE)
 @Indices({
         @Index(name = "target_propertyId_timestamp_IDX", members = { "target", "propertyId", "timestamp" }, unique = "false"),
         @Index(name = "target_timestamp_IDX", members = { "target", "timestamp" }, unique = "false"),
@@ -59,26 +60,26 @@ import lombok.Setter;
     @Query(
             name = Nq.FIND_BY_INTERACTION_ID,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE interactionId == :interactionId"),
     @Query(
             name = Nq.FIND_FIRST_BY_TARGET,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE target == :target "
                   + " ORDER BY timestamp ASC "
                   + " RANGE 0,2"),
     @Query(
             name = Nq.FIND_RECENT_BY_TARGET,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE targetStr == :targetStr "
                   + " ORDER BY timestamp DESC "
                   + " RANGE 0,100"),
     @Query(
             name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE targetStr == :targetStr "
                   + "    && timestamp >= :from "
                   + "    && timestamp <= :to "
@@ -86,51 +87,51 @@ import lombok.Setter;
     @Query(
             name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE target == :target "
                   + "    && timestamp >= :from "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE target == :target "
                   + "    && timestamp <= :to "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TARGET,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE target == :target "
                   + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_BETWEEN,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE timestamp >= :from "
                   + "    && timestamp <= :to "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_AFTER,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE timestamp >= :from "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_BEFORE,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE timestamp <= :to "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name = Nq.FIND_RECENT_BY_TARGET_AND_PROPERTY_ID,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
                   + " WHERE target == :target "
                   + "    && propertyId == :propertyId "
                   + " ORDER BY timestamp DESC "
@@ -138,27 +139,15 @@ import lombok.Setter;
 })
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@Version(column = "version")
-@Named(AuditTrailEntryJdo.LOGICAL_TYPE_NAME)
+@Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
+@Named(AuditTrailEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED
 )
-public class AuditTrailEntryJdo
+public class AuditTrailEntry
 extends org.apache.isis.audittrail.applib.dom.AuditTrailEntry {
 
-    static final String FQCN = "org.apache.isis.audittrail.jdo.dom.AuditTrailEntryJdo";
-
-    public AuditTrailEntryJdo(
-            final java.sql.Timestamp timestamp,
-            final String username,
-            final Bookmark target,
-            final String logicalMemberIdentifier,
-            final String propertyId,
-            final String preValue,
-            final String postValue,
-            final UUID interactionId) {
-        super(timestamp, username, target, logicalMemberIdentifier, propertyId, preValue, postValue, interactionId);
-    }
+    static final String FQCN = "org.apache.isis.audittrail.jdo.dom.AuditTrailEntry";
 
 
     @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)

@@ -95,13 +95,9 @@ import lombok.Setter;
                   + "    && rule == :rule "
                   + "    && featureSort == :featureSort "),
 })
-@Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@Version(
-        strategy = VersionStrategy.VERSION_NUMBER,
-        column = "version")
+@Inheritance(strategy = InheritanceStrategy.NEW_TABLE)
+@DatastoreIdentity(strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @Named(ApplicationPermission.LOGICAL_TYPE_NAME)
 @DomainObject()

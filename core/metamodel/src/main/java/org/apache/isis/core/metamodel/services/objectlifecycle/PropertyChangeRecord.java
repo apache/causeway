@@ -99,26 +99,25 @@ public final class PropertyChangeRecord {
 
     public EntityPropertyChange toEntityPropertyChange(
             final Timestamp timestamp,
-            final String user,
+            final String username,
             final TransactionId txId) {
 
-        val spec = getEntity().getSpecification();
         val property = this.getProperty();
 
         final Bookmark target = ManagedObjects.bookmarkElseFail(getEntity());
         final String propertyId = property.getId();
-        final String memberId = property.getFeatureIdentifier().getFullIdentityString();
+        final String logicalMemberId = property.getFeatureIdentifier().getFullIdentityString();
         final String preValueStr = getPreAndPostValue().getPreString();
         final String postValueStr = getPreAndPostValue().getPostString();
-        final String targetClass = IdentifierUtil.targetClassNameFor(spec);
 
-        final UUID transactionId = txId.getInteractionId();
+        final UUID interactionId = txId.getInteractionId();
         final int sequence = txId.getSequence();
 
-
         return EntityPropertyChange.of(
-                transactionId, sequence, targetClass, target,
-                memberId, propertyId, preValueStr, postValueStr, user, timestamp);
+                interactionId, sequence,
+                target, logicalMemberId, propertyId,
+                preValueStr, postValueStr,
+                username, timestamp);
     }
 
     // -- HELPER

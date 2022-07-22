@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.audittrail.applib.IsisModuleExtAuditTrailApplib;
-import org.apache.isis.audittrail.jdo.dom.AuditTrailEntryJdo;
+import org.apache.isis.audittrail.jdo.dom.AuditTrailEntry;
 import org.apache.isis.audittrail.jdo.dom.AuditTrailEntryRepository;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
@@ -44,7 +44,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
         AuditTrailEntryRepository.class,
 
         // entities, eager meta-model introspection
-        AuditTrailEntryJdo.class,
+        AuditTrailEntry.class,
 })
 public class IsisModuleExtAuditTrailPersistenceJdo implements ModuleWithFixtures {
 
@@ -53,7 +53,7 @@ public class IsisModuleExtAuditTrailPersistenceJdo implements ModuleWithFixtures
         return new TeardownFixtureJdoAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
-                deleteFrom(AuditTrailEntryJdo.class);
+                deleteFrom(AuditTrailEntry.class);
             }
         };
     }

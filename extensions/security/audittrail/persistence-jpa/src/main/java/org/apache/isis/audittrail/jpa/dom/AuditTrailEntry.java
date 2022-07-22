@@ -149,22 +149,6 @@ extends org.apache.isis.audittrail.applib.dom.AuditTrailEntry {
 
     static final String FQCN = "org.apache.isis.audittrail.jdo.dom.AuditTrailEntry";
 
-    public AuditTrailEntry() {
-        this(null, null, null, null, null, null, null, null);
-    }
-
-    public AuditTrailEntry(
-            final java.sql.Timestamp timestamp,
-            final String username,
-            final Bookmark target,
-            final String logicalMemberIdentifier,
-            final String propertyId,
-            final String preValue,
-            final String postValue,
-            final UUID interactionId) {
-        super(timestamp, username, target, logicalMemberIdentifier, propertyId, preValue, postValue, interactionId);
-    }
-
     @Id
     @GeneratedValue
     private Long id;

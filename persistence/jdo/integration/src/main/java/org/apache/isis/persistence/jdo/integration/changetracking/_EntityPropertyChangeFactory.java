@@ -32,7 +32,7 @@ final class _EntityPropertyChangeFactory {
 
     public static EntityPropertyChange createEntityPropertyChange(
             final java.sql.Timestamp timestamp,
-            final String user,
+            final String username,
             final TransactionId txId,
             final PropertyChangeRecord propertyChangeRecord) {
 
@@ -49,7 +49,7 @@ final class _EntityPropertyChangeFactory {
         final int sequence = txId.getSequence();
 
         return EntityPropertyChange.of(
-                transactionId, sequence, targetClass, target,
-                memberId, propertyId, preValue, postValue, user, timestamp);
+                transactionId, sequence, target,
+                memberId, propertyId, preValue, postValue, username, timestamp);
     }
 }

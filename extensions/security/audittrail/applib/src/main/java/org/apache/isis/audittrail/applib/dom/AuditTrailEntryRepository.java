@@ -31,6 +31,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 import lombok.NonNull;
@@ -51,9 +52,9 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
     }
 
 
-    public AuditTrailEntry create() {
+    public AuditTrailEntry createFor(final EntityPropertyChange change) {
         E entry = factoryService.detachedEntity(auditTrailEntryClass);
-        // TODO: set the state
+        entry.init(change);
         return repositoryService.persistAndFlush(entry);
     }
 

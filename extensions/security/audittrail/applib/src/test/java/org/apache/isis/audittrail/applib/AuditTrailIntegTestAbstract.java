@@ -16,28 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.sessionlog.applib;
+package org.apache.isis.audittrail.applib;
 
-import java.sql.Timestamp;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.services.session.SessionSubscriber;
-import org.apache.isis.sessionlog.applib.dom.SessionLogEntry;
-import org.apache.isis.sessionlog.applib.dom.SessionLogEntryRepository;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
+import org.apache.isis.audittrail.applib.dom.AuditTrailEntry;
+import org.apache.isis.audittrail.applib.dom.AuditTrailEntryRepository;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.Getter;
@@ -45,23 +39,12 @@ import lombok.RequiredArgsConstructor;
 
 public abstract class AuditTrailIntegTestAbstract extends IsisIntegrationTestAbstract {
 
-
-    @Value
-    @RequiredArgsConstructor
-    static class Session {
-        private static AtomicInteger counter = new AtomicInteger();
-        @Getter final String username;
-        final Instant instant;
-        public Date getDate() { return Date.from(instant); }
-        UUID sessionGuid = UUID.randomUUID();
-        final String httpSessionId = "http-" + counter.incrementAndGet();
-    }
     @BeforeEach
     void setUp() {
     }
 
 
-    @Inject @Qualifier("default") SessionSubscriber sessionSubscriber;
-    @Inject SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
+    @Inject @Qualifier("audittrail") EntityPropertyChangeSubscriber entityPropertyChangeSubscriber;
+    @Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
 
 }
