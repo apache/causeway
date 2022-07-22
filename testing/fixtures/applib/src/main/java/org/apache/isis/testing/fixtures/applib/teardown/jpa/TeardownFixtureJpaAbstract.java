@@ -18,26 +18,7 @@
  */
 package org.apache.isis.testing.fixtures.applib.teardown.jpa;
 
-import java.util.Optional;
-
-import javax.inject.Inject;
-import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.annotations.DiscriminatorStrategy;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.metadata.DiscriminatorMetadata;
-import javax.jdo.metadata.InheritanceMetadata;
-import javax.jdo.metadata.TypeMetadata;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceUnitUtil;
-import javax.persistence.metamodel.EntityType;
-
-import org.springframework.data.jpa.repository.JpaContext;
-
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**

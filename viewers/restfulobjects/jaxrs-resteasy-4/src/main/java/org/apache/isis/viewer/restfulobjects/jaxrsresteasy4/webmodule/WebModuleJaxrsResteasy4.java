@@ -36,6 +36,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
+import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsInteractionFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth;
 
