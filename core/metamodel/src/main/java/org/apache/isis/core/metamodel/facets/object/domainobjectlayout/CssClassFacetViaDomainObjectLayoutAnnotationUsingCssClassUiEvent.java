@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -105,10 +106,13 @@ extends CssClassFacetAbstract {
 
     private CssClassUiEvent<Object> newCssClassUiEventForPojo(final Object domainObject) {
         try {
-            final CssClassUiEvent<Object> cssClassUiEvent = _Casts.uncheckedCast(cssClassUiEventClass.newInstance());
+            final CssClassUiEvent<Object> cssClassUiEvent = _Casts.uncheckedCast(
+                    cssClassUiEventClass.getConstructor().newInstance());
             cssClassUiEvent.initSource(domainObject);
             return cssClassUiEvent;
-        } catch (InstantiationException | IllegalAccessException ex) {
+        } catch (InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException ex) {
             throw new UnrecoverableException(ex);
         }
     }

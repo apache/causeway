@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -103,10 +104,13 @@ extends IconFacetAbstract {
 
     private IconUiEvent<Object> newIconUiEventForPojo(final Object domainObject) {
         try {
-            final IconUiEvent<Object> iconUiEvent = _Casts.uncheckedCast(iconUiEventClass.newInstance());
+            final IconUiEvent<Object> iconUiEvent = _Casts.uncheckedCast(
+                    iconUiEventClass.getConstructor().newInstance());
             iconUiEvent.initSource(domainObject);
             return iconUiEvent;
-        } catch (InstantiationException | IllegalAccessException ex) {
+        } catch (InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException ex) {
             throw new UnrecoverableException(ex);
         }
     }

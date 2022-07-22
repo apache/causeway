@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -105,10 +106,13 @@ implements LayoutFacet {
     private LayoutUiEvent<Object> newLayoutUiEvent(final Object domainObject) {
         try {
             final LayoutUiEvent<Object> layoutUiEvent =
-                    _Casts.uncheckedCast(layoutUiEventClass.newInstance());
+                    _Casts.uncheckedCast(
+                            layoutUiEventClass.getConstructor().newInstance());
             layoutUiEvent.initSource(domainObject);
             return layoutUiEvent;
-        } catch (InstantiationException | IllegalAccessException ex) {
+        } catch (InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException ex) {
             throw new UnrecoverableException(ex);
         }
     }

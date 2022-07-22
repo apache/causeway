@@ -127,6 +127,7 @@ implements
      * (eg. ValueTypeRegistry, configuration, ...)
      * TODO instead properly validate by implementing a validator that looks into the facets that are created
      */
+    @SuppressWarnings("removal")
     private void validateConflictingTypeSemantics(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {

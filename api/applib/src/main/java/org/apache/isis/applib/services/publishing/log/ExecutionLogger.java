@@ -27,8 +27,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactn.Execution;
-import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
-import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.schema.ixn.v2.InteractionDto;

@@ -65,21 +65,21 @@ public class Object_recentCommands {
 
     private final Object domainObject;
 
-    @MemberSupport public List<CommandLogEntry> act() {
+    @MemberSupport public List<? extends CommandLogEntry> act() {
         return bookmarkService.bookmarkFor(domainObject)
         .map(commandLogEntryRepository::findRecentByTarget)
         .orElse(Collections.emptyList());
     }
 
     /**
-     * Hide if the mixee is itself {@link HasInteractionId}
+     * Hide if the mixee itself implements {@link HasInteractionId}.
      * (commands don't have commands).
      */
     @MemberSupport public boolean hideAct() {
         return (domainObject instanceof HasInteractionId);
     }
 
-    @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject BookmarkService bookmarkService;
 
 }

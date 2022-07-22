@@ -21,12 +21,10 @@ package org.apache.isis.applib.services.bookmark;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.UUID;
 
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.Property;
-
 
 /**
  * @since 2.0 {@index}

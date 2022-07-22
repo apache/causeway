@@ -26,8 +26,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
@@ -62,7 +60,6 @@ public class EntityChangesLogger implements EntityChangesSubscriber {
 
         log.debug(ChangesDtoUtils.toXml(changesDto));
     }
-
 
 }
 
