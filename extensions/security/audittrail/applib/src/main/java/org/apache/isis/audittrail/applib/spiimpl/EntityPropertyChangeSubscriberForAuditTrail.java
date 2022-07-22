@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.session.SessionSubscriber;
+import org.apache.isis.audittrail.applib.IsisModuleExtAuditTrailApplib;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -42,11 +43,13 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Named("isis.ext.audittrail.EntityPropertyChangeSubscriberForAuditTrail")
+@Named(EntityPropertyChangeSubscriberForAuditTrail.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("audittrail")
 @Log4j2
 public class EntityPropertyChangeSubscriberForAuditTrail implements EntityPropertyChangeSubscriber {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleExtAuditTrailApplib.NAMESPACE + ".EntityPropertyChangeSubscriberForAuditTrail";
 
     @Override
     public void onChanging(EntityPropertyChange entityPropertyChange) {

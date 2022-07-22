@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.Facets;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

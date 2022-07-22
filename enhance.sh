@@ -20,9 +20,8 @@
 #
 
 usage() {
-  #echo "$(basename $0): [-a] [-c] [-e] [-o] [-m] [-s] [-d] [-t]"              >&2
-  echo "$(basename $0): [-c] [-e] [-o] [-m] [-s] [-d] [-t]"                   >&2
-  #echo "  -a : audit trail (extensions/security)"                             >&2
+  echo "$(basename $0): [-a] [-c] [-e] [-o] [-m] [-s] [-d] [-t]"              >&2
+  echo "  -a : audit trail (extensions/security)"                             >&2
   echo "  -c : command log (extensions/core)"                                 >&2
   echo "  -e : execution log (extensions/core)"                               >&2
   echo "  -o : execution outbox (extensions/core)"                            >&2
@@ -45,17 +44,16 @@ SESSIONLOG=""
 
 PATHS=()
 
-#while getopts ":acdeomsht" arg; do
-while getopts ":cdeomsht" arg; do
+while getopts ":acdeomsht" arg; do
   case $arg in
     h)
       usage
       exit 0
       ;;
-#    a)
-#      AUDITTRAIL="enhance"
-#      PATHS+=( "extensions/security/audittrail/persistence-jdo" )
-#      ;;
+    a)
+      AUDITTRAIL="enhance"
+      PATHS+=( "extensions/security/audittrail/persistence-jdo" )
+      ;;
     c)
       COMMANDLOG="enhance"
       PATHS+=( "extensions/core/commandlog/persistence-jdo" )
@@ -91,7 +89,6 @@ while getopts ":cdeomsht" arg; do
 done
 
 shift $((OPTIND-1))
-
 
 echo "AUDITTRAIL      : $AUDITTRAIL"
 echo "COMMANDLOG      : $COMMANDLOG"

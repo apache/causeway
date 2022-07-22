@@ -49,6 +49,7 @@ import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.scope.TransactionBoundaryAware;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 
 import lombok.val;

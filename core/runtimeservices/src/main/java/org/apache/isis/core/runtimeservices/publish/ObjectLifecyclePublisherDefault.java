@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleE
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.PersistenceCallbackHandlerAbstract;
 

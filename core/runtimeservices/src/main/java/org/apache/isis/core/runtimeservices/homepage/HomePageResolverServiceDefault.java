@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.commons.internal.reflection._Annotations;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.val;
 

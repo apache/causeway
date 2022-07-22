@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityChanges;
 import org.springframework.beans.factory.annotation.Qualifier;

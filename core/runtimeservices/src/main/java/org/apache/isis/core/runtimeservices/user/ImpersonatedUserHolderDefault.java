@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 /**
  * Used by the framework's default implementation of {@link org.apache.isis.applib.services.user.UserService} to

@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 @Service
 @Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".UrlEncodingServiceWithCompression")

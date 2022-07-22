@@ -42,6 +42,7 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Xml;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

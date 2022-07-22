@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.applib.services.routing.RoutingService;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 @Service
 @Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".RoutingServiceDefault")

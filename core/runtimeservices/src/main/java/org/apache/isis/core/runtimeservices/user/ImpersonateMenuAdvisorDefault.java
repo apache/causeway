@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.user.ImpersonateMenuAdvisor;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 /**
  * This default implementation simply returns empty lists.

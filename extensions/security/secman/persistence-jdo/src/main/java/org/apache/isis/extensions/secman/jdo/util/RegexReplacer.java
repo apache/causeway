@@ -23,11 +23,12 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 
 import lombok.val;
 
 @Component
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".RegexReplacer")
+@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".RegexReplacer")
 public class RegexReplacer implements org.apache.isis.extensions.secman.applib.util.RegexReplacer {
 
     @Override

@@ -37,6 +37,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman;
 import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman.PermissionsEvaluationPolicy;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
@@ -50,7 +51,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".PermissionsEvaluationServiceForSecman")
+@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".PermissionsEvaluationServiceForSecman")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Secman")
 public class PermissionsEvaluationServiceForSecman

@@ -23,15 +23,13 @@ package org.apache.isis.audittrail.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.sessionlog.applib.app.SessionLogMenu;
-import org.apache.isis.sessionlog.applib.spiimpl.SessionSubscriberForSessionLog;
-import org.apache.isis.sessionlog.applib.spiimpl.SessionLogServiceInitializer;
-
+import org.apache.isis.audittrail.applib.app.AuditTrailMenu;
+import org.apache.isis.audittrail.applib.spiimpl.EntityPropertyChangeSubscriberForAuditTrail;
 
 @Configuration
 @Import({
         AuditTrailMenu.class,
-        SessionSubscriberForSessionLog.class
+        EntityPropertyChangeSubscriberForAuditTrail.class
 })
 public class IsisModuleExtAuditTrailApplib {
 

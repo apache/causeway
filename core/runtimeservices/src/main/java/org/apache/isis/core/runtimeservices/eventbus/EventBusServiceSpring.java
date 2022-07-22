@@ -20,6 +20,8 @@ package org.apache.isis.core.runtimeservices.eventbus;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

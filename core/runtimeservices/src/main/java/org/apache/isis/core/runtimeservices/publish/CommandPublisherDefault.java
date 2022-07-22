@@ -36,6 +36,7 @@ import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;

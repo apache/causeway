@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.tablecol.TableColumnVisibilityService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.user.menu.MeService;
 
@@ -37,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".TableColumnVisibilityServiceForSecman")
+@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".TableColumnVisibilityServiceForSecman")
 @javax.annotation.Priority(PriorityPrecedence.LATE - 10)
 @Qualifier("Secman")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

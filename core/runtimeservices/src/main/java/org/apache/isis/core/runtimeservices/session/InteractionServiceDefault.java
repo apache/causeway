@@ -67,6 +67,7 @@ import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.MetamodelEventService;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
 import lombok.NonNull;

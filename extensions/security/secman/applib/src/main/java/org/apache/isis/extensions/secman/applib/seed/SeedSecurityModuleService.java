@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.events.metamodel.MetamodelEvent;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.seed.scripts.SeedUsersAndRolesFixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -49,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".SeedSecurityModuleService")
+@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".SeedSecurityModuleService")
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject })
 @Log4j2
