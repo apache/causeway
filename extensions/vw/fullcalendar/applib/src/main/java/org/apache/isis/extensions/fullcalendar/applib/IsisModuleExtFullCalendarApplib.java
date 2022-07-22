@@ -31,4 +31,5 @@ import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemanti
     CalendarEventSemantics.class
 })
 public class IsisModuleExtFullCalendarApplib {
+    public static final String NAMESPACE = "isis.ext.fullcalendar";
 }

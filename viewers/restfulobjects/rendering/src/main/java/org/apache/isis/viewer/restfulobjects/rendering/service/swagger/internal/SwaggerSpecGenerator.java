@@ -28,13 +28,14 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.services.swagger.Format;
 import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 
 import io.swagger.models.Swagger;
 import io.swagger.util.Json;
 import io.swagger.util.Yaml;
 
 @Component
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".SwaggerSpecGenerator")
+@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".SwaggerSpecGenerator")
 public class SwaggerSpecGenerator {
 
     private final SpecificationLoader specificationLoader;

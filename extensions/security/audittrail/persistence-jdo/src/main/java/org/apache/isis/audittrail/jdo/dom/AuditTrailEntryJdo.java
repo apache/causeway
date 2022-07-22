@@ -20,8 +20,6 @@
 
 package org.apache.isis.audittrail.jdo.dom;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import javax.inject.Named;
@@ -33,37 +31,24 @@ import javax.jdo.annotations.Index;
 import javax.jdo.annotations.Indices;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
-import javax.jdo.annotations.Unique;
-import javax.jdo.annotations.Uniques;
 import javax.jdo.annotations.Version;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
-import org.apache.isis.applib.mixins.system.DomainChangeRecord;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.isis.audittrail.applib.IsisModuleExtAuditTrailApplib;
-import org.apache.isis.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.isis.audittrail.applib.dom.AuditTrailEntry.Nq;
 
 import lombok.Getter;
 import lombok.Setter;
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
-        schema = AuditTrailEntry.SCHEMA,
-        table = AuditTrailEntry.TABLE)
+        schema = AuditTrailEntryJdo.SCHEMA,
+        table = AuditTrailEntryJdo.TABLE)
 @Indices({
         @Index(name = "target_propertyId_timestamp_IDX", members = { "target", "propertyId", "timestamp" }, unique = "false"),
         @Index(name = "target_timestamp_IDX", members = { "target", "timestamp" }, unique = "false"),
@@ -74,26 +59,26 @@ import lombok.Setter;
     @Query(
             name = Nq.FIND_BY_INTERACTION_ID,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " WHERE interactionId == :interactionId"),
     @Query(
             name = Nq.FIND_FIRST_BY_TARGET,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " WHERE target == :target "
                   + " ORDER BY timestamp ASC "
                   + " RANGE 0,2"),
     @Query(
             name = Nq.FIND_RECENT_BY_TARGET,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " WHERE targetStr == :targetStr "
                   + " ORDER BY timestamp DESC "
                   + " RANGE 0,100"),
     @Query(
             name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " WHERE targetStr == :targetStr "
                   + "    && timestamp >= :from "
                   + "    && timestamp <= :to "
@@ -101,51 +86,51 @@ import lombok.Setter;
     @Query(
             name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " WHERE target == :target "
                   + "    && timestamp >= :from "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " WHERE target == :target "
                   + "    && timestamp <= :to "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TARGET,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " WHERE target == :target "
                   + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_BETWEEN,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " WHERE timestamp >= :from "
                   + "    && timestamp <= :to "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_AFTER,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " WHERE timestamp >= :from "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_BEFORE,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " WHERE timestamp <= :to "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " ORDER BY this.timestamp DESC"),
     @Query(
             name = Nq.FIND_RECENT_BY_TARGET_AND_PROPERTY_ID,
             value = "SELECT "
-                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + "  FROM " + AuditTrailEntryJdo.FQCN + " "
                   + " WHERE target == :target "
                   + "    && propertyId == :propertyId "
                   + " ORDER BY timestamp DESC "
@@ -154,16 +139,16 @@ import lombok.Setter;
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @Version(column = "version")
-@Named(AuditTrailEntry.LOGICAL_TYPE_NAME)
+@Named(AuditTrailEntryJdo.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED
 )
-public class AuditTrailEntry
+public class AuditTrailEntryJdo
 extends org.apache.isis.audittrail.applib.dom.AuditTrailEntry {
 
-    static final String FQCN = "org.apache.isis.audittrail.jdo.dom.AuditTrailEntry";
+    static final String FQCN = "org.apache.isis.audittrail.jdo.dom.AuditTrailEntryJdo";
 
-    public AuditTrailEntry(
+    public AuditTrailEntryJdo(
             final java.sql.Timestamp timestamp,
             final String username,
             final Bookmark target,

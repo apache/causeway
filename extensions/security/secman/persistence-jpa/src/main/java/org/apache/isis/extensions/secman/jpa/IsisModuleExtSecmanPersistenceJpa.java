@@ -33,6 +33,10 @@ import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.jpa.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jpa.util.RegexReplacer;
 import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
+import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAbstract;
 
 /**
  * @since 2.0 {@index}
@@ -40,6 +44,7 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclip
 @Configuration
 @Import({
         // Modules
+        IsisModuleTestingFixturesApplib.class,
         IsisModuleExtSecmanIntegration.class,
         IsisModulePersistenceJpaEclipselink.class,
 
@@ -63,6 +68,19 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclip
         ApplicationTenancy.class,
         ApplicationUser.class,
 })
-public class IsisModuleExtSecmanPersistenceJpa {
+public class IsisModuleExtSecmanPersistenceJpa implements ModuleWithFixtures {
+
+    @Override
+    public FixtureScript getTeardownFixture() {
+        return new TeardownFixtureJpaAbstract() {
+            @Override
+            protected void execute(final ExecutionContext executionContext) {
+                deleteFrom(ApplicationPermission.class);
+                deleteFrom(ApplicationUser.class);
+                deleteFrom(ApplicationRole.class);
+                deleteFrom(ApplicationTenancy.class);
+            }
+        };
+    }
 
 }

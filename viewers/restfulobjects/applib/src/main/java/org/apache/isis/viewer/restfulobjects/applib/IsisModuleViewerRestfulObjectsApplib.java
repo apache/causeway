@@ -25,4 +25,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class IsisModuleViewerRestfulObjectsApplib {
+
+
+    public static final String NAMESPACE = "isis.viewer.ro";
 }

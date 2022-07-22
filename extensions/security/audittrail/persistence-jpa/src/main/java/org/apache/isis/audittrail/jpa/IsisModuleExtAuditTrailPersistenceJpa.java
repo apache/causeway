@@ -24,42 +24,41 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.audittrail.applib.IsisModuleExtAuditTrailApplib;
+import org.apache.isis.audittrail.jpa.dom.AuditTrailEntry;
+import org.apache.isis.audittrail.jpa.dom.AuditTrailEntryRepository;
 import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
-import org.apache.isis.sessionlog.applib.IsisModuleExtSessionLogApplib;
-import org.apache.isis.sessionlog.jpa.dom.SessionLogEntry;
-import org.apache.isis.sessionlog.jpa.dom.SessionLogEntryPK;
-import org.apache.isis.sessionlog.jpa.dom.SessionLogEntryRepository;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
+import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAbstract;
 
 
 @Configuration
 @Import({
         // modules
         IsisModuleTestingFixturesApplib.class,
-        IsisModuleExtSessionLogApplib.class,
+        IsisModuleExtAuditTrailApplib.class,
         IsisModulePersistenceJpaEclipselink.class,
 
         // services
-        SessionLogEntryRepository.class,
-        SessionLogEntryPK.Stringifier.class,
+        AuditTrailEntryRepository.class,
 
         // entities, eager meta-model introspection
-        SessionLogEntry.class,
+        AuditTrailEntry.class,
 })
 @EntityScan(basePackageClasses = {
-        SessionLogEntry.class,
+        AuditTrailEntry.class,
 })
 public class IsisModuleExtAuditTrailPersistenceJpa implements ModuleWithFixtures {
 
     @Override
     public FixtureScript getTeardownFixture() {
-        return new TeardownFixtureJdoAbstract() {
+        return new TeardownFixtureJpaAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
-                deleteFrom(SessionLogEntry.class);
+                deleteFrom(AuditTrailEntry.class);
             }
         };
     }

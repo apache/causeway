@@ -27,6 +27,10 @@ import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntry;
 import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntryPK;
 import org.apache.isis.extensions.commandlog.jpa.dom.CommandLogEntryRepository;
 import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
+import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAbstract;
 
 /**
  * @since 2.0 {@index}
@@ -34,6 +38,7 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclip
 @Configuration
 @Import({
         // modules
+        IsisModuleTestingFixturesApplib.class,
         IsisModuleExtCommandLogApplib.class,
         IsisModulePersistenceJpaEclipselink.class,
 
@@ -47,10 +52,20 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclip
 @EntityScan(basePackageClasses = {
     CommandLogEntry.class
 })
-public class IsisModuleExtCommandLogPersistenceJpa {
+public class IsisModuleExtCommandLogPersistenceJpa implements ModuleWithFixtures {
 
     public static final String NAMESPACE = IsisModuleExtCommandLogApplib.NAMESPACE;
     public static final String SCHEMA = IsisModuleExtCommandLogApplib.SCHEMA;
+
+    @Override
+    public FixtureScript getTeardownFixture() {
+        return new TeardownFixtureJpaAbstract() {
+            @Override
+            protected void execute(final ExecutionContext executionContext) {
+                deleteFrom(CommandLogEntry.class);
+            }
+        };
+    }
 
 
 }

@@ -22,8 +22,10 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
+
 @Component
-@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassExcluderDefault")
+@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".ClassExcluderDefault")
 public class ClassExcluderDefault extends ClassExcluderAbstract {
 
     public ClassExcluderDefault() {

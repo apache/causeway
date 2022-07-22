@@ -43,7 +43,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.viewer.ro.AcceptHeaderServiceForRest")
+@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".AcceptHeaderServiceForRest")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("ForRest")
 @InteractionScope

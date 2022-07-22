@@ -27,6 +27,10 @@ import org.apache.isis.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntry;
 import org.apache.isis.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryPK;
 import org.apache.isis.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryRepository;
 import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
+import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
+import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAbstract;
 
 /**
  * @since 2.0 {@index}
@@ -34,6 +38,7 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclip
 @Configuration
 @Import({
         // modules
+        IsisModuleTestingFixturesApplib.class,
         IsisModuleExtExecutionOutboxApplib.class,
         IsisModulePersistenceJpaEclipselink.class,
 
@@ -47,9 +52,19 @@ import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclip
 @EntityScan(basePackageClasses = {
         ExecutionOutboxEntry.class
 })
-public class IsisModuleExtExecutionOutboxPersistenceJpa {
+public class IsisModuleExtExecutionOutboxPersistenceJpa implements ModuleWithFixtures {
 
     public static final String NAMESPACE = IsisModuleExtExecutionOutboxApplib.NAMESPACE;
     public static final String SCHEMA = IsisModuleExtExecutionOutboxApplib.SCHEMA;
+
+    @Override
+    public FixtureScript getTeardownFixture() {
+        return new TeardownFixtureJpaAbstract() {
+            @Override
+            protected void execute(final ExecutionContext executionContext) {
+                deleteFrom(ExecutionOutboxEntry.class);
+            }
+        };
+    }
 
 }

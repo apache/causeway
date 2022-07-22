@@ -57,7 +57,7 @@ import lombok.extern.log4j.Log4j2;
  * primitives.
  */
 @Service
-@Named("isis.viewer.ro.JsonValueEncoder")
+@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".JsonValueEncoder")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @Log4j2

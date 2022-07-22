@@ -57,7 +57,7 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.viewer.ro.ContentNegotiationServiceOrgApacheIsisV2")
+@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceOrgApacheIsisV2")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV2")
 public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiationServiceAbstract {

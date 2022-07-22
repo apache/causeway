@@ -68,7 +68,7 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.viewer.ro.ContentNegotiationServiceForRestfulObjectsV1_0")
+@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceForRestfulObjectsV1_0")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("RestfulObjectsV1_0")
 public class ContentNegotiationServiceForRestfulObjectsV1_0
