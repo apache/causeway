@@ -51,6 +51,7 @@ import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

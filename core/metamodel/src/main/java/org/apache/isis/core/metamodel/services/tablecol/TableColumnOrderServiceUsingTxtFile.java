@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

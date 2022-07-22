@@ -42,6 +42,7 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

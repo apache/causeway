@@ -23,10 +23,10 @@ package org.apache.isis.audittrail.jdo;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.audittrail.applib.IsisModuleExtAuditTrailApplib;
+import org.apache.isis.audittrail.jdo.dom.AuditTrailEntry;
+import org.apache.isis.audittrail.jdo.dom.AuditTrailEntryRepository;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
-import org.apache.isis.sessionlog.applib.IsisModuleExtSessionLogApplib;
-import org.apache.isis.sessionlog.jdo.dom.SessionLogEntry;
-import org.apache.isis.sessionlog.jdo.dom.SessionLogEntryRepository;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
@@ -37,23 +37,23 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 @Import({
         // modules
         IsisModuleTestingFixturesApplib.class,
-        IsisModuleExtSessionLogApplib.class,
+        IsisModuleExtAuditTrailApplib.class,
         IsisModulePersistenceJdoDatanucleus.class,
 
         // services
-        SessionLogEntryRepository.class,
+        AuditTrailEntryRepository.class,
 
         // entities, eager meta-model introspection
-        SessionLogEntry.class,
+        AuditTrailEntry.class,
 })
-public class IsisModuleExtSessionLogPersistenceJdo implements ModuleWithFixtures {
+public class IsisModuleExtAuditTrailPersistenceJdo implements ModuleWithFixtures {
 
     @Override
     public FixtureScript getTeardownFixture() {
         return new TeardownFixtureJdoAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
-                deleteFrom(SessionLogEntry.class);
+                deleteFrom(AuditTrailEntry.class);
             }
         };
     }

@@ -29,6 +29,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 import lombok.NonNull;
 

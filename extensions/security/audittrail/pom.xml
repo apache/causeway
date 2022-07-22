@@ -89,8 +89,6 @@
     <modules>
     	<module>applib</module>
     	<module>persistence-jdo</module>
-<!--
     	<module>persistence-jpa</module>
--->
     </modules>
 </project>

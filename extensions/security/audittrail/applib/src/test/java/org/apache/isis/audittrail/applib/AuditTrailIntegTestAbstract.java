@@ -43,7 +43,7 @@ import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstra
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public abstract class SessionLogIntegTestAbstract extends IsisIntegrationTestAbstract {
+public abstract class AuditTrailIntegTestAbstract extends IsisIntegrationTestAbstract {
 
 
     @Value
@@ -60,81 +60,6 @@ public abstract class SessionLogIntegTestAbstract extends IsisIntegrationTestAbs
     void setUp() {
     }
 
-    @Test
-    void login_and_logout() {
-
-        List<? extends SessionLogEntry> sessions;
-        SessionLogEntry session;
-        Optional<? extends SessionLogEntry> sessionIfAny;
-
-        // given
-        sessions = sessionLogEntryRepository.findActiveSessions();
-        Assertions.assertThat(sessions).isEmpty();
-
-        // when
-        Session session1 = new Session("fred",  Instant.now().minus(Duration.ofDays(2)));
-
-        sessionSubscriber.log(SessionSubscriber.Type.LOGIN, session1.username, session1.getDate(), SessionSubscriber.CausedBy.USER, session1.sessionGuid, session1.httpSessionId);
-
-        // then
-        sessions = sessionLogEntryRepository.findActiveSessions();
-        Assertions.assertThat(sessions).hasSize(1);
-        session = sessions.get(0);
-        Assertions.assertThat(session.getSessionGuid()).isEqualTo(session1.sessionGuid);
-
-        // when
-        Session session2 = new Session("mary", Instant.now().minus(Duration.ofDays(1)));
-
-        sessionSubscriber.log(SessionSubscriber.Type.LOGIN, session2.username, session2.getDate(), SessionSubscriber.CausedBy.USER, session2.sessionGuid, session2.httpSessionId);
-
-        // then
-        sessions = sessionLogEntryRepository.findActiveSessions();
-        Assertions.assertThat(sessions).hasSize(2);
-
-        // then
-        sessions = sessionLogEntryRepository.findByUsername(session1.username);
-        Assertions.assertThat(sessions).hasSize(1);
-        Assertions.assertThat(sessions.get(0)).extracting(SessionLogEntry::getUsername).isEqualTo(session1.username);
-
-        sessionIfAny = sessionLogEntryRepository.findBySessionGuid(session2.sessionGuid);
-        Assertions.assertThat(sessionIfAny).isPresent();
-        Assertions.assertThat(sessionIfAny).get().extracting(SessionLogEntry::getUsername).isEqualTo(session2.username);
-
-        sessionIfAny = sessionLogEntryRepository.findBySessionGuidStr(session1.sessionGuid.toString());
-        Assertions.assertThat(sessionIfAny).isPresent();
-        Assertions.assertThat(sessionIfAny).get().extracting(SessionLogEntry::getUsername).isEqualTo(session1.username);
-
-        sessions = sessionLogEntryRepository.findByUsernameAndStrictlyAfter(session1.username, Timestamp.from(session1.instant.plus(Duration.ofMillis(10))));
-        Assertions.assertThat(sessions).isEmpty();
-
-        sessions = sessionLogEntryRepository.findByUsernameAndStrictlyAfter(session1.username, Timestamp.from(session1.instant.minus(Duration.ofMillis(10))));
-        Assertions.assertThat(sessions).hasSize(1);
-
-        sessions = sessionLogEntryRepository.findByUsernameAndStrictlyBefore(session1.username, Timestamp.from(session1.instant.minus(Duration.ofMillis(10))));
-        Assertions.assertThat(sessions).isEmpty();
-
-        sessions = sessionLogEntryRepository.findByUsernameAndStrictlyBefore(session1.username, Timestamp.from(session1.instant.plus(Duration.ofMillis(10))));
-        Assertions.assertThat(sessions).hasSize(1);
-
-        sessions = sessionLogEntryRepository.findRecentByUsername(session1.username);
-        Assertions.assertThat(sessions).hasSize(1);
-
-        // when
-        sessionSubscriber.log(SessionSubscriber.Type.LOGOUT, null, session1.getDate(), SessionSubscriber.CausedBy.USER, session1.sessionGuid, null);
-
-        // then
-        sessions = sessionLogEntryRepository.findActiveSessions();
-        Assertions.assertThat(sessions).hasSize(1);
-        Assertions.assertThat(sessions.get(0)).extracting(SessionLogEntry::getUsername).isEqualTo(session2.username);
-
-        sessionSubscriber.log(SessionSubscriber.Type.LOGOUT, null, session2.getDate(), SessionSubscriber.CausedBy.USER, session2.sessionGuid, null);
-
-        // then
-        sessions = sessionLogEntryRepository.findActiveSessions();
-        Assertions.assertThat(sessions).isEmpty();
-
-
-    }
 
     @Inject @Qualifier("default") SessionSubscriber sessionSubscriber;
     @Inject SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;

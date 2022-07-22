@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.config.IsisModuleCoreConfig;
 
 @Component
 @Named(IsisModuleCoreConfig.NAMESPACE + "..PatternsConverter")

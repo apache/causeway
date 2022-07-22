@@ -33,6 +33,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
+import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAbstract;
 
 
 @Configuration
@@ -56,7 +57,7 @@ public class IsisModuleExtSessionLogPersistenceJpa implements ModuleWithFixtures
 
     @Override
     public FixtureScript getTeardownFixture() {
-        return new TeardownFixtureJdoAbstract() {
+        return new TeardownFixtureJpaAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
                 deleteFrom(SessionLogEntry.class);

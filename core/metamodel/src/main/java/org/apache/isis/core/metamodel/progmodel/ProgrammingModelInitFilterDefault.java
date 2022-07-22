@@ -36,6 +36,7 @@ import static org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilte
 import static org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilter.excludingNone;
 
 import lombok.val;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 /**
  *

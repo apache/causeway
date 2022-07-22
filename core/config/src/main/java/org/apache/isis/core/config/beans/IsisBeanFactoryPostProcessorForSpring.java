@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.config.beans.aoppatch.AopPatch;
 
 import lombok.val;

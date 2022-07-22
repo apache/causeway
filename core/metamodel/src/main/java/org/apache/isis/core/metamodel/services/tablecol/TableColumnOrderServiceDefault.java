@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 /**
  * Used as a identity fallback.

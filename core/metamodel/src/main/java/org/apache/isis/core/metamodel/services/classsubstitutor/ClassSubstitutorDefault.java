@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.graph.tree.TreeAdapter;
-
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 @Component
 @Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)

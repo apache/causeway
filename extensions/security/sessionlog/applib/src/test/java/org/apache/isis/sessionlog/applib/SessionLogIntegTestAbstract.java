@@ -136,7 +136,7 @@ public abstract class SessionLogIntegTestAbstract extends IsisIntegrationTestAbs
 
     }
 
-    @Inject @Qualifier("default") SessionSubscriber sessionSubscriber;
+    @Inject @Qualifier("sessionlog") SessionSubscriber sessionSubscriber;
     @Inject SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
 
 }

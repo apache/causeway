@@ -156,7 +156,7 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
     }
 
     public SessionLogEntry() {
-        super(null, null, null, null, null);
+        this(null, null, null, null, null);
     }
 
 

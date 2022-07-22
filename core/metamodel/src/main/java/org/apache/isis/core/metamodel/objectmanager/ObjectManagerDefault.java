@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 /**
  *

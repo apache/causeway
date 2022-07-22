@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.config.IsisModuleCoreConfig;
 
 import lombok.Getter;
 import lombok.NonNull;

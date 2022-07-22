@@ -22,10 +22,11 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepositoryAbstract;
 
 @Repository
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ApplicationTenancyRepository")
+@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancyRepository")
 public class ApplicationTenancyRepository
 extends ApplicationTenancyRepositoryAbstract<ApplicationTenancy> {
 

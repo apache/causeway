@@ -16,12 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.sessionlog.jdo;
+package org.apache.isis.audittrail.jpa;
 
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,16 +29,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
-import org.apache.isis.sessionlog.applib.SessionLogIntegTestAbstract;
-import org.apache.isis.sessionlog.jdo.dom.SessionLogEntryRepository;
-
-import lombok.Getter;
+import org.apache.isis.sessionlog.applib.AuditTrailIntegTestAbstract;
 
 @SpringBootTest(
-        classes = SessionLog_IntegTest.AppManifest.class
+        classes = AuditTrail_IntegTest.AppManifest.class
 )
 @ActiveProfiles("test")
-public class SessionLog_IntegTest extends SessionLogIntegTestAbstract {
+public class AuditTrail_IntegTest extends AuditTrailIntegTestAbstract {
 
 
     @SpringBootConfiguration
@@ -50,7 +43,7 @@ public class SessionLog_IntegTest extends SessionLogIntegTestAbstract {
     @Import({
             IsisModuleCoreRuntimeServices.class,
             IsisModuleSecurityBypass.class,
-            IsisModuleExtSessionLogPersistenceJdo.class,
+            IsisModuleExtAuditTrailPersistenceJpa.class,
     })
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test),

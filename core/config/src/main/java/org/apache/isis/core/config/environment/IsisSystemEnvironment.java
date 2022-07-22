@@ -24,6 +24,8 @@ import lombok.val;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.ioc._IocContainer;
+import org.apache.isis.core.config.IsisModuleCoreConfig;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.ApplicationContext;

@@ -22,10 +22,11 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepositoryAbstract;
 
 @Repository
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ApplicationPermissionRepository")
+@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermissionRepository")
 public class ApplicationPermissionRepository
 extends ApplicationPermissionRepositoryAbstract<ApplicationPermission> {
 

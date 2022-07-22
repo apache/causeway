@@ -29,6 +29,7 @@ import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 /**
  * Framework-provided implementation of {@link ExceptionRecognizer},

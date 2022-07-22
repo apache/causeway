@@ -36,6 +36,10 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
+import javax.jdo.annotations.Unique;
+import javax.jdo.annotations.Uniques;
+import javax.jdo.annotations.Version;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 import org.apache.isis.applib.Identifier;
@@ -45,11 +49,13 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.mixins.system.DomainChangeRecord;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.audittrail.applib.IsisModuleExtAuditTrailApplib;
+import org.apache.isis.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.isis.audittrail.applib.dom.AuditTrailEntry.Nq;
 
 import lombok.Getter;
@@ -58,18 +64,11 @@ import lombok.Setter;
         identityType = IdentityType.DATASTORE,
         schema = AuditTrailEntry.SCHEMA,
         table = AuditTrailEntry.TABLE)
-@DatastoreIdentity(
-        strategy = IdGeneratorStrategy.IDENTITY,
-        column = "id")
 @Indices({
-    @Index(name="pk", unique="true",
-            columns={
-                @Column(name="interactionId"),
-                @Column(name="sequence"),
-                @Column(name="target"),
-                @Column(name="propertyId")
-                }),
-    @Index(name = "target_timestamp_IDX", members = { "target", "timestamp" }, unique="false"),
+        @Index(name = "target_propertyId_timestamp_IDX", members = { "target", "propertyId", "timestamp" }, unique = "false"),
+        @Index(name = "target_timestamp_IDX", members = { "target", "timestamp" }, unique = "false"),
+        @Index(name = "timestamp_IDX", members = { "timestamp" }, unique = "false"),
+        @Index(name = "interactionId_IDX", members = { "interactionId" }, unique = "false")
 })
 @Queries( {
     @Query(
@@ -152,6 +151,9 @@ import lombok.Setter;
                   + " ORDER BY timestamp DESC "
                   + " RANGE 0,30")
 })
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@Version(column = "version")
 @Named(AuditTrailEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED
@@ -209,7 +211,6 @@ extends org.apache.isis.audittrail.applib.dom.AuditTrailEntry {
     @LogicalMemberIdentifier
     @Getter @Setter
     private String logicalMemberIdentifier;
-
 
 
     @Column(allowsNull = PropertyId.ALLOWS_NULL, length = PropertyId.MAX_LENGTH)
