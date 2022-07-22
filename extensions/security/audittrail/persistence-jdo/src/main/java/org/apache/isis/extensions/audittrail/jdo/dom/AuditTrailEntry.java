@@ -18,7 +18,7 @@
  *
  */
 
-package org.apache.isis.audittrail.jdo.dom;
+package org.apache.isis.extensions.audittrail.jdo.dom;
 
 import java.util.UUID;
 
@@ -147,7 +147,7 @@ import lombok.Setter;
 public class AuditTrailEntry
 extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
 
-    static final String FQCN = "org.apache.isis.audittrail.jdo.dom.AuditTrailEntry";
+    static final String FQCN = "org.apache.isis.extensions.audittrail.jdo.dom.AuditTrailEntry";
 
 
     @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)

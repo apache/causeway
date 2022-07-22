@@ -18,14 +18,14 @@
  *
  */
 
-package org.apache.isis.audittrail.jdo;
+package org.apache.isis.extensions.audittrail.jdo;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
-import org.apache.isis.audittrail.jdo.dom.AuditTrailEntry;
-import org.apache.isis.audittrail.jdo.dom.AuditTrailEntryRepository;
+import org.apache.isis.extensions.audittrail.jdo.dom.AuditTrailEntry;
+import org.apache.isis.extensions.audittrail.jdo.dom.AuditTrailEntryRepository;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;

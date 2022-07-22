@@ -21,16 +21,19 @@ package org.apache.isis.extensions.audittrail.jdo.integtests;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.isis.extensions.audittrail.applib.integtests.AuditTrail_IntegTestAbstract;
-import org.apache.isis.audittrail.jdo.IsisModuleExtAuditTrailPersistenceJdo;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.extensions.audittrail.applib.integtests.AuditTrail_IntegTestAbstract;
+import org.apache.isis.extensions.audittrail.jdo.IsisModuleExtAuditTrailPersistenceJdo;
+import org.apache.isis.extensions.audittrail.applib.integtests.model.AuditTrailTestDomainModel;
 import org.apache.isis.extensions.audittrail.jdo.integtests.model.Counter;
+import org.apache.isis.extensions.audittrail.jdo.integtests.model.CounterRepository;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 
 @SpringBootTest(
@@ -39,11 +42,6 @@ import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 @ActiveProfiles("test")
 public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
 
-
-    @Override
-    protected org.apache.isis.extensions.audittrail.applib.integtests.model.Counter newCounter(String name) {
-        return Counter.builder().name(name).build();
-    }
 
     @SpringBootConfiguration
     @EnableAutoConfiguration
@@ -55,7 +53,13 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
     @PropertySources({
             @PropertySource(IsisPresets.UseLog4j2Test),
     })
+    @ComponentScan(basePackageClasses = {AppManifest.class, AuditTrailTestDomainModel.class, CounterRepository.class})
     public static class AppManifest {
+    }
+
+    @Override
+    protected org.apache.isis.extensions.audittrail.applib.integtests.model.Counter newCounter(String name) {
+        return Counter.builder().name(name).build();
     }
 
 

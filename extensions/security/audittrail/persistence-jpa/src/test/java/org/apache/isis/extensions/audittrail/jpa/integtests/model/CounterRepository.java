@@ -24,7 +24,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CounterRepository
-        extends org.apache.isis.extensions.commandlog.applib.integtest.model.CounterRepository<Counter> {
+        extends org.apache.isis.extensions.audittrail.applib.integtests.model.CounterRepository<Counter> {
 
     public CounterRepository() {
         super(Counter.class);
