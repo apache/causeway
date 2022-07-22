@@ -48,11 +48,9 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     @Override
     protected final TextField<T> createTextField(final String id) {
-
         val scalarModel = scalarModel();
-
         return new TextFieldWithDateTimePicker<T>(
-                getCommonContext(), id, scalarModel, type, getConverter(scalarModel));
+                id, scalarModel, type, getConverter(scalarModel));
     }
 
     @Override

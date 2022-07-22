@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.datepicker;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -41,6 +42,7 @@ import de.agilecoders.wicket.jquery.IKey;
  * Configuration holder for all {@link TextFieldWithDateTimePicker} configurations.
  * Provides settings for <a href="https://github.com/tempusdominus/bootstrap-4">Tempus Dominus Bootstrap 4 Datetime Picker</a>
  * JavaScript widget
+ * @see DatetimePickerConfig
  */
 public class DateTimeConfig extends AbstractConfig {
     private static final long serialVersionUID = 1L;
@@ -110,15 +112,27 @@ public class DateTimeConfig extends AbstractConfig {
     private static final IKey<String> MaxDate = newKey("maxDate", null);
 
 
+//    /**
+//     * The two-letter code of the language to use for month and day names.
+//     * These will also be used as the input's value (and subsequently sent to the
+//     * server in the case of form submissions). Currently ships with English ('en');
+//     * German ('de'), Brazilian ('br'), and Spanish ('es') translations, but others
+//     * can be added (see I18N below). If an unknown language code is given, English
+//     * will be used.
+//     */
+//    private static final IKey<String> Language = newKey("language", "en");
+
+    private static final IKey<String> Locale = newKey("locale", null);
+
     /**
-     * The two-letter code of the language to use for month and day names.
-     * These will also be used as the input's value (and subsequently sent to the
-     * server in the case of form submissions). Currently ships with English ('en');
-     * German ('de'), Brazilian ('br'), and Spanish ('es') translations, but others
-     * can be added (see I18N below). If an unknown language code is given, English
-     * will be used.
+     * @param locale The moment.js locale
+     * @return current instance
      */
-    private static final IKey<String> Language = newKey("language", "en");
+    public DateTimeConfig useLocale(final Locale locale) {
+        put(Locale, locale.getLanguage());
+        return this;
+    }
+
 
     /**
      * The date format, combination of d, dd, m, mm, M, MM, yy, yyyy.
@@ -147,16 +161,6 @@ public class DateTimeConfig extends AbstractConfig {
      * conforming to the given format.
      */
     private static final IKey<Boolean> ForceParse = newKey("forceParse", true);
-
-    /**
-     * Whether or not to show the clear button.
-     */
-    private static final IKey<Boolean> ClearButton = newKey("clearBtn", false);
-
-    /**
-     * Whether or not to show the close button.
-     */
-    private static final IKey<Boolean> CloseButton = newKey("closeBtn", false);
 
     /**
      * Whether or not to show week numbers to the left of week rows.
@@ -191,20 +195,6 @@ public class DateTimeConfig extends AbstractConfig {
      */
     public String getFormat() {
         return getString(Format);
-    }
-
-    /**
-     * @return the language to use
-     */
-    public String getLanguage() {
-        return getString(Language);
-    }
-
-    /**
-     * @return true if default language should be used.
-     */
-    public boolean isDefaultLanguageSet() {
-        return Language.isDefaultValue(getLanguage());
     }
 
     /**
@@ -264,22 +254,6 @@ public class DateTimeConfig extends AbstractConfig {
             endDate = dateTimeFormatter.print(value);
         }
         put(EndDate, endDate);
-        return this;
-    }
-
-    /**
-     * The two-letter code of the language to use for month and day names.
-     * These will also be used as the input's value (and subsequently sent to the
-     * server in the case of form submissions). Currently ships with English ('en'),
-     * German ('de'), Brazilian ('br'), and Spanish ('es') translations, but others
-     * can be added (see I18N below). If an unknown language code is given, English
-     * will be used.
-     *
-     * @param value two letter language code (optional 5 letter code like de_DE)
-     * @return this instance for chaining
-     */
-    public DateTimeConfig withLanguage(final String value) {
-        put(Language, value);
         return this;
     }
 

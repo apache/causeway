@@ -29,7 +29,7 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -64,7 +64,6 @@ implements IConverter<T> {
     private final DateTimeConfig config;
 
     public TextFieldWithDateTimePicker(
-            final IsisAppCommonContext commonContext,
             final String id,
             final ScalarModel scalarModel,
             final Class<T> type,
@@ -74,9 +73,8 @@ implements IConverter<T> {
 
         this.converter = converter;
         this.config = createDatePickerConfig(
-                commonContext.getConfiguration(),
+                scalarModel.getCommonContext(),
                 !scalarModel.isRequired());
-
 
         /* debug
                 new IConverter<T>() {
@@ -171,13 +169,20 @@ implements IConverter<T> {
 
     // -- HELPER
 
-    private DateTimeConfig createDatePickerConfig(final IsisConfiguration isisConfiguration, final boolean isInputNullable) {
+    private DateTimeConfig createDatePickerConfig(
+            final IsisAppCommonContext commonContext,
+            final boolean isInputNullable) {
         val config = new DateTimeConfig();
+
+        config.useLocale(commonContext.currentUserLocale()
+                .map(UserLocale::getLanguageLocale)
+                .orElse(Locale.US));
 
         // if this text field is for a LocalDate, then the pattern obtained will just be a simple date format
         // (with no hour/minute components).
         final String dateTimePattern = ((ConverterBasedOnValueSemantics<T>)converter).getEditingPattern();
         config.withFormat(_TimeFormatUtil.convertToMomentJsFormat(dateTimePattern));
+
         config.useCalendarWeeks(true);
         config.useCurrent(false);
 
@@ -215,8 +220,8 @@ implements IConverter<T> {
         //XXX future extensions might allow to set bounds on a per member basis (via ValueSemantics annotation)
         //config.withMinDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().minDateAsJavaUtilDate());
         //config.withMaxDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().maxDateAsJavaUtilDate());
-        config.minDate(isisConfiguration.getViewer().getWicket().getDatePicker().getMinDate());
-        config.maxDate(isisConfiguration.getViewer().getWicket().getDatePicker().getMaxDate());
+        config.minDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMinDate());
+        config.maxDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMaxDate());
         return config;
     }
 
