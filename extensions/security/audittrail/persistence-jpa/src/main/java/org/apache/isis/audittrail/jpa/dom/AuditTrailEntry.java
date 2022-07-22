@@ -56,7 +56,7 @@ import lombok.Setter;
         indexes = {
                 @Index(name = "target_propertyId_timestamp_IDX", columnList = "target, propertyId, timestamp", unique = false),
                 @Index(name = "target_timestamp_IDX", columnList = "target, timestamp", unique = false),
-                @Index(name = "timestamp_IDX", columnList = "timestamp", unique = false)
+                @Index(name = "timestamp_IDX", columnList = "timestamp", unique = false),
                 @Index(name = "interactionId_IDX", columnList = "interactionId", unique = false)
         }
 )
