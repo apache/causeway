@@ -50,7 +50,7 @@ implements EntityPropertyChangeSubscriber {
 
         val propertyChangeEntry = String.format("%s/%s: '%s' -> '%s'",
                 entityPropertyChange.getTarget(),
-                entityPropertyChange.getPropertyName(),
+                entityPropertyChange.getPropertyId(),
                 entityPropertyChange.getPreValue(),
                 entityPropertyChange.getPostValue());
 
