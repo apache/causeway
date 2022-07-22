@@ -31,7 +31,6 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalQuery;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -40,6 +39,7 @@ import javax.inject.Inject;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.TimePrecision;
+import org.apache.isis.applib.annotation.TimeZoneTranslation;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
@@ -150,27 +150,14 @@ implements TemporalValueSemantics<T> {
     public final String titlePresentation(
             final ValueSemanticsProvider.Context context,
             final T value) {
-        return renderTitle(value, getRenderingFormatter(context, (text, tooltip)->text));
+        return renderTitle(value, getRenderingFormatter(context, BadgeRenderer.textual()));
     }
 
     @Override
     public final String htmlPresentation(
             final ValueSemanticsProvider.Context context,
             final T value) {
-        return renderHtml(value, getRenderingFormatter(context, this::toBootstrapBadgeWithTooltip));
-    }
-
-    /**
-     * @apiNote Ideally this logic would move to Wicket Viewer, as it depends on presence of <i>Bootstrap</i>.
-     */
-    private String toBootstrapBadgeWithTooltip(final String text, final String tooltip) {
-        return String.format("<span "
-                + "class=\"badge bg-secondary\" "
-                + "data-bs-container=\"body\" "
-                + "data-bs-toggle=\"tooltip\" "
-                + "title=\"%s\">"
-                + "%s"
-                + "</span>", tooltip, text);
+        return renderHtml(value, getRenderingFormatter(context, BadgeRenderer.bootstrapBadgeWithTooltip()));
     }
 
     // -- PARSER
@@ -213,7 +200,7 @@ implements TemporalValueSemantics<T> {
      */
     protected Function<T, String> getRenderingFormatter(
             final ValueSemanticsProvider.Context context,
-            final BinaryOperator<String> timeZoneDecorator) {
+            final BadgeRenderer badgeRenderer) {
 
         val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
@@ -225,20 +212,54 @@ implements TemporalValueSemantics<T> {
                         dateAndTimeFormatStyle.getTimeFormatStyle());
 
                 final var temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
-                        context, temporalCharacteristic, offsetCharacteristic);
+                        context, temporalCharacteristic, offsetCharacteristic).orElse(null);
 
                 final var sb = new StringBuffer();
 
-                sb.append(temporalNoZoneRenderingFormat.format(time));
+                //FIXME[ISIS-3085] use as provided via ValueSemantics annotation ...
+                final var timeZoneTranslation = TimeZoneTranslation.TO_LOCAL_TIMEZONE;
 
-                temporalZoneOnlyRenderingFormat
-                .ifPresent(zoneOnlyFormat->{
-                    sb.append(' ').append(timeZoneDecorator.apply(
-                            zoneOnlyFormat.format(time),
-                            translate("your local time: ")
-                                + " "
-                                + temporalNoZoneRenderingFormat.format(toLocalTime(context, time))));
-                });
+                final var asLocalTime = toLocalTime(context, time);
+
+                switch (timeZoneTranslation) {
+                case TO_LOCAL_TIMEZONE:
+                    if(offsetCharacteristic.isLocal()) {
+                        // start rendering with the time as is (no offset/zone info)
+                        sb.append(temporalNoZoneRenderingFormat.format(time));
+                    } else {
+                        // start rendering with the (to-local) translated time (no offset/zone info)
+                        sb.append(temporalNoZoneRenderingFormat.format(asLocalTime));
+
+                        // we have offset/zone information, so we append it (properly formatted) ...
+                        sb.append(' ');
+
+                        sb.append(badgeRenderer.render(
+                                translate("local"),
+                                ()->translate("time instant")
+                                    + ": "
+                                    + temporalNoZoneRenderingFormat.format(time)
+                                    + " "
+                                    + temporalZoneOnlyRenderingFormat.format(time)));
+
+                    }
+                    break;
+                case NONE:
+                default:
+                    // start rendering with the time as is (no offset/zone info)
+                    sb.append(temporalNoZoneRenderingFormat.format(time));
+
+                    if(!offsetCharacteristic.isLocal()) {
+                        // we have offset/zone information, so we append it (properly formatted) ...
+                        sb.append(' ');
+
+                        sb.append(badgeRenderer.render(
+                                temporalZoneOnlyRenderingFormat.format(time),
+                                ()->translate("your local time")
+                                    + ": "
+                                    + temporalNoZoneRenderingFormat.format(asLocalTime)));
+                    }
+                    break;
+                }
 
                 return sb.toString();
         };

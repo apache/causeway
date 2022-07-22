@@ -129,6 +129,18 @@ public @interface ValueSemantics {
     TimePrecision timePrecision()
         default TimePrecision.SECOND;
 
+
+    /**
+     * If associated with a temporal value,
+     * that has time-zone or time-offset information,
+     * the rendering mode, as to whether to transform the rendered value
+     * to the user's local/current time-zone or not.<br>
+     * default = {@link TimeZoneTranslation#TO_LOCAL_TIMEZONE}
+     * @see TimeZoneTranslation
+     */
+    TimeZoneTranslation timeZoneTranslation()
+        default TimeZoneTranslation.TO_LOCAL_TIMEZONE;
+
     /**
      * eg. &#64;ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
      */
