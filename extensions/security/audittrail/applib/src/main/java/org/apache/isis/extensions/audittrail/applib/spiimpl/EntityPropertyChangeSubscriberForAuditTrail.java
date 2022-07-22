@@ -61,5 +61,8 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
 
     }
 
-
+    @Override
+    public boolean isEnabled() {
+        return EntityPropertyChangeSubscriber.super.isEnabled();
+    }
 }

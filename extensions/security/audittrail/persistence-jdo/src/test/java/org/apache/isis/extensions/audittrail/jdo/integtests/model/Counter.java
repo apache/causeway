@@ -28,6 +28,7 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Publishing;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -42,7 +43,7 @@ import lombok.Setter;
 )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @Named("audittrail.test.Counter")
-@DomainObject(nature = Nature.ENTITY)
+@DomainObject(nature = Nature.ENTITY, entityChangePublishing = Publishing.ENABLED)
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

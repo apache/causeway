@@ -49,10 +49,6 @@
 			<artifactId>isis-core-metamodel</artifactId>
 		</dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.valuetypes</groupId>
-            <artifactId>isis-valuetypes-markdown-applib</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

@@ -31,6 +31,7 @@ import javax.inject.Named;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -252,7 +253,8 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
 
 
     @Property(
-            domainEvent = PropertyId.DomainEvent.class
+            domainEvent = PropertyId.DomainEvent.class,
+            optionality = Optionality.MANDATORY
     )
     @PropertyLayout(
             hidden = Where.ALL_TABLES
@@ -286,8 +288,8 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     public @interface PreValue {
         class DomainEvent extends PropertyDomainEvent<String> {}
         int MAX_LENGTH = DomainChangeRecord.PreValue.MAX_LENGTH;
-        boolean NULLABLE = false;
-        String ALLOWS_NULL = "false";
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
 
     }
     @PreValue
@@ -308,8 +310,8 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     public @interface PostValue {
         class DomainEvent extends PropertyDomainEvent<String> {}
         int MAX_LENGTH = DomainChangeRecord.PostValue.MAX_LENGTH;
-        boolean NULLABLE = false;
-        String ALLOWS_NULL = "false";
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
 
     }
     @PostValue

@@ -35,7 +35,6 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 import lombok.AccessLevel;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -45,8 +44,6 @@ import lombok.val;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
 
-    @Inject RepositoryService repositoryService;
-    @Inject FactoryService factoryService;
 
     private final Class<E> auditTrailEntryClass;
 
@@ -173,5 +170,8 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
     public void removeAll() {
         repositoryService.removeAll(auditTrailEntryClass);
     }
+
+    @Inject RepositoryService repositoryService;
+    @Inject FactoryService factoryService;
 
 }

@@ -21,8 +21,6 @@ package org.apache.isis.extensions.audittrail.jdo.dom;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry;
-
 @Service
 public class AuditTrailEntryRepository extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntryRepository<AuditTrailEntry> {
 
