@@ -492,7 +492,6 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
     @Inject CounterRepository counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
-    @Inject TransactionService transactionService;
     @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
 
 }

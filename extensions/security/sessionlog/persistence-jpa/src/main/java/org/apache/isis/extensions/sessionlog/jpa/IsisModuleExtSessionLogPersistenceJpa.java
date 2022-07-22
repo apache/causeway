@@ -18,42 +18,48 @@
  *
  */
 
-package org.apache.isis.audittrail.jdo;
+package org.apache.isis.extensions.sessionlog.jpa;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
-import org.apache.isis.audittrail.jdo.dom.AuditTrailEntry;
-import org.apache.isis.audittrail.jdo.dom.AuditTrailEntryRepository;
-import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
+import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
+import org.apache.isis.extensions.sessionlog.applib.IsisModuleExtSessionLogApplib;
+import org.apache.isis.extensions.sessionlog.jpa.dom.SessionLogEntry;
+import org.apache.isis.extensions.sessionlog.jpa.dom.SessionLogEntryPK;
+import org.apache.isis.extensions.sessionlog.jpa.dom.SessionLogEntryRepository;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
-import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
+import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAbstract;
 
 
 @Configuration
 @Import({
         // modules
         IsisModuleTestingFixturesApplib.class,
-        IsisModuleExtAuditTrailApplib.class,
-        IsisModulePersistenceJdoDatanucleus.class,
+        IsisModuleExtSessionLogApplib.class,
+        IsisModulePersistenceJpaEclipselink.class,
 
         // services
-        AuditTrailEntryRepository.class,
+        SessionLogEntryRepository.class,
+        SessionLogEntryPK.Stringifier.class,
 
         // entities, eager meta-model introspection
-        AuditTrailEntry.class,
+        SessionLogEntry.class,
 })
-public class IsisModuleExtAuditTrailPersistenceJdo implements ModuleWithFixtures {
+@EntityScan(basePackageClasses = {
+        SessionLogEntry.class,
+})
+public class IsisModuleExtSessionLogPersistenceJpa implements ModuleWithFixtures {
 
     @Override
     public FixtureScript getTeardownFixture() {
-        return new TeardownFixtureJdoAbstract() {
+        return new TeardownFixtureJpaAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
-                deleteFrom(AuditTrailEntry.class);
+                deleteFrom(SessionLogEntry.class);
             }
         };
     }

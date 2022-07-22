@@ -42,7 +42,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.audittrail.applib.dom.AuditTrailEntry.Nq;
+import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry.Nq;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -145,7 +145,7 @@ import lombok.Setter;
         editing = Editing.DISABLED
 )
 public class AuditTrailEntry
-extends org.apache.isis.audittrail.applib.dom.AuditTrailEntry {
+extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
 
     static final String FQCN = "org.apache.isis.audittrail.jdo.dom.AuditTrailEntry";
 

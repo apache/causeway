@@ -17,16 +17,16 @@
  * under the License.
  *
  */
-package org.apache.isis.audittrail.jdo.dom;
 
-import org.springframework.stereotype.Service;
+package org.apache.isis.extensions.audittrail.jdo.integtests.model;
 
-import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry;
+import org.springframework.stereotype.Repository;
 
-@Service
-public class AuditTrailEntryRepository extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntryRepository<AuditTrailEntry> {
+@Repository
+public class CounterRepository
+        extends org.apache.isis.extensions.audittrail.applib.integtests.model.CounterRepository<Counter> {
 
-    public AuditTrailEntryRepository() {
-        super(AuditTrailEntry.class);
+    public CounterRepository() {
+        super(Counter.class);
     }
 }

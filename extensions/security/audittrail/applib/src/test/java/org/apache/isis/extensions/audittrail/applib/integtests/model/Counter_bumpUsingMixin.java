@@ -17,16 +17,21 @@
  * under the License.
  *
  */
-package org.apache.isis.audittrail.jdo.dom;
 
-import org.springframework.stereotype.Service;
+package org.apache.isis.extensions.audittrail.applib.integtests.model;
 
-import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Publishing;
 
-@Service
-public class AuditTrailEntryRepository extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntryRepository<AuditTrailEntry> {
+import lombok.RequiredArgsConstructor;
 
-    public AuditTrailEntryRepository() {
-        super(AuditTrailEntry.class);
+@Action(commandPublishing = Publishing.ENABLED)
+@RequiredArgsConstructor
+public class Counter_bumpUsingMixin {
+
+    private final Counter counter;
+
+    public Counter act() {
+        return counter.doBump();
     }
 }

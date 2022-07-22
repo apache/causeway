@@ -18,19 +18,20 @@
  *
  */
 
-package org.apache.isis.audittrail.jdo;
+package org.apache.isis.extensions.audittrail.jpa;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
-import org.apache.isis.audittrail.jdo.dom.AuditTrailEntry;
-import org.apache.isis.audittrail.jdo.dom.AuditTrailEntryRepository;
-import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
+import org.apache.isis.extensions.audittrail.jpa.dom.AuditTrailEntry;
+import org.apache.isis.extensions.audittrail.jpa.dom.AuditTrailEntryRepository;
+import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
-import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
+import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAbstract;
 
 
 @Configuration
@@ -38,7 +39,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
         // modules
         IsisModuleTestingFixturesApplib.class,
         IsisModuleExtAuditTrailApplib.class,
-        IsisModulePersistenceJdoDatanucleus.class,
+        IsisModulePersistenceJpaEclipselink.class,
 
         // services
         AuditTrailEntryRepository.class,
@@ -46,11 +47,14 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
         // entities, eager meta-model introspection
         AuditTrailEntry.class,
 })
-public class IsisModuleExtAuditTrailPersistenceJdo implements ModuleWithFixtures {
+@EntityScan(basePackageClasses = {
+        AuditTrailEntry.class,
+})
+public class IsisModuleExtAuditTrailPersistenceJpa implements ModuleWithFixtures {
 
     @Override
     public FixtureScript getTeardownFixture() {
-        return new TeardownFixtureJdoAbstract() {
+        return new TeardownFixtureJpaAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
                 deleteFrom(AuditTrailEntry.class);

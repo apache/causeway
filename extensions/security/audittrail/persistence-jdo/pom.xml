@@ -58,6 +58,8 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- testing -->
+
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-audittrail-applib</artifactId>

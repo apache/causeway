@@ -17,16 +17,15 @@
  * under the License.
  *
  */
-package org.apache.isis.audittrail.jdo.dom;
+
+package org.apache.isis.extensions.sessionlog.jpa.dom;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry;
-
 @Service
-public class AuditTrailEntryRepository extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntryRepository<AuditTrailEntry> {
+public class SessionLogEntryRepository extends org.apache.isis.extensions.sessionlog.applib.dom.SessionLogEntryRepository<SessionLogEntry> {
 
-    public AuditTrailEntryRepository() {
-        super(AuditTrailEntry.class);
+    public SessionLogEntryRepository() {
+        super(SessionLogEntry.class);
     }
 }

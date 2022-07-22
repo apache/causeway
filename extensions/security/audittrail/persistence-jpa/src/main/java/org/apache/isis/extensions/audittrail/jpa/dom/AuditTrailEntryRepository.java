@@ -17,7 +17,7 @@
  * under the License.
  *
  */
-package org.apache.isis.audittrail.jdo.dom;
+package org.apache.isis.extensions.audittrail.jpa.dom;
 
 import org.springframework.stereotype.Service;
 
