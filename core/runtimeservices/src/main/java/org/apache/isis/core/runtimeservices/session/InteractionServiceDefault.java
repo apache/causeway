@@ -80,7 +80,7 @@ import lombok.extern.log4j.Log4j2;
  * @implNote holds a reference to the current session using a thread-local
  */
 @Service
-@Named("isis.runtimeservices.InteractionServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".InteractionServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

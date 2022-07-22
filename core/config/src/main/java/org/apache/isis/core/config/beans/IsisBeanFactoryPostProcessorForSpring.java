@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Component
-@Named("isis.config.IsisBeanFactoryPostProcessorForSpring")
+@Named(IsisModuleCoreConfig.NAMESPACE + "..IsisBeanFactoryPostProcessorForSpring")
 @Import({
     AopPatch.class
 })

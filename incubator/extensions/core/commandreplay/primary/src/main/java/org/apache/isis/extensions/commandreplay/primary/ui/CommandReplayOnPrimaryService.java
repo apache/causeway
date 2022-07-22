@@ -80,7 +80,7 @@ public class CommandReplayOnPrimaryService {
     @ActionLayout(cssClassFa = "fa-search", sequence="40")
     public class findCommands{
 
-        public class ActionEvent extends ActionDomainEvent<findCommands> { }
+        public class ActionDomainEvent extends CommandReplayOnPrimaryService.ActionDomainEvent<findCommands> { }
 
         /**
          * These actions should be called with HTTP Accept Header set to:
@@ -110,7 +110,7 @@ public class CommandReplayOnPrimaryService {
     @ActionLayout(cssClassFa = "fa-download", sequence="50")
     public class downloadCommands {
 
-        public class ActionEvent extends ActionDomainEvent<downloadCommands> { }
+        public class ActionDomainEvent extends CommandReplayOnPrimaryService.ActionDomainEvent<downloadCommands> { }
 
         /**
          * These actions should be called with HTTP Accept Header set to:
@@ -154,7 +154,7 @@ public class CommandReplayOnPrimaryService {
     @ActionLayout(cssClassFa = "fa-download", sequence="50")
     public class downloadCommandById {
 
-        public class ActionEvent extends ActionDomainEvent<downloadCommandById> { }
+        public class ActionDomainEvent extends CommandReplayOnPrimaryService.ActionDomainEvent<downloadCommandById> { }
 
         /**
          * This action should be called with HTTP Accept Header set to:

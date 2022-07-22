@@ -57,7 +57,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.RepositoryServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".RepositoryServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor

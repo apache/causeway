@@ -54,7 +54,7 @@ import org.apache.isis.core.transaction.changetracking.PersistenceCallbackHandle
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.runtimeservices.ObjectLifecyclePublisherDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ObjectLifecyclePublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 //@Log4j2

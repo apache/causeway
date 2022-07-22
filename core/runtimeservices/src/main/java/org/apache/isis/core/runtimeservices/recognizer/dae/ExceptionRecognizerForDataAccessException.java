@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
 import lombok.Getter;
 import lombok.val;
@@ -48,11 +49,13 @@ import lombok.val;
  * unless disabled via {@link IsisConfiguration}.
  */
 @Service
-@Named("isis.runtime.ExceptionRecognizerForDataAccessException")
+@Named(ExceptionRecognizerForDataAccessException.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerForDataAccessException
 implements ExceptionRecognizer {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleCoreRuntime.NAMESPACE + ".ExceptionRecognizerForDataAccessException";
 
     @Getter
     private final boolean disabled;

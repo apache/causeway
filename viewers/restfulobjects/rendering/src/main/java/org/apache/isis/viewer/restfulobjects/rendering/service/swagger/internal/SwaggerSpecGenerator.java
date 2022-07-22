@@ -34,7 +34,7 @@ import io.swagger.util.Json;
 import io.swagger.util.Yaml;
 
 @Component
-@Named("isis.metamodel.SwaggerSpecGenerator")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".SwaggerSpecGenerator")
 public class SwaggerSpecGenerator {
 
     private final SpecificationLoader specificationLoader;

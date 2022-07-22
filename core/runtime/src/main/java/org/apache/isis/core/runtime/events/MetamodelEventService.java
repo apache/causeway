@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.events.metamodel.MetamodelEvent;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
 /**
  *
@@ -38,7 +39,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
  * post-construct phase has finished and before the pre-destroy phase has begun.
  */
 @Service
-@Named("isis.runtime.MetamodelEventService")
+@Named(IsisModuleCoreRuntime.NAMESPACE + ".MetamodelEventService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class MetamodelEventService {

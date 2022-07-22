@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import lombok.val;
 
 @Component
-@Named("isis.ext.secman.RegexReplacer")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".RegexReplacer")
 public class RegexReplacer implements org.apache.isis.extensions.secman.applib.util.RegexReplacer {
 
     @Override

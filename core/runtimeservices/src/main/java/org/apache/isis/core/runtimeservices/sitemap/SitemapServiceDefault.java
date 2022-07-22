@@ -51,7 +51,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.SitemapServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".SitemapServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

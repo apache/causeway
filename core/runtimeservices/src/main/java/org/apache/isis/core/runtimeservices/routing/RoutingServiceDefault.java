@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.applib.services.routing.RoutingService;
 
 @Service
-@Named("isis.runtimeservices.RoutingServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".RoutingServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 //@Log4j2

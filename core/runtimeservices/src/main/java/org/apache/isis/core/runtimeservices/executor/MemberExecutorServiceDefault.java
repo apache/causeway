@@ -77,7 +77,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.runtimeservices.MemberExecutorServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".MemberExecutorServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

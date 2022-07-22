@@ -32,7 +32,7 @@ import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 
 @Service
-@Named("isis.runtimeservices.UrlEncodingServiceWithCompression")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".UrlEncodingServiceWithCompression")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Compression")
 public class UrlEncodingServiceWithCompression implements UrlEncodingService {

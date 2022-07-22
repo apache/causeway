@@ -50,7 +50,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.secman.AuthorizorSecman")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".AuthorizorSecman")
 @javax.annotation.Priority(PriorityPrecedence.EARLY - 10)
 @Qualifier("Secman")
 public class AuthorizorSecman implements Authorizor {
@@ -90,7 +90,7 @@ public class AuthorizorSecman implements Authorizor {
     }
 
     @Component
-    @Named("isis.ext.secman.AuthorizorSecman.PermissionCache")
+    @Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".AuthorizorSecman.PermissionCache")
     @InteractionScope
     static class PermissionCache implements DisposableBean {
 

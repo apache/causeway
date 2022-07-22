@@ -27,6 +27,7 @@ import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.SwaggerSpecGenerator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 @Service
-@Named("isis.metamodel.swaggerServiceDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".swaggerServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SwaggerServiceDefault implements SwaggerService {

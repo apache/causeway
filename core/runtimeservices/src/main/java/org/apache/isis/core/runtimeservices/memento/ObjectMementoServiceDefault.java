@@ -59,7 +59,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isis.runtimeservices.ObjectMementoServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ObjectMementoServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ObjectMementoServiceDefault implements ObjectMementoService {

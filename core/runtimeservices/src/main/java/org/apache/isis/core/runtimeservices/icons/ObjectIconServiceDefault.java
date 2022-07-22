@@ -48,7 +48,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.ObjectIconServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ObjectIconServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

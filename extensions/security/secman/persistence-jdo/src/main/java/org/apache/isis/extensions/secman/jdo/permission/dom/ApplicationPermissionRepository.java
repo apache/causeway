@@ -25,7 +25,7 @@ import org.springframework.stereotype.Repository;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepositoryAbstract;
 
 @Repository
-@Named("isis.ext.secman.ApplicationPermissionRepository")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ApplicationPermissionRepository")
 public class ApplicationPermissionRepository
 extends ApplicationPermissionRepositoryAbstract<ApplicationPermission> {
 

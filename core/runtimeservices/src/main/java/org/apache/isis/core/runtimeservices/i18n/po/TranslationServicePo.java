@@ -45,7 +45,7 @@ import lombok.Getter;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.TranslationServicePo")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".TranslationServicePo")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Po")
 public class TranslationServicePo implements TranslationService {

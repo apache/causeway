@@ -31,8 +31,8 @@
     <name>Apache Isis Ext - Session Log Persistence (using JDO)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.sessionlog.jdo</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/sessionlog/jdo</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.sessionlog.persistence.jdo</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/sessionlog/persistence-jdo</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>

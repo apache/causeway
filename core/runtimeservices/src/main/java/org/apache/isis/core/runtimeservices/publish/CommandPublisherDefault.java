@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.CommandPublisherDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".CommandPublisherDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

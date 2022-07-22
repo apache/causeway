@@ -43,7 +43,7 @@ import lombok.val;
  *
  */
 @Component
-@Named("isis.metamodel.ProgrammingModelInitFilterDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ProgrammingModelInitFilterDefault")
 public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFilter {
 
     @Inject private IsisConfiguration configuration;

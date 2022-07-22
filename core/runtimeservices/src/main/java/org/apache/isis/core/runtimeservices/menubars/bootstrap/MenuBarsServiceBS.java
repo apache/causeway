@@ -80,7 +80,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.runtimeservices.MenuBarsServiceBS")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsServiceBS")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("BS")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

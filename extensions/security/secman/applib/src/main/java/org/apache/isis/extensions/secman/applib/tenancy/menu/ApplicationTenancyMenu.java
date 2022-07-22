@@ -69,7 +69,7 @@ public class ApplicationTenancyMenu {
     // -- TENANCY MANAGER
 
     @Action(
-            domainEvent = tenancyManager.ActionEvent.class,
+            domainEvent = tenancyManager.ActionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
     )
     @ActionLayout(
@@ -78,7 +78,7 @@ public class ApplicationTenancyMenu {
     )
     public class tenancyManager{
 
-        public class ActionEvent extends ActionDomainEvent<tenancyManager> { }
+        public class ActionDomainEvent extends ApplicationTenancyMenu.ActionDomainEvent<tenancyManager> { }
 
         @MemberSupport public ApplicationTenancyManager act(){
             return factory.viewModel(new ApplicationTenancyManager());
@@ -89,13 +89,13 @@ public class ApplicationTenancyMenu {
     // -- FIND TENANCIES
 
     @Action(
-            domainEvent = findTenancies.ActionEvent.class,
+            domainEvent = findTenancies.ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(sequence = "100.30.2")
     public class findTenancies{
 
-        public class ActionEvent extends ActionDomainEvent<findTenancies> {}
+        public class ActionDomainEvent extends ApplicationTenancyMenu.ActionDomainEvent<findTenancies> {}
 
         @MemberSupport public Collection<? extends ApplicationTenancy> act(
                 @Parameter(optionality = Optionality.OPTIONAL)

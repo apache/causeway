@@ -38,7 +38,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named("isis.runtimeservices.LocaleChoiceProviderDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".LocaleChoiceProviderDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

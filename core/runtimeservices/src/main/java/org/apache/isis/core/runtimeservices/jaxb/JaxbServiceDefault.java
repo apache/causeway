@@ -49,7 +49,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.JaxbServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".JaxbServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

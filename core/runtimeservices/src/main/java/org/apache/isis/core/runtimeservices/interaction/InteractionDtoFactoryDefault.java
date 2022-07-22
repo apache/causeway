@@ -62,7 +62,7 @@ import lombok.val;
 * @see org.apache.isis.core.runtimeservices.command.CommandDtoFactoryDefault
  */
 @Service
-@Named("isis.runtimeservices.InteractionDtoServiceInternalDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".InteractionDtoServiceInternalDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class InteractionDtoFactoryDefault implements InteractionDtoFactory {

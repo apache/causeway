@@ -84,7 +84,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.metamodel.GridSystemServiceBootstrap")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".GridSystemServiceBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Bootstrap")
 @Log4j2

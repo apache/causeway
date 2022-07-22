@@ -60,23 +60,6 @@ import lombok.Setter;
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE interactionId == :interactionId "),
     @Query(
-            name  = Nq.FIND_BY_PARENT,
-            value = "SELECT "
-                  + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE parent == :parent "),
-    @Query(
-            name  = Nq.FIND_CURRENT,
-            value = "SELECT "
-                  + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE completedAt == null "
-                  + " ORDER BY this.timestamp DESC"),
-    @Query(
-            name  = Nq.FIND_COMPLETED,
-            value = "SELECT "
-                  + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE completedAt != null "
-                  + " ORDER BY this.timestamp DESC"),
-    @Query(
             name  = Nq.FIND_RECENT_BY_TARGET,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
@@ -110,7 +93,7 @@ import lombok.Setter;
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE target == :target "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_BETWEEN,
             value = "SELECT "
@@ -142,6 +125,23 @@ import lombok.Setter;
                   + " WHERE username == :username "
                   + " ORDER BY this.timestamp DESC "
                   + " RANGE 0,30"),
+    @Query(
+            name  = Nq.FIND_BY_PARENT,
+            value = "SELECT "
+                    + "  FROM " + CommandLogEntry.FQCN + " "
+                    + " WHERE parent == :parent "),
+    @Query(
+            name  = Nq.FIND_CURRENT,
+            value = "SELECT "
+                    + "  FROM " + CommandLogEntry.FQCN + " "
+                    + " WHERE completedAt == null "
+                    + " ORDER BY this.timestamp DESC"),
+    @Query(
+            name  = Nq.FIND_COMPLETED,
+            value = "SELECT "
+                    + "  FROM " + CommandLogEntry.FQCN + " "
+                    + " WHERE completedAt != null "
+                    + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND_FIRST,
             value = "SELECT "

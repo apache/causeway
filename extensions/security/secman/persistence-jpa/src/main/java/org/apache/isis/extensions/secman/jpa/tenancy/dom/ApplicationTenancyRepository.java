@@ -25,7 +25,7 @@ import org.springframework.stereotype.Repository;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepositoryAbstract;
 
 @Repository
-@Named("isis.ext.secman.ApplicationTenancyRepository")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ApplicationTenancyRepository")
 public class ApplicationTenancyRepository
 extends ApplicationTenancyRepositoryAbstract<ApplicationTenancy> {
 

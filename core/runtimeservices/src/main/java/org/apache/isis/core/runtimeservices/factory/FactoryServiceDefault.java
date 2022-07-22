@@ -47,7 +47,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.FactoryServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".FactoryServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class FactoryServiceDefault implements FactoryService {

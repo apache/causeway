@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.ext.secman.TableColumnVisibilityServiceForSecman")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".TableColumnVisibilityServiceForSecman")
 @javax.annotation.Priority(PriorityPrecedence.LATE - 10)
 @Qualifier("Secman")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

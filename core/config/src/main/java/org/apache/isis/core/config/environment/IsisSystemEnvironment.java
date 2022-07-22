@@ -47,7 +47,7 @@ import javax.inject.Singleton;
  * @implNote acts as the framework's bootstrapping entry-point for Spring
  */
 @Service
-@Named("isis.config.IsisSystemEnvironment")
+@Named(IsisModuleCoreConfig.NAMESPACE + "..IsisSystemEnvironment")
 @Priority(0) // same as PriorityPrecedence#FIRST
 @Qualifier("Default")
 @Singleton

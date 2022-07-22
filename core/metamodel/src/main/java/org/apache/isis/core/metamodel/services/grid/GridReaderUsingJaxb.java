@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
  *
  */
 @Service
-@Named("isis.metamodel.GridReaderUsingJaxb")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".GridReaderUsingJaxb")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

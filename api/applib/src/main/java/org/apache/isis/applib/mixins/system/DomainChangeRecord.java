@@ -253,6 +253,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
 
 
     @Property(
+            editing = Editing.DISABLED,
             optionality = Optionality.OPTIONAL,
             maxLength = PreValue.MAX_LENGTH
     )
@@ -289,6 +290,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
 
 
     @Property(
+            editing = Editing.DISABLED,
             optionality = Optionality.OPTIONAL,
             maxLength = PostValue.MAX_LENGTH
     )

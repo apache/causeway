@@ -20,12 +20,11 @@
 
 package org.apache.isis.sessionlog.applib;
 
-import org.eclipse.persistence.logging.SessionLog;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.sessionlog.applib.app.SessionLogMenu;
-import org.apache.isis.sessionlog.applib.spiimpl.SessionLogServiceDefault;
+import org.apache.isis.sessionlog.applib.spiimpl.SessionSubscriberForSessionLog;
 import org.apache.isis.sessionlog.applib.spiimpl.SessionLogServiceInitializer;
 
 
@@ -33,7 +32,7 @@ import org.apache.isis.sessionlog.applib.spiimpl.SessionLogServiceInitializer;
 @Import({
         SessionLogMenu.class,
         SessionLogServiceInitializer.class,
-        SessionLogServiceDefault.class
+        SessionSubscriberForSessionLog.class
 })
 public class IsisModuleExtSessionLogApplib {
 

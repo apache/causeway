@@ -43,7 +43,7 @@ import org.apache.isis.extensions.secman.applib.util.RegexReplacer;
 import lombok.val;
 
 @Repository
-@Named("isis.ext.secman.ApplicationRoleRepository")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ApplicationRoleRepository")
 public abstract class ApplicationRoleRepositoryAbstract<R extends ApplicationRole>
 implements ApplicationRoleRepository {
 

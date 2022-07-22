@@ -104,7 +104,7 @@ import lombok.extern.log4j.Log4j2;
  * </ul>
  */
 @Service
-@Named("isis.metamodel.SpecificationLoaderDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".SpecificationLoaderDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @Log4j2

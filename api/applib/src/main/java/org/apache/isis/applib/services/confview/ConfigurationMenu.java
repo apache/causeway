@@ -59,7 +59,7 @@ public class ConfigurationMenu {
 
 
     @Action(
-            domainEvent = configuration.ActionEvent.class,
+            domainEvent = configuration.ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
@@ -67,7 +67,7 @@ public class ConfigurationMenu {
             sequence = "500.900.1")
     public class configuration{
 
-        public class ActionEvent extends ActionDomainEvent<configuration> {}
+        public class ActionDomainEvent extends ConfigurationMenu.ActionDomainEvent<configuration> {}
 
         @MemberSupport public ConfigurationViewmodel act(){
             return factoryService.viewModel(new ConfigurationViewmodel());

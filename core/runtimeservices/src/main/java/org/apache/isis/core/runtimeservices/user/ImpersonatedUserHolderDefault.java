@@ -45,7 +45,7 @@ import org.apache.isis.applib.services.user.UserMemento;
  * </p>
  */
 @Service
-@Named("isis.runtimeservices.ImpersonatedUserHolderDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ImpersonatedUserHolderDefault")
 @javax.annotation.Priority(PriorityPrecedence.LAST)
 @Qualifier("Default")
 public class ImpersonatedUserHolderDefault implements ImpersonatedUserHolder {

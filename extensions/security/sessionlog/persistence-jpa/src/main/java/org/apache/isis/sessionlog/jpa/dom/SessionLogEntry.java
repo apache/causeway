@@ -25,12 +25,14 @@ import java.util.UUID;
 
 import javax.inject.Named;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -48,10 +50,10 @@ import lombok.Setter;
 )
 @NamedQueries( {
         @NamedQuery(
-                name  = Nq.FIND_BY_SESSION_GUID_STR,
+                name  = Nq.FIND_BY_SESSION_GUID,
                 query = "SELECT e "
                       + "  FROM SessionLogEntry e "
-                      + " WHERE e.sessionGuidStr = :sessionGuidStr"),
+                      + " WHERE e.pk.sessionGuid = :sessionGuid"),
         @NamedQuery(
                 name  = Nq.FIND_BY_HTTP_SESSION_ID,
                 query = "SELECT e "
@@ -158,12 +160,20 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
     }
 
 
-    @Id
-    @Column(nullable = SessionGuidStr.NULLABLE, length = SessionGuidStr.MAX_LENGTH)
-    @SessionGuidStr
-    @Getter @Setter
-    private String sessionGuidStr;
+    @EmbeddedId
+    private SessionLogEntryPK pk;
 
+    @Transient
+    @SessionGuid
+    @Override
+    public UUID getSessionGuid() {
+        return pk != null ? pk.getSessionGuid() : null;
+    }
+    @Transient
+    @Override
+    public void setSessionGuid(UUID sessionGuid) {
+        this.pk = new SessionLogEntryPK(sessionGuid);
+    }
 
     @Column(nullable = HttpSessionId.NULLABLE, length = HttpSessionId.MAX_LENGTH)
     @HttpSessionId

@@ -53,7 +53,7 @@ import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
 
 @Component
-@Named("isis.metamodel.ValuePropertyFactoryDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ValuePropertyFactoryDefault")
 public class ValuePropertyFactoryDefault implements ValuePropertyFactory {
 
     private final Map<Class<?>, Factory> propertyFactoryByClass = _Maps.newHashMap();

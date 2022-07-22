@@ -44,7 +44,7 @@ import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.commons.internal.resources._Resources;
 
 @Service
-@Named("isis.runtimeservices.EmailNotificationServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".EmailNotificationServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class EmailNotificationServiceDefault implements EmailNotificationService {

@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.SchemaValueMarshallerDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".SchemaValueMarshallerDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor

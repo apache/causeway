@@ -46,7 +46,7 @@ import javax.inject.Named;
 import java.util.List;
 
 @Service
-@Named("isis.runtimeservices.EntityPropertyChangePublisherDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".EntityPropertyChangePublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

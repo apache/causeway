@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 @Service
-@Named("isis.runtimeservices.EventBusServiceSpring")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".EventBusServiceSpring")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Spring")
 public class EventBusServiceSpring implements EventBusService {

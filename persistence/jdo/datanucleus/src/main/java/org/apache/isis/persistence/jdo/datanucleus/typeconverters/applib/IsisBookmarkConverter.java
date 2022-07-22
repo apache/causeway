@@ -21,6 +21,8 @@ package org.apache.isis.persistence.jdo.datanucleus.typeconverters.applib;
 import org.datanucleus.store.types.converters.TypeConverter;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.HasTarget;
+import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * @since 2.0 {@index}
@@ -29,10 +31,12 @@ public class IsisBookmarkConverter implements TypeConverter<Bookmark, String>{
 
     private static final long serialVersionUID = 1L;
 
+    static final int MAX_LENGTH = HasTarget.Target.MAX_LENGTH;
+
     @Override
     public String toDatastoreType(final Bookmark memberValue) {
         return memberValue != null
-                ? memberValue.toString()
+                ?  _Strings.nullIfExceeds(memberValue.toString(), MAX_LENGTH)
                         : null;
     }
 

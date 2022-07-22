@@ -43,7 +43,7 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import lombok.val;
 
 @Service
-@Named("isis.metamodel.ServiceRegistryDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ServiceRegistryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public final class ServiceRegistryDefault implements ServiceRegistry {

@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import lombok.NonNull;
 
 @Component
-@Named("isis.metamodel.ClassSubstitutorForCollections")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForCollections")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 10)
 public class ClassSubstitutorForCollections implements ClassSubstitutor {
 

@@ -49,4 +49,5 @@ import org.apache.isis.valuetypes.jodatime.integration.IsisModuleValJodatimeInte
 })
 public class IsisModuleCoreRuntime {
 
+    public static final String NAMESPACE = "isis.runtime";
 }

@@ -40,7 +40,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Service
-@Named("isis.config.IsisBeanTypeRegistryImpl")
+@Named(IsisModuleCoreConfig.NAMESPACE + "..IsisBeanTypeRegistryImpl")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 public class IsisBeanTypeRegistryDefault

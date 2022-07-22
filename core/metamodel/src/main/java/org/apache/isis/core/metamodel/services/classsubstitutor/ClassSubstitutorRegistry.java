@@ -39,7 +39,7 @@ import lombok.extern.log4j.Log4j2;
  * Aggregates all {@link ClassSubstitutor}s.
  */
 @Component
-@Named("isis.metamodel.ClassSubstitutorRegistry")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorRegistry")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Log4j2
 public class ClassSubstitutorRegistry {

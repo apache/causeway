@@ -31,7 +31,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Component
-@Named("isis.metamodel.ClassSubstitutorForDomainObjects")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForDomainObjects")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
 public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 

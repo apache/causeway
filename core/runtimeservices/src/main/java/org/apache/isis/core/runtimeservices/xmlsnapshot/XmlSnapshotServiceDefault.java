@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 
 @Service
-@Named("isis.runtimeservices.XmlSnapshotServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".XmlSnapshotServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class XmlSnapshotServiceDefault implements XmlSnapshotService {

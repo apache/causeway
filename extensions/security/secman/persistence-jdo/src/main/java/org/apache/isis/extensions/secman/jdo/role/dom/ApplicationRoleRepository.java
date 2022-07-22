@@ -25,7 +25,7 @@ import org.springframework.stereotype.Repository;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepositoryAbstract;
 
 @Repository
-@Named("isis.ext.secman.ApplicationRoleRepository")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ApplicationRoleRepository")
 public class ApplicationRoleRepository
 extends ApplicationRoleRepositoryAbstract<ApplicationRole> {
 

@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.graph.tree.TreeAdapter;
 
 @Component
-@Named("isis.metamodel.ClassSubstitutorDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 

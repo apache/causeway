@@ -45,7 +45,7 @@ import lombok.Setter;
         table = SessionLogEntry.TABLE)
 @Queries( {
         @Query(
-                name  = Nq.FIND_BY_SESSION_GUID_STR,
+                name  = Nq.FIND_BY_SESSION_GUID,
                 value = "SELECT "
                       + "  FROM " + SessionLogEntry.FQCN + " "
                       + " WHERE sessionGuidStr == :sessionGuidStr"),
@@ -156,10 +156,10 @@ public class SessionLogEntry extends org.apache.isis.sessionlog.applib.dom.Sessi
     }
 
     @PrimaryKey
-    @Column(allowsNull = SessionGuidStr.ALLOWS_NULL, length = SessionGuidStr.MAX_LENGTH)
-    @SessionGuidStr
+    @Column(allowsNull = SessionGuid.ALLOWS_NULL, length = SessionGuid.MAX_LENGTH)
+    @SessionGuid
     @Getter @Setter
-    private String sessionGuidStr;
+    private UUID sessionGuid;
 
 
     @Column(allowsNull = HttpSessionId.ALLOWS_NULL, length = HttpSessionId.MAX_LENGTH)

@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
 import org.apache.isis.sessionlog.applib.IsisModuleExtSessionLogApplib;
 import org.apache.isis.sessionlog.jpa.dom.SessionLogEntry;
+import org.apache.isis.sessionlog.jpa.dom.SessionLogEntryPK;
 import org.apache.isis.sessionlog.jpa.dom.SessionLogEntryRepository;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
@@ -43,6 +44,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 
         // services
         SessionLogEntryRepository.class,
+        SessionLogEntryPK.Stringifier.class,
 
         // entities, eager meta-model introspection
         SessionLogEntry.class,

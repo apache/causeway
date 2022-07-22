@@ -49,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.secman.SeedSecurityModuleService")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".SeedSecurityModuleService")
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject })
 @Log4j2

@@ -44,7 +44,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named("isis.metamodel.ValueSemanticsResolverDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ValueSemanticsResolverDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ValueSemanticsResolverDefault

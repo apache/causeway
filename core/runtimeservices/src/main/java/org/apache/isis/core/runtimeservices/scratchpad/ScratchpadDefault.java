@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.commons.internal.collections._Maps;
 
 @Service
-@Named("isis.runtimeservices.Scratchpad")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".Scratchpad")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @InteractionScope

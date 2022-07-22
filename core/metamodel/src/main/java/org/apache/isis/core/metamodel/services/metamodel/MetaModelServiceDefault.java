@@ -58,7 +58,7 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 import lombok.val;
 
 @Service
-@Named("isis.metamodel.MetaModelServiceDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".MetaModelServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class MetaModelServiceDefault implements MetaModelService {

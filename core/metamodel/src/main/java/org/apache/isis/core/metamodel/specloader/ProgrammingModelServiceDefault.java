@@ -38,7 +38,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.metamodel.ProgrammingModelServiceDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ProgrammingModelServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

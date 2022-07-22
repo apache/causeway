@@ -81,14 +81,15 @@ public class SwaggerServiceMenu {
 
     @Action(
             semantics = SemanticsOf.SAFE,
-            domainEvent = openSwaggerUi.ActionEvent.class,
+            domainEvent = openSwaggerUi.ActionDomainEvent.class,
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
             cssClassFa = "fa-external-link-alt",
             sequence="500.600.1")
     public class openSwaggerUi {
-        public class ActionEvent extends ActionDomainEvent<openSwaggerUi> { }
+
+        public class ActionDomainEvent extends SwaggerServiceMenu.ActionDomainEvent<openSwaggerUi> { }
 
         @MemberSupport public LocalResourcePath act() {
             return new LocalResourcePath("/swagger-ui/index.thtml");
@@ -102,7 +103,7 @@ public class SwaggerServiceMenu {
 
     @Action(
             semantics = SemanticsOf.SAFE,
-            domainEvent = openRestApi.ActionEvent.class,
+            domainEvent = openRestApi.ActionDomainEvent.class,
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
@@ -110,7 +111,7 @@ public class SwaggerServiceMenu {
             sequence="500.600.2")
     public class openRestApi {
 
-        public class ActionEvent extends ActionDomainEvent<openRestApi> { }
+        public class ActionDomainEvent extends SwaggerServiceMenu.ActionDomainEvent<openRestApi> { }
 
         @MemberSupport public LocalResourcePath act() {
             return new LocalResourcePath(basePath);
@@ -124,7 +125,7 @@ public class SwaggerServiceMenu {
 
     @Action(
             semantics = SemanticsOf.SAFE,
-            domainEvent = downloadSwaggerSchemaDefinition.ActionEvent.class,
+            domainEvent = downloadSwaggerSchemaDefinition.ActionDomainEvent.class,
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
@@ -133,7 +134,7 @@ public class SwaggerServiceMenu {
 
     public class downloadSwaggerSchemaDefinition {
 
-        public class ActionEvent extends ActionDomainEvent<downloadSwaggerSchemaDefinition> { }
+        public class ActionDomainEvent extends SwaggerServiceMenu.ActionDomainEvent<downloadSwaggerSchemaDefinition> { }
 
         @MemberSupport public Clob act(
                 @ParameterLayout(named = "Filename")

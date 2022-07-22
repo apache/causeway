@@ -100,7 +100,7 @@ public abstract class SessionLogIntegTestAbstract extends IsisIntegrationTestAbs
         Assertions.assertThat(sessionIfAny).isPresent();
         Assertions.assertThat(sessionIfAny).get().extracting(SessionLogEntry::getUsername).isEqualTo(session2.username);
 
-        sessionIfAny = sessionLogEntryRepository.findBySessionGuidStr(session1.sessionGuid.toString());
+        sessionIfAny = sessionLogEntryRepository.findBySessionGuid(session1.sessionGuid);
         Assertions.assertThat(sessionIfAny).isPresent();
         Assertions.assertThat(sessionIfAny).get().extracting(SessionLogEntry::getUsername).isEqualTo(session1.username);
 

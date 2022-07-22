@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
  * @see <a href="https://stackoverflow.com/questions/44446597/where-does-the-default-datasource-url-for-h2-come-from-on-spring-boot">stackoverflow.com</a>
  */
 @Service
-@Named("isis.config.DataSourceIntrospectionService")
+@Named(IsisModuleCoreConfig.NAMESPACE + "..DataSourceIntrospectionService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

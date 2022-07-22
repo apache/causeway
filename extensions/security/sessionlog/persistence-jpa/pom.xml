@@ -31,8 +31,8 @@
     <name>Apache Isis Ext - Session Log Persistence (using JPA)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.sessionlog.jpa</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/sessionlog/jpa</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.sessionlog.persistence.jpa</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/sessionlog/persistence-jpa</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>

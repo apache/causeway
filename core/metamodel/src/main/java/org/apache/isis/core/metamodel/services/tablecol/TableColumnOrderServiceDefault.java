@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.metamodel.TableColumnOrderServiceDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".TableColumnOrderServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 public class TableColumnOrderServiceDefault implements TableColumnOrderService {

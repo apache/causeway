@@ -59,7 +59,7 @@ public class UserMenu {
 
 
     @Action(
-            domainEvent = me.ActionEvent.class,
+            domainEvent = me.ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
@@ -69,7 +69,7 @@ public class UserMenu {
         )
     public class me {
 
-        public class ActionEvent extends ActionDomainEvent<me> {}
+        public class ActionDomainEvent extends UserMenu.ActionDomainEvent<me> {}
 
         @MemberSupport public UserMemento act() { return userService.currentUser().orElse(null); }
         @MemberSupport public String disableAct() {

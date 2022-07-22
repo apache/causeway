@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.user.ImpersonateMenuAdvisor;
  * </p>
  */
 @Service
-@Named("isis.runtimeservices.ImpersonateMenuAdvisorDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ImpersonateMenuAdvisorDefault")
 @javax.annotation.Priority(PriorityPrecedence.LAST)
 @Qualifier("Default")
 public class ImpersonateMenuAdvisorDefault implements ImpersonateMenuAdvisor {

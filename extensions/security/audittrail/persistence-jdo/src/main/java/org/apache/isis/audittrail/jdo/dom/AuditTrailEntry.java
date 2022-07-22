@@ -1,0 +1,232 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
+
+package org.apache.isis.audittrail.jdo.dom;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.UUID;
+
+import javax.inject.Named;
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Index;
+import javax.jdo.annotations.Indices;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+import javax.jdo.annotations.Queries;
+import javax.jdo.annotations.Query;
+
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.mixins.system.DomainChangeRecord;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.audittrail.applib.IsisModuleExtAuditTrailApplib;
+import org.apache.isis.audittrail.applib.dom.AuditTrailEntry.Nq;
+
+import lombok.Getter;
+import lombok.Setter;
+@PersistenceCapable(
+        identityType = IdentityType.DATASTORE,
+        schema = AuditTrailEntry.SCHEMA,
+        table = AuditTrailEntry.TABLE)
+@DatastoreIdentity(
+        strategy = IdGeneratorStrategy.IDENTITY,
+        column = "id")
+@Indices({
+    @Index(name="pk", unique="true",
+            columns={
+                @Column(name="interactionId"),
+                @Column(name="sequence"),
+                @Column(name="target"),
+                @Column(name="propertyId")
+                }),
+    @Index(name = "target_timestamp_IDX", members = { "target", "timestamp" }, unique="false"),
+})
+@Queries( {
+    @Query(
+            name = Nq.FIND_BY_INTERACTION_ID,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " WHERE interactionId == :interactionId"),
+    @Query(
+            name = Nq.FIND_FIRST_BY_TARGET,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " WHERE target == :target "
+                  + " ORDER BY timestamp ASC "
+                  + " RANGE 0,2"),
+    @Query(
+            name = Nq.FIND_RECENT_BY_TARGET,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " WHERE targetStr == :targetStr "
+                  + " ORDER BY timestamp DESC "
+                  + " RANGE 0,100"),
+    @Query(
+            name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " WHERE targetStr == :targetStr "
+                  + "    && timestamp >= :from "
+                  + "    && timestamp <= :to "
+                  + "ORDER BY timestamp DESC"),
+    @Query(
+            name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " WHERE target == :target "
+                  + "    && timestamp >= :from "
+                  + " ORDER BY this.timestamp DESC"),
+    @Query(
+            name  = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BEFORE,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " WHERE target == :target "
+                  + "    && timestamp <= :to "
+                  + " ORDER BY this.timestamp DESC"),
+    @Query(
+            name  = Nq.FIND_BY_TARGET,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " WHERE target == :target "
+                  + " ORDER BY timestamp DESC"),
+    @Query(
+            name  = Nq.FIND_BY_TIMESTAMP_BETWEEN,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " WHERE timestamp >= :from "
+                  + "    && timestamp <= :to "
+                  + " ORDER BY this.timestamp DESC"),
+    @Query(
+            name  = Nq.FIND_BY_TIMESTAMP_AFTER,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " WHERE timestamp >= :from "
+                  + " ORDER BY this.timestamp DESC"),
+    @Query(
+            name  = Nq.FIND_BY_TIMESTAMP_BEFORE,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " WHERE timestamp <= :to "
+                  + " ORDER BY this.timestamp DESC"),
+    @Query(
+            name  = Nq.FIND,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " ORDER BY this.timestamp DESC"),
+    @Query(
+            name = Nq.FIND_RECENT_BY_TARGET_AND_PROPERTY_ID,
+            value = "SELECT "
+                  + "  FROM " + AuditTrailEntry.FQCN + " "
+                  + " WHERE target == :target "
+                  + "    && propertyId == :propertyId "
+                  + " ORDER BY timestamp DESC "
+                  + " RANGE 0,30")
+})
+@Named(AuditTrailEntry.LOGICAL_TYPE_NAME)
+@DomainObject(
+        editing = Editing.DISABLED
+)
+public class AuditTrailEntry
+extends org.apache.isis.audittrail.applib.dom.AuditTrailEntry {
+
+    static final String FQCN = "org.apache.isis.audittrail.jdo.dom.AuditTrailEntry";
+
+    public AuditTrailEntry(
+            final java.sql.Timestamp timestamp,
+            final String username,
+            final Bookmark target,
+            final String logicalMemberIdentifier,
+            final String propertyId,
+            final String preValue,
+            final String postValue,
+            final UUID interactionId) {
+        super(timestamp, username, target, logicalMemberIdentifier, propertyId, preValue, postValue, interactionId);
+    }
+
+
+    @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)
+    @Username
+    @Getter @Setter
+    private String username;
+
+
+    @Column(allowsNull = Timestamp.ALLOWS_NULL)
+    @Timestamp
+    @Getter @Setter
+    private java.sql.Timestamp timestamp;
+
+
+    @Column(allowsNull = InteractionId.ALLOWS_NULL, length = InteractionId.MAX_LENGTH)
+    @InteractionId
+    @Getter @Setter
+    private UUID interactionId;
+
+
+    @Column(allowsNull = Sequence.ALLOWS_NULL)
+    @Sequence
+    @Getter @Setter
+    private int sequence;
+
+
+    @Persistent
+    @Column(allowsNull = Target.ALLOWS_NULL, length = Target.MAX_LENGTH)
+    @Target
+    @Getter @Setter
+    private Bookmark target;
+
+
+    @Column(allowsNull = LogicalMemberIdentifier.ALLOWS_NULL, length = LogicalMemberIdentifier.MAX_LENGTH)
+    @LogicalMemberIdentifier
+    @Getter @Setter
+    private String logicalMemberIdentifier;
+
+
+
+    @Column(allowsNull = PropertyId.ALLOWS_NULL, length = PropertyId.MAX_LENGTH)
+    @PropertyId
+    @Getter @Setter
+    private String propertyId;
+
+
+    @Column(allowsNull = PreValue.ALLOWS_NULL, length = PreValue.MAX_LENGTH)
+    @PreValue
+    @Getter @Setter
+    private String preValue;
+
+
+    @Column(allowsNull = PostValue.ALLOWS_NULL, length = PostValue.MAX_LENGTH)
+    @PostValue
+    @Getter @Setter
+    private String postValue;
+
+}

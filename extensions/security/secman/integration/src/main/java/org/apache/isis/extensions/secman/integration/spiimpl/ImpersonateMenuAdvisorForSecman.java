@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.ext.secman.ImpersonateMenuAdvisorForSecman")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ImpersonateMenuAdvisorForSecman")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("SecMan")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -107,7 +107,7 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
     // -- CACHE
 
     @Component
-    @Named("isis.ext.secman.ImpersonateMenuAdvisorForSecman.Cache")
+    @Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ImpersonateMenuAdvisorForSecman.Cache")
     @InteractionScope
     static class Cache implements DisposableBean {
 

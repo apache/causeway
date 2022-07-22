@@ -50,7 +50,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.secman.PermissionsEvaluationServiceForSecman")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".PermissionsEvaluationServiceForSecman")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Secman")
 public class PermissionsEvaluationServiceForSecman

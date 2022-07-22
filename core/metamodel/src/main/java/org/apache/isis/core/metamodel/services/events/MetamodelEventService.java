@@ -43,7 +43,7 @@ import lombok.Builder;
  *
  */
 @Service
-@Named("isis.metamodel.MetamodelEventService")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".MetamodelEventService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Builder //for JUnit Test support

@@ -20,13 +20,12 @@
 
 package org.apache.isis.sessionlog.applib.app;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -40,22 +39,29 @@ import org.apache.isis.sessionlog.applib.IsisModuleExtSessionLogApplib;
 import org.apache.isis.sessionlog.applib.dom.SessionLogEntry;
 import org.apache.isis.sessionlog.applib.dom.SessionLogEntryRepository;
 
+import lombok.RequiredArgsConstructor;
+
 
 /**
  * This service exposes a &lt;Sessions&gt; menu to the secondary menu bar for searching for sessions.
  */
+@Named(SessionLogMenu.LOGICAL_TYPE_NAME)
 @DomainService(nature = NatureOfService.VIEW)
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named = "Activity"
 )
-@Named("isissessionlogger.SessionLoggingServiceMenu")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SessionLogMenu {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleExtSessionLogApplib.NAMESPACE + ".SessionLogMenu";
+
+    final SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
 
     public static abstract class ActionDomainEvent<T> extends IsisModuleExtSessionLogApplib.ActionDomainEvent<T> { }
 
     @Action(
-            domainEvent = activeSessions.ActiveEvent.class,
+            domainEvent = activeSessions.ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
@@ -64,26 +70,27 @@ public class SessionLogMenu {
     )
     public class activeSessions {
 
-        public class ActiveEvent extends ActionDomainEvent<activeSessions> { }
+        public class ActionDomainEvent extends SessionLogMenu.ActionDomainEvent<activeSessions> { }
 
-        @MemberSupport public List<SessionLogEntry> act() {
+        @MemberSupport public List<? extends SessionLogEntry> act() {
             return sessionLogEntryRepository.findActiveSessions();
         }
     }
 
 
 
+    @Action(
+            domainEvent = findSessions.ActionDomainEvent.class,
+            semantics = SemanticsOf.SAFE
+    )
+    @ActionLayout(
+            cssClassFa = "fa-search"
+    )
     public class findSessions {
-        public class ActionEvent extends ActionDomainEvent<findSessions> { }
 
-        @Action(
-                domainEvent = ActionEvent.class,
-                semantics = SemanticsOf.SAFE
-        )
-        @ActionLayout(
-                cssClassFa = "fa-search"
-        )
-        public List<SessionLogEntry> act(
+        public class ActionDomainEvent extends SessionLogMenu.ActionDomainEvent<findSessions> { }
+
+        @MemberSupport public List<? extends SessionLogEntry> act(
                 final @Nullable String user,
                 final @Nullable LocalDate from,
                 final @Nullable LocalDate to) {
@@ -96,7 +103,5 @@ public class SessionLogMenu {
         }
     }
 
-
-    @Inject SessionLogEntryRepository sessionLogEntryRepository;
 
 }

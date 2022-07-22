@@ -48,7 +48,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.secman.UserRegistrationServiceForSecman")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".UserRegistrationServiceForSecman")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("SecMan")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

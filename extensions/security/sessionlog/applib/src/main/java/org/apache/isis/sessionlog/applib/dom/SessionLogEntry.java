@@ -26,6 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,6 +48,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.applib.mixins.security.HasUsername;
+import org.apache.isis.applib.mixins.system.DomainChangeRecord;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.sessionlog.applib.IsisModuleExtSessionLogApplib;
@@ -71,7 +74,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_SESSION_GUID_STR = LOGICAL_TYPE_NAME + ".findBySessionGuidStr";
+        public static final String FIND_BY_SESSION_GUID = LOGICAL_TYPE_NAME + ".findBySessionGuid";
         public static final String FIND_BY_HTTP_SESSION_ID = LOGICAL_TYPE_NAME + ".findByHttpSessionId";
         public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN = LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampBetween";
         public static final String FIND_BY_USERNAME_AND_TIMESTAMP_AFTER = LOGICAL_TYPE_NAME + ".findByUsernameAndTimestampAfter";
@@ -107,22 +110,20 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             final String username,
             final SessionSubscriber.CausedBy causedBy,
             final Timestamp loginTimestamp) {
-        setSessionGuidStr(sessionGuid != null ? sessionGuid.toString() : null);
+        setSessionGuid(sessionGuid);
         setHttpSessionId(httpSessionId);
         setUsername(username);
         setCausedBy(causedBy);
         setLoginTimestamp(loginTimestamp);
     }
 
+    private static final DateTimeFormatter formatter =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public String title() {
 
-        // nb: not thread-safe
-        // formats defined in https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         return String.format("%s: %s logged %s %s",
-                format.format(getLoginTimestamp()),
+                formatter.format(getLoginTimestamp().toLocalDateTime()),
                 getUsername(),
                 getLogoutTimestamp() == null ? "in": "out",
                 getCausedBy() == SessionSubscriber.CausedBy.SESSION_EXPIRATION ? "(session expired)" : "");
@@ -143,24 +144,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
 
     @Property(
-            hidden = Where.EVERYWHERE
-    )
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface SessionGuidStr {
-        class DomainEvent extends PropertyDomainEvent<String> {}
-        int MAX_LENGTH = 36; // to hold UUID.randomUuid().toString()
-        boolean NULLABLE = false;
-        String ALLOWS_NULL = "false";
-    }
-    @SessionGuidStr
-    public abstract String getSessionGuidStr();
-    public abstract void setSessionGuidStr(String sessionGuidStr);
-
-
-
-    @Property(
-        domainEvent = SessionGuid.DomainEvent.class
+            domainEvent = SessionGuid.DomainEvent.class
     )
     @PropertyLayout(
             fieldSetId = "Identity",
@@ -171,9 +155,17 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     @Retention(RetentionPolicy.RUNTIME)
     public @interface SessionGuid {
         class DomainEvent extends PropertyDomainEvent<UUID> {}
+        String NAME = "sessionGuid";
+        int MAX_LENGTH = 36; // to hold UUID#toString()
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
     @SessionGuid
-    public UUID getSessionGuid() {return UUID.fromString(getSessionGuidStr());}
+    public abstract UUID getSessionGuid();
+    public abstract void setSessionGuid(UUID sessionGuid);
+
+
+
 
 
     @Property(
@@ -367,7 +359,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             ObjectContracts.contract(SessionLogEntry.class)
                     .thenUse("loginTimestamp", SessionLogEntry::getLoginTimestamp)
                     .thenUse("username", SessionLogEntry::getUsername)
-                    .thenUse("sessionGuid", SessionLogEntry::getSessionGuidStr)
+                    .thenUse("sessionGuid", SessionLogEntry::getSessionGuid)
                     .thenUse("httpSessionId", SessionLogEntry::getHttpSessionId)
                     .thenUse("logoutTimestamp", SessionLogEntry::getLogoutTimestamp)
                     .thenUse("causedBy", SessionLogEntry::getCausedBy)

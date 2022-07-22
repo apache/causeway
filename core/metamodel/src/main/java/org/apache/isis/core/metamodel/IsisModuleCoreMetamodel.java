@@ -175,4 +175,6 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
 })
 public class IsisModuleCoreMetamodel {
 
+    public static final String NAMESPACE = "isis.metamodel";
+
 }

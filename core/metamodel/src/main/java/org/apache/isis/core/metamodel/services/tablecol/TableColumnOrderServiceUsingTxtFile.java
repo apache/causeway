@@ -63,7 +63,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.metamodel.TableColumnOrderServiceUsingTxtFile")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".TableColumnOrderServiceUsingTxtFile")
 @Priority(PriorityPrecedence.LATE - 100) // before Default
 @Qualifier("UsingFiles")
 @Log4j2

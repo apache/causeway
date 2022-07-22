@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Named("isis.runtimeservices.EntityChangesPublisherDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".EntityChangesPublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

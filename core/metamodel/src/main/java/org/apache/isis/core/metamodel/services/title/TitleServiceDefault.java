@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.metamodel.TitleServiceDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".TitleServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = @Inject)

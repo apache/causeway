@@ -21,13 +21,12 @@
 package org.apache.isis.sessionlog.applib.dom;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import javax.inject.Inject;
-
-import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -68,7 +67,7 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
             final Timestamp timestamp) {
         E entry = factoryService.detachedEntity(sessionLogEntryClass);
         entry.setUsername(username);
-        entry.setSessionGuidStr(sessionGuid.toString());
+        entry.setSessionGuid(sessionGuid);
         entry.setHttpSessionId(httpSessionId);
         entry.setCausedBy(causedBy);
         entry.setLoginTimestamp(timestamp);
@@ -76,15 +75,10 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
     }
 
 
-    public Optional<E> findBySessionGuid(final UUID sessionUuid) {
-        return findBySessionGuidStr(sessionUuid.toString());
-    }
-
-
-    public Optional<E> findBySessionGuidStr(final String sessionGuidStr) {
+    public Optional<E> findBySessionGuid(final UUID sessionGuid) {
         return repositoryService.firstMatch(
-                Query.named(sessionLogEntryClass,  SessionLogEntry.Nq.FIND_BY_SESSION_GUID_STR)
-                     .withParameter("sessionGuidStr", sessionGuidStr));
+                Query.named(sessionLogEntryClass,  SessionLogEntry.Nq.FIND_BY_SESSION_GUID)
+                     .withParameter("sessionGuid", sessionGuid));
     }
 
 
@@ -201,9 +195,9 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
     }
 
     private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate dt, final int daysOffset) {
-        return dt!=null
-                ?new Timestamp(dt.toDateTimeAtStartOfDay().plusDays(daysOffset).getMillis())
-                :null;
+        return dt != null
+                ? Timestamp.valueOf(dt.atStartOfDay().plusDays(daysOffset))
+                : null;
     }
 
 }

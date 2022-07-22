@@ -63,7 +63,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Service
-@Named("isis.runtimeservices.TransactionServiceSpring")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".TransactionServiceSpring")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Spring")
 @Log4j2

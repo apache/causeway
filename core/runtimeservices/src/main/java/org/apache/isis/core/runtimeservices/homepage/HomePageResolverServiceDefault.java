@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.HomePageResolverServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".HomePageResolverServiceDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 

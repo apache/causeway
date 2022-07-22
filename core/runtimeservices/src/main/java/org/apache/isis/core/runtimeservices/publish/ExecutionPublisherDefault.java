@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.ExecutionPublisherDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ExecutionPublisherDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @InteractionScope

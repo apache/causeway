@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -53,7 +54,7 @@ import lombok.val;
  * @since 2.x
  */
 @Service
-@Named("isis.runtime.IdStringifierLookupService")
+@Named(IsisModuleCoreRuntime.NAMESPACE + ".IdStringifierLookupService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor

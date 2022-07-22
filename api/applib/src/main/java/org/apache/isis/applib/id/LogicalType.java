@@ -66,7 +66,7 @@ implements
     private static final long serialVersionUID = 1L;
 
     /**
-     * Type ({@link Class} this identifier represents.
+     * Type (that is, the {@link Class} this identifier represents).
      */
     @Getter
     private final Class<?> correspondingClass;
@@ -80,7 +80,7 @@ implements
     // -- FACTORIES
 
     /**
-     * Returns a new TypeIdentifier based on the corresponding class
+     * Returns a new {@link LogicalType} based on the corresponding class
      * and a {@code logicalNameProvider} for lazy logical name lookup.
      */
     public static LogicalType lazy(
