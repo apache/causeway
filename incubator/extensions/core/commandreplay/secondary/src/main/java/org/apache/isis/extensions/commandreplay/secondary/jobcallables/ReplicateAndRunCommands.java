@@ -58,7 +58,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
     @Inject CommandExecutorService commandExecutorService;
     @Inject TransactionService transactionService;
     @Inject CommandFetcher commandFetcher;
-    @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject CommandReplayAnalysisService analysisService;
     @Inject Optional<ReplayCommandExecutionController> controller;
 
@@ -79,7 +79,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
             return;
         }
 
-        List<CommandLogEntry> commandsToReplay;
+        List<? extends CommandLogEntry> commandsToReplay;
 
         while(isRunning()) {
 
@@ -131,7 +131,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
      * @param commandsToReplay
      * @apiNote could return, whether there was a command to process (and so continue)
      */
-    private void replay(final List<CommandLogEntry> commandsToReplay) {
+    private void replay(final List<? extends CommandLogEntry> commandsToReplay) {
 
         commandsToReplay.forEach(commandLog -> {
 

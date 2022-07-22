@@ -23,7 +23,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
@@ -45,7 +44,7 @@ public class CommandLogEntry_replayQueue {
 
     final CommandLogEntry commandLogEntry;
 
-    public List<CommandLogEntry> coll() {
+    public List<? extends CommandLogEntry> coll() {
         return commandLogEntryRepository.findNotYetReplayed();
     }
     public boolean hideColl() {
@@ -53,6 +52,6 @@ public class CommandLogEntry_replayQueue {
     }
 
     @Inject SecondaryConfig secondaryConfig;
-    @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
 
 }

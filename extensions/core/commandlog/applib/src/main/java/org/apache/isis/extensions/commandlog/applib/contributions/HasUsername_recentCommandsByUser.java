@@ -53,7 +53,7 @@ public class HasUsername_recentCommandsByUser {
         this.hasUsername = hasUsername;
     }
 
-    public List<CommandLogEntry> coll() {
+    public List<? extends CommandLogEntry> coll() {
         val username = hasUsername.getUsername();
         return username != null
                 ? commandLogEntryRepository.findRecentByUsername(username)
@@ -63,5 +63,5 @@ public class HasUsername_recentCommandsByUser {
         return hasUsername.getUsername() == null;
     }
 
-    @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
 }

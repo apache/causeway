@@ -46,11 +46,11 @@ public class CommandLogEntry_childCommands {
     private final CommandLogEntry commandLogEntry;
 
     @MemberSupport
-    public List<CommandLogEntry> coll() {
+    public List<? extends CommandLogEntry> coll() {
         return commandLogEntryRepository.findByParent(commandLogEntry);
     }
 
     @javax.inject.Inject
-    private CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
+    private CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
 
 }
