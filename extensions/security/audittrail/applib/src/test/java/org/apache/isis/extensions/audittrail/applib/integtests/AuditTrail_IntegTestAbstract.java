@@ -40,6 +40,8 @@ import org.apache.isis.extensions.audittrail.applib.integtests.model.Counter_bum
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
+import lombok.val;
+
 public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAbstract {
 
     @BeforeAll
@@ -78,12 +80,13 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
         interactionService.openInteraction();
 
         // then
-        List<? extends AuditTrailEntry> entries = auditTrailEntryRepository.findAll();
+        val entries = auditTrailEntryRepository.findAll();
         assertThat(entries).hasSize(4); // Counter has four properties
 
         Bookmark target = bookmarkService.bookmarkFor(counter1).orElseThrow();
 
-        auditTrailEntryRepository.findRecentByTarget()
+        val recentByTarget = auditTrailEntryRepository.findRecentByTarget(target);
+        assertThat(recentByTarget).hasSize(4); // Counter has four properties
     }
 
 
