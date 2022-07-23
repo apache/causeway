@@ -47,9 +47,9 @@ public abstract class CounterRepository<X extends Counter> {
         repositoryService.removeAll(counterClass);
     }
 
-    @Inject RepositoryService repositoryService;
-
-    public Counter findByName(String name) {
-        return find().stream().filter(x -> Objects.equals(x.getName(), name)).findFirst().orElseThrow();
+    public void remove(Counter counter) {
+        repositoryService.remove(counter);
     }
+
+    @Inject RepositoryService repositoryService;
 }

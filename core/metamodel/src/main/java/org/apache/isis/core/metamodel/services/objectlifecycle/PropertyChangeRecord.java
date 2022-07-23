@@ -19,13 +19,11 @@
 package org.apache.isis.core.metamodel.services.objectlifecycle;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -75,8 +73,10 @@ public final class PropertyChangeRecord {
         this.preAndPostValue = preAndPostValue;
     }
 
-    public String getMemberId() {
-        return property.getFeatureIdentifier().getFullIdentityString();
+    public String getLogicalMemberIdentifier() {
+        val target = getBookmark();
+        val propertyId = getPropertyId();
+        return target.getLogicalTypeName() + "#" + propertyId;
     }
 
     public void setPreValue(final Object pre) {
@@ -88,11 +88,11 @@ public final class PropertyChangeRecord {
     }
 
     public void updatePostValueAsNonDeleted() {
-        preAndPostValue.withPost(getPropertyValue());
+        preAndPostValue = preAndPostValue.withPost(getPropertyValue());
     }
 
     public void updatePostValueAsDeleted() {
-        preAndPostValue.withPost(PropertyValuePlaceholder.DELETED);
+        preAndPostValue = preAndPostValue.withPost(PropertyValuePlaceholder.DELETED);
     }
 
     // -- UTILITY
@@ -102,21 +102,18 @@ public final class PropertyChangeRecord {
             final String username,
             final TransactionId txId) {
 
-        val property = this.getProperty();
+        val target = getBookmark();
+        val propertyId = getPropertyId();
+        val preValue = getPreAndPostValue().getPreString();
+        val postValue = getPreAndPostValue().getPostString();
+        val interactionId = txId.getInteractionId();
+        val sequence = txId.getSequence();
 
-        final Bookmark target = ManagedObjects.bookmarkElseFail(getEntity());
-        final String propertyId = property.getId();
-        final String logicalMemberId = property.getFeatureIdentifier().getFullIdentityString();
-        final String preValueStr = getPreAndPostValue().getPreString();
-        final String postValueStr = getPreAndPostValue().getPostString();
-
-        final UUID interactionId = txId.getInteractionId();
-        final int sequence = txId.getSequence();
-
+        String logicalMemberId = getLogicalMemberIdentifier();
         return EntityPropertyChange.of(
                 interactionId, sequence,
                 target, logicalMemberId, propertyId,
-                preValueStr, postValueStr,
+                preValue, postValue,
                 username, timestamp);
     }
 

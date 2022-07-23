@@ -18,30 +18,26 @@
  */
 package org.apache.isis.extensions.audittrail.applib.integtests;
 
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.isis.applib.mixins.system.DomainChangeRecord;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 import org.apache.isis.extensions.audittrail.applib.integtests.model.Counter;
 import org.apache.isis.extensions.audittrail.applib.integtests.model.CounterRepository;
 import org.apache.isis.extensions.audittrail.applib.integtests.model.Counter_bumpUsingMixin;
-import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
@@ -53,12 +49,13 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
         IsisPresets.forcePrototyping();
     }
 
-
-
     @BeforeEach
     void setUp() {
         counterRepository.removeAll();
+        interactionService.nextInteraction();
+
         auditTrailEntryRepository.removeAll();
+        interactionService.nextInteraction();
 
         assertThat(counterRepository.find()).isEmpty();
         assertThat(auditTrailEntryRepository.findAll()).isEmpty();
@@ -66,14 +63,6 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
 
     protected abstract Counter newCounter(String name);
 
-    @Disabled // to fix, due to:
-    /*
-    org.assertj.core.error.AssertJMultipleFailuresError:
-    Multiple Failures (1 failure)
-    -- failure 1 --
-    expected: "audittrail.test.Counter#name"
-     but was: "org.apache.isis.extensions.audittrail.jdo.integtests.model.Counter#name"
-     */
     @Test
     void created() {
 
@@ -85,8 +74,7 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
         // then
         var entries = auditTrailEntryRepository.findAll();
         val propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
-        assertThat(propertyIds).containsExactly("name", "num");
-        // assertThat(propertyIds).containsExactly("name", "num", "num2"); // ???TODO: why not 'num2' ?
+        assertThat(propertyIds).containsExactlyInAnyOrder("name", "num", "num2");
 
         val entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
         assertThat(entriesById.get("name"))
@@ -94,7 +82,7 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("[NEW]"))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("counter-1"))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getInteractionId).isNotNull())
-                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(1))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(0))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTarget).isEqualTo(target1))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTimestamp).isNotNull())
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getType).isEqualTo(DomainChangeRecord.ChangeType.AUDIT_ENTRY))
@@ -103,19 +91,12 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num"))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("[NEW]"))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isNull());
+        assertThat(entriesById.get("num2"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num2"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("[NEW]"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isNull());
     }
 
-    @Disabled // to fix, due to:
-    /*
-    Expecting actual:
-  ["name"]
-to contain exactly (and in same order):
-  ["num"]
-but some elements were not found:
-  ["num"]
-and others were not expected:
-  ["name"]
-     */
     @Test
     void updated_using_mixin() {
 
@@ -143,10 +124,10 @@ and others were not expected:
         var entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
         assertThat(entriesById.get("num"))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num"))
-                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("[NEW]"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isNull())
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("1"))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getInteractionId).isNotNull())
-                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(1))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(0))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTarget).isEqualTo(target1))
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTimestamp).isNotNull())
                 .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getType).isEqualTo(DomainChangeRecord.ChangeType.AUDIT_ENTRY))
@@ -173,6 +154,50 @@ and others were not expected:
 
     }
 
+    @Test
+    void deleted() {
+
+        // given
+        var counter1 = counterRepository.persist(newCounter("counter-1"));
+        counter1.setNum(1L);
+        counter1.setNum2(2L);
+        var target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
+        interactionService.nextInteraction();
+
+        auditTrailEntryRepository.removeAll();
+        interactionService.nextInteraction();
+
+        // when
+        counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
+        counterRepository.remove(counter1);
+        interactionService.nextInteraction();
+
+        // then
+        var entries = auditTrailEntryRepository.findAll();
+        val propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
+        assertThat(propertyIds).containsExactlyInAnyOrder("name", "num", "num2");
+
+        val entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
+        assertThat(entriesById.get("name"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#name"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("counter-1"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("[DELETED]"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getInteractionId).isNotNull())
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(0))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTarget).isEqualTo(target1))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTimestamp).isNotNull())
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getType).isEqualTo(DomainChangeRecord.ChangeType.AUDIT_ENTRY))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getUsername).isEqualTo("__system"));
+        assertThat(entriesById.get("num"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("1"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("[DELETED]"));
+        assertThat(entriesById.get("num2"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num2"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("2"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("[DELETED]"));
+
+    }
 
     @Inject InteractionService interactionService;
     @Inject CounterRepository<? extends Counter> counterRepository;

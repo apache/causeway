@@ -123,7 +123,11 @@ implements
     private final Provider<InteractionProvider> interactionProviderProvider;
 
     @Inject
-    public EntityChangeTrackerJdo(final EntityPropertyChangePublisher entityPropertyChangePublisher, final EntityChangesPublisher entityChangesPublisher, final EventBusService eventBusService, final Provider<InteractionProvider> interactionProviderProvider) {
+    public EntityChangeTrackerJdo(
+            final EntityPropertyChangePublisher entityPropertyChangePublisher,
+            final EntityChangesPublisher entityChangesPublisher,
+            final EventBusService eventBusService,
+            final Provider<InteractionProvider> interactionProviderProvider) {
         super(eventBusService);
         this.entityPropertyChangePublisher = entityPropertyChangePublisher;
         this.entityChangesPublisher = entityChangesPublisher;
@@ -238,8 +242,7 @@ implements
             final TransactionId txId) {
 
         return snapshotPropertyChangeRecords().stream()
-                .map(propertyChangeRecord->_EntityPropertyChangeFactory
-                        .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord))
+                .map(propertyChangeRecord -> propertyChangeRecord.toEntityPropertyChange(timestamp, userName, txId))
                 .collect(Can.toCan());
     }
 

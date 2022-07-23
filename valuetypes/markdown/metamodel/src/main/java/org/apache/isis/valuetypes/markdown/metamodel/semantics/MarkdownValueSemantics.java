@@ -29,10 +29,11 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.valuetypes.markdown.applib.IsisModuleValMarkdownApplib;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
 @Component
-@Named("isis.val.MarkdownValueSemantics")
+@Named(IsisModuleValMarkdownApplib.NAMESPACE + ".MarkdownValueSemantics")
 public class MarkdownValueSemantics
 extends ValueSemanticsAbstract<Markdown>
 implements
