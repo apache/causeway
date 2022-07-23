@@ -47,9 +47,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAb
         // entities, eager meta-model introspection
         AuditTrailEntry.class,
 })
-@EntityScan(basePackageClasses = {
-        AuditTrailEntry.class,
-})
+@EntityScan(basePackageClasses = {AuditTrailEntry.class})
 public class IsisModuleExtAuditTrailPersistenceJpa implements ModuleWithFixtures {
 
     @Override
