@@ -73,14 +73,14 @@ import lombok.Setter;
             name = Nq.FIND_RECENT_BY_TARGET,
             value = "SELECT "
                   + "  FROM " + AuditTrailEntry.FQCN + " "
-                  + " WHERE targetStr == :targetStr "
+                  + " WHERE target == :target "
                   + " ORDER BY timestamp DESC "
                   + " RANGE 0,100"),
     @Query(
             name = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
             value = "SELECT "
                   + "  FROM " + AuditTrailEntry.FQCN + " "
-                  + " WHERE targetStr == :targetStr "
+                  + " WHERE target == :target "
                   + "    && timestamp >= :from "
                   + "    && timestamp <= :to "
                   + "ORDER BY timestamp DESC"),

@@ -72,6 +72,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
     public void publishChangedProperties(
             final HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges) {
 
+        transactionService.flushTransaction();
         val payload = getPayload(hasEnlistedEntityPropertyChanges);
         val xrayHandle = _Xray.enterEntityPropertyChangePublishing(
                 iaTracker,

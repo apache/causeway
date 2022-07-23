@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
 import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
@@ -52,11 +53,11 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
 
     static final String LOGICAL_TYPE_NAME = IsisModuleExtAuditTrailApplib.NAMESPACE + ".EntityPropertyChangeSubscriberForAuditTrail";
 
+    final TransactionService transactionService;
     final AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
 
     @Override
     public void onChanging(EntityPropertyChange entityPropertyChange) {
-
         auditTrailEntryRepository.createFor(entityPropertyChange);
 
     }

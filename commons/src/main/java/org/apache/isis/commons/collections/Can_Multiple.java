@@ -178,7 +178,12 @@ final class Can_Multiple<T> implements Can<T> {
 
     @Override
     public void forEach(final @NonNull Consumer<? super T> action) {
-        elements.forEach(action);
+        try {
+            elements.forEach(action);
+        } finally {
+            int dummy;
+            dummy = 1;
+        }
     }
 
     @Override

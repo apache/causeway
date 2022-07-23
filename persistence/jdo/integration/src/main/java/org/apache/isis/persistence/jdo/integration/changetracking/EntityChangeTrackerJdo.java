@@ -171,6 +171,10 @@ implements
 
     private boolean isEntityEnabledForChangePublishing(final @NonNull ManagedObject adapter) {
 
+        if(!EntityChangePublishingFacet.isPublishingEnabled(adapter.getSpecification())) {
+            return false; // ignore entities that are not enabled for entity change publishing
+        }
+
         if(entityPropertyChangeRecordsForPublishing.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
@@ -178,10 +182,6 @@ implements
 
         entityChangeEventCount.increment();
         enableCommandPublishing();
-
-        if(!EntityChangePublishingFacet.isPublishingEnabled(adapter.getSpecification())) {
-            return false; // ignore entities that are not enabled for entity change publishing
-        }
 
         return true;
     }

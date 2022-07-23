@@ -50,8 +50,8 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
         IsisPresets.forcePrototyping();
     }
 
-    Counter counter1;
-    Counter counter2;
+    Bookmark target1, target2;
+
 
     @BeforeEach
     void setUp() {
@@ -60,8 +60,10 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
 
         assertThat(counterRepository.find()).isEmpty();
 
-        counter1 = counterRepository.persist(newCounter("counter-1"));
-        counter2 = counterRepository.persist(newCounter("counter-2"));
+        val counter1 = counterRepository.persist(newCounter("counter-1"));
+        val counter2 = counterRepository.persist(newCounter("counter-2"));
+        target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
+        target2 = bookmarkService.bookmarkFor(counter2).orElseThrow();
 
         assertThat(counterRepository.find()).hasSize(2);
 
@@ -71,11 +73,12 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
 
     protected abstract Counter newCounter(String name);
 
-    @Disabled   // currently failing for JDO (and JPA not yet implemented anyway)
+    // @Disabled   // currently failing for JDO (and JPA not yet implemented anyway)
     @Test
     void mixin() {
 
         // when
+        val counter1 = bookmarkService.lookup(target1).orElseThrow();
         wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         interactionService.closeInteractionLayers();    // to flush
 
@@ -85,9 +88,7 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
         val entries = auditTrailEntryRepository.findAll();
         assertThat(entries).hasSize(3); // Counter has three properties
 
-        Bookmark target = bookmarkService.bookmarkFor(counter1).orElseThrow();
-
-        val recentByTarget = auditTrailEntryRepository.findRecentByTarget(target);
+        val recentByTarget = auditTrailEntryRepository.findRecentByTarget(target1);
         assertThat(recentByTarget).hasSize(3);
     }
 

@@ -57,6 +57,7 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
         return repositoryService.firstMatch(
                 Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_FIRST_BY_TARGET)
                         .withParameter("target", target)
+                        .withLimit(2)
         );
     }
 

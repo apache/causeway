@@ -108,9 +108,9 @@ import lombok.Setter;
             name  = Nq.FIND_BY_TIMESTAMP_BETWEEN,
             query = "SELECT e "
                   + "  FROM AuditTrailEntry e "
-                  + " WHERE timestamp >= :from "
-                  + "    && timestamp <= :to "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " WHERE e.timestamp >= :from "
+                  + "   AND e.timestamp <= :to "
+                  + " ORDER BY e.timestamp DESC"),
     @NamedQuery(
             name  = Nq.FIND_BY_TIMESTAMP_AFTER,
             query = "SELECT e "
@@ -144,8 +144,6 @@ import lombok.Setter;
 )
 public class AuditTrailEntry
 extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
-
-    static final String FQCN = "org.apache.isis.audittrail.jdo.dom.AuditTrailEntry";
 
     @Id
     @GeneratedValue
