@@ -48,6 +48,7 @@ import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
@@ -99,6 +100,7 @@ implements
     final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
     final ClockService clockService;
     final Provider<CommandPublisher> commandPublisherProvider;
+    final Provider<TransactionService> transactionServiceProvider;
     final ConfigurableBeanFactory beanFactory;
 
     final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
@@ -115,6 +117,7 @@ implements
             final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler,
             final ClockService clockService,
             final Provider<CommandPublisher> commandPublisherProvider,
+            Provider<TransactionService> transactionServiceProvider,
             final ConfigurableBeanFactory beanFactory,
             final InteractionIdGenerator interactionIdGenerator) {
         this.runtimeEventService = runtimeEventService;
@@ -123,6 +126,7 @@ implements
         this.txBoundaryHandler = txBoundaryHandler;
         this.clockService = clockService;
         this.commandPublisherProvider = commandPublisherProvider;
+        this.transactionServiceProvider = transactionServiceProvider;
         this.beanFactory = beanFactory;
         this.interactionIdGenerator = interactionIdGenerator;
 
@@ -362,6 +366,7 @@ implements
 
     private void preInteractionClosed(final IsisInteraction interaction) {
         completeAndPublishCurrentCommand();
+        transactionServiceProvider.get().flushTransaction();
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
         transactionBoundaryAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(interaction, isSynchronizationActive));
         txBoundaryHandler.onClose(interaction);
@@ -400,7 +405,7 @@ implements
         if(interaction instanceof IsisInteraction) {
             return (IsisInteraction) interaction;
         }
-        throw _Exceptions.unrecoverable("the framework does not recognice "
+        throw _Exceptions.unrecoverable("the framework does not recognize "
                 + "this implementation of an Interaction: %s", interaction.getClass().getName());
     }
 

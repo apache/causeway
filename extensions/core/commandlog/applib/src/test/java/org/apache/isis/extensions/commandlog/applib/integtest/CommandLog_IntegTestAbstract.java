@@ -72,6 +72,8 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
 
     @BeforeEach
     void beforeEach() {
+        interactionService.nextInteraction();
+
         counterRepository.removeAll();
         commandLogEntryRepository.removeAll();
 
@@ -94,9 +96,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
 
         // when
         wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
-        interactionService.closeInteractionLayers();    // to flush
-
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         // then
         Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
@@ -130,9 +130,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
 
         // when
         wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
-        interactionService.closeInteractionLayers();    // to flush
-
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         // then
         Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
@@ -166,9 +164,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
 
         // when
         wrapperFactory.wrapMixin(Counter_bumpUsingMixinWithCommandPublishingDisabled.class, counter1).act();
-        interactionService.closeInteractionLayers();    // to flush
-
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         // then
         Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
@@ -180,9 +176,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
 
         // when
         wrapperFactory.wrap(counter1).bumpUsingDeclaredActionWithCommandPublishingDisabled();
-        interactionService.closeInteractionLayers();    // to flush
-
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         // then
         Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
@@ -196,9 +190,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
 
         // when
         wrapperFactory.wrap(counter1).setNum(99L);
-        interactionService.closeInteractionLayers();    // to flush
-
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         // then
         Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
@@ -246,9 +238,8 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
 
         // given
         wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
-        interactionService.closeInteractionLayers();    // to flush
+        interactionService.nextInteraction();
 
-        interactionService.openInteraction();
         Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
 
         CommandLogEntry commandLogEntry = mostRecentCompleted.get();
@@ -265,8 +256,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
         UUID.fromString(identifier.substring(2)); // should not fail, ie check the format is as we expect
 
         // when we start a new session and lookup from the bookmark
-        interactionService.closeInteractionLayers();
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         Optional<Object> cle2IfAny = bookmarkService.lookup(cleBookmarkIfAny.get());
         assertThat(cle2IfAny).isPresent();
@@ -286,8 +276,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
         sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         });
-        interactionService.closeInteractionLayers();    // to flush
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         // when
         Optional<? extends CommandLogEntry> commandTarget1User1IfAny = commandLogEntryRepository.findMostRecentCompleted();
@@ -304,8 +293,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
                         UserMemento.builder().name("user-2").build()),
                 () -> wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act()
         );
-        interactionService.closeInteractionLayers();    // to flush
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         // when
         Optional<? extends CommandLogEntry> commandTarget1User2IfAny = commandLogEntryRepository.findMostRecentCompleted();
@@ -343,8 +331,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
         sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter2).act();
         });
-        interactionService.closeInteractionLayers();    // to flush
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         // when
         Optional<? extends CommandLogEntry> commandTarget2User1IfAny = commandLogEntryRepository.findMostRecentCompleted();
