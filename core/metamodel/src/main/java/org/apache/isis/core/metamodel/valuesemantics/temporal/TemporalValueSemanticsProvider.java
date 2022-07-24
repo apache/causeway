@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatPrecisionFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeZoneTranslationFacet;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -214,12 +215,11 @@ implements TemporalValueSemantics<T> {
                 final var temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
                         context, temporalCharacteristic, offsetCharacteristic).orElse(null);
 
-                final var sb = new StringBuffer();
-
-                //FIXME[ISIS-3085] use as provided via ValueSemantics annotation ...
-                final var timeZoneTranslation = TimeZoneTranslation.TO_LOCAL_TIMEZONE;
+                final var timeZoneTranslation = dateAndTimeFormatStyle.getTimeZoneTranslation();
 
                 final var asLocalTime = toLocalTime(context, time);
+
+                final var sb = new StringBuffer();
 
                 switch (timeZoneTranslation) {
                 case TO_LOCAL_TIMEZONE:
@@ -337,9 +337,10 @@ implements TemporalValueSemantics<T> {
 
     @Value(staticConstructor = "of")
     static class DateAndTimeFormatStyle {
-        @Nullable FormatStyle dateFormatStyle;
-        @Nullable FormatStyle timeFormatStyle;
-        @Nullable TimePrecision timePrecision;
+        @NonNull FormatStyle dateFormatStyle;
+        @NonNull FormatStyle timeFormatStyle;
+        @NonNull TimePrecision timePrecision;
+        @NonNull TimeZoneTranslation timeZoneTranslation;
 
         static DateAndTimeFormatStyle forContext(
                 final @Nullable MetaModelContext mmc, // nullable .. JUnit support
@@ -367,7 +368,12 @@ implements TemporalValueSemantics<T> {
                     .map(TimeFormatPrecisionFacet::getTimePrecision)
                     .orElse(TimePrecision.SECOND);
 
-            return of(dateFormatStyle, timeFormatStyle, timePrecision);
+            val timeZoneTranslation = featureIfAny
+                    .flatMap(feature->feature.lookupFacet(TimeZoneTranslationFacet.class))
+                    .map(TimeZoneTranslationFacet::getTimeZoneTranslation)
+                    .orElse(TimeZoneTranslation.TO_LOCAL_TIMEZONE);
+
+            return of(dateFormatStyle, timeFormatStyle, timePrecision, timeZoneTranslation);
         }
 
     }
