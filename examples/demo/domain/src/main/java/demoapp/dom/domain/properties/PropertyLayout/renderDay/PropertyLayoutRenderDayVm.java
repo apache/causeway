@@ -76,9 +76,9 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
 
 //tag::render-as-day-before[]
     @Property(optionality = Optionality.OPTIONAL)
-    @ValueSemantics(dateRenderAdjustDays = -1)                    // <.>
+    @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)                    // <.>
     @PropertyLayout(describedAs =
-            "@ValueSemantics(dateRenderAdjustDays = -1)",
+            "@ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)",
         fieldSetId = "annotation", sequence = "2")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
@@ -126,7 +126,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
 //tag::meta-annotation-overridden[]
     @RenderDayMetaAnnotationStartDateInclusive      // <.>
     @Property(optionality = Optionality.OPTIONAL)
-    @ValueSemantics(dateRenderAdjustDays = -1)
+    @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
     @PropertyLayout(describedAs =
             "@RenderDayMetaAnnotationEndDateExclusive",
         fieldSetId = "meta-annotated-overridden", sequence = "1")

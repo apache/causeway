@@ -27,7 +27,8 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.annotation.ValueSemantics;
 
 //tag::class[]
-@ValueSemantics(dateRenderAdjustDays = -1)              // <.>
+@ValueSemantics(dateRenderAdjustDays
+        = ValueSemantics.AS_DAY_BEFORE)                 // <.>
 @Inherited
 @Target({
         ElementType.METHOD, ElementType.FIELD,          // <.>

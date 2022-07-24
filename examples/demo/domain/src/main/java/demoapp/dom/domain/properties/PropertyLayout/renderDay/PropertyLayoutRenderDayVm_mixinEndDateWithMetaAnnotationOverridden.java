@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 // deliberately incorrectly annotated
 @RenderDayMetaAnnotationStartDateInclusive          // <.>
 @Property()
-@ValueSemantics(dateRenderAdjustDays = -1)          // <.>
+@ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)          // <.>
 @PropertyLayout(describedAs =
         "@RenderDayMetaAnnotationStartDateInclusive" +
         " @PropertyLayout(renderDay = AS_DAY_BEFORE",

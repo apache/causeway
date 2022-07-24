@@ -28,9 +28,9 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@ValueSemantics(dateRenderAdjustDays = -1)      // <.>
+@ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)      // <.>
 @PropertyLayout(describedAs =
-        "@ValueSemantics(dateRenderAdjustDays = -1)",
+        "@ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)",
     fieldSetId = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor

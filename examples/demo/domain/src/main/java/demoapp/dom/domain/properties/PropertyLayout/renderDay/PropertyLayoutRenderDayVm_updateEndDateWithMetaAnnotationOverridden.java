@@ -46,10 +46,10 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden
     @MemberSupport public PropertyLayoutRenderDayVm act(
             @RenderDayMetaAnnotationStartDateInclusive          // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
-            @ValueSemantics(dateRenderAdjustDays = -1)          // <.>
+            @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)          // <.>
             @ParameterLayout(describedAs =
                     "@RenderDayMetaAnnotationStartDateInclusive " +
-                    "@ValueSemantics(dateRenderAdjustDays = -1)"
+                    "@ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)"
             )
             final LocalDate endDate) {
         propertyLayoutRenderDayVm.setEndDateUsingMetaAnnotationButOverridden(endDate);

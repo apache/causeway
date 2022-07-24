@@ -45,9 +45,9 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithParameterLayout {
 //tag::annotation[]
     @MemberSupport public PropertyLayoutRenderDayVm act(
             @Parameter(optionality = Optionality.OPTIONAL)
-            @ValueSemantics(dateRenderAdjustDays = -1)          // <.>
+            @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)          // <.>
             @ParameterLayout(describedAs =
-                    "@ValueSemantics(dateRenderAdjustDays = -1)")
+                    "@ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)")
             final LocalDate endDate) {
         propertyLayoutRenderDayVm.setEndDate(endDate);
         return propertyLayoutRenderDayVm;
