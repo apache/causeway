@@ -19,7 +19,7 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-extensions-executionlog-jdo</artifactId>
+    <artifactId>isis-extensions-executionlog-persistence-jdo</artifactId>
     <name>Apache Isis Ext - Execution Log Implementation (JDO)</name>
 
     <properties>

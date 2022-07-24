@@ -182,7 +182,15 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
 
 
     /**
-     * for testing purposes only
+     * intended for testing purposes only
+     */
+    public List<E> findAll() {
+        return repositoryService().allInstances(executionLogEntryClass);
+    }
+
+
+    /**
+     * intended for testing purposes only
      */
     public void removeAll() {
         if (isisSystemEnvironment.getDeploymentType().isProduction()) {

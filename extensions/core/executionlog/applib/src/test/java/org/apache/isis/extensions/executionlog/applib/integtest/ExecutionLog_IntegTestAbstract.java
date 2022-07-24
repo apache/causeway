@@ -71,6 +71,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
 
     @BeforeEach
     void beforeEach() {
+
         counterRepository.removeAll();
         executionLogEntryRepository.removeAll();
 
@@ -91,11 +92,9 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
     @Test
     void invoke_mixin() {
         counter1 = counterRepository.findByName("counter-1");
+
         // when
         wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
-        interactionService.closeInteractionLayers();    // to flush
-
-        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
@@ -124,9 +123,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
 
         // when
         wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
-        interactionService.closeInteractionLayers();    // to flush
-
-        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
@@ -155,9 +151,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
 
         // when
         wrapperFactory.wrapMixin(Counter_bumpUsingMixinWithExecutionPublishingDisabled.class, counter1).act();
-        interactionService.closeInteractionLayers();    // to flush
-
-        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
@@ -169,9 +162,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
 
         // when
         wrapperFactory.wrap(counter1).bumpUsingDeclaredActionWithExecutionPublishingDisabled();
-        interactionService.closeInteractionLayers();    // to flush
-
-        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
@@ -185,9 +175,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
 
         // when
         wrapperFactory.wrap(counter1).setNum(99L);
-        interactionService.closeInteractionLayers();    // to flush
-
-        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
@@ -215,9 +202,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
 
         // when
         wrapperFactory.wrap(counter1).setNum2(99L);
-        interactionService.closeInteractionLayers();    // to flush
-
-        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
@@ -230,9 +214,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
 
         // given
         wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
-        interactionService.closeInteractionLayers();    // to flush
 
-        interactionService.openInteraction();
         List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
 
         ExecutionLogEntry executionLogEntry = all.get(0);
@@ -249,8 +231,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         Integer.parseInt(identifier.substring(identifier.indexOf("_")+1)); // should not fail, ie check the format is as we expect
 
         // when we start a new session and lookup from the bookmark
-        interactionService.closeInteractionLayers();
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         Optional<Object> cle2IfAny = bookmarkService.lookup(eleBookmarkIfAny.get());
         assertThat(cle2IfAny).isPresent();
@@ -269,8 +250,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         });
-        interactionService.closeInteractionLayers();    // to flush
-        interactionService.openInteraction();
 
         // when
         List<? extends ExecutionLogEntry> executionTarget1User1IfAny = executionLogEntryRepository.findMostRecent(1);
@@ -287,8 +266,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
                         UserMemento.builder().name("user-2").build()),
                 () -> wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act()
         );
-        interactionService.closeInteractionLayers();    // to flush
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         // when
         List<? extends ExecutionLogEntry> executionTarget1User2IfAny = executionLogEntryRepository.findMostRecent(1);
@@ -326,8 +304,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter2).act();
         });
-        interactionService.closeInteractionLayers();    // to flush
-        interactionService.openInteraction();
+        interactionService.nextInteraction();
 
         // when
         List<? extends ExecutionLogEntry> executionTarget2User1IfAny = executionLogEntryRepository.findMostRecent(1);
@@ -423,7 +400,5 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
     @Inject CounterRepository counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
-    @Inject TransactionService transactionService;
-    @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
 
 }

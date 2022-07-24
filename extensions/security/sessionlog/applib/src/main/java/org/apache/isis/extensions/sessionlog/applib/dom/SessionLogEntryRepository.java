@@ -32,6 +32,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.session.SessionSubscriber;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
 import lombok.NonNull;
 import lombok.val;
@@ -43,6 +44,7 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
 
     @Inject RepositoryService repositoryService;
     @Inject FactoryService factoryService;
+    @Inject IsisSystemEnvironment isisSystemEnvironment;
 
     private final Class<E> sessionLogEntryClass;
 
@@ -198,6 +200,27 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
         return dt != null
                 ? Timestamp.valueOf(dt.atStartOfDay().plusDays(daysOffset))
                 : null;
+    }
+
+
+    /**
+     * for testing purposes only
+     */
+    public List<E> findAll() {
+        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+            throw new IllegalStateException("Cannot removeAll in production systems");
+        }
+        return repositoryService.allInstances(sessionLogEntryClass);
+    }
+
+    /**
+     * for testing purposes only
+     */
+    public void removeAll() {
+        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+            throw new IllegalStateException("Cannot removeAll in production systems");
+        }
+        repositoryService.removeAll(sessionLogEntryClass);
     }
 
 }

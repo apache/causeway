@@ -135,8 +135,7 @@ import lombok.Setter;
                 query = "SELECT e"
                       + "  FROM SessionLogEntry e "
                       + " WHERE e.username = :username "
-                      + " ORDER BY e.loginTimestamp DESC "
-                    /*+ " LIMIT 0,10"*/)  // instead use withRange on the Query.named(...) object in the repo.
+                      + " ORDER BY e.loginTimestamp DESC ")  // range 0,10 programmatically
 })
 @EntityListeners(IsisEntityListener.class)
 @Named(SessionLogEntry.LOGICAL_TYPE_NAME)

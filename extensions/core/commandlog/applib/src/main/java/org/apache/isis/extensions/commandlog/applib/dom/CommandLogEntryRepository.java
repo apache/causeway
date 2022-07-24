@@ -54,6 +54,7 @@ import lombok.val;
 public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
 
+
     public static class NotFoundException extends RecoverableException {
         private static final long serialVersionUID = 1L;
         @Getter
@@ -378,7 +379,18 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     }
 
     /**
-     * for testing purposes only
+     * intended for testing purposes only
+     */
+    public List<C> findAll() {
+        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+            throw new IllegalStateException("Cannot removeAll in production systems");
+        }
+        return repositoryService().allInstances(commandLogEntryClass);
+    }
+
+
+    /**
+     * intended for testing purposes only
      */
     public void removeAll() {
         if (isisSystemEnvironment.getDeploymentType().isProduction()) {

@@ -36,6 +36,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.ioc._IocContainer;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
@@ -70,7 +71,8 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
-        return isisSystemEnvironment.getIocContainer()
+        val iocContainer = isisSystemEnvironment.getIocContainer();
+        return iocContainer
                 .select(type, qualifiers);
     }
 

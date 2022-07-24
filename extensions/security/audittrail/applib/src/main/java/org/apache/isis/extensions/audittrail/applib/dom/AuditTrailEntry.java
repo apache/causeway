@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.system.DomainChangeRecord;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
@@ -51,7 +52,8 @@ import lombok.experimental.UtilityClass;
 
 @Named(AuditTrailEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
-        editing = Editing.DISABLED
+        editing = Editing.DISABLED,
+        entityChangePublishing = Publishing.DISABLED
 )
 @DomainObjectLayout(
         titleUiEvent = AuditTrailEntry.TitleUiEvent.class,

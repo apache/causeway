@@ -74,6 +74,7 @@
 			<dependency>
 				<groupId>org.apache.isis.testing</groupId>
 				<artifactId>isis-testing-integtestsupport-applib</artifactId>
+				<type>jar</type>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 

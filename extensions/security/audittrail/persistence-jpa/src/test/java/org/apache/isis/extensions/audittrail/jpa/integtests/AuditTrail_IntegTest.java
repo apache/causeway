@@ -74,7 +74,7 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
     }
 
     @BeforeEach()
-    void checkStack() {
+    void checkPersistenceStack() {
         // currently disabled for JPA, since EntityPropertyChangePublisher still to be implemented.
         Assumptions.assumeThat(isisBeanTypeRegistry.determineCurrentPersistenceStack().isJpa()).isFalse();
     }

@@ -20,6 +20,7 @@
 
 package org.apache.isis.extensions.audittrail.jpa.dom;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.inject.Named;
@@ -38,6 +39,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry.Nq;
@@ -140,73 +143,167 @@ import lombok.Setter;
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @Named(AuditTrailEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
-        editing = Editing.DISABLED
+        editing = Editing.DISABLED,
+        entityChangePublishing = Publishing.DISABLED
 )
 public class AuditTrailEntry
 extends org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry {
 
-    @Id
-    @GeneratedValue
     private Long id;
 
+    @Id
+    @Programmatic
+    @GeneratedValue
+    public Long getId() {
+        return id;
+    }
 
-    @Version
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+
     private Long version;
 
+    @Version
+    public Long getVersion() {
+        return version;
+    }
 
-    @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
-    @Username
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+
+
     @Getter @Setter
     private String username;
 
+    @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
+    @Username
+    public String getUsername() {
+        return username;
+    }
 
-    @Column(nullable = Timestamp.NULLABLE)
-    @Timestamp
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+
+
     @Getter @Setter
     private java.sql.Timestamp timestamp;
 
+    @Column(nullable = Timestamp.NULLABLE)
+    @Timestamp
+    public java.sql.Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(java.sql.Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+
+    @Getter @Setter
+    private UUID interactionId;
 
     @Convert(converter = JavaUtilUuidConverter.class)
     @Column(nullable = InteractionId.NULLABLE, length = InteractionId.MAX_LENGTH)
     @InteractionId
-    @Getter @Setter
-    private UUID interactionId;
+    public UUID getInteractionId() {
+        return interactionId;
+    }
+
+    public void setInteractionId(UUID interactionId) {
+        this.interactionId = interactionId;
+    }
 
 
-    @Column(nullable = Sequence.NULLABLE)
-    @Sequence
     @Getter @Setter
     private int sequence;
 
+    @Column(nullable = Sequence.NULLABLE)
+    @Sequence
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
+
+
+
+    @Getter @Setter
+    private Bookmark target;
 
     @Convert(converter = IsisBookmarkConverter.class)
     @Column(nullable = Target.NULLABLE, length = Target.MAX_LENGTH)
     @Target
-    @Getter @Setter
-    private Bookmark target;
+    public Bookmark getTarget() {
+        return target;
+    }
+
+    public void setTarget(Bookmark target) {
+        this.target = target;
+    }
 
 
-    @Column(nullable = LogicalMemberIdentifier.NULLABLE, length = LogicalMemberIdentifier.MAX_LENGTH)
-    @LogicalMemberIdentifier
     @Getter @Setter
     private String logicalMemberIdentifier;
 
+    @Column(nullable = LogicalMemberIdentifier.NULLABLE, length = LogicalMemberIdentifier.MAX_LENGTH)
+    @LogicalMemberIdentifier
+    public String getLogicalMemberIdentifier() {
+        return logicalMemberIdentifier;
+    }
 
-    @Column(nullable = PropertyId.NULLABLE, length = PropertyId.MAX_LENGTH)
-    @PropertyId
+    public void setLogicalMemberIdentifier(String logicalMemberIdentifier) {
+        this.logicalMemberIdentifier = logicalMemberIdentifier;
+    }
+
+
     @Getter @Setter
     private String propertyId;
 
+    @Column(nullable = PropertyId.NULLABLE, length = PropertyId.MAX_LENGTH)
+    @PropertyId
+    public String getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(String propertyId) {
+        this.propertyId = propertyId;
+    }
+
+
+    @Getter @Setter
+    private String preValue;
 
     @Column(nullable = PreValue.NULLABLE, length = PreValue.MAX_LENGTH)
     @PreValue
+    public String getPreValue() {
+        return preValue;
+    }
+
+    public void setPreValue(String preValue) {
+        this.preValue = preValue;
+    }
+
+
     @Getter @Setter
-    private String preValue;
+    private String postValue;
 
 
     @Column(nullable = PostValue.NULLABLE, length = PostValue.MAX_LENGTH)
     @PostValue
-    @Getter @Setter
-    private String postValue;
+    public String getPostValue() {
+        return postValue;
+    }
 
+    public void setPostValue(String postValue) {
+        this.postValue = postValue;
+    }
 }

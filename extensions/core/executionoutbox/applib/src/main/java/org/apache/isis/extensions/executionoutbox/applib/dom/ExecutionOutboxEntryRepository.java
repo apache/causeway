@@ -165,6 +165,17 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
     }
 
 
+
+    /**
+     * for testing purposes only
+     */
+    public List<E> findAll() {
+        if (isisSystemEnvironment.getDeploymentType().isProduction()) {
+            throw new IllegalStateException("Cannot removeAll in production systems");
+        }
+        return repositoryService().allInstances(executionOutboxEntryClass);
+    }
+
     /**
      * for testing purposes only
      */
@@ -174,6 +185,5 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
         }
         repositoryService().removeAll(executionOutboxEntryClass);
     }
-
 
 }

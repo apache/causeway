@@ -48,7 +48,7 @@ import lombok.Setter;
                 name  = Nq.FIND_BY_SESSION_GUID,
                 value = "SELECT "
                       + "  FROM " + SessionLogEntry.FQCN + " "
-                      + " WHERE sessionGuidStr == :sessionGuidStr"),
+                      + " WHERE sessionGuid == :sessionGuid"),
         @Query(
                 name  = Nq.FIND_BY_HTTP_SESSION_ID,
                 value = "SELECT "
