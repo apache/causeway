@@ -26,8 +26,8 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.ValueSemantics;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,11 +46,10 @@ public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden
     @MemberSupport public PropertyLayoutRenderDayVm act(
             @RenderDayMetaAnnotationStartDateInclusive          // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(
-                renderDay = RenderDay.AS_DAY_BEFORE             // <.>
-                , describedAs =
+            @ValueSemantics(dateRenderAdjustDays = -1)          // <.>
+            @ParameterLayout(describedAs =
                     "@RenderDayMetaAnnotationStartDateInclusive " +
-                    "@ParameterLayout(renderDay = AS_DAY_BEFORE)"
+                    "@ValueSemantics(dateRenderAdjustDays = -1)"
             )
             final LocalDate endDate) {
         propertyLayoutRenderDayVm.setEndDateUsingMetaAnnotationButOverridden(endDate);

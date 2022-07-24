@@ -24,13 +24,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.RenderDay;
+import org.apache.isis.applib.annotation.ValueSemantics;
 
 //tag::class[]
-@PropertyLayout(renderDay = RenderDay.AS_DAY_BEFORE)    // <.>
-@ParameterLayout(renderDay = RenderDay.AS_DAY_BEFORE)   // <.>
+@ValueSemantics(dateRenderAdjustDays = -1)              // <.>
 @Inherited
 @Target({
         ElementType.METHOD, ElementType.FIELD,          // <.>

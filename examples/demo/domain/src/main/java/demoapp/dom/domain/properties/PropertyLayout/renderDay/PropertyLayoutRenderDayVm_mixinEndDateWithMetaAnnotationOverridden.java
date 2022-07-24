@@ -22,7 +22,7 @@ import java.time.LocalDate;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.RenderDay;
+import org.apache.isis.applib.annotation.ValueSemantics;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,9 +30,8 @@ import lombok.RequiredArgsConstructor;
 // deliberately incorrectly annotated
 @RenderDayMetaAnnotationStartDateInclusive          // <.>
 @Property()
-@PropertyLayout(
-    renderDay = RenderDay.AS_DAY_BEFORE             // <.>
-    , describedAs =
+@ValueSemantics(dateRenderAdjustDays = -1)          // <.>
+@PropertyLayout(describedAs =
         "@RenderDayMetaAnnotationStartDateInclusive" +
         " @PropertyLayout(renderDay = AS_DAY_BEFORE",
     fieldSetId = "meta-annotated-overridden", sequence = "2"

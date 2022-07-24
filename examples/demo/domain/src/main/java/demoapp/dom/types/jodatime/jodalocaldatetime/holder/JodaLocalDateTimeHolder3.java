@@ -21,16 +21,16 @@ package demoapp.dom.types.jodatime.jodalocaldatetime.holder;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.RenderDay;
+import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.applib.annotation.Where;
 
 //tag::class[]
 public interface JodaLocalDateTimeHolder3 extends JodaLocalDateTimeHolder2 {
 
     @Property
+    @ValueSemantics(dateRenderAdjustDays = -1)                    // <.>
     @PropertyLayout(
-            renderDay = RenderDay.AS_DAY_BEFORE,                 // <.>
-            describedAs = "@PropertyLayout(renderDay=AS_DAY_BEFORE)",
+            describedAs = "@ValueSemantics(dateRenderAdjustDays = -1)",
             labelPosition = LabelPosition.TOP,
             hidden = Where.ALL_TABLES,
             fieldSetId = "render-day", sequence = "1")            // <.>
@@ -39,9 +39,9 @@ public interface JodaLocalDateTimeHolder3 extends JodaLocalDateTimeHolder2 {
     }
 
     @Property
+    @ValueSemantics(dateRenderAdjustDays = 0)                     // <.>
     @PropertyLayout(
-            renderDay = RenderDay.AS_DAY,                        // <.>
-            describedAs = "@PropertyLayout(renderDay=AS_DAY)",
+            describedAs = "@ValueSemantics(dateRenderAdjustDays = 0)",
             labelPosition = LabelPosition.TOP,
             hidden = Where.ALL_TABLES,
             fieldSetId = "render-day", sequence = "2")
@@ -50,16 +50,15 @@ public interface JodaLocalDateTimeHolder3 extends JodaLocalDateTimeHolder2 {
     }
 
     @Property
+    @ValueSemantics                                               // <.>
     @PropertyLayout(
-            renderDay = RenderDay.NOT_SPECIFIED,                // <.>
-            describedAs = "@PropertyLayout(renderDay=NOT_SPECIFIED)",
+            describedAs = "@ValueSemantics",
             labelPosition = LabelPosition.TOP,
             hidden = Where.ALL_TABLES,
             fieldSetId = "render-day", sequence = "3")
     default org.joda.time.LocalDateTime getReadOnlyPropertyDerivedRenderDayNotSpecified() {
         return getReadOnlyProperty();
     }
-
 
 }
 //end::class[]

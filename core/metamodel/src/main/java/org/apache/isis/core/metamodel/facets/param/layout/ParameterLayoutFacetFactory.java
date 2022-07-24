@@ -69,9 +69,6 @@ extends FacetFactoryAbstract {
                 NamedFacetForParameterLayoutAnnotation
                 .create(parameterLayoutIfAny, facetHolder));
 
-        addFacetIfPresent(RenderedAdjustedFacetForParameterLayoutAnnotation
-                .create(parameterLayoutIfAny, facetHolder));
-
         addFacetIfPresent(TypicalLengthFacetForParameterLayoutAnnotation
                 .create(parameterLayoutIfAny, facetHolder));
 
