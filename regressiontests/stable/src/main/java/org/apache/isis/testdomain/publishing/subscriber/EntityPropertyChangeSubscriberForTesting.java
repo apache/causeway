@@ -26,9 +26,14 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
+import org.apache.isis.core.config.beans.PersistenceStack;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.val;
@@ -39,6 +44,8 @@ public class EntityPropertyChangeSubscriberForTesting
 implements EntityPropertyChangeSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
+    @Inject private SpecificationLoader specificationLoader;
+    @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
 
     @PostConstruct
     public void init() {
@@ -48,8 +55,16 @@ implements EntityPropertyChangeSubscriber {
     @Override
     public void onChanging(final EntityPropertyChange entityPropertyChange) {
 
-        val propertyChangeEntry = String.format("%s/%s: '%s' -> '%s'",
-                entityPropertyChange.getTarget(),
+        PersistenceStack persistenceStack = isisBeanTypeRegistry.determineCurrentPersistenceStack();
+
+        val target = entityPropertyChange.getTarget();
+        val targetLogicalTypeName = target.getLogicalTypeName();
+        val targetLogicalType = specificationLoader.lookupLogicalTypeElseFail(targetLogicalTypeName);
+        val targetSimpleName = targetLogicalType.getLogicalTypeSimpleName();
+
+        val propertyChangeEntry = String.format("%s %s/%s: '%s' -> '%s'",
+                persistenceStack.titleCase(),
+                targetSimpleName,
                 entityPropertyChange.getPropertyId(),
                 entityPropertyChange.getPreValue(),
                 entityPropertyChange.getPostValue());

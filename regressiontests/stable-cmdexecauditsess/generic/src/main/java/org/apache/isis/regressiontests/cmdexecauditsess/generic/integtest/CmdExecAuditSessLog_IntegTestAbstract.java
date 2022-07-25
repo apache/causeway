@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.assertj.core.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,6 @@ import org.apache.isis.applib.mixins.system.DomainChangeRecord;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -48,8 +46,6 @@ import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 import org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 import org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
-import org.apache.isis.extensions.sessionlog.applib.dom.SessionLogEntry;
-import org.apache.isis.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
 import org.apache.isis.regressiontests.cmdexecauditsess.generic.integtest.model.Counter;
 import org.apache.isis.regressiontests.cmdexecauditsess.generic.integtest.model.CounterRepository;
 import org.apache.isis.regressiontests.cmdexecauditsess.generic.integtest.model.Counter_bumpUsingMixin;
