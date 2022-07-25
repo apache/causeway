@@ -59,7 +59,7 @@ public class SitemapServiceMenu {
     }
 
     @Action(
-            domainEvent = downloadSitemap.ActionEvent.class,
+            domainEvent = downloadSitemap.ActionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -69,7 +69,7 @@ public class SitemapServiceMenu {
             sequence="500.450.1")
     public class downloadSitemap{
 
-        public class ActionEvent extends ActionDomainEvent<downloadSitemap> {}
+        public class ActionDomainEvent extends SitemapServiceMenu.ActionDomainEvent<downloadSitemap> {}
 
         @MemberSupport public Clob act(
                 @Parameter(optionality = Optionality.MANDATORY) final String title,

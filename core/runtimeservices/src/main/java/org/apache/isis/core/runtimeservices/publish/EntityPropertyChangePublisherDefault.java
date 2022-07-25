@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
 import org.apache.isis.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -46,7 +47,7 @@ import javax.inject.Named;
 import java.util.List;
 
 @Service
-@Named("isis.runtimeservices.EntityPropertyChangePublisherDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".EntityPropertyChangePublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -71,6 +72,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
     public void publishChangedProperties(
             final HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges) {
 
+        transactionService.flushTransaction();
         val payload = getPayload(hasEnlistedEntityPropertyChanges);
         val xrayHandle = _Xray.enterEntityPropertyChangePublishing(
                 iaTracker,

@@ -29,9 +29,10 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 
 @Component
-@Named("isis.metamodel.TaggerDefault")
+@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".TaggerDefault")
 public class TaggerDefault implements Tagger {
 
     static Pattern tagPatternForFqcn = Pattern.compile("^.*\\.([^\\.]+)\\.([^\\.]+)$");

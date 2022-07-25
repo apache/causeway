@@ -25,11 +25,12 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.valuesemantics.InteractionDtoValueSemantics;
+import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
 
 import lombok.NonNull;
 
 @Component
-@Named("isis.val.InteractionDtoValueSemanticsPrettyRender")
+@Named(IsisModuleValAsciidocApplib.NAMESPACE + ".InteractionDtoValueSemanticsPrettyRender")
 @Order(PriorityPrecedence.EARLY)
 public class InteractionDtoValueSemanticsPrettyRender
 extends InteractionDtoValueSemantics {

@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.val;
 
@@ -54,7 +55,7 @@ import lombok.val;
  * This service enables a serializable 'bookmark' to be created for an entity.
  */
 @Service
-@Named("isis.runtimeservices.BookmarkServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".BookmarkServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class BookmarkServiceDefault implements BookmarkService, SerializingAdapter {

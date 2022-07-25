@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.value.Markup;
+import org.apache.isis.valuetypes.markdown.applib.IsisModuleValMarkdownApplib;
 import org.apache.isis.valuetypes.markdown.applib.jaxb.MarkdownJaxbAdapter;
 
 import lombok.AccessLevel;
@@ -38,7 +39,7 @@ import lombok.experimental.Accessors;
  *
  * @since 2.0 {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE + ".value.Markdown")
+@Named(IsisModuleValMarkdownApplib.NAMESPACE + ".Markdown")
 @org.apache.isis.applib.annotation.Value
 @EqualsAndHashCode
 @XmlJavaTypeAdapter(MarkdownJaxbAdapter.class)  // for JAXB view model support

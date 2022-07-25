@@ -23,6 +23,7 @@ import java.util.Optional;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
@@ -42,12 +43,13 @@ import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePu
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.NonNull;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.FactoryServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".FactoryServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class FactoryServiceDefault implements FactoryService {
@@ -56,7 +58,9 @@ public class FactoryServiceDefault implements FactoryService {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private ServiceInjector serviceInjector;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
-    @Inject private ObjectLifecyclePublisher objectLifecyclePublisher;
+    @Inject private Provider<ObjectLifecyclePublisher> objectLifecyclePublisherProvider;
+    private ObjectLifecyclePublisher objectLifecyclePublisher() { return objectLifecyclePublisherProvider.get(); }
+
 
     @Override
     public <T> T getOrCreate(final @NonNull Class<T> requiredType) {
@@ -92,7 +96,7 @@ public class FactoryServiceDefault implements FactoryService {
                     entityClass);
         }
         serviceInjector.injectServicesInto(entityPojo);
-        objectLifecyclePublisher.onPostCreate(ManagedObject.of(spec, entityPojo));
+        objectLifecyclePublisher().onPostCreate(ManagedObject.of(spec, entityPojo));
         return entityPojo;
     }
 
@@ -121,7 +125,7 @@ public class FactoryServiceDefault implements FactoryService {
                     viewModelClass);
         }
         serviceInjector.injectServicesInto(viewModelPojo);
-        objectLifecyclePublisher.onPostCreate(ManagedObject.of(spec, viewModelPojo));
+        objectLifecyclePublisher().onPostCreate(ManagedObject.of(spec, viewModelPojo));
         return viewModelPojo;
     }
 
@@ -134,7 +138,7 @@ public class FactoryServiceDefault implements FactoryService {
         }
         val viewModelFacet = getViewModelFacet(spec);
         val viewModel = viewModelFacet.instantiate(spec, Optional.ofNullable(bookmark));
-        objectLifecyclePublisher.onPostCreate(viewModel);
+        objectLifecyclePublisher().onPostCreate(viewModel);
         return _Casts.uncheckedCast(viewModel.getPojo());
     }
 

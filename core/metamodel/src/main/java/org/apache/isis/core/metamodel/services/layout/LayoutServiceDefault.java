@@ -38,6 +38,7 @@ import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.util.ZipWriter;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -46,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.metamodel.LayoutServiceDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".LayoutServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

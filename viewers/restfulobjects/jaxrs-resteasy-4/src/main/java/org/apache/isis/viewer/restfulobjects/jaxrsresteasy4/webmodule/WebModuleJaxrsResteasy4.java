@@ -36,6 +36,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
+import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.IsisRestfulObjectsInteractionFilter;
 import org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth;
 
@@ -55,7 +56,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isis.viewer.ro.WebModuleJaxrsRestEasy4") // CAUTION: SwaggerServiceMenu refers to this name
+@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleJaxrsRestEasy4") // CAUTION: SwaggerServiceMenu refers to this name
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {

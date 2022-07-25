@@ -55,12 +55,12 @@ public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
         if(Blob.class.equals(typeOf)
                 || Clob.class.equals(typeOf)) {
 
-            val isExplicetlyAllowed = policyFacetIfAny
+            val isExplictlyAllowed = policyFacetIfAny
                     .map(EntityPropertyChangePublishingPolicyFacet::isPublishingAllowed)
                     .orElse(false);
 
             //XXX ISIS-1488, exclude Bob/Clob from property change publishing unless explicitly allowed
-            return !isExplicetlyAllowed;
+            return !isExplictlyAllowed;
         }
 
         return policyFacetIfAny

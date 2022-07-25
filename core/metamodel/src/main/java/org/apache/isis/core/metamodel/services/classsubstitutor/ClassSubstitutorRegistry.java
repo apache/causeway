@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.functions._Predicates;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 
 import lombok.val;
@@ -39,7 +40,7 @@ import lombok.extern.log4j.Log4j2;
  * Aggregates all {@link ClassSubstitutor}s.
  */
 @Component
-@Named("isis.metamodel.ClassSubstitutorRegistry")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorRegistry")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Log4j2
 public class ClassSubstitutorRegistry {

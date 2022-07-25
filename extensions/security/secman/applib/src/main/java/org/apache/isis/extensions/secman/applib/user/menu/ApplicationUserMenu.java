@@ -69,7 +69,7 @@ public class ApplicationUserMenu {
     // -- USER MANAGER
 
     @Action(
-            domainEvent = userManager.ActionEvent.class,
+            domainEvent = userManager.ActionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
     )
     @ActionLayout(
@@ -78,7 +78,7 @@ public class ApplicationUserMenu {
     )
     public class userManager{
 
-        public class ActionEvent extends ActionDomainEvent<userManager> { }
+        public class ActionDomainEvent extends ApplicationUserMenu.ActionDomainEvent<userManager> { }
 
         @MemberSupport public ApplicationUserManager act(){
             return factory.viewModel(new ApplicationUserManager());
@@ -89,14 +89,13 @@ public class ApplicationUserMenu {
     // -- FIND USERS
 
     @Action(
-            domainEvent = findUsers.ActionEvent.class,
+            domainEvent = findUsers.ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(sequence = "100.10.2")
     public class findUsers{
 
-        public class ActionEvent
-                extends ActionDomainEvent<findUsers> { }
+        public class ActionDomainEvent extends ApplicationUserMenu.ActionDomainEvent<findUsers> { }
 
         @MemberSupport public Collection<? extends ApplicationUser> act(
                 final @ParameterLayout(named = "Search") String search) {

@@ -84,15 +84,6 @@ public final class _Strings {
      */
     public static final String[] emptyArray = new String[0];
 
-    public static String trimmed(final String str, final int lengthOfField) {
-        if (str == null) {
-            return null;
-        }
-        if (str.length() > lengthOfField) {
-            return str.substring(0, lengthOfField - 3) + "...";
-        }
-        return str;
-    }
 
     // -- PAIR OF STRINGS
 
@@ -840,5 +831,27 @@ public final class _Strings {
                 StringBuilder::append,
                 StringBuilder::toString);
     }
+
+    // -- TRUNCATION
+
+    public static String trimmed(final String str, final int lengthOfField) {
+        if (str == null) {
+            return null;
+        }
+        if (str.length() > lengthOfField) {
+            return str.substring(0, lengthOfField - 3) + "...";
+        }
+        return str;
+    }
+
+    /**
+     * for example, so that a DB type converter can return null if the string wouldn't fit into a target column.
+     */
+    public static String nullIfExceeds(String str, int maxLength) {
+        return str == null || str.length() > maxLength
+                    ? null
+                    : str;
+    }
+
 
 }

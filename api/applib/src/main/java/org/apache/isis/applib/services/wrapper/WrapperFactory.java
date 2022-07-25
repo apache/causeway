@@ -124,11 +124,33 @@ public interface WrapperFactory {
                     SyncControl syncControl);
 
     /**
+     * Provides the wrapper for a {@link Mixin typesafe} {@link FactoryService#mixin(Class, Object) mixin}, against which to invoke the action.
+     *
+     * <p>
+     *     The provided {@link SyncControl} determines whether business rules are checked first, and conversely
+     *     whether the action is executed.  See {@link #wrap(Object, SyncControl)} for more details on this.
+     * </p>
+     */
+    default <T extends Mixin<MIXEE>, MIXEE> T wrapMixinT(Class<T> mixinClass, MIXEE mixee,
+                    SyncControl syncControl) {
+        return wrapMixin(mixinClass, mixee, syncControl);
+    }
+
+    /**
      * A convenience overload for {@link #wrapMixin(Class, Object, SyncControl)},
      * returning a wrapper to invoke the action synchronously, enforcing business rules.
      * Any exceptions will be propagated, not swallowed.
      */
     <T> T wrapMixin(Class<T> mixinClass, Object mixee);
+
+    /**
+     * A convenience overload for {@link #wrapMixinT(Class, Object, SyncControl)},
+     * returning a wrapper to invoke the action synchronously, enforcing business rules.
+     * Any exceptions will be propagated, not swallowed.
+     */
+    default <T extends Mixin<MIXEE>, MIXEE> T wrapMixinT(Class<T> mixinClass, MIXEE mixee) {
+        return wrapMixin(mixinClass, mixee);
+    }
 
     /**
      * Obtains the underlying domain object, if wrapped.
@@ -183,6 +205,24 @@ public interface WrapperFactory {
     <T,R> T asyncWrapMixin(
                    Class<T> mixinClass, Object mixee,
                    AsyncControl<R> asyncControl);
+
+
+    /**
+     * Returns a proxy object for the provided {@code mixinClass},
+     * through which can execute the action asynchronously (in another thread).
+     *
+     * @param <T>
+     * @param mixinClass
+     * @param mixee
+     * @param asyncControl
+     *
+     * @since 2.0
+     */
+    default <T extends MIXEE,MIXEE, R> T asyncWrapMixinT(
+                   Class<T> mixinClass, MIXEE mixee,
+                   AsyncControl<R> asyncControl) {
+        return asyncWrapMixin(mixinClass, mixee, asyncControl);
+    }
 
 
 

@@ -25,6 +25,7 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -79,6 +80,7 @@ public interface ObjectLifecyclePublisher {
                 return entity
                 .getSpecification()
                 .streamProperties(MixedIn.EXCLUDED)
+                .filter(property->EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
                 .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
                 .map(property->
                         PropertyChangeRecord
@@ -115,6 +117,7 @@ public interface ObjectLifecyclePublisher {
                 return entity
                 .getSpecification()
                 .streamProperties(MixedIn.EXCLUDED)
+                .filter(property->EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
                 .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
                 .map(property->
                         PropertyChangeRecord

@@ -34,6 +34,8 @@ import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
+import javax.jdo.annotations.Version;
+import javax.jdo.annotations.VersionStrategy;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -70,8 +72,8 @@ import lombok.Setter;
 })
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
-@DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @Named(ApplicationRole.LOGICAL_TYPE_NAME)
 @DomainObject(

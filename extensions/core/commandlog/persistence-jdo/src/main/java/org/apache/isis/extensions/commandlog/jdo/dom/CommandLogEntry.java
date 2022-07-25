@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
@@ -59,23 +60,6 @@ import lombok.Setter;
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE interactionId == :interactionId "),
-    @Query(
-            name  = Nq.FIND_BY_PARENT,
-            value = "SELECT "
-                  + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE parent == :parent "),
-    @Query(
-            name  = Nq.FIND_CURRENT,
-            value = "SELECT "
-                  + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE completedAt == null "
-                  + " ORDER BY this.timestamp DESC"),
-    @Query(
-            name  = Nq.FIND_COMPLETED,
-            value = "SELECT "
-                  + "  FROM " + CommandLogEntry.FQCN + " "
-                  + " WHERE completedAt != null "
-                  + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND_RECENT_BY_TARGET,
             value = "SELECT "
@@ -110,7 +94,7 @@ import lombok.Setter;
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "
                   + " WHERE target == :target "
-                  + " ORDER BY this.timestamp DESC"),
+                  + " ORDER BY timestamp DESC"),
     @Query(
             name  = Nq.FIND_BY_TIMESTAMP_BETWEEN,
             value = "SELECT "
@@ -142,6 +126,23 @@ import lombok.Setter;
                   + " WHERE username == :username "
                   + " ORDER BY this.timestamp DESC "
                   + " RANGE 0,30"),
+    @Query(
+            name  = Nq.FIND_BY_PARENT,
+            value = "SELECT "
+                    + "  FROM " + CommandLogEntry.FQCN + " "
+                    + " WHERE parent == :parent "),
+    @Query(
+            name  = Nq.FIND_CURRENT,
+            value = "SELECT "
+                    + "  FROM " + CommandLogEntry.FQCN + " "
+                    + " WHERE completedAt == null "
+                    + " ORDER BY this.timestamp DESC"),
+    @Query(
+            name  = Nq.FIND_COMPLETED,
+            value = "SELECT "
+                    + "  FROM " + CommandLogEntry.FQCN + " "
+                    + " WHERE completedAt != null "
+                    + " ORDER BY this.timestamp DESC"),
     @Query(
             name  = Nq.FIND_FIRST,
             value = "SELECT "
@@ -195,7 +196,8 @@ import lombok.Setter;
 })
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
-        editing = Editing.DISABLED
+        editing = Editing.DISABLED,
+        entityChangePublishing = Publishing.DISABLED
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor

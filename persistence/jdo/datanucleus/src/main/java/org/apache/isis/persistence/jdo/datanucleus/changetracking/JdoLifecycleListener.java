@@ -126,6 +126,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         if(pojo.dnGetStateManager().isNew(pojo)) {
 
             getEntityChangeTracker().enlistCreated(entity);
+
         } else {
             // the callback and transaction.enlist are done in the preStore callback
             // (can't be done here, as the enlist requires to capture the 'before' values)

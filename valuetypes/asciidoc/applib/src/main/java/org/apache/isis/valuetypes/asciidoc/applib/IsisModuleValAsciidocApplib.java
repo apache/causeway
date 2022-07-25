@@ -25,4 +25,5 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class IsisModuleValAsciidocApplib {
+    public static final String NAMESPACE = "isis.value.asciidoc";
 }

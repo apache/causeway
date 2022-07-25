@@ -32,13 +32,14 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.locale.LocaleChoiceProvider;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named("isis.runtimeservices.LocaleChoiceProviderDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".LocaleChoiceProviderDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

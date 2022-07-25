@@ -38,7 +38,7 @@
                         <cpt:action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
                         <cpt:action id="recentCommands" position="PANEL_DROPDOWN"/>
                         <cpt:action id="recentExecutions" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="recentAuditEntries" position="PANEL_DROPDOWN"/>
+                        <cpt:action id="recentAuditTrailEntries" position="PANEL_DROPDOWN"/>
                         <cpt:action id="openRestApi" position="PANEL_DROPDOWN"/>
                         <cpt:property id="interactionId"/>
                         <cpt:property id="sequence"/>
@@ -60,9 +60,6 @@
                         <cpt:property id="duration"/>
                     </cpt:fieldSet>
                     <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-                    <cpt:fieldSet name="Related Command">
-                        <cpt:property id="commandLogEntry"/>
-                    </cpt:fieldSet>
                 </bs3:col>
             </bs3:row>
         </bs3:col>
@@ -75,6 +72,15 @@
     <bs3:row>
         <bs3:col span="12">
             <bs3:tabGroup>
+                <bs3:tab name="Related Command">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Related Command">
+                                <cpt:property id="commandLogEntry"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
                 <bs3:tab name="Related Execution Log Entries">
                     <bs3:row>
                         <bs3:col span="12">

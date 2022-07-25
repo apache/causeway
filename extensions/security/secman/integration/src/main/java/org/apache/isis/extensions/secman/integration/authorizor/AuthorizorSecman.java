@@ -38,6 +38,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.security.authorization.Authorizor;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
@@ -50,7 +51,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.secman.AuthorizorSecman")
+@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".AuthorizorSecman")
 @javax.annotation.Priority(PriorityPrecedence.EARLY - 10)
 @Qualifier("Secman")
 public class AuthorizorSecman implements Authorizor {
@@ -90,7 +91,7 @@ public class AuthorizorSecman implements Authorizor {
     }
 
     @Component
-    @Named("isis.ext.secman.AuthorizorSecman.PermissionCache")
+    @Named(IsisModuleExtSecmanApplib.NAMESPACE + ".AuthorizorSecman.PermissionCache")
     @InteractionScope
     static class PermissionCache implements DisposableBean {
 

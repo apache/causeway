@@ -32,8 +32,8 @@
     <description></description>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.realm.shiro</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/isis/extensions/secman/realm/shiro</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.shiro.realm</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/isis/extensions/secman/shiro-realm</git-plugin.propertiesDir>
 
     </properties>
 

@@ -70,7 +70,7 @@ public class ApplicationRoleMenu {
     // -- ROLE MANAGER
 
     @Action(
-            domainEvent = roleManager.ActionEvent.class,
+            domainEvent = roleManager.ActionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT
     )
     @ActionLayout(
@@ -79,7 +79,7 @@ public class ApplicationRoleMenu {
     )
     public class roleManager{
 
-        public class ActionEvent extends ActionDomainEvent<roleManager> { }
+        public class ActionDomainEvent extends ApplicationRoleMenu.ActionDomainEvent<roleManager> { }
 
         @MemberSupport public ApplicationRoleManager act(){
             return factory.viewModel(new ApplicationRoleManager());
@@ -90,13 +90,13 @@ public class ApplicationRoleMenu {
     // -- FIND ROLES
 
     @Action(
-            domainEvent = findRoles.ActionEvent.class,
+            domainEvent = findRoles.ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(sequence = "100.20.2")
     public class findRoles {
 
-        public class ActionEvent extends ActionDomainEvent<findRoles> {}
+        public class ActionDomainEvent extends ApplicationRoleMenu.ActionDomainEvent<findRoles> {}
 
         @MemberSupport public Collection<? extends ApplicationRole> act(
                 @Parameter(maxLength = ApplicationRole.Name.MAX_LENGTH)

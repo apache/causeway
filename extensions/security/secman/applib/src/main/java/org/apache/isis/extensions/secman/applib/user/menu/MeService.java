@@ -77,7 +77,7 @@ public class MeService {
 
 
     @Action(
-            domainEvent = me.ActionEvent.class,
+            domainEvent = me.ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
@@ -88,7 +88,7 @@ public class MeService {
             )
     public class me{
 
-        public class ActionEvent extends ActionDomainEvent<me> {}
+        public class ActionDomainEvent extends MeService.ActionDomainEvent<me> {}
 
         @MemberSupport public ApplicationUser act() {
             return queryResultsCacheProvider.get().execute(
@@ -113,8 +113,8 @@ public class MeService {
 
         final IsisConfiguration isisConfiguration;
 
-        @EventListener(UserMenu.me.ActionEvent.class)
-        public void on(final UserMenu.me.ActionEvent event) {
+        @EventListener(UserMenu.me.ActionDomainEvent.class)
+        public void on(final UserMenu.me.ActionDomainEvent event) {
             switch (isisConfiguration.getExtensions().getSecman().getUserMenuMeActionPolicy()) {
                 case HIDE:
                     event.hide();

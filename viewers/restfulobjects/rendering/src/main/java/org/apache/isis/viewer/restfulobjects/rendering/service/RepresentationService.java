@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
@@ -63,7 +64,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.viewer.ro.RepresentationService")
+@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".RepresentationService")
 @Priority(PriorityPrecedence.EARLY)
 @Log4j2
 public class RepresentationService {

@@ -64,13 +64,13 @@ public class ApplicationPermissionMenu {
 
 
     @Action(
-            domainEvent= findOrphanedPermissions.ActionEvent.class,
+            domainEvent= findOrphanedPermissions.ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(sequence = "100.50.1")
     public class findOrphanedPermissions{
 
-        public class ActionEvent extends ActionDomainEvent<findOrphanedPermissions> {}
+        public class ActionDomainEvent extends ApplicationPermissionMenu.ActionDomainEvent<findOrphanedPermissions> {}
 
         @MemberSupport public ApplicationOrphanedPermissionManager act() {
             return factoryService.viewModel(new ApplicationOrphanedPermissionManager());
@@ -80,14 +80,14 @@ public class ApplicationPermissionMenu {
 
 
     @Action(
-            domainEvent= allPermissions.ActionEvent.class,
+            domainEvent= allPermissions.ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(sequence = "100.50.2")
     public class allPermissions {
 
-        public class ActionEvent extends ActionDomainEvent<allPermissions> {}
+        public class ActionDomainEvent extends ApplicationPermissionMenu.ActionDomainEvent<allPermissions> {}
 
         @MemberSupport public Collection<? extends ApplicationPermission> act() {
             return applicationPermissionRepository.allPermissions();

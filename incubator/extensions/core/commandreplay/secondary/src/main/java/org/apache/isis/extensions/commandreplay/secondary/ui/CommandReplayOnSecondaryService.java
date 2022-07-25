@@ -68,7 +68,7 @@ public class CommandReplayOnSecondaryService {
     @ActionLayout(cssClassFa = "fa-bath", sequence="60.1")
     public class findMostRecentReplayed{
 
-        public class ActionEvent extends ActionDomainEvent<findMostRecentReplayed> { }
+        public class ActionDomainEvent extends CommandReplayOnSecondaryService.ActionDomainEvent<findMostRecentReplayed> { }
 
         @MemberSupport public CommandLogEntry act() {
             return commandLogEntryRepository.findMostRecentReplayed().orElse(null);
@@ -83,7 +83,7 @@ public class CommandReplayOnSecondaryService {
     @ActionLayout(cssClassFa = "fa-upload", sequence="60.2")
     public class uploadCommands{
 
-        public class ActionEvent extends ActionDomainEvent<uploadCommands> { }
+        public class ActionDomainEvent extends CommandReplayOnSecondaryService.ActionDomainEvent<uploadCommands> { }
 
         @MemberSupport public void act(final Clob commandsDtoAsXml) {
             val chars = commandsDtoAsXml.getChars();

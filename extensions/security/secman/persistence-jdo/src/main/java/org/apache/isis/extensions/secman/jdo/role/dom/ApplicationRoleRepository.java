@@ -22,10 +22,11 @@ import javax.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepositoryAbstract;
 
 @Repository
-@Named("isis.ext.secman.ApplicationRoleRepository")
+@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleRepository")
 public class ApplicationRoleRepository
 extends ApplicationRoleRepositoryAbstract<ApplicationRole> {
 

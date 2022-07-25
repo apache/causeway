@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.config.IsisModuleCoreConfig;
 
 import lombok.Getter;
 import lombok.val;
@@ -42,7 +43,7 @@ import lombok.val;
  */
 @Service
 @Singleton
-@Named("isis.config.WebAppContextPath")
+@Named(IsisModuleCoreConfig.NAMESPACE + "..WebAppContextPath")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class WebAppContextPath implements Serializable {

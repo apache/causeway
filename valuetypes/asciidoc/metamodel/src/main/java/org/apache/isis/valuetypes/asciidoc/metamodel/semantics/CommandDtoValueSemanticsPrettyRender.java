@@ -25,11 +25,12 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.valuesemantics.CommandDtoValueSemantics;
+import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
 
 import lombok.NonNull;
 
 @Component
-@Named("isis.val.CommandDtoValueSemanticsPrettyRender")
+@Named(IsisModuleValAsciidocApplib.NAMESPACE + ".CommandDtoValueSemanticsPrettyRender")
 @Order(PriorityPrecedence.EARLY)
 public class CommandDtoValueSemanticsPrettyRender
 extends CommandDtoValueSemantics {

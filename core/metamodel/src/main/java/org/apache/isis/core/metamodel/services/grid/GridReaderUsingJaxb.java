@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,7 +45,7 @@ import lombok.RequiredArgsConstructor;
  *
  */
 @Service
-@Named("isis.metamodel.GridReaderUsingJaxb")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".GridReaderUsingJaxb")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

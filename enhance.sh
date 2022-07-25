@@ -20,9 +20,8 @@
 #
 
 usage() {
-  #echo "$(basename $0): [-a] [-c] [-e] [-o] [-m] [-s] [-d] [-t]"              >&2
-  echo "$(basename $0): [-c] [-e] [-o] [-m] [-s] [-d] [-t]"                   >&2
-  #echo "  -a : audit trail (extensions/security)"                             >&2
+  echo "$(basename $0): [-a] [-c] [-e] [-o] [-m] [-s] [-d] [-t] [-u]"         >&2
+  echo "  -a : audit trail (extensions/security)"                             >&2
   echo "  -c : command log (extensions/core)"                                 >&2
   echo "  -e : execution log (extensions/core)"                               >&2
   echo "  -o : execution outbox (extensions/core)"                            >&2
@@ -30,6 +29,7 @@ usage() {
   echo "  -s : session log (extensions/security)"                             >&2
   echo "  -d : demo (examples/demo/domain)"                                   >&2
   echo "  -t : JDO regression tests (regressiontests/stable-persistence-jdo)" >&2
+  echo "  -u : JDO regression tests (regressiontests/stable-cmdexecauditsess)" >&2
 }
 
 
@@ -40,22 +40,23 @@ DEMO=""
 EXECUTIONLOG=""
 EXECUTIONOUTBOX=""
 REGRESSIONTESTS=""
+REGRESSIONTESTS2=""
 SECMAN=""
 SESSIONLOG=""
 
 PATHS=()
+ALL_IF_REQUIRED=""
 
-#while getopts ":acdeomsht" arg; do
-while getopts ":cdeomsht" arg; do
+while getopts ":acdeomshtu" arg; do
   case $arg in
     h)
       usage
       exit 0
       ;;
-#    a)
-#      AUDITTRAIL="enhance"
-#      PATHS+=( "extensions/security/audittrail/persistence-jdo" )
-#      ;;
+    a)
+      AUDITTRAIL="enhance"
+      PATHS+=( "extensions/security/audittrail/persistence-jdo" )
+      ;;
     c)
       COMMANDLOG="enhance"
       PATHS+=( "extensions/core/commandlog/persistence-jdo" )
@@ -83,6 +84,12 @@ while getopts ":cdeomsht" arg; do
     t)
       REGRESSIONTESTS="enhance"
       PATHS+=( "regressiontests/stable-persistence-jdo" )
+      ALL_IF_REQUIRED="-Dmodule-all"
+      ;;
+    u)
+      REGRESSIONTESTS2="enhance"
+      PATHS+=( "regressiontests/stable-cmdexecauditsess/persistence-jdo" )
+      ALL_IF_REQUIRED="-Dmodule-all"
       ;;
     *)
       usage
@@ -92,23 +99,21 @@ done
 
 shift $((OPTIND-1))
 
-
-echo "AUDITTRAIL      : $AUDITTRAIL"
-echo "COMMANDLOG      : $COMMANDLOG"
-echo "EXECUTIONLOG    : $EXECUTIONLOG"
-echo "EXECUTIONOUTBOX : $EXECUTIONOUTBOX"
-echo "SECMAN          : $SECMAN"
-echo "SESSIONLOG      : $SESSIONLOG"
-echo "DEMO            : $DEMO"
-echo "REGRESSIONTESTS : $REGRESSIONTESTS"
+echo "AUDITTRAIL       : $AUDITTRAIL"
+echo "COMMANDLOG       : $COMMANDLOG"
+echo "EXECUTIONLOG     : $EXECUTIONLOG"
+echo "EXECUTIONOUTBOX  : $EXECUTIONOUTBOX"
+echo "SECMAN           : $SECMAN"
+echo "SESSIONLOG       : $SESSIONLOG"
+echo "DEMO             : $DEMO"
+echo "REGRESSIONTESTS  : $REGRESSIONTESTS"
+echo "REGRESSIONTESTS2 : $REGRESSIONTESTS2"
 
 
 printf -v PATHS_SPLATTED '%s,' "${PATHS[@]}"
 PL_ARG=$(echo "${PATHS_SPLATTED%,}")
 
-if [ "$REGRESSIONTESTS" = "enhance" ]; then
-  PL_ARG="$PL_ARG -Dmodule-all"
-fi
+PL_ARG="$PL_ARG $ALL_IF_REQUIRED"
 
 if [ "$PL_ARG" = " " ]; then
   usage

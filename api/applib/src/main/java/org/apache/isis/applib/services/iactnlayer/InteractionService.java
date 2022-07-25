@@ -182,5 +182,34 @@ public interface InteractionService extends InteractionLayerTracker {
         return callAnonymousAndCatch(ThrowingRunnable.toCallable(runnable));
     }
 
+    /**
+     * Primarily for testing, closes the current interaction and opens a new one.
+     *
+     * <p>
+     *     In tests, this is a good way to simulate multiple interactions within a scenario.  If you use the popular
+     *     given/when/then structure, consider using at the end of each "given" or "when" block.
+     * </p>
+     *
+     * @see #closeInteractionLayers()
+     * @see #openInteraction()
+     * @see #nextInteraction(InteractionContext)
+     */
+    default InteractionLayer nextInteraction() {
+        closeInteractionLayers();
+        return openInteraction();
+    }
+
+    /**
+     * Primarily for testing, closes the current interaction and opens a new one with the specified
+     * {@link InteractionContext}.
+     *
+     * @see #closeInteractionLayers()
+     * @see #openInteraction(InteractionContext)
+     * @see #nextInteraction()
+     */
+    default InteractionLayer nextInteraction(final InteractionContext interactionContext) {
+        closeInteractionLayers();
+        return openInteraction(interactionContext);
+    }
 
 }

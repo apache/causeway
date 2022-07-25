@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 /**
  *
@@ -47,7 +48,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isis.metamodel.ObjectManagerDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ObjectManagerDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("DEFAULT")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

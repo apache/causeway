@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 /**
  *
@@ -33,7 +34,7 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
  *
  */
 @Configuration
-@Named("isis.metamodel.MetaModelContexts")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".MetaModelContexts")
 public class MetaModelContexts {
 
     @Bean @Singleton @Primary

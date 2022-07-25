@@ -22,6 +22,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.HasTarget;
+import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * @since 2.0 {@index}
@@ -31,10 +33,12 @@ public class IsisBookmarkConverter implements AttributeConverter<Bookmark, Strin
 
     private static final long serialVersionUID = 1L;
 
+    static final int MAX_LENGTH = HasTarget.Target.MAX_LENGTH;
+
     @Override
     public String convertToDatabaseColumn(Bookmark bookmark) {
         return bookmark != null
-                ? bookmark.toString()
+                ? _Strings.nullIfExceeds(bookmark.toString(), MAX_LENGTH)
                         : null;
     }
 

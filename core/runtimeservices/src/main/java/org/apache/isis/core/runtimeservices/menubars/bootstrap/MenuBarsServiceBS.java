@@ -74,13 +74,14 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.runtimeservices.MenuBarsServiceBS")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsServiceBS")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("BS")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

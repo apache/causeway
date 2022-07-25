@@ -123,7 +123,11 @@ implements
     private final Provider<InteractionProvider> interactionProviderProvider;
 
     @Inject
-    public EntityChangeTrackerJdo(final EntityPropertyChangePublisher entityPropertyChangePublisher, final EntityChangesPublisher entityChangesPublisher, final EventBusService eventBusService, final Provider<InteractionProvider> interactionProviderProvider) {
+    public EntityChangeTrackerJdo(
+            final EntityPropertyChangePublisher entityPropertyChangePublisher,
+            final EntityChangesPublisher entityChangesPublisher,
+            final EventBusService eventBusService,
+            final Provider<InteractionProvider> interactionProviderProvider) {
         super(eventBusService);
         this.entityPropertyChangePublisher = entityPropertyChangePublisher;
         this.entityChangesPublisher = entityChangesPublisher;
@@ -171,6 +175,10 @@ implements
 
     private boolean isEntityEnabledForChangePublishing(final @NonNull ManagedObject adapter) {
 
+        if(!EntityChangePublishingFacet.isPublishingEnabled(adapter.getSpecification())) {
+            return false; // ignore entities that are not enabled for entity change publishing
+        }
+
         if(entityPropertyChangeRecordsForPublishing.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
@@ -178,10 +186,6 @@ implements
 
         entityChangeEventCount.increment();
         enableCommandPublishing();
-
-        if(!EntityChangePublishingFacet.isPublishingEnabled(adapter.getSpecification())) {
-            return false; // ignore entities that are not enabled for entity change publishing
-        }
 
         return true;
     }
@@ -238,8 +242,7 @@ implements
             final TransactionId txId) {
 
         return snapshotPropertyChangeRecords().stream()
-                .map(propertyChangeRecord->_EntityPropertyChangeFactory
-                        .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord))
+                .map(propertyChangeRecord -> propertyChangeRecord.toEntityPropertyChange(timestamp, userName, txId))
                 .collect(Can.toCan());
     }
 

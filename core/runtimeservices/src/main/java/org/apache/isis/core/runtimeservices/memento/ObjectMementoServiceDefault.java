@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -59,7 +60,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isis.runtimeservices.ObjectMementoServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ObjectMementoServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ObjectMementoServiceDefault implements ObjectMementoService {

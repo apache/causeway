@@ -26,34 +26,33 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import lombok.Value;
 
 /**
- * Immutable data record for {@link EntityPropertyChangeSubscriber}s. 
- * 
+ * Immutable data record for {@link EntityPropertyChangeSubscriber}s.
+ *
  * @since 2.0 {@index}
  */
 @Value(staticConstructor = "of")
 public class EntityPropertyChange {
 
-    private final UUID interactionId; 
+    private final UUID interactionId;
     private final int sequence;
-    private final String targetClassName;
-    private final Bookmark target;                           
-    private final String memberIdentifier;
-    private final String propertyName;                             
-    private final String preValue; 
-    private final String postValue;          
-    private final String user; 
-    private final Timestamp timestamp;    
-    
+    private final Bookmark target;
+    private final String logicalMemberIdentifier;
+    private final String propertyId;
+    private final String preValue;
+    private final String postValue;
+    private final String username;
+    private final Timestamp timestamp;
+
     @Override
     public String toString() {
         return String.format("%s,%d: %s by %s, %s: %s -> %s",
-        getInteractionId(), 
-        getSequence(), 
-        getTarget().toString(), 
-        getUser(), 
-        getPropertyName(), 
-        getPreValue(), 
+        getInteractionId(),
+        getSequence(),
+        getTarget().toString(),
+        getUsername(),
+        getPropertyId(),
+        getPreValue(),
         getPostValue());
     }
-    
+
 }
