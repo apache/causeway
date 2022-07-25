@@ -27,7 +27,8 @@
         <dependency>
             <groupId>org.apache.isis.regressiontests</groupId>
             <artifactId>isis-regressiontests-cmdexecauditsess-generic</artifactId>
-            <type>test-jar</type>
+            <scope>test</scope>
+
         </dependency>
 
         <dependency>
