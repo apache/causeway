@@ -76,7 +76,7 @@ public class CommandReplayOnPrimaryService {
     extends IsisModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
 
-    @Action(domainEvent = findCommands.ActionEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(domainEvent = findCommands.ActionDomainEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-search", sequence="40")
     public class findCommands{
 
@@ -106,7 +106,7 @@ public class CommandReplayOnPrimaryService {
 
     }
 
-    @Action(domainEvent = downloadCommands.ActionEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(domainEvent = downloadCommands.ActionDomainEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-download", sequence="50")
     public class downloadCommands {
 
@@ -150,7 +150,7 @@ public class CommandReplayOnPrimaryService {
 
 
 
-    @Action(domainEvent = downloadCommandById.ActionEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(domainEvent = downloadCommandById.ActionDomainEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-download", sequence="50")
     public class downloadCommandById {
 

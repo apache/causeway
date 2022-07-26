@@ -64,7 +64,7 @@ public class CommandReplayOnSecondaryService {
 
     public static abstract class ActionDomainEvent<T> extends IsisModuleExtCommandReplaySecondary.ActionDomainEvent<T> { }
 
-    @Action(domainEvent = findMostRecentReplayed.ActionEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(domainEvent = findMostRecentReplayed.ActionDomainEvent.class, semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-bath", sequence="60.1")
     public class findMostRecentReplayed{
 
@@ -77,7 +77,7 @@ public class CommandReplayOnSecondaryService {
 
 
     @Action(
-        domainEvent = uploadCommands.ActionEvent.class,
+        domainEvent = uploadCommands.ActionDomainEvent.class,
         semantics = SemanticsOf.NON_IDEMPOTENT
     )
     @ActionLayout(cssClassFa = "fa-upload", sequence="60.2")
