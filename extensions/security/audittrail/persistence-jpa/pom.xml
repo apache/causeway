@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-audittrail-persistence-jpa</artifactId>
-    <name>Apache Isis Ext - Session Log Persistence (using JPA)</name>
+    <name>Apache Isis Ext - Audit Trail Persistence (using JPA)</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.audittrail.persistence.jpa</jar-plugin.automaticModuleName>

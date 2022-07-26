@@ -28,7 +28,7 @@
     </parent>
 
     <artifactId>isis-extensions-audittrail-persistence-jdo</artifactId>
-    <name>Apache Isis Ext - Session Log Persistence (using JDO)</name>
+    <name>Apache Isis Ext - Audit Trail Persistence (using JDO)</name>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.audittrail.persistence.jdo</jar-plugin.automaticModuleName>
