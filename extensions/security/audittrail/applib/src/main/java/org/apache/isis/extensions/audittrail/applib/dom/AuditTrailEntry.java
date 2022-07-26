@@ -23,7 +23,6 @@ package org.apache.isis.extensions.audittrail.applib.dom;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import javax.inject.Named;
@@ -44,8 +43,9 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.isis.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Times;
+import org.apache.isis.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -96,7 +96,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
 
 
     @Programmatic
-    public void init(EntityPropertyChange change) {
+    public void init(final EntityPropertyChange change) {
         setTimestamp(change.getTimestamp());
         setUsername(change.getUsername());
         setTarget(change.getTarget());
@@ -108,13 +108,10 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         setInteractionId(change.getInteractionId());
     }
 
-
-    private static final DateTimeFormatter formatter =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     public String title() {
         val buf = new TitleBuffer();
-        buf.append(formatter.format(getTimestamp().toLocalDateTime()));
+        buf.append(_Times.DEFAULT_LOCAL_DATETIME_FORMATTER
+                .format(getTimestamp().toLocalDateTime()));
         buf.append(" ").append(getLogicalMemberIdentifier());
         return buf.toString();
     }
@@ -202,20 +199,14 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
 
 
     /**
-     * The 0-based sequence number of the transaction in which this audit entry was persisted.
-     *
-     * <p>
-     * The combination of (({@link #getInteractionId() interactionId}, {@link #getSequence() sequence}) makes up the unique transaction identifier.
-     * </p>
-     */
-    /**
      * The 0-based additional identifier of an execution event within the given {@link #getInteractionId() interaction}.
      *
      * <p>
      * The combination of ({@link #getInteractionId() interactionId}, {@link #getSequence() sequence}) makes up the
      * primary key.
      * </p>
-     */    @Property(
+     */
+    @Property(
             domainEvent = Sequence.DomainEvent.class
     )
     @HasInteractionIdAndSequence.Sequence
@@ -249,6 +240,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         String ALLOWS_NULL = DomainChangeRecord.LogicalMemberIdentifier.ALLOWS_NULL;
 
     }
+    @Override
     @LogicalMemberIdentifier
     public abstract String getLogicalMemberIdentifier();
     public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
@@ -271,6 +263,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         String ALLOWS_NULL = "false";
 
     }
+    @Override
     @PropertyId
     public abstract String getPropertyId();
     public abstract void setPropertyId(String propertyId);
@@ -294,6 +287,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         String ALLOWS_NULL = "true";
 
     }
+    @Override
     @PreValue
     public abstract String getPreValue();
     public abstract void setPreValue(String preValue);
@@ -316,6 +310,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         String ALLOWS_NULL = "true";
 
     }
+    @Override
     @PostValue
     public abstract String getPostValue();
     public abstract void setPostValue(String postValue);
@@ -335,6 +330,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         return contract.toString(AuditTrailEntry.this);
     }
 
+    @Override
     public int compareTo(final AuditTrailEntry other) {
         return contract.compare(this, other);
     }

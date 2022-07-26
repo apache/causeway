@@ -25,7 +25,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,6 +48,7 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.commons.internal.base._Times;
 import org.apache.isis.extensions.sessionlog.applib.IsisModuleExtSessionLogApplib;
 
 import lombok.experimental.UtilityClass;
@@ -114,13 +114,11 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         setLoginTimestamp(loginTimestamp);
     }
 
-    private static final DateTimeFormatter formatter =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     public String title() {
 
         return String.format("%s: %s logged %s %s",
-                formatter.format(getLoginTimestamp().toLocalDateTime()),
+                _Times.DEFAULT_LOCAL_DATETIME_FORMATTER
+                    .format(getLoginTimestamp().toLocalDateTime()),
                 getUsername(),
                 getLogoutTimestamp() == null ? "in": "out",
                 getCausedBy() == SessionSubscriber.CausedBy.SESSION_EXPIRATION ? "(session expired)" : "");
@@ -205,6 +203,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         boolean NULLABLE = HasUsername.Username.NULLABLE;
         String ALLOWS_NULL = HasUsername.Username.ALLOWS_NULL;
     }
+    @Override
     @Username
     public abstract String getUsername();
     public abstract void setUsername(String username);

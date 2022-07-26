@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.base;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
@@ -43,6 +44,20 @@ import lombok.experimental.UtilityClass;
 public final class _Times {
 
     /**
+     * The default date/time format (seconds resolution): {@code 'yyyy-MM-dd HH:mm:ss'}.
+     * As used for auditing, session-logging, etc.
+     */
+    public static final DateTimeFormatter DEFAULT_LOCAL_DATETIME_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    /**
+     * The default date/time format (milliseconds resolution): {@code 'yyyy-MM-dd HH:mm:ss.SSS'}.
+     * As used eg. for Xray.
+     */
+    public static final DateTimeFormatter DEFAULT_LOCAL_DATETIME_FORMATTER_WITH_MILLIS =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+
+    /**
      * Returns duration between {@code startedAt} and {@code completedAt} in <i>seconds</i>,
      * to 3 decimal places.
      * @implNote if {@code completedAt} is before {@code startedAt},
@@ -58,6 +73,8 @@ public final class _Times {
     }
 
     // -- HELPER
+
+
 
     private static BigDecimal millisToSeconds(final long millis) {
         return new BigDecimal(millis)
