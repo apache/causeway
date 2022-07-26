@@ -45,8 +45,6 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.collections._Multimaps;
-import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
@@ -85,7 +83,8 @@ implements ApplicationFeatureRepository, MetamodelListener {
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = _Maps.newTreeMap();
-    private final ListMultimap<String, ApplicationFeature> memberFeaturesByLogicalTypeName = _Multimaps.newListTreeMultimap();
+    // apparently not used
+    //private final ListMultimap<String, ApplicationFeature> memberFeaturesByLogicalTypeName = _Multimaps.newListTreeMultimap();
 
     private final IsisConfiguration configuration;
     private final SpecificationLoader specificationLoader;
@@ -136,8 +135,8 @@ implements ApplicationFeatureRepository, MetamodelListener {
         visitFeatureIdentifierByName(typeFeatures, featuresByName::put);
         visitFeatureIdentifierByName(memberFeatures, featuresByName::put);
         this.featureIdentifiersByName = Collections.unmodifiableMap(featuresByName);
-        memberFeatures.forEach((key, value) ->
-            memberFeaturesByLogicalTypeName.putElement(key.getLogicalTypeName(), value));
+//        memberFeatures.forEach((key, value) ->
+//            memberFeaturesByLogicalTypeName.putElement(key.getLogicalTypeName(), value));
     }
 
     private void visitFeatureIdentifierByName(

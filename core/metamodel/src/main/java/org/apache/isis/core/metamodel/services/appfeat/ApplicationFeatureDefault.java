@@ -25,7 +25,6 @@ import java.util.SortedSet;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;

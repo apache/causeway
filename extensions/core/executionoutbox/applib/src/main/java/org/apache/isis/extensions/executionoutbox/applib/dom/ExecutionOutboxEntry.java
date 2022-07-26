@@ -58,7 +58,7 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderForCollectionTyp
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.commons.internal.base._BigDecimals;
+import org.apache.isis.commons.internal.base._Times;
 import org.apache.isis.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
@@ -112,19 +112,19 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
 
     @UtilityClass
     protected static class Util {
-        public static String abbreviated(String str, int maxLength) {
+        public static String abbreviated(final String str, final int maxLength) {
             return str != null ? (str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...") : null;
         }
     }
 
     @Inject BookmarkService bookmarkService;
 
-    public ExecutionOutboxEntry(@NonNull Execution<? extends MemberExecutionDto,?> execution) {
+    public ExecutionOutboxEntry(@NonNull final Execution<? extends MemberExecutionDto,?> execution) {
         init(execution);
     }
 
     @Programmatic
-    public void init(Execution<? extends MemberExecutionDto, ?> execution) {
+    public void init(final Execution<? extends MemberExecutionDto, ?> execution) {
         val interactionId = execution.getInteraction().getInteractionId();
         setInteractionId(interactionId);
 
@@ -326,6 +326,7 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
         boolean NULLABLE = false;
         String ALLOWS_NULL = "false";
     }
+    @Override
     @LogicalMemberIdentifier
     public abstract String getLogicalMemberIdentifier();
     public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
@@ -410,7 +411,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
      */
     @Duration
     public BigDecimal getDuration() {
-        return _BigDecimals.durationBetween(getStartedAt(), getCompletedAt());
+        return _Times.secondsBetweenAsDecimal(getStartedAt(), getCompletedAt())
+                .orElse(null);
     }
 
 

@@ -18,23 +18,19 @@
  */
 package org.apache.isis.commons.internal.base;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
-import java.util.Base64;
-import java.util.function.UnaryOperator;
+import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 
 /**
  * <h1>- internal use only -</h1>
  * <p>
- * Provides BigDecimal related functions.
+ * Provides time related functions.
  * </p>
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
@@ -43,27 +39,29 @@ import lombok.NonNull;
  *
  * @since 2.0
  */
-public final class _BigDecimals {
-
-    private _BigDecimals(){}
+@UtilityClass
+public final class _Times {
 
     /**
-     * @return in seconds, to 3 decimal places.
+     * Returns duration between {@code startedAt} and {@code completedAt} in <i>seconds</i>,
+     * to 3 decimal places.
+     * @implNote if {@code completedAt} is before {@code startedAt},
+     * a negative value is returned.
      */
-    public static BigDecimal durationBetween(Timestamp startedAt, Timestamp completedAt) {
-        if (completedAt == null) {
-            return null;
-        } else {
-            long millis = completedAt.getTime() - startedAt.getTime();
-            return toSeconds(millis);
-        }
+    public Optional<BigDecimal> secondsBetweenAsDecimal(
+            final @Nullable Timestamp startedAt,
+            final @Nullable Timestamp completedAt) {
+        return startedAt!=null
+                && completedAt!=null
+                        ? Optional.of(millisToSeconds(completedAt.getTime() - startedAt.getTime()))
+                        : Optional.empty();
     }
 
-    private static final BigDecimal DIVISOR = new BigDecimal(1000);
+    // -- HELPER
 
-    private static BigDecimal toSeconds(long millis) {
+    private static BigDecimal millisToSeconds(final long millis) {
         return new BigDecimal(millis)
-                .divide(DIVISOR, RoundingMode.HALF_EVEN)
+                .movePointLeft(3)
                 .setScale(3, RoundingMode.HALF_EVEN);
     }
 

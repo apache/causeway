@@ -60,8 +60,8 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.functional.Try;
-import org.apache.isis.commons.internal.base._BigDecimals;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Times;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -136,7 +136,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
 
     @Programmatic
-    public void init(Command command) {
+    public void init(final Command command) {
 
         setInteractionId(command.getInteractionId());
         setUsername(command.getUsername());
@@ -338,6 +338,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         String ALLOWS_NULL = DomainChangeRecord.LogicalMemberIdentifier.ALLOWS_NULL;
 
     }
+    @Override
     @LogicalMemberIdentifier
     public abstract String getLogicalMemberIdentifier();
     public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
@@ -427,7 +428,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     @Digits(integer=5, fraction=3)
     @Duration
     public BigDecimal getDuration() {
-        return _BigDecimals.durationBetween(getStartedAt(), getCompletedAt());
+        return _Times.secondsBetweenAsDecimal(getStartedAt(), getCompletedAt())
+                .orElse(null);
     }
 
 
