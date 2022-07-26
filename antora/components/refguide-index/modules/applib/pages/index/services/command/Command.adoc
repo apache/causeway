@@ -58,7 +58,7 @@ Derived from _#getCommandDto()_ , holds a string representation of the invoked a
 
 The user that created the command.
 
-Derived from _#getCommandDto()_ 's _CommandDto#getUser()_
+Derived from _#getCommandDto()_ 's _CommandDto#getUsername()_ ()}
 
 [#getTimestamp_]
 === getTimestamp()

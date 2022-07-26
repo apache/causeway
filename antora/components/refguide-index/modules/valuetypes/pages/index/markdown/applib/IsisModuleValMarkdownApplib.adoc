@@ -7,6 +7,7 @@
 .IsisModuleValMarkdownApplib.java
 ----
 class IsisModuleValMarkdownApplib {
+  public static final String NAMESPACE;
 }
 ----
 

@@ -18,6 +18,7 @@ interface ApplicationFeatureRepository {
   Collection<ApplicationFeature> allNamespaces()
   Collection<ApplicationFeature> allTypes()
   Collection<ApplicationFeature> allMembers()
+  SortedSet<ApplicationFeatureId> propertyIdsFor(LogicalType logicalType)
 }
 ----
 

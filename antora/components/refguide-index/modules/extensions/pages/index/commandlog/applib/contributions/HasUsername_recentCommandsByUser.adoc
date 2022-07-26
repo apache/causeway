@@ -8,7 +8,7 @@
 ----
 class HasUsername_recentCommandsByUser {
   HasUsername_recentCommandsByUser(HasUsername hasUsername)
-  List<CommandLogEntry> coll()
+  List<? extends CommandLogEntry> coll()
   boolean hideColl()
 }
 ----

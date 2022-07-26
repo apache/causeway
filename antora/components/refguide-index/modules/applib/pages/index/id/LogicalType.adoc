@@ -32,7 +32,7 @@ class LogicalType {
 <.> xref:#lazy_Class_Supplier[lazy(Class, Supplier)]
 +
 --
-Returns a new TypeIdentifier based on the corresponding class and a _logicalNameProvider_ for lazy logical name lookup.
+Returns a new xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] based on the corresponding class and a _logicalNameProvider_ for lazy logical name lookup.
 --
 <.> xref:#eager_Class_String[eager(Class, String)]
 +
@@ -80,7 +80,7 @@ The logical type name consists of 2 parts, the _namespace_ and the _logical simp
 [#lazy_Class_Supplier]
 === lazy(Class, Supplier)
 
-Returns a new TypeIdentifier based on the corresponding class and a _logicalNameProvider_ for lazy logical name lookup.
+Returns a new xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] based on the corresponding class and a _logicalNameProvider_ for lazy logical name lookup.
 
 [#eager_Class_String]
 === eager(Class, String)

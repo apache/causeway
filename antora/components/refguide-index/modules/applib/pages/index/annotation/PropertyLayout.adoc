@@ -19,8 +19,6 @@ Collects together all layout hints for a property of a domain object.
   String named() default "";     // <.>
   Navigable navigable() default Navigable.NOT_SPECIFIED;     // <.>
   PromptStyle promptStyle() default PromptStyle.NOT_SPECIFIED;     // <.>
-  @Deprecated(forRemoval = true, since = "2.0.0-M7")
-RenderDay renderDay() default RenderDay.NOT_SPECIFIED;     // <.>
   Repainting repainting() default Repainting.NOT_SPECIFIED;     // <.>
   String sequence() default "";     // <.>
   int typicalLength() default -1;     // <.>
@@ -76,18 +74,6 @@ Whether this property should be used to construct the navigable chain of breadcr
 +
 --
 How the properties of this domain object are be edited, either _PromptStyle#DIALOG dialog_ or _PromptStyle#INLINE inline_ .
---
-<.> xref:#renderDay[renderDay]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-instead use _ValueSemantics#dateRenderAdjustDays()_
-====
-
-For date properties (and parameters) only, instructs the viewer that the date should be rendered as one day prior to the actually stored date.
 --
 <.> xref:#repainting[repainting]
 +
@@ -180,32 +166,6 @@ Only one property can be annotated as such per domain class.
 === promptStyle
 
 How the properties of this domain object are be edited, either _PromptStyle#DIALOG dialog_ or _PromptStyle#INLINE inline_ .
-
-[#renderDay]
-=== renderDay
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-instead use _ValueSemantics#dateRenderAdjustDays()_
-====
-
-For date properties (and parameters) only, instructs the viewer that the date should be rendered as one day prior to the actually stored date.
-
-This is intended to be used so that an exclusive end date of an interval can be rendered as 1 day before the actual value stored.
-
-For example:
-
-----
-
-public LocalDate getStartDate() { ... }
-
-@PropertyLayout(renderDay=RenderDay.AS_DAY_BEFORE)
-public LocalDate getEndDate() { ... }
-----
-
-Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date. What is stored In the domain object, itself, however, the value stored is 1-jun-2013.
 
 [#repainting]
 === repainting

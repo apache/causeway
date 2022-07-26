@@ -27,6 +27,8 @@ interface InteractionService {
   Try<Void> runAndCatch(InteractionContext interactionContext, ThrowingRunnable runnable)     // <.>
   Try<R> callAnonymousAndCatch(Callable<R> callable)     // <.>
   Try<Void> runAnonymousAndCatch(ThrowingRunnable runnable)     // <.>
+  InteractionLayer nextInteraction()     // <.>
+  InteractionLayer nextInteraction(InteractionContext interactionContext)     // <.>
 }
 ----
 
@@ -85,6 +87,16 @@ Variant of _#callAnonymous(Callable)_ that wraps the return value with a xref:re
 +
 --
 Variant of _#runAnonymous(ThrowingRunnable)_ that returns a xref:refguide:commons:index/functional/Try.adoc[Try] of _Try_ , also catching any exception, that might have occurred.
+--
+<.> xref:#nextInteraction_[nextInteraction()]
++
+--
+Primarily for testing, closes the current interaction and opens a new one.
+--
+<.> xref:#nextInteraction_InteractionContext[nextInteraction(InteractionContext)]
++
+--
+Primarily for testing, closes the current interaction and opens a new one with the specified xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
 --
 
 == Members
@@ -154,3 +166,15 @@ Variant of _#callAnonymous(Callable)_ that wraps the return value with a xref:re
 === runAnonymousAndCatch(ThrowingRunnable)
 
 Variant of _#runAnonymous(ThrowingRunnable)_ that returns a xref:refguide:commons:index/functional/Try.adoc[Try] of _Try_ , also catching any exception, that might have occurred.
+
+[#nextInteraction_]
+=== nextInteraction()
+
+Primarily for testing, closes the current interaction and opens a new one.
+
+In tests, this is a good way to simulate multiple interactions within a scenario. If you use the popular given/when/then structure, consider using at the end of each "given" or "when" block.
+
+[#nextInteraction_InteractionContext]
+=== nextInteraction(InteractionContext)
+
+Primarily for testing, closes the current interaction and opens a new one with the specified xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .

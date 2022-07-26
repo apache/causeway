@@ -31,11 +31,14 @@ interface WrapperFactory {
   T wrap(T domainObject, SyncControl syncControl)     // <.>
   T wrap(T domainObject)     // <.>
   T wrapMixin(Class<T> mixinClass, Object mixee, SyncControl syncControl)     // <.>
+  T wrapMixinT(Class<T> mixinClass, MIXEE mixee, SyncControl syncControl)     // <.>
   T wrapMixin(Class<T> mixinClass, Object mixee)     // <.>
+  T wrapMixinT(Class<T> mixinClass, MIXEE mixee)     // <.>
   T unwrap(T possibleWrappedDomainObject)     // <.>
   boolean isWrapper(T possibleWrappedDomainObject)     // <.>
   T asyncWrap(T domainObject, AsyncControl<R> asyncControl)     // <.>
   T asyncWrapMixin(Class<T> mixinClass, Object mixee, AsyncControl<R> asyncControl)     // <.>
+  T asyncWrapMixinT(Class<T> mixinClass, MIXEE mixee, AsyncControl<R> asyncControl)     // <.>
   List<InteractionListener> getListeners()     // <.>
   boolean addInteractionListener(InteractionListener listener)     // <.>
   boolean removeInteractionListener(InteractionListener listener)     // <.>
@@ -58,10 +61,20 @@ A convenience overload for _#wrap(Object, SyncControl)_ , returning a wrapper to
 --
 Provides the wrapper for a _FactoryService#mixin(Class, Object) mixin_ , against which to invoke the action.
 --
+<.> xref:#wrapMixinT_Class_MIXEE_SyncControl[wrapMixinT(Class, MIXEE, SyncControl)]
++
+--
+Provides the wrapper for a _Mixin typesafe_ _FactoryService#mixin(Class, Object) mixin_ , against which to invoke the action.
+--
 <.> xref:#wrapMixin_Class_Object[wrapMixin(Class, Object)]
 +
 --
 A convenience overload for _#wrapMixin(Class, Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
+--
+<.> xref:#wrapMixinT_Class_MIXEE[wrapMixinT(Class, MIXEE)]
++
+--
+A convenience overload for _#wrapMixinT(Class, Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
 --
 <.> xref:#unwrap_T[unwrap(T)]
 +
@@ -79,6 +92,11 @@ Whether the supplied object is a wrapper around a domain object.
 Returns a proxy object for the provided _domainObject_ , through which can execute the action asynchronously (in another thread).
 --
 <.> xref:#asyncWrapMixin_Class_Object_AsyncControl[asyncWrapMixin(Class, Object, AsyncControl)]
++
+--
+Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously (in another thread).
+--
+<.> xref:#asyncWrapMixinT_Class_MIXEE_AsyncControl[asyncWrapMixinT(Class, MIXEE, AsyncControl)]
 +
 --
 Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously (in another thread).
@@ -128,10 +146,22 @@ Provides the wrapper for a _FactoryService#mixin(Class, Object) mixin_ , against
 
 The provided xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. See _#wrap(Object, SyncControl)_ for more details on this.
 
+[#wrapMixinT_Class_MIXEE_SyncControl]
+=== wrapMixinT(Class, MIXEE, SyncControl)
+
+Provides the wrapper for a _Mixin typesafe_ _FactoryService#mixin(Class, Object) mixin_ , against which to invoke the action.
+
+The provided xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. See _#wrap(Object, SyncControl)_ for more details on this.
+
 [#wrapMixin_Class_Object]
 === wrapMixin(Class, Object)
 
 A convenience overload for _#wrapMixin(Class, Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
+
+[#wrapMixinT_Class_MIXEE]
+=== wrapMixinT(Class, MIXEE)
+
+A convenience overload for _#wrapMixinT(Class, Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
 
 [#unwrap_T]
 === unwrap(T)
@@ -152,6 +182,11 @@ Returns a proxy object for the provided _domainObject_ , through which can execu
 
 [#asyncWrapMixin_Class_Object_AsyncControl]
 === asyncWrapMixin(Class, Object, AsyncControl)
+
+Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously (in another thread).
+
+[#asyncWrapMixinT_Class_MIXEE_AsyncControl]
+=== asyncWrapMixinT(Class, MIXEE, AsyncControl)
 
 Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously (in another thread).
 

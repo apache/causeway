@@ -9,6 +9,7 @@
 class IsisModuleExtExecutionOutboxPersistenceJpa {
   public static final String NAMESPACE;
   public static final String SCHEMA;
+  FixtureScript getTeardownFixture()
 }
 ----
 
