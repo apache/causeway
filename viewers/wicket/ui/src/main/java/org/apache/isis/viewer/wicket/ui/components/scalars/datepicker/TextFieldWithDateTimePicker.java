@@ -71,10 +71,12 @@ implements IConverter<T> {
         super(id, scalarModel.unwrapped(type), type);
         setOutputMarkupId(true);
 
-        this.converter = converter;
         this.config = createDatePickerConfig(
                 scalarModel.getCommonContext(),
+                ((ConverterBasedOnValueSemantics<T>) converter).getEditingPattern(),
                 !scalarModel.isRequired());
+
+        this.converter = converter;
 
         /* debug
                 new IConverter<T>() {
@@ -171,6 +173,7 @@ implements IConverter<T> {
 
     private DateTimeConfig createDatePickerConfig(
             final IsisAppCommonContext commonContext,
+            final String temporalPattern,
             final boolean isInputNullable) {
         val config = new DateTimeConfig();
 
@@ -178,11 +181,7 @@ implements IConverter<T> {
                 .map(UserLocale::getLanguageLocale)
                 .orElse(Locale.US));
 
-        // if this text field is for a LocalDate, then the pattern obtained will just be a simple date format
-        // (with no hour/minute components).
-        final String dateTimePattern = ((ConverterBasedOnValueSemantics<T>)converter).getEditingPattern();
-        config.withFormat(_TimeFormatUtil.convertToMomentJsFormat(dateTimePattern));
-
+        config.withFormat(_TimeFormatUtil.convertToMomentJsFormat(temporalPattern));
         config.useCalendarWeeks(true);
         config.useCurrent(false);
 
@@ -214,7 +213,7 @@ implements IConverter<T> {
                 .useNextIcon(FontAwesome6IconType.chevron_right_s)
                 .useTodayIcon(FontAwesome6IconType.calendar_check_r)
                 .useClearIcon(FontAwesome6IconType.trash_can_r)
-                .useCloseIcon(FontAwesome6IconType.xmark_s)
+                .useCloseIcon(FontAwesome6IconType.check_s)
                 );
 
         //XXX future extensions might allow to set bounds on a per member basis (via ValueSemantics annotation)
