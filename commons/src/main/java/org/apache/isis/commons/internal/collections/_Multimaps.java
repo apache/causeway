@@ -350,6 +350,13 @@ public class _Multimaps {
     }
 
     /**
+     * @return TreeMap of ArrayLists
+     */
+    public static <K, V> ListMultimap<K, V> newListTreeMultimap(){
+        return newListMultimap(TreeMap<K, List<V>>::new, ArrayList::new);
+    }
+
+    /**
      * @return ConcurrentHashMap of CopyOnWriteArrayList (fully concurrent)
      */
     public static <K, V> ListMultimap<K, V> newConcurrentListMultimap(){
