@@ -61,10 +61,12 @@
                 	<groupId>com.github.openjson</groupId>
                 	<artifactId>openjson</artifactId>
                 </exclusion>
+                <!-- required by web-jars below
                 <exclusion>
                 	<groupId>org.apache.wicket</groupId>
                 	<artifactId>wicket-util</artifactId>
                 </exclusion>
+                -->
             </exclusions>
         </dependency>
         

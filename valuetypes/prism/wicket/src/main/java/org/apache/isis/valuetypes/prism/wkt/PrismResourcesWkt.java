@@ -44,7 +44,7 @@ public final class PrismResourcesWkt{
     // -- HELPER
 
     /**
-     * Returns the main Prism JS resource + most common languages
+     * Returns the main Prism JS resource with theme 'coy' + most common languages
      */
     private List<ResourceReference> assembleJsResources() {
         final List<ResourceReference> resources = PrismLanguage.mostCommon().stream()
