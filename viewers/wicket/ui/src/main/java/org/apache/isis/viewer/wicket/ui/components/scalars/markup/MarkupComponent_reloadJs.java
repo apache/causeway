@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.wicket.request.IRequestHandler;
@@ -33,22 +34,24 @@ import lombok.val;
  */
 public class MarkupComponent_reloadJs {
 
-    public static CharSequence decorate(CharSequence htmlContent, ResourceReference jsRef) {
-
+    public static CharSequence decorate(final CharSequence htmlContent, final Iterable<ResourceReference> jsRefs) {
         val targetId = UUID.randomUUID().toString();
 
-        val sb = new StringBuilder();
-        sb
+        val sb = new StringBuilder()
         .append("<div id=\"").append(targetId).append("\">\n")
         .append(htmlContent)
-        .append("\n</div>\n")
-        .append("<script type=\"text/javascript\" src=\""+getUrl(jsRef)+"\" defer>\n")
-        .append("\n</script>\n");
-
+        .append("\n</div>\n");
+        for(ResourceReference jsRef : jsRefs) {
+            sb.append("<script type=\"text/javascript\" src=\""+getUrl(jsRef)+"\" defer></script>\n");
+        }
         return sb.toString();
     }
 
-    private static String getUrl(ResourceReference jsRef) {
+    public static CharSequence decorate(final CharSequence htmlContent, final ResourceReference jsRef) {
+        return decorate(htmlContent, List.of(jsRef));
+    }
+
+    private static String getUrl(final ResourceReference jsRef) {
         IRequestHandler handler = new ResourceReferenceRequestHandler(jsRef, null);
         return RequestCycle.get().urlFor(handler).toString();
     }

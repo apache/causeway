@@ -28,4 +28,12 @@
 		<git-plugin.propertiesDir>org/apache/isis/valuetypes/prism/resources</git-plugin.propertiesDir>
 	</properties>
 
+	<dependencies>
+		<dependency>
+		    <groupId>org.webjars.bowergithub.prismjs</groupId>
+		    <artifactId>prism</artifactId>
+		    <version>1.28.0</version>
+		</dependency>
+	</dependencies>
+
 </project>

@@ -16,27 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.prism.vaa;
+package org.apache.isis.valuetypes.prism;
 
-import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
-import org.apache.isis.valuetypes.prism.Prism;
+import java.util.Arrays;
+import java.util.List;
 
-import lombok.Getter;
-import lombok.experimental.UtilityClass;
+import lombok.RequiredArgsConstructor;
 
-@UtilityClass
-public final class PrismResourcesVaa {
+@RequiredArgsConstructor
+public enum PrismLanguage {
+    MARKUP("markup"),
+    CSS("css"),
+    CLIKE("clike"),
+    JAVA("java"),
+    JAVASCRIPT("javascript"),
+    ASCIIDOC("asciidoc"),
+    JAVADOC("javadoc"),
+    JAVADOCLIKE("javadoclike"),
+    JSON("json"),
+    PROPERTIES("properties"),
+    ;
+    final String languageSuffix;
+    public String jsFile() {
+        return "prism/components/prism-" + languageSuffix + ".min.js";
+    }
 
-    @Getter(lazy = true) private static final LocalResourceUtil.ResourceDescriptor cssResourceReference =
-            LocalResourceUtil.ResourceDescriptor.webjars(Prism.COY.cssFile());
-
-
-    @Getter(lazy = true) private static final LocalResourceUtil.ResourceDescriptor jsResourceReference =
-            LocalResourceUtil.ResourceDescriptor.webjars(Prism.COY.jsFile());
-
-//    public static InputStream readJsResource() {
-//        return PrismResourcesVaa.class.getResourceAsStream("/static/prism/" + Prism.VAADIN.jsFile());
-//    }
-
+    public static List<PrismLanguage> mostCommon() {
+        return Arrays.asList(PrismLanguage.values());
+    }
 
 }

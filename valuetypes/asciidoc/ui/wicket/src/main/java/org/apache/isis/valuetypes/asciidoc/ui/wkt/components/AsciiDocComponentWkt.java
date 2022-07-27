@@ -18,6 +18,8 @@
  */
 package org.apache.isis.valuetypes.asciidoc.ui.wkt.components;
 
+import java.util.List;
+
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -54,19 +56,21 @@ public class AsciiDocComponentWkt extends MarkupComponent {
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
         val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(markupStream, openTag,
-                MarkupComponent_reloadJs.decorate(htmlContent, jsRef()));
+                MarkupComponent_reloadJs.decorate(htmlContent, jsRefs()));
     }
 
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-
         response.render(CssHeaderItem.forReference(PrismResourcesWkt.getCssResourceReferenceWkt()));
-        response.render(JavaScriptHeaderItem.forReference(jsRef()));
+        for(ResourceReference jsRef : jsRefs()) {
+            response.render(JavaScriptHeaderItem.forReference(jsRef));
+        }
     }
 
-    private static final ResourceReference jsRef() {
-        return PrismResourcesWkt.getJsResourceReferenceWkt();
+    private static final List<ResourceReference> jsRefs() {
+        return PrismResourcesWkt.getJsResourceReferencesWkt();
     }
+
 
 }

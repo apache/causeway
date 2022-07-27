@@ -18,11 +18,11 @@
  */
 package org.apache.isis.valuetypes.asciidoc.ui.vaa.components;
 
-import org.springframework.lang.Nullable;
-
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.html.Div;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
@@ -41,7 +41,9 @@ public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
         add(div);
 
         LocalResourceUtil.addStyleSheet(PrismResourcesVaa.getCssResourceReference());
-        LocalResourceUtil.executeJavaScript(PrismResourcesVaa::readJsResource);
+        //LocalResourceUtil.executeJavaScript(PrismResourcesVaa::readJsResource);
+        //TODO potentially needs to be executed on page loaded ...
+        LocalResourceUtil.addJavaScript(PrismResourcesVaa.getJsResourceReference());
     }
 
     @Override

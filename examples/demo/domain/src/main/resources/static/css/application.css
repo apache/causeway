@@ -279,3 +279,9 @@ div.listingblock div.title {
     font-style: italic;
     color: darkred;
 }
+
+/* customized Prism theme COY */
+.listingblock pre[class*="language-"]::after, 
+.listingblock pre[class*="language-"]::before {
+	box-shadow: none;
+}

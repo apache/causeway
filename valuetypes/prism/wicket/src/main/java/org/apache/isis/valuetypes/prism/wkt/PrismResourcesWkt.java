@@ -18,28 +18,42 @@
  */
 package org.apache.isis.valuetypes.prism.wkt;
 
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.valuetypes.prism.Prism;
+import org.apache.isis.valuetypes.prism.PrismLanguage;
 
+import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class PrismResourcesWkt{
 
-    //TODO convert to ContextRelativeResourceReference(s)
-
     @Getter(lazy = true) private static final ResourceReference cssResourceReferenceWkt =
-            //new WebjarsCssResourceReference("prism/1.16.0/themes/prism.css");
-            new CssResourceReference(PrismResourcesWkt.class,
-                    Prism.WICKET.cssFile());
+            new WebjarsCssResourceReference(Prism.COY.cssFile());
 
-    @Getter(lazy = true) private static final ResourceReference jsResourceReferenceWkt =
-            //new WebjarsJavaScriptResourceReference("prism/1.16.0/components/prism-java.min.js");
-            new JavaScriptResourceReference(PrismResourcesWkt.class,
-                    Prism.WICKET.jsFile());
+    @Getter(lazy = true) private static final List<ResourceReference> jsResourceReferencesWkt =
+            assembleJsResources();
+
+    // -- HELPER
+
+    /**
+     * Returns the main Prism JS resource + most common languages
+     */
+    private List<ResourceReference> assembleJsResources() {
+        final List<ResourceReference> resources = PrismLanguage.mostCommon().stream()
+                .map(PrismLanguage::jsFile)
+                .map(WebjarsJavaScriptResourceReference::new)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        resources.add(0, new WebjarsJavaScriptResourceReference(Prism.COY.jsFile()));
+        return resources;
+    }
 
 }

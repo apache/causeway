@@ -22,16 +22,20 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Prism {
-    WICKET("1.24.1", "coy"),
-    VAADIN("1.24.1", "coy");
-//    WICKET("1.20", "default"),
-//    VAADIN("1.20", "default");
-    final String version;
-    final String theme;
+    DEFAULT(""),
+    COY("-coy"),
+    DARK("-dark"),
+    FUNKY("-funky"),
+    OKAIDIA("-okaidia"),
+    SOLARIZEDLIGHT("-solarizedlight"),
+    TOMORROW("-tomorrow"),
+    TWILIGHT("-twilight"),
+    ;
+    final String themeSuffix;
     public String cssFile() {
-        return "css/prism" + version + "-" + theme + ".css";
+        return "prism/themes/prism" + themeSuffix + ".min.css";
     }
     public String jsFile() {
-        return "js/prism" + version + ".js";
+        return "prism/prism" + ".js";
     }
 }

@@ -68,6 +68,12 @@
             </exclusions>
         </dependency>
         
+        <!-- so we can pull in Prism via Maven -->
+        <dependency>
+            <groupId>de.agilecoders.wicket.webjars</groupId>
+            <artifactId>wicket-webjars</artifactId>
+        </dependency>
+        
 	</dependencies>
 
 </project>
