@@ -80,6 +80,16 @@ public @interface Collection {
      */
     Class<? extends CollectionDomainEvent<?,?>> domainEvent()
             default CollectionDomainEvent.Default.class;
+        
+    /**
+     * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
+     *
+     * <p>
+     *     Note that non-editable objects can nevertheless have actions invoked upon them.
+     * </p>
+     */
+    Editing editing()
+            default Editing.NOT_SPECIFIED;
 
     /**
      * Indicates when the collection is not visible to the user.
