@@ -28,13 +28,13 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.config.util.SpringProfileUtil;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.pdfjs.wkt.ui.IsisModuleExtPdfjsWicketUi;
+import org.apache.isis.extensions.sse.wicket.IsisModuleExtSseWicket;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn.IsisModuleValAsciidocPersistenceJdoDn;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
 import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
 import org.apache.isis.valuetypes.markdown.persistence.jdo.dn.IsisModuleValMarkdownPersistenceJdoDn;
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
-import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifestJdo;
@@ -54,7 +54,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 
     // UI (Wicket Viewer)
     IsisModuleViewerWicketViewer.class,
-    IsisModuleValSseUiWkt.class,
+    IsisModuleExtSseWicket.class,
     IsisModuleValAsciidocUiWkt.class,
     IsisModuleValMarkdownUiWkt.class,
     IsisModuleExtPdfjsWicketUi.class,

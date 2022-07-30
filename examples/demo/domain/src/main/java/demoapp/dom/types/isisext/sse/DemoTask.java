@@ -27,8 +27,8 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.commons.internal.concurrent._ThreadSleep;
-import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
-import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
+import org.apache.isis.extensions.sse.applib.annotations.SseSource;
+import org.apache.isis.extensions.sse.applib.service.SseChannel;
 
 import lombok.RequiredArgsConstructor;
 

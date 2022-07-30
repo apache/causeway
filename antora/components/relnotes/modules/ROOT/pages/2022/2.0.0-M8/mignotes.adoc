@@ -234,4 +234,17 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 <groupId>org.apache.isis.viewer.commons</groupId>
 <artifactId>isis-viewer-commons-prism</artifactId>
 
+<!-- moved
+	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-sse*</artifactId>
+-->
+
+<!-- instead use ... -->
+<groupId>org.apache.isis.extensions</groupId>
+<artifactId>isis-extensions-sse*</artifactId>
+
+IsisModuleValSseApplib renamed to IsisModuleExtSseApplib
+IsisModuleValSseMetaModel renamed to IsisModuleExtSseMetaModel
+IsisModuleValSseUiWkt renamed to IsisModuleExtSseWicket 
+
 ----

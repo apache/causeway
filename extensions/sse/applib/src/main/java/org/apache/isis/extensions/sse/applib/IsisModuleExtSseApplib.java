@@ -16,29 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.model.valuetypes;
+package org.apache.isis.extensions.sse.applib;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
-import org.apache.isis.extensions.sse.metamodel.IsisModuleExtSseMetaModel;
-import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
-import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
-@Import({
-    IsisModuleValAsciidocMetaModel.class,
-    IsisModuleValMarkdownMetaModel.class,
-    IsisModuleExtSseMetaModel.class,
-    IsisModuleExtFullCalendarApplib.class,
-})
-@ComponentScan(
-        basePackageClasses= {
-                Configuration_usingValueTypes.class
-        })
-public class Configuration_usingValueTypes {
-
+public class IsisModuleExtSseApplib {
 
 }

@@ -16,29 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.model.valuetypes;
+package org.apache.isis.extensions.sse.wicket;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
 import org.apache.isis.extensions.sse.metamodel.IsisModuleExtSseMetaModel;
-import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
-import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
+import org.apache.isis.extensions.sse.wicket.markup.ListeningMarkupPanelFactoriesForWicket;
+import org.apache.isis.extensions.sse.wicket.services.SseServiceDefault;
+import org.apache.isis.extensions.sse.wicket.webmodule.WebModuleServerSentEvents;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
-    IsisModuleValAsciidocMetaModel.class,
-    IsisModuleValMarkdownMetaModel.class,
-    IsisModuleExtSseMetaModel.class,
-    IsisModuleExtFullCalendarApplib.class,
-})
-@ComponentScan(
-        basePackageClasses= {
-                Configuration_usingValueTypes.class
-        })
-public class Configuration_usingValueTypes {
+        // module dependencies
+        IsisModuleExtSseMetaModel.class,
 
+        // @Component's
+        ListeningMarkupPanelFactoriesForWicket.Parented.class,
+        ListeningMarkupPanelFactoriesForWicket.Standalone.class,
+
+        // @Service's
+        SseServiceDefault.class,
+        WebModuleServerSentEvents.class
+})
+public class IsisModuleExtSseWicket {
 
 }
