@@ -980,6 +980,7 @@ org.apache.isis.extensions:isis-extensions-secman-persistence-jpa:jar:<managed> 
 org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-sessionlog-persistence-jdo:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-sessionlog-persistence-jpa:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-sse-applib:jar:<managed> +
 org.apache.isis.testing:isis-testing-h2console-ui:jar:<managed> +
 org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel:jar:<managed> +
@@ -988,7 +989,6 @@ org.apache.isis.valuetypes:isis-valuetypes-asciidoc-persistence-jpa:jar:<managed
 org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence-jdo:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-markdown-persistence-jpa:jar:<managed> +
-org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed> +
 org.assertj:assertj-core:jar:<managed> +
 org.projectlombok:lombok:jar:<managed> +
 org.springframework.boot:spring-boot-configuration-processor:jar:<managed> +
@@ -1030,11 +1030,11 @@ Directory: /examples/demo/vaadin
 |.Dependencies
 ****
 org.apache.isis.examples.apps:demo-web:jar:${project.version} +
+org.apache.isis.extensions:isis-extensions-sse-wicket:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-vaadin-viewer:jar:${project.version} +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-vaa:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-markdown-ui-wkt:jar:<managed> +
-org.apache.isis.valuetypes:isis-valuetypes-sse-ui-wkt:jar:<managed> +
 org.projectlombok:lombok:jar:<managed> +
 ****
 
@@ -1079,9 +1079,9 @@ demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory +
 org.apache.isis.examples.apps:demo-web:jar:${project.version} +
 org.apache.isis.extensions:isis-extensions-fullcalendar-wicket-ui:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-pdfjs-wicket-ui:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-sse-wicket:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-ui-wkt:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-markdown-ui-wkt:jar:<managed> +
-org.apache.isis.valuetypes:isis-valuetypes-sse-ui-wkt:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-wicket-viewer:jar:<managed> +
 ****
@@ -2649,9 +2649,23 @@ skinparam rectangle<<2>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "Common\n[Software System]" {
-  rectangle "==Apache Isis Viewer - Common Model\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
 }
+skinparam rectangle<<4>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "Common\n[Software System]" {
+  rectangle "==Apache Isis Commons - Prism\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Viewer - Commons\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis Viewer - Commons Model\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+}
+2 .[#707070].> 4 : ""
+2 .[#707070].> 3 : ""
 @enduml
 ----
 .Projects/Modules (Common)
@@ -2659,32 +2673,57 @@ package "Common\n[Software System]" {
 |===
 |Coordinates |Description 
 
-|Apache Isis Viewer - Common Model
+|Apache Isis Viewer - Commons
 [source,yaml]
 ----
 Group: org.apache.isis.viewer
-Artifact: isis-viewer-common
+Artifact: isis-viewer-commons
+Type: pom
+Directory: /viewers/commons
+----
+|
+
+|Apache Isis Viewer - Commons Model
+[source,yaml]
+----
+Group: org.apache.isis.viewer
+Artifact: isis-viewer-commons-model
 Type: jar
-Directory: /viewers/common
+Directory: /viewers/commons/model
 ----
 |.Components
 ****
-o.a.i.viewer.common.model.branding.BrandingUiModelProvider +
-o.a.i.viewer.common.model.header.HeaderUiModelProvider +
-o.a.i.viewer.common.model.menu.MenuUiModelProvider +
-o.a.i.viewer.common.model.userprofile.UserProfileUiModelProviderDefault +
+o.a.i.viewer.commons.model.branding.BrandingUiModelProvider +
+o.a.i.viewer.commons.model.header.HeaderUiModelProvider +
+o.a.i.viewer.commons.model.menu.MenuUiModelProvider +
+o.a.i.viewer.commons.model.userprofile.UserProfileUiModelProviderDefault +
 ****
 
 .Dependencies
 ****
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
-org.webjars:font-awesome:jar:6.1.1 +
+org.webjars:font-awesome:jar:6.1.2 +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:viewer:index/common/applib/mixins/Object_impersonate.adoc[Object_impersonate], xref:refguide:viewer:index/common/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles], xref:refguide:viewer:index/common/applib/services/userprof/UserProfileUiModel.adoc[UserProfileUiModel], xref:refguide:viewer:index/common/applib/services/userprof/UserProfileUiModelProvider.adoc[UserProfileUiModelProvider]
+xref:refguide:viewer:index/commons/applib/mixins/Object_impersonate.adoc[Object_impersonate], xref:refguide:viewer:index/commons/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiModel.adoc[UserProfileUiModel], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiModelProvider.adoc[UserProfileUiModelProvider]
+****
+
+|Apache Isis Commons - Prism
+[source,yaml]
+----
+Group: org.apache.isis.viewer
+Artifact: isis-viewer-commons-prism
+Type: jar
+Directory: /viewers/commons/prism
+----
+|Client Side Syntax Highlighting
+
+.Dependencies
+****
+org.webjars.bowergithub.prismjs:prism:jar:1.28.0 +
 ****
 |===
 
@@ -2926,7 +2965,7 @@ o.a.i.viewer.restfulobjects.viewer.resources.VersionResourceServerside +
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
-org.apache.isis.viewer:isis-viewer-common:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-model:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-restfulobjects-rendering:jar:<managed> +
 ****
 
@@ -3011,7 +3050,7 @@ Directory: /viewers/wicket/model
 ****
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
-org.apache.isis.viewer:isis-viewer-common:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-model:jar:<managed> +
 org.apache.wicket:wicket-core:jar:<managed> +
 org.apache.wicket:wicket-extensions:jar:<managed> +
 ****
@@ -3044,6 +3083,7 @@ de.agilecoders.wicket:wicket-bootstrap-themes:jar:<managed> +
 de.agilecoders.wicket.webjars:wicket-webjars:jar:<managed> +
 javax.servlet:javax.servlet-api:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-prism:jar:${project.version} +
 org.apache.isis.viewer:isis-viewer-wicket-model:jar:<managed> +
 org.apache.wicket:wicket-auth-roles:jar:<managed> +
 org.apache.wicket:wicket-devutils:jar:<managed> +
@@ -3144,42 +3184,15 @@ skinparam rectangle<<5>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<6>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<7>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<8>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<9>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 package "Valuetypes\n[Software System]" {
   rectangle "==Apache Isis Val - Joda Time (applib)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
   rectangle "==Apache Isis Val - Joda Time (integration)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
   rectangle "==Apache Isis Val - Joda Time (parent)\n<size:10>[Container: packaging: pom]</size>" <<3>> as 3
-  rectangle "==Apache Isis Val - Prism (Parent)\n<size:10>[Container: packaging: pom]</size>" <<6>> as 6
-  rectangle "==Apache Isis Val - Prism (Vaadin)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
-  rectangle "==Apache Isis Val - Prism (Wicket)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
-  rectangle "==Apache Isis Val - Prism (resources)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
   rectangle "==Apache Isis Value types\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
 }
 3 .[#707070].> 4 : ""
 3 .[#707070].> 5 : ""
-6 .[#707070].> 9 : ""
-6 .[#707070].> 7 : ""
 2 .[#707070].> 3 : ""
-2 .[#707070].> 6 : ""
 @enduml
 ----
 .Projects/Modules (Valuetypes)
@@ -3259,54 +3272,6 @@ org.apache.isis.valuetypes:isis-valuetypes-jodatime-applib:jar:<managed> +
 .Document Index Entries
 ****
 xref:refguide:valuetypes:index/jodatime/integration/IsisModuleValJodatimeIntegration.adoc[IsisModuleValJodatimeIntegration]
-****
-
-|Apache Isis Val - Prism (Parent)
-[source,yaml]
-----
-Group: org.apache.isis.valuetypes
-Artifact: isis-valuetypes-prism
-Type: pom
-Directory: /valuetypes/prism
-----
-|Client Side Syntax Highlighting
-
-|Apache Isis Val - Prism (resources)
-[source,yaml]
-----
-Group: org.apache.isis.valuetypes
-Artifact: isis-valuetypes-prism-resources
-Type: jar
-Directory: /valuetypes/prism/resources
-----
-|
-
-|Apache Isis Val - Prism (Vaadin)
-[source,yaml]
-----
-Group: org.apache.isis.valuetypes
-Artifact: isis-valuetypes-prism-vaadin
-Type: jar
-Directory: /valuetypes/prism/vaadin
-----
-|.Dependencies
-****
-org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version} +
-org.apache.isis.valuetypes:isis-valuetypes-prism-resources:jar:${project.version} +
-****
-
-|Apache Isis Val - Prism (Wicket)
-[source,yaml]
-----
-Group: org.apache.isis.valuetypes
-Artifact: isis-valuetypes-prism-wicket
-Type: jar
-Directory: /valuetypes/prism/wicket
-----
-|.Dependencies
-****
-org.apache.isis.valuetypes:isis-valuetypes-prism-resources:jar:${project.version} +
-org.apache.wicket:wicket-core:jar:<managed> +
 ****
 |===
 
@@ -3521,7 +3486,6 @@ o.a.i.valuetypes.asciidoc.ui.vaa.components.AsciiDocFieldFactoryVaa +
 .Dependencies
 ****
 org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version} +
-org.apache.isis.valuetypes:isis-valuetypes-prism-vaadin:jar:${project.version} +
 ****
 
 |Apache Isis Val - Asciidoctor (ui wicket)
@@ -3541,7 +3505,6 @@ o.a.i.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Standalone
 .Dependencies
 ****
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel:jar:<managed> +
-org.apache.isis.valuetypes:isis-valuetypes-prism-wicket:jar:${project.version} +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 ****
 
@@ -3751,7 +3714,6 @@ o.a.i.valuetypes.markdown.ui.wkt.components.MarkdownPanelFactoriesWkt$Standalone
 .Dependencies
 ****
 org.apache.isis.valuetypes:isis-valuetypes-markdown-metamodel:jar:<managed> +
-org.apache.isis.valuetypes:isis-valuetypes-prism-wicket:jar:${project.version} +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 ****
 
@@ -3762,155 +3724,6 @@ xref:refguide:valuetypes:index/markdown/ui/wkt/IsisModuleValMarkdownUiWkt.adoc[I
 |===
 
 === SSE
-
-[plantuml,SSE,svg]
-----
-@startuml(id=SSE)
-title SSE - Containers
-caption Artifact Hierarchy (Maven)
-
-skinparam {
-  shadowing false
-  arrowFontSize 10
-  defaultTextAlignment center
-  wrapWidth 200
-  maxMessageSize 100
-}
-hide stereotype
-left to right direction
-skinparam rectangle<<2>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<3>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<4>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<5>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<6>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-package "SSE\n[Software System]" {
-  rectangle "==Apache Isis Val - SSE (ui)\n<size:10>[Container: packaging: pom]</size>" <<5>> as 5
-  rectangle "==Apache Isis Val - Server Sent Events\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
-  rectangle "==Apache Isis Val - Server Sent Events (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
-  rectangle "==Apache Isis Val - Server Sent Events (parent)\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
-  rectangle "==Apache Isis Val - Server Sent Events (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
-}
-5 .[#707070].> 6 : ""
-2 .[#707070].> 5 : ""
-2 .[#707070].> 3 : ""
-2 .[#707070].> 4 : ""
-@enduml
-----
-.Projects/Modules (SSE)
-[cols="3a,5a", options="header"]
-|===
-|Coordinates |Description 
-
-|Apache Isis Val - Server Sent Events (parent)
-[source,yaml]
-----
-Group: org.apache.isis.valuetypes
-Artifact: isis-valuetypes-sse
-Type: pom
-Directory: /valuetypes/sse
-----
-|Dynamically updating HTML markup
-
-|Apache Isis Val - Server Sent Events
-[source,yaml]
-----
-Group: org.apache.isis.valuetypes
-Artifact: isis-valuetypes-sse-applib
-Type: jar
-Directory: /valuetypes/sse/applib
-----
-|.Dependencies
-****
-org.apache.isis.core:isis-core-metamodel:jar:<managed> +
-org.apache.isis.core:isis-core-webapp:jar:<managed> +
-org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:valuetypes:index/sse/applib/IsisModuleValSseApplib.adoc[IsisModuleValSseApplib], xref:refguide:valuetypes:index/sse/applib/annotations/ServerSentEvents.adoc[ServerSentEvents], xref:refguide:valuetypes:index/sse/applib/annotations/SseSource.adoc[SseSource], xref:refguide:valuetypes:index/sse/applib/service/SseChannel.adoc[SseChannel], xref:refguide:valuetypes:index/sse/applib/service/SseService.adoc[SseService]
-****
-
-|Apache Isis Val - Server Sent Events (metamodel)
-[source,yaml]
-----
-Group: org.apache.isis.valuetypes
-Artifact: isis-valuetypes-sse-metamodel
-Type: jar
-Directory: /valuetypes/sse/metamodel
-----
-|.Components
-****
-o.a.i.valuetypes.sse.metamodel.facets.SseAnnotationFacetFactory$Register +
-****
-
-.Dependencies
-****
-org.apache.isis.core:isis-core-metamodel:jar:<managed> +
-org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed> +
-****
-
-|Apache Isis Val - SSE (ui)
-[source,yaml]
-----
-Group: org.apache.isis.valuetypes
-Artifact: isis-valuetypes-sse-ui
-Type: pom
-Directory: /valuetypes/sse/ui
-----
-|.Dependencies
-****
-org.apache.isis.core:isis-core-metamodel:jar:<managed> +
-org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed> +
-****
-
-|Apache Isis Val - Server Sent Events (ui wicket)
-[source,yaml]
-----
-Group: org.apache.isis.valuetypes
-Artifact: isis-valuetypes-sse-ui-wkt
-Type: jar
-Directory: /valuetypes/sse/ui/wicket
-----
-|.Components
-****
-o.a.i.valuetypes.sse.ui.wkt.markup.ListeningMarkupPanelFactoriesForWicket$Parented +
-o.a.i.valuetypes.sse.ui.wkt.markup.ListeningMarkupPanelFactoriesForWicket$Standalone +
-o.a.i.valuetypes.sse.ui.wkt.services.SseServiceDefault +
-o.a.i.valuetypes.sse.ui.wkt.webmodule.WebModuleServerSentEvents +
-****
-
-.Dependencies
-****
-org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel:jar:<managed> +
-org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:valuetypes:index/sse/ui/wkt/IsisModuleValSseUiWkt.adoc[IsisModuleValSseUiWkt], xref:refguide:valuetypes:index/sse/ui/wkt/services/SseServiceDefault.adoc[SseServiceDefault], xref:refguide:valuetypes:index/sse/ui/wkt/webmodule/WebModuleServerSentEvents.adoc[WebModuleServerSentEvents]
-****
-|===
 
 == Extensions
 
@@ -3934,16 +3747,6 @@ skinparam rectangle<<44>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<22>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<23>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<45>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -3954,62 +3757,32 @@ skinparam rectangle<<46>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<24>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<47>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<25>> {
+skinparam rectangle<<48>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<26>> {
+skinparam rectangle<<49>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<27>> {
+skinparam rectangle<<50>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<28>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<29>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<30>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<31>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<32>> {
+skinparam rectangle<<51>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<10>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<33>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -4024,22 +3797,7 @@ skinparam rectangle<<12>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<34>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<13>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<35>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<36>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -4054,22 +3812,7 @@ skinparam rectangle<<15>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<37>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<38>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<16>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<39>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -4129,6 +3872,106 @@ skinparam rectangle<<9>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<20>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<21>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<22>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<23>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<24>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<25>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<26>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<27>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<28>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<29>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<30>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<31>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<32>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<33>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<34>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<35>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<36>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<37>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<38>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<39>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 skinparam rectangle<<40>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -4139,17 +3982,7 @@ skinparam rectangle<<41>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<20>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<42>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -4195,6 +4028,10 @@ package "Extensions\n[Software System]" {
   rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (impl)\n<size:10>[Container: packaging: jar]</size>" <<46>> as 46
   rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (parent)\n<size:10>[Container: packaging: pom]</size>" <<45>> as 45
   rectangle "==Apache Isis Ext - Security - Spring Oauth2\n<size:10>[Container: packaging: jar]</size>" <<47>> as 47
+  rectangle "==Apache Isis Ext - Server Sent Events\n<size:10>[Container: packaging: jar]</size>" <<49>> as 49
+  rectangle "==Apache Isis Ext - Server Sent Events (Wicket)\n<size:10>[Container: packaging: jar]</size>" <<51>> as 51
+  rectangle "==Apache Isis Ext - Server Sent Events (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<50>> as 50
+  rectangle "==Apache Isis Ext - Server Sent Events (parent)\n<size:10>[Container: packaging: pom]</size>" <<48>> as 48
   rectangle "==Apache Isis Ext - Session Log\n<size:10>[Container: packaging: pom]</size>" <<41>> as 41
   rectangle "==Apache Isis Ext - Session Log Applib\n<size:10>[Container: packaging: jar]</size>" <<42>> as 42
   rectangle "==Apache Isis Ext - Session Log Persistence (using JDO)\n<size:10>[Container: packaging: jar]</size>" <<43>> as 43
@@ -4232,6 +4069,9 @@ package "Extensions\n[Software System]" {
 33 .[#707070].> 39 : ""
 33 .[#707070].> 40 : ""
 45 .[#707070].> 46 : ""
+48 .[#707070].> 49 : ""
+48 .[#707070].> 51 : ""
+48 .[#707070].> 50 : ""
 41 .[#707070].> 42 : ""
 41 .[#707070].> 43 : ""
 41 .[#707070].> 44 : ""
@@ -4250,6 +4090,7 @@ package "Extensions\n[Software System]" {
 2 .[#707070].> 33 : ""
 2 .[#707070].> 45 : ""
 2 .[#707070].> 47 : ""
+2 .[#707070].> 48 : ""
 2 .[#707070].> 41 : ""
 2 .[#707070].> 27 : ""
 @enduml
@@ -5194,6 +5035,82 @@ org.springframework.boot:spring-boot-starter-oauth2-client:jar:<managed> +
 ****
 xref:refguide:extensions:index/spring/security/oauth2/IsisModuleExtSpringSecurityOAuth2.adoc[IsisModuleExtSpringSecurityOAuth2]
 ****
+
+|Apache Isis Ext - Server Sent Events (parent)
+[source,yaml]
+----
+Group: org.apache.isis.extensions
+Artifact: isis-extensions-sse
+Type: pom
+Directory: /extensions/sse
+----
+|Dynamically updating HTML markup
+
+|Apache Isis Ext - Server Sent Events
+[source,yaml]
+----
+Group: org.apache.isis.extensions
+Artifact: isis-extensions-sse-applib
+Type: jar
+Directory: /extensions/sse/applib
+----
+|.Dependencies
+****
+org.apache.isis.core:isis-core-metamodel:jar:<managed> +
+org.apache.isis.core:isis-core-webapp:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/sse/applib/IsisModuleExtSseApplib.adoc[IsisModuleExtSseApplib], xref:refguide:extensions:index/sse/applib/annotations/ServerSentEvents.adoc[ServerSentEvents], xref:refguide:extensions:index/sse/applib/annotations/SseSource.adoc[SseSource], xref:refguide:extensions:index/sse/applib/service/SseChannel.adoc[SseChannel], xref:refguide:extensions:index/sse/applib/service/SseService.adoc[SseService]
+****
+
+|Apache Isis Ext - Server Sent Events (metamodel)
+[source,yaml]
+----
+Group: org.apache.isis.extensions
+Artifact: isis-extensions-sse-metamodel
+Type: jar
+Directory: /extensions/sse/metamodel
+----
+|.Components
+****
+o.a.i.extensions.sse.metamodel.facets.SseAnnotationFacetFactory$Register +
+****
+
+.Dependencies
+****
+org.apache.isis.core:isis-core-metamodel:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-sse-applib:jar:<managed> +
+****
+
+|Apache Isis Ext - Server Sent Events (Wicket)
+[source,yaml]
+----
+Group: org.apache.isis.extensions
+Artifact: isis-extensions-sse-wicket
+Type: jar
+Directory: /extensions/sse/wicket
+----
+|.Components
+****
+o.a.i.extensions.sse.wicket.markup.ListeningMarkupPanelFactoriesForWicket$Parented +
+o.a.i.extensions.sse.wicket.markup.ListeningMarkupPanelFactoriesForWicket$Standalone +
+o.a.i.extensions.sse.wicket.services.SseServiceDefault +
+o.a.i.extensions.sse.wicket.webmodule.WebModuleServerSentEvents +
+****
+
+.Dependencies
+****
+org.apache.isis.extensions:isis-extensions-sse-metamodel:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/sse/wicket/IsisModuleExtSseWicket.adoc[IsisModuleExtSseWicket], xref:refguide:extensions:index/sse/wicket/services/SseServiceDefault.adoc[SseServiceDefault], xref:refguide:extensions:index/sse/wicket/webmodule/WebModuleServerSentEvents.adoc[WebModuleServerSentEvents]
+****
 |===
 
 === Applib: Excel
@@ -5986,12 +5903,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -6173,6 +6090,7 @@ org.apache.isis.extensions:isis-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-encryption-jbcrypt:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-sse-metamodel:jar:<managed> +
 org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed> +
 org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed> +
@@ -6180,7 +6098,6 @@ org.apache.isis.security:isis-security-shiro:jar:<managed> +
 org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-metamodel:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-markdown-metamodel:jar:<managed> +
-org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-restfulobjects-client:jar:<managed> +
 ****
 
@@ -6575,7 +6492,7 @@ Directory: /incubator/viewers/graphql/model
 ****
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-graphql-applib:jar:<managed> +
-org.apache.isis.viewer:isis-viewer-common:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-model:jar:<managed> +
 org.springframework.graphql:spring-graphql:jar:<managed> +
 ****
 
@@ -6697,7 +6614,7 @@ io.swagger.parser.v3:swagger-parser-core:jar:2.0.20 +
 io.swagger.parser.v3:swagger-parser-v3:jar:2.0.20 +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
-org.apache.isis.viewer:isis-viewer-common:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-model:jar:<managed> +
 ****
 
 |Apache Isis Inc - Viewer Vaadin (UI Components)
@@ -6730,6 +6647,7 @@ com.vaadin:vaadin-spring:jar:<managed> +
 commons-fileupload:commons-fileupload:jar:1.4 +
 org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-vaadin-model:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-prism:jar:${project.version} +
 ****
 
 |Apache Isis Inc - Viewer Vaadin (Viewer)
@@ -6825,7 +6743,7 @@ Directory: /incubator/viewers/javafx/model
 |.Dependencies
 ****
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
-org.apache.isis.viewer:isis-viewer-common:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-model:jar:<managed> +
 org.openjfx:javafx-base:jar:<managed> +
 org.openjfx:javafx-controls:jar:<managed> +
 org.openjfx:javafx-fxml:jar:<managed> +
