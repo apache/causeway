@@ -90,6 +90,10 @@ content:
     - url: .
       start_path: extensions/vw/pdfjs/adoc # vw
       branches: HEAD
+    - url: .
+      start_path: extensions/sse/adoc # extensions
+      branches: HEAD
+      
 
 # mavendeps
     - url: .

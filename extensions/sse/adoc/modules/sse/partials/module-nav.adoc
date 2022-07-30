@@ -1,5 +1,5 @@
 
 
 
-* xref:valuetypes:sse:about.adoc[SSE]
+* xref:extensions:sse:about.adoc[SSE]
 
