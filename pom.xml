@@ -154,7 +154,6 @@
 				<module>incubator/viewers/graphql</module>
 				<module>incubator/viewers/javafx</module>
 				<module>incubator/viewers/vaadin</module>
-				<module>valuetypes/prism/vaadin</module>
 				<module>valuetypes/asciidoc/ui/vaadin</module>
 
 				<module>regressiontests</module>

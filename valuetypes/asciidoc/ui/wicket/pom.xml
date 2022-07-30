@@ -58,12 +58,6 @@
             <scope>provided</scope>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-            <artifactId>isis-valuetypes-prism-resources</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
 	</dependencies>
 
 </project>
