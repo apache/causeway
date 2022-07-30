@@ -58,9 +58,9 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
+		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
-            <artifactId>isis-valuetypes-prism-wicket</artifactId>
+            <artifactId>isis-valuetypes-prism-resources</artifactId>
             <version>${project.version}</version>
         </dependency>
 

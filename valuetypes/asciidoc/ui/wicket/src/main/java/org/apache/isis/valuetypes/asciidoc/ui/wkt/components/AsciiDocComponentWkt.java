@@ -28,11 +28,11 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.valuetypes.prism.wkt.PrismResourcesWkt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent_reloadJs;
+import org.apache.isis.viewer.wicket.ui.util.PrismResourcesWkt;
 
 import lombok.val;
 

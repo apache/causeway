@@ -28,8 +28,6 @@
 	
 	<modules>
 		<module>resources</module>
-		<module>wicket</module>
-<!-- 		<module>vaadin</module> incubator -->
 	</modules>
 
 </project>

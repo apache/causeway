@@ -112,8 +112,8 @@ Folder moved `/isis-parent` -> `/bom`
 .Bill of Material
 ----
 <!-- renamed
-<groupId>org.apache.isis</groupId>
-<artifactId>isis-parent</artifactId>
+	<groupId>org.apache.isis</groupId>
+	<artifactId>isis-parent</artifactId>
 -->
 
 <groupId>org.apache.isis</groupId>
@@ -136,8 +136,8 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 .Restclient Artifacts
 ----
 <!-- renamed
-<groupId>org.apache.isis.mappings</groupId>
-<artifactId>isis-mappings-restclient-applib</artifactId>
+	<groupId>org.apache.isis.mappings</groupId>
+	<artifactId>isis-mappings-restclient-applib</artifactId>
 -->
 
 <groupId>org.apache.isis.viewer</groupId>
@@ -160,8 +160,8 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 .Mappings
 ----
 <!-- all removed
-<groupId>org.apache.isis.mappings</groupId>
-<artifactId>isis-mappings-...</artifactId>
+	<groupId>org.apache.isis.mappings</groupId>
+	<artifactId>isis-mappings-...</artifactId>
 -->
 ----
 
@@ -171,9 +171,9 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 .integtests
 ----
 <!-- removed
-<groupId>org.apache.isis.mavendeps</groupId>
-<artifactId>isis-mavendeps-integtests</artifactId>
-<type>pom</type>
+	<groupId>org.apache.isis.mavendeps</groupId>
+	<artifactId>isis-mavendeps-integtests</artifactId>
+	<type>pom</type>
 -->
 
 <!-- instead use directly as required ... -->
@@ -192,9 +192,9 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 .unittests
 ----
 <!-- removed
-<groupId>org.apache.isis.mavendeps</groupId>
-<artifactId>isis-mavendeps-unittests</artifactId>
-<type>pom</type>
+	<groupId>org.apache.isis.mavendeps</groupId>
+	<artifactId>isis-mavendeps-unittests</artifactId>
+	<type>pom</type>
 -->
 
 <!-- instead use directly as required ... -->
@@ -206,4 +206,11 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 <artifactId>isis-testing-fakedata-applib</artifactId>
 ----
 
-
+[source, xml]
+.valuetypes
+----
+<!-- removed
+	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-prism-wicket</artifactId>
+-->
+----

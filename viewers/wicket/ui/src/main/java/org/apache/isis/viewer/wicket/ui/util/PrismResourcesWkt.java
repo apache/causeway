@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.prism.wkt;
+package org.apache.isis.viewer.wicket.ui.util;
 
 import java.util.ArrayList;
 import java.util.List;
