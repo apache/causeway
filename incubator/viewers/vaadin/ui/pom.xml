@@ -121,6 +121,12 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-runtimeservices</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+            <artifactId>isis-valuetypes-prism-resources</artifactId>
+            <version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.vaadin</groupId>

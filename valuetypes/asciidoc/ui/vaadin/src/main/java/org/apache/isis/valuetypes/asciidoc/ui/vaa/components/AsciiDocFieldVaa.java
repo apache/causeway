@@ -25,8 +25,8 @@ import com.vaadin.flow.component.html.Div;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
+import org.apache.isis.incubator.viewer.vaadin.ui.util.PrismResourcesVaa;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
-import org.apache.isis.valuetypes.prism.vaa.PrismResourcesVaa;
 
 public class AsciiDocFieldVaa extends CustomField<AsciiDoc> {
 

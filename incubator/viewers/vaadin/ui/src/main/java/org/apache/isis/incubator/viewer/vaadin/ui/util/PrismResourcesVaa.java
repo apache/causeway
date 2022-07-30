@@ -16,9 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.valuetypes.prism.vaa;
+package org.apache.isis.incubator.viewer.vaadin.ui.util;
 
-import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
 import org.apache.isis.valuetypes.prism.Prism;
 
 import lombok.Getter;

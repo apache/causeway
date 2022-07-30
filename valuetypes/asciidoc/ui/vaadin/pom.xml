@@ -36,12 +36,6 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        
-        <dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-            <artifactId>isis-valuetypes-prism-vaadin</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
 	</dependencies>
 
