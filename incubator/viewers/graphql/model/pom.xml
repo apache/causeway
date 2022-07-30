@@ -33,7 +33,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-common</artifactId>
+			<artifactId>isis-viewer-commons-model</artifactId>
 		</dependency>
 
 		<dependency>

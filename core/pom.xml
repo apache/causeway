@@ -519,7 +519,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-common</artifactId>
+				<artifactId>isis-viewer-commons-model</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -1619,7 +1619,7 @@
 		<module>../security/shiro</module>
 		<module>../security/spring</module>
 
-		<module>../viewers/common</module>
+		<module>../viewers/commons</module>
 		<module>../viewers/restfulobjects</module>
 		<module>../viewers/wicket</module>
 

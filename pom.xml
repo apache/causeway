@@ -228,7 +228,7 @@
 				<module>examples/demo/domain</module>
 				<module>examples/demo/web</module>
 
-				<module>examples/demo/wicket/common</module>
+				<module>examples/demo/wicket/commons</module>
 				<module>examples/demo/wicket/jdo</module>
 				<module>examples/demo/wicket/jpa</module>
 			</modules>
@@ -248,7 +248,7 @@
 				<module>incubator/viewers/vaadin</module>
 				<module>examples/demo/domain</module>
 				<module>examples/demo/web</module>
-				<module>examples/demo/wicket/common</module>
+				<module>examples/demo/wicket/commons</module>
 				<module>examples/demo/wicket/jdo</module>
 
 				<module>examples/demo/vaadin</module>
