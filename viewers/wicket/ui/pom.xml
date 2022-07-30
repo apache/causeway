@@ -73,8 +73,8 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-            <artifactId>isis-valuetypes-prism-resources</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+            <artifactId>isis-viewer-commons-prism</artifactId>
             <version>${project.version}</version>
         </dependency>
 		

@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
-import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
+import org.apache.isis.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

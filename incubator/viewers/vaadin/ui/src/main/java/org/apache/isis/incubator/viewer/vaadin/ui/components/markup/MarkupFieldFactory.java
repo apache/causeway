@@ -22,7 +22,7 @@ import com.vaadin.flow.component.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
-import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
+import org.apache.isis.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.val;
 

@@ -54,9 +54,9 @@ import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
-import org.apache.isis.viewer.common.model.components.UiComponentFactory;
-import org.apache.isis.viewer.common.model.decorators.DisablingDecorator.DisablingDecorationModel;
-import org.apache.isis.viewer.common.model.gridlayout.UiGridLayout;
+import org.apache.isis.viewer.commons.model.components.UiComponentFactory;
+import org.apache.isis.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
+import org.apache.isis.viewer.commons.model.gridlayout.UiGridLayout;
 
 import lombok.NonNull;
 import lombok.val;

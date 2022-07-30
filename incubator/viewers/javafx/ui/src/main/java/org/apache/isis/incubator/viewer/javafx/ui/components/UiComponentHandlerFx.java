@@ -18,8 +18,8 @@
  */
 package org.apache.isis.incubator.viewer.javafx.ui.components;
 
-import org.apache.isis.viewer.common.model.binding.BindingConverterForManagedObject;
-import org.apache.isis.viewer.common.model.components.UiComponentFactory;
+import org.apache.isis.viewer.commons.model.binding.BindingConverterForManagedObject;
+import org.apache.isis.viewer.commons.model.components.UiComponentFactory;
 
 import javafx.scene.Node;
 import javafx.util.StringConverter;

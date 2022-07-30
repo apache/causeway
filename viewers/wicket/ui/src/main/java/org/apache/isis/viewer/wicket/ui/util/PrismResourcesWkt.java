@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.valuetypes.prism.Prism;
-import org.apache.isis.valuetypes.prism.PrismLanguage;
+import org.apache.isis.viewer.commons.prism.Prism;
+import org.apache.isis.viewer.commons.prism.PrismLanguage;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;

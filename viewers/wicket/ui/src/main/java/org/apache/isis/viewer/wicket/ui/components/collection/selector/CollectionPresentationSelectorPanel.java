@@ -30,8 +30,8 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.viewer.common.model.PlacementDirection;
-import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.PlacementDirection;
+import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
@@ -46,7 +46,7 @@ import lombok.val;
 
 /**
  * Provides a list of links for selecting other views that support
- * {@link org.apache.isis.viewer.common.model.components.ComponentType#COLLECTION_CONTENTS} with a backing
+ * {@link org.apache.isis.viewer.commons.model.components.ComponentType#COLLECTION_CONTENTS} with a backing
  * {@link org.apache.isis.viewer.wicket.model.models.EntityCollectionModel}.
  */
 public class CollectionPresentationSelectorPanel

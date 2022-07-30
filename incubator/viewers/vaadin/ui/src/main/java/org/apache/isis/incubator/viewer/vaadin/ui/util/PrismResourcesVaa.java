@@ -18,7 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.ui.util;
 
-import org.apache.isis.valuetypes.prism.Prism;
+import org.apache.isis.viewer.commons.prism.Prism;
 
 import lombok.Getter;
 import lombok.experimental.UtilityClass;

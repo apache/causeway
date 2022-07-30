@@ -34,7 +34,7 @@ import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.object.ObjectViewFx;
-import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
+import org.apache.isis.viewer.commons.model.header.HeaderUiModelProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

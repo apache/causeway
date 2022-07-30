@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.viewer.common.model.decorators.DisablingDecorator;
+import org.apache.isis.viewer.commons.model.decorators.DisablingDecorator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

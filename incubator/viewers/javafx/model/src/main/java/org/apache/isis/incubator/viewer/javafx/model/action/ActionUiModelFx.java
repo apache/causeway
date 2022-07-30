@@ -21,7 +21,7 @@ package org.apache.isis.incubator.viewer.javafx.model.action;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
-import org.apache.isis.viewer.common.model.action.ActionUiModel;
+import org.apache.isis.viewer.commons.model.action.ActionUiModel;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

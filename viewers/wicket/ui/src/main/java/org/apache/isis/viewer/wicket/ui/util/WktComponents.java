@@ -27,7 +27,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.lang.Args;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
-import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.ComponentType;
 
 import de.agilecoders.wicket.jquery.util.Strings2;
 

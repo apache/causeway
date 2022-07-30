@@ -40,8 +40,8 @@ import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.Prototyp
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandlerFx;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilderFx;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiContextFxDefault;
+import org.apache.isis.viewer.commons.model.IsisModuleViewerCommon;
 import org.apache.isis.incubator.viewer.javafx.ui.main.MainViewFx;
-import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
 
 /**
  *

@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.pages.common.fontawesome;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 
-import org.apache.isis.viewer.common.model.decorators.IconDecorator;
+import org.apache.isis.viewer.commons.model.decorators.IconDecorator;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;

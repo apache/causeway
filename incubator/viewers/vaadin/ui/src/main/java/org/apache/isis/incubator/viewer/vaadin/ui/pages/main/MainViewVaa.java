@@ -39,8 +39,8 @@ import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryV
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectViewVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
-import org.apache.isis.viewer.common.model.decorators.IconDecorator;
-import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
+import org.apache.isis.viewer.commons.model.decorators.IconDecorator;
+import org.apache.isis.viewer.commons.model.header.HeaderUiModelProvider;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

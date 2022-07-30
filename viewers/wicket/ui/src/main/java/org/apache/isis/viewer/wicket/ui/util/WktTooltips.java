@@ -25,8 +25,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.viewer.common.model.PlacementDirection;
-import org.apache.isis.viewer.common.model.decorators.TooltipDecorator.TooltipDecorationModel;
+import org.apache.isis.viewer.commons.model.PlacementDirection;
+import org.apache.isis.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.isis.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 

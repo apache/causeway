@@ -211,6 +211,16 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 ----
 <!-- removed
 	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-prism</artifactId>
+-->
+
+<!-- removed
+	<groupId>org.apache.isis.valuetypes</groupId>
+	<artifactId>isis-valuetypes-resources</artifactId>
+-->
+
+<!-- removed
+	<groupId>org.apache.isis.valuetypes</groupId>
 	<artifactId>isis-valuetypes-prism-wicket</artifactId>
 -->
 
@@ -218,4 +228,10 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 	<groupId>org.apache.isis.valuetypes</groupId>
 	<artifactId>isis-valuetypes-prism-vaadin</artifactId>
 -->
+
+<!-- instead use ... -->
+
+<groupId>org.apache.isis.viewer.commons</groupId>
+<artifactId>isis-viewer-commons-prism</artifactId>
+
 ----

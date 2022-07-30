@@ -165,7 +165,6 @@
 	</dependencies>
 
 	<modules>
-		<module>prism</module>
 		<module>jodatime</module>
 		<module>asciidoc</module>
 		<module>markdown</module>

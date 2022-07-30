@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.viewer.common.model.HasParentUiModel;
-import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.commons.model.HasParentUiModel;
+import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.ObjectUiModelWkt;
 
 import lombok.NonNull;

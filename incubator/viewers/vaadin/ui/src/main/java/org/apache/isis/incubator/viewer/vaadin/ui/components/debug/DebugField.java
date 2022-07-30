@@ -24,7 +24,7 @@ import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 
-import org.apache.isis.viewer.common.model.debug.DebugUiModel;
+import org.apache.isis.viewer.commons.model.debug.DebugUiModel;
 
 import lombok.val;
 

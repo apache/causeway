@@ -29,7 +29,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
-import org.apache.isis.viewer.common.model.StringForRendering;
+import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
