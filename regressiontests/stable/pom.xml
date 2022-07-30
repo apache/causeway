@@ -50,8 +50,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-sse-metamodel</artifactId>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-sse-metamodel</artifactId>
 		</dependency>
 		
         <dependency>

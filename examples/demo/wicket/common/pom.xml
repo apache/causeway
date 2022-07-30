@@ -88,8 +88,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-sse-ui-wkt</artifactId>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-sse-wicket</artifactId>
 		</dependency>
 
 		<!-- EXTENSIONS -->
