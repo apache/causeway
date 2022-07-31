@@ -64,4 +64,13 @@ public final class LayoutConstants {
      */
     public static final String METADATA_FIELDSET_ID = "metadata";
 
+    /**
+     * The id for a field set intended to hold additional details.
+     *
+     * <p>
+     *     The fallback layout places the 'details' fieldset under the above 'identity' and 'metadata' fieldsets.
+     * </p>
+     */
+    public static final String DETAILS_FIELDSET_ID = "details";
+
 }
