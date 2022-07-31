@@ -52,9 +52,9 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-mask",
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         redirectPolicy = Redirect.EVEN_IF_SAME,
-        associateWith = LayoutConstants.METADATA_FIELDSET_ID,
         sequence = "850.2"
 )
 //mixin's don't need a logicalTypeName

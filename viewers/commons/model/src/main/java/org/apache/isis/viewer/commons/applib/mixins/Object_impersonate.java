@@ -48,8 +48,8 @@ import lombok.RequiredArgsConstructor;
         restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
-        associateWith = LayoutConstants.METADATA_FIELDSET_ID,
         cssClassFa = "fa-mask",
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         redirectPolicy = Redirect.EVEN_IF_SAME,
         sequence = "850.1"

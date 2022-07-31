@@ -52,8 +52,8 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-download",
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = LayoutConstants.METADATA_FIELDSET_ID,
         sequence = "700.1"
 )
 //mixin's don't need a logicalTypeName

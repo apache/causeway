@@ -62,11 +62,11 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-circle",
-        position = ActionLayout.Position.PANEL,
-        associateWith = LayoutConstants.METADATA_FIELDSET_ID,
-        sequence = "400.1",
         describedAs = "Resets the presentation of the displayed object/page to its initial form. "
-                + "(table sorting, tab selection, etc.)"
+                + "(table sorting, tab selection, etc.)",
+        position = ActionLayout.Position.PANEL,
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
+        sequence = "400.1"
 )
 @RequiredArgsConstructor
 public class Object_clearHints {

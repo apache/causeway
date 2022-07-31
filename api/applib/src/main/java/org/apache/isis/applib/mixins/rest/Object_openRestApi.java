@@ -50,8 +50,8 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-external-link-alt",
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = LayoutConstants.METADATA_FIELDSET_ID,
         sequence = "750.1"
 )
 //mixin's don't need a logicalTypeName

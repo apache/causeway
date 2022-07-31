@@ -45,10 +45,10 @@ import lombok.RequiredArgsConstructor;
 @Property(
         domainEvent = Persistable_datanucleusVersionLong.PropertyDomainEvent.class)
 @PropertyLayout(
-        named = "Version",
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         hidden = Where.ALL_TABLES,
-        fieldSetId = LayoutConstants.METADATA_FIELDSET_ID,
-        sequence = "800.2"
+        named = "Version",
+        sequence = "500.2"
         )
 @RequiredArgsConstructor
 public class Persistable_datanucleusVersionLong {

@@ -271,7 +271,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                 Set<String> boundAssociationIds =
                         boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
                 boundAssociationIds.add(oneToOneAssociation.getId());
-            } else if(id.equals(LayoutConstants.METADATA_FIELDSET_ID)) {
+            } else if(id.equals(LayoutConstants.FieldSetId.METADATA)) {
                 unboundMetadataContributingIds.add(oneToOneAssociation.getId());
             }
         }

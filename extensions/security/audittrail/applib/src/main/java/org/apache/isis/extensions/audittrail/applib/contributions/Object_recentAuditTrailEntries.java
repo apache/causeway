@@ -27,8 +27,10 @@ import javax.inject.Inject;
 
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -43,6 +45,12 @@ import lombok.val;
 @Action(
         domainEvent = Object_recentAuditTrailEntries.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE
+)
+@ActionLayout(
+        cssClassFa = "fa-bolt",
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
+        sequence = "900.3"
 )
 @RequiredArgsConstructor
 public class Object_recentAuditTrailEntries {

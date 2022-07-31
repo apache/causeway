@@ -54,7 +54,7 @@ import lombok.RequiredArgsConstructor;
 @ActionLayout(
         cssClassFa = "fa-bolt",
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = LayoutConstants.METADATA_FIELDSET_ID,
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         sequence = "900.1"
 )
 @RequiredArgsConstructor

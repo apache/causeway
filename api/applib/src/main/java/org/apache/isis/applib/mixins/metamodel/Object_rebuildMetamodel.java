@@ -47,8 +47,8 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
         cssClassFa = "fa-sync",
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL,
-        associateWith = LayoutConstants.METADATA_FIELDSET_ID,
         sequence = "800.1"
 )
 //mixin's don't need a logicalTypeName

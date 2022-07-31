@@ -53,8 +53,8 @@ import lombok.val;
 @Property
 @PropertyLayout(
         hidden = Where.ALL_TABLES,
-        fieldSetId = LayoutConstants.METADATA_FIELDSET_ID,
-        sequence = "700.2"
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
+        sequence = "400.2"
 )
 //mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
