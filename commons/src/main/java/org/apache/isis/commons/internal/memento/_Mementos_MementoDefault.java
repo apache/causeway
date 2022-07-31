@@ -76,9 +76,6 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
         if(value==null) {
             return this; //no-op, there is no point in storing null values
         }
-        if(name.equals("contingentHours")) {
-            System.err.printf("storing contingentHours %s%n", "" + value);
-        }
         valuesByKey.put(name, serializer.write(value));
         return this;
     }

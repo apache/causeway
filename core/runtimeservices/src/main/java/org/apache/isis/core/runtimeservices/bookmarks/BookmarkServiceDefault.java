@@ -171,7 +171,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
 
         Optional<IdStringifier<T>> idStringifierIfAny = idStringifierLookupService.lookup(aClass);
         if(idStringifierIfAny.isPresent()) {
-            IdStringifier<T> idStringifier = idStringifierIfAny.get();
+            final IdStringifier<T> idStringifier = idStringifierIfAny.get();
             return idStringifier.enstring(value);
         }
 
