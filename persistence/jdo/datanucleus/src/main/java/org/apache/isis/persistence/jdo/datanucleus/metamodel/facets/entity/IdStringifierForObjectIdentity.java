@@ -18,17 +18,13 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
-import java.util.UUID;
-
 import javax.annotation.Priority;
-import javax.inject.Inject;
 import javax.jdo.identity.ObjectIdentity;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForUuid;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -38,29 +34,13 @@ import lombok.NonNull;
 @Builder
 public class IdStringifierForObjectIdentity extends IdStringifier.Abstract<ObjectIdentity> {
 
-    @Inject IdStringifierForUuid idStringifierForUuid;
-
     public IdStringifierForObjectIdentity() {
         super(ObjectIdentity.class);
-    }
-
-    /**
-     * for testing only
-     * @param idStringifierForUuid
-     */
-    @Builder
-    IdStringifierForObjectIdentity(final IdStringifierForUuid idStringifierForUuid) {
-        this();
-        this.idStringifierForUuid = idStringifierForUuid;
     }
 
     @Override
     public String enstring(final @NonNull ObjectIdentity value) {
         Object keyAsObject = value.getKeyAsObject();
-        if (keyAsObject instanceof UUID) {
-            UUID uuid = (UUID) keyAsObject;
-            return idStringifierForUuid.enstring(uuid);
-        }
         // rely on JDO spec (5.4.3)
         return value.toString();
     }
@@ -69,10 +49,6 @@ public class IdStringifierForObjectIdentity extends IdStringifier.Abstract<Objec
     public ObjectIdentity destring(
             final @NonNull String stringified,
             final Class<?> targetEntityClassIfAny) {
-        if (idStringifierForUuid.recognizes(stringified)) {
-            UUID uuid = idStringifierForUuid.destring(stringified, targetEntityClassIfAny);
-            return new ObjectIdentity(targetEntityClassIfAny, uuid);
-        }
         return new ObjectIdentity(targetEntityClassIfAny, stringified);
     }
 }

@@ -32,14 +32,14 @@ import lombok.NonNull;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForUuid extends IdStringifier.AbstractWithPrefix<UUID> {
+public class IdStringifierForUuid extends IdStringifier.Abstract<UUID> {
 
     public IdStringifierForUuid() {
-        super(UUID.class, "u");
+        super(UUID.class);
     }
 
     @Override
-    public UUID doDestring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public UUID destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         return UUID.fromString(stringified);
     }
 
