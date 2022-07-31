@@ -49,13 +49,13 @@ public class IdStringifierForObjectIdentity extends IdStringifier.Abstract<Objec
      * @param idStringifierForUuid
      */
     @Builder
-    IdStringifierForObjectIdentity(IdStringifierForUuid idStringifierForUuid) {
+    IdStringifierForObjectIdentity(final IdStringifierForUuid idStringifierForUuid) {
         this();
         this.idStringifierForUuid = idStringifierForUuid;
     }
 
     @Override
-    public String enstring(@NonNull ObjectIdentity value) {
+    public String enstring(final @NonNull ObjectIdentity value) {
         Object keyAsObject = value.getKeyAsObject();
         if (keyAsObject instanceof UUID) {
             UUID uuid = (UUID) keyAsObject;
@@ -66,7 +66,9 @@ public class IdStringifierForObjectIdentity extends IdStringifier.Abstract<Objec
     }
 
     @Override
-    public ObjectIdentity destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public ObjectIdentity destring(
+            final @NonNull String stringified,
+            final @NonNull Class<?> targetEntityClass) {
         if (idStringifierForUuid.recognizes(stringified)) {
             UUID uuid = idStringifierForUuid.destring(stringified, targetEntityClass);
             return new ObjectIdentity(targetEntityClass, uuid);

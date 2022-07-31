@@ -35,7 +35,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
@@ -47,6 +46,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.val;
@@ -143,7 +143,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
 
         val idStringifierIfAny = idStringifierLookupService.lookup(valueClass);
         if(idStringifierIfAny.isPresent()) {
-            IdStringifier<T> idStringifier = idStringifierIfAny.get();
+            final IdStringifier<T> idStringifier = idStringifierIfAny.get();
             return idStringifier.destring((String)value, null);
         }
 
@@ -167,7 +167,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
         return write(_Casts.uncheckedCast(value), value.getClass());
     }
 
-    private <T> Serializable write(T value, Class<T> aClass) {
+    private <T> Serializable write(final T value, final Class<T> aClass) {
 
         Optional<IdStringifier<T>> idStringifierIfAny = idStringifierLookupService.lookup(aClass);
         if(idStringifierIfAny.isPresent()) {

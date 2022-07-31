@@ -21,7 +21,6 @@ package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 import javax.annotation.Priority;
 
 import org.datanucleus.identity.DatastoreIdImpl;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -42,13 +41,15 @@ public class IdStringifierForDatastoreIdImpl extends IdStringifier.Abstract<Data
     }
 
     @Override
-    public String enstring(@NonNull DatastoreIdImpl value) {
+    public String enstring(final @NonNull DatastoreIdImpl value) {
         return value.getKeyAsObject().toString();
     }
 
     @SneakyThrows
     @Override
-    public DatastoreIdImpl destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public DatastoreIdImpl destring(
+            final @NonNull String stringified,
+            final @NonNull Class<?> targetEntityClass) {
         // enString invoked toString() on the original key; invoking toString() on its stringified form does not change it
         val proto = new DatastoreIdImpl(targetEntityClass.getName(), stringified);
         // now render in the form that the DataStoreImpl constructor expects; it will take it apart itself.

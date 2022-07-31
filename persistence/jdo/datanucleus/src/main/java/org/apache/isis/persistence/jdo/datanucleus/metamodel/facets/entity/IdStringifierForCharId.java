@@ -46,18 +46,20 @@ public class IdStringifierForCharId extends IdStringifier.Abstract<CharId> {
      * for testing only
      */
     @Builder
-    IdStringifierForCharId(IdStringifierForCharacter idStringifierForCharacter) {
+    IdStringifierForCharId(final IdStringifierForCharacter idStringifierForCharacter) {
         this();
         this.idStringifierForCharacter = idStringifierForCharacter;
     }
 
     @Override
-    public String enstring(@NonNull CharId value) {
+    public String enstring(final @NonNull CharId value) {
         return idStringifierForCharacter.enstring(value.getKey());
     }
 
     @Override
-    public CharId destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public CharId destring(
+            final @NonNull String stringified,
+            final @NonNull Class<?> targetEntityClass) {
         val idValue = idStringifierForCharacter.destring(stringified, targetEntityClass);
         return new CharId(targetEntityClass, idValue);
     }

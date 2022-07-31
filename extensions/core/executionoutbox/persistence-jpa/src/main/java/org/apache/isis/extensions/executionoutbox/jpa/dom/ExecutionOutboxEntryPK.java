@@ -37,7 +37,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.val;
 
 @EqualsAndHashCode(of = {"interactionId", "sequence"})
@@ -78,12 +77,14 @@ public class ExecutionOutboxEntryPK implements Serializable {
         }
 
         @Override
-        public String enstring(ExecutionOutboxEntryPK value) {
+        public String enstring(final ExecutionOutboxEntryPK value) {
             return value.toString();
         }
 
         @Override
-        public ExecutionOutboxEntryPK destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+        public ExecutionOutboxEntryPK destring(
+                final @NonNull String stringified,
+                final @NonNull Class<?> targetEntityClass) {
             return new ExecutionOutboxEntryPK(stringified);
         }
     }

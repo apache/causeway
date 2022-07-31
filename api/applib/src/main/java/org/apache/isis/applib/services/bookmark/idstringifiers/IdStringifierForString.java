@@ -59,7 +59,9 @@ public class IdStringifierForString extends IdStringifier.Abstract<String> {
      * Not API, but publicly visible for adhoc reuse by other {@link IdStringifier} implementations.
      */
     @Override
-    public String destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public String destring(
+            final @NonNull String stringified,
+            final @NonNull Class<?> targetEntityClass) {
         if(stringified.startsWith(REGULAR_PREFIX)) {
             return stringified.substring(REGULAR_PREFIX.length());
         }

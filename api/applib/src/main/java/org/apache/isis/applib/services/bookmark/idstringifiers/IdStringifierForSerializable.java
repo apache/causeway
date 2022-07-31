@@ -55,19 +55,19 @@ public class IdStringifierForSerializable extends IdStringifier.Abstract<Seriali
         this.codec = codec;
         this.serializer = new _Mementos.SerializingAdapter() {
             @Override
-            public Serializable write(Object value) {
+            public Serializable write(final Object value) {
                 return _Casts.uncheckedCast(value);
             }
 
             @Override
-            public <T> T read(Class<T> cls, Serializable value) {
+            public <T> T read(final Class<T> cls, final Serializable value) {
                 return _Casts.uncheckedCast(value);
             }
         };
     }
 
     @Override
-    public boolean handles(@NonNull Class<?> candidateValueClass) {
+    public boolean handles(final @NonNull Class<?> candidateValueClass) {
         return isPredefinedSerializable(candidateValueClass);
     }
 
@@ -77,7 +77,9 @@ public class IdStringifierForSerializable extends IdStringifier.Abstract<Seriali
     }
 
     @Override
-    public Serializable destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public Serializable destring(
+            final @NonNull String stringified,
+            final @NonNull Class<?> targetEntityClass) {
         if (_Strings.isEmpty(stringified)) {
             return null;
         }

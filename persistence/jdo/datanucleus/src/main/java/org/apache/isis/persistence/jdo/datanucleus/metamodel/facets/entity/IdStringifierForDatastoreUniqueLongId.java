@@ -39,15 +39,16 @@ public class IdStringifierForDatastoreUniqueLongId extends IdStringifier.Abstrac
     }
 
     @Override
-    public String enstring(@NonNull DatastoreUniqueLongId value) {
+    public String enstring(final @NonNull DatastoreUniqueLongId value) {
         return value.toString();
     }
 
     @SneakyThrows
     @Override
-    public DatastoreUniqueLongId destring(@NonNull String stringified, @Nullable Class<?> targetEntityClass) {
+    public DatastoreUniqueLongId destring(
+            final @NonNull String stringified,
+            final @Nullable Class<?> targetEntityClass) {
         return new DatastoreUniqueLongId(stringified);
     }
-
 
 }

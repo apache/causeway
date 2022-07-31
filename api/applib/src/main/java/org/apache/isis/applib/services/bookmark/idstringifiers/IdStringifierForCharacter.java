@@ -60,7 +60,9 @@ public class IdStringifierForCharacter extends IdStringifier.Abstract<Character>
      * Not API, but publicly visible for adhoc reuse by other {@link IdStringifier} implementations.
      */
     @Override
-    public Character destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public Character destring(
+            final @NonNull String stringified,
+            final @NonNull Class<?> targetEntityClass) {
         if(stringified.startsWith(REGULAR_PREFIX)) {
             return stringified.substring(REGULAR_PREFIX.length()).charAt(0);
         }
