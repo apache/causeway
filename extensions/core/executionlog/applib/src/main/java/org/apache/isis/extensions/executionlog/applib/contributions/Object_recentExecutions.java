@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
@@ -54,8 +54,8 @@ import lombok.RequiredArgsConstructor;
 @ActionLayout(
         cssClassFa = "fa-bolt",
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
-        sequence = "900.1"
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
+        sequence = "900.2"
 )
 @RequiredArgsConstructor
 public class Object_recentExecutions {

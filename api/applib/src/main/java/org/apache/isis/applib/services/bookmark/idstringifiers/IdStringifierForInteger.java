@@ -30,14 +30,14 @@ import lombok.NonNull;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForInteger extends IdStringifier.AbstractWithPrefix<Integer> {
+public class IdStringifierForInteger extends IdStringifier.Abstract<Integer> {
 
     public IdStringifierForInteger() {
-        super(Integer.class, "i", int.class);
+        super(Integer.class, int.class);
     }
 
     @Override
-    protected Integer doDestring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public Integer destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         return Integer.parseInt(stringified);
     }
 }

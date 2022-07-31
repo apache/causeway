@@ -60,19 +60,19 @@ public class CommandLogEntryPK implements Serializable {
 
 
     @Component
-    public static class Stringifier extends IdStringifier.AbstractWithPrefix<CommandLogEntryPK> {
+    public static class Stringifier extends IdStringifier.Abstract<CommandLogEntryPK> {
 
         public Stringifier() {
-            super(CommandLogEntryPK.class, "u");
+            super(CommandLogEntryPK.class);
         }
 
         @Override
-        public String doEnstring(CommandLogEntryPK value) {
+        public String enstring(CommandLogEntryPK value) {
             return value.getInteractionId().toString();
         }
 
         @Override
-        protected CommandLogEntryPK doDestring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+        public CommandLogEntryPK destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
             return new CommandLogEntryPK(UUID.fromString(stringified));
         }
     }

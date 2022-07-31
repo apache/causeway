@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
@@ -48,8 +48,8 @@ import lombok.RequiredArgsConstructor;
         restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         cssClassFa = "fa-mask",
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         redirectPolicy = Redirect.EVEN_IF_SAME,
         sequence = "850.1"

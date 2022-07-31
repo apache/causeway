@@ -186,41 +186,49 @@
 		</dependency>
 	</dependencies>
 
+	<modules>
+		<module>domain</module>
+		<module>web</module>
+		<module>wicket/common</module>
+		<module>wicket/jdo</module>
+		<module>wicket/jpa</module>
+	</modules>
+
 	<profiles>
 		<profile>
-			<id>module-all</id>
+			<id>demo-jpa-and-graphql</id>
 			<activation>
 				<property>
-					<name>module-all</name>
+					<name>demo-jpa-and-graphql</name>
 				</property>
 			</activation>
 			<modules>
-				<module>domain</module>
-				<module>javafx</module>
-				<module>web</module>
-				<module>wicket/common</module>
-				<module>wicket/jdo</module>
-				<module>wicket/jpa</module>
 				<module>wicket/jpa-and-graphql</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>demo-vaadin</id>
+			<activation>
+				<property>
+					<name>demo-vaadin</name>
+				</property>
+			</activation>
+			<modules>
 				<module>vaadin</module>
 			</modules>
 		</profile>
-
 		<profile>
-			<id>module-all-except-incubator</id>
+			<id>demo-javafx</id>
 			<activation>
 				<property>
-					<name>module-all-except-incubator</name>
+					<name>demo-javafx</name>
 				</property>
 			</activation>
 			<modules>
-				<module>domain</module>
-				<module>web</module>
-				<module>wicket/common</module>
-				<module>wicket/jdo</module>
-				<module>wicket/jpa</module>
+				<module>javafx</module>
 			</modules>
 		</profile>
+
 	</profiles>
 
 </project>

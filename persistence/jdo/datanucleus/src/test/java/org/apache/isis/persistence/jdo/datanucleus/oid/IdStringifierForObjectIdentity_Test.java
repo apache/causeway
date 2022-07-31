@@ -20,7 +20,6 @@
 
 package org.apache.isis.persistence.jdo.datanucleus.oid;
 
-import java.util.UUID;
 import java.util.stream.Stream;
 
 import javax.jdo.identity.ObjectIdentity;
@@ -30,20 +29,20 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForUuid;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForObjectIdentity;
 
 import lombok.val;
 
-class IdStringifierForObjectIdentity_forUuid_Test {
+class IdStringifierForObjectIdentity_Test {
 
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
-                Arguments.of(UUID.randomUUID()),
-                Arguments.of(UUID.randomUUID()),
-                Arguments.of(UUID.randomUUID())
+                Arguments.of(1),
+                Arguments.of(0),
+                Arguments.of(10),
+                Arguments.of(Integer.MAX_VALUE),
+                Arguments.of(Integer.MIN_VALUE)
         );
     }
 
@@ -51,13 +50,11 @@ class IdStringifierForObjectIdentity_forUuid_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(UUID value) {
+    void roundtrip(int value) {
 
         val entityType = Customer.class;
 
-        val stringifier = IdStringifierForObjectIdentity.builder()
-                                .idStringifierForUuid(new IdStringifierForUuid())
-                                .build();
+        val stringifier = IdStringifierForObjectIdentity.builder().build();
 
         val stringified = stringifier.enstring(new ObjectIdentity(entityType, value));
         val parse = stringifier.destring(stringified, entityType);

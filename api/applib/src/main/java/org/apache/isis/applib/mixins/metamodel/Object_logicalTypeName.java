@@ -21,12 +21,13 @@ package org.apache.isis.applib.mixins.metamodel;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
@@ -53,8 +54,8 @@ import lombok.val;
 @Property
 @PropertyLayout(
         hidden = Where.ALL_TABLES,
-        fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
-        sequence = "700.1"
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
+        sequence = "400.1"
 )
 //mixin's don't need a logicalTypeName
 @RequiredArgsConstructor

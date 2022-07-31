@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.LayoutConstants;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,10 +45,10 @@ import lombok.RequiredArgsConstructor;
 @Property(
         domainEvent = Persistable_datanucleusVersionTimestamp.PropertyDomainEvent.class)
 @PropertyLayout(
-        named = "Version",
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         hidden = Where.ALL_TABLES,
-        fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
-        sequence = "800.2"
+        named = "Version",
+        sequence = "500.2"
         )
 @RequiredArgsConstructor
 public class Persistable_datanucleusVersionTimestamp {

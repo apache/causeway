@@ -37,8 +37,16 @@ body {
     margin-bottom: 0px;
 }
 
+.navbar.primary ul.dropdown-menu,
+.navbar-nav.secondary ul.dropdown-menu,
+.navbar-nav.tertiary ul.dropdown-menu {
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 /* emulate .dropdown-menu-right for secondary and tertiary dropdown menus */
-.navbar-nav.secondary .dropdown-menu, 
+.navbar-nav.secondary .dropdown-menu,
 .navbar-nav.tertiary .dropdown-menu {
 	right: 0;
 	left: auto;
@@ -106,7 +114,7 @@ td .badge,
 	color: var(--link-color);
 }
 .nav-link:focus, .nav-link:hover,
-a:focus, a:hover, 
+a:focus, a:hover,
 .btn-link:focus, .btn-link:hover {
     color: var(--link-color-hover);
 }
@@ -836,6 +844,7 @@ div.referencePanel.scalarNameAndValueComponentType {
 
 .scalarValueWrapper ul.additionalLinkList {
     padding-bottom: 5px;
+    margin-left: -6.4px;
 }
 
 .scalarValueWrapper ul.additionalLinkListInline li.additionalLinkItem {
@@ -971,10 +980,10 @@ footer .footer-image {
     margin-bottom: 4px;
 }
 
-/* fit button-group inside surrounding value input box 
+/* fit button-group inside surrounding value input box
    obsolete when changing button size more generally
 .scalarValueInput .btn-group-sm > .btn {
-	padding: .20rem .5rem;  
+	padding: .20rem .5rem;
 }
 */
 
@@ -1247,8 +1256,8 @@ ul.navbar-wrap {
 }
 
 span.wkt-component-with-tooltip,
-label.wkt-component-with-tooltip, 
-.wkt-component-with-tooltip label, 
+label.wkt-component-with-tooltip,
+.wkt-component-with-tooltip label,
 strong.wkt-component-with-tooltip  {
 	text-decoration-line: underline;
 	text-decoration-style: dotted;

@@ -20,6 +20,8 @@
 
 package org.apache.isis.applib.services.bookmark;
 
+import java.util.UUID;
+
 import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
@@ -114,8 +116,29 @@ public interface IdStringifier<T> {
                     || primitiveValueClassIfAny != null
                     && primitiveValueClassIfAny.isAssignableFrom(candidateValueClass);
         }
+
+        /**
+         * Overridable default implementation.
+         * @param value
+         * @return
+         */
+        @Override
+        public String enstring(@NonNull T value) {
+            return value.toString();
+        }
+
     }
 
+    /**
+     * Provided for backward compatibility with some v1 Ids that used a prefix to determine their actual type.
+     *
+     * <p>
+     * (In v2 we provide this so in the constructor, so there's no need to encode the type in the stringified form
+     * of the value).
+     * </p>
+     *
+     * @param <T>
+     */
     abstract class AbstractWithPrefix<T> extends Abstract<T> {
 
         private final String prefix;

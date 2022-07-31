@@ -50,7 +50,7 @@ import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
 import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
 import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.applib.layout.grid.bootstrap.Size;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -271,7 +271,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                 Set<String> boundAssociationIds =
                         boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
                 boundAssociationIds.add(oneToOneAssociation.getId());
-            } else if(id.equals(LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME)) {
+            } else if(id.equals(LayoutConstants.FieldSetId.METADATA)) {
                 unboundMetadataContributingIds.add(oneToOneAssociation.getId());
             }
         }

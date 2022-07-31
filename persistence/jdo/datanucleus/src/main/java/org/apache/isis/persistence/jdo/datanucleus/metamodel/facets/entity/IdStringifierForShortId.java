@@ -31,14 +31,14 @@ import lombok.NonNull;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForShortId extends IdStringifier.AbstractWithPrefix<ShortId> {
+public class IdStringifierForShortId extends IdStringifier.Abstract<ShortId> {
 
     public IdStringifierForShortId() {
-        super(ShortId.class, "t");
+        super(ShortId.class);
     }
 
     @Override
-    protected ShortId doDestring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
+    public ShortId destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
         return new ShortId(targetEntityClass, stringified);
     }
 }
