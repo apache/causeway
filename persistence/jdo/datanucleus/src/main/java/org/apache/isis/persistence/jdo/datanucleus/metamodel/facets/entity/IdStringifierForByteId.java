@@ -30,14 +30,14 @@ import lombok.NonNull;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForByteId extends IdStringifier.AbstractWithPrefix<ByteId> {
+public class IdStringifierForByteId extends IdStringifier.Abstract<ByteId> {
 
     public IdStringifierForByteId() {
-        super(ByteId.class, "b");
+        super(ByteId.class);
     }
 
     @Override
-    protected ByteId doDestring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
+    public ByteId destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
         return new ByteId(targetEntityClass, stringified);
     }
 }

@@ -60,19 +60,19 @@ public class SessionLogEntryPK implements Serializable {
 
 
     @Component
-    public static class Stringifier extends IdStringifier.AbstractWithPrefix<SessionLogEntryPK> {
+    public static class Stringifier extends IdStringifier.Abstract<SessionLogEntryPK> {
 
         public Stringifier() {
-            super(SessionLogEntryPK.class, "u");
+            super(SessionLogEntryPK.class);
         }
 
         @Override
-        public String doEnstring(SessionLogEntryPK value) {
+        public String enstring(SessionLogEntryPK value) {
             return value.getSessionGuid().toString();
         }
 
         @Override
-        protected SessionLogEntryPK doDestring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+        public SessionLogEntryPK destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
             return new SessionLogEntryPK(UUID.fromString(stringified));
         }
     }

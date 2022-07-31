@@ -30,14 +30,14 @@ import lombok.NonNull;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForShortIdentity extends IdStringifier.AbstractWithPrefix<ShortIdentity> {
+public class IdStringifierForShortIdentity extends IdStringifier.Abstract<ShortIdentity> {
 
     public IdStringifierForShortIdentity() {
-        super(ShortIdentity.class, "s");
+        super(ShortIdentity.class);
     }
 
     @Override
-    protected ShortIdentity doDestring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
+    public ShortIdentity destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
         return new ShortIdentity(targetEntityClass, stringified);
     }
 }

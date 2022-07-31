@@ -32,14 +32,14 @@ import lombok.NonNull;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForBigDecimal extends IdStringifier.AbstractWithPrefix<BigDecimal> {
+public class IdStringifierForBigDecimal extends IdStringifier.Abstract<BigDecimal> {
 
     public IdStringifierForBigDecimal() {
-        super(BigDecimal.class, "D");
+        super(BigDecimal.class);
     }
 
     @Override
-    protected BigDecimal doDestring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public BigDecimal destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
         return new BigDecimal(stringified);
     }
 }
