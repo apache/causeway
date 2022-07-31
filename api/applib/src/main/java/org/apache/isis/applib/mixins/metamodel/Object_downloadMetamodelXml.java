@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.mixins.dto.DtoMixinConstants;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.FallbackLayoutFieldSetIds;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.Config;
@@ -59,7 +59,7 @@ import lombok.val;
 @ActionLayout(
         cssClassFa = "fa-download",
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        associateWith = FallbackLayoutFieldSetIds.METADATA_FIELDSET_ID,
         sequence = "700.2"
 )
 //mixin's don't need a logicalTypeName

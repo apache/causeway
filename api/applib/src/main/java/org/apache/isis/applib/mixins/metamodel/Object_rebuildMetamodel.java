@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.FallbackLayoutFieldSetIds;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 @ActionLayout(
         cssClassFa = "fa-sync",
         position = ActionLayout.Position.PANEL,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        associateWith = FallbackLayoutFieldSetIds.METADATA_FIELDSET_ID,
         sequence = "800.1"
 )
 //mixin's don't need a logicalTypeName

@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.FallbackLayoutFieldSetIds;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
@@ -63,7 +63,7 @@ import lombok.val;
 @ActionLayout(
         cssClassFa = "fa-circle",
         position = ActionLayout.Position.PANEL,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        associateWith = FallbackLayoutFieldSetIds.METADATA_FIELDSET_ID,
         sequence = "400.1",
         describedAs = "Resets the presentation of the displayed object/page to its initial form. "
                 + "(table sorting, tab selection, etc.)"

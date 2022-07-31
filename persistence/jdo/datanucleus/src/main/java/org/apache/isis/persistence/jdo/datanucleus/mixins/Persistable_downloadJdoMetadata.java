@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.FallbackLayoutFieldSetIds;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
@@ -58,7 +58,7 @@ import lombok.RequiredArgsConstructor;
 @ActionLayout(
         cssClassFa = "fa-download",
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        associateWith = FallbackLayoutFieldSetIds.METADATA_FIELDSET_ID,
         sequence = "710.1"
 )
 @RequiredArgsConstructor
