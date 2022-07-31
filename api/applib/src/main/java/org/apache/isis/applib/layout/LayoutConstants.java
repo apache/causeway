@@ -23,19 +23,26 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Field set identifiers of the <code>layout.xml</code> that is used as a fallback if no layout.xml file is available
- * for the object being displayed.
+ * Constant identifiers of the <code>layout.xml</code> that are commonly used in layouts.
  *
  * <p>
- *     The service that loads layouts is {@link org.apache.isis.applib.services.grid.GridSystemService}; the notion of
- *     a fallback layout is implemented by the framework's default implementation.  (The fallback layout itself can
- *     be found in the <code>GridFallbackLayout.xml</code> file.
+ *     All of the mixins provided by the framework are bound to the {@link #METADATA_FIELDSET_ID metadata} field set,
+ *     and so - unless explicitly specified in the object's layout to some other location, will expect that the layout
+ *     includes a field set with this id.
+ * </p>
+ *
+ * <p>
+ *     The service that loads layouts is {@link org.apache.isis.applib.services.grid.GridSystemService}, and the
+ *     framework's default implementation of this service supports the notion of a fallback layout, used whenever
+ *     an object has no associated layout file.  This fallback layout <i>does</i> expose a
+ *     {@link #METADATA_FIELDSET_ID metadata} fieldset.  (The fallback layout itself can be found in the
+ *     <code>GridFallbackLayout.xml</code> file).
  * </p>
  *
  * @since 2.x {@index}
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class FallbackLayoutFieldSetIds {
+public final class LayoutConstants {
 
     /**
      * The id for a field set intended to hold the properties/fields that uniquely identify the object from the

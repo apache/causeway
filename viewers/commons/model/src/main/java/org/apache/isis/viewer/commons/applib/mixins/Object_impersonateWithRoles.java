@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.FallbackLayoutFieldSetIds;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.user.ImpersonateMenu;
@@ -54,7 +54,7 @@ import lombok.val;
         cssClassFa = "fa-mask",
         position = ActionLayout.Position.PANEL_DROPDOWN,
         redirectPolicy = Redirect.EVEN_IF_SAME,
-        associateWith = FallbackLayoutFieldSetIds.METADATA_FIELDSET_ID,
+        associateWith = LayoutConstants.METADATA_FIELDSET_ID,
         sequence = "850.2"
 )
 //mixin's don't need a logicalTypeName

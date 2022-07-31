@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.FallbackLayoutFieldSetIds;
+import org.apache.isis.applib.layout.LayoutConstants;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
         named = "Version",
         hidden = Where.ALL_TABLES,
-        fieldSetId = FallbackLayoutFieldSetIds.METADATA_FIELDSET_ID,
+        fieldSetId = LayoutConstants.METADATA_FIELDSET_ID,
         sequence = "800.2"
         )
 @RequiredArgsConstructor

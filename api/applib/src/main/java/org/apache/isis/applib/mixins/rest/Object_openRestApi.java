@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.FallbackLayoutFieldSetIds;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.value.LocalResourcePath;
 
@@ -51,7 +51,7 @@ import lombok.val;
 @ActionLayout(
         cssClassFa = "fa-external-link-alt",
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = FallbackLayoutFieldSetIds.METADATA_FIELDSET_ID,
+        associateWith = LayoutConstants.METADATA_FIELDSET_ID,
         sequence = "750.1"
 )
 //mixin's don't need a logicalTypeName

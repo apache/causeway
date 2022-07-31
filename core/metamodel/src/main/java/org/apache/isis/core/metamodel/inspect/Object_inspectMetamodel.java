@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreePath;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.layout.FallbackLayoutFieldSetIds;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -53,7 +53,7 @@ import lombok.val;
 @ActionLayout(
         cssClassFa = "fa-sitemap",
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = FallbackLayoutFieldSetIds.METADATA_FIELDSET_ID,
+        associateWith = LayoutConstants.METADATA_FIELDSET_ID,
         sequence = "700.2.1"
 )
 //mixin's don't need a logicalTypeName

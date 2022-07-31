@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.FallbackLayoutFieldSetIds;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
@@ -53,7 +53,7 @@ import lombok.val;
 @Property
 @PropertyLayout(
         hidden = Where.ALL_TABLES,
-        fieldSetId = FallbackLayoutFieldSetIds.METADATA_FIELDSET_ID,
+        fieldSetId = LayoutConstants.METADATA_FIELDSET_ID,
         sequence = "700.2"
 )
 //mixin's don't need a logicalTypeName
