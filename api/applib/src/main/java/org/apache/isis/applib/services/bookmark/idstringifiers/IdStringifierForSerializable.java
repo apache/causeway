@@ -79,7 +79,7 @@ public class IdStringifierForSerializable extends IdStringifier.Abstract<Seriali
     @Override
     public Serializable destring(
             final @NonNull String stringified,
-            final @NonNull Class<?> targetEntityClass) {
+            final Class<?> targetEntityClassIfAny) {
         if (_Strings.isEmpty(stringified)) {
             return null;
         }

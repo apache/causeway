@@ -84,7 +84,7 @@ public class ExecutionLogEntryPK implements Serializable {
         @Override
         public ExecutionLogEntryPK destring(
                 final @NonNull String stringified,
-                final @NonNull Class<?> targetEntityClass) {
+                final Class<?> targetEntityClassIfAny) {
             return new ExecutionLogEntryPK(stringified);
         }
     }

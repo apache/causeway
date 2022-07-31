@@ -68,11 +68,11 @@ public class IdStringifierForObjectId extends IdStringifier.Abstract<ObjectId> {
     @Override
     public ObjectId destring(
             final @NonNull String stringified,
-            final @NonNull Class<?> targetEntityClass) {
+            final Class<?> targetEntityClassIfAny) {
         if (idStringifierForUuid.recognizes(stringified)) {
-            UUID uuid = idStringifierForUuid.destring(stringified, targetEntityClass);
-            return new ObjectId(targetEntityClass, uuid);
+            UUID uuid = idStringifierForUuid.destring(stringified, targetEntityClassIfAny);
+            return new ObjectId(targetEntityClassIfAny, uuid);
         }
-        return new ObjectId(targetEntityClass, stringified);
+        return new ObjectId(targetEntityClassIfAny, stringified);
     }
 }

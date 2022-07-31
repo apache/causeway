@@ -62,7 +62,7 @@ public class IdStringifierForCharacter extends IdStringifier.Abstract<Character>
     @Override
     public Character destring(
             final @NonNull String stringified,
-            final @NonNull Class<?> targetEntityClass) {
+            final Class<?> targetEntityClassIfAny) {
         if(stringified.startsWith(REGULAR_PREFIX)) {
             return stringified.substring(REGULAR_PREFIX.length()).charAt(0);
         }

@@ -75,11 +75,13 @@ public interface IdStringifier<T> {
      * that can be used to retrieve.
      *
      * @param stringified - as returned by {@link #enstring(Object)}
-     * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
-     *                            we always have this information available, and is needed (at least) by the JDO
-     *                            implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
+     * @param targetEntityClassIfAny - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
+     *                                 we always have this information available, and is needed (at least) by the JDO
+     *                                 implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
+     *                                 For Bookmarks of view models, there won't be any targetEntityClass, so this parameter
+     *                                 could be null.
      */
-    T destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass);
+    T destring(@NonNull String stringified, Class<?> targetEntityClassIfAny);
 
     abstract class Abstract<T> implements IdStringifier<T> {
 
@@ -146,9 +148,9 @@ public interface IdStringifier<T> {
         @Override
         public final T destring(
                 final @NonNull String stringified,
-                final @NonNull Class<?> targetEntityClass) {
+                final Class<?> targetEntityClassIfAny) {
             val suffix = removePrefix(stringified);
-            return doDestring(suffix, targetEntityClass);
+            return doDestring(suffix, targetEntityClassIfAny);
         }
 
         /**

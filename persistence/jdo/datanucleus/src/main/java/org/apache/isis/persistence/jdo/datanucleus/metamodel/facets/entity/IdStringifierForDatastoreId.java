@@ -56,7 +56,7 @@ public class IdStringifierForDatastoreId extends IdStringifier.Abstract<Datastor
     @Override
     public DatastoreId destring(
             final @NonNull String stringified,
-            final @Nullable Class<?> targetEntityClass) {
+            final @Nullable Class<?> targetEntityClassIfAny) {
         int idx = stringified.indexOf(SEPARATOR);
         String clsName = stringified.substring(0, idx);
         String keyStr = stringified.substring(idx + 1);
