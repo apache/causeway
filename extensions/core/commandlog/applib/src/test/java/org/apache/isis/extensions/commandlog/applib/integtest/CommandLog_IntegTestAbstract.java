@@ -252,7 +252,12 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
         assertThat(cleBookmarkIfAny).isPresent();
         Bookmark cleBookmark = cleBookmarkIfAny.get();
         String identifier = cleBookmark.getIdentifier();
-        UUID.fromString(identifier); // should not fail, ie check the format is as we expect
+        if (isisBeanTypeRegistry.determineCurrentPersistenceStack().isJdo()) {
+            assertThat(identifier).startsWith("u_");
+            UUID.fromString(identifier.substring("u_".length())); // should not fail, ie check the format is as we expect
+        } else {
+            UUID.fromString(identifier); // should not fail, ie check the format is as we expect
+        }
 
         // when we start a new session and lookup from the bookmark
         interactionService.nextInteraction();

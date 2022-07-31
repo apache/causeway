@@ -18,6 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
+import java.util.UUID;
+
 import javax.annotation.Priority;
 
 import org.datanucleus.identity.ObjectId;
@@ -29,10 +31,22 @@ import org.apache.isis.applib.services.bookmark.IdStringifier;
 import lombok.Builder;
 import lombok.NonNull;
 
+/**
+ * Implementation for application-defined primary keys.
+ *
+ * <p>
+ *     For the most part this relies on the JDO spec (5.4.3), but with special case handling if the primary key is
+ *     of type int, long or UUID: rather than encode the fully qualified classname, instead uses a simpler prefix.
+ * </p>
+ */
 @Component
 @Priority(PriorityPrecedence.LATE)
 @Builder
 public class IdStringifierForObjectId extends IdStringifier.Abstract<ObjectId> {
+
+    private static final String PREFIX_UUID = "u_";
+    private static final String PREFIX_LONG = "l_";
+    private static final String PREFIX_INT = "i_";
 
     public IdStringifierForObjectId() {
         super(ObjectId.class);
@@ -41,14 +55,33 @@ public class IdStringifierForObjectId extends IdStringifier.Abstract<ObjectId> {
     @Override
     public String enstring(final @NonNull ObjectId value) {
         Object keyAsObject = value.getKeyAsObject();
-        // rely on JDO spec (5.4.3)
-        return value.toString();
+        if (keyAsObject instanceof Long) {
+            return PREFIX_LONG + keyAsObject;
+        }
+        if (keyAsObject instanceof Integer) {
+            return PREFIX_INT + keyAsObject;
+        }
+        if (keyAsObject instanceof  UUID) {
+            return PREFIX_UUID + keyAsObject;
+        }
+        // fall through to JDO spec (5.4.3)
+        return keyAsObject.toString();
     }
 
     @Override
     public ObjectId destring(
             final @NonNull String stringified,
             final Class<?> targetEntityClassIfAny) {
+        if (stringified.startsWith(PREFIX_LONG)) {
+            return new ObjectId(targetEntityClassIfAny, Long.parseLong(stringified.substring(PREFIX_LONG.length())));
+        }
+        if (stringified.startsWith(PREFIX_INT)) {
+            return new ObjectId(targetEntityClassIfAny, Integer.parseInt(stringified.substring(PREFIX_INT.length())));
+        }
+        if (stringified.startsWith(PREFIX_UUID)) {
+            return new ObjectId(targetEntityClassIfAny, UUID.fromString(stringified.substring(PREFIX_UUID.length())));
+        }
+        // fall through to JDO spec (5.4.3)
         return new ObjectId(targetEntityClassIfAny, stringified);
     }
 }
