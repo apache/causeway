@@ -40,7 +40,6 @@ import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.NonNull;
-import lombok.Value;
 import lombok.val;
 
 /**
@@ -117,11 +116,11 @@ public class SerializingAdapterDefault implements SerializingAdapter {
 
     // -- HELPER
 
-    @Value(staticConstructor = "of")
-    private static final class StringifiedValueMemento implements Serializable {
-        private static final long serialVersionUID = 1L;
-        private final String stringifiedValue;
-    }
+//    @Value(staticConstructor = "of")
+//    private static final class StringifiedValueMemento implements Serializable {
+//        private static final long serialVersionUID = 1L;
+//        private final String stringifiedValue;
+//    }
 
     private <T> Optional<ValueDecomposition> toValueDecomposition(
             final @NonNull T value) {
