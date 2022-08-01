@@ -41,6 +41,8 @@ import org.springframework.transaction.support.DelegatingTransactionDefinition;
 import org.springframework.transaction.support.ResourceTransactionManager;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import lombok.val;
+
 /**
  * {@link org.springframework.transaction.PlatformTransactionManager} implementation for a
  * single JDO {@link javax.jdo.PersistenceManagerFactory}. Binds a JDO PersistenceManager
@@ -467,9 +469,15 @@ public class JdoTransactionManager extends AbstractPlatformTransactionManager
 	@Override
 	protected void doSetRollbackOnly(DefaultTransactionStatus status) {
 		JdoTransactionObject txObject = (JdoTransactionObject) status.getTransaction();
+		val persistenceManager = txObject.getPersistenceManagerHolder().getPersistenceManager();
+		if (persistenceManager.isClosed()) {
+			logger.warn("Request to set JDO transaction on PersistenceManager [" +
+					persistenceManager + "] rollback-only ignored; PM is closed");
+			return;
+		}
 		if (status.isDebug()) {
 			logger.debug("Setting JDO transaction on PersistenceManager [" +
-					txObject.getPersistenceManagerHolder().getPersistenceManager() + "] rollback-only");
+					persistenceManager + "] rollback-only");
 		}
 		txObject.setRollbackOnly();
 	}
