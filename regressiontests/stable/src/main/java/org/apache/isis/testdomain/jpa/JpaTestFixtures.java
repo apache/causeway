@@ -28,7 +28,6 @@ import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
-import org.assertj.core.api.Assertions;
 import org.springframework.stereotype.Service;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -172,11 +171,8 @@ public class JpaTestFixtures implements MetamodelListener {
 
     public void assertHasPersistenceId(final Object entity) {
         val bookmark = bookmarkService.bookmarkForElseFail(entity);
-        String identifier = bookmark.getIdentifier();
-        Assertions.assertThat(identifier).startsWith("l_"); // because the entity has a long as its @PrimaryKey
-        final int id = Integer.parseInt(identifier.substring(2));
+        final int id = Integer.parseInt(bookmark.getIdentifier());
         assertTrue(id>0, ()->String.format("expected valid id; got %d", id));
-        //System.err.printf("%s%n", bookmark);
     }
 
     public static Set<String> expectedBookTitles() {
