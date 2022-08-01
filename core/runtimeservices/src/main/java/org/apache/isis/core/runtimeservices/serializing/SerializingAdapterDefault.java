@@ -19,6 +19,7 @@
 package org.apache.isis.core.runtimeservices.serializing;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -31,20 +32,22 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.bookmark.idstringifiers.PredefinedSerializables;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
+import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.NonNull;
 import lombok.Value;
+import lombok.val;
 
 /**
  * Default implementation of {@link SerializingAdapter}, intended as an 'internal' service.
  *
- * @implNote uses {@link Bookmark} or {@link StringifiedValueMemento}
- * for identifiable objects or any non {@link Serializable} objects,
+ * @implNote uses {@link Bookmark} or {@link ValueDecomposition}
+ * for identifiable objects or value types,
  * while some predefined serializable types that implement {@link Serializable}
  * are written/read directly
  *
@@ -57,7 +60,8 @@ import lombok.Value;
 public class SerializingAdapterDefault implements SerializingAdapter {
 
     @Inject private BookmarkService bookmarkService;
-    @Inject private IdStringifierLookupService idStringifierLookupService;
+    @Inject private ValueSemanticsResolver valueSemanticsResolver;
+    //@Inject private IdStringifierLookupService idStringifierLookupService;
 
     @Override
     public Serializable write(final @NonNull Object value) {
@@ -66,11 +70,13 @@ public class SerializingAdapterDefault implements SerializingAdapter {
             return (Serializable) value;
         }
 
-        // potentially not working for non serializable value-types
-        return bookmarkService.bookmarkFor(value)
+        // potentially is a value with value semantics
+        return toValueDecomposition(value)
                 .map(Serializable.class::cast)
-                // so fallback to registered IdStringifieries
-                .orElseGet(()->writeNonPredefinedSerializableValue(value));
+                // if not fallback to bookmarkService
+                .or(()->bookmarkService.bookmarkFor(value))
+                .orElseThrow(()->
+                    _Exceptions.unrecoverable("cannot create a memento for object of type %s", value.getClass()));
     }
 
     @Override
@@ -89,11 +95,21 @@ public class SerializingAdapterDefault implements SerializingAdapter {
                         .orElse(null));
         }
 
-        // otherwise, perhaps the value itself is a StringifiedValueMemento, in which case we treat it as a
-        // memento for a non-predefined-serializable value to be reconstructed
-        if(value instanceof StringifiedValueMemento) {
-            return readNonPredefinedSerializableValue(valueClass, (StringifiedValueMemento) value);
+        // otherwise, perhaps the value itself is a ValueDecomposition, in which case we
+        // re-compose the original value
+        if(value instanceof ValueDecomposition) {
+            val decomposition = (ValueDecomposition) value;
+            return fromValueDecomposition(valueClass, (ValueDecomposition) value)
+                    .orElseThrow(()->
+                      _Exceptions.unrecoverable("cannot restore object of type %s from decomposition '%s'",
+                              valueClass, decomposition.toJson()));
         }
+
+//        // otherwise, perhaps the value itself is a StringifiedValueMemento, in which case we treat it as a
+//        // memento for a non-predefined-serializable value to be reconstructed
+//        if(value instanceof StringifiedValueMemento) {
+//            return fromStringifiedValueMemento(valueClass, (StringifiedValueMemento) value);
+//        }
 
         // otherwise, the value was directly stored/written, so just recover as is
         return _Casts.uncheckedCast(value);
@@ -107,27 +123,46 @@ public class SerializingAdapterDefault implements SerializingAdapter {
         private final String stringifiedValue;
     }
 
-    private <T> StringifiedValueMemento writeNonPredefinedSerializableValue(
+    private <T> Optional<ValueDecomposition> toValueDecomposition(
             final @NonNull T value) {
 
         final Class<T> valueClass = _Casts.uncheckedCast(value.getClass());
 
-        return idStringifierLookupService.lookup(valueClass)
-            .map(idStringifier->idStringifier.enstring(value))
-            .map(stringifiedValue->StringifiedValueMemento.of(stringifiedValue))
-            .orElseThrow(()->
-                _Exceptions.unrecoverable("cannot create a memento for object of type %s", valueClass));
+        return valueSemanticsResolver.streamValueSemantics(valueClass)
+                .findFirst()
+                .map(vs->vs.decompose(value));
     }
 
-    private <T> T readNonPredefinedSerializableValue(
+    private <T> Optional<T> fromValueDecomposition(
             final @NonNull Class<T> valueClass,
-            final @NonNull StringifiedValueMemento memento) {
+            final @NonNull ValueDecomposition decomposition) {
 
-        return idStringifierLookupService.lookup(valueClass)
-                .map(idStringifier->idStringifier.destring(memento.getStringifiedValue(), null))
-                .orElseThrow(()->
-                    _Exceptions.unrecoverable("cannot restore object of type %s from memento '%s'",
-                            valueClass, memento));
+        return valueSemanticsResolver.streamValueSemantics(valueClass)
+                .findFirst()
+                .map(vs->vs.compose(decomposition));
     }
+
+//    private <T> StringifiedValueMemento toStringifiedValueMemento(
+//            final @NonNull T value) {
+//
+//        final Class<T> valueClass = _Casts.uncheckedCast(value.getClass());
+//
+//        return idStringifierLookupService.lookup(valueClass)
+//            .map(idStringifier->idStringifier.enstring(value))
+//            .map(stringifiedValue->StringifiedValueMemento.of(stringifiedValue))
+//            .orElseThrow(()->
+//                _Exceptions.unrecoverable("cannot create a memento for object of type %s", valueClass));
+//    }
+//
+//    private <T> T fromStringifiedValueMemento(
+//            final @NonNull Class<T> valueClass,
+//            final @NonNull StringifiedValueMemento memento) {
+//
+//        return idStringifierLookupService.lookup(valueClass)
+//                .map(idStringifier->idStringifier.destring(memento.getStringifiedValue(), null))
+//                .orElseThrow(()->
+//                    _Exceptions.unrecoverable("cannot restore object of type %s from memento '%s'",
+//                            valueClass, memento));
+//    }
 
 }
