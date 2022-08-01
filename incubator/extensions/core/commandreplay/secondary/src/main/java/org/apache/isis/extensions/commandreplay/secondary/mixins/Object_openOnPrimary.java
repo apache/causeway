@@ -25,11 +25,12 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.exceptions.RecoverableException;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.extensions.commandreplay.secondary.IsisModuleExtCommandReplaySecondary;
 import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig;
@@ -50,7 +51,7 @@ import lombok.val;
 @ActionLayout(
         cssClassFa = "fa-external-link-alt",
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        associateWith = LayoutConstants.FieldSetId.METADATA,
         sequence = "750.2"
 )
 @RequiredArgsConstructor
@@ -61,6 +62,7 @@ public class Object_openOnPrimary {
 
     final Object object;
 
+    @MemberSupport
     public URL act() {
         val baseUrlPrefix = lookupBaseUrlPrefix();
         val urlSuffix = bookmarkService.bookmarkForElseFail(object).toString();
@@ -71,7 +73,7 @@ public class Object_openOnPrimary {
             throw new RecoverableException(e);
         }
     }
-    public boolean hideAct() {
+    @MemberSupport public boolean hideAct() {
         return !secondaryConfig.isConfigured();
     }
 

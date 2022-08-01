@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.exceptions.RecoverableException;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.extensions.commandreplay.primary.config.PrimaryConfig;
@@ -51,7 +51,7 @@ import lombok.val;
 @ActionLayout(
         cssClassFa = "fa-external-link-alt",
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        associateWith = LayoutConstants.FieldSetId.METADATA,
         sequence = "750.3"
 )
 @RequiredArgsConstructor
