@@ -58,6 +58,7 @@ import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerFo
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault;
+import org.apache.isis.core.runtimeservices.serializing.SerializingAdapterDefault;
 import org.apache.isis.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.isis.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.isis.core.runtimeservices.sitemap.SitemapServiceDefault;
@@ -79,43 +80,44 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
 
         // @Service's
         BookmarkServiceDefault.class,
-        EntityChangesPublisherDefault.class,
-        EntityPropertyChangePublisherDefault.class,
         CommandDtoFactoryDefault.class,
         CommandExecutorServiceDefault.class,
         CommandPublisherDefault.class,
         EmailNotificationServiceDefault.class,
         EmailServiceDefault.class,
+        EntityChangesPublisherDefault.class,
+        EntityPropertyChangePublisherDefault.class,
+        EventBusServiceSpring.class,
         ExceptionRecognizerServiceDefault.class,
         ExecutionPublisherDefault.class,
-        EventBusServiceSpring.class,
         FactoryServiceDefault.class,
         HomePageResolverServiceDefault.class,
-        ImpersonatedUserHolderDefault.class,
         ImpersonateMenuAdvisorDefault.class,
+        ImpersonatedUserHolderDefault.class,
         InteractionDtoFactoryDefault.class,
-        InteractionServiceDefault.class,
         InteractionIdGenerator.class,
+        InteractionServiceDefault.class,
         JaxbServiceDefault.class,
-        LocaleChoiceProviderDefault.class,
         LanguageProviderDefault.class,
-        ObjectMementoServiceDefault.class,
-        TranslationServicePo.class,
+        LocaleChoiceProviderDefault.class,
         MemberExecutorServiceDefault.class,
         MenuBarsLoaderServiceDefault.class,
         MenuBarsServiceBS.class,
         MessageServiceDefault.class,
         ObjectIconServiceDefault.class,
+        ObjectLifecyclePublisherDefault.class,
+        ObjectMementoServiceDefault.class,
+        SchemaValueMarshallerDefault.class,
         ScratchpadDefault.class,
+        SerializingAdapterDefault.class,
         SitemapServiceDefault.class,
+        SpringBeansService.class,
         TransactionServiceSpring.class,
+        TranslationServicePo.class,
         UrlEncodingServiceWithCompression.class,
         WrapperFactoryDefault.class,
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,
-        ObjectLifecyclePublisherDefault.class,
-        SchemaValueMarshallerDefault.class,
-        SpringBeansService.class,
 
         // @Controller
         RoutingServiceDefault.class,
