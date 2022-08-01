@@ -295,6 +295,7 @@
 		<module>stable-cucumber</module>
 		<module>stable-domainmodel</module>
 		<module>stable-eventhandling</module>
+		<module>stable-layouts</module>
 		<module>stable-factory</module>
 		<module>stable-interact</module>
 		<module>stable-persistence-jdo</module>
