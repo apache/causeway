@@ -19,36 +19,36 @@
 package org.apache.isis.core.runtimeservices.serializing;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.bookmark.idstringifiers.PredefinedSerializables;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
-import lombok.val;
+import lombok.NonNull;
+import lombok.Value;
 
 /**
- * This service enables a serializable 'bookmark' to be created for an entity.
+ * Default implementation of {@link SerializingAdapter}, intended as an 'internal' service.
+ *
+ * @implNote uses {@link Bookmark} or {@link StringifiedValueMemento}
+ * for identifiable objects or any non {@link Serializable} objects,
+ * while some predefined serializable types that implement {@link Serializable}
+ * are written/read directly
+ *
+ * @see PredefinedSerializables
  */
 @Service
 @Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".SerializingAdapterDefault")
@@ -56,96 +56,78 @@ import lombok.val;
 @Qualifier("Default")
 public class SerializingAdapterDefault implements SerializingAdapter {
 
-    @Inject private SpecificationLoader specificationLoader;
-    @Inject private WrapperFactory wrapperFactory;
-    @Inject private ObjectManager objectManager;
-    @Inject private MetaModelContext mmc;
+    @Inject private BookmarkService bookmarkService;
     @Inject private IdStringifierLookupService idStringifierLookupService;
 
     @Override
-    public <T> T read(final Class<T> valueClass, final Serializable value) {
-
-        val idStringifierIfAny = idStringifierLookupService.lookup(valueClass);
-        if(idStringifierIfAny.isPresent()) {
-            final IdStringifier<T> idStringifier = idStringifierIfAny.get();
-            return idStringifier.destring((String)value, null);
+    public Serializable write(final @NonNull Object value) {
+        if(PredefinedSerializables.isPredefinedSerializable(value.getClass())) {
+            // the value can be stored/written directly without conversion to a bookmark
+            return (Serializable) value;
         }
 
-        // see if the value can be handled as a Bookmark
+        // potentially not working for non serializable value-types
+        return bookmarkService.bookmarkFor(value)
+                .map(Serializable.class::cast)
+                // so fallback to registered IdStringifieries
+                .orElseGet(()->writeNonPredefinedSerializableValue(value));
+    }
+
+    @Override
+    public <T> T read(final @NonNull Class<T> valueClass, final @NonNull Serializable value) {
+
+        // see if required/desired value-class is Bookmark, then just cast
         if(Bookmark.class.equals(valueClass)) {
             return _Casts.uncheckedCast(value);
         }
 
         // otherwise, perhaps the value itself is a Bookmark, in which case we treat it as a
-        // reference to an Object (probably an entity) to be looked up.
+        // reference to an Object (probably an entity) to be looked up
         if(Bookmark.class.isAssignableFrom(value.getClass())) {
-            final Bookmark valueAsBookmark = (Bookmark) value;
-            return _Casts.uncheckedCast(lookup(valueAsBookmark).orElse(null));
+            final Bookmark valueBookmark = (Bookmark) value;
+            return _Casts.uncheckedCast(bookmarkService.lookup(valueBookmark)
+                        .orElse(null));
         }
 
-        return _Casts.uncheckedCast(value);
-    }
+        // otherwise, perhaps the value itself is a StringifiedValueMemento, in which case we treat it as a
+        // memento for a non-predefined-serializable value to be reconstructed
+        if(value instanceof StringifiedValueMemento) {
+            return readNonPredefinedSerializableValue(valueClass, (StringifiedValueMemento) value);
+        }
 
-    @Override
-    public Serializable write(final Object value) {
-        return write(_Casts.uncheckedCast(value), value.getClass());
+        // otherwise, the value was directly stored/written, so just recover as is
+        return _Casts.uncheckedCast(value);
     }
 
     // -- HELPER
 
-    private <T> Serializable write(final T value, final Class<T> aClass) {
-
-        Optional<IdStringifier<T>> idStringifierIfAny = idStringifierLookupService.lookup(aClass);
-        if(idStringifierIfAny.isPresent()) {
-            final IdStringifier<T> idStringifier = idStringifierIfAny.get();
-            return idStringifier.enstring(value);
-        }
-
-        return bookmarkForElseFail(value);
+    @Value(staticConstructor = "of")
+    private static final class StringifiedValueMemento implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private final String stringifiedValue;
     }
 
-    // why would we ever store Service Beans as Bookmarks?
-    // - ANSWER: because it might be used by the CommandService to replay a command or exec in the background.
-    private Optional<Object> lookup(final @Nullable Bookmark bookmark) {
-        try {
-            return mmc.loadObject(bookmark)
-                    .map(ManagedObject::getPojo);
-        } catch(ObjectNotFoundException ex) {
-            return Optional.empty();
-        }
+    private <T> StringifiedValueMemento writeNonPredefinedSerializableValue(
+            final @NonNull T value) {
+
+        final Class<T> valueClass = _Casts.uncheckedCast(value.getClass());
+
+        return idStringifierLookupService.lookup(valueClass)
+            .map(idStringifier->idStringifier.enstring(value))
+            .map(stringifiedValue->StringifiedValueMemento.of(stringifiedValue))
+            .orElseThrow(()->
+                _Exceptions.unrecoverable("cannot create a memento for object of type %s", valueClass));
     }
 
-    private Optional<Bookmark> bookmarkFor(final @Nullable Object domainObject) {
-        if(domainObject == null) {
-            return Optional.empty();
-        }
-        val adapter = objectManager.adapt(unwrapped(domainObject));
-        if(!ManagedObjects.isIdentifiable(adapter)){
-            // eg values cannot be bookmarked
-            return Optional.empty();
-        }
-        return Optional.of(
-                objectManager.bookmarkObject(adapter));
+    private <T> T readNonPredefinedSerializableValue(
+            final @NonNull Class<T> valueClass,
+            final @NonNull StringifiedValueMemento memento) {
+
+        return idStringifierLookupService.lookup(valueClass)
+                .map(idStringifier->idStringifier.destring(memento.getStringifiedValue(), null))
+                .orElseThrow(()->
+                    _Exceptions.unrecoverable("cannot restore object of type %s from memento '%s'",
+                            valueClass, memento));
     }
-
-    private Object unwrapped(final Object domainObject) {
-        return wrapperFactory != null
-                ? wrapperFactory.unwrap(domainObject)
-                : domainObject;
-    }
-
-
-    private Bookmark bookmarkForElseFail(final @Nullable Object domainObject) {
-        return bookmarkFor(domainObject)
-                .orElseThrow(
-                        ()->_Exceptions.illegalArgument(
-                        "cannot create bookmark for type %s",
-                        domainObject!=null
-                            ? specificationLoader.specForType(domainObject.getClass())
-                                    .map(spec->spec.toString())
-                                    .orElseGet(()->domainObject.getClass().getName())
-                            : "<null>"));
-    }
-
 
 }

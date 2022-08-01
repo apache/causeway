@@ -20,8 +20,6 @@
 package org.apache.isis.applib.services.bookmark.idstringifiers;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -29,14 +27,10 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.graph.tree.TreeState;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.memento._Mementos;
 
 import lombok.NonNull;
@@ -68,7 +62,7 @@ public class IdStringifierForSerializable extends IdStringifier.Abstract<Seriali
 
     @Override
     public boolean handles(final @NonNull Class<?> candidateValueClass) {
-        return isPredefinedSerializable(candidateValueClass);
+        return PredefinedSerializables.isPredefinedSerializable(candidateValueClass);
     }
 
     @Override
@@ -94,49 +88,6 @@ public class IdStringifierForSerializable extends IdStringifier.Abstract<Seriali
 
     private _Mementos.Memento parseMemento(final String input) {
         return _Mementos.parse(codec, serializer, input);
-    }
-
-    private static final Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(
-            String.class, String[].class,
-            Class.class, Class[].class,
-            Character.class, Character[].class, char[].class,
-            Boolean.class, Boolean[].class, boolean[].class,
-            // Numbers
-            Byte[].class, byte[].class,
-            Short[].class, short[].class,
-            Integer[].class, int[].class,
-            Long[].class, long[].class,
-            Float[].class, float[].class,
-            Double[].class, double[].class
-    );
-
-    private static final List<Class<? extends Serializable>> serializableTypes = _Lists.of(
-            java.util.Date.class,
-            java.sql.Date.class,
-            Enum.class,
-            Bookmark.class,
-            TreeState.class
-    );
-
-    private boolean isPredefinedSerializable(final Class<?> cls) {
-        if (!Serializable.class.isAssignableFrom(cls)) {
-            return false;
-        }
-        // primitive ... boolean, byte, char, short, int, long, float, and double.
-        if (cls.isPrimitive() || Number.class.isAssignableFrom(cls)) {
-            return true;
-        }
-        //[ahuber] any non-scalar values could be problematic, so we are careful with wild-cards here
-        if (cls.getName().startsWith("java.time.")) {
-            return true;
-        }
-        if (cls.getName().startsWith("org.joda.time.")) {
-            return true;
-        }
-        if (serializableFinalTypes.contains(cls)) {
-            return true;
-        }
-        return serializableTypes.stream().anyMatch(t -> t.isAssignableFrom(cls));
     }
 
 }

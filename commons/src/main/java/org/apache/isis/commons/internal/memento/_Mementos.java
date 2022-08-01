@@ -29,6 +29,8 @@ import java.util.Set;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
+import lombok.NonNull;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -99,7 +101,7 @@ public final class _Mementos {
          * Note: write and read are complementary operators.
          * @param value
          */
-        public Serializable write(Object value);
+        public Serializable write(@NonNull Object value);
 
         /**
          * Converts the {@link Serializable} {@code value} as read from an {@link ObjectInput} back into its
@@ -108,7 +110,7 @@ public final class _Mementos {
          * @param cls the expected type which to cast the {@code value} to (required)
          * @param value
          */
-        public <T> T read(Class<T> cls, Serializable value);
+        public <T> T read(@NonNull Class<T> cls, @NonNull Serializable value);
     }
 
 
@@ -127,7 +129,7 @@ public final class _Mementos {
      * @param serializer (required)
      * @return non-null
      */
-    public static Memento create(EncoderDecoder codec, SerializingAdapter serializer) {
+    public static Memento create(final EncoderDecoder codec, final SerializingAdapter serializer) {
         return new _Mementos_MementoDefault(codec, serializer);
     }
 
@@ -163,12 +165,12 @@ public final class _Mementos {
     private static final class EmptyMemento implements Memento {
 
         @Override
-        public <T> T get(String name, Class<T> cls) {
+        public <T> T get(final String name, final Class<T> cls) {
             return null;
         }
 
         @Override
-        public Memento put(String name, Object value) {
+        public Memento put(final String name, final Object value) {
             throw _Exceptions.notImplemented();
         }
 
