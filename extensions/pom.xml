@@ -495,11 +495,11 @@
 		<module>security/spring-oauth2</module>
 		<module>security/sessionlog</module>
 
-		<module>sse</module>
 
 		<module>vro/cors</module>
 
 		<module>vw/exceldownload</module>
+		<module>vw/sse</module>
 		<module>vw/fullcalendar</module>
 		<module>vw/pdfjs</module>
 
