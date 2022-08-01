@@ -15,10 +15,13 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.isis.viewer.wicket.viewer.mixins;
+package org.apache.isis.viewer.wicket.applib.mixins;
 
 import javax.inject.Inject;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -28,10 +31,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.hint.HintStore;
-import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Provides the ability for the end-user to discard UI hints so that the
@@ -71,7 +72,7 @@ import lombok.val;
 @RequiredArgsConstructor
 public class Object_clearHints {
 
-    @Inject HintStore hintStore;
+    @Autowired(required = false) HintStore hintStore;
     @Inject BookmarkService bookmarkService;
 
     private final Object holder;
@@ -79,26 +80,16 @@ public class Object_clearHints {
     public static class ActionDomainEvent
         extends org.apache.isis.applib.events.domain.ActionDomainEvent<Object> {}
     @MemberSupport public Object act() {
-        if (getHintStoreUsingWicketSession() != null) {
-            val bookmark = bookmarkService.bookmarkForElseFail(holder);
-            val hintStore = getHintStoreUsingWicketSession();
-            if(hintStore!=null) { // just in case
-                hintStore.removeAll(bookmark);
-            }
+        if (hintStore != null) {
+            bookmarkService.bookmarkFor(holder).ifPresent(bookmark -> this.hintStore.removeAll(bookmark));
         }
         return holder;
     }
 
     @MemberSupport public boolean hideAct() {
-        return getHintStoreUsingWicketSession() == null;
+        return hintStore == null;
     }
 
     // -- HELPER
-
-    private HintStoreUsingWicketSession getHintStoreUsingWicketSession() {
-        return hintStore instanceof HintStoreUsingWicketSession
-                ? (HintStoreUsingWicketSession) hintStore
-                : null;
-    }
 
 }
