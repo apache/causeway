@@ -30,6 +30,8 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -56,20 +58,21 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class _Temporals {
 
+    public final ZoneId UTC = ZoneId.of("UTC");
+
     /**
      * The default date/time format (seconds resolution): {@code 'yyyy-MM-dd HH:mm:ss'}.
      * As used for auditing, session-logging, etc.
      */
-    public static final DateTimeFormatter DEFAULT_LOCAL_DATETIME_FORMATTER =
+    public final DateTimeFormatter DEFAULT_LOCAL_DATETIME_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /**
      * The default date/time format (milliseconds resolution): {@code 'yyyy-MM-dd HH:mm:ss.SSS'}.
      * As used eg. for Xray.
      */
-    public static final DateTimeFormatter DEFAULT_LOCAL_DATETIME_FORMATTER_WITH_MILLIS =
+    public final DateTimeFormatter DEFAULT_LOCAL_DATETIME_FORMATTER_WITH_MILLIS =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-
 
     /**
      * Returns duration between {@code startedAt} and {@code completedAt} in <i>seconds</i>,
@@ -85,6 +88,17 @@ public final class _Temporals {
                         ? Optional.of(millisToSeconds(completedAt.getTime() - startedAt.getTime()))
                         : Optional.empty();
     }
+
+    // -- TIME ZONE RENDERING
+
+    public final DateTimeFormatter ISO_OFFSET_ONLY_FORMAT = new DateTimeFormatterBuilder()
+            .appendOffsetId()
+            .toFormatter(Locale.US); // arbitrarily picking a locale, just in case; (should have no effect)
+
+    public final DateTimeFormatter DEFAULT_ZONEID_ONLY_FORMAT = new DateTimeFormatterBuilder()
+            .appendPattern("VV")
+            .toFormatter(Locale.US); // arbitrarily picking a locale, just in case; (should have no effect)
+
 
     // -- TEMPORAL TO STRING CONVERTERS
 
@@ -178,7 +192,7 @@ public final class _Temporals {
                         ? ZonedDateTime.parse(datastoreValue, ZONEDDATETIME_DATASTORE_PARSER)
                         : ZonedDateTime.of(
                                 LocalDateTime.parse(datastoreValue,
-                                        ZONEDDATETIME_DATASTORE_PARSER), ZoneOffset.UTC)
+                                        ZONEDDATETIME_DATASTORE_PARSER), UTC)
                 : null;
     }
 
@@ -209,6 +223,7 @@ public final class _Temporals {
         return Can.of(
                 ZonedDateTime.of(localNow, ZoneId.of("Europe/Paris")),
                 ZonedDateTime.of(localNow, ZoneOffset.UTC),
+                ZonedDateTime.of(localNow, ZoneId.of("UTC")),
                 ZonedDateTime.of(localNow, ZoneOffset.ofHours(2)),
                 ZonedDateTime.of(localNow, ZoneOffset.ofHours(-2)).plusDays(2).plusSeconds(15));
     }

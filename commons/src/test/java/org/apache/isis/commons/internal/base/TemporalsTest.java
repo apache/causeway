@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
@@ -71,8 +72,26 @@ class TemporalsTest {
     @Test
     void incompleteZonedDateTime() {
         assertEquals(
-                ZonedDateTime.of(LocalDate.of(2022, 1, 28), LocalTime.of(12, 31), ZoneOffset.UTC),
+                ZonedDateTime.of(LocalDate.of(2022, 1, 28), LocalTime.of(12, 31), _Temporals.UTC),
                 _Temporals.destringAsZonedDateTime("2022-01-28 12:31:00.0"));
     }
+
+    @Test
+    void timeZoneRendering() {
+
+        // given
+        val dummyDate = LocalDate.of(2022, 1, 28);
+        val dummyTime = LocalTime.of(12, 31);
+        val formatter = _Temporals.DEFAULT_ZONEID_ONLY_FORMAT;
+
+        // then
+        assertEquals(
+                "Europe/Vienna",
+                formatter.format(ZonedDateTime.of(dummyDate, dummyTime, ZoneId.of("Europe/Vienna"))));
+        assertEquals(
+                "UTC",
+                formatter.format(ZonedDateTime.of(dummyDate, dummyTime, _Temporals.UTC)));
+    }
+
 
 }

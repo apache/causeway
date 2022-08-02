@@ -48,11 +48,11 @@ import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEdi
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -310,23 +310,12 @@ implements
         case LOCAL:
             return Optional.empty();
         case OFFSET:
-            return Optional.of(getIsoTimeZoneOffsetFormat());
+            return Optional.of(_Temporals.ISO_OFFSET_ONLY_FORMAT);
         case ZONED:
-            return Optional.of(getLocalizedTimeZoneIdFormat(context));
+            return Optional.of(_Temporals.DEFAULT_ZONEID_ONLY_FORMAT);
         default:
             throw _Exceptions.unmatchedCase(offsetCharacteristic);
         }
-    }
-
-    @Getter(lazy = true, value = AccessLevel.PROTECTED)
-    private final DateTimeFormatter isoTimeZoneOffsetFormat = new DateTimeFormatterBuilder()
-            .appendOffsetId()
-            .toFormatter(Locale.US); // arbitrarily picking a locale, just in case; (this is an ISO format)
-
-    private DateTimeFormatter getLocalizedTimeZoneIdFormat(final ValueSemanticsProvider.Context context) {
-        return new DateTimeFormatterBuilder()
-            .appendPattern("VV")
-            .toFormatter(getUserLocale(context).getTimeFormatLocale());
     }
 
     // -- TEMPORAL FORMATTING/PARSING
