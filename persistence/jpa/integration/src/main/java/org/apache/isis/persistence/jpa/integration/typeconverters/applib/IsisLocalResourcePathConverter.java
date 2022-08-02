@@ -28,19 +28,17 @@ import org.apache.isis.applib.value.LocalResourcePath;
  */
 @Converter(autoApply = true)
 public class IsisLocalResourcePathConverter
-        implements AttributeConverter<LocalResourcePath, String> {
-
-    private static final long serialVersionUID = 1L;
+implements AttributeConverter<LocalResourcePath, String> {
 
     @Override
-    public String convertToDatabaseColumn(LocalResourcePath memberValue) {
+    public String convertToDatabaseColumn(final LocalResourcePath memberValue) {
         return memberValue != null
                 ? memberValue.getValue()
                 : null;
     }
 
     @Override
-    public LocalResourcePath convertToEntityAttribute(String datastoreValue) {
+    public LocalResourcePath convertToEntityAttribute(final String datastoreValue) {
         return datastoreValue != null
                 ? new LocalResourcePath(datastoreValue)
                 : null;

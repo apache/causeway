@@ -18,38 +18,17 @@
  */
 package org.apache.isis.persistence.jpa.integration.entity;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.persistence.Entity;
 
-import org.springframework.stereotype.Component;
-
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.graph.tree.TreeState;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.commons.internal.memento._Mementos;
-import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
-import lombok.NonNull;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
+//@Log4j2
 public class JpaEntityFacetFactory
 extends FacetFactoryAbstract {
 
@@ -72,10 +51,5 @@ extends FacetFactoryAbstract {
         addFacet(
                 new JpaEntityFacet(facetHolder, cls, getServiceRegistry()));
     }
-
-    // --
-
-    // -- HELPER - OBJECT ID SERIALIZATION
-
 
 }

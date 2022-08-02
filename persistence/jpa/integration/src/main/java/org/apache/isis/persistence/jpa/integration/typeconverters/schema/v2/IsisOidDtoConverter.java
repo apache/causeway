@@ -28,9 +28,8 @@ import org.apache.isis.schema.common.v2.OidDto;
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class IsisOidDtoConverter implements AttributeConverter<OidDto, String> {
-
-    private static final long serialVersionUID = 1L;
+public class IsisOidDtoConverter
+implements AttributeConverter<OidDto, String> {
 
     @Override
     public String convertToDatabaseColumn(final OidDto memberValue) {

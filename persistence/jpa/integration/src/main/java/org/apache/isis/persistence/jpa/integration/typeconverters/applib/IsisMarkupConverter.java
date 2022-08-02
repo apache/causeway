@@ -21,17 +21,14 @@ package org.apache.isis.persistence.jpa.integration.typeconverters.applib;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-
-import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.Markup;
 
 /**
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class IsisMarkupConverter implements AttributeConverter<Markup, String> {
-
-    private static final long serialVersionUID = 1L;
+public class IsisMarkupConverter
+implements AttributeConverter<Markup, String> {
 
     @Override
     public String convertToDatabaseColumn(final Markup memberValue) {

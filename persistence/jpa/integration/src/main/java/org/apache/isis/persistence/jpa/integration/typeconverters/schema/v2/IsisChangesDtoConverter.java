@@ -28,9 +28,8 @@ import org.apache.isis.schema.chg.v2.ChangesDto;
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class IsisChangesDtoConverter implements AttributeConverter<ChangesDto, String> {
-
-    private static final long serialVersionUID = 1L;
+public class IsisChangesDtoConverter
+implements AttributeConverter<ChangesDto, String> {
 
     @Override
     public String convertToDatabaseColumn(final ChangesDto memberValue) {

@@ -29,21 +29,20 @@ import org.apache.isis.commons.internal.base._Strings;
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class IsisBookmarkConverter implements AttributeConverter<Bookmark, String> {
-
-    private static final long serialVersionUID = 1L;
+public class IsisBookmarkConverter
+implements AttributeConverter<Bookmark, String> {
 
     static final int MAX_LENGTH = HasTarget.Target.MAX_LENGTH;
 
     @Override
-    public String convertToDatabaseColumn(Bookmark bookmark) {
+    public String convertToDatabaseColumn(final Bookmark bookmark) {
         return bookmark != null
                 ? _Strings.nullIfExceeds(bookmark.toString(), MAX_LENGTH)
                         : null;
     }
 
     @Override
-    public Bookmark convertToEntityAttribute(String datastoreValue) {
+    public Bookmark convertToEntityAttribute(final String datastoreValue) {
         return datastoreValue != null
                 ? Bookmark.parseElseFail(datastoreValue)
                 : null;

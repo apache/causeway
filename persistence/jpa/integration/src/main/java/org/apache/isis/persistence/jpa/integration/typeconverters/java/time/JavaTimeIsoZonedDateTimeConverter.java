@@ -28,9 +28,8 @@ import javax.persistence.Converter;
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class JavaTimeIsoZonedDateTimeConverter implements AttributeConverter<ZonedDateTime, String> {
-
-    private static final long serialVersionUID = 1L;
+public class JavaTimeIsoZonedDateTimeConverter
+implements AttributeConverter<ZonedDateTime, String> {
 
     @Override
     public String convertToDatabaseColumn(final ZonedDateTime offsetTime) {

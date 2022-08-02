@@ -28,9 +28,8 @@ import javax.persistence.Converter;
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class JavaTimeIsoOffsetTimeConverter implements AttributeConverter<OffsetTime, String>{
-
-    private static final long serialVersionUID = 1L;
+public class JavaTimeIsoOffsetTimeConverter
+implements AttributeConverter<OffsetTime, String>{
 
     @Override
     public String convertToDatabaseColumn(final OffsetTime offsetTime) {

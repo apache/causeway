@@ -28,9 +28,8 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class IsisCommandDtoConverter implements AttributeConverter<CommandDto, String> {
-
-    private static final long serialVersionUID = 1L;
+public class IsisCommandDtoConverter
+implements AttributeConverter<CommandDto, String> {
 
     @Override
     public String convertToDatabaseColumn(final CommandDto memberValue) {

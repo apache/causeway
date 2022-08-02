@@ -27,9 +27,8 @@ import javax.persistence.Converter;
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class JavaUtilUuidConverter implements AttributeConverter<UUID, String> {
-
-    private static final long serialVersionUID = 1L;
+public class JavaUtilUuidConverter
+implements AttributeConverter<UUID, String> {
 
     @Override
     public String convertToDatabaseColumn(final UUID uuid) {

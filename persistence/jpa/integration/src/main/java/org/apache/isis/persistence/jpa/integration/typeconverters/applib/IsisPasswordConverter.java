@@ -27,9 +27,8 @@ import org.apache.isis.applib.value.Password;
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class IsisPasswordConverter implements AttributeConverter<Password, String> {
-
-    private static final long serialVersionUID = 1L;
+public class IsisPasswordConverter
+implements AttributeConverter<Password, String> {
 
     @Override
     public String convertToDatabaseColumn(final Password memberValue) {

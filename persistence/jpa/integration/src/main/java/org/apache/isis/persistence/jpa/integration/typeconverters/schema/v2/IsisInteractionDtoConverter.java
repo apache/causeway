@@ -28,9 +28,8 @@ import org.apache.isis.schema.ixn.v2.InteractionDto;
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class IsisInteractionDtoConverter implements AttributeConverter<InteractionDto, String> {
-
-    private static final long serialVersionUID = 1L;
+public class IsisInteractionDtoConverter
+implements AttributeConverter<InteractionDto, String> {
 
     @Override
     public String convertToDatabaseColumn(final InteractionDto memberValue) {
