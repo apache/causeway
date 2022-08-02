@@ -45,7 +45,7 @@ public class HasInteractionId_executionLogEntries {
             extends IsisModuleExtExecutionLogApplib.CollectionDomainEvent<HasInteractionId_executionLogEntries, ExecutionLogEntry> { }
 
 
-    public List<ExecutionLogEntry> act() {
+    public List<? extends ExecutionLogEntry> act() {
         return executionLogEntryRepository.findByInteractionId(hasInteractionId.getInteractionId());
     }
 
@@ -54,6 +54,6 @@ public class HasInteractionId_executionLogEntries {
         return hasInteractionId instanceof ExecutionLogEntry;
     }
 
-    @Inject ExecutionLogEntryRepository<ExecutionLogEntry> executionLogEntryRepository;
+    @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
 
 }
