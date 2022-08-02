@@ -48,24 +48,26 @@ extends EntityChangePublishingFacetAbstract {
             val publishingPolicy = PublishingPolicies.entityChangePublishingPolicy(configuration);
             switch (publishingPolicy) {
             case NONE:
-                return Optional.empty();
+                return Optional.of(entityChangePublishingIfAny.isPresent()
+                        ? new EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured(holder, false)
+                        : new EntityChangePublishingFacetFromConfiguration(holder, false));
             default:
                 return Optional.of(entityChangePublishingIfAny.isPresent()
-                        ? new EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured(holder)
-                        : new EntityChangePublishingFacetFromConfiguration(holder));
+                        ? new EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured(holder, true)
+                        : new EntityChangePublishingFacetFromConfiguration(holder, true));
             }
         case DISABLED:
-            return null;
+            return Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, false));
         case ENABLED:
-            return Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder));
+            return Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, true));
 
         default:
             throw _Exceptions.unmatchedCase(publish);
         }
     }
 
-    protected EntityChangePublishingFacetForDomainObjectAnnotation(final FacetHolder holder) {
-        super(holder);
+    protected EntityChangePublishingFacetForDomainObjectAnnotation(final FacetHolder holder, boolean enabled) {
+        super(holder, enabled);
     }
 }
 

@@ -22,6 +22,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
+import lombok.Getter;
+
 public abstract class EntityChangePublishingFacetAbstract
 extends FacetAbstract
 implements EntityChangePublishingFacet {
@@ -30,8 +32,12 @@ implements EntityChangePublishingFacet {
         return EntityChangePublishingFacet.class;
     }
 
-    public EntityChangePublishingFacetAbstract(final FacetHolder facetHolder) {
+    @Getter
+    private final boolean enabled;
+
+    public EntityChangePublishingFacetAbstract(final FacetHolder facetHolder, boolean enabled) {
         super(EntityChangePublishingFacetAbstract.type(), facetHolder);
+        this.enabled = enabled;
     }
 
 }
