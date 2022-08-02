@@ -31,6 +31,7 @@ import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisLoc
 import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisMarkupConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisPasswordConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.awt.JavaAwtBufferedImageByteArrayConverter;
+import org.apache.isis.persistence.jpa.integration.typeconverters.java.time.JavaTimeIsoOffsetDateTimeConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.time.JavaTimeIsoOffsetTimeConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.time.JavaTimeIsoZonedDateTimeConverter;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
@@ -68,6 +69,7 @@ import org.apache.isis.persistence.jpa.metamodel.IsisModulePersistenceJpaMetamod
         JavaAwtBufferedImageByteArrayConverter.class,
         JavaUtilUuidConverter.class,
         JavaTimeIsoOffsetTimeConverter.class,
+        JavaTimeIsoOffsetDateTimeConverter.class,
         JavaTimeIsoZonedDateTimeConverter.class
 
 })

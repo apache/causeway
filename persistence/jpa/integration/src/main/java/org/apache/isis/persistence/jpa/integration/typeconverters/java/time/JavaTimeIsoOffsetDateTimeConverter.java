@@ -16,29 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.typeconverters.time;
+package org.apache.isis.persistence.jpa.integration.typeconverters.java.time;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
-import org.datanucleus.store.types.converters.TypeConverter;
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
 /**
  * @since 2.0 {@index}
  */
-public class IsoOffsetDateTimeConverter implements TypeConverter<OffsetDateTime, String>{
-
-    private static final long serialVersionUID = 1L;
+@Converter(autoApply = true)
+public class JavaTimeIsoOffsetDateTimeConverter
+implements AttributeConverter<OffsetDateTime, String> {
 
     @Override
-    public String toDatastoreType(final OffsetDateTime offsetDateTime) {
+    public String convertToDatabaseColumn(final OffsetDateTime offsetDateTime) {
         return offsetDateTime != null
                 ? offsetDateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                 : null;
     }
 
     @Override
-    public OffsetDateTime toMemberType(final String datastoreValue) {
+    public OffsetDateTime convertToEntityAttribute(final String datastoreValue) {
         return datastoreValue != null
                 ? OffsetDateTime.parse(datastoreValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                 : null;
