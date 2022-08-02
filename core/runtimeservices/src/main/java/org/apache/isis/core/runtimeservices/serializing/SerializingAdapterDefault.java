@@ -63,7 +63,6 @@ public class SerializingAdapterDefault implements SerializingAdapter {
 
     @Lazy
     @Inject private ValueSemanticsResolver valueSemanticsResolver;
-    //@Inject private IdStringifierLookupService idStringifierLookupService;
 
     @Override
     public Serializable write(final @NonNull Object value) {
@@ -107,23 +106,11 @@ public class SerializingAdapterDefault implements SerializingAdapter {
                               valueClass, decomposition.toJson()));
         }
 
-//        // otherwise, perhaps the value itself is a StringifiedValueMemento, in which case we treat it as a
-//        // memento for a non-predefined-serializable value to be reconstructed
-//        if(value instanceof StringifiedValueMemento) {
-//            return fromStringifiedValueMemento(valueClass, (StringifiedValueMemento) value);
-//        }
-
         // otherwise, the value was directly stored/written, so just recover as is
         return _Casts.uncheckedCast(value);
     }
 
     // -- HELPER
-
-//    @Value(staticConstructor = "of")
-//    private static final class StringifiedValueMemento implements Serializable {
-//        private static final long serialVersionUID = 1L;
-//        private final String stringifiedValue;
-//    }
 
     private <T> Optional<ValueDecomposition> toValueDecomposition(
             final @NonNull T value) {
@@ -143,28 +130,5 @@ public class SerializingAdapterDefault implements SerializingAdapter {
                 .findFirst()
                 .map(vs->vs.compose(decomposition));
     }
-
-//    private <T> StringifiedValueMemento toStringifiedValueMemento(
-//            final @NonNull T value) {
-//
-//        final Class<T> valueClass = _Casts.uncheckedCast(value.getClass());
-//
-//        return idStringifierLookupService.lookup(valueClass)
-//            .map(idStringifier->idStringifier.enstring(value))
-//            .map(stringifiedValue->StringifiedValueMemento.of(stringifiedValue))
-//            .orElseThrow(()->
-//                _Exceptions.unrecoverable("cannot create a memento for object of type %s", valueClass));
-//    }
-//
-//    private <T> T fromStringifiedValueMemento(
-//            final @NonNull Class<T> valueClass,
-//            final @NonNull StringifiedValueMemento memento) {
-//
-//        return idStringifierLookupService.lookup(valueClass)
-//                .map(idStringifier->idStringifier.destring(memento.getStringifiedValue(), null))
-//                .orElseThrow(()->
-//                    _Exceptions.unrecoverable("cannot restore object of type %s from memento '%s'",
-//                            valueClass, memento));
-//    }
 
 }
