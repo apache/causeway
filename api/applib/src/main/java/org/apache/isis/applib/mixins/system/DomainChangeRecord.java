@@ -23,11 +23,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.UUID;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -41,6 +43,10 @@ import org.apache.isis.applib.services.bookmark.HasTarget;
  *
  * @since 2.0 {@index}
  */
+@DomainObject(
+        editing = Editing.DISABLED,
+        entityChangePublishing = Publishing.DISABLED
+)
 public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTarget {
 
 

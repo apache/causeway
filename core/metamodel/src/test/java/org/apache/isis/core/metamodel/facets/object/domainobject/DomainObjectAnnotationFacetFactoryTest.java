@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import javax.inject.Named;
 
+import org.assertj.core.api.Assertions;
 import org.jmock.Expectations;
 import org.junit.After;
 import org.junit.Assert;
@@ -148,9 +149,10 @@ extends AbstractFacetFactoryJUnit4TestCase {
                         .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder);
                 facetFactory.processEntityChangePublishing(context.synthesizeOnType(DomainObject.class), context);
 
-                final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 assertThat(facet, is(notNullValue()));
                 Assert.assertTrue(facet instanceof EntityChangePublishingFacetFromConfiguration);
+                Assertions.assertThat(facet.isEnabled()).isTrue();
 
                 expectNoMethodsRemoved();
             }
@@ -163,7 +165,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
                         .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
 
                 final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-                Assert.assertNull(facet);
+                Assert.assertNotNull(facet);
+                Assertions.assertThat(facet.isEnabled()).isFalse();
 
                 expectNoMethodsRemoved();
             }
@@ -179,9 +182,10 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 facetFactory.process(ProcessClassContext
                         .forTesting(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
-                final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
                 Assert.assertNotNull(facet);
                 Assert.assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured);
+                Assertions.assertThat(facet.isEnabled()).isTrue();
 
                 expectNoMethodsRemoved();
             }
@@ -194,7 +198,8 @@ extends AbstractFacetFactoryJUnit4TestCase {
                         .forTesting(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
 
                 final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-                Assert.assertNull(facet);
+                Assert.assertNotNull(facet);
+                Assertions.assertThat(facet.isEnabled()).isFalse();
 
                 expectNoMethodsRemoved();
             }
