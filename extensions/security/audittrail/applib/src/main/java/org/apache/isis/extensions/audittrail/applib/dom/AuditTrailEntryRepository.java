@@ -47,6 +47,13 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
 
     private final Class<E> auditTrailEntryClass;
 
+    @Inject RepositoryService repositoryService;
+    @Inject FactoryService factoryService;
+
+    public Class<E> getEntityClass() {
+        return auditTrailEntryClass;
+    }
+
     public AuditTrailEntry createFor(final EntityPropertyChange change) {
         E entry = factoryService.detachedEntity(auditTrailEntryClass);
         entry.init(change);
@@ -172,7 +179,5 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
         repositoryService.removeAll(auditTrailEntryClass);
     }
 
-    @Inject RepositoryService repositoryService;
-    @Inject FactoryService factoryService;
 
 }

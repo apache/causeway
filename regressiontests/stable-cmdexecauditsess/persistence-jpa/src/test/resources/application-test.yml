@@ -27,6 +27,11 @@ isis:
   extensions:
     session-log:
       auto-logout-on-restart: false
+  core:
+    meta-model:
+      introspector:
+        mode: full
+
 
 spring:
   jpa:

@@ -53,8 +53,6 @@ import lombok.val;
 
 public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
-
-
     public static class NotFoundException extends RecoverableException {
         private static final long serialVersionUID = 1L;
         @Getter
@@ -71,8 +69,13 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
     private final Class<C> commandLogEntryClass;
 
+
     protected CommandLogEntryRepository(Class<C> commandLogEntryClass) {
         this.commandLogEntryClass = commandLogEntryClass;
+    }
+
+    public Class<C> getEntityClass() {
+        return commandLogEntryClass;
     }
 
     public C createEntryAndPersist(final Command command, CommandLogEntry parentEntryIfAny) {

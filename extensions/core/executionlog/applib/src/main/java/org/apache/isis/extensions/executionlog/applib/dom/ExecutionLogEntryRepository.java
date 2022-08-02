@@ -62,6 +62,10 @@ public abstract class ExecutionLogEntryRepository<E extends ExecutionLogEntry> {
         this.executionLogEntryClass = executionLogEntryClass;
     }
 
+    public Class<E> getEntityClass() {
+        return executionLogEntryClass;
+    }
+
 
     /**
      * for testing only.
