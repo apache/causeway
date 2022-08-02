@@ -31,6 +31,14 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class PredefinedSerializables {
 
+    /**
+     * Whether given {@code cls} can be serialized ad-hoc,
+     * which usually is true for simple value types,
+     * but not per-se for domain object's (entities and viewmodels)
+     * even if {@link Serializable}.
+     * For the latter a more sophisticated - {@link Bookmark}
+     * based - mechanism is required instead.
+     */
     public boolean isPredefinedSerializable(final Class<?> cls) {
         if(!Serializable.class.isAssignableFrom(cls)) {
             return false;

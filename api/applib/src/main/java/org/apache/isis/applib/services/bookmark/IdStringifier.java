@@ -26,7 +26,7 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * SPI to converts the identifier (primary key) of an entity, of a given type (eg Integer) into a string, and
+ * SPI to convert the identifier (primary key) of an entity, of a given type (eg Integer) into a string, and
  * to convert back again into the key object used to actually look up the target entity instance; supported by both JDO
  * and JPA persistence mechanisms.
  *
