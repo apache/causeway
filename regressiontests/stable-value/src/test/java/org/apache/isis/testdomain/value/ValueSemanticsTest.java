@@ -20,7 +20,6 @@ package org.apache.isis.testdomain.value;
 
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -249,7 +248,8 @@ class ValueSemanticsTest {
 
                                 if(valueType.equals(OffsetDateTime.class)
                                         || valueType.equals(OffsetTime.class)
-                                        || valueType.equals(ZonedDateTime.class)) {
+                                        //|| valueType.equals(ZonedDateTime.class)
+                                        ) {
 
                                     if(stringified.endsWith("Z")) {
                                         // skip format variations on UTC time-zone

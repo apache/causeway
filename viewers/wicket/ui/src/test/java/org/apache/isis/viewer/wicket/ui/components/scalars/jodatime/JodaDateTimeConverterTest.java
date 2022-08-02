@@ -53,7 +53,7 @@ class JodaDateTimeConverterTest {
 
     @Test
     void happy_case() {
-        converterTester.assertRoundtrip(valid, "2013-05-11 17:59:00 +01:00");
+        converterTester.assertRoundtrip(valid, "2013-05-11 17:59:00 GMT+01:00");
     }
 
     @Test

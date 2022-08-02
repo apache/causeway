@@ -201,6 +201,29 @@ extends
          * Z       zone-offset                 offset-Z          +0000; -0800; -08:00;
          *</pre>
          *
+         * TODO no <i>tempus-dominus</i> date/time-picker support yet.
+         */
+        @NotNull @NotEmpty
+        private String zoneIdPatternForOutput = "VV";
+
+        /**
+         * TODO no <i>tempus-dominus</i> date/time-picker support yet.
+         */
+        @NotNull @NotEmpty
+        private String zoneIdPatternForInput = "VV";
+
+        /**
+         * The locale-independent (canonical) pattern used for editing time-offset in the UI.
+         * <p>
+         * Java time-zone formats<pre>
+         * V       time-zone ID                zone-id           America/Los_Angeles; Z; -08:30
+         * z       time-zone name              zone-name         Pacific Standard Time; PST
+         * O       localized zone-offset       offset-O          GMT+8; GMT+08:00; UTC-08:00;
+         * X       zone-offset 'Z' for zero    offset-X          Z; -08; -0830; -08:30; -083015; -08:30:15;
+         * x       zone-offset                 offset-x          +0000; -08; -0830; -08:30; -083015; -08:30:15;
+         * Z       zone-offset                 offset-Z          +0000; -0800; -08:00;
+         *</pre>
+         *
          * @apiNote Yet only tested with {@literal XXX}, as there needs to be a format correspondence with
          * <i>momentJs</i> for the <i>tempus-dominus</i> date/time-picker to work
          * (as used by the <i>Wicket Viewer</i>).
@@ -208,7 +231,7 @@ extends
          * does the format conversion.
          */
         @NotNull @NotEmpty
-        private String zonePatternForOutput = "XXX";
+        private String offsetPatternForOutput = "XXX";
 
         /**
          * Support both forms for parsing, with or without colon.
@@ -217,7 +240,7 @@ extends
          * @see "https://stackoverflow.com/questions/34637626/java-datetimeformatter-for-time-zone-with-an-optional-colon-separator"
          */
         @NotNull @NotEmpty
-        private String zonePatternForInput = "[XXX][X]";
+        private String offsetPatternForInput = "[XXX][X]";
 
         // -- JOINING PATTERNS
 
@@ -251,27 +274,47 @@ extends
             switch (temporalCharacteristic) {
             case DATE_TIME:
                 val dateTimePattern =
-                    String.format(getDateTimeJoiningPattern(), getDatePattern(), timePattern(timePrecision, direction));
+                    String.format(getDateTimeJoiningPattern(),
+                            getDatePattern(),
+                            timePattern(timePrecision, direction));
                 return offsetCharacteristic.isLocal()
                         ? dateTimePattern
-                        : String.format(getZoneJoiningPattern(), dateTimePattern, zonePattern(direction));
+                        : String.format(getZoneJoiningPattern(),
+                                dateTimePattern,
+                                zonePattern(offsetCharacteristic, direction));
             case DATE_ONLY:
                 return offsetCharacteristic.isLocal()
                         ? getDatePattern()
-                        : String.format(getZoneJoiningPattern(), getDatePattern(), zonePattern(direction));
+                        : String.format(getZoneJoiningPattern(),
+                                getDatePattern(),
+                                zonePattern(offsetCharacteristic,direction));
             case TIME_ONLY:
                 return offsetCharacteristic.isLocal()
                         ? timePattern(timePrecision, direction)
-                        : String.format(getZoneJoiningPattern(), timePattern(timePrecision, direction), zonePattern(direction));
+                        : String.format(getZoneJoiningPattern(),
+                                timePattern(timePrecision, direction),
+                                zonePattern(offsetCharacteristic, direction));
             default:
                 throw _Exceptions.unmatchedCase(temporalCharacteristic);
             }
         }
 
-        private String zonePattern(@NonNull final EditingFormatDirection direction) {
-            return direction.isInput()
-                    ? getZonePatternForInput()
-                    : getZonePatternForOutput();
+        private String zonePattern(
+                final @NonNull OffsetCharacteristic offsetCharacteristic,
+                final @NonNull EditingFormatDirection direction) {
+
+            switch(offsetCharacteristic) {
+            case OFFSET:
+                return direction.isInput()
+                        ? getOffsetPatternForInput()
+                        : getOffsetPatternForOutput();
+            case ZONED:
+                return direction.isInput()
+                        ? getZoneIdPatternForInput()
+                        : getZoneIdPatternForOutput();
+            default:
+                throw _Exceptions.unexpectedCodeReach();
+            }
         }
 
         // -- HELPER
