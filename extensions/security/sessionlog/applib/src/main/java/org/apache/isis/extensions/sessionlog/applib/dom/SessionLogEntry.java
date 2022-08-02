@@ -272,14 +272,14 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     @Property(
             domainEvent = CausedBy.DomainEvent.class,
             editing = Editing.DISABLED,
-            optionality = Optionality.MANDATORY
+            optionality = Optionality.OPTIONAL
     )
     @PropertyLayout(
             fieldSetId="Details",
             sequence = "2"
     )
     @Parameter(
-            optionality = Optionality.MANDATORY
+            optionality = Optionality.OPTIONAL
     )
     @ParameterLayout(
             named = "Caused by"
@@ -288,8 +288,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     @Retention(RetentionPolicy.RUNTIME)
     public @interface CausedBy {
         class DomainEvent extends PropertyDomainEvent<String> {}
-        boolean NULLABLE = false;
-        String ALLOWS_NULL = "false";
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
     @CausedBy
     public abstract SessionSubscriber.CausedBy getCausedBy();
