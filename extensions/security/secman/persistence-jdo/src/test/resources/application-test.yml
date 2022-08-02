@@ -32,7 +32,7 @@ isis:
 
   persistence:
     schema:
-      auto-create-schemas: "ISISEXTENSIONSSECMAN"
+      auto-create-schemas: "ISISEXTSECMAN"
 
 
 spring:
