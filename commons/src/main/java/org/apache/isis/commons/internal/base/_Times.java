@@ -60,6 +60,7 @@ public final class _Times {
     public static final DateTimeFormatter DEFAULT_LOCAL_DATETIME_FORMATTER_WITH_MILLIS =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
+
     /**
      * Returns duration between {@code startedAt} and {@code completedAt} in <i>seconds</i>,
      * to 3 decimal places.
@@ -77,13 +78,32 @@ public final class _Times {
 
     // -- TEMPORAL TO STRING CONVERTERS
 
+    private static final DateTimeFormatter OFFSETTIME_DATASTORE_FORMATTER =
+            DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSSSSS XXX");
+
+    private static final DateTimeFormatter OFFSETTIME_DATASTORE_PARSER =
+            DateTimeFormatter.ofPattern("HH:mm:ss[.SSSSSSSSS] [XXX][X]");
+
+    private static final DateTimeFormatter OFFSETDATETIME_DATASTORE_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS XXX");
+
+    private static final DateTimeFormatter OFFSETDATETIME_DATASTORE_PARSER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSSSSS] [XXX][X]");
+
+    private static final DateTimeFormatter ZONEDDATETIME_DATASTORE_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS V");
+
+    private static final DateTimeFormatter ZONEDDATETIME_DATASTORE_PARSER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSSSSS] [V]");
+
+
     /**
      * Returns a {@link String} representing given temporal suitable for the data-store.
      */
     @Nullable
     public String enstringOffsetTime(final @Nullable OffsetTime temporal) {
         return temporal != null
-                ? temporal.format(DateTimeFormatter.ISO_OFFSET_TIME)
+                ? temporal.format(OFFSETTIME_DATASTORE_FORMATTER)
                 : null;
     }
 
@@ -93,7 +113,7 @@ public final class _Times {
     @Nullable
     public OffsetTime destringAsOffsetTime(final @Nullable String datastoreValue) {
         return _Strings.isNotEmpty(datastoreValue)
-                ? OffsetTime.parse(datastoreValue, DateTimeFormatter.ISO_OFFSET_TIME)
+                ? OffsetTime.parse(datastoreValue, OFFSETTIME_DATASTORE_PARSER)
                 : null;
     }
 
@@ -103,7 +123,7 @@ public final class _Times {
     @Nullable
     public String enstringOffsetDateTime(final @Nullable OffsetDateTime temporal) {
         return temporal != null
-                ? temporal.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                ? temporal.format(OFFSETDATETIME_DATASTORE_FORMATTER)
                 : null;
     }
 
@@ -113,7 +133,7 @@ public final class _Times {
     @Nullable
     public OffsetDateTime destringAsOffsetDateTime(final @Nullable String datastoreValue) {
         return _Strings.isNotEmpty(datastoreValue)
-                ? OffsetDateTime.parse(datastoreValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                ? OffsetDateTime.parse(datastoreValue, OFFSETDATETIME_DATASTORE_PARSER)
                 : null;
     }
 
@@ -123,7 +143,7 @@ public final class _Times {
     @Nullable
     public String enstringZonedDateTime(final @Nullable ZonedDateTime temporal) {
         return temporal != null
-                ? temporal.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                ? temporal.format(ZONEDDATETIME_DATASTORE_FORMATTER)
                 : null;
     }
 
@@ -133,7 +153,7 @@ public final class _Times {
     @Nullable
     public ZonedDateTime destringAsZonedDateTime(final @Nullable String datastoreValue) {
         return _Strings.isNotEmpty(datastoreValue)
-                ? ZonedDateTime.parse(datastoreValue, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                ? ZonedDateTime.parse(datastoreValue, ZONEDDATETIME_DATASTORE_PARSER)
                 : null;
     }
 
