@@ -49,9 +49,9 @@ public class IdStringifierForDatastoreIdImpl extends IdStringifier.Abstract<Data
     @Override
     public DatastoreIdImpl destring(
             final @NonNull String stringified,
-            final Class<?> targetEntityClassIfAny) {
+            final @NonNull Class<?> targetEntityClass) {
         // enString invoked toString() on the original key; invoking toString() on its stringified form does not change it
-        val proto = new DatastoreIdImpl(targetEntityClassIfAny.getName(), stringified);
+        val proto = new DatastoreIdImpl(targetEntityClass.getName(), stringified);
         // now render in the form that the DataStoreImpl constructor expects; it will take it apart itself.
         val str = proto.toString();
         return new DatastoreIdImpl(str);

@@ -72,7 +72,7 @@ public class ExecutionOutboxEntryPK implements Serializable {
         @Override
         public ExecutionOutboxEntryPK destring(
                 final @NonNull String stringified,
-                final Class<?> targetEntityClassIfAny) {
+                final @NonNull Class<?> targetEntityClass) {
             return new ExecutionOutboxEntryPK(stringified);
         }
     }

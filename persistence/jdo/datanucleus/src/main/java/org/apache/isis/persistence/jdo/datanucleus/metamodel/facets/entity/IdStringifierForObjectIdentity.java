@@ -23,7 +23,6 @@ import java.util.UUID;
 import javax.annotation.Priority;
 import javax.jdo.identity.ObjectIdentity;
 
-import org.datanucleus.identity.ObjectId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -72,17 +71,17 @@ public class IdStringifierForObjectIdentity extends IdStringifier.Abstract<Objec
     @Override
     public ObjectIdentity destring(
             final @NonNull String stringified,
-            final Class<?> targetEntityClassIfAny) {
+            final @NonNull Class<?> targetEntityClass) {
         if (stringified.startsWith(PREFIX_LONG)) {
-            return new ObjectIdentity(targetEntityClassIfAny, Long.parseLong(stringified.substring(PREFIX_LONG.length())));
+            return new ObjectIdentity(targetEntityClass, Long.parseLong(stringified.substring(PREFIX_LONG.length())));
         }
         if (stringified.startsWith(PREFIX_INT)) {
-            return new ObjectIdentity(targetEntityClassIfAny, Integer.parseInt(stringified.substring(PREFIX_INT.length())));
+            return new ObjectIdentity(targetEntityClass, Integer.parseInt(stringified.substring(PREFIX_INT.length())));
         }
         if (stringified.startsWith(PREFIX_UUID)) {
-            return new ObjectIdentity(targetEntityClassIfAny, UUID.fromString(stringified.substring(PREFIX_UUID.length())));
+            return new ObjectIdentity(targetEntityClass, UUID.fromString(stringified.substring(PREFIX_UUID.length())));
         }
         // fall through to JDO spec (5.4.3)
-        return new ObjectIdentity(targetEntityClassIfAny, stringified);
+        return new ObjectIdentity(targetEntityClass, stringified);
     }
 }

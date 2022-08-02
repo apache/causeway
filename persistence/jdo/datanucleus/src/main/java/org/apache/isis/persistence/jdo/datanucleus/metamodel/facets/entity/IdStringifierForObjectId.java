@@ -71,17 +71,17 @@ public class IdStringifierForObjectId extends IdStringifier.Abstract<ObjectId> {
     @Override
     public ObjectId destring(
             final @NonNull String stringified,
-            final Class<?> targetEntityClassIfAny) {
+            final @NonNull Class<?> targetEntityClass) {
         if (stringified.startsWith(PREFIX_LONG)) {
-            return new ObjectId(targetEntityClassIfAny, Long.parseLong(stringified.substring(PREFIX_LONG.length())));
+            return new ObjectId(targetEntityClass, Long.parseLong(stringified.substring(PREFIX_LONG.length())));
         }
         if (stringified.startsWith(PREFIX_INT)) {
-            return new ObjectId(targetEntityClassIfAny, Integer.parseInt(stringified.substring(PREFIX_INT.length())));
+            return new ObjectId(targetEntityClass, Integer.parseInt(stringified.substring(PREFIX_INT.length())));
         }
         if (stringified.startsWith(PREFIX_UUID)) {
-            return new ObjectId(targetEntityClassIfAny, UUID.fromString(stringified.substring(PREFIX_UUID.length())));
+            return new ObjectId(targetEntityClass, UUID.fromString(stringified.substring(PREFIX_UUID.length())));
         }
         // fall through to JDO spec (5.4.3)
-        return new ObjectId(targetEntityClassIfAny, stringified);
+        return new ObjectId(targetEntityClass, stringified);
     }
 }

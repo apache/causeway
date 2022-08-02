@@ -20,8 +20,6 @@
 
 package org.apache.isis.applib.services.bookmark;
 
-import java.util.UUID;
-
 import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
@@ -77,13 +75,11 @@ public interface IdStringifier<T> {
      * that can be used to retrieve.
      *
      * @param stringified - as returned by {@link #enstring(Object)}
-     * @param targetEntityClassIfAny - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
+     * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
      *                                 we always have this information available, and is needed (at least) by the JDO
      *                                 implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
-     *                                 For Bookmarks of view models, there won't be any targetEntityClass, so this parameter
-     *                                 could be null.
      */
-    T destring(@NonNull String stringified, Class<?> targetEntityClassIfAny);
+    T destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass);
 
     abstract class Abstract<T> implements IdStringifier<T> {
 
@@ -120,10 +116,9 @@ public interface IdStringifier<T> {
         /**
          * Overridable default implementation.
          * @param value
-         * @return
          */
         @Override
-        public String enstring(@NonNull T value) {
+        public String enstring(@NonNull final T value) {
             return value.toString();
         }
 
@@ -171,9 +166,9 @@ public interface IdStringifier<T> {
         @Override
         public final T destring(
                 final @NonNull String stringified,
-                final Class<?> targetEntityClassIfAny) {
+                final @NonNull Class<?> targetEntityClass) {
             val suffix = removePrefix(stringified);
-            return doDestring(suffix, targetEntityClassIfAny);
+            return doDestring(suffix, targetEntityClass);
         }
 
         /**

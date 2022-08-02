@@ -47,7 +47,7 @@ public class IdStringifierForDatastoreUniqueLongId extends IdStringifier.Abstrac
     @Override
     public DatastoreUniqueLongId destring(
             final @NonNull String stringified,
-            final @Nullable Class<?> targetEntityClassIfAny) {
+            final @Nullable Class<?> targetEntityClass) {
         return new DatastoreUniqueLongId(stringified);
     }
 
