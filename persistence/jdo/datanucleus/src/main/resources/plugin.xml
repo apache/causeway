@@ -67,6 +67,13 @@
                 converter-name="iso.zoneddatetime-string" />
     </extension>
 
+	<extension point="org.datanucleus.java_type">
+        <java-type
+                name="java.time.OffsetDateTime"
+                dfg="true" priority="10"
+                converter-name="iso.offsetdatetime-string" />
+    </extension>
+
     <extension point="org.datanucleus.java_type">
         <java-type
                 name="java.time.OffsetTime"
@@ -147,6 +154,14 @@
                 member-type="java.time.ZonedDateTime"
                 datastore-type="java.lang.String"
                 converter-class="org.apache.isis.persistence.jdo.datanucleus.typeconverters.time.IsoZonedDateTimeConverter"/>
+    </extension>
+
+	<extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="iso.offsetdatetime-string"
+                member-type="java.time.OffsetDateTime"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.isis.persistence.jdo.datanucleus.typeconverters.time.IsoOffsetDateTimeConverter"/>
     </extension>
 
     <extension point="org.datanucleus.type_converter">
