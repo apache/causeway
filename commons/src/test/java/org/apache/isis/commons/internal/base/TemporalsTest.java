@@ -18,6 +18,13 @@
  */
 package org.apache.isis.commons.internal.base;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,6 +52,27 @@ class TemporalsTest {
         for(val temporal: _Temporals.sampleZonedDateTime()) {
             assertEquals(temporal, _Temporals.destringAsZonedDateTime(_Temporals.enstringZonedDateTime(temporal)));
         }
+    }
+
+    @Test
+    void incompleteOffsetTime() {
+        assertEquals(
+                OffsetTime.of(LocalTime.of(12, 31), ZoneOffset.UTC),
+                _Temporals.destringAsOffsetTime("12:31:00.0"));
+    }
+
+    @Test
+    void incompleteOffsetDateTime() {
+        assertEquals(
+                OffsetDateTime.of(LocalDate.of(2022, 1, 28), LocalTime.of(12, 31), ZoneOffset.UTC),
+                _Temporals.destringAsOffsetDateTime("2022-01-28 12:31:00.0"));
+    }
+
+    @Test
+    void incompleteZonedDateTime() {
+        assertEquals(
+                ZonedDateTime.of(LocalDate.of(2022, 1, 28), LocalTime.of(12, 31), ZoneOffset.UTC),
+                _Temporals.destringAsZonedDateTime("2022-01-28 12:31:00.0"));
     }
 
 }

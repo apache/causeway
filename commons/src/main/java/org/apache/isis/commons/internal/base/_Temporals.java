@@ -31,11 +31,13 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -86,23 +88,26 @@ public final class _Temporals {
 
     // -- TEMPORAL TO STRING CONVERTERS
 
+    private static final String FRACTIONAL_SECONDS_READ_PATTERN =
+            "[.SSSSSSSSS][.SSSSSS][.SSS][.S]";
+
     private static final DateTimeFormatter OFFSETTIME_DATASTORE_FORMATTER =
             DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSSSSS XXX");
 
     private static final DateTimeFormatter OFFSETTIME_DATASTORE_PARSER =
-            DateTimeFormatter.ofPattern("HH:mm:ss[.SSSSSSSSS][ XXX]");
+            DateTimeFormatter.ofPattern("HH:mm:ss" + FRACTIONAL_SECONDS_READ_PATTERN + "[ XXX]");
 
     private static final DateTimeFormatter OFFSETDATETIME_DATASTORE_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS XXX");
 
     private static final DateTimeFormatter OFFSETDATETIME_DATASTORE_PARSER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSSSSS][ XXX]");
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss" + FRACTIONAL_SECONDS_READ_PATTERN + "[ XXX]");
 
     private static final DateTimeFormatter ZONEDDATETIME_DATASTORE_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS VV");
 
     private static final DateTimeFormatter ZONEDDATETIME_DATASTORE_PARSER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSSSSS][ VV]");
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss" + FRACTIONAL_SECONDS_READ_PATTERN + "[ VV]");
 
 
     /**
@@ -121,7 +126,11 @@ public final class _Temporals {
     @Nullable
     public OffsetTime destringAsOffsetTime(final @Nullable String datastoreValue) {
         return _Strings.isNotEmpty(datastoreValue)
-                ? OffsetTime.parse(datastoreValue, OFFSETTIME_DATASTORE_PARSER)
+                ? hasZoneOrOffsetInfoWhenAssumingTimeOnly(datastoreValue)
+                        ? OffsetTime.parse(datastoreValue, OFFSETTIME_DATASTORE_PARSER)
+                        : OffsetTime.of(
+                                LocalTime.parse(datastoreValue,
+                                        OFFSETTIME_DATASTORE_PARSER), ZoneOffset.UTC)
                 : null;
     }
 
@@ -141,7 +150,11 @@ public final class _Temporals {
     @Nullable
     public OffsetDateTime destringAsOffsetDateTime(final @Nullable String datastoreValue) {
         return _Strings.isNotEmpty(datastoreValue)
-                ? OffsetDateTime.parse(datastoreValue, OFFSETDATETIME_DATASTORE_PARSER)
+                ? hasZoneOrOffsetInfoWhenAssumingDateAndTime(datastoreValue)
+                        ? OffsetDateTime.parse(datastoreValue, OFFSETDATETIME_DATASTORE_PARSER)
+                        : OffsetDateTime.of(
+                                LocalDateTime.parse(datastoreValue,
+                                        OFFSETDATETIME_DATASTORE_PARSER), ZoneOffset.UTC)
                 : null;
     }
 
@@ -161,25 +174,29 @@ public final class _Temporals {
     @Nullable
     public ZonedDateTime destringAsZonedDateTime(final @Nullable String datastoreValue) {
         return _Strings.isNotEmpty(datastoreValue)
-                ? ZonedDateTime.parse(datastoreValue, ZONEDDATETIME_DATASTORE_PARSER)
+                ? hasZoneOrOffsetInfoWhenAssumingDateAndTime(datastoreValue)
+                        ? ZonedDateTime.parse(datastoreValue, ZONEDDATETIME_DATASTORE_PARSER)
+                        : ZonedDateTime.of(
+                                LocalDateTime.parse(datastoreValue,
+                                        ZONEDDATETIME_DATASTORE_PARSER), ZoneOffset.UTC)
                 : null;
     }
 
     // -- TEMPORAL SAMPLERS
 
-    public static Can<LocalDateTime> sampleLocalDateTime() {
+    public Can<LocalDateTime> sampleLocalDateTime() {
         return Can.of(
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(2).plusSeconds(15));
     }
 
-    public static Can<LocalDate> sampleLocalDate() {
+    public Can<LocalDate> sampleLocalDate() {
         return Can.of(
                 LocalDate.now(),
                 LocalDate.now().plusDays(2));
     }
 
-    public static Can<LocalTime> sampleLocalTime() {
+    public Can<LocalTime> sampleLocalTime() {
         return Can.of(
                 LocalTime.now(),
                 LocalTime.now().plusSeconds(15));
@@ -222,6 +239,26 @@ public final class _Temporals {
         return new BigDecimal(millis)
                 .movePointLeft(3)
                 .setScale(3, RoundingMode.HALF_EVEN);
+    }
+
+    /**
+     * Whether the number of delimiting white-spaces hints at presence of zone/offset info.
+     */
+    private boolean hasZoneOrOffsetInfoWhenAssumingTimeOnly(final @NonNull String datastoreValue) {
+        return delimitedChunksCount(datastoreValue)>1;
+    }
+
+    /**
+     * Whether the number of delimiting white-spaces hints at presence of zone/offset info.
+     */
+    private boolean hasZoneOrOffsetInfoWhenAssumingDateAndTime(final @NonNull String datastoreValue) {
+        return delimitedChunksCount(datastoreValue)>2;
+    }
+
+    private long delimitedChunksCount(final @NonNull String datastoreValue) {
+        return _Strings.splitThenStream(datastoreValue, Pattern.compile("\\s+"))
+                .filter(_Strings::isNotEmpty)
+                .count();
     }
 
 }
