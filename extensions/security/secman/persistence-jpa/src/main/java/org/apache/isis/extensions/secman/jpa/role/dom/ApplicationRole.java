@@ -54,7 +54,7 @@ import lombok.Setter;
         schema = ApplicationRole.SCHEMA,
         name = ApplicationRole.TABLE,
         uniqueConstraints =
-            @UniqueConstraint(name = "name__UNQ", columnNames= { "name" })
+            @UniqueConstraint(name = "ApplicationRole__name__UNQ", columnNames= { "name" })
 )
 @NamedQueries({
     @NamedQuery(

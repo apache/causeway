@@ -56,7 +56,7 @@ import lombok.Setter;
         schema = ApplicationRole.SCHEMA,
         table = ApplicationRole.TABLE)
 @Uniques({
-    @Unique(name = "name__UNQ", members = { "name" })
+    @Unique(name = "ApplicationRole__name__UNQ", members = { "name" })
 })
 @Queries({
     @Query(

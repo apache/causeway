@@ -52,9 +52,9 @@ import lombok.Setter;
         table = ExecutionOutboxEntry.TABLE,
         objectIdClass= ExecutionOutboxEntryPK.class)
 @Indices({
-        @Index(name = "timestamp__IDX", members = { "timestamp" }),
-        @Index(name = "target__timestamp__IDX", members = { "target", "timestamp" }),
-        @Index(name = "username__timestamp__IDX", members = { "username", "timestamp" }),
+        @Index(name = "ExecutionOutboxEntry__timestamp__IDX", members = { "timestamp" }),
+        @Index(name = "ExecutionOutboxEntry__target__timestamp__IDX", members = { "target", "timestamp" }),
+        @Index(name = "ExecutionOutboxEntry__username__timestamp__IDX", members = { "username", "timestamp" }),
 })
 @Queries( {
     @Query(

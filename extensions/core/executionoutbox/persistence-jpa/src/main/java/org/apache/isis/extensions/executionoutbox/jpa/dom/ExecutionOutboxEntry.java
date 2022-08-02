@@ -59,9 +59,9 @@ import lombok.Setter;
         schema = ExecutionOutboxEntry.SCHEMA,
         name = ExecutionOutboxEntry.TABLE,
         indexes = {
-                @Index(name = "timestamp__IDX", columnList = "timestamp"),
-                @Index(name = "target__timestamp__IDX", columnList = "target, timestamp"),
-                @Index(name = "username__timestamp__IDX", columnList = "username, timestamp"),
+                @Index(name = "ExecutionOutboxEntry__timestamp__IDX", columnList = "timestamp"),
+                @Index(name = "ExecutionOutboxEntry__target__timestamp__IDX", columnList = "target, timestamp"),
+                @Index(name = "ExecutionOutboxEntry__username__timestamp__IDX", columnList = "username, timestamp"),
         }
 )
 @NamedQueries( {

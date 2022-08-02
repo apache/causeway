@@ -55,10 +55,10 @@ import lombok.Setter;
         schema = AuditTrailEntry.SCHEMA,
         name = AuditTrailEntry.TABLE,
         indexes = {
-                @Index(name = "target_propertyId_timestamp_IDX", columnList = "target, propertyId, timestamp", unique = false),
-                @Index(name = "target_timestamp_IDX", columnList = "target, timestamp", unique = false),
-                @Index(name = "timestamp_IDX", columnList = "timestamp", unique = false),
-                @Index(name = "interactionId_IDX", columnList = "interactionId", unique = false)
+                @Index(name = "AuditTrailEntry__target_propertyId_timestamp__IDX", columnList = "target, propertyId, timestamp", unique = false),
+                @Index(name = "AuditTrailEntry__target_timestamp__IDX", columnList = "target, timestamp", unique = false),
+                @Index(name = "AuditTrailEntry__timestamp__IDX", columnList = "timestamp", unique = false),
+                @Index(name = "AuditTrailEntry__interactionId__IDX", columnList = "interactionId", unique = false)
         }
 )
 @NamedQueries( {

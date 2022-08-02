@@ -56,7 +56,7 @@ import lombok.Setter;
         schema = ApplicationTenancy.SCHEMA,
         table = ApplicationTenancy.TABLE)
 @Uniques({
-    @Unique(name = "name__UNQ", members = { "name" })
+    @Unique(name = "ApplicationTenancy__name__UNQ", members = { "name" })
 })
 @Queries( {
     @Query(

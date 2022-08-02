@@ -363,8 +363,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     @Retention(RetentionPolicy.RUNTIME)
     public @interface StartedAt {
         class DomainEvent extends PropertyDomainEvent<java.sql.Timestamp> {}
-        boolean NULLABLE = false;
-        String ALLOWS_NULL = "false";
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
     @StartedAt
     public abstract java.sql.Timestamp getStartedAt();
@@ -384,8 +384,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     @Retention(RetentionPolicy.RUNTIME)
     public @interface CompletedAt {
         class DomainEvent extends PropertyDomainEvent<java.sql.Timestamp> {}
-        boolean NULLABLE = false;
-        String ALLOWS_NULL = "false";
+        boolean NULLABLE = true;
+        String ALLOWS_NULL = "true";
     }
     @CompletedAt
     public abstract java.sql.Timestamp getCompletedAt();

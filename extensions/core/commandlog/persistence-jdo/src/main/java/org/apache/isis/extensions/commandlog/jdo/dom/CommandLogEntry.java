@@ -51,8 +51,8 @@ import lombok.Setter;
         schema = CommandLogEntry.SCHEMA,
         table = CommandLogEntry.TABLE)
 @Indices({
-        @Index(name = "startedAt__timestamp__IDX", members = { "startedAt", "timestamp" }),
-        @Index(name = "timestamp__IDX", members = { "timestamp" }),
+        @Index(name = "CommandLogEntry__startedAt_timestamp__IDX", members = { "startedAt", "timestamp" }),
+        @Index(name = "CommandLogEntry__timestamp__IDX", members = { "timestamp" }),
 })
 @Queries( {
     @Query(

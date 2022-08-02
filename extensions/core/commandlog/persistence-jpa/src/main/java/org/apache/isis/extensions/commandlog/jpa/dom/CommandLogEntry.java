@@ -62,10 +62,10 @@ import lombok.Setter;
         schema = CommandLogEntry.SCHEMA,
         name = CommandLogEntry.TABLE,
         indexes = {
-                @Index(name = "startedAt__timestamp__IDX", columnList = "startedAt, timestamp" ),
-                @Index(name = "timestamp__IDX", columnList = "timestamp"),
-                @Index(name = "target__IDX", columnList = "target"),
-                @Index(name = "target__startedAt__IDX", columnList = "target, startedAt"),
+                @Index(name = "CommandLogEntry__startedAt_timestamp__IDX", columnList = "startedAt, timestamp" ),
+                @Index(name = "CommandLogEntry__timestamp__IDX", columnList = "timestamp"),
+                @Index(name = "CommandLogEntry__target__IDX", columnList = "target"),
+                @Index(name = "CommandLogEntry__target_startedAt__IDX", columnList = "target, startedAt"),
         }
 )
 @NamedQueries({

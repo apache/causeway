@@ -52,10 +52,10 @@ import lombok.Setter;
         schema = AuditTrailEntry.SCHEMA,
         table = AuditTrailEntry.TABLE)
 @Indices({
-        @Index(name = "target_propertyId_timestamp_IDX", members = { "target", "propertyId", "timestamp" }, unique = "false"),
-        @Index(name = "target_timestamp_IDX", members = { "target", "timestamp" }, unique = "false"),
-        @Index(name = "timestamp_IDX", members = { "timestamp" }, unique = "false"),
-        @Index(name = "interactionId_IDX", members = { "interactionId" }, unique = "false")
+        @Index(name = "AuditTrailEntry__target_propertyId_timestamp_IDX", members = { "target", "propertyId", "timestamp" }, unique = "false"),
+        @Index(name = "AuditTrailEntry__target_timestamp_IDX", members = { "target", "timestamp" }, unique = "false"),
+        @Index(name = "AuditTrailEntry__timestamp_IDX", members = { "timestamp" }, unique = "false"),
+        @Index(name = "AuditTrailEntry__interactionId_IDX", members = { "interactionId" }, unique = "false")
 })
 @Queries( {
     @Query(

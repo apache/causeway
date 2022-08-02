@@ -57,7 +57,7 @@ import lombok.Setter;
         schema = ApplicationPermission.SCHEMA,
         name = ApplicationPermission.TABLE,
         uniqueConstraints=
-            @UniqueConstraint(name = "role__feature__rule__UNQ", columnNames={"roleId", "featureSort", "featureFqn", "rule"})
+            @UniqueConstraint(name = "ApplicationPermission_role_feature_rule__UNQ", columnNames={"roleId", "featureSort", "featureFqn", "rule"})
 )
 @NamedQueries({
     @NamedQuery(

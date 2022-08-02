@@ -237,7 +237,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface PropertyId {
-        int MAX_LENGTH = 255;
+        int MAX_LENGTH = 100;
         boolean NULLABLE = true;
         String ALLOWS_NULL = "true";
     }

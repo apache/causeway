@@ -58,9 +58,9 @@ import lombok.Setter;
         schema = ExecutionLogEntry.SCHEMA,
         name = ExecutionLogEntry.TABLE,
         indexes = {
-                @Index(name = "timestamp__IDX", columnList = "timestamp"),
-                @Index(name = "target__timestamp__IDX", columnList = "target, timestamp"),
-                @Index(name = "username__timestamp__IDX", columnList = "username, timestamp"),
+                @Index(name = "ExecutionLogEntry__timestamp__IDX", columnList = "timestamp"),
+                @Index(name = "ExecutionLogEntry__target_timestamp__IDX", columnList = "target, timestamp"),
+                @Index(name = "ExecutionLogEntry__username_timestamp__IDX", columnList = "username, timestamp"),
         }
 )
 @NamedQueries( {

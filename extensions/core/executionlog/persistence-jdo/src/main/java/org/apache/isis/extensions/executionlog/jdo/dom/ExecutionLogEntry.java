@@ -51,9 +51,9 @@ import lombok.Setter;
         table = ExecutionLogEntry.TABLE,
         objectIdClass= ExecutionLogEntryPK.class)
 @Indices({
-        @Index(name = "timestamp__IDX", members = { "timestamp" }),
-        @Index(name = "target__timestamp__IDX", members = { "target", "timestamp" }),
-        @Index(name = "username__timestamp__IDX", members = { "username", "timestamp" }),
+        @Index(name = "ExecutionLogEntry__timestamp__IDX", members = { "timestamp" }),
+        @Index(name = "ExecutionLogEntry__target_timestamp__IDX", members = { "target", "timestamp" }),
+        @Index(name = "ExecutionLogEntry__username_timestamp__IDX", members = { "username", "timestamp" }),
 })
 @Queries( {
     @Query(

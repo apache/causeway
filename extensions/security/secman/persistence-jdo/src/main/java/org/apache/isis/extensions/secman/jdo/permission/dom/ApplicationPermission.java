@@ -54,7 +54,7 @@ import lombok.Setter;
         schema = ApplicationPermission.SCHEMA,
         table = ApplicationPermission.TABLE)
 @Uniques({
-        @Unique(name = "role__feature__rule__UNQ", members = { "role", "featureSort", "featureFqn", "rule" })
+        @Unique(name = "ApplicationPermission__role_feature_rule__UNQ", members = { "role", "featureSort", "featureFqn", "rule" })
 })
 @Queries( {
     @Query(
