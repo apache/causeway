@@ -186,7 +186,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 public class IsisModuleExtSecmanApplib {
 
     public static final String NAMESPACE = "isis.ext.secman";
-    public static final String SCHEMA = "isisExtensionsSecman";
+    public static final String SCHEMA = "isisExtSecman";
 
     public abstract static class TitleUiEvent<S>
             extends org.apache.isis.applib.events.ui.TitleUiEvent<S> { }
