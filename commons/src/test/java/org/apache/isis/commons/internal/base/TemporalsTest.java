@@ -18,14 +18,6 @@
  */
 package org.apache.isis.commons.internal.base;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,39 +28,23 @@ class TemporalsTest {
 
     @Test
     void roundtripOffsetTime() {
-        val temporal = OffsetTime.of(sampleTime(), sampleOffset());
-        assertEquals(temporal, _Temporals.destringAsOffsetTime(_Temporals.enstringOffsetTime(temporal)));
+        for(val temporal: _Temporals.sampleOffsetTime()) {
+            assertEquals(temporal, _Temporals.destringAsOffsetTime(_Temporals.enstringOffsetTime(temporal)));
+        }
     }
 
     @Test
     void roundtripOffsetDateTime() {
-        val temporal = OffsetDateTime.of(sampleDate(), sampleTime(), sampleOffset());
-        assertEquals(temporal, _Temporals.destringAsOffsetDateTime(_Temporals.enstringOffsetDateTime(temporal)));
+        for(val temporal: _Temporals.sampleOffsetDateTime()) {
+            assertEquals(temporal, _Temporals.destringAsOffsetDateTime(_Temporals.enstringOffsetDateTime(temporal)));
+        }
     }
 
     @Test
     void roundtripZonedDateTime() {
-        val temporal = ZonedDateTime.of(sampleDate(), sampleTime(), sampleZone());
-        assertEquals(temporal, _Temporals.destringAsZonedDateTime(_Temporals.enstringZonedDateTime(temporal)));
+        for(val temporal: _Temporals.sampleZonedDateTime()) {
+            assertEquals(temporal, _Temporals.destringAsZonedDateTime(_Temporals.enstringZonedDateTime(temporal)));
+        }
     }
-
-    // -- HELPER
-
-    private static LocalDate sampleDate() {
-        return _Temporals.sampleLocalDate().getElseFail(0);
-    }
-
-    private static LocalTime sampleTime() {
-        return _Temporals.sampleLocalTime().getElseFail(0);
-    }
-
-    private static ZoneOffset sampleOffset() {
-        return ZoneOffset.ofHoursMinutes(6, 15);
-    }
-
-    private static ZoneId sampleZone() {
-        return ZoneId.of("Europe/Paris");
-    }
-
 
 }
