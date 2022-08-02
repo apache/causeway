@@ -124,20 +124,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
         class CustomerWithDomainObjectAndAuditingSetToEnabled {
         }
 
-        @Test
-        public void ignore_HasInteractionId() {
-
-            allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
-
-            val context = ProcessClassContext
-                    .forTesting(HasInteractionId.class, mockMethodRemover, facetHolder);
-            facetFactory.processEntityChangePublishing(context.synthesizeOnType(DomainObject.class), context);
-
-            final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-            Assert.assertNull(facet);
-
-            expectNoMethodsRemoved();
-        }
 
         public static class WhenNotAnnotatedAndDefaultsFromConfiguration extends EntityChangePublishing {
 

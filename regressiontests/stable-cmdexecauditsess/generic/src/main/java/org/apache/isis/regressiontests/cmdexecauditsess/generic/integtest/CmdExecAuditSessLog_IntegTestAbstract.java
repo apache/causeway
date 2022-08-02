@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,9 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.isis.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -93,6 +97,26 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends IsisIntegrat
 
     protected abstract Counter newCounter(String name);
 
+    @Inject SpecificationLoader specificationLoader;
+
+
+    @Test
+    void check_facets() {
+        assertEntityPublishingDisabledFor(auditTrailEntryRepository.getEntityClass());
+        assertEntityPublishingDisabledFor(commandLogEntryRepository.getEntityClass());
+        assertEntityPublishingDisabledFor(executionLogEntryRepository.getEntityClass());
+        assertEntityPublishingDisabledFor(executionOutboxEntryRepository.getEntityClass());
+
+    }
+
+    private void assertEntityPublishingDisabledFor(Class<?> entityClass) {
+        val objectSpecification = specificationLoader.loadSpecification(entityClass);
+        EntityChangePublishingFacet facet = objectSpecification.getFacet(EntityChangePublishingFacet.class);
+        Assertions.assertThat(facet)
+                        .satisfies(f -> assertThat(f).isNotNull())
+                        .satisfies(f -> assertThat(f.isEnabled()).isFalse())
+        ;
+    }
 
     @Test
     void invoke_mixin() {

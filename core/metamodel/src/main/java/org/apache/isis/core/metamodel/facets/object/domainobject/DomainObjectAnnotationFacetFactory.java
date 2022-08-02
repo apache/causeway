@@ -198,16 +198,6 @@ implements
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
-        //
-        // this rule originally implemented only in AuditableFacetFromConfigurationFactory
-        // but think should apply in general
-        //
-        if(HasInteractionId.class.isAssignableFrom(cls)) {
-            // do not install on any implementation of HasInteractionId
-            // (ie commands, audit entries, published events).
-            return;
-        }
-
         // check for @DomainObject(entityChangePublishing=....)
         val entityChangePublishing = domainObjectIfAny
                 .map(DomainObject::entityChangePublishing);

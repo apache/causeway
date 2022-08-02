@@ -68,6 +68,10 @@ public abstract class ExecutionOutboxEntryRepository<E extends ExecutionOutboxEn
         this.executionOutboxEntryClass = executionOutboxEntryClass;
     }
 
+    public Class<E> getEntityClass() {
+        return executionOutboxEntryClass;
+    }
+
 
     /**
      * for testing only.
