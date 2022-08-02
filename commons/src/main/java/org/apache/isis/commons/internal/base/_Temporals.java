@@ -255,8 +255,10 @@ public final class _Temporals {
         return delimitedChunksCount(datastoreValue)>2;
     }
 
+    private final Pattern DELIMITING_WHITESPACE_PATTERN = Pattern.compile("\\s+");
+
     private long delimitedChunksCount(final @NonNull String datastoreValue) {
-        return _Strings.splitThenStream(datastoreValue, Pattern.compile("\\s+"))
+        return _Strings.splitThenStream(datastoreValue, DELIMITING_WHITESPACE_PATTERN)
                 .filter(_Strings::isNotEmpty)
                 .count();
     }
