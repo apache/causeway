@@ -44,7 +44,7 @@ import lombok.experimental.UtilityClass;
  * @since 2.0
  */
 @UtilityClass
-public final class _Times {
+public final class _Temporals {
 
     /**
      * The default date/time format (seconds resolution): {@code 'yyyy-MM-dd HH:mm:ss'}.
@@ -82,19 +82,19 @@ public final class _Times {
             DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSSSSS XXX");
 
     private static final DateTimeFormatter OFFSETTIME_DATASTORE_PARSER =
-            DateTimeFormatter.ofPattern("HH:mm:ss[.SSSSSSSSS] [XXX][X]");
+            DateTimeFormatter.ofPattern("HH:mm:ss[.SSSSSSSSS][ XXX]");
 
     private static final DateTimeFormatter OFFSETDATETIME_DATASTORE_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS XXX");
 
     private static final DateTimeFormatter OFFSETDATETIME_DATASTORE_PARSER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSSSSS] [XXX][X]");
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSSSSS][ XXX]");
 
     private static final DateTimeFormatter ZONEDDATETIME_DATASTORE_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS V");
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS VV");
 
     private static final DateTimeFormatter ZONEDDATETIME_DATASTORE_PARSER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSSSSS] [V]");
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSSSSS][ VV]");
 
 
     /**
@@ -160,7 +160,7 @@ public final class _Times {
 
     // -- HELPER
 
-    private static BigDecimal millisToSeconds(final long millis) {
+    private BigDecimal millisToSeconds(final long millis) {
         return new BigDecimal(millis)
                 .movePointLeft(3)
                 .setScale(3, RoundingMode.HALF_EVEN);

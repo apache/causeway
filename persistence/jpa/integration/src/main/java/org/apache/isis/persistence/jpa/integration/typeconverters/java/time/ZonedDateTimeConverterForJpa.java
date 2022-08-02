@@ -23,7 +23,7 @@ import java.time.ZonedDateTime;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import org.apache.isis.commons.internal.base._Times;
+import org.apache.isis.commons.internal.base._Temporals;
 
 /**
  * @since 2.0 {@index}
@@ -34,12 +34,12 @@ implements AttributeConverter<ZonedDateTime, String> {
 
     @Override
     public String convertToDatabaseColumn(final ZonedDateTime zonedDateTime) {
-        return _Times.enstringZonedDateTime(zonedDateTime);
+        return _Temporals.enstringZonedDateTime(zonedDateTime);
     }
 
     @Override
     public ZonedDateTime convertToEntityAttribute(final String datastoreValue) {
-        return _Times.destringAsZonedDateTime(datastoreValue);
+        return _Temporals.destringAsZonedDateTime(datastoreValue);
     }
 
 }

@@ -61,7 +61,7 @@ import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.base._Times;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.schema.cmd.v2.CommandDto;
@@ -428,7 +428,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     @Digits(integer=5, fraction=3)
     @Duration
     public BigDecimal getDuration() {
-        return _Times.secondsBetweenAsDecimal(getStartedAt(), getCompletedAt())
+        return _Temporals.secondsBetweenAsDecimal(getStartedAt(), getCompletedAt())
                 .orElse(null);
     }
 

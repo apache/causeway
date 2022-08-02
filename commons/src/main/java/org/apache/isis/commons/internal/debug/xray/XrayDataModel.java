@@ -36,7 +36,7 @@ import javax.swing.JScrollPane;
 
 import org.apache.isis.commons.functional.IndexedConsumer;
 import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.commons.internal.base._Times;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.HasIdAndLabel;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.isis.commons.internal.debug.xray.graphics.SequenceDiagram;
@@ -124,7 +124,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
             logMessagePane.setEditable(false);
             logMessagePane.setText(logMessage);
 
-            val timestampLabel = new JLabel(timestamp.format(_Times.DEFAULT_LOCAL_DATETIME_FORMATTER_WITH_MILLIS));
+            val timestampLabel = new JLabel(timestamp.format(_Temporals.DEFAULT_LOCAL_DATETIME_FORMATTER_WITH_MILLIS));
 
             panel2.add(
                     _SwingUtil.verticalBox(

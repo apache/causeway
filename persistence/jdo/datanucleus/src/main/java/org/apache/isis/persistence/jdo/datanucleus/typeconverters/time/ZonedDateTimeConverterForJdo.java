@@ -22,7 +22,7 @@ import java.time.ZonedDateTime;
 
 import org.datanucleus.store.types.converters.TypeConverter;
 
-import org.apache.isis.commons.internal.base._Times;
+import org.apache.isis.commons.internal.base._Temporals;
 
 /**
  * @since 2.0 {@index}
@@ -33,12 +33,12 @@ public class ZonedDateTimeConverterForJdo implements TypeConverter<ZonedDateTime
 
     @Override
     public String toDatastoreType(final ZonedDateTime zonedDateTime) {
-        return _Times.enstringZonedDateTime(zonedDateTime);
+        return _Temporals.enstringZonedDateTime(zonedDateTime);
     }
 
     @Override
     public ZonedDateTime toMemberType(final String datastoreValue) {
-        return _Times.destringAsZonedDateTime(datastoreValue);
+        return _Temporals.destringAsZonedDateTime(datastoreValue);
     }
 
 }

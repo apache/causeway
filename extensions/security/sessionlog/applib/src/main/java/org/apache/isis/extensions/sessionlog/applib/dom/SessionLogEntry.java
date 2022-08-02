@@ -48,7 +48,7 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.applib.util.ObjectContracts;
-import org.apache.isis.commons.internal.base._Times;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.extensions.sessionlog.applib.IsisModuleExtSessionLogApplib;
 
 import lombok.experimental.UtilityClass;
@@ -117,7 +117,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     public String title() {
 
         return String.format("%s: %s logged %s %s",
-                _Times.DEFAULT_LOCAL_DATETIME_FORMATTER
+                _Temporals.DEFAULT_LOCAL_DATETIME_FORMATTER
                     .format(getLoginTimestamp().toLocalDateTime()),
                 getUsername(),
                 getLogoutTimestamp() == null ? "in": "out",

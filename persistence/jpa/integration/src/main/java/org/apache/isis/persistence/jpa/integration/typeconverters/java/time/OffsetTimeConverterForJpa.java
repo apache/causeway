@@ -23,7 +23,7 @@ import java.time.OffsetTime;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import org.apache.isis.commons.internal.base._Times;
+import org.apache.isis.commons.internal.base._Temporals;
 
 /**
  * @since 2.0 {@index}
@@ -34,12 +34,12 @@ implements AttributeConverter<OffsetTime, String>{
 
     @Override
     public String convertToDatabaseColumn(final OffsetTime offsetTime) {
-        return _Times.enstringOffsetTime(offsetTime);
+        return _Temporals.enstringOffsetTime(offsetTime);
     }
 
     @Override
     public OffsetTime convertToEntityAttribute(final String datastoreValue) {
-        return _Times.destringAsOffsetTime(datastoreValue);
+        return _Temporals.destringAsOffsetTime(datastoreValue);
     }
 
 }

@@ -44,7 +44,7 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.base._Times;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.extensions.audittrail.applib.IsisModuleExtAuditTrailApplib;
 
 import lombok.val;
@@ -110,7 +110,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
 
     public String title() {
         val buf = new TitleBuffer();
-        buf.append(_Times.DEFAULT_LOCAL_DATETIME_FORMATTER
+        buf.append(_Temporals.DEFAULT_LOCAL_DATETIME_FORMATTER
                 .format(getTimestamp().toLocalDateTime()));
         buf.append(" ").append(getLogicalMemberIdentifier());
         return buf.toString();

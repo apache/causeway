@@ -58,7 +58,7 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderForCollectionTyp
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.commons.internal.base._Times;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
@@ -411,7 +411,7 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
      */
     @Duration
     public BigDecimal getDuration() {
-        return _Times.secondsBetweenAsDecimal(getStartedAt(), getCompletedAt())
+        return _Temporals.secondsBetweenAsDecimal(getStartedAt(), getCompletedAt())
                 .orElse(null);
     }
 

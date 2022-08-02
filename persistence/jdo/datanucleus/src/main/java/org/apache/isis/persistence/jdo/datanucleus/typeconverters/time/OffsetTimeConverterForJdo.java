@@ -22,7 +22,7 @@ import java.time.OffsetTime;
 
 import org.datanucleus.store.types.converters.TypeConverter;
 
-import org.apache.isis.commons.internal.base._Times;
+import org.apache.isis.commons.internal.base._Temporals;
 
 /**
  * @since 2.0 {@index}
@@ -33,12 +33,12 @@ public class OffsetTimeConverterForJdo implements TypeConverter<OffsetTime, Stri
 
     @Override
     public String toDatastoreType(final OffsetTime offsetTime) {
-        return _Times.enstringOffsetTime(offsetTime);
+        return _Temporals.enstringOffsetTime(offsetTime);
     }
 
     @Override
     public OffsetTime toMemberType(final String datastoreValue) {
-        return _Times.destringAsOffsetTime(datastoreValue);
+        return _Temporals.destringAsOffsetTime(datastoreValue);
     }
 
 }
