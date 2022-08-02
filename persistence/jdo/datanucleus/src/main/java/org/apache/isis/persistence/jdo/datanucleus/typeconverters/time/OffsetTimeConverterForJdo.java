@@ -18,30 +18,27 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.typeconverters.time;
 
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.OffsetTime;
 
 import org.datanucleus.store.types.converters.TypeConverter;
+
+import org.apache.isis.commons.internal.base._Times;
 
 /**
  * @since 2.0 {@index}
  */
-public class IsoOffsetDateTimeConverter implements TypeConverter<OffsetDateTime, String>{
+public class OffsetTimeConverterForJdo implements TypeConverter<OffsetTime, String>{
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public String toDatastoreType(final OffsetDateTime offsetDateTime) {
-        return offsetDateTime != null
-                ? offsetDateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-                : null;
+    public String toDatastoreType(final OffsetTime offsetTime) {
+        return _Times.enstringOffsetTime(offsetTime);
     }
 
     @Override
-    public OffsetDateTime toMemberType(final String datastoreValue) {
-        return datastoreValue != null
-                ? OffsetDateTime.parse(datastoreValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-                : null;
+    public OffsetTime toMemberType(final String datastoreValue) {
+        return _Times.destringAsOffsetTime(datastoreValue);
     }
 
 }

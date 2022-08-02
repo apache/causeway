@@ -153,7 +153,7 @@
                 name="iso.zoneddatetime-string"
                 member-type="java.time.ZonedDateTime"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.persistence.jdo.datanucleus.typeconverters.time.IsoZonedDateTimeConverter"/>
+                converter-class="org.apache.isis.persistence.jdo.datanucleus.typeconverters.time.ZonedDateTimeConverterForJdo"/>
     </extension>
 
 	<extension point="org.datanucleus.type_converter">
@@ -161,7 +161,7 @@
                 name="iso.offsetdatetime-string"
                 member-type="java.time.OffsetDateTime"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.persistence.jdo.datanucleus.typeconverters.time.IsoOffsetDateTimeConverter"/>
+                converter-class="org.apache.isis.persistence.jdo.datanucleus.typeconverters.time.OffsetDateTimeConverterForJdo"/>
     </extension>
 
     <extension point="org.datanucleus.type_converter">
@@ -169,7 +169,7 @@
                 name="iso.offsettime-string"
                 member-type="java.time.OffsetTime"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.isis.persistence.jdo.datanucleus.typeconverters.time.IsoOffsetTimeConverter"/>
+                converter-class="org.apache.isis.persistence.jdo.datanucleus.typeconverters.time.OffsetTimeConverterForJdo"/>
     </extension>
 
     <extension point="org.datanucleus.type_converter">

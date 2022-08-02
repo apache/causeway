@@ -18,30 +18,27 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.typeconverters.time;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.OffsetDateTime;
 
 import org.datanucleus.store.types.converters.TypeConverter;
+
+import org.apache.isis.commons.internal.base._Times;
 
 /**
  * @since 2.0 {@index}
  */
-public class IsoZonedDateTimeConverter implements TypeConverter<ZonedDateTime, String>{
+public class OffsetDateTimeConverterForJdo implements TypeConverter<OffsetDateTime, String>{
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public String toDatastoreType(final ZonedDateTime offsetTime) {
-        return offsetTime != null
-                ? offsetTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
-                : null;
+    public String toDatastoreType(final OffsetDateTime offsetDateTime) {
+        return _Times.enstringOffsetDateTime(offsetDateTime);
     }
 
     @Override
-    public ZonedDateTime toMemberType(final String datastoreValue) {
-        return datastoreValue != null
-                ? ZonedDateTime.parse(datastoreValue, DateTimeFormatter.ISO_ZONED_DATE_TIME)
-                : null;
+    public OffsetDateTime toMemberType(final String datastoreValue) {
+        return _Times.destringAsOffsetDateTime(datastoreValue);
     }
 
 }

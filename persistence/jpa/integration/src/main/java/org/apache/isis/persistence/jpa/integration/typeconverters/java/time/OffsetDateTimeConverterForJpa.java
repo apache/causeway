@@ -18,31 +18,28 @@
  */
 package org.apache.isis.persistence.jpa.integration.typeconverters.java.time;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.OffsetDateTime;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+
+import org.apache.isis.commons.internal.base._Times;
 
 /**
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class JavaTimeIsoZonedDateTimeConverter
-implements AttributeConverter<ZonedDateTime, String> {
+public class OffsetDateTimeConverterForJpa
+implements AttributeConverter<OffsetDateTime, String> {
 
     @Override
-    public String convertToDatabaseColumn(final ZonedDateTime offsetTime) {
-        return offsetTime != null
-                ? offsetTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
-                : null;
+    public String convertToDatabaseColumn(final OffsetDateTime offsetDateTime) {
+        return _Times.enstringOffsetDateTime(offsetDateTime);
     }
 
     @Override
-    public ZonedDateTime convertToEntityAttribute(final String datastoreValue) {
-        return datastoreValue != null
-                ? ZonedDateTime.parse(datastoreValue, DateTimeFormatter.ISO_ZONED_DATE_TIME)
-                : null;
+    public OffsetDateTime convertToEntityAttribute(final String datastoreValue) {
+        return _Times.destringAsOffsetDateTime(datastoreValue);
     }
 
 }

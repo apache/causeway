@@ -19,30 +19,27 @@
 package org.apache.isis.persistence.jpa.integration.typeconverters.java.time;
 
 import java.time.OffsetTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+
+import org.apache.isis.commons.internal.base._Times;
 
 /**
  * @since 2.0 {@index}
  */
 @Converter(autoApply = true)
-public class JavaTimeIsoOffsetTimeConverter
+public class OffsetTimeConverterForJpa
 implements AttributeConverter<OffsetTime, String>{
 
     @Override
     public String convertToDatabaseColumn(final OffsetTime offsetTime) {
-        return offsetTime != null
-                ? offsetTime.format(DateTimeFormatter.ISO_OFFSET_TIME)
-                : null;
+        return _Times.enstringOffsetTime(offsetTime);
     }
 
     @Override
     public OffsetTime convertToEntityAttribute(final String datastoreValue) {
-        return datastoreValue != null
-                ? OffsetTime.parse(datastoreValue, DateTimeFormatter.ISO_OFFSET_TIME)
-                : null;
+        return _Times.destringAsOffsetTime(datastoreValue);
     }
 
 }

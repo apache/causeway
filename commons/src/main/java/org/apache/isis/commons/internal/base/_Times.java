@@ -21,6 +21,9 @@ package org.apache.isis.commons.internal.base;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
@@ -72,9 +75,70 @@ public final class _Times {
                         : Optional.empty();
     }
 
+    // -- TEMPORAL TO STRING CONVERTERS
+
+    /**
+     * Returns a {@link String} representing given temporal suitable for the data-store.
+     */
+    @Nullable
+    public String enstringOffsetTime(final @Nullable OffsetTime temporal) {
+        return temporal != null
+                ? temporal.format(DateTimeFormatter.ISO_OFFSET_TIME)
+                : null;
+    }
+
+    /**
+     * Recovers a temporal from given {@link String}.
+     */
+    @Nullable
+    public OffsetTime destringAsOffsetTime(final @Nullable String datastoreValue) {
+        return _Strings.isNotEmpty(datastoreValue)
+                ? OffsetTime.parse(datastoreValue, DateTimeFormatter.ISO_OFFSET_TIME)
+                : null;
+    }
+
+    /**
+     * Returns a {@link String} representing given temporal suitable for the data-store.
+     */
+    @Nullable
+    public String enstringOffsetDateTime(final @Nullable OffsetDateTime temporal) {
+        return temporal != null
+                ? temporal.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                : null;
+    }
+
+    /**
+     * Recovers a temporal from given {@link String}.
+     */
+    @Nullable
+    public OffsetDateTime destringAsOffsetDateTime(final @Nullable String datastoreValue) {
+        return _Strings.isNotEmpty(datastoreValue)
+                ? OffsetDateTime.parse(datastoreValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                : null;
+    }
+
+    /**
+     * Returns a {@link String} representing given temporal suitable for the data-store.
+     */
+    @Nullable
+    public String enstringZonedDateTime(final @Nullable ZonedDateTime temporal) {
+        return temporal != null
+                ? temporal.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                : null;
+    }
+
+    /**
+     * Recovers a temporal from given {@link String}.
+     */
+    @Nullable
+    public ZonedDateTime destringAsZonedDateTime(final @Nullable String datastoreValue) {
+        return _Strings.isNotEmpty(datastoreValue)
+                ? ZonedDateTime.parse(datastoreValue, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+                : null;
+    }
+
+
     // -- HELPER
-
-
 
     private static BigDecimal millisToSeconds(final long millis) {
         return new BigDecimal(millis)
