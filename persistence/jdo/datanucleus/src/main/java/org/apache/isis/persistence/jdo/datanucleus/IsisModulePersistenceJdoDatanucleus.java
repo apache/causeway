@@ -294,16 +294,19 @@ public class IsisModulePersistenceJdoDatanucleus {
 
         if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
 
+            val createSchemaSqlTemplate = persistenceSchemaConf.getCreateSchemaSqlTemplate();
+
             log.info("About to create db schema(s) {} with template '{}'",
                     persistenceSchemaConf.getAutoCreateSchemas(),
-                    persistenceSchemaConf.getCreateSchemaSqlTemplate());
+                    createSchemaSqlTemplate);
 
             try(val con = dataSource.getConnection()){
 
                 val s = con.createStatement();
 
                 for(val schema : persistenceSchemaConf.getAutoCreateSchemas()) {
-                    val sql = String.format(persistenceSchemaConf.getCreateSchemaSqlTemplate(), schema);
+                    // in case there are multiple placeholders, we specify the string multiple times.
+                    val sql = String.format(createSchemaSqlTemplate, schema, schema, schema, schema, schema, schema, schema);
                     log.info("SQL '{}'", sql);
                     s.execute(sql);
                 }
