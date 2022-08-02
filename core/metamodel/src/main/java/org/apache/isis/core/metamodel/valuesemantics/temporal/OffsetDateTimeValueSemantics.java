@@ -19,18 +19,15 @@
 package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.schema.common.v2.ValueType;
-
-import lombok.val;
 
 @Component
 @Named("isis.val.OffsetDateTimeValueSemantics")
@@ -67,13 +64,7 @@ extends TemporalValueSemanticsProvider<OffsetDateTime> {
 
     @Override
     public Can<OffsetDateTime> getExamples() {
-        // don't depend on current TimeZone.getDefault(),
-        // instead use an arbitrary mix of fixed time-zone offsets Z, +02:00 and -02:00
-        val localNow = LocalDateTime.now();
-        return Can.of(
-                OffsetDateTime.of(localNow, ZoneOffset.UTC),
-                OffsetDateTime.of(localNow, ZoneOffset.ofHours(2)),
-                OffsetDateTime.of(localNow, ZoneOffset.ofHours(-2)).plusDays(2).plusSeconds(15));
+        return _Temporals.sampleOffsetDateTime();
     }
 
 }

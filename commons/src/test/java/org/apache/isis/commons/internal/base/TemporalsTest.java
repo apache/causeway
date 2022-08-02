@@ -55,15 +55,15 @@ class TemporalsTest {
     // -- HELPER
 
     private static LocalDate sampleDate() {
-        return LocalDate.of(2022, 8, 2);
+        return _Temporals.sampleLocalDate().getElseFail(0);
     }
 
     private static LocalTime sampleTime() {
-        return LocalTime.of(2, 3, 4, 5);
+        return _Temporals.sampleLocalTime().getElseFail(0);
     }
 
     private static ZoneOffset sampleOffset() {
-        return ZoneOffset.ofHoursMinutes(6, 7);
+        return ZoneOffset.ofHoursMinutes(6, 15);
     }
 
     private static ZoneId sampleZone() {

@@ -21,14 +21,22 @@ package org.apache.isis.commons.internal.base;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.commons.collections.Can;
+
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -157,6 +165,56 @@ public final class _Temporals {
                 : null;
     }
 
+    // -- TEMPORAL SAMPLERS
+
+    public static Can<LocalDateTime> sampleLocalDateTime() {
+        return Can.of(
+                LocalDateTime.now(),
+                LocalDateTime.now().plusDays(2).plusSeconds(15));
+    }
+
+    public static Can<LocalDate> sampleLocalDate() {
+        return Can.of(
+                LocalDate.now(),
+                LocalDate.now().plusDays(2));
+    }
+
+    public static Can<LocalTime> sampleLocalTime() {
+        return Can.of(
+                LocalTime.now(),
+                LocalTime.now().plusSeconds(15));
+    }
+
+    public Can<ZonedDateTime> sampleZonedDateTime() {
+        // don't depend on current TimeZone.getDefault(),
+        // instead use an arbitrary mix of fixed time-zone offsets Z, +02:00 and -02:00
+        val localNow = LocalDateTime.now();
+        return Can.of(
+                ZonedDateTime.of(localNow, ZoneId.of("Europe/Paris")),
+                ZonedDateTime.of(localNow, ZoneOffset.UTC),
+                ZonedDateTime.of(localNow, ZoneOffset.ofHours(2)),
+                ZonedDateTime.of(localNow, ZoneOffset.ofHours(-2)).plusDays(2).plusSeconds(15));
+    }
+
+    public Can<OffsetTime> sampleOffsetTime() {
+        // don't depend on current TimeZone.getDefault(),
+        // instead use an arbitrary mix of fixed time-zone offsets Z, +02:00 and -02:00
+        val localNow = LocalTime.now();
+        return Can.of(
+                OffsetTime.of(localNow, ZoneOffset.UTC),
+                OffsetTime.of(localNow, ZoneOffset.ofHours(2)),
+                OffsetTime.of(localNow, ZoneOffset.ofHours(-2)).plusSeconds(15));
+    }
+
+    public Can<OffsetDateTime> sampleOffsetDateTime() {
+        // don't depend on current TimeZone.getDefault(),
+        // instead use an arbitrary mix of fixed time-zone offsets Z, +02:00 and -02:00
+        val localNow = LocalDateTime.now();
+        return Can.of(
+                OffsetDateTime.of(localNow, ZoneOffset.UTC),
+                OffsetDateTime.of(localNow, ZoneOffset.ofHours(2)),
+                OffsetDateTime.of(localNow, ZoneOffset.ofHours(-2)).plusDays(2).plusSeconds(15));
+    }
 
     // -- HELPER
 

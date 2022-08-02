@@ -26,6 +26,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
@@ -63,9 +64,7 @@ extends TemporalValueSemanticsProvider<LocalTime> {
 
     @Override
     public Can<LocalTime> getExamples() {
-        return Can.of(
-                LocalTime.now(),
-                LocalTime.now().plusSeconds(15));
+        return _Temporals.sampleLocalTime();
     }
 
 }
