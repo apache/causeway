@@ -33,6 +33,7 @@ import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
@@ -91,6 +92,7 @@ public class IsisEntityListener {
             objectChanges
             .getChanges()
             .stream()
+            .filter(property-> EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
             .filter(DirectToFieldChangeRecord.class::isInstance)
             .map(DirectToFieldChangeRecord.class::cast)
             .map(changeRecord -> {

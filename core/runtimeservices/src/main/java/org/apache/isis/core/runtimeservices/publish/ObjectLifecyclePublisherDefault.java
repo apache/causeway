@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -98,9 +99,11 @@ implements
         CallbackFacet.callCallback(entity, UpdatingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, UpdatingLifecycleEventFacet.class);
 
-        entityPropertyChangePublisher.publishChangedProperties(
-                ObjectLifecyclePublisher
-                .publishingPayloadForUpdate(entity, changeRecords));
+        if(EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
+            entityPropertyChangePublisher.publishChangedProperties(
+                    ObjectLifecyclePublisher
+                    .publishingPayloadForUpdate(entity, changeRecords));
+        }
 
     }
 
@@ -109,9 +112,11 @@ implements
         CallbackFacet.callCallback(entity, RemovingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
 
-        entityPropertyChangePublisher.publishChangedProperties(
-                ObjectLifecyclePublisher
-                .publishingPayloadForDeletion(entity));
+        if(EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
+            entityPropertyChangePublisher.publishChangedProperties(
+                    ObjectLifecyclePublisher
+                    .publishingPayloadForDeletion(entity));
+        }
     }
 
     @Override
@@ -119,9 +124,11 @@ implements
         CallbackFacet.callCallback(entity, PersistedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, PersistedLifecycleEventFacet.class);
 
-        entityPropertyChangePublisher.publishChangedProperties(
-                ObjectLifecyclePublisher
-                .publishingPayloadForCreation(entity));
+        if(EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
+            entityPropertyChangePublisher.publishChangedProperties(
+                    ObjectLifecyclePublisher
+                    .publishingPayloadForCreation(entity));
+        }
     }
 
     @Override
