@@ -200,22 +200,6 @@
 		</profile>
 
 		<profile>
-			<id>module-examples-demo-javafx</id>
-			<activation>
-				<property>
-					<name>module-examples-demo-javafx</name>
-				</property>
-			</activation>
-			<modules>
-				<!-- prerequisites ... -->
-				<module>examples/demo/domain</module>
-				<module>incubator/viewers/javafx</module>
-
-				<module>examples/demo/javafx</module>
-			</modules>
-		</profile>
-
-		<profile>
 			<id>module-examples-demo-wicket</id>
 			<activation>
 				<property>
@@ -223,18 +207,21 @@
 				</property>
 			</activation>
 			<modules>
-				<!-- prerequisites ... -->
 				<module>examples/demo</module>
-				<module>examples/demo/domain</module>
-				<module>examples/demo/web</module>
-
-				<module>examples/demo/wicket/common</module>
-				<module>examples/demo/wicket/jdo</module>
-				<module>examples/demo/wicket/jpa</module>
 			</modules>
 		</profile>
-
-
+		<profile>
+			<id>module-examples-demo-graphql</id>
+			<activation>
+				<property>
+					<name>module-examples-demo-graphql</name>
+				</property>
+			</activation>
+			<modules>
+				<module>incubator/viewers/graphql</module>
+				<module>examples/demo</module>
+			</modules>
+		</profile>
 		<profile>
 			<id>module-examples-demo-vaadin</id>
 			<activation>
@@ -243,15 +230,20 @@
 				</property>
 			</activation>
 			<modules>
-				<!-- prerequisites ... -->
-				<module>examples/demo/domain</module>
 				<module>incubator/viewers/vaadin</module>
-				<module>examples/demo/domain</module>
-				<module>examples/demo/web</module>
-				<module>examples/demo/wicket/common</module>
-				<module>examples/demo/wicket/jdo</module>
-
-				<module>examples/demo/vaadin</module>
+				<module>examples/demo</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>module-examples-demo-javafx</id>
+			<activation>
+				<property>
+					<name>module-examples-demo-javafx</name>
+				</property>
+			</activation>
+			<modules>
+				<module>incubator/viewers/javafx</module>
+				<module>examples/demo</module>
 			</modules>
 		</profile>
 

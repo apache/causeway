@@ -188,21 +188,33 @@
 
 	<modules>
 		<module>domain</module>
-		<module>web</module>
-		<module>wicket/common</module>
-		<module>wicket/jdo</module>
-		<module>wicket/jpa</module>
 	</modules>
 
 	<profiles>
 		<profile>
-			<id>demo-jpa-and-graphql</id>
+			<id>module-examples-demo-wicket</id>
 			<activation>
 				<property>
-					<name>demo-jpa-and-graphql</name>
+					<name>module-examples-demo-wicket</name>
 				</property>
 			</activation>
 			<modules>
+				<module>web</module>
+				<module>wicket/common</module>
+				<module>wicket/jdo</module>
+				<module>wicket/jpa</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>module-examples-demo-graphql</id>
+			<activation>
+				<property>
+					<name>module-examples-demo-graphql</name>
+				</property>
+			</activation>
+			<modules>
+				<module>web</module>
+				<module>wicket/common</module>
 				<module>wicket/jpa-and-graphql</module>
 			</modules>
 		</profile>
@@ -214,6 +226,9 @@
 				</property>
 			</activation>
 			<modules>
+				<module>web</module>
+				<module>wicket/common</module>
+				<module>wicket/jdo</module>
 				<module>vaadin</module>
 			</modules>
 		</profile>
