@@ -36,10 +36,10 @@ import lombok.val;
 
 /**
  * Contributes a property exposing the logical object type of the domain
- * object, typically as specified by {@link DomainObject#logicalTypeName()}.
+ * object, typically as specified by {@link javax.inject.Named}.
  *
  * <p>
- *     The object type is also accessible from the
+ *     The logical type name is also accessible from the
  *     {@link org.apache.isis.applib.services.bookmark.Bookmark} of the
  *     object.
  * </p>
@@ -53,6 +53,7 @@ import lombok.val;
  */
 @Property
 @PropertyLayout(
+        describedAs = "The logical name of this domain class (as used in persistence, URLs etc).  Intended to be stable/unchanging across time",
         hidden = Where.ALL_TABLES,
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         sequence = "400.1"

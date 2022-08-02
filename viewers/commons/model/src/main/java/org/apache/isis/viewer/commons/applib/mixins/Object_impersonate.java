@@ -49,6 +49,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
         cssClassFa = "fa-mask",
+        describedAs = "Switch to another user account (for prototype/testing only)",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         redirectPolicy = Redirect.EVEN_IF_SAME,

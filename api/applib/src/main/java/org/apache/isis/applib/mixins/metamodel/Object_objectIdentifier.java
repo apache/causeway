@@ -52,6 +52,7 @@ import lombok.val;
  */
 @Property
 @PropertyLayout(
+        describedAs = "The identifier of this object instance, unique within its domain class.  Combined with the 'logical type name', is a unique identifier across all domain classes.",
         hidden = Where.ALL_TABLES,
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         sequence = "400.2"

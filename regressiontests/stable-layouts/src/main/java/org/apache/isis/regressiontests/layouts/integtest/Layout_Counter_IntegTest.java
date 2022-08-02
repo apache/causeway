@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -80,10 +79,10 @@ import org.apache.isis.viewer.wicket.applib.IsisModuleViewerWicketApplibMixins;
 import lombok.val;
 
 @SpringBootTest(
-        classes = Layout_IntegTest.AppManifest.class
+        classes = Layout_Counter_IntegTest.AppManifest.class
 )
 @ActiveProfiles("test")
-public class Layout_IntegTest extends IsisIntegrationTestAbstract {
+public class Layout_Counter_IntegTest extends IsisIntegrationTestAbstract {
 
     @SpringBootConfiguration
     @EnableAutoConfiguration

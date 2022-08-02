@@ -58,6 +58,7 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-download",
+        describedAs = "Downloads a representation of the framework's internal metamodel for this object's domain class",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "700.2"

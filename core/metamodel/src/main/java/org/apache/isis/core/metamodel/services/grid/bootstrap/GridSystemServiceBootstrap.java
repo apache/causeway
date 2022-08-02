@@ -436,7 +436,15 @@ extends GridSystemServiceAbstract<BSGrid> {
 
                 final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
 
-                actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
+                // since the action is to be associated with a fieldSet, the only available positions are PANEL and PANEL_DROPDOWN.
+                // if the action already has a preference for PANEL, then preserve it, otherwise default to PANEL_DROPDOWN
+                val actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
+                if(actionPositionFacet != null && actionPositionFacet.position() == ActionLayout.Position.PANEL) {
+                    actionLayoutData.setPosition(ActionLayout.Position.PANEL);
+                } else {
+                    actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
+                }
+
                 final FieldSet fieldSet = gridModel.getFieldSet(layoutGroupName);
                 addActionTo(fieldSet, actionLayoutData);
             }

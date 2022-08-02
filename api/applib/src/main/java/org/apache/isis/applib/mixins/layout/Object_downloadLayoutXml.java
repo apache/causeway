@@ -52,6 +52,7 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-download",
+        describedAs = "Downloads the Xxx.layout.xml layout file effective/inferred for this object",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "700.1"

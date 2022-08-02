@@ -47,6 +47,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
         cssClassFa = "fa-sync",
+        describedAs = "Rebuilds the framework's internal metamodel of this object's domain class",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL,
         sequence = "800.1"

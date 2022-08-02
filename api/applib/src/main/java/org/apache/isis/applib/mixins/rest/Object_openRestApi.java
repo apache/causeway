@@ -50,6 +50,7 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-external-link-alt",
+        describedAs = "Opens up a view of this object as represented in the (Restful Objects) REST API",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "750.1"

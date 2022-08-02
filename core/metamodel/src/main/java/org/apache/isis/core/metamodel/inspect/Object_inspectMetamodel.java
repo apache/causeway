@@ -52,6 +52,7 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-sitemap",
+        describedAs = "Open up a view of the metamodel of this object's domain class",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "700.2.1"
