@@ -40,7 +40,6 @@ import org.apache.isis.core.runtimeservices.homepage.HomePageResolverServiceDefa
 import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePo;
 import org.apache.isis.core.runtimeservices.i18n.po.TranslationServicePoMenu;
 import org.apache.isis.core.runtimeservices.icons.ObjectIconServiceDefault;
-import org.apache.isis.core.runtimeservices.impersonation.ImpersonatedUserHolderDefault;
 import org.apache.isis.core.runtimeservices.interaction.InteractionDtoFactoryDefault;
 import org.apache.isis.core.runtimeservices.jaxb.JaxbServiceDefault;
 import org.apache.isis.core.runtimeservices.locale.LanguageProviderDefault;
@@ -67,6 +66,8 @@ import org.apache.isis.core.runtimeservices.spring.SpringBeansService;
 import org.apache.isis.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.isis.core.runtimeservices.user.ImpersonateMenuAdvisorDefault;
+import org.apache.isis.core.runtimeservices.user.ImpersonatedUserHolderDefault;
+import org.apache.isis.core.runtimeservices.user.UserCurrentSessionTimeZoneHolderDefault;
 import org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault;
 import org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.isis.core.runtimeservices.xml.XmlServiceDefault;
@@ -115,6 +116,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         TransactionServiceSpring.class,
         TranslationServicePo.class,
         UrlEncodingServiceWithCompression.class,
+        UserCurrentSessionTimeZoneHolderDefault.class,
         WrapperFactoryDefault.class,
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,

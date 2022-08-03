@@ -47,7 +47,7 @@ public interface KeyValueSessionStore {
      * Puts given value onto the session store, overriding any existing value.
      * If value is null, removes the entry from the store.
      * <p>
-     * In case there is no session store available, acts as a no-op.
+     * In case there is no session for storing available, acts as a no-op.
      * @param key - unique key (required)
      * @param value - serializable value (optional)
      */
@@ -57,7 +57,7 @@ public interface KeyValueSessionStore {
      * Optionally returns the value that is stored under given key,
      * based on whether a corresponding entry exists.
      * <p>
-     * In case there is no session store available, will return {@link Optional#empty()}.
+     * In case there is no session for storing available, will return {@link Optional#empty()}.
      */
     <T extends Serializable>
     Optional<T> lookupAs(@NonNull String key, @NonNull Class<T> requiredType);
@@ -65,7 +65,7 @@ public interface KeyValueSessionStore {
     /**
      * Removes the entry from the store.
      * <p>
-     * In case there is no session store available, acts as a no-op.
+     * In case there is no session for storing available, acts as a no-op.
      */
     void clear(final @NonNull String key);
 

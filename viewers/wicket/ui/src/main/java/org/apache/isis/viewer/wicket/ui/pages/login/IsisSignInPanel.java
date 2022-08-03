@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.apache.wicket.Component;
@@ -27,14 +29,16 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.user.UserCurrentSessionTimeZoneHolder;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.val;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * An extension of Wicket's default SignInPanel that provides
@@ -50,6 +54,8 @@ public class IsisSignInPanel extends SignInPanelAbstract {
     @Inject transient ServiceInjector serviceInjector;
     @Inject transient ServiceRegistry serviceRegistry;
     @Inject transient private PageClassRegistry pageClassRegistry;
+    @Inject transient private UserCurrentSessionTimeZoneHolder userCurrentSessionTimeZoneHolder;
+
     transient Can<UserRegistrationService> anyUserRegistrationService;
     transient Can<EmailNotificationService> anyEmailNotificationService;
 
@@ -97,6 +103,20 @@ public class IsisSignInPanel extends SignInPanelAbstract {
         setVisibilityAllowedBasedOnAvailableServices(signUpLink, passwordResetLink);
     }
 
+    @Override
+    protected void onSignInSucceeded() {
+        signInHook();
+        super.onSignInSucceeded();
+    }
+
+    @Override
+    protected void onSignInRemembered() {
+        signInHook();
+        super.onSignInRemembered();
+    }
+
+    // -- HELPER
+
     private BookmarkablePageLink<Void> addPasswordResetLink() {
         return addLink("passwdResetLink", PageType.PASSWORD_RESET, this.passwordResetLink);
     }
@@ -143,20 +163,12 @@ public class IsisSignInPanel extends SignInPanelAbstract {
         }
     }
 
-    @Override
-    protected void onSignInSucceeded() {
+    private void signInHook() {
         if(clearOriginalDestination) {
             clearOriginalDestination();
         }
-        super.onSignInSucceeded();
-    }
-
-    @Override
-    protected void onSignInRemembered() {
-        if(clearOriginalDestination) {
-            clearOriginalDestination();
-        }
-        super.onSignInRemembered();
+        Optional.ofNullable(getTimezone())
+            .ifPresent(userCurrentSessionTimeZoneHolder::setUserTimeZone);
     }
 
 }

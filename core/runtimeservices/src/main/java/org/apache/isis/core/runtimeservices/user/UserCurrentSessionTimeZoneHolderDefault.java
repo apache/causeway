@@ -16,54 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.impersonation;
+package org.apache.isis.core.runtimeservices.user;
 
+import java.time.ZoneId;
 import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.keyvaluestore.KeyValueSessionStore;
-import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
-import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.applib.services.user.UserCurrentSessionTimeZoneHolder;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
-@Component
-@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ImpersonatedUserHolderDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-public class ImpersonatedUserHolderDefault implements ImpersonatedUserHolder {
+import lombok.NonNull;
 
-    private static final String SESSION_KEY_IMPERSONATED_USER =
-            ImpersonatedUserHolderDefault.class.getName() + "#userMemento";
+@Service
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".UserCurrentSessionTimeZoneHolderDefault")
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+public class UserCurrentSessionTimeZoneHolderDefault implements UserCurrentSessionTimeZoneHolder {
+
+    private static final String SESSION_KEY_ZONE_ID =
+            UserCurrentSessionTimeZoneHolderDefault.class.getName() + "#zoneId";
 
     @Inject private Optional<KeyValueSessionStore> keyValueSessionStore;
 
     @Override
-    public boolean supportsImpersonation() {
-        return keyValueSessionStore
-            .map(KeyValueSessionStore::isSessionAvailable)
-            .orElse(false);
-    }
-
-    @Override
-    public void setUserMemento(final UserMemento userMemento) {
+    public void setUserTimeZone(final @NonNull ZoneId zoneId) {
         keyValueSessionStore
-            .ifPresent(store->store.put(SESSION_KEY_IMPERSONATED_USER, userMemento));
+            .ifPresent(store->store.put(SESSION_KEY_ZONE_ID, zoneId));
+
     }
 
     @Override
-    public Optional<UserMemento> getUserMemento() {
+    public Optional<ZoneId> getUserTimeZone() {
         return keyValueSessionStore
-            .flatMap(store->store.lookupAs(SESSION_KEY_IMPERSONATED_USER, UserMemento.class));
-    }
-
-    @Override
-    public void clearUserMemento() {
-        keyValueSessionStore
-            .ifPresent(store->store.clear(SESSION_KEY_IMPERSONATED_USER));
+            .flatMap(store->store.lookupAs(SESSION_KEY_ZONE_ID, ZoneId.class));
     }
 
 }
