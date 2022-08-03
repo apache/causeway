@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.changetracking;
+package org.apache.isis.persistence.jpa.integration.changetracking;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -33,6 +34,7 @@ import javax.inject.Provider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.EntityChangeKind;
@@ -48,6 +50,7 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -71,7 +74,6 @@ import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRec
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyValuePlaceholder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
@@ -90,12 +92,12 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.transaction.EntityChangeTrackerJdo")
+@Named("isis.transaction.EntityChangeTrackerJpa")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("jdo")
 @InteractionScope
 @Log4j2
-public class EntityChangeTrackerJdo
+public class EntityChangeTrackerJpa
 extends PersistenceCallbackHandlerAbstract
 implements
     MetricsService,
@@ -104,26 +106,49 @@ implements
     HasEnlistedEntityChanges {
 
     /**
+     * If provided by the ORM.
+     */
+    private final List<PropertyChangeRecord> enlistedPropertyChangesOfCreated = _Lists.newArrayList();
+    /**
+     * If provided by the ORM.
+     */
+    private final List<PropertyChangeRecord> enlistedPropertyChangesOfUpdated = _Lists.newArrayList();
+    /**
+     * If provided by the ORM.
+     */
+    private final List<PropertyChangeRecord> enlistedPropertyChangesOfDeleted = _Lists.newArrayList();
+
+    /**
      * Contains initial change records having set the pre-values of every property of every object that was enlisted.
+     *
+     * <p>
+     *     ONLY USED IF THE ENLISTED PROPERTY CHANGES ({@link #enlistedPropertyChangesOfCreated}, {@link #enlistedPropertyChangesOfUpdated}, {@link #enlistedPropertyChangesOfDeleted}) were not provided already.
+     * </p>
      */
     private final Map<String, PropertyChangeRecord> propertyChangeRecordsById = _Maps.newLinkedHashMap();
 
     /**
      * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot,
      * triggered by internal call to {@link #snapshotPropertyChangeRecords()}.
+     *
+     * <p>
+     *     ONLY USED IF THE ENLISTED PROPERTY CHANGES ({@link #enlistedPropertyChangesOfCreated}, {@link #enlistedPropertyChangesOfUpdated}, {@link #enlistedPropertyChangesOfDeleted}) were not provided already.
+     * </p>
      */
     private final _Lazy<Set<PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing
         = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
+
     @Getter(AccessLevel.PACKAGE)
     private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
+
 
     private final EntityPropertyChangePublisher entityPropertyChangePublisher;
     private final EntityChangesPublisher entityChangesPublisher;
     private final Provider<InteractionProvider> interactionProviderProvider;
 
     @Inject
-    public EntityChangeTrackerJdo(
+    public EntityChangeTrackerJpa(
             final EntityPropertyChangePublisher entityPropertyChangePublisher,
             final EntityChangesPublisher entityChangesPublisher,
             final EventBusService eventBusService,
@@ -140,30 +165,47 @@ implements
         .orElse(false);
     }
 
-    private void enlistCreatedInternal(final @NonNull ManagedObject adapter) {
+    private void enlistCreatedInternal(final @NonNull ManagedObject adapter, @Nullable Can<PropertyChangeRecord> propertyChangeRecords) {
         if(!isEntityEnabledForChangePublishing(adapter)) {
             return;
         }
         enlistForChangeKindPublishing(adapter, EntityChangeKind.CREATE);
-        enlistForPreAndPostValuePublishing(adapter, record->record.setPreValue(PropertyValuePlaceholder.NEW));
+        if (propertyChangeRecords != null) {
+            // provided by ORM
+            propertyChangeRecords.forEach(this.enlistedPropertyChangesOfCreated::add);
+        } else {
+            // home-grown approach
+            enlistForPreAndPostValuePublishing(adapter, record->record.setPreValue(PropertyValuePlaceholder.NEW));
+        }
     }
 
-    private void enlistUpdatingInternal(
-            final @NonNull ManagedObject entity) {
+    private void enlistUpdatingInternal(final @NonNull ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords) {
         if(!isEntityEnabledForChangePublishing(entity)) {
             return;
         }
         enlistForChangeKindPublishing(entity, EntityChangeKind.UPDATE);
-        enlistForPreAndPostValuePublishing(entity, PropertyChangeRecord::updatePreValue);
+        if(propertyChangeRecords != null) {
+            // provided by ORM
+            propertyChangeRecords.forEach(this.enlistedPropertyChangesOfUpdated::add);
+        } else {
+            // home-grown approach
+            enlistForPreAndPostValuePublishing(entity, PropertyChangeRecord::updatePreValue);
+        }
     }
 
-    private void enlistDeletingInternal(final @NonNull ManagedObject adapter) {
+    private void enlistDeletingInternal(final @NonNull ManagedObject adapter, Can<PropertyChangeRecord> propertyChangeRecords) {
         if(!isEntityEnabledForChangePublishing(adapter)) {
             return;
         }
         final boolean enlisted = enlistForChangeKindPublishing(adapter, EntityChangeKind.DELETE);
         if(enlisted) {
-            enlistForPreAndPostValuePublishing(adapter, PropertyChangeRecord::updatePreValue);
+            if (propertyChangeRecords != null) {
+                // provided by ORM
+                propertyChangeRecords.forEach(this.enlistedPropertyChangesOfDeleted::add);
+            } else {
+                // home-grown approach
+                enlistForPreAndPostValuePublishing(adapter, PropertyChangeRecord::updatePreValue);
+            }
         }
     }
 
@@ -173,12 +215,17 @@ implements
         return entityPropertyChangeRecordsForPublishing.get();
     }
 
+    private boolean isOrmSuppliedChangeRecords() {
+        return !(enlistedPropertyChangesOfCreated.isEmpty() && enlistedPropertyChangesOfUpdated.isEmpty() && enlistedPropertyChangesOfDeleted.isEmpty());
+    }
+
     private boolean isEntityEnabledForChangePublishing(final @NonNull ManagedObject adapter) {
 
         if(!EntityChangePublishingFacet.isPublishingEnabled(adapter.getSpecification())) {
             return false; // ignore entities that are not enabled for entity change publishing
         }
 
+        // if home-grown
         if(entityPropertyChangeRecordsForPublishing.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
@@ -213,9 +260,14 @@ implements
 
     private void postPublishing() {
         log.debug("purging entity change records");
-        propertyChangeRecordsById.clear();
+        this.enlistedPropertyChangesOfCreated.clear();
+        this.enlistedPropertyChangesOfUpdated.clear();
+        this.enlistedPropertyChangesOfDeleted.clear();
+
+//        propertyChangeRecordsById.clear();
         changeKindByEnlistedAdapter.clear();
-        entityPropertyChangeRecordsForPublishing.clear();
+//        entityPropertyChangeRecordsForPublishing.clear();
+
         entityChangeEventCount.reset();
         numberEntitiesLoaded.reset();
     }
@@ -240,7 +292,6 @@ implements
             final java.sql.Timestamp timestamp,
             final String userName,
             final TransactionId txId) {
-
         return snapshotPropertyChangeRecords().stream()
                 .map(propertyChangeRecord -> propertyChangeRecord.toEntityPropertyChange(timestamp, userName, txId))
                 .collect(Can.toCan());
@@ -316,20 +367,34 @@ implements
      */
     private Set<PropertyChangeRecord> capturePostValuesAndDrain() {
 
-        val records = propertyChangeRecordsById.values().stream()
-                // set post values, which have been left empty up to now
-                .peek(rec->{
-                    // assuming this check correctly detects deleted entities (JDO)
-                    if(EntityUtil.isDetachedOrRemoved(rec.getEntity())) {
-                        rec.updatePostValueAsDeleted();
-                    } else {
-                        rec.updatePostValueAsNonDeleted();
-                    }
-                })
-                .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
-                .collect(_Sets.toUnmodifiable());
+        Set<PropertyChangeRecord> records;
 
-        propertyChangeRecordsById.clear();
+        if (isOrmSuppliedChangeRecords()) {
+            records = _Sets.newLinkedHashSet();
+            // TODO: might need to make this more sophisticated ?
+            records.addAll(enlistedPropertyChangesOfCreated);
+            records.addAll(enlistedPropertyChangesOfUpdated);
+            records.addAll(enlistedPropertyChangesOfDeleted);
+
+            enlistedPropertyChangesOfCreated.clear();
+            enlistedPropertyChangesOfUpdated.clear();
+            enlistedPropertyChangesOfDeleted.clear();
+        } else {
+            records = propertyChangeRecordsById.values().stream()
+                    // set post values, which have been left empty up to now
+                    .peek(rec->{
+                        // assuming this check correctly detects deleted entities (JDO)
+                        if(ManagedObjects.EntityUtil.isDetachedOrRemoved(rec.getEntity())) {
+                            rec.updatePostValueAsDeleted();
+                        } else {
+                            rec.updatePostValueAsNonDeleted();
+                        }
+                    })
+                    .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
+                    .collect(_Sets.toUnmodifiable());
+
+            propertyChangeRecordsById.clear();
+        }
 
         return records;
 
@@ -356,9 +421,15 @@ implements
 
     @Override
     public void enlistCreated(final ManagedObject entity) {
+        enlistCreated(entity, null);
+    }
+
+
+    @Override
+    public void enlistCreated(ManagedObject entity,  @Nullable final Can<PropertyChangeRecord> propertyChangeRecords) {
         _Xray.enlistCreated(entity, interactionProviderProvider);
         val hasAlreadyBeenEnlisted = isEnlisted(entity);
-        enlistCreatedInternal(entity);
+        enlistCreatedInternal(entity, propertyChangeRecords);
 
         if(!hasAlreadyBeenEnlisted) {
             CallbackFacet.callCallback(entity, PersistedCallbackFacet.class);
@@ -367,38 +438,36 @@ implements
     }
 
     @Override
-    public void enlistCreated(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords) {
+    public void enlistDeleting(final ManagedObject entity) {
+        enlistDeleting(entity, null);
     }
 
     @Override
-    public void enlistDeleting(final ManagedObject entity) {
+    public void enlistDeleting(ManagedObject entity, final Can<PropertyChangeRecord> propertyChangeRecords) {
         _Xray.enlistDeleting(entity, interactionProviderProvider);
-        enlistDeletingInternal(entity);
+        enlistDeletingInternal(entity, propertyChangeRecords);
         CallbackFacet.callCallback(entity, RemovingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
     }
 
     @Override
-    public void enlistDeleting(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords) {
+    public void enlistUpdating(final ManagedObject entity) {
+        enlistUpdating(entity, null);
     }
 
     @Override
-    public void enlistUpdating(final ManagedObject entity) {
+    public void enlistUpdating(ManagedObject entity, final Can<PropertyChangeRecord> propertyChangeRecords) {
         _Xray.enlistUpdating(entity, interactionProviderProvider);
         val hasAlreadyBeenEnlisted = isEnlisted(entity);
         // we call this come what may;
         // additional properties may now have been changed, and the changeKind for publishing might also be modified
-        enlistUpdatingInternal(entity);
+        enlistUpdatingInternal(entity, propertyChangeRecords);
 
         if(!hasAlreadyBeenEnlisted) {
             // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so
             CallbackFacet.callCallback(entity, UpdatingCallbackFacet.class);
             postLifecycleEventIfRequired(entity, UpdatingLifecycleEventFacet.class);
         }
-    }
-
-    @Override
-    public void enlistUpdating(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords) {
     }
 
     @Override

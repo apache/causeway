@@ -73,11 +73,6 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
         return Counter.builder().name(name).build();
     }
 
-    @BeforeEach()
-    void checkPersistenceStack() {
-        // currently disabled for JPA, since EntityPropertyChangePublisher still to be implemented.
-        Assumptions.assumeThat(isisBeanTypeRegistry.determineCurrentPersistenceStack().isJpa()).isFalse();
-    }
 
     @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
 }

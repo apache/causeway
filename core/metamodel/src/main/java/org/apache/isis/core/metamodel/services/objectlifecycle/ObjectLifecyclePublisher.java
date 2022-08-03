@@ -69,100 +69,74 @@ public interface ObjectLifecyclePublisher {
     static HasEnlistedEntityPropertyChanges publishingPayloadForCreation(
             final @NonNull ManagedObject entity) {
 
-        return new HasEnlistedEntityPropertyChanges() {
+        return (timestamp, user, txId) -> entityPropertyChangesForCreation(timestamp, user, txId, entity);
+    }
 
-            @Override
-            public Can<EntityPropertyChange> getPropertyChanges(
-                    final Timestamp timestamp,
-                    final String user,
-                    final TransactionId txId) {
+    private static Can<EntityPropertyChange> entityPropertyChangesForCreation(Timestamp timestamp, String user, TransactionId txId, ManagedObject entity) {
+        return propertyChangeRecordsForCreation(entity).stream()
+                .map(pcr -> pcr.toEntityPropertyChange(timestamp, user, txId))
+                .collect(Can.toCan());
+    }
 
-                return entity
+    static Can<PropertyChangeRecord> propertyChangeRecordsForCreation(ManagedObject entity) {
+        return entity
                 .getSpecification()
                 .streamProperties(MixedIn.EXCLUDED)
-                .filter(property->EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
-                .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-                .map(property->
+                .filter(property -> EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
+                .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
+                .map(property ->
                         PropertyChangeRecord
-                        .of(
-                                entity,
-                                property,
-                                PreAndPostValue
-                                    .pre(PropertyValuePlaceholder.NEW)
-                                    .withPost(ManagedObjects.UnwrapUtil.single(property.get(entity, InteractionInitiatedBy.FRAMEWORK))))
-                        .toEntityPropertyChange(
-                                timestamp,
-                                user,
-                                txId)
-                )
+                                .of(
+                                        entity,
+                                        property,
+                                        PreAndPostValue
+                                                .pre(PropertyValuePlaceholder.NEW)
+                                                .withPost(ManagedObjects.UnwrapUtil.single(property.get(entity, InteractionInitiatedBy.FRAMEWORK)))))
                 .collect(Can.toCan());
-
-            }
-
-        };
-
     }
 
     static HasEnlistedEntityPropertyChanges publishingPayloadForDeletion(
             final @NonNull ManagedObject entity) {
 
-        return new HasEnlistedEntityPropertyChanges() {
-
-            @Override
-            public Can<EntityPropertyChange> getPropertyChanges(
-                    final Timestamp timestamp,
-                    final String user,
-                    final TransactionId txId) {
-
-                return entity
-                .getSpecification()
-                .streamProperties(MixedIn.EXCLUDED)
-                .filter(property->EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
-                .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-                .map(property->
-                        PropertyChangeRecord
-                        .of(
-                                entity,
-                                property,
-                                PreAndPostValue
-                                    .pre(ManagedObjects.UnwrapUtil.single(property.get(entity, InteractionInitiatedBy.FRAMEWORK)))
-                                    .withPost(PropertyValuePlaceholder.DELETED))
-                        .toEntityPropertyChange(
-                                timestamp,
-                                user,
-                                txId)
-                )
-                .collect(Can.toCan());
-
-            }
-
-        };
+        return (timestamp, user, txId) -> entityPropertyChangesForDeletion(timestamp, user, txId, entity);
 
     }
 
-    static HasEnlistedEntityPropertyChanges publishingPayloadForUpdate(
-            final ManagedObject entity,
-            final Can<PropertyChangeRecord> changeRecords) {
+    private static Can<EntityPropertyChange> entityPropertyChangesForDeletion(Timestamp timestamp, String user, TransactionId txId, ManagedObject entity) {
+        return propertyChangeRecordsForDeletion(entity).stream()
+                .map(pcr -> pcr.toEntityPropertyChange(timestamp, user, txId))
+                .collect(Can.toCan());
+    }
 
-        return new HasEnlistedEntityPropertyChanges() {
+    static Can<PropertyChangeRecord> propertyChangeRecordsForDeletion(ManagedObject entity) {
+        return entity
+                .getSpecification()
+                .streamProperties(MixedIn.EXCLUDED)
+                .filter(property -> EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
+                .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
+                .map(property ->
+                        PropertyChangeRecord
+                                .of(
+                                        entity,
+                                        property,
+                                        PreAndPostValue
+                                                .pre(ManagedObjects.UnwrapUtil.single(property.get(entity, InteractionInitiatedBy.FRAMEWORK)))
+                                                .withPost(PropertyValuePlaceholder.DELETED))
+                )
+                .collect(Can.toCan());
+    }
 
-            @Override
-            public Can<EntityPropertyChange> getPropertyChanges(
-                    final Timestamp timestamp,
-                    final String user,
-                    final TransactionId txId) {
+    static HasEnlistedEntityPropertyChanges publishingPayloadForUpdate(final Can<PropertyChangeRecord> changeRecords) {
+        return (timestamp, user, txId) -> entityPropertyChangesForUpdate(timestamp, user, txId, changeRecords);
+    }
 
-                return changeRecords
-                .map(changeRecord->
-                    changeRecord
-                    .toEntityPropertyChange(
-                            timestamp,
-                            user,
-                            txId));
-            }
+    private static Can<EntityPropertyChange> entityPropertyChangesForUpdate(Timestamp timestamp, String user, TransactionId txId, Can<PropertyChangeRecord> changeRecords) {
+        return propertyChangeRecordsForUpdate(changeRecords)
+                .map(pcr -> pcr.toEntityPropertyChange(timestamp, user, txId));
+    }
 
-        };
-
+    static Can<PropertyChangeRecord> propertyChangeRecordsForUpdate(Can<PropertyChangeRecord> changeRecords) {
+        return changeRecords;
     }
 
 

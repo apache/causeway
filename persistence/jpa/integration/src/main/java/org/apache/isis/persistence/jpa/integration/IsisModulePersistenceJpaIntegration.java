@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
-import org.apache.isis.persistence.jpa.integration.changetracking.PersistenceMetricsServiceJpa;
+import org.apache.isis.persistence.jpa.integration.changetracking.EntityChangeTrackerJpa;
 import org.apache.isis.persistence.jpa.integration.entity.JpaEntityIntegration;
 import org.apache.isis.persistence.jpa.integration.services.JpaSupportServiceUsingSpring;
 import org.apache.isis.persistence.jpa.integration.typeconverters.applib.IsisBookmarkConverter;
@@ -52,7 +52,7 @@ import org.apache.isis.persistence.jpa.metamodel.IsisModulePersistenceJpaMetamod
 
         // @Service's
         JpaSupportServiceUsingSpring.class,
-        PersistenceMetricsServiceJpa.class,
+        EntityChangeTrackerJpa.class,
 
 })
 @EntityScan(basePackageClasses = {

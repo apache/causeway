@@ -21,6 +21,7 @@ package org.apache.isis.core.runtimeservices.publish;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePu
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
+import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.PersistenceCallbackHandlerAbstract;
 
 /**
@@ -65,14 +66,18 @@ extends PersistenceCallbackHandlerAbstract
 implements
     ObjectLifecyclePublisher {
 
-    private final EntityPropertyChangePublisher entityPropertyChangePublisher;
+    private final Provider<EntityChangeTracker> entityChangeTrackerProvider;
 
     @Inject
     public ObjectLifecyclePublisherDefault(
             final EventBusService eventBusService,
-            final EntityPropertyChangePublisher entityPropertyChangePublisher) {
+            final Provider<EntityChangeTracker> entityChangeTrackerProvider) {
         super(eventBusService);
-        this.entityPropertyChangePublisher = entityPropertyChangePublisher;
+        this.entityChangeTrackerProvider = entityChangeTrackerProvider;
+    }
+
+    EntityChangeTracker entityChangeTracker() {
+        return entityChangeTrackerProvider.get();
     }
 
     @Override
@@ -100,9 +105,7 @@ implements
         postLifecycleEventIfRequired(entity, UpdatingLifecycleEventFacet.class);
 
         if(EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
-            entityPropertyChangePublisher.publishChangedProperties(
-                    ObjectLifecyclePublisher
-                    .publishingPayloadForUpdate(entity, changeRecords));
+            entityChangeTracker().enlistUpdating(entity, changeRecords);
         }
 
     }
@@ -113,9 +116,8 @@ implements
         postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
 
         if(EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
-            entityPropertyChangePublisher.publishChangedProperties(
-                    ObjectLifecyclePublisher
-                    .publishingPayloadForDeletion(entity));
+            entityChangeTracker().enlistDeleting(entity, ObjectLifecyclePublisher
+                    .propertyChangeRecordsForDeletion(entity));
         }
     }
 
@@ -125,9 +127,8 @@ implements
         postLifecycleEventIfRequired(entity, PersistedLifecycleEventFacet.class);
 
         if(EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
-            entityPropertyChangePublisher.publishChangedProperties(
-                    ObjectLifecyclePublisher
-                    .publishingPayloadForCreation(entity));
+            entityChangeTracker().enlistCreated(entity, ObjectLifecyclePublisher
+                    .propertyChangeRecordsForCreation(entity));
         }
     }
 

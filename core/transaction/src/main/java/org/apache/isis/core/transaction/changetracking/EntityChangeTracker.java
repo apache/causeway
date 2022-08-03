@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
@@ -38,6 +40,8 @@ public interface EntityChangeTracker {
      */
     void enlistCreated(ManagedObject entity);
 
+    void enlistCreated(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords);
+
     /**
      * Publishing support: for object stores to enlist an object that is about to be deleted,
      * capturing the pre-deletion value of the properties of the {@link ManagedObject}.
@@ -47,7 +51,9 @@ public interface EntityChangeTracker {
      * The post-modification values are captured  when the transaction commits.  In the case of deleted objects, a
      * dummy value <tt>'[DELETED]'</tt> is used as the post-modification value.
      */
-    void enlistDeleting(ManagedObject entity);
+    void enlistDeleting(ManagedObject entity) ;
+
+    void enlistDeleting(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords);
 
     /**
      * Publishing support: for object stores to enlist an object that is about to be updated,
@@ -58,6 +64,8 @@ public interface EntityChangeTracker {
      * The post-modification values are captured when the transaction commits.
      */
     void enlistUpdating(ManagedObject entity);
+
+    void enlistUpdating(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords);
 
     /**
      * Fires the appropriate event and lifecycle callback: {@literal LOADED}
@@ -73,6 +81,7 @@ public interface EntityChangeTracker {
      * Fires the appropriate event and lifecycle callback: {@literal UPDATING}
      */
     void recognizeUpdating(ManagedObject entity);
+
 
 }
 

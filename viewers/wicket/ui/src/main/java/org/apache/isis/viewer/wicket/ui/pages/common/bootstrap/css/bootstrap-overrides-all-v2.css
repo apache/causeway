@@ -1013,6 +1013,11 @@ footer .footer-image {
     /*padding-bottom: 7px;*/
 }
 
+.actionParametersForm .alert {
+    margin-top: 10px;
+}
+
+
 .propertyEditForm .buttons .wicket-ajax-indicator,
 .actionParametersForm .buttons .wicket-ajax-indicator,
 .additionalLinkList .wicket-ajax-indicator {
