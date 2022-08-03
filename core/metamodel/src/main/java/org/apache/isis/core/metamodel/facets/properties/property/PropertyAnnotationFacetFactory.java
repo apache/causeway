@@ -19,21 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.Mandatory;
-import org.apache.isis.applib.annotation.MaxLength;
-import org.apache.isis.applib.annotation.MustSatisfy;
-import org.apache.isis.applib.annotation.NotPersisted;
-import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
-import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyInteraction;
-import org.apache.isis.applib.annotation.RegEx;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
@@ -47,6 +38,8 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
+import org.apache.isis.core.metamodel.facets.actions.layout.NotContributedFacetForLayoutProperties;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
@@ -121,6 +114,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+        inferIntentWhenOnTypeLevel(processMethodContext);
+
         processModify(processMethodContext);
         processHidden(processMethodContext);
         processEditing(processMethodContext);
@@ -135,6 +130,21 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         processFileAccept(processMethodContext);
     }
 
+    void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext) {
+        // Verify that @Collection is on type and method to process == coll
+        final Annotation colAnno=processMethodContext.getFacetHolder().getOwningType().getAnnotation(Property.class);
+        if(colAnno==null || !processMethodContext.getMethod().getName().equals(Property.MIXIN_METHOD)) {
+            return; // no @Collection found neither type nor method
+        }
+
+        //[1998] if @Collection detected on method or type level infer:
+        //@Action(semantics=SAFE)
+        //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
+        final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
+        FacetUtil.addFacet(new ActionSemanticsFacetAbstract(ActionSemantics.Of.SAFE, facetedMethod) {});
+        FacetUtil.addFacet(new NotContributedFacetForLayoutProperties(NotContributed.As.from(Contributed.AS_ASSOCIATION),
+                processMethodContext.getFacetHolder()));
+    }
 
     void processModify(final ProcessMethodContext processMethodContext) {
 
