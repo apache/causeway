@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.javatime.javatimezoneddatetime.jpa;
 
+import java.time.ZonedDateTime;
+
 import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -60,6 +62,7 @@ public class JavaTimeZonedDateTimeJpa
     public JavaTimeZonedDateTimeJpa(final java.time.ZonedDateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
+        this.readWritePropertyNoTimeZoneTranslation = initialValue;
     }
 
 //tag::class[]
@@ -90,6 +93,10 @@ public class JavaTimeZonedDateTimeJpa
     @Column(nullable = true)
     @Getter @Setter
     private java.time.ZonedDateTime readWriteOptionalProperty;
+
+    @Column(nullable = false)
+    @Getter @Setter
+    private ZonedDateTime readWritePropertyNoTimeZoneTranslation;
 
 }
 //end::class[]
