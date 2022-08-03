@@ -213,7 +213,7 @@ public abstract class IsisComponentProvider {
                     @Override
                     public boolean apply(@Nullable final Class<?> input) {
                         if(input == null) { return false; }
-                        final DomainObject annotation = input.getAnnotation(DomainObject.class);
+                        final DomainObject annotation = Annotations.getAnnotation(input, DomainObject.class);
                         return annotation != null && annotation.nature() == Nature.MIXIN;
                     }
                 }))

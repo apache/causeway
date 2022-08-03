@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.*;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -68,4 +69,40 @@ public class AnnotationsTest  {
         assertThat(fieldNameCandidates.size(), is(0));
     }
 
+    @Test
+    public void testMetaAnnotationForAction(){
+        // When
+        final DomainObject domainObjectAnnotation = Annotations.getAnnotation(SomeDomainObjectWithAction.class, DomainObject.class);
+        // Then
+        assertThat(domainObjectAnnotation, is(not(nullValue())));
+        assertThat(domainObjectAnnotation.mixinMethod(), is(Action.MIXIN_METHOD));
+        assertThat(domainObjectAnnotation.nature(), is(Nature.MIXIN));
+    }
+
+    @Test
+    public void testMetaAnnotationForCollection(){
+        // When
+        final DomainObject domainObjectAnnotation = Annotations.getAnnotation(SomeDomainObjectWithCollection.class, DomainObject.class);
+        // Then
+        assertThat(domainObjectAnnotation, is(not(nullValue())));
+        assertThat(domainObjectAnnotation.mixinMethod(), is(Collection.MIXIN_METHOD));
+        assertThat(domainObjectAnnotation.nature(), is(Nature.MIXIN));
+    }
+
+    @Test
+    public void testMetaAnnotationForProperty(){
+        // When
+        final DomainObject domainObjectAnnotation = Annotations.getAnnotation(SomeDomainObjectWithProperty.class, DomainObject.class);
+        // Then
+        assertThat(domainObjectAnnotation, is(not(nullValue())));
+        assertThat(domainObjectAnnotation.mixinMethod(), is(Property.MIXIN_METHOD));
+        assertThat(domainObjectAnnotation.nature(), is(Nature.MIXIN));
+    }
+
+    @Action
+    private class SomeDomainObjectWithAction { }
+    @Collection
+    private class SomeDomainObjectWithCollection { }
+    @Property
+    private class SomeDomainObjectWithProperty { }
 }

@@ -47,10 +47,8 @@ public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract im
 
         final Class<?> candidateMixinType = processClassContext.getCls();
 
-        final boolean mixinAnnotation = Arrays.stream(candidateMixinType.getAnnotations())
-                .anyMatch(a -> Lists.newArrayList(Mixin.class, Action.class, Property.class, Collection.class)
-                        .contains(a.annotationType()));
-        if(!mixinAnnotation) {
+        final Mixin mixinAnnotation = candidateMixinType.getAnnotation(Mixin.class);
+        if(mixinAnnotation == null) {
             return;
         }
 

@@ -52,17 +52,8 @@ public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
             final Class<?> candidateMixinType, final FacetHolder facetHolder,
             final ServicesInjector servicesInjector) {
 
-        // v2 support new mixin annotations
-        String mixinMethod = Optional.ofNullable(candidateMixinType.getAnnotation(Mixin.class))
-                .map(m -> m.method()).orElse(null);
-        if(mixinMethod == null) {
-            int i = Arrays.stream(candidateMixinType.getAnnotations())
-                    .map(a -> Lists.newArrayList(Action.class, Property.class, Collection.class)
-                            .indexOf(a.annotationType())).findFirst().orElse(-1);
-            mixinMethod = i >= 0 ? new String[]{Action.MIXIN_METHOD, Property.MIXIN_METHOD, Collection.MIXIN_METHOD}[i]
-                    : null;
-        }
-        if(mixinMethod == null) {
+        final Mixin mixin = candidateMixinType.getAnnotation(Mixin.class);
+        if(mixin == null) {
             return null;
         }
 
@@ -73,7 +64,7 @@ public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
                 continue;
             }
             final Class<?> constructorType = constructorTypes[0];
-            return new MixinFacetForMixinAnnotation(candidateMixinType, mixinMethod, constructorType, facetHolder, servicesInjector);
+            return new MixinFacetForMixinAnnotation(candidateMixinType, mixin.method(), constructorType, facetHolder, servicesInjector);
         }
         return null;
     }
