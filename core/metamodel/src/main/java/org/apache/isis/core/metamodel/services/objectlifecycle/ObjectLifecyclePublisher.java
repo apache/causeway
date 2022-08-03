@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.services.objectlifecycle;
 
 import java.sql.Timestamp;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
@@ -35,109 +37,99 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import lombok.NonNull;
 
 /**
- * Responsible for collecting, then immediately publishing changes to domain objects,
- * that is,
- * notify publishing subscribers and call the various persistence call-back facets.
+ * Responsible for collecting and then passing along changes (to the EntityChangeTracker, in persistence commons) so
+ * that they can be published; and is responsible for calling the various persistence call-back facets.
  *
  * @since 2.0 {index}
  */
 public interface ObjectLifecyclePublisher {
 
     /**
-     * Independent of the persistence stack, only triggered by {@link FactoryService}
-     * and internal {@link ObjectManager}.
+     * Independent of the persistence stack, called when an object has been created in-memory, for example by
+     * {@link FactoryService} and internal {@link ObjectManager}.
+     *
+     * <p>
+     *     Default implementation fires off callback/lifecycle events.
+     * </p>
+     *
      * @param domainObject - an entity or view-model
      */
     void onPostCreate(ManagedObject domainObject);
 
+    /**
+     * Called by both JPA and JDO, just after an object is retrieved from the database.
+     *
+     * <p>
+     *     Default implementation calls <code>EntityChangeTracker#recognizeLoaded(ManagedObject)</code> and
+     *     fires off callback/lifecycle events.
+     * </p>
+     *
+     * @param entity
+     */
     void onPostLoad(ManagedObject entity);
 
+    /**
+     * Called by both JPA and JDO, just before an entity is inserted into the database.
+     *
+     * <p>
+     *     Default implementation fires callbacks (including emitting the <code>PreStoreEvent</code>, eg as subscribed)
+     *     by the <code>TimestampService</code>.
+     * </p>
+     *
+     * @param entity
+     */
     void onPrePersist(ManagedObject entity);
 
+    /**
+     * Called by both JPA and JDO, just after an entity has been inserted into the database.
+     *
+     * <p>
+     *     Default implementation fires callbacks and enlists the entity within <code>EntityChangeTracker</code>
+     *     for create/persist.
+     * </p>
+     *
+     * @param entity
+     */
     void onPostPersist(ManagedObject entity);
 
-    void onPreUpdate(ManagedObject entity, Can<PropertyChangeRecord> changeRecords);
+    /**
+     * Called by both JPA and JDO (though JDO does <i>not</i> provide any changeRecords).
+     *
+     * <p>
+     *     Default implementation fires callbacks and enlists the entity within <code>EntityChangeTracker</code>
+     *     for update.
+     * </p>
+     *
+     * @param entity
+     * @param changeRecords - optional parameter to provide the pre-computed {@link PropertyChangeRecord}s from the ORM.  JPA does this, JDO does not.
+     */
+    void onPreUpdate(ManagedObject entity, @Nullable Can<PropertyChangeRecord> changeRecords);
 
+    /**
+     * Called by both JPA and JDO, after an existing entity has been updated.
+     *
+     * <p>
+     *     Default implementation fires callbacks.
+     * </p>
+     *
+     * @param entity
+     */
     void onPostUpdate(ManagedObject entity);
 
+    /**
+     * Called by both JPA and JDO, just beforean entity is deleted from the database.
+     *
+     * <p>
+     *     Default implementation fires callbacks and enlists the entity within <code>EntityChangeTracker</code>
+     *     for delete/remove.
+     * </p>
+     *
+     * @param entity
+     */
     void onPreRemove(ManagedObject entity);
 
     //void onPostRemove(ManagedObject entity);
 
-    // -- PUBLISHING PAYLOAD FACTORIES
-
-    static HasEnlistedEntityPropertyChanges publishingPayloadForCreation(
-            final @NonNull ManagedObject entity) {
-
-        return (timestamp, user, txId) -> entityPropertyChangesForCreation(timestamp, user, txId, entity);
-    }
-
-    private static Can<EntityPropertyChange> entityPropertyChangesForCreation(Timestamp timestamp, String user, TransactionId txId, ManagedObject entity) {
-        return propertyChangeRecordsForCreation(entity).stream()
-                .map(pcr -> pcr.toEntityPropertyChange(timestamp, user, txId))
-                .collect(Can.toCan());
-    }
-
-    static Can<PropertyChangeRecord> propertyChangeRecordsForCreation(ManagedObject entity) {
-        return entity
-                .getSpecification()
-                .streamProperties(MixedIn.EXCLUDED)
-                .filter(property -> EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
-                .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-                .map(property ->
-                        PropertyChangeRecord
-                                .of(
-                                        entity,
-                                        property,
-                                        PreAndPostValue
-                                                .pre(PropertyValuePlaceholder.NEW)
-                                                .withPost(ManagedObjects.UnwrapUtil.single(property.get(entity, InteractionInitiatedBy.FRAMEWORK)))))
-                .collect(Can.toCan());
-    }
-
-    static HasEnlistedEntityPropertyChanges publishingPayloadForDeletion(
-            final @NonNull ManagedObject entity) {
-
-        return (timestamp, user, txId) -> entityPropertyChangesForDeletion(timestamp, user, txId, entity);
-
-    }
-
-    private static Can<EntityPropertyChange> entityPropertyChangesForDeletion(Timestamp timestamp, String user, TransactionId txId, ManagedObject entity) {
-        return propertyChangeRecordsForDeletion(entity).stream()
-                .map(pcr -> pcr.toEntityPropertyChange(timestamp, user, txId))
-                .collect(Can.toCan());
-    }
-
-    static Can<PropertyChangeRecord> propertyChangeRecordsForDeletion(ManagedObject entity) {
-        return entity
-                .getSpecification()
-                .streamProperties(MixedIn.EXCLUDED)
-                .filter(property -> EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
-                .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-                .map(property ->
-                        PropertyChangeRecord
-                                .of(
-                                        entity,
-                                        property,
-                                        PreAndPostValue
-                                                .pre(ManagedObjects.UnwrapUtil.single(property.get(entity, InteractionInitiatedBy.FRAMEWORK)))
-                                                .withPost(PropertyValuePlaceholder.DELETED))
-                )
-                .collect(Can.toCan());
-    }
-
-    static HasEnlistedEntityPropertyChanges publishingPayloadForUpdate(final Can<PropertyChangeRecord> changeRecords) {
-        return (timestamp, user, txId) -> entityPropertyChangesForUpdate(timestamp, user, txId, changeRecords);
-    }
-
-    private static Can<EntityPropertyChange> entityPropertyChangesForUpdate(Timestamp timestamp, String user, TransactionId txId, Can<PropertyChangeRecord> changeRecords) {
-        return propertyChangeRecordsForUpdate(changeRecords)
-                .map(pcr -> pcr.toEntityPropertyChange(timestamp, user, txId));
-    }
-
-    static Can<PropertyChangeRecord> propertyChangeRecordsForUpdate(Can<PropertyChangeRecord> changeRecords) {
-        return changeRecords;
-    }
 
 
 }

@@ -91,17 +91,6 @@ final class _Xray {
         addSequence("recognizeLoaded", entity, interactionProviderProvider);
     }
 
-    public static void recognizePersisting(
-            final ManagedObject entity,
-            final Provider<InteractionProvider> interactionProviderProvider) {
-        addSequence("recognizePersisting", entity, interactionProviderProvider);
-    }
-
-    public static void recognizeUpdating(
-            final ManagedObject entity,
-            final Provider<InteractionProvider> interactionProviderProvider) {
-        addSequence("recognizeUpdating", entity, interactionProviderProvider);
-    }
 
     // -- HELPER
 

@@ -19,8 +19,8 @@
  */
 package org.apache.isis.persistence.jpa.integration.changetracking;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -51,28 +51,14 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
-import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyValuePlaceholder;
+import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -106,35 +92,15 @@ implements
     HasEnlistedEntityPropertyChanges,
     HasEnlistedEntityChanges {
 
-    /**
-     * If provided by the ORM.
-     */
-    private final List<PropertyChangeRecord> enlistedPropertyChangesOfCreated = _Lists.newArrayList();
-    /**
-     * If provided by the ORM.
-     */
-    private final List<PropertyChangeRecord> enlistedPropertyChangesOfUpdated = _Lists.newArrayList();
-    /**
-     * If provided by the ORM.
-     */
-    private final List<PropertyChangeRecord> enlistedPropertyChangesOfDeleted = _Lists.newArrayList();
 
     /**
-     * Contains initial change records having set the pre-values of every property of every object that was enlisted.
-     *
-     * <p>
-     *     ONLY USED IF THE ENLISTED PROPERTY CHANGES ({@link #enlistedPropertyChangesOfCreated}, {@link #enlistedPropertyChangesOfUpdated}, {@link #enlistedPropertyChangesOfDeleted}) were not provided already.
-     * </p>
+     * Contains a record for every objectId/propertyId that was changed.
      */
-    private final Map<String, PropertyChangeRecord> propertyChangeRecordsById = _Maps.newLinkedHashMap();
+    private final Map<PropertyChangeRecordId, PropertyChangeRecord> enlistedPropertyChangeRecordsById = _Maps.newLinkedHashMap();
 
     /**
      * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot,
      * triggered by internal call to {@link #snapshotPropertyChangeRecords()}.
-     *
-     * <p>
-     *     ONLY USED IF THE ENLISTED PROPERTY CHANGES ({@link #enlistedPropertyChangesOfCreated}, {@link #enlistedPropertyChangesOfUpdated}, {@link #enlistedPropertyChangesOfDeleted}) were not provided already.
-     * </p>
      */
     private final _Lazy<Set<PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing
         = _Lazy.threadSafe(this::capturePostValuesAndDrain);
@@ -148,6 +114,10 @@ implements
     private final EntityChangesPublisher entityChangesPublisher;
     private final Provider<InteractionProvider> interactionProviderProvider;
 
+    private final LongAdder numberEntitiesLoaded = new LongAdder();
+    private final LongAdder entityChangeEventCount = new LongAdder();
+    private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
+
     @Inject
     public EntityChangeTrackerDefault(
             final EntityPropertyChangePublisher entityPropertyChangePublisher,
@@ -160,54 +130,10 @@ implements
         this.interactionProviderProvider = interactionProviderProvider;
     }
 
-    private boolean isEnlisted(final @NonNull ManagedObject adapter) {
+    private boolean isEnlistedWrtChangeKind(final @NonNull ManagedObject adapter) {
         return ManagedObjects.bookmark(adapter)
         .map(changeKindByEnlistedAdapter::containsKey)
         .orElse(false);
-    }
-
-    private void enlistCreatedInternal(final @NonNull ManagedObject adapter, @Nullable Can<PropertyChangeRecord> propertyChangeRecords) {
-        if(!isEntityEnabledForChangePublishing(adapter)) {
-            return;
-        }
-        enlistForChangeKindPublishing(adapter, EntityChangeKind.CREATE);
-        if (propertyChangeRecords != null) {
-            // provided by ORM
-            propertyChangeRecords.forEach(this.enlistedPropertyChangesOfCreated::add);
-        } else {
-            // home-grown approach
-            enlistForPreAndPostValuePublishing(adapter, record->record.setPreValue(PropertyValuePlaceholder.NEW));
-        }
-    }
-
-    private void enlistUpdatingInternal(final @NonNull ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords) {
-        if(!isEntityEnabledForChangePublishing(entity)) {
-            return;
-        }
-        enlistForChangeKindPublishing(entity, EntityChangeKind.UPDATE);
-        if(propertyChangeRecords != null) {
-            // provided by ORM
-            propertyChangeRecords.forEach(this.enlistedPropertyChangesOfUpdated::add);
-        } else {
-            // home-grown approach
-            enlistForPreAndPostValuePublishing(entity, PropertyChangeRecord::updatePreValue);
-        }
-    }
-
-    private void enlistDeletingInternal(final @NonNull ManagedObject adapter, Can<PropertyChangeRecord> propertyChangeRecords) {
-        if(!isEntityEnabledForChangePublishing(adapter)) {
-            return;
-        }
-        final boolean enlisted = enlistForChangeKindPublishing(adapter, EntityChangeKind.DELETE);
-        if(enlisted) {
-            if (propertyChangeRecords != null) {
-                // provided by ORM
-                propertyChangeRecords.forEach(this.enlistedPropertyChangesOfDeleted::add);
-            } else {
-                // home-grown approach
-                enlistForPreAndPostValuePublishing(adapter, PropertyChangeRecord::updatePreValue);
-            }
-        }
     }
 
     Set<PropertyChangeRecord> snapshotPropertyChangeRecords() {
@@ -216,14 +142,10 @@ implements
         return entityPropertyChangeRecordsForPublishing.get();
     }
 
-    private boolean isOrmSuppliedChangeRecords() {
-        return !(enlistedPropertyChangesOfCreated.isEmpty() && enlistedPropertyChangesOfUpdated.isEmpty() && enlistedPropertyChangesOfDeleted.isEmpty());
-    }
+    private boolean isEntityExcludedForChangePublishing(ManagedObject entity) {
 
-    private boolean isEntityEnabledForChangePublishing(final @NonNull ManagedObject adapter) {
-
-        if(!EntityChangePublishingFacet.isPublishingEnabled(adapter.getSpecification())) {
-            return false; // ignore entities that are not enabled for entity change publishing
+        if(!EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
+            return true; // ignore entities that are not enabled for entity change publishing
         }
 
         if(entityPropertyChangeRecordsForPublishing.isMemoized()) {
@@ -231,10 +153,7 @@ implements
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
         }
 
-        entityChangeEventCount.increment();
-        enableCommandPublishing();
-
-        return true;
+        return false;
     }
 
     /**
@@ -254,20 +173,14 @@ implements
         _Xray.publish(this, interactionProviderProvider);
 
         log.debug("about to publish entity changes");
-        entityPropertyChangePublisher.publishChangedProperties(this);
+        entityPropertyChangePublisher.publishChangedProperties();
         entityChangesPublisher.publishChangingEntities(this);
     }
 
     private void postPublishing() {
         log.debug("purging entity change records");
 
-        // if ORM provided property change records ... as in JPA
-        this.enlistedPropertyChangesOfCreated.clear();
-        this.enlistedPropertyChangesOfUpdated.clear();
-        this.enlistedPropertyChangesOfDeleted.clear();
-
-        // if instead we had to infer ourselves (home-grown)... as in JDO
-        propertyChangeRecordsById.clear();
+        enlistedPropertyChangeRecordsById.clear();
         entityPropertyChangeRecordsForPublishing.clear();
 
         changeKindByEnlistedAdapter.clear();
@@ -309,11 +222,14 @@ implements
     // -- HELPER
 
     /**
-     * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
+     * @return <code>true</code> if successfully enlisted, <code>false</code> if not (no longer) enlisted ... eg delete of an entity that was created earlier in the transaction
      */
     private boolean enlistForChangeKindPublishing(
             final @NonNull ManagedObject entity,
             final @NonNull EntityChangeKind changeKind) {
+
+        entityChangeEventCount.increment();
+        enableCommandPublishing();
 
         val bookmark = ManagedObjects.bookmarkElseFail(entity);
 
@@ -345,23 +261,7 @@ implements
         case DELETE:
             return false;
         }
-        return previousChangeKind == null;
-    }
-
-    private void enlistForPreAndPostValuePublishing(
-            final ManagedObject entity,
-            final Consumer<PropertyChangeRecord> onNewChangeRecord) {
-
-        log.debug("enlist entity's property changes for publishing {}", entity);
-
-        entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
-        .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-        .map(property->PropertyChangeRecord.of(entity, property))
-        .filter(record->!propertyChangeRecordsById.containsKey(record.getPropertyId())) // already enlisted, so ignore
-        .forEach(record->{
-            onNewChangeRecord.accept(record);
-            propertyChangeRecordsById.put(record.getPropertyId(), record);
-        });
+        return false;
     }
 
     /**
@@ -370,34 +270,20 @@ implements
      */
     private Set<PropertyChangeRecord> capturePostValuesAndDrain() {
 
-        Set<PropertyChangeRecord> records;
+        val records = enlistedPropertyChangeRecordsById.values().stream()
+                // set post values, which have been left empty up to now
+                .peek(rec -> {
+                    // assuming this check correctly detects deleted entities (JDO)
+                    if(ManagedObjects.EntityUtil.isDetachedOrRemoved(rec.getEntity())) {
+                        rec.updatePostValueAsDeleted();
+                    } else {
+                        rec.updatePostValueWithCurrent();
+                    }
+                })
+                .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
+                .collect(_Sets.toUnmodifiable());
 
-        if (isOrmSuppliedChangeRecords()) {
-            records = _Sets.newLinkedHashSet();
-            // TODO: might need to make this more sophisticated ?
-            records.addAll(enlistedPropertyChangesOfCreated);
-            records.addAll(enlistedPropertyChangesOfUpdated);
-            records.addAll(enlistedPropertyChangesOfDeleted);
-
-            enlistedPropertyChangesOfCreated.clear();
-            enlistedPropertyChangesOfUpdated.clear();
-            enlistedPropertyChangesOfDeleted.clear();
-        } else {
-            records = propertyChangeRecordsById.values().stream()
-                    // set post values, which have been left empty up to now
-                    .peek(rec->{
-                        // assuming this check correctly detects deleted entities (JDO)
-                        if(ManagedObjects.EntityUtil.isDetachedOrRemoved(rec.getEntity())) {
-                            rec.updatePostValueAsDeleted();
-                        } else {
-                            rec.updatePostValueAsNonDeleted();
-                        }
-                    })
-                    .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
-                    .collect(_Sets.toUnmodifiable());
-
-            propertyChangeRecordsById.clear();
-        }
+        enlistedPropertyChangeRecordsById.clear();
 
         return records;
 
@@ -405,8 +291,105 @@ implements
 
     // side-effect free, used by XRay
     long countPotentialPropertyChangeRecords() {
-        return propertyChangeRecordsById.size();
+        return enlistedPropertyChangeRecordsById.size();
     }
+
+    // -- ENTITY CHANGE TRACKING
+
+    @Override
+    public void enlistCreated(final ManagedObject entity) {
+
+        _Xray.enlistCreated(entity, interactionProviderProvider);
+
+        if (isEntityExcludedForChangePublishing(entity)) {
+            return;
+        }
+
+        log.debug("enlist entity's property changes for publishing {}", entity);
+        enlistForChangeKindPublishing(entity, EntityChangeKind.CREATE);
+
+        enlistForCreateOrUpdate(entity, PropertyChangeRecord::updatePreValueAsNew);
+    }
+
+    @Override
+    public void enlistUpdating(
+            final ManagedObject entity,
+            @Nullable final Can<PropertyChangeRecord> ormPropertyChangeRecords) {
+
+        _Xray.enlistUpdating(entity, interactionProviderProvider);
+
+        if (isEntityExcludedForChangePublishing(entity)) {
+            return;
+        }
+
+        // we call this come what may;
+        // additional properties may now have been changed, and the changeKind for publishing might also be modified
+        enlistForChangeKindPublishing(entity, EntityChangeKind.UPDATE);
+
+        if(ormPropertyChangeRecords != null) {
+            // provided by ORM
+            ormPropertyChangeRecords
+                    .stream()
+                    .filter(pcr -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(pcr.getProperty()))
+                    .forEach(pcr -> this.enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr)); // if already known, then we don't replace (keep first pre-value we know about)
+        } else {
+            // home-grown approach
+            log.debug("enlist entity's property changes for publishing {}", entity);
+
+            enlistForCreateOrUpdate(entity, PropertyChangeRecord::updatePreValueWithCurrent);
+        }
+    }
+
+    private void enlistForCreateOrUpdate(ManagedObject entity, Consumer<PropertyChangeRecord> propertyChangeRecordConsumer) {
+        entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
+                .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
+                .map(property -> PropertyChangeRecordId.of(entity, property))
+                .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
+                .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.of(pcrId)))
+                .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
+                .forEach(propertyChangeRecordConsumer);
+    }
+
+
+    @Override
+    public void enlistDeleting(final ManagedObject entity) {
+
+        _Xray.enlistDeleting(entity, interactionProviderProvider);
+
+        if (isEntityExcludedForChangePublishing(entity)) {
+            return;
+        }
+
+        final boolean enlisted = enlistForChangeKindPublishing(entity, EntityChangeKind.DELETE);
+        if(enlisted) {
+
+            log.debug("enlist entity's property changes for publishing {}", entity);
+
+            entity.getSpecification()
+                    .streamProperties(MixedIn.EXCLUDED)
+                    .filter(property -> EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
+                    .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
+                    .map(property -> PropertyChangeRecordId.of(entity, property))
+                    .map(pcrId -> enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, PropertyChangeRecord::of))
+                    .forEach(pcr -> {
+                        pcr.updatePreValueWithCurrent();
+                        pcr.updatePostValueAsDeleted();
+                    });
+        }
+    }
+
+
+
+    /**
+     * Used only for the implementation of {@link MetricsService}.
+     * @param entity
+     */
+    @Override
+    public void incrementLoaded(final ManagedObject entity) {
+        _Xray.recognizeLoaded(entity, interactionProviderProvider);
+        numberEntitiesLoaded.increment();
+    }
+
 
     // -- METRICS SERVICE
 
@@ -420,83 +403,7 @@ implements
         return changeKindByEnlistedAdapter.size();
     }
 
-    // -- ENTITY CHANGE TRACKING
-
-    @Override
-    public void enlistCreated(final ManagedObject entity) {
-        enlistCreated(entity, null);
-    }
 
 
-    @Override
-    public void enlistCreated(ManagedObject entity,  @Nullable final Can<PropertyChangeRecord> propertyChangeRecords) {
-        _Xray.enlistCreated(entity, interactionProviderProvider);
-        val hasAlreadyBeenEnlisted = isEnlisted(entity);
-        enlistCreatedInternal(entity, propertyChangeRecords);
-
-        if(!hasAlreadyBeenEnlisted) {
-            CallbackFacet.callCallback(entity, PersistedCallbackFacet.class);
-            postLifecycleEventIfRequired(entity, PersistedLifecycleEventFacet.class);
-        }
-    }
-
-    @Override
-    public void enlistDeleting(final ManagedObject entity) {
-        enlistDeleting(entity, null);
-    }
-
-    @Override
-    public void enlistDeleting(ManagedObject entity, final Can<PropertyChangeRecord> propertyChangeRecords) {
-        _Xray.enlistDeleting(entity, interactionProviderProvider);
-        enlistDeletingInternal(entity, propertyChangeRecords);
-        CallbackFacet.callCallback(entity, RemovingCallbackFacet.class);
-        postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
-    }
-
-    @Override
-    public void enlistUpdating(final ManagedObject entity) {
-        enlistUpdating(entity, null);
-    }
-
-    @Override
-    public void enlistUpdating(ManagedObject entity, final Can<PropertyChangeRecord> propertyChangeRecords) {
-        _Xray.enlistUpdating(entity, interactionProviderProvider);
-        val hasAlreadyBeenEnlisted = isEnlisted(entity);
-        // we call this come what may;
-        // additional properties may now have been changed, and the changeKind for publishing might also be modified
-        enlistUpdatingInternal(entity, propertyChangeRecords);
-
-        if(!hasAlreadyBeenEnlisted) {
-            // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so
-            CallbackFacet.callCallback(entity, UpdatingCallbackFacet.class);
-            postLifecycleEventIfRequired(entity, UpdatingLifecycleEventFacet.class);
-        }
-    }
-
-    @Override
-    public void recognizeLoaded(final ManagedObject entity) {
-        _Xray.recognizeLoaded(entity, interactionProviderProvider);
-        CallbackFacet.callCallback(entity, LoadedCallbackFacet.class);
-        postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);
-        numberEntitiesLoaded.increment();
-    }
-
-    @Override
-    public void recognizePersisting(final ManagedObject entity) {
-        _Xray.recognizePersisting(entity, interactionProviderProvider);
-        CallbackFacet.callCallback(entity, PersistingCallbackFacet.class);
-        postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
-    }
-
-    @Override
-    public void recognizeUpdating(final ManagedObject entity) {
-        _Xray.recognizeUpdating(entity, interactionProviderProvider);
-        CallbackFacet.callCallback(entity, UpdatedCallbackFacet.class);
-        postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
-    }
-
-    private final LongAdder numberEntitiesLoaded = new LongAdder();
-    private final LongAdder entityChangeEventCount = new LongAdder();
-    private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
 
 }

@@ -52,6 +52,7 @@ import org.apache.isis.core.runtimeservices.publish.CommandPublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.EntityChangesPublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.EntityPropertyChangePublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.ExecutionPublisherDefault;
+import org.apache.isis.core.runtimeservices.publish.LifecycleCallbackNotifier;
 import org.apache.isis.core.runtimeservices.publish.ObjectLifecyclePublisherDefault;
 import org.apache.isis.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault;
 import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
@@ -108,6 +109,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         ObjectIconServiceDefault.class,
         ObjectLifecyclePublisherDefault.class,
         ObjectMementoServiceDefault.class,
+        LifecycleCallbackNotifier.class,
         SchemaValueMarshallerDefault.class,
         ScratchpadDefault.class,
         SerializingAdapterDefault.class,

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -33,54 +35,50 @@ public interface EntityChangeTracker {
     /**
      * Publishing support: for object stores to enlist an object that has just been created,
      * capturing a dummy value <tt>'[NEW]'</tt> for the pre-modification value.
-     * <p>
-     * Fires the appropriate event and lifecycle callback: {@literal PERSISTED}
+     *
      * <p>
      * The post-modification values are captured when the transaction commits.
+     * </p>
      */
     void enlistCreated(ManagedObject entity);
-
-    void enlistCreated(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords);
-
-    /**
-     * Publishing support: for object stores to enlist an object that is about to be deleted,
-     * capturing the pre-deletion value of the properties of the {@link ManagedObject}.
-     * <p>
-     * Fires the appropriate event and lifecycle callback: {@literal REMOVING}
-     * <p>
-     * The post-modification values are captured  when the transaction commits.  In the case of deleted objects, a
-     * dummy value <tt>'[DELETED]'</tt> is used as the post-modification value.
-     */
-    void enlistDeleting(ManagedObject entity) ;
-
-    void enlistDeleting(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords);
 
     /**
      * Publishing support: for object stores to enlist an object that is about to be updated,
      * capturing the pre-modification values of the properties of the {@link ManagedObject}.
-     * <p>
-     * Fires the appropriate event and lifecycle callback: {@literal UPDATING}
+     *
      * <p>
      * The post-modification values are captured when the transaction commits.
+     *
+     * <p>
+     * Overload as an optimization for ORMs (specifically, JPA) where already have access to the changed records by
+     * accessing the ORM-specific data structures (<code>EntityManager</code>'s unit-of-work).
+     *
+     * </p>
+     *
+     * @param entity
+     * @param propertyChangeRecords - optional parameter (as a performance optimization) to provide the pre-computed {@link PropertyChangeRecord}s from the ORM.  JPA does this, JDO does not.
      */
-    void enlistUpdating(ManagedObject entity);
+    void enlistUpdating(ManagedObject entity, @Nullable Can<PropertyChangeRecord> propertyChangeRecords);
 
-    void enlistUpdating(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords);
-
-    /**
-     * Fires the appropriate event and lifecycle callback: {@literal LOADED}
-     */
-    void recognizeLoaded(ManagedObject entity);
-
-    /**
-     * Fires the appropriate event and lifecycle callback: {@literal PERSISTING}
-     */
-    void recognizePersisting(ManagedObject entity);
 
     /**
-     * Fires the appropriate event and lifecycle callback: {@literal UPDATING}
+     * Publishing support: for object stores to enlist an object that is about to be deleted,
+     * capturing the pre-deletion value of the properties of the {@link ManagedObject}.
+     *
+     * <p>
+     * The post-modification values are captured  when the transaction commits.  In the case of deleted objects, a
+     * dummy value <tt>'[DELETED]'</tt> is used as the post-modification value.
+     * </p>
      */
-    void recognizeUpdating(ManagedObject entity);
+    void enlistDeleting(ManagedObject entity) ;
+
+    /**
+     * Not strictly part of the concern of entity tracking, but allows the default implementation to also implement
+     * the {@link org.apache.isis.applib.services.metrics.MetricsService}.
+     */
+    void incrementLoaded(ManagedObject entity);
+
+
 
 
 }

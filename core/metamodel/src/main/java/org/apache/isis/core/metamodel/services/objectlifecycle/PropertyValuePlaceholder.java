@@ -25,6 +25,7 @@ package org.apache.isis.core.metamodel.services.objectlifecycle;
  */
 public enum PropertyValuePlaceholder {
 
+    UNKNOWN,
     NEW,
     DELETED
     ;

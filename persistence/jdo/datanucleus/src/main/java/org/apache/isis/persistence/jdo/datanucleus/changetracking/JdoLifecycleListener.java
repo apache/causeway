@@ -34,7 +34,9 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
+import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
@@ -65,8 +67,8 @@ implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListe
 DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener {
 
     private final @NonNull MetaModelContext metaModelContext;
-    private final @NonNull EventBusService eventBusService;
     private final @NonNull Provider<EntityChangeTracker> entityChangeTrackerProvider;
+    private final @NonNull ObjectLifecyclePublisher objectLifecyclePublisher;
 
     // -- CALLBACKS
 
@@ -92,7 +94,9 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("postLoad {}", ()->_Utils.debug(event));
         final Persistable pojo = _Utils.persistableFor(event);
         val entity = adaptEntityAndInjectServices(pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK);
-        getEntityChangeTracker().recognizeLoaded(entity);
+
+        objectLifecyclePublisher.onPostLoad(entity);
+
     }
 
     @Override
@@ -101,13 +105,11 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
         final Persistable pojo = _Utils.persistableFor(event);
 
-        eventBusService.post(PreStoreEvent.of(pojo));
-
         /* Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate
          * lifecycle callback. So filter for those events when initially persisting. */
         if(pojo.dnGetStateManager().isNew(pojo)) {
             val entity = adaptEntity(pojo, EntityAdaptingMode.SKIP_MEMOIZATION);
-            getEntityChangeTracker().recognizePersisting(entity);
+            objectLifecyclePublisher.onPrePersist(entity);
         }
     }
 
@@ -116,23 +118,22 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("postStore {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
-
         val entity = adaptEntityAndInjectServices(pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK);
 
-        eventBusService.post(PostStoreEvent.of(pojo));
+        if(EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
 
-        /* Called either when an entity is initially persisted, or when an entity is updated;
-         * fires the appropriate lifecycle callback.*/
-        if(pojo.dnGetStateManager().isNew(pojo)) {
+            /* Called either when an entity is initially persisted, or when an entity is updated;
+             * fires the appropriate lifecycle callback.*/
+            if(pojo.dnGetStateManager().isNew(pojo)) {
 
-            getEntityChangeTracker().enlistCreated(entity);
+                objectLifecyclePublisher.onPostPersist(entity);
 
-        } else {
-            // the callback and transaction.enlist are done in the preStore callback
-            // (can't be done here, as the enlist requires to capture the 'before' values)
-            getEntityChangeTracker().recognizeUpdating(entity);
+            } else {
+                // the callback and transaction.enlist are done in the preStore callback
+                // (can't be done here, as the enlist requires to capture the 'before' values)
+                objectLifecyclePublisher.onPostUpdate(entity);
+            }
         }
-
     }
 
 
@@ -142,7 +143,8 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
         final Persistable pojo = _Utils.persistableFor(event);
         val entity = adaptEntity(pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK);
-        getEntityChangeTracker().enlistUpdating(entity);
+
+        objectLifecyclePublisher.onPreUpdate(entity, null);
     }
 
     @Override
@@ -156,7 +158,8 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
         final Persistable pojo = _Utils.persistableFor(event);
         val entity = adaptEntity(pojo, EntityAdaptingMode.SKIP_MEMOIZATION);
-        getEntityChangeTracker().enlistDeleting(entity);
+
+        objectLifecyclePublisher.onPreRemove(entity);
     }
 
     @Override
