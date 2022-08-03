@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal.base;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -99,6 +100,13 @@ public final class _Temporals {
             .appendPattern("VV")
             .toFormatter(Locale.US); // arbitrarily picking a locale, just in case; (should have no effect)
 
+    public String formatZoneId(final ZoneId zoneId, final DateTimeFormatter zoneOnlyFormatter) {
+        return zoneOnlyFormatter.format(ZonedDateTime.ofInstant(Instant.EPOCH, zoneId));
+    }
+
+    public String formatZoneId(final ZoneId zoneId) {
+        return formatZoneId(zoneId, DEFAULT_ZONEID_ONLY_FORMAT);
+    }
 
     // -- TEMPORAL TO STRING CONVERTERS
 

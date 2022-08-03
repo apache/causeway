@@ -646,19 +646,17 @@ public abstract class ApplicationUser
     // -- IS FOR SELF OR RUN AS ADMINISTRATOR
 
     @Programmatic
-    public boolean isForSelfOrRunAsAdministrator() {
+    public boolean isForSelf() {
         val currentUser = currentUser();
         val currentUserName = currentUser.getName();
-        // is for self?
         val forSelf = Objects.equals(getUsername(), currentUserName);
-        if(forSelf) {
-            return true;
-        }
+        return forSelf;
+    }
 
-        // is runAsAdministrator?
-
+    @Programmatic
+    public boolean isRunAsAdministrator() {
+        val currentUser = currentUser();
         val adminRoleSuffix = ":" + getAdminRoleName();
-
         for (final RoleMemento role : currentUser.getRoles()) {
             final String roleName = role.getName();
             // format is realmName:roleName.
@@ -671,6 +669,11 @@ public abstract class ApplicationUser
         return false;
     }
 
+    @Programmatic
+    public boolean isForSelfOrRunAsAdministrator() {
+        return isForSelf()
+                || isRunAsAdministrator();
+    }
 
     // -- HELPERS
 
