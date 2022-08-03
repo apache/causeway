@@ -16,68 +16,75 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.webapp.impersonation;
+package org.apache.isis.core.webapp.keyvaluestore;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
-import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.applib.services.keyvaluestore.KeyValueSessionStore;
+
+import lombok.NonNull;
 
 /**
- * Implementation that supports impersonation, using the {@link HttpSession}
- * to store the value.
+ * Implementation that uses the {@link HttpSession}
+ * to store key/value pairs.
  *
  * @since 2.0 {@index}
  */
 @Component
-@Named("isis.webapp.ImpersonatedUserHolderUsingHttpSession")
+@Named("isis.webapp.KeyValueStoreUsingHttpSession")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-public class ImpersonatedUserHolderUsingHttpSession implements ImpersonatedUserHolder {
-
-    private static final String HTTP_SESSION_KEY_IMPERSONATED_USER =
-            ImpersonatedUserHolderUsingHttpSession.class.getName() + "#userMemento";
+public class KeyValueStoreUsingHttpSession implements KeyValueSessionStore {
 
     @Override
-    public boolean supportsImpersonation() {
+    public boolean isSessionAvailable() {
         return httpSession().isPresent();
     }
 
     @Override
-    public void setUserMemento(final UserMemento userMemento) {
+    public void put(final @NonNull String key, final @Nullable Serializable value) {
+        if(value==null) {
+            clear(key);
+            return;
+        }
         httpSession()
         .ifPresent(session->
-            session.setAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER, userMemento));
+            session.setAttribute(key, value));
     }
 
     @Override
-    public Optional<UserMemento> getUserMemento() {
+    public <T extends Serializable>
+    Optional<T> lookupAs(final @NonNull String key, final @NonNull Class<T> requiredType) {
         return httpSession()
-            .map(session->session.getAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER))
-            .filter(UserMemento.class::isInstance)
-            .map(UserMemento.class::cast);
+                .map(session->session.getAttribute(key))
+                .filter(requiredType::isInstance)
+                .map(requiredType::cast);
     }
 
     @Override
-    public void clearUserMemento() {
+    public void clear(final @NonNull String key) {
         httpSession()
         .ifPresent(session->
-            session.removeAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER));
+            session.removeAttribute(key));
     }
+
+    // -- HELPER
 
     private static Optional<HttpSession> httpSession() {
         return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
                 .filter(ServletRequestAttributes.class::isInstance)
                 .map(ServletRequestAttributes.class::cast)
                 .map(ServletRequestAttributes::getRequest)
-                .map(x -> x.getSession(false));
+                .map(x -> x.getSession(false)); // asks for session without side-effects
     }
 
 }

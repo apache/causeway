@@ -16,71 +16,54 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.user;
+package org.apache.isis.core.runtimeservices.impersonation;
 
 import java.util.Optional;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.keyvaluestore.KeyValueSessionStore;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
-/**
- * Used by the framework's default implementation of {@link org.apache.isis.applib.services.user.UserService} to
- * allow the current user to be temporarily impersonated.
- *
- * <p>
- *     The intention is that viewers provide an implementation of this service..
- *     Note that the Wicket viewer <i>does</i> implement this service and
- *     uses an {@link javax.servlet.http.HttpSession}; this will have the
- *     side-effect of making REST API potentially non stateful.
- * </p>
- *
- * <p>
- *     The default implementation does <i>not</i> support impersonation.
- * </p>
- */
-@Service
+@Component
 @Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ImpersonatedUserHolderDefault")
-@javax.annotation.Priority(PriorityPrecedence.LAST)
-@Qualifier("Default")
+@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ImpersonatedUserHolderDefault implements ImpersonatedUserHolder {
 
-    /**
-     * Returns <code>false</code>, as this implementation does <i>not</i>
-     * support impersonation.
-     */
+    private static final String SESSION_KEY_IMPERSONATED_USER =
+            ImpersonatedUserHolderDefault.class.getName() + "#userMemento";
+
+    @Inject private Optional<KeyValueSessionStore> keyValueSessionStore;
+
     @Override
     public boolean supportsImpersonation() {
-        return false;
+        return keyValueSessionStore
+            .map(KeyValueSessionStore::isSessionAvailable)
+            .orElse(false);
     }
 
-    /**
-     * Simply throws an exception.
-     */
     @Override
     public void setUserMemento(final UserMemento userMemento) {
-        throw new RuntimeException("This implementation does not support impersonation");
+        keyValueSessionStore
+            .ifPresent(store->store.put(SESSION_KEY_IMPERSONATED_USER, userMemento));
     }
 
-    /**
-     * Simply returns an empty Optional.
-     */
     @Override
     public Optional<UserMemento> getUserMemento() {
-        return Optional.empty();
+        return keyValueSessionStore
+            .flatMap(store->store.lookupAs(SESSION_KEY_IMPERSONATED_USER, UserMemento.class));
     }
 
-    /**
-     * No-op
-     */
     @Override
     public void clearUserMemento() {
+        keyValueSessionStore
+            .ifPresent(store->store.clear(SESSION_KEY_IMPERSONATED_USER));
     }
 
 }

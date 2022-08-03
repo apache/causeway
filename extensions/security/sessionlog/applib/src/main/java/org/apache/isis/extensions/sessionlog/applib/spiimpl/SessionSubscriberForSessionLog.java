@@ -40,7 +40,6 @@ import org.apache.isis.extensions.sessionlog.applib.dom.SessionLogEntryRepositor
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Implementation of the Isis {@link SessionSubscriber} creates a log
@@ -52,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(SessionSubscriberForSessionLog.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("sessionlog")
-@Log4j2
+//@Log4j2
 public class SessionSubscriberForSessionLog implements SessionSubscriber {
 
     static final String LOGICAL_TYPE_NAME = IsisModuleExtSessionLogApplib.NAMESPACE + ".SessionLoggingServiceDefault";
