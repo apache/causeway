@@ -41,9 +41,12 @@ import org.apache.isis.applib.value.Clob;
  * Domain semantics for domain object property.
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@DomainObject(nature=Nature.MIXIN, mixinMethod = Property.MIXIN_METHOD) // meta annotation, only applies at class level
 public @interface Property {
+
+    final static String MIXIN_METHOD = "prop";
 
     /**
      * Indicates that changes to the property that should be posted to the

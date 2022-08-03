@@ -33,9 +33,12 @@ import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
  * Domain semantics for domain object collection.
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@DomainObject(nature=Nature.MIXIN, mixinMethod = Collection.MIXIN_METHOD) // meta annotation, only applies at class level
 public @interface Collection {
+
+    final static String MIXIN_METHOD = "coll";
 
     /**
      * Indicates that changes to the collection that should be posted to the

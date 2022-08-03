@@ -19,7 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
+import java.util.Arrays;
+
+import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -40,8 +47,10 @@ public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract im
 
         final Class<?> candidateMixinType = processClassContext.getCls();
 
-        final Mixin mixinAnnotation = candidateMixinType.getAnnotation(Mixin.class);
-        if(mixinAnnotation == null) {
+        final boolean mixinAnnotation = Arrays.stream(candidateMixinType.getAnnotations())
+                .anyMatch(a -> Lists.newArrayList(Mixin.class, Action.class, Property.class, Collection.class)
+                        .contains(a.annotationType()));
+        if(!mixinAnnotation) {
             return;
         }
 

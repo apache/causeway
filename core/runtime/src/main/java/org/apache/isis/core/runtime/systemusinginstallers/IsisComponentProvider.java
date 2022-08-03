@@ -42,6 +42,7 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.vfs.Vfs;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -49,6 +50,7 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript;
@@ -200,6 +202,9 @@ public abstract class IsisComponentProvider {
         final Set<Class<?>> domainObjectTypes = Sets.newLinkedHashSet();
         domainObjectTypes.addAll(reflections.getTypesAnnotatedWith(DomainObject.class));
         domainObjectTypes.addAll(reflections.getTypesAnnotatedWith(DomainObjectLayout.class));
+        // v2 remove annotations with DomainObject
+        domainObjectTypes.removeAll(Lists.newArrayList(Action.class, Property.class,
+                org.apache.isis.applib.annotation.Collection.class));
 
         final Set<Class<?>> mixinTypes = Sets.newHashSet();
         mixinTypes.addAll(reflections.getTypesAnnotatedWith(Mixin.class));

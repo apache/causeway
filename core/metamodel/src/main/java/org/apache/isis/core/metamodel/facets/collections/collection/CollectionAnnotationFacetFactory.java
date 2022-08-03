@@ -19,18 +19,24 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.Optional;
 
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionInteraction;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.PostsCollectionAddedToEvent;
 import org.apache.isis.applib.annotation.PostsCollectionRemovedFromEvent;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -44,6 +50,10 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
+import org.apache.isis.core.metamodel.facets.actions.layout.NotContributedFacetForActionLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.layout.NotContributedFacetForLayoutProperties;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForDisabledAnnotationOnCollection;
@@ -97,11 +107,30 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+        inferIntentWhenOnTypeLevel(processMethodContext);
+
         processModify(processMethodContext);
         processHidden(processMethodContext);
         processEditing(processMethodContext);
         processNotPersisted(processMethodContext);
         processTypeOf(processMethodContext);
+    }
+
+    // Added to support v2
+    void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext) {
+        // Verify that @Collection is on type and method to process == coll
+        final Annotation colAnno=processMethodContext.getFacetHolder().getOwningType().getAnnotation(Collection.class);
+        if(colAnno==null || !processMethodContext.getMethod().getName().equals(Collection.MIXIN_METHOD)) {
+            return; // no @Collection found neither type nor method
+        }
+
+        //[1998] if @Collection detected on method or type level infer:
+        //@Action(semantics=SAFE)
+        //@ActionLayout(contributed=ASSOCIATION) ... it seems, is already allowed for mixins
+        final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
+        FacetUtil.addFacet(new ActionSemanticsFacetAbstract(ActionSemantics.Of.SAFE, facetedMethod) {});
+        FacetUtil.addFacet(new NotContributedFacetForLayoutProperties(NotContributed.As.from(Contributed.AS_ASSOCIATION),
+                processMethodContext.getFacetHolder()));
     }
 
     void processModify(final ProcessMethodContext processMethodContext) {

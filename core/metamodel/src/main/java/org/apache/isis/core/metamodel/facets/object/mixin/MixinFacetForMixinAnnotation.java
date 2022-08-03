@@ -20,8 +20,16 @@
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
 
+import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -43,10 +51,21 @@ public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
     public static MixinFacet create(
             final Class<?> candidateMixinType, final FacetHolder facetHolder,
             final ServicesInjector servicesInjector) {
-        final Mixin mixin = candidateMixinType.getAnnotation(Mixin.class);
-        if(mixin == null) {
+
+        // v2 support new mixin annotations
+        String mixinMethod = Optional.ofNullable(candidateMixinType.getAnnotation(Mixin.class))
+                .map(m -> m.method()).orElse(null);
+        if(mixinMethod == null) {
+            int i = Arrays.stream(candidateMixinType.getAnnotations())
+                    .map(a -> Lists.newArrayList(Action.class, Property.class, Collection.class)
+                            .indexOf(a.annotationType())).findFirst().orElse(-1);
+            mixinMethod = i >= 0 ? new String[]{Action.MIXIN_METHOD, Property.MIXIN_METHOD, Collection.MIXIN_METHOD}[i]
+                    : null;
+        }
+        if(mixinMethod == null) {
             return null;
         }
+
         final Constructor<?>[] constructors = candidateMixinType.getConstructors();
         for (Constructor<?> constructor : constructors) {
             final Class<?>[] constructorTypes = constructor.getParameterTypes();
@@ -54,7 +73,7 @@ public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
                 continue;
             }
             final Class<?> constructorType = constructorTypes[0];
-            return new MixinFacetForMixinAnnotation(candidateMixinType, mixin.method(), constructorType, facetHolder, servicesInjector);
+            return new MixinFacetForMixinAnnotation(candidateMixinType, mixinMethod, constructorType, facetHolder, servicesInjector);
         }
         return null;
     }
