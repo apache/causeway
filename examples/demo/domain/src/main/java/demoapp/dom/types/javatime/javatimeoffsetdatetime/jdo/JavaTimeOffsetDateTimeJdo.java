@@ -52,6 +52,7 @@ public class JavaTimeOffsetDateTimeJdo                                          
     public JavaTimeOffsetDateTimeJdo(final java.time.OffsetDateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
+        this.readWritePropertyNoTimeZoneTranslation = initialValue;
     }
 
 //tag::class[]
@@ -78,6 +79,10 @@ public class JavaTimeOffsetDateTimeJdo                                          
     @Column(allowsNull = "true")
     @Getter @Setter
     private java.time.OffsetDateTime readWriteOptionalProperty;
+
+    @Column(allowsNull = "false")
+    @Getter @Setter
+    private java.time.OffsetDateTime readWritePropertyNoTimeZoneTranslation;
 
 }
 //end::class[]

@@ -39,7 +39,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHolder3;
+import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHolder4;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,7 +50,7 @@ import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHo
         nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeOffsetTimeVm
-        implements HasAsciiDocDescription, JavaTimeOffsetTimeHolder3 {
+        implements HasAsciiDocDescription, JavaTimeOffsetTimeHolder4 {
 
 //end::class[]
     public JavaTimeOffsetTimeVm(final java.time.OffsetTime initialValue) {
@@ -62,7 +62,7 @@ public class JavaTimeOffsetTimeVm
     @Title(prepend = "java.time.OffsetTime view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
-    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetTimeAdapter.class)               // <.>
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetTimeAdapter.class)           // <.>
     @Getter @Setter
     private java.time.OffsetTime readOnlyProperty;
 
@@ -84,6 +84,10 @@ public class JavaTimeOffsetTimeVm
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetTimeAdapter.class)
     @Getter @Setter
     private java.time.OffsetTime readWriteOptionalProperty;
+
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetTimeAdapter.class)
+    @Getter @Setter
+    private java.time.OffsetTime readWritePropertyNoTimeZoneTranslation;
 
 }
 //end::class[]

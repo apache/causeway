@@ -24,14 +24,14 @@ import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHolder3;
+import demoapp.dom.types.javatime.javatimeoffsettime.holder.JavaTimeOffsetTimeHolder4;
 
 @Named("demo.JavaTimeOffsetTimeEntity") // shared permissions with concrete sub class
 @DomainObject
 public abstract class JavaTimeOffsetTimeEntity
 implements
     HasAsciiDocDescription,
-    JavaTimeOffsetTimeHolder3,
+    JavaTimeOffsetTimeHolder4,
     ValueHolder<java.time.OffsetTime> {
 
     @Override

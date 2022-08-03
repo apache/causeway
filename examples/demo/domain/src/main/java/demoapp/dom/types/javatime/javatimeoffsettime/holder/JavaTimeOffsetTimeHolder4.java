@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimezoneddatetime.holder;
+package demoapp.dom.types.javatime.javatimeoffsettime.holder;
 
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.LabelPosition;
@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.applib.annotation.Where;
 
 //tag::class[]
-public interface JavaTimeZonedDateTimeHolder4 extends JavaTimeZonedDateTimeHolder3 {
+public interface JavaTimeOffsetTimeHolder4 extends JavaTimeOffsetTimeHolder3 {
 
     @Property
     @ValueSemantics(timeZoneTranslation = TimeZoneTranslation.NONE)
@@ -36,7 +36,7 @@ public interface JavaTimeZonedDateTimeHolder4 extends JavaTimeZonedDateTimeHolde
             labelPosition = LabelPosition.TOP,
             hidden = Where.ALL_TABLES,
             fieldSetId = "time-zone-translation", sequence = "1")
-    default java.time.ZonedDateTime getReadOnlyPropertyNoTimeZoneTranslation() {
+    default java.time.OffsetTime getReadOnlyPropertyNoTimeZoneTranslation() {
         return getReadOnlyProperty();
     }
 
@@ -47,8 +47,8 @@ public interface JavaTimeZonedDateTimeHolder4 extends JavaTimeZonedDateTimeHolde
             labelPosition = LabelPosition.TOP,
             hidden = Where.ALL_TABLES,
             fieldSetId = "time-zone-translation", sequence = "2")
-    java.time.ZonedDateTime getReadWritePropertyNoTimeZoneTranslation();
-    void setReadWritePropertyNoTimeZoneTranslation(final java.time.ZonedDateTime temporal);
+    java.time.OffsetTime getReadWritePropertyNoTimeZoneTranslation();
+    void setReadWritePropertyNoTimeZoneTranslation(final java.time.OffsetTime temporal);
 
 }
 //end::class[]

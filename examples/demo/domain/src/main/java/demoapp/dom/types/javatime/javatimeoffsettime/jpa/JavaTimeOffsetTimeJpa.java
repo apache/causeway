@@ -60,6 +60,7 @@ public class JavaTimeOffsetTimeJpa
     public JavaTimeOffsetTimeJpa(final java.time.OffsetTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
+        this.readWritePropertyNoTimeZoneTranslation = initialValue;
     }
 
 //tag::class[]
@@ -90,6 +91,10 @@ public class JavaTimeOffsetTimeJpa
     @Column(nullable = true)
     @Getter @Setter
     private java.time.OffsetTime readWriteOptionalProperty;
+
+    @Column(nullable = false)
+    @Getter @Setter
+    private java.time.OffsetTime readWritePropertyNoTimeZoneTranslation;
 
 }
 //end::class[]
