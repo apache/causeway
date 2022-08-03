@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  */
 public interface BadgeRenderer {
 
-    String render(String text, Supplier<String> tooltipProvider);
+    String render(String text, Supplier<String> faIconProvider, Supplier<String> tooltipProvider);
 
     // -- FACTORIES
 
@@ -35,20 +35,21 @@ public interface BadgeRenderer {
      * non-html, text only; ignoring tooltip
      */
     public static BadgeRenderer textual() {
-        return (text, tooltipProvider)->text;
+        return (text, faIconProvider, tooltipProvider)->text;
     }
 
     /**
      * Depends on presence of <i>Bootstrap</i>.
      */
     public static BadgeRenderer bootstrapBadgeWithTooltip() {
-        return (text, tooltipProvider)->String.format("<span "
-                + "class=\"badge bg-secondary\" "
+        return (text, faIconProvider, tooltipProvider)->String.format("<span "
+                + "class=\"badge bg-light\" "
                 + "data-bs-container=\"body\" "
                 + "data-bs-toggle=\"tooltip\" "
                 + "title=\"%s\">"
+                + "<i class=\"%s\"></i>"
                 + "%s"
-                + "</span>", tooltipProvider.get(), text);
+                + "</span>", tooltipProvider.get(), faIconProvider.get(), text);
     }
 
 }

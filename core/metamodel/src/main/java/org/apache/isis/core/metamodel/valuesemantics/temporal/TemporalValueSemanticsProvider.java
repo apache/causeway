@@ -234,8 +234,9 @@ implements TemporalValueSemantics<T> {
                         sb.append(' ');
 
                         sb.append(badgeRenderer.render(
-                                translate("local"),
-                                ()->translate("time instant")
+                                "", // no text
+                                ()->"fa-solid fa-user-clock",
+                                ()->translate("Instant")
                                     + ": "
                                     + temporalNoZoneRenderingFormat.format(time)
                                     + " "
@@ -254,6 +255,7 @@ implements TemporalValueSemantics<T> {
 
                         sb.append(badgeRenderer.render(
                                 temporalZoneOnlyRenderingFormat.format(time),
+                                ()->"fa-solid fa-globe",
                                 ()->translate("your local time")
                                     + ": "
                                     + temporalNoZoneRenderingFormat.format(asLocalTime)));
