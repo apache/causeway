@@ -105,6 +105,17 @@ public final class Annotations  {
                 return annotationFromInterface;
             }
         }
+
+        // Search meta annotations
+        final Annotation[] annotations = cls.getAnnotations();
+        for(Annotation an:annotations){
+            if(!an.annotationType().getPackage().getName().startsWith("java.lang.annotation")) {
+                final T annotationFromAnnotation = getAnnotation(an.annotationType(), annotationClass);
+                if (annotationFromAnnotation != null) {
+                    return annotationFromAnnotation;
+                }
+            }
+        }
         return null;
     }
 

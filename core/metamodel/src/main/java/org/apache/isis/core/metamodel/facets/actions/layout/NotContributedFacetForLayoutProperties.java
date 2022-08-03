@@ -38,7 +38,7 @@ public class NotContributedFacetForLayoutProperties extends NotContributedFacetA
         return contributed != null? new NotContributedFacetForLayoutProperties(NotContributed.As.from(contributed), holder): null;
     }
 
-    private NotContributedFacetForLayoutProperties(
+    public NotContributedFacetForLayoutProperties(
             final NotContributed.As as,
             final FacetHolder holder) {
         super(as, holder);

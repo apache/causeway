@@ -37,10 +37,12 @@ import org.apache.isis.applib.services.publish.PublisherService;
  * Domain semantics for domain object collection.
  */
 @Inherited
-@Target({ ElementType.METHOD })
+@Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@DomainObject(nature=Nature.MIXIN, mixinMethod = Action.MIXIN_METHOD) // meta annotation, only applies at class level
 public @interface Action {
 
+    final static String MIXIN_METHOD = "act";
 
     /**
      * Indicates that an invocation of the action should be posted to the
@@ -127,12 +129,14 @@ public @interface Action {
     /**
      * Whether the action invocation should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
      */
+    @Deprecated
     CommandReification command() default CommandReification.AS_CONFIGURED;
 
     /**
      * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
      * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
      */
+    @Deprecated
     CommandPersistence commandPersistence() default CommandPersistence.PERSISTED;
 
     /**
@@ -144,6 +148,7 @@ public @interface Action {
      * will be set to this value.
      * </p>
      */
+    @Deprecated
     CommandExecuteIn commandExecuteIn() default CommandExecuteIn.FOREGROUND;
 
     /**
@@ -174,6 +179,7 @@ public @interface Action {
      * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
      * </p>
      */
+    @Deprecated
     Publishing publishing() default Publishing.AS_CONFIGURED;
 
     /**
@@ -227,6 +233,7 @@ public @interface Action {
      *     (in the Wicket UI, at least).
      * </p>
      */
+    @Deprecated
     String associateWith() default "";
 
     /**
@@ -241,6 +248,7 @@ public @interface Action {
      *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
      * </p>
      */
+    @Deprecated
     String associateWithSequence() default "1";
 
 

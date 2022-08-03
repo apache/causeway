@@ -19,7 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
+import java.util.Arrays;
+
+import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
