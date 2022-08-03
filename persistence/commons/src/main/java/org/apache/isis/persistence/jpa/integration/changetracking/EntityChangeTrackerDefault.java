@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
-import java.util.function.Consumer;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -109,7 +108,6 @@ implements
     @Getter(AccessLevel.PACKAGE)
     private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
 
-
     private final EntityPropertyChangePublisher entityPropertyChangePublisher;
     private final EntityChangesPublisher entityChangesPublisher;
     private final Provider<InteractionProvider> interactionProviderProvider;
@@ -130,16 +128,35 @@ implements
         this.interactionProviderProvider = interactionProviderProvider;
     }
 
-    private boolean isEnlistedWrtChangeKind(final @NonNull ManagedObject adapter) {
-        return ManagedObjects.bookmark(adapter)
-        .map(changeKindByEnlistedAdapter::containsKey)
-        .orElse(false);
-    }
-
     Set<PropertyChangeRecord> snapshotPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
         return entityPropertyChangeRecordsForPublishing.get();
+    }
+
+    /**
+     * For any enlisted Object Properties collects those, that are meant for publishing,
+     * then clears enlisted objects.
+     */
+    private Set<PropertyChangeRecord> capturePostValuesAndDrain() {
+
+        val records = enlistedPropertyChangeRecordsById.values().stream()
+                // set post values, which have been left empty up to now
+                .peek(rec -> {
+                    // assuming this check correctly detects deleted entities (JDO)
+                    if(ManagedObjects.EntityUtil.isDetachedOrRemoved(rec.getEntity())) {
+                        rec.withPostValueSetToDeleted();
+                    } else {
+                        rec.withPostValueSetToCurrent();
+                    }
+                })
+                .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
+                .collect(_Sets.toUnmodifiable());
+
+        enlistedPropertyChangeRecordsById.clear();
+
+        return records;
+
     }
 
     private boolean isEntityExcludedForChangePublishing(ManagedObject entity) {
@@ -264,30 +281,6 @@ implements
         return false;
     }
 
-    /**
-     * For any enlisted Object Properties collects those, that are meant for publishing,
-     * then clears enlisted objects.
-     */
-    private Set<PropertyChangeRecord> capturePostValuesAndDrain() {
-
-        val records = enlistedPropertyChangeRecordsById.values().stream()
-                // set post values, which have been left empty up to now
-                .peek(rec -> {
-                    // assuming this check correctly detects deleted entities (JDO)
-                    if(ManagedObjects.EntityUtil.isDetachedOrRemoved(rec.getEntity())) {
-                        rec.updatePostValueAsDeleted();
-                    } else {
-                        rec.updatePostValueWithCurrent();
-                    }
-                })
-                .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
-                .collect(_Sets.toUnmodifiable());
-
-        enlistedPropertyChangeRecordsById.clear();
-
-        return records;
-
-    }
 
     // side-effect free, used by XRay
     long countPotentialPropertyChangeRecords() {
@@ -308,7 +301,11 @@ implements
         log.debug("enlist entity's property changes for publishing {}", entity);
         enlistForChangeKindPublishing(entity, EntityChangeKind.CREATE);
 
-        enlistForCreateOrUpdate(entity, PropertyChangeRecord::updatePreValueAsNew);
+        entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
+                .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
+                .map(property -> PropertyChangeRecordId.of(entity, property))
+                .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
+                .forEach(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofNew(pcrId)));
     }
 
     @Override
@@ -331,23 +328,20 @@ implements
             ormPropertyChangeRecords
                     .stream()
                     .filter(pcr -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(pcr.getProperty()))
-                    .forEach(pcr -> this.enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr)); // if already known, then we don't replace (keep first pre-value we know about)
+                    .filter(pcr -> ! enlistedPropertyChangeRecordsById.containsKey(pcr.getId())) // only if not previously seen
+                    .forEach(pcr -> this.enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
         } else {
             // home-grown approach
             log.debug("enlist entity's property changes for publishing {}", entity);
 
-            enlistForCreateOrUpdate(entity, PropertyChangeRecord::updatePreValueWithCurrent);
+            entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
+                    .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
+                    .map(property -> PropertyChangeRecordId.of(entity, property))
+                    .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
+                    .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
+                    .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
+                    .forEach(PropertyChangeRecord::withPreValueSetToCurrent);
         }
-    }
-
-    private void enlistForCreateOrUpdate(ManagedObject entity, Consumer<PropertyChangeRecord> propertyChangeRecordConsumer) {
-        entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
-                .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-                .map(property -> PropertyChangeRecordId.of(entity, property))
-                .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
-                .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.of(pcrId)))
-                .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
-                .forEach(propertyChangeRecordConsumer);
     }
 
 
@@ -370,11 +364,7 @@ implements
                     .filter(property -> EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
                     .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
                     .map(property -> PropertyChangeRecordId.of(entity, property))
-                    .map(pcrId -> enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, PropertyChangeRecord::of))
-                    .forEach(pcr -> {
-                        pcr.updatePreValueWithCurrent();
-                        pcr.updatePostValueAsDeleted();
-                    });
+                    .forEach(pcrId -> enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, id -> PropertyChangeRecord.ofDeleting(id)));
         }
     }
 

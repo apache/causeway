@@ -116,10 +116,9 @@ public class IsisEntityListener {
                     return entity
                             .getSpecification()
                             .getProperty(propertyName)
-                            .filter(property->!property.isMixedIn())
-                            .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-                            .map(property->PropertyChangeRecord.of(PropertyChangeRecordId.of(entity, property),
-                                                                   PreAndPostValue.pre(ormChangeRecord.getOldValue())))
+                            .filter(property -> !property.isMixedIn())
+                            .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
+                            .map(property -> PropertyChangeRecord.ofCurrent(PropertyChangeRecordId.of(entity, property), ormChangeRecord.getOldValue()))
                             .orElse(null); // ignore
                 })
                 .collect(Can.toCan()); // a Can<T> only collects non-null elements

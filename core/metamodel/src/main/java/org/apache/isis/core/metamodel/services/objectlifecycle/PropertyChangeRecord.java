@@ -38,34 +38,43 @@ import lombok.val;
 @ToString(of = {"id"})
 public final class PropertyChangeRecord {
 
-    @Getter
-    private final PropertyChangeRecordId id;
+    @Getter private final PropertyChangeRecordId id;
+    @Getter private PreAndPostValue preAndPostValue;
 
     public ManagedObject getEntity() {return id.getEntity();}
     public OneToOneAssociation getProperty() {return id.getProperty();}
     public Bookmark getBookmark() {return id.getBookmark();}
     public String getPropertyId() {return id.getPropertyId();}
 
-    @Getter private PreAndPostValue preAndPostValue;
 
+    public static PropertyChangeRecord ofNew(
+            final @NonNull PropertyChangeRecordId pcrId) {
+        return new PropertyChangeRecord(pcrId)
+                        .withPreValueSetToNew();
+    }
 
-    public static @NonNull PropertyChangeRecord of(
+    public static PropertyChangeRecord ofCurrent(
+            final @NonNull PropertyChangeRecordId pcrId) {
+        return new PropertyChangeRecord(pcrId)
+                        .withPreValueSetToCurrent();
+    }
+
+    public static PropertyChangeRecord ofCurrent(
+            final @NonNull PropertyChangeRecordId pcrId,
+            final Object currentValue) {
+        return new PropertyChangeRecord(pcrId)
+                        .withPreValueSetTo(currentValue);
+    }
+
+    public static PropertyChangeRecord ofDeleting(
             final @NonNull PropertyChangeRecordId id) {
-        return new PropertyChangeRecord(id, PreAndPostValue.pre(PropertyValuePlaceholder.NEW));
+        return new PropertyChangeRecord(id)
+                        .withPreValueSetToCurrent()
+                        .withPostValueSetToDeleted();
     }
 
-    public static PropertyChangeRecord of(
-            final @NonNull PropertyChangeRecordId id,
-            final @NonNull PreAndPostValue preAndPostValue) {
-        return new PropertyChangeRecord(id, preAndPostValue);
-    }
-
-    private PropertyChangeRecord(
-            final @NonNull PropertyChangeRecordId id,
-            final PreAndPostValue preAndPostValue) {
-
+    private PropertyChangeRecord(final @NonNull PropertyChangeRecordId id) {
         this.id = id;
-        this.preAndPostValue = preAndPostValue;
     }
 
     public String getLogicalMemberIdentifier() {
@@ -74,20 +83,30 @@ public final class PropertyChangeRecord {
         return target.getLogicalTypeName() + "#" + propertyId;
     }
 
-    public void updatePreValueAsNew() {
-        preAndPostValue = PreAndPostValue.pre(PropertyValuePlaceholder.NEW);
+    public PropertyChangeRecord withPreValueSetToNew() {
+        return withPreValueSetTo(PropertyValuePlaceholder.NEW);
     }
 
-    public void updatePreValueWithCurrent() {
-        preAndPostValue = PreAndPostValue.pre(getPropertyValue());
+    public PropertyChangeRecord withPreValueSetToCurrent() {
+        return withPreValueSetTo(getPropertyValue());
     }
 
-    public void updatePostValueWithCurrent() {
-        preAndPostValue = preAndPostValue.withPost(getPropertyValue());
+    public PropertyChangeRecord withPostValueSetToCurrent() {
+        return withPostValueSetTo(getPropertyValue());
     }
 
-    public void updatePostValueAsDeleted() {
-        preAndPostValue = preAndPostValue.withPost(PropertyValuePlaceholder.DELETED);
+    public PropertyChangeRecord withPostValueSetToDeleted() {
+        return withPostValueSetTo(PropertyValuePlaceholder.DELETED);
+    }
+
+    private PropertyChangeRecord withPreValueSetTo(Object preValue) {
+        this.preAndPostValue = PreAndPostValue.pre(preValue);
+        return this;
+    }
+
+    private PropertyChangeRecord withPostValueSetTo(Object postValue) {
+        this.preAndPostValue = preAndPostValue.withPost(postValue);
+        return this;
     }
 
 
