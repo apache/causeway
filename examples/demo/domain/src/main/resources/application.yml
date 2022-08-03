@@ -107,7 +107,7 @@ isis:
 # schema auto creation etc. ...
   persistence:
     schema:
-       autoCreateSchemas: isisExtensionsSecman,isisExtCommandLog,isisExtExecutionLog,demo
+       autoCreateSchemas: isisExtSecman,isisExtCommandLog,isisExtExecutionLog,demo
 
   extensions:
     secman:

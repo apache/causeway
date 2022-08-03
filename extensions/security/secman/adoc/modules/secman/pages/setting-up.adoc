@@ -100,7 +100,7 @@ Add the database schema used by the SecMan entities to the configuration file:
 isis:
   persistence:
     schema:
-      auto-create-schemas: isisExtensionsSecman
+      auto-create-schemas: isisExtSecman
 ----
 
 Optionally, modify the configuration properties for Secman itself:
