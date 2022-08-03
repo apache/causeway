@@ -15,8 +15,9 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.isis.persistence.jdo.integration.changetracking;
+package org.apache.isis.persistence.jpa.integration.changetracking;
 
 import java.awt.Color;
 
@@ -34,7 +35,7 @@ import lombok.val;
 final class _Xray {
 
     public static void publish(
-            final EntityChangeTrackerJdo entityChangeTrackerDefault,
+            final EntityChangeTrackerDefault entityChangeTrackerDefault,
             final Provider<InteractionProvider> interactionProviderProvider) {
 
         if(!XrayUi.isXrayEnabled()) {

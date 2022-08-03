@@ -15,6 +15,7 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
 package org.apache.isis.persistence.jpa.integration.changetracking;
 
@@ -92,12 +93,12 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.transaction.EntityChangeTrackerJpa")
+@Named("isis.persistence.commons.EntityChangeTrackerDefault")
 @Priority(PriorityPrecedence.EARLY)
-@Qualifier("jdo")
+@Qualifier("default")
 @InteractionScope
 @Log4j2
-public class EntityChangeTrackerJpa
+public class EntityChangeTrackerDefault
 extends PersistenceCallbackHandlerAbstract
 implements
     MetricsService,
@@ -148,7 +149,7 @@ implements
     private final Provider<InteractionProvider> interactionProviderProvider;
 
     @Inject
-    public EntityChangeTrackerJpa(
+    public EntityChangeTrackerDefault(
             final EntityPropertyChangePublisher entityPropertyChangePublisher,
             final EntityChangesPublisher entityChangesPublisher,
             final EventBusService eventBusService,
@@ -225,7 +226,6 @@ implements
             return false; // ignore entities that are not enabled for entity change publishing
         }
 
-        // if home-grown
         if(entityPropertyChangeRecordsForPublishing.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
@@ -260,14 +260,17 @@ implements
 
     private void postPublishing() {
         log.debug("purging entity change records");
+
+        // if ORM provided property change records ... as in JPA
         this.enlistedPropertyChangesOfCreated.clear();
         this.enlistedPropertyChangesOfUpdated.clear();
         this.enlistedPropertyChangesOfDeleted.clear();
 
-//        propertyChangeRecordsById.clear();
-        changeKindByEnlistedAdapter.clear();
-//        entityPropertyChangeRecordsForPublishing.clear();
+        // if instead we had to infer ourselves (home-grown)... as in JDO
+        propertyChangeRecordsById.clear();
+        entityPropertyChangeRecordsForPublishing.clear();
 
+        changeKindByEnlistedAdapter.clear();
         entityChangeEventCount.reset();
         numberEntitiesLoaded.reset();
     }
