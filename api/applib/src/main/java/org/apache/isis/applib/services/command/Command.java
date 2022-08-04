@@ -243,6 +243,16 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      *     and replayed on another system, eg for regression testing.
      * </p>
      *
+     * <p>
+     *     Note that this flag will only be accurate if the <i>Audit Trail</i> extension (or equivalent) is configured
+     *     to actually set it.
+     * </p>
+     *
+     * <p>
+     *     See also the <code>isis.extensions.command-log.publish-policy</code> configuration property, that controls
+     *     whether the <i>Command Log</i> extension checks this flag or not.
+     * </p>
+     *
      */
     @Getter
     private boolean systemStateChanged;
