@@ -65,12 +65,12 @@ import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityChanges;
-import org.apache.isis.core.transaction.changetracking.PersistenceCallbackHandlerAbstract;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -82,9 +82,9 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("default")
 @InteractionScope
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class EntityChangeTrackerDefault
-extends PersistenceCallbackHandlerAbstract
 implements
     MetricsService,
     EntityChangeTracker,
@@ -108,25 +108,13 @@ implements
     @Getter(AccessLevel.PACKAGE)
     private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
 
-    private final EntityPropertyChangePublisher entityPropertyChangePublisher;
-    private final EntityChangesPublisher entityChangesPublisher;
-    private final Provider<InteractionProvider> interactionProviderProvider;
-
     private final LongAdder numberEntitiesLoaded = new LongAdder();
     private final LongAdder entityChangeEventCount = new LongAdder();
     private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
 
-    @Inject
-    public EntityChangeTrackerDefault(
-            final EntityPropertyChangePublisher entityPropertyChangePublisher,
-            final EntityChangesPublisher entityChangesPublisher,
-            final EventBusService eventBusService,
-            final Provider<InteractionProvider> interactionProviderProvider) {
-        super(eventBusService);
-        this.entityPropertyChangePublisher = entityPropertyChangePublisher;
-        this.entityChangesPublisher = entityChangesPublisher;
-        this.interactionProviderProvider = interactionProviderProvider;
-    }
+    private final EntityPropertyChangePublisher entityPropertyChangePublisher;
+    private final EntityChangesPublisher entityChangesPublisher;
+    private final Provider<InteractionProvider> interactionProviderProvider;
 
     Set<PropertyChangeRecord> snapshotPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction,
