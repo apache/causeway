@@ -39,7 +39,7 @@ public class ImpersonatedUserHolderDefault implements ImpersonatedUserHolder {
     private static final String SESSION_KEY_IMPERSONATED_USER =
             ImpersonatedUserHolderDefault.class.getName() + "#userMemento";
 
-    @Inject private Optional<KeyValueSessionStore> keyValueSessionStore;
+    @Inject private Optional<KeyValueSessionStore> keyValueSessionStore = Optional.empty();
 
     @Override
     public boolean supportsImpersonation() {

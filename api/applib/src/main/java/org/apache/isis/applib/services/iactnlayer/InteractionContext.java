@@ -102,7 +102,14 @@ public class InteractionContext implements Serializable {
 
     @With @Getter @Builder.Default
     final @NonNull ZoneId timeZone = ZoneId.systemDefault();
-
+    /**
+     * Only override if zoneIdIfAny is present, otherwise acts as identity operation.
+     */
+    public InteractionContext withTimeZoneIfAny(final Optional<ZoneId> zoneIdIfAny) {
+        return zoneIdIfAny
+                .map(this::withTimeZone)
+                .orElse(this);
+    }
 
     /**
      * Convenience method for use with {@link org.apache.isis.applib.services.sudo.SudoService}, returning a

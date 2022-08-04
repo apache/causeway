@@ -36,12 +36,13 @@ import lombok.NonNull;
 @Service
 @Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".UserCurrentSessionTimeZoneHolderDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-public class UserCurrentSessionTimeZoneHolderDefault implements UserCurrentSessionTimeZoneHolder {
+public class UserCurrentSessionTimeZoneHolderDefault
+implements UserCurrentSessionTimeZoneHolder {
 
     private static final String SESSION_KEY_ZONE_ID =
             UserCurrentSessionTimeZoneHolderDefault.class.getName() + "#zoneId";
 
-    @Inject private Optional<KeyValueSessionStore> keyValueSessionStore;
+    @Inject private Optional<KeyValueSessionStore> keyValueSessionStore = Optional.empty();
 
     @Override
     public void setUserTimeZone(final @NonNull ZoneId zoneId) {
