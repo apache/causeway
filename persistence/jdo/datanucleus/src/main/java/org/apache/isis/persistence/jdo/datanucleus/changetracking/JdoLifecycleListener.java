@@ -65,9 +65,7 @@ implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListe
 DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener {
 
     private final @NonNull MetaModelContext metaModelContext;
-    private final @NonNull Provider<EntityChangeTracker> entityChangeTrackerProvider;
     private final @NonNull ObjectLifecyclePublisher objectLifecyclePublisher;
-    private final @NonNull InteractionService interactionService;
 
     // -- CALLBACKS
 
@@ -207,10 +205,5 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         return _Utils.adaptEntityAndInjectServices(metaModelContext, pojo, bookmarking);
     }
 
-    // -- DEPENDENCIES
-
-    private EntityChangeTracker entityChangeTracker() {
-        return interactionService.isInInteraction() ? entityChangeTrackerProvider.get() : EntityChangeTracker.NOOP;
-    }
 
 }
