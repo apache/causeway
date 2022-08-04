@@ -51,10 +51,9 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onCompleted(final Command command) {
 
-        // TODO: JPA does not yet support lifecycle listeners, so always would be false.
-//        if(!command.isSystemStateChanged()) {
-//            return;
-//        }
+        if(!command.isSystemStateChanged()) {
+            return;
+        }
 
         val existingCommandJdoIfAny =
                 commandLogEntryRepository.findByInteractionId(command.getInteractionId());

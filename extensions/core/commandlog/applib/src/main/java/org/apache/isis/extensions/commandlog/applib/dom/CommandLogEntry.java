@@ -635,6 +635,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         return stringifier.toString(this);
     }
 
+    @Programmatic
     public CommandOutcomeHandler outcomeHandler() {
         return new CommandOutcomeHandler() {
             @Override
