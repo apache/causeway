@@ -52,7 +52,7 @@ public class HasUsername_recentSessionsForUser {
 
     private final HasUsername hasUsername;
 
-    @MemberSupport public List<SessionLogEntry> act() {
+    @MemberSupport public List<? extends SessionLogEntry> act() {
         if(hasUsername == null || hasUsername.getUsername() == null) {
             return Collections.emptyList();
         }
@@ -62,6 +62,6 @@ public class HasUsername_recentSessionsForUser {
         return hasUsername == null || hasUsername.getUsername() == null;
     }
 
-    @Inject SessionLogEntryRepository sessionLogEntryRepository;
+    @Inject SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
 
 }

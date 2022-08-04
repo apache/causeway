@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
@@ -43,7 +44,7 @@ public class ExecutionLogEntry_siblingExecutions {
             extends IsisModuleExtExecutionLogApplib.CollectionDomainEvent<ExecutionLogEntry_siblingExecutions, ExecutionLogEntry> { }
 
 
-    public List<ExecutionLogEntry> coll() {
+    @MemberSupport public List<ExecutionLogEntry> coll() {
         val entries = executionLogEntryRepository.findByInteractionId(executionLogEntry.getInteractionId());
         entries.remove(executionLogEntry);
         return entries;

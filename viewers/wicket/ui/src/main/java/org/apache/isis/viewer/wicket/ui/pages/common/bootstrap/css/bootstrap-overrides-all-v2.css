@@ -761,6 +761,7 @@ div.label-right .scalarValueWrapper .feedback-links-below-wrapper {
 .form-horizontal.actionParametersForm .form-group,
 .form-horizontal.propertyEditForm .form-group {
     margin-left: -5px;
+    margin-top: 5px;
 }
 
 .form-horizontal.inputForm .form-group {

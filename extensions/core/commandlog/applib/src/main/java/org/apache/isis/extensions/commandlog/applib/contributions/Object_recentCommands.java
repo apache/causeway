@@ -67,7 +67,7 @@ public class Object_recentCommands {
 
     @MemberSupport public List<? extends CommandLogEntry> act() {
         return bookmarkService.bookmarkFor(domainObject)
-        .map(commandLogEntryRepository::findRecentByTarget)
+        .map(commandLogEntryRepository::findRecentByTargetOrResult)
         .orElse(Collections.emptyList());
     }
 

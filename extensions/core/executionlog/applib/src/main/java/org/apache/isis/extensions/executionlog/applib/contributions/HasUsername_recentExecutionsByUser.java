@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.commandlog.applib.contributions;
+package org.apache.isis.extensions.executionlog.applib.contributions;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,9 +27,9 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.mixins.security.HasUsername;
-import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
-import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
+import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
+import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.val;
 
@@ -38,32 +38,32 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Collection(
-    domainEvent = HasUsername_recentCommandsByUser.CollectionDomainEvent.class
+    domainEvent = HasUsername_recentExecutionsByUser.CollectionDomainEvent.class
 )
 @CollectionLayout(
     defaultView = "table",
     paged = 5,
     sequence = "3"
 )
-public class HasUsername_recentCommandsByUser {
+public class HasUsername_recentExecutionsByUser {
 
     public static class CollectionDomainEvent
-            extends IsisModuleExtCommandLogApplib.CollectionDomainEvent<HasUsername_recentCommandsByUser, CommandLogEntry> { }
+            extends IsisModuleExtExecutionLogApplib.CollectionDomainEvent<HasUsername_recentExecutionsByUser, ExecutionLogEntry> { }
 
     private final HasUsername hasUsername;
-    public HasUsername_recentCommandsByUser(final HasUsername hasUsername) {
+    public HasUsername_recentExecutionsByUser(final HasUsername hasUsername) {
         this.hasUsername = hasUsername;
     }
 
-    @MemberSupport public List<? extends CommandLogEntry> coll() {
+    @MemberSupport public List<? extends ExecutionLogEntry> coll() {
         val username = hasUsername.getUsername();
         return username != null
-                ? commandLogEntryRepository.findRecentByUsername(username)
+                ? executionLogEntryRepository.findRecentByUsername(username)
                 : Collections.emptyList();
     }
     @MemberSupport public boolean hideColl() {
         return hasUsername.getUsername() == null;
     }
 
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
 }

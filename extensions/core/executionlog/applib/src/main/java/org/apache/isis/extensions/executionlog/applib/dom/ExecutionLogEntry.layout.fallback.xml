@@ -16,50 +16,57 @@
         </bs3:col>
     </bs3:row>
     <bs3:row>
-        <bs3:col span="4">
-            <bs3:row>
-                <bs3:col span="12">
-                    <cpt:fieldSet name="Identifiers" id="identifiers" unreferencedProperties="true">
-                        <cpt:action id="clearHints" position="PANEL"/>
-                        <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="inspectMetamodel" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="downloadMetamodelXml" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="recentCommands" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="recentExecutions" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="recentAuditTrailEntries" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="openRestApi" position="PANEL_DROPDOWN"/>
-                        <cpt:property id="interactionId">
-                            <!-- if executionrepublisher module included -->
-                            <cpt:action id="copyToOutbox"/>
-                        </cpt:property>
-                        <cpt:property id="sequence"/>
-                        <cpt:property id="type"/>
-                    </cpt:fieldSet>
-                    <cpt:fieldSet name="Target" id="target">
-                        <cpt:property id="target"/>
-                        <cpt:property id="targetLogicalTypeName"/>
-                        <cpt:property id="logicalMemberIdentifier"/>
-                        <cpt:property id="executionType"/>
-                    </cpt:fieldSet>
-                    <cpt:fieldSet name="Who and When">
-                        <cpt:property id="username"/>
-                        <cpt:property id="timestamp"/>
-                    </cpt:fieldSet>
-                    <cpt:fieldSet name="Timings" id="timings">
-                        <cpt:property id="startedAt"/>
-                        <cpt:property id="completedAt"/>
-                        <cpt:property id="duration"/>
-                    </cpt:fieldSet>
-                    <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-                </bs3:col>
-            </bs3:row>
+        <bs3:col span="3">
+            <bs3:tabGroup>
+                <bs3:tab name="Identity">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Identity" id="identity">
+                                <cpt:property id="interactionId">
+                                    <!-- if executionoutbox module included -->
+                                    <cpt:action id="copyToOutbox"/>
+                                </cpt:property>
+                                <cpt:property id="sequence"/>
+                                <cpt:property id="type"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Metadata">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Metadata" id="metadata"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+            <cpt:fieldSet name="Target" id="target">
+                <cpt:property id="target"/>
+                <cpt:property id="targetLogicalTypeName">
+                    <cpt:named>Logical Type Name</cpt:named>
+                </cpt:property>
+                <cpt:property id="logicalMemberIdentifier">
+                    <cpt:named>member Identifier</cpt:named>
+                </cpt:property>
+                <cpt:property id="executionType"/>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Who and When">
+                <cpt:property id="username"/>
+                <cpt:property id="timestamp"/>
+            </cpt:fieldSet>
         </bs3:col>
-        <bs3:col span="8">
+        <bs3:col span="6">
             <cpt:fieldSet name="Interaction DTO" id="interactionDto">
                 <cpt:property id="interactionDto" multiLine="30" labelPosition="TOP"/>
             </cpt:fieldSet>
+        </bs3:col>
+        <bs3:col span="3">
+            <cpt:fieldSet name="Timings" id="timings">
+                <cpt:property id="startedAt"/>
+                <cpt:property id="completedAt"/>
+                <cpt:property id="duration"/>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
         </bs3:col>
     </bs3:row>
     <bs3:row>

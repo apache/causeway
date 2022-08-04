@@ -26,65 +26,66 @@
         </bs3:col>
     </bs3:row>
     <bs3:row>
-        <bs3:col span="4">
-            <bs3:row>
-                <bs3:col span="12">
-                    <cpt:fieldSet name="Identifiers" id="identifiers">
-                        <cpt:action id="clearHints" position="PANEL"/>
-                        <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="inspectMetamodel" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="downloadMetamodelXml" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="recentCommands" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="recentExecutions" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="recentAuditTrailEntries" position="PANEL_DROPDOWN"/>
-                        <cpt:action id="openRestApi" position="PANEL_DROPDOWN"/>
-                        <cpt:property id="interactionId"/>
-                        <cpt:property id="type"/>
-                    </cpt:fieldSet>
-                    <cpt:fieldSet name="Target" id="target">
-                        <cpt:property id="target"/>
-                        <cpt:property id="targetLogicalTypeName"/>
-                        <cpt:property id="logicalMemberIdentifier"/>
-                    </cpt:fieldSet>
-                    <cpt:fieldSet name="Who and When">
-                        <cpt:property id="username"/>
-                        <cpt:property id="timestamp"/>
-                    </cpt:fieldSet>
-                    <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-                </bs3:col>
-            </bs3:row>
-        </bs3:col>
-        <bs3:col span="4">
-            <cpt:fieldSet name="Command DTO" id="commandDto">
-                <cpt:property id="commandDto" labelPosition="NONE" multiLine="20"/>
+        <bs3:col span="3">
+            <bs3:tabGroup>
+                <bs3:tab name="Identity">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Identity" id="identity">
+                                <cpt:property id="interactionId"/>
+                                <cpt:property id="type"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Metadata">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Metadata" id="metadata"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+            <cpt:fieldSet name="Target" id="target">
+                <cpt:property id="target"/>
+                <cpt:property id="targetLogicalTypeName">
+                    <cpt:named>Logical Type Name</cpt:named>
+                </cpt:property>
+                <cpt:property id="logicalMemberIdentifier">
+                    <cpt:named>member Identifier</cpt:named>
+                </cpt:property>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Who and When">
+                <cpt:property id="username"/>
+                <cpt:property id="timestamp"/>
             </cpt:fieldSet>
         </bs3:col>
-        <bs3:col span="4">
-            <bs3:row>
-                <bs3:col span="12">
-                    <cpt:fieldSet name="Execution" id="execution">
-                        <cpt:action id="retry" cssClassFa="fa-repeat" cssClass="btn-warning"/>
-                        <cpt:action id="exclude" cssClassFa="fa-ban" cssClass="btn-warning"/>
-                        <cpt:property id="executeIn"/>
-                        <cpt:property id="parent"/>
-                        <cpt:property id="replayState"/>
-                        <cpt:property id="replayStateFailureReason"/>
-                    </cpt:fieldSet>
-                    <cpt:fieldSet name="Timings" id="timings">
-                        <cpt:property id="startedAt"/>
-                        <cpt:property id="completedAt"/>
-                        <cpt:property id="duration"/>
-                        <cpt:property id="complete"/>
-                    </cpt:fieldSet>
-                    <cpt:fieldSet name="Results" id="results">
-                        <cpt:property id="resultSummary"/>
-                        <cpt:property id="result"/>
-                        <cpt:property id="exception" labelPosition="TOP"/>
-                    </cpt:fieldSet>
-                </bs3:col>
-            </bs3:row>
+        <bs3:col span="6">
+            <cpt:fieldSet name="Command DTO" id="commandDto">
+                <cpt:property id="commandDto" multiLine="30" labelPosition="TOP"/>
+            </cpt:fieldSet>
+        </bs3:col>
+        <bs3:col span="3">
+            <cpt:fieldSet name="Execution" id="execution">
+                <cpt:action id="retry" cssClassFa="fa-repeat" cssClass="btn-warning"/>
+                <cpt:action id="exclude" cssClassFa="fa-ban" cssClass="btn-warning"/>
+                <cpt:property id="executeIn"/>
+                <cpt:property id="parent"/>
+                <cpt:property id="replayState"/>
+                <cpt:property id="replayStateFailureReason"/>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Timings" id="timings">
+                <cpt:property id="startedAt"/>
+                <cpt:property id="completedAt"/>
+                <cpt:property id="duration"/>
+                <cpt:property id="complete"/>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Results" id="results">
+                <cpt:property id="resultSummary"/>
+                <cpt:property id="result"/>
+                <cpt:property id="exception" labelPosition="TOP"/>
+            </cpt:fieldSet>
+            <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
         </bs3:col>
     </bs3:row>
     <bs3:row>

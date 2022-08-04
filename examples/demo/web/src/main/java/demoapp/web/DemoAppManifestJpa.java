@@ -23,6 +23,8 @@ import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogPersiste
 import org.apache.isis.extensions.executionlog.jpa.IsisModuleExtExecutionLogPersistenceJpa;
 import org.apache.isis.extensions.executionoutbox.jpa.IsisModuleExtExecutionOutboxPersistenceJpa;
 import org.apache.isis.extensions.secman.jpa.IsisModuleExtSecmanPersistenceJpa;
+import org.apache.isis.extensions.sessionlog.jpa.IsisModuleExtSessionLogPersistenceJpa;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -38,6 +40,7 @@ import demoapp.dom.DemoModuleJpa;
 
     // Security Manager Extension (secman)
     IsisModuleExtSecmanPersistenceJpa.class,
+    IsisModuleExtSessionLogPersistenceJpa.class,
     IsisModuleExtCommandLogPersistenceJpa.class,
     IsisModuleExtExecutionLogPersistenceJpa.class,
     IsisModuleExtExecutionOutboxPersistenceJpa.class,

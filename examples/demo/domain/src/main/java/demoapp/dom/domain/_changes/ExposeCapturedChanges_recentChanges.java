@@ -34,7 +34,7 @@ import lombok.val;
 //tag::class[]
 @Collection
 @RequiredArgsConstructor
-public class ExposeCapturedChanges_changes {
+public class ExposeCapturedChanges_recentChanges {
     // ...
 //end::class[]
 
@@ -42,12 +42,12 @@ public class ExposeCapturedChanges_changes {
     private final ExposeCapturedChanges exposeCapturedChanges;
 
     @MemberSupport
-    @ValueSemantics(provider = "pretty-render")
 //tag::class[]
-    public List<ChangesDto> coll() {
-        val list = new LinkedList<ChangesDto>();
+    public List<ChangesVm> coll() {
+        val list = new LinkedList<ChangesVm>();
         entityChangesSubscriberToCaptureChangesInMemory
                 .streamChangedEntities()
+                .map(ChangesVm::new)
                 .forEach(list::push);   // reverse order
         return list;
     }

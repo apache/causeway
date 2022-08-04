@@ -24,6 +24,7 @@ import org.apache.isis.extensions.commandlog.jdo.IsisModuleExtCommandLogPersiste
 import org.apache.isis.extensions.executionlog.jdo.IsisModuleExtExecutionLogPersistenceJdo;
 import org.apache.isis.extensions.executionoutbox.jdo.IsisModuleExtExecutionOutboxPersistenceJdo;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
+import org.apache.isis.extensions.sessionlog.jdo.IsisModuleExtSessionLogPersistenceJdo;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -40,6 +41,7 @@ import demoapp.dom.DemoModuleJdo;
 
     // Security Manager Extension (secman)
     IsisModuleExtSecmanPersistenceJdo.class,
+    IsisModuleExtSessionLogPersistenceJdo.class,
     IsisModuleExtCommandLogPersistenceJdo.class,
     IsisModuleExtExecutionLogPersistenceJdo.class,
     IsisModuleExtExecutionOutboxPersistenceJdo.class,

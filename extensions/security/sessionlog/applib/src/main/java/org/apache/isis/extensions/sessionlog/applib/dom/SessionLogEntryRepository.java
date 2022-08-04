@@ -32,6 +32,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.session.SessionSubscriber;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
 import lombok.NonNull;
@@ -43,6 +44,7 @@ import lombok.val;
 public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
 
     @Inject RepositoryService repositoryService;
+    @Inject TransactionService transactionService;
     @Inject FactoryService factoryService;
     @Inject IsisSystemEnvironment isisSystemEnvironment;
 
@@ -59,6 +61,7 @@ public abstract class SessionLogEntryRepository<E extends SessionLogEntry> {
             activeEntry.setCausedBy(SessionSubscriber.CausedBy.RESTART);
             activeEntry.setLogoutTimestamp(logoutTimestamp);
         }
+        transactionService.flushTransaction();
     }
 
     public SessionLogEntry create(
