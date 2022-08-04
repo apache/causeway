@@ -32,6 +32,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.Temporal;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -88,6 +89,38 @@ public final class _Temporals {
                 && completedAt!=null
                         ? Optional.of(millisToSeconds(completedAt.getTime() - startedAt.getTime()))
                         : Optional.empty();
+    }
+
+    // -- ZONE TRANSLATION
+
+    /**
+     * Translates given {@link Temporal} into provided {@link ZoneId} preserving the time instant.
+     * If timeZone is absent, acts as a identity operator.
+     * @param temporal - the {@link Temporal} to translate (required)
+     * @param zoneId - target {@link ZoneId} (required)
+     */
+    public ZonedDateTime translateToTimeZone(final @NonNull ZonedDateTime temporal, final @NonNull ZoneId zoneId) {
+        return temporal.withZoneSameInstant(zoneId);
+    }
+
+    /**
+     * Translates given {@link Temporal} into provided {@link ZoneId} preserving the time instant.
+     * If timeZone is absent, acts as a identity operator.
+     * @param temporal - the {@link Temporal} to translate (required)
+     * @param zoneId - target {@link ZoneId} (required)
+     */
+    public ZonedDateTime translateToTimeZone(final @NonNull OffsetDateTime temporal, final @NonNull ZoneId zoneId) {
+        return ZonedDateTime.ofInstant(temporal.toInstant(), zoneId);
+    }
+
+    /**
+     * Translates given {@link Temporal} into provided {@link ZoneId} preserving the time instant.
+     * If timeZone is absent, acts as a identity operator.
+     * @param temporal - the {@link Temporal} to translate (required)
+     * @param offset - target {@link ZoneOffset} (required)
+     */
+    public OffsetTime translateToTimeOffset(final @NonNull OffsetTime temporal, final @NonNull ZoneOffset offset) {
+        return temporal.withOffsetSameInstant(offset);
     }
 
     // -- TIME ZONE RENDERING

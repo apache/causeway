@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZonedDateTime;
@@ -47,6 +46,7 @@ import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacet;
@@ -217,7 +217,7 @@ implements TemporalValueSemantics<T> {
 
                 final var timeZoneTranslation = dateAndTimeFormatStyle.getTimeZoneTranslation();
 
-                final var asLocalTime = toLocalTime(context, time);
+                final var asLocalicedTime = translateToUserLocalTimeZone(context, time);
 
                 final var sb = new StringBuffer();
 
@@ -228,14 +228,15 @@ implements TemporalValueSemantics<T> {
                         sb.append(temporalNoZoneRenderingFormat.format(time));
                     } else {
                         // start rendering with the (to-local) translated time (no offset/zone info)
-                        sb.append(temporalNoZoneRenderingFormat.format(asLocalTime));
+                        sb.append(temporalNoZoneRenderingFormat.format(asLocalicedTime));
 
                         // we have offset/zone information, so we append it (properly formatted) ...
                         sb.append(' ');
 
                         sb.append(badgeRenderer.render(
-                                "", // no text
-                                ()->"fa-solid fa-user-clock",
+                                // translated local time-zone
+                                temporalZoneOnlyRenderingFormat.format(asLocalicedTime),
+                                ()->"fa-solid fa-user-clock fontAwesomeIcon",
                                 ()->translate("Instant")
                                     + ": "
                                     + temporalNoZoneRenderingFormat.format(time)
@@ -255,10 +256,10 @@ implements TemporalValueSemantics<T> {
 
                         sb.append(badgeRenderer.render(
                                 temporalZoneOnlyRenderingFormat.format(time),
-                                ()->"fa-solid fa-globe",
+                                ()->"fa-solid fa-globe fontAwesomeIcon",
                                 ()->translate("your local time")
                                     + ": "
-                                    + temporalNoZoneRenderingFormat.format(asLocalTime)));
+                                    + temporalNoZoneRenderingFormat.format(asLocalicedTime)));
                     }
                     break;
                 }
@@ -267,29 +268,51 @@ implements TemporalValueSemantics<T> {
         };
     }
 
+//    /**
+//     * Converts given {@link Temporal} when offset,
+//     * to a temporal that is local to the user's (client's) time-zone.
+//     * In other words, this conversion preserves the time {@link Instant}.
+//     */
+//    private Temporal toLocalTime(final ValueSemanticsProvider.Context context, final Temporal t) {
+//        if(t instanceof ZonedDateTime) {
+//            return LocalDateTime.ofInstant(((ZonedDateTime) t).toInstant(),
+//                    context.getInteractionContext().getTimeZone());
+//        }
+//        if(t instanceof OffsetDateTime) {
+//            return LocalDateTime.ofInstant(((OffsetDateTime) t).toInstant(),
+//                    context.getInteractionContext().getTimeZone());
+//        }
+//        if(t instanceof OffsetTime) {
+//            return ((OffsetTime) t)
+//                    // convert to 'user time'
+//                    .withOffsetSameInstant(context.getInteractionContext().getTimeZoneOffsetNow())
+//                    // remove offset information
+//                    .toLocalTime();
+//        }
+//        return t;
+//    }
+
     /**
      * Converts given {@link Temporal} when offset,
      * to a temporal that is local to the user's (client's) time-zone.
      * In other words, this conversion preserves the time {@link Instant}.
      */
-    private Temporal toLocalTime(final ValueSemanticsProvider.Context context, final Temporal t) {
+    private Temporal translateToUserLocalTimeZone(final ValueSemanticsProvider.Context context, final Temporal t) {
         if(t instanceof ZonedDateTime) {
-            return LocalDateTime.ofInstant(((ZonedDateTime) t).toInstant(),
+            return _Temporals.translateToTimeZone((ZonedDateTime) t,
                     context.getInteractionContext().getTimeZone());
         }
         if(t instanceof OffsetDateTime) {
-            return LocalDateTime.ofInstant(((OffsetDateTime) t).toInstant(),
+            return _Temporals.translateToTimeZone((OffsetDateTime) t,
                     context.getInteractionContext().getTimeZone());
         }
         if(t instanceof OffsetTime) {
-            return ((OffsetTime) t)
-                    // convert to 'user time'
-                    .withOffsetSameInstant(context.getInteractionContext().getTimeZoneOffsetNow())
-                    // remove offset information
-                    .toLocalTime();
+            return _Temporals.translateToTimeOffset((OffsetTime) t,
+                    context.getInteractionContext().getTimeZoneOffsetNow());
         }
-        return t;
+        return t; // otherwise acts as identity operator
     }
+
 
     /**
      * Format used for rendering editable text representation.
