@@ -48,13 +48,18 @@ implements UserCurrentSessionTimeZoneHolder {
     public void setUserTimeZone(final @NonNull ZoneId zoneId) {
         keyValueSessionStore
             .ifPresent(store->store.put(SESSION_KEY_ZONE_ID, zoneId));
-
     }
 
     @Override
     public Optional<ZoneId> getUserTimeZone() {
         return keyValueSessionStore
             .flatMap(store->store.lookupAs(SESSION_KEY_ZONE_ID, ZoneId.class));
+    }
+
+    @Override
+    public void clearUserTimeZone() {
+        keyValueSessionStore
+            .ifPresent(store->store.clear(SESSION_KEY_ZONE_ID));
     }
 
 }

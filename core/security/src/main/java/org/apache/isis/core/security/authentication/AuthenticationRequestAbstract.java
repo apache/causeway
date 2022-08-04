@@ -29,7 +29,8 @@ import org.apache.isis.commons.internal.collections._Sets;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
-public abstract class AuthenticationRequestAbstract implements AuthenticationRequest {
+public abstract class AuthenticationRequestAbstract
+implements AuthenticationRequest {
 
     private final String name;
     private final Set<String> roles = _Sets.newHashSet();
@@ -60,14 +61,14 @@ public abstract class AuthenticationRequestAbstract implements AuthenticationReq
      * @param role
      * @since 2.0
      */
-    public void addRole(String role) {
+    public void addRole(final String role) {
         if(_Strings.isNullOrEmpty(role)) {
             return; // ignore
         }
         this.roles.add(role);
     }
 
-    public void addRoles(@Nullable Collection<String> roles) {
+    public void addRoles(final @Nullable Collection<String> roles) {
         stream(roles)
                 .forEach(this::addRole);
     }

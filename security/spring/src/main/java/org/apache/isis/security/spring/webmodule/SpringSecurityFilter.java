@@ -34,6 +34,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.user.UserCurrentSessionTimeZoneHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
@@ -48,6 +49,7 @@ public class SpringSecurityFilter implements Filter {
 
     @Autowired private InteractionService interactionService;
     @Inject List<AuthenticationConverter> converters;
+    @Inject private UserCurrentSessionTimeZoneHolder userCurrentSessionTimeZoneHolder;
 
     @Override
     public void doFilter(
@@ -85,7 +87,8 @@ public class SpringSecurityFilter implements Filter {
                 .withAuthenticationSource(AuthenticationSource.EXTERNAL);
 
         interactionService.run(
-                InteractionContext.ofUserWithSystemDefaults(userMemento),
+                InteractionContext.ofUserWithSystemDefaults(userMemento)
+                .withTimeZoneIfAny(userCurrentSessionTimeZoneHolder.getUserTimeZone()),
                 ()->filterChain.doFilter(servletRequest, servletResponse));
     }
 

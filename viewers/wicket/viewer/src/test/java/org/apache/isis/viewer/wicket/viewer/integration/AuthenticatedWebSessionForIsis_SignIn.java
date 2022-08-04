@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -70,6 +71,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
                 singletonList(mockAuthenticator),
                 new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault(),
+                Optional.empty(),
                 emptyList());
     }
 

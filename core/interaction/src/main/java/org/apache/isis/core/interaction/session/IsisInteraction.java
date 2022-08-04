@@ -50,6 +50,7 @@ implements InteractionInternal {
     public IsisInteraction(final @NonNull UUID interactionId) {
         this.startedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
         this.command = new Command(interactionId);
+        log.debug("new IsisInteraction id={}", interactionId);
     }
 
     @Getter(onMethod_ = {@Override})
@@ -108,7 +109,7 @@ implements InteractionInternal {
         }
     }
 
-    private void pushAndStart(ActionInvocation actionInvocation, ClockService clockService, MetricsService metricsService, Command command) {
+    private void pushAndStart(final ActionInvocation actionInvocation, final ClockService clockService, final MetricsService metricsService, final Command command) {
         push(actionInvocation);
         start(actionInvocation, clockService, metricsService, command);
     }
@@ -130,7 +131,7 @@ implements InteractionInternal {
         }
     }
 
-    private <T extends Execution<?,?>> Object executeInternal(MemberExecutor<T> memberExecutor, T execution) {
+    private <T extends Execution<?,?>> Object executeInternal(final MemberExecutor<T> memberExecutor, final T execution) {
 
         try {
             Object result = memberExecutor.execute(execution);
@@ -236,22 +237,22 @@ implements InteractionInternal {
     private final Map<Class<?>, Object> attributes = new HashMap<>();
 
     @Override
-    public <T> T putAttribute(Class<? super T> type, T value) {
+    public <T> T putAttribute(final Class<? super T> type, final T value) {
         return _Casts.uncheckedCast(attributes.put(type, value));
     }
 
     @Override
-    public <T> T computeAttributeIfAbsent(Class<? super T> type, Function<Class<?>, ? extends T> mappingFunction) {
+    public <T> T computeAttributeIfAbsent(final Class<? super T> type, final Function<Class<?>, ? extends T> mappingFunction) {
         return _Casts.uncheckedCast(attributes.computeIfAbsent(type, mappingFunction));
     }
 
     @Override
-    public <T> T getAttribute(Class<T> type) {
+    public <T> T getAttribute(final Class<T> type) {
         return _Casts.uncheckedCast(attributes.get(type));
     }
 
     @Override
-    public void removeAttribute(Class<?> type) {
+    public void removeAttribute(final Class<?> type) {
         attributes.remove(type);
     }
 

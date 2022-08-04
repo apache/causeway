@@ -49,5 +49,10 @@ public interface UserCurrentSessionTimeZoneHolder {
      */
     Optional<ZoneId> getUserTimeZone();
 
+    /**
+     * Clears the user's current {@link ZoneId}
+     * within the context of the current session.
+     */
+    void clearUserTimeZone();
 
 }

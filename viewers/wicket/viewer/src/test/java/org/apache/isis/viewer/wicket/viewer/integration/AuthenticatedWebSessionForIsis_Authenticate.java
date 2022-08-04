@@ -76,6 +76,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 Collections.singletonList(mockAuthenticator),
                 new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault(),
+                Optional.empty(),
                 Collections.emptyList());
 
         context.checking(new Expectations() {

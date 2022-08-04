@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.util.UUID;
+import java.util.function.UnaryOperator;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -39,6 +40,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.viewer.wicket.model.isis.HasAmendableInteractionContext;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
@@ -55,7 +57,11 @@ import lombok.val;
  */
 public class AuthenticatedWebSessionForIsis
 extends AuthenticatedWebSession
-implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonContext {
+implements
+    BreadcrumbModelProvider,
+    BookmarkedPagesModelProvider,
+    HasCommonContext,
+    HasAmendableInteractionContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -142,12 +148,12 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
                 ? SessionSubscriber.CausedBy.USER
                 : SessionSubscriber.CausedBy.SESSION_EXPIRATION;
 
-
         log(SessionSubscriber.Type.LOGOUT, userName, causedBy);
     }
 
     /**
-     * If there is an {@link InteractionContext} already (as some authentication mechanisms setup in filters, eg
+     * If there is an {@link InteractionContext} already
+     * (as some authentication mechanisms setup in filters, eg
      * SpringSecurityFilter), then just use it.
      *
      * <p>
@@ -155,10 +161,14 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
      * </p>
      */
     public void syncExternalAuthenticationIfAvailable() {
+        getInteractionService()
+            .currentInteractionContext()
+            .ifPresent(interactionContext -> this.authentication = interactionContext);
+    }
 
-        val interactionService = commonContext.lookupServiceElseFail(InteractionService.class);
-        val interactionContextIfAny = interactionService.currentInteractionContext();
-        interactionContextIfAny.ifPresent(interactionContext -> this.authentication = interactionContext);
+    @Override
+    public void amendInteractionContext(final UnaryOperator<InteractionContext> updater) {
+        authentication = updater.apply(authentication);
     }
 
     /**
@@ -231,7 +241,7 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
             final SessionSubscriber.CausedBy causedBy) {
 
 
-        val interactionFactory = getInteractionService();
+        val interactionService = getInteractionService();
         val sessionLoggingServices = getSessionLoggingServices();
 
         final Runnable loggingTask = ()->{
@@ -244,8 +254,8 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
             );
         };
 
-        if(interactionFactory!=null) {
-            interactionFactory.runAnonymous(loggingTask::run);
+        if(interactionService!=null) {
+            interactionService.runAnonymous(loggingTask::run);
         } else {
             loggingTask.run();
         }

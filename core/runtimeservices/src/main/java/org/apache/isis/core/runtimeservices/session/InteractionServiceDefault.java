@@ -117,7 +117,7 @@ implements
             final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler,
             final ClockService clockService,
             final Provider<CommandPublisher> commandPublisherProvider,
-            Provider<TransactionService> transactionServiceProvider,
+            final Provider<TransactionService> transactionServiceProvider,
             final ConfigurableBeanFactory beanFactory,
             final InteractionIdGenerator interactionIdGenerator) {
         this.runtimeEventService = runtimeEventService;

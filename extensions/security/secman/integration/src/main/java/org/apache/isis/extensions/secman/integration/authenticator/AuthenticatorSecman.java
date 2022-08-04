@@ -101,6 +101,4 @@ public class AuthenticatorSecman implements Authenticator {
         // be re-authenticated.
     }
 
-
-
 }

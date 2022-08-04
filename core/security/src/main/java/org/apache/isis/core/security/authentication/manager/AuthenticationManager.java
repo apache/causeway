@@ -20,6 +20,7 @@ package org.apache.isis.core.security.authentication.manager;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -34,6 +35,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.user.UserCurrentSessionTimeZoneHolder;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Timing;
@@ -60,16 +62,19 @@ public class AuthenticationManager {
     private final @NonNull RandomCodeGenerator randomCodeGenerator;
     private final @NonNull Can<Registrar> registrars;
     private final @NonNull List<UserMementoRefiner> userMementoRefiners;
+    private final @NonNull Optional<UserCurrentSessionTimeZoneHolder> userCurrentSessionTimeZoneHolder;
 
     @Inject
     public AuthenticationManager(
             final List<Authenticator> authenticators,
             final InteractionService interactionService,
             final RandomCodeGenerator randomCodeGenerator,
+            final Optional<UserCurrentSessionTimeZoneHolder> userCurrentSessionTimeZoneHolder,
             final List<UserMementoRefiner> userMementoRefiners) {
         this.interactionService = interactionService;
         this.randomCodeGenerator = randomCodeGenerator;
         this.authenticators = Can.ofCollection(authenticators);
+        this.userCurrentSessionTimeZoneHolder = userCurrentSessionTimeZoneHolder;
         this.userMementoRefiners = userMementoRefiners;
         if (this.authenticators.isEmpty()) {
             throw new NoAuthenticatorException("No authenticators specified");
@@ -105,14 +110,20 @@ public class AuthenticationManager {
                 val interactionContext = authenticator.authenticate(request, getUnusedRandomCode());
                 if (interactionContext != null) {
 
+                    val interactionContextWithTimeZone = interactionContext
+                            .withTimeZoneIfAny(userCurrentSessionTimeZoneHolder
+                                    .flatMap(UserCurrentSessionTimeZoneHolder::getUserTimeZone));
+
                     val userRefined = UserMementoRefiner.refine(
                             interactionContext.getUser(),
                             userMementoRefiners);
-                    val interactionContextRefined = interactionContext.withUser(userRefined);
 
                     userByValidationCode.put(
                             userRefined.getAuthenticationCode(),
                             userRefined.getName());
+
+                    val interactionContextRefined = interactionContextWithTimeZone
+                            .withUser(userRefined);
                     return interactionContextRefined;
                 }
             }

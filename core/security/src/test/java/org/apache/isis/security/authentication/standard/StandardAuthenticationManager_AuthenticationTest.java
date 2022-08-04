@@ -19,6 +19,7 @@
 package org.apache.isis.security.authentication.standard;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +45,7 @@ public class StandardAuthenticationManager_AuthenticationTest {
                 Collections.singletonList(AuthenticatorsForTesting.authenticatorValidForFoo()),
                 new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault(),
+                Optional.empty(),
                 Collections.emptyList());
     }
 

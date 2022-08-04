@@ -124,8 +124,6 @@ final class _CallStackMerger {
         val executionLanes = new ArrayList<int[]>();
 
         logEntries.forEach(logEntry->{
-            //System.err.printf("joining %s%n", logEntry.getLabel());
-
             val executionLane = new int[logEntry.getData().size()];
             executionLanes.add(executionLane);
 
