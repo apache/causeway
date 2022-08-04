@@ -37,11 +37,11 @@ import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.metrics.MetricsService;
@@ -75,13 +75,23 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * This service keeps track of all of the changes within a transactoin, for entities for which entity property change
+ * publishing is enabled (typically using the
+ * {@link DomainObject#entityChangePublishing() @DomainObject(entityChangePublishing=)} annotation attribute.
+ *
+ * <p>
+ * The service is {@link InteractionScope}d.  In theory this could happen multiple times per interaction, so the
+ * data structures are cleared on each commit for potential reuse within the same interaction.  (Of course, because the
+ * service <i>is</i> interaction-scoped, a new instance of the service is created for each interaction, and so the
+ * data held in this service is private to each user's interaction.
+ * </p>
  * @since 2.0 {@index}
  */
 @Service
 @Named("isis.persistence.commons.EntityChangeTrackerDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("default")
-@InteractionScope
+@InteractionScope   // see note above regarding this
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class EntityChangeTrackerDefault

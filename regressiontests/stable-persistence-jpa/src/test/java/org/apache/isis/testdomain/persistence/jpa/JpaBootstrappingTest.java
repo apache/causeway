@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -59,7 +60,7 @@ import lombok.val;
         })
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@DirtiesContext
+ @DirtiesContext // doesn't seem to tidy up correctly ... I see InteractionService still injected into entities in the _next_ tests run (JpaExceptionTranslationTest_usingTransactional)
 class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager;
