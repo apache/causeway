@@ -24,6 +24,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 import lombok.RequiredArgsConstructor;
@@ -36,8 +38,11 @@ public class ExposeCapturedChanges_changes {
     // ...
 //end::class[]
 
+    @SuppressWarnings("unused")
     private final ExposeCapturedChanges exposeCapturedChanges;
 
+    @MemberSupport
+    @ValueSemantics(provider = "pretty-render")
 //tag::class[]
     public List<ChangesDto> coll() {
         val list = new LinkedList<ChangesDto>();

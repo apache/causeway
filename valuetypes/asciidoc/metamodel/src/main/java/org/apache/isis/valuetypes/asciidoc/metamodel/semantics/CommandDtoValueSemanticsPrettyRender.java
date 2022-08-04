@@ -20,6 +20,7 @@ package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,7 @@ import lombok.NonNull;
 @Component
 @Named(IsisModuleValAsciidocApplib.NAMESPACE + ".CommandDtoValueSemanticsPrettyRender")
 @Order(PriorityPrecedence.EARLY)
+@Qualifier("pretty-render")
 public class CommandDtoValueSemanticsPrettyRender
 extends CommandDtoValueSemantics {
 

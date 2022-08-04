@@ -23,6 +23,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.ValueSemantics;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +38,7 @@ public class DomainObjectEntityChangePublishingVm_publishingEnabledAnnotatedEnti
     @SuppressWarnings("unused")
     private final DomainObjectEntityChangePublishingVm mixee;
 
+    @MemberSupport
     public List<? extends DomainObjectEntityChangePublishingEnabledEntity> coll() {
         return publishingEnabledEntities.all();
     }
