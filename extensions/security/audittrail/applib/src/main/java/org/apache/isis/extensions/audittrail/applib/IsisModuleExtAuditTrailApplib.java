@@ -24,12 +24,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.audittrail.applib.app.AuditTrailMenu;
+import org.apache.isis.extensions.audittrail.applib.contributions.HasInteractionId_auditTrailEntries;
+import org.apache.isis.extensions.audittrail.applib.contributions.Object_recentAuditTrailEntries;
 import org.apache.isis.extensions.audittrail.applib.spiimpl.EntityPropertyChangeSubscriberForAuditTrail;
 
 @Configuration
 @Import({
         AuditTrailMenu.class,
-        EntityPropertyChangeSubscriberForAuditTrail.class
+        EntityPropertyChangeSubscriberForAuditTrail.class,
+
+        HasInteractionId_auditTrailEntries.class,
+        Object_recentAuditTrailEntries.class
 })
 public class IsisModuleExtAuditTrailApplib {
 

@@ -21,6 +21,7 @@ package org.apache.isis.extensions.executionoutbox.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.extensions.executionoutbox.applib.app.ExecutionOutboxMenu;
 import org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 import org.apache.isis.extensions.executionoutbox.applib.restapi.OutboxRestApi;
 import org.apache.isis.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents;
@@ -33,6 +34,8 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
         OutboxRestApi.class,
 
         // @Service's
+        ExecutionOutboxMenu.class,
+
         ExecutionSubscriberForExecutionOutbox.class,
         ExecutionOutboxEntry.TableColumnOrderDefault.class,
         ContentMappingServiceForOutboxEvents.class

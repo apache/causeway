@@ -326,9 +326,6 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
             domainEvent = LogicalMemberIdentifier.DomainEvent.class,
             editing = Editing.DISABLED
     )
-    @PropertyLayout(
-            hidden = Where.ALL_TABLES
-    )
     @DomainChangeRecord.LogicalMemberIdentifier
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -481,7 +478,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     )
     @PropertyLayout(
             hidden = Where.ALL_TABLES,
-            multiLine = 5,
+            multiLine = 3,
             named = "Exception (if any)"
     )
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })

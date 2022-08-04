@@ -44,12 +44,12 @@ public class ExecutionLogEntry_siblingExecutions {
             extends IsisModuleExtExecutionLogApplib.CollectionDomainEvent<ExecutionLogEntry_siblingExecutions, ExecutionLogEntry> { }
 
 
-    @MemberSupport public List<ExecutionLogEntry> coll() {
+    @MemberSupport public List<? extends ExecutionLogEntry> coll() {
         val entries = executionLogEntryRepository.findByInteractionId(executionLogEntry.getInteractionId());
         entries.remove(executionLogEntry);
         return entries;
     }
 
-    @Inject ExecutionLogEntryRepository<ExecutionLogEntry> executionLogEntryRepository;
+    @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
 
 }

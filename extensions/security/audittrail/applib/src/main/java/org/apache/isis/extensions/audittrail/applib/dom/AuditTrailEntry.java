@@ -250,9 +250,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
             domainEvent = PropertyId.DomainEvent.class,
             optionality = Optionality.MANDATORY
     )
-    @PropertyLayout(
-            hidden = Where.ALL_TABLES
-    )
     @DomainChangeRecord.PropertyId
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)

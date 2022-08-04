@@ -27,31 +27,40 @@
     </bs3:row>
     <bs3:row>
         <bs3:col span="4">
-            <cpt:fieldSet name="Identifiers" id="identifiers">
-                <cpt:action id="clearHints" position="PANEL"/>
-                <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
-                <cpt:action id="inspectMetamodel" position="PANEL_DROPDOWN"/>
-                <cpt:action id="downloadMetamodelXml" position="PANEL_DROPDOWN"/>
-                <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
-                <cpt:action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
-                <cpt:action id="recentCommands" position="PANEL_DROPDOWN"/>
-                <cpt:action id="recentExecutions" position="PANEL_DROPDOWN"/>
-                <cpt:action id="recentAuditTrailEntries" position="PANEL_DROPDOWN"/>
-                <cpt:property id="interactionId"/>
-                <cpt:property id="sequence"/>
-                <cpt:property id="type"/>
-            </cpt:fieldSet>
+            <bs3:tabGroup>
+                <bs3:tab name="Identity">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Identity" id="identity">
+                                <cpt:property id="interactionId"/>
+                                <cpt:property id="sequence"/>
+                                <cpt:property id="type"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Metadata">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Metadata" id="metadata"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
             <cpt:fieldSet name="Target" id="target">
                 <cpt:property id="target"/>
-                <cpt:property id="targetLogicalTypeName"/>
-                <cpt:property id="logicalMemberIdentifier"/>
+                <cpt:property id="targetLogicalTypeName">
+                    <cpt:named>Logical Type Name</cpt:named>
+                </cpt:property>
+                <cpt:property id="logicalMemberIdentifier">
+                    <cpt:named>member Identifier</cpt:named>
+                </cpt:property>
                 <cpt:property id="propertyId"/>
             </cpt:fieldSet>
             <cpt:fieldSet name="Who and When">
                 <cpt:property id="username"/>
                 <cpt:property id="timestamp"/>
             </cpt:fieldSet>
-            <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
         </bs3:col>
         <bs3:col span="4">
             <cpt:fieldSet name="Change" id="change">
@@ -60,10 +69,19 @@
             </cpt:fieldSet>
         </bs3:col>
         <bs3:col span="4">
-            <!-- we provide this collection twice, for convenience -->
-            <cpt:collection id="auditTrailEntries">
-                <cpt:named>All changes</cpt:named>
-            </cpt:collection>
+            <bs3:row>
+                <bs3:col span="12">
+                    <!-- we provide this collection twice, for convenience -->
+                    <cpt:collection id="auditTrailEntries">
+                        <cpt:named>All changes</cpt:named>
+                    </cpt:collection>
+                </bs3:col>
+            </bs3:row>
+            <bs3:row>
+                <bs3:col span="12">
+                    <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+                </bs3:col>
+            </bs3:row>
         </bs3:col>
     </bs3:row>
     <bs3:row>

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.executionlog.applib.app;
+package org.apache.isis.extensions.executionoutbox.applib.app;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -34,16 +34,16 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
-import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
-import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
+import org.apache.isis.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
+import org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
+import org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 
 /**
  * @since 2.0 {@index}
  */
-@Named(ExecutionLogMenu.LOGICAL_TYPE_NAME)
+@Named(ExecutionOutboxMenu.LOGICAL_TYPE_NAME)
 @DomainService(
     nature = NatureOfService.VIEW
 )
@@ -53,31 +53,28 @@ import lombok.RequiredArgsConstructor;
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class ExecutionLogMenu {
+public class ExecutionOutboxMenu {
 
     public static final String LOGICAL_TYPE_NAME =
-            IsisModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionLogMenu";
+            IsisModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionOutboxMenu";
 
     public static abstract class ActionDomainEvent
-        extends IsisModuleExtExecutionLogApplib.ActionDomainEvent<ExecutionLogMenu> { }
-
+        extends IsisModuleExtExecutionOutboxApplib.ActionDomainEvent<ExecutionOutboxMenu> { }
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(describedAs = "Returns the most recent execution entries")
-    public List<? extends ExecutionLogEntry> findMostRecent() {
-        return executionLogEntryRepository.findMostRecent();
+    @ActionLayout(describedAs = "Returns to oldest 100 entries (next to be processed) in the outbox")
+    public List<? extends ExecutionOutboxEntry> findOldest() {
+        return executionOutboxEntryRepository.findOldest();
     }
-
 
     @Action(semantics = SemanticsOf.SAFE, restrictTo = RestrictTo.PROTOTYPING)
     @ActionLayout(describedAs = "Returns all entries (still to be processed) in the outbox")
-    public List<? extends ExecutionLogEntry> findAll() {
-        return executionLogEntryRepository.findAll();
+    public List<? extends ExecutionOutboxEntry> findAll() {
+        return executionOutboxEntryRepository.findAll();
     }
 
-
-    final ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
+    final ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
     final ClockService clockService;
 
 

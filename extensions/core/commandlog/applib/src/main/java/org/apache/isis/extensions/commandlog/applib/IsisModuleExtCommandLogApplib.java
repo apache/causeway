@@ -28,6 +28,9 @@ import org.apache.isis.extensions.commandlog.applib.contributions.HasInteraction
 import org.apache.isis.extensions.commandlog.applib.contributions.HasUsername_recentCommandsByUser;
 import org.apache.isis.extensions.commandlog.applib.contributions.Object_recentCommands;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.isis.extensions.commandlog.applib.dom.mixins.CommandLogEntry_childCommands;
+import org.apache.isis.extensions.commandlog.applib.dom.mixins.CommandLogEntry_openResultObject;
+import org.apache.isis.extensions.commandlog.applib.dom.mixins.CommandLogEntry_siblingCommands;
 import org.apache.isis.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
@@ -40,6 +43,9 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
         HasInteractionId_commandLogEntry.class,
         HasUsername_recentCommandsByUser.class,
         Object_recentCommands.class,
+        CommandLogEntry_childCommands.class,
+        CommandLogEntry_openResultObject.class,
+        CommandLogEntry_siblingCommands.class,
 
         // @Service's
         CommandSubscriberForCommandLog.class,

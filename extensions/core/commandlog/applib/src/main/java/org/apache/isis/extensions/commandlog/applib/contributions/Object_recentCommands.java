@@ -48,8 +48,7 @@ import lombok.RequiredArgsConstructor;
         domainEvent = Object_recentCommands.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
-        executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING
+        executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
         cssClassFa = "fa-bolt",
