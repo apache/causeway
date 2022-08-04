@@ -63,10 +63,14 @@ public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher
 
     private final Provider<EntityChangeTracker> entityChangeTrackerProvider;
     private final Provider<LifecycleCallbackNotifier> lifecycleCallbackNotifierProvider;
-    private final InteractionService interactionService;
+    private final Provider<InteractionService> interactionServiceProvider;
 
-    EntityChangeTracker entityChangeTracker() {
-        return interactionService.isInInteraction() ? entityChangeTrackerProvider.get() : EntityChangeTracker.NOOP;
+    private InteractionService interactionService() {
+        return interactionServiceProvider.get();
+    }
+
+    private EntityChangeTracker entityChangeTracker() {
+        return interactionService().isInInteraction() ? entityChangeTrackerProvider.get() : EntityChangeTracker.NOOP;
     }
 
     LifecycleCallbackNotifier lifecycleCallbackNotifier() {
