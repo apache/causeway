@@ -106,19 +106,21 @@ public class OutboxRestClient_IntegTest  {
 
     @BeforeEach
     void beforeEach() {
-        transactionService.runTransactional(Propagation.REQUIRED, () -> {
-            counterRepository.removeAll();
-            executionOutboxEntryRepository.removeAll();
+        interactionService.runAnonymous(() -> {
+            transactionService.runTransactional(Propagation.REQUIRED, () -> {
+                counterRepository.removeAll();
+                executionOutboxEntryRepository.removeAll();
 
-            assertThat(counterRepository.find()).isEmpty();
+                assertThat(counterRepository.find()).isEmpty();
 
-            counter1 = counterRepository.persist(Counter.builder().name("counter-1").build());
-            counter2 = counterRepository.persist(Counter.builder().name("counter-2").build());
+                counter1 = counterRepository.persist(Counter.builder().name("counter-1").build());
+                counter2 = counterRepository.persist(Counter.builder().name("counter-2").build());
 
-            assertThat(counterRepository.find()).hasSize(2);
+                assertThat(counterRepository.find()).hasSize(2);
 
-            List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
-            assertThat(all).isEmpty();
+                List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
+                assertThat(all).isEmpty();
+            });
         });
 
         outboxClient = restEndpointService.newClient(port, "any", "any-password-because-security-bypass-module-is-configured")
