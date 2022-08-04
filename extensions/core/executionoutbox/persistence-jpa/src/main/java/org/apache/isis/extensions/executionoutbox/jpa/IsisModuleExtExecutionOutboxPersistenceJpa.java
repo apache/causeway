@@ -18,13 +18,10 @@
  */
 package org.apache.isis.extensions.executionoutbox.jpa;
 
-import javax.inject.Inject;
-
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
 import org.apache.isis.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntry;
 import org.apache.isis.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryPK;
