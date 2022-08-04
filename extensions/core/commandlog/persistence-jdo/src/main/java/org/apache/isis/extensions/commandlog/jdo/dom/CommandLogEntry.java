@@ -68,6 +68,14 @@ import lombok.Setter;
                   + " ORDER BY this.timestamp DESC "
                   + " RANGE 0,30"),
     @Query(
+            name  = Nq.FIND_RECENT_BY_TARGET_OR_RESULT,
+            value = "SELECT "
+                  + "  FROM " + CommandLogEntry.FQCN + " "
+                  + " WHERE target == :targetOrResult "
+                  + "    || result == :targetOrResult "
+                  + " ORDER BY this.timestamp DESC "
+                  + " RANGE 0,30"),
+    @Query(
             name  = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
             value = "SELECT "
                   + "  FROM " + CommandLogEntry.FQCN + " "

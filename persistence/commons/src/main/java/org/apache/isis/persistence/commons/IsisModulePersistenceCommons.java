@@ -16,39 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jpa.integration.changetracking;
+package org.apache.isis.persistence.commons;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
+import org.apache.isis.persistence.jpa.integration.changetracking.EntityChangeTrackerDefault;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.metrics.MetricsService;
+@Configuration
+@Import({
+        // modules
+        IsisModuleCoreRuntime.class,
 
-/**
- * @since 2.0 {@index}
- */
-@Service
-@Named("isis.transaction.PersistenceMetricsServiceJpa")
-@Priority(PriorityPrecedence.EARLY)
-@Qualifier("jpa")
-//@Log4j2
-public class PersistenceMetricsServiceJpa
-implements
-    MetricsService {
+        // @Service's
+        EntityChangeTrackerDefault.class,
+        EntityChangeTrackerDefault.TransactionSubscriber.class,
 
-    // -- METRICS
-
-    @Override
-    public int numberEntitiesLoaded() {
-        return -1; // n/a
-    }
-
-    @Override
-    public int numberEntitiesDirtied() {
-        return -1; // n/a
-    }
+})
+public class IsisModulePersistenceCommons {
 
 }

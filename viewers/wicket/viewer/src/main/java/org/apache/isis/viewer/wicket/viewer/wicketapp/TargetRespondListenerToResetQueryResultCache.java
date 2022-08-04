@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.viewer.wicketapp;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
@@ -29,7 +30,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.ITargetRespondListener {
 
-    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
+    @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 
     @Override
     public void onTargetRespond(final AjaxRequestTarget target) {

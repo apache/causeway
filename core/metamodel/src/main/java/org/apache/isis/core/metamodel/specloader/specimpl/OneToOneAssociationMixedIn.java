@@ -128,7 +128,7 @@ implements MixedInMember {
 
         val head = headFor(mixedInAdapter);
 
-        return getPublisherDispatchService().withPublishingSuppressed(
+        return executionPublisher().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(head, Can.empty(), interactionInitiatedBy)
         );
     }
@@ -159,7 +159,7 @@ implements MixedInMember {
                 || _Annotations.synthesize(javaMethod, Domain.Include.class).isPresent();
     }
 
-    private ExecutionPublisher getPublisherDispatchService() {
+    private ExecutionPublisher executionPublisher() {
         return getServiceRegistry().lookupServiceElseFail(ExecutionPublisher.class);
     }
 

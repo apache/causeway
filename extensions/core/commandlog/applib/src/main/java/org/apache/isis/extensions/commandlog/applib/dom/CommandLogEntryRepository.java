@@ -181,7 +181,17 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     public List<C> findRecentByTarget(final Bookmark target) {
         return repositoryService().allMatches(
                 Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_RECENT_BY_TARGET)
-                        .withParameter("target", target));
+                        .withParameter("target", target)
+                        .withLimit(30L)
+        );
+    }
+
+    public List<C> findRecentByTargetOrResult(final Bookmark targetOrResult) {
+        return repositoryService().allMatches(
+                Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_RECENT_BY_TARGET_OR_RESULT)
+                        .withParameter("targetOrResult", targetOrResult)
+                        .withLimit(30L)
+        );
     }
 
 

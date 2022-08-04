@@ -38,6 +38,7 @@ import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
@@ -412,16 +413,16 @@ implements EntityFacet {
 
     private Can<ManagedObject> fetchWithinTransaction(final Supplier<List<?>> fetcher) {
 
-        val entityChangeTracker = getFacetHolder().getServiceRegistry().lookupServiceElseFail(EntityChangeTracker.class);
+        val objectLifecyclePublisher = getFacetHolder().getServiceRegistry().lookupServiceElseFail(ObjectLifecyclePublisher.class);
 
         return getTransactionalProcessor().callWithinCurrentTransactionElseCreateNew(
                 ()->_NullSafe.stream(fetcher.get())
-                    .map(fetchedObject->adopt(entityChangeTracker, fetchedObject))
+                    .map(fetchedObject->adopt(objectLifecyclePublisher, fetchedObject))
                     .collect(Can.toCan()))
                 .getValue().orElseThrow();
     }
 
-    private ManagedObject adopt(final EntityChangeTracker entityChangeTracker, final Object fetchedObject) {
+    private ManagedObject adopt(final ObjectLifecyclePublisher objectLifecyclePublisher, final Object fetchedObject) {
         // handles lifecycle callbacks and injects services
 
         // ought not to be necessary, however for some queries it seems that the
@@ -429,8 +430,8 @@ implements EntityFacet {
         if(fetchedObject instanceof Persistable) {
             // an entity
             val entity = objectManager.adapt(fetchedObject);
-                    //fetchResultHandler.initializeEntityAfterFetched((Persistable) fetchedObject);
-            entityChangeTracker.recognizeLoaded(entity);
+
+            objectLifecyclePublisher.onPostLoad(entity);
             return entity;
         } else {
             // a value type

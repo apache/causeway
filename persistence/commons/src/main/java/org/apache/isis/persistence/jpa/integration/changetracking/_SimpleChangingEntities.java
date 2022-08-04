@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.changetracking;
+package org.apache.isis.persistence.jpa.integration.changetracking;
 
 import java.sql.Timestamp;
 import java.util.UUID;

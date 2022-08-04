@@ -35,12 +35,25 @@
                 <bs3:tab name="Identifier">
                     <bs3:row>
                         <bs3:col span="12">
-                            <cpt:fieldSet name="Identifiers" id="identifiers" unreferencedProperties="true">
+                            <cpt:fieldSet name="Identity" id="identity">
                                 <cpt:action id="previous"/>
                                 <cpt:action id="next"/>
+                                <cpt:property id="httpSessionGuid"/>
+                            </cpt:fieldSet>
+                            <cpt:fieldSet name="" id="who-and-when">
                                 <cpt:property id="username"/>
                                 <cpt:property id="loginTimestamp"/>
                             </cpt:fieldSet>
+                            <cpt:fieldSet name="" id="http-id">
+                                <cpt:property id="sessionGuid"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Other">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
@@ -48,12 +61,6 @@
                     <bs3:row>
                         <bs3:col span="12">
                             <cpt:fieldSet name="Metadata" id="metadata">
-                                <cpt:action id="recentAuditTrailEntries" position="PANEL_DROPDOWN"/>
-                                <cpt:action id="clearHints" position="PANEL_DROPDOWN"/>
-                                <cpt:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
-                                <cpt:action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
-                                <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
-                                <cpt:property id="sessionId"/>
                             </cpt:fieldSet>
                         </bs3:col>
                     </bs3:row>
@@ -68,7 +75,7 @@
                             <cpt:fieldSet name="Timestamps" id="logout">
                                 <cpt:property id="loginTimestamp"/>
                                 <cpt:property id="logoutTimestamp"/>
-                                <cpt:property id="causedBy2"/>
+                                <cpt:property id="causedBy"/>
                             </cpt:fieldSet>
                         </bs3:col>
                     </bs3:row>

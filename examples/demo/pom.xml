@@ -175,6 +175,36 @@
 				<scope>import</scope>
 			</dependency>
 
+			<dependency>
+				<groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>demo-domain</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>demo-web</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>demo-wicket-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>demo-wicket-jpa</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>demo-wicket-jdo</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -186,10 +216,6 @@
 		</dependency>
 	</dependencies>
 
-	<modules>
-		<module>domain</module>
-	</modules>
-
 	<profiles>
 		<profile>
 			<id>module-examples-demo-wicket</id>
@@ -199,6 +225,7 @@
 				</property>
 			</activation>
 			<modules>
+				<module>domain</module>
 				<module>web</module>
 				<module>wicket/common</module>
 				<module>wicket/jdo</module>
@@ -213,19 +240,21 @@
 				</property>
 			</activation>
 			<modules>
+				<module>domain</module>
 				<module>web</module>
 				<module>wicket/common</module>
 				<module>wicket/jpa-and-graphql</module>
 			</modules>
 		</profile>
 		<profile>
-			<id>demo-vaadin</id>
+			<id>modules-example-demo-vaadin</id>
 			<activation>
 				<property>
-					<name>demo-vaadin</name>
+					<name>modules-example-demo-vaadin</name>
 				</property>
 			</activation>
 			<modules>
+				<module>domain</module>
 				<module>web</module>
 				<module>wicket/common</module>
 				<module>wicket/jdo</module>
@@ -233,13 +262,14 @@
 			</modules>
 		</profile>
 		<profile>
-			<id>demo-javafx</id>
+			<id>modules-example-demo-javafx</id>
 			<activation>
 				<property>
 					<name>demo-javafx</name>
 				</property>
 			</activation>
 			<modules>
+				<module>domain</module>
 				<module>javafx</module>
 			</modules>
 		</profile>

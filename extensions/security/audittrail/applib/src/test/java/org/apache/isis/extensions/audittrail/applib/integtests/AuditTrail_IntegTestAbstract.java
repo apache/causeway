@@ -74,7 +74,7 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
         // then
         var entries = auditTrailEntryRepository.findAll();
         val propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
-        assertThat(propertyIds).containsExactlyInAnyOrder("name", "num", "num2");
+        assertThat(propertyIds).contains("name", "num", "num2");
 
         val entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
         assertThat(entriesById.get("name"))
@@ -175,7 +175,7 @@ public abstract class AuditTrail_IntegTestAbstract extends IsisIntegrationTestAb
         // then
         var entries = auditTrailEntryRepository.findAll();
         val propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
-        assertThat(propertyIds).containsExactlyInAnyOrder("name", "num", "num2");
+        assertThat(propertyIds).contains("name", "num", "num2");
 
         val entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
         assertThat(entriesById.get("name"))

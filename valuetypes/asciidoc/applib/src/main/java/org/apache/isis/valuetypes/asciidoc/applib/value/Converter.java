@@ -32,32 +32,6 @@ import lombok.Getter;
 
 final class Converter {
 
-    /**
-     * For syntax highlighting to work, the client/browser needs to load specific
-     * java-script and css.
-     * <p>
-     * 1) In your web-app's {@code scripts/application.js} include the bundled
-     * {@code src/main/resources/prism1.14.js}.
-     * <pre>
-     * function includeJs(jsFilePath) {
-     *     var js = document.createElement("script");
-     *     js.type = "text/javascript";
-     *     js.src = jsFilePath;
-     *     document.body.appendChild(js);
-     * }
-     *
-     * includeJs("/scripts/prism1.14.js");
-     * </pre>
-     * <p>
-     * 2) In your web-app's {@code css/application.css} include the bundled
-     * {@code src/main/resources/prism.css}.
-     * <pre>
-     * {@code @import "prism.css"}.
-     * </pre>
-     *
-     * @param adoc - formatted input to be converted to HTML
-     * @param options - if {@code null} uses built-in default options
-     */
     public static String adocToHtml(final @Nullable String adoc, final @Nullable Options options) {
         return _Strings.isEmpty(adoc)
                 ? ""

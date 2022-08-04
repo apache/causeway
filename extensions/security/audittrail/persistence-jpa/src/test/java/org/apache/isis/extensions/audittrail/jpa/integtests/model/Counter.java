@@ -23,12 +23,15 @@ package org.apache.isis.extensions.audittrail.jpa.integtests.model;
 import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -43,7 +46,8 @@ import lombok.Setter;
         name = "Counter"
 )
 @Named("audittrail.test.Counter")
-@DomainObject(nature = Nature.ENTITY)
+@EntityListeners(IsisEntityListener.class)
+@DomainObject(nature = Nature.ENTITY, entityChangePublishing = Publishing.ENABLED)
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

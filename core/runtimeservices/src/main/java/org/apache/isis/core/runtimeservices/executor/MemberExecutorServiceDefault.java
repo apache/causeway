@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
@@ -91,11 +90,19 @@ implements MemberExecutorService {
     private final @Getter ObjectManager objectManager;
     private final @Getter ClockService clockService;
     private final @Getter ServiceInjector serviceInjector;
-    private final @Getter Provider<MetricsService> metricsService;
+    private final @Getter Provider<MetricsService> metricsServiceProvider;
     private final @Getter InteractionDtoFactory interactionDtoFactory;
-    private final @Getter Provider<ExecutionPublisher> executionPublisher;
+    private final @Getter Provider<ExecutionPublisher> executionPublisherProvider;
     private final @Getter MetamodelEventService metamodelEventService;
     private final @Getter TransactionService transactionService;
+
+    private MetricsService metricsService() {
+        return metricsServiceProvider.get();
+    }
+
+    private ExecutionPublisher executionPublisher() {
+        return executionPublisherProvider.get();
+    }
 
     @Override
     public Optional<InteractionInternal> getInteraction() {
@@ -150,7 +157,7 @@ implements MemberExecutorService {
         val memberExecutor = actionExecutorFactory.createExecutor(owningAction, head, argumentAdapters);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        interaction.execute(memberExecutor, actionInvocation, clockService, metricsService.get(), command);
+        interaction.execute(memberExecutor, actionInvocation, clockService, metricsService(), command);
 
         // handle any exceptions
         final Execution<ActionInvocationDto, ?> priorExecution =
@@ -179,13 +186,14 @@ implements MemberExecutorService {
 
         // publish (if not a contributed association, query-only mixin)
         if (ExecutionPublishingFacet.isPublishingEnabled(facetHolder)) {
-            executionPublisher.get().publishActionInvocation(priorExecution);
+            executionPublisher().publishActionInvocation(priorExecution);
         }
 
         val result = resultFilteredHonoringVisibility(method, returnedAdapter, interactionInitiatedBy);
         _Xray.exitInvocation(xrayHandle);
         return result;
     }
+
     @Override
     public ManagedObject setOrClearProperty(
             final @NonNull OneToOneAssociation owningProperty,
@@ -218,7 +226,7 @@ implements MemberExecutorService {
                         interactionInitiatedBy, editingVariant);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        val targetPojo = interaction.execute(executor, propertyEdit, clockService, metricsService.get(), command);
+        val targetPojo = interaction.execute(executor, propertyEdit, clockService, metricsService(), command);
 
         // handle any exceptions
         final Execution<?, ?> priorExecution = interaction.getPriorExecution();
@@ -235,7 +243,7 @@ implements MemberExecutorService {
         // publish (if not a contributed association, query-only mixin)
         val publishedPropertyFacet = facetHolder.getFacet(ExecutionPublishingFacet.class);
         if (publishedPropertyFacet != null) {
-            executionPublisher.get().publishPropertyEdit(priorExecution);
+            executionPublisher().publishPropertyEdit(priorExecution);
         }
 
         val result = getObjectManager().adapt(targetPojo);

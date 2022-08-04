@@ -23,6 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
@@ -44,12 +45,11 @@ public class HasInteractionId_executionLogEntries {
     public static class CollectionDomainEvent
             extends IsisModuleExtExecutionLogApplib.CollectionDomainEvent<HasInteractionId_executionLogEntries, ExecutionLogEntry> { }
 
-
-    public List<? extends ExecutionLogEntry> act() {
+    @MemberSupport public List<? extends ExecutionLogEntry> coll() {
         return executionLogEntryRepository.findByInteractionId(hasInteractionId.getInteractionId());
     }
 
-    public boolean hideAct() {
+    @MemberSupport public boolean hideColl() {
         // for the ELE itself, we provide the 'siblingExecutions' mixin.
         return hasInteractionId instanceof ExecutionLogEntry;
     }

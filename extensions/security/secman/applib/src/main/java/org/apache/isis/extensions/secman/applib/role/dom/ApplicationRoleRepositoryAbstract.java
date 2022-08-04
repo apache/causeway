@@ -51,8 +51,7 @@ implements ApplicationRoleRepository {
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
     @Inject private IsisConfiguration config;
-    @Inject RegexReplacer regexReplacer;
-
+    @Inject private RegexReplacer regexReplacer;
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 
     private final Class<R> applicationRoleClass;

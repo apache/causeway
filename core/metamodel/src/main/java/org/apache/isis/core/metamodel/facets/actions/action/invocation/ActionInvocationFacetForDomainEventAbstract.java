@@ -152,7 +152,7 @@ implements ImperativeFacet {
         final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
         final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
         if(cacheable) {
-            final QueryResultsCache queryResultsCache = getQueryResultsCache();
+            final QueryResultsCache queryResultsCache = queryResultsCache();
             final Object[] targetPojoPlusExecutionParameters = _Arrays.combine(executionParameters, targetPojo);
             return queryResultsCache.execute(
                     ()->CanonicalInvoker.invoke(method, targetPojo, executionParameters),
@@ -163,11 +163,11 @@ implements ImperativeFacet {
         }
     }
 
-    private QueryResultsCache getQueryResultsCache() {
+    private QueryResultsCache queryResultsCache() {
         return serviceRegistry.lookupServiceElseFail(QueryResultsCache.class);
     }
 
-    private InteractionDtoFactory getInteractionDtoServiceInternal() {
+    private InteractionDtoFactory interactionDtoFactory() {
         return serviceRegistry.lookupServiceElseFail(InteractionDtoFactory.class);
     }
 
@@ -184,7 +184,7 @@ implements ImperativeFacet {
         public Object execute(final ActionInvocation currentExecution) {
 
             // update the current execution with the DTO (memento)
-            val invocationDto = getInteractionDtoServiceInternal()
+            val invocationDto = interactionDtoFactory()
             .asActionInvocationDto(owningAction, head, initialArgs);
 
             currentExecution.setDto(invocationDto);

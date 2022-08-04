@@ -22,6 +22,7 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -68,7 +69,7 @@ public class MeService {
 
     final ApplicationUserRepository applicationUserRepository;
     final UserService userService;
-    final javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
+    final Provider<QueryResultsCache> queryResultsCacheProvider;
 
 
     @ObjectSupport public String iconName() {

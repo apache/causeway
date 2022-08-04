@@ -50,6 +50,7 @@ usage() {
  echo "  -k use 'package' rather than 'install'.  Does not run integ tests.  Cannot combine with '-y'" >&2
  echo "  -y use 'verify' rather than 'install'.  Cannot combine with '-k'"                             >&2
  echo "  -O do NOT add '-o' (offline) flag, ie bring down any new dependencies"                        >&2
+ echo "  -I append '-Dmodule-all-except-incubator"                                                     >&2
  echo "  -F do NOT search for Failures and Errors at the end"                                          >&2
  echo "  -S do NOT print summary or last 50 lines at the end"                                          >&2
  echo "  -w whatif - don't run the command but do print it out.  Implies -v (verbose)"                 >&2
@@ -68,12 +69,13 @@ WHATIF=false
 SINGLE_THREADED=false
 SKIP_SEARCH_FOR_FAILURES=false
 SKIP_SUMMARY=false
+ALL_EXCEPT_INCUBATOR=false
 EDIT=false
 VERBOSE=false
 
 MVN_LOG=/tmp/$BASENAME_0.$$.log
 
-while getopts 'prctlkyOFSwveh' opt
+while getopts 'prctlkyIOFSwveh' opt
 do
   case $opt in
     p) export GIT_PULL=true ;;
@@ -83,6 +85,7 @@ do
     l) export SINGLE_THREADED=true ;;
     k) export PACKAGE_ONLY=true ;;
     y) export VERIFY_ONLY=true ;;
+    I) export ALL_EXCEPT_INCUBATOR=true ;;
     F) export SKIP_SEARCH_FOR_FAILURES=true ;;
     S) export SKIP_SUMMARY=true ;;
     w) export WHATIF=true ;;
@@ -110,6 +113,7 @@ if [ "$VERBOSE" = "true" ]; then
   echo "-k PACKAGE_ONLY             : $PACKAGE_ONLY"
   echo "-y VERIFY_ONLY              : $VERIFY_ONLY"
   echo "-O SKIP_OFFLINE             : $SKIP_OFFLINE"
+  echo "-I ALL_EXCEPT_INCUBATOR     : $ALL_EXCEPT_INCUBATOR"
   echo "-F SKIP_SEARCH_FOR_FAILURES : $SKIP_SEARCH_FOR_FAILURES"
   echo "-S SKIP_SUMMARY             : $SKIP_SUMMARY"
   echo "-w WHATIF                   : $WHATIF"
@@ -138,6 +142,10 @@ fi
 
 if [ "$TIMELINE" = "true" ]; then
   OPTS="$OPTS -Dmaven-timeline.version=1.8-SNAPSHOT"
+fi
+
+if [ "$ALL_EXCEPT_INCUBATOR" = "true" ]; then
+  OPTS="$OPTS -Dmodule-all-except-incubator"
 fi
 
 if [ "$SKIP_OFFLINE" = "false" ]; then

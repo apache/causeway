@@ -50,30 +50,6 @@
 			<artifactId>isis-persistence-jpa-eclipselink</artifactId>
 		</dependency>
 
-		<!-- Extensions -->
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-commandlog-persistence-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-sessionlog-persistence-jpa</artifactId>
-		</dependency>
-
-		<!-- Value types -->
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-persistence-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
-		</dependency>
-
 	</dependencies>
 
 	<profiles>

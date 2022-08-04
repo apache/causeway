@@ -761,6 +761,7 @@ div.label-right .scalarValueWrapper .feedback-links-below-wrapper {
 .form-horizontal.actionParametersForm .form-group,
 .form-horizontal.propertyEditForm .form-group {
     margin-left: -5px;
+    margin-top: 5px;
 }
 
 .form-horizontal.inputForm .form-group {
@@ -1012,6 +1013,11 @@ footer .footer-image {
     padding-top: 3px;
     /*padding-bottom: 7px;*/
 }
+
+.actionParametersForm .alert {
+    margin-top: 10px;
+}
+
 
 .propertyEditForm .buttons .wicket-ajax-indicator,
 .actionParametersForm .buttons .wicket-ajax-indicator,

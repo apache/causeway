@@ -85,7 +85,7 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
 
     // -- HELPER
 
-    private Optional<EntityChanges> getPayload(HasEnlistedEntityChanges hasEnlistedEntityChanges) {
+    private Optional<EntityChanges> getPayload(final @NonNull HasEnlistedEntityChanges hasEnlistedEntityChanges) {
         return enabledSubscribers.isEmpty()
                 ? Optional.empty()
                 : hasEnlistedEntityChanges.getEntityChanges(

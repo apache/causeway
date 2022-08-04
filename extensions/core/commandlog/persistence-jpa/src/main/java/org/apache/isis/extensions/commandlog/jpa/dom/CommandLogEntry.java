@@ -98,6 +98,13 @@ import lombok.Setter;
                   + " WHERE cl.target = :target "
                   + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 30
     @NamedQuery(
+            name  = Nq.FIND_RECENT_BY_TARGET_OR_RESULT,
+            query = "SELECT cl "
+                  + "  FROM CommandLogEntry cl "
+                  + " WHERE cl.target = :targetOrResult "
+                  + "    OR cl.result = :targetOrResult "
+                  + " ORDER BY cl.timestamp DESC"), // programmatic LIMIT 30
+    @NamedQuery(
             name  = Nq.FIND_BY_TARGET_AND_TIMESTAMP_BETWEEN,
             query = "SELECT cl "
                   + "  FROM CommandLogEntry cl "

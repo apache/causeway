@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,43 +34,47 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
 
-@EqualsAndHashCode(of = {"bookmarkStr", "propertyId"})
-@ToString(of = {"bookmarkStr", "propertyId"})
+@EqualsAndHashCode(of = {"id"})
+@ToString(of = {"id"})
 public final class PropertyChangeRecord {
 
-    @Getter private final ManagedObject entity;
-    @Getter private final ObjectAssociation property;
-    @Getter private final Bookmark bookmark;
-    @Getter private final String propertyId;
+    @Getter private final PropertyChangeRecordId id;
     @Getter private PreAndPostValue preAndPostValue;
 
-    private final String bookmarkStr;
+    public ManagedObject getEntity() {return id.getEntity();}
+    public OneToOneAssociation getProperty() {return id.getProperty();}
+    public Bookmark getBookmark() {return id.getBookmark();}
+    public String getPropertyId() {return id.getPropertyId();}
 
-    public static PropertyChangeRecord of(
-            final @NonNull ManagedObject entity,
-            final @NonNull ObjectAssociation property) {
-        return new PropertyChangeRecord(entity, property, null);
+
+    public static PropertyChangeRecord ofNew(
+            final @NonNull PropertyChangeRecordId pcrId) {
+        return new PropertyChangeRecord(pcrId)
+                        .withPreValueSetToNew();
     }
 
-    public static PropertyChangeRecord of(
-            final @NonNull ManagedObject entity,
-            final @NonNull ObjectAssociation property,
-            final @NonNull PreAndPostValue preAndPostValue) {
-        return new PropertyChangeRecord(entity, property, preAndPostValue);
+    public static PropertyChangeRecord ofCurrent(
+            final @NonNull PropertyChangeRecordId pcrId) {
+        return new PropertyChangeRecord(pcrId)
+                        .withPreValueSetToCurrent();
     }
 
-    private PropertyChangeRecord(
-            final ManagedObject entity,
-            final ObjectAssociation property,
-            final PreAndPostValue preAndPostValue) {
-        this.entity = entity;
-        this.property = property;
-        this.propertyId = property.getId();
+    public static PropertyChangeRecord ofCurrent(
+            final @NonNull PropertyChangeRecordId pcrId,
+            final Object currentValue) {
+        return new PropertyChangeRecord(pcrId)
+                        .withPreValueSetTo(currentValue);
+    }
 
-        this.bookmark = ManagedObjects.bookmarkElseFail(entity);
-        this.bookmarkStr = bookmark.toString();
+    public static PropertyChangeRecord ofDeleting(
+            final @NonNull PropertyChangeRecordId id) {
+        return new PropertyChangeRecord(id)
+                        .withPreValueSetToCurrent()
+                        .withPostValueSetToDeleted();
+    }
 
-        this.preAndPostValue = preAndPostValue;
+    private PropertyChangeRecord(final @NonNull PropertyChangeRecordId id) {
+        this.id = id;
     }
 
     public String getLogicalMemberIdentifier() {
@@ -79,21 +83,32 @@ public final class PropertyChangeRecord {
         return target.getLogicalTypeName() + "#" + propertyId;
     }
 
-    public void setPreValue(final Object pre) {
-        preAndPostValue = PreAndPostValue.pre(pre);
+    public PropertyChangeRecord withPreValueSetToNew() {
+        return withPreValueSetTo(PropertyValuePlaceholder.NEW);
     }
 
-    public void updatePreValue() {
-        setPreValue(getPropertyValue());
+    public PropertyChangeRecord withPreValueSetToCurrent() {
+        return withPreValueSetTo(getPropertyValue());
     }
 
-    public void updatePostValueAsNonDeleted() {
-        preAndPostValue = preAndPostValue.withPost(getPropertyValue());
+    public PropertyChangeRecord withPostValueSetToCurrent() {
+        return withPostValueSetTo(getPropertyValue());
     }
 
-    public void updatePostValueAsDeleted() {
-        preAndPostValue = preAndPostValue.withPost(PropertyValuePlaceholder.DELETED);
+    public PropertyChangeRecord withPostValueSetToDeleted() {
+        return withPostValueSetTo(PropertyValuePlaceholder.DELETED);
     }
+
+    private PropertyChangeRecord withPreValueSetTo(Object preValue) {
+        this.preAndPostValue = PreAndPostValue.pre(preValue);
+        return this;
+    }
+
+    private PropertyChangeRecord withPostValueSetTo(Object postValue) {
+        this.preAndPostValue = preAndPostValue.withPost(postValue);
+        return this;
+    }
+
 
     // -- UTILITY
 
@@ -120,7 +135,7 @@ public final class PropertyChangeRecord {
     // -- HELPER
 
     private Object getPropertyValue() {
-        val referencedAdapter = property.get(entity, InteractionInitiatedBy.FRAMEWORK);
+        val referencedAdapter = getProperty().get(getEntity(), InteractionInitiatedBy.FRAMEWORK);
         return ManagedObjects.UnwrapUtil.single(referencedAdapter);
     }
 

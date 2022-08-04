@@ -20,14 +20,19 @@ package org.apache.isis.extensions.executionlog.applib.app;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.RestrictTo;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
@@ -55,6 +60,21 @@ public class ExecutionLogMenu {
 
     public static abstract class ActionDomainEvent
         extends IsisModuleExtExecutionLogApplib.ActionDomainEvent<ExecutionLogMenu> { }
+
+
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(describedAs = "Returns the most recent execution entries")
+    public List<? extends ExecutionLogEntry> findMostRecent() {
+        return executionLogEntryRepository.findMostRecent();
+    }
+
+
+    @Action(semantics = SemanticsOf.SAFE, restrictTo = RestrictTo.PROTOTYPING)
+    @ActionLayout(describedAs = "Returns all entries (still to be processed) in the outbox")
+    public List<? extends ExecutionLogEntry> findAll() {
+        return executionLogEntryRepository.findAll();
+    }
 
 
     final ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;

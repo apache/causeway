@@ -24,8 +24,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.ValueSemantics;
 
 public interface HasInteractionDto {
 
@@ -33,8 +35,10 @@ public interface HasInteractionDto {
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            multiLine = 9
+            multiLine = 15,
+            labelPosition = LabelPosition.NONE
     )
+    @ValueSemantics(provider = "pretty-render")
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface InteractionDtoAnnot {

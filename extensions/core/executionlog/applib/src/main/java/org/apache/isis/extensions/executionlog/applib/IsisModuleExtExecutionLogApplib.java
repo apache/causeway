@@ -23,8 +23,10 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.executionlog.applib.app.ExecutionLogMenu;
 import org.apache.isis.extensions.executionlog.applib.contributions.HasInteractionId_executionLogEntries;
+import org.apache.isis.extensions.executionlog.applib.contributions.HasUsername_recentExecutionsByUser;
 import org.apache.isis.extensions.executionlog.applib.contributions.Object_recentExecutions;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
+import org.apache.isis.extensions.executionlog.applib.dom.mixins.ExecutionLogEntry_siblingExecutions;
 import org.apache.isis.extensions.executionlog.applib.spiimpl.ExecutionSubscriberForExecutionLog;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
@@ -35,7 +37,9 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 
         // mixins
         HasInteractionId_executionLogEntries.class,
+        HasUsername_recentExecutionsByUser.class,
         Object_recentExecutions.class,
+        ExecutionLogEntry_siblingExecutions.class,
 
         // @Service's
         ExecutionSubscriberForExecutionLog.class,

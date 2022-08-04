@@ -145,7 +145,7 @@ implements MixedInMember {
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        return getPublishingServiceInternal().withPublishingSuppressed(
+        return executionPublisher().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(
                         headFor(ownerAdapter), Can.empty(), interactionInitiatedBy));
     }
@@ -176,7 +176,7 @@ implements MixedInMember {
                 || _Annotations.synthesize(javaMethod, Domain.Include.class).isPresent();
     }
 
-    private ExecutionPublisher getPublishingServiceInternal() {
+    private ExecutionPublisher executionPublisher() {
         return getServiceRegistry().lookupServiceElseFail(ExecutionPublisher.class);
     }
 

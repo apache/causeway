@@ -48,8 +48,7 @@ import lombok.RequiredArgsConstructor;
         domainEvent = Object_recentCommands.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
-        executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING
+        executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
         cssClassFa = "fa-bolt",
@@ -67,7 +66,7 @@ public class Object_recentCommands {
 
     @MemberSupport public List<? extends CommandLogEntry> act() {
         return bookmarkService.bookmarkFor(domainObject)
-        .map(commandLogEntryRepository::findRecentByTarget)
+        .map(commandLogEntryRepository::findRecentByTargetOrResult)
         .orElse(Collections.emptyList());
     }
 

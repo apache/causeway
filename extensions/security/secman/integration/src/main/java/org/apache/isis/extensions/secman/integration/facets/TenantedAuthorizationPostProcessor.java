@@ -66,6 +66,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     @Inject UserService userService;
     @Inject @Lazy ApplicationUserRepository userRepository;
     @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
+
     @Autowired(required=false) List<ApplicationTenancyEvaluator> applicationTenancyEvaluators;
 
     @Inject

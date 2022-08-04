@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
@@ -54,11 +55,10 @@ implements ApplicationPermissionRepository {
 
     @Inject private RepositoryService repository;
     @Inject private ApplicationFeatureRepository featureRepository;
-    @Inject private ApplicationRoleRepository roleRepository;
     @Inject private FactoryService factory;
     @Inject private MessageService messages;
 
-    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
+    @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 
     private final Class<P> applicationPermissionClass;
 

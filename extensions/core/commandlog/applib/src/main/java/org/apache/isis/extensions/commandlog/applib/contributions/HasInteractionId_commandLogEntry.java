@@ -21,8 +21,12 @@
 package org.apache.isis.extensions.commandlog.applib.contributions;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
@@ -38,6 +42,9 @@ import lombok.RequiredArgsConstructor;
 @Property(
         domainEvent = HasInteractionId_commandLogEntry.PropertyDomainEvent.class
 )
+@PropertyLayout(
+        hidden = Where.ALL_TABLES
+)
 @RequiredArgsConstructor
 public class HasInteractionId_commandLogEntry {
 
@@ -47,8 +54,8 @@ public class HasInteractionId_commandLogEntry {
             extends IsisModuleExtCommandLogApplib.PropertyDomainEvent<HasInteractionId_commandLogEntry, CommandLogEntry> { }
 
 
-    public CommandLogEntry prop() {
-        return queryResultsCache.execute(this::doProp, getClass(), "prop");
+    @MemberSupport public CommandLogEntry prop() {
+        return queryResultsCacheProvider.get().execute(this::doProp, getClass(), "prop");
     }
 
     private CommandLogEntry doProp() {
@@ -59,11 +66,11 @@ public class HasInteractionId_commandLogEntry {
      * Hide if the contributee is a {@link CommandLogEntry}, because we don't want to navigate to ourselves, and there
      * are other ways to navigate to the parent or child commands.
      */
-    public boolean hideProp() {
+    @MemberSupport public boolean hideProp() {
         return (hasInteractionId instanceof CommandLogEntry);
     }
 
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
-    @Inject QueryResultsCache queryResultsCache;
+    @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
 
 }

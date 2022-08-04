@@ -325,9 +325,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
             domainEvent = LogicalMemberIdentifier.DomainEvent.class,
             editing = Editing.DISABLED
     )
-    @PropertyLayout(
-            hidden = Where.ALL_TABLES
-    )
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface LogicalMemberIdentifier {

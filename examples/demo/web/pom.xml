@@ -46,9 +46,9 @@
 		<dependency>
 			<groupId>org.apache.isis.examples.apps</groupId>
 			<artifactId>demo-domain</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
 		</dependency>
+
+
 
 		<!-- CORS -->
 
