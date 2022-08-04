@@ -37,14 +37,14 @@ public class TenantedAuthorizationFacetDefault
 extends FacetAbstract
 implements TenantedAuthorizationFacet {
 
-    private static final Class<? extends Facet> type() {
+    private static Class<? extends Facet> type() {
         return TenantedAuthorizationFacet.class;
     }
 
     private final List<ApplicationTenancyEvaluator> evaluators;
     private final ApplicationUserRepository applicationUserRepository;
-    private final Provider<QueryResultsCache> queryResultsCacheProvider;
     private final UserService userService;
+    private final Provider<QueryResultsCache> queryResultsCacheProvider;
 
     public TenantedAuthorizationFacetDefault(
             final List<ApplicationTenancyEvaluator> evaluators,

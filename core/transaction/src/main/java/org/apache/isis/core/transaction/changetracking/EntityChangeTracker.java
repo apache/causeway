@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
@@ -30,7 +31,19 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  *
  * @since 1.x but renamed/refactored for v2 {@index}
  */
-public interface EntityChangeTracker {
+public interface EntityChangeTracker extends DisposableBean {
+
+    /**
+     * Provided primarily for testing, but also used in cases where an attempt is made to resolve a bean but
+     * there is no active interaction.
+     */
+    EntityChangeTracker NOOP = new EntityChangeTracker() {
+        @Override public void destroy() throws Exception {}
+        @Override public void enlistCreated(ManagedObject entity) {}
+        @Override public void enlistUpdating(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords) {}
+        @Override public void enlistDeleting(ManagedObject entity) {}
+        @Override public void incrementLoaded(ManagedObject entity) {}
+    };
 
     /**
      * Publishing support: for object stores to enlist an object that has just been created,

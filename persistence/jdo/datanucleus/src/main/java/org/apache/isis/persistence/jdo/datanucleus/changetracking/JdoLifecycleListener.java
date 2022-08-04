@@ -32,15 +32,13 @@ import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.enhancement.Persistable;
 
-import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
-import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
-import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -69,6 +67,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     private final @NonNull MetaModelContext metaModelContext;
     private final @NonNull Provider<EntityChangeTracker> entityChangeTrackerProvider;
     private final @NonNull ObjectLifecyclePublisher objectLifecyclePublisher;
+    private final @NonNull InteractionService interactionService;
 
     // -- CALLBACKS
 
@@ -210,8 +209,8 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     // -- DEPENDENCIES
 
-    private EntityChangeTracker getEntityChangeTracker() {
-        return entityChangeTrackerProvider.get();
+    private EntityChangeTracker entityChangeTracker() {
+        return interactionService.isInInteraction() ? entityChangeTrackerProvider.get() : EntityChangeTracker.NOOP;
     }
 
 }

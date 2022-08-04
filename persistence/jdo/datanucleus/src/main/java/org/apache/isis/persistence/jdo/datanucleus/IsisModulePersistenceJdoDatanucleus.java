@@ -42,6 +42,7 @@ import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -157,7 +158,7 @@ public class IsisModulePersistenceJdoDatanucleus {
             final IsisConfiguration isisConfiguration,
             final DataSource dataSource,
             final MetaModelContext metaModelContext,
-            final EventBusService eventBusService,
+            final InteractionService interactionService,
             final ObjectLifecyclePublisher objectLifecyclePublisher,
             final Provider<EntityChangeTracker> entityChangeTrackerProvider,
             final IsisBeanTypeRegistry beanTypeRegistry,
@@ -175,14 +176,14 @@ public class IsisModulePersistenceJdoDatanucleus {
                 val pu = createDefaultPersistenceUnit(beanTypeRegistry);
                 val pmf = new JDOPersistenceManagerFactory(pu, props);
                 pmf.setConnectionFactory(dataSource);
-                integrateWithApplicationLayer(metaModelContext, entityChangeTrackerProvider, objectLifecyclePublisher, pmf);
+                integrateWithApplicationLayer(metaModelContext, entityChangeTrackerProvider, objectLifecyclePublisher, interactionService, pmf);
                 return pmf;
             }
             @Override
             protected PersistenceManagerFactory newPersistenceManagerFactory(final String name) {
                 val pmf = super.newPersistenceManagerFactory(name);
                 pmf.setConnectionFactory(dataSource); //might be too late, anyway, not sure if this is ever called
-                integrateWithApplicationLayer(metaModelContext, entityChangeTrackerProvider, objectLifecyclePublisher, pmf);
+                integrateWithApplicationLayer(metaModelContext, entityChangeTrackerProvider, objectLifecyclePublisher, interactionService, pmf);
                 return pmf;
             }
         };
@@ -334,12 +335,13 @@ public class IsisModulePersistenceJdoDatanucleus {
             final MetaModelContext metaModelContext,
             final Provider<EntityChangeTracker> entityChangeTrackerProvider,
             final ObjectLifecyclePublisher objectLifecyclePublisher,
+            final InteractionService interactionService,
             final PersistenceManagerFactory pmf) {
 
         // install JDO specific entity change listeners ...
 
         val jdoLifecycleListener =
-                new JdoLifecycleListener(metaModelContext, entityChangeTrackerProvider, objectLifecyclePublisher);
+                new JdoLifecycleListener(metaModelContext, entityChangeTrackerProvider, objectLifecyclePublisher, interactionService);
         pmf.addInstanceLifecycleListener(jdoLifecycleListener, (Class[]) null);
 
     }

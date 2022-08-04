@@ -21,6 +21,7 @@
 package org.apache.isis.extensions.commandlog.applib.contributions;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
@@ -48,7 +49,7 @@ public class HasInteractionId_commandLogEntry {
 
 
     public CommandLogEntry prop() {
-        return queryResultsCache.execute(this::doProp, getClass(), "prop");
+        return queryResultsCacheProvider.get().execute(this::doProp, getClass(), "prop");
     }
 
     private CommandLogEntry doProp() {
@@ -64,6 +65,6 @@ public class HasInteractionId_commandLogEntry {
     }
 
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
-    @Inject QueryResultsCache queryResultsCache;
+    @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
 
 }

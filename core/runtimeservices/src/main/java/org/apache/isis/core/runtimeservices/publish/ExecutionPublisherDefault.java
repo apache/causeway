@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.lang.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
@@ -57,11 +58,20 @@ implements ExecutionPublisher {
     private final InteractionLayerTracker iaTracker;
 
     private Can<ExecutionSubscriber> enabledSubscribers = Can.empty();
+    /**
+     * this is the reason that this service is @InteractionScope'd
+     */
+    private final LongAdder suppressionRequestCounter = new LongAdder();
 
     @PostConstruct
     public void init() {
         enabledSubscribers = Can.ofCollection(subscribers)
                 .filter(HasEnabling::isEnabled);
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        suppressionRequestCounter.reset();
     }
 
     @Override
@@ -104,7 +114,6 @@ implements ExecutionPublisher {
 
     }
 
-    private final LongAdder suppressionRequestCounter = new LongAdder();
 
     private boolean canPublish() {
         return enabledSubscribers.isNotEmpty()

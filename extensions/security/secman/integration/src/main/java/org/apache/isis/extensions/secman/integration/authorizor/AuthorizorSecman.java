@@ -95,20 +95,16 @@ public class AuthorizorSecman implements Authorizor {
     @InteractionScope
     static class PermissionCache implements DisposableBean {
 
-        private Map<String, Optional<ApplicationPermissionValueSet>> permissionsByUsername;
+        private final Map<String, Optional<ApplicationPermissionValueSet>> permissionsByUsername = _Maps.newHashMap();
 
         @Override
-        public void destroy() throws Exception {
-            permissionsByUsername = null;
+        public void destroy() {
+            permissionsByUsername.clear();
         }
 
         Optional<ApplicationPermissionValueSet> computeIfAbsent(
                 final @NonNull String userName,
                 final Supplier<Optional<ApplicationPermissionValueSet>> lookup) {
-
-            if(permissionsByUsername==null) {
-                permissionsByUsername = _Maps.newHashMap();
-            }
 
             return permissionsByUsername.computeIfAbsent(userName, __->lookup.get());
         }

@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.services.publishing;
 
 import java.util.function.Supplier;
 
+import org.springframework.beans.factory.DisposableBean;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.iactn.Execution;
@@ -33,7 +35,7 @@ import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
  *
  * @see ExecutionSubscriber
  */
-public interface ExecutionPublisher {
+public interface ExecutionPublisher extends DisposableBean {
 
     /**
      * Notifies {@link ExecutionSubscriber}s of an action invocation through

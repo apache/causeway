@@ -31,6 +31,7 @@ import org.apache.isis.persistence.jpa.integration.changetracking.EntityChangeTr
 
         // @Service's
         EntityChangeTrackerDefault.class,
+        EntityChangeTrackerDefault.TransactionSubscriber.class,
 
 })
 public class IsisModulePersistenceCommons {

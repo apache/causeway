@@ -28,6 +28,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
@@ -46,6 +47,8 @@ import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * @see ObjectLifecyclePublisher
  * @since 2.0 {@index}
@@ -54,23 +57,18 @@ import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
 @Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ObjectLifecyclePublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
 public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher {
 
     private final Provider<EntityChangeTracker> entityChangeTrackerProvider;
     private final Provider<LifecycleCallbackNotifier> lifecycleCallbackNotifierProvider;
-
-    @Inject
-    public ObjectLifecyclePublisherDefault(
-            final Provider<EntityChangeTracker> entityChangeTrackerProvider,
-            final Provider<LifecycleCallbackNotifier> lifecycleCallbackNotifierProvider) {
-        this.entityChangeTrackerProvider = entityChangeTrackerProvider;
-        this.lifecycleCallbackNotifierProvider = lifecycleCallbackNotifierProvider;
-    }
+    private final InteractionService interactionService;
 
     EntityChangeTracker entityChangeTracker() {
-        return entityChangeTrackerProvider.get();
+        return interactionService.isInInteraction() ? entityChangeTrackerProvider.get() : EntityChangeTracker.NOOP;
     }
+
     LifecycleCallbackNotifier lifecycleCallbackNotifier() {
         return lifecycleCallbackNotifierProvider.get();
     }

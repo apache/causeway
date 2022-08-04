@@ -72,7 +72,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
                 .filter(HasEnabling::isEnabled);
     }
 
-    private HasEnlistedEntityPropertyChanges getHasEnlistedEntityPropertyChanges() {
+    private HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges() {
         return hasEnlistedEntityPropertyChangesProvider.get();
     }
 
@@ -89,7 +89,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
         val currentUser = userService.currentUserNameElseNobody();
         val currentTransactionId = transactionService.currentTransactionId().orElse(TransactionId.empty());
 
-        val propertyChanges = getHasEnlistedEntityPropertyChanges().getPropertyChanges(
+        val propertyChanges = hasEnlistedEntityPropertyChanges().getPropertyChanges(
                 currentTime,
                 currentUser,
                 currentTransactionId);
