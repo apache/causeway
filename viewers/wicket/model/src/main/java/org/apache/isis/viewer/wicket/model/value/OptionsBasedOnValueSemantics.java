@@ -16,47 +16,47 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.scalars;
+package org.apache.isis.viewer.wicket.model.value;
 
-import java.util.EnumSet;
+import java.util.Optional;
 
-import org.apache.wicket.util.convert.IConverter;
-
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.applib.value.semantics.Renderer.SyntaxHighlighter;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.NonNull;
+import lombok.val;
 
-/**
- * Specialization of {@link ScalarPanelTextFieldAbstract},
- * where the scalar (parameter or property) is a value-type,
- * using conversion that is backed by a {@link ValueSemanticsProvider}.
- */
-public class ScalarPanelTextFieldWithValueSemantics<T>
-extends ScalarPanelTextFieldAbstract<T> {
+public class OptionsBasedOnValueSemantics
+extends ValueSemanticsModelAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ScalarPanelTextFieldWithValueSemantics(
-            final String id,
-            final ScalarModel scalarModel,
-            final Class<T> type) {
-        super(id, scalarModel, type);
-    }
-
-    @Override
-    protected final IConverter<T> getConverter(
+    public OptionsBasedOnValueSemantics(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {
-        return new ConverterBasedOnValueSemantics<>(propOrParam, scalarRepresentation);
+        super(propOrParam, scalarRepresentation);
     }
 
-    @Override
-    protected void setupFormatModifiers(final EnumSet<FormatModifier> modifiers) {
-        modifiers.add(FormatModifier.NO_OUTPUT_ESCAPE);
+    public final Optional<Renderer<?>> lookupRenderer() {
+        val valueFacet = valueFacet();
+        switch(scalarRepresentation) {
+        case EDITING:
+            return Optional.empty();
+        case VIEWING:
+            return Optional.of(propOrParam.fold(
+                    prop->valueFacet.selectRendererForPropertyElseFallback(prop),
+                    param->valueFacet.selectRendererForParameterElseFallback(param)));
+        }
+        throw _Exceptions.unmatchedCase(scalarRepresentation);
+    }
+
+    public final SyntaxHighlighter getSyntaxHighlighter() {
+        return lookupRenderer()
+        .map(Renderer::syntaxHighlighter)
+        .orElse(SyntaxHighlighter.NONE);
     }
 
 }

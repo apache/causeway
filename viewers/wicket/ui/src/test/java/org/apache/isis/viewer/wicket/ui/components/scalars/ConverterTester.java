@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.security._testing.InteractionService_forTesting;
-import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
+import org.apache.isis.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

@@ -43,4 +43,12 @@ extends ChangesDtoValueSemantics {
         return _XmlToHtml.toHtml(xml);
     }
 
+    // -- RENDERER
+
+    @Override
+    public SyntaxHighlighter syntaxHighlighter() {
+        return SyntaxHighlighter.PRISM_COY;
+    }
+
+
 }

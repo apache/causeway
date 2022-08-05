@@ -16,12 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.converter;
+package org.apache.isis.viewer.wicket.model.value;
 
-import java.util.Locale;
-
-import org.apache.wicket.util.convert.ConversionException;
-import org.apache.wicket.util.convert.IConverter;
+import java.io.Serializable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.functional.Either;
@@ -39,19 +36,19 @@ import lombok.NonNull;
 import lombok.Synchronized;
 import lombok.val;
 
-public class ConverterBasedOnValueSemantics<T>
+abstract class ValueSemanticsModelAbstract
 implements
-    IConverter<T>,
-    HasCommonContext {
+    HasCommonContext,
+    Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Identifier featureIdentifier;
-    private final ScalarRepresentation scalarRepresentation;
-    private transient Either<OneToOneAssociation, ObjectActionParameter> propOrParam;
+    protected final Identifier featureIdentifier;
+    protected final ScalarRepresentation scalarRepresentation;
+    protected transient Either<OneToOneAssociation, ObjectActionParameter> propOrParam;
     private transient IsisAppCommonContext commonContext;
 
-    public ConverterBasedOnValueSemantics(
+    protected ValueSemanticsModelAbstract(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {
         this.scalarRepresentation = scalarRepresentation;
@@ -61,80 +58,10 @@ implements
         this.featureIdentifier = propOrParam.getFeatureIdentifier();
     }
 
-    /**
-     * Parameter {@code locale} is ignored!
-     * @see IConverter#convertToObject(String, Locale)
-     */
-    @Override
-    public final T convertToObject(final String text, final Locale locale) throws ConversionException {
-
-        // guard against framework bugs
-        if(scalarRepresentation.isViewing()) {
-            throw _Exceptions.illegalArgument("Internal Error: "
-                    + "cannot convert a rendering representation back to its value-type '%s' -> %s",
-                        text,
-                        featureIdentifier);
-        }
-
-        val feature = feature();
-        val valueFacet = valueFacet();
-
-        val context = valueFacet
-                .createValueSemanticsContext(feature);
-
-        try {
-            return valueFacet.selectParserForFeatureElseFallback(feature)
-                    .parseTextRepresentation(context, text);
-        } catch (Exception e) {
-            if(e instanceof ConversionException) {
-                throw e;
-            } else {
-                throw new ConversionException(e.getMessage(), e);
-            }
-        }
-    }
-
-    /**
-     * Parameter {@code locale} is ignored!
-     * @see IConverter#convertToString(Object, Locale)
-     */
-    @Override
-    public final String convertToString(final T value, final Locale locale) {
-
-        val feature = feature();
-        val valueFacet = valueFacet();
-
-        val context = valueFacet
-                .createValueSemanticsContext(feature);
-
-        switch(scalarRepresentation) {
-        case EDITING:
-            return valueFacet.selectParserForFeatureElseFallback(feature)
-                    .parseableTextRepresentation(context, value);
-        case VIEWING:
-            return propOrParam.fold(
-                    prop->valueFacet.selectRendererForPropertyElseFallback(prop)
-                            .titlePresentation(context, value),
-                    param->valueFacet.selectRendererForParameterElseFallback(param)
-                            .titlePresentation(context, value));
-        }
-
-        throw _Exceptions.unmatchedCase(scalarRepresentation);
-    }
-
-    public String getEditingPattern() {
-        val feature = feature();
-        val valueFacet = valueFacet();
-        val context = valueFacet
-                .createValueSemanticsContext(feature);
-        return valueFacet.selectParserForFeatureElseFallback(feature)
-                .getPattern(context);
-    }
-
     // -- HELPER
 
     @Synchronized
-    private ObjectFeature feature() {
+    protected ObjectFeature feature() {
         if(propOrParam==null) {
             val feature = getSpecificationLoader().loadFeature(featureIdentifier).orElse(null);
             this.propOrParam = (feature instanceof OneToOneAssociation)
@@ -146,8 +73,7 @@ implements
                 ObjectFeature.class::cast);
     }
 
-    @SuppressWarnings("unchecked")
-    private ValueFacet<T> valueFacet() {
+    protected ValueFacet<?> valueFacet() {
         val feature = feature();
         val valueFacet = feature.getElementType()
                 .valueFacet()
@@ -155,7 +81,7 @@ implements
                         "Value type Property or Parameter %s is missing a ValueFacet",
                         feature.getFeatureIdentifier()));
 
-        return (ValueFacet<T>) valueFacet;
+        return valueFacet;
     }
 
     // -- DEPENDENCIES

@@ -31,7 +31,10 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.value.semantics.Renderer.SyntaxHighlighter;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
@@ -47,7 +50,10 @@ public class MarkupComponent extends WebComponent {
 
     private static final long serialVersionUID = 1L;
 
-    public static enum SyntaxHighLighter {
+    /**
+     * Maps {@link SyntaxHighlighter} to behavior.
+     */
+    private static enum HighlightBehavior {
         NONE {
             @Override
             void renderHead(final IHeaderResponse response) {
@@ -70,6 +76,20 @@ public class MarkupComponent extends WebComponent {
                 return MarkupComponent_reloadJs.decorate(htmlContent, prismJsRefs());
             }
         };
+
+        public static HighlightBehavior valueOf(final @Nullable SyntaxHighlighter syntaxHighlighter) {
+            if(syntaxHighlighter==null) {
+                return NONE;
+            }
+            switch(syntaxHighlighter) {
+            case PRISM_COY:
+                return HighlightBehavior.PRISM;
+            case NONE:
+                return HighlightBehavior.NONE;
+            default:
+                throw _Exceptions.unmatchedCase(syntaxHighlighter);
+            }
+        }
         abstract void renderHead(IHeaderResponse response);
         abstract CharSequence htmlContentPostProcess(CharSequence htmlContent);
         private static final List<ResourceReference> prismJsRefs() {
@@ -82,18 +102,23 @@ public class MarkupComponent extends WebComponent {
         private static final long serialVersionUID = 1L;
 
         @Builder.Default
-        private SyntaxHighLighter syntaxHighLighter = SyntaxHighLighter.NONE;
+        private SyntaxHighlighter syntaxHighlighter = SyntaxHighlighter.NONE;
 
         public static Options defaults() {
             return Options.builder().build();
         }
+
+        public HighlightBehavior highlightBehavior() {
+            return HighlightBehavior.valueOf(getSyntaxHighlighter());
+        }
+
     }
 
     // -- CONSTRUCTION
 
     private final Options options;
 
-    protected MarkupComponent(final String id, final IModel<?> model, final Options options) {
+    public MarkupComponent(final String id, final IModel<?> model, final Options options) {
         super(id, model);
         this.options = options;
     }
@@ -107,15 +132,14 @@ public class MarkupComponent extends WebComponent {
     @Override
     public final void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        options.getSyntaxHighLighter().renderHead(response);
+        options.highlightBehavior().renderHead(response);
     }
-
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
         val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(markupStream, openTag,
-                options.getSyntaxHighLighter().htmlContentPostProcess(htmlContent));
+                options.highlightBehavior().htmlContentPostProcess(htmlContent));
     }
 
     @Override

@@ -31,8 +31,8 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
 

@@ -35,4 +35,14 @@ public interface Renderer<T> {
         return titlePresentation(context, value);
     }
 
+    public static enum SyntaxHighlighter {
+        NONE,
+        /** <i>Prism<> with 'coy' theme */
+        PRISM_COY;
+    }
+
+    default SyntaxHighlighter syntaxHighlighter() {
+        return SyntaxHighlighter.NONE;
+    }
+
 }

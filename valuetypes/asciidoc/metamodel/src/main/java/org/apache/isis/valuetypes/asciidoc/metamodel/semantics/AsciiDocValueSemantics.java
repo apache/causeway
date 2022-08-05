@@ -74,6 +74,11 @@ implements
         return renderHtml(adoc, AsciiDoc::asHtml);
     }
 
+    @Override
+    public SyntaxHighlighter syntaxHighlighter() {
+        return SyntaxHighlighter.PRISM_COY;
+    }
+
     // -- PARSER
 
     @Override

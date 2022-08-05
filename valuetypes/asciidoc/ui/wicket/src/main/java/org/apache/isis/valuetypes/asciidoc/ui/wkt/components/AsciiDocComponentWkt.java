@@ -20,6 +20,7 @@ package org.apache.isis.valuetypes.asciidoc.ui.wkt.components;
 
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
 public class AsciiDocComponentWkt extends MarkupComponent {
@@ -29,7 +30,7 @@ public class AsciiDocComponentWkt extends MarkupComponent {
     public AsciiDocComponentWkt(final String id, final IModel<?> model){
         super(id, model,
                 Options.builder()
-                .syntaxHighLighter(SyntaxHighLighter.PRISM)
+                .syntaxHighlighter(SyntaxHighlighter.PRISM_COY)
                 .build());
     }
 

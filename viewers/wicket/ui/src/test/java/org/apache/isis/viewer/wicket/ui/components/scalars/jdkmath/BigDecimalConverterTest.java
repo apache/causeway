@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
-import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
+import org.apache.isis.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ConverterTester;
 
 import lombok.Getter;
