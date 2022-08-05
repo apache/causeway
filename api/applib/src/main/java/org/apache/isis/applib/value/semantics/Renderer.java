@@ -43,6 +43,11 @@ public interface Renderer<T> {
         PRISM_COY;
     }
 
+    /**
+     * Governs whether, to switch on client-side syntax highlighting.
+     * @apiNote a rendered page can currently only support a single high-lighter theme;
+     * if there is a mix of themes the behavior is unpredictable
+     */
     default SyntaxHighlighter syntaxHighlighter() {
         return SyntaxHighlighter.NONE;
     }
