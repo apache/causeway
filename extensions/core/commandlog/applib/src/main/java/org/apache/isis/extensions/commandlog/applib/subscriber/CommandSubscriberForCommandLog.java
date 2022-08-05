@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.util.JaxbUtil;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -53,7 +52,9 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     @Override
     public void onCompleted(final Command command) {
 
-        if (isisConfiguration.getExtensions().getCommandLog().getPublishPolicy().isOnlyIfSystemChanged() && !command.isSystemStateChanged()) {
+        // skip if no changes AND skipping is allowed
+        if (isisConfiguration.getExtensions().getCommandLog().getPublishPolicy().isOnlyIfSystemChanged()
+                && !command.isSystemStateChanged()) {
             return;
         }
 

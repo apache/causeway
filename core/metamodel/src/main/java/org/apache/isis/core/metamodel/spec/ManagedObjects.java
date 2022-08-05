@@ -93,9 +93,28 @@ public final class ManagedObjects {
                 : adapter.getPojo()==null;
     }
 
+    /**
+     * Optionally given adapter, based on whether it is not null AND specified AND not empty.
+     */
+    public static Optional<ManagedObject> whenNonEmpty(final ManagedObject adapter) {
+        return isNullOrUnspecifiedOrEmpty(adapter)
+                ? Optional.empty()
+                : Optional.of(adapter);
+    }
+
     /** whether has at least a spec */
     public static boolean isSpecified(final @Nullable ManagedObject adapter) {
         return adapter!=null && adapter!=ManagedObject.unspecified();
+    }
+
+    /**
+     * Optionally given adapter, based on whether it is specified
+     * (even if empty, that is, representing null.)
+     */
+    public static Optional<ManagedObject> whenSpecified(final ManagedObject adapter) {
+        return isSpecified(adapter)
+                ? Optional.of(adapter)
+                : Optional.empty();
     }
 
     /**

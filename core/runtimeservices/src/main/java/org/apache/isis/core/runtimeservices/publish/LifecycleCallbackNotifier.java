@@ -18,11 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.publish;
 
-import java.util.LinkedHashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Consumer;
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,12 +25,10 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
@@ -54,12 +47,12 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEv
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
 import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Calls lifecycle callbacks for entities, ensuring that any given entity is only ever called once.
@@ -75,61 +68,58 @@ public class LifecycleCallbackNotifier {
 
     final EventBusService eventBusService;
 
-    public void postCreate(ManagedObject entity) {
+    public void postCreate(final ManagedObject entity) {
         CallbackFacet.callCallback(entity, CreatedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, CreatedLifecycleEventFacet.class);
     }
 
-    public void postLoad(ManagedObject entity) {
+    public void postLoad(final ManagedObject entity) {
         CallbackFacet.callCallback(entity, LoadedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);
     }
 
-    public void prePersist(ManagedObject entity) {
+    public void prePersist(final ManagedObject entity) {
         eventBusService.post(PreStoreEvent.of(entity.getPojo()));
         CallbackFacet.callCallback(entity, PersistingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
     }
 
-    public void postPersist(ManagedObject entity) {
+    public void postPersist(final ManagedObject entity) {
         eventBusService.post(PostStoreEvent.of(entity.getPojo()));
         CallbackFacet.callCallback(entity, PersistedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, PersistedLifecycleEventFacet.class);
     }
 
-    public void preUpdate(ManagedObject entity) {
+    public void preUpdate(final ManagedObject entity) {
         eventBusService.post(PreStoreEvent.of(entity.getPojo()));
         CallbackFacet.callCallback(entity, UpdatingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, UpdatingLifecycleEventFacet.class);
     }
 
-    public void postUpdate(ManagedObject entity) {
+    public void postUpdate(final ManagedObject entity) {
         CallbackFacet.callCallback(entity, UpdatedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
     }
 
-    public void preRemove(ManagedObject entity) {
+    public void preRemove(final ManagedObject entity) {
         CallbackFacet.callCallback(entity, RemovingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
     }
 
-
     //  -- HELPER
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void postLifecycleEventIfRequired(
-            final ManagedObject adapter,
+            final ManagedObject object,
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
 
-        val lifecycleEventFacet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
-        if(lifecycleEventFacet == null) {
-            return;
-        }
-        val eventInstance = (AbstractLifecycleEvent) _InstanceUtil
-                .createInstance(lifecycleEventFacet.getEventType());
-        val pojo = adapter.getPojo();
-        postEvent(eventInstance, pojo);
-
+        ManagedObjects.whenNonEmpty(object)
+        .map(ManagedObject::getSpecification)
+        .flatMap(spec->spec.lookupFacet(lifecycleEventFacetClass))
+        .map(LifecycleEventFacet::getEventType)
+        .map(_InstanceUtil::createInstance)
+        .ifPresent(eventInstance->{
+            postEvent(_Casts.uncheckedCast(eventInstance), object.getPojo());
+        });
     }
 
     protected void postEvent(final AbstractLifecycleEvent<Object> event, final Object pojo) {

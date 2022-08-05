@@ -159,7 +159,7 @@ public interface ObjectManager {
             return ManagedObject.unspecified();
         }
         return spec.isScalar()
-                ? managedObjectFor(spec, pojo, entityAdaptingMode)
+                ? managedObjectEagerlyBookmarkedIfRequired(spec, pojo, entityAdaptingMode)
                 : PackedManagedObject.pack(
                         spec.getElementSpecification().orElseGet(fallbackElementType),
                         _NullSafe.streamAutodetect(pojo)
@@ -190,7 +190,8 @@ public interface ObjectManager {
                 || pojo.getClass().equals(proposedSpec.getCorrespondingClass()))
             // if actual type matches spec's, we assume, that we don't need to reload,
             // so this is a shortcut for performance reasons
-            ? managedObjectFor(proposedSpec, pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK)
+            ? managedObjectEagerlyBookmarkedIfRequired(
+                    proposedSpec, pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK)
             // fallback, ignoring proposedSpec
             : adapt(pojo);
         return adapter;
@@ -198,12 +199,19 @@ public interface ObjectManager {
 
     // -- HELPER
 
-    private static ManagedObject managedObjectFor(
+    /**
+     * {@link ManagedObject} factory, that in case of given pojo representing an entity
+     * and the entityAdaptingMode equals {@link EntityAdaptingMode#isMemoize()},
+     * then tries to memoize its {@link Bookmark} eagerly
+     * (otherwise its {@link Bookmark} is lazily resolved).
+     */
+    private static ManagedObject managedObjectEagerlyBookmarkedIfRequired(
             final ObjectSpecification spec,
             final Object pojo,
             final EntityAdaptingMode entityAdaptingMode) {
 
-        if(entityAdaptingMode.isMemoize() && spec.isEntity()) {
+        if(entityAdaptingMode.isMemoize()
+                && spec.isEntity()) {
             val entityFacet = spec.getFacet(EntityFacet.class);
             val state = entityFacet.getEntityState(pojo);
             if(state.isAttached()) {

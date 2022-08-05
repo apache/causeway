@@ -39,10 +39,10 @@ public interface EntityChangeTracker extends DisposableBean {
      */
     EntityChangeTracker NOOP = new EntityChangeTracker() {
         @Override public void destroy() throws Exception {}
-        @Override public void enlistCreated(ManagedObject entity) {}
-        @Override public void enlistUpdating(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords) {}
-        @Override public void enlistDeleting(ManagedObject entity) {}
-        @Override public void incrementLoaded(ManagedObject entity) {}
+        @Override public void enlistCreated(final ManagedObject entity) {}
+        @Override public void enlistUpdating(final ManagedObject entity, final Can<PropertyChangeRecord> propertyChangeRecords) {}
+        @Override public void enlistDeleting(final ManagedObject entity) {}
+        @Override public void incrementLoaded(final ManagedObject entity) {}
     };
 
     /**

@@ -31,7 +31,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -173,7 +172,7 @@ implements
 
     }
 
-    private boolean isEntityExcludedForChangePublishing(ManagedObject entity) {
+    private boolean isEntityExcludedForChangePublishing(final ManagedObject entity) {
 
         if(!EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
             return true; // ignore entities that are not enabled for entity change publishing

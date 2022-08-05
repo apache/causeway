@@ -32,6 +32,16 @@ import lombok.Getter;
 
 final class Converter {
 
+    /**
+     * For syntax highlighting to work, the client/browser needs to load specific
+     * Javascript and CSS.
+     * The framework supports this out of the box with its various viewers,
+     * using <i>Prism</i> web-jars.
+     *
+     * @param adoc - formated input to be converted to HTML
+     *
+     * @see <a href="https://prismjs.com/">prismjs.com</a>
+     */
     public static String adocToHtml(final @Nullable String adoc, final @Nullable Options options) {
         return _Strings.isEmpty(adoc)
                 ? ""
