@@ -22,37 +22,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.viewer.commons.prism.Prism;
 import org.apache.isis.viewer.commons.prism.PrismLanguage;
 
+import lombok.experimental.UtilityClass;
+
 import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
-import lombok.Getter;
-import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class PrismResourcesWkt{
 
-    @Getter(lazy = true) private static final ResourceReference cssResourceReferenceWkt =
-            new WebjarsCssResourceReference(Prism.COY.cssFile());
-
-    @Getter(lazy = true) private static final List<ResourceReference> jsResourceReferencesWkt =
-            assembleJsResources();
-
-    // -- HELPER
+    /**
+     * Returns the main Prism CSS resource for selected theme
+     */
+    public CssResourceReference cssResource(final Prism theme) {
+        return new WebjarsCssResourceReference(theme.cssFile());
+    }
 
     /**
-     * Returns the main Prism JS resource with theme 'coy' + most common languages
+     * Returns the main Prism JS resources for selected theme + most common languages
      */
-    private List<ResourceReference> assembleJsResources() {
+    public List<ResourceReference> jsResources(final Prism theme) {
         final List<ResourceReference> resources = PrismLanguage.mostCommon().stream()
                 .map(PrismLanguage::jsFile)
                 .map(WebjarsJavaScriptResourceReference::new)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        resources.add(0, new WebjarsJavaScriptResourceReference(Prism.COY.jsFile()));
+        resources.add(0, new WebjarsJavaScriptResourceReference(theme.jsFile()));
         return resources;
     }
 

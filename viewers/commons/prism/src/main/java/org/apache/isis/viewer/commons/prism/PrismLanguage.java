@@ -44,7 +44,8 @@ public enum PrismLanguage {
     }
 
     public static List<PrismLanguage> mostCommon() {
-        //order matters, eg. JAVADOCLIKE must come before JAVADOC
+        //XXX order matters, eg. JAVADOCLIKE must come before JAVADOC
+        //XXX future extensions might want to make that a config option
         return Arrays.asList(PrismLanguage.values());
     }
 

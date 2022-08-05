@@ -19,28 +19,21 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.semantics.Renderer.SyntaxHighlighter;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.ui.util.PrismResourcesWkt;
 
 import lombok.Builder;
 import lombok.Value;
@@ -49,53 +42,6 @@ import lombok.val;
 public class MarkupComponent extends WebComponent {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Maps {@link SyntaxHighlighter} to behavior.
-     */
-    private static enum HighlightBehavior {
-        NONE {
-            @Override
-            void renderHead(final IHeaderResponse response) {
-            }
-            @Override
-            CharSequence htmlContentPostProcess(final CharSequence htmlContent) {
-                return htmlContent;
-            }
-        },
-        PRISM {
-            @Override
-            void renderHead(final IHeaderResponse response) {
-                response.render(CssHeaderItem.forReference(PrismResourcesWkt.getCssResourceReferenceWkt()));
-                for(ResourceReference jsRef : prismJsRefs()) {
-                    response.render(JavaScriptHeaderItem.forReference(jsRef));
-                }
-            }
-            @Override
-            CharSequence htmlContentPostProcess(final CharSequence htmlContent) {
-                return MarkupComponent_reloadJs.decorate(htmlContent, prismJsRefs());
-            }
-        };
-
-        public static HighlightBehavior valueOf(final @Nullable SyntaxHighlighter syntaxHighlighter) {
-            if(syntaxHighlighter==null) {
-                return NONE;
-            }
-            switch(syntaxHighlighter) {
-            case PRISM_COY:
-                return HighlightBehavior.PRISM;
-            case NONE:
-                return HighlightBehavior.NONE;
-            default:
-                throw _Exceptions.unmatchedCase(syntaxHighlighter);
-            }
-        }
-        abstract void renderHead(IHeaderResponse response);
-        abstract CharSequence htmlContentPostProcess(CharSequence htmlContent);
-        private static final List<ResourceReference> prismJsRefs() {
-            return PrismResourcesWkt.getJsResourceReferencesWkt();
-        }
-    }
 
     @Value @Builder
     public static class Options implements Serializable {
@@ -108,8 +54,8 @@ public class MarkupComponent extends WebComponent {
             return Options.builder().build();
         }
 
-        public HighlightBehavior highlightBehavior() {
-            return HighlightBehavior.valueOf(getSyntaxHighlighter());
+        private _HighlightBehavior highlightBehavior() {
+            return _HighlightBehavior.valueOf(getSyntaxHighlighter());
         }
 
     }

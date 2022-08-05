@@ -37,6 +37,8 @@ public interface Renderer<T> {
 
     public static enum SyntaxHighlighter {
         NONE,
+        /** <i>Prism<> with 'default' theme */
+        PRISM_DEFAULT,
         /** <i>Prism<> with 'coy' theme */
         PRISM_COY;
     }

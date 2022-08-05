@@ -46,7 +46,7 @@ extends CommandDtoValueSemantics {
 
     @Override
     public SyntaxHighlighter syntaxHighlighter() {
-        return SyntaxHighlighter.PRISM_COY;
+        return SyntaxHighlighter.PRISM_DEFAULT;
     }
 
 
