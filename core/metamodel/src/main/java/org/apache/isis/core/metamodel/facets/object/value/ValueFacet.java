@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationM
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -123,6 +124,7 @@ extends
     Optional<Renderer<T>> selectDefaultRenderer();
     Optional<Renderer<T>> selectRendererForParameter(final ObjectActionParameter param);
     Optional<Renderer<T>> selectRendererForProperty(final OneToOneAssociation prop);
+    Optional<Renderer<T>> selectRendererForCollection(final OneToManyAssociation coll);
 
     Renderer<T> fallbackRenderer(Identifier featureIdentifier);
 
@@ -148,6 +150,11 @@ extends
     default Renderer<T> selectRendererForPropertyElseFallback(final OneToOneAssociation prop) {
         return selectRendererForProperty(prop)
                 .orElseGet(()->fallbackRenderer(prop.getFeatureIdentifier()));
+    }
+
+    default Renderer<T> selectRendererForCollectionElseFallback(final OneToManyAssociation coll) {
+        return selectRendererForCollection(coll)
+                .orElseGet(()->fallbackRenderer(coll.getFeatureIdentifier()));
     }
 
     // -- COMPOSITE VALUE SUPPORT

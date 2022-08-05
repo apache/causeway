@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
@@ -61,20 +62,34 @@ implements TitleFacet {
 
         // support for qualified value semantics, requires a 'where' context, that is,
         // what property, collection, action return or action param this is to be rendered for ...
-
-        if(renderRequest.getFeature() instanceof OneToOneAssociation) {
-            val prop = (OneToOneAssociation)renderRequest.getFeature();
-            final Renderer renderer = valueFacet
-                    .selectRendererForPropertyElseFallback(prop);
-            return renderer
-                    .titlePresentation(valueFacet
-                            .createValueSemanticsContext(prop), pojo);
-        }
-        if(renderRequest.getFeature() instanceof ObjectActionParameter) {
-            val param = (ObjectActionParameter)renderRequest.getFeature();
-            final Renderer renderer = valueFacet
-                    .selectRendererForParameterElseFallback(param);
-            return renderer.titlePresentation(valueFacet.createValueSemanticsContext(param), pojo);
+        if(renderRequest.getFeature()!=null) {
+            switch(renderRequest.getFeature().getFeatureType()) {
+            case PROPERTY: {
+                val prop = (OneToOneAssociation)renderRequest.getFeature();
+                final Renderer renderer = valueFacet
+                        .selectRendererForPropertyElseFallback(prop);
+                return renderer
+                        .titlePresentation(valueFacet
+                                .createValueSemanticsContext(prop), pojo);
+            }
+            case COLLECTION: {
+                val coll = (OneToManyAssociation)renderRequest.getFeature();
+                final Renderer renderer = valueFacet
+                        .selectRendererForCollectionElseFallback(coll);
+                return renderer
+                        .titlePresentation(valueFacet
+                                .createValueSemanticsContext(coll), pojo);
+            }
+            case ACTION_PARAMETER_SCALAR:
+            case ACTION_PARAMETER_COLLECTION:{
+                val param = (ObjectActionParameter)renderRequest.getFeature();
+                final Renderer renderer = valueFacet
+                        .selectRendererForParameterElseFallback(param);
+                return renderer.titlePresentation(valueFacet.createValueSemanticsContext(param), pojo);
+            }
+            default:
+                // fall through
+            }
         }
 
         // fall back to default value semantics ...
