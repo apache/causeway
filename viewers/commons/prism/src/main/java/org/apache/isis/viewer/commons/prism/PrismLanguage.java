@@ -31,10 +31,12 @@ public enum PrismLanguage {
     JAVA("java"),
     JAVASCRIPT("javascript"),
     ASCIIDOC("asciidoc"),
-    JAVADOC("javadoc"),
     JAVADOCLIKE("javadoclike"),
+    JAVADOC("javadoc"),
     JSON("json"),
     PROPERTIES("properties"),
+    XML_DOC("xml-doc"),
+    YAML("yaml"),
     ;
     final String languageSuffix;
     public String jsFile() {
@@ -42,6 +44,7 @@ public enum PrismLanguage {
     }
 
     public static List<PrismLanguage> mostCommon() {
+        //order matters, eg. JAVADOCLIKE must come before JAVADOC
         return Arrays.asList(PrismLanguage.values());
     }
 

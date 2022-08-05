@@ -37,14 +37,12 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
+import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.WktLinks;
-import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 public class ExceptionStackTracePanel extends Panel {
 
@@ -98,7 +96,7 @@ public class ExceptionStackTracePanel extends Panel {
                 if(ticketMarkup == null) {
                     WktComponents.permanentlyHide(this, ID_TICKET_MARKUP);
                 } else {
-                    add(new MarkupComponent(ID_TICKET_MARKUP, Model.of(ticket.getMarkup())));
+                    Wkt.markupAdd(this, ID_TICKET_MARKUP, ticket.getMarkup());
                 }
 
                 final boolean suppressExceptionDetail =

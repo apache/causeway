@@ -43,14 +43,14 @@ public class ListeningMarkupComponent extends MarkupComponent {
             final String id,
             final ScalarModel model,
             final LocalResourcePath observing){
-        super(id, model);
+        super(id, model, Options.defaults());
         this.observing = observing;
     }
 
     public ListeningMarkupComponent(
             final String id,
             final ValueModel model){
-        super(id, model);
+        super(id, model, Options.defaults());
         this.observing = null;
     }
 

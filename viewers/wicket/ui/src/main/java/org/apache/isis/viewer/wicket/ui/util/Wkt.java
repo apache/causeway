@@ -63,6 +63,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.IResource;
@@ -823,7 +824,7 @@ public class Wkt {
     }
 
     public MarkupComponent markup(final String id, final String html) {
-        return new MarkupComponent(id, html);
+        return markup(id, Model.of(html));
     }
 
     public MarkupComponent markupAdd(final MarkupContainer container, final String id, final String html) {

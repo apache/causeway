@@ -67,7 +67,7 @@ public class MarkdownPanelFactoriesWkt {
 
         @Override
         protected MarkupComponent newMarkupComponent(final String id, final ValueModel model) {
-            return new MarkupComponent(id, model);
+            return new MarkdownComponentWkt(id, model);
         }
 
     }
