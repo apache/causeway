@@ -23,6 +23,8 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.memento.ObjectMemberMemento;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.NonNull;
@@ -39,8 +41,9 @@ extends ModelAbstract<ManagedObject> {
 
     public static ValueModel of(
             final @NonNull  IsisAppCommonContext commonContext,
+            final @NonNull  ObjectMember objectMember,
             final @Nullable ManagedObject valueAdapter) {
-        return new ValueModel(commonContext, valueAdapter);
+        return new ValueModel(commonContext, objectMember, valueAdapter);
     }
 
     // --
@@ -49,14 +52,27 @@ extends ModelAbstract<ManagedObject> {
 
     private ValueModel(
             final IsisAppCommonContext commonContext,
+            final @NonNull  ObjectMember objectMember,
             final @Nullable ManagedObject valueAdapter) {
         super(commonContext);
+        this.objectMemberMemento = ObjectMemberMemento.forMember(objectMember);
         adapterMemento = super.getMementoService().mementoForObject(valueAdapter);
     }
 
     @Override
     protected ManagedObject load() {
         return getCommonContext().reconstructObject(adapterMemento);
+    }
+
+    // -- META MODEL
+
+    private final ObjectMemberMemento objectMemberMemento;
+
+    /**
+     * The originating {@link ObjectMember} this {@link ValueModel} is provided by.
+     */
+    public ObjectMember getObjectMember() {
+        return objectMemberMemento.getObjectMember(getCommonContext()::getSpecificationLoader);
     }
 
     // -- HINTING SUPPORT

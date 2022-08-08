@@ -28,9 +28,9 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.commons.model.object.ObjectUiModel.RenderingHint;
+import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -77,11 +77,13 @@ extends GenericColumnAbstract {
     }
 
     private Component createComponent(final String id, final IModel<DataRow> rowModel) {
-        val adapter = rowModel.getObject().getRowElement();
+        val dataRow = rowModel.getObject();
+
+        val adapter = dataRow.getRowElement();
 
         if(ManagedObjects.isValue(adapter)) {
-            val valueModel = ValueModel.of(super.getCommonContext(), adapter);
-
+            val objectMember = dataRow.getParentTable().getMetaModel();
+            val valueModel = ValueModel.of(super.getCommonContext(), objectMember, adapter);
             val componentFactory = findComponentFactory(ComponentType.VALUE, valueModel);
             return componentFactory.createComponent(id, valueModel);
         }

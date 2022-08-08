@@ -96,9 +96,9 @@ public enum ActionResultResponseType {
                 final ManagedObject resultAdapter,
                 final Can<ManagedObject> args) {
             final var commonContext = actionModel.getCommonContext();
-            ValueModel valueModel = ValueModel.of(commonContext, resultAdapter);
+            final var valueModel = ValueModel.of(commonContext, actionModel.getAction(), resultAdapter);
             valueModel.setActionHint(actionModel);
-            final ValuePage valuePage = new ValuePage(valueModel);
+            final var valuePage = new ValuePage(valueModel);
             return ActionResultResponse.toPage(ValuePage.class, valuePage);
         }
     },

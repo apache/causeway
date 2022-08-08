@@ -33,7 +33,7 @@ import lombok.NonNull;
 import lombok.Synchronized;
 
 /**
- * {@link Serializable} representation of a {@link OneToOneAssociation}
+ * {@link Serializable} representation of an {@link OneToOneAssociation}
  *
  * @implNote thread-safe memoization
  *
