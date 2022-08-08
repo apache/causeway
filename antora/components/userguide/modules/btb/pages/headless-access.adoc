@@ -25,7 +25,7 @@ The xref:docs:starters:simpleapp.adoc[SimpleApp] starter app demonstrates the pa
 @RequiredArgsConstructor
 class CustomController {
 
-    private final InteractionFactory interactionFactory;
+    private final InteractionService interactionService;
     private final TransactionalProcessor transactionalProcessor;
     private final SimpleObjects simpleObjects;
 
