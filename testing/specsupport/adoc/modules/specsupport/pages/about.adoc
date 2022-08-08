@@ -276,13 +276,13 @@ public class TransactionalStepDef {                         // <2>
     @Before(order = PriorityPrecedence.EARLY)
     public void beforeScenario(){
         //open InteractionSession to be closed after scenario (see below)
-        isisInteractionFactory.openInteraction(new InitialisationSession());
+        interactionService.openInteraction(new InitialisationSession());
 
         val txTemplate = new TransactionTemplate(txMan);    // <3>
         val status = txTemplate.getTransactionManager().getTransaction(null);
         afterScenario = () -> {
             txTemplate.getTransactionManager().rollback(status);
-            isisInteractionFactory.closeSessionStack();
+            interactionService.closeSessionStack();
         };
 
         status.flush();

@@ -270,7 +270,7 @@ CommandServiceInternal -> CommandPublisher
  HasUpdatedByAndAt
 
 | IsisInteractionFactory
-| InteractionFactory
+| InteractionService
 
 | IsisModuleJdoDataNucleus5
 | removed, use IsisModuleJdoDatanucleus instead (symmetry with JPA/IsisModuleJpaEclipselink)

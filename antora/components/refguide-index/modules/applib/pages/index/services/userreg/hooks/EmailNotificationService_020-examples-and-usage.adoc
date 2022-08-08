@@ -10,7 +10,7 @@ If you need to use different text then you can of course always write and regist
 If you have configured an alternative email service implementation, it should process the message body as HTML.
 
 Be aware also that there may not be any Apache Isis session running when this service is called.
-If necessary, one can be created on the fly using the `InteractionFactory#runAuthenticated(...)` (not API).
+If necessary, one can be created on the fly using the `InteractionService#runAuthenticated(...)` (not API).
 .
 
 == User Registration
