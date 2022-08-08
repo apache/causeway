@@ -401,7 +401,7 @@ under the License.
 		<joda-time.version>2.10.14</joda-time.version>
 		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
-		<jquery-ui.version>1.13.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
+		<jquery-ui.version>1.13.2</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
 		<jsr305.version>3.0.2</jsr305.version>
 		<jsoup.version>1.15.2</jsoup.version>
