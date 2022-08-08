@@ -58,7 +58,7 @@ data class LogEntry(
     val request: String = "",
     @Contextual val createdAt: Date = Date(),
 ) {
-    val url: String = rs?.url
+    val url: String = rs.url
 
     //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     val subType = rs?.subType
