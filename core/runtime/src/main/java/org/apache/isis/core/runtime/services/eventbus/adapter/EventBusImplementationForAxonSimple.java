@@ -23,7 +23,6 @@ import com.google.common.collect.Maps;
 import org.axonframework.domain.EventMessage;
 import org.axonframework.domain.GenericEventMessage;
 import org.axonframework.eventhandling.SimpleEventBus;
-import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter;
 
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
@@ -93,7 +92,7 @@ public class EventBusImplementationForAxonSimple extends EventBusImplementationA
             return null;
     }
 
-    class AxonEventListenerAdapter extends AnnotationEventListenerAdapter {
+    class AxonEventListenerAdapter extends IsisAnnotationListenerAdapterAxon {
 
         public AxonEventListenerAdapter(final Object annotatedEventListener) {
             super(annotatedEventListener);

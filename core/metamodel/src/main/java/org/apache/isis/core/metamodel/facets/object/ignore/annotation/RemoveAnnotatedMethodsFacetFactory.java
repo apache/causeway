@@ -37,7 +37,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
 
-    private Class<? extends Annotation> eventHandlerClass;
+    private Class<? extends Annotation> eventAxonHandlerClass;
+    private Class<? extends Annotation> eventSpringHandlerClass;
 
     public RemoveAnnotatedMethodsFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -45,11 +46,19 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
         try {
             // doing this reflectively so that don't bring in a dependency on axon.
             Class cls = (Class) ClassUtil.forName("org.axonframework.eventhandling.annotation.EventHandler");
-            eventHandlerClass = cls;
+            eventAxonHandlerClass = cls;
+        } catch(Exception ignore) {
+            // ignore
+            eventAxonHandlerClass = null;
+        }
+        try {
+            // doing this reflectively so that don't bring in a dependency on axon.
+            Class cls = (Class) ClassUtil.forName("org.springframework.context.event.EventListener");
+            eventSpringHandlerClass = cls;
 
         } catch(Exception ignore) {
             // ignore
-            eventHandlerClass = null;
+            eventSpringHandlerClass = null;
         }
     }
 
@@ -71,8 +80,11 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
             removeAnnotatedMethods(methodRemover, method, Ignore.class);
             removeAnnotatedMethods(methodRemover, method, Programmatic.class);
             removeAnnotatedMethods(methodRemover, method, Subscribe.class);
-            if(eventHandlerClass != null) {
-                removeAnnotatedMethods(methodRemover, method, eventHandlerClass);
+            if(eventAxonHandlerClass != null) {
+                removeAnnotatedMethods(methodRemover, method, eventAxonHandlerClass);
+            }
+            if(eventSpringHandlerClass != null) {
+                removeAnnotatedMethods(methodRemover, method, eventSpringHandlerClass);
             }
         }
     }

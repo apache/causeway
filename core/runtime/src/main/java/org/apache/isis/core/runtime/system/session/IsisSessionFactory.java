@@ -202,7 +202,8 @@ public class IsisSessionFactory
 
     private boolean shouldRegister(Object service) {
         return Arrays.stream(service.getClass().getMethods())
-                .anyMatch(method -> method.getAnnotation(org.axonframework.eventhandling.annotation.EventHandler.class) != null);
+                .anyMatch(method -> method.getAnnotation(org.axonframework.eventhandling.annotation.EventHandler.class) != null
+                || Arrays.stream(method.getAnnotations()).anyMatch(annotation -> "org.springframework.context.event.EventListener".equals(annotation.annotationType().getName())));
     }
 
     @Programmatic
