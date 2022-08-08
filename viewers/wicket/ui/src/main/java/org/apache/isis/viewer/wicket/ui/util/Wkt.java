@@ -94,9 +94,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponen
 import org.apache.isis.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
+import static de.agilecoders.wicket.jquery.JQuery.$;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
@@ -107,8 +105,9 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.jquery.Key;
-
-import static de.agilecoders.wicket.jquery.JQuery.$;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -825,6 +824,10 @@ public class Wkt {
 
     public MarkupComponent markup(final String id, final String html) {
         return markup(id, Model.of(html));
+    }
+
+    public MarkupComponent markupAdd(final MarkupContainer container, final String id, final IModel<String> htmlModel) {
+        return add(container, markup(id, htmlModel));
     }
 
     public MarkupComponent markupAdd(final MarkupContainer container, final String id, final String html) {

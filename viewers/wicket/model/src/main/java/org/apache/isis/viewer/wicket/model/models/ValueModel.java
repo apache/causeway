@@ -75,6 +75,12 @@ extends ModelAbstract<ManagedObject> {
         return objectMemberMemento.getObjectMember(getCommonContext()::getSpecificationLoader);
     }
 
+//    @SuppressWarnings("unchecked")
+//    public Optional<Renderer<?>> lookupRenderer() {
+//        return getObjectMember().getElementType().lookupFacet(ValueFacet.class)
+//                .flatMap(valueFacet->valueFacet.selectRendererForFeature(getObjectMember()));
+//    }
+
     // -- HINTING SUPPORT
 
     private ActionModel actionModelHint;

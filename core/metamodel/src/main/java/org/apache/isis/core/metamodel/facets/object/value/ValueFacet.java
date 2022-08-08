@@ -137,6 +137,8 @@ extends
             return selectRendererForParameter((ObjectActionParameter)feature);
         case PROPERTY:
             return selectRendererForProperty((OneToOneAssociation)feature);
+        case COLLECTION:
+            return selectRendererForCollection((OneToManyAssociation)feature);
         default:
             return selectDefaultRenderer();
         }
