@@ -356,7 +356,7 @@ under the License.
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
 		<commons-io.version>2.11.0</commons-io.version>
 
-		<cucumber.version>7.5.0</cucumber.version>
+		<cucumber.version>7.6.0</cucumber.version>
 
 		<cxf-rt-rs-client.version>3.5.3</cxf-rt-rs-client.version>
 
