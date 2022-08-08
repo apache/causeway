@@ -30,22 +30,11 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
-import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
 
 import lombok.RequiredArgsConstructor;
 
@@ -70,7 +59,9 @@ public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher
     }
 
     private EntityChangeTracker entityChangeTracker() {
-        return interactionService().isInInteraction() ? entityChangeTrackerProvider.get() : EntityChangeTracker.NOOP;
+        return interactionService().isInInteraction()
+                ? entityChangeTrackerProvider.get()
+                : EntityChangeTracker.NOOP;
     }
 
     LifecycleCallbackNotifier lifecycleCallbackNotifier() {

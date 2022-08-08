@@ -19,7 +19,6 @@
 package org.apache.isis.extensions.secman.jpa.tenancy.dom;
 
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.inject.Named;

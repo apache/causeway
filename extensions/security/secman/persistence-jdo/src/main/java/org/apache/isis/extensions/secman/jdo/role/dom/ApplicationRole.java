@@ -45,7 +45,6 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq;
-import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
 
 import lombok.Getter;
 import lombok.Setter;

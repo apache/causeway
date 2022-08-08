@@ -27,11 +27,8 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
-import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 /**
  * Role interface for domain objects to implement, indicating that these are characteristics of the entity that

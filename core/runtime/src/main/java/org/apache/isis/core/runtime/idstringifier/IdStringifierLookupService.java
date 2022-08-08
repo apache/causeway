@@ -37,15 +37,12 @@ import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.val;
 
 /**
- * Convenience service that looks up (and caches) the {@link IdStringifier} available for a given value class, and
- * optionally the class of the owning entity.
+ * Convenience service that looks up (and caches) the {@link IdStringifier}
+ * available for a given value class, and optionally the class of the owning entity.
  *
  * <p>
  *     This is intended for framework use, there is little reason to call it or override it.
@@ -64,7 +61,7 @@ public class IdStringifierLookupService {
     private final List<IdStringifier<?>> idStringifiers;
     private final Map<Class<?>, IdStringifier<?>> stringifierByClass = new ConcurrentHashMap<>();
 
-    public <T> IdStringifier<T> lookupElseFail(Class<T> candidateValueClass) {
+    public <T> IdStringifier<T> lookupElseFail(final Class<T> candidateValueClass) {
         val idStringifier = stringifierByClass.computeIfAbsent(candidateValueClass, aClass -> {
             for (val candidateStringifier : idStringifiers) {
                 if (candidateStringifier.handles(candidateValueClass)) {
@@ -74,10 +71,12 @@ public class IdStringifierLookupService {
             return null;
         });
         return Optional.<IdStringifier<T>>ofNullable(_Casts.uncheckedCast(idStringifier))
-                .orElseThrow(() -> new IllegalStateException(String.format("Could not locate an IdStringifier to handle '%s'", candidateValueClass)));
+                .orElseThrow(() -> new IllegalStateException(
+                        String.format("Could not locate an IdStringifier to handle '%s'",
+                                candidateValueClass)));
     }
 
-    public <T> Optional<IdStringifier<T>> lookup(Class<T> candidateValueClass) {
+    public <T> Optional<IdStringifier<T>> lookup(final Class<T> candidateValueClass) {
         val idStringifier = stringifierByClass.computeIfAbsent(candidateValueClass, aClass -> {
             for (val candidateStringifier : idStringifiers) {
                 if (candidateStringifier.handles(candidateValueClass)) {

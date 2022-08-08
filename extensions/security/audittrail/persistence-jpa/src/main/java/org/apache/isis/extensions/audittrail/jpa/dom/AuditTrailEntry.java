@@ -20,7 +20,6 @@
 
 package org.apache.isis.extensions.audittrail.jpa.dom;
 
-import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.inject.Named;

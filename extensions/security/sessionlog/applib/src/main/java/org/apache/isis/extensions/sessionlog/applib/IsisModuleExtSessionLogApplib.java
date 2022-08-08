@@ -24,8 +24,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.sessionlog.applib.app.SessionLogMenu;
-import org.apache.isis.extensions.sessionlog.applib.spiimpl.SessionSubscriberForSessionLog;
 import org.apache.isis.extensions.sessionlog.applib.spiimpl.SessionLogServiceInitializer;
+import org.apache.isis.extensions.sessionlog.applib.spiimpl.SessionSubscriberForSessionLog;
 
 
 @Configuration

@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -47,6 +45,8 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Provides a UI to allow domain model metadata (obtained from {@link MetaModelService}) to be downloaded.

@@ -18,7 +18,16 @@
  */
 package org.apache.isis.applib.services.commanddto.conmap;
 
-import lombok.val;
+import java.util.List;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.core.MediaType;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -28,15 +37,8 @@ import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProces
 import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import org.springframework.lang.Nullable;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.core.MediaType;
-import java.util.List;
+import lombok.val;
 
 /**
  *

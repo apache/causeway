@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.executionlog.applib.IsisModuleExtExecutionLogApplib;

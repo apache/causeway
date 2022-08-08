@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.wrapper;
 
-import org.apache.isis.applib.services.wrapper.control.SyncControl;
-
 /**
  * Marker interface that mixins can optionally implement, to indicate the type of the mixee that they require.
  *

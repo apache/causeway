@@ -21,8 +21,8 @@ package org.apache.isis.extensions.spring.security.oauth2;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.security.spring.IsisModuleSecuritySpring;
 import org.apache.isis.extensions.spring.security.oauth2.authconverters.AuthenticationConverterOfOAuth2UserPrincipal;
+import org.apache.isis.security.spring.IsisModuleSecuritySpring;
 
 import lombok.extern.log4j.Log4j2;
 

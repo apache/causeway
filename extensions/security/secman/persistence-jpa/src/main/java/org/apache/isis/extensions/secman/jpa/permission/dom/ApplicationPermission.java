@@ -38,16 +38,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.Nq;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
-
-import static org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission.*;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -50,7 +51,6 @@ import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
 import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
 import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.applib.layout.grid.bootstrap.Size;
-import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;

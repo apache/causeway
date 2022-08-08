@@ -18,22 +18,15 @@
  */
 package org.apache.isis.core.metamodel.services.objectlifecycle;
 
-import java.sql.Timestamp;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
-import org.apache.isis.applib.services.xactn.TransactionId;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.val;
 
 @EqualsAndHashCode(of = {"bookmarkStr", "propertyId"})
 @ToString(of = {"bookmarkStr", "propertyId"})

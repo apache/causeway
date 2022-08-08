@@ -28,7 +28,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -105,7 +104,8 @@ public class IdentifierUtil {
             ObjectAction objectAction = (ObjectAction) objectMember;
             if (objectAction.isDeclaredOnMixin()) {
                 if (interactionHead instanceof ActionInteractionHead) {
-                    ObjectAction objectActionOnMixee = ((ActionInteractionHead) interactionHead).getMetaModel();
+                    ObjectAction objectActionOnMixee =
+                            ((ActionInteractionHead) interactionHead).getMetaModel();
                     ObjectSpecification specificationOfMixee = interactionHead.getOwner().getSpecification();
                     return logicalMemberIdentifierFor(specificationOfMixee, objectActionOnMixee);
                 }

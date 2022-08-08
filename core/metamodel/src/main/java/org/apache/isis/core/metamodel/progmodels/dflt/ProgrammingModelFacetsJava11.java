@@ -95,7 +95,6 @@ import org.apache.isis.core.metamodel.postprocessors.param.ChoicesAndDefaultsPos
 import org.apache.isis.core.metamodel.postprocessors.param.TypicalLengthFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.properties.DisabledFromImmutablePostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
-import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
 
 import lombok.val;
@@ -119,13 +118,12 @@ extends ProgrammingModelAbstract {
     private void addFacetFactories() {
 
         val mmc = getMetaModelContext();
-        val classSubstitutorRegistry = mmc.getServiceRegistry().lookupServiceElseFail(ClassSubstitutorRegistry.class);
 
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(FacetProcessingOrder.A1_FALLBACK_DEFAULTS, new FallbackFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new LogicalTypeFacetFromClassNameFactory(mmc, classSubstitutorRegistry));
+        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new LogicalTypeFacetFromClassNameFactory(mmc));
         addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new DomainServiceFacetAnnotationFactory(mmc));
         addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory(mmc));
 

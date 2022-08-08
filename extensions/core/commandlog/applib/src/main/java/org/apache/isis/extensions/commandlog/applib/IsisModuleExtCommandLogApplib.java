@@ -21,7 +21,6 @@ package org.apache.isis.extensions.commandlog.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.core.config.util.SpringProfileUtil;
 import org.apache.isis.extensions.commandlog.applib.app.CommandLogMenu;
 import org.apache.isis.extensions.commandlog.applib.contributions.HasInteractionId_commandLogEntry;

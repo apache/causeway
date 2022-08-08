@@ -19,8 +19,8 @@
 package org.apache.isis.extensions.excel.testing;
 
 
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.extensions.excel.applib.RowHandler;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * @since 2.0 {@index}

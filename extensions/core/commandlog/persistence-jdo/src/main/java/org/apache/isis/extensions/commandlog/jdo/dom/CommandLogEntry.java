@@ -37,10 +37,8 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry.Nq;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-
-import static org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry.Nq;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

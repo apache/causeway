@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.excel.testing;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,6 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * This class should be executed using
@@ -119,7 +119,7 @@ public class ExcelFixture2 extends FixtureScript {
     }
 
     private byte[] readBytes() {
-        try(val is = getExcelResource().openStream()) {
+        try(final InputStream is = getExcelResource().openStream()) {
             return _Bytes.of(is);
         } catch (Exception e) {
             throw new IllegalArgumentException("Could not read from resource: " + getExcelResource());

@@ -42,7 +42,11 @@ public class ProxyCreator {
         final Class<T> base = _Casts.uncheckedCast(toProxy.getClass());
 
         if (base.isInterface()) {
-            return (T) Proxy.newProxyInstance(base.getClassLoader(), _Arrays.combine(base, (Class<?>[]) new Class[]{WrappingObject.class}) , handler);
+            return _Casts.uncheckedCast(
+                    Proxy.newProxyInstance(
+                            base.getClassLoader(),
+                            _Arrays.combine(base, (Class<?>[]) new Class[]{WrappingObject.class}),
+                            handler));
         } else {
             final _ProxyFactory<T> proxyFactory = proxyFactoryService.factory(base, WrappingObject.class);
             return proxyFactory.createInstance(handler, false);

@@ -43,8 +43,6 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
-import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 
 import lombok.experimental.UtilityClass;
 

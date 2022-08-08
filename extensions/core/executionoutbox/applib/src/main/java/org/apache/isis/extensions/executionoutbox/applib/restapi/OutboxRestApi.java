@@ -30,7 +30,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.util.schema.InteractionsDtoUtils;
 import org.apache.isis.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
 import org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;

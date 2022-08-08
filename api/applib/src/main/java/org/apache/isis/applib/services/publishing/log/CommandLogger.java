@@ -30,8 +30,8 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Simple implementation of {@link CommandSubscriber} that just logs out the {@link Command Command}'s
