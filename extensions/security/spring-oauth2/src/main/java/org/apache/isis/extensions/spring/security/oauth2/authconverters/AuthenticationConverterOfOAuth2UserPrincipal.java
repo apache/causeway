@@ -29,25 +29,26 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
- * Interprets an {@link Authentication} as containing an OAuth2 principal.
+ * Applies if {@link Authentication} holds a principal of type {@link OAuth2User}.
  */
 @Component
 @javax.annotation.Priority(PriorityPrecedence.LATE - 150)
-public class AuthenticationConverterOfOAuth2UserPrincipal implements AuthenticationConverter {
+public class AuthenticationConverterOfOAuth2UserPrincipal
+extends AuthenticationConverter.Abstract<OAuth2User> {
+
+    public AuthenticationConverterOfOAuth2UserPrincipal() {
+        super(OAuth2User.class);
+    }
 
     @Override
-    public UserMemento convert(final Authentication authentication) {
-        val principal = authentication.getPrincipal();
-        if (principal instanceof OAuth2User) {
-            val oAuth2User = (OAuth2User) principal;
-            return UserMemento.ofNameAndRoleNames(usernameFrom(oAuth2User))
-                    .withAvatarUrl(avatarUrlFrom(oAuth2User))
-                    .withRealName(realNameFrom(oAuth2User));
-        }
-        return null;
+    protected UserMemento convertPrincipal(final @NonNull OAuth2User oAuth2User) {
+        return UserMemento.ofNameAndRoleNames(usernameFrom(oAuth2User))
+                .withAvatarUrl(avatarUrlFrom(oAuth2User))
+                .withRealName(realNameFrom(oAuth2User));
     }
 
     protected static String usernameFrom(final OAuth2User oAuth2User) {

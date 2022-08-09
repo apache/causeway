@@ -65,19 +65,31 @@ public class SpringSecurityFilter implements Filter {
                 .orElse(null);
 
         if (userMemento == null) {
-            ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            setUnauthorized(servletResponse);
             return; // either not authenticated or unknown principal type (not handled)
         }
 
         val interactionContext = InteractionContext.ofUserWithSystemDefaults(userMemento)
                 .withTimeZoneIfAny(userCurrentSessionTimeZoneHolder.getUserTimeZone());
 
-        interactionService.run(
+        val result = interactionService.runAndCatch(
                 interactionContext,
                 ()->filterChain.doFilter(servletRequest, servletResponse));
+
+        result.ifFailure(failure->{
+            failure.printStackTrace(); // debug
+            setUnauthorized(servletResponse);
+        });
+
+        // re-throw
+        result.ifFailureFail();
     }
 
     // -- HELPER
+
+    private void setUnauthorized(final ServletResponse servletResponse){
+        ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    }
 
     /**
      * Optionally Spring's {@link Authentication}, based on presence
@@ -110,7 +122,7 @@ public class SpringSecurityFilter implements Filter {
                                 .withRoleAdded(UserMemento.AUTHORIZED_USER_ROLE)
                                 .withAuthenticationSource(AuthenticationSource.EXTERNAL));
                 }
-            } catch(final Exception ignored) {
+            } catch(final Throwable ignored) {
             }
         }
         return Optional.empty();

@@ -21,10 +21,17 @@ package org.apache.isis.security.spring.authconverters;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.commons.internal.base._Casts;
+
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Defines an SPI to attempt to convert a Spring {@link Authentication} into
@@ -61,7 +68,7 @@ public interface AuthenticationConverter {
      *
      * <p>
      *     There are many different implementations of {@link Authentication},
-     *     so the implementation should be targetted at a specific
+     *     so the implementation should be targeted at a specific
      *     implementation.
      * </p>
      *
@@ -73,5 +80,27 @@ public interface AuthenticationConverter {
      * @param authentication to attempt to convert
      * @return non-null if could be converted
      */
-    UserMemento convert(final Authentication authentication);
+    @Nullable
+    UserMemento convert(@NonNull Authentication authentication);
+
+    // -- BASE CLASS FOR CONVENIENCE
+
+    @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+    abstract class Abstract<T> implements AuthenticationConverter {
+
+        private final @NonNull Class<T> principalClass;
+
+        @Override
+        public final UserMemento convert(final @NonNull Authentication authentication) {
+            val principal = authentication.getPrincipal();
+            return _Casts.castTo(principalClass, principal)
+                    .map(this::convertPrincipal)
+                    .orElse(null);
+        }
+
+        protected abstract UserMemento convertPrincipal(@NonNull T principal);
+
+    }
+
+
 }
