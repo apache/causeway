@@ -23,17 +23,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceUsingBaseEncodingAbstract;
 
 public class UrlEncodingServiceTest {
 
     UrlEncodingServiceWithCompression serviceWithCompression;
-    UrlEncodingServiceUsingBaseEncodingAbstract serviceBaseEncoding;
+    UrlEncodingService serviceBaseEncoding;
 
     @BeforeEach
     public void setUp() throws Exception {
         serviceWithCompression = new UrlEncodingServiceWithCompression();
-        serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncodingAbstract(){};
+        serviceBaseEncoding = UrlEncodingService.forTestingNoCompression();
     }
 
     @Test
@@ -46,7 +45,7 @@ public class UrlEncodingServiceTest {
         roundtrip(serviceWithCompression, true);
     }
 
-    private void roundtrip(UrlEncodingService service, boolean testIsCompressing) throws Exception {
+    private void roundtrip(final UrlEncodingService service, final boolean testIsCompressing) throws Exception {
 
         final String original = "0-theme-entityPageContainer-entity-rows-2-rowContents-1-col-tabGroups-1-panel-tabPanel-rows-1-rowContents-1-col-fieldSets-1-memberGroup-properties-1-property-scalarTypeContainer-scalarIfRegular-associatedActionLinksBelow-additionalLinkList-additionalLinkItem-0-additionalLink";
 

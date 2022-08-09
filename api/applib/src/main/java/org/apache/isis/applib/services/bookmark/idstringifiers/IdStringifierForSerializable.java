@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.memento._Mementos;
+import org.apache.isis.commons.internal.resources._Serializables;
 
 import lombok.NonNull;
 
@@ -40,54 +40,46 @@ import lombok.NonNull;
 public class IdStringifierForSerializable extends IdStringifier.Abstract<Serializable> {
 
     private final UrlEncodingService codec;
-    private final _Mementos.SerializingAdapter serializer;
 
     @Inject
     public IdStringifierForSerializable(
             final @NonNull UrlEncodingService codec) {
         super(Serializable.class);
         this.codec = codec;
-        this.serializer = new _Mementos.SerializingAdapter() {
-            @Override
-            public Serializable write(final Object value) {
-                return _Casts.uncheckedCast(value);
-            }
-
-            @Override
-            public <T> T read(final Class<T> cls, final Serializable value) {
-                return _Casts.uncheckedCast(value);
-            }
-        };
     }
 
     @Override
     public boolean handles(final @NonNull Class<?> candidateValueClass) {
-        return PredefinedSerializables.isPredefinedSerializable(candidateValueClass);
+        return Serializable.class.isAssignableFrom(candidateValueClass);
     }
 
     @Override
     public String enstring(final @NonNull Serializable id) {
-        return newMemento().put("id", id).asString();
+        // even though null case is guarded by lombok - keep null check for symmetry
+        return id != null
+                ? codec.encode(_Serializables.write(id))
+                : null;
     }
 
     @Override
     public Serializable destring(
             final @NonNull String stringified,
             final @NonNull Class<?> targetEntityClass) {
-        if (_Strings.isEmpty(stringified)) {
-            return null;
-        }
-        return _Casts.uncheckedCast(parseMemento(stringified).get("id", Object.class));
+
+        final Class<? extends Serializable> requiredClass =
+                _Casts.uncheckedCast(targetEntityClass);
+
+        return destringAs(stringified, requiredClass);
     }
 
     // -- HELPER
 
-    private _Mementos.Memento newMemento() {
-        return _Mementos.create(codec, serializer);
-    }
-
-    private _Mementos.Memento parseMemento(final String input) {
-        return _Mementos.parse(codec, serializer, input);
+    public <T extends Serializable> T destringAs(
+            final @NonNull String stringified,
+            final @NonNull Class<T> requiredClass) {
+        return _Strings.isNotEmpty(stringified)
+                ? _Serializables.read(requiredClass, codec.decode(stringified))
+                : null;
     }
 
 }

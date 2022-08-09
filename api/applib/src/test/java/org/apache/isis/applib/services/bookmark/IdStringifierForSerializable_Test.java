@@ -21,7 +21,6 @@
 package org.apache.isis.applib.services.bookmark;
 
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,45 +31,49 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForSerializable;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.Value;
 import lombok.val;
 
 class IdStringifierForSerializable_Test {
 
-    static final UrlEncodingService CODEC = new UrlEncodingService() {
-        @Override
-        public String encode(final byte[] bytes) {
-            return _Strings.ofBytes(_Bytes.asCompressedUrlBase64.apply(bytes), StandardCharsets.UTF_8);
-        }
+    private UrlEncodingService codec = UrlEncodingService.forTesting();
 
-        @Override
-        public byte[] decode(final String str) {
-            return _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(str, StandardCharsets.UTF_8));
-        }
-    };
+    // -- SCENARIO
 
-    public static Stream<Arguments> roundtrip() {
+    @Value
+    static class CustomerPK implements Serializable{
+        private static final long serialVersionUID = 1L;
+        final int lower;
+        final int upper;
+    }
+
+    // -- TEST
+
+    static Stream<Arguments> roundtrip() {
         return Stream.of(
                 Arguments.of(Byte.MAX_VALUE),
                 Arguments.of(Byte.MIN_VALUE),
                 Arguments.of((byte)0),
                 Arguments.of((byte)12345),
-                Arguments.of((byte)-12345)
+                Arguments.of((byte)-12345),
+                Arguments.of(new CustomerPK(5,6))
+                // Arguments.of((Serializable)null) ... throws NPE as expected
         );
     }
 
-    static class Customer {}
-
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(Serializable value) {
+    void roundtrip(final Serializable value) {
 
-        val stringifier = new IdStringifierForSerializable(CODEC);
+        val idClass = value != null
+                ? value.getClass()
+                : void.class;
+
+        val stringifier = new IdStringifierForSerializable(codec);
 
         String stringified = stringifier.enstring(value);
-        Serializable parse = stringifier.destring(stringified, Customer.class);
+        Serializable parse = stringifier.destring(stringified, idClass);
 
         assertThat(parse).isEqualTo(value);
     }

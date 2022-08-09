@@ -33,7 +33,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingServiceUsingBaseEncodingAbstract;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.Memento;
@@ -46,23 +45,23 @@ class MementosTest {
     }
 
     UrlEncodingServiceWithCompression serviceWithCompression;
-    UrlEncodingServiceUsingBaseEncodingAbstract serviceBaseEncoding;
+    UrlEncodingService serviceBaseEncoding;
     SerializingAdapter serializingAdapter;
 
     @BeforeEach
     void setUp() throws Exception {
         serviceWithCompression = new UrlEncodingServiceWithCompression();
-        serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncodingAbstract(){};
+        serviceBaseEncoding = UrlEncodingService.forTestingNoCompression();;
 
         serializingAdapter = new SerializingAdapter() {
 
             @Override
-            public Serializable write(Object value) {
+            public Serializable write(final Object value) {
                 return (Serializable) value;
             }
 
             @Override
-            public <T> T read(Class<T> cls, Serializable value) {
+            public <T> T read(final Class<T> cls, final Serializable value) {
                 return _Casts.castToOrElseNull(value, cls);
             }
         };
@@ -79,7 +78,7 @@ class MementosTest {
         roundtrip(serviceWithCompression);
     }
 
-    private void roundtrip(UrlEncodingService codec) {
+    private void roundtrip(final UrlEncodingService codec) {
         final Memento memento = _Mementos.create(codec, serializingAdapter);
 
         memento.put("someString", "a string");
