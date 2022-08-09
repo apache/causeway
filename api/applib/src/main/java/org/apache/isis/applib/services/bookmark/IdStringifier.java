@@ -20,7 +20,7 @@
 
 package org.apache.isis.applib.services.bookmark;
 
-import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
 import lombok.NonNull;
 import lombok.val;
@@ -86,31 +86,20 @@ public interface IdStringifier<T> {
         protected final static char SEPARATOR = '_';
 
         /**
-         * eg <code>Integer.class</code>, or JDO-specific <code>DatastoreId</code>, or a custom class for application-defined PKs.
+         * eg <code>Integer.class</code>, or JDO-specific <code>DatastoreId</code>,
+         * or a custom class for application-defined PKs.
          */
-        private final Class<T> valueClass;
-        /**
-         * Allows for a Stringifier to handle (for example) both <code>Integer.class</code> and <code>int.class</code>.
-         */
-        private final Class<T> primitiveValueClassIfAny;
+        private final Class<?> resolvedClass;
 
-        public Abstract(
+        protected Abstract(
                 final @NonNull Class<T> handledClass) {
-            this(handledClass, null);
-        }
-        public Abstract(
-                final Class<T> valueClass,
-                final @Nullable Class<T> primitiveClass
-                ) {
-            this.valueClass = valueClass;
-            this.primitiveValueClassIfAny = primitiveClass;
+            this.resolvedClass = ClassUtils.resolvePrimitiveIfNecessary(handledClass);
         }
 
         @Override
         public boolean handles(final @NonNull Class<?> candidateValueClass) {
-            return valueClass.isAssignableFrom(candidateValueClass)
-                    || primitiveValueClassIfAny != null
-                    && primitiveValueClassIfAny.isAssignableFrom(candidateValueClass);
+            val reolvedCandidateClass = ClassUtils.resolvePrimitiveIfNecessary(candidateValueClass);
+            return resolvedClass.isAssignableFrom(reolvedCandidateClass);
         }
 
         /**
@@ -141,13 +130,7 @@ public interface IdStringifier<T> {
         public AbstractWithPrefix(
                 @NonNull final Class<T> handledClass,
                 @NonNull final String typeCode) {
-            this(handledClass, typeCode, null);
-        }
-        public AbstractWithPrefix(
-                @NonNull final Class<T> handledClass,
-                @NonNull final String typeCode,
-                final @Nullable Class<T> primitiveClass) {
-            super(handledClass, primitiveClass);
+            super(handledClass);
             this.prefix = typeCode + SEPARATOR;
         }
 

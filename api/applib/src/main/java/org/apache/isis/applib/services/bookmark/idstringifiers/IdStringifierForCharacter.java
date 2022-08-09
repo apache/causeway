@@ -38,7 +38,7 @@ import lombok.NonNull;
 public class IdStringifierForCharacter extends IdStringifier.Abstract<Character> {
 
     public IdStringifierForCharacter() {
-        super(Character.class, char.class);
+        super(Character.class);
     }
 
     static final List<Character> NON_SAFE_URL_CHARS = IdStringifierForString.NON_SAFE_URL_CHARS.stream().map(x -> x.charAt(0)).collect(Collectors.toList());

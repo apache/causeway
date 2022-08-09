@@ -33,11 +33,13 @@ import lombok.NonNull;
 public class IdStringifierForInteger extends IdStringifier.Abstract<Integer> {
 
     public IdStringifierForInteger() {
-        super(Integer.class, int.class);
+        super(Integer.class);
     }
 
     @Override
-    public Integer destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public Integer destring(
+            final @NonNull String stringified,
+            final @NonNull Class<?> targetEntityClass) {
         return Integer.parseInt(stringified);
     }
 }

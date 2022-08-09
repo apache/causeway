@@ -33,11 +33,13 @@ import lombok.NonNull;
 public class IdStringifierForByte extends IdStringifier.Abstract<Byte> {
 
     public IdStringifierForByte() {
-        super(Byte.class, byte.class);
+        super(Byte.class);
     }
 
     @Override
-    public Byte destring(final @NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+    public Byte destring(
+            final @NonNull String stringified,
+            final @NonNull Class<?> targetEntityClass) {
         return Byte.parseByte(stringified);
     }
 }
