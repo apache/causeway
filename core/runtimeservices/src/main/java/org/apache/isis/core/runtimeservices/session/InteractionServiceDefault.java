@@ -54,6 +54,7 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionsDtoUtils;
 import org.apache.isis.commons.functional.ThrowingRunnable;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
@@ -328,8 +329,8 @@ implements
         serviceInjector.injectServicesInto(callable);
         try {
             return callable.call();
-        } catch (Exception e) {
-            requestRollback();
+        } catch (Throwable e) {
+            requestRollback(e);
             throw e;
         }
     }
@@ -339,14 +340,20 @@ implements
         serviceInjector.injectServicesInto(runnable);
         try {
             runnable.run();
-        } catch (Exception e) {
-            requestRollback();
+        } catch (Throwable e) {
+            requestRollback(e);
             throw e;
         }
     }
 
-    private void requestRollback() {
+    private void requestRollback(final Throwable cause) {
         val stack = interactionLayerStack.get();
+        _Assert.assertFalse(stack.isEmpty(), ()->
+                String.format(
+                        "unexpected state: missing interaction (layer) on interaction rollback; "
+                        + "rollback was caused by %s -> %s",
+                        cause.getClass().getName(),
+                        cause.getMessage()));
         val interaction = _Casts.<IsisInteraction>uncheckedCast(stack.get(0).getInteraction());
         txBoundaryHandler.requestRollback(interaction);
     }
