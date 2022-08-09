@@ -41,6 +41,9 @@ class IdStringifierForSerializable_Test {
 
     // -- SCENARIO
 
+    static class Customer {
+    }
+
     @Value
     static class CustomerPK implements Serializable{
         private static final long serialVersionUID = 1L;
@@ -66,14 +69,10 @@ class IdStringifierForSerializable_Test {
     @MethodSource()
     void roundtrip(final Serializable value) {
 
-        val idClass = value != null
-                ? value.getClass()
-                : void.class;
-
         val stringifier = new IdStringifierForSerializable(codec);
 
         String stringified = stringifier.enstring(value);
-        Serializable parse = stringifier.destring(stringified, idClass);
+        Serializable parse = stringifier.destring(stringified, Customer.class);
 
         assertThat(parse).isEqualTo(value);
     }

@@ -29,7 +29,6 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Serializables;
 
@@ -65,16 +64,12 @@ public class IdStringifierForSerializable extends IdStringifier.Abstract<Seriali
     public Serializable destring(
             final @NonNull String stringified,
             final @NonNull Class<?> targetEntityClass) {
-
-        final Class<? extends Serializable> requiredClass =
-                _Casts.uncheckedCast(targetEntityClass);
-
-        return destringAs(stringified, requiredClass);
+        return destringAs(stringified, Serializable.class);
     }
 
     // -- HELPER
 
-    public <T extends Serializable> T destringAs(
+    private <T extends Serializable> T destringAs(
             final @NonNull String stringified,
             final @NonNull Class<T> requiredClass) {
         return _Strings.isNotEmpty(stringified)

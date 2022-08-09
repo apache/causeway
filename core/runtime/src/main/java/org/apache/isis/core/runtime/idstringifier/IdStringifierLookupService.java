@@ -34,10 +34,11 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForSerializable;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -54,12 +55,18 @@ import lombok.val;
 @Named(IsisModuleCoreRuntime.NAMESPACE + ".IdStringifierLookupService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor
 public class IdStringifierLookupService {
 
-    @Inject
-    private final List<IdStringifier<?>> idStringifiers;
+    private final Can<IdStringifier<?>> idStringifiers;
     private final Map<Class<?>, IdStringifier<?>> stringifierByClass = new ConcurrentHashMap<>();
+
+    @Inject
+    public IdStringifierLookupService(final List<IdStringifier<?>> idStringifiers, final IdStringifierForSerializable x) {
+        //FIXME[ISIS-3115] remove this hotfix
+        idStringifiers.removeIf(s->IdStringifierForSerializable.class.equals(s.getClass()));
+        idStringifiers.add(x); // put last
+        this.idStringifiers = Can.ofCollection(idStringifiers);
+    }
 
     public <T> IdStringifier<T> lookupElseFail(final Class<T> candidateValueClass) {
         val idStringifier = stringifierByClass.computeIfAbsent(candidateValueClass, aClass -> {
