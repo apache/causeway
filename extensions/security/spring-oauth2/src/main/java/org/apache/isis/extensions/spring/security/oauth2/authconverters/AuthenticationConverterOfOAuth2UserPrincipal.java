@@ -51,14 +51,16 @@ extends AuthenticationConverter.Abstract<OAuth2User> {
                 .withRealName(realNameFrom(oAuth2User));
     }
 
-    protected static String usernameFrom(final OAuth2User oAuth2User) {
+    // -- HOOKS FOR CUSTOMIZATION
+
+    protected String usernameFrom(final OAuth2User oAuth2User) {
         val loginAttr = oAuth2User.getAttributes().get("login");
         return loginAttr instanceof CharSequence
                 ? ((CharSequence) loginAttr).toString()
                 : oAuth2User.getName();
     }
 
-    protected static URL avatarUrlFrom(final OAuth2User oAuth2User) {
+    protected URL avatarUrlFrom(final OAuth2User oAuth2User) {
         final Object avatarUrlObj = oAuth2User.getAttributes().get("avatar_url");
         if(avatarUrlObj instanceof String) {
             try {
@@ -70,7 +72,7 @@ extends AuthenticationConverter.Abstract<OAuth2User> {
         return null;
     }
 
-    protected static String realNameFrom(final OAuth2User oAuth2User) {
+    protected String realNameFrom(final OAuth2User oAuth2User) {
         final Object nameAttr = oAuth2User.getAttributes().get("name");
         if(nameAttr instanceof String) {
             return (String)nameAttr;
