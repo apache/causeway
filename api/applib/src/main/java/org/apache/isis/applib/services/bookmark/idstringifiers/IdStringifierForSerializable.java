@@ -35,7 +35,7 @@ import org.apache.isis.commons.internal.resources._Serializables;
 import lombok.NonNull;
 
 @Component
-@Priority(PriorityPrecedence.LATE + 50) // after more specific stringifiers
+@Priority(PriorityPrecedence.LAST) // goes last - is also enforced by IdStringifierLookupService programmatically
 public class IdStringifierForSerializable extends IdStringifier.Abstract<Serializable> {
 
     private final UrlEncodingService codec;

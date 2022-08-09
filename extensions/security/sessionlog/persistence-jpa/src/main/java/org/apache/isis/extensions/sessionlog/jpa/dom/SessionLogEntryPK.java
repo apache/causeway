@@ -23,15 +23,17 @@ package org.apache.isis.extensions.sessionlog.jpa.dom;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.annotation.Priority;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 import org.apache.isis.extensions.sessionlog.applib.dom.SessionLogEntry;
+import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -60,6 +62,7 @@ public class SessionLogEntryPK implements Serializable {
 
 
     @Component
+    @Priority(PriorityPrecedence.MIDPOINT)
     public static class Stringifier extends IdStringifier.Abstract<SessionLogEntryPK> {
 
         public Stringifier() {
@@ -67,12 +70,12 @@ public class SessionLogEntryPK implements Serializable {
         }
 
         @Override
-        public String enstring(SessionLogEntryPK value) {
+        public String enstring(final SessionLogEntryPK value) {
             return value.getSessionGuid().toString();
         }
 
         @Override
-        public SessionLogEntryPK destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+        public SessionLogEntryPK destring(@NonNull final String stringified, @NonNull final Class<?> targetEntityClass) {
             return new SessionLogEntryPK(UUID.fromString(stringified));
         }
     }

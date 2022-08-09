@@ -61,10 +61,16 @@ public class IdStringifierLookupService {
     private final Map<Class<?>, IdStringifier<?>> stringifierByClass = new ConcurrentHashMap<>();
 
     @Inject
-    public IdStringifierLookupService(final List<IdStringifier<?>> idStringifiers, final IdStringifierForSerializable x) {
-        //FIXME[ISIS-3115] remove this hotfix
-        idStringifiers.removeIf(s->IdStringifierForSerializable.class.equals(s.getClass()));
-        idStringifiers.add(x); // put last
+    public IdStringifierLookupService(
+            final List<IdStringifier<?>> idStringifiers,
+            final Optional<IdStringifierForSerializable> idStringifierForSerializableIfAny) {
+        // IdStringifierForSerializable is enforced to go last, so any custom IdStringifier(s)
+        // that do not explicitly specify an @Order/@Precedence go earlier
+        idStringifierForSerializableIfAny
+        .ifPresent(idStringifierForSerializable->{
+            idStringifiers.removeIf(idStringifier->IdStringifierForSerializable.class.equals(idStringifier.getClass()));
+            idStringifiers.add(idStringifierForSerializable); // put last
+        });
         this.idStringifiers = Can.ofCollection(idStringifiers);
     }
 

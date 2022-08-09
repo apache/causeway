@@ -17,18 +17,19 @@
  * under the License.
  *
  */
-
 package org.apache.isis.extensions.commandlog.jpa.dom;
 
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.annotation.Priority;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
@@ -60,6 +61,7 @@ public class CommandLogEntryPK implements Serializable {
 
 
     @Component
+    @Priority(PriorityPrecedence.MIDPOINT)
     public static class Stringifier extends IdStringifier.Abstract<CommandLogEntryPK> {
 
         public Stringifier() {
@@ -67,12 +69,12 @@ public class CommandLogEntryPK implements Serializable {
         }
 
         @Override
-        public String enstring(CommandLogEntryPK value) {
+        public String enstring(final CommandLogEntryPK value) {
             return value.getInteractionId().toString();
         }
 
         @Override
-        public CommandLogEntryPK destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass) {
+        public CommandLogEntryPK destring(@NonNull final String stringified, @NonNull final Class<?> targetEntityClass) {
             return new CommandLogEntryPK(UUID.fromString(stringified));
         }
     }

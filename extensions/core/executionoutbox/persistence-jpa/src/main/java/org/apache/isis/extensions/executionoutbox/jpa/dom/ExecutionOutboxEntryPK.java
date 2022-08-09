@@ -22,12 +22,14 @@ import java.io.Serializable;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
+import javax.annotation.Priority;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 
@@ -70,6 +72,7 @@ public class ExecutionOutboxEntryPK implements Serializable {
     }
 
     @Component
+    @Priority(PriorityPrecedence.MIDPOINT)
     public static class Stringifier extends IdStringifier.Abstract<ExecutionOutboxEntryPK> {
 
         public Stringifier() {
