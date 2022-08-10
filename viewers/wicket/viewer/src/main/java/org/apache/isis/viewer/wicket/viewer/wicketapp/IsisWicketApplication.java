@@ -53,7 +53,6 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -61,7 +60,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -103,7 +101,6 @@ extends AuthenticatedWebApplication
 implements
     ComponentFactoryRegistryAccessor,
     PageClassRegistryAccessor,
-    WicketViewerSettingsAccessor,
     HasCommonContext {
 
     private static final long serialVersionUID = 1L;
@@ -423,11 +420,6 @@ implements
     @SuppressWarnings("unchecked")
     public Class<? extends WebPage> getForgotPasswordPageClass() {
         return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.PASSWORD_RESET);
-    }
-
-    @Override
-    public Wicket getSettings() {
-        return configuration.getViewer().getWicket();
     }
 
 }

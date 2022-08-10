@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
@@ -157,9 +156,9 @@ extends IndicatingAjaxLink<ManagedObject> {
                 : null;
     }
 
-    protected Wicket getSettings() {
-        return ((WicketViewerSettingsAccessor) Application.get()).getSettings();
-    }
+//    protected Wicket getSettings() {
+//        return ((WicketViewerSettingsAccessor) Application.get()).getSettings();
+//    }
 
     @Override
     public void onClick(final AjaxRequestTarget target) {
@@ -259,6 +258,10 @@ extends IndicatingAjaxLink<ManagedObject> {
 
     private ComponentFactoryRegistry getComponentFactoryRegistry() {
         return ((ComponentFactoryRegistryAccessor) Application.get()).getComponentFactoryRegistry();
+    }
+
+    public Wicket getSettings() {
+        return getCommonContext().getConfiguration().getViewer().getWicket();
     }
 
 }
