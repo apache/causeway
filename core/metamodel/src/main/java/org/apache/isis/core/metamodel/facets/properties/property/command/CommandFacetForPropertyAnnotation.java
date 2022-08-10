@@ -18,12 +18,9 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.property.command;
 
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
-import org.apache.isis.applib.annotation.CommandExecuteIn;
-import org.apache.isis.applib.annotation.CommandPersistence;
-import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -41,6 +38,18 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
             final ServicesInjector servicesInjector) {
 
         CommandReification commandReification = property != null ? property.command() : CommandReification.AS_CONFIGURED;
+        // Check for v2 commandPublishing
+        switch (property.commandPublishing()){
+            case ENABLED:
+                commandReification = CommandReification.ENABLED;
+                break;
+            case DISABLED:
+                commandReification = CommandReification.DISABLED;
+                break;
+            case AS_CONFIGURED:
+                commandReification = CommandReification.AS_CONFIGURED;
+                break;
+        }
         final CommandPersistence commandPersistence = property != null ? property.commandPersistence() : CommandPersistence.PERSISTED;
         final CommandExecuteIn commandExecuteIn = property != null? property.commandExecuteIn() :  CommandExecuteIn.FOREGROUND;
         final Class<? extends CommandDtoProcessor> processorClass =

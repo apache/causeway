@@ -29,6 +29,7 @@ import javax.jdo.annotations.NotPersistent;
 
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.conmap.ContentMappingServiceForCommandsDto;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.applib.services.command.spi.CommandService;
@@ -118,13 +119,28 @@ public @interface Property {
 
     /**
      * Whether the property edit should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
+     *
+     * @Deprecated replaced with commandPublishing
      */
+    @Deprecated
     CommandReification command() default CommandReification.AS_CONFIGURED;
+
+
+    /**
+     * Whether property edits, captured as {@link Command}s,
+     * should be published to {@link CommandSubscriber}s.
+     *
+     * @see Action#commandPublishing()
+     * @see Property#commandDtoProcessor()
+     */
+    Publishing commandPublishing()
+            default Publishing.NOT_SPECIFIED;
 
     /**
      * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
      * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
      */
+    @Deprecated
     CommandPersistence commandPersistence() default CommandPersistence.PERSISTED;
 
     /**
@@ -136,6 +152,7 @@ public @interface Property {
      * will be set to this value.
      * </p>
      */
+    @Deprecated
     CommandExecuteIn commandExecuteIn() default CommandExecuteIn.FOREGROUND;
 
 
@@ -147,9 +164,23 @@ public @interface Property {
      * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublishingService}
      * or {@link org.apache.isis.applib.services.publish.PublisherService} is registered with the framework.
      * </p>
+     *
+     * @Deprecated replaced by executionPublishing
      */
+    @Deprecated
     Publishing publishing() default Publishing.AS_CONFIGURED;
 
+
+    /**
+     * Whether
+     * {@link Execution}s
+     * (triggered property edits), should be dispatched to
+     * {@link ExecutionSubscriber}s.
+     *
+     * @see Action#executionPublishing()
+     */
+    Publishing executionPublishing()
+            default Publishing.NOT_SPECIFIED;
 
     /**
      * The {@link CommandDtoProcessor} to process this command's DTO.
@@ -201,10 +232,24 @@ public @interface Property {
      * <p>
      *     To ensure that the property is actually not persisted in the objectstore, also annotate with {@link NotPersistent}.
      * </p>
+     *
+     * @deprecated replaced with snapshot
      */
+    @Deprecated
     boolean notPersisted() default false;
 
 
+
+    /**
+     * Indicates whether the property should be included or excluded from mementos.
+     *
+     * <p>
+     *     To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation
+     *     <code>javax.jdo.annotations.NotPersistent</code>
+     * </p>
+     */
+    Snapshot snapshot()
+            default Snapshot.NOT_SPECIFIED;
 
 
 
@@ -255,6 +300,7 @@ public @interface Property {
      *
      * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
      */
+    @Deprecated
     String fileAccept() default "";
 
 }
