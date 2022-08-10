@@ -70,10 +70,6 @@ public @interface Property {
      */
     Class<? extends PropertyDomainEvent<?,?>> domainEvent() default PropertyDomainEvent.Default.class;
 
-
-
-
-
     /**
      * Indicates where the property is not visible to the user.
      */
@@ -95,9 +91,6 @@ public @interface Property {
      */
     Projecting projecting() default Projecting.NOT_SPECIFIED;
 
-
-
-
     /**
      * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
      *
@@ -113,10 +106,6 @@ public @interface Property {
      */
     String editingDisabledReason() default "";
 
-
-
-
-
     /**
      * Whether the property edit should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
      *
@@ -124,7 +113,6 @@ public @interface Property {
      */
     @Deprecated
     CommandReification command() default CommandReification.AS_CONFIGURED;
-
 
     /**
      * Whether property edits, captured as {@link Command}s,
