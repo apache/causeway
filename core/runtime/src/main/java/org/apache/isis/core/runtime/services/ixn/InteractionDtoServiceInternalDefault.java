@@ -22,6 +22,7 @@ package org.apache.isis.core.runtime.services.ixn;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -64,7 +65,8 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
         final Object targetPojo = targetAdapter.getObject();
-        final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo);
+        final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo)
+                .orElseThrow(() -> new NonRecoverableException("Bookmark not found for pojo "+targetPojo));
 
         final String actionIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
         final String actionId = actionIdentifier.substring(actionIdentifier.indexOf('#')+1);
@@ -112,7 +114,8 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
         final Object targetPojo = targetAdapter.getObject();
-        final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo);
+        final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo)
+                .orElseThrow(() -> new NonRecoverableException("Bookmark not found for pojo "+targetPojo));
 
         final String propertyIdentifier = property.getIdentifier().toClassAndNameIdentityString();
         final String propertyId = propertyIdentifier.substring(propertyIdentifier.indexOf('#')+1);

@@ -255,7 +255,7 @@ public final class CommonDtoUtils {
         case REFERENCE: {
             final Bookmark bookmark = val instanceof Bookmark
                     ? (Bookmark) val
-                    : bookmarkService.bookmarkFor(val);
+                    : bookmarkService.bookmarkFor(val).orElse(null);
 
             if (bookmark != null) {
                 OidDto argValue = bookmark.toOidDto();

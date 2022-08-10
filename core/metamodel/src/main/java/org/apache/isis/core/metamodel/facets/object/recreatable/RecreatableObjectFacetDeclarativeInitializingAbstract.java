@@ -147,7 +147,7 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
                     if(mementoService.canSet(propertyValue)) {
                         memento.set(property.getId(), propertyValue);
                     } else {
-                        final Bookmark propertyValueBookmark = bookmarkService.bookmarkFor(propertyValue);
+                        final Bookmark propertyValueBookmark = bookmarkService.bookmarkFor(propertyValue).orElse(null);
                         memento.set(property.getId() + ".bookmark", propertyValueBookmark);
                     }
                 }

@@ -22,11 +22,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Strings;
@@ -463,8 +459,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             }
             if(getRepositoryService().isPersistent(domainObject)) {
                 BookmarkService bookmarkService = getBookmarkService();
-                Bookmark bookmark = bookmarkService.bookmarkFor(domainObject);
-               command.setResult(bookmark);
+                Optional<Bookmark> bookmark = bookmarkService.bookmarkFor(domainObject);
+                if(bookmark.isPresent())
+                    command.setResult(bookmark.get());
             }
             break;
         default:

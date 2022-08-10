@@ -17,6 +17,7 @@
 package org.apache.isis.schema.utils.jaxbadapters;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -50,8 +51,10 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
         }
         OidsDto oidsDto = new OidsDto();
         for (final Object domainObject : domainObjects) {
-            final Bookmark bookmark = getBookmarkService().bookmarkFor(domainObject);
-            oidsDto.getOid().add(bookmark.toOidDto());
+            final Optional<Bookmark> bookmark = getBookmarkService().bookmarkFor(domainObject);
+            if(!bookmark.isPresent())
+                return null;
+            oidsDto.getOid().add(bookmark.get().toOidDto());
         }
         return oidsDto;
     }

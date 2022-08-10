@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.services.bookmarks;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -125,11 +126,12 @@ public class BookmarkServiceInternalDefault implements BookmarkService2 {
 
     @Programmatic
     @Override
-    public Bookmark bookmarkFor(final Object domainObject) {
+    public Optional<Bookmark> bookmarkFor(final Object domainObject) {
         if(domainObject == null) {
-            return null;
+            return Optional.empty();
         }
-        return persistenceSessionServiceInternal.bookmarkFor(unwrapped(domainObject));
+        return Optional.ofNullable(
+                persistenceSessionServiceInternal.bookmarkFor(unwrapped(domainObject)));
     }
 
     private Object unwrapped(Object domainObject) {
@@ -139,8 +141,9 @@ public class BookmarkServiceInternalDefault implements BookmarkService2 {
 
     @Programmatic
     @Override
-    public Bookmark bookmarkFor(Class<?> cls, String identifier) {
-        return persistenceSessionServiceInternal.bookmarkFor(cls, identifier);
+    public Optional<Bookmark> bookmarkFor(Class<?> cls, String identifier) {
+        return Optional.ofNullable(
+                persistenceSessionServiceInternal.bookmarkFor(cls, identifier));
     }
 
 

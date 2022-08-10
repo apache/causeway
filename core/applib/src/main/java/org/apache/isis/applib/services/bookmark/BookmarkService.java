@@ -20,6 +20,8 @@ package org.apache.isis.applib.services.bookmark;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+import java.util.Optional;
+
 /**
  * This service enables a serializable &quot;bookmark&quot; to be created for an entity.
  *
@@ -53,9 +55,9 @@ public interface BookmarkService {
     <T> T lookup(Bookmark bookmark, Class<T> cls);
 
     @Programmatic
-    Bookmark bookmarkFor(Object domainObject);
+    Optional<Bookmark> bookmarkFor(Object domainObject);
 
     @Programmatic
-    Bookmark bookmarkFor(Class<?> cls, String identifier);
+    Optional<Bookmark> bookmarkFor(Class<?> cls, String identifier);
     
 }
