@@ -37,7 +37,6 @@ import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.isis.applib.services.grid.GridService;
-import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.sitemap.SitemapService;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -116,7 +115,9 @@ public class SitemapServiceDefault implements SitemapService {
                         }
                     };
 
-                    val grid = toGrid(actionElementType.getCorrespondingClass(), Style.CURRENT);
+                    val grid = specificationLoader.specForType(actionElementType.getCorrespondingClass())
+                                .flatMap(Facets::bootstrapGrid)
+                                .orElse(null);
                     grid.visit(new Grid.VisitorAdapter() {
                         @Override public void visit(final ActionLayoutData actionLayoutData) {
                             actionElementType.getAction(actionLayoutData.getId(), ActionScope.PRODUCTION_ONLY)
@@ -179,32 +180,6 @@ public class SitemapServiceDefault implements SitemapService {
         return specificationLoader
         .specForLogicalTypeName(actionLayout.getLogicalTypeName())
         .map(typeSpec->typeSpec.getAction(actionLayout.getId(), ActionScope.PRODUCTION_ONLY).orElse(null));
-    }
-
-    private Grid toGrid(final Class<?> domainClass, final Style style) {
-
-        if (style == Style.CURRENT) {
-            return specificationLoader.specForType(domainClass)
-                    .flatMap(Facets::bootstrapGrid)
-                    .orElse(null);
-        }
-
-        // don't use the grid from the facet, because it will be modified subsequently.
-        Grid grid = gridService.load(domainClass);
-        if(grid == null) {
-            grid = gridService.defaultGridFor(domainClass);
-        }
-        gridService.normalize(grid);
-        if (style == Style.NORMALIZED) {
-            return grid;
-        }
-        if (style == Style.COMPLETE) {
-            return gridService.complete(grid);
-        }
-        if (style == Style.MINIMAL) {
-            return gridService.minimal(grid);
-        }
-        throw new IllegalArgumentException("unsupported style");
     }
 
 }

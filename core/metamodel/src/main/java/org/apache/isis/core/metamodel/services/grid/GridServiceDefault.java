@@ -88,7 +88,7 @@ public class GridServiceDefault implements GridService {
     // //////////////////////////////////////
 
     @Override
-    public Grid defaultGridFor(Class<?> domainClass) {
+    public Grid defaultGridFor(final Class<?> domainClass) {
 
         for (val gridSystemService : gridSystemServices()) {
             val grid = gridSystemService.defaultGrid(domainClass);
@@ -141,7 +141,6 @@ public class GridServiceDefault implements GridService {
 
         return grid;
     }
-
 
     /**
      * Not public API, exposed only for testing.
@@ -203,6 +202,8 @@ public class GridServiceDefault implements GridService {
                 ? gridSystemServices
                 : gridSystemServicesForTest;
     }
+
+
 
 
 }

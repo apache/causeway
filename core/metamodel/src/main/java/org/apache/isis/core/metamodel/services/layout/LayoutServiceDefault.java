@@ -33,13 +33,12 @@ import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.layout.LayoutFormat;
 import org.apache.isis.applib.services.layout.LayoutService;
-import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.util.ZipWriter;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
-import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -59,8 +58,8 @@ public class LayoutServiceDefault implements LayoutService {
     private final MenuBarsService menuBarsService;
 
     @Override
-    public String toXml(final Class<?> domainClass, final Style style) {
-        final Grid grid = toGrid(domainClass, style);
+    public String toXml(final Class<?> domainClass, final LayoutFormat format) {
+        final Grid grid = gridService.toGridForExport(domainClass, format);
         return jaxbService.toXml(grid,
                 _Maps.unmodifiable(
                         Marshaller.JAXB_SCHEMA_LOCATION,
@@ -68,37 +67,8 @@ public class LayoutServiceDefault implements LayoutService {
                         ));
     }
 
-    protected Grid toGrid(final Class<?> domainClass, final Style style) {
-
-        if (style == Style.CURRENT) {
-
-            return specificationLoader.specForType(domainClass)
-                    .flatMap(spec->spec.lookupFacet(GridFacet.class))
-                    .map(gridFacet->gridFacet.getGrid(null))
-                    .orElse(null);
-        }
-
-        // don't use the grid from the facet, because it will be modified subsequently.
-        Grid grid = gridService.load(domainClass);
-        if(grid == null) {
-            grid = gridService.defaultGridFor(domainClass);
-        }
-        gridService.normalize(grid);
-        if (style == Style.NORMALIZED) {
-            return grid;
-        }
-        if (style == Style.COMPLETE) {
-            return gridService.complete(grid);
-        }
-        if (style == Style.MINIMAL) {
-            return gridService.minimal(grid);
-        }
-        throw new IllegalArgumentException("unsupported style");
-    }
-
-
     @Override
-    public byte[] toZip(final Style style) {
+    public byte[] toZip(final LayoutFormat format) {
         val domainObjectSpecs = specificationLoader.snapshotSpecifications()
         .filter(spec ->
                 !spec.isAbstract()
@@ -108,7 +78,7 @@ public class LayoutServiceDefault implements LayoutService {
 
         for (val objectSpec : domainObjectSpecs) {
             val domainClass = objectSpec.getCorrespondingClass();
-            val grid = toGrid(domainClass, style);
+            val grid = gridService.toGridForExport(domainClass, format);
             if(grid != null) {
                 zipWriter.nextEntry(zipEntryNameFor(objectSpec), writer->{
 

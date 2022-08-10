@@ -23,6 +23,8 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.applib.services.layout.LayoutFormat;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Provides the ability to load the XML layout (grid) for a domain class.
@@ -117,8 +119,8 @@ public interface GridService {
      * Returns a normalized grid for the domain class obtained previously using {@link #load(Class)}.
      *
      * <p>
-     *     If a &quot;normalized&quot; grid is persisted as the <code>layout.xml</code>, then the expectation is that
-     *     the {@link MemberOrder} annotation can be removed from the domain class
+     *     If a 'normalized' grid is persisted as the <code>layout.xml</code>, then the expectation is that
+     *     any ordering metadata from layout annotations can be removed from the domain class
      *     because the binding of properties/collections/actions will be within the XML.  However, the layout
      *     annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and
      *     {@link CollectionLayout}) (if present) will continue to be used to provide additional layout metadata.  Of
@@ -134,8 +136,8 @@ public interface GridService {
      * {@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and {@link CollectionLayout}.
      *
      * <p>
-     *     If a &quot;completed&quot; grid is persisted as the <code>layout.xml</code>, then there should be no need
-     *     for any of the layout annotations, nor the {@link MemberOrder} annotations,
+     *     If a 'complete' grid is persisted as the <code>layout.xml</code>, then there should be no need
+     *     for any of the layout annotations,
      *     to be required in the domain class itself.
      * </p>
      */
@@ -145,13 +147,31 @@ public interface GridService {
      * Modifies the provided {@link Grid}, removing all metadata except the basic grid structure.
      *
      * <p>
-     *     If a &quot;minimal&quot; grid is persisted as the <code>layout.xml</code>, then the expectation is that
+     *     If a 'minimal' grid is persisted as the <code>layout.xml</code>, then the expectation is that
      *     most of the layout annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout},
-     *     {@link CollectionLayout}, but also {@link MemberOrder}) will still be retained in the domain class code.
+     *     {@link CollectionLayout} will still be retained in the domain class code.
      * </p>
      *
      * @param grid
      */
     Grid minimal(Grid grid);
+
+    default Grid toGridForExport(
+            final Class<?> domainClass,
+            final LayoutFormat format) {
+
+        // don't use the grid from the facet, because it will be modified subsequently.
+        Grid grid = load(domainClass);
+        if(grid == null) {
+            grid = defaultGridFor(domainClass);
+        }
+        if (format == LayoutFormat.COMPLETE) {
+            return complete(grid);
+        }
+        if (format == LayoutFormat.MINIMAL) {
+            return minimal(grid);
+        }
+        throw _Exceptions.unmatchedCase(format);
+    }
 
 }
