@@ -17,6 +17,7 @@
 package org.apache.isis.applib.services.layout;
 
 import java.net.MalformedURLException;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -51,11 +52,13 @@ public class Object_openRestApi {
     )
     @MemberOrder(name = "datanucleusIdLong", sequence = "750.1")
     public java.net.URL act() throws MalformedURLException {
-        Bookmark bookmark = bookmarkService2.bookmarkFor(object);
+        Optional<Bookmark> bookmark = bookmarkService2.bookmarkFor(object);
+        if(!bookmark.isPresent())
+            return null;
         return new java.net.URL(String.format(
                 "http:///restful/objects/%s/%s",
-                bookmark.getObjectType(),
-                bookmark.getIdentifier()));
+                bookmark.get().getObjectType(),
+                bookmark.get().getIdentifier()));
     }
 
     @javax.inject.Inject

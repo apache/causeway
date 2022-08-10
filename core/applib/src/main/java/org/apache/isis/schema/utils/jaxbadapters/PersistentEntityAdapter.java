@@ -24,6 +24,8 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.bookmark.BookmarkService2;
 import org.apache.isis.schema.common.v1.OidDto;
 
+import java.util.Optional;
+
 public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
 
     @Override
@@ -39,8 +41,11 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
         if(domainObject == null) {
             return null;
         }
-        final Bookmark bookmark = getBookmarkService().bookmarkFor(domainObject);
-        return bookmark.toOidDto();
+        final Optional<Bookmark> bookmark = getBookmarkService().bookmarkFor(domainObject);
+        if(!bookmark.isPresent()){
+            return null;
+        }
+        return bookmark.get().toOidDto();
     }
 
     private static String coalesce(final String first, final String second) {

@@ -26,13 +26,17 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
 
+import java.util.Optional;
+
 @DomainService(nature = NatureOfService.DOMAIN)
 public class DtoMappingHelper {
 
     @Programmatic
     public OidDto oidDtoFor(final Object object) {
-        final Bookmark bookmark = bookmarkService.bookmarkFor(object);
-        return asOidDto(bookmark);
+        final Optional<Bookmark> bookmark = bookmarkService.bookmarkFor(object);
+        if(!bookmark.isPresent())
+            return null;
+        return asOidDto(bookmark.get());
     }
 
     private static OidDto asOidDto(final Bookmark reference) {

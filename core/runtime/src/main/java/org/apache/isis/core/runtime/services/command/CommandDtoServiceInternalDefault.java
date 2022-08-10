@@ -128,7 +128,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         final ObjectAction action = (ObjectAction) member;
         final String actionIdentifier = CommandUtil.memberIdentifierFor(action);
         
-        final Bookmark domainObjectBookmark = bookmarkService.bookmarkFor(domainObject);
+        final Bookmark domainObjectBookmark = bookmarkService.bookmarkFor(domainObject).orElse(null);
 
         final List<Class<?>> argTypes = Lists.newArrayList();
         final List<Object> argObjs = Lists.newArrayList();

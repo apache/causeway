@@ -30,6 +30,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.hint.HintStore;
 
+import java.util.Optional;
+
 @Mixin(method="act")
 public class Object_clearHints {
 
@@ -54,8 +56,10 @@ public class Object_clearHints {
     @MemberOrder(name = "datanucleusIdLong", sequence = "400.1")
     public Object act() {
         if (getHintStoreUsingWicketSession() != null) {
-            final Bookmark bookmark = bookmarkService.bookmarkFor(object);
-            getHintStoreUsingWicketSession().removeAll(bookmark);
+            final Optional<Bookmark> bookmark = bookmarkService.bookmarkFor(object);
+            if(bookmark.isPresent()) {
+                getHintStoreUsingWicketSession().removeAll(bookmark.get());
+            }
         }
         return object;
     }

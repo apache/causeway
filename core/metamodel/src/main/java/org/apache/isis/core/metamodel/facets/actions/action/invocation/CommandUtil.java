@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -123,9 +124,11 @@ public class CommandUtil {
                 argTypes.add(method.getParameterTypes()[i]);
                 argObjs.add(input);
             } else {
-                Bookmark argBookmark = bookmarkService.bookmarkFor(input);
-                argTypes.add(Bookmark.class);
-                argObjs.add(argBookmark);
+                Optional<Bookmark> argBookmark = bookmarkService.bookmarkFor(input);
+                if(argBookmark.isPresent()) {
+                    argTypes.add(Bookmark.class);
+                    argObjs.add(argBookmark);
+                }
             }
         }
     }
