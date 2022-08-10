@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.property.notpersisted;
 
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
@@ -38,7 +39,11 @@ public class NotPersistedFacetForPropertyAnnotation extends NotPersistedFacetAbs
             return null;
         }
 
-        final boolean notPersisted = property.notPersisted();
+        boolean notPersisted = property.notPersisted();
+        // Test for v2
+        if(property.snapshot()!= Snapshot.NOT_SPECIFIED){
+            notPersisted = property.snapshot()==Snapshot.EXCLUDED;
+        }
         final boolean persisted = !notPersisted;
         if(persisted) {
             return null;

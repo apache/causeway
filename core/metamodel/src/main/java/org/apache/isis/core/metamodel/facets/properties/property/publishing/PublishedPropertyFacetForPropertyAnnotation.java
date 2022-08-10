@@ -33,7 +33,11 @@ public class PublishedPropertyFacetForPropertyAnnotation extends PublishedProper
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final Publishing publishing = property != null ? property.publishing() : Publishing.AS_CONFIGURED;
+        Publishing publishing = property != null ? property.publishing() : Publishing.AS_CONFIGURED;
+        // Test for v2
+        if (property.executionPublishing()!=Publishing.NOT_SPECIFIED){
+            publishing = property.executionPublishing();
+        }
 
         switch (publishing) {
             case AS_CONFIGURED:
