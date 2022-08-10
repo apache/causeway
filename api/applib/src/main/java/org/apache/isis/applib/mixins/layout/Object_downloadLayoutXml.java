@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.mixins.dto.DtoMixinConstants;
-import org.apache.isis.applib.services.layout.LayoutFormat;
+import org.apache.isis.applib.services.layout.LayoutExportStyle;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
@@ -71,9 +71,9 @@ public class Object_downloadLayoutXml {
                     named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
                     describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
-            final LayoutFormat format) {
+            final LayoutExportStyle style) {
 
-        val xmlString = layoutService.toXml(holder.getClass(), format);
+        val xmlString = layoutService.toXml(holder.getClass(), style);
         return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
@@ -85,10 +85,10 @@ public class Object_downloadLayoutXml {
     }
 
     /**
-     * Default style is {@link LayoutFormat#MINIMAL}.
+     * Default style is {@link LayoutExportStyle#MINIMAL}.
      */
-    @MemberSupport public LayoutFormat default1Act() {
-        return LayoutFormat.defaults();
+    @MemberSupport public LayoutExportStyle default1Act() {
+        return LayoutExportStyle.defaults();
     }
 
     @Inject LayoutService layoutService;

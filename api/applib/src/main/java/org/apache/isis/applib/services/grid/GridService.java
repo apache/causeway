@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.layout.grid.Grid;
-import org.apache.isis.applib.services.layout.LayoutFormat;
+import org.apache.isis.applib.services.layout.LayoutExportStyle;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
@@ -158,20 +158,20 @@ public interface GridService {
 
     default Grid toGridForExport(
             final Class<?> domainClass,
-            final LayoutFormat format) {
+            final LayoutExportStyle style) {
 
         // don't use the grid from the facet, because it will be modified subsequently.
         Grid grid = load(domainClass);
         if(grid == null) {
             grid = defaultGridFor(domainClass);
         }
-        if (format == LayoutFormat.COMPLETE) {
+        if (style == LayoutExportStyle.COMPLETE) {
             return complete(grid);
         }
-        if (format == LayoutFormat.MINIMAL) {
+        if (style == LayoutExportStyle.MINIMAL) {
             return minimal(grid);
         }
-        throw _Exceptions.unmatchedCase(format);
+        throw _Exceptions.unmatchedCase(style);
     }
 
 }

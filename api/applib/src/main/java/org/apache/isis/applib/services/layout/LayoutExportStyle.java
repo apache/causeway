@@ -34,7 +34,7 @@ import org.apache.isis.applib.layout.grid.Grid;
  */
 @Named(IsisModuleApplib.NAMESPACE + ".services.layout.LayoutFormat")
 @Value
-public enum LayoutFormat {
+public enum LayoutExportStyle {
 
     /**
      * Format that yields a full representation for the <code>layout.xml</code>,
@@ -53,7 +53,7 @@ public enum LayoutFormat {
      */
     MINIMAL,;
 
-    public static LayoutFormat defaults() {
+    public static LayoutExportStyle defaults() {
         return MINIMAL;
     }
 

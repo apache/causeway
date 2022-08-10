@@ -89,14 +89,14 @@ public class GridServiceDefault implements GridService {
 
     @Override
     public Grid defaultGridFor(final Class<?> domainClass) {
-
         for (val gridSystemService : gridSystemServices()) {
             val grid = gridSystemService.defaultGrid(domainClass);
             if(grid != null) {
                 return grid;
             }
         }
-        throw new IllegalStateException("No GridSystemService available to create grid for '" + domainClass.getName() + "'");
+        throw new IllegalStateException(
+                "No GridSystemService available to create grid for '" + domainClass.getName() + "'");
     }
 
     @Override

@@ -33,7 +33,7 @@ import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.LayoutFormat;
+import org.apache.isis.applib.services.layout.LayoutExportStyle;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.util.ZipWriter;
@@ -58,8 +58,8 @@ public class LayoutServiceDefault implements LayoutService {
     private final MenuBarsService menuBarsService;
 
     @Override
-    public String toXml(final Class<?> domainClass, final LayoutFormat format) {
-        final Grid grid = gridService.toGridForExport(domainClass, format);
+    public String toXml(final Class<?> domainClass, final LayoutExportStyle style) {
+        final Grid grid = gridService.toGridForExport(domainClass, style);
         return jaxbService.toXml(grid,
                 _Maps.unmodifiable(
                         Marshaller.JAXB_SCHEMA_LOCATION,
@@ -68,7 +68,7 @@ public class LayoutServiceDefault implements LayoutService {
     }
 
     @Override
-    public byte[] toZip(final LayoutFormat format) {
+    public byte[] toZip(final LayoutExportStyle style) {
         val domainObjectSpecs = specificationLoader.snapshotSpecifications()
         .filter(spec ->
                 !spec.isAbstract()
@@ -78,7 +78,7 @@ public class LayoutServiceDefault implements LayoutService {
 
         for (val objectSpec : domainObjectSpecs) {
             val domainClass = objectSpec.getCorrespondingClass();
-            val grid = gridService.toGridForExport(domainClass, format);
+            val grid = gridService.toGridForExport(domainClass, style);
             if(grid != null) {
                 zipWriter.nextEntry(zipEntryNameFor(objectSpec), writer->{
 

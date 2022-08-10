@@ -81,15 +81,15 @@ public class LayoutServiceMenu {
 
         public class ActionDomainEvent extends LayoutServiceMenu.ActionDomainEvent<downloadLayouts> {}
 
-        @MemberSupport public Blob act(final LayoutFormat format) {
+        @MemberSupport public Blob act(final LayoutExportStyle style) {
 
-            final String fileName = "layouts." + format.name().toLowerCase() + ".zip";
+            final String fileName = "layouts." + style.name().toLowerCase() + ".zip";
 
-            final byte[] zipBytes = layoutService.toZip(format);
+            final byte[] zipBytes = layoutService.toZip(style);
             return new Blob(fileName, mimeTypeApplicationZip, zipBytes);
         }
 
-        @MemberSupport public LayoutFormat default0Act() { return LayoutFormat.defaults(); }
+        @MemberSupport public LayoutExportStyle default0Act() { return LayoutExportStyle.defaults(); }
     }
 
 
