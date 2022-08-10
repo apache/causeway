@@ -68,8 +68,6 @@ import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Core;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -1943,11 +1941,11 @@ public class IsisConfiguration {
              */
             private int maxTitleLengthInTables = 12;
 
-            private static boolean isValidTitleLenght(final int len) {
+            private static boolean isMaxTitleLenghtValid(final int len) {
                 return len>=0;
             }
             private int asTitleLenght(final int len) {
-                return isValidTitleLenght(len)
+                return isMaxTitleLenghtValid(len)
                         ? len
                         : getMaxTitleLengthInTables();
             }
