@@ -20,6 +20,6 @@ package org.apache.isis.viewer.wicket.model.isis;
 
 public interface WicketViewerSettingsAccessor {
 
-    WicketViewerSettings getSettings();
+    org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket getSettings();
 
 }

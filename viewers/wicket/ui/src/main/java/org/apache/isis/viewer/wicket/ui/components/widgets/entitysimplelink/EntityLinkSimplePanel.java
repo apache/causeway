@@ -63,7 +63,8 @@ implements CancelHintRequired  {
 
     private void buildGui() {
 
-        val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(getModel().getObject());
+        val objectModelForLink = getModel();
+        val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(objectModelForLink.getObject());
 
         if(isEmpty) {
             // represent null reference by a simple markup displaying '(none)'
@@ -73,7 +74,6 @@ implements CancelHintRequired  {
 
         } else {
 
-            val objectModelForLink = getModel();
             val componentFactory = getComponentFactoryRegistry()
                     .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, objectModelForLink);
 

@@ -25,7 +25,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -41,14 +40,12 @@ extends FormAbstract<ManagedObject>{
     public  static final String ID_CANCEL_BUTTON = "cancelButton";
     private static final String ID_FEEDBACK = "feedback";
 
-    protected final WicketViewerSettings settings;
     protected final AjaxButton okButton;
     protected final AjaxButton cancelButton;
 
-    protected OkCancelForm(final String id, final WicketViewerSettings settings, final IModel<ManagedObject> model) {
+    protected OkCancelForm(final String id, final IModel<ManagedObject> model) {
         super(id, model);
-        this.settings = settings;
-        okButton = Wkt.buttonAddOk(this, ID_OK_BUTTON, ()->translate("OK"), settings, this::onOkSubmitted);
+        okButton = Wkt.buttonAddOk(this, ID_OK_BUTTON, ()->translate("OK"), getSettings(), this::onOkSubmitted);
         cancelButton = Wkt.buttonAdd(this, ID_CANCEL_BUTTON, ()->translate("Cancel"), (button, target)->{
             onCancelSubmitted(target);
         });

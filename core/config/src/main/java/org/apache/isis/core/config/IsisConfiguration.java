@@ -34,6 +34,12 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import javax.activation.DataSource;
 import javax.inject.Named;
 import javax.validation.Constraint;
@@ -70,12 +76,6 @@ import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyP
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.web.DialogMode;
-
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import lombok.Data;
 import lombok.Getter;
@@ -1941,7 +1941,16 @@ public class IsisConfiguration {
              */
             private int maxTitleLengthInTables = 12;
 
-            private Integer maxTitleLengthInParentedTables;
+            private static boolean isValidTitleLenght(final int len) {
+                return len>0;
+            }
+            private int asTitleLenght(final int len) {
+                return isValidTitleLenght(len)
+                        ? len
+                        : getMaxTitleLengthInTables();
+            }
+
+            private int maxTitleLengthInParentedTables = -1;
 
             /**
              * The maximum number of characters to use to render the title of a domain object (alongside the icon) in a
@@ -1952,18 +1961,18 @@ public class IsisConfiguration {
              * </p>
              *
              * <p>
-             *     If not specified, then the value of {@link #getMaxTitleLengthInTables()} is used.
+             *     If invalid or not specified, then the value of {@link #getMaxTitleLengthInTables()} is used.
              * </p>
              */
             public int getMaxTitleLengthInParentedTables() {
-                return maxTitleLengthInParentedTables != null ? maxTitleLengthInParentedTables : getMaxTitleLengthInTables();
+                return asTitleLenght(maxTitleLengthInParentedTables);
             }
 
             public void setMaxTitleLengthInParentedTables(final int val) {
                 maxTitleLengthInParentedTables = val;
             }
 
-            private Integer maxTitleLengthInStandaloneTables;
+            private int maxTitleLengthInStandaloneTables = -1;
 
             /**
              * The maximum number of characters to use to render the title of a domain object (alongside the icon)
@@ -1974,15 +1983,17 @@ public class IsisConfiguration {
              * </p>
              *
              * <p>
-             *     If not specified, then the value of {@link #getMaxTitleLengthInTables()} is used.
+             *     If invalid or not specified, then the value of {@link #getMaxTitleLengthInTables()} is used.
              * </p>
              */
             public int getMaxTitleLengthInStandaloneTables() {
-                return maxTitleLengthInStandaloneTables != null ? maxTitleLengthInStandaloneTables : getMaxTitleLengthInTables();
+                return asTitleLenght(maxTitleLengthInStandaloneTables);
             }
             /**
              * The maximum length that a title of an object will be shown when rendered in a standalone table;
              * will be truncated beyond this (with ellipses to indicate the truncation).
+             * <p>
+             * If set to negative or zero, sets defaults instead.
              */
             public void setMaxTitleLengthInStandaloneTables(final int val) {
                 maxTitleLengthInStandaloneTables = val;

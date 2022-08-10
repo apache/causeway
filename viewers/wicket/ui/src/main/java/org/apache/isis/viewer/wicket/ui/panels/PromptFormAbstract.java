@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
@@ -68,10 +67,9 @@ implements ScalarModelSubscriber {
     protected PromptFormAbstract(
             final String id,
             final Component parentPanel,
-            final WicketViewerSettings settings,
             final T model) {
 
-        super(id, settings, model);
+        super(id, model);
         this.parentPanel = parentPanel;
 
         addParameters();

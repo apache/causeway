@@ -47,7 +47,7 @@ extends PromptFormPanelAbstract<ManagedObject, ScalarPropertyModel> {
 
     private void buildGui() {
         val scalarPropertyModel = scalarPropertyModel();
-        add(new PropertyEditForm(ID_INPUT_FORM, this, this.getWicketViewerSettings(), scalarPropertyModel));
+        add(new PropertyEditForm(ID_INPUT_FORM, this, scalarPropertyModel));
     }
 
     private ScalarPropertyModel scalarPropertyModel() {

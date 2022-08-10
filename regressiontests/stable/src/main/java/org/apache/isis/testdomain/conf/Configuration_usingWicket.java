@@ -50,6 +50,7 @@ import static org.junit.Assert.assertEquals;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -57,7 +58,6 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.dto.IBook;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
@@ -328,9 +328,10 @@ public class Configuration_usingWicket {
         private final PageClassRegistry pageClassRegistry =
                 getCommonContext().lookupServiceElseFail(PageClassRegistry.class);
 
-        @Getter(lazy=true)
-        private final WicketViewerSettings settings =
-                getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
+        @Override
+        public Wicket getSettings() {
+            return getCommonContext().getConfiguration().getViewer().getWicket();
+        }
 
         @Override
         public Class<? extends Page> getHomePage() {

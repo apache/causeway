@@ -85,16 +85,18 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.commons.internal.functions._Functions.SerializableFunction;
 import org.apache.isis.commons.internal.functions._Functions.SerializableSupplier;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
-import static de.agilecoders.wicket.jquery.JQuery.$;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
@@ -105,9 +107,8 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.jquery.Key;
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
+
+import static de.agilecoders.wicket.jquery.JQuery.$;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -311,7 +312,7 @@ public class Wkt {
     public AjaxButton buttonOk(
             final String id,
             final IModel<String> labelModel,
-            final WicketViewerSettings settings,
+            final Wicket settings,
             final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
         return settings.isUseIndicatorForFormSubmit()
         ? new IndicatingAjaxButton(id, labelModel) {
@@ -356,7 +357,7 @@ public class Wkt {
             final MarkupContainer markupContainer,
             final String id,
             final IModel<String> labelModel,
-            final WicketViewerSettings settings,
+            final Wicket settings,
             final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
         return add(markupContainer, buttonOk(id, labelModel, settings, onClick));
     }

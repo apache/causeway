@@ -32,7 +32,6 @@ import org.apache.isis.viewer.wicket.viewer.services.DeepLinkServiceWicket;
 import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
 import org.apache.isis.viewer.wicket.viewer.services.ImageResourceCacheClassPath;
 import org.apache.isis.viewer.wicket.viewer.services.TranslationsResolverWicket;
-import org.apache.isis.viewer.wicket.viewer.services.WicketViewerSettingsDefault;
 import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.config.BootstrapInitWkt;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.config.DebugInitWkt;
@@ -69,7 +68,6 @@ import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WicketViewerCssBund
         PageNavigationServiceDefault.class,
         TranslationsResolverWicket.class,
         WebModuleWicket.class,
-        WicketViewerSettingsDefault.class,
 
 })
 public class IsisModuleViewerWicketViewer {

@@ -56,7 +56,7 @@ extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
         val actionModel = getModel();
         actionModel.clearArguments();  // in case previously used, eg prompt displayed then cancelled
         final ActionParametersForm inputForm =
-                new ActionParametersForm(ID_INPUT_FORM, this, this.getWicketViewerSettings(), actionModel);
+                new ActionParametersForm(ID_INPUT_FORM, this, actionModel);
 
         Wkt.cssAppend(inputForm, actionModel.getAction().getFeatureIdentifier());
         add(inputForm);
