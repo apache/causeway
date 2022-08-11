@@ -56,7 +56,7 @@ class IdStringifierForObjectIdentity_Test {
         val stringifier = JdoObjectIdentityValueSemantics.builder().build();
 
         val stringified = stringifier.enstring(new ObjectIdentity(entityType, value));
-        val parse = stringifier.destring(stringified, entityType);
+        val parse = stringifier.destring(entityType, stringified);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);

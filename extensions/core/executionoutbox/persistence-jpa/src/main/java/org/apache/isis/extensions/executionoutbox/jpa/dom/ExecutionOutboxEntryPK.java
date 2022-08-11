@@ -30,7 +30,7 @@ import javax.persistence.Embeddable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 
 import lombok.AccessLevel;
@@ -74,7 +74,7 @@ public class ExecutionOutboxEntryPK implements Serializable {
     @Component
     @Priority(PriorityPrecedence.MIDPOINT)
     public static class Semantics
-    extends ValueSemanticsBasedOnIdStringifier<ExecutionOutboxEntryPK> {
+    extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<ExecutionOutboxEntryPK> {
 
         public Semantics() {
             super(ExecutionOutboxEntryPK.class);

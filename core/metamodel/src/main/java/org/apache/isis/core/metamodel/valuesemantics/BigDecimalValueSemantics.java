@@ -55,7 +55,7 @@ implements
     DefaultsProvider<BigDecimal>,
     Parser<BigDecimal>,
     Renderer<BigDecimal>,
-    IdStringifier<BigDecimal> {
+    IdStringifier.EntityAgnostic<BigDecimal> {
 
     @Setter @Inject
     private SpecificationLoader specificationLoader;
@@ -96,8 +96,7 @@ implements
     }
 
     @Override
-    public BigDecimal destring(
-            final @NonNull String stringified) {
+    public BigDecimal destring(final @NonNull String stringified) {
         return new BigDecimal(stringified);
     }
 

@@ -55,7 +55,7 @@ class IdStringifierForIntId_Test {
         val stringifier = new JdoIntIdValueSemantics();
 
         val stringified = stringifier.enstring(new IntId(entityType, value));
-        val parse = stringifier.destring(stringified, entityType);
+        val parse = stringifier.destring(entityType, stringified);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClassName()).isEqualTo(entityType.getName());

@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
-import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -37,7 +37,7 @@ import lombok.val;
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class JdoDatastoreIdImplValueSemantics
-extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<DatastoreIdImpl> {
+extends ValueSemanticsBasedOnIdStringifier<DatastoreIdImpl> {
 
     public static final String STRING_DELIMITER = "[OID]"; // as
 
@@ -60,7 +60,7 @@ extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<Datastore
         val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
-        return destring(key, _InstanceUtil.loadClass(targetClassName));
+        return destring(_InstanceUtil.loadClass(targetClassName), key);
     }
 
     // -- ID STRINGIFIER
@@ -73,8 +73,8 @@ extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<Datastore
     @SneakyThrows
     @Override
     public DatastoreIdImpl destring(
-            final @NonNull String stringified,
-            final @NonNull Class<?> targetEntityClass) {
+            final @NonNull Class<?> targetEntityClass,
+            final @NonNull String stringified) {
         // enString invoked toString() on the original key; invoking toString() on its stringified form does not change it
         val proto = new DatastoreIdImpl(targetEntityClass.getName(), stringified);
         // now render in the form that the DataStoreImpl constructor expects; it will take it apart itself.

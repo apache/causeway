@@ -92,10 +92,7 @@ public class IdStringifierService {
             final @NonNull Class<?> entityClass,
             final @NonNull String stringifiedId) {
         val idStringifier = lookupElseFail(ClassUtils.resolvePrimitiveIfNecessary(primaryKeyType));
-        @SuppressWarnings("unchecked")
-        val primaryKey = _Casts.castTo(IdStringifier.SupportingTargetEntityClass.class, idStringifier)
-                .map(stringifier->stringifier.destring(stringifiedId, entityClass))
-                .orElseGet(()->idStringifier.destring(stringifiedId));
+        val primaryKey = idStringifier.destring(entityClass, stringifiedId);
         return _Casts.uncheckedCast(primaryKey);
     }
 

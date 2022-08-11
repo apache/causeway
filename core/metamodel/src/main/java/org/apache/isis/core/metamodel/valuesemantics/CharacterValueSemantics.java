@@ -56,7 +56,7 @@ implements
     DefaultsProvider<Character>,
     Parser<Character>,
     Renderer<Character>,
-    IdStringifier<Character> {
+    IdStringifier.EntityAgnostic<Character> {
 
     @Override
     public Class<Character> getCorrespondingClass() {
@@ -111,8 +111,7 @@ implements
     }
 
     @Override
-    public Character destring(
-            final @NonNull String stringified) {
+    public Character destring(final @NonNull String stringified) {
         if(stringified.startsWith(REGULAR_PREFIX)) {
             return stringified.substring(REGULAR_PREFIX.length()).charAt(0);
         }

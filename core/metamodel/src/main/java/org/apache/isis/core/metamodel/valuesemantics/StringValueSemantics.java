@@ -47,7 +47,7 @@ extends ValueSemanticsAbstract<String>
 implements
     Parser<String>,
     Renderer<String>,
-    IdStringifier<String> {
+    IdStringifier.EntityAgnostic<String> {
 
     @Override
     public Class<String> getCorrespondingClass() {
@@ -87,8 +87,7 @@ implements
     }
 
     @Override
-    public String destring(
-            final @NonNull String stringified) {
+    public String destring(final @NonNull String stringified) {
         if(stringified.startsWith(REGULAR_PREFIX)) {
             return stringified.substring(REGULAR_PREFIX.length());
         }

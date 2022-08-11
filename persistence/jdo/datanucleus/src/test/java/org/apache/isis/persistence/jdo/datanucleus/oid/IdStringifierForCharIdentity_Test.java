@@ -77,7 +77,7 @@ class IdStringifierForCharIdentity_Test {
 
         val value = new CharIdentity(entityType, c);
         val stringified = stringifier.enstring(value);
-        val parse = stringifier.destring(stringified, entityType);
+        val parse = stringifier.destring(entityType, stringified);
 
         assertThat(parse).isEqualTo(value);
     }

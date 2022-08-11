@@ -54,7 +54,7 @@ implements
     DefaultsProvider<Long>,
     Parser<Long>,
     Renderer<Long>,
-    IdStringifier<Long>{
+    IdStringifier.EntityAgnostic<Long>{
 
     @Override
     public Class<Long> getCorrespondingClass() {
@@ -92,8 +92,7 @@ implements
     }
 
     @Override
-    public Long destring(
-            final @NonNull String stringified) {
+    public Long destring(final @NonNull String stringified) {
         return Long.parseLong(stringified);
     }
 

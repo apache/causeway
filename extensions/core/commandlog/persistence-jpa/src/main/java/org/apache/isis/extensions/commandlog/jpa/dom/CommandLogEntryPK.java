@@ -30,7 +30,7 @@ import javax.persistence.Embeddable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 
@@ -65,7 +65,7 @@ public class CommandLogEntryPK implements Serializable {
     @Component
     @Priority(PriorityPrecedence.MIDPOINT)
     public static class Semantics
-    extends ValueSemanticsBasedOnIdStringifier<CommandLogEntryPK> {
+    extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<CommandLogEntryPK> {
 
         public Semantics() {
             super(CommandLogEntryPK.class);

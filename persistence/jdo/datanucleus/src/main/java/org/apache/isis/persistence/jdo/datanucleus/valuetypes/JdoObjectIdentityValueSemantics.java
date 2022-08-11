@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
-import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -48,7 +48,7 @@ import lombok.val;
 @Priority(PriorityPrecedence.LATE)
 @Builder
 public class JdoObjectIdentityValueSemantics
-extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<ObjectIdentity> {
+extends ValueSemanticsBasedOnIdStringifier<ObjectIdentity> {
 
     private static final String PREFIX_UUID = "u_";
     private static final String PREFIX_LONG = "l_";
@@ -73,7 +73,7 @@ extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<ObjectIde
         val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
-        return destring(key, _InstanceUtil.loadClass(targetClassName));
+        return destring(_InstanceUtil.loadClass(targetClassName), key);
     }
 
     // -- ID STRINGIFIER
@@ -96,8 +96,8 @@ extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<ObjectIde
 
     @Override
     public ObjectIdentity destring(
-            final @NonNull String stringified,
-            final @NonNull Class<?> targetEntityClass) {
+            final @NonNull Class<?> targetEntityClass,
+            final @NonNull String stringified) {
         if (stringified.startsWith(PREFIX_LONG)) {
             return new ObjectIdentity(targetEntityClass, Long.parseLong(stringified.substring(PREFIX_LONG.length())));
         }

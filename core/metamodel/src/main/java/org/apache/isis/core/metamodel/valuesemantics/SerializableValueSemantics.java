@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -45,7 +45,7 @@ import lombok.NonNull;
 @Named("isis.val.SerializableValueSemantics")
 @Priority(PriorityPrecedence.LAST)
 public class SerializableValueSemantics
-extends ValueSemanticsBasedOnIdStringifier<Serializable> {
+extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<Serializable> {
 
     private final UrlEncodingService codec;
 

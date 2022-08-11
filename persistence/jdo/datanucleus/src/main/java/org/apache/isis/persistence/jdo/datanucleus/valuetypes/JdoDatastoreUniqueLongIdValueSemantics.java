@@ -24,7 +24,7 @@ import org.datanucleus.identity.DatastoreUniqueLongId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
 
 import lombok.NonNull;
 
@@ -34,7 +34,7 @@ import lombok.NonNull;
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class JdoDatastoreUniqueLongIdValueSemantics
-extends ValueSemanticsBasedOnIdStringifier<DatastoreUniqueLongId> {
+extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<DatastoreUniqueLongId> {
 
     public JdoDatastoreUniqueLongIdValueSemantics() {
         super(DatastoreUniqueLongId.class);

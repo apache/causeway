@@ -54,7 +54,7 @@ implements
     DefaultsProvider<Short>,
     Parser<Short>,
     Renderer<Short>,
-    IdStringifier<Short> {
+    IdStringifier.EntityAgnostic<Short> {
 
     @Override
     public Class<Short> getCorrespondingClass() {
@@ -92,8 +92,7 @@ implements
     }
 
     @Override
-    public Short destring(
-            final @NonNull String stringified) {
+    public Short destring(final @NonNull String stringified) {
         return Short.parseShort(stringified);
     }
 

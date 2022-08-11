@@ -23,14 +23,13 @@ import java.lang.reflect.Constructor;
 import javax.annotation.Priority;
 
 import org.datanucleus.identity.DatastoreId;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
-import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
@@ -43,7 +42,7 @@ import lombok.val;
 @Component
 @Priority(PriorityPrecedence.LATE + 100) // after the implementations of DatastoreId; for a custom impl.
 public class JdoDatastoreIdValueSemantics
-extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<DatastoreId> {
+extends ValueSemanticsBasedOnIdStringifier<DatastoreId> {
 
     public JdoDatastoreIdValueSemantics() {
         super(DatastoreId.class);
@@ -64,7 +63,7 @@ extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<Datastore
         val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
-        return destring(key, _InstanceUtil.loadClass(targetClassName));
+        return destring(_InstanceUtil.loadClass(targetClassName), key);
     }
 
     // -- ID STRINGIFIER
@@ -82,8 +81,8 @@ extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<Datastore
     @SneakyThrows
     @Override
     public DatastoreId destring(
-            final @NonNull String stringified,
-            final @Nullable Class<?> targetEntityClass) {
+            final @NonNull Class<?> targetEntityClass,
+            final @NonNull String stringified) {
         int idx = stringified.indexOf(IdStringifier.AbstractWithPrefix.SEPARATOR);
         String clsName = stringified.substring(0, idx);
         String keyStr = stringified.substring(idx + 1);

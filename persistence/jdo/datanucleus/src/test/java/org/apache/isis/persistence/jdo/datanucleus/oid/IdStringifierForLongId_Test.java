@@ -55,7 +55,7 @@ class IdStringifierForLongId_Test {
         val stringifier = new JdoLongIdValueSemantics();
 
         val stringified = stringifier.enstring(new LongId(entityType, value));
-        val parse = stringifier.destring(stringified, entityType);
+        val parse = stringifier.destring(entityType, stringified);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClassName()).isEqualTo(entityType.getName());

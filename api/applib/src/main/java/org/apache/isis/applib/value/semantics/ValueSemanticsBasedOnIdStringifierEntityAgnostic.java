@@ -28,19 +28,18 @@ import lombok.experimental.Accessors;
 
 /**
  * Convenient base class for value-semantics,
- * that are basically inferred from an {@link IdStringifier} with target-entity-class-support.
- * @see org.apache.isis.applib.services.bookmark.IdStringifier.SupportingTargetEntityClass
+ * that are inferred from an {@link org.apache.isis.applib.services.bookmark.IdStringifier.EntityAgnostic}.
  * @since 2.0
  */
-public abstract class ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<T>
+public abstract class ValueSemanticsBasedOnIdStringifierEntityAgnostic<T>
 extends ValueSemanticsAbstract<T>
 implements
-    IdStringifier.SupportingTargetEntityClass<T> {
+    IdStringifier.EntityAgnostic<T> {
 
     @Getter @Accessors(makeFinal = true)
     private final Class<T> correspondingClass;
 
-    protected ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport(
+    protected ValueSemanticsBasedOnIdStringifierEntityAgnostic(
             final @NonNull Class<T> correspondingClass) {
         _Assert.assertFalse(correspondingClass.isPrimitive(),
                 ()->String.format("not allowed to be initialzed with a primitive class (%s), "
@@ -59,6 +58,18 @@ implements
     @Override
     public String enstring(@NonNull final T value) {
         return value.toString();
+    }
+
+    // -- COMPOSER
+
+    @Override
+    public final ValueDecomposition decompose(final T value) {
+        return decomposeAsString(value, this::enstring, ()->null);
+    }
+
+    @Override
+    public final T compose(final ValueDecomposition decomposition) {
+        return composeFromString(decomposition, this::destring, ()->null);
     }
 
 }

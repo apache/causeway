@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
-import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.schema.common.v2.ValueType;
 
@@ -36,7 +36,7 @@ import lombok.val;
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class JdoLongIdValueSemantics
-extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<LongId> {
+extends ValueSemanticsBasedOnIdStringifier<LongId> {
 
     public JdoLongIdValueSemantics() {
         super(LongId.class);
@@ -57,13 +57,15 @@ extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<LongId> {
         val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
-        return destring(key, _InstanceUtil.loadClass(targetClassName));
+        return destring(_InstanceUtil.loadClass(targetClassName), key);
     }
 
     // -- ID STRINGIFIER
 
     @Override
-    public LongId destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
+    public LongId destring(
+            final @NonNull Class<?> targetEntityClass,
+            final @NonNull String stringified) {
         return new LongId(targetEntityClass, stringified);
     }
 }

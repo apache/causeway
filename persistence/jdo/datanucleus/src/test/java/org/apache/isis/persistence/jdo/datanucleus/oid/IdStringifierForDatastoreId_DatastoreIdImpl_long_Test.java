@@ -58,7 +58,7 @@ class IdStringifierForDatastoreId_DatastoreIdImpl_long_Test {
         if(enstringed != null) {
             Assertions.assertThat(stringified).isEqualTo(enstringed);
         }
-        val parse = stringifier.destring(stringified, entityType);
+        val parse = stringifier.destring(entityType, stringified);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClassName()).isEqualTo(entityType.getName());
