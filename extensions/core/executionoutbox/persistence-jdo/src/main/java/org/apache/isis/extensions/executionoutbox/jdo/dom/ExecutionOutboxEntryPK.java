@@ -27,7 +27,7 @@ import javax.annotation.Priority;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -62,9 +62,10 @@ public class ExecutionOutboxEntryPK implements Serializable {
 
     @Component
     @Priority(PriorityPrecedence.MIDPOINT)
-    public static class Stringifier extends IdStringifier.Abstract<ExecutionOutboxEntryPK> {
+    public static class Semantics
+    extends ValueSemanticsBasedOnIdStringifier<ExecutionOutboxEntryPK> {
 
-        public Stringifier() {
+        public Semantics() {
             super(ExecutionOutboxEntryPK.class);
         }
 
@@ -75,8 +76,7 @@ public class ExecutionOutboxEntryPK implements Serializable {
 
         @Override
         public ExecutionOutboxEntryPK destring(
-                final @NonNull String stringified,
-                final @NonNull Class<?> targetEntityClass) {
+                final @NonNull String stringified) {
             return new ExecutionOutboxEntryPK(stringified);
         }
     }

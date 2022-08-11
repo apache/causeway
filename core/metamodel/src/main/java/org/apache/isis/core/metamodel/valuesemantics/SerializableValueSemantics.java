@@ -28,15 +28,12 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.applib.value.semantics.ValueDecomposition;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Serializables;
-import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.NonNull;
 
@@ -48,38 +45,15 @@ import lombok.NonNull;
 @Named("isis.val.SerializableValueSemantics")
 @Priority(PriorityPrecedence.LAST)
 public class SerializableValueSemantics
-extends ValueSemanticsAbstract<Serializable>
-implements
-    IdStringifier<Serializable> {
+extends ValueSemanticsBasedOnIdStringifier<Serializable> {
 
     private final UrlEncodingService codec;
 
     @Inject
     public SerializableValueSemantics(
             final @NonNull UrlEncodingService codec) {
+        super(Serializable.class);
         this.codec = codec;
-    }
-
-    @Override
-    public Class<Serializable> getCorrespondingClass() {
-        return Serializable.class;
-    }
-
-    @Override
-    public ValueType getSchemaValueType() {
-        return ValueType.STRING;
-    }
-
-    // -- COMPOSER
-
-    @Override
-    public ValueDecomposition decompose(final Serializable value) {
-        return decomposeAsString(value, this::enstring, ()->null);
-    }
-
-    @Override
-    public Serializable compose(final ValueDecomposition decomposition) {
-        return composeFromString(decomposition, this::destring, ()->null);
     }
 
     // -- ID STRINGIFIER
@@ -93,13 +67,6 @@ implements
     }
 
     @Override
-    public Serializable destring(
-            final @NonNull String stringified,
-            final @NonNull Class<?> targetEntityClass) {
-        return destring(stringified);
-    }
-
-    @Override
     public Can<Serializable> getExamples() {
         return Can.of(
                 Integer.MAX_VALUE,
@@ -109,7 +76,8 @@ implements
 
     // -- HELPER
 
-    private Serializable destring(
+    @Override
+    protected Serializable destring(
             @NonNull final String stringified) {
         return destringAs(stringified, Serializable.class);
     }

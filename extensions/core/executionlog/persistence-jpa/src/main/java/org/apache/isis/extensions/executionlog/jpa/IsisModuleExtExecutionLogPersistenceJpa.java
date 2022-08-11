@@ -44,7 +44,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAb
 
         // @Service's
         ExecutionLogEntryRepository.class,
-        ExecutionLogEntryPK.Stringifier.class,
+        ExecutionLogEntryPK.Semantics.class,
 
         // entities
         ExecutionLogEntry.class

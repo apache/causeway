@@ -40,7 +40,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 
         // @Service's
         ExecutionLogEntryRepository.class,
-        ExecutionLogEntryPK.Stringifier.class,
+        ExecutionLogEntryPK.Semantics.class,
 
         // entities
         ExecutionLogEntry.class

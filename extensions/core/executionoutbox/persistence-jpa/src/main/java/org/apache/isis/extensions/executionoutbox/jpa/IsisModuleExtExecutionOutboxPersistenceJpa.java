@@ -44,7 +44,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAb
 
         // @Service's
         ExecutionOutboxEntryRepository.class,
-        ExecutionOutboxEntryPK.Stringifier.class,
+        ExecutionOutboxEntryPK.Semantics.class,
 
         // entities
         ExecutionOutboxEntry.class

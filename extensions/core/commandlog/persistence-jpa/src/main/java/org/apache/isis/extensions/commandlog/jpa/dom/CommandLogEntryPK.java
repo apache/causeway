@@ -30,12 +30,9 @@ import javax.persistence.Embeddable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.applib.value.semantics.ValueDecomposition;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
-import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -68,32 +65,11 @@ public class CommandLogEntryPK implements Serializable {
     @Component
     @Priority(PriorityPrecedence.MIDPOINT)
     public static class Semantics
-    extends ValueSemanticsAbstract<CommandLogEntryPK>
-    implements IdStringifier<CommandLogEntryPK> {
+    extends ValueSemanticsBasedOnIdStringifier<CommandLogEntryPK> {
 
-        @Override
-        public Class<CommandLogEntryPK> getCorrespondingClass() {
-            return CommandLogEntryPK.class;
+        public Semantics() {
+            super(CommandLogEntryPK.class);
         }
-
-        @Override
-        public ValueType getSchemaValueType() {
-            return ValueType.STRING;
-        }
-
-        // -- COMPOSER
-
-        @Override
-        public ValueDecomposition decompose(final CommandLogEntryPK value) {
-            return decomposeAsString(value, this::enstring, ()->null);
-        }
-
-        @Override
-        public CommandLogEntryPK compose(final ValueDecomposition decomposition) {
-            return composeFromString(decomposition, this::destring, ()->null);
-        }
-
-        // -- ID STRINGIFIER
 
         @Override
         public String enstring(final CommandLogEntryPK value) {
@@ -101,17 +77,10 @@ public class CommandLogEntryPK implements Serializable {
         }
 
         @Override
-        public CommandLogEntryPK destring(
-                @NonNull final String stringified,
-                @NonNull final Class<?> targetEntityClass) {
-            return destring(stringified);
-        }
-
-        private CommandLogEntryPK destring(
+        protected CommandLogEntryPK destring(
                 @NonNull final String stringified) {
             return new CommandLogEntryPK(UUID.fromString(stringified));
         }
-
 
     }
 

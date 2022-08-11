@@ -44,7 +44,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAb
 
         // services
         SessionLogEntryRepository.class,
-        SessionLogEntryPK.Stringifier.class,
+        SessionLogEntryPK.Semantics.class,
 
         // entities, eager meta-model introspection
         SessionLogEntry.class,

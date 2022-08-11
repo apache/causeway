@@ -30,7 +30,7 @@ import javax.persistence.Embeddable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
 import org.apache.isis.persistence.jpa.integration.typeconverters.java.util.JavaUtilUuidConverter;
 
 import lombok.AccessLevel;
@@ -73,21 +73,16 @@ public class ExecutionLogEntryPK implements Serializable {
 
     @Component
     @Priority(PriorityPrecedence.MIDPOINT)
-    public static class Stringifier extends IdStringifier.Abstract<ExecutionLogEntryPK> {
+    public static class Semantics
+    extends ValueSemanticsBasedOnIdStringifier<ExecutionLogEntryPK> {
 
-        public Stringifier() {
+        public Semantics() {
             super(ExecutionLogEntryPK.class);
         }
 
         @Override
-        public String enstring(final ExecutionLogEntryPK value) {
-            return value.toString();
-        }
-
-        @Override
         public ExecutionLogEntryPK destring(
-                final @NonNull String stringified,
-                final @NonNull Class<?> targetEntityClass) {
+                final @NonNull String stringified) {
             return new ExecutionLogEntryPK(stringified);
         }
     }

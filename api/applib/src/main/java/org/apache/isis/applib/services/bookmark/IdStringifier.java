@@ -105,7 +105,6 @@ public interface IdStringifier<T> {
             _Assert.assertFalse(correspondingClass.isPrimitive());
 
             this.correspondingClass = correspondingClass;
-                    ClassUtils.resolvePrimitiveIfNecessary(correspondingClass);
         }
 
         @Override

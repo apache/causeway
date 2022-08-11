@@ -40,7 +40,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
 
         // @Service's
         ExecutionOutboxEntryRepository.class,
-        ExecutionOutboxEntryPK.Stringifier.class,
+        ExecutionOutboxEntryPK.Semantics.class,
 
         // entities
         ExecutionOutboxEntry.class
