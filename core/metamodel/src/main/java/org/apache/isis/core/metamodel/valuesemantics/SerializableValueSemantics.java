@@ -67,6 +67,12 @@ extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<Serializable> {
     }
 
     @Override
+    public Serializable destring(
+            @NonNull final String stringified) {
+        return destringAs(stringified, Serializable.class);
+    }
+
+    @Override
     public Can<Serializable> getExamples() {
         return Can.of(
                 Integer.MAX_VALUE,
@@ -75,12 +81,6 @@ extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<Serializable> {
     }
 
     // -- HELPER
-
-    @Override
-    public Serializable destring(
-            @NonNull final String stringified) {
-        return destringAs(stringified, Serializable.class);
-    }
 
     private <T extends Serializable> T destringAs(
             final @NonNull String stringified,
