@@ -50,6 +50,8 @@ import lombok.val;
 @SuppressWarnings("javadoc")
 public interface IdStringifier<T> {
 
+    public final static char SEPARATOR = '_';
+
     Class<T> getCorrespondingClass();
 
     /**
@@ -103,8 +105,6 @@ public interface IdStringifier<T> {
      */
     @Deprecated
     abstract class AbstractWithPrefix<T> implements IdStringifier<T> {
-
-        public final static char SEPARATOR = '_';
 
         /**
          * eg <code>Integer.class</code>, or JDO-specific <code>DatastoreId</code>,

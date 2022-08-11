@@ -99,8 +99,8 @@ implements
             .stream()
             .map(x -> x.charAt(0))
             .collect(Collectors.toList());
-    static final String REGULAR_PREFIX = "c" + IdStringifier.AbstractWithPrefix.SEPARATOR;
-    static final String BASE64_PREFIX = "cbse64" + IdStringifier.AbstractWithPrefix.SEPARATOR;
+    static final String REGULAR_PREFIX = "c" + IdStringifier.SEPARATOR;
+    static final String BASE64_PREFIX = "cbse64" + IdStringifier.SEPARATOR;
 
     @Override
     public String enstring(final @NonNull Character id) {

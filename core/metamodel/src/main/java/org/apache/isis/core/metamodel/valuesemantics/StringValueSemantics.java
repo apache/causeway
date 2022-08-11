@@ -75,8 +75,8 @@ implements
 
     static final List<String> NON_SAFE_URL_CHARS =
             Arrays.asList("/", "\\", "?", ":", "&", "%", "+");
-    static final String REGULAR_PREFIX = "s" + IdStringifier.AbstractWithPrefix.SEPARATOR;
-    static final String BASE64_PREFIX = "base64" + IdStringifier.AbstractWithPrefix.SEPARATOR;
+    static final String REGULAR_PREFIX = "s" + IdStringifier.SEPARATOR;
+    static final String BASE64_PREFIX = "base64" + IdStringifier.SEPARATOR;
 
     @Override
     public String enstring(final @NonNull String id) {

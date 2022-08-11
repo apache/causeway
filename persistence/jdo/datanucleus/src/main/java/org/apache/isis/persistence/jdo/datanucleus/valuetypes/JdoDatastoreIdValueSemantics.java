@@ -75,7 +75,7 @@ extends ValueSemanticsBasedOnIdStringifier<DatastoreId> {
         // re-create-able through the constructor
         //
         // to do this, we also need to capture the class of the Id value class itself, followed by the value (as a string)
-        return value.getClass().getName() + IdStringifier.AbstractWithPrefix.SEPARATOR + value.toString();
+        return value.getClass().getName() + IdStringifier.SEPARATOR + value.toString();
     }
 
     @SneakyThrows
@@ -83,7 +83,7 @@ extends ValueSemanticsBasedOnIdStringifier<DatastoreId> {
     public DatastoreId destring(
             final @NonNull Class<?> targetEntityClass,
             final @NonNull String stringified) {
-        int idx = stringified.indexOf(IdStringifier.AbstractWithPrefix.SEPARATOR);
+        int idx = stringified.indexOf(IdStringifier.SEPARATOR);
         String clsName = stringified.substring(0, idx);
         String keyStr = stringified.substring(idx + 1);
         final Class<?> cls = _Context.loadClass(clsName);
