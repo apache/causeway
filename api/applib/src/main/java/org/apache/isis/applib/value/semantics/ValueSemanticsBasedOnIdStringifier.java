@@ -63,11 +63,6 @@ implements
         return value.toString();
     }
 
-    @Override
-    public final T destring(@NonNull final String stringified, @NonNull final Class<?> targetEntityClass) {
-        return destring(stringified);
-    }
-
     // -- COMPOSER
 
     @Override
@@ -79,9 +74,5 @@ implements
     public final T compose(final ValueDecomposition decomposition) {
         return composeFromString(decomposition, this::destring, ()->null);
     }
-
-    // --
-
-    protected abstract T destring(@NonNull String stringified);
 
 }

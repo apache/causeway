@@ -59,7 +59,7 @@ public class IdStringifierForStringIdentity extends IdStringifier.Abstract<Strin
     public StringIdentity destring(
             final @NonNull String stringified,
             final @NonNull Class<?> targetEntityClass) {
-        val idValue = idStringifierForString.destring(stringified, targetEntityClass);
+        val idValue = idStringifierForString.destring(stringified);
         return new StringIdentity(targetEntityClass, idValue);
     }
 }

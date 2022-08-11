@@ -93,8 +93,7 @@ implements
 
     @Override
     public Byte destring(
-            final @NonNull String stringified,
-            final @NonNull Class<?> targetEntityClass) {
+            final @NonNull String stringified) {
         return Byte.parseByte(stringified);
     }
 

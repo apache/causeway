@@ -99,8 +99,7 @@ implements
 
     @Override
     public BigInteger destring(
-            final @NonNull String stringified,
-            final @NonNull Class<?> targetEntityClass) {
+            final @NonNull String stringified) {
         return new BigInteger(stringified);
     }
 

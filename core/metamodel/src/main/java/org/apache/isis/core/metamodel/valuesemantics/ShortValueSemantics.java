@@ -93,8 +93,7 @@ implements
 
     @Override
     public Short destring(
-            final @NonNull String stringified,
-            final @NonNull Class<?> targetEntityClass) {
+            final @NonNull String stringified) {
         return Short.parseShort(stringified);
     }
 

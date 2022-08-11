@@ -38,8 +38,6 @@ import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
-import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -58,9 +56,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
@@ -157,7 +156,9 @@ implements EntityFacet {
             val primaryKeyType = primaryKeyTypeFor(entityClass);
 
             val idStringifier = idStringifierLookupService.lookupElseFail(primaryKeyType);
-            val primaryKey = idStringifier.destring(bookmark.getIdentifier(), entityClass);
+            val primaryKey = _Casts.castTo(IdStringifier.Abstract.class, idStringifier)
+                    .map(stringifier->stringifier.destring(bookmark.getIdentifier(), entityClass))
+                    .orElseGet(()->idStringifier.destring(bookmark.getIdentifier()));
 
             val fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
@@ -187,11 +188,11 @@ implements EntityFacet {
 
     private Map<Class<?>, Class<?>> primaryKeyClassByEntityClass = new ConcurrentHashMap<>();
 
-    private Class<?> primaryKeyTypeFor(Class<?> entityClass) {
+    private Class<?> primaryKeyTypeFor(final Class<?> entityClass) {
         return primaryKeyClassByEntityClass.computeIfAbsent(entityClass, this::lookupPrimaryKeyTypeFor);
     }
 
-    private Class<?> lookupPrimaryKeyTypeFor(Class<?> entityClass) {
+    private Class<?> lookupPrimaryKeyTypeFor(final Class<?> entityClass) {
 
         val persistenceManager = getPersistenceManager();
         val pmf = (JDOPersistenceManagerFactory) persistenceManager.getPersistenceManagerFactory();

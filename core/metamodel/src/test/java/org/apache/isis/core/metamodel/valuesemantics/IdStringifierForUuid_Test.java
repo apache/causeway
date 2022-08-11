@@ -41,8 +41,6 @@ class IdStringifierForUuid_Test {
         );
     }
 
-    static class Customer {}
-
     @ParameterizedTest
     @MethodSource()
     void roundtrip(final UUID value) {
@@ -50,7 +48,7 @@ class IdStringifierForUuid_Test {
         val stringifier = new UUIDValueSemantics();
 
         String stringified = stringifier.enstring(value);
-        UUID parse = stringifier.destring(stringified, Customer.class);
+        UUID parse = stringifier.destring(stringified);
 
         assertThat(parse).isEqualTo(value);
     }

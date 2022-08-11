@@ -59,7 +59,7 @@ public class IdStringifierForCharId extends IdStringifier.Abstract<CharId> {
     public CharId destring(
             final @NonNull String stringified,
             final @NonNull Class<?> targetEntityClass) {
-        val idValue = idStringifierForCharacter.destring(stringified, targetEntityClass);
+        val idValue = idStringifierForCharacter.destring(stringified);
         return new CharId(targetEntityClass, idValue);
     }
 }

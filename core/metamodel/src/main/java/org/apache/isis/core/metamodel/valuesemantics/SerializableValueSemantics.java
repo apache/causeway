@@ -77,7 +77,7 @@ extends ValueSemanticsBasedOnIdStringifier<Serializable> {
     // -- HELPER
 
     @Override
-    protected Serializable destring(
+    public Serializable destring(
             @NonNull final String stringified) {
         return destringAs(stringified, Serializable.class);
     }

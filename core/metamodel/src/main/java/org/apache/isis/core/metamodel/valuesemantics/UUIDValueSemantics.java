@@ -79,7 +79,7 @@ implements
     }
 
     @Override
-    public UUID destring(final @NonNull String stringified, @NonNull final Class<?> targetEntityClass) {
+    public UUID destring(final @NonNull String stringified) {
         return UUID.fromString(stringified);
     }
 

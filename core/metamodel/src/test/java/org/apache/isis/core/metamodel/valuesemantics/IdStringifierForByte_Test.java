@@ -42,8 +42,6 @@ class IdStringifierForByte_Test {
         );
     }
 
-    static class Customer {}
-
     @ParameterizedTest
     @MethodSource()
     void roundtrip(final Byte value) {
@@ -51,7 +49,7 @@ class IdStringifierForByte_Test {
         val stringifier = new ByteValueSemantics();
 
         String stringified = stringifier.enstring(value);
-        Byte parse = stringifier.destring(stringified, Customer.class);
+        Byte parse = stringifier.destring(stringified);
 
         assertThat(parse).isEqualTo(value);
     }

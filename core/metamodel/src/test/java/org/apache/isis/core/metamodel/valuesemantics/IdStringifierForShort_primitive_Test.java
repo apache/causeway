@@ -42,8 +42,6 @@ class IdStringifierForShort_primitive_Test {
         );
     }
 
-    static class Customer {}
-
     @ParameterizedTest
     @MethodSource()
     void roundtrip(final short value) {
@@ -51,7 +49,7 @@ class IdStringifierForShort_primitive_Test {
         val stringifier = new ShortValueSemantics();
 
         String stringified = stringifier.enstring(value);
-        Short parse = stringifier.destring(stringified, Customer.class);
+        Short parse = stringifier.destring(stringified);
 
         assertThat(parse).isEqualTo(value);
     }

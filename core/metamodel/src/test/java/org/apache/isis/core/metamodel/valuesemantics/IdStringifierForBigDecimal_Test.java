@@ -50,8 +50,6 @@ class IdStringifierForBigDecimal_Test {
         );
     }
 
-    static class Customer {}
-
     @ParameterizedTest
     @MethodSource()
     void roundtrip(final BigDecimal bigDecimal) {
@@ -59,7 +57,7 @@ class IdStringifierForBigDecimal_Test {
         val stringifier = new BigDecimalValueSemantics();
 
         String stringified = stringifier.enstring(bigDecimal);
-        BigDecimal parse = stringifier.destring(stringified, Customer.class);
+        BigDecimal parse = stringifier.destring(stringified);
 
         assertThat(parse).isEqualTo(bigDecimal);
     }

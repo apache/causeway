@@ -57,8 +57,6 @@ class IdStringifierForCharacter_Test {
         );
     }
 
-    static class Customer {}
-
     @ParameterizedTest
     @MethodSource()
     void roundtrip(final char value) {
@@ -66,7 +64,7 @@ class IdStringifierForCharacter_Test {
         val stringifier = new CharacterValueSemantics();
 
         val stringified = stringifier.enstring(value);
-        val parse = stringifier.destring(stringified, Customer.class);
+        val parse = stringifier.destring(stringified);
 
         Assertions.assertThat(parse).isEqualTo(value);
     }

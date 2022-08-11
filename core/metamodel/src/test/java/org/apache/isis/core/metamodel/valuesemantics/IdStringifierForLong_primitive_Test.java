@@ -43,8 +43,6 @@ class IdStringifierForLong_primitive_Test {
         );
     }
 
-    static class Customer {}
-
     @ParameterizedTest
     @MethodSource()
     void roundtrip(final long value) {
@@ -52,7 +50,7 @@ class IdStringifierForLong_primitive_Test {
         val stringifier = new LongValueSemantics();
 
         String stringified = stringifier.enstring(value);
-        Long parse = stringifier.destring(stringified, Customer.class);
+        Long parse = stringifier.destring(stringified);
 
         assertThat(parse).isEqualTo(value);
     }

@@ -97,8 +97,7 @@ implements
 
     @Override
     public BigDecimal destring(
-            final @NonNull String stringified,
-            final @NonNull Class<?> targetEntityClass) {
+            final @NonNull String stringified) {
         return new BigDecimal(stringified);
     }
 

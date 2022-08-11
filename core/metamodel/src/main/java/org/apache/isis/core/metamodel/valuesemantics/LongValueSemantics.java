@@ -93,8 +93,7 @@ implements
 
     @Override
     public Long destring(
-            final @NonNull String stringified,
-            final @NonNull Class<?> targetEntityClass) {
+            final @NonNull String stringified) {
         return Long.parseLong(stringified);
     }
 

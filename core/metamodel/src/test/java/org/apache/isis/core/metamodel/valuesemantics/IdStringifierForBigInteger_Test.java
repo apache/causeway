@@ -47,8 +47,6 @@ class IdStringifierForBigInteger_Test {
         );
     }
 
-    static class Customer {}
-
     @ParameterizedTest
     @MethodSource()
     void roundtrip(final BigInteger bigInteger) {
@@ -56,7 +54,7 @@ class IdStringifierForBigInteger_Test {
         val stringifier = new BigIntegerValueSemantics();
 
         String stringified = stringifier.enstring(bigInteger);
-        BigInteger parse = stringifier.destring(stringified, Customer.class);
+        BigInteger parse = stringifier.destring(stringified);
 
         assertThat(parse).isEqualTo(bigInteger);
     }

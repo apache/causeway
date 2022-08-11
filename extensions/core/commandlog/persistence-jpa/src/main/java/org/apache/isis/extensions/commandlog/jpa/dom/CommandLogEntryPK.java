@@ -77,7 +77,7 @@ public class CommandLogEntryPK implements Serializable {
         }
 
         @Override
-        protected CommandLogEntryPK destring(
+        public CommandLogEntryPK destring(
                 @NonNull final String stringified) {
             return new CommandLogEntryPK(UUID.fromString(stringified));
         }
