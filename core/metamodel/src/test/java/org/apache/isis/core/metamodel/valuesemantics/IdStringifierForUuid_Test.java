@@ -18,8 +18,9 @@
  *
  */
 
-package org.apache.isis.applib.services.bookmark;
+package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,19 +29,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForByte;
-
 import lombok.val;
 
-class IdStringifierForByte_Test {
+class IdStringifierForUuid_Test {
 
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
-                Arguments.of(Byte.MAX_VALUE),
-                Arguments.of(Byte.MIN_VALUE),
-                Arguments.of((byte)0),
-                Arguments.of((byte)12345),
-                Arguments.of((byte)-12345)
+                Arguments.of(UUID.randomUUID()),
+                Arguments.of(UUID.randomUUID()),
+                Arguments.of(UUID.randomUUID())
         );
     }
 
@@ -48,12 +45,12 @@ class IdStringifierForByte_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(Byte value) {
+    void roundtrip(final UUID value) {
 
-        val stringifier = new IdStringifierForByte();
+        val stringifier = new UUIDValueSemantics();
 
         String stringified = stringifier.enstring(value);
-        Byte parse = stringifier.destring(stringified, Customer.class);
+        UUID parse = stringifier.destring(stringified, Customer.class);
 
         assertThat(parse).isEqualTo(value);
     }

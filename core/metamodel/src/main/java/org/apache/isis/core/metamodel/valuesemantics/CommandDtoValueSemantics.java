@@ -18,16 +18,19 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 @Component
 @Named("isis.val.CommandDtoValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class CommandDtoValueSemantics
 extends XmlValueSemanticsAbstract<CommandDto> {
 

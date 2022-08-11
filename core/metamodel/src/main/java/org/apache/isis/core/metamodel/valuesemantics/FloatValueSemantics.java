@@ -20,10 +20,12 @@ package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -39,6 +41,7 @@ import org.apache.isis.schema.common.v2.ValueWithTypeDto;
  */
 @Component
 @Named("isis.val.FloatValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class FloatValueSemantics
 extends ValueSemanticsAbstract<Float>
 implements

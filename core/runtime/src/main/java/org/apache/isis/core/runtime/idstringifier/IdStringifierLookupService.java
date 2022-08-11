@@ -20,6 +20,7 @@
 
 package org.apache.isis.core.runtime.idstringifier;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,7 +35,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForSerializable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
@@ -63,12 +63,13 @@ public class IdStringifierLookupService {
     @Inject
     public IdStringifierLookupService(
             final List<IdStringifier<?>> idStringifiers,
-            final Optional<IdStringifierForSerializable> idStringifierForSerializableIfAny) {
+            final Optional<IdStringifier<Serializable>> idStringifierForSerializableIfAny) {
         // IdStringifierForSerializable is enforced to go last, so any custom IdStringifier(s)
         // that do not explicitly specify an @Order/@Precedence go earlier
         idStringifierForSerializableIfAny
         .ifPresent(idStringifierForSerializable->{
-            idStringifiers.removeIf(idStringifier->IdStringifierForSerializable.class.equals(idStringifier.getClass()));
+            idStringifiers.removeIf(idStringifier->idStringifierForSerializable.getClass()
+                    .equals(idStringifier.getClass()));
             idStringifiers.add(idStringifierForSerializable); // put last
         });
         this.idStringifiers = Can.ofCollection(idStringifiers);

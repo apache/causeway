@@ -18,9 +18,8 @@
  *
  */
 
-package org.apache.isis.applib.services.bookmark;
+package org.apache.isis.core.metamodel.valuesemantics;
 
-import java.io.Serializable;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,50 +28,31 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForSerializable;
-import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-
-import lombok.Value;
 import lombok.val;
 
-class IdStringifierForSerializable_Test {
+class IdStringifierForLong_primitive_Test {
 
-    private UrlEncodingService codec = UrlEncodingService.forTesting();
 
-    // -- SCENARIO
-
-    static class Customer {
-    }
-
-    @Value
-    static class CustomerPK implements Serializable{
-        private static final long serialVersionUID = 1L;
-        final int lower;
-        final int upper;
-    }
-
-    // -- TEST
-
-    static Stream<Arguments> roundtrip() {
+    public static Stream<Arguments> roundtrip() {
         return Stream.of(
-                Arguments.of(Byte.MAX_VALUE),
-                Arguments.of(Byte.MIN_VALUE),
-                Arguments.of((byte)0),
-                Arguments.of((byte)12345),
-                Arguments.of((byte)-12345),
-                Arguments.of(new CustomerPK(5,6))
-                // Arguments.of((Serializable)null) ... throws NPE as expected
+                Arguments.of(Long.MAX_VALUE),
+                Arguments.of(Long.MIN_VALUE),
+                Arguments.of(0L),
+                Arguments.of(12345L),
+                Arguments.of(-12345L)
         );
     }
 
+    static class Customer {}
+
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(final Serializable value) {
+    void roundtrip(final long value) {
 
-        val stringifier = new IdStringifierForSerializable(codec);
+        val stringifier = new LongValueSemantics();
 
         String stringified = stringifier.enstring(value);
-        Serializable parse = stringifier.destring(stringified, Customer.class);
+        Long parse = stringifier.destring(stringified, Customer.class);
 
         assertThat(parse).isEqualTo(value);
     }

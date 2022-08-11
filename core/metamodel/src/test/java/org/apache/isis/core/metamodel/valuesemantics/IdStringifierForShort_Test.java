@@ -18,7 +18,7 @@
  *
  */
 
-package org.apache.isis.applib.services.bookmark;
+package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.util.stream.Stream;
 
@@ -28,20 +28,17 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForByte;
-
 import lombok.val;
 
-class IdStringifierForByte_primitive_Test {
-
+class IdStringifierForShort_Test {
 
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
-                Arguments.of(Byte.MAX_VALUE),
-                Arguments.of(Byte.MIN_VALUE),
-                Arguments.of((byte)0),
-                Arguments.of((byte)12345),
-                Arguments.of((byte)-12345)
+                Arguments.of(Short.MAX_VALUE),
+                Arguments.of(Short.MIN_VALUE),
+                Arguments.of((short)0),
+                Arguments.of((short)12345),
+                Arguments.of((short)-12345)
         );
     }
 
@@ -49,12 +46,12 @@ class IdStringifierForByte_primitive_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(byte value) {
+    void roundtrip(final Short value) {
 
-        val stringifier = new IdStringifierForByte();
+        val stringifier = new ShortValueSemantics();
 
         String stringified = stringifier.enstring(value);
-        Byte parse = stringifier.destring(stringified, Customer.class);
+        Short parse = stringifier.destring(stringified, Customer.class);
 
         assertThat(parse).isEqualTo(value);
     }

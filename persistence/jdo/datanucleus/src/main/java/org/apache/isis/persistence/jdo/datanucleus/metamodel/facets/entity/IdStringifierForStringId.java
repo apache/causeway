@@ -26,7 +26,6 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForString;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -36,7 +35,7 @@ import lombok.val;
 @Priority(PriorityPrecedence.LATE)
 public class IdStringifierForStringId extends IdStringifier.Abstract<StringIdentity> {
 
-    @Inject IdStringifierForString idStringifierForString;
+    @Inject IdStringifier<String> idStringifierForString;
 
     public IdStringifierForStringId() {
         super(StringIdentity.class);
@@ -46,7 +45,7 @@ public class IdStringifierForStringId extends IdStringifier.Abstract<StringIdent
      * for testing only
      */
     @Builder
-    IdStringifierForStringId(final IdStringifierForString idStringifierForString) {
+    IdStringifierForStringId(final IdStringifier<String> idStringifierForString) {
         this();
         this.idStringifierForString = idStringifierForString;
     }

@@ -29,7 +29,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForUuid;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForObjectIdentity;
 
 import lombok.val;
@@ -50,7 +49,7 @@ class IdStringifierForObjectIdentity_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(int value) {
+    void roundtrip(final int value) {
 
         val entityType = Customer.class;
 

@@ -21,11 +21,14 @@ package org.apache.isis.core.metamodel.valuesemantics;
 import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -36,6 +39,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -43,12 +47,14 @@ import lombok.val;
  */
 @Component
 @Named("isis.val.ShortValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class ShortValueSemantics
 extends ValueSemanticsAbstract<Short>
 implements
     DefaultsProvider<Short>,
     Parser<Short>,
-    Renderer<Short> {
+    Renderer<Short>,
+    IdStringifier<Short> {
 
     @Override
     public Class<Short> getCorrespondingClass() {
@@ -76,6 +82,20 @@ implements
     public Short compose(final ValueDecomposition decomposition) {
         return composeFromNullable(
                 decomposition, ValueWithTypeDto::getShort, UnaryOperator.identity(), ()->null);
+    }
+
+    // -- ID STRINGIFIER
+
+    @Override
+    public String enstring(final @NonNull Short value) {
+        return value.toString();
+    }
+
+    @Override
+    public Short destring(
+            final @NonNull String stringified,
+            final @NonNull Class<?> targetEntityClass) {
+        return Short.parseShort(stringified);
     }
 
     // -- RENDERER

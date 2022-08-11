@@ -18,10 +18,12 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -34,6 +36,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.MarkupValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class MarkupValueSemantics
 extends ValueSemanticsAbstract<Markup>
 implements

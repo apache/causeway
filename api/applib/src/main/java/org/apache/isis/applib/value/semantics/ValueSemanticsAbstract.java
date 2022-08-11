@@ -39,6 +39,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.annotation.TimePrecision;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.locale.UserLocale;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
@@ -110,6 +111,12 @@ implements
     @Override
     public DefaultsProvider<T> getDefaultsProvider() {
         return this instanceof DefaultsProvider ? (DefaultsProvider<T>)this : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public IdStringifier<T> getIdStringifier() {
+        return this instanceof IdStringifier ? (IdStringifier<T>)this : null;
     }
 
     /**

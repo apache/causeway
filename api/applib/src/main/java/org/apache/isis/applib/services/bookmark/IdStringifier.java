@@ -22,6 +22,9 @@ package org.apache.isis.applib.services.bookmark;
 
 import org.springframework.util.ClassUtils;
 
+import org.apache.isis.commons.internal.assertions._Assert;
+
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -46,19 +49,24 @@ import lombok.val;
  */
 public interface IdStringifier<T> {
 
-    /**
-     * Whether this {@link IdStringifier} is able to {@link #enstring(Object)} or {@link #destring(String, Class)} values
-     * of this type.
-     *
-     * <p>
-     * Even though some implementations also require the owning entity type in order to {@link #destring(String, Class)},
-     * we do not consider that as part of this function; we assume that the entity type will be provided
-     * when necessary (by the JDO entity facet, in fact).  This is sufficient.
-     * </p>
-     *
-     * @param candidateValueClass
-     */
-    boolean handles(@NonNull Class<?> candidateValueClass);
+    Class<T> getCorrespondingClass();
+
+//    /**
+//     * Whether this {@link IdStringifier} is able to {@link #enstring(Object)} or {@link #destring(String, Class)} values
+//     * of this type.
+//     *
+//     * <p>
+//     * Even though some implementations also require the owning entity type in order to {@link #destring(String, Class)},
+//     * we do not consider that as part of this function; we assume that the entity type will be provided
+//     * when necessary (by the JDO entity facet, in fact).  This is sufficient.
+//     * </p>
+//     *
+//     * @param candidateValueClass
+//     */
+    default boolean handles(final @NonNull Class<?> candidateValueClass) {
+        return getCorrespondingClass()
+                .isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(candidateValueClass));
+    }
 
 
     /**
@@ -83,23 +91,27 @@ public interface IdStringifier<T> {
 
     abstract class Abstract<T> implements IdStringifier<T> {
 
-        protected final static char SEPARATOR = '_';
+        public final static char SEPARATOR = '_';
 
         /**
          * eg <code>Integer.class</code>, or JDO-specific <code>DatastoreId</code>,
          * or a custom class for application-defined PKs.
          */
-        private final Class<?> resolvedClass;
+        @Getter private final Class<T> correspondingClass;
 
         protected Abstract(
-                final @NonNull Class<T> handledClass) {
-            this.resolvedClass = ClassUtils.resolvePrimitiveIfNecessary(handledClass);
+                final @NonNull Class<T> correspondingClass) {
+
+            _Assert.assertFalse(correspondingClass.isPrimitive());
+
+            this.correspondingClass = correspondingClass;
+                    ClassUtils.resolvePrimitiveIfNecessary(correspondingClass);
         }
 
         @Override
-        public boolean handles(final @NonNull Class<?> candidateValueClass) {
-            val reolvedCandidateClass = ClassUtils.resolvePrimitiveIfNecessary(candidateValueClass);
-            return resolvedClass.isAssignableFrom(reolvedCandidateClass);
+        public final boolean handles(final @NonNull Class<?> candidateValueClass) {
+            return getCorrespondingClass()
+                    .isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(candidateValueClass));
         }
 
         /**
@@ -125,7 +137,7 @@ public interface IdStringifier<T> {
      */
     abstract class AbstractWithPrefix<T> extends Abstract<T> {
 
-        private final String prefix;
+                private final String prefix;
 
         public AbstractWithPrefix(
                 @NonNull final Class<T> handledClass,

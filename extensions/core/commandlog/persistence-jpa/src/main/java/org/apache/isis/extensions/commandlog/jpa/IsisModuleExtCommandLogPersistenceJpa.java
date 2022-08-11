@@ -44,7 +44,7 @@ import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAb
 
         // @Service's
         CommandLogEntryRepository.class,
-        CommandLogEntryPK.Stringifier.class,
+        CommandLogEntryPK.Semantics.class,
 
         // entities
         CommandLogEntry.class

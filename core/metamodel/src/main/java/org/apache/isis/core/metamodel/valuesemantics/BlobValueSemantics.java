@@ -20,10 +20,12 @@ package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
@@ -36,6 +38,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.BlobValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class BlobValueSemantics
 extends ValueSemanticsAbstract<Blob>
 implements

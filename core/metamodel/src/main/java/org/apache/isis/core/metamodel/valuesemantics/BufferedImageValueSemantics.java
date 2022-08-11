@@ -21,11 +21,13 @@ package org.apache.isis.core.metamodel.valuesemantics;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.semantics.OrderRelation;
@@ -41,6 +43,7 @@ import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 @Component
 @Named("isis.val.BufferedImageValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class BufferedImageValueSemantics
 extends ValueSemanticsAbstract<BufferedImage>
 implements

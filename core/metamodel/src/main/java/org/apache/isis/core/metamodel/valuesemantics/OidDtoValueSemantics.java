@@ -18,11 +18,13 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
@@ -31,6 +33,7 @@ import org.apache.isis.schema.common.v2.OidDto;
 
 @Component
 @Named("isis.val.OidDtoValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class OidDtoValueSemantics
 extends ValueSemanticsAdapter<OidDto, Bookmark, Void> {
 

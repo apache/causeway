@@ -18,8 +18,9 @@
  *
  */
 
-package org.apache.isis.applib.services.bookmark;
+package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.math.BigInteger;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,19 +29,21 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForShort;
-
 import lombok.val;
 
-class IdStringifierForShort_Test {
+class IdStringifierForBigInteger_Test {
 
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
-                Arguments.of(Short.MAX_VALUE),
-                Arguments.of(Short.MIN_VALUE),
-                Arguments.of((short)0),
-                Arguments.of((short)12345),
-                Arguments.of((short)-12345)
+                Arguments.of(BigInteger.ZERO),
+                Arguments.of(BigInteger.ONE),
+                Arguments.of(BigInteger.TEN),
+                Arguments.of(BigInteger.valueOf(Long.MAX_VALUE)),
+                Arguments.of(BigInteger.valueOf(Long.MIN_VALUE)),
+                Arguments.of(BigInteger.valueOf(Double.MAX_EXPONENT)),
+                Arguments.of(BigInteger.valueOf(Double.MIN_EXPONENT)),
+                Arguments.of(BigInteger.valueOf(10)),
+                Arguments.of(new BigInteger("12345678901234567890123456789012345678901234567890"))
         );
     }
 
@@ -48,14 +51,14 @@ class IdStringifierForShort_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(Short value) {
+    void roundtrip(final BigInteger bigInteger) {
 
-        val stringifier = new IdStringifierForShort();
+        val stringifier = new BigIntegerValueSemantics();
 
-        String stringified = stringifier.enstring(value);
-        Short parse = stringifier.destring(stringified, Customer.class);
+        String stringified = stringifier.enstring(bigInteger);
+        BigInteger parse = stringifier.destring(stringified, Customer.class);
 
-        assertThat(parse).isEqualTo(value);
+        assertThat(parse).isEqualTo(bigInteger);
     }
 
 }

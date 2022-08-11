@@ -21,10 +21,13 @@ package org.apache.isis.core.metamodel.valuesemantics;
 import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -34,14 +37,18 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
+import lombok.NonNull;
+
 @Component
 @Named("isis.val.BigIntegerValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class BigIntegerValueSemantics
 extends ValueSemanticsAbstract<BigInteger>
 implements
     DefaultsProvider<BigInteger>,
     Parser<BigInteger>,
-    Renderer<BigInteger> {
+    Renderer<BigInteger>,
+    IdStringifier<BigInteger> {
 
     @Override
     public Class<BigInteger> getCorrespondingClass() {
@@ -81,6 +88,20 @@ implements
     @Override
     public String htmlPresentation(final Context context, final BigInteger value) {
         return renderHtml(value, getNumberFormat(context)::format);
+    }
+
+    // -- ID STRINGIFIER
+
+    @Override
+    public String enstring(final @NonNull BigInteger value) {
+        return value.toString();
+    }
+
+    @Override
+    public BigInteger destring(
+            final @NonNull String stringified,
+            final @NonNull Class<?> targetEntityClass) {
+        return new BigInteger(stringified);
     }
 
     // -- PARSER

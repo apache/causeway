@@ -18,34 +18,28 @@
  *
  */
 
-package org.apache.isis.applib.services.bookmark;
+package org.apache.isis.core.metamodel.valuesemantics;
 
-import java.math.BigInteger;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.assertj.core.api.Assertions.*;
-
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForBigInteger;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import lombok.val;
 
-class IdStringifierForBigInteger_Test {
+class IdStringifierForByte_primitive_Test {
+
 
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
-                Arguments.of(BigInteger.ZERO),
-                Arguments.of(BigInteger.ONE),
-                Arguments.of(BigInteger.TEN),
-                Arguments.of(BigInteger.valueOf(Long.MAX_VALUE)),
-                Arguments.of(BigInteger.valueOf(Long.MIN_VALUE)),
-                Arguments.of(BigInteger.valueOf(Double.MAX_EXPONENT)),
-                Arguments.of(BigInteger.valueOf(Double.MIN_EXPONENT)),
-                Arguments.of(BigInteger.valueOf(10)),
-                Arguments.of(new BigInteger("12345678901234567890123456789012345678901234567890"))
+                Arguments.of(Byte.MAX_VALUE),
+                Arguments.of(Byte.MIN_VALUE),
+                Arguments.of((byte)0),
+                Arguments.of((byte)12345),
+                Arguments.of((byte)-12345)
         );
     }
 
@@ -53,14 +47,14 @@ class IdStringifierForBigInteger_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(BigInteger bigInteger) {
+    void roundtrip(final byte value) {
 
-        val stringifier = new IdStringifierForBigInteger();
+        val stringifier = new ByteValueSemantics();
 
-        String stringified = stringifier.enstring(bigInteger);
-        BigInteger parse = stringifier.destring(stringified, Customer.class);
+        String stringified = stringifier.enstring(value);
+        Byte parse = stringifier.destring(stringified, Customer.class);
 
-        assertThat(parse).isEqualTo(bigInteger);
+        assertThat(parse).isEqualTo(value);
     }
 
 }

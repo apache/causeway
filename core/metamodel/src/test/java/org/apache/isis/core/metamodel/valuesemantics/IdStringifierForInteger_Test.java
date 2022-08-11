@@ -18,9 +18,8 @@
  *
  */
 
-package org.apache.isis.applib.services.bookmark;
+package org.apache.isis.core.metamodel.valuesemantics;
 
-import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,26 +28,18 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForBigDecimal;
-
 import lombok.val;
 
-class IdStringifierForBigDecimal_Test {
+class IdStringifierForInteger_Test {
+
 
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
-                Arguments.of(BigDecimal.ZERO),
-                Arguments.of(BigDecimal.ONE),
-                Arguments.of(BigDecimal.TEN),
-                Arguments.of(BigDecimal.valueOf(Long.MAX_VALUE)),
-                Arguments.of(BigDecimal.valueOf(Long.MIN_VALUE)),
-                Arguments.of(BigDecimal.valueOf(Double.MAX_VALUE)),
-                Arguments.of(BigDecimal.valueOf(Double.MIN_VALUE)),
-                Arguments.of(BigDecimal.valueOf(10, 0)),
-                Arguments.of(BigDecimal.valueOf(10, 1)),
-                Arguments.of(BigDecimal.valueOf(10, 2)),
-                Arguments.of(BigDecimal.valueOf(10, 3)),
-                Arguments.of(new BigDecimal("1234567890123456789012345678901234567890.12345678901234567890"))
+                Arguments.of(Integer.MAX_VALUE),
+                Arguments.of(Integer.MIN_VALUE),
+                Arguments.of(0),
+                Arguments.of(12345),
+                Arguments.of(-12345)
         );
     }
 
@@ -56,14 +47,14 @@ class IdStringifierForBigDecimal_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(BigDecimal bigDecimal) {
+    void roundtrip(final Integer value) {
 
-        val stringifier = new IdStringifierForBigDecimal();
+        val stringifier = new IntValueSemantics();
 
-        String stringified = stringifier.enstring(bigDecimal);
-        BigDecimal parse = stringifier.destring(stringified, Customer.class);
+        String stringified = stringifier.enstring(value);
+        Integer parse = stringifier.destring(stringified, Customer.class);
 
-        assertThat(parse).isEqualTo(bigDecimal);
+        assertThat(parse).isEqualTo(value);
     }
 
 }

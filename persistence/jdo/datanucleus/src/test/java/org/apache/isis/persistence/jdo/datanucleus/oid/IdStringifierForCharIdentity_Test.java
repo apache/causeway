@@ -28,9 +28,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForCharacter;
+import org.apache.isis.core.metamodel.valuesemantics.CharacterValueSemantics;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharIdentity;
 
 import lombok.val;
@@ -67,11 +67,13 @@ class IdStringifierForCharIdentity_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(char c) {
+    void roundtrip(final char c) {
 
         val entityType = Customer.class;
 
-        val stringifier = IdStringifierForCharIdentity.builder().idStringifierForCharacter(new IdStringifierForCharacter()).build();
+        val stringifier = IdStringifierForCharIdentity.builder()
+                .idStringifierForCharacter(new CharacterValueSemantics())
+                .build();
 
         val value = new CharIdentity(entityType, c);
         val stringified = stringifier.enstring(value);

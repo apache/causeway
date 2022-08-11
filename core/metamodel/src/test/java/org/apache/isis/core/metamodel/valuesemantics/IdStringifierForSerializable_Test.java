@@ -18,8 +18,9 @@
  *
  */
 
-package org.apache.isis.applib.services.bookmark;
+package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.io.Serializable;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,32 +29,49 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForShort;
+import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 
+import lombok.Value;
 import lombok.val;
 
-class IdStringifierForShort_primitive_Test {
+class IdStringifierForSerializable_Test {
 
-    public static Stream<Arguments> roundtrip() {
+    private UrlEncodingService codec = UrlEncodingService.forTesting();
+
+    // -- SCENARIO
+
+    static class Customer {
+    }
+
+    @Value
+    static class CustomerPK implements Serializable{
+        private static final long serialVersionUID = 1L;
+        final int lower;
+        final int upper;
+    }
+
+    // -- TEST
+
+    static Stream<Arguments> roundtrip() {
         return Stream.of(
-                Arguments.of(Short.MAX_VALUE),
-                Arguments.of(Short.MIN_VALUE),
-                Arguments.of((short)0),
-                Arguments.of((short)12345),
-                Arguments.of((short)-12345)
+                Arguments.of(Byte.MAX_VALUE),
+                Arguments.of(Byte.MIN_VALUE),
+                Arguments.of((byte)0),
+                Arguments.of((byte)12345),
+                Arguments.of((byte)-12345),
+                Arguments.of(new CustomerPK(5,6))
+                // Arguments.of((Serializable)null) ... throws NPE as expected
         );
     }
 
-    static class Customer {}
-
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(short value) {
+    void roundtrip(final Serializable value) {
 
-        val stringifier = new IdStringifierForShort();
+        val stringifier = new SerializableValueSemantics(codec);
 
         String stringified = stringifier.enstring(value);
-        Short parse = stringifier.destring(stringified, Customer.class);
+        Serializable parse = stringifier.destring(stringified, Customer.class);
 
         assertThat(parse).isEqualTo(value);
     }

@@ -18,7 +18,7 @@
  *
  */
 
-package org.apache.isis.applib.services.bookmark;
+package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.util.stream.Stream;
 
@@ -26,8 +26,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForCharacter;
 
 import lombok.val;
 
@@ -63,9 +61,9 @@ class IdStringifierForCharacter_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(char value) {
+    void roundtrip(final char value) {
 
-        val stringifier = new IdStringifierForCharacter();
+        val stringifier = new CharacterValueSemantics();
 
         val stringified = stringifier.enstring(value);
         val parse = stringifier.destring(stringified, Customer.class);

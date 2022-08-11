@@ -18,26 +18,36 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
+
+import lombok.NonNull;
 
 @Component
 @Named("isis.val.StringValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class StringValueSemantics
 extends ValueSemanticsAbstract<String>
 implements
     Parser<String>,
-    Renderer<String> {
+    Renderer<String>,
+    IdStringifier<String> {
 
     @Override
     public Class<String> getCorrespondingClass() {
@@ -59,6 +69,34 @@ implements
     @Override
     public String compose(final ValueDecomposition decomposition) {
         return composeFromString(decomposition, UnaryOperator.identity(), ()->null);
+    }
+
+    // -- ID STRINGIFIER
+
+    static final List<String> NON_SAFE_URL_CHARS =
+            Arrays.asList("/", "\\", "?", ":", "&", "%", "+");
+    static final String REGULAR_PREFIX = "s" + IdStringifier.AbstractWithPrefix.SEPARATOR;
+    static final String BASE64_PREFIX = "base64" + IdStringifier.AbstractWithPrefix.SEPARATOR;
+
+    @Override
+    public String enstring(final @NonNull String id) {
+        if(NON_SAFE_URL_CHARS.stream().anyMatch(id::contains)) {
+            return BASE64_PREFIX + _Strings.base64UrlEncode(id);
+        }
+        return REGULAR_PREFIX + id;
+    }
+
+    @Override
+    public String destring(
+            final @NonNull String stringified,
+            final @NonNull Class<?> targetEntityClass) {
+        if(stringified.startsWith(REGULAR_PREFIX)) {
+            return stringified.substring(REGULAR_PREFIX.length());
+        }
+        if(stringified.startsWith(BASE64_PREFIX)) {
+            return _Strings.base64UrlDecode(stringified.substring(BASE64_PREFIX.length()));
+        }
+        throw new IllegalArgumentException(String.format("Could not parse stringified id '%s'", stringified));
     }
 
     // -- RENDERER

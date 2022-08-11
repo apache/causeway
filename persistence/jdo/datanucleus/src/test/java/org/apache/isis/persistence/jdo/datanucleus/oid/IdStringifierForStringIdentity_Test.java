@@ -29,7 +29,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import org.apache.isis.applib.services.bookmark.idstringifiers.IdStringifierForString;
+import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForStringIdentity;
 
 import lombok.val;
@@ -55,11 +55,12 @@ class IdStringifierForStringIdentity_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(String value) {
+    void roundtrip(final String value) {
 
         val entityType = Customer.class;
 
-        val stringifier = IdStringifierForStringIdentity.builder().idStringifierForString(new IdStringifierForString()).build();
+        val stringifier = IdStringifierForStringIdentity.builder()
+                .idStringifierForString(new StringValueSemantics()).build();
 
         val stringified = stringifier.enstring(new StringIdentity(entityType, value));
         val parse = stringifier.destring(stringified, entityType);
