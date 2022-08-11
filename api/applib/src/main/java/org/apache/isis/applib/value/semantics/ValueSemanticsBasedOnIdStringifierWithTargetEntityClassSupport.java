@@ -27,7 +27,10 @@ import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 /**
- * @since 2.x {@index}
+ * Convenient base class for value-semantics,
+ * that are basically inferred from an {@link IdStringifier} with target-entity-class-support.
+ * @see org.apache.isis.applib.services.bookmark.IdStringifier.SupportingTargetEntityClass
+ * @since 2.0
  */
 public abstract class ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<T>
 extends ValueSemanticsAbstract<T>

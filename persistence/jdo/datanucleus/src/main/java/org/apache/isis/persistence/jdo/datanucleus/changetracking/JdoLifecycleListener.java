@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.datanucleus.changetracking;
 
 import javax.enterprise.inject.Vetoed;
-import javax.inject.Provider;
 import javax.jdo.listener.AttachLifecycleListener;
 import javax.jdo.listener.ClearLifecycleListener;
 import javax.jdo.listener.CreateLifecycleListener;
@@ -32,13 +31,11 @@ import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.enhancement.Persistable;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -204,6 +201,5 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
             final @NonNull EntityAdaptingMode bookmarking) {
         return _Utils.adaptEntityAndInjectServices(metaModelContext, pojo, bookmarking);
     }
-
 
 }

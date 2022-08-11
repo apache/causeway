@@ -51,7 +51,7 @@ import lombok.val;
  *     This is intended for framework use, there is little reason to call it or override it.
  * </p>
  *
- * @since 2.x
+ * @since 2.0
  */
 @Service
 @Named(IsisModuleCoreRuntime.NAMESPACE + ".IdStringifierLookupService")
@@ -103,6 +103,8 @@ public class IdStringifierLookupService {
         });
         return Optional.ofNullable(_Casts.uncheckedCast(idStringifier));
     }
+
+    // -- HELPER
 
     private boolean handles(final IdStringifier<?> idStringifier, final @NonNull Class<?> candidateValueClass) {
         return idStringifier.getCorrespondingClass()

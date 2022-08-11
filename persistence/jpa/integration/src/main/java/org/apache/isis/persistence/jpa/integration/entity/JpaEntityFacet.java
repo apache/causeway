@@ -70,8 +70,7 @@ public class JpaEntityFacet
         super(EntityFacet.class, holder, Precedence.HIGH);
         this.entityClass = entityClass;
         this.serviceRegistry = serviceRegistry;
-        this.idStringifierLookupService = serviceRegistry.lookupService(IdStringifierLookupService.class).orElseThrow();
-
+        this.idStringifierLookupService = serviceRegistry.lookupServiceElseFail(IdStringifierLookupService.class);
     }
 
     // -- ENTITY FACET

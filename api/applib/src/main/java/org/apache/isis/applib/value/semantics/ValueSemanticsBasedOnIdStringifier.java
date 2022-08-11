@@ -27,7 +27,9 @@ import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 /**
- * @since 2.x {@index}
+ * Convenient base class for value-semantics,
+ * that are basically inferred from an {@link IdStringifier}.
+ * @since 2.0
  */
 public abstract class ValueSemanticsBasedOnIdStringifier<T>
 extends ValueSemanticsAbstract<T>

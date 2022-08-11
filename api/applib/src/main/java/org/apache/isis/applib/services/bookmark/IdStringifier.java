@@ -85,7 +85,18 @@ public interface IdStringifier<T> {
         }
     }
 
-    abstract class Abstract<T> implements SupportingTargetEntityClass<T> {
+    /**
+     * Provided for backward compatibility with some v1 Ids that used a prefix to determine their actual type.
+     * <p>
+     * (In v2 we provide this so in the constructor, so there's no need to encode the type in the stringified form
+     * of the value).
+     *
+     * @param <T>
+     *
+     * @deprecated not used within the framework; eventually remove
+     */
+    @Deprecated
+    abstract class AbstractWithPrefix<T> implements SupportingTargetEntityClass<T> {
 
         public final static char SEPARATOR = '_';
 
@@ -95,55 +106,27 @@ public interface IdStringifier<T> {
          */
         @Getter private final Class<T> correspondingClass;
 
-        protected Abstract(
-                final @NonNull Class<T> correspondingClass) {
+        private final String prefix;
+
+        public AbstractWithPrefix(
+                @NonNull final Class<T> correspondingClass,
+                @NonNull final String typeCode) {
             _Assert.assertFalse(correspondingClass.isPrimitive(),
                     ()->String.format("not allowed to be initialzed with a primitive class (%s), "
                             + "use the boxed variant instead",
                             correspondingClass));
             this.correspondingClass = correspondingClass;
-        }
-
-        /**
-         * Overridable default implementation.
-         * @param value
-         */
-        @Override
-        public String enstring(@NonNull final T value) {
-            return value.toString();
-        }
-
-        @Override
-        public final T destring(@NonNull final String stringified) {
-            throw _Exceptions.unsupportedOperation();
-        }
-
-    }
-
-    /**
-     * Provided for backward compatibility with some v1 Ids that used a prefix to determine their actual type.
-     *
-     * <p>
-     * (In v2 we provide this so in the constructor, so there's no need to encode the type in the stringified form
-     * of the value).
-     * </p>
-     *
-     * @param <T>
-     */
-    abstract class AbstractWithPrefix<T> extends Abstract<T> {
-
-                private final String prefix;
-
-        public AbstractWithPrefix(
-                @NonNull final Class<T> handledClass,
-                @NonNull final String typeCode) {
-            super(handledClass);
             this.prefix = typeCode + SEPARATOR;
         }
 
         @Override
         public final String enstring(final @NonNull T value) {
             return prefix + doEnstring(value);
+        }
+
+        @Override
+        public final T destring(@NonNull final String stringified) {
+            throw _Exceptions.unsupportedOperation();
         }
 
         /**

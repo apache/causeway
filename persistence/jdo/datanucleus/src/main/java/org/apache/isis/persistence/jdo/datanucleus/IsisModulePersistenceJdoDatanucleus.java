@@ -19,14 +19,10 @@
 package org.apache.isis.persistence.jdo.datanucleus;
 
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
-import javax.inject.Provider;
 import javax.jdo.JDOException;
 import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.annotations.PersistenceCapable;
 import javax.sql.DataSource;
 
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -40,7 +36,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -48,7 +43,6 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
-import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
 import org.apache.isis.persistence.jdo.datanucleus.config.DatanucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus.dialect.DnJdoDialect;
@@ -138,17 +132,17 @@ public class IsisModulePersistenceJdoDatanucleus {
         return new DnJdoDialect(dataSource);
     }
 
-    private static boolean ignore(final Class<?> entityType) {
-        try {
-            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass() || entityType.isInterface()) {
-                return true;
-            }
-            val persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);
-            return persistenceCapable == null; // ignore if doesn't have @PersistenceCapable
-        } catch (NoClassDefFoundError ex) {
-            return true;
-        }
-    }
+//    private static boolean ignore(final Class<?> entityType) {
+//        try {
+//            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass() || entityType.isInterface()) {
+//                return true;
+//            }
+//            val persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);
+//            return persistenceCapable == null; // ignore if doesn't have @PersistenceCapable
+//        } catch (NoClassDefFoundError ex) {
+//            return true;
+//        }
+//    }
 
     @Qualifier("local-pmf-proxy")
     @Bean
