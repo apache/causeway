@@ -133,7 +133,7 @@ implements EntityFacet {
                     pojo.getClass().getName());
         }
 
-        return idStringifierService.enstringPrimaryKey(primaryKeyTypeFor(entityClass), primaryKey);
+        return idStringifierService.enstringPrimaryKey(primaryKey.getClass(), primaryKey);
     }
 
 

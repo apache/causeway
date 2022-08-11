@@ -111,18 +111,13 @@ public class IdStringifierService {
     private <T> Optional<IdStringifier<T>> lookup(final Class<T> candidateValueClass) {
         val idStringifier = stringifierByClass.computeIfAbsent(candidateValueClass, aClass -> {
             for (val candidateStringifier : idStringifiers) {
-                if (handles(candidateStringifier, candidateValueClass)) {
+                if (candidateStringifier.getCorrespondingClass().isAssignableFrom(candidateValueClass)) {
                     return candidateStringifier;
                 }
             }
             return null;
         });
         return Optional.ofNullable(_Casts.uncheckedCast(idStringifier));
-    }
-
-    private boolean handles(final IdStringifier<?> idStringifier, final @NonNull Class<?> candidateValueClass) {
-        return idStringifier.getCorrespondingClass()
-                .isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(candidateValueClass));
     }
 
 }
