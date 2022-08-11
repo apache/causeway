@@ -9,18 +9,18 @@ Provides the ability to obtain the XML layout for a single domain object or for 
 .LayoutService.java
 ----
 interface LayoutService {
-  String toXml(Class<?> domainClass, Style style)     // <.>
-  byte[] toZip(Style style)     // <.>
+  String toXml(Class<?> domainClass, LayoutExportStyle style)     // <.>
+  byte[] toZip(LayoutExportStyle style)     // <.>
   String toMenuBarsXml(MenuBarsService.Type type)     // <.>
 }
 ----
 
-<.> xref:#toXml_Class_Style[toXml(Class, Style)]
+<.> xref:#toXml_Class_LayoutExportStyle[toXml(Class, LayoutExportStyle)]
 +
 --
 Obtains the serialized XML form of the layout (grid) for the specified domain class.
 --
-<.> xref:#toZip_Style[toZip(Style)]
+<.> xref:#toZip_LayoutExportStyle[toZip(LayoutExportStyle)]
 +
 --
 Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
@@ -33,13 +33,13 @@ Obtains the serialized XML form of the menu bars layout ( xref:refguide:applib:i
 
 == Members
 
-[#toXml_Class_Style]
-=== toXml(Class, Style)
+[#toXml_Class_LayoutExportStyle]
+=== toXml(Class, LayoutExportStyle)
 
 Obtains the serialized XML form of the layout (grid) for the specified domain class.
 
-[#toZip_Style]
-=== toZip(Style)
+[#toZip_LayoutExportStyle]
+=== toZip(LayoutExportStyle)
 
 Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
 

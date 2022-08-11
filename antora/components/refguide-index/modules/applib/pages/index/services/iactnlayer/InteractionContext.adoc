@@ -11,6 +11,7 @@ Provides the user and scenario specific environment for an xref:refguide:applib:
 class InteractionContext {
   InteractionContext ofUserWithSystemDefaults(UserMemento user)     // <.>
   UserLocale getLocale()
+  InteractionContext withTimeZoneIfAny(Optional<ZoneId> zoneIdIfAny)     // <.>
   UnaryOperator<InteractionContext> switchUser(UserMemento userMemento)     // <.>
   UnaryOperator<InteractionContext> switchClock(VirtualClock clock)     // <.>
   UnaryOperator<InteractionContext> switchLocale(UserLocale locale)     // <.>
@@ -25,6 +26,11 @@ class InteractionContext {
 +
 --
 Creates a new xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] with the specified user and system defaults for clock, locale and time-zone.
+--
+<.> xref:#withTimeZoneIfAny_Optional[withTimeZoneIfAny(Optional)]
++
+--
+Only override if zoneIdIfAny is present, otherwise acts as identity operation.
 --
 <.> xref:#switchUser_UserMemento[switchUser(UserMemento)]
 +
@@ -68,6 +74,11 @@ Returns the _ZoneOffset_ at the current time _Instant_ (at which _ZoneId_ rules 
 === ofUserWithSystemDefaults(UserMemento)
 
 Creates a new xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] with the specified user and system defaults for clock, locale and time-zone.
+
+[#withTimeZoneIfAny_Optional]
+=== withTimeZoneIfAny(Optional)
+
+Only override if zoneIdIfAny is present, otherwise acts as identity operation.
 
 [#switchUser_UserMemento]
 === switchUser(UserMemento)

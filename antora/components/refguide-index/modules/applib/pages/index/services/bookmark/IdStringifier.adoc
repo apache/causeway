@@ -13,23 +13,18 @@ The framework provides default implementations of this SPI for JDO (data store a
 .IdStringifier.java
 ----
 interface IdStringifier<T> {
-  boolean handles(Class<?> candidateValueClass)     // <.>
+  Class<T> getCorrespondingClass()
   String enstring(T value)     // <.>
-  T destring(String stringified, Class<?> targetEntityClass)     // <.>
+  T destring(String stringified)     // <.>
 }
 ----
 
-<.> xref:#handles_Class[handles(Class)]
-+
---
-Whether this xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier] is able to _#enstring(Object)_ or _#destring(String, Class)_ values of this type.
---
 <.> xref:#enstring_T[enstring(T)]
 +
 --
-Convert the value (which will be of the same type as is _#handles(Class) handled_ into a string representation.
+Convert the value (which will be of the same type as returned by _#getCorrespondingClass()_ into a string representation.
 --
-<.> xref:#destring_String_Class[destring(String, Class)]
+<.> xref:#destring_String[destring(String)]
 +
 --
 Convert a string representation of the identifier (as returned by _#enstring(Object)_ ) into an object that can be used to retrieve.
@@ -37,19 +32,12 @@ Convert a string representation of the identifier (as returned by _#enstring(Obj
 
 == Members
 
-[#handles_Class]
-=== handles(Class)
-
-Whether this xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier] is able to _#enstring(Object)_ or _#destring(String, Class)_ values of this type.
-
-Even though some implementations also require the owning entity type in order to _#destring(String, Class)_ , we do not consider that as part of this function; we assume that the entity type will be provided when necessary (by the JDO entity facet, in fact). This is sufficient.
-
 [#enstring_T]
 === enstring(T)
 
-Convert the value (which will be of the same type as is _#handles(Class) handled_ into a string representation.
+Convert the value (which will be of the same type as returned by _#getCorrespondingClass()_ into a string representation.
 
-[#destring_String_Class]
-=== destring(String, Class)
+[#destring_String]
+=== destring(String)
 
 Convert a string representation of the identifier (as returned by _#enstring(Object)_ ) into an object that can be used to retrieve.

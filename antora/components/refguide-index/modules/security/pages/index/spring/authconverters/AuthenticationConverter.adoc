@@ -32,6 +32,6 @@ Attempt to convert a Spring _Authentication_ (which will have been _Authenticati
 
 Attempt to convert a Spring _Authentication_ (which will have been _Authentication#isAuthenticated() authenticated_ ) into a xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
 
-There are many different implementations of _Authentication_ , so the implementation should be targetted at a specific implementation.
+There are many different implementations of _Authentication_ , so the implementation should be targeted at a specific implementation.
 
 The framework provides some default implementations for the most common use cases.

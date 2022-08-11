@@ -8,6 +8,8 @@
 ----
 class ExecutionLogMenu {
   public static final String LOGICAL_TYPE_NAME;
+  List<? extends ExecutionLogEntry> findMostRecent()
+  List<? extends ExecutionLogEntry> findAll()
 }
 ----
 

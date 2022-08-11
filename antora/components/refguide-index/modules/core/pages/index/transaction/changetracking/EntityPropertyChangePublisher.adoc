@@ -9,11 +9,11 @@ Notifies _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSub
 .EntityPropertyChangePublisher.java
 ----
 interface EntityPropertyChangePublisher {
-  void publishChangedProperties(HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges)     // <.>
+  void publishChangedProperties()     // <.>
 }
 ----
 
-<.> xref:#publishChangedProperties_HasEnlistedEntityPropertyChanges[publishChangedProperties(HasEnlistedEntityPropertyChanges)]
+<.> xref:#publishChangedProperties_[publishChangedProperties()]
 +
 --
 Notifies _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s that a property of an entity has changed using the _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber#onChanging(EntityPropertyChange)_ callback.
@@ -21,7 +21,7 @@ Notifies _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSub
 
 == Members
 
-[#publishChangedProperties_HasEnlistedEntityPropertyChanges]
-=== publishChangedProperties(HasEnlistedEntityPropertyChanges)
+[#publishChangedProperties_]
+=== publishChangedProperties()
 
 Notifies _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s that a property of an entity has changed using the _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber#onChanging(EntityPropertyChange)_ callback.

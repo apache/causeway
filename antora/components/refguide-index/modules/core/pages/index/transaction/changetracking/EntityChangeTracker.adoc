@@ -9,86 +9,71 @@ Responsible for collecting the details of all changes to domain objects within a
 .EntityChangeTracker.java
 ----
 interface EntityChangeTracker {
+  EntityChangeTracker NOOP;     // <.>
   void enlistCreated(ManagedObject entity)     // <.>
+  void enlistUpdating(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords)     // <.>
   void enlistDeleting(ManagedObject entity)     // <.>
-  void enlistUpdating(ManagedObject entity)     // <.>
-  void recognizeLoaded(ManagedObject entity)     // <.>
-  void recognizePersisting(ManagedObject entity)     // <.>
-  void recognizeUpdating(ManagedObject entity)     // <.>
+  void incrementLoaded(ManagedObject entity)     // <.>
 }
 ----
 
+<.> xref:#NOOP[NOOP]
++
+--
+Provided primarily for testing, but also used in cases where an attempt is made to resolve a bean but there is no active interaction.
+--
 <.> xref:#enlistCreated_ManagedObject[enlistCreated(ManagedObject)]
 +
 --
 Publishing support: for object stores to enlist an object that has just been created, capturing a dummy value `'[NEW]'` for the pre-modification value.
+--
+<.> xref:#enlistUpdating_ManagedObject_Can[enlistUpdating(ManagedObject, Can)]
++
+--
+Publishing support: for object stores to enlist an object that is about to be updated, capturing the pre-modification values of the properties of the _ManagedObject_ .
 --
 <.> xref:#enlistDeleting_ManagedObject[enlistDeleting(ManagedObject)]
 +
 --
 Publishing support: for object stores to enlist an object that is about to be deleted, capturing the pre-deletion value of the properties of the _ManagedObject_ .
 --
-<.> xref:#enlistUpdating_ManagedObject[enlistUpdating(ManagedObject)]
+<.> xref:#incrementLoaded_ManagedObject[incrementLoaded(ManagedObject)]
 +
 --
-Publishing support: for object stores to enlist an object that is about to be updated, capturing the pre-modification values of the properties of the _ManagedObject_ .
---
-<.> xref:#recognizeLoaded_ManagedObject[recognizeLoaded(ManagedObject)]
-+
---
-Fires the appropriate event and lifecycle callback: _LOADED_
---
-<.> xref:#recognizePersisting_ManagedObject[recognizePersisting(ManagedObject)]
-+
---
-Fires the appropriate event and lifecycle callback: _PERSISTING_
---
-<.> xref:#recognizeUpdating_ManagedObject[recognizeUpdating(ManagedObject)]
-+
---
-Fires the appropriate event and lifecycle callback: _UPDATING_
+Not strictly part of the concern of entity tracking, but allows the default implementation to also implement the _org.apache.isis.applib.services.metrics.MetricsService_ .
 --
 
 == Members
+
+[#NOOP]
+=== NOOP
+
+Provided primarily for testing, but also used in cases where an attempt is made to resolve a bean but there is no active interaction.
 
 [#enlistCreated_ManagedObject]
 === enlistCreated(ManagedObject)
 
 Publishing support: for object stores to enlist an object that has just been created, capturing a dummy value `'[NEW]'` for the pre-modification value.
 
-Fires the appropriate event and lifecycle callback: _PERSISTED_
+The post-modification values are captured when the transaction commits.
+
+[#enlistUpdating_ManagedObject_Can]
+=== enlistUpdating(ManagedObject, Can)
+
+Publishing support: for object stores to enlist an object that is about to be updated, capturing the pre-modification values of the properties of the _ManagedObject_ .
 
 The post-modification values are captured when the transaction commits.
+
+Overload as an optimization for ORMs (specifically, JPA) where already have access to the changed records by accessing the ORM-specific data structures ( `EntityManager` 's unit-of-work).
 
 [#enlistDeleting_ManagedObject]
 === enlistDeleting(ManagedObject)
 
 Publishing support: for object stores to enlist an object that is about to be deleted, capturing the pre-deletion value of the properties of the _ManagedObject_ .
 
-Fires the appropriate event and lifecycle callback: _REMOVING_
-
 The post-modification values are captured when the transaction commits. In the case of deleted objects, a dummy value `'[DELETED]'` is used as the post-modification value.
 
-[#enlistUpdating_ManagedObject]
-=== enlistUpdating(ManagedObject)
+[#incrementLoaded_ManagedObject]
+=== incrementLoaded(ManagedObject)
 
-Publishing support: for object stores to enlist an object that is about to be updated, capturing the pre-modification values of the properties of the _ManagedObject_ .
-
-Fires the appropriate event and lifecycle callback: _UPDATING_
-
-The post-modification values are captured when the transaction commits.
-
-[#recognizeLoaded_ManagedObject]
-=== recognizeLoaded(ManagedObject)
-
-Fires the appropriate event and lifecycle callback: _LOADED_
-
-[#recognizePersisting_ManagedObject]
-=== recognizePersisting(ManagedObject)
-
-Fires the appropriate event and lifecycle callback: _PERSISTING_
-
-[#recognizeUpdating_ManagedObject]
-=== recognizeUpdating(ManagedObject)
-
-Fires the appropriate event and lifecycle callback: _UPDATING_
+Not strictly part of the concern of entity tracking, but allows the default implementation to also implement the _org.apache.isis.applib.services.metrics.MetricsService_ .

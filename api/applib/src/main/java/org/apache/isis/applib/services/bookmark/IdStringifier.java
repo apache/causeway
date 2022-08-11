@@ -29,8 +29,8 @@ import lombok.val;
 
 /**
  * SPI to convert the identifier (primary key) of an entity, of a given type (eg Integer) into a string, and
- * to convert back again into the key object used to actually look up the target entity instance; supported by both JDO
- * and JPA persistence mechanisms.
+ * to convert back again into the key object used to actually look up the target entity instance;
+ * supported by both JDO and JPA persistence mechanisms.
  *
  * <p>
  *     This is ultimately used by {@link BookmarkService} where we hold a persistent reference to an entity.  The
@@ -43,6 +43,8 @@ import lombok.val;
  *     for JPA. Because this is an SPI, other modules or application code can provide their own implementations.
  *     An example of such is the JPA implementation of the <code>commandlog</code> extension.
  * </p>
+ *
+ * @see org.apache.isis.core.runtime.idstringifier.IdStringifierService
  *
  * @since 2.0 {@index}
  */

@@ -7,8 +7,8 @@
 .HasInteractionId_executionLogEntries.java
 ----
 class HasInteractionId_executionLogEntries {
-  List<ExecutionLogEntry> act()
-  boolean hideAct()
+  List<? extends ExecutionLogEntry> coll()
+  boolean hideColl()
 }
 ----
 

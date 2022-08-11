@@ -14,12 +14,12 @@ The particular persistence layer implementation in use needs to be configured, w
 ----
 class IsisEntityListener {
   void onPrePersist(Object entityPojo)
+  void onPostLoad(Object entityPojo)
   void onPreUpdate(Object entityPojo)
   void onPreRemove(Object entityPojo)
   void onPostPersist(Object entityPojo)
   void onPostUpdate(Object entityPojo)
   void onPostRemove(Object entityPojo)
-  void onPostLoad(Object entityPojo)
 }
 ----
 

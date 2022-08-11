@@ -9,9 +9,9 @@ Provides the ability to download the layout XML for any domain entity or view mo
 .Object_downloadLayoutXml.java
 ----
 class Object_downloadLayoutXml {
-  Object act(String fileName, Style style)
+  Object act(String fileName, LayoutExportStyle style)
   String default0Act()     // <.>
-  Style default1Act()     // <.>
+  LayoutExportStyle default1Act()     // <.>
 }
 ----
 
@@ -23,7 +23,7 @@ Defaults to the (simple) name of the domain object's class, with a `.layout` suf
 <.> xref:#default1Act_[default1Act()]
 +
 --
-Default style is _Style#NORMALIZED_ .
+Default style is _LayoutExportStyle#MINIMAL_ .
 --
 
 == Members
@@ -36,6 +36,6 @@ Defaults to the (simple) name of the domain object's class, with a `.layout` suf
 [#default1Act_]
 === default1Act()
 
-Default style is _Style#NORMALIZED_ .
+Default style is _LayoutExportStyle#MINIMAL_ .
 
 include::hooks/Object_downloadLayoutXml_see-also.adoc[]

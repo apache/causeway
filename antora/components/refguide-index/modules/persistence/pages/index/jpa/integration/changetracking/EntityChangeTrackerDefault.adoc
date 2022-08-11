@@ -1,0 +1,51 @@
+= EntityChangeTrackerDefault
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+This service keeps track of all of the changes within a transactoin, for entities for which entity property change publishing is enabled (typically using the _DomainObject#entityChangePublishing() @DomainObject(entityChangePublishing=)_ annotation attribute.
+
+The service is xref:refguide:applib:index/annotation/InteractionScope.adoc[InteractionScope] d. In theory this could happen multiple times per interaction, so the data structures are cleared on each commit for potential reuse within the same interaction. (Of course, because the service _is_ interaction-scoped, a new instance of the service is created for each interaction, and so the data held in this service is private to each user's interaction.
+
+== API
+
+[source,java]
+.EntityChangeTrackerDefault.java
+----
+class EntityChangeTrackerDefault {
+  void destroy()
+  Set<PropertyChangeRecord> snapshotPropertyChangeRecords()
+  void onTransactionCompleting(TransactionBeforeCompletionEvent event)     // <.>
+  Optional<EntityChanges> getEntityChanges(java.sql.Timestamp timestamp, String userName)
+  Can<EntityPropertyChange> getPropertyChanges(java.sql.Timestamp timestamp, String userName, TransactionId txId)
+  Interaction currentInteraction()
+  long countPotentialPropertyChangeRecords()
+  void enlistCreated(ManagedObject entity)
+  void enlistUpdating(ManagedObject entity, Can<PropertyChangeRecord> ormPropertyChangeRecords)
+  void enlistDeleting(ManagedObject entity)
+  void incrementLoaded(ManagedObject entity)     // <.>
+  int numberEntitiesLoaded()
+  int numberEntitiesDirtied()
+}
+----
+
+<.> xref:#onTransactionCompleting_TransactionBeforeCompletionEvent[onTransactionCompleting(TransactionBeforeCompletionEvent)]
++
+--
+As called by _TransactionSubscriber_ , so long as there is an xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] in xref:refguide:applib:index/annotation/InteractionScope.adoc[InteractionScope] .
+--
+<.> xref:#incrementLoaded_ManagedObject[incrementLoaded(ManagedObject)]
++
+--
+Used only for the implementation of xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService] .
+--
+
+== Members
+
+[#onTransactionCompleting_TransactionBeforeCompletionEvent]
+=== onTransactionCompleting(TransactionBeforeCompletionEvent)
+
+As called by _TransactionSubscriber_ , so long as there is an xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] in xref:refguide:applib:index/annotation/InteractionScope.adoc[InteractionScope] .
+
+[#incrementLoaded_ManagedObject]
+=== incrementLoaded(ManagedObject)
+
+Used only for the implementation of xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService] .

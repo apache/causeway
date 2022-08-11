@@ -12,6 +12,7 @@ class ValueSemanticsAbstract<T> {
   Renderer<T> getRenderer()
   Parser<T> getParser()
   DefaultsProvider<T> getDefaultsProvider()
+  IdStringifier<T> getIdStringifier()
   Can<T> getExamples()     // <.>
 }
 ----

@@ -15,6 +15,8 @@ interface UrlEncodingService {
   byte[] decode(String str)     // <.>
   String encodeString(String str)
   String decodeToString(String str)
+  UrlEncodingService forTesting()     // <.>
+  UrlEncodingService forTestingNoCompression()     // <.>
 }
 ----
 
@@ -27,6 +29,16 @@ Converts the string (eg view model memento) into a string safe for use within an
 +
 --
 Unconverts the string from its URL form into its original form URL.
+--
+<.> xref:#forTesting_[forTesting()]
++
+--
+Uses base64 with compression.
+--
+<.> xref:#forTestingNoCompression_[forTestingNoCompression()]
++
+--
+Uses base64 without compression.
 --
 
 == Members
@@ -42,6 +54,16 @@ Converts the string (eg view model memento) into a string safe for use within an
 Unconverts the string from its URL form into its original form URL.
 
 Reciprocal of _#encode(byte[])_ .
+
+[#forTesting_]
+=== forTesting()
+
+Uses base64 with compression.
+
+[#forTestingNoCompression_]
+=== forTestingNoCompression()
+
+Uses base64 without compression.
 
 include::hooks/UrlEncodingService_010-implementation.adoc[]
 

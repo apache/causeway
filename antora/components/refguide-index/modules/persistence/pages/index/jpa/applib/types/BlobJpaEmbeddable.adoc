@@ -5,7 +5,29 @@ A utility class to enable the persisting of xref:refguide:applib:index/value/Blo
 
 Although JPA supports custom value types, these can only be for simple values; seeeclipse-ee4j/jpa-api/issues/105.
 
-EclipseLink _does_ provide its own extension,
+EclipseLink _does_ provide its own extension,Transformation API, but there's a lot of boilerplate involved even so.
+
+This class provides support for an alternative approach, where the Isis xref:refguide:applib:index/value/Blob.adoc[Blob] is marshalled in and out of this class.
+
+Example usage:
+
+----
+
+    @Embedded
+    private BlobJpaEmbeddable pdf;
+
+    @Property()
+    @PropertyLayout()
+    public Blob getPdf() {
+        return BlobJpaEmbeddable.toBlob(pdf);
+    }
+    public void setPdf(final Blob pdf) {
+        this.pdf = BlobJpaEmbeddable.fromBlob(pdf);
+    }
+   
+----
+
+Lastly; note that _javax.persistence.AttributeOverrides_ and _javax.persistence.AttributeOverride_ provide a standardised way of fine-tuning the column definitions.
 
 == API
 

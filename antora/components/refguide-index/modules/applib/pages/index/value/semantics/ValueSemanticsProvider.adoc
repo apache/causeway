@@ -22,6 +22,7 @@ interface ValueSemanticsProvider<T> {
   Renderer<T> getRenderer()     // <.>
   Parser<T> getParser()     // <.>
   DefaultsProvider<T> getDefaultsProvider()     // <.>
+  IdStringifier<T> getIdStringifier()     // <.>
   ValueSemanticsProvider<X> castTo(Class<X> cls)
   boolean isEnumType()
   boolean isNumberType()
@@ -70,6 +71,11 @@ The xref:refguide:applib:index/value/semantics/Parser.adoc[Parser] , if any.
 --
 The xref:refguide:applib:index/value/semantics/DefaultsProvider.adoc[DefaultsProvider] , if any.
 --
+<.> xref:#getIdStringifier_[getIdStringifier()]
++
+--
+The xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier] , if any.
+--
 
 == Members
 
@@ -114,3 +120,8 @@ The xref:refguide:applib:index/value/semantics/Parser.adoc[Parser] , if any.
 The xref:refguide:applib:index/value/semantics/DefaultsProvider.adoc[DefaultsProvider] , if any.
 
 If not `null` , implies that the value has (or may have) a default.
+
+[#getIdStringifier_]
+=== getIdStringifier()
+
+The xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier] , if any.
