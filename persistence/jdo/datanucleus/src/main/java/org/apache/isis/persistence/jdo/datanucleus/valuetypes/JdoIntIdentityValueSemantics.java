@@ -16,29 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import javax.annotation.Priority;
-import javax.jdo.identity.LongIdentity;
+import javax.jdo.identity.IntIdentity;
 
-import org.datanucleus.identity.LongId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
 
 import lombok.NonNull;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForLongId extends IdStringifier.Abstract<LongId> {
+public class JdoIntIdentityValueSemantics
+extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<IntIdentity> {
 
-    public IdStringifierForLongId() {
-        super(LongId.class);
+    public JdoIntIdentityValueSemantics() {
+        super(IntIdentity.class);
     }
 
     @Override
-    public LongId destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
-        return new LongId(targetEntityClass, stringified);
+    public IntIdentity destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
+        return new IntIdentity(targetEntityClass, stringified);
     }
 }

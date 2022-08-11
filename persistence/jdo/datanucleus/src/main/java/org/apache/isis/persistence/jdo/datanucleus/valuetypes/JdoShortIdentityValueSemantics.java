@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import javax.annotation.Priority;
 import javax.jdo.identity.ShortIdentity;
@@ -24,15 +24,16 @@ import javax.jdo.identity.ShortIdentity;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
 
 import lombok.NonNull;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForShortIdentity extends IdStringifier.Abstract<ShortIdentity> {
+public class JdoShortIdentityValueSemantics
+extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<ShortIdentity> {
 
-    public IdStringifierForShortIdentity() {
+    public JdoShortIdentityValueSemantics() {
         super(ShortIdentity.class);
     }
 

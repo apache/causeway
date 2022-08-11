@@ -156,7 +156,7 @@ implements EntityFacet {
             val primaryKeyType = primaryKeyTypeFor(entityClass);
 
             val idStringifier = idStringifierLookupService.lookupElseFail(primaryKeyType);
-            val primaryKey = _Casts.castTo(IdStringifier.Abstract.class, idStringifier)
+            val primaryKey = _Casts.castTo(IdStringifier.SupportingTargetEntityClass.class, idStringifier)
                     .map(stringifier->stringifier.destring(bookmark.getIdentifier(), entityClass))
                     .orElseGet(()->idStringifier.destring(bookmark.getIdentifier()));
 

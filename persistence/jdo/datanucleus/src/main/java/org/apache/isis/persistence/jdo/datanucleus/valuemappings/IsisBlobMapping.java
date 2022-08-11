@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.valuetypes.applib;
+package org.apache.isis.persistence.jdo.datanucleus.valuemappings;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -122,7 +122,7 @@ public class JpaEntityFacet
         log.debug("fetchEntity; bookmark={}", bookmark);
 
         val idStringifier = lookupIdStringifier(getPrimaryKeyType());
-        val primaryKey = _Casts.castTo(IdStringifier.Abstract.class, idStringifier)
+        val primaryKey = _Casts.castTo(IdStringifier.SupportingTargetEntityClass.class, idStringifier)
                 .map(stringifier->stringifier.destring(bookmark.getIdentifier(), entityClass))
                 .orElseGet(()->idStringifier.destring(bookmark.getIdentifier()));
 

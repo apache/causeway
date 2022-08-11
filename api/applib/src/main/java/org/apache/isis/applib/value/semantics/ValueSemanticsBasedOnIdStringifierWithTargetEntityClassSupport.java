@@ -29,15 +29,15 @@ import lombok.experimental.Accessors;
 /**
  * @since 2.x {@index}
  */
-public abstract class ValueSemanticsBasedOnIdStringifier<T>
+public abstract class ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<T>
 extends ValueSemanticsAbstract<T>
 implements
-    IdStringifier<T> {
+    IdStringifier.SupportingTargetEntityClass<T> {
 
     @Getter @Accessors(makeFinal = true)
     private final Class<T> correspondingClass;
 
-    protected ValueSemanticsBasedOnIdStringifier(
+    protected ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport(
             final @NonNull Class<T> correspondingClass) {
         _Assert.assertFalse(correspondingClass.isPrimitive(),
                 ()->String.format("not allowed to be initialzed with a primitive class (%s), "

@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.isis.core.metamodel.valuesemantics.CharacterValueSemantics;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoCharIdentityValueSemantics;
 
 import lombok.val;
 
@@ -71,7 +71,7 @@ class IdStringifierForCharIdentity_Test {
 
         val entityType = Customer.class;
 
-        val stringifier = IdStringifierForCharIdentity.builder()
+        val stringifier = JdoCharIdentityValueSemantics.builder()
                 .idStringifierForCharacter(new CharacterValueSemantics())
                 .build();
 

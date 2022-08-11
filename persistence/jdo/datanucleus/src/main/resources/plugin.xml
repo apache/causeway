@@ -28,10 +28,10 @@
     <extension point="org.datanucleus.store.rdbms.java_mapping">
         <mapping
             java-type="org.apache.isis.applib.value.Blob"
-            mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuetypes.applib.IsisBlobMapping"/>
+            mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuemappings.IsisBlobMapping"/>
         <mapping
             java-type="org.apache.isis.applib.value.Clob"
-            mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuetypes.applib.IsisClobMapping"/>
+            mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuemappings.IsisClobMapping"/>
 
     </extension>
 
@@ -45,14 +45,14 @@
                 jdbc-type="BLOB"
                 sql-type="BLOB"
                 default="true"
-                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuemappings.applib.ByteArrayBlobRdbmsMapping">
+                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
         </mapping>
         <mapping
                 java-type="[Ljava.lang.Byte;"
                 jdbc-type="BLOB"
                 sql-type="BLOB"
                 default="true"
-                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuemappings.applib.ByteArrayBlobRdbmsMapping">
+                column-mapping-class="org.apache.isis.persistence.jdo.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
         </mapping>
     </extension>
 

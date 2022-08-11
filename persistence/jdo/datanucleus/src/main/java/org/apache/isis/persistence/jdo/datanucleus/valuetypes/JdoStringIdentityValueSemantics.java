@@ -16,16 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.jdo.identity.StringIdentity;
 
-import org.datanucleus.identity.CharId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -33,33 +34,34 @@ import lombok.val;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForCharId extends IdStringifier.Abstract<CharId> {
+public class JdoStringIdentityValueSemantics
+extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<StringIdentity> {
 
-    @Inject IdStringifier<Character> idStringifierForCharacter;
+    @Inject IdStringifier<String> idStringifierForString;
 
-    public IdStringifierForCharId() {
-        super(CharId.class);
+    public JdoStringIdentityValueSemantics() {
+        super(StringIdentity.class);
     }
 
     /**
      * for testing only
      */
     @Builder
-    IdStringifierForCharId(final IdStringifier<Character> idStringifierForCharacter) {
+    JdoStringIdentityValueSemantics(final IdStringifier<String> idStringifierForString) {
         this();
-        this.idStringifierForCharacter = idStringifierForCharacter;
+        this.idStringifierForString = idStringifierForString;
     }
 
     @Override
-    public String enstring(final @NonNull CharId value) {
-        return idStringifierForCharacter.enstring(value.getKey());
+    public String enstring(final @NonNull StringIdentity value) {
+        return idStringifierForString.enstring(value.getKey());
     }
 
     @Override
-    public CharId destring(
+    public StringIdentity destring(
             final @NonNull String stringified,
             final @NonNull Class<?> targetEntityClass) {
-        val idValue = idStringifierForCharacter.destring(stringified);
-        return new CharId(targetEntityClass, idValue);
+        val idValue = idStringifierForString.destring(stringified);
+        return new StringIdentity(targetEntityClass, idValue);
     }
 }

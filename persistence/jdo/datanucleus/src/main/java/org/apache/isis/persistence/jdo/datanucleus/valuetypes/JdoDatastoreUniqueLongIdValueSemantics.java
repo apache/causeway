@@ -16,28 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import javax.annotation.Priority;
-import javax.jdo.identity.ByteIdentity;
 
+import org.datanucleus.identity.DatastoreUniqueLongId;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForByteIdentity extends IdStringifier.Abstract<ByteIdentity> {
+public class JdoDatastoreUniqueLongIdValueSemantics
+extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<DatastoreUniqueLongId> {
 
-    public IdStringifierForByteIdentity() {
-        super(ByteIdentity.class);
+    public JdoDatastoreUniqueLongIdValueSemantics() {
+        super(DatastoreUniqueLongId.class);
     }
 
     @Override
-    public ByteIdentity destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
-        return new ByteIdentity(targetEntityClass, stringified);
+    public String enstring(final @NonNull DatastoreUniqueLongId value) {
+        return value.toString();
     }
+
+    @SneakyThrows
+    @Override
+    public DatastoreUniqueLongId destring(
+            final @NonNull String stringified,
+            final @Nullable Class<?> targetEntityClass) {
+        return new DatastoreUniqueLongId(stringified);
+    }
+
 }

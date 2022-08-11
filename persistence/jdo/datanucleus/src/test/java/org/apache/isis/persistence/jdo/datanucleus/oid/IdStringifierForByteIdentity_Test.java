@@ -29,7 +29,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForByteIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoByteIdentityValueSemantics;
 
 import lombok.val;
 
@@ -53,7 +53,7 @@ class IdStringifierForByteIdentity_Test {
 
         val entityType = Customer.class;
 
-        val stringifier = new IdStringifierForByteIdentity();
+        val stringifier = new JdoByteIdentityValueSemantics();
 
         val stringified = stringifier.enstring(new ByteIdentity(entityType, value));
         val parse = stringifier.destring(stringified, entityType);

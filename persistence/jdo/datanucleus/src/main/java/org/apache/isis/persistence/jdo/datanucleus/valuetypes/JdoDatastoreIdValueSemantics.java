@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import java.lang.reflect.Constructor;
 
@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.context._Context;
 
@@ -36,9 +37,10 @@ import lombok.SneakyThrows;
 
 @Component
 @Priority(PriorityPrecedence.LATE + 100) // after the implementations of DatastoreId; for a custom impl.
-public class IdStringifierForDatastoreId extends IdStringifier.Abstract<DatastoreId> {
+public class JdoDatastoreIdValueSemantics
+extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<DatastoreId> {
 
-    public IdStringifierForDatastoreId() {
+    public JdoDatastoreIdValueSemantics() {
         super(DatastoreId.class);
     }
 
@@ -49,7 +51,7 @@ public class IdStringifierForDatastoreId extends IdStringifier.Abstract<Datastor
         // re-create-able through the constructor
         //
         // to do this, we also need to capture the class of the Id value class itself, followed by the value (as a string)
-        return value.getClass().getName() + SEPARATOR + value.toString();
+        return value.getClass().getName() + IdStringifier.Abstract.SEPARATOR + value.toString();
     }
 
     @SneakyThrows
@@ -57,7 +59,7 @@ public class IdStringifierForDatastoreId extends IdStringifier.Abstract<Datastor
     public DatastoreId destring(
             final @NonNull String stringified,
             final @Nullable Class<?> targetEntityClass) {
-        int idx = stringified.indexOf(SEPARATOR);
+        int idx = stringified.indexOf(IdStringifier.Abstract.SEPARATOR);
         String clsName = stringified.substring(0, idx);
         String keyStr = stringified.substring(idx + 1);
         final Class<?> cls = _Context.loadClass(clsName);

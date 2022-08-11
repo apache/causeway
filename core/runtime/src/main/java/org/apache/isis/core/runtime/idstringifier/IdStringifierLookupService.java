@@ -32,6 +32,7 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
@@ -39,6 +40,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -78,7 +80,7 @@ public class IdStringifierLookupService {
     public <T> IdStringifier<T> lookupElseFail(final Class<T> candidateValueClass) {
         val idStringifier = stringifierByClass.computeIfAbsent(candidateValueClass, aClass -> {
             for (val candidateStringifier : idStringifiers) {
-                if (candidateStringifier.handles(candidateValueClass)) {
+                if (handles(candidateStringifier, candidateValueClass)) {
                     return candidateStringifier;
                 }
             }
@@ -93,7 +95,7 @@ public class IdStringifierLookupService {
     public <T> Optional<IdStringifier<T>> lookup(final Class<T> candidateValueClass) {
         val idStringifier = stringifierByClass.computeIfAbsent(candidateValueClass, aClass -> {
             for (val candidateStringifier : idStringifiers) {
-                if (candidateStringifier.handles(candidateValueClass)) {
+                if (handles(candidateStringifier, candidateValueClass)) {
                     return candidateStringifier;
                 }
             }
@@ -101,4 +103,10 @@ public class IdStringifierLookupService {
         });
         return Optional.ofNullable(_Casts.uncheckedCast(idStringifier));
     }
+
+    private boolean handles(final IdStringifier<?> idStringifier, final @NonNull Class<?> candidateValueClass) {
+        return idStringifier.getCorrespondingClass()
+                .isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(candidateValueClass));
+    }
+
 }

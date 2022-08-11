@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import java.util.UUID;
 
@@ -26,7 +26,7 @@ import javax.jdo.identity.ObjectIdentity;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -42,13 +42,14 @@ import lombok.NonNull;
 @Component
 @Priority(PriorityPrecedence.LATE)
 @Builder
-public class IdStringifierForObjectIdentity extends IdStringifier.Abstract<ObjectIdentity> {
+public class JdoObjectIdentityValueSemantics
+extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<ObjectIdentity> {
 
     private static final String PREFIX_UUID = "u_";
     private static final String PREFIX_LONG = "l_";
     private static final String PREFIX_INT = "i_";
 
-    public IdStringifierForObjectIdentity() {
+    public JdoObjectIdentityValueSemantics() {
         super(ObjectIdentity.class);
     }
 

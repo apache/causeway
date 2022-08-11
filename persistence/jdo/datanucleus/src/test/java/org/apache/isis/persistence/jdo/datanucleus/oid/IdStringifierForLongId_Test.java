@@ -30,8 +30,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForLongId;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForLongIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoLongIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoLongIdentityValueSemantics;
 
 import lombok.val;
 
@@ -55,7 +55,7 @@ class IdStringifierForLongId_Test {
 
         val entityType = Customer.class;
 
-        val stringifier = new IdStringifierForLongId();
+        val stringifier = new JdoLongIdValueSemantics();
 
         val stringified = stringifier.enstring(new LongId(entityType, value));
         val parse = stringifier.destring(stringified, entityType);

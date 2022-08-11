@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -33,11 +34,12 @@ import lombok.val;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForCharIdentity extends IdStringifier.Abstract<CharIdentity> {
+public class JdoCharIdentityValueSemantics
+extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<CharIdentity> {
 
     @Inject IdStringifier<Character> idStringifierForCharacter;
 
-    public IdStringifierForCharIdentity() {
+    public JdoCharIdentityValueSemantics() {
         super(CharIdentity.class);
     }
 
@@ -45,7 +47,7 @@ public class IdStringifierForCharIdentity extends IdStringifier.Abstract<CharIde
      * for testing only
      */
     @Builder
-    IdStringifierForCharIdentity(final IdStringifier<Character> idStringifierForCharacter) {
+    JdoCharIdentityValueSemantics(final IdStringifier<Character> idStringifierForCharacter) {
         this();
         this.idStringifierForCharacter = idStringifierForCharacter;
     }

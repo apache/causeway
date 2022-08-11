@@ -16,28 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import javax.annotation.Priority;
 
-import org.datanucleus.identity.ByteId;
+import org.datanucleus.identity.IntId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
 
 import lombok.NonNull;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForByteId extends IdStringifier.Abstract<ByteId> {
+public class JdoIntIdValueSemantics
+extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<IntId> {
 
-    public IdStringifierForByteId() {
-        super(ByteId.class);
+    public JdoIntIdValueSemantics() {
+        super(IntId.class);
     }
 
     @Override
-    public ByteId destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
-        return new ByteId(targetEntityClass, stringified);
+    public IntId destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
+        return new IntId(targetEntityClass, stringified);
     }
 }

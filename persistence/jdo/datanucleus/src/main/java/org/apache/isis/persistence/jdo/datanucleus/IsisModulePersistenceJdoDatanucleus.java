@@ -54,26 +54,26 @@ import org.apache.isis.persistence.jdo.datanucleus.config.DatanucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForByteId;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharId;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForCharIdentity;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForDatastoreId;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForDatastoreUniqueLongId;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForIntId;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForLongId;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForObjectId;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForShortId;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForStringId;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForByteIdentity;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForDatastoreIdImpl;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForIntIdentity;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForLongIdentity;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForObjectIdentity;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForShortIdentity;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForStringIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoByteIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoByteIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoCharIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoCharIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoDatastoreIdImplValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoDatastoreIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoDatastoreUniqueLongIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoIntIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoIntIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoLongIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoLongIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoObjectIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoObjectIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoShortIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoShortIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoStringIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoStringIdentityValueSemantics;
 import org.apache.isis.persistence.jdo.integration.IsisModulePersistenceJdoIntegration;
 import org.apache.isis.persistence.jdo.provider.config.JdoEntityDiscoveryListener;
 import org.apache.isis.persistence.jdo.spring.integration.JdoDialect;
@@ -96,23 +96,23 @@ import lombok.extern.log4j.Log4j2;
     // @Component's
     DnEntityStateProvider.class,
 
-    IdStringifierForDatastoreIdImpl.class, // datastore identity
-    IdStringifierForDatastoreUniqueLongId.class,
-    IdStringifierForDatastoreId.class,
-    IdStringifierForShortIdentity.class, // application-defined PK, javax.jdo.identity
-    IdStringifierForLongIdentity.class,
-    IdStringifierForIntIdentity.class,
-    IdStringifierForByteIdentity.class,
-    IdStringifierForCharIdentity.class,
-    IdStringifierForStringIdentity.class,
-    IdStringifierForObjectIdentity.class,
-    IdStringifierForShortId.class,  // application-defined PK, org.datanucleus.identity
-    IdStringifierForLongId.class,
-    IdStringifierForIntId.class,
-    IdStringifierForByteId.class,
-    IdStringifierForCharId.class,
-    IdStringifierForStringId.class,
-    IdStringifierForObjectId.class,
+    JdoDatastoreIdImplValueSemantics.class, // datastore identity
+    JdoDatastoreUniqueLongIdValueSemantics.class,
+    JdoDatastoreIdValueSemantics.class,
+    JdoShortIdentityValueSemantics.class, // application-defined PK, javax.jdo.identity
+    JdoLongIdentityValueSemantics.class,
+    JdoIntIdentityValueSemantics.class,
+    JdoByteIdentityValueSemantics.class,
+    JdoCharIdentityValueSemantics.class,
+    JdoStringIdentityValueSemantics.class,
+    JdoObjectIdentityValueSemantics.class,
+    JdoShortIdValueSemantics.class,  // application-defined PK, org.datanucleus.identity
+    JdoLongIdValueSemantics.class,
+    JdoIntIdValueSemantics.class,
+    JdoByteIdValueSemantics.class,
+    JdoCharIdValueSemantics.class,
+    JdoStringIdValueSemantics.class,
+    JdoObjectIdValueSemantics.class,
 
     // @Mixin's
     Persistable_datanucleusVersionLong.class,

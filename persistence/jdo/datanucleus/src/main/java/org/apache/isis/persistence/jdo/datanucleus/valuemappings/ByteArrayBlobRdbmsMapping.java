@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.valuemappings.applib;
+package org.apache.isis.persistence.jdo.datanucleus.valuemappings;
 
 import org.datanucleus.store.rdbms.RDBMSStoreManager;
 import org.datanucleus.store.rdbms.mapping.column.BlobColumnMapping;

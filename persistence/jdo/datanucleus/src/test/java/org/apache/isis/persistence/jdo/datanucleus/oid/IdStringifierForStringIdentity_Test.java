@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.IdStringifierForStringIdentity;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoStringIdentityValueSemantics;
 
 import lombok.val;
 
@@ -59,7 +59,7 @@ class IdStringifierForStringIdentity_Test {
 
         val entityType = Customer.class;
 
-        val stringifier = IdStringifierForStringIdentity.builder()
+        val stringifier = JdoStringIdentityValueSemantics.builder()
                 .idStringifierForString(new StringValueSemantics()).build();
 
         val stringified = stringifier.enstring(new StringIdentity(entityType, value));

@@ -16,39 +16,46 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import javax.annotation.Priority;
 
-import org.datanucleus.identity.DatastoreUniqueLongId;
-import org.springframework.lang.Nullable;
+import org.datanucleus.identity.DatastoreIdImpl;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.val;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class IdStringifierForDatastoreUniqueLongId extends IdStringifier.Abstract<DatastoreUniqueLongId> {
+public class JdoDatastoreIdImplValueSemantics
+extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<DatastoreIdImpl> {
 
-    public IdStringifierForDatastoreUniqueLongId() {
-        super(DatastoreUniqueLongId.class);
+    public static final String STRING_DELIMITER = "[OID]"; // as
+
+    public JdoDatastoreIdImplValueSemantics() {
+        super(DatastoreIdImpl.class);
     }
 
     @Override
-    public String enstring(final @NonNull DatastoreUniqueLongId value) {
-        return value.toString();
+    public String enstring(final @NonNull DatastoreIdImpl value) {
+        return value.getKeyAsObject().toString();
     }
 
     @SneakyThrows
     @Override
-    public DatastoreUniqueLongId destring(
+    public DatastoreIdImpl destring(
             final @NonNull String stringified,
-            final @Nullable Class<?> targetEntityClass) {
-        return new DatastoreUniqueLongId(stringified);
+            final @NonNull Class<?> targetEntityClass) {
+        // enString invoked toString() on the original key; invoking toString() on its stringified form does not change it
+        val proto = new DatastoreIdImpl(targetEntityClass.getName(), stringified);
+        // now render in the form that the DataStoreImpl constructor expects; it will take it apart itself.
+        val str = proto.toString();
+        return new DatastoreIdImpl(str);
     }
 
 }

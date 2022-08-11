@@ -20,8 +20,6 @@
 
 package org.apache.isis.applib.services.bookmark;
 
-import org.springframework.util.ClassUtils;
-
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -52,30 +50,11 @@ public interface IdStringifier<T> {
 
     Class<T> getCorrespondingClass();
 
-//    /**
-//     * Whether this {@link IdStringifier} is able to {@link #enstring(Object)} or {@link #destring(String, Class)} values
-//     * of this type.
-//     *
-//     * <p>
-//     * Even though some implementations also require the owning entity type in order to {@link #destring(String, Class)},
-//     * we do not consider that as part of this function; we assume that the entity type will be provided
-//     * when necessary (by the JDO entity facet, in fact).  This is sufficient.
-//     * </p>
-//     *
-//     * @param candidateValueClass
-//     */
-    @Deprecated
-    default boolean handles(final @NonNull Class<?> candidateValueClass) {
-        return getCorrespondingClass()
-                .isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(candidateValueClass));
-    }
-
     /**
-     * Convert the value (which will be of the same type as is {@link #handles(Class) handled} into a string
-     * representation.
+     * Convert the value (which will be of the same type as returned by {@link #getCorrespondingClass()}
+     * into a string representation.
      *
      * @see #destring(String)
-     * @see #handles(Class)
      */
     String enstring(@NonNull T value);
 
@@ -87,7 +66,26 @@ public interface IdStringifier<T> {
      */
     T destring(@NonNull String stringified);
 
-    abstract class Abstract<T> implements IdStringifier<T> {
+
+    interface SupportingTargetEntityClass<T> extends IdStringifier<T> {
+        /**
+         * Convert a string representation of the identifier (as returned by {@link #enstring(Object)}) into an object
+         * that can be used to retrieve.
+         *
+         * @param stringified - as returned by {@link #enstring(Object)}
+         * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
+         *                                 we always have this information available, and is needed (at least) by the JDO
+         *                                 implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
+         */
+        T destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass);
+
+        @Override
+        default T destring(@NonNull final String stringified) {
+            throw _Exceptions.unsupportedOperation();
+        }
+    }
+
+    abstract class Abstract<T> implements SupportingTargetEntityClass<T> {
 
         public final static char SEPARATOR = '_';
 
@@ -99,17 +97,11 @@ public interface IdStringifier<T> {
 
         protected Abstract(
                 final @NonNull Class<T> correspondingClass) {
-
-            _Assert.assertFalse(correspondingClass.isPrimitive());
-
+            _Assert.assertFalse(correspondingClass.isPrimitive(),
+                    ()->String.format("not allowed to be initialzed with a primitive class (%s), "
+                            + "use the boxed variant instead",
+                            correspondingClass));
             this.correspondingClass = correspondingClass;
-        }
-
-        @Deprecated
-        @Override
-        public final boolean handles(final @NonNull Class<?> candidateValueClass) {
-            return getCorrespondingClass()
-                    .isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(candidateValueClass));
         }
 
         /**
@@ -120,17 +112,6 @@ public interface IdStringifier<T> {
         public String enstring(@NonNull final T value) {
             return value.toString();
         }
-
-        /**
-         * Convert a string representation of the identifier (as returned by {@link #enstring(Object)}) into an object
-         * that can be used to retrieve.
-         *
-         * @param stringified - as returned by {@link #enstring(Object)}
-         * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
-         *                                 we always have this information available, and is needed (at least) by the JDO
-         *                                 implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
-         */
-        public abstract T destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass);
 
         @Override
         public final T destring(@NonNull final String stringified) {
