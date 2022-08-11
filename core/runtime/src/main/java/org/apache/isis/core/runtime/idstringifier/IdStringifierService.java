@@ -35,9 +35,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
 import lombok.NonNull;
@@ -46,24 +48,27 @@ import lombok.val;
 /**
  * Convenience service that looks up (and caches) the {@link IdStringifier}
  * available for a given value class, and optionally the class of the owning entity.
- *
  * <p>
- *     This is intended for framework use, there is little reason to call it or override it.
- * </p>
+ * This is intended for framework use, there is little reason to call it or override it.
+ *
+ * @implNote yet does not support per member ValueSemantics selection;
+ *      future work would look for {@link ValueSemantics} annotations on primary key members and
+ *      would then honor {@link ValueSemantics#provider()} attribute,
+ *      to narrow the {@link IdStringifier} search
  *
  * @since 2.0
  */
 @Service
-@Named(IsisModuleCoreRuntime.NAMESPACE + ".IdStringifierLookupService")
+@Named(IsisModuleCoreRuntime.NAMESPACE + ".IdStringifierService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class IdStringifierLookupService {
+public class IdStringifierService {
 
     private final Can<IdStringifier<?>> idStringifiers;
     private final Map<Class<?>, IdStringifier<?>> stringifierByClass = new ConcurrentHashMap<>();
 
     @Inject
-    public IdStringifierLookupService(
+    public IdStringifierService(
             final List<IdStringifier<?>> idStringifiers,
             final Optional<IdStringifier<Serializable>> idStringifierForSerializableIfAny) {
         // IdStringifierForSerializable is enforced to go last, so any custom IdStringifier(s)
@@ -77,22 +82,33 @@ public class IdStringifierLookupService {
         this.idStringifiers = Can.ofCollection(idStringifiers);
     }
 
-    public <T> IdStringifier<T> lookupElseFail(final Class<T> candidateValueClass) {
-        val idStringifier = stringifierByClass.computeIfAbsent(candidateValueClass, aClass -> {
-            for (val candidateStringifier : idStringifiers) {
-                if (handles(candidateStringifier, candidateValueClass)) {
-                    return candidateStringifier;
-                }
-            }
-            return null;
-        });
-        return Optional.<IdStringifier<T>>ofNullable(_Casts.uncheckedCast(idStringifier))
-                .orElseThrow(() -> new IllegalStateException(
-                        String.format("Could not locate an IdStringifier to handle '%s'",
-                                candidateValueClass)));
+    public <T> String enstringPrimaryKey(final @NonNull Class<T> primaryKeyType, final @NonNull Object primaryKey) {
+        val idStringifier = lookupElseFail(ClassUtils.resolvePrimitiveIfNecessary(primaryKeyType));
+        return idStringifier.enstring(_Casts.uncheckedCast(primaryKey));
     }
 
-    public <T> Optional<IdStringifier<T>> lookup(final Class<T> candidateValueClass) {
+    public <T> T destringPrimaryKey(
+            final @NonNull Class<T> primaryKeyType,
+            final @NonNull Class<?> entityClass,
+            final @NonNull String stringifiedId) {
+        val idStringifier = lookupElseFail(ClassUtils.resolvePrimitiveIfNecessary(primaryKeyType));
+        @SuppressWarnings("unchecked")
+        val primaryKey = _Casts.castTo(IdStringifier.SupportingTargetEntityClass.class, idStringifier)
+                .map(stringifier->stringifier.destring(stringifiedId, entityClass))
+                .orElseGet(()->idStringifier.destring(stringifiedId));
+        return _Casts.uncheckedCast(primaryKey);
+    }
+
+    // -- HELPER
+
+    private <T> IdStringifier<T> lookupElseFail(final Class<T> candidateValueClass) {
+        return lookup(candidateValueClass)
+            .orElseThrow(() -> _Exceptions.noSuchElement(
+                    "Could not locate an IdStringifier to handle '%s'",
+                    candidateValueClass));
+    }
+
+    private <T> Optional<IdStringifier<T>> lookup(final Class<T> candidateValueClass) {
         val idStringifier = stringifierByClass.computeIfAbsent(candidateValueClass, aClass -> {
             for (val candidateStringifier : idStringifiers) {
                 if (handles(candidateStringifier, candidateValueClass)) {
@@ -103,8 +119,6 @@ public class IdStringifierLookupService {
         });
         return Optional.ofNullable(_Casts.uncheckedCast(idStringifier));
     }
-
-    // -- HELPER
 
     private boolean handles(final IdStringifier<?> idStringifier, final @NonNull Class<?> candidateValueClass) {
         return idStringifier.getCorrespondingClass()

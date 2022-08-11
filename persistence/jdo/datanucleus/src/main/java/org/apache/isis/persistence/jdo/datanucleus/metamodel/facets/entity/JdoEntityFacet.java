@@ -37,7 +37,6 @@ import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -45,7 +44,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionalProcessor;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Debug;
@@ -59,7 +57,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierService;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
@@ -84,7 +82,7 @@ implements EntityFacet {
     @Inject private ObjectManager objectManager;
     @Inject private ExceptionRecognizerService exceptionRecognizerService;
     @Inject private JdoFacetContext jdoFacetContext;
-    @Inject private IdStringifierLookupService idStringifierLookupService;
+    @Inject private IdStringifierService idStringifierService;
 
     private final Class<?> entityClass;
 
@@ -135,11 +133,7 @@ implements EntityFacet {
                     pojo.getClass().getName());
         }
 
-
-        val primaryKeyType = primaryKey.getClass();
-        val idStringifier = _Casts.<IdStringifier<Object>>uncheckedCast(idStringifierLookupService.lookupElseFail(primaryKeyType));
-
-        return idStringifier.enstring(primaryKey);
+        return idStringifierService.enstringPrimaryKey(primaryKeyTypeFor(entityClass), primaryKey);
     }
 
 
@@ -153,12 +147,8 @@ implements EntityFacet {
         try {
 
             val persistenceManager = getPersistenceManager();
-            val primaryKeyType = primaryKeyTypeFor(entityClass);
-
-            val idStringifier = idStringifierLookupService.lookupElseFail(primaryKeyType);
-            val primaryKey = _Casts.castTo(IdStringifier.SupportingTargetEntityClass.class, idStringifier)
-                    .map(stringifier->stringifier.destring(bookmark.getIdentifier(), entityClass))
-                    .orElseGet(()->idStringifier.destring(bookmark.getIdentifier()));
+            val primaryKey = idStringifierService
+                    .destringPrimaryKey(primaryKeyTypeFor(entityClass), entityClass, bookmark.getIdentifier());
 
             val fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);

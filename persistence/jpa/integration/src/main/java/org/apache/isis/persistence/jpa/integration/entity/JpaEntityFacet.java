@@ -34,7 +34,6 @@ import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
@@ -47,7 +46,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierService;
 
 import lombok.NonNull;
 import lombok.val;
@@ -60,7 +59,7 @@ public class JpaEntityFacet
 
     private final Class<?> entityClass;
     private final ServiceRegistry serviceRegistry;
-    private final IdStringifierLookupService idStringifierLookupService;
+    private final IdStringifierService idStringifierService;
 
     protected JpaEntityFacet(
             final FacetHolder holder,
@@ -70,7 +69,7 @@ public class JpaEntityFacet
         super(EntityFacet.class, holder, Precedence.HIGH);
         this.entityClass = entityClass;
         this.serviceRegistry = serviceRegistry;
-        this.idStringifierLookupService = serviceRegistry.lookupServiceElseFail(IdStringifierLookupService.class);
+        this.idStringifierService = serviceRegistry.lookupServiceElseFail(IdStringifierService.class);
     }
 
     // -- ENTITY FACET
@@ -101,17 +100,7 @@ public class JpaEntityFacet
                     pojo.getClass().getName());
         }
 
-        val primaryKeyType = getPrimaryKeyType();
-        return identifierFor(primaryKeyType, _Casts.uncheckedCast(primaryKey));
-    }
-
-    private <T> String identifierFor(final Class<T> primaryKeyType, final T primaryKey) {
-        val stringifier = lookupIdStringifier(primaryKeyType);
-        return stringifier.enstring(primaryKey);
-    }
-
-    private <T> IdStringifier<T> lookupIdStringifier(final Class<T> primaryKeyType) {
-        return _Casts.uncheckedCast(idStringifierLookupService.lookupElseFail(primaryKeyType));
+        return idStringifierService.enstringPrimaryKey(getPrimaryKeyType(), primaryKey);
     }
 
     @Override
@@ -120,10 +109,8 @@ public class JpaEntityFacet
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
-        val idStringifier = lookupIdStringifier(getPrimaryKeyType());
-        val primaryKey = _Casts.castTo(IdStringifier.SupportingTargetEntityClass.class, idStringifier)
-                .map(stringifier->stringifier.destring(bookmark.getIdentifier(), entityClass))
-                .orElseGet(()->idStringifier.destring(bookmark.getIdentifier()));
+        val primaryKey = idStringifierService
+                .destringPrimaryKey(getPrimaryKeyType(), entityClass, bookmark.getIdentifier());
 
         val entityManager = getEntityManager();
         val entityPojo = entityManager.find(entityClass, primaryKey);

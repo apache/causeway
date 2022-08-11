@@ -44,7 +44,7 @@ import lombok.val;
  *     An example of such is the JPA implementation of the <code>commandlog</code> extension.
  * </p>
  *
- * @since 2.x {@index}
+ * @since 2.0 {@index}
  */
 public interface IdStringifier<T> {
 
