@@ -49,7 +49,7 @@ class IdStringifierForShortIdentity_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(short value) {
+    void roundtrip(final short value) {
 
         val entityType = Customer.class;
 
@@ -60,6 +60,12 @@ class IdStringifierForShortIdentity_Test {
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);
+
+        val decomposed = stringifier.decompose(new ShortIdentity(entityType, value));
+        val composed = stringifier.compose(decomposed);
+
+        Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
+        Assertions.assertThat(composed.getTargetClass()).isEqualTo(entityType);
     }
 
 }

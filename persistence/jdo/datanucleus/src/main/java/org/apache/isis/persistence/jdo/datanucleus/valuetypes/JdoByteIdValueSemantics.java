@@ -24,9 +24,14 @@ import org.datanucleus.identity.ByteId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.NonNull;
+import lombok.val;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
@@ -37,8 +42,30 @@ extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<ByteId> {
         super(ByteId.class);
     }
 
+    // -- COMPOSER
+
+    @Override
+    public ValueDecomposition decompose(final ByteId value) {
+        return CommonDtoUtils.typedTupleBuilder(value)
+                .addFundamentalType(ValueType.STRING, "targetClassName", ByteId::getTargetClassName)
+                .addFundamentalType(ValueType.STRING, "key", this::enstring)
+                .buildAsDecomposition();
+    }
+
+    @Override
+    public ByteId compose(final ValueDecomposition decomposition) {
+        val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
+        final String targetClassName = (String)elementMap.get("targetClassName");
+        final String key = (String)elementMap.get("key");
+        return destring(key, _InstanceUtil.loadClass(targetClassName));
+    }
+
+    // -- ID STRINGIFIER
+
     @Override
     public ByteId destring(final @NonNull String stringified, final @NonNull Class<?> targetEntityClass) {
         return new ByteId(targetEntityClass, stringified);
     }
+
+
 }

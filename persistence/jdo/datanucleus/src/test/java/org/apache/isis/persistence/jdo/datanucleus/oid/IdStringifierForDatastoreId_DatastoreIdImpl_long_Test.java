@@ -48,7 +48,7 @@ class IdStringifierForDatastoreId_DatastoreIdImpl_long_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(long value, String enstringed) {
+    void roundtrip(final long value, final String enstringed) {
 
         val entityType = Customer.class;
 
@@ -62,6 +62,12 @@ class IdStringifierForDatastoreId_DatastoreIdImpl_long_Test {
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClassName()).isEqualTo(entityType.getName());
+
+        val decomposed = stringifier.decompose(new DatastoreIdImpl(entityType.getName(), value));
+        val composed = stringifier.compose(decomposed);
+
+        Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
+        Assertions.assertThat(composed.getTargetClassName()).isEqualTo(entityType.getName());
     }
 
 }

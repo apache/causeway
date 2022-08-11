@@ -26,10 +26,15 @@ import org.datanucleus.identity.ObjectId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Implementation for application-defined primary keys.
@@ -52,6 +57,26 @@ extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<ObjectId>
     public JdoObjectIdValueSemantics() {
         super(ObjectId.class);
     }
+
+    // -- COMPOSER
+
+    @Override
+    public ValueDecomposition decompose(final ObjectId value) {
+        return CommonDtoUtils.typedTupleBuilder(value)
+                .addFundamentalType(ValueType.STRING, "targetClassName", ObjectId::getTargetClassName)
+                .addFundamentalType(ValueType.STRING, "key", this::enstring)
+                .buildAsDecomposition();
+    }
+
+    @Override
+    public ObjectId compose(final ValueDecomposition decomposition) {
+        val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
+        final String targetClassName = (String)elementMap.get("targetClassName");
+        final String key = (String)elementMap.get("key");
+        return destring(key, _InstanceUtil.loadClass(targetClassName));
+    }
+
+    // -- ID STRINGIFIER
 
     @Override
     public String enstring(final @NonNull ObjectId value) {

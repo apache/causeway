@@ -49,7 +49,7 @@ class IdStringifierForByteIdentity_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(Byte value) {
+    void roundtrip(final Byte value) {
 
         val entityType = Customer.class;
 
@@ -60,6 +60,13 @@ class IdStringifierForByteIdentity_Test {
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);
+
+        val decomposed = stringifier.decompose(new ByteIdentity(entityType, value));
+        val composed = stringifier.compose(decomposed);
+
+        Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
+        Assertions.assertThat(composed.getTargetClass()).isEqualTo(entityType);
+
     }
 
 }

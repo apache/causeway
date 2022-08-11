@@ -28,7 +28,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoDatastoreIdImplValueSemantics;
 import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoDatastoreUniqueLongIdValueSemantics;
 
 import lombok.val;
@@ -45,22 +44,29 @@ class IdStringifierForDatastoreId_DatastoreUniqueLongId_long_Test {
         );
     }
 
-    static class Customer {}
+    //static class Customer {}
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(long value) {
+    void roundtrip(final long value) {
 
-        val entityType = Customer.class;
+        //val entityType = Customer.class;
 
         val stringifier = new JdoDatastoreUniqueLongIdValueSemantics();
 
         val stringified = stringifier.enstring(new DatastoreUniqueLongId(value));
-        val parse = stringifier.destring(stringified, null); // no need to pass entityType
+        val parse = stringifier.destring(stringified); // no need to pass entityType
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         // UnsupportedOperationException if attempt this.
         // Assertions.assertThat(parse.getTargetClassName()).isEqualTo(entityType.getName());
+
+        val decomposed = stringifier.decompose(new DatastoreUniqueLongId(value));
+        val composed = stringifier.compose(decomposed);
+
+        Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
+        //Assertions.assertThat(composed.getTargetClassName()).isEqualTo(entityType.getName());
+
     }
 
 }

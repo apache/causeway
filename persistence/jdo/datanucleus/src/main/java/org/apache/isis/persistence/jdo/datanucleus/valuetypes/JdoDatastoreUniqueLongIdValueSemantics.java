@@ -21,34 +21,27 @@ package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 import javax.annotation.Priority;
 
 import org.datanucleus.identity.DatastoreUniqueLongId;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
+import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
 
 import lombok.NonNull;
-import lombok.SneakyThrows;
 
+/**
+ * @implNote has no targetEntityClass support
+ */
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class JdoDatastoreUniqueLongIdValueSemantics
-extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<DatastoreUniqueLongId> {
+extends ValueSemanticsBasedOnIdStringifier<DatastoreUniqueLongId> {
 
     public JdoDatastoreUniqueLongIdValueSemantics() {
         super(DatastoreUniqueLongId.class);
     }
 
     @Override
-    public String enstring(final @NonNull DatastoreUniqueLongId value) {
-        return value.toString();
-    }
-
-    @SneakyThrows
-    @Override
-    public DatastoreUniqueLongId destring(
-            final @NonNull String stringified,
-            final @Nullable Class<?> targetEntityClass) {
+    public DatastoreUniqueLongId destring(@NonNull final String stringified) {
         return new DatastoreUniqueLongId(stringified);
     }
 

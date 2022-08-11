@@ -60,6 +60,12 @@ class IdStringifierForObjectIdentity_Test {
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);
+
+        val decomposed = stringifier.decompose(new ObjectIdentity(entityType, value));
+        val composed = stringifier.compose(decomposed);
+
+        Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
+        Assertions.assertThat(composed.getTargetClass()).isEqualTo(entityType);
     }
 
 }

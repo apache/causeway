@@ -58,16 +58,4 @@ implements
         return value.toString();
     }
 
-    // -- COMPOSER
-
-    @Override
-    public final ValueDecomposition decompose(final T value) {
-        return decomposeAsString(value, this::enstring, ()->null);
-    }
-
-    @Override
-    public final T compose(final ValueDecomposition decomposition) {
-        return composeFromString(decomposition, this::destring, ()->null);
-    }
-
 }

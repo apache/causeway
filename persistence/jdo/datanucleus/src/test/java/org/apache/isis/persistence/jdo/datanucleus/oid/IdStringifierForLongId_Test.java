@@ -22,8 +22,6 @@ package org.apache.isis.persistence.jdo.datanucleus.oid;
 
 import java.util.stream.Stream;
 
-import javax.jdo.identity.LongIdentity;
-
 import org.assertj.core.api.Assertions;
 import org.datanucleus.identity.LongId;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,7 +29,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoLongIdValueSemantics;
-import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoLongIdentityValueSemantics;
 
 import lombok.val;
 
@@ -51,7 +48,7 @@ class IdStringifierForLongId_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(long value) {
+    void roundtrip(final long value) {
 
         val entityType = Customer.class;
 
@@ -62,6 +59,12 @@ class IdStringifierForLongId_Test {
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClassName()).isEqualTo(entityType.getName());
+
+        val decomposed = stringifier.decompose(new LongId(entityType, value));
+        val composed = stringifier.compose(decomposed);
+
+        Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
+        Assertions.assertThat(composed.getTargetClassName()).isEqualTo(entityType.getName());
     }
 
 }

@@ -26,7 +26,11 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
+import org.apache.isis.applib.util.schema.CommonDtoUtils;
+import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
+import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -52,6 +56,26 @@ extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<CharIdent
         this.idStringifierForCharacter = idStringifierForCharacter;
     }
 
+    // -- COMPOSER
+
+    @Override
+    public ValueDecomposition decompose(final CharIdentity value) {
+        return CommonDtoUtils.typedTupleBuilder(value)
+                .addFundamentalType(ValueType.STRING, "targetClassName", CharIdentity::getTargetClassName)
+                .addFundamentalType(ValueType.STRING, "key", this::enstring)
+                .buildAsDecomposition();
+    }
+
+    @Override
+    public CharIdentity compose(final ValueDecomposition decomposition) {
+        val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
+        final String targetClassName = (String)elementMap.get("targetClassName");
+        final String key = (String)elementMap.get("key");
+        return destring(key, _InstanceUtil.loadClass(targetClassName));
+    }
+
+    // -- ID STRINGIFIER
+
     @Override
     public String enstring(final @NonNull CharIdentity value) {
         return idStringifierForCharacter.enstring(value.getKey());
@@ -64,4 +88,5 @@ extends ValueSemanticsBasedOnIdStringifierWithTargetEntityClassSupport<CharIdent
         val idValue = idStringifierForCharacter.destring(stringified);
         return new CharIdentity(targetEntityClass, idValue);
     }
+
 }

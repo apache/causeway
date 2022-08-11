@@ -49,7 +49,7 @@ class IdStringifierForIntIdentity_Test {
 
     @ParameterizedTest
     @MethodSource()
-    void roundtrip(Integer value) {
+    void roundtrip(final Integer value) {
 
         val entityType = Customer.class;
 
@@ -60,6 +60,12 @@ class IdStringifierForIntIdentity_Test {
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);
+
+        val decomposed = stringifier.decompose(new IntIdentity(entityType, value));
+        val composed = stringifier.compose(decomposed);
+
+        Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
+        Assertions.assertThat(composed.getTargetClass()).isEqualTo(entityType);
     }
 
 }
