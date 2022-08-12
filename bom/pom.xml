@@ -385,7 +385,7 @@ under the License.
 		<jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
 		<jakartaee.version>8.0.0</jakartaee.version>
 		<javafaker.version>1.0.2</javafaker.version>
-		<javassist.version>3.29.0-GA</javassist.version>
+		<javassist.version>3.29.1-GA</javassist.version>
 		<javax-servlet.version>4.0.1</javax-servlet.version>
 		<jaxb-impl.version>2.3.6</jaxb-impl.version>
 		<jaxws-ri.version>2.3.5</jaxws-ri.version>
