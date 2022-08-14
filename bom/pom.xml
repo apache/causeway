@@ -345,6 +345,7 @@ under the License.
 
         <!-- LIBRARY DEPENDENCIES -->
 		<archunit.version>0.23.1</archunit.version>
+		<asciidoctorj.version>2.5.5</asciidoctorj.version>
 		<asm.version>9.3</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
 		<approvaltests.version>18.0.0</approvaltests.version>
 
