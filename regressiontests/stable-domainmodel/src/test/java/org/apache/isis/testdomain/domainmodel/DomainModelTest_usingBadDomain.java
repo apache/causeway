@@ -19,7 +19,6 @@
 package org.apache.isis.testdomain.domainmodel;
 
 import java.lang.annotation.Annotation;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -34,9 +33,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -47,7 +43,6 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
@@ -72,6 +67,9 @@ import org.apache.isis.testdomain.model.bad.InvalidServiceWithAlias;
 import org.apache.isis.testdomain.model.bad.OrphanedMemberSupportDetection;
 import org.apache.isis.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -218,33 +216,23 @@ class DomainModelTest_usingBadDomain {
                         "isActive()"));
     }
 
-//    @Test
-//    void logicalTypeNameClash_shouldFail() {
-//        assertLogicalTypeNameClashesAmong(Can.of(
-//                InvalidLogicalTypeNameClash.VariantA.class,
-//                InvalidLogicalTypeNameClash.VariantB.class
+    // since use of @Named annotation, entirely guarded by Spring ...
+//    private void assertLogicalTypeNameClashesAmong(final Can<Class<?>> types) {
 //
-//                //FIXME ISIS-2871 for some reason the value type c does not get considered
-//                //,InvalidLogicalTypeNameClash.VariantC.class
-//                ));
+//        val typeLiteralList = types.stream()
+//                .map(t->t.getName())
+//                .collect(Collectors.joining(", "));
+//
+//        val classIdentifiers = types.stream()
+//                .map(t->Identifier.classIdentifier(LogicalType.fqcn(t)))
+//                .collect(Can.toCan());
+//
+//        validator.assertAnyOfContainingAnyFailures(
+//                classIdentifiers,
+//                "Logical type name 'isis.testdomain.InvalidLogicalTypeNameClash' "
+//                        + "mapped to multiple non-abstract classes:\n"
+//                        + typeLiteralList);
 //    }
-
-    private void assertLogicalTypeNameClashesAmong(final Can<Class<?>> types) {
-
-        val typeLiteralList = types.stream()
-                .map(t->t.getName())
-                .collect(Collectors.joining(", "));
-
-        val classIdentifiers = types.stream()
-                .map(t->Identifier.classIdentifier(LogicalType.fqcn(t)))
-                .collect(Can.toCan());
-
-        validator.assertAnyOfContainingAnyFailures(
-                classIdentifiers,
-                "Logical type name 'isis.testdomain.InvalidLogicalTypeNameClash' "
-                        + "mapped to multiple non-abstract classes:\n"
-                        + typeLiteralList);
-    }
 
     @Test
     void contradictingTypeSemantics_shouldFailValidation() {

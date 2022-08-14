@@ -28,7 +28,6 @@
     </description>
 
 	<properties>
-		<graphql-java.version>19.1</graphql-java.version>
 		<javapoet.version>1.13.0</javapoet.version>
 		<skipTests>true</skipTests>
 		<enforcer.skip>true</enforcer.skip>
@@ -46,7 +45,6 @@
         <dependency>
 			<groupId>com.graphql-java</groupId>
 			<artifactId>graphql-java</artifactId>
-			<version>${graphql-java.version}</version>
 		</dependency>
 		
 		<!-- JAVA META PROGRAMMING -->
