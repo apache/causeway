@@ -35,12 +35,12 @@ import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValid
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import demoapp.dom.domain.tests.conf.Configuration_usingJpa;
+import demoapp.dom.domain.tests.conf.Configuration_usingJdo;
 import lombok.val;
 
 @SpringBootTest(
         classes = {
-                Configuration_usingJpa.class,
+                Configuration_usingJdo.class,
         },
         properties = {
                 "isis.core.meta-model.introspector.mode=FULL",
@@ -53,8 +53,8 @@ import lombok.val;
     IsisPresets.SilenceMetaModel,
     IsisPresets.SilenceProgrammingModel
 })
-@ActiveProfiles(profiles = "demo-jpa")
-class DomainIntrospectionTestJpa {
+@ActiveProfiles(profiles = "demo-jdo")
+class DomainIntrospectionTestJdo {
 
     //@Inject private MetaModelService metaModelService;
     //@Inject private JaxbService jaxbService;

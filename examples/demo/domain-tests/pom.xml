@@ -67,7 +67,6 @@
 
 		<!-- DEMO DOMAIN ADDITIONAL DEPENDENCIES -->
 
-		<!-- TODO: this should be pulled in by eg. --> 
 		<dependency>
 			<groupId>org.apache.isis.valuetypes</groupId>
 			<artifactId>isis-valuetypes-asciidoc-ui</artifactId>

@@ -27,26 +27,26 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
-import demoapp.web.DemoAppManifestJpa;
+import demoapp.web.DemoAppManifestJdo;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @Import({
     IsisModuleCoreRuntimeServices.class,
-    IsisModulePersistenceJpaEclipselink.class,
+    IsisModulePersistenceJdoDatanucleus.class,
     IsisModuleTestingFixturesApplib.class,
 
     // demo domain
-    DemoAppManifestJpa.class,
+    DemoAppManifestJdo.class,
 })
 @PropertySources({
     @PropertySource(IsisPresets.NoTranslations),
     @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
 })
-@Profile("demo-jpa")
-public class Configuration_usingJpa {
+@Profile("demo-jdo")
+public class Configuration_usingJdo {
 
 }
