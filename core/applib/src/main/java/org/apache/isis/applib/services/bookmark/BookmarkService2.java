@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
+import java.util.Optional;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -50,16 +52,16 @@ public interface BookmarkService2 extends BookmarkService {
     }
 
     @Programmatic
-    Object lookup(BookmarkHolder bookmarkHolder, FieldResetPolicy fieldResetPolicy);
+    Optional<Object> lookup(BookmarkHolder bookmarkHolder, FieldResetPolicy fieldResetPolicy);
 
     @Programmatic
-    Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
+    Optional<Object> lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
 
     /**
      * As {@link #lookup(Bookmark, FieldResetPolicy)}, but downcasting to the specified type.
      */
     @Programmatic
-    <T> T lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy, Class<T> cls);
+    <T> Optional<T> lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy, Class<T> cls);
 
 
 }

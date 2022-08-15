@@ -33,26 +33,14 @@ import java.util.Optional;
  */
 public interface BookmarkService {
 
-    /**
-     * @deprecated - use {@link BookmarkService2#lookup(BookmarkHolder, BookmarkService2.FieldResetPolicy)} instead.
-     */
-    @Deprecated
     @Programmatic
-    Object lookup(BookmarkHolder bookmarkHolder);
+    Optional<Object> lookup(BookmarkHolder bookmarkHolder);
 
-    /**
-     * @deprecated - use {@link BookmarkService2#lookup(Bookmark, BookmarkService2.FieldResetPolicy)} instead.
-     */
-    @Deprecated
     @Programmatic
-    Object lookup(Bookmark bookmark);
+    Optional<Object> lookup(Bookmark bookmark);
 
-    /**
-     * @deprecated - use {@link BookmarkService2#lookup(Bookmark, BookmarkService2.FieldResetPolicy, Class)} instead.
-     */
-    @Deprecated
     @Programmatic
-    <T> T lookup(Bookmark bookmark, Class<T> cls);
+    <T> Optional<T> lookup(Bookmark bookmark, Class<T> cls);
 
     @Programmatic
     Optional<Bookmark> bookmarkFor(Object domainObject);

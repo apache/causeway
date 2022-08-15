@@ -53,46 +53,46 @@ public class BookmarkServiceInternalDefault implements BookmarkService2 {
 
 
     @Programmatic
-    public Object lookup(
+    public Optional<Object> lookup(
             final BookmarkHolder bookmarkHolder,
             final FieldResetPolicy fieldResetPolicy) {
         Bookmark bookmark = bookmarkHolder.bookmark();
-        return bookmark != null? lookup(bookmark, fieldResetPolicy): null;
+        return bookmark != null? Optional.ofNullable(lookup(bookmark, fieldResetPolicy)): Optional.empty();
     }
 
     @Programmatic
     @Override
-    public Object lookup(final BookmarkHolder bookmarkHolder) {
+    public Optional<Object> lookup(final BookmarkHolder bookmarkHolder) {
         return lookup(bookmarkHolder, FieldResetPolicy.RESET);
     }
 
 
-    private Object lookupInternal(
+    private Optional<Object> lookupInternal(
             final Bookmark bookmark,
             final FieldResetPolicy fieldResetPolicy) {
         if(bookmark == null) {
-            return null;
+            return Optional.empty();
         }
         try {
-            return persistenceSessionServiceInternal.lookup(bookmark, fieldResetPolicy);
+            return Optional.ofNullable(persistenceSessionServiceInternal.lookup(bookmark, fieldResetPolicy));
         } catch(ObjectNotFoundException ex) {
-            return null;
+            return Optional.empty();
         }
     }
 
 
     @Programmatic
     @Override
-    public Object lookup(
+    public Optional<Object> lookup(
             final Bookmark bookmark,
             final FieldResetPolicy fieldResetPolicy) {
         if(bookmark == null) {
-            return null;
+            return Optional.empty();
         }
         final String objectType = bookmark.getObjectType();
         final Object service = lookupService(objectType);
         if(service != null) {
-            return service;
+            return Optional.of(service);
         }
         return lookupInternal(bookmark, fieldResetPolicy);
     }
@@ -101,7 +101,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService2 {
 
     @Programmatic
     @Override
-    public Object lookup(final Bookmark bookmark) {
+    public Optional<Object> lookup(final Bookmark bookmark) {
         return lookup(bookmark, FieldResetPolicy.RESET);
     }
 
@@ -109,18 +109,18 @@ public class BookmarkServiceInternalDefault implements BookmarkService2 {
     @SuppressWarnings("unchecked")
     @Programmatic
     @Override
-    public <T> T lookup(
+    public <T> Optional<T> lookup(
             final Bookmark bookmark,
             final FieldResetPolicy fieldResetPolicy,
             Class<T> cls) {
-        return (T) lookup(bookmark, fieldResetPolicy);
+        return (Optional<T>) lookup(bookmark, fieldResetPolicy);
     }
 
     @SuppressWarnings("unchecked")
     @Programmatic
     @Override
-    public <T> T lookup(final Bookmark bookmark, Class<T> cls) {
-        return (T) lookup(bookmark, FieldResetPolicy.RESET, cls);
+    public <T> Optional<T> lookup(final Bookmark bookmark, Class<T> cls) {
+        return (Optional<T>) lookup(bookmark, FieldResetPolicy.RESET, cls);
     }
 
 
