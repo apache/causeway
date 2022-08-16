@@ -22,8 +22,6 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
-
 import demoapp.dom.types.Samples;
 
 @Service
@@ -31,7 +29,7 @@ public class /*${showcase-name}*/Samples implements Samples</*${showcase-type}*/
 
     @Override
     public Stream</*${showcase-type}*/> stream() {
-        return new UUIDValueSemantics()
+        return new /*${showcase-value-semantics-provider}*/()
                 .getExamples()
                 .stream();
     }

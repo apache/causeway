@@ -124,6 +124,8 @@ public class ValueTypeGenTemplate {
             templateVars.put("java-package", source.javaPackage(config));
             templateVars.put("showcase-name", config.showcaseName);
             templateVars.put("showcase-type", "java.util.UUID");
+            templateVars.put("showcase-value-semantics-provider",
+                    "org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics");
 
             generateFromTemplate(templateVars, template, genTarget);
             onSourceGenerated.accept(genTarget);
