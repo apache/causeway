@@ -32,6 +32,8 @@ import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -161,6 +163,30 @@ public class _Files {
 
     public static Function<File, String> realtiveFileName(final File root) {
         return file->realtiveFileName(root, file);
+    }
+
+    /**
+     * Creates the given directory if it does not already exist.
+     * If directory is null acts as a no-op.
+     * @throws IllegalArgumentException if any pre-existing file is in conflict
+     */
+    public static void makeDir(final @Nullable File directory) {
+        if(directory==null) {
+            return; // no-op
+        }
+        if(directory.exists()) {
+            if(directory.isDirectory()) {
+                return; // nothing to do
+            }
+            throw _Exceptions.illegalArgument(
+                    "cannot create directory over pre-existing file of same name %s",
+                    directory.getAbsolutePath());
+        }
+        if(!directory.mkdirs()) {
+            throw _Exceptions.unrecoverable(
+                    "failed to create directory %s",
+                    directory.getAbsolutePath());
+        }
     }
 
 }

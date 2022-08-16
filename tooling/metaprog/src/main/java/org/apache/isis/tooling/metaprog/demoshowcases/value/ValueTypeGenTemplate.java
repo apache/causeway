@@ -19,19 +19,32 @@
 package org.apache.isis.tooling.metaprog.demoshowcases.value;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
+
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Files;
+import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Text;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.Singular;
 import lombok.Value;
 import lombok.val;
 
+@RequiredArgsConstructor
 public class ValueTypeGenTemplate {
 
     @Value @Builder
     public static class Config {
         final File outputRootDir;
         final String showcaseName;
+        final String javaPackage;
+        @Singular final Map<String, String> templateVariables = new HashMap<>();
     }
 
     @RequiredArgsConstructor
@@ -78,17 +91,63 @@ public class ValueTypeGenTemplate {
         private final File file(final Config config) {
             return new File(config.getOutputRootDir(),
                     String.format(pathTemplate, config.getShowcaseName())
-                    + generator.fileSuffix);
+                    + generator.fileSuffix)
+                    .getAbsoluteFile();
+        }
+        private final File template() {
+            return new File("src/main/resources",
+                    String.format(pathTemplate, "Template")
+                    + generator.fileSuffix)
+                    .getAbsoluteFile();
+        }
+        private final String javaPackage(final Config config) {
+            return Optional.ofNullable(new File(String.format(pathTemplate, "X")).getParent())
+                    .map(path->path.replace('/', '.'))
+                    .map(suffix->config.javaPackage + "." + suffix)
+                    .orElse(config.javaPackage);
         }
     }
 
-    public void generate(final Config config, final Consumer<File> onSourceGenerated) {
+    final Config config;
+
+    public void generate(final Consumer<File> onSourceGenerated) {
 
         for(var source: Sources.values()) {
-            val gen = source.file(config);
-            onSourceGenerated.accept(gen);
+            val template = source.template();
+
+            _Assert.assertTrue(template.exists(), ()->String.format("template %s not found", template));
+
+            val genTarget = source.file(config);
+
+            val templateVars = new HashMap<String, String>();
+            templateVars.putAll(config.templateVariables);
+            templateVars.put("java-package", source.javaPackage(config));
+            templateVars.put("showcase-name", config.showcaseName);
+            templateVars.put("showcase-type", "java.util.UUID");
+
+            generateFromTemplate(templateVars, template, genTarget);
+            onSourceGenerated.accept(genTarget);
         }
 
+    }
+
+    private void generateFromTemplate(
+            final Map<String, String> templateVars, final File template, final File genTarget) {
+        val templateLines = _Text.readLinesFromFile(template, StandardCharsets.UTF_8);
+
+        _Files.makeDir(genTarget.getParentFile());
+
+        _Text.writeLinesToFile(templateLines
+                .map(line->templateProcessor(templateVars, line)),
+                genTarget, StandardCharsets.UTF_8);
+    }
+
+    private String templateProcessor(final Map<String, String> templateVars, final String line) {
+        val lineRef = _Refs.stringRef(line);
+        templateVars.forEach((key, value)->{
+            lineRef.update(s->s.replace("/*${" + key + "}*/", value));
+        });
+        return lineRef.getValue();
     }
 
 }
