@@ -52,8 +52,7 @@ public class JavaSourceCompilingClassLoader extends ClassLoader  {
     @SneakyThrows
     private JavaSourceCompilingClassLoader() {
         // purely for the purpose of communicating with the compiler
-        this.root = Files.createTempDirectory("isis-dsl-cl");
-        this.root.toFile().deleteOnExit();
+        this.root = _Files.tempDir("isis-tooling-cl").toPath();
         log.info("tmp dir created in {}", root);
 
         Thread printingHook = new Thread(() -> {

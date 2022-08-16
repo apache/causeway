@@ -23,10 +23,11 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
@@ -51,8 +52,7 @@ public class _Files {
             final File dir,
             final Predicate<File> dirFilter,
             final Predicate<File> fileFilter) throws IOException {
-
-        final Set<File> fileList = new HashSet<>();
+        final Set<File> fileList = new LinkedHashSet<>();
         searchFiles(dir, dirFilter, fileFilter, fileList::add);
         return fileList;
     }
@@ -72,7 +72,6 @@ public class _Files {
             final Predicate<File> dirFilter,
             final Predicate<File> fileFilter,
             final Consumer<File> onFileFound) throws IOException {
-
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir.toPath())) {
             for (Path path : stream) {
                 val file = path.toFile();
@@ -144,6 +143,24 @@ public class _Files {
             }
         }
         return directoryToBeDeleted.delete();
+    }
+
+    /**
+     * Returns a temp directory with delete-on-exit policy.
+     */
+    @SneakyThrows
+    public static File tempDir(final String name) {
+        val tempDir =  Files.createTempDirectory(name).toFile();
+        tempDir.deleteOnExit();
+        return tempDir;
+    }
+
+    public static String realtiveFileName(final File root, final File file) {
+        return file.getAbsolutePath().substring(root.getAbsolutePath().length()+1);
+    }
+
+    public static Function<File, String> realtiveFileName(final File root) {
+        return file->realtiveFileName(root, file);
     }
 
 }
