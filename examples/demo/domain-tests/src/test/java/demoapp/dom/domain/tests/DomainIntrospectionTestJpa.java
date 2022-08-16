@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -36,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import demoapp.dom.domain.tests.conf.Configuration_usingJpa;
+import demoapp.dom.domain.tests.conf.MetaModelExportToConsole;
 import lombok.val;
 
 @SpringBootTest(
@@ -56,7 +58,7 @@ import lombok.val;
 @ActiveProfiles(profiles = "demo-jpa")
 class DomainIntrospectionTestJpa {
 
-    //@Inject private MetaModelService metaModelService;
+    @Inject private MetaModelService metaModelService;
     //@Inject private JaxbService jaxbService;
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private SpecificationLoader specificationLoader;
@@ -80,6 +82,8 @@ class DomainIntrospectionTestJpa {
                     .map(validationFailure->validationFailure.getMessage())
                     .collect(Collectors.joining("\n"))));
         }
+
+        new MetaModelExportToConsole().export(metaModelService.getDomainModel());
     }
 
 }

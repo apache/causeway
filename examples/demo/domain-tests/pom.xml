@@ -25,6 +25,7 @@
 	<description>Introduced to allow for JUnit integration tests with the demo-domain.</description>
 
 	<properties>
+		<!-- <maven.compiler.release>18</maven.compiler.release> -->
 	</properties>
 
     <build>
