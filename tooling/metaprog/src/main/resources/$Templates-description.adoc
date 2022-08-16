@@ -19,7 +19,7 @@ The `JavaUtilUuidHolder` interface is used to contribute a number of mixins to b
 
 [source,java]
 ----
-include::holder/JavaUtilUuidHolder.java[tags=class]
+include::holder/$TemplateHolder.java[tags=class]
 ----
 
 === JavaUtilUuidHolder2

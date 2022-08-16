@@ -4,7 +4,7 @@ JAXB supports `java.util.UUID` out-of-the-box, so no special annotations are req
 
 [source,java]
 ----
-include::JavaUtilUuidVm.java[tags=class]
+include::$TemplateVm.java[tags=class]
 ----
 <.> a no-arg constructor is required by JAXB
 <.> required property as defined to JAXB
@@ -14,4 +14,4 @@ include::JavaUtilUuidVm.java[tags=class]
 This is the default for JAXB so no additional annotation required.
 
 
-include::../JavaUtilUuids-common.adoc[]
+include::../$Templates-common.adoc[]

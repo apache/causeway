@@ -9,21 +9,21 @@ For example:
 +
 [source,java]
 ----
-include::holder/JavaUtilUuidHolder_updateReadOnlyProperty.java[tags=class]
+include::holder/$TemplateHolder_updateReadOnlyProperty.java[tags=class]
 ----
 
 * the `updateReadOnlyOptionalProperty` action is:
 +
 [source,java]
 ----
-include::holder/JavaUtilUuidHolder_updateReadOnlyOptionalProperty.java[tags=class]
+include::holder/$TemplateHolder_updateReadOnlyOptionalProperty.java[tags=class]
 ----
 
 * the `actionReturning` action is:
 +
 [source,java]
 ----
-include::holder/JavaUtilUuidHolder_actionReturning.java[tags=class]
+include::holder/$TemplateHolder_actionReturning.java[tags=class]
 ----
 
 
@@ -31,7 +31,7 @@ include::holder/JavaUtilUuidHolder_actionReturning.java[tags=class]
 +
 [source,java]
 ----
-include::holder/JavaUtilUuidHolder_actionReturningCollection.java[tags=class]
+include::holder/$TemplateHolder_actionReturningCollection.java[tags=class]
 ----
 
 == Mixin properties
@@ -42,7 +42,7 @@ We also use the interface to contribute a mixin property:
 +
 [source,java]
 ----
-include::holder/JavaUtilUuidHolder_mixinProperty.java[tags=class]
+include::holder/$TemplateHolder_mixinProperty.java[tags=class]
 ----
 
 
@@ -52,7 +52,7 @@ To demonstrate support for label positions using `@PropertyLayout(labelPosition=
 
 [source,java]
 ----
-include::holder/JavaUtilUuidHolder2.java[tags=class]
+include::holder/$TemplateHolder2.java[tags=class]
 ----
 
 <.> The default methods have annotations that are automatically inherited.
