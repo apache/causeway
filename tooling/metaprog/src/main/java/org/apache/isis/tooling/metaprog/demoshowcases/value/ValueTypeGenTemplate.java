@@ -60,20 +60,20 @@ public class ValueTypeGenTemplate {
         DOC(".adoc"){
             @Override String formatAsComment(final String text) {
                 return "//// " + text + " ////"; }
-            @Override String formatAsTemplateVar(final String text) {
-                return "////${" + text + "}////"; }
+            @Override String formatAsTemplateVar(final String key) {
+                return "#{" + key + "}"; } // ADOC pass through var syntax
         },
         JAVA(".java"){
             @Override String formatAsComment(final String text) {
                 return "/* " + text + " */"; }
-            @Override String formatAsTemplateVar(final String text) {
-                return "/*${" + text + "}*/"; }
+            @Override String formatAsTemplateVar(final String key) {
+                return "/*${" + key + "}*/"; }
         },
         LAYOUT(".layout.xml"){
             @Override String formatAsComment(final String text) {
                 return "<!-- " + text + " -->"; }
-            @Override String formatAsTemplateVar(final String text) {
-                return "<!--${" + text + "}-->"; }
+            @Override String formatAsTemplateVar(final String key) {
+                return "<!--${" + key + "}-->"; }
         };
         boolean isDoc() { return this == DOC; }
         boolean isJava() { return this == JAVA; }

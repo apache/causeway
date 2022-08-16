@@ -40,8 +40,8 @@ class ValueTypeGenTemplateTest {
                   || file.getName().endsWith(".adoc")
               );
 
-        val outputRootDir = new File("D:/tmp");
-                //_Files.tempDir("isis-tooling-showcases");
+        val outputRootDir = _Files.tempDir("isis-tooling-showcases");
+                //new File("D:/tmp/uuid");
         log.info("tmp dir created in {}", outputRootDir);
 
         val generator = new ValueTypeGenTemplate(Config.builder()

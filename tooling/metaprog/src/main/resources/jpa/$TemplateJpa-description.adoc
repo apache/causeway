@@ -5,7 +5,7 @@
 TODO this yet is just a copy from JDO
 ====
 
-JDO supports `java.util.UUID` out-of-the-box, so no special annotations are required.
+JDO supports `#{showcase-type}` out-of-the-box, so no special annotations are required.
 
 [source,java]
 ----
