@@ -20,6 +20,7 @@ package /*${java-package}*/;
 
 import javax.inject.Named;
 
+/*${before-class-declaration}*/
 @Named("demo./*${showcase-name}*/Holder")
 //tag::class[]
 public interface /*${showcase-name}*/Holder {

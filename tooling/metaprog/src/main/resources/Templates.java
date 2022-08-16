@@ -45,6 +45,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javautil.uuids.persistence./*${showcase-name}*/Entity;
 import demoapp.dom.types.javautil.uuids.vm./*${showcase-name}*/Vm;
 
+/*${before-class-declaration}*/
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)

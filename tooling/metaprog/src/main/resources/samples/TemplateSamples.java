@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import demoapp.dom.types.Samples;
 
+/*${before-class-declaration}*/
 @Service
 public class /*${showcase-name}*/Samples implements Samples</*${showcase-type}*/> {
 

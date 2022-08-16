@@ -47,6 +47,9 @@ class ValueTypeGenTemplateTest {
                 .outputRootDir(outputRootDir)
                 .showcaseName("JavaUtilUuid")
                 .javaPackage("demoapp.dom.types.javautil.uuids")
+                .showcaseValueType("java.util.UUID")
+                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics")
+                .suppressGeneratedFileNotice(true)
                 .build());
 
         val generatedFiles = _Sets.<File>newLinkedHashSet();
@@ -77,24 +80,37 @@ class ValueTypeGenTemplateTest {
         val sortedA = Can.ofCollection(filesA).sorted(Comparator.naturalOrder());
         val sortedB = Can.ofCollection(filesB).sorted(Comparator.naturalOrder());
 
-        val failedFiles = sortedA
-                .zipMap(sortedB, (a, b)->
-                     Objects.equals(
-                            _Text.readLinesFromFile(a, StandardCharsets.UTF_8),
-                            _Text.readLinesFromFile(b, StandardCharsets.UTF_8))
+        val failedFileComparisons = sortedA
+                .zipMap(sortedB, (a, b)->{
+
+                    var linesA = _Text.normalize(
+                            _Text.readLinesFromFile(a, StandardCharsets.UTF_8));
+                    var linesB = _Text.normalize(
+                            _Text.readLinesFromFile(b, StandardCharsets.UTF_8));
+
+                    return Objects.equals(linesA, linesB)
                             ? null
-                            : b)
-                .map(failedFile->failedFile.getName());
+                            : String.format("non equal line in file %s: %s",
+                                    a.getName(),
+                                    firstLineNotEqual(linesA, linesB));
+                });
 
+        failedFileComparisons.forEach(msg->System.err.printf("%s%n", msg));
 
-        failedFiles.forEach(failedFile->{
-            System.err.printf("failed comparision: %s%n", failedFile);
-        });
-
-        if(failedFiles.isNotEmpty()) {
-            fail(String.format("some file contents are not equal %s", failedFiles));
+        if(failedFileComparisons.isNotEmpty()) {
+            fail(String.format("some file contents are not equal %s", failedFileComparisons));
         }
+    }
 
+    private String firstLineNotEqual(final Can<String> linesA, final Can<String> linesB) {
+        int lineIndex = 0;
+        for(val lineA : linesA) {
+            val lineB = linesB.get(lineIndex++).orElse(null);
+            if(!lineA.equals(lineB)) {
+                return String.format("%s <-> %s", lineA, lineB);
+            }
+        }
+        return "";
     }
 
 }

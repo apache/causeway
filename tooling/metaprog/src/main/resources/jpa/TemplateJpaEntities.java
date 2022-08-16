@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 
+/*${before-class-declaration}*/
 @Profile("demo-jpa")
 @Service
 public class /*${showcase-name}*/JpaEntities

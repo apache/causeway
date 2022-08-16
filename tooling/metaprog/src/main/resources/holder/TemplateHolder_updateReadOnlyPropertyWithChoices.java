@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
 
+/*${before-class-declaration}*/
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT
