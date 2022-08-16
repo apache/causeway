@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.persistence;
+package /*${java-package}*/;
 
 import javax.inject.Inject;
 
@@ -26,11 +26,11 @@ import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
-public class JavaUtilUuidSeeding
+public class /*${showcase-name}*/Seeding
 extends SeedServiceAbstract {
 
     @Inject
-    public JavaUtilUuidSeeding(ValueHolderRepository<java.util.UUID, ? extends JavaUtilUuidEntity> entities) {
+    public /*${showcase-name}*/Seeding(ValueHolderRepository</*${showcase-type}*/, ? extends /*${showcase-name}*/Entity> entities) {
         super(entities);
     }
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.jdo;
+package /*${java-package}*/;
 
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
@@ -37,47 +37,47 @@ import org.apache.isis.applib.annotation.Title;
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidEntity;
+import demoapp.dom.types.javautil.uuids.persistence./*${showcase-name}*/Entity;
 
 @Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@Named("demo.JavaUtilUuidEntity")
+@Named("demo./*${showcase-name}*/Entity")
 @DomainObject
-public class JavaUtilUuidJdo                                          // <.>
-        extends JavaUtilUuidEntity {
+public class /*${showcase-name}*/Jdo                                          // <.>
+        extends /*${showcase-name}*/Entity {
 
 //end::class[]
-    public JavaUtilUuidJdo(final java.util.UUID initialValue) {
+    public /*${showcase-name}*/Jdo(final /*${showcase-type}*/ initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "java.util.UUID JDO entity: ")
+    @Title(prepend = "/*${showcase-type}*/ JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
-    private java.util.UUID readOnlyProperty;
+    private /*${showcase-type}*/ readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
-    private java.util.UUID readWriteProperty;
+    private /*${showcase-type}*/ readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
-    private java.util.UUID readOnlyOptionalProperty;
+    private /*${showcase-type}*/ readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
-    private java.util.UUID readWriteOptionalProperty;
+    private /*${showcase-type}*/ readWriteOptionalProperty;
 
 }
 //end::class[]

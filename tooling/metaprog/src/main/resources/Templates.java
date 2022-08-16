@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids;
+package /*${java-package}*/;
 
 import java.util.List;
 
@@ -42,41 +42,41 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidEntity;
-import demoapp.dom.types.javautil.uuids.vm.JavaUtilUuidVm;
+import demoapp.dom.types.javautil.uuids.persistence./*${showcase-name}*/Entity;
+import demoapp.dom.types.javautil.uuids.vm./*${showcase-name}*/Vm;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.JavaUtilUuids")
+@Named("demo./*${showcase-name}*/s")
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 //@Log4j2
-public class JavaUtilUuids implements HasAsciiDocDescription {
+public class /*${showcase-name}*/s implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "java.util.UUID data type";
+        return "/*${showcase-type}*/ data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JavaUtilUuidVm openViewModel(final java.util.UUID initialValue) {
-        return new JavaUtilUuidVm(initialValue);
+    public /*${showcase-name}*/Vm openViewModel(final /*${showcase-type}*/ initialValue) {
+        return new /*${showcase-name}*/Vm(initialValue);
     }
-    @MemberSupport public java.util.UUID default0OpenViewModel() {
+    @MemberSupport public /*${showcase-type}*/ default0OpenViewModel() {
         return samples.single();
     }
 
     @Collection
-    public List<? extends JavaUtilUuidEntity> getEntities() {
+    public List<? extends /*${showcase-name}*/Entity> getEntities() {
         return entities.all();
     }
 
     @Inject
     @XmlTransient
-    ValueHolderRepository<java.util.UUID, ? extends JavaUtilUuidEntity> entities;
+    ValueHolderRepository</*${showcase-type}*/, ? extends /*${showcase-name}*/Entity> entities;
 
     @Inject
     @XmlTransient
-    Samples<java.util.UUID> samples;
+    Samples</*${showcase-type}*/> samples;
 
 }

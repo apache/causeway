@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.holder;
+package /*${java-package}*/;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -38,19 +38,19 @@ import lombok.RequiredArgsConstructor;
         , associateWith = "readOnlyOptionalProperty"
         , sequence = "1")
 @RequiredArgsConstructor
-public class JavaUtilUuidHolder_updateReadOnlyOptionalProperty {
+public class /*${showcase-name}*/Holder_updateReadOnlyOptionalProperty {
 
-    private final JavaUtilUuidHolder holder;
+    private final /*${showcase-name}*/Holder holder;
 
-    @MemberSupport public JavaUtilUuidHolder act(
+    @MemberSupport public /*${showcase-name}*/Holder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            final java.util.UUID newValue
+            final /*${showcase-type}*/ newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public java.util.UUID default0Act() {
+    @MemberSupport public /*${showcase-type}*/ default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

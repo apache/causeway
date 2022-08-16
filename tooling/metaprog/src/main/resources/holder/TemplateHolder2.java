@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.holder;
+package /*${java-package}*/;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Property;
@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 
 //tag::class[]
-public interface JavaUtilUuidHolder2 extends JavaUtilUuidHolder {
+public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder {
 
     @Property                                               // <.>
     @PropertyLayout(
@@ -33,7 +33,7 @@ public interface JavaUtilUuidHolder2 extends JavaUtilUuidHolder {
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "1")     // <.>
-    default java.util.UUID getReadOnlyPropertyDerivedLabelPositionLeft() {
+    default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
 
@@ -44,7 +44,7 @@ public interface JavaUtilUuidHolder2 extends JavaUtilUuidHolder {
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "2")
-    default java.util.UUID getReadOnlyPropertyDerivedLabelPositionTop() {
+    default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
 
@@ -55,7 +55,7 @@ public interface JavaUtilUuidHolder2 extends JavaUtilUuidHolder {
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "3")
-    default java.util.UUID getReadOnlyPropertyDerivedLabelPositionRight() {
+    default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
 
@@ -66,7 +66,7 @@ public interface JavaUtilUuidHolder2 extends JavaUtilUuidHolder {
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "4")
-    default java.util.UUID getReadOnlyPropertyDerivedLabelPositionNone() {
+    default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }
 

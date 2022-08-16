@@ -19,7 +19,6 @@
 package demoapp.dom.types.javautil.uuids.holder;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -30,9 +29,8 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.types.Samples;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
@@ -63,7 +61,7 @@ public class JavaUtilUuidHolder_updateReadOnlyPropertyWithChoices {
     }
 
     @Inject
-    Samples<UUID> samples;
+    Samples<java.util.UUID> samples;
 
 }
 //end::class[]

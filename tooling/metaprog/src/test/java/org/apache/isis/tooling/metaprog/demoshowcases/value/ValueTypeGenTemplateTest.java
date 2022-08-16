@@ -77,20 +77,23 @@ class ValueTypeGenTemplateTest {
         val sortedA = Can.ofCollection(filesA).sorted(Comparator.naturalOrder());
         val sortedB = Can.ofCollection(filesB).sorted(Comparator.naturalOrder());
 
-        val equalsVector = sortedA.zipMap(sortedB, (a, b)->{
+        val failedFiles = sortedA
+                .zipMap(sortedB, (a, b)->
+                     Objects.equals(
+                            _Text.readLinesFromFile(a, StandardCharsets.UTF_8),
+                            _Text.readLinesFromFile(b, StandardCharsets.UTF_8))
+                            ? null
+                            : b)
+                .map(failedFile->failedFile.getName());
 
-            return Objects.equals(
-                    _Text.readLinesFromFile(a, StandardCharsets.UTF_8),
-                    _Text.readLinesFromFile(b, StandardCharsets.UTF_8)
-                    );
+
+        failedFiles.forEach(failedFile->{
+            System.err.printf("failed comparision: %s%n", failedFile);
         });
 
-        for(var flag: equalsVector) {
-            if(!flag) {
-                fail(String.format("some file contents are not equal %s", equalsVector));
-            }
+        if(failedFiles.isNotEmpty()) {
+            fail(String.format("some file contents are not equal %s", failedFiles));
         }
-
 
     }
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.jpa;
+package /*${java-package}*/;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -25,16 +25,16 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jpa")
 @Service
-public class JavaUtilUuidJpaEntities
-extends ValueHolderRepository<java.util.UUID, JavaUtilUuidJpa> {
+public class /*${showcase-name}*/JpaEntities
+extends ValueHolderRepository</*${showcase-type}*/, /*${showcase-name}*/Jpa> {
 
-    protected JavaUtilUuidJpaEntities() {
-        super(JavaUtilUuidJpa.class);
+    protected /*${showcase-name}*/JpaEntities() {
+        super(/*${showcase-name}*/Jpa.class);
     }
 
     @Override
-    protected JavaUtilUuidJpa newDetachedEntity(java.util.UUID value) {
-        return new JavaUtilUuidJpa(value);
+    protected /*${showcase-name}*/Jpa newDetachedEntity(/*${showcase-type}*/ value) {
+        return new /*${showcase-name}*/Jpa(value);
     }
 
 }

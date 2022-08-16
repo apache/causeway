@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.persistence;
+package /*${java-package}*/;
 
 import javax.inject.Named;
 
@@ -24,18 +24,18 @@ import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.types.javautil.uuids.holder.JavaUtilUuidHolder2;
+import demoapp.dom.types.javautil.uuids.holder./*${showcase-name}*/Holder2;
 
-@Named("demo.JavaUtilUuidEntity") // shared permissions with concrete sub class
+@Named("demo./*${showcase-name}*/Entity") // shared permissions with concrete sub class
 @DomainObject
-public abstract class JavaUtilUuidEntity
+public abstract class /*${showcase-name}*/Entity
 implements
     HasAsciiDocDescription,
-    JavaUtilUuidHolder2,
-    ValueHolder<java.util.UUID> {
+    /*${showcase-name}*/Holder2,
+    ValueHolder</*${showcase-type}*/> {
 
     @Override
-    public java.util.UUID value() {
+    public /*${showcase-type}*/ value() {
         return getReadOnlyProperty();
     }
 

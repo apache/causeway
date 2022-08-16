@@ -16,25 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.holder;
+package /*${java-package}*/;
 
 import javax.inject.Named;
 
-@Named("demo.JavaUtilUuidHolder")
+@Named("demo./*${showcase-name}*/Holder")
 //tag::class[]
-public interface JavaUtilUuidHolder {
+public interface /*${showcase-name}*/Holder {
 
-    java.util.UUID getReadOnlyProperty();
-    void setReadOnlyProperty(java.util.UUID c);
+    /*${showcase-type}*/ getReadOnlyProperty();
+    void setReadOnlyProperty(/*${showcase-type}*/ c);
 
-    java.util.UUID getReadWriteProperty();
-    void setReadWriteProperty(java.util.UUID c);
+    /*${showcase-type}*/ getReadWriteProperty();
+    void setReadWriteProperty(/*${showcase-type}*/ c);
 
-    java.util.UUID getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(java.util.UUID c);
+    /*${showcase-type}*/ getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(/*${showcase-type}*/ c);
 
-    java.util.UUID getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(java.util.UUID c);
+    /*${showcase-type}*/ getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(/*${showcase-type}*/ c);
 
 }
 //end::class[]

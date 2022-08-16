@@ -19,7 +19,6 @@
 package demoapp.dom.types.javautil.uuids.holder;
 
 import java.util.Collection;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -27,9 +26,8 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.types.Samples;
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
@@ -45,7 +43,7 @@ public class JavaUtilUuidHolder_actionReturningCollection {
     }
 
     @Inject
-    Samples<UUID> samples;
+    Samples<java.util.UUID> samples;
 
 }
 //end::class[]

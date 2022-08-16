@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.jdo;
+package /*${java-package}*/;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -25,16 +25,16 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jdo")
 @Service
-public class JavaUtilUuidJdoEntities
-extends ValueHolderRepository<java.util.UUID, JavaUtilUuidJdo> {
+public class /*${showcase-name}*/JdoEntities
+extends ValueHolderRepository</*${showcase-type}*/, /*${showcase-name}*/Jdo> {
 
-    protected JavaUtilUuidJdoEntities() {
-        super(JavaUtilUuidJdo.class);
+    protected /*${showcase-name}*/JdoEntities() {
+        super(/*${showcase-name}*/Jdo.class);
     }
 
     @Override
-    protected JavaUtilUuidJdo newDetachedEntity(java.util.UUID value) {
-        return new JavaUtilUuidJdo(value);
+    protected /*${showcase-name}*/Jdo newDetachedEntity(/*${showcase-type}*/ value) {
+        return new /*${showcase-name}*/Jdo(value);
     }
 
 }

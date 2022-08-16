@@ -16,10 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.holder;
+package /*${java-package}*/;
 
 import java.util.Collection;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -27,25 +26,24 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.types.Samples;
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
-public class JavaUtilUuidHolder_actionReturningCollection {
+public class /*${showcase-name}*/Holder_actionReturningCollection {
 
-    private final JavaUtilUuidHolder holder;
+    private final /*${showcase-name}*/Holder holder;
 
-    public Collection<java.util.UUID> act() {
+    public Collection</*${showcase-type}*/> act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples<UUID> samples;
+    Samples</*${showcase-type}*/> samples;
 
 }
 //end::class[]

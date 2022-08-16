@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.holder;
+package /*${java-package}*/;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -36,16 +36,16 @@ import lombok.RequiredArgsConstructor;
         , associateWith = "readOnlyProperty"
         , sequence = "1")
 @RequiredArgsConstructor
-public class JavaUtilUuidHolder_updateReadOnlyProperty {
+public class /*${showcase-name}*/Holder_updateReadOnlyProperty {
 
-    private final JavaUtilUuidHolder holder;
+    private final /*${showcase-name}*/Holder holder;
 
-    @MemberSupport public JavaUtilUuidHolder act(final java.util.UUID newValue) {
+    @MemberSupport public /*${showcase-name}*/Holder act(final /*${showcase-type}*/ newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public java.util.UUID default0Act() {
+    @MemberSupport public /*${showcase-type}*/ default0Act() {
         return holder.getReadOnlyProperty();
     }
 

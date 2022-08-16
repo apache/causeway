@@ -16,10 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.holder;
+package /*${java-package}*/;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -30,9 +29,8 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.types.Samples;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
@@ -44,26 +42,26 @@ import demoapp.dom.types.Samples;
         , associateWith = "readOnlyProperty"
         , sequence = "2")
 @RequiredArgsConstructor
-public class JavaUtilUuidHolder_updateReadOnlyPropertyWithChoices {
+public class /*${showcase-name}*/Holder_updateReadOnlyPropertyWithChoices {
 
-    private final JavaUtilUuidHolder holder;
+    private final /*${showcase-name}*/Holder holder;
 
-    @MemberSupport public JavaUtilUuidHolder act(final java.util.UUID newValue) {
+    @MemberSupport public /*${showcase-name}*/Holder act(final /*${showcase-type}*/ newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public java.util.UUID default0Act() {
+    @MemberSupport public /*${showcase-type}*/ default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport public List<java.util.UUID> choices0Act() {
+    @MemberSupport public List</*${showcase-type}*/> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples<UUID> samples;
+    Samples</*${showcase-type}*/> samples;
 
 }
 //end::class[]

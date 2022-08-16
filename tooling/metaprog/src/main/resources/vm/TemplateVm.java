@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.vm;
+package /*${java-package}*/;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -37,47 +37,47 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javautil.uuids.holder.JavaUtilUuidHolder2;
+import demoapp.dom.types.javautil.uuids.holder./*${showcase-name}*/Holder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.JavaUtilUuidVm")
+@Named("demo./*${showcase-name}*/Vm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
-public class JavaUtilUuidVm
-        implements HasAsciiDocDescription, JavaUtilUuidHolder2 {
+public class /*${showcase-name}*/Vm
+        implements HasAsciiDocDescription, /*${showcase-name}*/Holder2 {
 
 //end::class[]
-    public JavaUtilUuidVm(final java.util.UUID initialValue) {
+    public /*${showcase-name}*/Vm(final /*${showcase-type}*/ initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "java.util.UUID view model: ")
+    @Title(prepend = "/*${showcase-type}*/ view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
-    private java.util.UUID readOnlyProperty;
+    private /*${showcase-type}*/ readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private java.util.UUID readWriteProperty;
+    private /*${showcase-type}*/ readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Getter @Setter
-    private java.util.UUID readOnlyOptionalProperty;
+    private /*${showcase-type}*/ readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Getter @Setter
-    private java.util.UUID readWriteOptionalProperty;
+    private /*${showcase-type}*/ readWriteOptionalProperty;
 
 }
 //end::class[]

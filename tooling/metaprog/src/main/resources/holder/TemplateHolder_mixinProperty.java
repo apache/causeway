@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.holder;
+package /*${java-package}*/;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -29,11 +29,11 @@ import lombok.RequiredArgsConstructor;
 @Property()
 @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "contributed", sequence = "1")
 @RequiredArgsConstructor
-public class JavaUtilUuidHolder_mixinProperty {
+public class /*${showcase-name}*/Holder_mixinProperty {
 
-    private final JavaUtilUuidHolder holder;
+    private final /*${showcase-name}*/Holder holder;
 
-    public java.util.UUID prop() {
+    public /*${showcase-type}*/ prop() {
         return holder.getReadOnlyProperty();
     }
 
