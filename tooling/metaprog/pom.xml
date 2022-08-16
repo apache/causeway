@@ -20,9 +20,9 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-tooling-dsl</artifactId>
+	<artifactId>isis-tooling-metaprog</artifactId>
 
-	<name>Apache Isis - Tooling - Java DSL (Code Gen)</name>
+	<name>Apache Isis - Tooling - Meta Programming</name>
 	<description>
         Tools for Java meta-programming and runtime class generaton.
     </description>

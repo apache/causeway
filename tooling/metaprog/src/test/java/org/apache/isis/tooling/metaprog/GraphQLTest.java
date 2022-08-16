@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tooling.dsl;
+package org.apache.isis.tooling.metaprog;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
@@ -29,6 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.tooling.metaprog.GraphQLToJavaSourceConverter;
+import org.apache.isis.tooling.metaprog.JavaSourceCompilingClassLoader;
 
 import lombok.val;
 

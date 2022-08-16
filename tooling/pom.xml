@@ -323,7 +323,7 @@
 		<module>javamodel</module>
 		<module>projectmodel</module>
 		<module>java2adoc</module>
-		<module>dsl</module>
+		<module>metaprog</module>
 		<module>cli</module>
 	</modules>
 
