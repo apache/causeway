@@ -71,6 +71,34 @@ class ValueTypeGenTemplateTest {
         testShowcase(config);
     }
 
+    @Test
+    void testWShort() throws IOException {
+
+        val config = fundamentalTypeSupportNotice()
+                .outputRootDir(outputDir("wshort"))
+                .showcaseName("WrapperShort")
+                .javaPackage("demoapp.dom.types.javalang.shorts")
+                .showcaseValueType("java.lang.Short")
+                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.ShortValueSemantics")
+                .build();
+
+        testShowcase(config);
+    }
+
+    @Test
+    void testWByte() throws IOException {
+
+        val config = fundamentalTypeSupportNotice()
+                .outputRootDir(outputDir("wbyte"))
+                .showcaseName("WrapperByte")
+                .javaPackage("demoapp.dom.types.javalang.bytes")
+                .showcaseValueType("java.lang.Byte")
+                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics")
+                .build();
+
+        testShowcase(config);
+    }
+
     // -- HELPER
 
     private ConfigBuilder fundamentalTypeSupportNotice() {
