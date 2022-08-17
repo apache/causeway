@@ -33,7 +33,7 @@ import org.apache.isis.applib.value.Clob;
 
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "isisApplib.SwaggerServiceMenu"
 )
 @DomainServiceLayout(
@@ -116,4 +116,4 @@ public class SwaggerServiceMenu {
 
     @javax.inject.Inject
     SwaggerService swaggerService;
-}    
+}

@@ -235,11 +235,12 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributed.As.EITHER));
         }
 
+
         @Test
-        public void onDomainServiceForViewContributionsOnly() {
+        public void onDomainServiceForView() {
 
             // given
-            @DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
+            @DomainService(nature = NatureOfService.VIEW)
             class CustomerService {
 
                 @ActionLayout(contributed = Contributed.AS_NEITHER)
@@ -253,45 +254,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
                 will(returnValue(mockObjSpec));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
-                }));
-            }});
-
-            expectNoMethodsRemoved();
-
-            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
-
-            // when
-            facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
-
-            // then
-            final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
-            assertThat(facet, CoreMatchers.is(not(nullValue())));
-            assertThat(facet instanceof NotContributedFacetForActionLayoutAnnotation, CoreMatchers.is(true));
-            final NotContributedFacetForActionLayoutAnnotation facetImpl = (NotContributedFacetForActionLayoutAnnotation) facet;
-            assertThat(facetImpl.value(), CoreMatchers.equalTo(NotContributed.As.EITHER));
-
-        }
-
-        @Test
-        public void onDomainServiceForViewMenuOnly() {
-
-            // given
-            @DomainService(nature = NatureOfService.VIEW_MENU_ONLY)
-            class CustomerService {
-
-                @ActionLayout(contributed = Contributed.AS_NEITHER)
-                public String name() {
-                    return "Joe";
-                }
-            }
-
-            context.checking(new Expectations() {{
-                allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-                will(returnValue(mockObjSpec));
-
-                allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_MENU_ONLY) { }));
+                will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) { }));
 
                 allowing(mockObjSpec).getFacet(MixinFacet.class);
                 will(returnValue(null));

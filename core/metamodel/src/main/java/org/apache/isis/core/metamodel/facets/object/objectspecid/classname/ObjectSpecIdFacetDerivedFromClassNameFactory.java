@@ -170,8 +170,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory
             // don't check if domain service isn't a target in public API (UI/REST)
             final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
             if(domainServiceFacet != null) {
-                if(domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN ||
-                        domainServiceFacet.getNatureOfService() == NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
+                if(domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN) {
                     return false;
                 }
             }

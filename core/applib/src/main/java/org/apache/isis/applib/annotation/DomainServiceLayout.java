@@ -63,8 +63,8 @@ public @interface DomainServiceLayout {
      * <p>
      *     Either this attribute or {@link DomainService#menuOrder()} can be used; they are equivalent.
      *     Typically this attribute is used for services with a {@link DomainService#nature() nature} of
-     *     {@link NatureOfService#VIEW_MENU_ONLY} (these are visible in the UI) whereas
-     *     {@link DomainService#menuOrder()} is used for services with a nature of
+     *     {@link NatureOfService#VIEW} (these are visible in the UI) whereas
+     *     {@link DomainServiceLayout#menuOrder()} is used for services with a nature of
      *     {@link NatureOfService#DOMAIN domain} (which do not appear in the UI).
      * </p>
      *

@@ -178,15 +178,9 @@ public @interface ActionLayout {
     // //////////////////////////////////////
 
     /**
-     * For actions of domain services that can be viewed and contributed (that is, whose
-     * {@link DomainService#nature() nature} is either {@link org.apache.isis.applib.annotation.NatureOfService#VIEW}
-     * or {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY}), specifies how the
-     * contribution should be implemented, as an action, as an association, or as both.
-     *
-     * <p>
-     *     Has no meaning for actions of domain entities.
-     * </p>
+     * @deprecated  - contributed actions (from domain services) now removed, this annotation attribute has no effect.
      */
+    @Deprecated
     Contributed contributed() default Contributed.AS_BOTH;
 
 

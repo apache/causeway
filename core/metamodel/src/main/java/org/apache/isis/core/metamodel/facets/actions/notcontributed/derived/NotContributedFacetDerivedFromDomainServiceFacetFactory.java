@@ -47,9 +47,6 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactory extends Fac
         }
 
         final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
-        if(natureOfService == NatureOfService.VIEW_CONTRIBUTIONS_ONLY || natureOfService == NatureOfService.VIEW) {
-            return;
-        }
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new NotContributedFacetDerivedFromDomainServiceFacet(natureOfService, facetHolder));

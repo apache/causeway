@@ -350,7 +350,6 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
             if (natureOfService == NatureOfService.REST ||
                     natureOfService == NatureOfService.VIEW_REST_ONLY ||
-                    natureOfService == NatureOfService.VIEW_CONTRIBUTIONS_ONLY ||
                     natureOfService == NatureOfService.DOMAIN) {
                 return;
             }

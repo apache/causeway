@@ -27,16 +27,16 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates the (service) action should be not be displayed in the menu.
- * 
+ *
  * <p>
  * It may still be contributed (unless it has been annotated as
  * {@link NotContributed}). If {@link Hidden}, then also implies that the menu
  * should not appear in the service menu.
- * 
+ *
  * <p>
  * Has no meaning if annotated on an action of a regular entity.
- * 
- * @deprecated - instead move such actions into a separate domain service and specify nature of {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY contributions} or {@link org.apache.isis.applib.annotation.NatureOfService#DOMAIN domain} using {@link DomainService#nature()}.
+ *
+ * @deprecated - no longer has any meaning, because contributed actions from domain services are no longer supported.
  */
 @Deprecated
 @Inherited

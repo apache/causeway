@@ -41,13 +41,7 @@ public interface DomainServiceFacet extends Facet {
      * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#nature()}.
      *
      * <p>
-     *     If set to {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_MENU_ONLY} or {@link org.apache.isis.applib.annotation.NatureOfService#DOMAIN}, then {@link org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet} is
-     *     derived for all actions.
-     * </p>
-     *
-     * <p>
-     *     If set to {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY} or {@link org.apache.isis.applib.annotation.NatureOfService#DOMAIN}, then {@link org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet} is
-     *     derived for all actions.
+     *     Only now used to indicate if a menu is in the Wicket viewer UI and/or in the REST API.  Support for contributed actions/associations from domain services has been removed.
      * </p>
      */
     public NatureOfService getNatureOfService();

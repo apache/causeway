@@ -24,33 +24,23 @@ package org.apache.isis.applib.annotation;
 public enum NatureOfService {
 
     /**
-     * The default; the service's actions appear on menus and can be contributed to domain objects as actions,
-     * properties or collections.
+     * The default; the service's actions appear on menus but do not (ni onger) contribute.
      */
     VIEW,
     /**
      * The service's actions appear on menus but do not contribute.
      *
-     * <p>
-     * Equivalent to annotating all actions with (the now deprecated) {@link org.apache.isis.applib.annotation.NotContributed} annotation.
-     * </p>
+     * @deprecated - replaced in isis v2 with VIEW.
      */
     @Deprecated
     VIEW_MENU_ONLY,
     /**
-     * The service's actions can be contributed to domain objects as actions, properties or collections but do not
-     * appear on menus.
-     *
-     * <p>
-     * Equivalent to annotating all actions with (the now deprecated) {@link org.apache.isis.applib.annotation.NotInServiceMenu} annotation.
-     * </p>
-     */
-    @Deprecated
-    VIEW_CONTRIBUTIONS_ONLY,
-    /**
      * The services actions should only be visible in the REST API exposed by the Restful Objects viewer.
      */
     REST,
+    /**
+     * @deprecated - replaced in isis v2 with REST
+     */
     @Deprecated
     VIEW_REST_ONLY,
 
@@ -60,6 +50,8 @@ public enum NatureOfService {
      * <p>
      * Equivalent to annotating all actions with both (the now deprecated) {@link org.apache.isis.applib.annotation.NotInServiceMenu} and {@link org.apache.isis.applib.annotation.NotContributed} annotations).
      * </p>
+     *
+     * @deprecated - replaced in isis v2 with @Service or @Component annotation
      */
     @Deprecated
     DOMAIN;
