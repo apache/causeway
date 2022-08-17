@@ -99,6 +99,48 @@ class ValueTypeGenTemplateTest {
         testShowcase(config);
     }
 
+    @Test
+    void testWDouble() throws IOException {
+
+        val config = fundamentalTypeSupportNotice()
+                .outputRootDir(outputDir("wdouble"))
+                .showcaseName("WrapperDouble")
+                .javaPackage("demoapp.dom.types.javalang.doubles")
+                .showcaseValueType("java.lang.Double")
+                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics")
+                .build();
+
+        testShowcase(config);
+    }
+
+    @Test
+    void testWFloat() throws IOException {
+
+        val config = fundamentalTypeSupportNotice()
+                .outputRootDir(outputDir("wfloat"))
+                .showcaseName("WrapperFloat")
+                .javaPackage("demoapp.dom.types.javalang.floats")
+                .showcaseValueType("java.lang.Float")
+                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics")
+                .build();
+
+        testShowcase(config);
+    }
+
+//    @Test
+//    void testWBoolean() throws IOException {
+//
+//        val config = fundamentalTypeSupportNotice()
+//                .outputRootDir(outputDir("wbool"))
+//                .showcaseName("WrapperBoolean")
+//                .javaPackage("demoapp.dom.types.javalang.booleans")
+//                .showcaseValueType("java.lang.Boolean")
+//                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics")
+//                .build();
+//
+//        testShowcase(config);
+//    }
+
     // -- HELPER
 
     private ConfigBuilder fundamentalTypeSupportNotice() {
