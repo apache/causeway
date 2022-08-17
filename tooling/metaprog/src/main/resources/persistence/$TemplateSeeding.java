@@ -31,7 +31,7 @@ public class /*${showcase-name}*/Seeding
 extends SeedServiceAbstract {
 
     @Inject
-    public /*${showcase-name}*/Seeding(ValueHolderRepository</*${showcase-type}*/, ? extends /*${showcase-name}*/Entity> entities) {
+    public /*${showcase-name}*/Seeding(ValueHolderRepository</*${showcase-type-boxed}*/, ? extends /*${showcase-name}*/Entity> entities) {
         super(entities);
     }
 

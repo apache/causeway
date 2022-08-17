@@ -74,10 +74,10 @@ public class /*${showcase-name}*/s implements HasAsciiDocDescription {
 
     @Inject
     @XmlTransient
-    ValueHolderRepository</*${showcase-type}*/, ? extends /*${showcase-name}*/Entity> entities;
+    ValueHolderRepository</*${showcase-type-boxed}*/, ? extends /*${showcase-name}*/Entity> entities;
 
     @Inject
     @XmlTransient
-    Samples</*${showcase-type}*/> samples;
+    Samples</*${showcase-type-boxed}*/> samples;
 
 }

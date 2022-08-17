@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.collections.Can;
@@ -18,6 +19,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Config;
 import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Config.ConfigBuilder;
+import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Template;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -52,6 +54,24 @@ class ValueTypeGenTemplateTest {
                 .javaPackage("demoapp.dom.types.javalang.longs")
                 .showcaseValueType("java.lang.Long")
                 .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics")
+                .build();
+
+        testShowcase(config);
+    }
+
+    @Test @Disabled("WIP")
+    void testPLong() throws IOException {
+
+        val config = fundamentalTypeSupportNotice()
+                .outputRootDir(outputDir("plong"))
+                .showcaseName("PrimitiveLong")
+                .javaPackage("demoapp.dom.types.primitive.longs")
+                .showcaseValueType("long")
+                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics")
+                .templatePredicate(template->
+                    template != Template.HOLDER_UPDATE_READONLY_OPTIONAL_PROPERTY
+                    && template != Template.HOLDER_ACTION_RETURNING_COLLECTION
+                    && template != Template.SAMPLES)
                 .build();
 
         testShowcase(config);
@@ -178,7 +198,7 @@ class ValueTypeGenTemplateTest {
 
     }
 
-    static boolean PERSIST = false;
+    static boolean PERSIST = true;
     static File outputRootDir;
 
     @BeforeAll
@@ -237,7 +257,7 @@ class ValueTypeGenTemplateTest {
     }
 
     private String normalizeForComparision(final String line) {
-        return line.replace("java.lang.Long", "Long");
+        return line;//.replace("java.lang.Long", "Long");
     }
 
     private String firstLineNotEqual(final Can<String> linesA, final Can<String> linesB) {

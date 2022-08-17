@@ -18,26 +18,33 @@
  */
 package /*${java-package}*/;
 
-import javax.inject.Named;
+import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.commons.functional.IndexedConsumer;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-import /*${showcase-java-package}*/.holder./*${showcase-name}*/Holder2;
+import demoapp.dom.types.Samples;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /*${generated-file-notice}*/
-@Named("demo./*${showcase-name}*/Entity") // shared permissions with concrete sub class
-@DomainObject
-public abstract class /*${showcase-name}*/Entity
-implements
-    HasAsciiDocDescription,
-    /*${showcase-name}*/Holder2,
-    ValueHolder</*${showcase-type-boxed}*/> {
+//tag::class[]
+@Action(semantics = SemanticsOf.SAFE)
+@RequiredArgsConstructor
+public class /*${showcase-name}*/Holder_actionReturningArray {
 
-    @Override
-    public /*${showcase-type-boxed}*/ value() {
-        return getReadOnlyProperty();
+    private final /*${showcase-name}*/Holder holder;
+
+    public /*${showcase-type}*/[] act() {
+        val array = new long[(int)samples.stream().count()];
+        samples.stream()
+            .forEach(IndexedConsumer.zeroBased((index, value)->array[index] = value));
+        return array;
     }
 
+    @Inject
+    Samples</*${showcase-type-boxed}*/> samples;
+
 }
+//end::class[]
