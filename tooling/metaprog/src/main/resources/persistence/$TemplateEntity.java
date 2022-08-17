@@ -26,7 +26,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.javautil.uuids.holder./*${showcase-name}*/Holder2;
 
-/*${before-class-declaration}*/
+/*${generated-file-notice}*/
 @Named("demo./*${showcase-name}*/Entity") // shared permissions with concrete sub class
 @DomainObject
 public abstract class /*${showcase-name}*/Entity

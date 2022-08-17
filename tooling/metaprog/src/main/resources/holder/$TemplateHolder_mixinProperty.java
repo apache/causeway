@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
-/*${before-class-declaration}*/
+/*${generated-file-notice}*/
 //tag::class[]
 @Property()
 @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "contributed", sequence = "1")

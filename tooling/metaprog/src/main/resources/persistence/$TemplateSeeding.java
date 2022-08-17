@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-/*${before-class-declaration}*/
+/*${generated-file-notice}*/
 @Service
 public class /*${showcase-name}*/Seeding
 extends SeedServiceAbstract {

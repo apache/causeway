@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-/*${before-class-declaration}*/
+/*${generated-file-notice}*/
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT

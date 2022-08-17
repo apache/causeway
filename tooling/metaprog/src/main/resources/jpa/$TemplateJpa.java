@@ -42,7 +42,7 @@ import lombok.Setter;
 
 import demoapp.dom.types.javautil.uuids.persistence./*${showcase-name}*/Entity;
 
-/*${before-class-declaration}*/
+/*${generated-file-notice}*/
 @Profile("demo-jpa")
 //tag::class[]
 @Entity

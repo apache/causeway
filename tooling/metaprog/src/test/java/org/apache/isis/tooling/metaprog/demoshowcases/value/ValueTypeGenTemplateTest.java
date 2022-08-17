@@ -8,6 +8,8 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.collections.Can;
@@ -20,6 +22,7 @@ import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -27,41 +30,74 @@ import lombok.extern.log4j.Log4j2;
 class ValueTypeGenTemplateTest {
 
     @Test
-    void test() throws IOException {
+    void testUuid() throws IOException {
+
+        val config = Config.builder()
+                .outputRootDir(outputDir("uuid"))
+                .showcaseName("JavaUtilUuid")
+                .javaPackage("demoapp.dom.types.javautil.uuids")
+                .showcaseValueType("java.util.UUID")
+                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics")
+                //.suppressGeneratedFileNotice(true)
+                .build();
+
+        testShowcase(config);
+    }
+
+    @Test @Disabled("WIP")
+    void testLong() throws IOException {
+
+        val config = Config.builder()
+                .outputRootDir(outputDir("wlong"))
+                .showcaseName("WrapperLong")
+                .javaPackage("demoapp.dom.types.javalang.longs")
+                .showcaseValueType("java.lang.Long")
+                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics")
+                .suppressGeneratedFileNotice(true)
+                .build();
+
+        testShowcase(config);
+    }
+
+
+    // -- HELPER
+
+    @SneakyThrows
+    void testShowcase(final ValueTypeGenTemplate.Config config) {
 
         val frameWorkRoot = new File(".").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
         val demoDomainRoot = new File(frameWorkRoot, "examples/demo/domain/src/main/java");
-        val uuidDemoDomain = new File(demoDomainRoot, "demoapp/dom/types/javautil/uuids");
+        val demoDomainShowCase = new File(demoDomainRoot, config.getJavaPackage().replace('.', '/'));
 
-        // list UUID source files
-        val uuidShowcaseFiles = _Files.searchFiles(uuidDemoDomain, _Predicates.alwaysTrue(), file->
+        // list reference source files
+        val refShowcaseFiles = _Files.searchFiles(demoDomainShowCase, _Predicates.alwaysTrue(), file->
                   file.getName().endsWith(".java")
                   || file.getName().endsWith(".xml")
                   || file.getName().endsWith(".adoc")
               );
 
-        val outputRootDir = _Files.tempDir("isis-tooling-showcases");
-                //new File("D:/tmp/uuid");
-        log.info("tmp dir created in {}", outputRootDir);
-
-        val generator = new ValueTypeGenTemplate(Config.builder()
-                .outputRootDir(outputRootDir)
-                .showcaseName("JavaUtilUuid")
-                .javaPackage("demoapp.dom.types.javautil.uuids")
-                .showcaseValueType("java.util.UUID")
-                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics")
-                .suppressGeneratedFileNotice(true)
-                .build());
+        val generator = new ValueTypeGenTemplate(config);
 
         val generatedFiles = _Sets.<File>newLinkedHashSet();
         generator.generate(generatedFiles::add);
 
-        assertFileSetEquals(uuidShowcaseFiles, uuidDemoDomain, generatedFiles, outputRootDir);
-        assertFileContentEquals(uuidShowcaseFiles, generatedFiles);
+        assertFileSetEquals(refShowcaseFiles, demoDomainShowCase, generatedFiles, config.getOutputRootDir());
+        assertFileContentEquals(refShowcaseFiles, generatedFiles);
 
     }
 
-    // -- HELPER
+    static File outputRootDir;
+
+    @BeforeAll
+    static void setup() {
+        outputRootDir = _Files.tempDir("isis-tooling-showcases");
+                //new File("D:/tmp");
+        log.info("tmp dir created in {}", outputRootDir);
+    }
+
+    private File outputDir(final String subfolder) {
+        return new File(outputRootDir, subfolder);
+    }
 
     private void assertFileSetEquals(
             final Set<File> setA, final File rootA,
@@ -85,9 +121,11 @@ class ValueTypeGenTemplateTest {
                 .zipMap(sortedB, (a, b)->{
 
                     var linesA = _Text.normalize(
-                            _Text.readLinesFromFile(a, StandardCharsets.UTF_8));
+                            _Text.readLinesFromFile(a, StandardCharsets.UTF_8))
+                            .map(this::normalizeForComparision);
                     var linesB = _Text.normalize(
-                            _Text.readLinesFromFile(b, StandardCharsets.UTF_8));
+                            _Text.readLinesFromFile(b, StandardCharsets.UTF_8))
+                            .map(this::normalizeForComparision);
 
                     return Objects.equals(linesA, linesB)
                             ? null
@@ -101,6 +139,10 @@ class ValueTypeGenTemplateTest {
         if(failedFileComparisons.isNotEmpty()) {
             fail(String.format("some file contents are not equal %s", failedFileComparisons));
         }
+    }
+
+    private String normalizeForComparision(final String line) {
+        return line.replace("java.lang.Long", "Long");
     }
 
     private String firstLineNotEqual(final Can<String> linesA, final Can<String> linesB) {

@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 
-/*${before-class-declaration}*/
+/*${generated-file-notice}*/
 //tag::class[]
 public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder {
 

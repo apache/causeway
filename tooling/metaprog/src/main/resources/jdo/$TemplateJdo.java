@@ -39,7 +39,7 @@ import lombok.Setter;
 
 import demoapp.dom.types.javautil.uuids.persistence./*${showcase-name}*/Entity;
 
-/*${before-class-declaration}*/
+/*${generated-file-notice}*/
 @Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")

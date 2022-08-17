@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-/*${before-class-declaration}*/
+/*${generated-file-notice}*/
 @Profile("demo-jdo")
 @Service
 public class /*${showcase-name}*/JdoEntities

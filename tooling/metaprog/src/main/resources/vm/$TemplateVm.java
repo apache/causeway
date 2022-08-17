@@ -39,7 +39,7 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.javautil.uuids.holder./*${showcase-name}*/Holder2;
 
-/*${before-class-declaration}*/
+/*${generated-file-notice}*/
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
