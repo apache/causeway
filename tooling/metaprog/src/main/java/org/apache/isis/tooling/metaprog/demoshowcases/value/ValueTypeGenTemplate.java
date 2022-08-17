@@ -46,7 +46,6 @@ public class ValueTypeGenTemplate {
         final String showcaseValueType;
         final String showcaseValueSemantics;
         final String javaPackage;
-        final boolean suppressGeneratedFileNotice;
         @Builder.Default
         final String fileNamePlaceholderForShowcaseName = "$Template";
         @Builder.Default
@@ -169,6 +168,7 @@ public class ValueTypeGenTemplate {
             templateVars.put("java-package", source.javaPackage(config));
             templateVars.put("showcase-name", config.showcaseName);
             templateVars.put("showcase-type", config.showcaseValueType);
+            templateVars.put("showcase-java-package", config.javaPackage);
             templateVars.put("showcase-value-semantics-provider", config.showcaseValueSemantics);
             templateVars.put("generated-file-notice", source.generator.formatAsComment(config.generatedFileNotice));
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javautil.uuids.samples;
+package /*${java-package}*/;
 
 import java.util.stream.Stream;
 

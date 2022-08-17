@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.types.javautil.uuids.holder./*${showcase-name}*/Holder2;
+import /*${showcase-java-package}*/.holder./*${showcase-name}*/Holder2;
 
 /*${generated-file-notice}*/
 @Named("demo./*${showcase-name}*/Entity") // shared permissions with concrete sub class

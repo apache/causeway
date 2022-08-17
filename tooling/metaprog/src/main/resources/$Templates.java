@@ -42,8 +42,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javautil.uuids.persistence./*${showcase-name}*/Entity;
-import demoapp.dom.types.javautil.uuids.vm./*${showcase-name}*/Vm;
+import /*${showcase-java-package}*/.persistence./*${showcase-name}*/Entity;
+import /*${showcase-java-package}*/.vm./*${showcase-name}*/Vm;
 
 /*${generated-file-notice}*/
 @XmlRootElement(name = "Demo")

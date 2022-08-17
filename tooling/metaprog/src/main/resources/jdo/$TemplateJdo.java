@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.Title;
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.dom.types.javautil.uuids.persistence./*${showcase-name}*/Entity;
+import /*${showcase-java-package}*/.persistence./*${showcase-name}*/Entity;
 
 /*${generated-file-notice}*/
 @Profile("demo-jdo")

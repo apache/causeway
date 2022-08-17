@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.collections.Can;
@@ -38,13 +37,12 @@ class ValueTypeGenTemplateTest {
                 .javaPackage("demoapp.dom.types.javautil.uuids")
                 .showcaseValueType("java.util.UUID")
                 .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics")
-                //.suppressGeneratedFileNotice(true)
                 .build();
 
         testShowcase(config);
     }
 
-    @Test @Disabled("WIP")
+    @Test //@Disabled("WIP")
     void testLong() throws IOException {
 
         val config = Config.builder()
@@ -53,7 +51,6 @@ class ValueTypeGenTemplateTest {
                 .javaPackage("demoapp.dom.types.javalang.longs")
                 .showcaseValueType("java.lang.Long")
                 .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics")
-                .suppressGeneratedFileNotice(true)
                 .build();
 
         testShowcase(config);

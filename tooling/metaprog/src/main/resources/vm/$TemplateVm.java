@@ -37,7 +37,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javautil.uuids.holder./*${showcase-name}*/Holder2;
+import /*${showcase-java-package}*/.holder./*${showcase-name}*/Holder2;
 
 /*${generated-file-notice}*/
 //tag::class[]
