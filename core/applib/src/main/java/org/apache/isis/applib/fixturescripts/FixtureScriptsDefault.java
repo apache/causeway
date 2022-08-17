@@ -59,7 +59,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
  * </p>
  */
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         logicalTypeName = "isisApplib.FixtureScriptsDefault"
 )
 @DomainServiceLayout(

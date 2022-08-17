@@ -95,19 +95,6 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
                         repositoryFor));
 
 
-        // the mixinOnlyValidator is only added if the config property is set.
-        switch (domainServiceFacet.getNatureOfService()) {
-        case VIEW:
-            mixinOnlyValidator.addFailure(
-                    "%s: menu/contributed services (nature == VIEW) are prohibited ('%s' config property); convert into a mixin (@Mixin annotation) instead",
-                    cls.getName(), ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
-            break;
-        case VIEW_CONTRIBUTIONS_ONLY:
-            mixinOnlyValidator.addFailure(
-                    "%s: contributed services (nature == VIEW_CONTRIBUTIONS_ONLY) are prohibited ('%s' config property); convert into a mixin (@Mixin annotation) instead",
-                    cls.getName(), ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY);
-            break;
-        }
     }
 
 

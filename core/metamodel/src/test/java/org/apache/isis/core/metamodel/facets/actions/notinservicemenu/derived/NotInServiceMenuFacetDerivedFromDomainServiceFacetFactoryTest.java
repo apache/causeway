@@ -48,41 +48,6 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
         facetFactory.setServicesInjector(mockServicesInjector);
     }
 
-    @Test
-    public void whenContributions() throws Exception {
-
-        // given
-        @DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
-        class CustomerService {
-
-            public String name() {
-                return "Joe";
-            }
-        }
-
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-            will(returnValue(mockObjSpec));
-
-            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
-            }));
-        }});
-
-        expectNoMethodsRemoved();
-
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
-
-        // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
-        assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof NotInServiceMenuFacetDerivedFromDomainServiceFacet, is(true));
-        final NotInServiceMenuFacetDerivedFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (NotInServiceMenuFacetDerivedFromDomainServiceFacet) facet;
-        assertThat(facetDerivedFromDomainServiceFacet.getNatureOfService(), equalTo(NatureOfService.VIEW_CONTRIBUTIONS_ONLY));
-    }
 
     @Test
     public void whenDomain() throws Exception {
@@ -121,7 +86,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
     }
 
     @Test
-    public void whenView() throws Exception {
+    public void whenViewOrig() throws Exception {
 
         // given
         @DomainService(nature = NatureOfService.VIEW)
@@ -154,10 +119,10 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
     }
 
     @Test
-    public void whenMenu() throws Exception {
+    public void whenView() throws Exception {
 
         // given
-        @DomainService(nature = NatureOfService.VIEW_MENU_ONLY)
+        @DomainService(nature = NatureOfService.VIEW)
         class CustomerService {
 
             public String name() {
@@ -170,7 +135,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_MENU_ONLY) {
+            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
             }));
         }});
 

@@ -45,7 +45,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 @DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
+        nature = NatureOfService.VIEW,
         objectType = "isisApplib.MetaModelServicesMenu"
 )
 @DomainServiceLayout(

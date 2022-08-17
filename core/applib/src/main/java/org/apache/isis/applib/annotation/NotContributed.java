@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  * <p/>
  * Has no meaning for actions on regular entities.
  *
- * @deprecated - to not contribute at all, move action to a service whose {@link org.apache.isis.applib.annotation.DomainService#nature() nature} is {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_MENU_ONLY} or {@link org.apache.isis.applib.annotation.NatureOfService#DOMAIN}; to contribute only as an action or as an association, ensure action is in a service whose nature is {@link org.apache.isis.applib.annotation.NatureOfService#VIEW} or {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY}, and use {@link ActionLayout#contributed()} to specify whether the contribution should be  {@link Contributed#AS_ACTION as action} or {@link Contributed#AS_ASSOCIATION as association}.
+ * @deprecated - to not contribute at all.  No longer required, contributions from domain services has been removed.
  */
 @Deprecated
 @Inherited

@@ -49,10 +49,10 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
     }
 
     @Test
-    public void whenMenu() throws Exception {
+    public void whenView() throws Exception {
 
         // given
-        @DomainService(nature = NatureOfService.VIEW_MENU_ONLY)
+        @DomainService(nature = NatureOfService.VIEW)
         class CustomerService {
 
             public String name() {
@@ -65,7 +65,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_MENU_ONLY) {
+            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
             }));
         }});
 
@@ -81,7 +81,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         assertThat(facet, is(not(nullValue())));
         assertThat(facet instanceof NotContributedFacetDerivedFromDomainServiceFacet, is(true));
         final NotContributedFacetDerivedFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (NotContributedFacetDerivedFromDomainServiceFacet) facet;
-        assertThat(facetDerivedFromDomainServiceFacet.getNatureOfService(), equalTo(NatureOfService.VIEW_MENU_ONLY));
+        assertThat(facetDerivedFromDomainServiceFacet.getNatureOfService(), equalTo(NatureOfService.VIEW));
     }
 
     @Test
@@ -120,71 +120,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         assertThat(facetDerivedFromDomainServiceFacet.getNatureOfService(), equalTo(NatureOfService.DOMAIN));
     }
 
-    @Test
-    public void whenView() throws Exception {
 
-        // given
-        @DomainService(nature = NatureOfService.VIEW)
-        class CustomerService {
-
-            public String name() {
-                return "Joe";
-            }
-        }
-
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-            will(returnValue(mockObjSpec));
-
-            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
-            }));
-        }});
-
-        expectNoMethodsRemoved();
-
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
-
-        // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
-        assertThat(facet, is(nullValue()));
-    }
-
-    @Test
-    public void whenContributions() throws Exception {
-
-        // given
-        @DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
-        class CustomerService {
-
-            public String name() {
-                return "Joe";
-            }
-        }
-
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
-            will(returnValue(mockObjSpec));
-
-            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
-            }));
-        }});
-
-        expectNoMethodsRemoved();
-
-        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
-
-        // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
-        assertThat(facet, is(nullValue()));
-    }
 
     @Test
     public void whenNone() throws Exception {
