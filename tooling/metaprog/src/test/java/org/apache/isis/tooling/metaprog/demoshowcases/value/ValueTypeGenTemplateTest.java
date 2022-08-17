@@ -17,6 +17,7 @@ import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Config;
+import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Config.ConfigBuilder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -42,30 +43,46 @@ class ValueTypeGenTemplateTest {
         testShowcase(config);
     }
 
-    @Test //@Disabled("WIP")
-    void testLong() throws IOException {
+    @Test
+    void testWLong() throws IOException {
 
-        val defaults = Config.builder().build();
-
-        val config = Config.builder()
+        val config = fundamentalTypeSupportNotice()
                 .outputRootDir(outputDir("wlong"))
                 .showcaseName("WrapperLong")
                 .javaPackage("demoapp.dom.types.javalang.longs")
                 .showcaseValueType("java.lang.Long")
                 .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics")
-                .jdoTypeSupportNotice(defaults.getJdoTypeSupportNotice()
-                        + " see link:https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#_primitive_and_java_lang_types[DataNucleus]")
-                .jpaTypeSupportNotice(defaults.getJdoTypeSupportNotice()
-                        + " see link:https://www.objectdb.com/java/jpa/entity/types#simple_java_data_types[ObjectDB]")
-                .jaxbTypeSupportNotice(defaults.getJaxbTypeSupportNotice()
-                        + " see link:https://docs.oracle.com/cd/E12840_01/wls/docs103/webserv/data_types.html#wp223908[Oracle]")
                 .build();
 
         testShowcase(config);
     }
 
+    @Test
+    void testWInt() throws IOException {
+
+        val config = fundamentalTypeSupportNotice()
+                .outputRootDir(outputDir("wint"))
+                .showcaseName("WrapperInteger")
+                .javaPackage("demoapp.dom.types.javalang.integers")
+                .showcaseValueType("java.lang.Integer")
+                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics")
+                .build();
+
+        testShowcase(config);
+    }
 
     // -- HELPER
+
+    private ConfigBuilder fundamentalTypeSupportNotice() {
+        val defaults = Config.builder().build();
+        return Config.builder()
+                .jdoTypeSupportNotice(defaults.getJdoTypeSupportNotice()
+                        + " see link:https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#_primitive_and_java_lang_types[DataNucleus]")
+                .jpaTypeSupportNotice(defaults.getJdoTypeSupportNotice()
+                        + " see link:https://www.objectdb.com/java/jpa/entity/types#simple_java_data_types[ObjectDB]")
+                .jaxbTypeSupportNotice(defaults.getJaxbTypeSupportNotice()
+                        + " see link:https://docs.oracle.com/cd/E12840_01/wls/docs103/webserv/data_types.html#wp223908[Oracle]");
+    }
 
     @SneakyThrows
     void testShowcase(final ValueTypeGenTemplate.Config config) {
