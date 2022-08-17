@@ -45,12 +45,20 @@ class ValueTypeGenTemplateTest {
     @Test //@Disabled("WIP")
     void testLong() throws IOException {
 
+        val defaults = Config.builder().build();
+
         val config = Config.builder()
                 .outputRootDir(outputDir("wlong"))
                 .showcaseName("WrapperLong")
                 .javaPackage("demoapp.dom.types.javalang.longs")
                 .showcaseValueType("java.lang.Long")
                 .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics")
+                .jdoTypeSupportNotice(defaults.getJdoTypeSupportNotice()
+                        + " see link:https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#_primitive_and_java_lang_types[DataNucleus]")
+                .jpaTypeSupportNotice(defaults.getJdoTypeSupportNotice()
+                        + " see link:https://www.objectdb.com/java/jpa/entity/types#simple_java_data_types[ObjectDB]")
+                .jaxbTypeSupportNotice(defaults.getJaxbTypeSupportNotice()
+                        + " see link:https://docs.oracle.com/cd/E12840_01/wls/docs103/webserv/data_types.html#wp223908[Oracle]")
                 .build();
 
         testShowcase(config);
@@ -83,12 +91,15 @@ class ValueTypeGenTemplateTest {
 
     }
 
+    static boolean PERSIST = false;
     static File outputRootDir;
 
     @BeforeAll
     static void setup() {
-        outputRootDir = _Files.tempDir("isis-tooling-showcases");
-                //new File("D:/tmp");
+        outputRootDir = PERSIST
+                ? new File("D:/tmp")
+                : _Files.tempDir("isis-tooling-showcases");
+
         log.info("tmp dir created in {}", outputRootDir);
     }
 

@@ -53,7 +53,7 @@ import /*${showcase-java-package}*/.persistence./*${showcase-name}*/Entity;
 @EntityListeners(IsisEntityListener.class)
 @Named("demo./*${showcase-name}*/Entity")
 @DomainObject
-@NoArgsConstructor
+@NoArgsConstructor                                                             // <.>
 public class /*${showcase-name}*/Jpa
         extends /*${showcase-name}*/Entity {
 

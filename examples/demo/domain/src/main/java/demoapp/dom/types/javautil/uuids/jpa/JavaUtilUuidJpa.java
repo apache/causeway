@@ -53,7 +53,7 @@ import demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidEntity;
 @EntityListeners(IsisEntityListener.class)
 @Named("demo.JavaUtilUuidEntity")
 @DomainObject
-@NoArgsConstructor
+@NoArgsConstructor                                                             // <.>
 public class JavaUtilUuidJpa
         extends JavaUtilUuidEntity {
 

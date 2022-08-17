@@ -53,7 +53,7 @@ import demoapp.dom.types.javalang.longs.persistence.WrapperLongEntity;
 @EntityListeners(IsisEntityListener.class)
 @Named("demo.WrapperLongEntity")
 @DomainObject
-@NoArgsConstructor
+@NoArgsConstructor                                                             // <.>
 public class WrapperLongJpa
         extends WrapperLongEntity {
 

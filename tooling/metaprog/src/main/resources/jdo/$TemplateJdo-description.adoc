@@ -2,7 +2,7 @@
 
 //#{generated-file-notice}
 
-JDO supports `#{showcase-type}` out-of-the-box, so no special annotations are required.
+#{jdo-type-support-notice}
 
 [source,java]
 ----

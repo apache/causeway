@@ -2,7 +2,7 @@
 
 //#{generated-file-notice}
 
-JAXB supports `#{showcase-type}` out-of-the-box, so no special annotations are required.
+#{jaxb-type-support-notice}
 
 [source,java]
 ----

@@ -45,6 +45,15 @@ public class ValueTypeGenTemplate {
         final String showcaseName;
         final String showcaseValueType;
         final String showcaseValueSemantics;
+        @Builder.Default
+        final String jdoTypeSupportNotice =
+            "JDO supports `#{showcase-type}` out-of-the-box, so no special annotations are required.";
+        @Builder.Default
+        final String jpaTypeSupportNotice =
+            "JPA supports `#{showcase-type}` out-of-the-box, so no special annotations are required.";
+        @Builder.Default
+        final String jaxbTypeSupportNotice =
+            "JAXB supports `#{showcase-type}` out-of-the-box, so no special annotations are required.";
         final String javaPackage;
         @Builder.Default
         final String fileNamePlaceholderForShowcaseName = "$Template";
@@ -171,6 +180,11 @@ public class ValueTypeGenTemplate {
             templateVars.put("showcase-java-package", config.javaPackage);
             templateVars.put("showcase-value-semantics-provider", config.showcaseValueSemantics);
             templateVars.put("generated-file-notice", source.generator.formatAsComment(config.generatedFileNotice));
+
+            templateVars.put("jdo-type-support-notice", config.jdoTypeSupportNotice);
+            templateVars.put("jpa-type-support-notice", config.jpaTypeSupportNotice);
+            templateVars.put("jaxb-type-support-notice", config.jaxbTypeSupportNotice);
+
 
             // allow for ADOC IDE tools, to properly resolve include statements,
             // that is referenced (template) files should exist
