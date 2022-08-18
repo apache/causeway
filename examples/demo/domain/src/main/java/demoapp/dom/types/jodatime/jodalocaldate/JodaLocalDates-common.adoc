@@ -62,7 +62,7 @@ include::holder/JodaLocalDateHolder2.java[tags=class]
 <.> Position label to the right
 +
 CAUTION: currently not supported
-<.> Hide the label compleely.
+<.> Hide the label completely.
 
 
 == @PropertyLayout(renderDay=...)

@@ -24,16 +24,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.springframework.util.ClassUtils;
 
-import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._Text;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Singular;
 import lombok.Value;
@@ -65,11 +68,9 @@ public class ValueTypeGenTemplate {
         @Singular
         final Map<String, String> templateVariables = new HashMap<>();
         @Builder.Default
-        final Predicate<Template> templatePredicate = template->template != Template.HOLDER_ACTION_RETURNING_ARRAY;
-
-        final boolean accepts(final Template template) {
-            return templatePredicate.test(template);
-        }
+        final Can<Template> templates = Template.REGULAR_SET;
+        @Builder.Default
+        final TemplateVariant templateVariant = TemplateVariant.DEFAULT;
     }
 
     @RequiredArgsConstructor
@@ -98,6 +99,14 @@ public class ValueTypeGenTemplate {
         final String fileSuffix;
         abstract String formatAsComment(String text);
         abstract String formatAsTemplateVar(String key);
+    }
+
+    @RequiredArgsConstructor
+    enum TemplateVariant {
+        DEFAULT(""),
+        PRIMITIVE("~primitive"),
+        ;
+        @Getter private final String suffix;
     }
 
     @RequiredArgsConstructor
@@ -130,8 +139,16 @@ public class ValueTypeGenTemplate {
         COLLECTION_LAYOUT("%ss", Generator.LAYOUT),
         ENTITY_LAYOUT("persistence/%sEntity", Generator.LAYOUT),
         VIEWMODEL_LAYOUT("vm/%sVm", Generator.LAYOUT)
-
         ;
+
+        public static Can<Template> REGULAR_SET = Can.ofArray(Template.values())
+            .remove(HOLDER_ACTION_RETURNING_ARRAY);
+
+        public static Can<Template> PRIMITIVE_SET = Can.ofArray(Template.values())
+                .remove(HOLDER_ACTION_RETURNING_COLLECTION)
+                .remove(HOLDER_UPDATE_READONLY_OPTIONAL_PROPERTY)
+                .remove(Template.SAMPLES);
+
         private final String pathTemplate;
         private final Generator generator;
         private final File file(final Config config) {
@@ -140,11 +157,22 @@ public class ValueTypeGenTemplate {
                     + generator.fileSuffix)
                     .getAbsoluteFile();
         }
-        private final File template(final Config config) {
-            return new File("src/main/resources",
+        private final File templateFile(final Config config) {
+            return _Files.existingFile(templateFile(config, config.templateVariant)) // existence is optional
+                    .orElseGet(()->{
+                        // existence is mandatory
+                        val defaultTemplateFile = templateFile(config, TemplateVariant.DEFAULT);
+                        return _Files.existingFile(defaultTemplateFile)
+                                .orElseThrow(()->_Exceptions.noSuchElement("template %s not found", defaultTemplateFile));
+                    });
+        }
+        private final File templateFile(final Config config, final TemplateVariant templateVariant) {
+            val templateFile = new File("src/main/resources",
                     String.format(pathTemplate, config.fileNamePlaceholderForShowcaseName)
+                    + templateVariant.suffix
                     + generator.fileSuffix)
                     .getAbsoluteFile();
+            return templateFile;
         }
         private final String javaPackage(final Config config) {
             return Optional.ofNullable(new File(String.format(pathTemplate, "X")).getParent())
@@ -175,14 +203,9 @@ public class ValueTypeGenTemplate {
 
     public void generate(final Consumer<File> onSourceGenerated) {
 
-        for(var template: Template.values()) {
-            if(!config.accepts(template)) {
-                continue;
-            }
+        for(var template: config.getTemplates()) {
 
-            val templateFile = template.template(config);
-
-            _Assert.assertTrue(templateFile.exists(), ()->String.format("template %s not found", templateFile));
+            val templateFile = template.templateFile(config);
 
             val genTarget = template.file(config);
 
@@ -210,6 +233,11 @@ public class ValueTypeGenTemplate {
             // that is referenced (template) files should exist
             if(template.generator.isDoc()) {
                 templateVars.putRaw("$Template", config.showcaseName);
+                // purge any TemplateVariant occurrences in ADOC templates
+                Stream.of(TemplateVariant.values())
+                .map(TemplateVariant::getSuffix)
+                .filter(_Strings::isNotEmpty)
+                .forEach(variantSuffix->templateVars.putRaw(variantSuffix, ""));
             }
 
             generateFromTemplate(templateVars, templateFile, genTarget);

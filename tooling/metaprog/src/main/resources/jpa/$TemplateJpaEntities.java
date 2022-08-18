@@ -27,14 +27,14 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 @Profile("demo-jpa")
 @Service
 public class /*${showcase-name}*/JpaEntities
-extends ValueHolderRepository</*${showcase-type}*/, /*${showcase-name}*/Jpa> {
+extends ValueHolderRepository</*${showcase-type-boxed}*/, /*${showcase-name}*/Jpa> {
 
     protected /*${showcase-name}*/JpaEntities() {
         super(/*${showcase-name}*/Jpa.class);
     }
 
     @Override
-    protected /*${showcase-name}*/Jpa newDetachedEntity(/*${showcase-type}*/ value) {
+    protected /*${showcase-name}*/Jpa newDetachedEntity(/*${showcase-type-boxed}*/ value) {
         return new /*${showcase-name}*/Jpa(value);
     }
 

@@ -56,13 +56,13 @@ public class /*${showcase-name}*/Holder_updateReadOnlyPropertyWithChoices {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport public List</*${showcase-type}*/> choices0Act() {
+    @MemberSupport public List</*${showcase-type-boxed}*/> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples</*${showcase-type}*/> samples;
+    Samples</*${showcase-type-boxed}*/> samples;
 
 }
 //end::class[]

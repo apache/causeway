@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.collections.Can;
@@ -20,6 +19,7 @@ import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Config;
 import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Config.ConfigBuilder;
 import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Template;
+import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.TemplateVariant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -59,7 +59,7 @@ class ValueTypeGenTemplateTest {
         testShowcase(config);
     }
 
-    @Test @Disabled("WIP")
+    @Test //@Disabled("WIP")
     void testPLong() throws IOException {
 
         val config = fundamentalTypeSupportNotice()
@@ -68,10 +68,8 @@ class ValueTypeGenTemplateTest {
                 .javaPackage("demoapp.dom.types.primitive.longs")
                 .showcaseValueType("long")
                 .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics")
-                .templatePredicate(template->
-                    template != Template.HOLDER_UPDATE_READONLY_OPTIONAL_PROPERTY
-                    && template != Template.HOLDER_ACTION_RETURNING_COLLECTION
-                    && template != Template.SAMPLES)
+                .templates(Template.PRIMITIVE_SET)
+                .templateVariant(TemplateVariant.PRIMITIVE)
                 .build();
 
         testShowcase(config);

@@ -189,4 +189,24 @@ public class _Files {
         }
     }
 
+    /**
+     * Optionally given file, based on whether non-null and exists and is a file (not a directory).
+     */
+    public static Optional<File> existingFile(final @Nullable File file) {
+        return file!=null
+                && file.isFile()
+                ? Optional.of(file)
+                : Optional.empty();
+    }
+
+    /**
+     * Optionally given file, based on whether non-null and exists and is a directory (not a file).
+     */
+    public static Optional<File> existingDirectory(final @Nullable File file) {
+        return file!=null
+                && file.isDirectory()
+                ? Optional.of(file)
+                : Optional.empty();
+    }
+
 }

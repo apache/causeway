@@ -44,4 +44,4 @@ include::holder/PrimitiveBooleanHolder2.java[tags=class]
 <.> Using `@PropertyLayout(fieldSetId=...)` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
 <.> Position label on top
 <.> Position label to the right
-<.> Hide the label compleely.
+<.> Hide the label completely.
