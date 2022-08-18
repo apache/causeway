@@ -117,9 +117,10 @@ public class ValueTypeGenTemplate {
         HOLDER_ACTION_RETURNING_ARRAY("holder/%sHolder_actionReturningArray", Generator.JAVA),
         HOLDER_ACTION_RETURNING_COLLECTION("holder/%sHolder_actionReturningCollection", Generator.JAVA),
         HOLDER_MIXIN_PROPERTY("holder/%sHolder_mixinProperty", Generator.JAVA),
-        HOLDER_UPDATE_READONLY_OPTIONAL_PROPERTY("holder/%sHolder_updateReadOnlyOptionalProperty", Generator.JAVA),
-        HOLDER_updateReadOnlyProperty("holder/%sHolder_updateReadOnlyProperty", Generator.JAVA),
-        HOLDER_updateReadOnlyPropertyWithChoices("holder/%sHolder_updateReadOnlyPropertyWithChoices", Generator.JAVA),
+        HOLDER_UPDATE_RO_PROPERTY("holder/%sHolder_updateReadOnlyProperty", Generator.JAVA),
+        HOLDER_UPDATE_ROO_PROPERTY("holder/%sHolder_updateReadOnlyOptionalProperty", Generator.JAVA),
+        HOLDER_UPDATE_RO_PROPERTY_WITH_CHOICES("holder/%sHolder_updateReadOnlyPropertyWithChoices", Generator.JAVA),
+        HOLDER_UPDATE_ROO_PROPERTY_WITH_CHOICES("holder/%sHolder_updateReadOnlyOptionalPropertyWithChoices", Generator.JAVA),
         COLLECTION("%ss", Generator.JAVA),
         JDO("jdo/%sJdo", Generator.JAVA),
         JDO_ENTITIES("jdo/%sJdoEntities", Generator.JAVA),
@@ -146,7 +147,8 @@ public class ValueTypeGenTemplate {
 
         public static Can<Template> PRIMITIVE_SET = Can.ofArray(Template.values())
                 .remove(HOLDER_ACTION_RETURNING_COLLECTION)
-                .remove(HOLDER_UPDATE_READONLY_OPTIONAL_PROPERTY)
+                .remove(HOLDER_UPDATE_ROO_PROPERTY)
+                .remove(HOLDER_UPDATE_ROO_PROPERTY_WITH_CHOICES)
                 .remove(Template.SAMPLES);
 
         private final String pathTemplate;
