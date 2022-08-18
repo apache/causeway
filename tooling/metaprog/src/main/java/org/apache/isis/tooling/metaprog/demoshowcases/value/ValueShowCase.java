@@ -35,6 +35,14 @@ public enum ValueShowCase {
             .javaPackage("demoapp.dom.types.javautil.uuids")
             .showcaseValueType("java.util.UUID")
             .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics")),
+
+    PCHAR(fundamentalTypeSupportNotice()
+            .showcaseName("PrimitiveChar")
+            .javaPackage("demoapp.dom.types.primitive.chars")
+            .showcaseValueType("char")
+            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.CharacterValueSemantics")
+            .templates(Template.PRIMITIVE_SET)
+            .templateVariant(TemplateVariant.PRIMITIVE)),
     PLONG(fundamentalTypeSupportNotice()
             .showcaseName("PrimitiveLong")
             .javaPackage("demoapp.dom.types.primitive.longs")
@@ -77,6 +85,12 @@ public enum ValueShowCase {
             .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics")
             .templates(Template.PRIMITIVE_SET)
             .templateVariant(TemplateVariant.PRIMITIVE)),
+
+    WCHAR(fundamentalTypeSupportNotice()
+            .showcaseName("WrapperCharacter")
+            .javaPackage("demoapp.dom.types.javalang.characters")
+            .showcaseValueType("java.lang.Character")
+            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.CharacterValueSemantics")),
     WLONG(fundamentalTypeSupportNotice()
                 .showcaseName("WrapperLong")
                 .javaPackage("demoapp.dom.types.javalang.longs")
