@@ -34,7 +34,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "1")     // <.>
-    default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionLeft() {
+    default /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionLeft() {
         return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
@@ -45,7 +45,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "2")
-    default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionTop() {
+    default /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionTop() {
         return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
@@ -56,7 +56,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "3")
-    default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionRight() {
+    default /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionRight() {
         return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
@@ -67,7 +67,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "4")
-    default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionNone() {
+    default /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionNone() {
         return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
