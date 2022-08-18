@@ -58,6 +58,7 @@ class ValueTypeGenTemplateTest {
 
         // override origin
         //copyFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
+        //copyMissingFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
 
         assertFileSetEquals(refShowcaseFiles, demoDomainShowCase, generatedFiles, config.getOutputRootDir());
         assertFileContentEquals(refShowcaseFiles, generatedFiles);
@@ -93,12 +94,24 @@ class ValueTypeGenTemplateTest {
     }
 
 
-    private void copyFiles(final Collection<File> files, final File sourceRoot, final File destinationRoot) {
-        files.forEach(src->{
+    @SuppressWarnings("unused")
+    private void copyFiles(final Collection<File> generatedFiles, final File sourceRoot, final File destinationRoot) {
+        generatedFiles.forEach(src->{
             val dest = new File(destinationRoot, _Files.realtiveFileName(sourceRoot, src));
             _Files.copy(src, dest);
         });
     }
+
+    @SuppressWarnings("unused")
+    private void copyMissingFiles(final Collection<File> generatedFiles, final File sourceRoot, final File destinationRoot) {
+        generatedFiles.forEach(src->{
+            val dest = new File(destinationRoot, _Files.realtiveFileName(sourceRoot, src));
+            if(!dest.exists()) {
+                _Files.copy(src, dest);
+            }
+        });
+    }
+
 
     private void assertFileContentEquals(final Collection<File> filesA, final Collection<File> filesB) {
 

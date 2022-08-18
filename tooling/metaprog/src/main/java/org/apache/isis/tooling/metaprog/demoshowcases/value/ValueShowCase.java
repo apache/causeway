@@ -35,6 +35,21 @@ public enum ValueShowCase {
             .javaPackage("demoapp.dom.types.javautil.uuids")
             .showcaseValueType("java.util.UUID")
             .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics")),
+    ENUM(Config.builder()
+            .showcaseName("JavaLangEnum")
+            .javaPackage("demoapp.dom.types.javalang.enums")
+            .showcaseValueType("demoapp.dom.types.javalang.enums.samples.DemoEnum")
+            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.EnumValueSemantics")),
+    STRING(Config.builder()
+            .showcaseName("JavaLangString")
+            .javaPackage("demoapp.dom.types.javalang.strings")
+            .showcaseValueType("java.lang.String")
+            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics")),
+//    VOID(Config.builder()
+//            .showcaseName("JavaLangVoid")
+//            .javaPackage("demoapp.dom.types.javalang.voids")
+//            .showcaseValueType("java.lang.Void")
+//            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.VoidValueSemantics")),
 
     PBOOL(fundamentalTypeSupportNotice()
             .showcaseName("PrimitiveBoolean")
@@ -92,7 +107,6 @@ public enum ValueShowCase {
             .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics")
             .templates(Template.PRIMITIVE_SET)
             .templateVariant(TemplateVariant.PRIMITIVE)),
-
     WBOOL(fundamentalTypeSupportNotice()
             .showcaseName("WrapperBoolean")
             .javaPackage("demoapp.dom.types.javalang.booleans")
