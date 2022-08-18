@@ -1,7 +1,6 @@
 package org.apache.isis.tooling.metaprog.demoshowcases.value;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Comparator;
@@ -9,17 +8,14 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Files;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.functions._Predicates;
-import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Config;
-import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Config.ConfigBuilder;
-import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.Template;
-import org.apache.isis.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.TemplateVariant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -31,146 +27,15 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 class ValueTypeGenTemplateTest {
 
-    @Test
-    void testUuid() throws IOException {
-
-        val config = Config.builder()
-                .outputRootDir(outputDir("uuid"))
-                .showcaseName("JavaUtilUuid")
-                .javaPackage("demoapp.dom.types.javautil.uuids")
-                .showcaseValueType("java.util.UUID")
-                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics")
-                .build();
-
-        testShowcase(config);
+    @ParameterizedTest
+    @EnumSource(ValueShowCase.class)
+    void test(final ValueShowCase valueShowCase) {
+        testShowcase(valueShowCase.getConfigBuilder()
+                .outputRootDir(outputDir(valueShowCase.name().toLowerCase()))
+                .build());
     }
-
-    @Test
-    void testWLong() throws IOException {
-
-        val config = fundamentalTypeSupportNotice()
-                .outputRootDir(outputDir("wlong"))
-                .showcaseName("WrapperLong")
-                .javaPackage("demoapp.dom.types.javalang.longs")
-                .showcaseValueType("java.lang.Long")
-                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics")
-                .build();
-
-        testShowcase(config);
-    }
-
-    @Test //@Disabled("WIP")
-    void testPLong() throws IOException {
-
-        val config = fundamentalTypeSupportNotice()
-                .outputRootDir(outputDir("plong"))
-                .showcaseName("PrimitiveLong")
-                .javaPackage("demoapp.dom.types.primitive.longs")
-                .showcaseValueType("long")
-                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics")
-                .templates(Template.PRIMITIVE_SET)
-                .templateVariant(TemplateVariant.PRIMITIVE)
-                .build();
-
-        testShowcase(config);
-    }
-
-    @Test
-    void testWInt() throws IOException {
-
-        val config = fundamentalTypeSupportNotice()
-                .outputRootDir(outputDir("wint"))
-                .showcaseName("WrapperInteger")
-                .javaPackage("demoapp.dom.types.javalang.integers")
-                .showcaseValueType("java.lang.Integer")
-                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics")
-                .build();
-
-        testShowcase(config);
-    }
-
-    @Test
-    void testWShort() throws IOException {
-
-        val config = fundamentalTypeSupportNotice()
-                .outputRootDir(outputDir("wshort"))
-                .showcaseName("WrapperShort")
-                .javaPackage("demoapp.dom.types.javalang.shorts")
-                .showcaseValueType("java.lang.Short")
-                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.ShortValueSemantics")
-                .build();
-
-        testShowcase(config);
-    }
-
-    @Test
-    void testWByte() throws IOException {
-
-        val config = fundamentalTypeSupportNotice()
-                .outputRootDir(outputDir("wbyte"))
-                .showcaseName("WrapperByte")
-                .javaPackage("demoapp.dom.types.javalang.bytes")
-                .showcaseValueType("java.lang.Byte")
-                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics")
-                .build();
-
-        testShowcase(config);
-    }
-
-    @Test
-    void testWDouble() throws IOException {
-
-        val config = fundamentalTypeSupportNotice()
-                .outputRootDir(outputDir("wdouble"))
-                .showcaseName("WrapperDouble")
-                .javaPackage("demoapp.dom.types.javalang.doubles")
-                .showcaseValueType("java.lang.Double")
-                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics")
-                .build();
-
-        testShowcase(config);
-    }
-
-    @Test
-    void testWFloat() throws IOException {
-
-        val config = fundamentalTypeSupportNotice()
-                .outputRootDir(outputDir("wfloat"))
-                .showcaseName("WrapperFloat")
-                .javaPackage("demoapp.dom.types.javalang.floats")
-                .showcaseValueType("java.lang.Float")
-                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics")
-                .build();
-
-        testShowcase(config);
-    }
-
-//    @Test
-//    void testWBoolean() throws IOException {
-//
-//        val config = fundamentalTypeSupportNotice()
-//                .outputRootDir(outputDir("wbool"))
-//                .showcaseName("WrapperBoolean")
-//                .javaPackage("demoapp.dom.types.javalang.booleans")
-//                .showcaseValueType("java.lang.Boolean")
-//                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics")
-//                .build();
-//
-//        testShowcase(config);
-//    }
 
     // -- HELPER
-
-    private ConfigBuilder fundamentalTypeSupportNotice() {
-        val defaults = Config.builder().build();
-        return Config.builder()
-                .jdoTypeSupportNotice(defaults.getJdoTypeSupportNotice()
-                        + " see link:https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#_primitive_and_java_lang_types[DataNucleus]")
-                .jpaTypeSupportNotice(defaults.getJdoTypeSupportNotice()
-                        + " see link:https://www.objectdb.com/java/jpa/entity/types#simple_java_data_types[ObjectDB]")
-                .jaxbTypeSupportNotice(defaults.getJaxbTypeSupportNotice()
-                        + " see link:https://docs.oracle.com/cd/E12840_01/wls/docs103/webserv/data_types.html#wp223908[Oracle]");
-    }
 
     @SneakyThrows
     void testShowcase(final ValueTypeGenTemplate.Config config) {

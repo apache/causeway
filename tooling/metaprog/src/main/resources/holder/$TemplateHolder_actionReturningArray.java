@@ -37,7 +37,7 @@ public class /*${showcase-name}*/Holder_actionReturningArray {
     private final /*${showcase-name}*/Holder holder;
 
     public /*${showcase-type}*/[] act() {
-        val array = new long[(int)samples.stream().count()];
+        val array = new /*${showcase-type}*/[(int)samples.stream().count()];
         samples.stream()
             .forEach(IndexedConsumer.zeroBased((index, value)->array[index] = value));
         return array;
