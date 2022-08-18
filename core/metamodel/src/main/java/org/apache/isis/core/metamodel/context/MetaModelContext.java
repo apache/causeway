@@ -28,6 +28,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -102,6 +103,8 @@ public interface MetaModelContext {
     MemberExecutorService getMemberExecutor();
 
     TransactionService getTransactionService();
+
+    PlaceholderRenderService getPlaceholderRenderService();
 
     ManagedObject getHomePageAdapter();
 

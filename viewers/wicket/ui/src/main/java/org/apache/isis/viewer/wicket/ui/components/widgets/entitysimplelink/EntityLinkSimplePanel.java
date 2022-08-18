@@ -36,7 +36,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelH
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-import lombok.Getter;
 import lombok.val;
 
 /**
@@ -120,10 +119,9 @@ implements CancelHintRequired  {
 
     // -- DEPENDENCIES
 
-    @Getter(lazy=true)
-    private final PlaceholderRenderService placeholderRenderService =
-        getCommonContext().lookupService(PlaceholderRenderService.class)
-            .orElseGet(PlaceholderRenderService::fallback);
+    private PlaceholderRenderService getPlaceholderRenderService() {
+        return getCommonContext().getPlaceholderRenderService();
+    }
 
     private IsisAppCommonContext getCommonContext() {
         return ((HasCommonContext)getModel()).getCommonContext();

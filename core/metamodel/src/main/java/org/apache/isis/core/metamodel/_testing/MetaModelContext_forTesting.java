@@ -40,6 +40,7 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -164,6 +165,9 @@ implements MetaModelContext {
     private IsisBeanTypeClassifier isisBeanTypeClassifier;
 
     private IsisBeanTypeRegistry isisBeanTypeRegistry;
+
+    @Builder.Default
+    private PlaceholderRenderService placeholderRenderService = PlaceholderRenderService.fallback();
 
     //private Map<String, ManagedObject> serviceAdaptersById;
 

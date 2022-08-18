@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.context;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,6 +29,7 @@ import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -104,6 +106,11 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     getSingletonElseFail(ObjectIconService.class);
 
     @Getter(lazy=true)
+    private final PlaceholderRenderService placeholderRenderService =
+            getDefault(PlaceholderRenderService.class)
+            .orElseGet(PlaceholderRenderService::fallback);
+
+    @Getter(lazy=true)
     private final TitleService titleService =
     getSingletonElseFail(TitleService.class);
 
@@ -154,6 +161,10 @@ class MetaModelContext_usingIoc implements MetaModelContext {
 
     private <T> T getSingletonElseFail(final Class<T> type) {
         return iocContainer.getSingletonElseFail(type);
+    }
+
+    private <T> Optional<T> getDefault(final Class<T> type) {
+        return iocContainer.select(type).getFirst();
     }
 
     private final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =

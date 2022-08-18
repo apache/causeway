@@ -27,6 +27,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -130,6 +131,10 @@ public interface HasMetaModelContext {
 
     default WrapperFactory getWrapperFactory() {
         return getMetaModelContext().getWrapperFactory();
+    }
+
+    default PlaceholderRenderService getPlaceholderRenderService() {
+        return getMetaModelContext().getPlaceholderRenderService();
     }
 
     default Optional<UserLocale> currentUserLocale() {

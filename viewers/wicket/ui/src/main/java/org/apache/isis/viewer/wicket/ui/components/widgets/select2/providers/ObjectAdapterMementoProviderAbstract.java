@@ -158,13 +158,12 @@ extends ChoiceProvider<ObjectMemento> {
     /**
      * Translate without context: Tooltips, Button-Labels, etc.
      */
-    private final String translate(final String input) {
+    private String translate(final String input) {
         return getCommonContext().getTranslationService().translate(TranslationContext.empty(), input);
     }
 
-    @Getter(lazy=true)
-    private final PlaceholderRenderService placeholderRenderService =
-        getCommonContext().lookupService(PlaceholderRenderService.class)
-            .orElseGet(PlaceholderRenderService::fallback);
+    private PlaceholderRenderService getPlaceholderRenderService() {
+        return getCommonContext().getPlaceholderRenderService();
+    }
 
 }
