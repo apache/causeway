@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.config;
 
-import java.io.Serializable;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -63,7 +62,6 @@ import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -1866,12 +1864,7 @@ public class IsisConfiguration {
 
         private final Wicket wicket = new Wicket();
         @Data
-        public static class Wicket implements Serializable {
-
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+        public static class Wicket {
 
             /**
              * Specifies the subclass of

@@ -94,9 +94,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponen
 import org.apache.isis.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
-import lombok.NonNull;
-import lombok.val;
-import lombok.experimental.UtilityClass;
+import static de.agilecoders.wicket.jquery.JQuery.$;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
@@ -107,8 +105,9 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import de.agilecoders.wicket.jquery.Key;
-
-import static de.agilecoders.wicket.jquery.JQuery.$;
+import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Wicket common idioms, in alphabetical order.
@@ -314,6 +313,10 @@ public class Wkt {
             final IModel<String> labelModel,
             final Wicket settings,
             final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
+
+        // be aware: settings is not Serializable
+        val isPreventDoubleClickForFormSubmit = settings.isPreventDoubleClickForFormSubmit();
+
         return settings.isUseIndicatorForFormSubmit()
         ? new IndicatingAjaxButton(id, labelModel) {
             private static final long serialVersionUID = 1L;
@@ -321,7 +324,7 @@ public class Wkt {
                 onClick.accept(this, target);
             }
             @Override protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
-                if (settings.isPreventDoubleClickForFormSubmit()) {
+                if (isPreventDoubleClickForFormSubmit) {
                     PanelUtil.disableBeforeReenableOnComplete(attributes, this);
                 }
             }
@@ -335,7 +338,7 @@ public class Wkt {
                 onClick.accept(this, target);
             }
             @Override protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
-                if (settings.isPreventDoubleClickForFormSubmit()) {
+                if (isPreventDoubleClickForFormSubmit) {
                     PanelUtil.disableBeforeReenableOnComplete(attributes, this);
                 }
             }
