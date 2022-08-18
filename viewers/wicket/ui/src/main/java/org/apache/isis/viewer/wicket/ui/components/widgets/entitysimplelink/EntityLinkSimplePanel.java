@@ -24,16 +24,19 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
+import lombok.Getter;
 import lombok.val;
 
 /**
@@ -69,7 +72,7 @@ implements CancelHintRequired  {
         if(isEmpty) {
             // represent null reference by a simple markup displaying '(none)'
             Wkt.markupAdd(this, ID_ENTITY_TITLE_NULL,
-                    PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
+                    getPlaceholderRenderService().asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
 
         } else {
@@ -111,8 +114,19 @@ implements CancelHintRequired  {
      * Translate without context: Tooltips, Button-Labels, etc.
      */
     public final String translate(final String input) {
-        return ((HasCommonContext)getModel()).getCommonContext().getTranslationService()
+        return getCommonContext().getTranslationService()
                 .translate(TranslationContext.empty(), input);
+    }
+
+    // -- DEPENDENCIES
+
+    @Getter(lazy=true)
+    private final PlaceholderRenderService placeholderRenderService =
+        getCommonContext().lookupService(PlaceholderRenderService.class)
+            .orElseGet(PlaceholderRenderService::fallback);
+
+    private IsisAppCommonContext getCommonContext() {
+        return ((HasCommonContext)getModel()).getCommonContext();
     }
 
 

@@ -37,11 +37,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.locale.UserLocale;
@@ -53,7 +48,6 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.functional.Try;
@@ -75,6 +69,11 @@ import org.apache.isis.testdomain.model.valuetypes.ValueTypeExampleService.Scena
 import org.apache.isis.testdomain.value.ValueSemanticsTester.PropertyInteractionProbe;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -240,7 +239,7 @@ class ValueSemanticsTest {
 
                             if(valueType.equals(Password.class)) {
                                 val recoveredValue = (Password)parser.parseTextRepresentation(context, stringified);
-                                assertTrue(recoveredValue.checkPassword(PlaceholderLiteral.SUPPRESSED.getLiteral()));
+                                assertTrue(recoveredValue.checkPassword("(suppressed)"));
 
                             } else {
 

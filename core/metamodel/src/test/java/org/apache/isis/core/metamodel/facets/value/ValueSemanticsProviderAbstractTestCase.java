@@ -28,17 +28,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -49,6 +42,12 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializerDefault;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import lombok.Getter;
 
@@ -160,7 +159,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
             assertEquals("",
                     semantics.getRenderer().titlePresentation(null, null));
         } else {
-            assertEquals(PlaceholderLiteral.NULL_REPRESENTATION.getLiteral(),
+            assertEquals("(none)",
                     semantics.getRenderer().titlePresentation(null, null));
         }
 

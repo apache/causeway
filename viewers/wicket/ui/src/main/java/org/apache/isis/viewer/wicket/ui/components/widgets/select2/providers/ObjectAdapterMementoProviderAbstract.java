@@ -28,7 +28,8 @@ import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -60,7 +61,7 @@ extends ChoiceProvider<ObjectMemento> {
     public String getDisplayValue(final ObjectMemento choiceMemento) {
         if (choiceMemento == null
                 || choiceMemento instanceof ObjectMementoForEmpty) {
-            return PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate);
+            return getPlaceholderRenderService().asText(PlaceholderLiteral.NULL_REPRESENTATION);
         }
         return translate(choiceMemento.getTitle());
     }
@@ -161,5 +162,9 @@ extends ChoiceProvider<ObjectMemento> {
         return getCommonContext().getTranslationService().translate(TranslationContext.empty(), input);
     }
 
+    @Getter(lazy=true)
+    private final PlaceholderRenderService placeholderRenderService =
+        getCommonContext().lookupService(PlaceholderRenderService.class)
+            .orElseGet(PlaceholderRenderService::fallback);
 
 }

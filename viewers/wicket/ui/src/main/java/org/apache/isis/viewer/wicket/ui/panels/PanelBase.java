@@ -28,6 +28,7 @@ import org.apache.isis.applib.services.i18n.LanguageProvider;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -49,6 +50,10 @@ import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider
 import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Provides the <em>common context</em> for all implementing sub-classes.
@@ -139,6 +144,11 @@ implements HasCommonContext {
     protected PageNavigationService getPageNavigationService() {
         return pageNavigationService = computeIfAbsent(PageNavigationService.class, pageNavigationService);
     }
+
+    @Getter(lazy=true, value = AccessLevel.PROTECTED) @Accessors(makeFinal = true)
+    private final PlaceholderRenderService placeholderRenderService =
+        getCommonContext().lookupService(PlaceholderRenderService.class)
+            .orElseGet(PlaceholderRenderService::fallback);
 
     protected MessageBroker getMessageBroker() {
         return getCommonContext().getMessageBroker()
