@@ -25,10 +25,10 @@ import javax.inject.Named;
 //tag::class[]
 public interface /*${showcase-name}*/Holder {
 
-    /*${showcase-type}*/ getReadOnlyProperty();
+    /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     void setReadOnlyProperty(/*${showcase-type}*/ c);
 
-    /*${showcase-type}*/ getReadWriteProperty();
+    /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadWriteProperty();
     void setReadWriteProperty(/*${showcase-type}*/ c);
 
 }

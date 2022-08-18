@@ -53,7 +53,7 @@ public class /*${showcase-name}*/Holder_updateReadOnlyPropertyWithChoices {
     }
 
     @MemberSupport public /*${showcase-type}*/ default0Act() {
-        return holder.getReadOnlyProperty();
+        return holder./*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
     @MemberSupport public List</*${showcase-type-boxed}*/> choices0Act() {

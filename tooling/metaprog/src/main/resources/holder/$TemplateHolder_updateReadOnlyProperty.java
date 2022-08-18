@@ -47,7 +47,7 @@ public class /*${showcase-name}*/Holder_updateReadOnlyProperty {
     }
 
     @MemberSupport public /*${showcase-type}*/ default0Act() {
-        return holder.getReadOnlyProperty();
+        return holder./*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
 }

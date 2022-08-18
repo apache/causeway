@@ -168,15 +168,16 @@ public class _Files {
     /**
      * Creates the given directory if it does not already exist.
      * If directory is null acts as a no-op.
+     * @return
      * @throws IllegalArgumentException if any pre-existing file is in conflict
      */
-    public static void makeDir(final @Nullable File directory) {
+    public static File makeDir(final @Nullable File directory) {
         if(directory==null) {
-            return; // no-op
+            return directory; // no-op
         }
         if(directory.exists()) {
             if(directory.isDirectory()) {
-                return; // nothing to do
+                return directory; // nothing to do
             }
             throw _Exceptions.illegalArgument(
                     "cannot create directory over pre-existing file of same name %s",
@@ -187,6 +188,7 @@ public class _Files {
                     "failed to create directory %s",
                     directory.getAbsolutePath());
         }
+        return directory;
     }
 
     /**

@@ -37,7 +37,7 @@ implements
 
     @Override
     public /*${showcase-type-boxed}*/ value() {
-        return getReadOnlyProperty();
+        return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
 }

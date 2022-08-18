@@ -67,7 +67,7 @@ class ValueTypeGenTemplateTest {
     @BeforeAll
     static void setup() {
         outputRootDir = PERSIST
-                ? new File("D:/tmp")
+                ? _Files.makeDir(new File("D:/tmp/valueTypes"))
                 : _Files.tempDir("isis-tooling-showcases");
 
         log.info("tmp dir created in {}", outputRootDir);

@@ -220,6 +220,11 @@ public class ValueTypeGenTemplate {
                     .map(Class::getName)
                     .orElse(config.showcaseValueType));
 
+            templateVars.put("showcase-type-getter-prefix",
+                    Optional.ofNullable(ClassUtils.resolvePrimitiveClassName(config.showcaseValueType))
+                    .map(cls->boolean.class.equals(cls) ? "is" : "get")
+                    .orElse("get"));
+
             templateVars.put("showcase-java-package", config.javaPackage);
             templateVars.put("showcase-value-semantics-provider", config.showcaseValueSemantics);
             templateVars.put("generated-file-notice", template.generator.formatAsComment(config.generatedFileNotice));

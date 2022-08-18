@@ -36,6 +36,13 @@ public enum ValueShowCase {
             .showcaseValueType("java.util.UUID")
             .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics")),
 
+    PBOOL(fundamentalTypeSupportNotice()
+            .showcaseName("PrimitiveBoolean")
+            .javaPackage("demoapp.dom.types.primitive.booleans")
+            .showcaseValueType("boolean")
+            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics")
+            .templates(Template.PRIMITIVE_SET)
+            .templateVariant(TemplateVariant.PRIMITIVE)),
     PCHAR(fundamentalTypeSupportNotice()
             .showcaseName("PrimitiveChar")
             .javaPackage("demoapp.dom.types.primitive.chars")
@@ -86,6 +93,11 @@ public enum ValueShowCase {
             .templates(Template.PRIMITIVE_SET)
             .templateVariant(TemplateVariant.PRIMITIVE)),
 
+    WBOOL(fundamentalTypeSupportNotice()
+            .showcaseName("WrapperBoolean")
+            .javaPackage("demoapp.dom.types.javalang.booleans")
+            .showcaseValueType("java.lang.Boolean")
+            .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics")),
     WCHAR(fundamentalTypeSupportNotice()
             .showcaseName("WrapperCharacter")
             .javaPackage("demoapp.dom.types.javalang.characters")
@@ -121,11 +133,6 @@ public enum ValueShowCase {
                 .javaPackage("demoapp.dom.types.javalang.floats")
                 .showcaseValueType("java.lang.Float")
                 .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics")),
-//    WBOOLEAN(fundamentalTypeSupportNotice()
-//                .showcaseName("WrapperBoolean")
-//                .javaPackage("demoapp.dom.types.javalang.booleans")
-//                .showcaseValueType("java.lang.Boolean")
-//                .showcaseValueSemantics("org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics")),
     ;
 
     @Getter final ValueTypeGenTemplate.Config.ConfigBuilder configBuilder;

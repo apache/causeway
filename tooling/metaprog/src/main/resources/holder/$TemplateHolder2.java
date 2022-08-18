@@ -35,7 +35,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "1")     // <.>
     default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionLeft() {
-        return getReadOnlyProperty();
+        return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
     @Property
@@ -46,7 +46,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "2")
     default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionTop() {
-        return getReadOnlyProperty();
+        return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
     @Property
@@ -57,7 +57,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "3")
     default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionRight() {
-        return getReadOnlyProperty();
+        return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
     @Property
@@ -68,7 +68,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "4")
     default /*${showcase-type}*/ getReadOnlyPropertyDerivedLabelPositionNone() {
-        return getReadOnlyProperty();
+        return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
 }

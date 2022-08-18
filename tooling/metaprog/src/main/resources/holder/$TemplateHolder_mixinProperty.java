@@ -34,7 +34,7 @@ public class /*${showcase-name}*/Holder_mixinProperty {
     private final /*${showcase-name}*/Holder holder;
 
     public /*${showcase-type}*/ prop() {
-        return holder.getReadOnlyProperty();
+        return holder./*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
 }
