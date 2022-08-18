@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -209,6 +210,16 @@ public class _Files {
                 && file.isDirectory()
                 ? Optional.of(file)
                 : Optional.empty();
+    }
+
+    /**
+     * Copy {@code from} file {@code to} file, replacing existing.
+     * @param from
+     * @param to
+     */
+    @SneakyThrows
+    public static void copy(final @NonNull File from, final @NonNull File to) {
+        Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
 }

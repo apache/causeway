@@ -56,6 +56,9 @@ class ValueTypeGenTemplateTest {
         val generatedFiles = _Sets.<File>newLinkedHashSet();
         generator.generate(generatedFiles::add);
 
+        // override origin
+        //copyFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
+
         assertFileSetEquals(refShowcaseFiles, demoDomainShowCase, generatedFiles, config.getOutputRootDir());
         assertFileContentEquals(refShowcaseFiles, generatedFiles);
 
@@ -89,6 +92,13 @@ class ValueTypeGenTemplateTest {
                 .sorted(Comparator.naturalOrder()));
     }
 
+
+    private void copyFiles(final Collection<File> files, final File sourceRoot, final File destinationRoot) {
+        files.forEach(src->{
+            val dest = new File(destinationRoot, _Files.realtiveFileName(sourceRoot, src));
+            _Files.copy(src, dest);
+        });
+    }
 
     private void assertFileContentEquals(final Collection<File> filesA, final Collection<File> filesB) {
 

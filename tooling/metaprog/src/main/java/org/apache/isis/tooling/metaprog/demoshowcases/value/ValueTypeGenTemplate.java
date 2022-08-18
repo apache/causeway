@@ -153,7 +153,7 @@ public class ValueTypeGenTemplate {
 
         private final String pathTemplate;
         private final Generator generator;
-        private final File file(final Config config) {
+        private final File outputFile(final Config config) {
             return new File(config.getOutputRootDir(),
                     String.format(pathTemplate, config.getShowcaseName())
                     + generator.fileSuffix)
@@ -209,7 +209,7 @@ public class ValueTypeGenTemplate {
 
             val templateFile = template.templateFile(config);
 
-            val genTarget = template.file(config);
+            val genTarget = template.outputFile(config);
 
             val templateVars = new TemplateVars(template.generator);
             templateVars.putAll(config.templateVariables);
