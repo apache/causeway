@@ -35,10 +35,11 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
-*
-* @since 2.0
-*
-*/
+ * Default implementation of {@link PlaceholderRenderService},
+ * that (HTML) renders <i>Bootstrap</i> styled placeholder badges.
+ *
+ * @since 2.0
+ */
 @Service
 @Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".PlaceholderRenderServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

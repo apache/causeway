@@ -37,7 +37,16 @@ public interface PlaceholderRenderService {
         private final String literal;
     }
 
+    /**
+     * Textual representation of given {@link PlaceholderLiteral},
+     * as used for eg. titles and choice drop-downs.
+     */
     String asText(@NonNull PlaceholderLiteral placeholderLiteral);
+
+    /**
+     * Html representation of given {@link PlaceholderLiteral},
+     * as used for rendering with the UI (when appropriate).
+     */
     String asHtml(@NonNull PlaceholderLiteral placeholderLiteral);
 
     static PlaceholderRenderService fallback() {

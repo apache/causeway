@@ -104,6 +104,12 @@ The following changed:
 
 == Other
 
+=== Placeholder Rendering (UI) 
+
+The UI now renders placeholders `(none)` when representing `null` references. 
+To customize behavior you may want to implement your own `PlaceholderRenderService`. 
+(See `PlaceholderRenderServiceDefault`, the default implementation.)  
+
 === Bill of Material / Parent POM
 
 Folder moved `/isis-parent` -> `/bom` 
