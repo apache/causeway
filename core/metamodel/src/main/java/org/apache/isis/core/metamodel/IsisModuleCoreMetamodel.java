@@ -70,6 +70,7 @@ import org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.OidDtoValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.PasswordValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.SerializableValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.ShortValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.TreeNodeValueSemantics;
@@ -148,6 +149,7 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         JavaUtilDateValueSemantics.class,
         // Value Semantics (meta-model)
         ApplicationFeatureIdValueSemantics.class,
+        SerializableValueSemantics.class,
 
         // @Service's
         ObjectManagerDefault.class,
