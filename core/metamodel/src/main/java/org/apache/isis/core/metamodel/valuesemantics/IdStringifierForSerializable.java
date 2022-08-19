@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -28,10 +27,9 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.resources._Serializables;
 
@@ -42,19 +40,41 @@ import lombok.NonNull;
  * is available to handle the corresponding value type.
  */
 @Component
-@Named("isis.val.SerializableValueSemantics")
+@Named("isis.val.IdStringifierForSerializable")
 @Priority(PriorityPrecedence.LAST)
-public class SerializableValueSemantics
-extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<Serializable> {
+public class IdStringifierForSerializable
+implements
+    IdStringifier.EntityAgnostic<Serializable>{
 
     private final UrlEncodingService codec;
 
     @Inject
-    public SerializableValueSemantics(
+    public IdStringifierForSerializable(
             final @NonNull UrlEncodingService codec) {
-        super(Serializable.class);
         this.codec = codec;
     }
+
+//    @Override
+//    public ValueType getSchemaValueType() {
+//        return ValueType.STRING;
+//    }
+
+    @Override
+    public Class<Serializable> getCorrespondingClass() {
+        return Serializable.class;
+    }
+
+//    // -- COMPOSER
+//
+//    @Override
+//    public ValueDecomposition decompose(final Serializable value) {
+//        return decomposeAsString(value, this::enstring, ()->null);
+//    }
+//
+//    @Override
+//    public Serializable compose(final ValueDecomposition decomposition) {
+//        return composeFromString(decomposition, this::destring, ()->null);
+//    }
 
     // -- ID STRINGIFIER
 
@@ -72,13 +92,13 @@ extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<Serializable> {
         return destringAs(stringified, Serializable.class);
     }
 
-    @Override
-    public Can<Serializable> getExamples() {
-        return Can.of(
-                Integer.MAX_VALUE,
-                "Hallo World",
-                new BigDecimal("3.1415"));
-    }
+//    @Override
+//    public Can<Serializable> getExamples() {
+//        return Can.of(
+//                Integer.MAX_VALUE,
+//                "Hallo World",
+//                new BigDecimal("3.1415"));
+//    }
 
     // -- HELPER
 
@@ -89,6 +109,8 @@ extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<Serializable> {
                 ? _Serializables.read(requiredClass, codec.decode(stringified))
                 : null;
     }
+
+
 
 
 }

@@ -62,6 +62,7 @@ import org.apache.isis.core.metamodel.valuesemantics.ClobValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.CommandDtoValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics;
+import org.apache.isis.core.metamodel.valuesemantics.IdStringifierForSerializable;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.InteractionDtoValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.LocalResourcePathValueSemantics;
@@ -70,7 +71,6 @@ import org.apache.isis.core.metamodel.valuesemantics.LongValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.MarkupValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.OidDtoValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.PasswordValueSemantics;
-import org.apache.isis.core.metamodel.valuesemantics.SerializableValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.ShortValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.TreeNodeValueSemantics;
@@ -149,7 +149,8 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         JavaUtilDateValueSemantics.class,
         // Value Semantics (meta-model)
         ApplicationFeatureIdValueSemantics.class,
-        SerializableValueSemantics.class,
+        // fallback IdStringifier
+        IdStringifierForSerializable.class,
 
         // @Service's
         ObjectManagerDefault.class,

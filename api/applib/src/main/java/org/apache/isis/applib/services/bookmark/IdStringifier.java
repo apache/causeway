@@ -47,7 +47,6 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
-@SuppressWarnings("javadoc")
 public interface IdStringifier<T> {
 
     public final static char SEPARATOR = '_';

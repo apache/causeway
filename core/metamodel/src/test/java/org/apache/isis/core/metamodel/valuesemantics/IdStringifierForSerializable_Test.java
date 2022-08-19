@@ -27,9 +27,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import lombok.Value;
 import lombok.val;
@@ -65,7 +65,7 @@ class IdStringifierForSerializable_Test {
     @MethodSource()
     void roundtrip(final Serializable value) {
 
-        val stringifier = new SerializableValueSemantics(codec);
+        val stringifier = new IdStringifierForSerializable(codec);
 
         String stringified = stringifier.enstring(value);
         Serializable parse = stringifier.destring(stringified);
