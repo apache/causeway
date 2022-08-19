@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.valuerender;
 
 import java.util.OptionalInt;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.springframework.lang.Nullable;
@@ -41,18 +42,28 @@ import lombok.NonNull;
 public interface JsonValueConverter {
 
     /**
-     * The value as pojo, otherwise <tt>null</tt>.
+     * The value recovered from {@link JsonRepresentation} as pojo, otherwise <tt>null</tt>.
      */
     @Nullable
     Object recoverValueAsPojo(JsonRepresentation repr, Context context);
 
+    /**
+     * A {@link JsonNode} or otherwise natively supported simple type.
+     */
     Object asObject(ManagedObject objectAdapter, Context context);
 
+    /**
+     * Appends given value type representing {@link ManagedObject} to given
+     * {@link JsonRepresentation}.
+     */
     Object appendValueAndFormat(
             final ManagedObject objectAdapter,
             final Context context,
             final JsonRepresentation repr);
 
+    /**
+     * {@link Class} this converter is suited for.
+     */
     Class<?> getValueClass();
 
     static interface Context extends HasObjectFeature {

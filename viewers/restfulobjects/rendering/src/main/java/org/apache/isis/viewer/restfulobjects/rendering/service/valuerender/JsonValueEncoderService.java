@@ -18,34 +18,62 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.valuerender;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.NullNode;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
- * Converts value representing {@link ManagedObject}s to their corresponding JSON representation.
+ * Converts value representing {@link ManagedObject}s to their corresponding JSON representation
+ * and back.
+ *
+ * @since 1.x refined for 2.0 {@index}
  */
 public interface JsonValueEncoderService {
 
+    /**
+     * The value recovered from {@link JsonRepresentation}
+     * as {@link ManagedObject} honoring {@link Context},
+     * otherwise <tt>null</tt>.
+     */
     public ManagedObject asAdapter(
-            final ObjectSpecification objectSpec,
-            final JsonRepresentation argValueRepr,
+            final ObjectSpecification valueSpec,
+            final JsonRepresentation valueRepr,
             final JsonValueConverter.Context context);
 
+    /**
+     * Appends given value type representing {@link ManagedObject} to given
+     * {@link JsonRepresentation} honoring {@link Context}.
+     */
     public void appendValueAndFormat(
             final ManagedObject valueAdapter,
             final JsonRepresentation repr,
-            final Context context);
+            final JsonValueConverter.Context context);
 
+    /**
+     * A {@link JsonNode} or otherwise natively supported simple type from given {@link ManagedObject},
+     * honoring {@link Context}.
+     */
     @Nullable
     public Object asObject(final @NonNull ManagedObject adapter, final JsonValueConverter.Context context);
 
-    static void appendFormats(
+    // -- UTILITY
+
+    default NullNode appendNullAndFormat(final JsonRepresentation repr, final boolean suppressExtensions) {
+        val value = NullNode.getInstance();
+        repr.mapPutJsonNode("value", value);
+        appendFormats(repr, "string", "string", suppressExtensions);
+        return value;
+    }
+
+    default void appendFormats(
             final JsonRepresentation repr,
             final @Nullable String format, final @Nullable String extendedFormat, final boolean suppressExtensions) {
         repr.putFormat(format);

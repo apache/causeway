@@ -27,8 +27,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.fasterxml.jackson.databind.node.NullNode;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -74,16 +72,16 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
     @Override
     public ManagedObject asAdapter(
             final ObjectSpecification objectSpec,
-            final JsonRepresentation argValueRepr,
+            final JsonRepresentation valueRepr,
             final JsonValueConverter.Context context) {
 
-        if(argValueRepr == null) {
+        if(valueRepr == null) {
             return null;
         }
         if (objectSpec == null) {
             throw new IllegalArgumentException("ObjectSpecification is required");
         }
-        if (!argValueRepr.isValue()) {
+        if (!valueRepr.isValue()) {
             throw new IllegalArgumentException("Representation must be of a value");
         }
 
@@ -94,22 +92,22 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         final JsonValueConverter jvc = converterByClass.get(ClassUtils.resolvePrimitiveIfNecessary(valueClass));
         if(jvc == null) {
             // best effort
-            if (argValueRepr.isString()) {
-                final String argStr = argValueRepr.asString();
+            if (valueRepr.isString()) {
+                final String argStr = valueRepr.asString();
                 return ManagedObject.of(objectSpec,
                         valueSerializer.fromEncodedString(Format.JSON, argStr));
             }
             throw new IllegalArgumentException("Unable to parse value");
         }
 
-        val valueAsPojo = jvc.recoverValueAsPojo(argValueRepr, context);
+        val valueAsPojo = jvc.recoverValueAsPojo(valueRepr, context);
         if(valueAsPojo != null) {
             return ManagedObject.lazy(specificationLoader, valueAsPojo);
         }
 
         // last attempt
-        if (argValueRepr.isString()) {
-            final String argStr = argValueRepr.asString();
+        if (valueRepr.isString()) {
+            final String argStr = valueRepr.asString();
             try {
                 return ManagedObject.of(objectSpec,
                         valueSerializer.fromEncodedString(Format.JSON, argStr));
@@ -118,7 +116,10 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             }
         }
 
-        throw new IllegalArgumentException("Could not parse value '" + argValueRepr.asString() + "' as a " + objectSpec.getFullIdentifier());
+        throw new IllegalArgumentException("Could not parse value '"
+                + valueRepr.asString()
+                + "' as a "
+                + objectSpec.getFullIdentifier());
     }
 
     @Override
@@ -171,13 +172,6 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         }
     }
 
-    private NullNode appendNullAndFormat(final JsonRepresentation repr, final boolean suppressExtensions) {
-        val value = NullNode.getInstance();
-        repr.mapPutJsonNode("value", value);
-        appendFormats(repr, "string", "string", suppressExtensions);
-        return value;
-    }
-
     private static Optional<ValueDecomposition> decompose(final ManagedObject valueAdapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(valueAdapter)) {
             return Optional.empty();
@@ -213,14 +207,6 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         // else
         return Facets.valueSerializerElseFail(objectSpec, cls)
                 .toEncodedString(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
-    }
-
-    static void appendFormats(final JsonRepresentation repr,
-            final @Nullable String format, final @Nullable String extendedFormat, final boolean suppressExtensions) {
-        repr.putFormat(format);
-        if(!suppressExtensions) {
-            repr.putExtendedFormat(extendedFormat);
-        }
     }
 
     /**
