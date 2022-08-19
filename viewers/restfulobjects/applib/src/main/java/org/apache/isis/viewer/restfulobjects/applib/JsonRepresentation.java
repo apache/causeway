@@ -48,11 +48,16 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonNodeUtils;
 import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
+
+import lombok.val;
 
 /**
  * A wrapper around {@link JsonNode} that provides some additional helper
@@ -118,6 +123,19 @@ public class JsonRepresentation {
             REPRESENTATION_INSTANTIATORS.put(representationType, transformer);
         }
         return transformer;
+    }
+
+    public static JsonRepresentation jsonAsMap(final @Nullable String keyValuePairsAsJson) {
+        val repr = JsonRepresentation.newMap();
+        if(_Strings.isNotEmpty(keyValuePairsAsJson)) {
+            final Map<Object, Object> keyValuePairs = _Casts.uncheckedCast(
+                    _Json.readJson(Map.class, keyValuePairsAsJson).getValue().orElseThrow());
+
+            keyValuePairs.forEach((key, value)->{
+                repr.mapPutString(""+key, ""+value);
+            });
+        }
+        return repr;
     }
 
     public static JsonRepresentation newMap(final String... keyValuePairs) {
@@ -1759,9 +1777,7 @@ public class JsonRepresentation {
     }
 
 
-    // ///////////////////////////////////////////////////////////////////////
-    // equals and hashcode
-    // ///////////////////////////////////////////////////////////////////////
+    // -- OBJECT CONTRACT (NO SEMANTIC EQUALITY) ... use toString() to check for semantic equality
 
     @Override
     public int hashCode() {
@@ -1782,15 +1798,12 @@ public class JsonRepresentation {
         JsonRepresentation other = (JsonRepresentation) obj;
         if (jsonNode == null) {
             if (other.jsonNode != null)
-                return false;
+            return false;
         } else if (!jsonNode.equals(other.jsonNode))
             return false;
         return true;
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // toString
-    // ///////////////////////////////////////////////////////////////////////
 
     @Override
     public String toString() {

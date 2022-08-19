@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
@@ -44,6 +45,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.Facets;
+import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueConverter.Context;
@@ -122,7 +124,7 @@ public class JsonValueEncoder {
         throw new IllegalArgumentException("Could not parse value '" + argValueRepr.asString() + "' as a " + objectSpec.getFullIdentifier());
     }
 
-    public Object appendValueAndFormat(
+    public void appendValueAndFormat(
             final ManagedObject valueAdapter,
             final JsonRepresentation repr,
             final Context context) {
@@ -131,17 +133,43 @@ public class JsonValueEncoder {
         val valueClass = valueSpec.getCorrespondingClass();
         val jsonValueConverter = converterByClass.get(valueClass);
         if(jsonValueConverter != null) {
-            return jsonValueConverter.appendValueAndFormat(valueAdapter, context, repr);
+            jsonValueConverter.appendValueAndFormat(valueAdapter, context, repr);
+            return;
         } else {
             final Optional<ValueDecomposition> valueDecompositionIfAny = decompose(valueAdapter);
-
             if(valueDecompositionIfAny.isPresent()) {
-                val value = valueDecompositionIfAny.get().toJson();
-                repr.mapPutString("value", value);
-                appendFormats(repr, "string", "string", context.isSuppressExtensions());
-                return value;
+                val valueDecomposition = valueDecompositionIfAny.get();
+                val valueAsJson = valueDecomposition.toJson();
+                valueDecomposition.accept(
+                        simple->{
+                            // special treatment for BLOB/CLOB/ENUM as these are better represented by a map
+                            if(simple.getType() == ValueType.BLOB
+                                    || simple.getType() == ValueType.CLOB
+                                    || simple.getType() == ValueType.ENUM) {
+                                val decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
+                                repr.mapPutJsonRepresentation("value", decompRepr);
+                                appendFormats(repr, null, simple.getType().value(), context.isSuppressExtensions());
+                            } else {
+                                // using string representation from value semantics
+                                repr.mapPutString("value", valueAsJson);
+                                appendFormats(repr, "string", simple.getType().value(), context.isSuppressExtensions());
+                            }
+                        },
+                        tuple->{
+                            val decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
+                            repr.mapPutJsonRepresentation("value", decompRepr);
+
+                            val typeTupleAsFormat = "{"
+                                    + tuple.getElements().stream()
+                                        .map(el->el.getType().value())
+                                        .collect(Collectors.joining(","))
+                                    + "}";
+
+                            appendFormats(repr, null, typeTupleAsFormat, context.isSuppressExtensions());
+                        });
+            } else {
+                appendNullAndFormat(repr, context.isSuppressExtensions());
             }
-            return appendNullAndFormat(repr, context.isSuppressExtensions());
         }
     }
 
@@ -188,13 +216,11 @@ public class JsonValueEncoder {
                 .toEncodedString(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
     }
 
-    @Deprecated
-    static void appendFormats(final JsonRepresentation repr, final String format, final String xIsisFormat, final boolean suppressExtensions) {
-        if(format != null) {
-            repr.mapPutString("format", format);
-        }
-        if(!suppressExtensions && xIsisFormat != null) {
-            repr.mapPutString("extensions.x-isis-format", xIsisFormat);
+    static void appendFormats(final JsonRepresentation repr,
+            final @Nullable String format, final @Nullable String extendedFormat, final boolean suppressExtensions) {
+        repr.putFormat(format);
+        if(!suppressExtensions) {
+            repr.putExtendedFormat(extendedFormat);
         }
     }
 

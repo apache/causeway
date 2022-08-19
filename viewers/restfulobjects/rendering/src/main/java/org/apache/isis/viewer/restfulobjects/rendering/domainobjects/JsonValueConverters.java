@@ -30,7 +30,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -40,10 +39,8 @@ import lombok.val;
 
 /**
  * Has support for JSON primitives.
- * @deprecated should be covered 100% per {@link ValueSemanticsProvider}
  */
-@Deprecated
-public final class JsonValueConverters {
+final class JsonValueConverters {
 
     @RequiredArgsConstructor
     public static enum DefaultFormat {
@@ -56,14 +53,24 @@ public final class JsonValueConverters {
         FLOAT(Float.class, "decimal", "float"),
         DOUBLE(Double.class, "decimal", "double"),
         CHAR(Character.class, null, "char"),
+
+        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         BIGINTEGER(BigInteger.class, "big-integer(18)", "javamathbiginteger"),
+        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         BIGDECIMAL(BigDecimal.class, "big-decimal", "javamathbigdecimal"),
+        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         JODALOCALDATE(LocalDate.class, "date", "jodalocaldate"),
+        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         JODALOCALDATETIME(LocalDateTime.class, "date-time", "jodalocaldatetime"),
+        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         JODADATETIME(DateTime.class, "date-time", "jodadatetime"),
+        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         JAVAUTILDATE(java.util.Date.class, "date-time", "javautildate"),
+        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         JAVASQLDATE(java.sql.Date.class, "date", "javasqldate"),
+        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         JAVASQLTIME(java.sql.Time.class, "time", "javasqltime"),
+        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         JAVASQLTIMESTAMP(java.sql.Timestamp.class, "utc-millisec", "javasqltimestamp"),
 
         ;

@@ -78,7 +78,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     // value
     // ///////////////////////////////////////////////////
 
-    private Object addValue(final LinkFollowSpecs linkFollower) {
+    private void addValue(final LinkFollowSpecs linkFollower) {
         val valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
 
         // use the runtime type if we have a value, otherwise fallback to the compile time type of the member
@@ -89,17 +89,18 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         val spec = valueAdapter.getSpecification();
 
         if (spec.isValue()) {
-            return jsonValueEncoder
+            jsonValueEncoder
                     .appendValueAndFormat(
                             valueAdapter,
                             representation,
                             JsonValueConverter.Context.of(objectMember, resourceContext.suppressMemberExtensions()));
+            return;
         }
 
         if(valueAdapter.getPojo() == null) {
             final NullNode value = NullNode.getInstance();
             representation.mapPutJsonNode("value", value);
-            return value;
+            return;
         }
 
         final boolean eagerlyRender =
@@ -125,7 +126,6 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
 
         final JsonRepresentation valueJsonRepr = valueLinkBuilder.build();
         representation.mapPutJsonRepresentation("value", valueJsonRepr);
-        return valueJsonRepr;
 
     }
 

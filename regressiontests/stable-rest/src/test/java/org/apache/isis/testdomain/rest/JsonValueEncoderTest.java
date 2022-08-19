@@ -30,9 +30,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.commons.internal.base._Temporals;
-import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -368,10 +368,41 @@ class JsonValueEncoderTest {
     @Test
     void whenBlob() {
         val value = Blob.of("a Blob", CommonMimeType.BIN, new byte[] {1, 2, 3});
-        val representation = representationFor(value, _Functions.noopConsumer());
+        val representation = representationFor(value, osObj->assertEquals(
+                    JsonRepresentation.newMap("name", "a Blob.bin",
+                            "mimeType", "application/octet-stream",
+                            "bytes", "AQID").toString(),
+                    osObj.toString()));
 
-        System.err.printf("representation %s%n", representation);
-        //TODO convert repr. to map like
+        assertThat(representation.getString("extensions.x-isis-format"), is("blob"));
+    }
+
+    @Test
+    void whenClob() {
+        val value = Clob.of("a Clob", CommonMimeType.TXT, "abc");
+        val representation = representationFor(value, osObj->assertEquals(
+                    JsonRepresentation.newMap("name", "a Clob.txt",
+                            "mimeType", "text/plain",
+                            "chars", "abc").toString(),
+                    osObj.toString()));
+
+        assertThat(representation.getString("extensions.x-isis-format"), is("clob"));
+    }
+
+    static enum SampleEnum {
+        HALLO,
+        WORLD
+    }
+
+    @Test
+    void whenEnum() {
+        val value = SampleEnum.HALLO;
+        val representation = representationFor(value, osObj->assertEquals(
+                    JsonRepresentation.newMap("enumType", SampleEnum.class.getName(),
+                            "enumName", value.name()).toString(),
+                    osObj.toString()));
+
+        assertThat(representation.getString("extensions.x-isis-format"), is("enum"));
     }
 
     private JsonRepresentation representationFor(final Object value) {
@@ -395,6 +426,9 @@ class JsonValueEncoderTest {
 
         val representation = JsonRepresentation.newMap();
         jsonValueEncoder.appendValueAndFormat(valueAdapter, representation, context);
+
+        //debug
+        //System.err.printf("value %s-> %s %n", valueAdapter.getSpecification().getCorrespondingClass(), representation);
         return representation;
     }
 
