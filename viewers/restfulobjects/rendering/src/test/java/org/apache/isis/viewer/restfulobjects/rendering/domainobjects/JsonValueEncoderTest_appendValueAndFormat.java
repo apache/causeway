@@ -30,10 +30,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -41,6 +37,11 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueConverter.Context;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 public class JsonValueEncoderTest_appendValueAndFormat {
 
@@ -73,7 +74,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(String.class);
         allowingObjectAdapterToReturn("aString");
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("aString"));
 
@@ -86,7 +87,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(Boolean.class);
         allowingObjectAdapterToReturn(Boolean.TRUE);
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isBoolean("value"), is(true));
         assertThat(representation.getBoolean("value"), is(Boolean.TRUE));
 
@@ -98,7 +99,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(boolean.class);
         allowingObjectAdapterToReturn(true);
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isBoolean("value"), is(true));
         assertThat(representation.getBoolean("value"), is(true));
 
@@ -110,7 +111,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(Byte.class);
         allowingObjectAdapterToReturn(Byte.valueOf((byte)123));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getByte("value"), is(Byte.valueOf((byte)123)));
 
@@ -123,7 +124,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(byte.class);
         allowingObjectAdapterToReturn((byte)123);
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getByte("value"), is((byte)123));
 
@@ -136,7 +137,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(Short.class);
         allowingObjectAdapterToReturn(Short.valueOf((short)12345));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getShort("value"), is(Short.valueOf((short)12345)));
 
@@ -149,7 +150,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(short.class);
         allowingObjectAdapterToReturn((short)12345);
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getShort("value"), is((short)12345));
 
@@ -162,7 +163,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(Integer.class);
         allowingObjectAdapterToReturn(Integer.valueOf(12345678));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getInt("value"), is(Integer.valueOf(12345678)));
 
@@ -175,7 +176,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(int.class);
         allowingObjectAdapterToReturn(12345678);
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getInt("value"), is(12345678));
 
@@ -188,7 +189,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(Long.class);
         allowingObjectAdapterToReturn(Long.valueOf(12345678901234L));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getLong("value"), is(Long.valueOf(12345678901234L)));
 
@@ -201,7 +202,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(long.class);
         allowingObjectAdapterToReturn(12345678901234L);
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getLong("value"), is(12345678901234L));
 
@@ -214,7 +215,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(Float.class);
         allowingObjectAdapterToReturn(Float.valueOf((float)123.45));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getFloat("value"), is(Float.valueOf((float)123.45)));
 
@@ -227,7 +228,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(Float.class);
         allowingObjectAdapterToReturn((float)123.45);
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getFloat("value"), is((float)123.45));
 
@@ -240,7 +241,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(Double.class);
         allowingObjectAdapterToReturn(Double.valueOf(12345.6789));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getDouble("value"), is(Double.valueOf(12345.6789)));
 
@@ -253,7 +254,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(double.class);
         allowingObjectAdapterToReturn(12345.6789);
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getDouble("value"), is(12345.6789));
 
@@ -266,7 +267,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(Character.class);
         allowingObjectAdapterToReturn(Character.valueOf('a'));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getChar("value"), is(Character.valueOf('a')));
 
@@ -279,7 +280,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(char.class);
         allowingObjectAdapterToReturn('a');
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getChar("value"), is('a'));
 
@@ -292,7 +293,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(java.util.Date.class);
         allowingObjectAdapterToReturn(asDateTime("2014-04-25T12:34:45Z"));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
 
@@ -305,7 +306,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(java.sql.Date.class);
         allowingObjectAdapterToReturn(asSqlDate("2014-04-25"));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25"));
 
@@ -318,7 +319,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(org.joda.time.DateTime.class);
         allowingObjectAdapterToReturn(new org.joda.time.DateTime(asDateTime("2014-04-25T12:34:45Z")));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
 
@@ -331,7 +332,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(org.joda.time.LocalDateTime.class);
         allowingObjectAdapterToReturn(new org.joda.time.LocalDateTime(asDateTime("2014-04-25T12:34:45Z")));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
 
@@ -344,7 +345,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(org.joda.time.LocalDate.class);
         allowingObjectAdapterToReturn(new org.joda.time.LocalDate(2014,4,25));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25"));
 
@@ -358,7 +359,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         final long time = asDateTime("2014-04-25T12:34:45Z").getTime();
         allowingObjectAdapterToReturn(new Timestamp(time));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, defaultContext());
         assertThat(representation.isLong("value"), is(true));
         assertThat(representation.getLong("value"), is(time));
 
@@ -371,7 +372,8 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(BigInteger.class);
         allowingObjectAdapterToReturn(new BigInteger("12345678901234567890"));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, "big-integer(22)", false);
+        //"big-integer(22)"
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, Context.forTesting(22, 0));
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.isBigInteger("value"), is(true));
         assertThat(representation.getBigInteger("value"), is(new BigInteger("12345678901234567890")));
@@ -385,7 +387,8 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         allowingLogicalTypeReturnObjectTypeFor(BigDecimal.class);
         allowingObjectAdapterToReturn(new BigDecimal("12345678901234567890.1234"));
 
-        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, "big-decimal(27,4)", false);
+        //"big-decimal(27,4)"
+        jsonValueEncoder.appendValueAndFormat(mockObjectAdapter, representation, Context.forTesting(27, 4));
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.isBigDecimal("value"), is(true));
         assertThat(representation.getBigDecimal("value"), is(new BigDecimal("12345678901234567890.1234")));
@@ -394,6 +397,9 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         assertThat(representation.getString("extensions.x-isis-format"), is("javamathbigdecimal"));
     }
 
+    private Context defaultContext() {
+        return Context.forTesting(null, null);
+    }
 
     private void allowingLogicalTypeReturnObjectTypeFor(final Class<?> cls) {
         context.checking(new Expectations() {

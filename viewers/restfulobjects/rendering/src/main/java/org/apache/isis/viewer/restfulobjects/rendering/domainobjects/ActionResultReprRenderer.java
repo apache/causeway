@@ -154,7 +154,7 @@ extends ReprRendererAbstract<ObjectAndActionInvocation> {
         case SCALAR_VALUE:
 
             final ScalarValueReprRenderer scalarValueReprRenderer =
-            new ScalarValueReprRenderer(resourceContext, null, representation);
+            new ScalarValueReprRenderer(resourceContext, action, null, representation);
             scalarValueReprRenderer.with(returnedAdapter)
             .withReturnType(action.getReturnType());
 

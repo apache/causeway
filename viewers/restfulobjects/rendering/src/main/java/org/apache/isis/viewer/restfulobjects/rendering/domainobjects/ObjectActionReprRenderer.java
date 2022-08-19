@@ -172,7 +172,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         for (val choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = param.getSpecification();
-            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, super.getJsonValueEncoder(), choiceAdapter));
+            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, paramMeta, getJsonValueEncoder(), choiceAdapter));
         }
         return list;
     }
@@ -184,7 +184,8 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         }
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
         // final ObjectSpecification defaultSpec = param.getSpecification();
-        return DomainObjectReprRenderer.valueOrRef(resourceContext, super.getJsonValueEncoder(), defaultAdapter);
+        val paramMeta = paramMod.getMetaModel();
+        return DomainObjectReprRenderer.valueOrRef(resourceContext, paramMeta, getJsonValueEncoder(), defaultAdapter);
     }
 
     // ///////////////////////////////////////////////////

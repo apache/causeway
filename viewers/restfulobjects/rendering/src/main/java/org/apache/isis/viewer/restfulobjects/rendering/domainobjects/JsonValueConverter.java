@@ -18,15 +18,24 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
+import java.util.OptionalInt;
+
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.feature.HasObjectFeature;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import lombok.Getter;
+import lombok.NonNull;
 
 public interface JsonValueConverter {
 
@@ -34,66 +43,112 @@ public interface JsonValueConverter {
      * The value as pojo, otherwise <tt>null</tt>.
      */
     @Nullable
-    Object recoverValueAsPojo(JsonRepresentation repr, String format);
+    Object recoverValueAsPojo(JsonRepresentation repr, Context context);
 
-    Object asObject(ManagedObject objectAdapter, String format);
+    Object asObject(ManagedObject objectAdapter, Context context);
 
     Object appendValueAndFormat(
             final ManagedObject objectAdapter,
-            final String formatOverride,
-            final JsonRepresentation repr,
-            final boolean suppressExtensions);
+            final Context context,
+            final JsonRepresentation repr);
 
     Can<Class<?>> getClasses();
 
+    static interface Context extends HasObjectFeature {
+
+        OptionalInt maxTotalDigits(@Nullable ManagedObject value);
+        OptionalInt maxFractionalDigits(@Nullable ManagedObject value);
+        boolean isSuppressExtensions();
+
+        public static Context of(
+                final @NonNull ObjectFeature objectFeature,
+                final boolean suppressExtensions) {
+            return new Context.InferredFromFacets(objectFeature, suppressExtensions);
+        }
+
+        public static Context forTesting(final Integer maxTotalDigits, final Integer maxFractionalDigits) {
+            return new Context() {
+                @Override public ObjectFeature getObjectFeature() {
+                    throw _Exceptions.notImplemented(); }
+                @Override public OptionalInt maxTotalDigits(final ManagedObject value) {
+                    return OptionalInt.of(maxTotalDigits); }
+                @Override public OptionalInt maxFractionalDigits(final ManagedObject value) {
+                    return OptionalInt.of(maxFractionalDigits); }
+                @Override public boolean isSuppressExtensions() {
+                    return false; }
+            };
+        }
+
+        @Getter
+        @lombok.Value
+        static class InferredFromFacets implements Context {
+            final @NonNull ObjectFeature objectFeature;
+            final boolean suppressExtensions;
+
+            @Override
+            public OptionalInt maxTotalDigits(final @Nullable ManagedObject value) {
+                return Facets.maxTotalDigits(facetHolders(value));
+            }
+
+            @Override
+            public OptionalInt maxFractionalDigits(final @Nullable ManagedObject value) {
+                return Facets.maxFractionalDigits(facetHolders(value));
+            }
+
+            // look for facet on feature, else on the value's spec
+            private Can<FacetHolder> facetHolders(final @Nullable ManagedObject value) {
+                return ManagedObjects.isNullOrUnspecifiedOrEmpty(value)
+                    ? Can.of(objectFeature)
+                    : Can.of(objectFeature, value.getSpecification());
+            }
+
+        }
+
+    }
+
     static abstract class Abstract implements JsonValueConverter {
         protected final String format;
-        protected final String xIsisFormat;
+        protected final String extendedFormat;
 
         @Getter private final Can<Class<?>> classes;
 
-        public Abstract(final String format, final String xIsisFormat, final Class<?>... classes) {
+        public Abstract(final String format, final String extendedFormat, final Class<?>... classes) {
             this.format = format;
-            this.xIsisFormat = xIsisFormat;
+            this.extendedFormat = extendedFormat;
             this.classes = Can.ofArray(classes);
         }
 
         @Override
         public Object appendValueAndFormat(
                 final ManagedObject objectAdapter,
-                final String formatOverride,
-                final JsonRepresentation repr,
-                final boolean suppressExtensions) {
+                final Context context,
+                final JsonRepresentation repr) {
 
             final Object value = unwrapAsObjectElseNullNode(objectAdapter);
             repr.mapPut("value", value);
-            appendFormats(repr, effectiveFormat(formatOverride), this.xIsisFormat, suppressExtensions);
+            appendFormats(repr, context);
             return value;
         }
 
         @Override
-        public final Object asObject(final ManagedObject objectAdapter, final String format) {
+        public final Object asObject(final ManagedObject objectAdapter, final Context format) {
             return objectAdapter.getPojo();
         }
 
         protected final String effectiveFormat(final String formatOverride) {
-            return formatOverride!=null ? formatOverride : this.format;
+            return formatOverride!=null ? formatOverride : format;
         }
 
         static Object unwrapAsObjectElseNullNode(final ManagedObject adapter) {
             return adapter != null? adapter.getPojo(): NullNode.getInstance();
         }
 
-        static void appendFormats(
+        void appendFormats(
                 final JsonRepresentation repr,
-                final String format,
-                final String xIsisFormat,
-                final boolean suppressExtensions) {
-            if(format != null) {
-                repr.mapPutString("format", format);
-            }
-            if(!suppressExtensions && xIsisFormat != null) {
-                repr.mapPutString("extensions.x-isis-format", xIsisFormat);
+                final Context context) {
+            repr.putFormat(format);
+            if(!context.isSuppressExtensions()) {
+                repr.putExtendedFormat(extendedFormat);
             }
         }
     }

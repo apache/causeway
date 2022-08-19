@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueConverter.Context;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
 
 import lombok.val;
@@ -53,7 +54,7 @@ class JsonValueEncoderTest {
 
         val jsonValueEncoder = JsonValueEncoder.forTesting(mmc.getSpecificationLoader());
         val representation = JsonRepresentation.newMap();
-        jsonValueEncoder.appendValueAndFormat(valueAdapter, representation, null, false);
+        jsonValueEncoder.appendValueAndFormat(valueAdapter, representation, defaultContext());
 
         System.err.printf("representation %s%n", representation);
 
@@ -66,6 +67,11 @@ class JsonValueEncoderTest {
         //assertEquals(new BigDecimal("12345678901234567890.1234"), representation.getBigDecimal("value"));
         //assertEquals("big-decimal(27,4)", representation.getString("format"));
         //assertEquals("javamathbigdecimal", representation.getString("extensions.x-isis-format"));
+    }
+
+    private Context defaultContext() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

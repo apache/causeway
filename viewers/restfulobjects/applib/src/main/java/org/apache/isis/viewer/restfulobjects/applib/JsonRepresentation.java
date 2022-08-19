@@ -46,6 +46,7 @@ import com.fasterxml.jackson.databind.node.POJONode;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -1538,6 +1539,24 @@ public class JsonRepresentation {
         }
         return this;
     }
+
+    // -- FORMATS
+
+    public JsonRepresentation putFormat(final @Nullable String format) {
+        if(format != null) {
+            mapPutString("format", format);
+        }
+        return this;
+    }
+
+    public JsonRepresentation putExtendedFormat(final @Nullable String format) {
+        if(format != null) {
+            mapPutString("extensions.x-isis-format", format);
+        }
+        return this;
+    }
+
+    // -- PATH
 
     private static class Path {
         private final List<String> head;

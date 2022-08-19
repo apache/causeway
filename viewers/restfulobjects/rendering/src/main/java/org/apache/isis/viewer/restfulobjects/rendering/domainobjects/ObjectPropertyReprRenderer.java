@@ -23,9 +23,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -91,30 +89,11 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         val spec = valueAdapter.getSpecification();
 
         if (spec.isValue()) {
-            String formatOverride = null;
-            final Class<?> valueType = spec.getCorrespondingClass();
-            if(valueType == java.math.BigDecimal.class) {
-
-                // look for facet on member, else on the value's spec
-                val facetHolders = Can.<FacetHolder>of(objectMember, spec);
-                final int totalDigits = Facets.maxTotalDigits(facetHolders).orElse(-1);
-                final int scale = Facets.maxFractionalDigits(facetHolders).orElse(-1);
-
-                formatOverride = String.format("big-decimal(%d,%d)", totalDigits, scale);
-
-            } else if(valueType == java.math.BigInteger.class) {
-
-                // look for facet on member, else on the value's spec
-                val facetHolders = Can.<FacetHolder>of(objectMember, spec);
-                final int totalDigits = Facets.maxTotalDigits(facetHolders).orElse(-1);
-                formatOverride = String.format("big-integer(%d)", totalDigits);
-            }
             return jsonValueEncoder
                     .appendValueAndFormat(
                             valueAdapter,
                             representation,
-                            formatOverride,
-                            resourceContext.suppressMemberExtensions());
+                            JsonValueConverter.Context.of(objectMember, resourceContext.suppressMemberExtensions()));
         }
 
         if(valueAdapter.getPojo() == null) {
@@ -204,7 +183,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
             // final ObjectSpecification choiceSpec = objectMember.getSpecification();
 
             // REVIEW: check that it works for ToDoItem$Category, though...
-            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, super.getJsonValueEncoder(), choiceAdapter));
+            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, objectMember, super.getJsonValueEncoder(), choiceAdapter));
         }
         return list;
     }

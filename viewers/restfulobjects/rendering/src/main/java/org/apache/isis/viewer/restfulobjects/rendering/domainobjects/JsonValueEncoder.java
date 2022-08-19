@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueConverter.Context;
 
 import lombok.NonNull;
 import lombok.val;
@@ -78,7 +79,7 @@ public class JsonValueEncoder {
     public ManagedObject asAdapter(
             final ObjectSpecification objectSpec,
             final JsonRepresentation argValueRepr,
-            final String format) {
+            final JsonValueConverter.Context context) {
 
         if(argValueRepr == null) {
             return null;
@@ -105,7 +106,7 @@ public class JsonValueEncoder {
             throw new IllegalArgumentException("Unable to parse value");
         }
 
-        val valueAsPojo = jvc.recoverValueAsPojo(argValueRepr, format);
+        val valueAsPojo = jvc.recoverValueAsPojo(argValueRepr, context);
         if(valueAsPojo != null) {
             return ManagedObject.lazy(specificationLoader, valueAsPojo);
         }
@@ -127,24 +128,23 @@ public class JsonValueEncoder {
     public Object appendValueAndFormat(
             final ManagedObject valueAdapter,
             final JsonRepresentation repr,
-            final String formatOverride,
-            final boolean suppressExtensions) {
+            final Context context) {
 
         val valueSpec = valueAdapter.getSpecification();
         val valueClass = valueSpec.getCorrespondingClass();
         val jsonValueConverter = converterByClass.get(valueClass);
         if(jsonValueConverter != null) {
-            return jsonValueConverter.appendValueAndFormat(valueAdapter, formatOverride, repr, suppressExtensions);
+            return jsonValueConverter.appendValueAndFormat(valueAdapter, context, repr);
         } else {
             final Optional<ValueDecomposition> valueDecompositionIfAny = decompose(valueAdapter);
 
             if(valueDecompositionIfAny.isPresent()) {
                 val value = valueDecompositionIfAny.get().toJson();
                 repr.mapPutString("value", value);
-                appendFormats(repr, "string", "string", suppressExtensions);
+                appendFormats(repr, "string", "string", context.isSuppressExtensions());
                 return value;
             }
-            return appendNullAndFormat(repr, suppressExtensions);
+            return appendNullAndFormat(repr, context.isSuppressExtensions());
         }
     }
 
@@ -176,14 +176,14 @@ public class JsonValueEncoder {
     }
 
     @Nullable
-    public Object asObject(final @NonNull ManagedObject adapter, final String format) {
+    public Object asObject(final @NonNull ManagedObject adapter, final JsonValueConverter.Context context) {
 
         val objectSpec = adapter.getSpecification();
         val cls = objectSpec.getCorrespondingClass();
 
         val jsonValueConverter = converterByClass.get(cls);
         if(jsonValueConverter != null) {
-            return jsonValueConverter.asObject(adapter, format);
+            return jsonValueConverter.asObject(adapter, context);
         }
 
         // else

@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.Facets;
@@ -453,13 +454,14 @@ extends ReprRendererAbstract<ManagedObject> {
 
     public static Object valueOrRef(
             final IResourceContext context,
+            final ObjectFeature objectFeature,
             final JsonValueEncoder jsonValueEncoder,
             final ManagedObject domainObject) {
 
         val spec = domainObject.getSpecification();
         if(spec.isValue()) {
-            String format = null; // TODO
-            return jsonValueEncoder.asObject(domainObject, format);
+            val context2 = JsonValueConverter.Context.of(objectFeature, context.suppressMemberExtensions());
+            return jsonValueEncoder.asObject(domainObject, context2);
         }
 
         return DomainObjectReprRenderer.newLinkToBuilder(
