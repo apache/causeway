@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.node.NullNode;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
@@ -64,16 +65,12 @@ public class JsonValueEncoder {
 
     @Inject private SpecificationLoader specificationLoader;
 
+    private Map<Class<?>, JsonValueConverter> converterByClass = _Maps.newLinkedHashMap();
+
     @PostConstruct
     public void init() {
         new JsonValueConverters().asList()
-            .forEach(this::registerConverter);
-    }
-
-    private Map<Class<?>, JsonValueConverter> converterByClass = _Maps.newLinkedHashMap();
-
-    private void registerConverter(final JsonValueConverter jvc) {
-        jvc.getClasses().forEach(cls->converterByClass.put(cls, jvc));
+            .forEach(converter->converterByClass.put(converter.getValueClass(), converter));
     }
 
     public ManagedObject asAdapter(
@@ -95,7 +92,7 @@ public class JsonValueEncoder {
         val valueSerializer =
                 Facets.valueSerializerElseFail(objectSpec, valueClass);
 
-        final JsonValueConverter jvc = converterByClass.get(valueClass);
+        final JsonValueConverter jvc = converterByClass.get(ClassUtils.resolvePrimitiveIfNecessary(valueClass));
         if(jvc == null) {
             // best effort
             if (argValueRepr.isString()) {

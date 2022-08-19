@@ -52,7 +52,7 @@ public interface JsonValueConverter {
             final Context context,
             final JsonRepresentation repr);
 
-    Can<Class<?>> getClasses();
+    Class<?> getValueClass();
 
     static interface Context extends HasObjectFeature {
 
@@ -110,12 +110,12 @@ public interface JsonValueConverter {
         protected final String format;
         protected final String extendedFormat;
 
-        @Getter private final Can<Class<?>> classes;
+        @Getter private final Class<?> valueClass;
 
-        public Abstract(final String format, final String extendedFormat, final Class<?>... classes) {
+        public Abstract(final String format, final String extendedFormat, final Class<?> valueClass) {
             this.format = format;
             this.extendedFormat = extendedFormat;
-            this.classes = Can.ofArray(classes);
+            this.valueClass = valueClass;
         }
 
         @Override

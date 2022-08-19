@@ -70,7 +70,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract(null, "boolean", boolean.class, Boolean.class){
+        converters.add(new JsonValueConverter.Abstract(null, "boolean", Boolean.class){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isBoolean()) {
@@ -92,7 +92,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("int", "byte", byte.class, Byte.class){
+        converters.add(new JsonValueConverter.Abstract("int", "byte", Byte.class){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isNumber()) {
@@ -123,7 +123,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("int", "short", short.class, Short.class){
+        converters.add(new JsonValueConverter.Abstract("int", "short", Short.class){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isNumber()) {
@@ -154,7 +154,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("int", "int", int.class, Integer.class){
+        converters.add(new JsonValueConverter.Abstract("int", "int", Integer.class){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isInt()) {
@@ -185,7 +185,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("int", "long", long.class, Long.class){
+        converters.add(new JsonValueConverter.Abstract("int", "long", Long.class){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isLong()) {
@@ -217,7 +217,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("decimal", "float", float.class, Float.class){
+        converters.add(new JsonValueConverter.Abstract("decimal", "float", Float.class){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isDecimal()) {
@@ -252,7 +252,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("decimal", "double", double.class, Double.class){
+        converters.add(new JsonValueConverter.Abstract("decimal", "double", Double.class){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isDecimal()) {
@@ -290,7 +290,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract(null, "char", char.class, Character.class){
+        converters.add(new JsonValueConverter.Abstract(null, "char", Character.class){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isString()) {
