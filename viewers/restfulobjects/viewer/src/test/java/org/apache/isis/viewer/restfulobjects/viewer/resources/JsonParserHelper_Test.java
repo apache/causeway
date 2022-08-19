@@ -28,7 +28,7 @@ public class JsonParserHelper_Test {
     @Test
     public void oidFromLink() throws Exception {
         final JsonRepresentation link = JsonRepresentation.newMap();
-        link.mapPut("href", "http://localhost/objects/OID/1");
+        link.mapPutString("href", "http://localhost/objects/OID/1");
         final String oidFromHref = JsonParserHelper.encodedOidFromLink(link);
         Assert.assertEquals("OID:1", oidFromHref);
     }

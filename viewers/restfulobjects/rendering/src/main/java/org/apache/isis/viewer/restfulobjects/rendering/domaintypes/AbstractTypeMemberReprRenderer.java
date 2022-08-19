@@ -53,8 +53,8 @@ extends AbstractTypeFeatureReprRenderer<T> {
         memberType = MemberType.determineFrom(objectFeature);
 
         // done eagerly so can use as criteria for x-ro-follow-links
-        representation.mapPut("id", objectFeature.getId());
-        representation.mapPut("memberType", memberType.getName());
+        representation.mapPutString("id", objectFeature.getId());
+        representation.mapPutString("memberType", memberType.getName());
 
         return this;
     }

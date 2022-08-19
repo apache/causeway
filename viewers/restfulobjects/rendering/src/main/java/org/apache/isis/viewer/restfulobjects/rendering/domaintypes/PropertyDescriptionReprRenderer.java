@@ -58,9 +58,9 @@ extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
 
     @Override
     protected void addPropertiesSpecificToFeature() {
-        representation.mapPut("optional", !getObjectFeature().isMandatory());
+        representation.mapPutBoolean("optional", !getObjectFeature().isMandatory());
         Facets.maxLength(getObjectFeature())
-            .ifPresent(maxLength->representation.mapPut("maxLength", maxLength));
+            .ifPresent(maxLength->representation.mapPutInt("maxLength", maxLength));
     }
 
 

@@ -177,23 +177,23 @@ extends ReprRendererAbstract<ManagedObject> {
                 }
                 oidIfAny.ifPresent(oid->{
                     val oidStr = oid.stringify();
-                    getExtensions().mapPut("oid", oidStr);
+                    getExtensions().mapPutString("oid", oidStr);
                 });
             }
 
             // title
             final String title = objectAdapter.titleString();
-            representation.mapPut("title", title);
+            representation.mapPutString("title", title);
 
             // serviceId or instance Id
             if (isService) {
-                representation.mapPut("serviceId", ServiceUtil.idOfAdapter(objectAdapter));
+                representation.mapPutString("serviceId", ServiceUtil.idOfAdapter(objectAdapter));
             } else {
                 oidIfAny.ifPresent(oid->{
                     Optional.ofNullable(oid.getLogicalTypeName())
                     .ifPresent(domainType->
-                        representation.mapPut("domainType", domainType));
-                    representation.mapPut("instanceId", oid.getIdentifier());
+                        representation.mapPutString("domainType", domainType));
+                    representation.mapPutString("instanceId", oid.getIdentifier());
                 });
             }
         }
@@ -219,8 +219,8 @@ extends ReprRendererAbstract<ManagedObject> {
             addUpdatePropertiesLinkIfRequired();
 
             // extensions
-            getExtensions().mapPut("isService", isService);
-            getExtensions().mapPut("isPersistent", ManagedObjects.isIdentifiable(objectAdapter));
+            getExtensions().mapPutBoolean("isService", isService);
+            getExtensions().mapPutBoolean("isPersistent", ManagedObjects.isIdentifiable(objectAdapter));
             if(isService) {
 
                 Facets.domainServiceLayoutMenuBar(objectAdapter.getSpecification())
@@ -241,7 +241,7 @@ extends ReprRendererAbstract<ManagedObject> {
             val renderer =
                     new DomainObjectReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap())
                     .with(objectAdapter);
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);
@@ -254,7 +254,7 @@ extends ReprRendererAbstract<ManagedObject> {
         if (linkFollower.matches(link)) {
             final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
             renderer.with(objectAdapter.getSpecification());
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
         getLinks().arrayAdd(link);
     }
@@ -300,7 +300,7 @@ extends ReprRendererAbstract<ManagedObject> {
             }
         }
         if(!mode.isUpdatePropertiesLinkArgs()) {
-            representation.mapPut("members", appendTo);
+            representation.mapPutJsonRepresentation("members", appendTo);
         }
         return this;
     }
@@ -336,7 +336,7 @@ extends ReprRendererAbstract<ManagedObject> {
             final JsonRepresentation propertyRepr = resourceContext.objectPropertyValuesOnly()
                     ? propertyValueRepresentation.getRepresentation("value")
                             : propertyValueRepresentation;
-                    members.mapPut(assoc.getId(), propertyRepr);
+                    members.mapPutJsonRepresentation(assoc.getId(), propertyRepr);
         }
     }
 
@@ -369,7 +369,7 @@ extends ReprRendererAbstract<ManagedObject> {
                 renderer.asEventSerialization();
             }
 
-            members.mapPut(assoc.getId(), renderer.render());
+            members.mapPutJsonRepresentation(assoc.getId(), renderer.render());
         }
     }
 
@@ -392,7 +392,7 @@ extends ReprRendererAbstract<ManagedObject> {
             val where = resourceContext.getWhere();
 
             renderer.with(ManagedAction.of(objectAdapter, action, where)).usingLinkTo(linkToBuilder);
-            members.mapPut(action.getId(), renderer.render());
+            members.mapPutJsonRepresentation(action.getId(), renderer.render());
         });
 
     }

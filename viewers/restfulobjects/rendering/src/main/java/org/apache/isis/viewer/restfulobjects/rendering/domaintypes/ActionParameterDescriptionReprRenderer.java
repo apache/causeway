@@ -62,7 +62,7 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
         super.with(specAndFeature);
 
         // done eagerly so can use as criteria for x-ro-follow-links
-        representation.mapPut("id", deriveId());
+        representation.mapPutString("id", deriveId());
 
         return this;
     }
@@ -96,14 +96,14 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
 
     @Override
     protected void addPropertiesSpecificToFeature() {
-        representation.mapPut("name", getObjectFeature()
+        representation.mapPutString("name", getObjectFeature()
                 .getStaticFriendlyName()
                 .orElseThrow(_Exceptions::unexpectedCodeReach));
-        representation.mapPut("number", getObjectFeature().getParameterIndex());
-        representation.mapPut("optional", getObjectFeature().isOptional());
+        representation.mapPutInt("number", getObjectFeature().getParameterIndex());
+        representation.mapPutBoolean("optional", getObjectFeature().isOptional());
 
         Facets.maxLength(getObjectFeature())
-            .ifPresent(maxLength->representation.mapPut("maxLength", maxLength));
+            .ifPresent(maxLength->representation.mapPutInt("maxLength", maxLength));
     }
 
     @Override

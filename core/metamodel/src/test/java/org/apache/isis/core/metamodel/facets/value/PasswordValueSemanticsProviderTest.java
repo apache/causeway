@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.core.metamodel.valuesemantics.PasswordValueSemantics;
+
+import static org.junit.Assert.assertEquals;
 
 public class PasswordValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Password> {
@@ -49,6 +49,16 @@ extends ValueSemanticsProviderAbstractTestCase<Password> {
         final Object restore = valueSemantics.compose(
                 ValueDecomposition.fromJson(valueSemantics.getSchemaValueType(), "secret"));
         assertEquals(password, restore);
+    }
+
+    @Override
+    protected Password getSample() {
+        return password;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final Password a, final String json) {
+        assertEquals("secret", json);
     }
 
 }

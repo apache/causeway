@@ -36,13 +36,13 @@ extends ReprRendererAbstract<InteractionContext> {
 
     @Override
     public UserReprRenderer with(final InteractionContext authentication) {
-        representation.mapPut("userName", authentication.getUser().getName());
+        representation.mapPutString("userName", authentication.getUser().getName());
         final JsonRepresentation roles = JsonRepresentation.newArray();
 
         authentication.getUser().streamRoleNames()
         .forEach(roles::arrayAdd);
 
-        representation.mapPut("roles", roles);
+        representation.mapPutJsonRepresentation("roles", roles);
         return this;
     }
 
@@ -64,7 +64,7 @@ extends ReprRendererAbstract<InteractionContext> {
         if (linkFollower.matches(link)) {
             final UserReprRenderer renderer = new UserReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
             renderer.with(getResourceContext().getInteractionProvider().currentInteractionContextElseFail());
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);
@@ -76,7 +76,7 @@ extends ReprRendererAbstract<InteractionContext> {
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final HomePageReprRenderer renderer = new HomePageReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
         getLinks().arrayAdd(link);
     }

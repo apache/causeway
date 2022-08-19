@@ -87,13 +87,13 @@ public class JsonParserHelper {
 
         if(!argRepr.mapHas("value")) {
             String reason = "No 'value' key";
-            argRepr.mapPut("invalidReason", reason);
+            argRepr.mapPutString("invalidReason", reason);
             throw new IllegalArgumentException(reason);
         }
 
         if (objectSpec == null) {
             String reason = "ObjectSpec is null, cannot validate";
-            argRepr.mapPut("invalidReason", reason);
+            argRepr.mapPutString("invalidReason", reason);
             throw new IllegalArgumentException(reason);
         }
 
@@ -104,7 +104,7 @@ public class JsonParserHelper {
             try {
                 return jsonValueEncoder.asAdapter(objectSpec, argValueRepr, null);
             }catch(IllegalArgumentException ex) {
-                argRepr.mapPut("invalidReason", ex.getMessage());
+                argRepr.mapPutString("invalidReason", ex.getMessage());
                 throw ex;
             }catch(Exception ex) {
                 StringBuilder buf = new StringBuilder("Failed to parse representation ");
@@ -115,7 +115,7 @@ public class JsonParserHelper {
                 }
                 buf.append("as value of type '").append(objectSpec.getShortIdentifier()).append("'");
                 String reason = buf.toString();
-                argRepr.mapPut("invalidReason", reason);
+                argRepr.mapPutString("invalidReason", reason);
                 throw new IllegalArgumentException(reason);
             }
         }
@@ -123,20 +123,20 @@ public class JsonParserHelper {
         // reference
         if (!argValueRepr.isLink()) {
             final String reason = "Expected a link (because this object's type is not a value) but found no 'href'";
-            argRepr.mapPut("invalidReason", reason);
+            argRepr.mapPutString("invalidReason", reason);
             throw new IllegalArgumentException(reason);
         }
         final String oidFromHref = encodedOidFromLink(argValueRepr);
         if (oidFromHref == null) {
             final String reason = "Could not parse 'href' to identify the object's OID";
-            argRepr.mapPut("invalidReason", reason);
+            argRepr.mapPutString("invalidReason", reason);
             throw new IllegalArgumentException(reason);
         }
 
         val objectAdapter = resourceContext.getObjectAdapterForOidFromHref(oidFromHref)
                 .orElseThrow(()->{
                     val reason = "'href' does not reference a known entity";
-                    argRepr.mapPut("invalidReason", reason);
+                    argRepr.mapPutString("invalidReason", reason);
                     return new IllegalArgumentException(reason);
                 });
         return objectAdapter;

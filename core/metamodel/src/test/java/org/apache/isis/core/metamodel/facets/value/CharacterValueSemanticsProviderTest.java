@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.apache.isis.applib.exceptions.recoverable.InvalidEntryException;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.core.metamodel.valuesemantics.CharacterValueSemantics;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CharacterValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Character> {
@@ -71,5 +71,15 @@ extends ValueSemanticsProviderAbstractTestCase<Character> {
         final Object restore = valueSemantics.compose(
                 ValueDecomposition.fromJson(valueSemantics.getSchemaValueType(), "Y"));
         assertEquals(Character.valueOf('Y'), restore);
+    }
+
+    @Override
+    protected Character getSample() {
+        return character;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final Character a, final String json) {
+        assertEquals("r", json);
     }
 }

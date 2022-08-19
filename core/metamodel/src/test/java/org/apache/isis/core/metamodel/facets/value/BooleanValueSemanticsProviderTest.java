@@ -84,4 +84,14 @@ extends ValueSemanticsProviderAbstractTestCase<Boolean> {
                 value.titlePresentation(null, null));
     }
 
+    @Override
+    protected Boolean getSample() {
+        return booleanObj;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final Boolean a, final String json) {
+        assertEquals("true", json);
+    }
+
 }

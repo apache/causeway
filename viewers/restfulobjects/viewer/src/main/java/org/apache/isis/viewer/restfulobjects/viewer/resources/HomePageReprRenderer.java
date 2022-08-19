@@ -77,7 +77,7 @@ extends ReprRendererAbstract<Void> {
         addLinkToDomainTypes(getResourceContext().getMetaModelContext().getSpecificationLoader().snapshotSpecifications());
 
         // inks and extensions
-        representation.mapPut("extensions", JsonRepresentation.newMap());
+        representation.mapPutJsonRepresentation("extensions", JsonRepresentation.newMap());
 
         return representation;
     }
@@ -97,7 +97,7 @@ extends ReprRendererAbstract<Void> {
                     linkFollower,
                     JsonRepresentation.newMap());
 
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
         getLinks().arrayAdd(link);
     }
@@ -113,7 +113,7 @@ extends ReprRendererAbstract<Void> {
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final VersionReprRenderer renderer = new VersionReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);
@@ -141,7 +141,7 @@ extends ReprRendererAbstract<Void> {
             .withLink(Rel.SELF, "services")
             .with(serviceAdapters);
 
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);
@@ -163,7 +163,7 @@ extends ReprRendererAbstract<Void> {
                     JsonRepresentation.newMap());
 
             renderer.with(authentication);
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);
@@ -225,7 +225,7 @@ extends ReprRendererAbstract<Void> {
                             JsonRepresentation.newMap());
 
             renderer.withLink(Rel.SELF, "domain-types").with(specifications);
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);

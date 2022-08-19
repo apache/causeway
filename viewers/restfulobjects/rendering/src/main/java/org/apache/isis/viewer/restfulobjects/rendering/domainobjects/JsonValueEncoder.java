@@ -135,46 +135,52 @@ public class JsonValueEncoder {
     public Object appendValueAndFormat(
             final ManagedObject valueAdapter,
             final JsonRepresentation repr,
-            final String format,
+            final String formatOverride,
             final boolean suppressExtensions) {
 
         val valueSpec = valueAdapter.getSpecification();
         val valueClass = valueSpec.getCorrespondingClass();
         val jsonValueConverter = converterByClass.get(valueClass);
         if(jsonValueConverter != null) {
-            return jsonValueConverter.appendValueAndFormat(valueAdapter, format, repr, suppressExtensions);
+            return jsonValueConverter.appendValueAndFormat(valueAdapter, formatOverride, repr, suppressExtensions);
         } else {
+            final Optional<ValueDecomposition> valueDecompositionIfAny = decompose(valueAdapter);
 
-            final Object value = ManagedObjects.isNullOrUnspecifiedOrEmpty(valueAdapter)
-                    ? NullNode.getInstance()
-                    : decomposeToJson(valueAdapter)
-                        .map(Object.class::cast)
-                        .orElseGet(()->{
-                            log.warn("{Could not resolve a ValueComposer for {}, "
-                                    + "falling back to rendering as 'null'. "
-                                    + "Make sure the framework has access to a ValueSemanticsProvider<{}> "
-                                    + "that implements ValueComposer<{}>}",
-                                    valueSpec.getLogicalTypeName(),
-                                    valueSpec.getCorrespondingClass().getSimpleName(),
-                                    valueSpec.getCorrespondingClass().getSimpleName());
-                            return NullNode.getInstance();
-                        });
-
-            repr.mapPut("value", value);
-            appendFormats(repr, "string", "string", suppressExtensions);
-            return value;
+            if(valueDecompositionIfAny.isPresent()) {
+                val value = valueDecompositionIfAny.get().toJson();
+                repr.mapPutString("value", value);
+                appendFormats(repr, "string", "string", suppressExtensions);
+                return value;
+            }
+            return appendNullAndFormat(repr, suppressExtensions);
         }
     }
 
-    private static Optional<ValueDecomposition> decompose(final ManagedObject valueAdapter) {
-        val valueClass = valueAdapter.getSpecification().getCorrespondingClass();
-        return Facets.valueDefaultSemantics(valueAdapter.getSpecification(), valueClass)
-                .map(composer->composer.decompose(_Casts.uncheckedCast(valueAdapter.getPojo())));
+    private NullNode appendNullAndFormat(final JsonRepresentation repr, final boolean suppressExtensions) {
+        val value = NullNode.getInstance();
+        repr.mapPutJsonNode("value", value);
+        appendFormats(repr, "string", "string", suppressExtensions);
+        return value;
     }
 
-    private static Optional<String> decomposeToJson(final ManagedObject valueAdapter) {
-        return decompose(valueAdapter)
-                .map(ValueDecomposition::toJson);
+    private static Optional<ValueDecomposition> decompose(final ManagedObject valueAdapter) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(valueAdapter)) {
+            return Optional.empty();
+        }
+        val valueClass = valueAdapter.getSpecification().getCorrespondingClass();
+        val decompositionIfAny = Facets.valueDefaultSemantics(valueAdapter.getSpecification(), valueClass)
+                .map(composer->composer.decompose(_Casts.uncheckedCast(valueAdapter.getPojo())));
+        if(decompositionIfAny.isEmpty()) {
+            val valueSpec = valueAdapter.getSpecification();
+            log.warn("{Could not resolve a ValueComposer for {}, "
+                    + "falling back to rendering as 'null'. "
+                    + "Make sure the framework has access to a ValueSemanticsProvider<{}> "
+                    + "that implements ValueComposer<{}>}",
+                    valueSpec.getLogicalTypeName(),
+                    valueSpec.getCorrespondingClass().getSimpleName(),
+                    valueSpec.getCorrespondingClass().getSimpleName());
+        }
+        return decompositionIfAny;
     }
 
     @Nullable
@@ -196,10 +202,10 @@ public class JsonValueEncoder {
 
     static void appendFormats(final JsonRepresentation repr, final String format, final String xIsisFormat, final boolean suppressExtensions) {
         if(format != null) {
-            repr.mapPut("format", format);
+            repr.mapPutString("format", format);
         }
         if(!suppressExtensions && xIsisFormat != null) {
-            repr.mapPut("extensions.x-isis-format", xIsisFormat);
+            repr.mapPutString("extensions.x-isis-format", xIsisFormat);
         }
     }
 
@@ -233,14 +239,18 @@ public class JsonValueEncoder {
 
         public Object appendValueAndFormat(
                 final ManagedObject objectAdapter,
-                final String format,
+                final String formatOverride,
                 final JsonRepresentation repr,
                 final boolean suppressExtensions) {
 
             final Object value = unwrapAsObjectElseNullNode(objectAdapter);
             repr.mapPut("value", value);
-            appendFormats(repr, this.format, this.xIsisFormat, suppressExtensions);
+            appendFormats(repr, effectiveFormat(formatOverride), this.xIsisFormat, suppressExtensions);
             return value;
+        }
+
+        protected String effectiveFormat(final String formatOverride) {
+            return formatOverride!=null ? formatOverride : this.format;
         }
 
         public Object asObject(final ManagedObject objectAdapter, final String format) {

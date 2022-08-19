@@ -42,7 +42,7 @@ public class RestfulRequest_RequestParameterTest_valueOf_xrodomainmodel {
 
     @Test
     public void simple() {
-        repr.mapPut("x-ro-domain-model", "simple");
+        repr.mapPutString("x-ro-domain-model", "simple");
         final DomainModel valueOf = requestParameter.valueOf(repr);
 
         assertThat(valueOf, is(DomainModel.SIMPLE));

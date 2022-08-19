@@ -26,13 +26,13 @@ import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import lombok.val;
 
@@ -71,13 +71,25 @@ extends ValueSemanticsProviderAbstractTestCase<Date> {
 
     @Test
     public void testTitleOf() {
-        assertEquals(DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)), value.titlePresentation(null, date));
+        assertEquals(
+                DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)),
+                value.titlePresentation(null, date));
     }
 
     @Test
     public void testParse() throws Exception {
         val parsedDate = value.parseTextRepresentation(null, "1980-01-01");
         assertEquals("1980-01-01", parsedDate.toString());
+    }
+
+    @Override
+    protected Date getSample() {
+        return date;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final Date a, final String json) {
+        assertEquals("1970-01-01", json);
     }
 
 }

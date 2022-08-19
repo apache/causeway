@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.ByteValueSemantics;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ByteValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Byte> {
@@ -59,5 +59,15 @@ extends ValueSemanticsProviderAbstractTestCase<Byte> {
     @Test
     public void testTitleOf() throws Exception {
         assertEquals("102", value.titlePresentation(null, byteObj));
+    }
+
+    @Override
+    protected Byte getSample() {
+        return byteObj;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final Byte a, final String json) {
+        assertEquals("102", json);
     }
 }

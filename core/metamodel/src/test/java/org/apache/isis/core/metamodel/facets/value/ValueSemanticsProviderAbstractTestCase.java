@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.value;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -27,6 +28,7 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.value.semantics.Parser;
@@ -132,6 +134,24 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
         }
 
     }
+
+    @Test
+    public void testValueSerializer_usingJson() {
+        final T value = getSample();
+        final String encoded = getValueSerializer().toEncodedString(Format.JSON, value);
+
+        assertValueEncodesToJsonAs(value, encoded);
+
+        T decoded = getValueSerializer().fromEncodedString(Format.JSON, encoded);
+
+        Optional.ofNullable(semantics.getOrderRelation())
+            .ifPresentOrElse(rel->Assertions.assertTrue(rel.equals(value, decoded)),
+                    ()->Assertions.assertEquals(value, decoded));
+    }
+
+    protected abstract T getSample();
+    protected abstract void assertValueEncodesToJsonAs(T a, String json);
+
 
     @Test
     public void testDecodeNULL() throws Exception {

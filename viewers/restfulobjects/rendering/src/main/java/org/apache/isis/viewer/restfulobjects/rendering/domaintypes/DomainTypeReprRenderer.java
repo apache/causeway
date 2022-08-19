@@ -83,7 +83,7 @@ extends ReprRendererAbstract<ObjectSpecification> {
             getLinks().arrayAdd(layoutLink);
         }
 
-        representation.mapPut("canonicalName", objectSpecification.getFullIdentifier());
+        representation.mapPutString("canonicalName", objectSpecification.getFullIdentifier());
         addMembers();
 
         addTypeActions();
@@ -97,11 +97,11 @@ extends ReprRendererAbstract<ObjectSpecification> {
 
     private void addMembers() {
         final JsonRepresentation membersMap = JsonRepresentation.newMap();
-        representation.mapPut("members", membersMap);
+        representation.mapPutJsonRepresentation("members", membersMap);
 
         objectSpecification.streamProperties(MixedIn.INCLUDED)
         .forEach(property->
-            membersMap.mapPut(
+            membersMap.mapPutJsonRepresentation(
                     property.getId(),
                     PropertyDescriptionReprRenderer
                         .newLinkToBuilder(getResourceContext(), Rel.PROPERTY, objectSpecification, property)
@@ -110,7 +110,7 @@ extends ReprRendererAbstract<ObjectSpecification> {
 
         objectSpecification.streamCollections(MixedIn.INCLUDED)
         .forEach(collection->
-            membersMap.mapPut(
+            membersMap.mapPutJsonRepresentation(
                     collection.getId(),
                     CollectionDescriptionReprRenderer
                         .newLinkToBuilder(getResourceContext(), Rel.COLLECTION, objectSpecification, collection)
@@ -119,7 +119,7 @@ extends ReprRendererAbstract<ObjectSpecification> {
 
         objectSpecification.streamAnyActions(MixedIn.INCLUDED)
         .forEach(action->
-            membersMap.mapPut(
+            membersMap.mapPutJsonRepresentation(
                     action.getId(),
                     ActionDescriptionReprRenderer
                         .newLinkToBuilder(getResourceContext(), Rel.ACTION, objectSpecification, action)
@@ -132,15 +132,15 @@ extends ReprRendererAbstract<ObjectSpecification> {
         JsonRepresentation typeActions = representation.getMap("typeActions");
         if (typeActions == null) {
             typeActions = JsonRepresentation.newMap();
-            representation.mapPut("typeActions", typeActions);
+            representation.mapPutJsonRepresentation("typeActions", typeActions);
         }
         return typeActions;
     }
 
     private void addTypeActions() {
         val typeActions = getTypeActions();
-        typeActions.mapPut("isSubtypeOf", linkToIsSubtypeOf());
-        typeActions.mapPut("isSupertypeOf", linkToIsSupertypeOf());
+        typeActions.mapPutJsonRepresentation("isSubtypeOf", linkToIsSubtypeOf());
+        typeActions.mapPutJsonRepresentation("isSupertypeOf", linkToIsSupertypeOf());
     }
 
     private JsonRepresentation linkToIsSubtypeOf() {
@@ -164,32 +164,32 @@ extends ReprRendererAbstract<ObjectSpecification> {
     public static JsonRepresentation argumentsTo(final IResourceContext resourceContext, final String paramName, final ObjectSpecification objectSpec) {
         final JsonRepresentation arguments = JsonRepresentation.newMap();
         final JsonRepresentation link = JsonRepresentation.newMap();
-        arguments.mapPut(paramName, link);
+        arguments.mapPutJsonRepresentation(paramName, link);
         if (objectSpec != null) {
-            link.mapPut("href", resourceContext.restfulUrlFor("domain-types/" + objectSpec.getLogicalTypeName()));
+            link.mapPutString("href", resourceContext.restfulUrlFor("domain-types/" + objectSpec.getLogicalTypeName()));
         } else {
-            link.mapPut("href", NullNode.instance);
+            link.mapPutJsonNode("href", NullNode.instance);
         }
         return arguments;
     }
 
     protected void putExtensionsNames() {
         final String singularName = objectSpecification.getSingularName();
-        getExtensions().mapPut("friendlyName", singularName);
+        getExtensions().mapPutString("friendlyName", singularName);
 
         final String pluralName = objectSpecification.getPluralName();
-        getExtensions().mapPut("pluralName", pluralName);
+        getExtensions().mapPutString("pluralName", pluralName);
     }
 
     protected void putExtensionsDescriptionIfAvailable() {
         final String description = objectSpecification.getDescription();
         if (!_Strings.isNullOrEmpty(description)) {
-            getExtensions().mapPut("description", description);
+            getExtensions().mapPutString("description", description);
         }
     }
 
     protected void putExtensionsIfService() {
-        getExtensions().mapPut("isService", objectSpecification.isInjectable());
+        getExtensions().mapPutBoolean("isService", objectSpecification.isInjectable());
     }
 
 }

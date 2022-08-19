@@ -78,7 +78,7 @@ extends AbstractTypeMemberReprRenderer<ObjectAction> {
                     .build());
         }
 
-        representation.mapPut("parameters", parameterList);
+        representation.mapPutJsonRepresentation("parameters", parameterList);
     }
 
     private void addLinkToElementTypeIfAny() {

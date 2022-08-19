@@ -162,9 +162,9 @@ implements IResourceContext {
                 // test whether we can parse as an int
                 val parseResult = _Ints.parseInt(paramValue, 10);
                 if(parseResult.isPresent()) {
-                    map.mapPut(key, parseResult.getAsInt());
+                    map.mapPutInt(key, parseResult.getAsInt());
                 } else {
-                    map.mapPut(key, stripQuotes(paramValue));
+                    map.mapPutString(key, stripQuotes(paramValue));
                 }
 
             }

@@ -91,33 +91,35 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         val spec = valueAdapter.getSpecification();
 
         if (spec.isValue()) {
-            String format = null;
+            String formatOverride = null;
             final Class<?> valueType = spec.getCorrespondingClass();
             if(valueType == java.math.BigDecimal.class) {
+
                 // look for facet on member, else on the value's spec
-
                 val facetHolders = Can.<FacetHolder>of(objectMember, spec);
-
                 final int totalDigits = Facets.maxTotalDigits(facetHolders).orElse(-1);
                 final int scale = Facets.maxFractionalDigits(facetHolders).orElse(-1);
 
-                format = String.format("big-decimal(%d,%d)", totalDigits, scale);
+                formatOverride = String.format("big-decimal(%d,%d)", totalDigits, scale);
 
             } else if(valueType == java.math.BigInteger.class) {
+
                 // look for facet on member, else on the value's spec
-                format = String.format("big-integer");
+                val facetHolders = Can.<FacetHolder>of(objectMember, spec);
+                final int totalDigits = Facets.maxTotalDigits(facetHolders).orElse(-1);
+                formatOverride = String.format("big-integer(%d)", totalDigits);
             }
             return jsonValueEncoder
                     .appendValueAndFormat(
                             valueAdapter,
                             representation,
-                            format,
+                            formatOverride,
                             resourceContext.suppressMemberExtensions());
         }
 
         if(valueAdapter.getPojo() == null) {
             final NullNode value = NullNode.getInstance();
-            representation.mapPut("value", value);
+            representation.mapPutJsonNode("value", value);
             return value;
         }
 
@@ -143,7 +145,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         }
 
         final JsonRepresentation valueJsonRepr = valueLinkBuilder.build();
-        representation.mapPut("value", valueJsonRepr);
+        representation.mapPutJsonRepresentation("value", valueJsonRepr);
         return valueJsonRepr;
 
     }
@@ -160,7 +162,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         final JsonRepresentation representation = JsonRepresentation.newMap();
         final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, representation);
         renderer.with(ManagedProperty.of(objectAdapter, objectMember, super.where)).asFollowed();
-        detailsLink.mapPut("value", renderer.render());
+        detailsLink.mapPutJsonRepresentation("value", renderer.render());
     }
 
     // ///////////////////////////////////////////////////

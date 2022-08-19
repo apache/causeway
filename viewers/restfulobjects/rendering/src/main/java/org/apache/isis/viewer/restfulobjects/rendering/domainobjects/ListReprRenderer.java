@@ -115,11 +115,11 @@ extends ReprRendererAbstract<Stream<ManagedObject>> {
                                 linkFollower,
                                 JsonRepresentation.newMap());
                 final JsonRepresentation domainObject = renderer.with(adapter).render();
-                linkToObject.mapPut("value", domainObject);
+                linkToObject.mapPutJsonRepresentation("value", domainObject);
             }
         });
 
-        representation.mapPut("value", values);
+        representation.mapPutJsonRepresentation("value", values);
     }
 
 

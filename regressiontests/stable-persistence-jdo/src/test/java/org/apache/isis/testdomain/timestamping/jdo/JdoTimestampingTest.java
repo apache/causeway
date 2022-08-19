@@ -24,13 +24,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertNotNull;
-
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.jdo.entities.JdoProductComment;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+
+import static org.junit.Assert.assertNotNull;
 
 import lombok.val;
 
@@ -61,6 +61,12 @@ class JdoTimestampingTest extends IsisIntegrationTestAbstract {
 
         assertNotNull(comment.getUpdatedAt());
         assertNotNull(comment.getUpdatedBy());
+
+        //FIXME[ISIS-3126] see if we can update the persistent entity
+
+        //comment.setComment("Awesome Book, really!");
+
+        //repository.persist(comment);
 
     }
 

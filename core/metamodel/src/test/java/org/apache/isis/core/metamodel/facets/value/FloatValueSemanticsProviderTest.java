@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.FloatValueSemantics;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class FloatValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Float> {
@@ -66,6 +66,16 @@ extends ValueSemanticsProviderAbstractTestCase<Float> {
     public void testParseBadlyFormatedEntry() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, "1,20.0");
         assertEquals(120.0f, ((Float) parsed).floatValue(), 0.0);
+    }
+
+    @Override
+    protected Float getSample() {
+        return float1;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final Float a, final String json) {
+        assertEquals("32.5", json);
     }
 
 }

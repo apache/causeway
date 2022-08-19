@@ -57,7 +57,7 @@ extends ReprRendererAbstract<Can<ObjectSpecification>> {
             specList.arrayAdd(linkBuilder.build());
         }
 
-        representation.mapPut("values", specList);
+        representation.mapPutJsonRepresentation("values", specList);
 
         getExtensions(); // empty
 

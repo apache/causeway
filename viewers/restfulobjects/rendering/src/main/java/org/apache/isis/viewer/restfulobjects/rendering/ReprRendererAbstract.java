@@ -131,7 +131,7 @@ implements ReprRenderer<T> {
         JsonRepresentation links = representation.getArray("links");
         if (links == null) {
             links = JsonRepresentation.newArray();
-            representation.mapPut("links", links);
+            representation.mapPutJsonRepresentation("links", links);
         }
         return links;
     }
@@ -148,7 +148,7 @@ implements ReprRenderer<T> {
         if (linkFollower.matches(link)) {
             final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap())
                     .with(objectSpec);
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
     }
@@ -160,7 +160,7 @@ implements ReprRenderer<T> {
         JsonRepresentation extensions = representation.getMap("extensions");
         if (extensions == null) {
             extensions = JsonRepresentation.newMap();
-            representation.mapPut("extensions", extensions);
+            representation.mapPutJsonRepresentation("extensions", extensions);
         }
         return extensions;
     }
@@ -169,7 +169,7 @@ implements ReprRenderer<T> {
         if (!extensions.isMap()) {
             throw new IllegalArgumentException("extensions must be a map");
         }
-        representation.mapPut("extensions", extensions);
+        representation.mapPutJsonRepresentation("extensions", extensions);
         return this;
     }
 
@@ -197,7 +197,7 @@ implements ReprRenderer<T> {
             return;
         }
         final JsonRepresentation adapterList = JsonRepresentation.newArray();
-        getExtensions().mapPut(key, adapterList);
+        getExtensions().mapPutJsonRepresentation(key, adapterList);
         for (val adapter : adapters) {
             adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getResourceContext(), Rel.VALUE, adapter).build());
         }

@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class IntValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Integer> {
@@ -65,5 +65,15 @@ extends ValueSemanticsProviderAbstractTestCase<Integer> {
     public void testParseOddlyFormedEntry() throws Exception {
         final Object newValue = value.parseTextRepresentation(null, "1,20.0");
         assertEquals(Integer.valueOf(120), newValue);
+    }
+
+    @Override
+    protected Integer getSample() {
+        return integer;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final Integer a, final String json) {
+        assertEquals("32", json);
     }
 }

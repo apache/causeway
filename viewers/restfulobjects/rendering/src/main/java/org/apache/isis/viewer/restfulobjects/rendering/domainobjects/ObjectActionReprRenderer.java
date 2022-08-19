@@ -82,7 +82,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         val where = resourceContext.getWhere();
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
         renderer.with(ManagedAction.of(objectAdapter, objectMember, where)).usingLinkTo(linkTo).asFollowed();
-        detailsLink.mapPut("value", renderer.render());
+        detailsLink.mapPutJsonRepresentation("value", renderer.render());
     }
 
     // ///////////////////////////////////////////////////
@@ -145,9 +145,9 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     private Object paramDetails(final ManagedParameter paramMod, final ParameterNegotiationModel paramNeg) {
         val paramMeta = paramMod.getMetaModel();
         final JsonRepresentation paramRep = JsonRepresentation.newMap();
-        paramRep.mapPut("num", paramMeta.getParameterIndex());
-        paramRep.mapPut("id", paramMeta.getId());
-        paramRep.mapPut("name", paramMeta.getFriendlyName(objectAdapter.asProvider()));
+        paramRep.mapPutInt("num", paramMeta.getParameterIndex());
+        paramRep.mapPutString("id", paramMeta.getId());
+        paramRep.mapPutString("name", paramMeta.getFriendlyName(objectAdapter.asProvider()));
         paramRep.mapPut("description", paramMeta.getDescription(objectAdapter.asProvider()));
         final Object paramChoices = choicesFor(paramMod, paramNeg);
         if (paramChoices != null) {
@@ -202,10 +202,10 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
 
     @Override
     protected void putExtensionsIsisProprietary() {
-        getExtensions().mapPut("actionScope", objectMember.getScope().name().toLowerCase());
+        getExtensions().mapPutString("actionScope", objectMember.getScope().name().toLowerCase());
 
         final SemanticsOf semantics = objectMember.getSemantics();
-        getExtensions().mapPut("actionSemantics", semantics.getCamelCaseName());
+        getExtensions().mapPutString("actionSemantics", semantics.getCamelCaseName());
     }
 
 }

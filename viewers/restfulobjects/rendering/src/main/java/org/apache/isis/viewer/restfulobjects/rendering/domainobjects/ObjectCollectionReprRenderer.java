@@ -141,7 +141,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
                 new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, jsonRepresentation)
                 .with(ManagedCollection.of(objectAdapter, objectMember, where))
                 .asFollowed();
-        detailsLink.mapPut("value", objectCollectionReprRenderer.render());
+        detailsLink.mapPutJsonRepresentation("value", objectCollectionReprRenderer.render());
     }
 
     // ///////////////////////////////////////////////////
@@ -171,7 +171,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
     @Override
     protected void putExtensionsIsisProprietary() {
         final CollectionSemantics semantics = CollectionSemantics.determine(objectMember);
-        getExtensions().mapPut("collectionSemantics", semantics.name().toLowerCase());
+        getExtensions().mapPutString("collectionSemantics", semantics.name().toLowerCase());
     }
 
 
