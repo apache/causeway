@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -34,7 +33,6 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder.JsonValueConverter;
 
 import lombok.val;
 
@@ -42,17 +40,17 @@ import lombok.val;
  * Similar to Isis' value encoding, but with additional support for JSON
  * primitives.
  */
-public final class JsonValueEncoder_Converters {
+public final class JsonValueConverters {
 
-    public List<JsonValueConverter> asList(final Function<Object, ManagedObject> pojoToAdapter) {
+    public List<JsonValueConverter> asList() {
 
         val converters = _Lists.<JsonValueConverter>newArrayList();
 
-        converters.add(new JsonValueConverter(null, "string", String.class){
+        converters.add(new JsonValueConverter.Abstract(null, "string", String.class){
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isString()) {
-                    return pojoToAdapter.apply(repr.asString());
+                    return repr.asString();
                 }
                 return null;
             }
@@ -69,11 +67,11 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter(null, "boolean", boolean.class, Boolean.class){
+        converters.add(new JsonValueConverter.Abstract(null, "boolean", boolean.class, Boolean.class){
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isBoolean()) {
-                    return pojoToAdapter.apply(repr.asBoolean());
+                    return repr.asBoolean();
                 }
                 return null;
             }
@@ -91,20 +89,20 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("int", "byte", byte.class, Byte.class){
+        converters.add(new JsonValueConverter.Abstract("int", "byte", byte.class, Byte.class){
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isNumber()) {
-                    return pojoToAdapter.apply(repr.asNumber().byteValue());
+                    return repr.asNumber().byteValue();
                 }
                 if (repr.isInt()) {
-                    return pojoToAdapter.apply((byte)(int)repr.asInt());
+                    return (byte)(int)repr.asInt();
                 }
                 if (repr.isLong()) {
-                    return pojoToAdapter.apply((byte)(long)repr.asLong());
+                    return (byte)(long)repr.asLong();
                 }
                 if (repr.isBigInteger()) {
-                    return pojoToAdapter.apply(repr.asBigInteger().byteValue());
+                    return repr.asBigInteger().byteValue();
                 }
                 return null;
             }
@@ -122,20 +120,20 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("int", "short", short.class, Short.class){
+        converters.add(new JsonValueConverter.Abstract("int", "short", short.class, Short.class){
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isNumber()) {
-                    return pojoToAdapter.apply(repr.asNumber().shortValue());
+                    return repr.asNumber().shortValue();
                 }
                 if (repr.isInt()) {
-                    return pojoToAdapter.apply((short)(int)repr.asInt());
+                    return (short)(int)repr.asInt();
                 }
                 if (repr.isLong()) {
-                    return pojoToAdapter.apply((short)(long)repr.asLong());
+                    return (short)(long)repr.asLong();
                 }
                 if (repr.isBigInteger()) {
-                    return pojoToAdapter.apply(repr.asBigInteger().shortValue());
+                    return repr.asBigInteger().shortValue();
                 }
                 return null;
             }
@@ -153,20 +151,20 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("int", "int", int.class, Integer.class){
+        converters.add(new JsonValueConverter.Abstract("int", "int", int.class, Integer.class){
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isInt()) {
-                    return pojoToAdapter.apply(repr.asInt());
+                    return repr.asInt();
                 }
                 if (repr.isLong()) {
-                    return pojoToAdapter.apply(repr.asLong().intValue());
+                    return repr.asLong().intValue();
                 }
                 if (repr.isBigInteger()) {
-                    return pojoToAdapter.apply(repr.asBigInteger().intValue());
+                    return repr.asBigInteger().intValue();
                 }
                 if (repr.isNumber()) {
-                    return pojoToAdapter.apply(repr.asNumber().intValue());
+                    return repr.asNumber().intValue();
                 }
                 return null;
             }
@@ -184,20 +182,20 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("int", "long", long.class, Long.class){
+        converters.add(new JsonValueConverter.Abstract("int", "long", long.class, Long.class){
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isLong()) {
-                    return pojoToAdapter.apply(repr.asLong());
+                    return repr.asLong();
                 }
                 if (repr.isInt()) {
-                    return pojoToAdapter.apply(repr.asLong());
+                    return repr.asLong();
                 }
                 if (repr.isBigInteger()) {
-                    return pojoToAdapter.apply(repr.asBigInteger().longValue());
+                    return repr.asBigInteger().longValue();
                 }
                 if (repr.isNumber()) {
-                    return pojoToAdapter.apply(repr.asNumber().longValue());
+                    return repr.asNumber().longValue();
                 }
                 return null;
             }
@@ -216,23 +214,23 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("decimal", "float", float.class, Float.class){
+        converters.add(new JsonValueConverter.Abstract("decimal", "float", float.class, Float.class){
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isDecimal()) {
-                    return pojoToAdapter.apply(repr.asDouble().floatValue());
+                    return repr.asDouble().floatValue();
                 }
                 if (repr.isNumber()) {
-                    return pojoToAdapter.apply(repr.asNumber().floatValue());
+                    return repr.asNumber().floatValue();
                 }
                 if (repr.isLong()) {
-                    return pojoToAdapter.apply(repr.asLong().floatValue());
+                    return repr.asLong().floatValue();
                 }
                 if (repr.isInt()) {
-                    return pojoToAdapter.apply(repr.asInt().floatValue());
+                    return repr.asInt().floatValue();
                 }
                 if (repr.isBigInteger()) {
-                    return pojoToAdapter.apply(repr.asBigInteger().floatValue());
+                    return repr.asBigInteger().floatValue();
                 }
                 return null;
             }
@@ -251,26 +249,26 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("decimal", "double", double.class, Double.class){
+        converters.add(new JsonValueConverter.Abstract("decimal", "double", double.class, Double.class){
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isDecimal()) {
-                    return pojoToAdapter.apply(repr.asDouble());
+                    return repr.asDouble();
                 }
                 if (repr.isLong()) {
-                    return pojoToAdapter.apply(repr.asLong().doubleValue());
+                    return repr.asLong().doubleValue();
                 }
                 if (repr.isInt()) {
-                    return pojoToAdapter.apply(repr.asInt().doubleValue());
+                    return repr.asInt().doubleValue();
                 }
                 if (repr.isBigInteger()) {
-                    return pojoToAdapter.apply(repr.asBigInteger().doubleValue());
+                    return repr.asBigInteger().doubleValue();
                 }
                 if (repr.isBigDecimal()) {
-                    return pojoToAdapter.apply(repr.asBigDecimal().doubleValue());
+                    return repr.asBigDecimal().doubleValue();
                 }
                 if (repr.isNumber()) {
-                    return pojoToAdapter.apply(repr.asNumber().doubleValue());
+                    return repr.asNumber().doubleValue();
                 }
                 return null;
             }
@@ -289,13 +287,13 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter(null, "char", char.class, Character.class){
+        converters.add(new JsonValueConverter.Abstract(null, "char", char.class, Character.class){
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isString()) {
                     final String str = repr.asString();
                     if(str != null && str.length()>0) {
-                        return pojoToAdapter.apply(str.charAt(0));
+                        return str.charAt(0);
                     }
                 }
                 // in case a char literal was provided
@@ -303,7 +301,7 @@ public final class JsonValueEncoder_Converters {
                     final Integer x = repr.asInt();
                     if(Character.MIN_VALUE <= x && x <= Character.MAX_VALUE) {
                         char c = (char) x.intValue();
-                        return pojoToAdapter.apply(c);
+                        return c;
                     }
                 }
                 return null;
@@ -323,23 +321,23 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("big-integer(18)", "javamathbiginteger", BigInteger.class){
+        converters.add(new JsonValueConverter.Abstract("big-integer(18)", "javamathbiginteger", BigInteger.class){
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isString()) {
-                    return pojoToAdapter.apply(new BigInteger(repr.asString()));
+                    return new BigInteger(repr.asString());
                 }
                 if (repr.isBigInteger()) {
-                    return pojoToAdapter.apply(repr.asBigInteger(format));
+                    return repr.asBigInteger(format);
                 }
                 if (repr.isLong()) {
-                    return pojoToAdapter.apply(BigInteger.valueOf(repr.asLong()));
+                    return BigInteger.valueOf(repr.asLong());
                 }
                 if (repr.isInt()) {
-                    return pojoToAdapter.apply(BigInteger.valueOf(repr.asInt()));
+                    return BigInteger.valueOf(repr.asInt());
                 }
                 if (repr.isNumber()) {
-                    return pojoToAdapter.apply(BigInteger.valueOf(repr.asNumber().longValue()));
+                    return BigInteger.valueOf(repr.asNumber().longValue());
                 }
                 return null;
             }
@@ -358,26 +356,26 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("big-decimal", "javamathbigdecimal", BigDecimal.class){
+        converters.add(new JsonValueConverter.Abstract("big-decimal", "javamathbigdecimal", BigDecimal.class){
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isString()) {
-                    return pojoToAdapter.apply(new BigDecimal(repr.asString()));
+                    return new BigDecimal(repr.asString());
                 }
                 if (repr.isBigDecimal()) {
-                    return pojoToAdapter.apply(repr.asBigDecimal(format));
+                    return repr.asBigDecimal(format);
                 }
                 if (repr.isBigInteger()) {
-                    return pojoToAdapter.apply(new BigDecimal(repr.asBigInteger()));
+                    return new BigDecimal(repr.asBigInteger());
                 }
                 if (repr.isDecimal()) {
-                    return pojoToAdapter.apply(BigDecimal.valueOf(repr.asDouble()));
+                    return BigDecimal.valueOf(repr.asDouble());
                 }
                 if (repr.isLong()) {
-                    return pojoToAdapter.apply(BigDecimal.valueOf(repr.asLong()));
+                    return BigDecimal.valueOf(repr.asLong());
                 }
                 if (repr.isInt()) {
-                    return pojoToAdapter.apply(BigDecimal.valueOf(repr.asInt()));
+                    return BigDecimal.valueOf(repr.asInt());
                 }
                 return null;
             }
@@ -396,7 +394,7 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("date", "jodalocaldate", LocalDate.class){
+        converters.add(new JsonValueConverter.Abstract("date", "jodalocaldate", LocalDate.class){
 
             // these formatters do NOT use withZoneUTC()
             final List<DateTimeFormatter> formatters = Arrays.asList(
@@ -407,13 +405,13 @@ public final class JsonValueEncoder_Converters {
                     );
 
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
                         try {
                             final LocalDate parsedDate = formatter.parseLocalDate(dateStr);
-                            return pojoToAdapter.apply(parsedDate);
+                            return parsedDate;
                         } catch (IllegalArgumentException ex) {
                             // fall through
                         }
@@ -438,7 +436,7 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("date-time", "jodalocaldatetime", LocalDateTime.class){
+        converters.add(new JsonValueConverter.Abstract("date-time", "jodalocaldatetime", LocalDateTime.class){
 
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
@@ -449,13 +447,13 @@ public final class JsonValueEncoder_Converters {
                     );
 
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
                         try {
                             final LocalDateTime parsedDate = formatter.parseLocalDateTime(dateStr);
-                            return pojoToAdapter.apply(parsedDate);
+                            return parsedDate;
                         } catch (IllegalArgumentException ex) {
                             // fall through
                         }
@@ -480,7 +478,7 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("date-time", "jodadatetime", DateTime.class){
+        converters.add(new JsonValueConverter.Abstract("date-time", "jodadatetime", DateTime.class){
 
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
@@ -491,13 +489,13 @@ public final class JsonValueEncoder_Converters {
                     );
 
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
                         try {
                             final DateTime parsedDate = formatter.parseDateTime(dateStr);
-                            return pojoToAdapter.apply(parsedDate);
+                            return parsedDate;
                         } catch (IllegalArgumentException ex) {
                             // fall through
                         }
@@ -522,7 +520,7 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("date-time", "javautildate", java.util.Date.class){
+        converters.add(new JsonValueConverter.Abstract("date-time", "javautildate", java.util.Date.class){
 
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
@@ -532,14 +530,14 @@ public final class JsonValueEncoder_Converters {
                     JsonRepresentation.yyyyMMddTHHmmssZ.withZoneUTC()
                     );
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
                         try {
                             final DateTime parseDateTime = formatter.parseDateTime(dateStr);
                             final java.util.Date parsedDate = parseDateTime.toDate();
-                            return pojoToAdapter.apply(parsedDate);
+                            return parsedDate;
                         } catch (IllegalArgumentException ex) {
                             // fall through
                         }
@@ -565,7 +563,7 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("date", "javasqldate", java.sql.Date.class){
+        converters.add(new JsonValueConverter.Abstract("date", "javasqldate", java.sql.Date.class){
 
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.date().withZoneUTC(),
@@ -573,14 +571,14 @@ public final class JsonValueEncoder_Converters {
                     JsonRepresentation.yyyyMMdd.withZoneUTC()
                     );
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
                         try {
                             final DateTime parseDateTime = formatter.parseDateTime(dateStr);
                             final java.sql.Date parsedDate = new java.sql.Date(parseDateTime.getMillis());
-                            return pojoToAdapter.apply(parsedDate);
+                            return parsedDate;
                         } catch (IllegalArgumentException ex) {
                             // fall through
                         }
@@ -605,7 +603,7 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("time", "javasqltime", java.sql.Time.class){
+        converters.add(new JsonValueConverter.Abstract("time", "javasqltime", java.sql.Time.class){
 
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.hourMinuteSecond().withZoneUTC(),
@@ -614,14 +612,14 @@ public final class JsonValueEncoder_Converters {
                     JsonRepresentation._HHmmss.withZoneUTC()
                     );
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
                         try {
                             final DateTime parseDateTime = formatter.parseDateTime(dateStr);
                             final java.sql.Time parsedTime = new java.sql.Time(parseDateTime.getMillis());
-                            return pojoToAdapter.apply(parsedTime);
+                            return parsedTime;
                         } catch (IllegalArgumentException ex) {
                             // fall through
                         }
@@ -646,21 +644,21 @@ public final class JsonValueEncoder_Converters {
             }
         });
 
-        converters.add(new JsonValueConverter("utc-millisec", "javasqltimestamp", java.sql.Timestamp.class){
+        converters.add(new JsonValueConverter.Abstract("utc-millisec", "javasqltimestamp", java.sql.Timestamp.class){
 
             @Override
-            public ManagedObject asAdapter(final JsonRepresentation repr, final String format) {
+            public Object recoverValueAsPojo(final JsonRepresentation repr, final String format) {
                 if (repr.isLong()) {
                     final Long millis = repr.asLong();
                     final java.sql.Timestamp parsedTimestamp = new java.sql.Timestamp(millis);
-                    return pojoToAdapter.apply(parsedTimestamp);
+                    return parsedTimestamp;
                 }
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     try {
                         final Long parseMillis = Long.parseLong(dateStr);
                         final java.sql.Timestamp parsedTimestamp = new java.sql.Timestamp(parseMillis);
-                        return pojoToAdapter.apply(parsedTimestamp);
+                        return parsedTimestamp;
                     } catch (IllegalArgumentException ex) {
                         // fall through
                     }
@@ -685,16 +683,6 @@ public final class JsonValueEncoder_Converters {
         });
 
         return converters;
-    }
-
-
-    static void appendFormats(final JsonRepresentation repr, final String format, final String xIsisFormat,
-            final boolean suppressExtensions) {
-        JsonValueEncoder.appendFormats(repr, format, xIsisFormat, suppressExtensions);
-    }
-
-    static Object unwrapAsObjectElseNullNode(final ManagedObject adapter) {
-        return JsonValueEncoder.unwrapAsObjectElseNullNode(adapter);
     }
 
 }

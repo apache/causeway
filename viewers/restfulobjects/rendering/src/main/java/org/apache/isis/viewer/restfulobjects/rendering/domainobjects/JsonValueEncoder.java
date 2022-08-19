@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
@@ -36,7 +35,6 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
@@ -48,7 +46,6 @@ import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -68,12 +65,7 @@ public class JsonValueEncoder {
 
     @PostConstruct
     public void init() {
-
-        //XXX no lombok val here
-        Function<Object, ManagedObject> pojoToAdapter = pojo ->
-            ManagedObject.lazy(specificationLoader, pojo);
-
-        new JsonValueEncoder_Converters().asList(pojoToAdapter)
+        new JsonValueConverters().asList()
             .forEach(this::registerConverter);
     }
 
@@ -113,9 +105,9 @@ public class JsonValueEncoder {
             throw new IllegalArgumentException("Unable to parse value");
         }
 
-        final ManagedObject asAdapter = jvc.asAdapter(argValueRepr, format);
-        if(asAdapter != null) {
-            return asAdapter;
+        val valueAsPojo = jvc.recoverValueAsPojo(argValueRepr, format);
+        if(valueAsPojo != null) {
+            return ManagedObject.lazy(specificationLoader, valueAsPojo);
         }
 
         // last attempt
@@ -199,7 +191,7 @@ public class JsonValueEncoder {
                 .toEncodedString(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
     }
 
-
+    @Deprecated
     static void appendFormats(final JsonRepresentation repr, final String format, final String xIsisFormat, final boolean suppressExtensions) {
         if(format != null) {
             repr.mapPutString("format", format);
@@ -209,55 +201,11 @@ public class JsonValueEncoder {
         }
     }
 
-    static Object unwrapAsObjectElseNullNode(final ManagedObject adapter) {
-        return adapter != null? adapter.getPojo(): NullNode.getInstance();
-    }
-
     // -- NESTED TYPE DECLARATIONS
 
     public static class ExpectedStringRepresentingValueException extends IllegalArgumentException {
         private static final long serialVersionUID = 1L;
     }
-
-    public static abstract class JsonValueConverter {
-
-        protected final String format;
-        protected final String xIsisFormat;
-
-        @Getter private final Can<Class<?>> classes;
-
-        public JsonValueConverter(final String format, final String xIsisFormat, final Class<?>... classes) {
-            this.format = format;
-            this.xIsisFormat = xIsisFormat;
-            this.classes = Can.ofArray(classes);
-        }
-
-        /**
-         * The value, otherwise <tt>null</tt>.
-         */
-        public abstract ManagedObject asAdapter(JsonRepresentation repr, String format);
-
-        public Object appendValueAndFormat(
-                final ManagedObject objectAdapter,
-                final String formatOverride,
-                final JsonRepresentation repr,
-                final boolean suppressExtensions) {
-
-            final Object value = unwrapAsObjectElseNullNode(objectAdapter);
-            repr.mapPut("value", value);
-            appendFormats(repr, effectiveFormat(formatOverride), this.xIsisFormat, suppressExtensions);
-            return value;
-        }
-
-        protected String effectiveFormat(final String formatOverride) {
-            return formatOverride!=null ? formatOverride : this.format;
-        }
-
-        public Object asObject(final ManagedObject objectAdapter, final String format) {
-            return objectAdapter.getPojo();
-        }
-    }
-
 
     /**
      * JUnit support
