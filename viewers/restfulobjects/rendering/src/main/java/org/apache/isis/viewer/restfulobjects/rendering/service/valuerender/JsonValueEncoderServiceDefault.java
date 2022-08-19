@@ -146,6 +146,10 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
                                     || simple.getType() == ValueType.CLOB
                                     || simple.getType() == ValueType.ENUM) {
                                 val decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
+                                // amend emums with "enumTitle"
+                                if(simple.getType() == ValueType.ENUM) {
+                                    decompRepr.mapPutString("enumTitle", valueAdapter.titleString());
+                                }
                                 repr.mapPutJsonRepresentation("value", decompRepr);
                                 appendFormats(repr, null, simple.getType().value(), context.isSuppressExtensions());
                             } else {

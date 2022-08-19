@@ -38,8 +38,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
-import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
 import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -391,16 +391,23 @@ class JsonValueEncoderTest {
 
     static enum SampleEnum {
         HALLO,
-        WORLD
+        WORLD;
+        public String title() {
+            return name().toLowerCase();
+        }
     }
 
     @Test
     void whenEnum() {
         val value = SampleEnum.HALLO;
         val representation = representationFor(value, osObj->assertEquals(
-                    JsonRepresentation.newMap("enumType", SampleEnum.class.getName(),
+                    JsonRepresentation.newMap(
+                            "enumType", SampleEnum.class.getName(),
                             "enumName", value.name()).toString(),
                     osObj.toString()));
+
+        // assert emum is amended with "enumTitle"
+        assertThat(representation.getString("value.enumTitle"), is(value.title()));
 
         assertThat(representation.getString("extensions.x-isis-format"), is("enum"));
     }
