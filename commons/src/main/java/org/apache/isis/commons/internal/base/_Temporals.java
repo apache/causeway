@@ -237,6 +237,12 @@ public final class _Temporals {
                 : null;
     }
 
+    // -- ISO UTILS
+
+    public static OffsetDateTime parseIsoDateTime(final String isoDateTime) {
+        return DateTimeFormatter.ISO_DATE_TIME.parse(isoDateTime, OffsetDateTime::from);
+    }
+
     // -- TEMPORAL SAMPLERS
 
     public Can<LocalDateTime> sampleLocalDateTime() {

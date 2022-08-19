@@ -18,15 +18,19 @@
  */
 package org.apache.isis.testdomain.rest;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Instant;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -35,43 +39,357 @@ import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRest
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueConverter.Context;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
 import lombok.val;
 
 @SpringBootTest(classes={
         Configuration_headless.class,
         IsisModuleViewerRestfulObjectsJaxrsResteasy4.class
 })
-@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true") //TODO WIP
+//@DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true") //TODO WIP
 @TestPropertySource(IsisPresets.UseLog4j2Test)
 class JsonValueEncoderTest {
 
     @Inject MetaModelContext mmc;
 
     @Test
+    public void whenString() {
+        val value = "aString";
+        val representation = representationFor(value);
+
+        assertThat(representation.isString("value"), is(true));
+        assertThat(representation.getString("value"), is("aString"));
+
+        assertThat(representation.getString("format"), is(nullValue()));
+        assertThat(representation.getString("extensions.x-isis-format"), is("string"));
+    }
+
+    @Test
+    public void whenBooleanWrapper() {
+        val value = Boolean.TRUE;
+        val representation = representationFor(value);
+
+        assertThat(representation.isBoolean("value"), is(true));
+        assertThat(representation.getBoolean("value"), is(Boolean.TRUE));
+
+        assertThat(representation.getString("format"), is(nullValue()));
+    }
+
+    @Test
+    public void whenBooleanPrimitive() {
+        val value = true;
+        val representation = representationFor(value);
+
+        assertThat(representation.isBoolean("value"), is(true));
+        assertThat(representation.getBoolean("value"), is(true));
+
+        assertThat(representation.getString("format"), is(nullValue()));
+    }
+
+    @Test
+    public void whenByteWrapper() {
+        val value = Byte.valueOf((byte)123);
+        val representation = representationFor(value);
+
+        assertThat(representation.isIntegralNumber("value"), is(true));
+        assertThat(representation.getByte("value"), is(Byte.valueOf((byte)123)));
+
+        assertThat(representation.getString("format"), is("int"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("byte"));
+    }
+
+    @Test
+    public void whenBytePrimitive() {
+        val value = (byte)123;
+        val representation = representationFor(value);
+
+        assertThat(representation.isIntegralNumber("value"), is(true));
+        assertThat(representation.getByte("value"), is((byte)123));
+
+        assertThat(representation.getString("format"), is("int"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("byte"));
+    }
+
+    @Test
+    public void whenShortWrapper() {
+        val value = Short.valueOf((short)12345);
+        val representation = representationFor(value);
+
+        assertThat(representation.isIntegralNumber("value"), is(true));
+        assertThat(representation.getShort("value"), is(Short.valueOf((short)12345)));
+
+        assertThat(representation.getString("format"), is("int"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("short"));
+    }
+
+    @Test
+    public void whenShortPrimitive() {
+        val value = (short)12345;
+        val representation = representationFor(value);
+
+        assertThat(representation.isIntegralNumber("value"), is(true));
+        assertThat(representation.getShort("value"), is((short)12345));
+
+        assertThat(representation.getString("format"), is("int"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("short"));
+    }
+
+    @Test
+    public void whenIntWrapper() {
+        val value = Integer.valueOf(12345678);
+        val representation = representationFor(value);
+
+        assertThat(representation.isIntegralNumber("value"), is(true));
+        assertThat(representation.getInt("value"), is(Integer.valueOf(12345678)));
+
+        assertThat(representation.getString("format"), is("int"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("int"));
+    }
+
+    @Test
+    public void whenIntPrimitive() {
+        val value = 12345678;
+        val representation = representationFor(value);
+
+        assertThat(representation.isIntegralNumber("value"), is(true));
+        assertThat(representation.getInt("value"), is(12345678));
+
+        assertThat(representation.getString("format"), is("int"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("int"));
+    }
+
+    @Test
+    public void whenLongWrapper() {
+        val value = Long.valueOf(12345678901234L);
+        val representation = representationFor(value);
+
+        assertThat(representation.isIntegralNumber("value"), is(true));
+        assertThat(representation.getLong("value"), is(Long.valueOf(12345678901234L)));
+
+        assertThat(representation.getString("format"), is("int"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("long"));
+    }
+
+    @Test
+    public void whenLongPrimitive() {
+        val value = 12345678901234L;
+        val representation = representationFor(value);
+
+        assertThat(representation.isIntegralNumber("value"), is(true));
+        assertThat(representation.getLong("value"), is(12345678901234L));
+
+        assertThat(representation.getString("format"), is("int"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("long"));
+    }
+
+    @Test
+    public void whenFloatWrapper() {
+        val value = Float.valueOf((float)123.45);
+        val representation = representationFor(value);
+
+        assertThat(representation.isDecimal("value"), is(true));
+        assertThat(representation.getFloat("value"), is(Float.valueOf((float)123.45)));
+
+        assertThat(representation.getString("format"), is("decimal"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("float"));
+    }
+
+    @Test
+    public void whenFloatPrimitive() {
+        val value = (float)123.45;
+        val representation = representationFor(value);
+
+        assertThat(representation.isDecimal("value"), is(true));
+        assertThat(representation.getFloat("value"), is((float)123.45));
+
+        assertThat(representation.getString("format"), is("decimal"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("float"));
+    }
+
+    @Test
+    public void whenDoubleWrapper() {
+        val value = Double.valueOf(12345.6789);
+        val representation = representationFor(value);
+
+        assertThat(representation.isDecimal("value"), is(true));
+        assertThat(representation.getDouble("value"), is(Double.valueOf(12345.6789)));
+
+        assertThat(representation.getString("format"), is("decimal"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("double"));
+    }
+
+    @Test
+    public void whenDoublePrimitive() {
+        val value = 12345.6789;
+        val representation = representationFor(value);
+
+        assertThat(representation.isDecimal("value"), is(true));
+        assertThat(representation.getDouble("value"), is(12345.6789));
+
+        assertThat(representation.getString("format"), is("decimal"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("double"));
+    }
+
+    @Test
+    public void whenCharWrapper() {
+        val value = Character.valueOf('a');
+        val representation = representationFor(value);
+
+        assertThat(representation.isString("value"), is(true));
+        assertThat(representation.getChar("value"), is(Character.valueOf('a')));
+
+        assertThat(representation.getString("format"), is(nullValue()));
+        assertThat(representation.getString("extensions.x-isis-format"), is("char"));
+    }
+
+    @Test
+    public void whenCharPrimitive() {
+        val value = 'a';
+        val representation = representationFor(value);
+
+        assertThat(representation.isString("value"), is(true));
+        assertThat(representation.getChar("value"), is('a'));
+
+        assertThat(representation.getString("format"), is(nullValue()));
+        assertThat(representation.getString("extensions.x-isis-format"), is("char"));
+    }
+
+    @Test
+    public void whenJavaSqlTimestamp() {
+
+        val epochMilli = defaultInstant().toEpochMilli();
+        val value = new java.sql.Timestamp(epochMilli);
+        val representation = representationFor(value);
+
+        assertThat(representation.isLong("value"), is(true));
+        assertThat(representation.getLong("value"), is(epochMilli));
+
+        assertThat(representation.getString("format"), is("utc-millisec"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("javasqltimestamp"));
+    }
+
+    @Test
+    public void whenBigInteger() {
+        val value = new BigInteger("12345678901234567890");
+        //"big-integer(22)"
+        val representation = representationFor(value, Context.forTesting(22, 0));
+
+        assertThat(representation.isString("value"), is(true));
+        assertThat(representation.isBigInteger("value"), is(true));
+        assertThat(representation.getBigInteger("value"), is(new BigInteger("12345678901234567890")));
+
+        assertThat(representation.getString("format"), is("big-integer(22)"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("javamathbiginteger"));
+    }
+
+    @Test
+    public void whenBigDecimal() {
+        val value = new BigDecimal("12345678901234567890.1234");
+        //"big-decimal(27,4)"
+        val representation = representationFor(value, Context.forTesting(27, 4));
+
+        assertThat(representation.isString("value"), is(true));
+        assertThat(representation.isBigDecimal("value"), is(true));
+        assertThat(representation.getBigDecimal("value"), is(new BigDecimal("12345678901234567890.1234")));
+
+        assertThat(representation.getString("format"), is("big-decimal(27,4)"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("javamathbigdecimal"));
+    }
+
+    // -- TEMPORALS
+
+    @Test
+    public void whenJavaUtilDate() {
+        val value = java.util.Date.from(defaultInstant());
+        val representation = representationFor(value);
+
+        assertThat(representation.isString("value"), is(true));
+        assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
+
+        assertThat(representation.getString("format"), is("date-time"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("javautildate"));
+    }
+
+    @Test
+    public void whenJavaSqlDate() {
+        val value = new java.sql.Date(defaultInstant().toEpochMilli());
+        val representation = representationFor(value);
+
+        assertThat(representation.isString("value"), is(true));
+        assertThat(representation.getString("value"), is("2014-04-25"));
+
+        assertThat(representation.getString("format"), is("date"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("javasqldate"));
+    }
+
+    @Test
+    public void whenJodaDateTime() {
+        val value = new org.joda.time.DateTime(defaultInstant().toEpochMilli());
+        val representation = representationFor(value);
+
+        assertThat(representation.isString("value"), is(true));
+        assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
+
+        assertThat(representation.getString("format"), is("date-time"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("jodadatetime"));
+    }
+
+    @Test
+    public void whenJodaLocalDateTime() {
+        val value = new org.joda.time.LocalDateTime(defaultInstant().toEpochMilli());
+        val representation = representationFor(value);
+
+        assertThat(representation.isString("value"), is(true));
+        assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
+
+        assertThat(representation.getString("format"), is("date-time"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("jodalocaldatetime"));
+    }
+
+    @Test
+    public void whenJodaLocalDate() {
+        val value = new org.joda.time.LocalDate(2014,4,25);
+        val representation = representationFor(value);
+
+        assertThat(representation.isString("value"), is(true));
+        assertThat(representation.getString("value"), is("2014-04-25"));
+
+        assertThat(representation.getString("format"), is("date"));
+        assertThat(representation.getString("extensions.x-isis-format"), is("jodalocaldate"));
+    }
+
+
+    @Test
     void whenBlob() {
         val value = Blob.of("a Blob", CommonMimeType.BIN, new byte[] {1, 2, 3});
-        val valueAdapter = mmc.getObjectManager().adapt(value);
-
-        val jsonValueEncoder = JsonValueEncoder.forTesting(mmc.getSpecificationLoader());
-        val representation = JsonRepresentation.newMap();
-        jsonValueEncoder.appendValueAndFormat(valueAdapter, representation, defaultContext());
+        val representation = representationFor(value);
 
         System.err.printf("representation %s%n", representation);
+        //TODO convert repr. to map like
+    }
 
-        //representation.getString("value");
+    private JsonRepresentation representationFor(final Object value) {
+        return representationFor(value, defaultContext());
+    }
 
-        //representation.isMap("value");
-
-        //assertTrue(representation.isString("value"));
-
-        //assertEquals(new BigDecimal("12345678901234567890.1234"), representation.getBigDecimal("value"));
-        //assertEquals("big-decimal(27,4)", representation.getString("format"));
-        //assertEquals("javamathbigdecimal", representation.getString("extensions.x-isis-format"));
+    private JsonRepresentation representationFor(final Object value, final Context context) {
+        val valueAdapter = mmc.getObjectManager().adapt(value);
+        val jsonValueEncoder = JsonValueEncoder.forTesting(mmc.getSpecificationLoader());
+        val representation = JsonRepresentation.newMap();
+        jsonValueEncoder.appendValueAndFormat(valueAdapter, representation, context);
+        return representation;
     }
 
     private Context defaultContext() {
-        // TODO Auto-generated method stub
-        return null;
+        return Context.forTesting(null, null);
+    }
+
+    private Instant defaultInstant() {
+        return _Temporals.parseIsoDateTime("2014-04-25T12:34:45Z")
+                .toInstant();
     }
 
 }

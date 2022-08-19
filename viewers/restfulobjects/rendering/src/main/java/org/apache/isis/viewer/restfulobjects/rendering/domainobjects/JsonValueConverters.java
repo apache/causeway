@@ -30,6 +30,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
+import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -37,10 +38,11 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import lombok.val;
 
 /**
- * Similar to Isis' value encoding, but with additional support for JSON
- * primitives.
+ * Has support for JSON primitives.
+ * @deprecated should be covered 100% per {@link ValueSemanticsProvider}
  */
-public final class JsonValueConverters {
+@Deprecated
+final class JsonValueConverters {
 
     public List<JsonValueConverter> asList() {
 
