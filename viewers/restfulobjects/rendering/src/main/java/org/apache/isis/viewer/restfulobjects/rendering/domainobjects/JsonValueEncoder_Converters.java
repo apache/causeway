@@ -386,7 +386,8 @@ public final class JsonValueEncoder_Converters {
                     final JsonRepresentation repr, final boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof BigDecimal) {
-                    repr.mapPut("value", (BigDecimal) obj);
+                    final BigDecimal bd = (BigDecimal) obj;
+                    repr.mapPutBigDecimal("value", bd);
                 } else {
                     repr.mapPut("value", obj);
                 }
