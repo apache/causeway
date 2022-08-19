@@ -35,6 +35,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -42,13 +43,40 @@ import lombok.val;
  * @deprecated should be covered 100% per {@link ValueSemanticsProvider}
  */
 @Deprecated
-final class JsonValueConverters {
+public final class JsonValueConverters {
+
+    @RequiredArgsConstructor
+    public static enum DefaultFormat {
+        STRING(String.class, null, "string"),
+        BOOLEAN(Boolean.class, null, "boolean"),
+        BYTE(Byte.class, "int", "byte"),
+        SHORT(Short.class, "int", "short"),
+        INT(Integer.class, "int", "int"),
+        LONG(Long.class, "int", "long"),
+        FLOAT(Float.class, "decimal", "float"),
+        DOUBLE(Double.class, "decimal", "double"),
+        CHAR(Character.class, null, "char"),
+        BIGINTEGER(BigInteger.class, "big-integer(18)", "javamathbiginteger"),
+        BIGDECIMAL(BigDecimal.class, "big-decimal", "javamathbigdecimal"),
+        JODALOCALDATE(LocalDate.class, "date", "jodalocaldate"),
+        JODALOCALDATETIME(LocalDateTime.class, "date-time", "jodalocaldatetime"),
+        JODADATETIME(DateTime.class, "date-time", "jodadatetime"),
+        JAVAUTILDATE(java.util.Date.class, "date-time", "javautildate"),
+        JAVASQLDATE(java.sql.Date.class, "date", "javasqldate"),
+        JAVASQLTIME(java.sql.Time.class, "time", "javasqltime"),
+        JAVASQLTIMESTAMP(java.sql.Timestamp.class, "utc-millisec", "javasqltimestamp"),
+
+        ;
+        final Class<?> valueClass;
+        final String format;
+        final String extendedFormat;
+    }
 
     public List<JsonValueConverter> asList() {
 
         val converters = _Lists.<JsonValueConverter>newArrayList();
 
-        converters.add(new JsonValueConverter.Abstract(null, "string", String.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.STRING){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isString()) {
@@ -70,7 +98,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract(null, "boolean", Boolean.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.BOOLEAN){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isBoolean()) {
@@ -92,7 +120,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("int", "byte", Byte.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.BYTE){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isNumber()) {
@@ -123,7 +151,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("int", "short", Short.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.SHORT){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isNumber()) {
@@ -154,7 +182,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("int", "int", Integer.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.INT){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isInt()) {
@@ -185,7 +213,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("int", "long", Long.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.LONG){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isLong()) {
@@ -217,7 +245,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("decimal", "float", Float.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.FLOAT){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isDecimal()) {
@@ -252,7 +280,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("decimal", "double", Double.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.DOUBLE){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isDecimal()) {
@@ -290,7 +318,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract(null, "char", Character.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.CHAR){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isString()) {
@@ -324,7 +352,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("big-integer(18)", "javamathbiginteger", BigInteger.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.BIGINTEGER){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isString()) {
@@ -367,7 +395,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("big-decimal", "javamathbigdecimal", BigDecimal.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.BIGDECIMAL){
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
                 if (repr.isString()) {
@@ -422,7 +450,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("date", "jodalocaldate", LocalDate.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JODALOCALDATE){
 
             // these formatters do NOT use withZoneUTC()
             final List<DateTimeFormatter> formatters = Arrays.asList(
@@ -464,7 +492,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("date-time", "jodalocaldatetime", LocalDateTime.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JODALOCALDATETIME){
 
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
@@ -506,7 +534,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("date-time", "jodadatetime", DateTime.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JODADATETIME){
 
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
@@ -548,7 +576,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("date-time", "javautildate", java.util.Date.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVAUTILDATE){
 
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
@@ -591,7 +619,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("date", "javasqldate", java.sql.Date.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVASQLDATE){
 
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.date().withZoneUTC(),
@@ -631,7 +659,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("time", "javasqltime", java.sql.Time.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVASQLTIME){
 
             final List<DateTimeFormatter> formatters = Arrays.asList(
                     ISODateTimeFormat.hourMinuteSecond().withZoneUTC(),
@@ -672,7 +700,7 @@ final class JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract("utc-millisec", "javasqltimestamp", java.sql.Timestamp.class){
+        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVASQLTIMESTAMP){
 
             @Override
             public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {

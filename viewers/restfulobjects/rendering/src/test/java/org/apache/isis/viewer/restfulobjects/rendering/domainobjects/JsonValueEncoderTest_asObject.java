@@ -18,23 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
-import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -45,7 +35,6 @@ public class JsonValueEncoderTest_asObject {
             JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock private ObjectSpecification mockObjectSpec;
-    @Mock private ValueFacet mockValueFacet;
     @Mock private ManagedObject mockObjectAdapter;
     @Mock private SpecificationLoader specLoader;
 
@@ -65,184 +54,9 @@ public class JsonValueEncoderTest_asObject {
 
     }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
     @Test(expected = Exception.class)
     public void whenAdapterIsNull() throws Exception {
         jsonValueEncoder.asObject(null, null);
-    }
-
-    @Test
-    public void whenBooleanPrimitive() throws Exception {
-        whenBoolean(boolean.class);
-    }
-
-    @Test
-    public void whenBooleanWrapper() throws Exception {
-        whenBoolean(Boolean.class);
-    }
-
-    private void whenBoolean(final Class<?> cls) {
-        allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
-        never(mockValueFacet);
-        context.checking(new Expectations() {
-            {
-                oneOf(mockObjectAdapter).getPojo();
-                will(returnValue(true));
-            }
-        });
-        assertEquals(true, jsonValueEncoder.asObject(mockObjectAdapter, null));
-    }
-
-    @Test
-    public void whenIntegerPrimitive() throws Exception {
-        whenInteger(int.class);
-    }
-
-    @Test
-    public void whenIntegerWrapper() throws Exception {
-        whenInteger(Integer.class);
-    }
-
-    private void whenInteger(final Class<?> cls) {
-        allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
-        never(mockValueFacet);
-        context.checking(new Expectations() {
-            {
-                oneOf(mockObjectAdapter).getPojo();
-                will(returnValue(123));
-            }
-        });
-        assertEquals(123, jsonValueEncoder.asObject(mockObjectAdapter, null));
-    }
-
-    @Test
-    public void whenLongPrimitive() throws Exception {
-        whenLong(long.class);
-    }
-
-    @Test
-    public void whenLongWrapper() throws Exception {
-        whenLong(Long.class);
-    }
-
-    private void whenLong(final Class<?> cls) {
-        allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
-        never(mockValueFacet);
-        context.checking(new Expectations() {
-            {
-                oneOf(mockObjectAdapter).getPojo();
-                will(returnValue(123456789L));
-            }
-        });
-        assertEquals(123456789L, jsonValueEncoder.asObject(mockObjectAdapter, null));
-    }
-
-    @Test
-    public void whenDoublePrimitive() throws Exception {
-        whenDouble(double.class);
-    }
-
-    @Test
-    public void whenDoubleWrapper() throws Exception {
-        whenDouble(Double.class);
-    }
-
-    private void whenDouble(final Class<?> cls) {
-        allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
-        never(mockValueFacet);
-        context.checking(new Expectations() {
-            {
-                oneOf(mockObjectAdapter).getPojo();
-                will(returnValue(12345.6789));
-            }
-        });
-        assertEquals(12345.6789, jsonValueEncoder.asObject(mockObjectAdapter, null));
-    }
-
-    @Test
-    public void whenBigInteger() throws Exception {
-        allowingObjectSpecCorrespondingClassIs(BigInteger.class);
-        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
-        never(mockValueFacet);
-        final BigInteger value = new BigInteger("123456789012345");
-        context.checking(new Expectations() {
-
-            {
-                oneOf(mockObjectAdapter).getPojo();
-                will(returnValue(value));
-            }
-        });
-        assertEquals(value, jsonValueEncoder.asObject(mockObjectAdapter, null));
-    }
-
-    @Test
-    public void whenBigDecimal() throws Exception {
-        allowingObjectSpecCorrespondingClassIs(BigDecimal.class);
-        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
-        never(mockValueFacet);
-        final BigDecimal value = new BigDecimal("1234567890.1234567890");
-        context.checking(new Expectations() {
-
-            {
-                oneOf(mockObjectAdapter).getPojo();
-                will(returnValue(value));
-            }
-        });
-        assertEquals(value, jsonValueEncoder.asObject(mockObjectAdapter, null));
-    }
-
-    @Test
-    public void whenString() throws Exception {
-        allowingObjectSpecCorrespondingClassIs(String.class);
-        allowingObjectSpecHas(ValueFacet.class, mockValueFacet);
-        context.checking(new Expectations() {
-            {
-                oneOf(mockObjectAdapter).getPojo();
-                will(returnValue("encodedString"));
-            }
-        });
-        final Object actual = jsonValueEncoder.asObject(mockObjectAdapter, null);
-        assertSame("encodedString", actual);
-    }
-
-    private void allowingObjectSpecCorrespondingClassIs(final Class<?> result) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockObjectSpec).getCorrespondingClass();
-                will(returnValue(result));
-            }
-        });
-        context.checking(new Expectations() {
-            {
-                allowing(mockObjectSpec).getLogicalType();
-                will(returnValue(LogicalType.fqcn(result)));
-            }
-        });
-    }
-
-    private <T extends Facet> void allowingObjectSpecHas(final Class<T> facetClass, final T encodableFacet) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockObjectSpec).getFacet(facetClass);
-                will(returnValue(encodableFacet));
-            }
-        });
-    }
-
-    private void never(final ValueFacet vFacet) {
-        context.checking(new Expectations() {
-            {
-                never(vFacet);
-            }
-        });
     }
 
 }

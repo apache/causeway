@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.rest;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Instant;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -31,6 +32,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.commons.internal.base._Temporals;
+import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.testdomain.conf.Configuration_headless;
@@ -42,6 +44,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEn
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
@@ -365,19 +368,31 @@ class JsonValueEncoderTest {
     @Test
     void whenBlob() {
         val value = Blob.of("a Blob", CommonMimeType.BIN, new byte[] {1, 2, 3});
-        val representation = representationFor(value);
+        val representation = representationFor(value, _Functions.noopConsumer());
 
         System.err.printf("representation %s%n", representation);
         //TODO convert repr. to map like
     }
 
     private JsonRepresentation representationFor(final Object value) {
-        return representationFor(value, defaultContext());
+        return representationFor(value, defaultContext(), osObj->assertEquals(value, osObj));
+    }
+
+    private JsonRepresentation representationFor(final Object value, final Consumer<Object> valueAsObjectVerifier) {
+        return representationFor(value, defaultContext(), valueAsObjectVerifier);
     }
 
     private JsonRepresentation representationFor(final Object value, final Context context) {
+        return representationFor(value, context, osObj->assertEquals(value, osObj));
+    }
+
+    private JsonRepresentation representationFor(
+            final Object value, final Context context, final Consumer<Object> valueAsObjectVerifier) {
         val valueAdapter = mmc.getObjectManager().adapt(value);
         val jsonValueEncoder = JsonValueEncoder.forTesting(mmc.getSpecificationLoader());
+
+        valueAsObjectVerifier.accept(jsonValueEncoder.asObject(valueAdapter, context));
+
         val representation = JsonRepresentation.newMap();
         jsonValueEncoder.appendValueAndFormat(valueAdapter, representation, context);
         return representation;
