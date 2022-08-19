@@ -28,7 +28,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
 import lombok.val;
@@ -44,13 +44,13 @@ public class JsonParserHelper {
 
     private final IResourceContext resourceContext;
     private final ObjectSpecification objectSpec;
-    private final JsonValueEncoder jsonValueEncoder;
+    private final JsonValueEncoderService jsonValueEncoder;
 
     public JsonParserHelper(final IResourceContext resourceContext, final ObjectSpecification objectSpecification) {
         this.objectSpec = objectSpecification;
         this.resourceContext = resourceContext;
         this.jsonValueEncoder = resourceContext.getMetaModelContext().getServiceRegistry()
-                .lookupServiceElseFail(JsonValueEncoder.class);
+                .lookupServiceElseFail(JsonValueEncoderService.class);
     }
 
 

@@ -38,11 +38,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -53,6 +48,13 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 import lombok.val;
 
@@ -67,12 +69,12 @@ public class JsonValueEncoderTest_asAdapter {
     @Mock private SpecificationLoader specLoader;
 
     private JsonRepresentation representation;
-    private JsonValueEncoder jsonValueEncoder;
+    private JsonValueEncoderService jsonValueEncoder;
 
     @Before
     public void setUp() throws Exception {
 
-        jsonValueEncoder = JsonValueEncoder.forTesting(specLoader);
+        jsonValueEncoder = JsonValueEncoderServiceDefault.forTesting(specLoader);
 
         representation = new JsonRepresentation(TextNode.valueOf("aString"));
     }

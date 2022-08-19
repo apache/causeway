@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
+package org.apache.isis.viewer.restfulobjects.rendering.service.valuerender;
 
 import java.util.Map;
 import java.util.Optional;
@@ -48,22 +48,18 @@ import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueConverter.Context;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-/**
- * Similar to Isis' value encoding, but with additional support for JSON
- * primitives.
- */
 @Service
-@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".JsonValueEncoder")
-@Priority(PriorityPrecedence.EARLY)
+@Named(IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".JsonValueEncoderDefault")
+@Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
-public class JsonValueEncoder {
+public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
 
     @Inject private SpecificationLoader specificationLoader;
 
@@ -71,10 +67,11 @@ public class JsonValueEncoder {
 
     @PostConstruct
     public void init() {
-        new JsonValueConverters().asList()
+        new _JsonValueConverters().asList()
             .forEach(converter->converterByClass.put(converter.getValueClass(), converter));
     }
 
+    @Override
     public ManagedObject asAdapter(
             final ObjectSpecification objectSpec,
             final JsonRepresentation argValueRepr,
@@ -124,6 +121,7 @@ public class JsonValueEncoder {
         throw new IllegalArgumentException("Could not parse value '" + argValueRepr.asString() + "' as a " + objectSpec.getFullIdentifier());
     }
 
+    @Override
     public void appendValueAndFormat(
             final ManagedObject valueAdapter,
             final JsonRepresentation repr,
@@ -200,6 +198,7 @@ public class JsonValueEncoder {
         return decompositionIfAny;
     }
 
+    @Override
     @Nullable
     public Object asObject(final @NonNull ManagedObject adapter, final JsonValueConverter.Context context) {
 
@@ -224,17 +223,11 @@ public class JsonValueEncoder {
         }
     }
 
-    // -- NESTED TYPE DECLARATIONS
-
-    public static class ExpectedStringRepresentingValueException extends IllegalArgumentException {
-        private static final long serialVersionUID = 1L;
-    }
-
     /**
      * JUnit support
      */
-    public static JsonValueEncoder forTesting(final SpecificationLoader specificationLoader) {
-        val jsonValueEncoder = new JsonValueEncoder();
+    public static JsonValueEncoderServiceDefault forTesting(final SpecificationLoader specificationLoader) {
+        val jsonValueEncoder = new JsonValueEncoderServiceDefault();
         jsonValueEncoder.specificationLoader = specificationLoader;
         jsonValueEncoder.init();
         return jsonValueEncoder;

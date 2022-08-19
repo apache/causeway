@@ -36,6 +36,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
 
 import lombok.val;
 

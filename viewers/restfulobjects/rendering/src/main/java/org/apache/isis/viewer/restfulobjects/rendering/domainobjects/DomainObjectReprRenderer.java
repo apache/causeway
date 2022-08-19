@@ -46,6 +46,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 
 import lombok.val;
 
@@ -455,7 +457,7 @@ extends ReprRendererAbstract<ManagedObject> {
     public static Object valueOrRef(
             final IResourceContext context,
             final ObjectFeature objectFeature,
-            final JsonValueEncoder jsonValueEncoder,
+            final JsonValueEncoderService jsonValueEncoder,
             final ManagedObject domainObject) {
 
         val spec = domainObject.getSpecification();

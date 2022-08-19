@@ -34,8 +34,8 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 
 import lombok.Getter;
 import lombok.val;
@@ -44,7 +44,7 @@ public abstract class ReprRendererAbstract<T>
 implements ReprRenderer<T> {
 
     @Getter protected final IResourceContext resourceContext;
-    @Getter protected final JsonValueEncoder jsonValueEncoder;
+    @Getter protected final JsonValueEncoderService jsonValueEncoder;
 
     private final LinkFollowSpecs linkFollower;
     private final RepresentationType representationType;
@@ -62,7 +62,7 @@ implements ReprRenderer<T> {
             final JsonRepresentation representation) {
         this.resourceContext = resourceContext;
         this.jsonValueEncoder = resourceContext.getMetaModelContext().getServiceRegistry()
-                .lookupServiceElseFail(JsonValueEncoder.class);
+                .lookupServiceElseFail(JsonValueEncoderService.class);
 
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;

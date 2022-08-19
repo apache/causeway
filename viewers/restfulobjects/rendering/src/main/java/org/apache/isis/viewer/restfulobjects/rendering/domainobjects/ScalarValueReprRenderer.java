@@ -30,6 +30,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererException;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
 
 import lombok.Getter;
 import lombok.val;

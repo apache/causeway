@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
+package org.apache.isis.viewer.restfulobjects.rendering.service.valuerender;
 
 import java.util.OptionalInt;
 
@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.spec.feature.HasObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueConverters.DefaultFormat;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender._JsonValueConverters.DefaultFormat;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -113,18 +113,11 @@ public interface JsonValueConverter {
 
         @Getter private final Class<?> valueClass;
 
-
         public Abstract(final DefaultFormat format) {
             this.format = format.format;
             this.extendedFormat = format.extendedFormat;
             this.valueClass = format.valueClass;
         }
-
-//        public Abstract(final String format, final String extendedFormat, final Class<?> valueClass) {
-//            this.format = format;
-//            this.extendedFormat = extendedFormat;
-//            this.valueClass = valueClass;
-//        }
 
         @Override
         public Object appendValueAndFormat(

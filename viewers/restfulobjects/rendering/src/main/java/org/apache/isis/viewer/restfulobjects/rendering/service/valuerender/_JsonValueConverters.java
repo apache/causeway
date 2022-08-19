@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
+package org.apache.isis.viewer.restfulobjects.rendering.service.valuerender;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -40,7 +40,7 @@ import lombok.val;
 /**
  * Has support for JSON primitives.
  */
-final class JsonValueConverters {
+final class _JsonValueConverters {
 
     @RequiredArgsConstructor
     public static enum DefaultFormat {

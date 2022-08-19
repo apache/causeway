@@ -38,8 +38,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueConverter.Context;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -420,7 +420,7 @@ class JsonValueEncoderTest {
     private JsonRepresentation representationFor(
             final Object value, final Context context, final Consumer<Object> valueAsObjectVerifier) {
         val valueAdapter = mmc.getObjectManager().adapt(value);
-        val jsonValueEncoder = JsonValueEncoder.forTesting(mmc.getSpecificationLoader());
+        val jsonValueEncoder = JsonValueEncoderServiceDefault.forTesting(mmc.getSpecificationLoader());
 
         valueAsObjectVerifier.accept(jsonValueEncoder.asObject(valueAdapter, context));
 

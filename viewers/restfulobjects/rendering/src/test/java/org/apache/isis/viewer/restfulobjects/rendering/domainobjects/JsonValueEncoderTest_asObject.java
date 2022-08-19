@@ -28,6 +28,8 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
 
 public class JsonValueEncoderTest_asObject {
 
@@ -38,7 +40,7 @@ public class JsonValueEncoderTest_asObject {
     @Mock private ManagedObject mockObjectAdapter;
     @Mock private SpecificationLoader specLoader;
 
-    private JsonValueEncoder jsonValueEncoder;
+    private JsonValueEncoderService jsonValueEncoder;
 
     @Before
     public void setUp() throws Exception {
@@ -50,7 +52,7 @@ public class JsonValueEncoderTest_asObject {
             }
         });
 
-        jsonValueEncoder = JsonValueEncoder.forTesting(specLoader);
+        jsonValueEncoder = JsonValueEncoderServiceDefault.forTesting(specLoader);
 
     }
 
