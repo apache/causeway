@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.entities;
 
+import java.util.Map;
 import java.util.Optional;
 
 import javax.jdo.PersistenceManager;
@@ -30,6 +31,7 @@ import org.datanucleus.state.ReferentialStateManagerImpl;
 import org.datanucleus.store.FieldValues;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
@@ -153,6 +155,43 @@ extends ReferentialStateManagerImpl {
                     entity.getClass());
         }
     }
+
+    // -- PRE-DIRTY NESTED LOOP PREVENTION
+
+    @FunctionalInterface
+    public static interface PreDirtyPropagationLock {
+        void release();
+    }
+
+    // assuming we don't require thread-safety here,
+    // as each thread presumably has its own DN execution context
+    private final Map<Object, PreDirtyPropagationLock> preDirtyPropagationLocks =
+            _Maps.newHashMap();
+
+    private final PreDirtyPropagationLock createPreDirtyPropagationLock(final Object id) {
+        return ()->preDirtyPropagationLocks.remove(id);
+    }
+
+    public Optional<PreDirtyPropagationLock> acquirePreDirtyPropagationLock(final Object id) {
+
+        // this algorithm is not thread-safe
+        // assuming we don't require thread-safety here,
+        // as each thread presumably has its own DN execution context
+
+        val lockIfGranted = preDirtyPropagationLocks.containsKey(id)
+                ? Optional.<PreDirtyPropagationLock>empty()
+                : Optional.of(preDirtyPropagationLocks.computeIfAbsent(id,
+                        this::createPreDirtyPropagationLock));
+
+        if(log.isDebugEnabled()) {
+            log.debug("acquirePreDirtyPropagationLock({}) -> {}",
+                    id, lockIfGranted.map(lock->"GRANTED").orElse("DENIED"));
+        }
+
+        return lockIfGranted;
+    }
+
+    // --
 
     /*
 
