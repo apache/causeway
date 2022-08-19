@@ -140,18 +140,12 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         final Persistable pojo = _Utils.persistableFor(event);
         final Runnable doPreDirty = ()->doPreDirty(pojo);
 
-
-
+        // [ISIS-3126] pre-dirty nested loop prevention,
+        // assuming we can cast the DN StateManager to the custom one as provided by the framework
         _Casts.castTo(DnObjectProviderForIsis.class, pojo.dnGetStateManager())
         .ifPresentOrElse(stateManager->
                 stateManager.acquirePreDirtyPropagationLock(pojo.dnGetObjectId())
-                .ifPresent(lock->{
-                    try {
-                        doPreDirty.run();
-                    } finally {
-                        lock.release();
-                    }
-                }),
+                .ifPresent(lock->lock.releaseAfter(doPreDirty)),
                 doPreDirty);
     }
 

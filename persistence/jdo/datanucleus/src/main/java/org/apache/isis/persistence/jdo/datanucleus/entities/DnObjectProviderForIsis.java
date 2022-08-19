@@ -156,11 +156,18 @@ extends ReferentialStateManagerImpl {
         }
     }
 
-    // -- PRE-DIRTY NESTED LOOP PREVENTION
+    // -- [ISIS-3126] PRE-DIRTY NESTED LOOP PREVENTION
 
     @FunctionalInterface
     public static interface PreDirtyPropagationLock {
         void release();
+        default void releaseAfter(final Runnable runnable) {
+            try {
+                runnable.run();
+            } finally {
+                release();
+            }
+        }
     }
 
     // assuming we don't require thread-safety here,
@@ -172,6 +179,10 @@ extends ReferentialStateManagerImpl {
         return ()->preDirtyPropagationLocks.remove(id);
     }
 
+    /**
+     * Optionally provides a {@link PreDirtyPropagationLock} for pre-dirty event propagation,
+     * based on whether there is NOT already an pre-dirty event in progress for the same OID.
+     */
     public Optional<PreDirtyPropagationLock> acquirePreDirtyPropagationLock(final Object id) {
 
         // this algorithm is not thread-safe
