@@ -17,85 +17,64 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!--
+This pom is the top-level parent, responsible for deploying to ASF using the apache-release, and as defined in org.apache:apache global parent.
+At the same time, we want it to inherit from org.springframework.boot:spring-boot-starter-parent.
+It is therefore a copy of org.apache:apache, with customisations clearly identified (though some plugins versions have been bumped to more recent versions).
+-->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
+    <!-- for more information, see the documentation of this POM: http://maven.apache.org/pom/asf/ -->
 
-	<!--
-	This pom is a copy of org.apache:apache, the idea being to also inherit
-	from org.springframework.boot:spring-boot-starter-parent.
-
-	As little as possible has been changed.  The customisations are clearly identified.
-	Where the customisations clash with existing (eg project metadata stuff),
-	then the original from org.apache:apache have been commented out.
-	-->
-
-	<!-- for more information, see the documentation of this POM: http://maven.apache.org/pom/asf/ -->
-
-	<!-- ORG.APACHE:APACHE : commented out : start
-
+    <!-- APACHE ISIS customisation 1/21: : start -->
+    <!--
     <groupId>org.apache</groupId>
     <artifactId>apache</artifactId>
-    <version>24</version>
+    <version>27</version>
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.3</version>
+        <relativePath/>
+    </parent>
+    <groupId>org.apache.isis</groupId>
+    <artifactId>isis-bom</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <!-- APACHE ISIS customisation 1/21: end -->
+
     <packaging>pom</packaging>
 
-	ORG.APACHE:APACHE : commented out : end -->
-
-	<!-- APACHE ISIS customisation 1/15: : start -->
-
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.3</version>
-		<relativePath/>
-	</parent>
-
-	<groupId>org.apache.isis</groupId>
-	<artifactId>isis-bom</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
-
-	<!-- APACHE ISIS customisation 1/15: end -->
-
-
-	<!-- ORG.APACHE:APACHE : commented out : start
-
+    <!-- APACHE ISIS customisation 2/21: start -->
+    <!--
     <name>The Apache Software Foundation</name>
-    <description>
-        The Apache Software Foundation provides support for the Apache community of open-source software projects.
-        The Apache projects are characterized by a collaborative, consensus based development process, an open and
-        pragmatic software license, and a desire to create high quality software that leads the way in its field.
-        We consider ourselves not simply a group of projects sharing a server, but rather a community of developers
-        and users.
-    </description>
+    <description> The Apache Software Foundation provides support for the Apache community of open-source software projects. The Apache projects are characterized by a collaborative, consensus based development process, an open and pragmatic software license, and a desire to create high quality software that leads the way in its field. We consider ourselves not simply a group of projects sharing a server, but rather a community of developers and users. </description>
     <url>https://www.apache.org/</url>
-
-	ORG.APACHE:APACHE : commented out : end -->
-
-	<!-- APACHE ISIS customisation 2/15: start -->
-	<name>Apache Isis</name>
-	<description>
-		Apache Isis Bill of Material (BOM).
-		Also the parent POM for the core framework and extensions.
-	</description>
-
+    -->
+    <name>Apache Isis</name>
+    <description>
+        Apache Isis Bill of Material (BOM).
+        Also the parent POM for the core framework and extensions.
+    </description>
     <url>https://isis.apache.org</url>
-	<inceptionYear>2010</inceptionYear>
-	<!-- APACHE ISIS customisation 2/15: end -->
+    <!-- APACHE ISIS customisation 2/21: end -->
 
-	<organization>
-		<name>The Apache Software Foundation</name>
-		<url>https://www.apache.org/</url>
-	</organization>
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <organization>
+        <name>The Apache Software Foundation</name>
+        <url>https://www.apache.org/</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-	<!-- ORG.APACHE:APACHE : commented out : start
-	<mailingLists>
+    <!-- APACHE ISIS customisation 3/21: start -->
+    <!--
+    <mailingLists>
         <mailingList>
             <name>Apache Announce List</name>
             <subscribe>announce-subscribe@apache.org</subscribe>
@@ -104,859 +83,850 @@ under the License.
             <archive>https://mail-archives.apache.org/mod_mbox/www-announce/</archive>
         </mailingList>
     </mailingLists>
-
     <scm>
         <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-apache-parent.git</connection>
         <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-apache-parent.git</developerConnection>
         <url>https://github.com/apache/maven-apache-parent/tree/${project.scm.tag}</url>
-        <tag>apache-24</tag>
+        <tag>apache-27</tag>
     </scm>
-	ORG.APACHE:APACHE : commented out : end -->
+    -->
+    <mailingLists>
+        <mailingList>
+            <name>developers</name>
+            <archive>http://mail-archives.apache.org/mod_mbox/isis-dev/</archive>
+            <post>dev@isis.apache.org</post>
+            <subscribe>dev-subscribe@isis.apache.org</subscribe>
+            <unsubscribe>dev-unsubscribe@isis.apache.org</unsubscribe>
+        </mailingList>
+        <mailingList>
+            <name>users</name>
+            <archive>http://mail-archives.apache.org/mod_mbox/isis-users/</archive>
+            <post>users@isis.apache.org</post>
+            <subscribe>users-subscribe@isis.apache.org</subscribe>
+            <unsubscribe>users-unsubscribe@isis.apache.org</unsubscribe>
+        </mailingList>
+    </mailingLists>
+    <scm>
+        <connection>scm:git:http://github.com/apache/isis.git</connection>
+        <developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
+        <url>http://github.com/apache/isis</url>
+        <tag>HEAD</tag>
+    </scm>
+    <!-- APACHE ISIS customisation 3/21: end -->
+    <distributionManagement>
+        <repository>
+            <id>apache.releases.https</id>
+            <name>Apache Release Distribution Repository</name>
+            <url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>apache.snapshots.https</id>
+            <name>${distMgmtSnapshotsName}</name>
+            <url>${distMgmtSnapshotsUrl}</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <!-- APACHE ISIS customisation 4/21: start -->
+    <inceptionYear>2010</inceptionYear>
+    <issueManagement>
+        <system>Jira</system>
+        <url>https://issues.apache.org/jira/browse/ISIS</url>
+    </issueManagement>
+    <ciManagement>
+        <system>CI</system>
+        <url>https://github.com/apache-isis-committers/isis-nightly</url>
+    </ciManagement>
+    <developers>
+        <developer>
+            <id>ahuber</id>
+            <name>Andi Huber</name>
+            <email>ahuber@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>bibryam</id>
+            <name>Bilgin Ibryam</name>
+            <email>bibryam@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+0</timezone>
+        </developer>
+        <developer>
+            <id>danhaywood</id>
+            <name>Dan Haywood</name>
+            <email>danhaywood@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+0</timezone>
+        </developer>
+        <developer>
+            <id>dslaughter</id>
+            <name>Dave Slaughter</name>
+            <email>dslaughter@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <id>jcvanderwal</id>
+            <name>Jeroen van der Wal</name>
+            <email>jcvanderwal@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>jdoornenbal</id>
+            <name>Johan Doornenbal</name>
+            <email>jdoornenbal@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>joergrade</id>
+            <name>Joerg Rade</name>
+            <email>joergrade@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>kevin</id>
+            <name>Kevin Meyer</name>
+            <email>kevin@apache.org</email>
+            <roles>
+                <role>pmc chair</role>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>madytyoo</id>
+            <name>Maurizio Taverna</name>
+            <email>madytyoo@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>mgrigorov</id>
+            <name>Martin Grigorov</name>
+            <email>mgrigorov@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>mnour</id>
+            <name>Mohammad Nour El-Din</name>
+            <email>mnour@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>mentor while incubating</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>oscarbou</id>
+            <name>Oscar Bou</name>
+            <email>oscarbou@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>rmatthews</id>
+            <name>Robert Matthews</name>
+            <email>rmatthews@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+0</timezone>
+        </developer>
+        <developer>
+            <id>struberg</id>
+            <name>Mark Struberg</name>
+            <email>struberg@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>mentor while incubating</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>themalkolm</id>
+            <name>Alexander Krasnuhkin</name>
+            <email>themalkolm@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+3</timezone>
+        </developer>
+    </developers>
+    <!-- APACHE ISIS customisation 4/21: end -->
+    <properties>
+        <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
+        <distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
+        <organization.logo>https://www.apache.org/images/asf_logo_wide_2016.png</organization.logo>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
+        <gpg.useagent>true</gpg.useagent>
+        <minimalMavenBuildVersion>3.2.5</minimalMavenBuildVersion>
+        <minimalJavaBuildVersion>1.8</minimalJavaBuildVersion>
 
-	<!-- APACHE ISIS customisation 3/15: start -->
-	<mailingLists>
-		<mailingList>
-			<name>developers</name>
-			<archive>http://mail-archives.apache.org/mod_mbox/isis-dev/</archive>
-			<post>dev@isis.apache.org</post>
-			<subscribe>dev-subscribe@isis.apache.org</subscribe>
-			<unsubscribe>dev-unsubscribe@isis.apache.org</unsubscribe>
-		</mailingList>
-		<mailingList>
-			<name>users</name>
-			<archive>http://mail-archives.apache.org/mod_mbox/isis-users/</archive>
-			<post>users@isis.apache.org</post>
-			<subscribe>users-subscribe@isis.apache.org</subscribe>
-			<unsubscribe>users-unsubscribe@isis.apache.org</unsubscribe>
-		</mailingList>
-	</mailingLists>
+        <!-- APACHE ISIS customisation 5/21: start -->
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.release>11</maven.compiler.release>
+        <surefire.version>3.0.0-M7</surefire.version>
+        <!-- APACHE ISIS customisation 5/21: end -->
 
-	<scm>
-		<connection>scm:git:http://github.com/apache/isis.git</connection>
-		<developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
-		<url>http://github.com/apache/isis</url>
-		<tag>HEAD</tag>
-	</scm>
-
-	<issueManagement>
-		<system>Jira</system>
-		<url>https://issues.apache.org/jira/browse/ISIS</url>
-	</issueManagement>
-
-	<ciManagement>
-		<system>CI</system>
-		<url>https://github.com/apache-isis-committers/isis-nightly</url>
-	</ciManagement>
-
-	<developers>
-		<developer>
-			<id>ahuber</id>
-			<name>Andi Huber</name>
-			<email>ahuber@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>bibryam</id>
-			<name>Bilgin Ibryam</name>
-			<email>bibryam@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+0</timezone>
-		</developer>
-		<developer>
-			<id>danhaywood</id>
-			<name>Dan Haywood</name>
-			<email>danhaywood@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+0</timezone>
-		</developer>
-		<developer>
-			<id>dslaughter</id>
-			<name>Dave Slaughter</name>
-			<email>dslaughter@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>-6</timezone>
-		</developer>
-		<developer>
-			<id>jcvanderwal</id>
-			<name>Jeroen van der Wal</name>
-			<email>jcvanderwal@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>jdoornenbal</id>
-			<name>Johan Doornenbal</name>
-			<email>jdoornenbal@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>joergrade</id>
-			<name>Joerg Rade</name>
-			<email>joergrade@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>kevin</id>
-			<name>Kevin Meyer</name>
-			<email>kevin@apache.org</email>
-			<roles>
-				<role>pmc chair</role>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+2</timezone>
-		</developer>
-		<developer>
-			<id>madytyoo</id>
-			<name>Maurizio Taverna</name>
-			<email>madytyoo@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>mgrigorov</id>
-			<name>Martin Grigorov</name>
-			<email>mgrigorov@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+2</timezone>
-		</developer>
-		<developer>
-			<id>mnour</id>
-			<name>Mohammad Nour El-Din</name>
-			<email>mnour@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>mentor while incubating</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>oscarbou</id>
-			<name>Oscar Bou</name>
-			<email>oscarbou@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>rmatthews</id>
-			<name>Robert Matthews</name>
-			<email>rmatthews@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+0</timezone>
-		</developer>
-		<developer>
-			<id>struberg</id>
-			<name>Mark Struberg</name>
-			<email>struberg@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>mentor while incubating</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
-			<id>themalkolm</id>
-			<name>Alexander Krasnuhkin</name>
-			<email>themalkolm@apache.org</email>
-			<roles>
-				<role>pmc</role>
-				<role>committer</role>
-			</roles>
-			<timezone>+3</timezone>
-		</developer>
-	</developers>
-	<!-- APACHE ISIS customisation 3/15: end -->
-
-	<distributionManagement>
-		<repository>
-			<id>apache.releases.https</id>
-			<name>Apache Release Distribution Repository</name>
-			<url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
-		</repository>
-		<snapshotRepository>
-			<id>apache.snapshots.https</id>
-			<name>${distMgmtSnapshotsName}</name>
-			<url>${distMgmtSnapshotsUrl}</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<properties>
-		<distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
-		<distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
-		<organization.logo>https://www.apache.org/images/asf_logo_wide_2016.png</organization.logo>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
-		<gpg.useagent>true</gpg.useagent>
-		<minimalMavenBuildVersion>3.1.1</minimalMavenBuildVersion>
-		<minimalJavaBuildVersion>1.8</minimalJavaBuildVersion>
-		<!-- APACHE ISIS customisation 4/15: start -->
-		<java.version>11</java.version>
-		<maven.compiler.source>${java.version}</maven.compiler.source>
-		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<maven.compiler.release>11</maven.compiler.release>
-
-		<lombok.version>1.18.24</lombok.version> <!-- overriding Spring -->
-		<delombok.output>${project.build.directory}/delombok</delombok.output>
-		<surefire.version>3.0.0-M7</surefire.version>
-		<surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
-		<!-- APACHE ISIS customisation 4/15: end -->
-
-		<assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
-		<!-- set this property for all derived projects:
-        -->
+        <!--  for surefire, failsafe and surefire-report  -->
+        <maven.plugin.tools.version>3.6.4</maven.plugin.tools.version>
+        <!--  for m-plugin-p and maven-plugin-annotations  -->
+        <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
         <project.build.outputTimestamp>1</project.build.outputTimestamp>
 
+        <!-- APACHE ISIS customisation 6/21: start -->
+
+        <delombok.output>${project.build.directory}/delombok</delombok.output>
+
         <!-- LIBRARY DEPENDENCIES -->
-		<archunit.version>0.23.1</archunit.version>
-		<asciidoctorj.version>2.5.5</asciidoctorj.version>
-		<asm.version>9.3</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
-		<approvaltests.version>18.0.0</approvaltests.version>
+        <archunit.version>0.23.1</archunit.version>
+        <asciidoctorj.version>2.5.5</asciidoctorj.version>
+        <asm.version>9.3</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
+        <approvaltests.version>18.0.0</approvaltests.version>
 
-		<assertj-guava.version>3.5.0</assertj-guava.version>
+        <assertj-guava.version>3.5.0</assertj-guava.version>
 
-		<camel.version>3.14.3</camel.version>
+        <camel.version>3.14.3</camel.version>
 
-		<commons-email.version>1.5</commons-email.version>
-		<commons-httpclient.version>4.5.12</commons-httpclient.version>
-		<commons-io.version>2.11.0</commons-io.version>
+        <commons-email.version>1.5</commons-email.version>
+        <commons-httpclient.version>4.5.12</commons-httpclient.version>
+        <commons-io.version>2.11.0</commons-io.version>
 
-		<cucumber.version>7.6.0</cucumber.version>
+        <cucumber.version>7.6.0</cucumber.version>
 
-		<cxf-rt-rs-client.version>3.5.3</cxf-rt-rs-client.version>
+        <cxf-rt-rs-client.version>3.5.3</cxf-rt-rs-client.version>
 
-		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
-		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
+        <danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
+        <danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
 
-		<datanucleus-api-jdo.version>6.0.0-release</datanucleus-api-jdo.version>
-		<datanucleus-api-jpa.version>6.0.0-release</datanucleus-api-jpa.version>
-		<datanucleus-core.version>6.0.0-release</datanucleus-core.version>
-		<datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
-		<datanucleus-jdo-query.version>6.0.0-release</datanucleus-jdo-query.version>
-		<datanucleus-jodatime.version>6.0.0-release</datanucleus-jodatime.version>
-		<datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
-		<datanucleus-rdbms.version>6.0.0-release</datanucleus-rdbms.version>
+        <datanucleus-api-jdo.version>6.0.0-release</datanucleus-api-jdo.version>
+        <datanucleus-api-jpa.version>6.0.0-release</datanucleus-api-jpa.version>
+        <datanucleus-core.version>6.0.0-release</datanucleus-core.version>
+        <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
+        <datanucleus-jdo-query.version>6.0.0-release</datanucleus-jdo-query.version>
+        <datanucleus-jodatime.version>6.0.0-release</datanucleus-jodatime.version>
+        <datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
+        <datanucleus-rdbms.version>6.0.0-release</datanucleus-rdbms.version>
 
-		<docx4j.version>11.3.2</docx4j.version>
+        <docx4j.version>11.3.2</docx4j.version>
 
-		<easymock.version>4.3</easymock.version>
-		<error_prone_annotations.version>2.15.0</error_prone_annotations.version>
+        <easymock.version>4.3</easymock.version>
+        <error_prone_annotations.version>2.15.0</error_prone_annotations.version>
 
-		<git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
-		<guava.version>31.1-jre</guava.version>
+        <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
+        <guava.version>31.1-jre</guava.version>
 
-		<htmlparser.version>2.1</htmlparser.version>
+        <htmlparser.version>2.1</htmlparser.version>
 
-		<jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
-		<jakartaee.version>8.0.0</jakartaee.version>
-		<javafaker.version>1.0.2</javafaker.version>
-		<javassist.version>3.29.1-GA</javassist.version>
-		<javax-servlet.version>4.0.1</javax-servlet.version>
-		<jaxb-impl.version>2.3.6</jaxb-impl.version>
-		<jaxws-ri.version>2.3.5</jaxws-ri.version>
+        <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
+        <jakartaee.version>8.0.0</jakartaee.version>
+        <javafaker.version>1.0.2</javafaker.version>
+        <javassist.version>3.29.1-GA</javassist.version>
+        <javax-servlet.version>4.0.1</javax-servlet.version>
+        <jaxb-impl.version>2.3.6</jaxb-impl.version>
+        <jaxws-ri.version>2.3.5</jaxws-ri.version>
 
-		<jbcrypt.version>0.4</jbcrypt.version>
-		<jboss-jaxrs-api_2.0_spec.version>1.0.1.Final</jboss-jaxrs-api_2.0_spec.version>
+        <jbcrypt.version>0.4</jbcrypt.version>
+        <jboss-jaxrs-api_2.0_spec.version>1.0.1.Final</jboss-jaxrs-api_2.0_spec.version>
 
-		<!-- v3.2 not available yet, use datanucleus staging for now -->
-		<!-- <jdo-api.version>3.2</jdo-api.version> -->
+        <!-- v3.2 not available yet, use datanucleus staging for now -->
+        <!-- <jdo-api.version>3.2</jdo-api.version> -->
 
-		<jdom.version>2.0.6.1</jdom.version>
-		<jmock.version>2.12.0</jmock.version>
-		<joda-time.version>2.11.0</joda-time.version>
-		<jopt-simple.version>6.0-alpha-3</jopt-simple.version>
+        <jdom.version>2.0.6.1</jdom.version>
+        <jmock.version>2.12.0</jmock.version>
+        <joda-time.version>2.11.0</joda-time.version>
+        <jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
-		<jquery-ui.version>1.13.2</jquery-ui.version> <!-- org.webjars:jquery-ui -->
+        <jquery-ui.version>1.13.2</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
-		<jsr305.version>3.0.2</jsr305.version>
-		<jsoup.version>1.15.2</jsoup.version>
-		<junit-jupiter.version>5.9.0</junit-jupiter.version> <!-- overrides spring -->
-		<junit-platform.version>1.9.0</junit-platform.version>
+        <jsr305.version>3.0.2</jsr305.version>
+        <jsoup.version>1.15.2</jsoup.version>
+        <junit-jupiter.version>5.9.0</junit-jupiter.version> <!-- overrides spring -->
+        <junit-platform.version>1.9.0</junit-platform.version>
 
-		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
+        <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
+        <lombok.version>1.18.24</lombok.version> <!-- overriding Spring -->
 
-		<maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-		<maven-release-plugin.version>3.0.0-M6</maven-release-plugin.version>
-		<maven-war-plugin.version>3.3.2</maven-war-plugin.version>
+        <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
+        <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
 
-		<!-- See https://nodejs.org/en/download/ for latest node and npm (lts)
-			versions -->
-		<node.version>v16.15.0</node.version>
-		<npm.version>8.9.0</npm.version>
+        <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
+        <node.version>v16.15.0</node.version>
+        <npm.version>8.9.0</npm.version>
 
-		<objenesis.version>3.3</objenesis.version>
-		<ognl.version>3.3.3</ognl.version>
+        <objenesis.version>3.3</objenesis.version>
+        <ognl.version>3.3.3</ognl.version>
 
-		<picocontainer.version>2.15</picocontainer.version>
-		<poi.version>5.2.2</poi.version>
+        <picocontainer.version>2.15</picocontainer.version>
+        <poi.version>5.2.2</poi.version>
 
-		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
+        <quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
-		<resteasy-spring-boot-starter.version>5.0.0.Final</resteasy-spring-boot-starter.version>
-		<resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
+        <resteasy-spring-boot-starter.version>5.0.0.Final</resteasy-spring-boot-starter.version>
+        <resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
-		<select2.version>4.0.13</select2.version>
-		<shiro.version>1.9.1</shiro.version>
-		<simpleslackapi.version>1.3.0</simpleslackapi.version>
-		<slf4j-api.version>1.7.36</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
-		<spring-boot.version>2.7.3</spring-boot.version>
-		<summernote.version>0.8.11</summernote.version>
-		<swagger-core.version>1.6.6</swagger-core.version>
+        <select2.version>4.0.13</select2.version>
+        <shiro.version>1.9.1</shiro.version>
+        <simpleslackapi.version>1.3.0</simpleslackapi.version>
+        <slf4j-api.version>1.7.36</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
+        <spring-boot.version>2.7.3</spring-boot.version>
+        <summernote.version>0.8.11</summernote.version>
+        <surefire-plugin.argLine>-Xmx512m</surefire-plugin.argLine>
+        <swagger-core.version>1.6.6</swagger-core.version>
 
-		<togglz.version>3.2.1</togglz.version>
+        <togglz.version>3.2.1</togglz.version>
 
-		<vaadin.version>23.1.6</vaadin.version>
+        <vaadin.version>23.1.6</vaadin.version>
 
-		<wicket.version>9.11.0</wicket.version>
-		<wicket-bootstrap.version>6.0.0-M7</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
-		<wicket-webjars.version>3.0.4</wicket-webjars.version>
-		<wicket-viewer-jquery.version>3.5.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
+        <wicket.version>9.11.0</wicket.version>
+        <wicket-bootstrap.version>6.0.0-M7</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
+        <wicket-webjars.version>3.0.4</wicket-webjars.version>
+        <wicket-viewer-jquery.version>3.5.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
 
-		<wicketstuff.version>${wicket.version}</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
-		<wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
+        <wicketstuff.version>${wicket.version}</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
+        <wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
 
+        <!-- APACHE ISIS customisation 6/21: end -->
     </properties>
-
-<!-- breaks dependabot run: timeout due to repo not accessible
-	<repositories>
-		<repository>
-			<id>apache.snapshots</id>
-			<name>Apache Snapshot Repository</name>
-			<url>https://repository.apache.org/snapshots</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>apache.snapshots</id>
-			<name>Apache Snapshot Repository</name>
-			<url>https://repository.apache.org/snapshots</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</pluginRepository>
-	</pluginRepositories>
-	 -->
-
-	<build>
-		<extensions>
-			<!-- scp and sftp support for deployments. -->
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh</artifactId>
-				<version>3.5.2</version>
-			</extension>
-			<!-- ftp support for deployments. -->
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>3.5.2</version>
-			</extension>
-		</extensions>
-
-		<pluginManagement>
-			<plugins>
-            <!-- set versions of common plugins for reproducibility, ordered alphabetically -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-antrun-plugin</artifactId>
-					<version>3.1.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<version>3.4.2</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-clean-plugin</artifactId>
-					<version>3.2.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.8.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>3.3.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>3.0.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-docck-plugin</artifactId>
-					<version>1.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-ear-plugin</artifactId>
-					<version>3.2.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-enforcer-plugin</artifactId>
- 					<version>${maven-enforcer-plugin.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>${surefire.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-gpg-plugin</artifactId>
-					<version>3.0.1</version>
-					<configuration>
-						<gpgArguments>
-							<arg>--digest-algo=SHA512</arg>
-						</gpgArguments>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-help-plugin</artifactId>
-					<version>3.3.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-install-plugin</artifactId>
-					<version>3.0.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-invoker-plugin</artifactId>
-					<version>3.3.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.2.0</version>
-					<configuration>
-						<archive>
-							<manifest>
-								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							</manifest>
-						</archive>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.maven.plugin-tools</groupId>
+                <artifactId>maven-plugin-annotations</artifactId>
+                <version>${maven.plugin.tools.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <repositories>
+        <!-- APACHE ISIS customisation 7/21: start -->
+        <!-- breaks dependabot run: timeout due to repo not accessible
+        <repository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshot Repository</name>
+            <url>https://repository.apache.org/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <!-- APACHE ISIS customisation 7/21: end -->
+    </repositories>
+    <pluginRepositories>
+        <!-- APACHE ISIS customisation 8/21: start -->
+        <!-- breaks dependabot run: timeout due to repo not accessible
+        <pluginRepository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshot Repository</name>
+            <url>https://repository.apache.org/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+        -->
+        <!-- APACHE ISIS customisation 8/21: end -->
+    </pluginRepositories>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!--  set versions of common plugins for reproducibility, ordered alphabetically  -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.4.2</version>    <!--bumped-->
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.10.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
                     <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.0.0</version>    <!--bumped-->
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ear-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${surefire.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>3.0.1</version>
                     <configuration>
-                        <notimestamp>true</notimestamp><!-- avoid noise for svn/gitpubsub -->
+                        <gpgArguments>
+                            <arg>--digest-algo=SHA512</arg>
+                        </gpgArguments>
                     </configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-plugin-plugin</artifactId>
-					<version>3.6.4</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.4.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-help-plugin</artifactId>
+                    <version>3.3.0</version>    <!--bumped-->
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>3.0.1</version>    <!--bumped-->
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-invoker-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.2.2</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.4.0</version>
+                    <configuration>
+                        <notimestamp>true</notimestamp>
+                        <!--  avoid noise for svn/gitpubsub  -->
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>${maven.plugin.tools.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.4.1</version>    <!--bumped-->
                     <configuration>
                         <pluginManagementExcludes>
                             <exclude>org.eclipse.m2e:lifecycle-mapping</exclude>
                         </pluginManagementExcludes>
                     </configuration>
-				</plugin>
-				<!-- START SNIPPET: release-plugin-configuration -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-                    <version>${maven-release-plugin.version}</version>
-					<configuration>
-						<useReleaseProfile>false</useReleaseProfile>
-						<goals>deploy</goals>
+                </plugin>
+                <!--  START SNIPPET: release-plugin-configuration  -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.0-M6</version>
+                    <configuration>
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <goals>deploy</goals>
                         <releaseProfiles>apache-release</releaseProfiles>
-					</configuration>
-				</plugin>
-				<!-- END SNIPPET: release-plugin-configuration -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-remote-resources-plugin</artifactId>
-					<version>3.0.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.3.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-scm-plugin</artifactId>
-					<version>1.13.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-scm-publish-plugin</artifactId>
-					<version>3.1.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>3.12.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>3.2.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>${surefire.version}</version>
-					<configuration>
-						<!-- override defaults and include everything unless explicitly excluded -->
-						<includes>
-							<include>**/*.java</include>
-						</includes>
-						<excludes>
-							<exclude>${testsToExclude}</exclude>
-						</excludes>
-						<printSummary>false</printSummary>
-						<argLine>${surefire-plugin.argLine}</argLine>
-						<forkCount>1C</forkCount>
-						<reuseForks>true</reuseForks>
-						<systemPropertyVariables>
-							<!-- allows tests to reduce verbosity, or conditionally disable
-								 when run with surefire; e.g.:
-								 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
-								 -->
-							<isRunningWithSurefire>true</isRunningWithSurefire>
-						</systemPropertyVariables>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-report-plugin</artifactId>
-					<version>${surefire.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>3.3.2</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-shade-plugin</artifactId>
-					<version>3.3.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.rat</groupId>
-					<artifactId>apache-rat-plugin</artifactId>
-					<version>0.14</version>
+                    </configuration>
+                </plugin>
+                <!--  END SNIPPET: release-plugin-configuration  -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-remote-resources-plugin</artifactId>
+                    <version>3.0.0</version>    <!--bumped-->
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.0</version>    <!--bumped-->
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-plugin</artifactId>
+                    <version>1.13.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-publish-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.12.1</version>    <!--bumped-->
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${surefire.version}</version>
+                    <!-- APACHE ISIS customisation 9/21: start -->
+                    <configuration>
+                        <!-- override defaults and include everything unless explicitly excluded -->
+                        <includes>
+                            <include>**/*.java</include>
+                        </includes>
+                        <excludes>
+                            <exclude>${testsToExclude}</exclude>
+                        </excludes>
+                        <printSummary>false</printSummary>
+                        <argLine>${surefire-plugin.argLine}</argLine>
+                        <forkCount>1C</forkCount>
+                        <reuseForks>true</reuseForks>
+                        <systemPropertyVariables>
+                            <!-- allows tests to reduce verbosity, or conditionally disable
+                                 when run with surefire; e.g.:
+                                 @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+                                 -->
+                            <isRunningWithSurefire>true</isRunningWithSurefire>
+                        </systemPropertyVariables>
+                    </configuration>
+                    <!-- APACHE ISIS customisation 9/21: end -->
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>${surefire.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.3.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.rat</groupId>
+                    <artifactId>apache-rat-plugin</artifactId>
+                    <version>0.14</version>
+                    <!-- APACHE ISIS customisation 10/21: start -->
+                    <configuration>
+                        <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
+                        <excludeSubProjects>true</excludeSubProjects>
+                        <excludes>
+                            <exclude>**/target/**</exclude>
+                            <exclude>**/target-ide/**</exclude>
 
-					<!-- APACHE ISIS customisation 5/15: start -->
-					<configuration>
-						<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
-						<excludeSubProjects>true</excludeSubProjects>
-						<excludes>
-							<exclude>**/target/**</exclude>
-							<exclude>**/target-ide/**</exclude>
+                            <exclude>**/node_modules/**</exclude>
+                            <exclude>**/node/npm</exclude>
+                            <exclude>**/node/npm.cmd</exclude>
 
-							<exclude>**/node_modules/**</exclude>
-							<exclude>**/node/npm</exclude>
-							<exclude>**/node/npm.cmd</exclude>
+                            <exclude>**/*.project</exclude>
+                            <exclude>**/.classpath</exclude>
+                            <exclude>**/.settings/**</exclude>
+                            <exclude>**/*.launch</exclude>
+                            <exclude>**/*.columnOrder.txt</exclude>
+                            <exclude>**/*.drawio.svg</exclude>
+                            <exclude>**/META-INF/spring.factories</exclude>
 
-							<exclude>**/*.project</exclude>
-							<exclude>**/.classpath</exclude>
-							<exclude>**/.settings/**</exclude>
-							<exclude>**/*.launch</exclude>
-							<exclude>**/*.columnOrder.txt</exclude>
-							<exclude>**/*.drawio.svg</exclude>
-							<exclude>**/META-INF/spring.factories</exclude>
+                            <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
 
-							<exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
+                            <exclude>**/isis/tooling/model4adoc/src/test/resources/org/apache/isis/tooling/adocmodel/test/**</exclude>
 
-							<exclude>**/isis/tooling/model4adoc/src/test/resources/org/apache/isis/tooling/adocmodel/test/**</exclude>
+                            <exclude>**/*.iml</exclude>
+                            <exclude>**/webpack.config.js</exclude>
+                            <exclude>**/webpack.generated.js</exclude>
+                            <exclude>**/pnpm-lock.yaml</exclude>
+                            <exclude>**/pnpmfile.js</exclude>
 
-							<exclude>**/*.iml</exclude>
-							<exclude>**/webpack.config.js</exclude>
-							<exclude>**/webpack.generated.js</exclude>
-							<exclude>**/pnpm-lock.yaml</exclude>
-							<exclude>**/pnpmfile.js</exclude>
+                            <exclude>**/*.pdn</exclude>
+                            <exclude>**/*.svg</exclude>
+                            <exclude>**/*.rtf</exclude>
+                            <exclude>**/*.json</exclude>
+                            <exclude>**/.gitkeep</exclude>
+                            <exclude>**/*.min.js</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/*.dtd</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/*.dcl</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/*.soc</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/vs</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/vx</exclude>
 
-							<exclude>**/*.pdn</exclude>
-							<exclude>**/*.svg</exclude>
-							<exclude>**/*.rtf</exclude>
-							<exclude>**/*.json</exclude>
-							<exclude>**/.gitkeep</exclude>
-							<exclude>**/*.min.js</exclude>
-							<exclude>**/fakedata/applib/services/clobs/*.dtd</exclude>
-							<exclude>**/fakedata/applib/services/clobs/*.dcl</exclude>
-							<exclude>**/fakedata/applib/services/clobs/*.soc</exclude>
-							<exclude>**/fakedata/applib/services/clobs/vs</exclude>
-							<exclude>**/fakedata/applib/services/clobs/vx</exclude>
+                            <exclude>**/MANIFEST.MF</exclude>
+                            <exclude>**/*.ucd</exclude>
+                            <exclude>**/*.ucls</exclude>
+                            <exclude>**/*.puml</exclude>
+                            <exclude>**/antora/supplemental-ui/**</exclude>
 
-							<exclude>**/MANIFEST.MF</exclude>
-							<exclude>**/*.ucd</exclude>
-							<exclude>**/*.ucls</exclude>
-							<exclude>**/*.puml</exclude>
-							<exclude>**/antora/supplemental-ui/**</exclude>
+                            <exclude>**/xml/objects/**</exclude>
+                            <exclude>**/test.data</exclude>
+                            <exclude>**/fixture-data/**</exclude>
+                            <exclude>**/partials/module-nav.adoc</exclude>
+                            <exclude>**/partials/extensions.adoc</exclude>
+                            <exclude>**/partials/component-nav.adoc</exclude>
+                            <exclude>**/_nav.adoc</exclude>
+                            <exclude>**/_overview/nav.adoc</exclude>
 
-							<exclude>**/xml/objects/**</exclude>
-							<exclude>**/test.data</exclude>
-							<exclude>**/fixture-data/**</exclude>
-							<exclude>**/partials/module-nav.adoc</exclude>
-							<exclude>**/partials/extensions.adoc</exclude>
-							<exclude>**/partials/component-nav.adoc</exclude>
-							<exclude>**/_nav.adoc</exclude>
-							<exclude>**/_overview/nav.adoc</exclude>
+                            <exclude>**/application.js</exclude>
 
-							<exclude>**/application.js</exclude>
+                            <exclude>**/jquery.zclip.js</exclude>
+                            <exclude>**/simple-sidebar.css</exclude>
+                            <exclude>**/bootstrap-growl.js</exclude>
+                            <exclude>**/moment.js</exclude>
+                            <exclude>**/prism*.js</exclude>
+                            <exclude>**/prism*.css</exclude>
+                            <exclude>**/kroviz/webpack.config.d/**</exclude>
 
-							<exclude>**/jquery.zclip.js</exclude>
-							<exclude>**/simple-sidebar.css</exclude>
-							<exclude>**/bootstrap-growl.js</exclude>
-							<exclude>**/moment.js</exclude>
-							<exclude>**/prism*.js</exclude>
-							<exclude>**/prism*.css</exclude>
-							<exclude>**/kroviz/webpack.config.d/**</exclude>
+                            <exclude>**/viewer/wicket/ui/components/**/*.css</exclude>
+                            <exclude>**/viewer/wicket/ui/components/**/*.js</exclude>
+                            <exclude>**/bootstrap-datetimepicker.min.css</exclude>
+                            <exclude>**/bootstrap-datetimepicker.css</exclude>
+                            <exclude>**/select2-bootstrap.css</exclude>
 
-							<exclude>**/viewer/wicket/ui/components/**/*.css</exclude>
-							<exclude>**/viewer/wicket/ui/components/**/*.js</exclude>
-							<exclude>**/bootstrap-datetimepicker.min.css</exclude>
-							<exclude>**/bootstrap-datetimepicker.css</exclude>
-							<exclude>**/select2-bootstrap.css</exclude>
+                            <exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
 
-							<exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
+                            <exclude>**/src/main/resources/supplemental-models.xml</exclude>
+                            <exclude>**/datanucleus.log</exclude>
+                            <exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
+                            <exclude>**/gradlew</exclude>
+                            <exclude>**/gradlew.bat</exclude>
+                            <exclude>**/rebel.xml</exclude>
+                            <exclude>**/translations**.po</exclude>
+                            <exclude>**/translations.pot</exclude>
+                            <exclude>**/intellij/launch/*.xml</exclude>
 
-							<exclude>**/src/main/resources/supplemental-models.xml</exclude>
-							<exclude>**/datanucleus.log</exclude>
-							<exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
-							<exclude>**/gradlew</exclude>
-							<exclude>**/gradlew.bat</exclude>
-							<exclude>**/rebel.xml</exclude>
-							<exclude>**/translations**.po</exclude>
-							<exclude>**/translations.pot</exclude>
-							<exclude>**/intellij/launch/*.xml</exclude>
+                            <exclude>**/css/home/scss-files.txt</exclude>
+                            <exclude>**/css/home/styles.css</exclude>
+                            <exclude>**/css/site-custom.css</exclude>
 
-							<exclude>**/css/home/scss-files.txt</exclude>
-							<exclude>**/css/home/styles.css</exclude>
-							<exclude>**/css/site-custom.css</exclude>
+                            <exclude>**/swagger-ui/**</exclude>
 
-							<exclude>**/swagger-ui/**</exclude>
-
-							<exclude>**/META-INF/services/**</exclude>
-						</excludes>
-						<licenses>
-							<license
-									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-								<licenseFamilyCategory>AL2  </licenseFamilyCategory>
-								<licenseFamilyName>Apache License 2.0</licenseFamilyName>
-								<notes />
-								<patterns>
-									<pattern>Licensed to the Apache Software Foundation (ASF) under
-										one</pattern>
-								</patterns>
-							</license>
-							<license
-									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-								<licenseFamilyCategory>MIT</licenseFamilyCategory>
-								<licenseFamilyName>MIT Licensed</licenseFamilyName>
-								<notes />
-								<patterns>
-									<pattern>The MIT License (MIT)</pattern>
-									<pattern>Dual licensed under the MIT</pattern>
-									<pattern>http://prismjs.com/download.html</pattern>
-								</patterns>
-							</license>
-							<license
-									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-								<licenseFamilyCategory>CC3</licenseFamilyCategory>
-								<licenseFamilyName>Creative Commons 3.0</licenseFamilyName>
-								<notes />
-								<patterns>
-									<pattern>ASCII text placed in the public domain by Moby Lexical Tools, 1992.</pattern>
-								</patterns>
-							</license>
-							<license
-									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-								<licenseFamilyCategory>JMOCK</licenseFamilyCategory>
-								<licenseFamilyName>JMock</licenseFamilyName>
-								<notes />
-								<patterns>
-									<pattern>Copyright (c) 2000-2007, jMock.org</pattern>
-								</patterns>
-							</license>
-							<license
-									implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-								<licenseFamilyCategory>JMOCK</licenseFamilyCategory>
-								<licenseFamilyName>JMock</licenseFamilyName>
-								<notes />
-								<patterns>
-									<pattern>Copyright (c) 2000-2007, jMock.org</pattern>
-								</patterns>
-							</license>
-						</licenses>
-						<licenseFamilies>
-							<licenseFamily
-									implementation="org.apache.rat.license.SimpleLicenseFamily">
-								<familyName>Apache License 2.0</familyName>
-							</licenseFamily>
-							<licenseFamily
-									implementation="org.apache.rat.license.SimpleLicenseFamily">
-								<familyName>MIT</familyName>
-							</licenseFamily>
-							<licenseFamily
-									implementation="org.apache.rat.license.SimpleLicenseFamily">
-								<familyName>JMock</familyName>
-							</licenseFamily>
-							<licenseFamily
-									implementation="org.apache.rat.license.SimpleLicenseFamily">
-								<familyName>XHTML</familyName>
-							</licenseFamily>
-						</licenseFamilies>
-					</configuration>
-					<!-- APACHE ISIS customisation 5/15: end -->
-				</plugin>
-
-				<!-- APACHE ISIS customisation 6/15: start -->
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>clirr-maven-plugin</artifactId>
-					<version>2.8</version>
-				</plugin>
-				<!-- APACHE ISIS customisation 6/15: end -->
-			</plugins>
-		</pluginManagement>
-		<plugins>
-			<!-- We want to package up license resources in the JARs produced -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-remote-resources-plugin</artifactId>
-				<executions>
-					<execution>
+                            <exclude>**/META-INF/services/**</exclude>
+                        </excludes>
+                        <licenses>
+                            <license
+                                    implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                                <licenseFamilyCategory>AL2  </licenseFamilyCategory>
+                                <licenseFamilyName>Apache License 2.0</licenseFamilyName>
+                                <notes />
+                                <patterns>
+                                    <pattern>Licensed to the Apache Software Foundation (ASF) under
+                                        one</pattern>
+                                </patterns>
+                            </license>
+                            <license
+                                    implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                                <licenseFamilyCategory>MIT</licenseFamilyCategory>
+                                <licenseFamilyName>MIT Licensed</licenseFamilyName>
+                                <notes />
+                                <patterns>
+                                    <pattern>The MIT License (MIT)</pattern>
+                                    <pattern>Dual licensed under the MIT</pattern>
+                                    <pattern>http://prismjs.com/download.html</pattern>
+                                </patterns>
+                            </license>
+                            <license
+                                    implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                                <licenseFamilyCategory>CC3</licenseFamilyCategory>
+                                <licenseFamilyName>Creative Commons 3.0</licenseFamilyName>
+                                <notes />
+                                <patterns>
+                                    <pattern>ASCII text placed in the public domain by Moby Lexical Tools, 1992.</pattern>
+                                </patterns>
+                            </license>
+                            <license
+                                    implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                                <licenseFamilyCategory>JMOCK</licenseFamilyCategory>
+                                <licenseFamilyName>JMock</licenseFamilyName>
+                                <notes />
+                                <patterns>
+                                    <pattern>Copyright (c) 2000-2007, jMock.org</pattern>
+                                </patterns>
+                            </license>
+                            <license
+                                    implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                                <licenseFamilyCategory>JMOCK</licenseFamilyCategory>
+                                <licenseFamilyName>JMock</licenseFamilyName>
+                                <notes />
+                                <patterns>
+                                    <pattern>Copyright (c) 2000-2007, jMock.org</pattern>
+                                </patterns>
+                            </license>
+                        </licenses>
+                        <licenseFamilies>
+                            <licenseFamily
+                                    implementation="org.apache.rat.license.SimpleLicenseFamily">
+                                <familyName>Apache License 2.0</familyName>
+                            </licenseFamily>
+                            <licenseFamily
+                                    implementation="org.apache.rat.license.SimpleLicenseFamily">
+                                <familyName>MIT</familyName>
+                            </licenseFamily>
+                            <licenseFamily
+                                    implementation="org.apache.rat.license.SimpleLicenseFamily">
+                                <familyName>JMock</familyName>
+                            </licenseFamily>
+                            <licenseFamily
+                                    implementation="org.apache.rat.license.SimpleLicenseFamily">
+                                <familyName>XHTML</familyName>
+                            </licenseFamily>
+                        </licenseFamilies>
+                    </configuration>
+                    <!-- APACHE ISIS customisation 10/21: end -->
+                </plugin>
+                <!-- APACHE ISIS customisation 11/21: start -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-docck-plugin</artifactId>
+                    <version>1.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>clirr-maven-plugin</artifactId>
+                    <version>2.8</version>
+                </plugin>
+                <!-- APACHE ISIS customisation 11/21: end -->
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <!--  We want to package up license resources in the JARs produced  -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <executions>
+                    <execution>
                         <id>process-resource-bundles</id>
-						<goals>
-							<goal>process</goal>
-						</goals>
-						<configuration>
-							<resourceBundles>
-								<resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
-							</resourceBundles>
-							<!-- APACHE ISIS customisation 7/15: start -->
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <resourceBundles>
+                                <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
+                            </resourceBundles>
+                            <!-- APACHE ISIS customisation 12/21: start -->
 
-						    <!-- Reference the supplemental-model artifact from module supplemental-model -->
-				            <supplementalModelArtifacts>
-				            	<supplementalModelArtifact>org.apache.isis:supplemental-model:1.0</supplementalModelArtifact>
-				            </supplementalModelArtifacts>
+                            <!-- Reference the supplemental-model artifact from module supplemental-model -->
+                            <supplementalModelArtifacts>
+                                <supplementalModelArtifact>org.apache.isis:supplemental-model:1.0</supplementalModelArtifact>
+                            </supplementalModelArtifacts>
 
-							<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                            <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
 
-							 <!-- Specify the path, relative to the JAR root, where the supplemental model file is located -->
-							<supplementalModels>
-								<supplementalModel>supplemental-models.xml</supplementalModel>
-							</supplementalModels>
-							<properties>
-								<projectTimespan>2010~2021</projectTimespan>
-								<postDepListText>
-									The above (auto-generated) list aggregates the
-									dependencies
-									(either directly
-									or transitively) of all the modules
-									that make up ${project.name}.
-									You can use
-									mvn dependency:list or
-									mvn dependency:tree to view dependencies by
-									submodule.
+                             <!-- Specify the path, relative to the JAR root, where the supplemental model file is located -->
+                            <supplementalModels>
+                                <supplementalModel>supplemental-models.xml</supplementalModel>
+                            </supplementalModels>
+                            <properties>
+                                <projectTimespan>2010~2022</projectTimespan>
+                                <postDepListText>
+                                    The above (auto-generated) list aggregates the dependencies (either directly or
+                                    transitively) of all the modules that make up ${project.name}.   You can use
+                                    mvn dependency:list or mvn dependency:tree to view dependencies by submodule.
 
-									${license.additional-notes}
-								</postDepListText>
-							</properties>
-							<!-- APACHE ISIS customisation 7/15: end -->
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- APACHE ISIS customisation 8/15: start -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<configuration>
-					<rules>
-						<requireMavenVersion>
-							<version>[3.6,)</version>
-						</requireMavenVersion>
-						<requireJavaVersion>
-							<version>[11,)</version>
-						</requireJavaVersion>
-						<!-- seemingly not compatible with use of 2.0.0-SNAPSHOT placeholders
-							<requirePluginVersions> <message>All plugin versions must be defined!</message>
-							<banLatest>true</banLatest> <banRelease>true</banRelease> </requirePluginVersions> -->
-						<DependencyConvergence />
-					</rules>
-				</configuration>
-				<!-- goal:enforce supposedly binds to phase:validate, but explicit binding
-					seems to be required -->
-				<executions>
-					<execution>
-						<id>validate-enforce</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>enforce-maven-version</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<requireMavenVersion>
+                                    ${license.additional-notes}
+                                </postDepListText>
+                            </properties>
+                            <!-- APACHE ISIS customisation 12/21: end -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <!-- APACHE ISIS customisation 13/21: start -->
+                <configuration>
+                    <rules>
+                        <requireMavenVersion>
+                            <version>[3.6,)</version>
+                        </requireMavenVersion>
+                        <requireJavaVersion>
+                            <version>[11,)</version>
+                        </requireJavaVersion>
+                        <!-- seemingly not compatible with use of 2.0.0-SNAPSHOT placeholders
+                            <requirePluginVersions> <message>All plugin versions must be defined!</message>
+                            <banLatest>true</banLatest> <banRelease>true</banRelease> </requirePluginVersions> -->
+                        <DependencyConvergence />
+                    </rules>
+                </configuration>
+                <!-- APACHE ISIS customisation 13/21: end -->
+                <executions>
+                    <!-- APACHE ISIS customisation 14/21: start -->
+                    <!-- goal:enforce supposedly binds to phase:validate, but explicit binding seems to be required -->
+                    <execution>
+                        <id>validate-enforce</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                    </execution>
+                    <!-- APACHE ISIS customisation 14/21: end -->
+                    <execution>
+                        <id>enforce-maven-version</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
                                     <version>${minimalMavenBuildVersion}</version>
-								</requireMavenVersion>
-							</rules>
-						</configuration>
-					</execution>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>enforce-java-version</id>
                         <goals>
@@ -970,351 +940,397 @@ under the License.
                             </rules>
                         </configuration>
                     </execution>
-				</executions>
-			</plugin>
-			<!-- APACHE ISIS customisation 8/15: end -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-descriptor</id>
-						<goals>
-							<goal>attach-descriptor</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-descriptor</id>
+                        <goals>
+                            <goal>attach-descriptor</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <!-- APACHE ISIS customisation 15/21: start -->
+        <extensions>
+            <!-- scp and sftp support for deployments. -->
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>3.5.2</version>
+            </extension>
+            <!-- ftp support for deployments. -->
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>3.5.2</version>
+            </extension>
+        </extensions>
+        <!-- APACHE ISIS customisation 15/21: end -->
+    </build>
+    <profiles>
+        <!--  START SNIPPET: release-profile  -->
+        <profile>
+            <id>apache-release</id>
+            <!-- APACHE ISIS customisation 16/21: start -->
+            <activation>
+                <property>
+                    <name>apache-release</name>
+                </property>
+            </activation>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+            <!-- APACHE ISIS customisation 16/21: end -->
+            <build>
+                <plugins>
+                    <!-- APACHE ISIS customisation 17/21: start -->
+                    <plugin>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok-maven-plugin</artifactId>
+                        <version>1.18.20.0</version>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                            <outputDirectory>${delombok.output}</outputDirectory>
+                            <addOutputDirectory>false</addOutputDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>delombok</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- APACHE ISIS customisation 17/21: end -->
 
-	<profiles>
-		<!-- START SNIPPET: release-profile -->
-		<profile>
-			<id>apache-release</id>
-			<!-- APACHE ISIS customisation 9/15: start -->
-			<activation>
-				<property>
-					<name>apache-release</name>
-				</property>
-			</activation>
-			<properties>
-				<skipTests>true</skipTests>
-			</properties>
-			<!-- APACHE ISIS customisation 9/15: end -->
-			<build>
-				<plugins>
-					<!-- APACHE ISIS customisation 10/15: end -->
-					<plugin>
-						<groupId>org.projectlombok</groupId>
-						<artifactId>lombok-maven-plugin</artifactId>
-						<version>1.18.20.0</version>
-						<configuration>
-							<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-							<outputDirectory>${delombok.output}</outputDirectory>
-							<addOutputDirectory>false</addOutputDirectory>
-						</configuration>
-						<executions>
-							<execution>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>delombok</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<!-- APACHE ISIS customisation 10/15: end -->
-
-					<!-- Create a source-release artifact that contains the fully buildable
-                         project directory source structure. This is the artifact which is
-                         the official subject of any release vote. -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<dependencies>
-							<dependency>
-								<groupId>org.apache.apache.resources</groupId>
-								<artifactId>apache-source-release-assembly-descriptor</artifactId>
-								<version>1.0.6</version>
-							</dependency>
-						</dependencies>
-						<executions>
-							<execution>
-								<id>source-release-assembly</id>
-								<phase>package</phase>
-								<goals>
-									<goal>single</goal>
-								</goals>
-								<configuration>
-									<!-- APACHE ISIS customisation 11/15: start -->
-									<archiveBaseDirectory>..</archiveBaseDirectory>
-									<!-- APACHE ISIS customisation 11/15: end -->
+                    <!--  Create a source-release artifact that contains the fully buildable
+                                   project directory source structure. This is the artifact which is
+                                   the official subject of any release vote.  -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.apache.resources</groupId>
+                                <artifactId>apache-source-release-assembly-descriptor</artifactId>
+                                <version>1.0.6</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>source-release-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- APACHE ISIS customisation 18/21: start -->
+                                    <archiveBaseDirectory>..</archiveBaseDirectory>
+                                    <!-- APACHE ISIS customisation 18/21: end -->
                                     <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-									<descriptorRefs>
-										<descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
-									</descriptorRefs>
-									<tarLongFileMode>posix</tarLongFileMode>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<!-- We want to deploy the artifact to a staging location for perusal -->
-					<plugin>
-						<inherited>true</inherited>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-deploy-plugin</artifactId>
-						<configuration>
-							<updateReleaseInfo>true</updateReleaseInfo>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-								<!-- APACHE ISIS customisation 12/15: start -->
-								<configuration>
-									<sourcepath>${delombok.output}</sourcepath>
-									<doclint>none</doclint>
-								</configuration>
-								<!-- APACHE ISIS customisation 12/15: end -->
-							</execution>
-						</executions>
-					</plugin>
-					<!-- calculate checksums of source release for Apache dist area -->
-					<plugin>
-						<groupId>net.nicoulaj.maven.plugins</groupId>
-						<artifactId>checksum-maven-plugin</artifactId>
-						<version>1.11</version>
-						<executions>
-							<execution>
-								<id>source-release-checksum</id>
-								<goals>
+                                    <descriptorRefs>
+                                        <descriptorRef>${sourceReleaseAssemblyDescriptor}</descriptorRef>
+                                    </descriptorRefs>
+                                    <tarLongFileMode>posix</tarLongFileMode>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!--  We want to deploy the artifact to a staging location for perusal  -->
+                    <plugin>
+                        <inherited>true</inherited>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <configuration>
+                            <updateReleaseInfo>true</updateReleaseInfo>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <!-- APACHE ISIS customisation 19/21: start -->
+                                <configuration>
+                                    <sourcepath>${delombok.output}</sourcepath>
+                                    <doclint>none</doclint>
+                                </configuration>
+                                <!-- APACHE ISIS customisation 19/21: end -->
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!--  calculate checksums of source release for Apache dist area  -->
+                    <plugin>
+                        <groupId>net.nicoulaj.maven.plugins</groupId>
+                        <artifactId>checksum-maven-plugin</artifactId>
+                        <version>1.11</version>
+                        <executions>
+                            <execution>
+                                <id>source-release-checksum</id>
+                                <goals>
                                     <goal>artifacts</goal>
-								</goals>
-								<!-- execute prior to maven-gpg-plugin:sign due to https://github.com/nicoulaj/checksum-maven-plugin/issues/112 -->
-								<phase>post-integration-test</phase>
-								<configuration>
-									<algorithms>
-										<algorithm>SHA-512</algorithm>
-									</algorithms>
-									<!-- https://maven.apache.org/apache-resource-bundles/#source-release-assembly-descriptor -->
-									<includeClassifiers>source-release</includeClassifiers>
-									<excludeMainArtifact>true</excludeMainArtifact>
-									<csvSummary>false</csvSummary>
-									<!-- attach SHA-512 checksum as well to upload to Maven Staging Repo,
-                                         as this eases uploading from stage to dist and doesn't do harm in Maven Central -->
-									<attachChecksums>true</attachChecksums>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<!-- We want to sign the artifact, the POM, and all attached artifacts (except for SHA-512 checksum) -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>sign-release-artifacts</id>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-			<!-- APACHE ISIS customisation 13/15: start -->
-			<modules>
-				<module>../core</module>
-				<module>../extensions</module>
-				<module>../mavendeps</module>
-				<module>../starters</module>
-				<module>../testing</module>
-				<module>../valuetypes</module>
-			</modules>
-			<!-- APACHE ISIS customisation 13/15: end -->
-		</profile>
-		<!-- END SNIPPET: release-profile -->
-		<profile>
-			<id>enforce-output-timestamp-property</id>
-			<activation>
-				<!-- APACHE ISIS customisation 14/15: start -->
-				<!-- multiple profile activation conditions have AND logic ... -->
-				<property>
-					<name>apache-release</name>
-				</property>
-				<!-- APACHE ISIS customisation 14/15: end -->
-				<file>
-					<missing>${basedir}/.maven-apache-parent.marker</missing>
-				</file>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-enforcer-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>enforce-output-timestamp-property</id>
-								<goals>
-									<goal>enforce</goal>
-								</goals>
-								<configuration>
-									<rules>
-										<requireProperty>
-											<property>project.build.outputTimestamp</property>
-											<message>The property "project.build.outputTimestamp" must be set on the reactor's root pom.xml to make the build reproducible. Further information at "https://maven.apache.org/guides/mini/guide-reproducible-builds.html".</message>
-										</requireProperty>
-									</rules>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<!-- APACHE ISIS customisation 15/15: start -->
-
-		<profile>
-			<id>sources</id>
-			<activation>
-				<property>
-					<name>sources</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<phase>deploy</phase>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
-			<id>github</id>
-			<activation>
-				<property>
-					<name>github</name>
-				</property>
-			</activation>
-			<properties>
-				<enforcer.failFast>true</enforcer.failFast>
-				<jacoco.skip>true</jacoco.skip>
-			</properties>
-			<modules>
-				<module>../core</module>
-				<module>../extensions</module>
-				<module>../mavendeps</module>
-				<module>../starters</module>
-				<module>../testing</module>
-				<module>../valuetypes</module>
-			</modules>
-			<distributionManagement>
-				<repository>
-					<id>github</id>
-					<name>Github Releases</name>
-					<url>https://maven.pkg.github.com/apache/isis</url>
-				</repository>
-			</distributionManagement>
-		</profile>
-
-		<profile>
-			<id>nightly-localfs-repo</id>
-			<activation>
-				<property>
-					<name>nightly-localfs-repo</name>
-				</property>
-			</activation>
-			<distributionManagement>
-				<repository>
-			        <id>nightly-localfs-repo</id>
-			        <name>Temporary Local Filesystem Staging Repository</name>
-			        <url>file://${MVN_SNAPSHOTS_PATH}</url>
-			    </repository>
-			</distributionManagement>
-			<build>
-				<plugins>
-					<plugin>
-					    <artifactId>maven-deploy-plugin</artifactId>
-					    <version>3.0.0</version>
-					    <configuration>
-					        <altDeploymentRepository>
-					            nightly-localfs-repo::default::file://${MVN_SNAPSHOTS_PATH}
-					        </altDeploymentRepository>
-					    </configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
-			<id>jacoco-report-xml</id>
-			<activation>
-				<property>
-					<name>jacoco-report-xml</name>
-				</property>
-			</activation>
-			<properties>
-				<surefire-plugin.argLine>@{argLine} -Xmx512m</surefire-plugin.argLine>
-			</properties>
-			<build>
-				<plugins>
-					<plugin>
-		                <groupId>org.jacoco</groupId>
-		                <artifactId>jacoco-maven-plugin</artifactId>
-		                <version>0.8.8</version>
-		                <executions>
-		                    <execution>
-		                        <goals>
-		                            <goal>prepare-agent</goal>
-		                        </goals>
-		                    </execution>
-		                    <execution>
-		                        <id>report</id>
-		                        <phase>prepare-package</phase>
-		                        <goals>
-		                            <goal>report</goal>
-		                        </goals>
-		                        <configuration>
-		                        	<formats>XML</formats>
-		                        </configuration>
-		                    </execution>
-		                </executions>
-		            </plugin>
-         		</plugins>
-			</build>
-		</profile>
-
-
-		<!-- APACHE ISIS customisation 15/15: end -->
-	</profiles>
+                                </goals>
+                                <!--  execute prior to maven-gpg-plugin:sign due to https://github.com/nicoulaj/checksum-maven-plugin/issues/112  -->
+                                <phase>post-integration-test</phase>
+                                <configuration>
+                                    <algorithms>
+                                        <algorithm>SHA-512</algorithm>
+                                    </algorithms>
+                                    <!--  https://maven.apache.org/apache-resource-bundles/#source-release-assembly-descriptor  -->
+                                    <includeClassifiers>source-release</includeClassifiers>
+                                    <excludeMainArtifact>true</excludeMainArtifact>
+                                    <csvSummary>false</csvSummary>
+                                    <!--  attach SHA-512 checksum as well to upload to Maven Staging Repo,
+                                                           as this eases uploading from stage to dist and doesn't do harm in Maven Central  -->
+                                    <attachChecksums>true</attachChecksums>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!--  We want to sign the artifact, the POM, and all attached artifacts (except for SHA-512 checksum)  -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-release-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <!-- APACHE ISIS customisation 20/21: start -->
+            <modules>
+                <module>../core</module>
+                <module>../extensions</module>
+                <module>../mavendeps</module>
+                <module>../starters</module>
+                <module>../testing</module>
+                <module>../valuetypes</module>
+            </modules>
+            <!-- APACHE ISIS customisation 20/21: end -->
+        </profile>
+        <!--  END SNIPPET: release-profile  -->
+        <profile>
+            <id>only-eclipse</id>
+            <activation>
+                <property>
+                    <name>m2e.version</name>
+                </property>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <!--  Disable execution of some plugins in m2e (https://www.eclipse.org/m2e/documentation/m2e-execution-not-covered.html)  -->
+                        <plugin>
+                            <groupId>org.eclipse.m2e</groupId>
+                            <artifactId>lifecycle-mapping</artifactId>
+                            <version>1.0.0</version>
+                            <!--  as this is an artificial artifact only use in a profile (https://bugs.eclipse.org/bugs/show_bug.cgi?id=367870#c18)  -->
+                            <configuration>
+                                <lifecycleMappingMetadata>
+                                    <pluginExecutions>
+                                        <pluginExecution>
+                                            <!--  no native m2e support yet (https://issues.apache.org/jira/browse/MRRESOURCES-85)  -->
+                                            <pluginExecutionFilter>
+                                                <groupId>org.apache.maven.plugins</groupId>
+                                                <artifactId>maven-remote-resources-plugin</artifactId>
+                                                <versionRange>[0,1.8.0)</versionRange>
+                                                <goals>
+                                                    <goal>process</goal>
+                                                </goals>
+                                            </pluginExecutionFilter>
+                                            <action>
+                                                <ignore/>
+                                            </action>
+                                        </pluginExecution>
+                                    </pluginExecutions>
+                                </lifecycleMappingMetadata>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <!-- APACHE ISIS customisation 21/21: start -->
+        <profile>
+            <id>enforce-output-timestamp-property</id>
+            <activation>
+                <!-- multiple profile activation conditions have AND logic ... -->
+                <property>
+                    <name>apache-release</name>
+                </property>
+                <file>
+                    <missing>${basedir}/.maven-apache-parent.marker</missing>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-output-timestamp-property</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>project.build.outputTimestamp</property>
+                                            <message>The property "project.build.outputTimestamp" must be set on the reactor's root pom.xml to make the build reproducible. Further information at "https://maven.apache.org/guides/mini/guide-reproducible-builds.html".</message>
+                                        </requireProperty>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>sources</id>
+            <activation>
+                <property>
+                    <name>sources</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>github</id>
+            <activation>
+                <property>
+                    <name>github</name>
+                </property>
+            </activation>
+            <properties>
+                <enforcer.failFast>true</enforcer.failFast>
+                <jacoco.skip>true</jacoco.skip>
+            </properties>
+            <modules>
+                <module>../core</module>
+                <module>../extensions</module>
+                <module>../mavendeps</module>
+                <module>../starters</module>
+                <module>../testing</module>
+                <module>../valuetypes</module>
+            </modules>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>Github Releases</name>
+                    <url>https://maven.pkg.github.com/apache/isis</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>nightly-localfs-repo</id>
+            <activation>
+                <property>
+                    <name>nightly-localfs-repo</name>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>nightly-localfs-repo</id>
+                    <name>Temporary Local Filesystem Staging Repository</name>
+                    <url>file://${MVN_SNAPSHOTS_PATH}</url>
+                </repository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <configuration>
+                            <altDeploymentRepository>
+                                nightly-localfs-repo::default::file://${MVN_SNAPSHOTS_PATH}
+                            </altDeploymentRepository>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jacoco-report-xml</id>
+            <activation>
+                <property>
+                    <name>jacoco-report-xml</name>
+                </property>
+            </activation>
+            <properties>
+                <surefire-plugin.argLine>@{argLine} -Xmx512m</surefire-plugin.argLine>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.8</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                                <configuration>
+                                    <formats>XML</formats>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- APACHE ISIS customisation 21/21: end -->
+    </profiles>
 </project>
