@@ -1,5 +1,3 @@
 
-
-
-* xref:extensions:sse:about.adoc[SSE]
+** xref:vw:sse:about.adoc[SSE]
 

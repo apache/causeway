@@ -38,10 +38,10 @@ content:
       branches: HEAD
 
     - url: .
-      start_path: extensions/applib/excel/adoc # extensions
+      start_path: extensions/core/commandlog/adoc # extensions
       branches: HEAD
     - url: .
-      start_path: extensions/core/commandlog/adoc # extensions
+      start_path: extensions/core/excel/adoc # extensions
       branches: HEAD
     - url: .
       start_path: extensions/core/executionlog/adoc # extensions
