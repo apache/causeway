@@ -363,7 +363,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <javafaker.version>1.0.2</javafaker.version>
         <javassist.version>3.29.1-GA</javassist.version>
         <javax-servlet.version>4.0.1</javax-servlet.version>
-        <jaxb-impl.version>2.3.6</jaxb-impl.version>
+        <jaxb-impl.version>4.0.0</jaxb-impl.version>
         <jaxws-ri.version>2.3.5</jaxws-ri.version>
 
         <jbcrypt.version>0.4</jbcrypt.version>
