@@ -1,0 +1,197 @@
+= Events
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The framework emits events when it interacts with domain objects; the domain application can listen to these events and use them to influence the interaction (including veto'ing it).
+
+These events fall into three broad categories: UI hints, domain and persistence lifecycles.
+
+
+== UI Events
+
+As specified using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout#xxxUiEvent()].
+
+.UI Events
+[plantuml,file="eventbus_ui.png"]
+----
+@startuml
+
+skinparam nodesep 20
+
+(Event\nBus) as EB
+(Spring) as SPRING
+SPRING .l.> EB : provides/\nmanages
+(Event\nListener) as EL
+EL --> EB : listens to \n (is subscribed to)
+
+(UI\nEvent) as UIE
+UIE -r-> EB : is \n published \n to
+
+(Title\nUIEvent) as TUIE
+TUIE -u-> UIE : is a
+(Icon\nUIEvent) as IUIE
+IUIE -u-> UIE : is a
+
+(CssClass\nUIEvent) as CCUIE
+CCUIE -u-> UIE : is a
+(Layout\nUIEvent) as LUIE
+LUIE -u-> UIE : is a
+
+
+(Domain\nObject) as DO
+DO "when \n rendered, \n leads to \n emission \nof"-d-> UIE
+
+(Presentation) as PST
+DO -u-> PST : has
+EL -u-> PST : can modify
+note right of EL
+When DomainObject implements
+respective supporting methods itself (
+* title(),
+* iconName(),
+* cssClass(),
+* layout()),
+modification is not possible.
+end note
+
+@enduml
+----
+
+//DE -d-> MB : can be \n declared \n for
+//
+//EL -u-> MB : can modify/check: \nvisibility (hide), \nusability (disable), \nvalidity (validate)
+//
+//DO ->"title \n icon \n cssClass \n layout" PST
+//(UI\nEvent) as UIE
+//EL --> PST : modify
+//UIE --> EL : receive
+
+
+== Domain Events
+
+As specified using xref:refguide:applib:index/annotation/Action.adoc[@Action#domainEvent()], xref:refguide:applib:index/annotation/Property.adoc[@Property#domainEvent()] and xref:refguide:applib:index/annotation/Collection.adoc[@Collection#domainEvent()]:
+
+.Domain Events
+[plantuml,file="eventbus_domain.png"]
+----
+@startuml
+
+skinparam nodesep 20
+
+together {
+    (Domain\nService) as DS
+    (Domain\nObject) as DO
+    (<i>Domain\n<i>Event) as DE
+}
+(<i>Member</i>) as MB
+together {
+    (Property) as P
+    (Action) as A
+    (Collection) as C
+}
+P -u-> MB : is a
+A -u-> MB : is a
+C -u-> MB : is a
+
+DO -d-> MB : has
+DS -d--> A : has
+
+DE -d-> MB : can be \n declared \n for
+
+(Execution) as EX
+P "edit \n is an"-->  EX
+A "invocation \n is an"--> EX
+
+(Event\nBus) as EB
+(Spring) as SPRING
+SPRING .l.> EB : provides/\nmanages
+EX -> EB : is published as: \n * before event (phase: EXECUTING)\n * after event (phase: EXECUTED)
+
+(Event\nListener) as EL
+EL --> EB : listens \n on
+EL -u-> MB : can check/modify: \nvisibility (hide), \nusability (disable), \nvalidity (validate)
+
+note right of DE
+Phases are:
+* HIDING
+* DISABLING
+* VALIDATING
+* EXECUTING
+* EXECUTED
+The framework automatically sends out
+events with the phases in the order listed.
+end note
+
+note right of MB
+<i>DomainEvent</i> is declared as an
+annotation type element in a member annotation, e.g.
+<b>@Action(
+        <b>domainEvent=<i>Custom</i>ActionDomainEvent.class).
+end note
+
+note right of EL
+EventListeners can be declared on
+any public Spring bean method, e.g.
+<b>@EventListener(
+       <b><i>Custom</i>ActionDomainEvent.class).
+Via <i>DomainEvent</i>.getEventPhase(),
+further filtering can be applied.
+end note
+@enduml
+----
+
+== Persistence Events
+
+As specified using xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject#xxxLifecycleEvent()]:
+
+.Persistence Events
+[plantuml,file="eventbus_persistence.png"]
+----
+@startuml
+
+(Event\nBus) as EB
+(Spring) as SPRING
+SPRING .l.> EB : provides/\nmanages
+(Event\nListener) as EL
+EL --> EB : listens
+
+(<i>Object</i>\nLifecyleEvent) as LCE
+LCE -> EB : published to
+(Created\nEvent) as C
+C -u-> LCE : is a
+(Loaded\nEvent) as L
+L -u-> LCE : is a
+
+(Persisting\nEvent) as PNG
+PNG -u-> LCE : is a
+(Persisted\nEvent) as PED
+PED -u-> LCE : is a
+
+(Updating\nEvent) as UNG
+UNG -u-> LCE : is a
+(Updated\nEvent) as UED
+UED -u-> LCE : is a
+
+(Removing\nEvent) as RNG
+RNG -u-> LCE : is a
+
+(Factory\nService) as FS
+FS -u-> C :emits
+(Repository\nService) as RS
+RS -u-> L :emits
+RS -u-> PNG :emits
+RS -u-> PED :emits
+RS -u-> UNG :emits
+RS -u-> UED :emits
+RS -u-> RNG :emits
+
+note top of RNG
+JDO/Datanucleus
+does not support
+something like a
+"Removed Event".
+Hence not implemented.
+end note
+
+@enduml
+----

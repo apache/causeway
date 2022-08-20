@@ -2,4 +2,11 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO
+this module provides an extensive set of domain services.
+
+Many of the services defined (as interfaces) in the applib are actually implemented in this module (the rest are defined in xref:core:metamodel:about.adoc[]).
+
+
+Although it's a simplification, you can think of the xref:core:metamodel:about.adoc[] module as handling domain types (cf `java.lang.Class`), while the xref:core:runtime:about.adoc[], xref:core:runtimeservices:about.adoc[] and xref:transaction:about.adoc[] modules handle domain object instances (cf `java.lang.Object`).
+
+That said, Spring Boot is responsible for instantiating domain service instances, while the persistence mechanisms (xref:pjpa:ROOT:about.adoc[JPA] and xref:pjdo:ROOT:about.adoc[JDO]) -- which are not part of the `core` modules -- handle the lifecycle of entity instances.

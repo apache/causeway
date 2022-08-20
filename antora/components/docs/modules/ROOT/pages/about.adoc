@@ -136,15 +136,12 @@ _Automated Analysis_
 * link:https://sonarcloud.io/dashboard?id=apache_isis[SonarCloud.io]
 * link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
 
-_In Development_
+_Development_
 
-* xref:incubator:ROOT:about.adoc[Incubator]
+* xref:core:ROOT:about.adoc[]
+* xref:regressiontests:ROOT:about.adoc[]
+* xref:incubator:ROOT:about.adoc[]
 
-
-_Other_
-
-* xref:core:_overview:about.adoc[System Overview] (generated)
-* xref:core:ROOT:about.adoc[Design Docs] (out of date)
 
 _Thanks_
 

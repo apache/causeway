@@ -27,37 +27,6 @@ content:
     - url: .
       start_path: antora/components/docs # docs
       branches: HEAD
-# core
-    - url: .
-      start_path: core/adoc  # core (design docs)
-      branches: HEAD
-    - url: .
-      start_path: core/codegen-bytebuddy/src/main/adoc # core
-      branches: HEAD
-    - url: .
-      start_path: commons/src/main/adoc # core
-      branches: HEAD
-    - url: .
-      start_path: core/interaction/src/main/adoc # core
-      branches: HEAD
-    - url: .
-      start_path: core/internaltestsupport/src/main/adoc # core
-      branches: HEAD
-    - url: .
-      start_path: core/metamodel/src/main/adoc # core
-      branches: HEAD
-    - url: .
-      start_path: core/runtime/src/main/adoc # core
-      branches: HEAD
-    - url: .
-      start_path: core/runtimeservices/src/main/adoc # core
-      branches: HEAD
-    - url: .
-      start_path: core/transaction/src/main/adoc # core
-      branches: HEAD
-    - url: .
-      start_path: core/webapp/src/main/adoc # core
-      branches: HEAD
 
 # examples
     - url: .
@@ -69,10 +38,16 @@ content:
       start_path: mavendeps/adoc # docs
       branches: HEAD
 
+# regression tests
+    - url: .
+      start_path: regressiontests/adoc # regressiontests
+      branches: HEAD
+
 # starters
     - url: .
       start_path: starters/adoc # docs
       branches: HEAD
+
 
 
 ui:

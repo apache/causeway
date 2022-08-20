@@ -99,15 +99,11 @@ content:
     - url: .
       start_path: antora/components/tutorials # tutorials
       branches: HEAD
-    - url: .
-      start_path: regressiontests/adoc # core
-      branches: HEAD
 
 # extensions
     - url: .
       start_path: extensions/adoc # extensions
       branches: HEAD
-
 
     - url: .
       start_path: extensions/core/commandlog/adoc # userguide
@@ -198,6 +194,11 @@ content:
       branches: HEAD
     - url: .
       start_path: persistence/jdo/adoc # pjdo
+      branches: HEAD
+
+# regression tests
+    - url: .
+      start_path: regressiontests/adoc # regressiontests
       branches: HEAD
 
 # security

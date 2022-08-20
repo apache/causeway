@@ -1,14 +1,72 @@
-= Core Framework
+= Internal Design Docs
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-This section documents the design and implementation of the core framework.
+This section documents the internal design and implementation of the core framework.
+It will primarily be of interest to committers and contributors to the framework.
 
-We also include some design documentation - where it provides useful context - in the end-user documentation set:
+We also include some design documentation - where it provides useful context - in the end-user documentation set (the xref:userguide:ROOT:about.adoc[user guide], xref:refguide:ROOT:about.adoc[reference guide], xref:security:ROOT:about.adoc[security guide] and xref:testing:ROOT:about.adoc[testing guide]).
 
-* xref:userguide:ROOT:about.adoc[user guide]
-* xref:refguide:ROOT:about.adoc[reference guide]
-* xref:security:ROOT:about.adoc[security guide]
-* xref:testing:ROOT:about.adoc[testing guide].
 
+== Modules
+
+There is a section for most of the `core` modules:
+
+* xref:core:codegen-bytebuddy:about.adoc[] - utliity service to create dynamic proxy objects
+
+* xref:core:commons:about.adoc[] - an extensive library of common utilities (though not intended as an end-user API)
++
+Note that this module does not reside in `core/` directory, instead it is to be found in `../commons` directory instead
+
+* xref:core:interaction:about.adoc[] - declares the `@InteractionScope` to Spring.
+Also defines the internal data structures that keep track of the action invocations and property edits performed within the interaction.
++
+An "interaction" is normally the same duration as a web request, whereby a short-lived persistence session is created using a connection from a database connection pool.
+
+* xref:core:internaltestsupport:about.adoc[] - utility classes for unit testing the framework's own classes.
+
+* xref:core:metamodel:about.adoc[] - classes that are used to build the internal metamodel by introspecting the domain classes.
++
+Many of the services defined (as interfaces) in the applib have implementations defined in this module (the rest are defined in xref:core:runtimeservices:about.adoc[], below).
++
+The documentation in this module explains (with diagrams) the concepts at both a high and more detailed level.
++
+As you might have guessed, this is the largest module within the framework.
+
+* xref:core:runtime:about.adoc[] - a very small module providing a set of classes to handle the runtime context.
+It also has classes that trigger events for when the metamodel is fully built (after bootstrapping), and to emit events for transaction boundaries.
+
+* xref:core:runtimeservices:about.adoc[] - provides an extensive set of domain services.
++
+Many of the services defined (as interfaces) in the applib are actually implemented in this module (the rest are defined in xref:core:metamodel:about.adoc[], above).
+
+* xref:core:transaction:about.adoc[] - a small module providing a set of classes primarily concerned with for tracking changes to entities during transactions.
+
+* xref:core:webapp:about.adoc[] - classes used to bootstrap the app itself, also providing hooks for other components to contribute their own
+filters and servlets into the web request pipeline.
+
+
+As a simplification, the xref:core:metamodel:about.adoc[] module handles domain types (cf `java.lang.Class`) while the xref:core:runtime:about.adoc[] and xref:core:runtimeservices:about.adoc[] modules handle domain object instances (cf `java.lang.Object`).
+That said, Spring Boot is responsible for instantiating domain service instances, while the persistence mechanisms (xref:pjpa:ROOT:about.adoc[JPA] and xref:pjdo:ROOT:about.adoc[JDO]) -- which are not part of the `core` modules -- handle the lifecycle of entity instances.
+
+
+There are also two `core` modules not listed above, because their documentation are both part of the end-user docs:
+
+* the docs for the `core/config` module consistitute the xref:refguide:config:about.adoc[]
+* the docs for the `core/security` module consistitute  the xref:security:ROOT:about.adoc[Security Guide]
+
+
+== Generated Index
+
+This is probably a good place as any to mention that the documentation/website procedures include tooling to automatically create Asciidoc reference documentation for _any_ Java class in the codebase.
+
+This is used extensively for the classes in the applib; these can be referenced using the form `\xref:refguide:applib:index/xxx.adoc[]`.
+
+* For example `\xref:refguide:applib:index/annotation/DomainObject.adoc[]` resolves to xref:refguide:applib:index/annotation/DomainObject.adoc[].
+
+But the index is also available for internal classes, such as those in core/security, which can be found under `\xref:refguide:core:index/security/xxx.adoc[]`
+
+* For example, `\xref:refguide:core:index/security/authentication/Authenticator.adoc[]` resolves to xref:refguide:core:index/security/authentication/Authenticator.adoc[].
+
+Not every class is generated into the index, but all that is required is to include `{@index}` in the class-level javadoc.

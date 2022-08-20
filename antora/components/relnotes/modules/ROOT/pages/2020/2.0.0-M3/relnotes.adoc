@@ -21,7 +21,7 @@ This milestone also introduces a number of new features:
 * security integration with xref:security:keycloak:about.adoc[Keycloak]
 
 * New value types:
-** text-based value type with simple xref:valuetypes:sse:about.adoc[SSE support]
+** text-based value type with simple xref:vw:sse:about.adoc[SSE support]
 ** xref:valuetypes:asciidoc:about.adoc[Asciidoc] value type
 ** xref:valuetypes:markdown:about.adoc[Markdown] value type
 

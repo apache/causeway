@@ -801,9 +801,9 @@ For example:
 [c4plantuml,c4-demo,svg]
 ----
 @startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
-!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+include::docs:resources:partial$C4.puml[]
+include::docs:resources:partial$C4_Context.puml[]
+include::docs:resources:partial$C4_Container.puml[]
 
 title System Context diagram for Internet Banking System
 
