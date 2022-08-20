@@ -448,6 +448,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <enabled>false</enabled>
             </releases>
         </repository>
+        -->
         <!-- APACHE ISIS customisation 7/21: end -->
     </repositories>
     <pluginRepositories>
