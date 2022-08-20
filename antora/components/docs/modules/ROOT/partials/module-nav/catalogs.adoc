@@ -6,5 +6,3 @@
 
 **  xref:valuetypes:ROOT:about.adoc[Value Type Catalog]
 **  xref:extensions:ROOT:about.adoc[Extensions Catalog]
-** Other
-***  xref:incubator:ROOT:about.adoc[Incubator]

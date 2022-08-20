@@ -5,7 +5,7 @@ SPI to convert the identifier (primary key) of an entity, of a given type (eg In
 
 This is ultimately used by xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService] where we hold a persistent reference to an entity. The resultant string also appears in URLs of the Wicket viewer and Restful Objects viewers, and in mementos eg in _org.apache.isis.schema.cmd.v2.CommandDto_ and _org.apache.isis.schema.ixn.v2.InteractionDto_ .
 
-The framework provides default implementations of this SPI for JDO (data store and application identity) and for JPA. Because this is an SPI, other modules or application code can provide their own implementations. An example of such is the JPA implementation of the `commandlog` extension.
+The framework provides default implementations of this SPI for JDO (data store and application identity) and for JPA. Because this is a SPI, other modules or application code can provide their own implementations. An example of such is the JPA implementation of the `commandlog` extension.
 
 == API
 
@@ -13,9 +13,10 @@ The framework provides default implementations of this SPI for JDO (data store a
 .IdStringifier.java
 ----
 interface IdStringifier<T> {
+  public final static char SEPARATOR;
   Class<T> getCorrespondingClass()
   String enstring(T value)     // <.>
-  T destring(String stringified)     // <.>
+  T destring(Class<?> targetEntityClass, String stringified)     // <.>
 }
 ----
 
@@ -24,7 +25,7 @@ interface IdStringifier<T> {
 --
 Convert the value (which will be of the same type as returned by _#getCorrespondingClass()_ into a string representation.
 --
-<.> xref:#destring_String[destring(String)]
+<.> xref:#destring_Class_String[destring(Class, String)]
 +
 --
 Convert a string representation of the identifier (as returned by _#enstring(Object)_ ) into an object that can be used to retrieve.
@@ -37,7 +38,7 @@ Convert a string representation of the identifier (as returned by _#enstring(Obj
 
 Convert the value (which will be of the same type as returned by _#getCorrespondingClass()_ into a string representation.
 
-[#destring_String]
-=== destring(String)
+[#destring_Class_String]
+=== destring(Class, String)
 
 Convert a string representation of the identifier (as returned by _#enstring(Object)_ ) into an object that can be used to retrieve.

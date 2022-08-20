@@ -70,10 +70,9 @@ To run the RAT tool, use:
 [source,bash,subs="attributes+"]
 .find unapproved/missing licenses
 ----
-mvn clean
-
 pushd bom
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000 -Dreleased
+mvn -Dapache-release clean
+mvn -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000
 popd
 
 for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt
@@ -105,18 +104,40 @@ This is stored in the `src/main/appended-resources/supplemental-models.xml` file
 
 It's first necessary to have built the framework locally at least once.
 
-In the root directory:
-
+* switch to the `bom` directory:
++
 [source,bash,subs="attributes+"]
 ----
-mvn clean install -o -DskipTests
+pushd bom
 ----
 
-Once this is done, capture the missing license information using:
-
+* build the framework (ok to skip tests):
++
 [source,bash,subs="attributes+"]
 ----
-mvn license:download-licenses
+mvn -Dgithub clean install -DskipTests
+----
++
+NB: the `-Dgithub` activates the "github" profile which references the exact same ``<module>``s as the official "apache-release" profile.
+
+* Capture the missing license information using:
++
+[source,bash,subs="attributes+"]
+----
+mvn -Dgithub license:download-licenses
+----
+
+* Switch back to the root directory:
++
+[source,bash,subs="attributes+"]
+----
+popd
+----
+
+* Report on the missing license information using:
++
+[source,bash,subs="attributes+"]
+----
 groovy scripts/checkmissinglicenses.groovy
 ----
 

@@ -4,21 +4,21 @@
 
 * Framework
 
+
 ** Process
-*** xref:conguide:ROOT:about.adoc[Contributors' Guide]
 *** xref:comguide:ROOT:about.adoc[Committers' Guide]
-**** xref:tooling:ROOT:about.adoc[Tooling]
+*** xref:tooling:ROOT:about.adoc[Tooling]
 
-** Design
-
-*** xref:core:ROOT:about.adoc[Core Framework]
-**** xref:core:_overview:about.adoc[System Overview]
-
-
-** Analysis
+** Automated Analysis
 *** link:https://sonarcloud.io/dashboard?id=apache_isis[SonarCloud.io]
 *** link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
 
-** Thanks
-*** xref:more-thanks/more-thanks.adoc[Acknowledgements]
+**  xref:incubator:ROOT:about.adoc[Incubator]
+
+** Other
+
+*** xref:core:_overview:about.adoc[System Overview] (generated)
+*** xref:core:ROOT:about.adoc[Design Docs] (out of date)
+
+** xref:more-thanks/more-thanks.adoc[Acknowledgements]
 

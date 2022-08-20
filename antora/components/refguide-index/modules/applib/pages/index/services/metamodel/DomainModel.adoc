@@ -8,6 +8,7 @@
 ----
 interface DomainModel {
   List<DomainMember> getDomainMembers()
+  void forEachLogicalType(BiConsumer<? super String, ? super List<DomainMember>> consumer)
 }
 ----
 

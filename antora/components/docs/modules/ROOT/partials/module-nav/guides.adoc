@@ -12,3 +12,7 @@
 *** xref:userguide:ROOT:about.adoc[User Guide]
 *** xref:refguide:ROOT:about.adoc[Reference Guide]
 *** xref:testing:ROOT:about.adoc[Testing Guide]
+
+** Process
+*** xref:conguide:ROOT:about.adoc[Contributors' Guide]
+
