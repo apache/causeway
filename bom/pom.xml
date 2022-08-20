@@ -388,6 +388,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <lombok.version>1.18.24</lombok.version> <!-- overriding Spring -->
 
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
+        <maven-release-plugin.version>3.0.0-M6</maven-release-plugin.version>
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
 
         <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
@@ -580,7 +581,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>3.0.0-M6</version>
+                    <version>${maven-release-plugin.version}</version>
                     <configuration>
                         <useReleaseProfile>false</useReleaseProfile>
                         <goals>deploy</goals>
