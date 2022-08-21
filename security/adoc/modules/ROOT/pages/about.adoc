@@ -30,6 +30,21 @@ include::security:keycloak:partial$module-nav.adoc[]
 include::security:spring:partial$module-nav.adoc[]
 
 
+In addition to the security SPI implementations, there are a number of security-related extensions:
+
+* The xref:security:spring-oauth2:about.adoc[Spring OAuth2] extension configures the xref:security:spring:about.adoc[Spring authenticator] for OAuth2 stores (eg gmail, facebook)
+* The xref:security:shiro-realm-ldap:about.adoc[LDAP Realm] extension confiures the xref:security:shiro:about.adoc[Shiro authenticator] to use LDAP as a credential source.
+* The xref:security:secman:about.adoc[SecMan extension] provides both an authenticator and an authorizor from domain entities (users, roles and permission entities) using either xref:pjpa:ROOT:about.adoc[JPA] or xref:pjdo:ROOT:about.adoc[JDO].
++
+As these users, roles and permissions are domain objects, they can be administered through Apache Isis itself.
+
+Note that authenticators and authorizor components can be mixed.
+For example, the Keycloak or Spring OAuth2 authenticator can be used with Secman for authorization.
+
+
+The most significant of these is probably xref:security:secman:about.adoc[SecMan], which uses a
+
+
 == Permissions
 
 The xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI defines two types of permissions:
@@ -82,11 +97,5 @@ If using the xref:vw::about.adoc[Wicket viewer], then note there will also be an
 
 
 
-== Extensions
-
-In addition to the security SPI implementations, there are a number of security-related extesions.
-
-The most significant of these is probably xref:security:secman:about.adoc[SecMan], which uses a database of users, roles and permission entities (either xref:pjpa:ROOT:about.adoc[JPA] or xref:pjdo:ROOT:about.adoc[JDO]) to manage authorisation.
-As these users, roles and permissions are domain objects, they can be administered through Apache Isis itself.
 
 

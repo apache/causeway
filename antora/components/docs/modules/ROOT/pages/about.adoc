@@ -32,8 +32,8 @@ link:https://simpleapp.jpa.isis.incode.work[jpa])
 
 _POMs_
 
-* xref:docs:parent-pom:about.adoc[Parent POM]
-* xref:docs:mavendeps:about.adoc[Webapp Aggregator POM]
+* xref:docs:parent-pom:about.adoc[Starter (Parent POM)]
+* xref:docs:mavendeps:about.adoc[Webapp (Aggregator POM)]
 
 |
 [discrete]
@@ -79,6 +79,12 @@ _Persistence_
 * xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
 * xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
 
+_Security_
+
+* xref:security:bypass:about.adoc[Bypass]
+* xref:security:shiro:about.adoc[Shiro]
+* xref:security:spring:about.adoc[Spring]
+* xref:security:keycloak:about.adoc[Keycloak]
 
 
 |
@@ -87,11 +93,11 @@ _Persistence_
 
 _For Use in Domain Apps_
 
-*  xref:valuetypes:ROOT:about.adoc[Value Type Catalog]
+* *xref:valuetypes:ROOT:about.adoc[Value Type Catalog]*
 
 _Extending the framework itself_
 
-*  xref:extensions:ROOT:about.adoc[Extensions Catalog]
+* *xref:extensions:ROOT:about.adoc[Extensions Catalog]*
 
 
 |

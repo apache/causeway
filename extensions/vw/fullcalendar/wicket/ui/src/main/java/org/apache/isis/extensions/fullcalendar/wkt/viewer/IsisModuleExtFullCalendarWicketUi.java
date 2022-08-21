@@ -16,20 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.viewer.wicket.exceldownload.ui;
+package org.apache.isis.extensions.fullcalendar.wkt.viewer;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsExcelFactory;
+import org.apache.isis.extensions.fullcalendar.applib.IsisModuleExtFullCalendarApplib;
+import org.apache.isis.extensions.fullcalendar.wkt.viewer.calendarable.CalendarableCollectionAsFullCalendarFactory;
+import org.apache.isis.extensions.fullcalendar.wkt.viewer.calendareventable.CalendarEventableCollectionAsFullCalendarFactory;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-        // @Component's
-        CollectionContentsAsExcelFactory.class
+        IsisModuleExtFullCalendarApplib.class,
+
+        CalendarEventableCollectionAsFullCalendarFactory.class,
+        CalendarableCollectionAsFullCalendarFactory.class
 })
-public class IsisModuleExtExcelDownloadUi {
+public class IsisModuleExtFullCalendarWicketUi {
 }

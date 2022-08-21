@@ -28,7 +28,10 @@ In the webapp module of your application, add the following dependency:
 [[_update-appmanifest]]
 == Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import `IsisModuleSecuritySpring`, `IsisModuleExtSpringSecurityOAuth2` modules and `AuthorizorShiro`.
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import `IsisModuleSecuritySpring` and `IsisModuleExtSpringSecurityOAuth2` modules.
+
+Neither of these modules provide an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[] SPI, so we must also configure one.
+For the purpose of this walkthrough, we'll use the implementation provided by xref:security:shiro:about.adoc[Shiro], namely `AuthorizorShiro`.
 
 [source,java]
 .AppManifest.java
@@ -36,16 +39,18 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Configuration
 @Import({
         ...
-        IsisModuleExtSpringSecurityOAuth2.class,
+        IsisModuleExtSpringSecurityOAuth2.class, // <.>
         AuthorizorShiro.class,
         ...
 })
 public class AppManifest {
 }
 ----
-
-This module brings in a transitive dependency on `IsisModuleSecuritySpring`, so if that is referenced in the `AppManifest` then it can be removed.
+<.> The `IsisModuleExtSpringSecurityOAuth2` module brings in a transitive dependency on `IsisModuleSecuritySpring`.
++
 Make sure though that no other `IsisModuleSecurityXxx` module is imported.
+
+It is also possible to use with other `Authorizor` implementations; for example, using xref:security:secman:setting-up-with-spring-oauth2.adoc[SecMan].
 
 
 == Design

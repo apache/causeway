@@ -1,5 +1,5 @@
-include::userguide:excel:partial$module-nav.adoc[]
 include::userguide:commandlog:partial$module-nav.adoc[]
+include::userguide:excel:partial$module-nav.adoc[]
 include::userguide:executionlog:partial$module-nav.adoc[]
 include::userguide:executionoutbox:partial$module-nav.adoc[]
 include::userguide:executionrepublisher:partial$module-nav.adoc[]

@@ -3,27 +3,24 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-SecMan provides an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, to determine whether the currently logged-in user has access to a given object member
+SecMan provides an implementation of both the xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] and xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPIs, storing user, roles and permissions information as domain entities (persisted to relational database).
+It can be used with both the JDO or JPA persistence mechanisms.
 
-This authorization is implemented using domain entities, which means that authorizations/permissions can then be administered from within your Apache Isis application.
-Moreover, the set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".
+Because these features are implemented using domain entities, it means that this security information can be administered from within your Apache Isis application.
 The domain model is explained in more detail <<domain-model,below>>.
 
-SecMan can be used just for authorization, or it can be used in conjunction with Apache Isis' xref:security:shiro:about.adoc[Shiro security] implementation to perform authentication, where a password is held for each application user.
-This integration is discussed in more detail <<shiro-integration,below>>.
+If SecMan is used for authentication, user/passwords are stored in encrypted form using a configured `PasswordEncoder`.
+The framework ships with xref:refguide:extensions:index/secman/encryption/jbcrypt/services/PasswordEncoderUsingJBcrypt.adoc[] that uses the link:https://www.mindrot.org/projects/jBCrypt/[jBCrypt] library.
 
-This guide explains these concepts in more detail, and describes how to configure secman for use.
+Authorization is supported by associating users to roles, where each role has a set of permissions.
+Permissions can be defined at different scopes, and can either allow or veto access to the underlying feature.
+The set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".
+
+SecMan can be used just for authorization, or it can be used in conjunction with any of the other xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] implementations, for example xref:security:shiro:about.adoc[Shiro], xref:security:spring:about.adoc[Spring] or xref:security:keycloak:about.adoc[Keycloak].
+This integration is discussed in more detail <<shiro-integration,below>>.
 
 
 == Users, Roles and Permissions
-
-As described in the introduction, the primary purpose of SecMan is to provide an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, to determine whether the currently logged-in user has access to a given object member:
-
-* the logged-in user is represented as an xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext]
-
-* by "object member" we mean either an action, property or collection,as represented by an xref:refguide:applib:index/Identifier.adoc[Identifier]
-
-* by "access", we mean whether the object member is xref:refguide:core:index/security/authorization/Authorizor.adoc#isVisible__InteractionContext_Identifier] to the user, and if so whether it is xref:refguide:core:index/security/authorization/Authorizor.adoc#isUsable_InteractionContext_Identifier[usable] (not disabled) by the user.
 
 SecMan's xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] implementation uses domain entities to model users, roles and permissions.
 Each permission relates to an "object feature".
@@ -33,14 +30,14 @@ Object features themselves come in three varieties:
 +
 for example `myapp.customer.CustomerAddress#zipCode`
 
-* next up is an object feature representing an entire type
+* next up is an object feature representing an entire type, described using its logical type name.
 +
 for example `myapp.customer.CustomerAddress`.
-This is usually specified using xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[@DomainObject#logicalTypeName()]
+This is usually specified using the `@javax.inject.Named` annotation.
 
 * most general is an object feature representing a namespace
 +
-These consist of the portion of the xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[logical type name] up to but excluding the local type name, for example `myapp.customer`.
+These consist of the portion of the logical type name up to but excluding the local type name, for example `myapp.customer`.
 
 Permissions are inferred: a permission granted at the type level implies a permission to all the object members of the type, and a permission granted to a namespace implies a permission to all the object members of all the object types within that namespace.
 
@@ -215,49 +212,19 @@ Another option again is rather simple: just run multiple instances of the applic
 
 
 
-[#shiro-integration]
-== Shiro Integration
-
-While SecMan is primarily designed for authorization (as per the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI), it is necessary when running an Apache Isis application to specify an authenticator.
-SecMan provides specific support so that Apache Isis' xref:security:shiro:about.adoc[Shiro security] integration can be used for authentication.
-
-This is implemented through the SecMan's shiro realm submodule, which provides an implementation of Apache Shiro's `Realm` interface that then calls back into SecMan.
-
-The diagram below sketches the high-level architecture:
-
-.SecMan's Shiro architecture
-image:secman-shiro-architecture.drawio.svg[]
-
-Thus:
-
-* Apache Isis' xref:security:shiro:about.adoc[Shiro security] integration sets up Shiro web filters to intercept every http request, as well as the xref:refguide:security:index/shiro/authentication/AuthenticatorShiro.adoc[AuthenticatorShiro] implementation.
-* The `AuthenticatorShiro` calls to the Shiro Security Manager to obtain the authenticated principal.
-* The Shiro Security Manager uses the `shiro.ini` configuration file to look up the realm to perform the authentication; in this case we configure it to use Secman's realm (xref:refguide:extensions:index/secman/shiro/IsisModuleExtSecmanShiroRealm.adoc[IsisModuleExtSecmanShiroRealm]).
-* Secman's realm implementation queries the database and uses this to create an instance of `PrincipalForApplicationUser`, where the `Principal` interface is Shiro's representation of an authenticated user.
-The `PrincipalForApplicationUser` is backed by xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], which all of the permissions to object members for this particular user.
-* to render a page, the Apache Isis viewer uses configured `Authorizor`, in this case
-Secman's own xref:refguide:extensions:index/secman/integration/authorizor/AuthorizorSecman.adoc[AuthorizorSecman].
-This looks up the current xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser] (which will already reside in-memory) and renders the page according to which object members are visible or not.
-
-
-The above configuration allows Secman to be used to authenticate users; the password is stored as an (typically) encrypted property of the xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser].
-These are called "local" users, as per the xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser]'s `accountType` property.
-
-Secman's xref:refguide:extensions:index/secman/shiro/IsisModuleExtSecmanShiroRealm.adoc[Realm implementation] also allows a "delegate" realm to be configured.
-In such cases the authentication of "delegated" users is performed by the delegate realm rather than locally.
-
-The diagram below shows where this delegation occurs:
-
-.SecMan's Shiro delegate architecture
-image:secman-shiro-delegate-architecture.drawio.svg[]
-
-Configuring the delegate realm is performed using Shiro's "poor man's dependency injection" syntax in its `shiro.ini` file.
-
 == Password encryption
 
 Secman leverages Spring's `org.springframework.security.crypto.password.PasswordEncoder` SPI to allow different algorithms to encrypt the user's password.
 
 The `encryption-jbcrypt` module provides an implementation using the link:https://www.mindrot.org/projects/jBCrypt/[jBCrypt] library.
+
+
+[#shiro-integration]
+== Using other Authenticators
+
+While SecMan does provide an implementation of the xref:refguide:core:index/security/authentication/Authenticator.adoc[] SPI, it's also possible to use an alternative `Authenticator` implementation, for example as provided by xref:security:shiro:about.adoc[Apache Shiro], xref:security:spring:about.adoc[Spring] or xref:security:keycloak:about.adoc[Keycloak].
+
+For more details, see xref:security:secman:setting-up-with-shiro.adoc[], xref:setting-up-with-spring-oauth2.adoc[] and xref:setting-up-with-keycloak.adoc[].
 
 
 == SecMan's structure

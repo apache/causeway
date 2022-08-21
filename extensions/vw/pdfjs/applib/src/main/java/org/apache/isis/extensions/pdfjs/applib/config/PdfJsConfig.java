@@ -33,7 +33,7 @@ import lombok.With;
 /**
  * @since 2.0 {@index}
  */
-@Getter @With @AllArgsConstructor @NoArgsConstructor @Builder
+@Getter @AllArgsConstructor @NoArgsConstructor @Builder
 public class PdfJsConfig implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,15 +41,19 @@ public class PdfJsConfig implements Serializable {
     @Builder.Default
     private int initialPage = 1;
 
-    @Builder.Default
+    @Builder.Default @With
     private Scale initialScale = Scale._1_00;
 
     @Builder.Default
     private int initialHeight = 800;
 
+    @With
     private CharSequence documentUrl;
+    @With
     private CharSequence workerUrl;
+    @With
     private CharSequence cmapsUrl;
+    @With
     private CharSequence canvasId;
 
     public PdfJsConfig withInitialPage(int initialPage) {

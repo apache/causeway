@@ -13,3 +13,9 @@
 *** xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
 *** xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
 
+** Security
+
+*** xref:security:bypass:about.adoc[Bypass]
+*** xref:security:shiro:about.adoc[Shiro]
+*** xref:security:spring:about.adoc[Spring]
+*** xref:security:keycloak:about.adoc[Keycloak]
