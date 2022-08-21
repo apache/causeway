@@ -62,6 +62,7 @@ import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
@@ -1729,6 +1730,32 @@ public class IsisConfiguration {
              */
             private String createSchemaSqlTemplate = "CREATE SCHEMA IF NOT EXISTS %S";
 
+        }
+    }
+
+    private final Prototyping prototyping = new Prototyping();
+    @Data
+    public static class Prototyping {
+
+        private final H2Console h2Console = new H2Console();
+        @Data
+        public static class H2Console {
+            /**
+             * Whether to allow remote access to the H2 Web-Console,
+             * which is a potential security risk when no web-admin password is set.
+             * <p>
+             * Corresponds to Spring Boot 'spring.h2.console.settings.web-allow-others'.
+             */
+            private boolean webAllowRemoteAccess = false;
+
+            /**
+             * Whether to generate a random password for access to the H2 Web-Console advanced features.
+             * <p>
+             * If a password is generated, it is logged to the logging subsystem (Log4j2).
+             * <p>
+             * Recommended (<code>true</code>) when {@link #isWebAllowRemoteAccess()} is also <code>true</code>.
+             */
+            private boolean generateRandomWebAdminPassword = true;
         }
     }
 

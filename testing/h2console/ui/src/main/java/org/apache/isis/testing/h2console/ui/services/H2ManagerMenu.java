@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testing.h2console.ui.services;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -68,13 +70,17 @@ public class H2ManagerMenu {
             cssClassFa = "database",
             sequence = "500.800")
     public LocalResourcePath openH2Console() {
-        if(webModule==null) {
-            return null;
-        }
-        return webModule.getLocalResourcePathIfEnabled();
+        return getPathToH2Console().orElse(null);
     }
     @MemberSupport public boolean hideOpenH2Console() {
-        return webModule==null || webModule.getLocalResourcePathIfEnabled()==null;
+        return getPathToH2Console().isEmpty();
+    }
+
+    // -- HELPER
+
+    private Optional<LocalResourcePath> getPathToH2Console() {
+        return Optional.ofNullable(webModule)
+                .map(WebModuleH2Console::getLocalResourcePathIfEnabled);
     }
 
 }
