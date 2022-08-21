@@ -53,18 +53,16 @@ _POMs_
 [discrete]
 == Guides
 
-_Development_
-
-* xref:setupguide:ROOT:about.adoc[Setup Guide]
-
 _Core_
 
 * *xref:userguide:ROOT:about.adoc[User Guide]*
 * *xref:refguide:ROOT:about.adoc[Reference Guide]*
 * *xref:testing:ROOT:about.adoc[Testing Guide]*
+* *xref:security:ROOT:about.adoc[Security Guide]*
 
-_Process_
+_Development_
 
+* xref:setupguide:ROOT:about.adoc[Setup Guide]
 * xref:conguide:ROOT:about.adoc[Contributors' Guide]
 
 |
@@ -81,9 +79,6 @@ _Persistence_
 * xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
 * xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
 
-_Security_
-
-* *xref:security:ROOT:about.adoc[Security Guide]*
 
 
 |

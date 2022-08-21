@@ -5,7 +5,6 @@
 
 If you are an http://www.eclipse.org[Eclipse] user, then we recommend you download the "Eclipse JEE package" configuration.
 
-NOTE: This material does not constitute an endorsement; Eclipse foundation is not affiliated to Apache Software Foundation in any way.
 
 
 //== Editor Templates
