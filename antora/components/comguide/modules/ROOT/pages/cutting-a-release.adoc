@@ -313,15 +313,10 @@ mvn versions:set -DnewVersion=$ISISREL
 +
 [source,bash,subs="attributes+"]
 ----
-mvn install -o -DskipTests -Dreleased
+mvn install -o -DskipTests -T1C -Dgithub
 ----
 +
-[NOTE]
-====
-The `released` system property is set to only sanity check the modules actually to be released (ignores the incubator modules).
-
-Partly that's because there's no need to check the incubator modules, it's also because the incubator modules might require more recent versions of Java than that formally supported by the framework (Java 11 currently).
-====
+The `-Dgithub` property activates the "github" profile that references all modules to be released.
 
 * next we also update the starters (as used by applications built using the framework):
 +
@@ -337,7 +332,6 @@ popd
 +
 [source,bash,subs="attributes+"]
 ----
-
 git add ..
 git commit -m "$ISISJIRA: bumps version to $ISISREL"
 ----
@@ -347,12 +341,14 @@ git commit -m "$ISISJIRA: bumps version to $ISISREL"
 === Sanity check
 
 Perform one last sanity check on the codebase.
-Delete all Isis artifacts from your local Maven repo, then build using the `-o` offline flag:
+Delete all Isis artifacts from your local Maven repo, then build using the `-o` offline flag.
+
+Still in the `bom` directory:
 
 [source,bash,subs="attributes+"]
 ----
 rm -rf ~/.m2/repository/org/apache/isis
-mvn clean install -o -Dreleased
+mvn clean install -o -T1C -Dgithub
 git clean -dfx ..
 ----
 
