@@ -43,7 +43,7 @@ abstract class BaseAggregator {
 
     open lateinit var dpm: BaseDisplayModel
 
-    open fun update(logEntry: LogEntry, subType: String) {
+    open fun update(logEntry: LogEntry, subType: String?) {
         /* default is do nothing - can be overridden in subclasses */
     }
 

@@ -33,7 +33,7 @@ class SystemAggregator() : BaseAggregator() {
         dpm = SystemDM("not filled (yet)")
     }
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         when (val obj = logEntry.getTransferObject()) {
             is User -> dpm.addData(obj)
             is Version -> dpm.addData(obj)

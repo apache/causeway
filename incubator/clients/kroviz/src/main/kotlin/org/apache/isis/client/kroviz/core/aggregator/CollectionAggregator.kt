@@ -41,7 +41,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
         dpm = CollectionDM(actionTitle)
     }
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         super.update(logEntry, subType)
         if (logEntry.state == EventState.DUPLICATE) {
             console.log("[CollectionAggregator.update] TODO duplicates should not be propagated to handlers")

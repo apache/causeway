@@ -55,11 +55,12 @@ class ResourceProxy {
         }
     }
 
-    fun fetch(link: Link,
-              aggregator: BaseAggregator? = null,
-              subType: String = Constants.subTypeJson,
-              isRest: Boolean = true,
-              referrer: String = "") {
+    fun fetch(
+        link: Link,
+        aggregator: BaseAggregator? = null,
+        subType: String? = Constants.subTypeJson,
+        isRest: Boolean = true,
+        referrer: String = "") {
         val rs = ResourceSpecification(link.href, subType = subType, referrerUrl = referrer)
         val le = findAndSetupLogEntry(rs)
         val isCached = when (le) {
@@ -95,7 +96,7 @@ class ResourceProxy {
         return first
     }
 
-    private fun process(aggregator: BaseAggregator?, link: Link, subType: String, referrer: String) {
+    private fun process(aggregator: BaseAggregator?, link: Link, subType: String?, referrer: String) {
         if (aggregator is AggregatorWithLayout) {
             if (aggregator.tree == null) {
                 val root = Node(referrer, null)

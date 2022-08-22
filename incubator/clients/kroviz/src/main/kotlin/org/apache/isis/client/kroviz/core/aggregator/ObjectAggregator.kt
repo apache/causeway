@@ -42,7 +42,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         dpm = ObjectDM(actionTitle)
     }
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         super.update(logEntry, subType)
         if (!logEntry.isUpdatedFromParentedCollection()) {
             val referrer = logEntry.url

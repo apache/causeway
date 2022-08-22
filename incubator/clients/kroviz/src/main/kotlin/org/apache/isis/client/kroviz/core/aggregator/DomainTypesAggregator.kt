@@ -29,7 +29,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         dpm = DiagramDM(url)
     }
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         when (val obj = logEntry.getTransferObject()) {
             is DomainTypes -> handleDomainTypes(obj)
             is DomainType -> handleDomainType(obj)

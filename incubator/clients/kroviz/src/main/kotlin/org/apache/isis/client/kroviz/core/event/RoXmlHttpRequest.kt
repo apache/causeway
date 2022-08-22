@@ -43,7 +43,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
     private val CONTENT_TYPE = "Content-Type"
     private val ACCEPT = "Accept"
 
-    internal fun process(link: Link, subType: String) {
+    internal fun process(link: Link, subType: String?) {
         val method = link.method
         var url = link.href
         if (method != Method.POST.operation) {
@@ -83,7 +83,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         }
     }
 
-    internal fun processNonREST(link: Link, subType: String) {
+    internal fun processNonREST(link: Link, subType: String?) {
         val method = link.method
         val url = link.href
 
@@ -114,7 +114,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
 
     private fun buildResourceSpecificationAndSetupHandler(
         url: String,
-        subType: String,
+        subType: String?,
         body: String
     ): ResourceSpecification {
         val rs = ResourceSpecification(url, subType)
