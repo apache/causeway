@@ -31,9 +31,13 @@
 #    curl
 #    gpg
 #    unzip
-#    jdk 8
+#    jdk 11+ (make sure you have the 'jar' command!)
 #    mvn 3.6.0+
 #
+
+## uncomment for single line step through debugging
+# set -x
+# trap read debug
 
 # shellcheck disable=SC2164
 
