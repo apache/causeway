@@ -120,7 +120,7 @@
     	<module>encryption-spring</module>
     	<module>persistence-jdo</module>
     	<module>persistence-jpa</module>
-    	<module>shiro-realm</module>
-    	<module>spring-autocreator</module>
+    	<module>delegated-shiro</module>
+    	<module>delegated-springoauth2</module>
     </modules>
 </project>
