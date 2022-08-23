@@ -20,9 +20,7 @@ package org.apache.isis.core.metamodel.postprocessors;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
@@ -49,11 +47,6 @@ implements ObjectSpecificationPostProcessor {
         // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
         val objectMemberImpl = (ObjectMemberAbstract) objectMember;
         return objectMemberImpl.getFacetedMethod();
-    }
-
-    protected static FacetHolder peerFor(final ObjectActionParameter param) {
-        // TODO: hacky, need to copy facet onto underlying peer, not to the param itself.
-        return param.getFacetHolder();
     }
 
 }
