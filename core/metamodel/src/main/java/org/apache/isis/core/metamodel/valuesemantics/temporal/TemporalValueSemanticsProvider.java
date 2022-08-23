@@ -19,6 +19,10 @@
 package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.time.Duration;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
@@ -26,6 +30,7 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalQuery;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
@@ -33,6 +38,7 @@ import javax.inject.Inject;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.TimePrecision;
+import org.apache.isis.applib.annotation.TimeZoneTranslation;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics;
@@ -40,11 +46,13 @@ import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatPrecisionFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeZoneTranslationFacet;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -143,14 +151,14 @@ implements TemporalValueSemantics<T> {
     public final String titlePresentation(
             final ValueSemanticsProvider.Context context,
             final T value) {
-        return renderTitle(value, getRenderingFormat(context)::format);
+        return renderTitle(value, getRenderingFormatter(context, BadgeRenderer.textual()));
     }
 
     @Override
     public final String htmlPresentation(
             final ValueSemanticsProvider.Context context,
             final T value) {
-        return renderHtml(value, getRenderingFormat(context)::format);
+        return renderHtml(value, getRenderingFormatter(context, BadgeRenderer.bootstrapBadgeWithTooltip()));
     }
 
     // -- PARSER
@@ -191,15 +199,120 @@ implements TemporalValueSemantics<T> {
     /**
      * Format for pretty rendering, not used for parsing/editing.
      */
-    protected DateTimeFormatter getRenderingFormat(final ValueSemanticsProvider.Context context) {
+    protected Function<T, String> getRenderingFormatter(
+            final ValueSemanticsProvider.Context context,
+            final BadgeRenderer badgeRenderer) {
 
         val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
-        return getTemporalRenderingFormat(
-                context, temporalCharacteristic, offsetCharacteristic,
-                dateAndTimeFormatStyle.getDateFormatStyle(),
-                dateAndTimeFormatStyle.getTimeFormatStyle());
+        return time-> {
+
+                final var temporalNoZoneRenderingFormat = getTemporalNoZoneRenderingFormat(
+                        context, temporalCharacteristic, offsetCharacteristic,
+                        dateAndTimeFormatStyle.getDateFormatStyle(),
+                        dateAndTimeFormatStyle.getTimeFormatStyle());
+
+                final var temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
+                        context, temporalCharacteristic, offsetCharacteristic).orElse(null);
+
+                final var timeZoneTranslation = dateAndTimeFormatStyle.getTimeZoneTranslation();
+
+                final var asLocalicedTime = translateToUserLocalTimeZone(context, time);
+
+                final var sb = new StringBuffer();
+
+                switch (timeZoneTranslation) {
+                case TO_LOCAL_TIMEZONE:
+                    if(offsetCharacteristic.isLocal()) {
+                        // start rendering with the time as is (no offset/zone info)
+                        sb.append(temporalNoZoneRenderingFormat.format(time));
+                    } else {
+                        // start rendering with the (to-local) translated time (no offset/zone info)
+                        sb.append(temporalNoZoneRenderingFormat.format(asLocalicedTime));
+
+                        // we have offset/zone information, so we append it (properly formatted) ...
+                        sb.append(' ');
+
+                        sb.append(badgeRenderer.render(
+                                // translated local time-zone
+                                temporalZoneOnlyRenderingFormat.format(asLocalicedTime),
+                                ()->"fa-solid fa-user-clock fontAwesomeIcon",
+                                ()->translate("Instant")
+                                    + ": "
+                                    + temporalNoZoneRenderingFormat.format(time)
+                                    + " "
+                                    + temporalZoneOnlyRenderingFormat.format(time)));
+
+                    }
+                    break;
+                case NONE:
+                default:
+                    // start rendering with the time as is (no offset/zone info)
+                    sb.append(temporalNoZoneRenderingFormat.format(time));
+
+                    if(!offsetCharacteristic.isLocal()) {
+                        // we have offset/zone information, so we append it (properly formatted) ...
+                        sb.append(' ');
+
+                        sb.append(badgeRenderer.render(
+                                temporalZoneOnlyRenderingFormat.format(time),
+                                ()->"fa-solid fa-globe fontAwesomeIcon",
+                                ()->translate("your local time")
+                                    + ": "
+                                    + temporalNoZoneRenderingFormat.format(asLocalicedTime)));
+                    }
+                    break;
+                }
+
+                return sb.toString();
+        };
     }
+
+//    /**
+//     * Converts given {@link Temporal} when offset,
+//     * to a temporal that is local to the user's (client's) time-zone.
+//     * In other words, this conversion preserves the time {@link Instant}.
+//     */
+//    private Temporal toLocalTime(final ValueSemanticsProvider.Context context, final Temporal t) {
+//        if(t instanceof ZonedDateTime) {
+//            return LocalDateTime.ofInstant(((ZonedDateTime) t).toInstant(),
+//                    context.getInteractionContext().getTimeZone());
+//        }
+//        if(t instanceof OffsetDateTime) {
+//            return LocalDateTime.ofInstant(((OffsetDateTime) t).toInstant(),
+//                    context.getInteractionContext().getTimeZone());
+//        }
+//        if(t instanceof OffsetTime) {
+//            return ((OffsetTime) t)
+//                    // convert to 'user time'
+//                    .withOffsetSameInstant(context.getInteractionContext().getTimeZoneOffsetNow())
+//                    // remove offset information
+//                    .toLocalTime();
+//        }
+//        return t;
+//    }
+
+    /**
+     * Converts given {@link Temporal} when offset,
+     * to a temporal that is local to the user's (client's) time-zone.
+     * In other words, this conversion preserves the time {@link Instant}.
+     */
+    private Temporal translateToUserLocalTimeZone(final ValueSemanticsProvider.Context context, final Temporal t) {
+        if(t instanceof ZonedDateTime) {
+            return _Temporals.translateToTimeZone((ZonedDateTime) t,
+                    context.getInteractionContext().getTimeZone());
+        }
+        if(t instanceof OffsetDateTime) {
+            return _Temporals.translateToTimeZone((OffsetDateTime) t,
+                    context.getInteractionContext().getTimeZone());
+        }
+        if(t instanceof OffsetTime) {
+            return _Temporals.translateToTimeOffset((OffsetTime) t,
+                    context.getInteractionContext().getTimeZoneOffsetNow());
+        }
+        return t; // otherwise acts as identity operator
+    }
+
 
     /**
      * Format used for rendering editable text representation.
@@ -249,9 +362,10 @@ implements TemporalValueSemantics<T> {
 
     @Value(staticConstructor = "of")
     static class DateAndTimeFormatStyle {
-        @Nullable FormatStyle dateFormatStyle;
-        @Nullable FormatStyle timeFormatStyle;
-        @Nullable TimePrecision timePrecision;
+        @NonNull FormatStyle dateFormatStyle;
+        @NonNull FormatStyle timeFormatStyle;
+        @NonNull TimePrecision timePrecision;
+        @NonNull TimeZoneTranslation timeZoneTranslation;
 
         static DateAndTimeFormatStyle forContext(
                 final @Nullable MetaModelContext mmc, // nullable .. JUnit support
@@ -279,7 +393,12 @@ implements TemporalValueSemantics<T> {
                     .map(TimeFormatPrecisionFacet::getTimePrecision)
                     .orElse(TimePrecision.SECOND);
 
-            return of(dateFormatStyle, timeFormatStyle, timePrecision);
+            val timeZoneTranslation = featureIfAny
+                    .flatMap(feature->feature.lookupFacet(TimeZoneTranslationFacet.class))
+                    .map(TimeZoneTranslationFacet::getTimeZoneTranslation)
+                    .orElse(TimeZoneTranslation.TO_LOCAL_TIMEZONE);
+
+            return of(dateFormatStyle, timeFormatStyle, timePrecision, timeZoneTranslation);
         }
 
     }
@@ -291,7 +410,7 @@ implements TemporalValueSemantics<T> {
                 .orElseGet(IsisConfiguration.ValueTypes.Temporal::new);
     }
 
-    private TemporalEditingPattern temporalEditingPattern() {
+    protected TemporalEditingPattern temporalEditingPattern() {
         return temporalConfig().getEditing();
     }
 

@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 public class EntityChangePublishingFacetFromConfiguration
 extends EntityChangePublishingFacetAbstract {
 
-    public EntityChangePublishingFacetFromConfiguration(final FacetHolder facetHolder) {
-        super(facetHolder);
+    public EntityChangePublishingFacetFromConfiguration(final FacetHolder facetHolder, final boolean enabled) {
+        super(facetHolder, enabled);
     }
 
 }

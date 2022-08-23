@@ -33,7 +33,7 @@ import lombok.NonNull;
 import lombok.Synchronized;
 
 /**
- * {@link Serializable} representation of a {@link ObjectActionParameter parameter}
+ * {@link Serializable} representation of an {@link ObjectActionParameter parameter}
  * that belongs to an {@link ObjectAction}.
  *
  * @implNote thread-safe memoization

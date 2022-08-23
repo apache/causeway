@@ -16,7 +16,11 @@ Domain service APIs for the application layer allow the domain objects to contro
 
 
 |xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService]
-|Executes the specified xref:refguide:applib:index/services/command/Command.adoc[Command].
+|Service used to execute a specified xref:refguide:applib:index/services/command/Command.adoc[Command].
+One use case is in support of async commands (using xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] ).
+
+// commandreplay moved to incubator for the time being
+//Another is to replay commands from a primary onto a secondary (see xref:userguide:commandreplay:about.adoc[Command Replay] ; another is
 
 
 |xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu]
@@ -25,8 +29,22 @@ Domain service APIs for the application layer allow the domain objects to contro
 The actions in this menu are restricted to non-production use only.
 
 
-|xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext]
+
+|xref:refguide:applib:index/services/iactn/InteractionProvider.adoc[InteractionProvider]
 |Request-scoped access to the current member execution (action invocation or property edit), represented as the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] context.
+
+|xref:refguide:applib:index/services/iactnlayer/InteractionLayerTracker.adoc[InteractionLayerTracker]
+|Access to the current xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer], where the lowest layer is in effect a short-lived session connected to the database, with a xref:refguide:applib:index/services/xactn/TransactionService.adoc#currentTransactionId_[transaction] started automatically.
+
+
+|xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[InteractionService]
+|Extends xref:refguide:applib:index/services/iactnlayer/InteractionLayerTracker.adoc[InteractionLayerTracker], providing additional "session" management capabilities.
+
+In particular, can be used to open new xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer layer]s (= "session"), similar to an "su" command in Unix, with the user or clock etc. temporarily altered.
+Can also be used to close all layers (= "close the session"), which commits the transaction.
+
+More precisely: provides access to the current xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] / xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer], with the ability to
+
 
 
 |xref:refguide:applib:index/services/message/MessageService.adoc[MessageService]
@@ -34,7 +52,7 @@ The actions in this menu are restricted to non-production use only.
 
 
 |xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService]
-|Typically for use in testing while running xref:testing:fixtures:services/FixtureScripts.adoc[fixture scripts], allows a block of code to run as a specified user account.
+|Typically for use in testing while running fixture scripts, allows a block of code to run as a specified user account.
 
 
 
@@ -43,8 +61,12 @@ The actions in this menu are restricted to non-production use only.
 
 
 
+|xref:refguide:applib:index/services/xactn/TransactionalProcessor.adoc[TransactionalProcessor]
+|Provides the ability to submit work within a transaction, specifying whether that transaction should be nested or new (suspending the current).
+
+
 |xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService]
-|Methods for managing transactions.
+|Extends xref:refguide:applib:index/services/xactn/TransactionalProcessor.adoc[TransactionalProcessor] to provide the ability to query the current transaction state and to flush the current transaction.
 
 
 

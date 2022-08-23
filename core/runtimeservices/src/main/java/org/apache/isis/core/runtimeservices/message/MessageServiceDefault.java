@@ -36,9 +36,10 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.interaction.session.MessageBroker;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 @Service
-@Named("isis.runtimeservices.MessageServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".MessageServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class MessageServiceDefault implements MessageService {

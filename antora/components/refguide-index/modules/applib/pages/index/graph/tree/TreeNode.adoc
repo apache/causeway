@@ -37,53 +37,53 @@ class TreeNode<T> {
 }
 ----
 
-<.> xref:#getTreeState__[getTreeState()]
-<.> xref:#expand__TreePath[expand(TreePath)]
+<.> xref:#getTreeState_[getTreeState()]
+<.> xref:#expand_TreePath[expand(TreePath)]
 +
 --
 Adds _treePaths_ to the set of expanded nodes, as held by this tree's shared state object.
 --
-<.> xref:#expand__[expand()]
+<.> xref:#expand_[expand()]
 +
 --
 Expands this node and all its parents.
 --
-<.> xref:#collapse__TreePath[collapse(TreePath)]
+<.> xref:#collapse_TreePath[collapse(TreePath)]
 +
 --
 Removes _treePaths_ from the set of expanded nodes, as held by this tree's shared state object.
 --
-<.> xref:#lazy__T_Class[lazy(T, Class)]
+<.> xref:#lazy_T_Class[lazy(T, Class)]
 +
 --
 Convenient shortcut.
 --
-<.> xref:#getTreeAdapterClass__[getTreeAdapterClass()]
+<.> xref:#getTreeAdapterClass_[getTreeAdapterClass()]
 
 == Members
 
-[#getTreeState__]
+[#getTreeState_]
 === getTreeState()
 
-[#expand__TreePath]
+[#expand_TreePath]
 === expand(TreePath)
 
 Adds _treePaths_ to the set of expanded nodes, as held by this tree's shared state object.
 
-[#expand__]
+[#expand_]
 === expand()
 
 Expands this node and all its parents.
 
-[#collapse__TreePath]
+[#collapse_TreePath]
 === collapse(TreePath)
 
 Removes _treePaths_ from the set of expanded nodes, as held by this tree's shared state object.
 
-[#lazy__T_Class]
+[#lazy_T_Class]
 === lazy(T, Class)
 
 Convenient shortcut.
 
-[#getTreeAdapterClass__]
+[#getTreeAdapterClass_]
 === getTreeAdapterClass()

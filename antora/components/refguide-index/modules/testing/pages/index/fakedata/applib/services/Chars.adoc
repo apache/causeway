@@ -18,27 +18,27 @@ class Chars {
 }
 ----
 
-<.> xref:#upper__[upper()]
+<.> xref:#upper_[upper()]
 +
 --
 Returns a random upper case characters, between 'A' and 'Z'.
 --
-<.> xref:#lower__[lower()]
+<.> xref:#lower_[lower()]
 +
 --
 Returns a random lower case characters, between 'a' and 'z'.
 --
-<.> xref:#digit__[digit()]
+<.> xref:#digit_[digit()]
 +
 --
 Returns a digit character, between '0' and '9'.
 --
-<.> xref:#anyOf__String[anyOf(String)]
+<.> xref:#anyOf_String[anyOf(String)]
 +
 --
 Returns any single character within the provided string.
 --
-<.> xref:#any__[any()]
+<.> xref:#any_[any()]
 +
 --
 Returns any character at random.
@@ -46,27 +46,27 @@ Returns any character at random.
 
 == Members
 
-[#upper__]
+[#upper_]
 === upper()
 
 Returns a random upper case characters, between 'A' and 'Z'.
 
-[#lower__]
+[#lower_]
 === lower()
 
 Returns a random lower case characters, between 'a' and 'z'.
 
-[#digit__]
+[#digit_]
 === digit()
 
 Returns a digit character, between '0' and '9'.
 
-[#anyOf__String]
+[#anyOf_String]
 === anyOf(String)
 
 Returns any single character within the provided string.
 
-[#any__]
+[#any_]
 === any()
 
 Returns any character at random.

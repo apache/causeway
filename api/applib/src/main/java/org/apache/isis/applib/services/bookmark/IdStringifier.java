@@ -1,0 +1,173 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
+
+package org.apache.isis.applib.services.bookmark;
+
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
+
+/**
+ * SPI to convert the identifier (primary key) of an entity, of a given type (eg Integer) into a string, and
+ * to convert back again into the key object used to actually look up the target entity instance;
+ * supported by both JDO and JPA persistence mechanisms.
+ *
+ * <p>
+ *     This is ultimately used by {@link BookmarkService} where we hold a persistent reference to an entity.  The
+ *     resultant string also appears in URLs of the Wicket viewer and Restful Objects viewers, and in mementos eg
+ *     in {@link org.apache.isis.schema.cmd.v2.CommandDto} and {@link org.apache.isis.schema.ixn.v2.InteractionDto}.
+ * </p>
+ *
+ * <p>
+ *     The framework provides default implementations of this SPI for JDO (data store and application identity) and
+ *     for JPA. Because this is an SPI, other modules or application code can provide their own implementations.
+ *     An example of such is the JPA implementation of the <code>commandlog</code> extension.
+ * </p>
+ *
+ * @see org.apache.isis.core.runtime.idstringifier.IdStringifierService
+ *
+ * @since 2.0 {@index}
+ */
+public interface IdStringifier<T> {
+
+    Class<T> getCorrespondingClass();
+
+    /**
+     * Convert the value (which will be of the same type as returned by {@link #getCorrespondingClass()}
+     * into a string representation.
+     *
+     * @see #destring(String)
+     */
+    String enstring(@NonNull T value);
+
+    /**
+     * Convert a string representation of the identifier (as returned by {@link #enstring(Object)}) into an object
+     * that can be used to retrieve.
+     *
+     * @param stringified - as returned by {@link #enstring(Object)}
+     */
+    T destring(@NonNull String stringified);
+
+
+    interface SupportingTargetEntityClass<T> extends IdStringifier<T> {
+        /**
+         * Convert a string representation of the identifier (as returned by {@link #enstring(Object)}) into an object
+         * that can be used to retrieve.
+         *
+         * @param stringified - as returned by {@link #enstring(Object)}
+         * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
+         *                                 we always have this information available, and is needed (at least) by the JDO
+         *                                 implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
+         */
+        T destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass);
+
+        @Override
+        default T destring(@NonNull final String stringified) {
+            throw _Exceptions.unsupportedOperation();
+        }
+    }
+
+    /**
+     * Provided for backward compatibility with some v1 Ids that used a prefix to determine their actual type.
+     * <p>
+     * (In v2 we provide this so in the constructor, so there's no need to encode the type in the stringified form
+     * of the value).
+     *
+     * @param <T>
+     *
+     * @deprecated not used within the framework; eventually remove
+     */
+    @Deprecated
+    abstract class AbstractWithPrefix<T> implements SupportingTargetEntityClass<T> {
+
+        public final static char SEPARATOR = '_';
+
+        /**
+         * eg <code>Integer.class</code>, or JDO-specific <code>DatastoreId</code>,
+         * or a custom class for application-defined PKs.
+         */
+        @Getter private final Class<T> correspondingClass;
+
+        private final String prefix;
+
+        public AbstractWithPrefix(
+                @NonNull final Class<T> correspondingClass,
+                @NonNull final String typeCode) {
+            _Assert.assertFalse(correspondingClass.isPrimitive(),
+                    ()->String.format("not allowed to be initialzed with a primitive class (%s), "
+                            + "use the boxed variant instead",
+                            correspondingClass));
+            this.correspondingClass = correspondingClass;
+            this.prefix = typeCode + SEPARATOR;
+        }
+
+        @Override
+        public final String enstring(final @NonNull T value) {
+            return prefix + doEnstring(value);
+        }
+
+        @Override
+        public final T destring(@NonNull final String stringified) {
+            throw _Exceptions.unsupportedOperation();
+        }
+
+        /**
+         * Overridable hook
+         */
+        protected String doEnstring(final T value) {
+            return value.toString();
+        }
+
+        @Override
+        public final T destring(
+                final @NonNull String stringified,
+                final @NonNull Class<?> targetEntityClass) {
+            val suffix = removePrefix(stringified);
+            return doDestring(suffix, targetEntityClass);
+        }
+
+        /**
+         * Mandatory hook
+         */
+        protected abstract T doDestring(
+                final @NonNull String idStr,
+                final @NonNull Class<?> targetEntityClass);
+
+        private String removePrefix(final String str) {
+            if (str.startsWith(prefix)) {
+                return str.substring(prefix.length());
+            }
+            throw new IllegalArgumentException(
+                    String.format("expected id to start with '%s', but got '%s'", prefix, str));
+        }
+
+        /**
+         * Not API
+         */
+        public boolean recognizes(final String stringified) {
+            return stringified.startsWith(prefix);
+        }
+
+    }
+
+}

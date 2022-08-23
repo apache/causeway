@@ -29,7 +29,7 @@ class SimpleTicket {
 }
 ----
 
-<.> xref:#getKittenUrl__[getKittenUrl()]
+<.> xref:#getKittenUrl_[getKittenUrl()]
 +
 --
 If specified, is the external URL of an image to display to the end user.
@@ -37,7 +37,7 @@ If specified, is the external URL of an image to display to the end user.
 
 == Members
 
-[#getKittenUrl__]
+[#getKittenUrl_]
 === getKittenUrl()
 
 If specified, is the external URL of an image to display to the end user.

@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="DemoAppVaadin" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" />
+    <module name="demo-vaadin" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="demoapp.webapp.vaadin.DemoAppVaadin" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

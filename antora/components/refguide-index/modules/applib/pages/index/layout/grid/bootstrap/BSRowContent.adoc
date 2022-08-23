@@ -19,12 +19,12 @@ class BSRowContent {
 }
 ----
 
-<.> xref:#getSize__[getSize()]
+<.> xref:#getSize_[getSize()]
 +
 --
 Default if not specified is _Size#MD_ .
 --
-<.> xref:#getOwner__[getOwner()]
+<.> xref:#getOwner_[getOwner()]
 +
 --
 Owner.
@@ -32,12 +32,12 @@ Owner.
 
 == Members
 
-[#getSize__]
+[#getSize_]
 === getSize()
 
 Default if not specified is _Size#MD_ .
 
-[#getOwner__]
+[#getOwner_]
 === getOwner()
 
 Owner.

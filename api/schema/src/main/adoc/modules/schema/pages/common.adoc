@@ -20,19 +20,19 @@ The `oidDto` complex type is defined as:
 
 [source,xml]
 ----
-<xs:schema targetNamespace="http://isis.apache.org/schema/common"                           <!--1-->
+<xs:schema targetNamespace="http://isis.apache.org/schema/common"                           <!--.-->
            elementFormDefault="qualified"
            xmlns="http://isis.apache.org/schema/common"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <xs:complexType name="oidDto">                                                          <!--2-->
+    <xs:complexType name="oidDto">                                                          <!--.-->
         <xs:sequence/>
-        <xs:attribute name="type" type="xs:string"/>                                        <!--3-->
-        <xs:attribute name="id" type="xs:string"/>                                          <!--4-->
+        <xs:attribute name="type" type="xs:string"/>                                        <!--.-->
+        <xs:attribute name="id" type="xs:string"/>                                          <!--.-->
         <xs:attribute name="objectState" type="bookmarkObjectState"/>
     </xs:complexType>
 
-    <xs:simpleType name="bookmarkObjectState">                                              <!--5-->
+    <xs:simpleType name="bookmarkObjectState">                                              <!--.-->
         <xs:restriction base="xs:string">
             <xs:enumeration value="persistent"/>
             <xs:enumeration value="transient"/>
@@ -40,7 +40,7 @@ The `oidDto` complex type is defined as:
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="oidsDto">                                                         <!--6-->
+    <xs:complexType name="oidsDto">                                                         <!--.-->
         <xs:sequence>
             <xs:element name="oid" type="oidDto" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
@@ -48,17 +48,17 @@ The `oidDto` complex type is defined as:
     ...
 </xs:schema>
 ----
-<1> the common schema has a namespace URI of "http://isis.apache.org/schema/common".
+<.> the common schema has a namespace URI of "http://isis.apache.org/schema/common".
 Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
-<2> the `oidDto` complex type defines the unique identifier for any domain object: its type, and an identifier.
+<.> the `oidDto` complex type defines the unique identifier for any domain object: its type, and an identifier.
 The `objectState` attribute can usually be omitted (indicating a persistent object)
-<3> the object type, corresponding to either the xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[@DomainObject#logicalTypeName()] attribute, or to the (JDO)
+<.> the object type, corresponding to either the xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[@DomainObject#logicalTypeName()] attribute, or to the (JDO)
 xref:refguide:applib-ant:PersistenceCapable.adoc[@PersistenceCapable] annotation (`schema` and/or `table` attributes), or to the (JDO) xref:refguide:applib-ant:Discriminator.adoc[@Discriminator] annotation.
 If none is specified, then the fully qualified class name will be used.
-<4> the object identifier (aka primary key), converted to string form.
-<5> the `bookmarkObjectState` enumerates the possible persistence states of the referenced object.
+<.> the object identifier (aka primary key), converted to string form.
+<.> the `bookmarkObjectState` enumerates the possible persistence states of the referenced object.
 In previous versions of the schema the attribute was defaulted to "persistent"; the "persistent" state is assumed if the attribute is omitted.
-<6> Models a list of OIDs.
+<.> Models a list of OIDs.
 This is used by the xref:refguide:schema:cmd.adoc["cmd" schema] to represent the
 intention to perform a bulk actions (against a number of selected objects).
 
@@ -108,7 +108,7 @@ The common schema also defines two types representing values: the `valueDto` com
 ----
 <xs:schema targetNamespace="http://isis.apache.org/schema/common" ... >
     ...
-    <xs:complexType name="valueDto">                                <!--1-->
+    <xs:complexType name="valueDto">                                <!--.-->
         <xs:choice minOccurs="0" maxOccurs="1">
             <xs:element name="string" type="xs:string"/>
             <xs:element name="byte" type="xs:byte"/>
@@ -123,7 +123,7 @@ The common schema also defines two types representing values: the `valueDto` com
         </xs:choice>
     </xs:complexType>
 
-    <xs:simpleType name="valueType">                                <!--2-->
+    <xs:simpleType name="valueType">                                <!--.-->
         <xs:restriction base="xs:string">
             <xs:enumeration value="string"/>
             <xs:enumeration value="byte"/>
@@ -134,11 +134,11 @@ The common schema also defines two types representing values: the `valueDto` com
             <xs:enumeration value="collection"/>
             <xs:enumeration value="blob"/>
             <xs:enumeration value="clob"/>
-            <xs:enumeration value="void"/>                          <!--3-->
+            <xs:enumeration value="void"/>                          <!--.-->
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="valueWithTypeDto">                        <--4-->
+    <xs:complexType name="valueWithTypeDto">                        <--.-->
         <xs:complexContent>
             <xs:extension base="valueDto">
                 <xs:attribute name="type" use="required" type="valueType"/>
@@ -149,10 +149,10 @@ The common schema also defines two types representing values: the `valueDto` com
     ...
 </xs:schema>
 ----
-<1> Intended to hold any valid value, eg of an argument to an action or a new value of a property.
-<2> Enumerates the full set of types understood by the framework; note that these also include references to entities or view models, and to enums.
-<3> Not valid to be used as the parameter type of an action; can be used as its return type.
-<4> Inherits from `valueDto`, capturing both a value and its corresponding type.
+<.> Intended to hold any valid value, eg of an argument to an action or a new value of a property.
+<.> Enumerates the full set of types understood by the framework; note that these also include references to entities or view models, and to enums.
+<.> Not valid to be used as the parameter type of an action; can be used as its return type.
+<.> Inherits from `valueDto`, capturing both a value and its corresponding type.
 Used for the return value of action invocations, and for the new value in property edits.
 
 
@@ -176,14 +176,14 @@ The common schema also defines a number of ancillary types, used either by the c
 ----
 <xs:schema targetNamespace="http://isis.apache.org/schema/common" ... >
     ...
-    <xs:complexType name="enumDto">                                 <!--1-->
+    <xs:complexType name="enumDto">                                 <!--.-->
         <xs:sequence>
             <xs:element name="enumType" type="xs:string"/>
             <xs:element name="enumName" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="blobDto">                                 <!--2-->
+    <xs:complexType name="blobDto">                                 <!--.-->
         <xs:sequence>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="mimeType" type="xs:string"/>
@@ -193,7 +193,7 @@ The common schema also defines a number of ancillary types, used either by the c
         <xs:attribute name="null" use="optional" type="xs:boolean"/>
     </xs:complexType>
 
-    <xs:complexType name="clobDto">                                 <!--3-->
+    <xs:complexType name="clobDto">                                 <!--.-->
         <xs:sequence>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="mimeType" type="xs:string"/>
@@ -203,7 +203,7 @@ The common schema also defines a number of ancillary types, used either by the c
         <xs:attribute name="null" use="optional" type="xs:boolean"/>
     </xs:complexType>
 
-    <xs:complexType name="periodDto">                               <!--4-->
+    <xs:complexType name="periodDto">                               <!--.-->
         <xs:sequence>
             <xs:element name="startedAt" type="xs:dateTime"/>
             <xs:element name="completedAt" type="xs:dateTime"
@@ -211,20 +211,20 @@ The common schema also defines a number of ancillary types, used either by the c
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="differenceDto">                           <!--5-->
+    <xs:complexType name="differenceDto">                           <!--.-->
         <xs:sequence/>
         <xs:attribute name="before" type="xs:int"/>
         <xs:attribute name="after" type="xs:int"/>
     </xs:complexType>
 
-    <xs:simpleType name="interactionType">                          <!--6-->
+    <xs:simpleType name="interactionType">                          <!--.-->
         <xs:restriction base="xs:string">
             <xs:enumeration value="action_invocation" />
             <xs:enumeration value="property_edit" />
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="oidsDto">                                 <!--7-->
+    <xs:complexType name="oidsDto">                                 <!--.-->
         <xs:sequence>
             <xs:element name="oid" type="oidDto" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
@@ -232,13 +232,13 @@ The common schema also defines a number of ancillary types, used either by the c
 
 </xs:schema>
 ----
-<1> Models an instance member of an enum (eg `Color.RED`).
-<2> Models a `Blob`
-<3> Models a `Clob`
-<4> Captures a period of time, eg for capturing metrics/timings.
-<5> Captures a pair of numbers representing a difference.
+<.> Models an instance member of an enum (eg `Color.RED`).
+<.> Models a `Blob`
+<.> Models a `Clob`
+<.> Captures a period of time, eg for capturing metrics/timings.
+<.> Captures a pair of numbers representing a difference.
 Used for example to capture metrics (number objects modified before and after).
-<6> Whether this command/interaction with a member is invoking an action, or editing a property.
+<.> Whether this command/interaction with a member is invoking an action, or editing a property.
 Used by both the xref:refguide:schema:cmd.adoc["cmd"] and xref:refguide:schema:ixn.adoc["ixn"] schemas.
-<7> Contains a list of OIDs, eg for use in "bulk" actions that apply to multiple targets.
+<.> Contains a list of OIDs, eg for use in "bulk" actions that apply to multiple targets.
 

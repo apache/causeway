@@ -17,7 +17,7 @@ class RestfulResponse<T> {
 }
 ----
 
-<.> xref:#wraps__Class[wraps(Class)]
+<.> xref:#wraps_Class[wraps(Class)]
 +
 --
 Convenience that recasts this response as wrapping some other representation.
@@ -25,7 +25,7 @@ Convenience that recasts this response as wrapping some other representation.
 
 == Members
 
-[#wraps__Class]
+[#wraps_Class]
 === wraps(Class)
 
 Convenience that recasts this response as wrapping some other representation.

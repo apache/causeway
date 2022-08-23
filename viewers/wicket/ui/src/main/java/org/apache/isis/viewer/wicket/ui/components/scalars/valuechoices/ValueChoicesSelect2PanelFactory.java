@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.ScalarTitleBadgePanel;

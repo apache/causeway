@@ -45,11 +45,10 @@ public interface EntityChangePublishingFacet extends Facet {
             }
         }
 
-        val auditableFacet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-        if(auditableFacet == null) {
-            return false;
-        }
-        return true;
+        val entityChangePublishingFacet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+        return entityChangePublishingFacet != null && entityChangePublishingFacet.isEnabled();
     }
+
+    boolean isEnabled();
 
 }

@@ -36,7 +36,7 @@ import org.apache.isis.incubator.viewer.vaadin.ui.components.text.TextFieldFacto
 import org.apache.isis.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory;
 import org.apache.isis.incubator.viewer.vaadin.ui.pages.main.UiActionHandlerVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.pages.main.UiContextVaaDefault;
-import org.apache.isis.viewer.common.model.IsisModuleViewerCommon;
+import org.apache.isis.viewer.commons.model.IsisModuleViewerCommon;
 
 
 @Configuration

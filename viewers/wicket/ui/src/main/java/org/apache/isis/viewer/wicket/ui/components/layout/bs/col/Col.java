@@ -37,7 +37,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
@@ -249,6 +249,10 @@ implements HasDynamicallyVisibleContent {
             final CollectionLayoutData snapshot = entityModel.getCollectionLayoutData();
 
             for (CollectionLayoutData collection : collections) {
+
+                if (entityModel.getManagedObject().getSpecification().getAssociation(collection.getId()).isEmpty()) {
+                    continue;
+                }
 
                 final String id = collectionRv.newChildId();
 

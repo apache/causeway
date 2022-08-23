@@ -47,6 +47,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -256,6 +257,19 @@ public class DomainObjectTesterFactory {
             this.parameterNegotiationStarter = null;
         }
 
+        @Nullable
+        public <X> X getActionOwnerAs(final Class<X> type) {
+            return _Casts.uncheckedCast(getActionOwner().map(ManagedObject::getPojo).orElse(null));
+        }
+
+        public ManagedObject getActionOwnerElseFail() {
+            return getActionOwner().orElseThrow();
+        }
+
+        public Optional<ManagedObject> getActionOwner() {
+            return getManagedAction().map(ManagedAction::getOwner);
+        }
+
         public Optional<ManagedAction> getManagedAction() {
             return actionInteraction().flatMap(ActionInteraction::getManagedAction);
         }
@@ -417,6 +431,39 @@ public class DomainObjectTesterFactory {
 
         }
 
+        @SuppressWarnings("unchecked")
+        public <X> void assertParameterChoices(
+                final boolean checkRules,
+                final Class<X> elementType,
+                final Consumer<Iterable<X>> ...pojoArgChoiceTests) {
+
+            assertExists(true);
+
+            val pojoTests = Can.ofArray(pojoArgChoiceTests);
+
+            interactionService.runAnonymous(()->{
+
+                startParameterNegotiation(checkRules).getParamModels()
+                .forEach(param->{
+                    pojoTests
+                        .get(param.getParamNr())
+                        .ifPresent(pojoTest->
+                            pojoTest.accept(
+                                    (List<X>) choicesFor(param)
+                                    ));
+                });
+
+                captureCommand();
+
+            });
+
+        }
+
+        private static List<Object> choicesFor(final ManagedValue param) {
+            return ManagedObjects.UnwrapUtil.multipleAsList(param.getChoices().getValue());
+        }
+
+        @SuppressWarnings("unchecked")
         public void assertParameterVisibility(
                 final boolean checkRules,
                 final Consumer<Boolean> ...argVisibleChecks) {

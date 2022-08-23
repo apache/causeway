@@ -63,6 +63,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.IResource;
@@ -84,11 +85,11 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.commons.internal.functions._Functions.SerializableFunction;
 import org.apache.isis.commons.internal.functions._Functions.SerializableSupplier;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.viewer.common.model.StringForRendering;
+import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.isis.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -311,7 +312,7 @@ public class Wkt {
     public AjaxButton buttonOk(
             final String id,
             final IModel<String> labelModel,
-            final WicketViewerSettings settings,
+            final Wicket settings,
             final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
         return settings.isUseIndicatorForFormSubmit()
         ? new IndicatingAjaxButton(id, labelModel) {
@@ -356,7 +357,7 @@ public class Wkt {
             final MarkupContainer markupContainer,
             final String id,
             final IModel<String> labelModel,
-            final WicketViewerSettings settings,
+            final Wicket settings,
             final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
         return add(markupContainer, buttonOk(id, labelModel, settings, onClick));
     }
@@ -823,7 +824,11 @@ public class Wkt {
     }
 
     public MarkupComponent markup(final String id, final String html) {
-        return new MarkupComponent(id, html);
+        return markup(id, Model.of(html));
+    }
+
+    public MarkupComponent markupAdd(final MarkupContainer container, final String id, final IModel<String> htmlModel) {
+        return add(container, markup(id, htmlModel));
     }
 
     public MarkupComponent markupAdd(final MarkupContainer container, final String id, final String html) {

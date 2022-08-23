@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.dialog.Dialogs;
-import org.apache.isis.viewer.common.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
+import org.apache.isis.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;

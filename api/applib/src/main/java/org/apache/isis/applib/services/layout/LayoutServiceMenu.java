@@ -38,8 +38,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
- * Simply provides a UI to allow layouts (obtained from {@link LayoutService}
- * to be downloaded within the UI.
+ * Provides a UI to allow layouts (obtained from {@link LayoutService}) to be downloaded.
  *
  * @since 1.x {@index}
  */
@@ -70,7 +69,7 @@ public class LayoutServiceMenu {
 
 
     @Action(
-            domainEvent = downloadLayouts.ActionEvent.class,
+            domainEvent = downloadLayouts.ActionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -80,9 +79,9 @@ public class LayoutServiceMenu {
             sequence="500.400.1")
     public class downloadLayouts{
 
-        public class ActionEvent extends ActionDomainEvent<downloadLayouts> {}
+        public class ActionDomainEvent extends LayoutServiceMenu.ActionDomainEvent<downloadLayouts> {}
 
-        @MemberSupport public Blob act(final Style style) {
+        @MemberSupport public Blob act(final LayoutExportStyle style) {
 
             final String fileName = "layouts." + style.name().toLowerCase() + ".zip";
 
@@ -90,13 +89,13 @@ public class LayoutServiceMenu {
             return new Blob(fileName, mimeTypeApplicationZip, zipBytes);
         }
 
-        @MemberSupport public Style default0Act() { return Style.NORMALIZED; }
+        @MemberSupport public LayoutExportStyle default0Act() { return LayoutExportStyle.defaults(); }
     }
 
 
 
     @Action(
-            domainEvent = downloadMenuBarsLayout.ActionEvent.class,
+            domainEvent = downloadMenuBarsLayout.ActionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -106,7 +105,7 @@ public class LayoutServiceMenu {
             sequence="500.400.2")
     public class downloadMenuBarsLayout{
 
-        public class ActionEvent extends ActionDomainEvent<downloadMenuBarsLayout> {}
+        public class ActionDomainEvent extends LayoutServiceMenu.ActionDomainEvent<downloadMenuBarsLayout> {}
 
         @MemberSupport public Clob act(
                 @ParameterLayout(named = "File name") final String fileName,

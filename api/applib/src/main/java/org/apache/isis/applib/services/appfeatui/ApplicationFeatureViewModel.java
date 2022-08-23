@@ -69,7 +69,7 @@ import lombok.val;
 @DomainObject
 public abstract class ApplicationFeatureViewModel implements ViewModel {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureViewModel";
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationFeatureViewModel";
 
     public static abstract class PropertyDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleApplib.PropertyDomainEvent<S, T> {}
     public static abstract class CollectionDomainEvent<S extends ApplicationFeatureViewModel,T> extends IsisModuleApplib.CollectionDomainEvent<S, T> {}

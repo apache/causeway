@@ -156,113 +156,124 @@
 		</plugins>
 	</build>
 
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.valuetypes</groupId>
+				<artifactId>isis-valuetypes</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>demo-domain</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>demo-web</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>demo-wicket-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>demo-wicket-jpa</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>demo-wicket-jdo</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
-
-		<!-- EXTENSIONS -->
-
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-metamodel</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-persistence-jdo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-asciidoc-persistence-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-markdown-metamodel</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.valuetypes</groupId>
-			<artifactId>isis-valuetypes-sse-applib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-exceldownload-ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-integration</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-encryption-spring</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-shiro-realm</artifactId>
-		</dependency>
-
-		<!-- OTHER DEPENDENCIES -->
-
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
 	</dependencies>
 
 	<profiles>
 		<profile>
-			<id>module-all</id>
+			<id>module-examples-demo-wicket</id>
 			<activation>
 				<property>
-					<name>module-all</name>
+					<name>module-examples-demo-wicket</name>
+				</property>
+			</activation>
+			<modules>
+				<module>domain</module>
+				<module>web</module>
+				<module>wicket/common</module>
+				<module>wicket/jdo</module>
+				<module>wicket/jpa</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>module-examples-demo-graphql</id>
+			<activation>
+				<property>
+					<name>module-examples-demo-graphql</name>
+				</property>
+			</activation>
+			<modules>
+				<module>domain</module>
+				<module>web</module>
+				<module>wicket/common</module>
+				<module>wicket/jpa-and-graphql</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>modules-example-demo-vaadin</id>
+			<activation>
+				<property>
+					<name>modules-example-demo-vaadin</name>
+				</property>
+			</activation>
+			<modules>
+				<module>domain</module>
+				<module>web</module>
+				<module>wicket/common</module>
+				<module>wicket/jdo</module>
+				<module>vaadin</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>modules-example-demo-javafx</id>
+			<activation>
+				<property>
+					<name>demo-javafx</name>
 				</property>
 			</activation>
 			<modules>
 				<module>domain</module>
 				<module>javafx</module>
-				<module>web</module>
-				<module>wicket/common</module>
-				<module>wicket/jdo</module>
-				<module>wicket/jpa</module>
-				<module>wicket/jpa-and-graphql</module>
-				<module>vaadin</module>
 			</modules>
 		</profile>
 
-		<profile>
-			<id>module-all-except-incubator</id>
-			<activation>
-				<property>
-					<name>module-all-except-incubator</name>
-				</property>
-			</activation>
-			<modules>
-				<module>domain</module>
-				<module>web</module>
-				<module>wicket/common</module>
-				<module>wicket/jdo</module>
-				<module>wicket/jpa</module>
-			</modules>
-		</profile>
 	</profiles>
 
 </project>

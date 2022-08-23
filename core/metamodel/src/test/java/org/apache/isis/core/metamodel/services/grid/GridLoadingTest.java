@@ -27,8 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.apache.isis.applib.services.grid.GridLoaderService;
+import org.apache.isis.applib.services.layout.LayoutExportStyle;
 import org.apache.isis.applib.services.layout.LayoutService;
-import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.core.metamodel.MetaModelTestAbstract;
 import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
@@ -55,7 +55,7 @@ extends MetaModelTestAbstract {
         val domainClassAndLayout = new GridLoaderServiceDefault.DomainClassAndLayout(Bar.class, null);
         gridLoaderService.loadXml(domainClassAndLayout);
 
-        val xml = layoutService.toXml(Bar.class, Style.NORMALIZED);
+        val xml = layoutService.toXml(Bar.class, LayoutExportStyle.MINIMAL);
         System.out.println(xml);
     }
 

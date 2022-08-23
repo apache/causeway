@@ -37,6 +37,8 @@ import java.util.stream.Stream;
 
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -54,6 +56,9 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.Markup;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.Password;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEventSemantics;
@@ -80,8 +85,17 @@ public abstract class ValueTypeExample<T> {
         setValue(value);
     }
 
+    @Autowired(required = false) List<ValueSemanticsAbstract<T>> semanticsList;
+    @Programmatic
+    public Can<T> getExamples() {
+        return Can.ofCollection(semanticsList)
+        .getFirst()
+        .map(semantics->semantics.getExamples())
+        .orElseGet(()->Can.of(getValue(), getUpdateValue()));
+    }
+
     @Collection
-    public final List<T> getValues() {
+    public List<T> getValues() {
         return List.of(getValue(), getUpdateValue());
     }
 
@@ -285,6 +299,12 @@ public abstract class ValueTypeExample<T> {
         private Float value = -63.1f;
         @Getter
         private Float updateValue = 0.f;
+
+        //FIXME does not handle example Float.MIN_VALUE well
+        @Deprecated // remove override once fixed
+        @Override public Can<Float> getExamples() {
+            return Can.of(value, updateValue);
+        }
     }
 
     @Named("isis.testdomain.valuetypes.ValueTypeExampleDouble")
@@ -296,6 +316,12 @@ public abstract class ValueTypeExample<T> {
         private Double value = -63.1;
         @Getter
         private Double updateValue = 0.;
+
+        //FIXME does not handle example Double.MIN_VALUE well
+        @Deprecated // remove override once fixed
+        @Override public Can<Double> getExamples() {
+            return Can.of(value, updateValue);
+        }
     }
 
     @Named("isis.testdomain.valuetypes.ValueTypeExampleBigInteger")
@@ -374,9 +400,9 @@ public abstract class ValueTypeExample<T> {
     public static class ValueTypeExampleLocalDate
     extends ValueTypeExample<LocalDate> {
         @Property @Getter @Setter
-        private LocalDate value = LocalDate.now();
+        private LocalDate value = _Temporals.sampleLocalDate().getElseFail(0);
         @Getter
-        private LocalDate updateValue = LocalDate.now().plusDays(2);
+        private LocalDate updateValue = getValue().plusDays(2);
     }
 
     @Named("isis.testdomain.valuetypes.ValueTypeExampleLocalDateTime")
@@ -385,9 +411,9 @@ public abstract class ValueTypeExample<T> {
     public static class ValueTypeExampleLocalDateTime
     extends ValueTypeExample<LocalDateTime> {
         @Property @Getter @Setter
-        private LocalDateTime value = LocalDateTime.now();
+        private LocalDateTime value = _Temporals.sampleLocalDateTime().getElseFail(0);
         @Getter
-        private LocalDateTime updateValue = LocalDateTime.now().plusDays(2).plusSeconds(15);
+        private LocalDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
     }
 
     @Named("isis.testdomain.valuetypes.ValueTypeExampleLocalTime")
@@ -397,9 +423,9 @@ public abstract class ValueTypeExample<T> {
     public static class ValueTypeExampleLocalTime
     extends ValueTypeExample<LocalTime> {
         @Property @Getter @Setter
-        private LocalTime value = LocalTime.now();
+        private LocalTime value = _Temporals.sampleLocalTime().getElseFail(0);
         @Getter
-        private LocalTime updateValue = LocalTime.now().plusSeconds(15);
+        private LocalTime updateValue = getValue().plusSeconds(15);
     }
 
     @Named("isis.testdomain.valuetypes.ValueTypeExampleOffsetDateTime")
@@ -408,9 +434,9 @@ public abstract class ValueTypeExample<T> {
     public static class ValueTypeExampleOffsetDateTime
     extends ValueTypeExample<OffsetDateTime> {
         @Property @Getter @Setter
-        private OffsetDateTime value = OffsetDateTime.now();
+        private OffsetDateTime value = _Temporals.sampleOffsetDateTime().getElseFail(0);
         @Getter
-        private OffsetDateTime updateValue = OffsetDateTime.now().plusDays(2).plusSeconds(15);
+        private OffsetDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
     }
 
     @Named("isis.testdomain.valuetypes.ValueTypeExampleOffsetTime")
@@ -419,7 +445,7 @@ public abstract class ValueTypeExample<T> {
     public static class ValueTypeExampleOffsetTime
     extends ValueTypeExample<OffsetTime> {
         @Property @Getter @Setter
-        private OffsetTime value = OffsetTime.now();
+        private OffsetTime value = _Temporals.sampleOffsetTime().getElseFail(0);
         @Getter
         private OffsetTime updateValue = OffsetTime.now().plusSeconds(15);
     }
@@ -430,9 +456,9 @@ public abstract class ValueTypeExample<T> {
     public static class ValueTypeExampleZonedDateTime
     extends ValueTypeExample<ZonedDateTime> {
         @Property @Getter @Setter
-        private ZonedDateTime value = ZonedDateTime.now();
+        private ZonedDateTime value = _Temporals.sampleZonedDateTime().getElseFail(0);
         @Getter
-        private ZonedDateTime updateValue = ZonedDateTime.now().plusDays(2).plusSeconds(15);
+        private ZonedDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
     }
 
     // -- EXAMPLES - TEMPORAL - JODA TIME

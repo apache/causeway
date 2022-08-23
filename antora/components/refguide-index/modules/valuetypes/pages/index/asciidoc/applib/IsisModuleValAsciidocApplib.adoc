@@ -7,6 +7,7 @@
 .IsisModuleValAsciidocApplib.java
 ----
 class IsisModuleValAsciidocApplib {
+  public static final String NAMESPACE;
 }
 ----
 

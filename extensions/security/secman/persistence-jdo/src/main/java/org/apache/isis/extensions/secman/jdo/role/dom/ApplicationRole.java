@@ -34,14 +34,17 @@ import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
+import javax.jdo.annotations.Version;
+import javax.jdo.annotations.VersionStrategy;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole.Nq;
-import org.apache.isis.extensions.secman.jdo.user.dom.ApplicationUser;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -52,26 +55,25 @@ import lombok.Setter;
         schema = ApplicationRole.SCHEMA,
         table = ApplicationRole.TABLE)
 @Uniques({
-    @Unique(
-            name = "ApplicationRole_name_UNQ",
-            members = { "name" })
+    @Unique(name = "ApplicationRole__name__UNQ", members = { "name" })
 })
 @Queries({
     @Query(
             name = Nq.FIND_BY_NAME,
             value = "SELECT "
-                    + "FROM " + ApplicationRole.FQCN
-                    + " WHERE name == :name"),
+                  + "  FROM " + ApplicationRole.FQCN
+                  + " WHERE name == :name"),
     @Query(
             name = Nq.FIND_BY_NAME_CONTAINING,
             value = "SELECT "
-                    + "FROM " + ApplicationRole.FQCN
-                    + " WHERE name.matches(:regex) ")
+                  + "  FROM " + ApplicationRole.FQCN
+                  + " WHERE name.matches(:regex) ")
 })
 @Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
-@DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.NATIVE, column = "id")
+@Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @Named(ApplicationRole.LOGICAL_TYPE_NAME)
 @DomainObject(
         bounding = Bounding.BOUNDED,

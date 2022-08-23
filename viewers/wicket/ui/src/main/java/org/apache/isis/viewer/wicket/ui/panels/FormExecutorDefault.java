@@ -33,9 +33,9 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
@@ -68,13 +68,11 @@ implements FormExecutor {
 
     // -- CONSTRUCTION
 
-    protected final WicketViewerSettings settings;
     private final Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel;
 
     private FormExecutorDefault(
             final Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel) {
         this.actionOrPropertyModel = actionOrPropertyModel;
-        this.settings = getSettings();
     }
 
     /**
@@ -259,10 +257,9 @@ implements FormExecutor {
         return getCommonContext().getServiceRegistry();
     }
 
-    private WicketViewerSettings getSettings() {
-        return getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
+    protected final Wicket getSettings() {
+        return getCommonContext().getConfiguration().getViewer().getWicket();
     }
-
 
 
 }

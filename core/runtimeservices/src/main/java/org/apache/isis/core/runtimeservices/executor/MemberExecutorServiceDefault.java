@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
@@ -67,6 +66,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.Getter;
@@ -77,7 +77,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.runtimeservices.MemberExecutorServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".MemberExecutorServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -90,11 +90,19 @@ implements MemberExecutorService {
     private final @Getter ObjectManager objectManager;
     private final @Getter ClockService clockService;
     private final @Getter ServiceInjector serviceInjector;
-    private final @Getter Provider<MetricsService> metricsService;
+    private final @Getter Provider<MetricsService> metricsServiceProvider;
     private final @Getter InteractionDtoFactory interactionDtoFactory;
-    private final @Getter Provider<ExecutionPublisher> executionPublisher;
+    private final @Getter Provider<ExecutionPublisher> executionPublisherProvider;
     private final @Getter MetamodelEventService metamodelEventService;
     private final @Getter TransactionService transactionService;
+
+    private MetricsService metricsService() {
+        return metricsServiceProvider.get();
+    }
+
+    private ExecutionPublisher executionPublisher() {
+        return executionPublisherProvider.get();
+    }
 
     @Override
     public Optional<InteractionInternal> getInteraction() {
@@ -128,7 +136,7 @@ implements MemberExecutorService {
         val interaction = getInteractionElseFail();
         val command = interaction.getCommand();
 
-        CommandPublishingFacet.prepareCommandForPublishing(command, owningAction, facetHolder);
+        CommandPublishingFacet.prepareCommandForPublishing(command, head, owningAction, facetHolder);
 
         val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
@@ -142,17 +150,14 @@ implements MemberExecutorService {
                 .map(UnwrapUtil::single)
                 .collect(_Lists.toUnmodifiable());
 
-        val targetMemberName = ObjectAction.Util.friendlyNameFor(owningAction, head);
-        val targetClass = IdentifierUtil.targetClassNameFor(targetAdapter);
-
         val actionInvocation =
                 new ActionInvocation(
-                        interaction, actionId, targetPojo, argumentPojos, targetMemberName,
-                        targetClass);
+                        interaction, actionId, targetPojo, argumentPojos
+                );
         val memberExecutor = actionExecutorFactory.createExecutor(owningAction, head, argumentAdapters);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        interaction.execute(memberExecutor, actionInvocation, clockService, metricsService.get(), command);
+        interaction.execute(memberExecutor, actionInvocation, clockService, metricsService(), command);
 
         // handle any exceptions
         final Execution<ActionInvocationDto, ?> priorExecution =
@@ -160,7 +165,7 @@ implements MemberExecutorService {
 
         val executionExceptionIfAny = priorExecution.getThrew();
 
-        // TODO: should also sync DTO's 'threw' attribute here...?
+        actionInvocation.setThrew(executionExceptionIfAny);
 
         if(executionExceptionIfAny != null) {
             throw executionExceptionIfAny instanceof RuntimeException
@@ -181,13 +186,14 @@ implements MemberExecutorService {
 
         // publish (if not a contributed association, query-only mixin)
         if (ExecutionPublishingFacet.isPublishingEnabled(facetHolder)) {
-            executionPublisher.get().publishActionInvocation(priorExecution);
+            executionPublisher().publishActionInvocation(priorExecution);
         }
 
         val result = resultFilteredHonoringVisibility(method, returnedAdapter, interactionInitiatedBy);
         _Xray.exitInvocation(xrayHandle);
         return result;
     }
+
     @Override
     public ManagedObject setOrClearProperty(
             final @NonNull OneToOneAssociation owningProperty,
@@ -204,7 +210,7 @@ implements MemberExecutorService {
             return head.getTarget();
         }
 
-        CommandPublishingFacet.prepareCommandForPublishing(command, owningProperty, facetHolder);
+        CommandPublishingFacet.prepareCommandForPublishing(command, head, owningProperty, facetHolder);
 
         val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, newValueAdapter);
 
@@ -214,16 +220,13 @@ implements MemberExecutorService {
         val target = UnwrapUtil.single(targetManagedObject);
         val argValue = UnwrapUtil.single(newValueAdapter);
 
-        val targetMemberName = owningProperty.getFriendlyName(head::getTarget);
-        val targetClass = IdentifierUtil.targetClassNameFor(targetManagedObject);
-
-        val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass);
+        val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue);
         val executor = propertyExecutorFactory
                 .createExecutor(owningProperty, head, newValueAdapter,
                         interactionInitiatedBy, editingVariant);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        val targetPojo = interaction.execute(executor, propertyEdit, clockService, metricsService.get(), command);
+        val targetPojo = interaction.execute(executor, propertyEdit, clockService, metricsService(), command);
 
         // handle any exceptions
         final Execution<?, ?> priorExecution = interaction.getPriorExecution();
@@ -240,7 +243,7 @@ implements MemberExecutorService {
         // publish (if not a contributed association, query-only mixin)
         val publishedPropertyFacet = facetHolder.getFacet(ExecutionPublishingFacet.class);
         if (publishedPropertyFacet != null) {
-            executionPublisher.get().publishPropertyEdit(priorExecution);
+            executionPublisher().publishPropertyEdit(priorExecution);
         }
 
         val result = getObjectManager().adapt(targetPojo);

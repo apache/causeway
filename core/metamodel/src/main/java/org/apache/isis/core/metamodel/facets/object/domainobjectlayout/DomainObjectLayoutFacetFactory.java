@@ -67,11 +67,11 @@ extends FacetFactoryAbstract {
                 .create(domainObjectLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                DescribedAsFacetForDomainObjectLayoutAnnotation
+                ObjectDescribedFacetForDomainObjectLayoutAnnotation
                 .create(domainObjectLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                NamedFacetForDomainObjectLayoutAnnotation
+                ObjectNamedFacetForDomainObjectLayoutAnnotation
                 .create(domainObjectLayoutIfAny, facetHolder));
 
         addFacetIfPresent(

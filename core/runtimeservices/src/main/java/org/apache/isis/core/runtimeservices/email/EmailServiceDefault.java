@@ -39,6 +39,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -46,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  * A service that sends email notifications when specific events occur
  */
 @Service
-@Named("isis.runtimeservices.EmailServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".EmailServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

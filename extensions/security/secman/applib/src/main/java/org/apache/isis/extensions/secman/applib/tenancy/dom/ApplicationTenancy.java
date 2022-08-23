@@ -43,8 +43,6 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
-import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
-import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 
 import lombok.experimental.UtilityClass;
 
@@ -67,9 +65,9 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_NAME = ApplicationTenancy.LOGICAL_TYPE_NAME + ".findByName";
-        public static final String FIND_BY_PATH = ApplicationTenancy.LOGICAL_TYPE_NAME + ".findByPath";
-        public static final String FIND_BY_NAME_OR_PATH_MATCHING = ApplicationTenancy.LOGICAL_TYPE_NAME + ".findByNameOrPathMatching";
+        public static final String FIND_BY_NAME = LOGICAL_TYPE_NAME + ".findByName";
+        public static final String FIND_BY_PATH = LOGICAL_TYPE_NAME + ".findByPath";
+        public static final String FIND_BY_NAME_OR_PATH_MATCHING = LOGICAL_TYPE_NAME + ".findByNameOrPathMatching";
     }
 
 

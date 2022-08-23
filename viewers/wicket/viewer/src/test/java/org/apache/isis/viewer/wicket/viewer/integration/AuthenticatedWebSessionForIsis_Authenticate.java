@@ -37,7 +37,7 @@ import static org.hamcrest.Matchers.nullValue;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.session.SessionLogService;
+import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.ThrowingRunnable;
@@ -76,6 +76,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 Collections.singletonList(mockAuthenticator),
                 new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault(),
+                Optional.empty(),
                 Collections.emptyList());
 
         context.checking(new Expectations() {
@@ -83,7 +84,7 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 allowing(mockCommonContext).getServiceRegistry();
                 will(returnValue(mockServiceRegistry));
 
-                allowing(mockServiceRegistry).select(SessionLogService.class);
+                allowing(mockServiceRegistry).select(SessionSubscriber.class);
                 will(returnValue(Can.empty()));
 
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionService.class);

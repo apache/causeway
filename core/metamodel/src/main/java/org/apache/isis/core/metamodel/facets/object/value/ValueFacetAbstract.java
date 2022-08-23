@@ -50,6 +50,7 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 
@@ -251,6 +252,14 @@ implements ValueFacet<T> {
     @Override
     public Optional<Renderer<T>> selectRendererForProperty(final OneToOneAssociation prop) {
         return streamValueSemanticsHonoringQualifiers(prop)
+                .map(ValueSemanticsProvider::getRenderer)
+                .filter(_NullSafe::isPresent)
+                .findFirst();
+    }
+
+    @Override
+    public Optional<Renderer<T>> selectRendererForCollection(final OneToManyAssociation coll) {
+        return streamValueSemanticsHonoringQualifiers(coll)
                 .map(ValueSemanticsProvider::getRenderer)
                 .filter(_NullSafe::isPresent)
                 .findFirst();

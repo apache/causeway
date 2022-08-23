@@ -60,7 +60,7 @@ public class JdoMetamodelMenu {
 
 
     @Action(
-            domainEvent = downloadMetamodels.ActionEvent.class,
+            domainEvent = downloadMetamodels.ActionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -70,7 +70,7 @@ public class JdoMetamodelMenu {
             sequence="500.670.1")
     public class downloadMetamodels{
 
-        public class ActionEvent extends ActionDomainEvent<downloadMetamodels> {}
+        public class ActionDomainEvent extends JdoMetamodelMenu.ActionDomainEvent<downloadMetamodels> {}
 
         @MemberSupport public Blob act() {
             final byte[] zipBytes = zip();

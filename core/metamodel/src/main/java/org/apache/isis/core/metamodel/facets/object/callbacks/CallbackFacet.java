@@ -22,6 +22,7 @@ import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 /**
  * A {@link Facet} that represents some type of lifecycle callback on the object
@@ -32,15 +33,22 @@ extends ImperativeFacet {
 
     public void invoke(ManagedObject object);
 
-    public static void callCallback(final ManagedObject object, final Class<? extends Facet> cls) {
-        final CallbackFacet facet = (CallbackFacet) object.getSpecification().getFacet(cls);
-        if (facet != null) {
+    public static void callCallback(
+            final ManagedObject object,
+            final Class<? extends CallbackFacet> callbackFacetType) {
+
+        ManagedObjects.whenSpecified(object)
+        .map(ManagedObject::getSpecification)
+        .flatMap(spec->spec.lookupFacet(callbackFacetType))
+        .ifPresent(callbackFacet->{
             try {
-                facet.invoke(object);
+                callbackFacet.invoke(object);
             } catch (final RuntimeException e) {
-                throw new DomainModelException("Callback failed.  Calling " + facet + " on " + object, e);
+                throw new DomainModelException(
+                        "Callback failed.  Calling " + callbackFacet + " on " + object, e);
             }
-        }
+        });
+
     }
 
 

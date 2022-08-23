@@ -19,22 +19,22 @@ class JavaSqlTimestamps {
 }
 ----
 
-<.> xref:#around__Period[around(Period)]
+<.> xref:#around_Period[around(Period)]
 +
 --
 Returns a random timestamp either before or after 'now', within the specified _Period_ .
 --
-<.> xref:#before__Period[before(Period)]
+<.> xref:#before_Period[before(Period)]
 +
 --
 Returns a random timestamp some time before 'now', within the specified _Period_ .
 --
-<.> xref:#after__Period[after(Period)]
+<.> xref:#after_Period[after(Period)]
 +
 --
 Returns a random timestamp some time after 'now', within the specified _Period_ .
 --
-<.> xref:#any__[any()]
+<.> xref:#any_[any()]
 +
 --
 Returns a random timestamp 5 years around 'now'.
@@ -42,22 +42,22 @@ Returns a random timestamp 5 years around 'now'.
 
 == Members
 
-[#around__Period]
+[#around_Period]
 === around(Period)
 
 Returns a random timestamp either before or after 'now', within the specified _Period_ .
 
-[#before__Period]
+[#before_Period]
 === before(Period)
 
 Returns a random timestamp some time before 'now', within the specified _Period_ .
 
-[#after__Period]
+[#after_Period]
 === after(Period)
 
 Returns a random timestamp some time after 'now', within the specified _Period_ .
 
-[#any__]
+[#any_]
 === any()
 
 Returns a random timestamp 5 years around 'now'.

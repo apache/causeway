@@ -32,7 +32,7 @@ public class AuthenticatorsForTesting {
             public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
                 return true;
             }
-            
+
             @Override
             public boolean isValid(final AuthenticationRequest request) {
                 return true;
@@ -46,21 +46,21 @@ public class AuthenticatorsForTesting {
             public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
                 return true;
             }
-            
+
             @Override
             public boolean isValid(final AuthenticationRequest request) {
                 return false;
             }
         };
     }
-    
+
     public static AuthenticatorAbstract authenticatorValidForFoo() {
         return new AuthenticatorAbstract() {
             @Override
             public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
                 return true;
             }
-            
+
             @Override
             public boolean isValid(final AuthenticationRequest request) {
                 if(!"foo".equals(request.getName())) {
@@ -70,6 +70,6 @@ public class AuthenticatorsForTesting {
             }
         };
     }
-    
+
 
 }

@@ -30,6 +30,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
+/**
+ * For (test) mixin descriptions see {@link ProperMemberSupport}.
+ */
 @Action(executionPublishing = Publishing.ENABLED)
 @RequiredArgsConstructor
 public class ProperMemberSupport_action4 {
@@ -44,7 +47,7 @@ public class ProperMemberSupport_action4 {
 
     // proper mix-in action
 
-    public ProperMemberSupport act(List<String> a, List<String> b) {
+    public ProperMemberSupport act(final List<String> a, final List<String> b) {
         return holder;
     }
 
@@ -56,39 +59,39 @@ public class ProperMemberSupport_action4 {
         return false;
     }
 
-    @MemberSupport public String validateAct(Parameter params) {
+    @MemberSupport public String validateAct(final Parameter params) {
         return null;
     }
 
-    @MemberSupport public Set<String> autoCompleteA(Parameter params, @MinLength(3) String search) {
+    @MemberSupport public Set<String> autoCompleteA(final Parameter params, @MinLength(3) final String search) {
         return null;
     }
 
-    @MemberSupport public Set<String> autoCompleteB(Parameter params, @MinLength(3) String search) {
+    @MemberSupport public Set<String> autoCompleteB(final Parameter params, @MinLength(3) final String search) {
         return null;
     }
 
-    @MemberSupport public Set<String> choicesA(Parameter params) {
+    @MemberSupport public Set<String> choicesA(final Parameter params) {
         return null;
     }
 
-    @MemberSupport public Set<String> choicesB(Parameter params) {
+    @MemberSupport public Set<String> choicesB(final Parameter params) {
         return null;
     }
 
-    @MemberSupport public List<String> defaultA(Parameter params) {
+    @MemberSupport public List<String> defaultA(final Parameter params) {
         return null;
     }
 
-    @MemberSupport public List<String> defaultB(Parameter params) {
+    @MemberSupport public List<String> defaultB(final Parameter params) {
         return null;
     }
 
-    @MemberSupport public String validateA(Parameter params) {
+    @MemberSupport public String validateA(final Parameter params) {
         return null;
     }
 
-    @MemberSupport public String validateB(Parameter params) {
+    @MemberSupport public String validateB(final Parameter params) {
         return null;
     }
 

@@ -14,7 +14,7 @@ Highlights of this release:
 
 * Support for xref:refguide:applib:index/locale/UserLocale.adoc[UserLocale] (languate, number format, time format) as an attributed of the current user / xref:refguide:applib:index/services/user/UserMemento.adoc[user memento].
 
-* Rationalization of the handling of xref:refguide:applib:index/annotation/LogicalTypeName.adoc[logical type name] for superclasses/supertypes.
+* Rationalization of the handling of xref:refguide:applib:index/annotation/DomainObject.adoc#logicalTypeName[logical type name] for superclasses/supertypes.
 
 * Update to DataNucleus 6.
 

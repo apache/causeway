@@ -33,8 +33,6 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -45,6 +43,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -65,15 +64,15 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.excel.applib.AggregationType;
 import org.apache.isis.extensions.excel.applib.ExcelMetaDataEnabled;
+import org.apache.isis.extensions.excel.applib.Mode;
+import org.apache.isis.extensions.excel.applib.RowHandler;
+import org.apache.isis.extensions.excel.applib.WorksheetContent;
+import org.apache.isis.extensions.excel.applib.WorksheetSpec;
 import org.apache.isis.extensions.excel.applib.annotation.HyperLink;
 import org.apache.isis.extensions.excel.applib.annotation.PivotColumn;
 import org.apache.isis.extensions.excel.applib.annotation.PivotDecoration;
 import org.apache.isis.extensions.excel.applib.annotation.PivotRow;
 import org.apache.isis.extensions.excel.applib.annotation.PivotValue;
-import org.apache.isis.extensions.excel.applib.RowHandler;
-import org.apache.isis.extensions.excel.applib.WorksheetContent;
-import org.apache.isis.extensions.excel.applib.WorksheetSpec;
-import org.apache.isis.extensions.excel.applib.Mode;
 import org.apache.isis.extensions.excel.applib.util.PivotUtils;
 import org.apache.isis.extensions.excel.applib.util.SheetPivoter;
 

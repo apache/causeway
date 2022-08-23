@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -145,10 +146,13 @@ extends TitleFacetAbstract {
 
     private TitleUiEvent<Object> newTitleUiEvent(final Object domainObject) {
         try {
-            final TitleUiEvent<Object> titleUiEvent = _Casts.uncheckedCast(titleUiEventClass.newInstance());
+            final TitleUiEvent<Object> titleUiEvent = _Casts.uncheckedCast(
+                    titleUiEventClass.getConstructor().newInstance());
             titleUiEvent.initSource(domainObject);
             return titleUiEvent;
-        } catch (InstantiationException | IllegalAccessException ex) {
+        } catch (InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException ex) {
             throw new UnrecoverableException(ex);
         }
     }

@@ -29,10 +29,11 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.common.v2.ValueType;
+import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 @Component
-@Named("isis.val.AsciiDocValueSemantics")
+@Named(IsisModuleValAsciidocApplib.NAMESPACE + ".AsciiDocValueSemantics")
 public class AsciiDocValueSemantics
 extends ValueSemanticsAbstract<AsciiDoc>
 implements
@@ -71,6 +72,11 @@ implements
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final AsciiDoc adoc) {
         return renderHtml(adoc, AsciiDoc::asHtml);
+    }
+
+    @Override
+    public SyntaxHighlighter syntaxHighlighter() {
+        return SyntaxHighlighter.PRISM_COY;
     }
 
     // -- PARSER

@@ -25,11 +25,11 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-@Action
+@Action(choicesFrom = "favorites")
 @ActionLayout(
     describedAs =
-            "@Action(associateWith = \"favorites\") " +
-            "@ActionLayout(sequence = \"1\")"
+            "@Action(choicesFrom = \"favorites\") " +
+            "@ActionLayout(associateWith = \"otherProperty\", sequence = \"2\")"
     , associateWith = "otherProperty"                           // <.>
     , sequence = "2"                                            // <.>
 )

@@ -74,9 +74,7 @@ extends PublishingTestAbstract {
 
             val bookClass = bookClass();
             final Interaction interaction = null;
-            val targetMemberName = "name???";
             final Object target = null;
-            val targetClass = bookClass.getName();
 
             switch(changeScenario) {
             case PROPERTY_UPDATE: {
@@ -85,7 +83,7 @@ extends PublishingTestAbstract {
                 Object argValue = "Book #2";
 
                 assertHasExecutionEntries(Can.of(
-                        new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass)
+                        new PropertyEdit(interaction, propertyId, target, argValue)
                         ));
             }
                 break;
@@ -95,7 +93,7 @@ extends PublishingTestAbstract {
                 val args = Collections.<Object>emptyList();
 
                 assertHasExecutionEntries(Can.of(
-                        new ActionInvocation(interaction, actionId, target, args, targetMemberName, targetClass)
+                        new ActionInvocation(interaction, actionId, target, args)
                         ));
             }
 
@@ -131,9 +129,9 @@ extends PublishingTestAbstract {
     }
 
     private String executionDifference(final Execution<?, ?> a, final Execution<?, ?> b) {
-        if(!Objects.equals(a.getMemberIdentifier(), b.getMemberIdentifier())) {
+        if(!Objects.equals(a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier())) {
             return String.format("differing member identifier %s != %s",
-                    a.getMemberIdentifier(), b.getMemberIdentifier());
+                    a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier());
         }
         if(!Objects.equals(a.getInteractionType(), b.getInteractionType())) {
             return String.format("differing interaction type %s != %s",

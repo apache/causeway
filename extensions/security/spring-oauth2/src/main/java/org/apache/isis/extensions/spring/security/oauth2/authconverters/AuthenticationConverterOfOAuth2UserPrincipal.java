@@ -29,35 +29,38 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
- * Interprets an {@link Authentication} as containing an OAuth2 principal.
+ * Applies if {@link Authentication} holds a principal of type {@link OAuth2User}.
  */
 @Component
 @javax.annotation.Priority(PriorityPrecedence.LATE - 150)
-public class AuthenticationConverterOfOAuth2UserPrincipal implements AuthenticationConverter {
+public class AuthenticationConverterOfOAuth2UserPrincipal
+extends AuthenticationConverter.Abstract<OAuth2User> {
 
-    @Override
-    public UserMemento convert(final Authentication authentication) {
-        val principal = authentication.getPrincipal();
-        if (principal instanceof OAuth2User) {
-            val oAuth2User = (OAuth2User) principal;
-            return UserMemento.ofNameAndRoleNames(usernameFrom(oAuth2User))
-                    .withAvatarUrl(avatarUrlFrom(oAuth2User))
-                    .withRealName(realNameFrom(oAuth2User));
-        }
-        return null;
+    public AuthenticationConverterOfOAuth2UserPrincipal() {
+        super(OAuth2User.class);
     }
 
-    protected static String usernameFrom(final OAuth2User oAuth2User) {
+    @Override
+    protected UserMemento convertPrincipal(final @NonNull OAuth2User oAuth2User) {
+        return UserMemento.ofNameAndRoleNames(usernameFrom(oAuth2User))
+                .withAvatarUrl(avatarUrlFrom(oAuth2User))
+                .withRealName(realNameFrom(oAuth2User));
+    }
+
+    // -- HOOKS FOR CUSTOMIZATION
+
+    protected String usernameFrom(final OAuth2User oAuth2User) {
         val loginAttr = oAuth2User.getAttributes().get("login");
         return loginAttr instanceof CharSequence
                 ? ((CharSequence) loginAttr).toString()
                 : oAuth2User.getName();
     }
 
-    protected static URL avatarUrlFrom(final OAuth2User oAuth2User) {
+    protected URL avatarUrlFrom(final OAuth2User oAuth2User) {
         final Object avatarUrlObj = oAuth2User.getAttributes().get("avatar_url");
         if(avatarUrlObj instanceof String) {
             try {
@@ -69,7 +72,7 @@ public class AuthenticationConverterOfOAuth2UserPrincipal implements Authenticat
         return null;
     }
 
-    protected static String realNameFrom(final OAuth2User oAuth2User) {
+    protected String realNameFrom(final OAuth2User oAuth2User) {
         final Object nameAttr = oAuth2User.getAttributes().get("name");
         if(nameAttr instanceof String) {
             return (String)nameAttr;

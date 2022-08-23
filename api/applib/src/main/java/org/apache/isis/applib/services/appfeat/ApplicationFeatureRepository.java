@@ -20,6 +20,9 @@ package org.apache.isis.applib.services.appfeat;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.SortedSet;
+
+import org.apache.isis.applib.id.LogicalType;
 
 /**
  * Provides the access to string representations of the packages, classes and
@@ -29,7 +32,7 @@ import java.util.Map;
  * @since 1.x revised for 2.0 {@index}
  */
 public interface ApplicationFeatureRepository  {
-    
+
     ApplicationFeature newApplicationFeature(ApplicationFeatureId featureId);
 
     Map<String, ApplicationFeatureId> getFeatureIdentifiersByName();
@@ -45,7 +48,8 @@ public interface ApplicationFeatureRepository  {
     Collection<ApplicationFeature> allNamespaces();
 
     Collection<ApplicationFeature> allTypes();
-    
+
     Collection<ApplicationFeature> allMembers();
 
+    SortedSet<ApplicationFeatureId> propertyIdsFor(LogicalType logicalType);
 }

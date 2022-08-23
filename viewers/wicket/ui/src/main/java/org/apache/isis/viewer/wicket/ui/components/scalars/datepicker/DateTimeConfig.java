@@ -19,6 +19,8 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.datepicker;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -31,6 +33,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;
 import de.agilecoders.wicket.jquery.AbstractConfig;
 import de.agilecoders.wicket.jquery.IKey;
 
@@ -38,6 +42,7 @@ import de.agilecoders.wicket.jquery.IKey;
  * Configuration holder for all {@link TextFieldWithDateTimePicker} configurations.
  * Provides settings for <a href="https://github.com/tempusdominus/bootstrap-4">Tempus Dominus Bootstrap 4 Datetime Picker</a>
  * JavaScript widget
+ * @see DatetimePickerConfig
  */
 public class DateTimeConfig extends AbstractConfig {
     private static final long serialVersionUID = 1L;
@@ -107,15 +112,27 @@ public class DateTimeConfig extends AbstractConfig {
     private static final IKey<String> MaxDate = newKey("maxDate", null);
 
 
+//    /**
+//     * The two-letter code of the language to use for month and day names.
+//     * These will also be used as the input's value (and subsequently sent to the
+//     * server in the case of form submissions). Currently ships with English ('en');
+//     * German ('de'), Brazilian ('br'), and Spanish ('es') translations, but others
+//     * can be added (see I18N below). If an unknown language code is given, English
+//     * will be used.
+//     */
+//    private static final IKey<String> Language = newKey("language", "en");
+
+    private static final IKey<String> Locale = newKey("locale", null);
+
     /**
-     * The two-letter code of the language to use for month and day names.
-     * These will also be used as the input's value (and subsequently sent to the
-     * server in the case of form submissions). Currently ships with English ('en');
-     * German ('de'), Brazilian ('br'), and Spanish ('es') translations, but others
-     * can be added (see I18N below). If an unknown language code is given, English
-     * will be used.
+     * @param locale The moment.js locale
+     * @return current instance
      */
-    private static final IKey<String> Language = newKey("language", "en");
+    public DateTimeConfig useLocale(final Locale locale) {
+        put(Locale, locale.getLanguage());
+        return this;
+    }
+
 
     /**
      * The date format, combination of d, dd, m, mm, M, MM, yy, yyyy.
@@ -146,14 +163,11 @@ public class DateTimeConfig extends AbstractConfig {
     private static final IKey<Boolean> ForceParse = newKey("forceParse", true);
 
     /**
-     * Whether or not to show the clear button.
-     */
-    private static final IKey<Boolean> ClearButton = newKey("clearBtn", false);
-
-    /**
      * Whether or not to show week numbers to the left of week rows.
      */
     private static final IKey<Boolean> CalendarWeeks = newKey("calendarWeeks", false);
+
+    private static final IKey<DatetimePickerIconConfig> Icons = newKey("icons", null);
 
     /**
      * holds all week days in a specific sort order.
@@ -181,20 +195,6 @@ public class DateTimeConfig extends AbstractConfig {
      */
     public String getFormat() {
         return getString(Format);
-    }
-
-    /**
-     * @return the language to use
-     */
-    public String getLanguage() {
-        return getString(Language);
-    }
-
-    /**
-     * @return true if default language should be used.
-     */
-    public boolean isDefaultLanguageSet() {
-        return Language.isDefaultValue(getLanguage());
     }
 
     /**
@@ -254,22 +254,6 @@ public class DateTimeConfig extends AbstractConfig {
             endDate = dateTimeFormatter.print(value);
         }
         put(EndDate, endDate);
-        return this;
-    }
-
-    /**
-     * The two-letter code of the language to use for month and day names.
-     * These will also be used as the input's value (and subsequently sent to the
-     * server in the case of form submissions). Currently ships with English ('en'),
-     * German ('de'), Brazilian ('br'), and Spanish ('es') translations, but others
-     * can be added (see I18N below). If an unknown language code is given, English
-     * will be used.
-     *
-     * @param value two letter language code (optional 5 letter code like de_DE)
-     * @return this instance for chaining
-     */
-    public DateTimeConfig withLanguage(final String value) {
-        put(Language, value);
         return this;
     }
 
@@ -362,23 +346,17 @@ public class DateTimeConfig extends AbstractConfig {
     }
 
     /**
-     * @param value Whether or not to display a 'clear' button, which allows for clearing the input field.
-     * @return this instance for chaining
-     */
-    public DateTimeConfig clearButton(final boolean value) {
-        put(ClearButton, value);
-        return this;
-    }
-
-    /**
      * @param value Whether or not to show week numbers to the left of week rows.
      * @return this instance for chaining
      */
-    public DateTimeConfig calendarWeeks(final boolean value) {
+    public DateTimeConfig useCalendarWeeks(final boolean value) {
         put(CalendarWeeks, value);
         return this;
     }
 
+    /**
+     * @param value Whether on show, will set the picker to the current date/time.
+     */
     public DateTimeConfig useCurrent(final boolean value) {
         put(UseCurrent, value);
         return this;
@@ -405,6 +383,35 @@ public class DateTimeConfig extends AbstractConfig {
         return this;
     }
 
+
+    /**
+     * Sets buttons.
+     *
+     * @param buttons buttons to show/hide
+     * @return config instance
+     */
+    public DateTimeConfig withButtons(final Map<String, Boolean> buttons) {
+        put(DatetimePickerConfig.newKey("buttons", null), Map.of(
+                DatetimePickerConfig.BTN_SHOW_TODAY,
+                Boolean.TRUE.equals(buttons.get(DatetimePickerConfig.BTN_SHOW_TODAY))
+                , DatetimePickerConfig.BTN_SHOW_CLEAR,
+                Boolean.TRUE.equals(buttons.get(DatetimePickerConfig.BTN_SHOW_CLEAR))
+                , DatetimePickerConfig.BTN_SHOW_CLOSE,
+                Boolean.TRUE.equals(buttons.get(DatetimePickerConfig.BTN_SHOW_CLOSE))));
+        return this;
+    }
+
+    /**
+     * Set icon config.
+     *
+     * @param iconConfig icon config
+     * @return config instance
+     */
+    public DateTimeConfig withIcons(final DatetimePickerIconConfig iconConfig) {
+        put(Icons, iconConfig);
+        return this;
+    }
+
     /**
      * See <a href="http://bootstrap-datepicker.readthedocs.org/en/latest/options.html#todaybtn">docs</a>.
      * Today button could be a boolean or string <em>"linked"</em>:
@@ -425,7 +432,7 @@ public class DateTimeConfig extends AbstractConfig {
     private static class TodayButtonSerializer extends JsonSerializer<TodayButton> {
 
         @Override
-        public void serialize(TodayButton value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+        public void serialize(final TodayButton value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException {
             switch (value) {
             case TRUE:
                 jgen.writeBoolean(true);

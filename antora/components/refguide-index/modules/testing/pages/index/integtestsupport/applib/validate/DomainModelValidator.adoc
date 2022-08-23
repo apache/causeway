@@ -19,22 +19,22 @@ class DomainModelValidator {
 }
 ----
 
-<.> xref:#assertValid__[assertValid()]
+<.> xref:#assertValid_[assertValid()]
 +
 --
 Typical usage in integration tests.
 --
-<.> xref:#throwIfInvalid__[throwIfInvalid()]
+<.> xref:#throwIfInvalid_[throwIfInvalid()]
 +
 --
 Alternative way of checking
 --
-<.> xref:#assertAnyFailuresContaining__Identifier_String[assertAnyFailuresContaining(Identifier, String)]
+<.> xref:#assertAnyFailuresContaining_Identifier_String[assertAnyFailuresContaining(Identifier, String)]
 +
 --
 JUnit support
 --
-<.> xref:#assertAnyOfContainingAnyFailures__Can_String[assertAnyOfContainingAnyFailures(Can, String)]
+<.> xref:#assertAnyOfContainingAnyFailures_Can_String[assertAnyOfContainingAnyFailures(Can, String)]
 +
 --
 JUnit support
@@ -42,22 +42,22 @@ JUnit support
 
 == Members
 
-[#assertValid__]
+[#assertValid_]
 === assertValid()
 
 Typical usage in integration tests.
 
-[#throwIfInvalid__]
+[#throwIfInvalid_]
 === throwIfInvalid()
 
 Alternative way of checking
 
-[#assertAnyFailuresContaining__Identifier_String]
+[#assertAnyFailuresContaining_Identifier_String]
 === assertAnyFailuresContaining(Identifier, String)
 
 JUnit support
 
-[#assertAnyOfContainingAnyFailures__Can_String]
+[#assertAnyOfContainingAnyFailures_Can_String]
 === assertAnyOfContainingAnyFailures(Can, String)
 
 JUnit support

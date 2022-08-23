@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
-import org.apache.isis.viewer.common.model.decorators.PrototypingDecorator;
+import org.apache.isis.viewer.commons.model.decorators.PrototypingDecorator;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

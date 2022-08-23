@@ -50,7 +50,7 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -304,7 +304,7 @@ implements ActionPromptProvider {
     }
 
     /**
-     * As provided in the {@link #PageAbstract(org.apache.wicket.request.mapper.parameter.PageParameters, String, org.apache.isis.viewer.common.model.components.ComponentType...)} constructor}.
+     * As provided in the {@link #PageAbstract(org.apache.wicket.request.mapper.parameter.PageParameters, String, org.apache.isis.viewer.commons.model.components.ComponentType...)} constructor}.
      *
      * <p>
      * This superclass doesn't do anything with this property directly, but

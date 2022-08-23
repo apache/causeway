@@ -54,7 +54,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpec) {
+    public void postProcessObject(final ObjectSpecification objectSpec) {
         memoizeTranslations(
                 Stream.of(
                         objectSpec.lookupFacet(ObjectNamedFacet.class),
@@ -62,7 +62,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpec, final ObjectAction act) {
+    public void postProcessAction(final ObjectSpecification objectSpec, final ObjectAction act) {
         memoizeTranslations(
                 Stream.of(
                         act.lookupFacet(MemberNamedFacet.class),
@@ -70,7 +70,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(
+    public void postProcessParameter(
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction,
             final ObjectActionParameter param) {
@@ -81,7 +81,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpec, final OneToOneAssociation prop) {
+    public void postProcessProperty(final ObjectSpecification objectSpec, final OneToOneAssociation prop) {
         memoizeTranslations(
                 Stream.of(
                         prop.lookupFacet(MemberNamedFacet.class),
@@ -89,12 +89,11 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpec, final OneToManyAssociation coll) {
+    public void postProcessCollection(final ObjectSpecification objectSpec, final OneToManyAssociation coll) {
         memoizeTranslations(
                 Stream.of(
                         coll.lookupFacet(MemberNamedFacet.class),
                         coll.lookupFacet(MemberDescribedFacet.class)));
-
     }
 
     // -- HELPER

@@ -33,11 +33,11 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.extensions.excel.applib.WorksheetContent;
+import org.apache.isis.extensions.excel.applib.WorksheetSpec;
 import org.apache.isis.extensions.excel.applib.annotation.PivotColumn;
 import org.apache.isis.extensions.excel.applib.annotation.PivotRow;
 import org.apache.isis.extensions.excel.applib.annotation.PivotValue;
-import org.apache.isis.extensions.excel.applib.WorksheetContent;
-import org.apache.isis.extensions.excel.applib.WorksheetSpec;
 import org.apache.isis.extensions.excel.applib.util.ExcelFileBlobConverter;
 
 import lombok.SneakyThrows;

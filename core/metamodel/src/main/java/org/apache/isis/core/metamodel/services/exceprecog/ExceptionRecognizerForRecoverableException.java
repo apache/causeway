@@ -29,6 +29,7 @@ import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 /**
  * Framework-provided implementation of {@link ExceptionRecognizer},
@@ -36,7 +37,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
  * {@link org.apache.isis.applib.exceptions.RecoverableException}s.
  */
 @Service
-@Named("isis.metamodel.ExceptionRecognizerForRecoverableException")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ExceptionRecognizerForRecoverableException")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerForRecoverableException extends ExceptionRecognizerForType {

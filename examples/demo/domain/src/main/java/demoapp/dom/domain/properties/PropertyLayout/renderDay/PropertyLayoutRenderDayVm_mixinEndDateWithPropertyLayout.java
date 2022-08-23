@@ -22,16 +22,15 @@ import java.time.LocalDate;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.RenderDay;
+import org.apache.isis.applib.annotation.ValueSemantics;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(
-    renderDay = RenderDay.AS_DAY_BEFORE         // <.>
-    , describedAs =
-        "@PropertyLayout(renderDay = AS_DAY_BEFORE)",
+@ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)      // <.>
+@PropertyLayout(describedAs =
+        "@ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)",
     fieldSetId = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor

@@ -42,27 +42,27 @@ class BSCol {
 }
 ----
 
-<.> xref:#getId__[getId()]
+<.> xref:#getId_[getId()]
 +
 --
 As per <div id="...">...</div> : must be unique across entire page.
 --
-<.> xref:#isUnreferencedActions__[isUnreferencedActions()]
+<.> xref:#isUnreferencedActions_[isUnreferencedActions()]
 +
 --
 Whether this column should be used to hold any unreferenced actions (contributed or "native").
 --
-<.> xref:#isUnreferencedCollections__[isUnreferencedCollections()]
+<.> xref:#isUnreferencedCollections_[isUnreferencedCollections()]
 +
 --
 Whether this column should be used to hold any unreferenced collections (contributed or "native").
 --
-<.> xref:#getDomainObject__[getDomainObject()]
+<.> xref:#getDomainObject_[getDomainObject()]
 +
 --
 Whether to show the object's icon and title.
 --
-<.> xref:#getMetadataError__[getMetadataError()]
+<.> xref:#getMetadataError_[getMetadataError()]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
@@ -70,31 +70,31 @@ For diagnostics; populated by the framework if and only if a metadata error.
 
 == Members
 
-[#getId__]
+[#getId_]
 === getId()
 
 As per <div id="...">...</div> : must be unique across entire page.
 
-[#isUnreferencedActions__]
+[#isUnreferencedActions_]
 === isUnreferencedActions()
 
 Whether this column should be used to hold any unreferenced actions (contributed or "native").
 
 Any layout must have precisely one column or xref:refguide:applib:index/layout/component/FieldSet.adoc[FieldSet] that has this attribute set.
 
-[#isUnreferencedCollections__]
+[#isUnreferencedCollections_]
 === isUnreferencedCollections()
 
 Whether this column should be used to hold any unreferenced collections (contributed or "native").
 
 Any layout must have precisely one column or xref:refguide:applib:index/layout/grid/bootstrap/BSTabGroup.adoc[BSTabGroup] that has this attribute set.
 
-[#getDomainObject__]
+[#getDomainObject_]
 === getDomainObject()
 
 Whether to show the object's icon and title.
 
-[#getMetadataError__]
+[#getMetadataError_]
 === getMetadataError()
 
 For diagnostics; populated by the framework if and only if a metadata error.

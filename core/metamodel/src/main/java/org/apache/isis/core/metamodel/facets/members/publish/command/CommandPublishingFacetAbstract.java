@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.members.publish.command;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
@@ -73,8 +74,10 @@ implements CommandPublishingFacet {
             return null;
         }
         try {
-            return (CommandDtoProcessor) cls.newInstance();
-        } catch (final InstantiationException | IllegalAccessException e) {
+            return (CommandDtoProcessor) cls.getConstructor().newInstance();
+        } catch (final InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException e) {
             return null;
         }
     }

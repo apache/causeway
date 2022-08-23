@@ -96,14 +96,14 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      * The user that created the command.
      *
      * <p>
-     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getUser()}
+     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getUsername()} ()}
      * </p>
      */
     @Override
     public String getUsername() {
         // ...
         return commandDto != null
-                ? commandDto.getUser()
+                ? commandDto.getUsername()
                 : null;
     }
 
@@ -127,7 +127,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      * <p>
      *     When the framework sets this (through an internal API), it is
      *     expected to have {@link CommandDto#getInteractionId()},
-     *     {@link CommandDto#getUser()}, {@link CommandDto#getTimestamp()},
+     *     {@link CommandDto#getUsername()}, {@link CommandDto#getTimestamp()},
      *     {@link CommandDto#getTargets()} and {@link CommandDto#getMember()}
      *     to be populated.  The {@link #getInteractionId()}, {@link #getUsername()},
      *     {@link #getTimestamp()} and {@link #getTarget()} are all derived
@@ -241,6 +241,16 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      *     {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} is
      *     an alternative for that use case) or so that it can be retrieved
      *     and replayed on another system, eg for regression testing.
+     * </p>
+     *
+     * <p>
+     *     Note that this flag will only be accurate if the <i>Audit Trail</i> extension (or equivalent) is configured
+     *     to actually set it.
+     * </p>
+     *
+     * <p>
+     *     See also the <code>isis.extensions.command-log.publish-policy</code> configuration property, that controls
+     *     whether the <i>Command Log</i> extension checks this flag or not.
      * </p>
      *
      */

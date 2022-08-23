@@ -31,10 +31,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModel;
-import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModelProvider;
-import org.apache.isis.viewer.common.model.decorators.IconDecorator;
-import org.apache.isis.viewer.common.model.decorators.TooltipDecorator;
+import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiModel;
+import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiModelProvider;
+import org.apache.isis.viewer.commons.model.decorators.IconDecorator;
+import org.apache.isis.viewer.commons.model.decorators.TooltipDecorator;
 
 import lombok.Getter;
 import lombok.val;

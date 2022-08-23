@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.javatime.javatimezoneddatetime.jdo;
 
+import java.time.ZonedDateTime;
+
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
@@ -52,6 +54,7 @@ public class JavaTimeZonedDateTimeJdo                                          /
     public JavaTimeZonedDateTimeJdo(final java.time.ZonedDateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
+        this.readWritePropertyNoTimeZoneTranslation = initialValue;
     }
 
 //tag::class[]
@@ -78,6 +81,10 @@ public class JavaTimeZonedDateTimeJdo                                          /
     @Column(allowsNull = "true")
     @Getter @Setter
     private java.time.ZonedDateTime readWriteOptionalProperty;
+
+    @Column(allowsNull = "false")
+    @Getter @Setter
+    private ZonedDateTime readWritePropertyNoTimeZoneTranslation;
 
 }
 //end::class[]

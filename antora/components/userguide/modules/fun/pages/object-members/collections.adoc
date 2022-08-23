@@ -112,7 +112,7 @@ Apache Isis can (currently) only provide a UI for collections of references.
 
 If you do wish to use collections of this type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] so that it is ignored by the Apache Isis framework.
 
-As a workaround, if you want to visualize an array of value types in Apache Isis, then one option is to wrap the value in a view model, as explained xref:userguide:btb:about.adoc#simulating-collections-of-values[here].
+As a workaround, if you want to visualize an array of value types in Apache Isis, then one option is to wrap the value in a view model, as explained xref:userguide:btb:hints-and-tips/simulating-collections-of-values.adoc[here].
 
 == Derived Collections
 

@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.urlencoding;
 
 import java.nio.charset.StandardCharsets;
 
+import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.memento._Mementos.EncoderDecoder;
 
@@ -62,6 +63,45 @@ public interface UrlEncodingService extends EncoderDecoder {
 
     default String decodeToString(final String str) {
         return _Strings.ofBytes(decode(str), StandardCharsets.UTF_8);
+    }
+
+    // -- FACTORIES
+
+    /**
+     * Uses base64 with compression.
+     */
+    public static UrlEncodingService forTesting() {
+        return new UrlEncodingService() {
+
+            @Override
+            public String encode(final byte[] bytes) {
+                return _Strings.ofBytes(_Bytes.asCompressedUrlBase64.apply(bytes), StandardCharsets.UTF_8);
+            }
+
+            @Override
+            public byte[] decode(final String str) {
+                return _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(str, StandardCharsets.UTF_8));
+            }
+        };
+    }
+
+    /**
+     * Uses base64 without compression.
+     */
+    public static UrlEncodingService forTestingNoCompression() {
+        return new UrlEncodingService() {
+
+            @Override
+            public String encode(final byte[] bytes) {
+                return _Strings.ofBytes(_Bytes.asUrlBase64.apply(bytes), StandardCharsets.UTF_8);
+            }
+
+            @Override
+            public byte[] decode(final String str) {
+                return _Bytes.ofUrlBase64.apply(_Strings.toBytes(str, StandardCharsets.UTF_8));
+            }
+        };
+
     }
 
 }

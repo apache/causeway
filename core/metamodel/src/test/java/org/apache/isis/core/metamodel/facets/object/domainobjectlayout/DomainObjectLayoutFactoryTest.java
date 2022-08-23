@@ -256,9 +256,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 final Facet facet = facetHolder.getFacet(ObjectDescribedFacet.class);
                 assertNotNull(facet);
-                assertTrue(facet instanceof DescribedAsFacetForDomainObjectLayoutAnnotation);
+                assertTrue(facet instanceof ObjectDescribedFacetForDomainObjectLayoutAnnotation);
 
-                final DescribedAsFacetForDomainObjectLayoutAnnotation facetImpl = (DescribedAsFacetForDomainObjectLayoutAnnotation) facet;
+                final ObjectDescribedFacetForDomainObjectLayoutAnnotation facetImpl = (ObjectDescribedFacetForDomainObjectLayoutAnnotation) facet;
                 Assert.assertThat(facetImpl.text(), is("This is a description"));
 
                 expectNoMethodsRemoved();
@@ -303,7 +303,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNotNull(namedFacet);
-                assertTrue(namedFacet instanceof NamedFacetForDomainObjectLayoutAnnotation);
+                assertTrue(namedFacet instanceof ObjectNamedFacetForDomainObjectLayoutAnnotation);
 
                 assertEquals("Name override", namedFacet.singular());
 

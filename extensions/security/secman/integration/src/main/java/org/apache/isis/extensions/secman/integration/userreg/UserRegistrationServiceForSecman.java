@@ -32,6 +32,7 @@ import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
@@ -48,7 +49,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.ext.secman.UserRegistrationServiceForSecman")
+@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".UserRegistrationServiceForSecman")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("SecMan")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

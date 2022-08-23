@@ -48,14 +48,14 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
+    public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction act) {
         // previously was also copying ImmutableFacet from spec onto Action (as for properties and collections ...
         // corresponds to CopyImmutableFacetOntoMembersFactory.  However, ImmutableFacet only ever disables for
         // properties and collections, so no point in copying over.
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
+    public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
         if(property.containsNonFallbackFacet(DisabledFacet.class)) {
             return;
         }

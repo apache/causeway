@@ -25,8 +25,8 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.NonNull;
 

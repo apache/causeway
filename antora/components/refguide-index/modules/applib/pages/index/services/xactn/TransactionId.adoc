@@ -17,7 +17,7 @@ class TransactionId {
 }
 ----
 
-<.> xref:#empty__[empty()]
+<.> xref:#empty_[empty()]
 +
 --
 Factory method that returns a nominally "empty" transaction identifier, used as a placeholder.
@@ -25,7 +25,7 @@ Factory method that returns a nominally "empty" transaction identifier, used as 
 
 == Members
 
-[#empty__]
+[#empty_]
 === empty()
 
 Factory method that returns a nominally "empty" transaction identifier, used as a placeholder.

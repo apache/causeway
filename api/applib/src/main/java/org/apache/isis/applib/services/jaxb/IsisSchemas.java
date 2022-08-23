@@ -36,6 +36,8 @@ import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
  * far more convenient when debugging and so on.  The Isis schemas can always be
  * <a href="http://isis.apache.org/schema">downloaded</a> from the Isis website.
  * </p>
+ *
+ * @since 1.0 {@index}
  */
 @Named(IsisModuleApplib.NAMESPACE + ".services.jaxb.IsisSchemas")
 @Value

@@ -24,12 +24,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -42,6 +42,7 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.metamodel.GridLoaderServiceDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".GridLoaderServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor //JUnit Support

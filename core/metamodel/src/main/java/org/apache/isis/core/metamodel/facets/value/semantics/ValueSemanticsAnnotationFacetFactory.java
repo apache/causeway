@@ -143,6 +143,10 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(
                 DateRenderAdjustFacetFromValueSemanticsAnnotation
                 .create(valueSemanticsIfAny, facetHolder));
+
+        addFacetIfPresent(
+                TimeZoneTranslationFacetFromValueSemanticsAnnotation
+                .create(valueSemanticsIfAny, facetHolder));
     }
 
 }

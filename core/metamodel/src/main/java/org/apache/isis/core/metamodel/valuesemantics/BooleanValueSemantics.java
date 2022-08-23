@@ -20,10 +20,12 @@ package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Parser;
@@ -43,6 +45,7 @@ import lombok.val;
  */
 @Component
 @Named("isis.val.BooleanValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class BooleanValueSemantics
 extends ValueSemanticsAbstract<Boolean>
 implements

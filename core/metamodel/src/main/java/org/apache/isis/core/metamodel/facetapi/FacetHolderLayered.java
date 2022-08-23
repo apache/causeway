@@ -46,7 +46,7 @@ import lombok.val;
  *
  * @see Facet#isAllowedToBeSharedWhenMixedIn()
  */
-class FacetHolderLayered
+final class FacetHolderLayered
 implements FacetHolder {
 
     @Getter(onMethod_ = {@Override})
@@ -59,7 +59,7 @@ implements FacetHolder {
             final @NonNull FacetHolder shared) {
         this.featureIdentifier = featureIdentifier;
         this.shared = shared;
-        this.local = FacetHolderAbstract.simple(shared.getMetaModelContext(), featureIdentifier);
+        this.local = FacetHolder.simple(shared.getMetaModelContext(), featureIdentifier);
     }
 
     @Override
@@ -71,9 +71,9 @@ implements FacetHolder {
     @Override
     public void addFacet(@NonNull final Facet facet) {
         // eg. if a Facet originates from layout.xml introspection, don't install it on the shared FacetHolder
-        val facetHolder = facet.isAllowedToBeSharedWhenMixedIn()
-                ? shared
-                : local;
+        val facetHolder = facet.isObjectTypeSpecific()
+                ? local
+                : shared;
         facetHolder.addFacet(facet);
     }
 

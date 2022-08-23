@@ -9,20 +9,20 @@ This mixin contributes a `recentCommands` action to any domain object (unless al
 .Object_recentCommands.java
 ----
 class Object_recentCommands {
-  List<CommandLogEntry> act()
+  List<? extends CommandLogEntry> act()
   boolean hideAct()     // <.>
 }
 ----
 
-<.> xref:#hideAct__[hideAct()]
+<.> xref:#hideAct_[hideAct()]
 +
 --
-Hide if the mixee is itself xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] (commands don't have commands).
+Hide if the mixee itself implements xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] . (commands don't have commands).
 --
 
 == Members
 
-[#hideAct__]
+[#hideAct_]
 === hideAct()
 
-Hide if the mixee is itself xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] (commands don't have commands).
+Hide if the mixee itself implements xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] . (commands don't have commands).

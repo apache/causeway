@@ -24,12 +24,12 @@ class SudoService {
 --
 If included in the list of roles, then will disable security checks (can view and use all object members).
 --
-<.> xref:#call__UnaryOperator_Callable[call(UnaryOperator, Callable)]
+<.> xref:#call_UnaryOperator_Callable[call(UnaryOperator, Callable)]
 +
 --
 Executes the supplied _Callable_ block, within the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
 --
-<.> xref:#run__UnaryOperator_ThrowingRunnable[run(UnaryOperator, ThrowingRunnable)]
+<.> xref:#run_UnaryOperator_ThrowingRunnable[run(UnaryOperator, ThrowingRunnable)]
 +
 --
 Executes the supplied _Callable_ block, within the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
@@ -42,12 +42,12 @@ Executes the supplied _Callable_ block, within the provided xref:refguide:applib
 
 If included in the list of roles, then will disable security checks (can view and use all object members).
 
-[#call__UnaryOperator_Callable]
+[#call_UnaryOperator_Callable]
 === call(UnaryOperator, Callable)
 
 Executes the supplied _Callable_ block, within the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .
 
-[#run__UnaryOperator_ThrowingRunnable]
+[#run_UnaryOperator_ThrowingRunnable]
 === run(UnaryOperator, ThrowingRunnable)
 
 Executes the supplied _Callable_ block, within the provided xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] .

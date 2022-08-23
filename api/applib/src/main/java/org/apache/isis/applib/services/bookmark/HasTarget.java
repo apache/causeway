@@ -21,12 +21,10 @@ package org.apache.isis.applib.services.bookmark;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.UUID;
 
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.Property;
-
 
 /**
  * @since 2.0 {@index}
@@ -41,7 +39,7 @@ public interface HasTarget {
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Target {
-        int MAX_LENGTH = 2000;
+        int MAX_LENGTH = 1500;
         boolean NULLABLE = true;
         String ALLOWS_NULL = "true";
     }

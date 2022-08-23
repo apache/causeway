@@ -32,7 +32,6 @@ The framework provides a number of mixins that contributes to `java.lang.Object`
 * All viewers:
 ** xref:refguide:viewer:index/common/applib/mixins/Object_impersonate.adoc[Object_impersonate]
 ** xref:refguide:viewer:index/common/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles]
-** xref:refguide:viewer:index/common/applib/mixins/Object_stopImpersonating.adoc[Object_stopImpersonating]
 ** xref:refguide:applib:index/mixins/rest/Object_openRestApi.adoc[Object_openRestApi]
 
 
@@ -87,19 +86,26 @@ Domain objects that are associated to an xref:refguide:applib:index/services/iac
 
 Mixins that contribute to this mixee interface include:
 
-* xref:refguide:extensions:index/commandlog/impl/mixins/HasInteractionId_command.adoc[HasInteractionId_command]
-+
-from xref:userguide:commandlog:about.adoc[Comman Log] module.
+* from the xref:userguide:commandlog:about.adoc[Command Log] extension:
+
+** xref:refguide:extensions:index/commandlog/applib/contributions/Object_recentCommands.adoc[Object_recentCommands]
+** xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[HasInteraction_commandLogEntry]
+** xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[HasUsername_recentCommandsByUser]
 
 
-The closely related  xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId] (a subtype of xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId]) can be implemented by any domain objects associated with a particular transaction within the outer xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction].
+* from the xref:userguide:executionlog:about.adoc[Execution Log] extension:
 
-The xref:refguide:applib:index/mixins/system/DomainChangeRecord.adoc[DomainChangeRecord] is intended for domain objects representing commands, audit entries or executions (of action invocations/property edits).
+** xref:refguide:extensions:index/executionlog/applib/contributions/Object_recentExecutions.adoc[Object_recentExecutions]
+** xref:refguide:extensions:index/executionlog/applib/contributions/HasInteractionId_executionLogEntries.adoc[HasInteractionId_executionLogEntries]
+
+The closely related  xref:refguide:applib:index/mixins/system/HasInteractionIdAndSequence.adoc[HasInteractionIdAndSequence] (a subtype of xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId]) can be implemented by any objects representing events that could occur multiple times within within the outer xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction], most notably transactions..
+
+The xref:refguide:applib:index/services/bookmark/HasTarget.adoc[HasTarget] is intended for domain objects representing commands, audit entries or executions (of action invocations/property edits).
 Extension modules that provide these capabilities can implement this domain object to allow the user to navigate between these different but related cross-cutting concerns.
 
 Mixins that contribute to this mixee interface include:
 
-** xref:refguide:applib:index/mixins/system/DomainChangeRecord_openTargetObject.adoc[DomainChangeRecord_openTargetObject]
+** xref:refguide:applib:index/mixins/system/HasTarget_openTargetObject.adoc[HasTarget_openTargetObject]
 +
 (provided by the core framework)
 

@@ -26,6 +26,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
@@ -48,7 +49,7 @@ extends TemporalValueSemanticsProvider<ZonedDateTime> {
     }
 
     public ZonedDateTimeValueSemantics() {
-        super(TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.OFFSET,
+        super(TemporalCharacteristic.DATE_TIME, OffsetCharacteristic.ZONED,
                 TYPICAL_LENGTH, MAX_LENGTH,
                 ZonedDateTime::from,
                 TemporalAdjust::adjustZonedDateTime);
@@ -63,9 +64,7 @@ extends TemporalValueSemanticsProvider<ZonedDateTime> {
 
     @Override
     public Can<ZonedDateTime> getExamples() {
-        return Can.of(
-                ZonedDateTime.now(),
-                ZonedDateTime.now().plusDays(2).plusSeconds(15));
+        return _Temporals.sampleZonedDateTime();
     }
 
 }

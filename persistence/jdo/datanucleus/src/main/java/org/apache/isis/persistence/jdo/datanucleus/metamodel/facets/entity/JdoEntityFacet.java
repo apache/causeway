@@ -20,12 +20,15 @@ package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
 import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
 
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
@@ -42,7 +45,6 @@ import org.apache.isis.applib.services.xactn.TransactionalProcessor;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
@@ -52,11 +54,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
+import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierService;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -80,10 +82,14 @@ implements EntityFacet {
     @Inject private ObjectManager objectManager;
     @Inject private ExceptionRecognizerService exceptionRecognizerService;
     @Inject private JdoFacetContext jdoFacetContext;
+    @Inject private IdStringifierService idStringifierService;
+
+    private final Class<?> entityClass;
 
     public JdoEntityFacet(
-            final FacetHolder holder) {
+            final FacetHolder holder, final Class<?> entityClass) {
         super(EntityFacet.class, holder);
+        this.entityClass = entityClass;
     }
 
     @Override
@@ -92,12 +98,12 @@ implements EntityFacet {
     }
 
     @Override
-    public String identifierFor(final ObjectSpecification spec, final Object pojo) {
+    public String identifierFor(final Object pojo) {
 
         if(pojo==null) {
             throw _Exceptions.illegalArgument(
                     "The persistence layer cannot identify a pojo that is null (given type %s)",
-                    spec.getCorrespondingClass().getName());
+                    entityClass.getName());
         }
 
         if(!isPersistableType(pojo.getClass())) {
@@ -127,30 +133,23 @@ implements EntityFacet {
                     pojo.getClass().getName());
         }
 
-        final String identifier = JdoObjectIdSerializer.toOidIdentifier(primaryKey);
-        if(_Strings.isEmpty(identifier)) {
-            throw _Exceptions.illegalArgument(
-                    "JdoObjectIdSerializer failed to convert primary key %s to a String.",
-                    primaryKey.getClass().getName());
-        }
-
-        return identifier;
+        return idStringifierService.enstringPrimaryKey(primaryKey.getClass(), primaryKey);
     }
+
 
     @Override
     public ManagedObject fetchByIdentifier(
-            final @NonNull ObjectSpecification entitySpec,
             final @NonNull Bookmark bookmark) {
-
-        _Assert.assertTrue(entitySpec.isEntity());
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
         Object entityPojo;
         try {
-            val primaryKey = JdoObjectIdSerializer.toJdoObjectId(entitySpec, bookmark);
+
             val persistenceManager = getPersistenceManager();
-            val entityClass = entitySpec.getCorrespondingClass();
+            val primaryKey = idStringifierService
+                    .destringPrimaryKey(primaryKeyTypeFor(entityClass), entityClass, bookmark.getIdentifier());
+
             val fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
             entityPojo = persistenceManager.getObjectById(entityClass, primaryKey);
@@ -177,11 +176,46 @@ implements EntityFacet {
         return ManagedObject.bookmarked(actualEntitySpec, entityPojo, bookmark);
     }
 
-    @Override
-    public Can<ManagedObject> fetchByQuery(final ObjectSpecification spec, final Query<?> query) {
-        if(!spec.isEntity()) {
-            throw _Exceptions.unexpectedCodeReach();
+    private Map<Class<?>, Class<?>> primaryKeyClassByEntityClass = new ConcurrentHashMap<>();
+
+    private Class<?> primaryKeyTypeFor(final Class<?> entityClass) {
+        return primaryKeyClassByEntityClass.computeIfAbsent(entityClass, this::lookupPrimaryKeyTypeFor);
+    }
+
+    private Class<?> lookupPrimaryKeyTypeFor(final Class<?> entityClass) {
+
+        val persistenceManager = getPersistenceManager();
+        val pmf = (JDOPersistenceManagerFactory) persistenceManager.getPersistenceManagerFactory();
+        val nucleusContext = pmf.getNucleusContext();
+
+        val contextLoader = Thread.currentThread().getContextClassLoader();
+        val clr = nucleusContext.getClassLoaderResolver(contextLoader);
+
+        val typeMetadata = pmf.getMetadata(entityClass.getName());
+
+        val identityType = typeMetadata.getIdentityType();
+        switch (identityType) {
+            case APPLICATION:
+                String objectIdClass = typeMetadata.getObjectIdClass();
+                return clr.classForName(objectIdClass);
+            case DATASTORE:
+                return nucleusContext.getIdentityManager().getDatastoreIdClass();
+            case UNSPECIFIED:
+            case NONDURABLE:
+            default:
+                throw new IllegalStateException(String.format(
+                        "JdoEntityFacet has been incorrectly installed on '%s' which has an supported identityType of '%s'",
+                        entityClass.getName(), identityType));
         }
+    }
+
+    private ObjectSpecification getEntitySpec() {
+        return getSpecificationLoader().specForType(entityClass)
+                .orElseThrow(() -> new IllegalStateException(String.format("Could not load specification for entity class '%s'", entityClass)));
+    }
+
+    @Override
+    public Can<ManagedObject> fetchByQuery(final Query<?> query) {
 
         if (log.isDebugEnabled()) {
             log.debug("about to execute Query: {}", query.getDescription());
@@ -256,7 +290,7 @@ implements EntityFacet {
     }
 
     @Override
-    public void persist(final ObjectSpecification spec, final Object pojo) {
+    public void persist(final Object pojo) {
 
         if(pojo==null
                 || !isPersistableType(pojo.getClass())
@@ -276,7 +310,7 @@ implements EntityFacet {
     }
 
     @Override
-    public void delete(final ObjectSpecification spec, final Object pojo) {
+    public void delete(final Object pojo) {
 
         if(pojo==null || !isPersistableType(pojo.getClass())) {
             return; // nothing to do
@@ -370,16 +404,16 @@ implements EntityFacet {
 
     private Can<ManagedObject> fetchWithinTransaction(final Supplier<List<?>> fetcher) {
 
-        val entityChangeTracker = getFacetHolder().getServiceRegistry().lookupServiceElseFail(EntityChangeTracker.class);
+        val objectLifecyclePublisher = getFacetHolder().getServiceRegistry().lookupServiceElseFail(ObjectLifecyclePublisher.class);
 
         return getTransactionalProcessor().callWithinCurrentTransactionElseCreateNew(
                 ()->_NullSafe.stream(fetcher.get())
-                    .map(fetchedObject->adopt(entityChangeTracker, fetchedObject))
+                    .map(fetchedObject->adopt(objectLifecyclePublisher, fetchedObject))
                     .collect(Can.toCan()))
                 .getValue().orElseThrow();
     }
 
-    private ManagedObject adopt(final EntityChangeTracker entityChangeTracker, final Object fetchedObject) {
+    private ManagedObject adopt(final ObjectLifecyclePublisher objectLifecyclePublisher, final Object fetchedObject) {
         // handles lifecycle callbacks and injects services
 
         // ought not to be necessary, however for some queries it seems that the
@@ -387,8 +421,8 @@ implements EntityFacet {
         if(fetchedObject instanceof Persistable) {
             // an entity
             val entity = objectManager.adapt(fetchedObject);
-                    //fetchResultHandler.initializeEntityAfterFetched((Persistable) fetchedObject);
-            entityChangeTracker.recognizeLoaded(entity);
+
+            objectLifecyclePublisher.onPostLoad(entity);
             return entity;
         } else {
             // a value type

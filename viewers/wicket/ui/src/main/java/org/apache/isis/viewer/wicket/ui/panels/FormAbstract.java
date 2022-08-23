@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
@@ -88,6 +89,10 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
 
     protected final TranslationService getTranslationService() {
         return getCommonContext().getTranslationService();
+    }
+
+    protected final Wicket getSettings() {
+        return getCommonContext().getConfiguration().getViewer().getWicket();
     }
 
 }

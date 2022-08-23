@@ -25,6 +25,7 @@ import org.apache.isis.core.interaction.IsisModuleCoreInteraction;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.runtime.events.MetamodelEventService;
 import org.apache.isis.core.runtime.events.TransactionEventEmitter;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierService;
 import org.apache.isis.core.transaction.IsisModuleCoreTransaction;
 import org.apache.isis.valuetypes.jodatime.integration.IsisModuleValJodatimeIntegration;
 
@@ -41,10 +42,12 @@ import org.apache.isis.valuetypes.jodatime.integration.IsisModuleValJodatimeInte
         // @Service's
         MetamodelEventService.class,
         TransactionEventEmitter.class,
+        IdStringifierService.class,
 
         // @Configuration's
 
 })
 public class IsisModuleCoreRuntime {
 
+    public static final String NAMESPACE = "isis.runtime";
 }

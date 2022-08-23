@@ -28,7 +28,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
+import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;

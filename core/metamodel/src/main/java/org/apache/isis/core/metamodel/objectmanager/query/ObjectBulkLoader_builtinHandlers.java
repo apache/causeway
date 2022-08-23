@@ -91,7 +91,7 @@ final class ObjectBulkLoader_builtinHandlers {
                         "ObjectSpecification is missing an EntityFacet: %s", spec.getCorrespondingClass());
             }
 
-            val entities = entityFacet.fetchByQuery(spec, objectQuery.getQuery());
+            val entities = entityFacet.fetchByQuery(objectQuery.getQuery());
             val serviceInjector = metaModelContext.getServiceInjector();
 
             //TODO injection should have already be done by DataNucleus

@@ -36,6 +36,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.mixins.ApplicationPermission_delete;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.util.RegexReplacer;
@@ -43,15 +44,14 @@ import org.apache.isis.extensions.secman.applib.util.RegexReplacer;
 import lombok.val;
 
 @Repository
-@Named("isis.ext.secman.ApplicationRoleRepository")
+@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ApplicationRoleRepository")
 public abstract class ApplicationRoleRepositoryAbstract<R extends ApplicationRole>
 implements ApplicationRoleRepository {
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
     @Inject private IsisConfiguration config;
-    @Inject RegexReplacer regexReplacer;
-
+    @Inject private RegexReplacer regexReplacer;
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 
     private final Class<R> applicationRoleClass;

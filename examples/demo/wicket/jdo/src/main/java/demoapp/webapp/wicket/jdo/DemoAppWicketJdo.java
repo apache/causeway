@@ -18,7 +18,6 @@
  */
 package demoapp.webapp.wicket.jdo;
 
-import lombok.val;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -29,13 +28,13 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.config.util.SpringProfileUtil;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.pdfjs.wkt.ui.IsisModuleExtPdfjsWicketUi;
+import org.apache.isis.extensions.sse.wicket.IsisModuleExtSseWicket;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
-import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
+import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn.IsisModuleValAsciidocPersistenceJdoDn;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
 import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaModel;
-import org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.IsisModuleValMarkdownPersistenceJdoDn5;
+import org.apache.isis.valuetypes.markdown.persistence.jdo.dn.IsisModuleValMarkdownPersistenceJdoDn;
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
-import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifestJdo;
@@ -55,7 +54,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 
     // UI (Wicket Viewer)
     IsisModuleViewerWicketViewer.class,
-    IsisModuleValSseUiWkt.class,
+    IsisModuleExtSseWicket.class,
     IsisModuleValAsciidocUiWkt.class,
     IsisModuleValMarkdownUiWkt.class,
     IsisModuleExtPdfjsWicketUi.class,
@@ -64,8 +63,8 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     DemoAppWicketCommon.class,
 
     // Persistence (JDO/DN5)
-    IsisModuleValAsciidocPersistenceJdoDn5.class,
-    IsisModuleValMarkdownPersistenceJdoDn5.class,
+    IsisModuleValAsciidocPersistenceJdoDn.class,
+    IsisModuleValMarkdownPersistenceJdoDn.class,
 
     // XrayEnable.class // for debugging only
 })
@@ -93,11 +92,6 @@ public class DemoAppWicketJdo extends SpringBootServletInitializer {
 
         SpringApplication.run(new Class[] { DemoAppWicketJdo.class }, args);
 
-    }
-
-    private static String preservingAnyExisting(String profile) {
-        val existingProfiles = System.getProperty("spring.profiles.active");
-        return existingProfiles == null ? profile : existingProfiles + "," + profile;
     }
 
 }

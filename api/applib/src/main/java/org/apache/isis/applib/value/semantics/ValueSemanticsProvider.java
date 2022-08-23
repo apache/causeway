@@ -23,6 +23,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.schema.chg.v2.ChangesDto;
@@ -107,11 +108,15 @@ public interface ValueSemanticsProvider<T> {
 
     /**
      * The {@link DefaultsProvider}, if any.
-     *
      * <p>
      * If not <tt>null</tt>, implies that the value has (or may have) a default.
      */
     DefaultsProvider<T> getDefaultsProvider();
+
+    /**
+     * The {@link IdStringifier}, if any.
+     */
+    IdStringifier<T> getIdStringifier();
 
     // -- UTILITY
 

@@ -41,22 +41,22 @@ public static final String LOGICAL_TYPE_NAME;
 --
 The package prefix to search for fixture scripts. This default value will result in no fixture scripts being found. However, normally it will be overridden.
 --
-<.> xref:#runFixtureScript__String_String[runFixtureScript(String, String)]
+<.> xref:#runFixtureScript_String_String[runFixtureScript(String, String)]
 +
 --
 Main action - as exposed in the UI - to execute the specified fixture script.
 --
-<.> xref:#recreateObjectsAndReturnFirst__[recreateObjectsAndReturnFirst()]
+<.> xref:#recreateObjectsAndReturnFirst_[recreateObjectsAndReturnFirst()]
 +
 --
 Convenience action - exposed through the UI - to execute the specified "recreate" xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] and return/show the first object returned by that fixture script.
 --
-<.> xref:#runBuilder__BuilderScriptAbstract[runBuilder(BuilderScriptAbstract)]
+<.> xref:#runBuilder_BuilderScriptAbstract[runBuilder(BuilderScriptAbstract)]
 +
 --
 Runs the builderScript within its own transactional boundary.
 --
-<.> xref:#runBuilderScriptNonTransactional__BuilderScriptAbstract[runBuilderScriptNonTransactional(BuilderScriptAbstract)]
+<.> xref:#runBuilderScriptNonTransactional_BuilderScriptAbstract[runBuilderScriptNonTransactional(BuilderScriptAbstract)]
 +
 --
 Runs the builderScript without its own transactional boundary.The caller is responsible to provide a transactional context/boundary.
@@ -69,24 +69,24 @@ Runs the builderScript without its own transactional boundary.The caller is resp
 
 The package prefix to search for fixture scripts. This default value will result in no fixture scripts being found. However, normally it will be overridden.
 
-[#runFixtureScript__String_String]
+[#runFixtureScript_String_String]
 === runFixtureScript(String, String)
 
 Main action - as exposed in the UI - to execute the specified fixture script.
 
 Also allows arbitrary parameters to be specified for said fixture script.
 
-[#recreateObjectsAndReturnFirst__]
+[#recreateObjectsAndReturnFirst_]
 === recreateObjectsAndReturnFirst()
 
 Convenience action - exposed through the UI - to execute the specified "recreate" xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] and return/show the first object returned by that fixture script.
 
-[#runBuilder__BuilderScriptAbstract]
+[#runBuilder_BuilderScriptAbstract]
 === runBuilder(BuilderScriptAbstract)
 
 Runs the builderScript within its own transactional boundary.
 
-[#runBuilderScriptNonTransactional__BuilderScriptAbstract]
+[#runBuilderScriptNonTransactional_BuilderScriptAbstract]
 === runBuilderScriptNonTransactional(BuilderScriptAbstract)
 
 Runs the builderScript without its own transactional boundary.The caller is responsible to provide a transactional context/boundary.

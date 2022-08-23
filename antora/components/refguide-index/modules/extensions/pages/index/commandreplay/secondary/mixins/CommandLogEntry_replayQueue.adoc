@@ -7,7 +7,7 @@
 .CommandLogEntry_replayQueue.java
 ----
 class CommandLogEntry_replayQueue {
-  List<CommandLogEntry> coll()
+  List<? extends CommandLogEntry> coll()
   boolean hideColl()
 }
 ----

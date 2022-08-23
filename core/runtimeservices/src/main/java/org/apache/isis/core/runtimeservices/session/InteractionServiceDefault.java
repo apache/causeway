@@ -48,9 +48,11 @@ import org.apache.isis.applib.services.iactnlayer.InteractionLayer;
 import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.applib.util.schema.InteractionsDtoUtils;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
@@ -66,6 +68,7 @@ import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.events.MetamodelEventService;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
 import lombok.NonNull;
@@ -79,7 +82,7 @@ import lombok.extern.log4j.Log4j2;
  * @implNote holds a reference to the current session using a thread-local
  */
 @Service
-@Named("isis.runtimeservices.InteractionServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".InteractionServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
@@ -97,6 +100,7 @@ implements
     final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler;
     final ClockService clockService;
     final Provider<CommandPublisher> commandPublisherProvider;
+    final Provider<TransactionService> transactionServiceProvider;
     final ConfigurableBeanFactory beanFactory;
 
     final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
@@ -113,6 +117,7 @@ implements
             final InteractionAwareTransactionalBoundaryHandler txBoundaryHandler,
             final ClockService clockService,
             final Provider<CommandPublisher> commandPublisherProvider,
+            final Provider<TransactionService> transactionServiceProvider,
             final ConfigurableBeanFactory beanFactory,
             final InteractionIdGenerator interactionIdGenerator) {
         this.runtimeEventService = runtimeEventService;
@@ -121,6 +126,7 @@ implements
         this.txBoundaryHandler = txBoundaryHandler;
         this.clockService = clockService;
         this.commandPublisherProvider = commandPublisherProvider;
+        this.transactionServiceProvider = transactionServiceProvider;
         this.beanFactory = beanFactory;
         this.interactionIdGenerator = interactionIdGenerator;
 
@@ -140,6 +146,7 @@ implements
                 .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
                 .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
                 .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
+                .addRunnable("InteractionsDtoUtils::init", InteractionsDtoUtils::init)
                 .addRunnable("CommandDtoUtils::init", CommandDtoUtils::init)
                 ;
 
@@ -321,8 +328,8 @@ implements
         serviceInjector.injectServicesInto(callable);
         try {
             return callable.call();
-        } catch (Exception e) {
-            requestRollback();
+        } catch (Throwable e) {
+            requestRollback(e);
             throw e;
         }
     }
@@ -332,14 +339,23 @@ implements
         serviceInjector.injectServicesInto(runnable);
         try {
             runnable.run();
-        } catch (Exception e) {
-            requestRollback();
+        } catch (Throwable e) {
+            requestRollback(e);
             throw e;
         }
     }
 
-    private void requestRollback() {
+    private void requestRollback(final Throwable cause) {
         val stack = interactionLayerStack.get();
+        if(stack.isEmpty()) {
+            // seeing this code-path, when the corresponding runnable/callable
+            // by itself causes the interaction stack to be closed
+            log.warn("unexpected state: missing interaction (layer) on interaction rollback; "
+                    + "rollback was caused by {} -> {}",
+                    cause.getClass().getName(),
+                    cause.getMessage());
+            return;
+        }
         val interaction = _Casts.<IsisInteraction>uncheckedCast(stack.get(0).getInteraction());
         txBoundaryHandler.requestRollback(interaction);
     }
@@ -359,6 +375,7 @@ implements
 
     private void preInteractionClosed(final IsisInteraction interaction) {
         completeAndPublishCurrentCommand();
+        transactionServiceProvider.get().flushTransaction();
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
         transactionBoundaryAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(interaction, isSynchronizationActive));
         txBoundaryHandler.onClose(interaction);
@@ -397,7 +414,7 @@ implements
         if(interaction instanceof IsisInteraction) {
             return (IsisInteraction) interaction;
         }
-        throw _Exceptions.unrecoverable("the framework does not recognice "
+        throw _Exceptions.unrecoverable("the framework does not recognize "
                 + "this implementation of an Interaction: %s", interaction.getClass().getName());
     }
 

@@ -24,6 +24,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.isis.applib.annotation.InteractionScope;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.RegressionTestAbstract;

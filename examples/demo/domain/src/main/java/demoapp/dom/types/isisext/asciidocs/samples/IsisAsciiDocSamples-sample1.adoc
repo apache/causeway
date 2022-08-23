@@ -1,13 +1,12 @@
-Asciidoctor Demo
-================
+= Asciidoctor Demo
 ////
 Big ol' comment
 
 sittin' right 'tween this here title 'n header metadata
 ////
 
-:description: A demo of Asciidoctor. This document +
-exercises numerous features of AsciiDoc +
+:description: A demo of Asciidoctor. This document \
+exercises numerous features of AsciiDoc \
 to test Asciidoctor compliance.
 :library: Asciidoctor
 :idprefix:

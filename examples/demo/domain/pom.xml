@@ -18,7 +18,6 @@
 		<groupId>org.apache.isis.examples.apps</groupId>
 		<artifactId>demo-parent</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>demo-domain</artifactId>
@@ -62,7 +61,7 @@
 
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-exceldownload-ui</artifactId>
+			<artifactId>isis-extensions-exceldownload-wicket-ui</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
@@ -74,14 +73,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
 			<artifactId>isis-extensions-secman-shiro-realm</artifactId>
 		</dependency>
 		<dependency>
@@ -89,17 +80,94 @@
 			<artifactId>isis-testing-h2console-ui</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-sse-applib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-metamodel</artifactId>
+		</dependency>
+
+
+		<!-- JDO specific -->
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-commandlog-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-sessionlog-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-executionlog-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-executionoutbox-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-audittrail-persistence-jdo</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-persistence-jdo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-persistence-jdo</artifactId>
+		</dependency>
+
+
+		<!-- JPA specific -->
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-commandlog-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-sessionlog-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-executionlog-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-executionoutbox-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>isis-extensions-audittrail-persistence-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-asciidoc-persistence-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.valuetypes</groupId>
+			<artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
+		</dependency>
+
+
+
 		<!-- OTHER DEPENDENCIES -->
 
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
         <dependency>
@@ -111,16 +179,6 @@
             <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-fullcalendar-applib</artifactId>
         </dependency>
-
-		<!-- Extensions -->
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-commandlog-jdo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>isis-extensions-commandlog-jpa</artifactId>
-		</dependency>
 
 		<!-- test -->
 		<dependency>

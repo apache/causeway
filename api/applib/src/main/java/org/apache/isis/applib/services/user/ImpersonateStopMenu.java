@@ -64,7 +64,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateStopMenu {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ImpersonateStopMenu";   // deliberately IS part of isis.applib
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ImpersonateStopMenu";   // deliberately IS part of isis.applib
 
     final UserService userService;
     final MessageService messageService;
@@ -74,7 +74,7 @@ public class ImpersonateStopMenu {
 
 
     @Action(
-            domainEvent = stopImpersonating.ActionEvent.class,
+            domainEvent = stopImpersonating.ActionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT,
             commandPublishing = Publishing.DISABLED,
             executionPublishing = Publishing.DISABLED,
@@ -83,7 +83,7 @@ public class ImpersonateStopMenu {
     @ActionLayout(sequence = "100.3", redirectPolicy = Redirect.EVEN_IF_SAME)
     public class stopImpersonating{
 
-        public class ActionEvent extends ActionDomainEvent<stopImpersonating> { }
+        public class ActionDomainEvent extends ImpersonateStopMenu.ActionDomainEvent<stopImpersonating> { }
 
         @MemberSupport public void act() {
             userService.stopImpersonating();

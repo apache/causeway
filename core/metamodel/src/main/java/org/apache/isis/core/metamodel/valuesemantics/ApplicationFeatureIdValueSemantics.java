@@ -18,10 +18,12 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -36,6 +38,7 @@ import lombok.val;
 
 @Component
 @Named("isis.val.ApplicationFeatureIdValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class ApplicationFeatureIdValueSemantics
 extends ValueSemanticsAbstract<ApplicationFeatureId>
 implements

@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.InteractionScope;
@@ -39,12 +39,13 @@ import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.ExecutionPublisherDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ExecutionPublisherDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @InteractionScope
@@ -56,11 +57,20 @@ implements ExecutionPublisher {
     private final InteractionLayerTracker iaTracker;
 
     private Can<ExecutionSubscriber> enabledSubscribers = Can.empty();
+    /**
+     * this is the reason that this service is @InteractionScope'd
+     */
+    private final LongAdder suppressionRequestCounter = new LongAdder();
 
     @PostConstruct
     public void init() {
         enabledSubscribers = Can.ofCollection(subscribers)
                 .filter(HasEnabling::isEnabled);
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        suppressionRequestCounter.reset();
     }
 
     @Override
@@ -103,7 +113,6 @@ implements ExecutionPublisher {
 
     }
 
-    private final LongAdder suppressionRequestCounter = new LongAdder();
 
     private boolean canPublish() {
         return enabledSubscribers.isNotEmpty()

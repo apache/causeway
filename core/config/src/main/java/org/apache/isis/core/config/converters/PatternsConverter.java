@@ -31,9 +31,10 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.config.IsisModuleCoreConfig;
 
 @Component
-@Named("isis.config.PatternsConverter")
+@Named(IsisModuleCoreConfig.NAMESPACE + "..PatternsConverter")
 @ConfigurationPropertiesBinding
 public class PatternsConverter implements Converter<String, Map<Pattern, String>> {
 

@@ -51,8 +51,8 @@ extends CssClassFaStaticFacetAbstract {
     }
 
     @Override
-    public boolean isAllowedToBeSharedWhenMixedIn() {
-        return false;
+    public boolean isObjectTypeSpecific() {
+        return true;
     }
 
 }

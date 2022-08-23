@@ -18,10 +18,12 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -34,6 +36,7 @@ import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
 @Component
 @Named("isis.val.PasswordValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class PasswordValueSemantics
 extends ValueSemanticsAbstract<Password>
 implements

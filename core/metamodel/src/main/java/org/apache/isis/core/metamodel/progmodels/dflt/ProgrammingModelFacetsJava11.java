@@ -84,7 +84,6 @@ import org.apache.isis.core.metamodel.facets.properties.validating.method.Proper
 import org.apache.isis.core.metamodel.facets.value.semantics.ValueSemanticsAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.isis.core.metamodel.methods.MethodByClassMap;
-import org.apache.isis.core.metamodel.postprocessors.DeriveMixinMembersPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.DescribedAsFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
@@ -96,7 +95,6 @@ import org.apache.isis.core.metamodel.postprocessors.param.ChoicesAndDefaultsPos
 import org.apache.isis.core.metamodel.postprocessors.param.TypicalLengthFromTypePostProcessor;
 import org.apache.isis.core.metamodel.postprocessors.properties.DisabledFromImmutablePostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
-import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
 
 import lombok.val;
@@ -120,13 +118,12 @@ extends ProgrammingModelAbstract {
     private void addFacetFactories() {
 
         val mmc = getMetaModelContext();
-        val classSubstitutorRegistry = mmc.getServiceRegistry().lookupServiceElseFail(ClassSubstitutorRegistry.class);
 
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(FacetProcessingOrder.A1_FALLBACK_DEFAULTS, new FallbackFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new LogicalTypeFacetFromClassNameFactory(mmc, classSubstitutorRegistry));
+        addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new LogicalTypeFacetFromClassNameFactory(mmc));
         addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new DomainServiceFacetAnnotationFactory(mmc));
         addFactory(FacetProcessingOrder.B1_OBJECT_NAMING, new ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory(mmc));
 
@@ -244,10 +241,6 @@ extends ProgrammingModelAbstract {
     private void addPostProcessors() {
 
         val mmc = getMetaModelContext();
-
-        addPostProcessor(PostProcessingOrder.A0_BEFORE_BUILTIN, new DeriveMixinMembersPostProcessor(mmc));
-
-        // only after this point have any mixin members been resolved and are available on the ObjectSpecification.
 
         // must run before Object nouns are used
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeObjectNamingPostProcessor(mmc));

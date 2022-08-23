@@ -33,11 +33,10 @@ import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.viewer.common.model.PlacementDirection;
-import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.common.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
-import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.commons.model.PlacementDirection;
+import org.apache.isis.viewer.commons.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
+import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
@@ -59,9 +58,8 @@ extends PromptFormAbstract<ActionModel> {
     public ActionParametersForm(
             final String id,
             final Component parentPanel,
-            final WicketViewerSettings settings,
             final ActionModel actionModel) {
-        super(id, parentPanel, settings, actionModel);
+        super(id, parentPanel, actionModel);
     }
 
     protected ActionModel actionModel() {

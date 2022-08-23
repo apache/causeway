@@ -18,17 +18,19 @@
  */
 package org.apache.isis.core.metamodel.services;
 
-import org.springframework.lang.Nullable;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +42,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isis.metamodel.ServiceInjectorDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ServiceInjectorDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

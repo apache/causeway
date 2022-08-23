@@ -30,9 +30,10 @@ import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 @Service
-@Named("isis.runtimeservices.Scratchpad")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".Scratchpad")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @InteractionScope

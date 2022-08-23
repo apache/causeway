@@ -37,12 +37,13 @@ import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.metamodel.GridServiceDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".GridServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -87,15 +88,15 @@ public class GridServiceDefault implements GridService {
     // //////////////////////////////////////
 
     @Override
-    public Grid defaultGridFor(Class<?> domainClass) {
-
+    public Grid defaultGridFor(final Class<?> domainClass) {
         for (val gridSystemService : gridSystemServices()) {
             val grid = gridSystemService.defaultGrid(domainClass);
             if(grid != null) {
                 return grid;
             }
         }
-        throw new IllegalStateException("No GridSystemService available to create grid for '" + domainClass.getName() + "'");
+        throw new IllegalStateException(
+                "No GridSystemService available to create grid for '" + domainClass.getName() + "'");
     }
 
     @Override
@@ -140,7 +141,6 @@ public class GridServiceDefault implements GridService {
 
         return grid;
     }
-
 
     /**
      * Not public API, exposed only for testing.
@@ -202,6 +202,8 @@ public class GridServiceDefault implements GridService {
                 ? gridSystemServices
                 : gridSystemServicesForTest;
     }
+
+
 
 
 }

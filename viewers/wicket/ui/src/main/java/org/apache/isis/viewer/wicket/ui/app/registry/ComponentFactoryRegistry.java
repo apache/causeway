@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
-import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 
 /**

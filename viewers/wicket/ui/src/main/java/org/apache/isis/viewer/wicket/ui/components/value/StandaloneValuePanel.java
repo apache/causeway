@@ -18,11 +18,19 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.value;
 
+import java.net.URL;
+import java.util.UUID;
+
+import org.apache.isis.applib.services.bookmark.idstringifiers.PredefinedSerializables;
+import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+
+import lombok.val;
 
 /**
  * Panel for rendering any value types that do not have their own custom
@@ -36,7 +44,30 @@ extends PanelAbstract<ManagedObject, ValueModel> {
 
     public StandaloneValuePanel(final String id, final ValueModel valueModel) {
         super(id, valueModel);
-        Wkt.labelAdd(this, ID_STANDALONE_VALUE, ()->getModel().getObject().titleString());
+
+        //XXX StandaloneValuePanel has its limitations compared to the ScalarPanel infrastructure,
+        // which has far better rendering support
+        // (we probably need to remove StandaloneValuePanel and utilize the ScalarPanel for standalone values instead)
+        if(isProbablySimpleInlineHtml(valueModel.getObjectMember().getElementType())) {
+            Wkt.markupAdd(this, ID_STANDALONE_VALUE, ()->
+                getModel().getObject().htmlString(getModel().getObjectMember()));
+        } else {
+            // resort to (textual) title rendering
+            Wkt.labelAdd(this, ID_STANDALONE_VALUE, ()->
+                getModel().getObject().titleString());
+        }
     }
+
+    // -- HELPER
+
+    private boolean isProbablySimpleInlineHtml(final ObjectSpecification valueSpec) {
+        val cls = valueSpec.getCorrespondingClass();
+
+        return PredefinedSerializables.isPredefinedSerializable(cls)
+                || UUID.class.equals(cls)
+                || URL.class.equals(cls)
+                || LocalResourcePath.class.equals(cls);
+    }
+
 
 }

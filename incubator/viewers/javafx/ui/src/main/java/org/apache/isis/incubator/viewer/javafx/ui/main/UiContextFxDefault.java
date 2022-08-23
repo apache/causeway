@@ -31,9 +31,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
-import org.apache.isis.viewer.common.model.decorators.DisablingDecorator;
-import org.apache.isis.viewer.common.model.decorators.IconDecorator;
-import org.apache.isis.viewer.common.model.decorators.PrototypingDecorator;
+import org.apache.isis.viewer.commons.model.decorators.DisablingDecorator;
+import org.apache.isis.viewer.commons.model.decorators.IconDecorator;
+import org.apache.isis.viewer.commons.model.decorators.PrototypingDecorator;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

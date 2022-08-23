@@ -26,7 +26,7 @@ class Config {
 }
 ----
 
-<.> xref:#withNamespacePrefix__String[withNamespacePrefix(String)]
+<.> xref:#withNamespacePrefix_String[withNamespacePrefix(String)]
 +
 --
 Returns a new _Config_ with given _packagePrefix_ added to the set of this _Config_ 's packagePrefixes.
@@ -34,7 +34,7 @@ Returns a new _Config_ with given _packagePrefix_ added to the set of this _Conf
 
 == Members
 
-[#withNamespacePrefix__String]
+[#withNamespacePrefix_String]
 === withNamespacePrefix(String)
 
 Returns a new _Config_ with given _packagePrefix_ added to the set of this _Config_ 's packagePrefixes.

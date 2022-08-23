@@ -257,6 +257,7 @@ git push origin $ISISBRANCH -u
 ----
 
 
+[#bump-code-to-isisrel]
 === Bump code to `$ISISREL`
 
 Search through the `.java` files for `{page-isisprev}`, and change to `{page-isisrel}`.
@@ -779,6 +780,7 @@ Once the artifacts have been uploaded, you can call a vote.
 In all cases, votes last for 72 hours and require a +3 (binding) vote from members.
 
 
+[#start-voting-thread-on-dev-mailing-list]
 === Start voting thread on dev mailing list
 
 That is, link:mailto:dev@apache.isis.org[]

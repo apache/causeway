@@ -37,8 +37,16 @@ body {
     margin-bottom: 0px;
 }
 
+.navbar.primary ul.dropdown-menu,
+.navbar-nav.secondary ul.dropdown-menu,
+.navbar-nav.tertiary ul.dropdown-menu {
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 /* emulate .dropdown-menu-right for secondary and tertiary dropdown menus */
-.navbar-nav.secondary .dropdown-menu, 
+.navbar-nav.secondary .dropdown-menu,
 .navbar-nav.tertiary .dropdown-menu {
 	right: 0;
 	left: auto;
@@ -106,7 +114,7 @@ td .badge,
 	color: var(--link-color);
 }
 .nav-link:focus, .nav-link:hover,
-a:focus, a:hover, 
+a:focus, a:hover,
 .btn-link:focus, .btn-link:hover {
     color: var(--link-color-hover);
 }
@@ -141,7 +149,9 @@ footer > .navbar {
     margin: 0;
 }
 
-
+.fontAwesomeIcon {
+	margin-right: 4px;
+}
 
 /* from ActionPromptHeaderPanel */
 
@@ -751,6 +761,7 @@ div.label-right .scalarValueWrapper .feedback-links-below-wrapper {
 .form-horizontal.actionParametersForm .form-group,
 .form-horizontal.propertyEditForm .form-group {
     margin-left: -5px;
+    margin-top: 5px;
 }
 
 .form-horizontal.inputForm .form-group {
@@ -836,6 +847,7 @@ div.referencePanel.scalarNameAndValueComponentType {
 
 .scalarValueWrapper ul.additionalLinkList {
     padding-bottom: 5px;
+    margin-left: -6.4px;
 }
 
 .scalarValueWrapper ul.additionalLinkListInline li.additionalLinkItem {
@@ -971,10 +983,10 @@ footer .footer-image {
     margin-bottom: 4px;
 }
 
-/* fit button-group inside surrounding value input box 
+/* fit button-group inside surrounding value input box
    obsolete when changing button size more generally
 .scalarValueInput .btn-group-sm > .btn {
-	padding: .20rem .5rem;  
+	padding: .20rem .5rem;
 }
 */
 
@@ -1001,6 +1013,11 @@ footer .footer-image {
     padding-top: 3px;
     /*padding-bottom: 7px;*/
 }
+
+.actionParametersForm .alert {
+    margin-top: 10px;
+}
+
 
 .propertyEditForm .buttons .wicket-ajax-indicator,
 .actionParametersForm .buttons .wicket-ajax-indicator,
@@ -1247,8 +1264,8 @@ ul.navbar-wrap {
 }
 
 span.wkt-component-with-tooltip,
-label.wkt-component-with-tooltip, 
-.wkt-component-with-tooltip label, 
+label.wkt-component-with-tooltip,
+.wkt-component-with-tooltip label,
 strong.wkt-component-with-tooltip  {
 	text-decoration-line: underline;
 	text-decoration-style: dotted;

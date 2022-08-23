@@ -19,16 +19,14 @@
 package org.apache.isis.core.metamodel.services.objectlifecycle;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,95 +34,108 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
 
-@EqualsAndHashCode(of = {"bookmarkStr", "propertyId"})
-@ToString(of = {"bookmarkStr", "propertyId"})
+@EqualsAndHashCode(of = {"id"})
+@ToString(of = {"id"})
 public final class PropertyChangeRecord {
 
-    @Getter private final ManagedObject entity;
-    @Getter private final ObjectAssociation property;
-    @Getter private final Bookmark bookmark;
-    @Getter private final String propertyId;
+    @Getter private final PropertyChangeRecordId id;
     @Getter private PreAndPostValue preAndPostValue;
 
-    private final String bookmarkStr;
+    public ManagedObject getEntity() {return id.getEntity();}
+    public OneToOneAssociation getProperty() {return id.getProperty();}
+    public Bookmark getBookmark() {return id.getBookmark();}
+    public String getPropertyId() {return id.getPropertyId();}
 
-    public static PropertyChangeRecord of(
-            final @NonNull ManagedObject entity,
-            final @NonNull ObjectAssociation property) {
-        return new PropertyChangeRecord(entity, property, null);
+
+    public static PropertyChangeRecord ofNew(
+            final @NonNull PropertyChangeRecordId pcrId) {
+        return new PropertyChangeRecord(pcrId)
+                        .withPreValueSetToNew();
     }
 
-    public static PropertyChangeRecord of(
-            final @NonNull ManagedObject entity,
-            final @NonNull ObjectAssociation property,
-            final @NonNull PreAndPostValue preAndPostValue) {
-        return new PropertyChangeRecord(entity, property, preAndPostValue);
+    public static PropertyChangeRecord ofCurrent(
+            final @NonNull PropertyChangeRecordId pcrId) {
+        return new PropertyChangeRecord(pcrId)
+                        .withPreValueSetToCurrent();
     }
 
-    private PropertyChangeRecord(
-            final ManagedObject entity,
-            final ObjectAssociation property,
-            final PreAndPostValue preAndPostValue) {
-        this.entity = entity;
-        this.property = property;
-        this.propertyId = property.getId();
-
-        this.bookmark = ManagedObjects.bookmarkElseFail(entity);
-        this.bookmarkStr = bookmark.toString();
-
-        this.preAndPostValue = preAndPostValue;
+    public static PropertyChangeRecord ofCurrent(
+            final @NonNull PropertyChangeRecordId pcrId,
+            final Object currentValue) {
+        return new PropertyChangeRecord(pcrId)
+                        .withPreValueSetTo(currentValue);
     }
 
-    public String getMemberId() {
-        return property.getFeatureIdentifier().getFullIdentityString();
+    public static PropertyChangeRecord ofDeleting(
+            final @NonNull PropertyChangeRecordId id) {
+        return new PropertyChangeRecord(id)
+                        .withPreValueSetToCurrent()
+                        .withPostValueSetToDeleted();
     }
 
-    public void setPreValue(final Object pre) {
-        preAndPostValue = PreAndPostValue.pre(pre);
+    private PropertyChangeRecord(final @NonNull PropertyChangeRecordId id) {
+        this.id = id;
     }
 
-    public void updatePreValue() {
-        setPreValue(getPropertyValue());
+    public String getLogicalMemberIdentifier() {
+        val target = getBookmark();
+        val propertyId = getPropertyId();
+        return target.getLogicalTypeName() + "#" + propertyId;
     }
 
-    public void updatePostValueAsNonDeleted() {
-        preAndPostValue.withPost(getPropertyValue());
+    public PropertyChangeRecord withPreValueSetToNew() {
+        return withPreValueSetTo(PropertyValuePlaceholder.NEW);
     }
 
-    public void updatePostValueAsDeleted() {
-        preAndPostValue.withPost(PropertyValuePlaceholder.DELETED);
+    public PropertyChangeRecord withPreValueSetToCurrent() {
+        return withPreValueSetTo(getPropertyValue());
     }
+
+    public PropertyChangeRecord withPostValueSetToCurrent() {
+        return withPostValueSetTo(getPropertyValue());
+    }
+
+    public PropertyChangeRecord withPostValueSetToDeleted() {
+        return withPostValueSetTo(PropertyValuePlaceholder.DELETED);
+    }
+
+    private PropertyChangeRecord withPreValueSetTo(Object preValue) {
+        this.preAndPostValue = PreAndPostValue.pre(preValue);
+        return this;
+    }
+
+    private PropertyChangeRecord withPostValueSetTo(Object postValue) {
+        this.preAndPostValue = preAndPostValue.withPost(postValue);
+        return this;
+    }
+
 
     // -- UTILITY
 
     public EntityPropertyChange toEntityPropertyChange(
             final Timestamp timestamp,
-            final String user,
+            final String username,
             final TransactionId txId) {
 
-        val spec = getEntity().getSpecification();
-        val property = this.getProperty();
+        val target = getBookmark();
+        val propertyId = getPropertyId();
+        val preValue = getPreAndPostValue().getPreString();
+        val postValue = getPreAndPostValue().getPostString();
+        val interactionId = txId.getInteractionId();
+        val sequence = txId.getSequence();
 
-        final Bookmark target = ManagedObjects.bookmarkElseFail(getEntity());
-        final String propertyId = property.getId();
-        final String memberId = property.getFeatureIdentifier().getFullIdentityString();
-        final String preValueStr = getPreAndPostValue().getPreString();
-        final String postValueStr = getPreAndPostValue().getPostString();
-        final String targetClass = IdentifierUtil.targetClassNameFor(spec);
-
-        final UUID transactionId = txId.getInteractionId();
-        final int sequence = txId.getSequence();
-
-
+        String logicalMemberId = getLogicalMemberIdentifier();
         return EntityPropertyChange.of(
-                transactionId, sequence, targetClass, target,
-                memberId, propertyId, preValueStr, postValueStr, user, timestamp);
+                interactionId, sequence,
+                target, logicalMemberId, propertyId,
+                preValue, postValue,
+                username, timestamp);
     }
 
     // -- HELPER
 
     private Object getPropertyValue() {
-        val referencedAdapter = property.get(entity, InteractionInitiatedBy.FRAMEWORK);
+        val referencedAdapter = getProperty().get(getEntity(), InteractionInitiatedBy.FRAMEWORK);
         return ManagedObjects.UnwrapUtil.single(referencedAdapter);
     }
 

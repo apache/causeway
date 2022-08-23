@@ -359,10 +359,10 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:named>Activity</mb3:named>
             <mb3:section>
                 <mb3:named>Command Log</mb3:named>
-                <mb3:serviceAction objectType="isis.ext.commandLog.CommandServiceMenu" id="activeCommands"/>
-                <mb3:serviceAction objectType="isis.ext.commandLog.CommandServiceMenu" id="findCommands"/>
-                <mb3:serviceAction objectType="isis.ext.commandLog.CommandServiceMenu" id="findCommandById"/>
-                <mb3:serviceAction objectType="isis.ext.commandLog.CommandServiceMenu" id="truncateLog"/>
+                <mb3:serviceAction objectType="isis.ext.commandLog.CommandLogMenu" id="activeCommands"/>
+                <mb3:serviceAction objectType="isis.ext.commandLog.CommandLogMenu" id="findCommands"/>
+                <mb3:serviceAction objectType="isis.ext.commandLog.CommandLogMenu" id="findCommandById"/>
+                <mb3:serviceAction objectType="isis.ext.commandLog.CommandLogMenu" id="truncateLog"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>Command Replay - Primary</mb3:named>

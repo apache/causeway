@@ -31,48 +31,52 @@ These can be updated using the view model's `create`, `update all` and `delete` 
 
 TIP: Click through to the entity objects to see examples of the annotations applied.
 
-== PublisherService
 
-The demo also has a simple implementation of `PublisherService` that just stores the DTOs in memory:
-
-[source,java]
-----
-include::spiimpl/PublisherServiceSpiForDomainObject.java[tags=class]
-----
-<.> serializes to `ChangesDto`, as defined by the link:https://isis.apache.org/refguide/2.0.0-M3/schema/chg.html[Apache Isis schema].
-
-The demo implementation also provides a way to query these executions:
-
-[source,java,indent=0]
-----
-include::spiimpl/PublisherServiceSpiForDomainObject.java[tags=demo]
-----
-
-Supporting mixins surface this list as contributions on the object:
-
-* `publishedObjects` collection:
-+
-[source,java,indent=0]
-----
-include::spiimpl/DomainObjectPublishingVm_publishedObjects.java[tags=class]
-----
-
-* `clearPublishedObjects` action:
-+
-[source,java,indent=0]
-----
-include::spiimpl/DomainObjectPublishingVm_clearPublishedObjects.java[tags=class]
-----
-
-
-For the three (of the four in total) domain entities where publishing is enabled, this collection should be appended to when the `create`, `update all` or `delete` actions are invoked.
-
-[NOTE]
-====
-Because the `Publisher` is notified after the interaction has completed, it's necessary to refresh the page to see the collection of changes being updated.
-
-This can be done simply by clicking on the view model's title.
-====
+//
+// to fix up
+//
+//== ExecutionSubscriber
+//
+//The demo also has a simple implementation of `ExecutionSubscriber` that just stores the DTOs in memory:
+//
+//[source,java]
+//----
+//include::spiimpl/PublisherServiceSpiForDomainObject.java[tags=class]
+//----
+//<.> serializes to `ChangesDto`, as defined by the link:https://isis.apache.org/refguide/2.0.0-M3/schema/chg.html[Apache Isis schema].
+//
+//The demo implementation also provides a way to query these executions:
+//
+//[source,java,indent=0]
+//----
+//include::spiimpl/PublisherServiceSpiForDomainObject.java[tags=demo]
+//----
+//
+//Supporting mixins surface this list as contributions on the object:
+//
+//* `publishedObjects` collection:
+//+
+//[source,java,indent=0]
+//----
+//include::spiimpl/DomainObjectPublishingVm_publishedObjects.java[tags=class]
+//----
+//
+//* `clearPublishedObjects` action:
+//+
+//[source,java,indent=0]
+//----
+//include::spiimpl/DomainObjectPublishingVm_clearPublishedObjects.java[tags=class]
+//----
+//
+//
+//For the three (of the four in total) domain entities where publishing is enabled, this collection should be appended to when the `create`, `update all` or `delete` actions are invoked.
+//
+//[NOTE]
+//====
+//Because the `Publisher` is notified after the interaction has completed, it's necessary to refresh the page to see the collection of changes being updated.
+//
+//This can be done simply by clicking on the view model's title.
+//====
 
 
 == Configuration

@@ -12,11 +12,12 @@ class ValueSemanticsAbstract<T> {
   Renderer<T> getRenderer()
   Parser<T> getParser()
   DefaultsProvider<T> getDefaultsProvider()
+  IdStringifier<T> getIdStringifier()
   Can<T> getExamples()     // <.>
 }
 ----
 
-<.> xref:#getExamples__[getExamples()]
+<.> xref:#getExamples_[getExamples()]
 +
 --
 JUnit support.
@@ -24,7 +25,7 @@ JUnit support.
 
 == Members
 
-[#getExamples__]
+[#getExamples_]
 === getExamples()
 
 JUnit support.

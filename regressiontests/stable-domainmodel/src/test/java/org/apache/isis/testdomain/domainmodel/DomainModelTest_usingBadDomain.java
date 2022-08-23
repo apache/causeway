@@ -46,6 +46,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
@@ -91,6 +92,7 @@ import lombok.val;
 class DomainModelTest_usingBadDomain {
 
     @Inject private IsisConfiguration configuration;
+    @Inject private InteractionService interactionService;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private DomainObjectTesterFactory testerFactory;
@@ -99,8 +101,10 @@ class DomainModelTest_usingBadDomain {
 
     @BeforeEach
     void setup() {
-        validator = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
-        assertThrows(DomainModelException.class, validator::throwIfInvalid);
+        interactionService.runAnonymous(() -> {
+            validator = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
+            assertThrows(DomainModelException.class, validator::throwIfInvalid);
+        });
     }
 
 

@@ -84,6 +84,7 @@ public final class _Strings {
      */
     public static final String[] emptyArray = new String[0];
 
+
     // -- PAIR OF STRINGS
 
     public static interface KeyValuePair extends Map.Entry<String, String> {
@@ -423,6 +424,36 @@ public final class _Strings {
         final int fillCount = minLength - len;
 
         return nullToEmpty(str) + of(fillCount, c);
+    }
+
+    /**
+     * Returns a string that is a substring of given {@code str}.
+     * The substring begins at the specified beginIndex and extends to the character at index endIndex - 1.
+     * Thus the length of the substring is endIndex-beginIndex.
+     * <p>
+     * Supports negative {@code endIndex}, as well as index overflow.
+     * If the endIndex is negative, it is understood as being relative to the end of the given {@code str}.
+     */
+    public static String substring(final @Nullable String str, final int beginIndex, final int endIndex) {
+        if(isEmpty(str)) {
+            return str;
+        }
+        final int maxIndex = str.length()-1; // >= 0
+
+        final int i0 = beginIndex>0
+                ? Math.min(beginIndex, maxIndex)
+                : 0;
+
+        final int i1 = Math.min(
+                maxIndex+1,
+                endIndex<0
+                    ? str.length() + endIndex
+                    : endIndex
+                );
+
+        return i0<i1
+                ? str.substring(i0, i1)
+                : "";
     }
 
     // -- SPLITTING
@@ -800,5 +831,27 @@ public final class _Strings {
                 StringBuilder::append,
                 StringBuilder::toString);
     }
+
+    // -- TRUNCATION
+
+    public static String trimmed(final String str, final int lengthOfField) {
+        if (str == null) {
+            return null;
+        }
+        if (str.length() > lengthOfField) {
+            return str.substring(0, lengthOfField - 3) + "...";
+        }
+        return str;
+    }
+
+    /**
+     * for example, so that a DB type converter can return null if the string wouldn't fit into a target column.
+     */
+    public static String nullIfExceeds(String str, int maxLength) {
+        return str == null || str.length() > maxLength
+                    ? null
+                    : str;
+    }
+
 
 }

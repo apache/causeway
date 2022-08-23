@@ -18,12 +18,16 @@
  */
 package demoapp.dom.services.extensions.secman.appuser.seed;
 
+import java.util.Locale;
+import java.util.function.Consumer;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 import org.apache.isis.extensions.secman.applib.user.dom.AccountType;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.fixtures.AbstractUserAndRolesFixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
@@ -41,7 +45,12 @@ extends SeedServiceAbstract {
             @Override protected void execute(final ExecutionContext executionContext) {
                 executionContext.executeChildren(this,
                         newRole("demo", Can.of(ApplicationFeatureId.newNamespace("demo"))),
-                        newUser("bob", Can.of("isis-ext-secman-admin", "demo"))
+                        newUser("bob", Can.of("isis-ext-secman-admin", "demo"), user->{
+                            user.setLanguage(Locale.GERMAN);
+                            user.setNumberFormat(Locale.GERMAN);
+                            user.setTimeFormat(Locale.GERMAN);
+                            user.setEmailAddress("bob@office.org");
+                        })
                     );
             }
 
@@ -59,10 +68,18 @@ extends SeedServiceAbstract {
     }
     private static AbstractUserAndRolesFixtureScript newUser(
             final String username,
-            final Can<String> roleNames) {
+            final Can<String> roleNames,
+            final Consumer<ApplicationUser> onNewUser) {
         return new AbstractUserAndRolesFixtureScript(
                 username, "pass", AccountType.LOCAL,
                 roleNames) {
+
+            @Override
+            protected void execute(final ExecutionContext executionContext) {
+                super.execute(executionContext);
+                onNewUser.accept(getApplicationUser());
+            }
+
         };
     }
 

@@ -11,6 +11,28 @@ This can of course be overridden using `@ActionLayout` or the layout file
 However, it is also used at a deeper level, because the action may have a collection parameter which is the same type as the collection elements.
 In the Wicket viewer, the collection is rendered with checkboxes; those selected objects are used as defaults for the action collection parameter.
 
+++++
+include::overview.svg[]
+++++
+////
+caption Demo Classes
+
+class "ActionAssociateWithVm" as PARENT
+class "ActionAssociateWithChildVm" as CHILD
+
+PARENT : addChild(..) // factory, associate with 'children'
+PARENT : removeChild(..) // single choice from 'children', associate with 'children'
+PARENT : removeChildren(..) // multiple choices from 'children', associate with 'children'
+PARENT : makeFavorite(..) // single choice from 'children', associate with 'favorites'
+PARENT : noLongerFavorite(..) // single choice from 'favorites', associate with 'favorites'
+PARENT : noLongerFavorites(..) // multiple choices from 'favorites', associate with 'favorites'
+PARENT : String text
+
+CHILD : String value
+
+PARENT --> CHILD : "children\n(0..n)"
+PARENT --> CHILD : "favorites\n(0..n)"
+////
 
 == Associated with Properties
 
@@ -98,11 +120,11 @@ include::ActionAssociateWithVm.java[tags=class-collections-favorites]
 There are three mixin actions associated with this collection:
 
 * the `makeFavorite` action.
-This takes a element from the "children" collectio and also adds to the "favorites" collection:
+This takes a element from the "children" collection and also adds to the "favorites" collection:
 +
 [source,java]
 ----
-include::child/ActionAssociateWithVm_makeFavorite.java[tags=class]
+include::ActionAssociateWithVm_makeFavorite.java[tags=class]
 ----
 <.> associates with the "favorites" collection
 <.> positioned first in the UI
@@ -113,7 +135,7 @@ This just removes a selected element from the "children" collection:
 +
 [source,java]
 ----
-include::child/ActionAssociateWithVm_noLongerFavorite.java[tags=class]
+include::ActionAssociateWithVm_noLongerFavorite.java[tags=class]
 ----
 <.> associates with the "children" collection
 <.> positioned second in the UI
@@ -125,7 +147,7 @@ This is similar to the previous action, but for multiple favorite elements:
 +
 [source,java]
 ----
-include::child/ActionAssociateWithVm_noLongerFavorites.java[tags=class]
+include::ActionAssociateWithVm_noLongerFavorites.java[tags=class]
 ----
 <.> associates with the "favorites" collection
 <.> positioned third in the UI

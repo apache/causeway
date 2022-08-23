@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.user.ImpersonateMenuAdvisor;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 /**
  * This default implementation simply returns empty lists.
@@ -40,7 +41,7 @@ import org.apache.isis.applib.services.user.ImpersonateMenuAdvisor;
  * </p>
  */
 @Service
-@Named("isis.runtimeservices.ImpersonateMenuAdvisorDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ImpersonateMenuAdvisorDefault")
 @javax.annotation.Priority(PriorityPrecedence.LAST)
 @Qualifier("Default")
 public class ImpersonateMenuAdvisorDefault implements ImpersonateMenuAdvisor {

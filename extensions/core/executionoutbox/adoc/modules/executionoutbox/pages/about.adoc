@@ -1,0 +1,16 @@
+[[executionoutbox]]
+= Execution Outbox
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+WARNING: TODO: v2 - to properly document.
+
+The _executionoutbox_ module provides an implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persists xref:refguide:applib:index/services/iactn/Execution.adoc[Execution]s into an "outbox" (using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store).
+The purpose of the "outbox" is to act as a temporary store of executions to be propogated to other "downstream" systems.
+
+The module also provides a REST API, a rest client and DTOs to represent the payloads between these two services.
+The client polls the outbox through the REST API (for example every 15 seconds), and uses it to download any new executions.
+Once processed (eg published to a message bus), the client then uses the same REST API to delete the executions.
+
+

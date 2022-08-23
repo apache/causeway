@@ -46,18 +46,18 @@ public class CommandLogEntry_siblingCommands {
     private final CommandLogEntry commandLogEntry;
 
     @MemberSupport
-    public List<CommandLogEntry> coll() {
+    public List<? extends CommandLogEntry> coll() {
         final CommandLogEntry parentJdo = commandLogEntry.getParent();
         if(parentJdo == null) {
             return Collections.emptyList();
         }
-        final List<CommandLogEntry> siblingCommands = commandLogEntryRepository.findByParent(parentJdo);
+        final List<? extends CommandLogEntry> siblingCommands = commandLogEntryRepository.findByParent(parentJdo);
         siblingCommands.remove(commandLogEntry);
         return siblingCommands;
     }
 
 
     @javax.inject.Inject
-    private CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
+    private CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
 
 }

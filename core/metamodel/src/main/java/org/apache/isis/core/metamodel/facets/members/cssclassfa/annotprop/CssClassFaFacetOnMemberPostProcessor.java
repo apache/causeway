@@ -38,7 +38,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+    public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
 
         if(objectAction.isDeclaredOnMixin()) {
             return; // don't process mixin main method, instead process its peer

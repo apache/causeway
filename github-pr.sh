@@ -1,4 +1,24 @@
 #!/bin/bash
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#        http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+#
+
 #set -x
 #trap read debug
 set -o nounset
@@ -6,8 +26,8 @@ set -o errexit
 
 
 #
-# Merges github PRs into local git clone of ASF project 
-# ('https://github.com/apache/xxx') 
+# Merges github PRs into local git clone of ASF project
+# ('https://github.com/apache/xxx')
 #
 # Process:
 # - locate/raise JIRA ticket, eg ISIS-1162
@@ -19,14 +39,14 @@ set -o errexit
 #
 # Usage: github-pr.sh -p ISIS -j 1162 -g 31
 #
-#        where 
+#        where
 #               - isis is the JIRA project and repo
 #               - 1162 is the JIRA ticket number
 #               - 31   is the gthub PR issue number
 #
 # uses 'jq' to parse JSON
 # - on Linux: aptitude install jq
-# - on Mac: brew install jq 
+# - on Mac: brew install jq
 # - on Windows: download exe from http://stedolan.github.io/jq/download/
 #
 
@@ -94,7 +114,7 @@ fi
 err_message=$(echo $jira_json | jq --raw-output '.errorMessages')
 
 if [ "$err_message" != "null" ]; then
-	die "Cannot find the info about JIRA issue $jira_number" 
+	die "Cannot find the info about JIRA issue $jira_number"
 fi
 
 echo ""
@@ -112,7 +132,7 @@ fi
 
 err_message=$(echo $github_json | jq --raw-output '.message')
 if [ "x$err_message" = "xNot Found" ]; then
-	die "Cannot find the info about PR $pr_number" 
+	die "Cannot find the info about PR $pr_number"
 fi
 
 echo "Found github PR"
@@ -144,7 +164,7 @@ echo ""
 branch_exists=$(git branch --list $branch_name_temp)
 if [ "x$branch_exists" != "x" ]; then
 	echo "Deleting branch '$branch_name_temp'"
-	git branch -D $branch_name_temp 
+	git branch -D $branch_name_temp
 fi
 
 echo "Creating the branch $branch_name_temp"
@@ -159,7 +179,7 @@ echo ""
 if [ "$skip_build" == "false" ]
 then
     echo "Merged the PR; hit enter to build"
-    read 
+    read
     echo "Building..."
     echo
 
@@ -173,8 +193,8 @@ then
     echo "git checkout $branch_name_local && git merge --no-ff $branch_name_temp && git branch -d $branch_name_temp"
     echo
 else
-    echo 
+    echo
     echo "Merging..."
-    echo 
+    echo
     git checkout $branch_name_local && git merge --no-ff $branch_name_temp && git branch -d $branch_name_temp
 fi

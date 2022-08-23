@@ -35,4 +35,21 @@ public interface Renderer<T> {
         return titlePresentation(context, value);
     }
 
+    public static enum SyntaxHighlighter {
+        NONE,
+        /** <i>Prism<> with 'default' theme */
+        PRISM_DEFAULT,
+        /** <i>Prism<> with 'coy' theme */
+        PRISM_COY;
+    }
+
+    /**
+     * Governs whether, to switch on client-side syntax highlighting.
+     * @apiNote a rendered page can currently only support a single high-lighter theme;
+     * if there is a mix of themes the behavior is unpredictable
+     */
+    default SyntaxHighlighter syntaxHighlighter() {
+        return SyntaxHighlighter.NONE;
+    }
+
 }

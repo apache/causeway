@@ -36,7 +36,6 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -101,12 +100,12 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_FEATURE = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByFeature";
-        public static final String FIND_BY_ROLE = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRole";
-        public static final String FIND_BY_ROLE_RULE_FEATURE = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRoleAndRuleAndFeature";
-        public static final String FIND_BY_ROLE_RULE_FEATURE_FQN = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRoleAndRuleAndFeatureAndFqn";
-        public static final String FIND_BY_USER = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByUser";
-        public static final String FIND_BY_ROLE_NAMES = ApplicationPermission.LOGICAL_TYPE_NAME + ".findByRoleNames";
+        public static final String FIND_BY_FEATURE = LOGICAL_TYPE_NAME + ".findByFeature";
+        public static final String FIND_BY_ROLE = LOGICAL_TYPE_NAME + ".findByRole";
+        public static final String FIND_BY_ROLE_RULE_FEATURE = LOGICAL_TYPE_NAME + ".findByRoleAndRuleAndFeature";
+        public static final String FIND_BY_ROLE_RULE_FEATURE_FQN = LOGICAL_TYPE_NAME + ".findByRoleAndRuleAndFeatureAndFqn";
+        public static final String FIND_BY_USER = LOGICAL_TYPE_NAME + ".findByUser";
+        public static final String FIND_BY_ROLE_NAMES = LOGICAL_TYPE_NAME + ".findByRoleNames";
     }
 
 

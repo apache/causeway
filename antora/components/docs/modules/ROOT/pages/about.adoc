@@ -63,7 +63,11 @@ _Core_
 * *xref:refguide:ROOT:about.adoc[Reference Guide]*
 * *xref:testing:ROOT:about.adoc[Testing Guide]*
 
+_Process_
 
+* xref:conguide:ROOT:about.adoc[Contributors' Guide]
+* *xref:comguide:ROOT:about.adoc[Committers' Guide]*
+** xref:tooling:ROOT:about.adoc[Tooling]
 
 |
 [discrete]
@@ -90,7 +94,6 @@ _Security_
 
 _For Use in Apps_
 
-*  xref:subdomains:ROOT:about.adoc[Subdomain Libraries]
 *  xref:valuetypes:ROOT:about.adoc[Value Type Catalog]
 
 _Extending the framework itself_
@@ -125,12 +128,6 @@ _Nightly Builds (not ASF)_
 |
 [discrete]
 == Framework
-
-_Process_
-
-* xref:conguide:ROOT:about.adoc[Contributors' Guide]
-* *xref:comguide:ROOT:about.adoc[Committers' Guide]*
-** xref:tooling:ROOT:about.adoc[Tooling]
 
 _Design_
 

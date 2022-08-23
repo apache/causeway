@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.pages.login;
 
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.RestartResponseException;
@@ -46,6 +47,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContex
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
 
@@ -54,7 +56,7 @@ import lombok.val;
  * with an additional 'timezone' form field.
  * @see org.apache.wicket.authroles.authentication.panel.SignInPanel
  */
-public class SignInPanelAbstract
+public abstract class SignInPanelAbstract
 extends Panel
 implements HasCommonContext {
 
@@ -62,7 +64,6 @@ implements HasCommonContext {
 
     private static final String SIGN_IN_FORM = "signInForm";
     private static final String TIME_ZONE_SELECT = "timezone-select";
-
 
     /** True if the panel should display a remember-me checkbox */
     private boolean includeRememberMe = true;
@@ -181,6 +182,7 @@ implements HasCommonContext {
      * Called when sign in failed
      */
     protected void onSignInFailed() {
+        clearUserTimeZoneFromSession();
         // Try the component based localizer first. If not found try the
         // application localizer. Else use the default
         error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
@@ -190,6 +192,8 @@ implements HasCommonContext {
      * Called when sign in was successful
      */
     protected void onSignInSucceeded() {
+        Optional.ofNullable(getTimezone())
+            .ifPresent(zoneId->storeUserTimeZoneToSession(zoneId));
         // If login has been called because the user was not yet logged in, than continue to the
         // original destination, otherwise to the Home page
         continueToOriginalDestination();
@@ -208,6 +212,9 @@ implements HasCommonContext {
      * @see #onConfigure()
      */
     protected void onSignInRemembered() {
+        Optional.ofNullable(getTimezone())
+            .ifPresent(zoneId->storeUserTimeZoneToSession(zoneId));
+
         // logon successful. Continue to the original destination
         continueToOriginalDestination();
 
@@ -323,4 +330,15 @@ implements HasCommonContext {
         }
 
     }
+
+    /**
+     * Stores user's {@link ZoneId} to their session.
+     */
+    protected abstract void storeUserTimeZoneToSession(@NonNull ZoneId zoneId);
+
+    /**
+     * Clears user's {@link ZoneId} from their session.
+     */
+    protected abstract void clearUserTimeZoneFromSession();
+
 }

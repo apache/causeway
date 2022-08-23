@@ -42,7 +42,8 @@ public class AuthenticatorSecmanAutoConfiguration  {
     public Authenticator authenticatorSecman(
             final ApplicationUserRepository applicationUserRepository,
             final @Qualifier("secman") PasswordEncoder passwordEncoder) {
-        return new AuthenticatorSecman(applicationUserRepository, passwordEncoder);
+        return new AuthenticatorSecman(
+                applicationUserRepository, passwordEncoder);
     }
 
 }

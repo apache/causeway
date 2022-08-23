@@ -37,6 +37,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.user.ImpersonateMenuAdvisor;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
@@ -47,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.ext.secman.ImpersonateMenuAdvisorForSecman")
+@Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ImpersonateMenuAdvisorForSecman")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("SecMan")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -107,7 +108,7 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
     // -- CACHE
 
     @Component
-    @Named("isis.ext.secman.ImpersonateMenuAdvisorForSecman.Cache")
+    @Named(IsisModuleExtSecmanApplib.NAMESPACE + ".ImpersonateMenuAdvisorForSecman.Cache")
     @InteractionScope
     static class Cache implements DisposableBean {
 

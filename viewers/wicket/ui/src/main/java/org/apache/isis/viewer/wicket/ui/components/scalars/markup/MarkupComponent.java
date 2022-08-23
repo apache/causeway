@@ -18,48 +18,74 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.viewer.common.model.feature.ParameterUiModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 
+import lombok.Builder;
+import lombok.Value;
 import lombok.val;
 
 public class MarkupComponent extends WebComponent {
 
     private static final long serialVersionUID = 1L;
 
-    public MarkupComponent(final String id, final ScalarModel model){
-        super(id, model);
+    @Value @Builder
+    public static class Options implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        @Builder.Default
+        private SyntaxHighlighter syntaxHighlighter = SyntaxHighlighter.NONE;
+
+        public static Options defaults() {
+            return Options.builder().build();
+        }
+
+        private _HighlightBehavior highlightBehavior() {
+            return _HighlightBehavior.valueOf(getSyntaxHighlighter());
+        }
+
     }
 
-    public MarkupComponent(final String id, final ValueModel model){
+    // -- CONSTRUCTION
+
+    private final Options options;
+
+    public MarkupComponent(final String id, final IModel<?> model, final Options options) {
         super(id, model);
+        this.options = options;
     }
 
-    public MarkupComponent(final String id, final IModel<String> model){
-        super(id, model);
+    public MarkupComponent(final String id, final IModel<?> model) {
+        this(id, model, Options.defaults());
     }
 
-    public MarkupComponent(final String id, final String html){
-        super(id, Model.of(html));
+    // --
+
+    @Override
+    public final void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+        options.highlightBehavior().renderHead(response);
     }
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
         val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
-        replaceComponentTagBody(markupStream, openTag, htmlContent);
+        replaceComponentTagBody(markupStream, openTag,
+                options.highlightBehavior().htmlContentPostProcess(htmlContent));
     }
 
     @Override

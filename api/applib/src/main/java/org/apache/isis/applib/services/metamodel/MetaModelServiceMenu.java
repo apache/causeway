@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -48,10 +46,10 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
- *
- * Provides a UI to allow domain model metadata (obtained from
- * {@link MetaModelService} to be downloaded within the UI.
+ * Provides a UI to allow domain model metadata (obtained from {@link MetaModelService}) to be downloaded.
  *
  * @since 2.0 {@index}
  */
@@ -66,13 +64,13 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class MetaModelServiceMenu {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".MetaModelServiceMenu";
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".MetaModelServiceMenu";
 
     public static abstract class ActionDomainEvent<T> extends IsisModuleApplib.ActionDomainEvent<T> { }
 
 
     @Action(
-            domainEvent = downloadMetaModelCsv.ActionEvent.class,
+            domainEvent = downloadMetaModelCsv.ActionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -82,7 +80,7 @@ public class MetaModelServiceMenu {
             sequence="500.500.2")
     public class downloadMetaModelCsv {
 
-        public class ActionEvent extends ActionDomainEvent<downloadMetaModelCsv> { }
+        public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModelCsv> { }
 
         @MemberSupport public Blob act(
                 @ParameterLayout(named = ".csv file name")
@@ -104,7 +102,7 @@ public class MetaModelServiceMenu {
 
 
     @Action(
-            domainEvent = downloadMetaModelXml.ActionEvent.class,
+            domainEvent = downloadMetaModelXml.ActionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -114,7 +112,7 @@ public class MetaModelServiceMenu {
             sequence="500.500.2")
     public class downloadMetaModelXml{
 
-        public class ActionEvent extends ActionDomainEvent<downloadMetaModelXml> { }
+        public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModelXml> { }
 
         @MemberSupport public Blob act(
                 @ParameterLayout(named = ".xml file name")
@@ -167,7 +165,7 @@ public class MetaModelServiceMenu {
 
 
     @Action(
-            domainEvent = downloadMetaModelAscii.ActionEvent.class,
+            domainEvent = downloadMetaModelAscii.ActionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -177,7 +175,7 @@ public class MetaModelServiceMenu {
             sequence="500.500.2")
     public class downloadMetaModelAscii{
 
-        public class ActionEvent extends ActionDomainEvent<downloadMetaModelAscii> { }
+        public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModelAscii> { }
 
         @MemberSupport public Blob act(
                 @ParameterLayout(named = ".txt file name")
@@ -230,7 +228,7 @@ public class MetaModelServiceMenu {
 
 
     @Action(
-            domainEvent = downloadMetaModelDiff.ActionEvent.class,
+            domainEvent = downloadMetaModelDiff.ActionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -240,7 +238,7 @@ public class MetaModelServiceMenu {
             sequence="500.500.2")
     public class downloadMetaModelDiff {
 
-        public class ActionEvent extends ActionDomainEvent<downloadMetaModelDiff> { }
+        public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModelDiff> { }
 
         @MemberSupport public Blob act(
                 @ParameterLayout(named = ".txt file name")

@@ -31,12 +31,17 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectSupport;
 
+/**
+ * As returned by {@link ConfigurationMenu.configuration#act() ConfigurationMenu}.
+ *
+ * @since 2.0 {@index}
+ */
 @Named(ConfigurationViewmodel.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature = Nature.VIEW_MODEL)
 public class ConfigurationViewmodel {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationViewmodel";
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_CONF + ".ConfigurationViewmodel";
 
     @Autowired(required = false)
     private ConfigurationViewService configurationService;

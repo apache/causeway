@@ -46,8 +46,8 @@ extends CssClassFacetSimple {
     }
 
     @Override
-    public boolean isAllowedToBeSharedWhenMixedIn() {
-        return false;
+    public boolean isObjectTypeSpecific() {
+        return true;
     }
 
 }

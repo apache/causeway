@@ -51,7 +51,7 @@ class OffsetDateTimeConverterTest {
 
     @Test
     void happy_case() {
-        converterTester.assertRoundtrip(valid, "2013-05-11 17:23:00 +03");
+        converterTester.assertRoundtrip(valid, "2013-05-11 17:23:00 +03:00");
     }
 
     @Test

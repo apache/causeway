@@ -17,6 +17,8 @@ class ApplicationUser {
   boolean isHasPassword()
   boolean hideHasPassword()
   ApplicationPermissionValueSet getPermissionSet()
+  boolean isForSelf()
+  boolean isRunAsAdministrator()
   boolean isForSelfOrRunAsAdministrator()
   boolean isLocalAccount()
   int compareTo(org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser other)

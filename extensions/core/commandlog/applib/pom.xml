@@ -37,9 +37,11 @@
                 <filtering>false</filtering>
                 <directory>src/main/java</directory>
                 <includes>
-                    <!-- we include all .java too, so that we can reference it from the descriptions -->
                     <include>**</include>
                 </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
             </resource>
         </resources>
     </build>

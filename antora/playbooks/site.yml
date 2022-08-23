@@ -115,7 +115,13 @@ content:
       start_path: extensions/core/commandlog/adoc # extensions
       branches: HEAD
     - url: .
-      start_path: extensions/core/commandreplay/adoc # extensions
+      start_path: extensions/core/executionlog/adoc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/core/executionoutbox/adoc # extensions
+      branches: HEAD
+    - url: .
+      start_path: extensions/core/executionrepublisher/adoc # extensions
       branches: HEAD
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
@@ -156,12 +162,19 @@ content:
       start_path: extensions/vw/pdfjs/adoc # vw
       branches: HEAD
 
+    - url: .
+      start_path: extensions/vw/sse/adoc # extensions
+      branches: HEAD
+
 # incubator
     - url: .
       start_path: incubator/adoc # incubator
       branches: HEAD
     - url: .
       start_path: incubator/clients/kroviz/adoc # incubator
+      branches: HEAD
+    - url: .
+      start_path: incubator/extensions/core/commandreplay/adoc # incubator
       branches: HEAD
     - url: .
       start_path: incubator/viewers/graphql/adoc # incubator
@@ -255,9 +268,6 @@ content:
       branches: HEAD
     - url: .
       start_path: valuetypes/markdown/adoc # valuetypes
-      branches: HEAD
-    - url: .
-      start_path: valuetypes/sse/adoc # valuetypes
       branches: HEAD
 
 # viewers

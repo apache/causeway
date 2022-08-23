@@ -91,6 +91,7 @@ public class AppManifest {
 ----
 
 
+[#bootstrapping]
 == Bootstrapping
 
 We typically put the bootstrapping of Apache Isis into a superclass, one for each Maven module.
@@ -175,6 +176,7 @@ This can be done by adding:
 ----
 
 
+[#typical-usage]
 == Typical Usage
 
 Let's now drill down and look at `SimpleObject_IntegTest`, which (not surprisingly) is the integration test that exercises the `SimpleObject` class:
@@ -558,6 +560,7 @@ The walk through of xref:about.adoc#typical-usage[SimpleApp] above showed how th
 
 
 
+[#manual-teardown]
 == Manual Teardown
 
 The Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Transactional.html[@Transactional] annotation means that any changes made in the database will be rolled back automatically.

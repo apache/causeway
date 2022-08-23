@@ -24,6 +24,7 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
@@ -33,15 +34,19 @@ import org.apache.isis.schema.ixn.v2.InteractionDto;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Simple implementation of {@link ExecutionSubscriber} that just logs out the {@link Execution}'s
+ * DTO to a debug log.
  *
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.applib.ExecutionLogger")
+@Named(ExecutionLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Logging")
 @Log4j2
 public class ExecutionLogger implements ExecutionSubscriber {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ExecutionLogger";
 
     @Override
     public boolean isEnabled() {

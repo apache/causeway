@@ -32,11 +32,11 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.Placeholder
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.Getter;
@@ -51,7 +51,6 @@ extends ChoiceProvider<ObjectMemento> {
 
     @Getter private final ScalarModel scalarModel;
     private transient IsisAppCommonContext commonContext;
-    private transient WicketViewerSettings wicketViewerSettings;
 
     public ObjectAdapterMementoProviderAbstract(final ScalarModel scalarModel) {
         this.scalarModel = scalarModel;
@@ -139,11 +138,8 @@ extends ChoiceProvider<ObjectMemento> {
         return commonContext;
     }
 
-    protected WicketViewerSettings getWicketViewerSettings() {
-        if(wicketViewerSettings==null) {
-            wicketViewerSettings = getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
-        }
-        return wicketViewerSettings;
+    protected final Wicket getSettings() {
+        return getCommonContext().getConfiguration().getViewer().getWicket();
     }
 
     // -- HELPER

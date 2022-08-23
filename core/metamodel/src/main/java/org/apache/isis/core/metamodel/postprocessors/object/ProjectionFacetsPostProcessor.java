@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacetFromProjectingProperty;
+import org.apache.isis.core.metamodel.facets.object.projection.ident.CssClassFacetFromProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ident.IconFacetFromProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ident.TitleFacetFromProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -45,24 +46,27 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification) {
-        val projectionFacet = ProjectionFacetFromProjectingProperty.create(objectSpecification);
-        if (projectionFacet == null) {
-            return;
-        }
-        FacetUtil.addFacet(projectionFacet);
-        val titleFacet = objectSpecification.getFacet(TitleFacet.class);
-        if(canOverwrite(titleFacet)) {
-            FacetUtil.addFacet(new TitleFacetFromProjectionFacet(projectionFacet, objectSpecification));
-        }
-        val iconFacet = objectSpecification.getFacet(IconFacet.class);
-        if(canOverwrite(iconFacet)) {
-            FacetUtil.addFacet(new IconFacetFromProjectionFacet(projectionFacet, objectSpecification));
-        }
-        val cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
-        if(canOverwrite(cssClassFacet)) {
-            FacetUtil.addFacet(new IconFacetFromProjectionFacet(projectionFacet, objectSpecification));
-        }
+    public void postProcessObject(final ObjectSpecification objectSpecification) {
+
+        FacetUtil.addFacetIfPresent(
+                ProjectionFacetFromProjectingProperty.create(objectSpecification))
+        .ifPresent(projectionFacet->{
+
+            val titleFacet = objectSpecification.getFacet(TitleFacet.class);
+            if(canOverwrite(titleFacet)) {
+                FacetUtil.addFacet(new TitleFacetFromProjectionFacet(projectionFacet, objectSpecification));
+            }
+            val iconFacet = objectSpecification.getFacet(IconFacet.class);
+            if(canOverwrite(iconFacet)) {
+                FacetUtil.addFacet(new IconFacetFromProjectionFacet(projectionFacet, objectSpecification));
+            }
+            val cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
+            if(canOverwrite(cssClassFacet)) {
+                FacetUtil.addFacet(new CssClassFacetFromProjectionFacet(projectionFacet, objectSpecification));
+            }
+
+        });
+
     }
 
     // -- HELPER

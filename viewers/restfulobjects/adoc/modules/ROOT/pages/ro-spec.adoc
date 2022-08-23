@@ -112,7 +112,7 @@ link:http://angular-ui.github.io/bootstrap/[Angular Bootstrap],
 link:http://vitalets.github.io/angular-xeditable/[Angular XEditable],
 link:https://github.com/mgcrea/angular-strap[Angular Strap].
 
-This support is discussed further in the xref:vro:ROOT:simplified-representations.adoc[simplified representations]
+This support is discussed further in the xref:vro:ROOT:content-negotiation/apache-isis-v2-profile.adoc[simplified representations]
 chapter.
 
 === Minimizing Round-trips

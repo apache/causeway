@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.model.models.interaction;
 
-import org.apache.isis.viewer.common.model.object.ObjectUiModel;
+import org.apache.isis.viewer.commons.model.object.ObjectUiModel;
 
 @FunctionalInterface
 public interface ObjectUiModelWkt

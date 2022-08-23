@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
@@ -62,7 +63,7 @@ import lombok.val;
 * @see org.apache.isis.core.runtimeservices.command.CommandDtoFactoryDefault
  */
 @Service
-@Named("isis.runtimeservices.InteractionDtoServiceInternalDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".InteractionDtoServiceInternalDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
@@ -88,18 +89,15 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final Bookmark targetBookmark = owner.getBookmark()
                 .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", owner));
 
-        final String actionId = objectAction.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString();
-        final String targetTitle = targetBookmark.toString() + ": " + actionId;
-
         final String currentUser = userService.currentUserNameElseNobody();
 
         final ActionDto actionDto = new ActionDto();
-        commandDtoServiceInternal.addActionArgs(objectAction, actionDto, argumentAdapters);
+        commandDtoServiceInternal.addActionArgs(head, objectAction, actionDto, argumentAdapters);
         final List<ParamDto> parameterDtos = CommandDtoUtils.parametersFor(actionDto).getParameter();
 
         return InteractionDtoUtils.newActionInvocation(
-                nextEventSequence, targetBookmark, targetTitle,
-                actionDto.getMemberIdentifier(),
+                nextEventSequence, targetBookmark,
+                actionDto.getLogicalMemberIdentifier(),
                 parameterDtos, currentUser
                 );
     }
@@ -128,7 +126,8 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
     public PropertyEditDto asPropertyEditDto(
             final OneToOneAssociation property,
             final ManagedObject targetAdapter,
-            final ManagedObject newValueAdapterIfAny) {
+            final ManagedObject newValueAdapterIfAny,
+            final InteractionHead interactionHead) {
 
         final Interaction interaction = interactionProviderProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
@@ -136,18 +135,15 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final Bookmark targetBookmark = targetAdapter.getBookmark()
                 .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
 
-        final String propertyId = property.getFeatureIdentifier().getMemberLogicalName();
-        final String targetTitle = targetBookmark.toString() + ": " + propertyId;
-
         final String currentUser = userService.currentUserNameElseNobody();
 
         final PropertyDto propertyDto = new PropertyDto();
-        commandDtoServiceInternal.addPropertyValue(property, propertyDto, newValueAdapterIfAny);
+        commandDtoServiceInternal.addPropertyValue(interactionHead, property, propertyDto, newValueAdapterIfAny);
         final ValueWithTypeDto newValue = propertyDto.getNewValue();
 
         return InteractionDtoUtils.newPropertyEdit(
-                nextEventSequence, targetBookmark, targetTitle,
-                propertyDto.getMemberIdentifier(),
+                nextEventSequence, targetBookmark,
+                propertyDto.getLogicalMemberIdentifier(),
                 newValue, currentUser
                 );
     }

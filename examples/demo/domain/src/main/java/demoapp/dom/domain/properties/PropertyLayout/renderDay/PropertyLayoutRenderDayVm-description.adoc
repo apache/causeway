@@ -89,8 +89,7 @@ The `renderDay` element can also be specified using a custom meta-annotation:
 ----
 include::RenderDayMetaAnnotationEndDateExclusive.java[tags=class]
 ----
-<.> annotated for a property ...
-<.> \... and for a parameter.
+<.> annotated for a property or a parameter
 <.> annotation can be applied to a property (either its getter or the field directly)
 <.> annotation can be applied to a parameter
 <.> annotation can be applied to a type (ie, meta-meta annotations recursively)

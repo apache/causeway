@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationM
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
-import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
+import org.apache.isis.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

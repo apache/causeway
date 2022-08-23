@@ -14,7 +14,7 @@ class BuilderScriptWithResult<T> {
 }
 ----
 
-<.> xref:#getObject__[getObject()]
+<.> xref:#getObject_[getObject()]
 +
 --
 Simply returns the object returned by _#buildResult(ExecutionContext)_ .
@@ -22,7 +22,7 @@ Simply returns the object returned by _#buildResult(ExecutionContext)_ .
 
 == Members
 
-[#getObject__]
+[#getObject_]
 === getObject()
 
 Simply returns the object returned by _#buildResult(ExecutionContext)_ .

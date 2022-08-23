@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreePath;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -52,8 +52,9 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-sitemap",
+        describedAs = "Open up a view of the metamodel of this object's domain class",
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "700.2.1"
 )
 //mixin's don't need a logicalTypeName

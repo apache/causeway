@@ -19,12 +19,12 @@
 package org.apache.isis.extensions.secman.jpa.tenancy.dom;
 
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -34,12 +34,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.tenancy.dom.ApplicationTenancy.Nq;
+import org.apache.isis.persistence.jpa.applib.integration.IsisEntityListener;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -50,9 +53,7 @@ import lombok.Setter;
         schema = ApplicationTenancy.SCHEMA,
         name = ApplicationTenancy.TABLE,
         uniqueConstraints =
-            @UniqueConstraint(
-                    name = "ApplicationTenancy_name_UNQ",
-                    columnNames={"name"})
+            @UniqueConstraint(name = "ApplicationTenancy__name__UNQ", columnNames = { "name" })
 )
 @NamedQueries({
     @NamedQuery(
@@ -72,6 +73,8 @@ import lombok.Setter;
                   + " WHERE t.name LIKE :regex "
                   + "    OR t.path LIKE :regex"),
 })
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+@EntityListeners(IsisEntityListener.class)
 @Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
 @DomainObject(
         autoCompleteRepository = ApplicationTenancyRepository.class,

@@ -28,17 +28,16 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
+import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
-import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
@@ -157,9 +156,9 @@ extends IndicatingAjaxLink<ManagedObject> {
                 : null;
     }
 
-    protected WicketViewerSettings getSettings() {
-        return ((WicketViewerSettingsAccessor) Application.get()).getSettings();
-    }
+//    protected Wicket getSettings() {
+//        return ((WicketViewerSettingsAccessor) Application.get()).getSettings();
+//    }
 
     @Override
     public void onClick(final AjaxRequestTarget target) {
@@ -259,6 +258,10 @@ extends IndicatingAjaxLink<ManagedObject> {
 
     private ComponentFactoryRegistry getComponentFactoryRegistry() {
         return ((ComponentFactoryRegistryAccessor) Application.get()).getComponentFactoryRegistry();
+    }
+
+    public Wicket getSettings() {
+        return getCommonContext().getConfiguration().getViewer().getWicket();
     }
 
 }

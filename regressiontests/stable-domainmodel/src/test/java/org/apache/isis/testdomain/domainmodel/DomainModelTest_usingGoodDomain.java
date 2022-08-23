@@ -59,9 +59,9 @@ import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionP
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
-import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterChoicesFacetFromParentedCollection;
 import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -180,9 +180,9 @@ class DomainModelTest_usingGoodDomain {
 
         val holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
 
-        val mx_action = holderSpec.getActionElseFail("action"); // when @Action at type level
+        val mx_action = holderSpec.getActionElseFail("action1"); // when @Action at type level
         assertNotNull(mx_action);
-        assertEquals("action", mx_action.getId());
+        assertEquals("action1", mx_action.getId());
         assertEquals("foo", mx_action.getStaticFriendlyName().get());
         assertEquals("bar", mx_action.getStaticDescription().get());
         assertHasPublishedActionFacet(mx_action);
@@ -191,9 +191,9 @@ class DomainModelTest_usingGoodDomain {
         assertNotNull(mx_action2);
         assertHasPublishedActionFacet(mx_action2);
 
-        val mx_property = holderSpec.getAssociationElseFail("property"); // when @Property at type level
+        val mx_property = holderSpec.getAssociationElseFail("property1"); // when @Property at type level
         assertNotNull(mx_property);
-        assertEquals("property", mx_property.getId());
+        assertEquals("property1", mx_property.getId());
         assertEquals("foo", mx_property.getStaticFriendlyName().get());
         assertEquals("bar", mx_property.getStaticDescription().get());
 
@@ -203,9 +203,9 @@ class DomainModelTest_usingGoodDomain {
         assertEquals("foo", mx_property2.getStaticFriendlyName().get());
         assertEquals("bar", mx_property2.getStaticDescription().get());
 
-        val mx_collection = holderSpec.getAssociationElseFail("collection"); // when @Collection at type level
+        val mx_collection = holderSpec.getAssociationElseFail("collection1"); // when @Collection at type level
         assertNotNull(mx_collection);
-        assertEquals("collection", mx_collection.getId());
+        assertEquals("collection1", mx_collection.getId());
         assertEquals("foo", mx_collection.getStaticFriendlyName().get());
         assertEquals("bar", mx_collection.getStaticDescription().get());
 
@@ -442,7 +442,7 @@ class DomainModelTest_usingGoodDomain {
         val param0 = action.getParameters().getFirstOrFail();
 
         assertEquals(
-                ActionParameterChoicesFacetFromParentedCollection.class,
+                ActionParameterChoicesFacetFromChoicesFromFacet.class,
                 param0.lookupFacet(ActionParameterChoicesFacet.class)
                     .map(Object::getClass)
                     .orElse(null));
@@ -485,6 +485,52 @@ class DomainModelTest_usingGoodDomain {
                     .orElse(null));
     }
 
+    /**
+     *  annotation provided 'choicesFrom' fallback, if no explicit choices member-support is given
+     *  (that are params #1 and #3)
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    void actionParamChoices_shouldBeAvailable_whenMixedInActionHasChoicesFromAnnotationAttribute() {
+
+        val actTester = testerFactory
+                .actionTester(ProperMemberSupport.class, "action6");
+        actTester.assertExists(true);
+
+        // low-level MM inspection
+        {
+            val action = actTester.getActionMetaModelElseFail();
+            action.getParameters()
+            .forEach(param->{
+
+               assertTrue(param.getAction().isMixedIn(), ()->String.format(
+                       "param %d is expected to belong to a mixed-in action",
+                       param.getParameterIndex()));
+
+               val choicesFacet = param.getFacet(ActionParameterChoicesFacet.class);
+
+               assertNotNull(choicesFacet, ()->String.format(
+                       "param %d is expected to have an ActionParameterChoicesFacet",
+                       param.getParameterIndex()));
+            });
+        }
+
+        val mixee = actTester.getActionOwnerAs(ProperMemberSupport.class);
+        mixee.setMyColl(List.of(
+                "Hallo",
+                "World"));
+
+        val expectedParamChoices = Can.of(
+                "Hallo",
+                "World");
+
+        // verify param choices from 'choicesFrom' action annotation attribute (param params #1 and #3)
+        actTester.assertParameterChoices(true, String.class,
+                choices0->assertEquals(expectedParamChoices, Can.ofIterable(choices0), ()->"param 0 choices mismatch"),
+                choices1->assertEquals(expectedParamChoices, Can.ofIterable(choices1), ()->"param 1 choices mismatch"),
+                choices2->assertEquals(expectedParamChoices, Can.ofIterable(choices2), ()->"param 2 choices mismatch"),
+                choices3->assertEquals(expectedParamChoices, Can.ofIterable(choices3), ()->"param 3 choices mismatch"));
+    }
 
     @ParameterizedTest
     @MethodSource("provideImperativelyNamed")

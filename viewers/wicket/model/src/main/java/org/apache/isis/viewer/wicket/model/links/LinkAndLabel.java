@@ -29,8 +29,8 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.common.model.action.HasManagedAction;
-import org.apache.isis.viewer.common.model.mixin.HasUiComponent;
+import org.apache.isis.viewer.commons.model.action.HasManagedAction;
+import org.apache.isis.viewer.commons.model.mixin.HasUiComponent;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 
 import lombok.AccessLevel;

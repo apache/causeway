@@ -13,12 +13,12 @@ class ComparableContractTester<T> {
 }
 ----
 
-<.> xref:#ComparableContractTester__List[ComparableContractTester(List)]
+<.> xref:#ComparableContractTester_List[ComparableContractTester(List)]
 +
 --
 Provide an array of tuples; each tuple should consist of 4 elements, whereby item0 < item1 = item2 < item3 Typically item0 should be null valued (if supported by the impl).
 --
-<.> xref:#listOf__E[listOf(E)]
+<.> xref:#listOf_E[listOf(E)]
 +
 --
 Syntax sugar to remove boilerplate from subclasses.
@@ -26,12 +26,12 @@ Syntax sugar to remove boilerplate from subclasses.
 
 == Members
 
-[#ComparableContractTester__List]
+[#ComparableContractTester_List]
 === ComparableContractTester(List)
 
 Provide an array of tuples; each tuple should consist of 4 elements, whereby item0 < item1 = item2 < item3 Typically item0 should be null valued (if supported by the impl).
 
-[#listOf__E]
+[#listOf_E]
 === listOf(E)
 
 Syntax sugar to remove boilerplate from subclasses.

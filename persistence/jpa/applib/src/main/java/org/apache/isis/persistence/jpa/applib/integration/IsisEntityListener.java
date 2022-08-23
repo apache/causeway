@@ -31,13 +31,17 @@ import javax.persistence.PreUpdate;
 import org.eclipse.persistence.sessions.UnitOfWork;
 import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PreAndPostValue;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
+import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
+import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 import org.apache.isis.persistence.jpa.applib.services.JpaSupportService;
 
 import lombok.val;
@@ -66,18 +70,30 @@ public class IsisEntityListener {
     @Inject private ObjectLifecyclePublisher objectLifecyclePublisher;
     @Inject private Provider<JpaSupportService> jpaSupportServiceProvider;
     @Inject private ObjectManager objectManager;
+    @Inject private EventBusService eventBusService;
 
     @PrePersist void onPrePersist(final Object entityPojo) {
         log.debug("onPrePersist: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
+
         objectLifecyclePublisher.onPrePersist(entity);
     }
 
-    @PreUpdate void onPreUpdate(final Object entityPojo) {
-        log.debug("onPreUpdate: {}", entityPojo);
+    @PostLoad void onPostLoad(final Object entityPojo) {
+        log.debug("onPostLoad: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
+        objectLifecyclePublisher.onPostLoad(entity);
+    }
+
+
+    @PreUpdate void onPreUpdate(final Object entityPojo) {
+        log.debug("onPreUpdate: {}", entityPojo);
+
+        serviceInjector.injectServicesInto(entityPojo);
+        val entity = objectManager.adapt(entityPojo);
+
         val entityManagerResult = jpaSupportServiceProvider.get().getEntityManager(entityPojo.getClass());
         entityManagerResult.getValue().ifPresent(em -> {  // https://wiki.eclipse.org/EclipseLink/FAQ/JPA#How_to_access_what_changed_in_an_object_or_transaction.3F
             val unwrap = em.unwrap(UnitOfWork.class);
@@ -88,31 +104,26 @@ public class IsisEntityListener {
             }
 
             final Can<PropertyChangeRecord> propertyChangeRecords =
-            objectChanges
-            .getChanges()
-            .stream()
-            .filter(DirectToFieldChangeRecord.class::isInstance)
-            .map(DirectToFieldChangeRecord.class::cast)
-            .map(changeRecord -> {
-                //XXX lombok val issue with nested lambda
-                final String propertyName = changeRecord.getAttribute();
-                return entity
-                        .getSpecification()
-                        .getProperty(propertyName)
-                        .filter(property->!property.isMixedIn())
-                        .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-                        .map(property->PropertyChangeRecord.of(
-                                entity,
-                                property,
-                                PreAndPostValue
-                                    .pre(changeRecord.getOldValue())
-                                    .withPost(changeRecord.getNewValue())))
-                        .orElse(null); // ignore
-            })
-            .collect(Can.toCan()); // a Can<T> only collects non-null elements
+                objectChanges
+                .getChanges()
+                .stream()
+                .filter(property-> EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
+                .filter(DirectToFieldChangeRecord.class::isInstance)
+                .map(DirectToFieldChangeRecord.class::cast)
+                .map(ormChangeRecord -> {
+                    //XXX lombok val issue with nested lambda
+                    final String propertyName = ormChangeRecord.getAttribute();
+                    return entity
+                            .getSpecification()
+                            .getProperty(propertyName)
+                            .filter(property -> !property.isMixedIn())
+                            .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
+                            .map(property -> PropertyChangeRecord.ofCurrent(PropertyChangeRecordId.of(entity, property), ormChangeRecord.getOldValue()))
+                            .orElse(null); // ignore
+                })
+                .collect(Can.toCan()); // a Can<T> only collects non-null elements
 
             objectLifecyclePublisher.onPreUpdate(entity, propertyChangeRecords);
-
         });
     }
 
@@ -137,13 +148,6 @@ public class IsisEntityListener {
 
     @PostRemove void onPostRemove(final Object entityPojo) {
         log.debug("onPostRemove: {}", entityPojo);
-    }
-
-    @PostLoad void onPostLoad(final Object entityPojo) {
-        log.debug("onPostLoad: {}", entityPojo);
-        serviceInjector.injectServicesInto(entityPojo);
-        val entity = objectManager.adapt(entityPojo);
-        objectLifecyclePublisher.onPostLoad(entity);
     }
 
 }

@@ -62,6 +62,7 @@ import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_removeRoles;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_resetPassword;
+import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_timeZone;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_unlock;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateAccountType;
 import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateAtPath;
@@ -148,6 +149,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
         ApplicationUser_effectiveMemberPermissions.class,
         ApplicationUser_removeRoles.class,
         ApplicationUser_resetPassword.class,
+        ApplicationUser_timeZone.class,
         ApplicationUser_unlock.class,
         ApplicationUser_updateAccountType.class,
         ApplicationUser_updateAtPath.class,
@@ -186,7 +188,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 public class IsisModuleExtSecmanApplib {
 
     public static final String NAMESPACE = "isis.ext.secman";
-    public static final String SCHEMA = "isisExtensionsSecman";
+    public static final String SCHEMA = "isisExtSecman";
 
     public abstract static class TitleUiEvent<S>
             extends org.apache.isis.applib.events.ui.TitleUiEvent<S> { }

@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -41,6 +42,7 @@ import lombok.val;
 )
 @CollectionLayout(
     defaultView = "table",
+    paged = 5,
     sequence = "3"
 )
 public class HasUsername_recentCommandsByUser {
@@ -53,15 +55,15 @@ public class HasUsername_recentCommandsByUser {
         this.hasUsername = hasUsername;
     }
 
-    public List<CommandLogEntry> coll() {
+    @MemberSupport public List<? extends CommandLogEntry> coll() {
         val username = hasUsername.getUsername();
         return username != null
                 ? commandLogEntryRepository.findRecentByUsername(username)
                 : Collections.emptyList();
     }
-    public boolean hideColl() {
+    @MemberSupport public boolean hideColl() {
         return hasUsername.getUsername() == null;
     }
 
-    @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
 }

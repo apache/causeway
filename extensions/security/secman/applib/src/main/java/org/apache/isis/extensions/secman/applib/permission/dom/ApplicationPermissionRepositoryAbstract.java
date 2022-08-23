@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
@@ -43,7 +44,6 @@ import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRole;
-import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.NonNull;
@@ -54,11 +54,10 @@ implements ApplicationPermissionRepository {
 
     @Inject private RepositoryService repository;
     @Inject private ApplicationFeatureRepository featureRepository;
-    @Inject private ApplicationRoleRepository roleRepository;
     @Inject private FactoryService factory;
     @Inject private MessageService messages;
 
-    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
+    @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 
     private final Class<P> applicationPermissionClass;
 

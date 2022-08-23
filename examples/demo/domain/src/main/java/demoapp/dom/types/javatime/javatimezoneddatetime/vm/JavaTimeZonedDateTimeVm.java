@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.javatime.javatimezoneddatetime.vm;
 
+import java.time.ZonedDateTime;
+
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -39,7 +41,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDateTimeHolder3;
+import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDateTimeHolder4;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,7 +52,7 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.holder.JavaTimeZonedDate
         nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeZonedDateTimeVm
-        implements HasAsciiDocDescription, JavaTimeZonedDateTimeHolder3 {
+        implements HasAsciiDocDescription, JavaTimeZonedDateTimeHolder4 {
 
 //end::class[]
     public JavaTimeZonedDateTimeVm(final java.time.ZonedDateTime initialValue) {
@@ -62,7 +64,7 @@ public class JavaTimeZonedDateTimeVm
     @Title(prepend = "java.time.ZonedDateTime view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
-    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.ZonedDateTimeAdapter.class)               // <.>
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.ZonedDateTimeAdapter.class)        // <.>
     @Getter @Setter
     private java.time.ZonedDateTime readOnlyProperty;
 
@@ -84,6 +86,10 @@ public class JavaTimeZonedDateTimeVm
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.ZonedDateTimeAdapter.class)
     @Getter @Setter
     private java.time.ZonedDateTime readWriteOptionalProperty;
+
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.ZonedDateTimeAdapter.class)
+    @Getter @Setter
+    private ZonedDateTime readWritePropertyNoTimeZoneTranslation;
 
 }
 //end::class[]

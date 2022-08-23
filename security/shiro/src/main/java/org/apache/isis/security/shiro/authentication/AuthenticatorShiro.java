@@ -81,13 +81,12 @@ public class AuthenticatorShiro implements Authenticator {
     private final boolean autoLogout;
 
     @Inject
-    public AuthenticatorShiro(IsisConfiguration configuration) {
+    public AuthenticatorShiro(
+            final IsisConfiguration configuration) {
         super();
         this.configuration = configuration;
         this.autoLogout = this.configuration.getSecurity().getShiro().isAutoLogoutIfAlreadyAuthenticated();
     }
-
-
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -158,10 +157,10 @@ public class AuthenticatorShiro implements Authenticator {
     }
 
     InteractionContext authenticationFor(
-            AuthenticationRequest request,
-            String validationCode,
-            AuthenticationToken token,
-            Subject currentSubject) {
+            final AuthenticationRequest request,
+            final String validationCode,
+            final AuthenticationToken token,
+            final Subject currentSubject) {
 
         final Stream<String> roles = Stream.concat(
                 streamRoles(currentSubject, token),

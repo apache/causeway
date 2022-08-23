@@ -35,14 +35,13 @@ import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.RenderDay;
+import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -66,10 +65,8 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
 
 //tag::render-not-specified[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        renderDay = RenderDay.NOT_SPECIFIED         // <.>
-        , describedAs =
-            "@PropertyLayout(renderDay = NOT_SPECIFIED)",
+    @ValueSemantics                                 // <.>
+    @PropertyLayout(describedAs = "@ValueSemantics",
         fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
@@ -79,10 +76,9 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
 
 //tag::render-as-day-before[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        renderDay = RenderDay.AS_DAY_BEFORE         // <.>
-        , describedAs =
-            "@PropertyLayout(renderDay = AS_DAY_BEFORE)",
+    @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)                    // <.>
+    @PropertyLayout(describedAs =
+            "@ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)",
         fieldSetId = "annotation", sequence = "2")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
@@ -92,10 +88,9 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
 
 //tag::render-as-day[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        renderDay = RenderDay.AS_DAY             // <.>
-        , describedAs =
-            "Value of getEndDate(), but @PropertyLayout(renderDay = AS_DAY)",
+    @ValueSemantics(dateRenderAdjustDays = 0)                     // <.>
+    @PropertyLayout(describedAs =
+            "Value of getEndDate(), but @ValueSemantics(dateRenderAdjustDays = 0)",
         fieldSetId = "annotation", sequence = "3")
     public LocalDate getEndDateRaw() {
         return getEndDate();
@@ -131,9 +126,8 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
 //tag::meta-annotation-overridden[]
     @RenderDayMetaAnnotationStartDateInclusive      // <.>
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        renderDay = RenderDay.AS_DAY_BEFORE
-        , describedAs =
+    @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
+    @PropertyLayout(describedAs =
             "@RenderDayMetaAnnotationEndDateExclusive",
         fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)

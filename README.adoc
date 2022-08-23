@@ -73,8 +73,7 @@ Apache Isis automatically generates the UI from the domain classes.
 === Sign-in
 
 Apache Isis integrates with http://shiro.apache.org[Apache Shiro] as well as link:https://spring.io/projects/spring-security[Spring Security] and link:https://www.keycloak.org/[Keycloak].
-When using Shiro, the core framework supports file-based realms, while the xref:security:ROOT:about.adoc[SecMan extension] provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
-
+When using Shiro, the core framework supports file-based realms, while the __SecMan__ extension provides a well-featured subdomain of users, roles and permissions against features derived from the Apache Isis metamodel.
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/010-login.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/010-login.png"]
 
@@ -157,16 +156,16 @@ For example, when a collection of objects is rendered, this is just one several 
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/070-pluggable-views.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/070-pluggable-views.png"]
 
-The (non-ASF) link:https://platform.incode.org/modules/wkt/gmap3/wkt-gmap3.html[gmap3 component] will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
+The __gmap3__ extension will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/080-gmap3-view.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/080-gmap3-view.png"]
 
-Similarly the (non-ASF) link:https://platform.incode.org/modules/wkt/fullcalendar2/wkt-fullcalendar2.html[fullcalendar2 component] will render any domain entity (such as `ToDoItem`) that implements its `Calendarable` interface:
+Similarly the __fullcalendar2__ extension will render any domain entity (such as `ToDoItem`) that implements its `Calendarable` interface:
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/090-fullcalendar2-view.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/090-fullcalendar2-view.png"]
 
 
-Yet another "view" (though this one is rather simpler) is that provided by the (non-ASF) link:https://platform.incode.org/modules/wkt/excel/wkt-excel.html[excel component].
+Yet another "view" (though this one is rather simpler) is the __exceldownload__ extension.
 This provides a download button to the table as a spreadsheet:
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png"]
@@ -203,17 +202,14 @@ image::https://raw.githubusercontent.com/apache/isis/master/antora/components/do
 
 === Multi-tenancy support
 
-Of the various modules in the Incode Platform, the link:https://platform.incode.org/modules/spi/security/spi-security.html[security module] has the most features.
+One significant feature of the __SecMan__ extension the ability to associate users and objects with a "tenancy" (string) token.
+An SPI is provided as the mechanism to interpret this token, so this is highly configurable.
 
-NOTE: this module has now been integrated into the Apache Isis framework itself, as the xref:security:ROOT:about.adoc[SecMan extension].
-
-One significant feature of the is the ability to associate users and objects with a "tenancy".
 The todoapp uses this feature so that different users' list of todo items are kept separate from one another.
 A user with administrator is able to switch their own "tenancy" to the tenancy of some other user, in order to access the objects in that tenancy:
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/160-switch-tenancy.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/160-switch-tenancy.png"]
 
-For more details, see the security module's link:https://platform.incode.org/modules/spi/security/spi-security.html[README] (or xref:security:ROOT:about.adoc[SecMan extension])..
 
 === Me
 

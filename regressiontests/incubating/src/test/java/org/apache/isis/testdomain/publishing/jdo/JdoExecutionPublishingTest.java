@@ -40,9 +40,9 @@ import org.apache.isis.testdomain.publishing.stubs.ExecutionPublishingTestAbstra
         },
         properties = {
                 "logging.level.org.apache.isis.applib.services.publishing.log.ExecutionLogger=DEBUG",
-                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
+                "logging.level.org.apache.isis.persistence.jdo.datanucleus.persistence.IsisTransactionJdo=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
-                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.datanucleus.service.JdoPersistenceLifecycleService=DEBUG"
+                "logging.level.org.apache.isis.persistence.jdo.datanucleus.datanucleus.service.JdoPersistenceLifecycleService=DEBUG"
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test

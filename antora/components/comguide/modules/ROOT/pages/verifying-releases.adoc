@@ -16,7 +16,7 @@ This section describes some guidance on what a voter (members of the Apache Isis
 
 == Background
 
-Whenever a release manager announces a vote on a release (as per the xref:comguide:ROOT:cutting-a-release.adoc#_start_voting_thread_on_dev_mailing_list[release process]) on the xref:docs:support:mailing-list.adoc#mailing-lists[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
+Whenever a release manager announces a vote on a release (as per the xref:comguide:ROOT:cutting-a-release.adoc#start-voting-thread-on-dev-mailing-list[release process]) on the xref:docs:support:mailing-list.adoc#mailing-lists[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
 Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
 
 Per this http://www.apache.org/dev/release.html[ASF documentation], the legal requirements for an ASF release are:
@@ -112,6 +112,7 @@ And/or, you can go ahead and xref:comguide:ROOT:verifying-releases.adoc#casting-
 
 The next version of the website can be found at link:https://isis.staged.apache.org[].
 
+[#optional-creadur-tools]
 == (Optional) Creadur Tools
 
 The http://creadur.apache.org[Apache Creadur] project exists to provide a set of tools to ensure compliance with Apache's licensing standards.
@@ -131,6 +132,7 @@ Things to check include:
 
 In this report, each binary will have three links listed after its name '(licenses, notices, contents)'
 
+[#casting-a-vote]
 == Casting a Vote
 
 When you have made the above checks (and any other checks you think may be relevant), cast your vote by replying to the email thread on the mailing list.

@@ -23,7 +23,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -42,22 +41,8 @@ import lombok.val;
 @AllArgsConstructor
 @RequiredArgsConstructor
 //@Log4j2
-public abstract class FacetHolderAbstract
+abstract class FacetHolderAbstract
 implements FacetHolder {
-
-    // -- FACTORIES
-
-    public static FacetHolderAbstract simple(
-            final MetaModelContext mmc,
-            final Identifier featureIdentifier) {
-        return new FacetHolderAbstract(mmc, featureIdentifier) {};
-    }
-
-    public static FacetHolder layered(
-            final Identifier featureIdentifier,
-            final FacetHolder parentLayer) {
-        return new FacetHolderLayered(featureIdentifier, parentLayer);
-    }
 
     // -- FIELDS
 
@@ -122,15 +107,6 @@ implements FacetHolder {
     @Override
     public final Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
         return Optional.ofNullable(rankingByType.get(facetType));
-    }
-
-    // -- JUNIT SUPPORT
-
-    /**
-     *  Meant for simple JUnit tests, that don't use the FacetHolder's identifier.
-     */
-    public static FacetHolderAbstract forTesting(final MetaModelContext mmc) {
-        return simple(mmc, Identifier.classIdentifier(LogicalType.fqcn(Object.class)));
     }
 
     // -- HELPER

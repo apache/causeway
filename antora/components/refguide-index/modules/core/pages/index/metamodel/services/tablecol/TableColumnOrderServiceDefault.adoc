@@ -14,12 +14,12 @@ class TableColumnOrderServiceDefault {
 }
 ----
 
-<.> xref:#orderParented__Object_String_Class_List[orderParented(Object, String, Class, List)]
+<.> xref:#orderParented_Object_String_Class_List[orderParented(Object, String, Class, List)]
 +
 --
 Just returns the `propertyIds` unchanged.
 --
-<.> xref:#orderStandalone__Class_List[orderStandalone(Class, List)]
+<.> xref:#orderStandalone_Class_List[orderStandalone(Class, List)]
 +
 --
 Just returns the `propertyIds` unchanged.
@@ -27,12 +27,12 @@ Just returns the `propertyIds` unchanged.
 
 == Members
 
-[#orderParented__Object_String_Class_List]
+[#orderParented_Object_String_Class_List]
 === orderParented(Object, String, Class, List)
 
 Just returns the `propertyIds` unchanged.
 
-[#orderStandalone__Class_List]
+[#orderStandalone_Class_List]
 === orderStandalone(Class, List)
 
 Just returns the `propertyIds` unchanged.

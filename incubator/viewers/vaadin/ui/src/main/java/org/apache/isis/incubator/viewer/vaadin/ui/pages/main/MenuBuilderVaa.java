@@ -29,8 +29,8 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.action.ActionUiModelFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.model.decorator.Decorators;
-import org.apache.isis.viewer.common.model.menu.MenuItemDto;
-import org.apache.isis.viewer.common.model.menu.MenuVisitor;
+import org.apache.isis.viewer.commons.model.menu.MenuItemDto;
+import org.apache.isis.viewer.commons.model.menu.MenuVisitor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

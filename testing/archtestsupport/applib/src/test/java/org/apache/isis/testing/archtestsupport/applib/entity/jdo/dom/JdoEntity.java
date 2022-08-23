@@ -29,6 +29,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
 import javax.jdo.annotations.Version;
+import javax.jdo.annotations.VersionStrategy;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -37,7 +38,7 @@ import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 
 @PersistenceCapable(schema = "jdo", identityType = IdentityType.DATASTORE)
 @DatastoreIdentity(strategy = IdGeneratorStrategy.NATIVE)
-@Version
+@Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
 @Uniques(@Unique(name = "name", members = {"name"}))
 @DomainObject(nature = Nature.ENTITY)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)

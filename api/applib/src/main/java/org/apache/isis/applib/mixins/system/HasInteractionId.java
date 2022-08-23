@@ -21,15 +21,12 @@ package org.apache.isis.applib.mixins.system;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.util.UUID;
 
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactn.Interaction;
-
 
 /**
  * Allows domain objects that represent or are associated with a system
@@ -41,30 +38,18 @@ import org.apache.isis.applib.services.iactn.Interaction;
 public interface HasInteractionId {
 
     @Property(
-            hidden = Where.EVERYWHERE,
-            maxLength = InteractionIdStr.MAX_LENGTH
+            editing = Editing.DISABLED,
+            maxLength = InteractionId.MAX_LENGTH
     )
     @Parameter(
-            maxLength = InteractionIdStr.MAX_LENGTH
-    )
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    @interface InteractionIdStr {
-        int MAX_LENGTH = 36;
-        boolean NULLABLE = InteractionId.NULLABLE;
-        String ALLOWS_NULL = InteractionId.ALLOWS_NULL;
-        String NAME = "interactionId";
-    }
-
-
-    @Property(
-            editing = Editing.DISABLED
+            maxLength = InteractionId.MAX_LENGTH
     )
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface InteractionId {
         boolean NULLABLE = false;
         String ALLOWS_NULL = "false";
+        int MAX_LENGTH = 36;
     }
 
 
@@ -73,6 +58,5 @@ public interface HasInteractionId {
      */
     @InteractionId
     UUID getInteractionId();
-
 
 }

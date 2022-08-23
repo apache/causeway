@@ -4,23 +4,17 @@
 :page-partial:
 
 Whenever a domain object (or list of domain objects) is to be rendered, the framework fires off multiple domain events for every property, collection and action of the domain object.
-In the cases of the domain object's collections, the events that are fired are:
+In the cases of the domain object's collections, the event that is fired is:
 
 * hide phase: to check that the collection is visible (has not been hidden)
-* disable phase: to check that the collection is usable (has not been disabled)
-* validate phase: to check that the collection's arguments are valid (to add or remove an element)
-* pre-execute phase: before the modification of the collection
-* post-execute: after the modification of the collection
+
+[NOTE]
+====
+Unlike actions and properties, collections are immutable and so there are no events emitted for disable, validate, pre-execute or post-execute.
+====
 
 Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], and can influence each of these phases.
 
-[WARNING]
-====
-The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] does _not_ currently support the modification of collections; they are rendered read-only.
-However, domain events are still relevant to determine if such collections should be hidden.
-
-The workaround is to create add/remove actions and use xref:refguide:applib:index/annotation/MemberOrder.adoc[UI hints] to render them close to the collection.
-====
 
 By default the event raised is `CollectionDomainEvent.Default`.
 For example:
@@ -48,10 +42,10 @@ For example:
 ----
 public class ToDoItem {
 
-    public static class DependenciesChangedEvent
+    public static class DependenciesCollectionEvent
             extends CollectionDomainEvent<ToDoItem, ToDoItem> { } // <.>
     @Collection(
-        domainEvent=DependenciesChangedEvent.class
+        domainEvent=DependenciesCollectionEvent.class
     )
     @Getter @Setter
     private SortedSet<ToDoItem> dependencies = ...
@@ -100,8 +94,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SomeSubscriber {
-    @EventListener(ToDoItem.DependenciesChangedEvent.class)
-    public void on(ToDoItem.DependenciesChangedEvent ev) {
+    @EventListener(ToDoItem.DependenciesCollectionEvent.class)
+    public void on(ToDoItem.DependenciesCollectionEvent ev) {
         // ...
     }
 }
@@ -133,12 +127,8 @@ public class SomeSubscriber {
             case HIDE:                      // <.>
                 break;
             case DISABLE:                   // <.>
-                break;
-            case VALIDATE:                  // <.>
-                break;
-
+            case VALIDATE:
             case EXECUTING:
-                break;
             case EXECUTED:
                 break;
         }
@@ -147,13 +137,8 @@ public class SomeSubscriber {
 ----
 
 <.> call `ev.hide()` or `ev.veto("")` to hide the collection
+<.> collections are immutable and so domain events are never called for these phases.
 
-<.> call `ev.disable("...")` or `ev.veto("...")` to disable the collection
-
-<.> call ev.invalidate("...") or ev.veto("...") if object being added/removed to collection is invalid
-
-It is also possible to abort the transaction during the executing or executed phases by throwing an exception.
-If the exception is a subtype of `RecoverableException` then the exception will be rendered as a user-friendly warning (eg Growl/toast) rather than an error.
 
 ==== Default, Doop and Noop events
 

@@ -62,6 +62,7 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -104,7 +105,7 @@ import lombok.extern.log4j.Log4j2;
  * </ul>
  */
 @Service
-@Named("isis.metamodel.SpecificationLoaderDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".SpecificationLoaderDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @Log4j2

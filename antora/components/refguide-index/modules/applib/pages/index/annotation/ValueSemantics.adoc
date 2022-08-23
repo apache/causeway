@@ -18,6 +18,7 @@ Collects all the value-type specific customization attributes.
   FormatStyle dateFormatStyle() default FormatStyle.MEDIUM;     // <.>
   FormatStyle timeFormatStyle() default FormatStyle.MEDIUM;     // <.>
   TimePrecision timePrecision() default TimePrecision.SECOND;     // <.>
+  TimeZoneTranslation timeZoneTranslation() default TimeZoneTranslation.TO_LOCAL_TIMEZONE;     // <.>
   int dateRenderAdjustDays() default 0;     // <.>
 }
 ----
@@ -66,6 +67,11 @@ If associated with a temporal time value, the rendering style of a localized tim
 +
 --
 If associated with a temporal time value, the time of day precision, used for editing a time field in the UI.default = _TimePrecision#SECOND_
+--
+<.> xref:#timeZoneTranslation[timeZoneTranslation]
++
+--
+If associated with a temporal value, that has time-zone or time-offset information, the rendering mode, as to whether to transform the rendered value to the user's local/current time-zone or not.default = _TimeZoneTranslation#TO_LOCAL_TIMEZONE_
 --
 <.> xref:#dateRenderAdjustDays[dateRenderAdjustDays]
 +
@@ -119,6 +125,11 @@ If associated with a temporal time value, the rendering style of a localized tim
 === timePrecision
 
 If associated with a temporal time value, the time of day precision, used for editing a time field in the UI.default = _TimePrecision#SECOND_
+
+[#timeZoneTranslation]
+=== timeZoneTranslation
+
+If associated with a temporal value, that has time-zone or time-offset information, the rendering mode, as to whether to transform the rendered value to the user's local/current time-zone or not.default = _TimeZoneTranslation#TO_LOCAL_TIMEZONE_
 
 [#dateRenderAdjustDays]
 === dateRenderAdjustDays

@@ -118,13 +118,6 @@
 			<version>2.2.12</version>
 		</dependency>
 		<!-- END OF ASCII-DOC -->
-		
-		<!-- PRISM (SYNTAX HIGHLIGHTING) -->
-<!-- 		<dependency> -->
-<!-- 		    <groupId>org.webjars.bower</groupId> -->
-<!-- 		    <artifactId>prism</artifactId> -->
-<!-- 		    <version>1.16.0</version> -->
-<!-- 		</dependency> -->
 
 	</dependencies>
 

@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityChanges;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,7 +45,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Named("isis.runtimeservices.EntityChangesPublisherDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".EntityChangesPublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -84,7 +85,7 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
 
     // -- HELPER
 
-    private Optional<EntityChanges> getPayload(HasEnlistedEntityChanges hasEnlistedEntityChanges) {
+    private Optional<EntityChanges> getPayload(final @NonNull HasEnlistedEntityChanges hasEnlistedEntityChanges) {
         return enabledSubscribers.isEmpty()
                 ? Optional.empty()
                 : hasEnlistedEntityChanges.getEntityChanges(

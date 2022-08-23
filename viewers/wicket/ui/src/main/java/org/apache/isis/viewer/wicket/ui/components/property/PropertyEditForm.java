@@ -23,8 +23,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.viewer.common.model.components.ComponentType;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -33,16 +32,16 @@ import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
-class PropertyEditForm extends PromptFormAbstract<ScalarPropertyModel> {
+class PropertyEditForm
+extends PromptFormAbstract<ScalarPropertyModel> {
 
     private static final long serialVersionUID = 1L;
 
     public PropertyEditForm(
             final String id,
             final Component parentPanel,
-            final WicketViewerSettings settings,
             final ScalarPropertyModel propertyModel) {
-        super(id, parentPanel, settings, propertyModel);
+        super(id, parentPanel, propertyModel);
     }
 
     private ScalarPropertyModel scalarPropertyModel() {

@@ -1,4 +1,4 @@
-= ContentNegotiationService _(interface)_
+= ContentNegotiationService
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Generates a representation according to HTTP `Accept` header of the request.
@@ -21,27 +21,27 @@ interface ContentNegotiationService {
 }
 ----
 
-<.> xref:#buildResponse__IResourceContext_ManagedObject[buildResponse(IResourceContext, ManagedObject)]
+<.> xref:#buildResponse_IResourceContext_ManagedObject[buildResponse(IResourceContext, ManagedObject)]
 +
 --
 Returns a representation of a single object.
 --
-<.> xref:#buildResponse__IResourceContext_ManagedProperty[buildResponse(IResourceContext, ManagedProperty)]
+<.> xref:#buildResponse_IResourceContext_ManagedProperty[buildResponse(IResourceContext, ManagedProperty)]
 +
 --
 Returns a representation of a single property of an object.
 --
-<.> xref:#buildResponse__IResourceContext_ManagedCollection[buildResponse(IResourceContext, ManagedCollection)]
+<.> xref:#buildResponse_IResourceContext_ManagedCollection[buildResponse(IResourceContext, ManagedCollection)]
 +
 --
 Returns a representation of a single collection of an object.
 --
-<.> xref:#buildResponse__IResourceContext_ManagedAction[buildResponse(IResourceContext, ManagedAction)]
+<.> xref:#buildResponse_IResourceContext_ManagedAction[buildResponse(IResourceContext, ManagedAction)]
 +
 --
 Returns a representation of a single action (prompt) of an object.
 --
-<.> xref:#buildResponse__IResourceContext_ObjectAndActionInvocation[buildResponse(IResourceContext, ObjectAndActionInvocation)]
+<.> xref:#buildResponse_IResourceContext_ObjectAndActionInvocation[buildResponse(IResourceContext, ObjectAndActionInvocation)]
 +
 --
 Returns a representation of a single action invocation of an object.
@@ -49,35 +49,35 @@ Returns a representation of a single action invocation of an object.
 
 == Members
 
-[#buildResponse__IResourceContext_ManagedObject]
+[#buildResponse_IResourceContext_ManagedObject]
 === buildResponse(IResourceContext, ManagedObject)
 
 Returns a representation of a single object.
 
 By default this representation is as per section 14.4 of the RO spec, v1.0.
 
-[#buildResponse__IResourceContext_ManagedProperty]
+[#buildResponse_IResourceContext_ManagedProperty]
 === buildResponse(IResourceContext, ManagedProperty)
 
 Returns a representation of a single property of an object.
 
 By default this representation is as per section 16.4 of the RO spec, v1.0.
 
-[#buildResponse__IResourceContext_ManagedCollection]
+[#buildResponse_IResourceContext_ManagedCollection]
 === buildResponse(IResourceContext, ManagedCollection)
 
 Returns a representation of a single collection of an object.
 
 By default this representation is as per section 17.5 of the RO spec, v1.0.
 
-[#buildResponse__IResourceContext_ManagedAction]
+[#buildResponse_IResourceContext_ManagedAction]
 === buildResponse(IResourceContext, ManagedAction)
 
 Returns a representation of a single action (prompt) of an object.
 
 By default this representation is as per section 18.2 of the RO spec, v1.0.
 
-[#buildResponse__IResourceContext_ObjectAndActionInvocation]
+[#buildResponse_IResourceContext_ObjectAndActionInvocation]
 === buildResponse(IResourceContext, ObjectAndActionInvocation)
 
 Returns a representation of a single action invocation of an object.

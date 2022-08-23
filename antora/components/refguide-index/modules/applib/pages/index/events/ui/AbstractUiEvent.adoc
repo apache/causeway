@@ -14,17 +14,17 @@ class AbstractUiEvent<S> {
 }
 ----
 
-<.> xref:#AbstractUiEvent__[AbstractUiEvent()]
+<.> xref:#AbstractUiEvent_[AbstractUiEvent()]
 +
 --
 If used then the framework will set state via (non-API) setters.
 --
-<.> xref:#get__Object[get(Object)]
+<.> xref:#get_Object[get(Object)]
 +
 --
 Obtain user-data, as set by any other subscribers.
 --
-<.> xref:#put__Object_Object[put(Object, Object)]
+<.> xref:#put_Object_Object[put(Object, Object)]
 +
 --
 Set user-data, for the use of other subscribers.
@@ -32,17 +32,17 @@ Set user-data, for the use of other subscribers.
 
 == Members
 
-[#AbstractUiEvent__]
+[#AbstractUiEvent_]
 === AbstractUiEvent()
 
 If used then the framework will set state via (non-API) setters.
 
-[#get__Object]
+[#get_Object]
 === get(Object)
 
 Obtain user-data, as set by any other subscribers.
 
-[#put__Object_Object]
+[#put_Object_Object]
 === put(Object, Object)
 
 Set user-data, for the use of other subscribers.

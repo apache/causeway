@@ -86,7 +86,7 @@ implements ObjectTypeFacetFactory {
         .map(jdoPersistenceCapableFacet->{
 
             FacetUtil.addFacet(
-                    jdoFacetContext.createEntityFacet(facetHolder));
+                    jdoFacetContext.createEntityFacet(facetHolder, cls));
 
             return true; // jdoPersistenceCapableFacet was created
         })
@@ -111,7 +111,7 @@ implements ObjectTypeFacetFactory {
         .ifPresent(jdoPersistenceCapableFacet->{
 
             FacetUtil.addFacet(
-                    jdoFacetContext.createEntityFacet(facetHolder));
+                    jdoFacetContext.createEntityFacet(facetHolder, cls));
 
         });
     }

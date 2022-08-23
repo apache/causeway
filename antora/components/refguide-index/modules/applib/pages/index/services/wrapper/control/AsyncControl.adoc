@@ -24,37 +24,37 @@ class AsyncControl<R> {
 }
 ----
 
-<.> xref:#returningVoid__[returningVoid()]
+<.> xref:#returningVoid_[returningVoid()]
 +
 --
 Factory method to instantiate a control instance for a void action or a property edit (where there is no need or intention to provide a return value through the `Future`).
 --
-<.> xref:#returning__Class[returning(Class)]
+<.> xref:#returning_Class[returning(Class)]
 +
 --
 Factory method to instantiate for a control instance for an action returning a value of `` (where this value will be returned through the `Future`).
 --
-<.> xref:#withSkipRules__[withSkipRules()]
+<.> xref:#withSkipRules_[withSkipRules()]
 +
 --
 Skip checking business rules (hide/disable/validate) before executing the underlying property or action
 --
-<.> xref:#with__ExceptionHandler[with(ExceptionHandler)]
+<.> xref:#with_ExceptionHandler[with(ExceptionHandler)]
 +
 --
 How to handle exceptions if they occur, using the provided xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
 --
-<.> xref:#with__ExecutorService[with(ExecutorService)]
+<.> xref:#with_ExecutorService[with(ExecutorService)]
 +
 --
 Specifies the _ExecutorService_ to use to obtain the thread to invoke the action.
 --
-<.> xref:#withUser__UserMemento[withUser(UserMemento)]
+<.> xref:#withUser_UserMemento[withUser(UserMemento)]
 +
 --
 Specifies the user for the session used to execute the command asynchronously, in the background.
 --
-<.> xref:#setFuture__Future[setFuture(Future)]
+<.> xref:#setFuture_Future[setFuture(Future)]
 +
 --
 For framework use only.
@@ -62,43 +62,43 @@ For framework use only.
 
 == Members
 
-[#returningVoid__]
+[#returningVoid_]
 === returningVoid()
 
 Factory method to instantiate a control instance for a void action or a property edit (where there is no need or intention to provide a return value through the `Future`).
 
-[#returning__Class]
+[#returning_Class]
 === returning(Class)
 
 Factory method to instantiate for a control instance for an action returning a value of `` (where this value will be returned through the `Future`).
 
-[#withSkipRules__]
+[#withSkipRules_]
 === withSkipRules()
 
 Skip checking business rules (hide/disable/validate) before executing the underlying property or action
 
-[#with__ExceptionHandler]
+[#with_ExceptionHandler]
 === with(ExceptionHandler)
 
 How to handle exceptions if they occur, using the provided xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
 
 The default behaviour is to rethrow the exception.
 
-[#with__ExecutorService]
+[#with_ExecutorService]
 === with(ExecutorService)
 
 Specifies the _ExecutorService_ to use to obtain the thread to invoke the action.
 
 The default executor service is the common pool.
 
-[#withUser__UserMemento]
+[#withUser_UserMemento]
 === withUser(UserMemento)
 
 Specifies the user for the session used to execute the command asynchronously, in the background.
 
 If not specified, then the user of the current foreground session is used.
 
-[#setFuture__Future]
+[#setFuture_Future]
 === setFuture(Future)
 
 For framework use only.

@@ -40,8 +40,8 @@ implements ApplicationTenancyRepository {
 
     @Inject private FactoryService factory;
     @Inject private RepositoryService repository;
+    @Inject private RegexReplacer regexReplacer;
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
-    @Inject RegexReplacer regexReplacer;
 
 
     private final Class<T> applicationTenancyClass;

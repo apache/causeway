@@ -34,29 +34,13 @@ final class Converter {
 
     /**
      * For syntax highlighting to work, the client/browser needs to load specific
-     * java-script and css.
-     * <p>
-     * 1) In your web-app's {@code scripts/application.js} include the bundled
-     * {@code src/main/resources/prism1.14.js}.
-     * <pre>
-     * function includeJs(jsFilePath) {
-     *     var js = document.createElement("script");
-     *     js.type = "text/javascript";
-     *     js.src = jsFilePath;
-     *     document.body.appendChild(js);
-     * }
+     * Javascript and CSS.
+     * The framework supports this out of the box with its various viewers,
+     * using <i>Prism</i> web-jars.
      *
-     * includeJs("/scripts/prism1.14.js");
-     * </pre>
-     * <p>
-     * 2) In your web-app's {@code css/application.css} include the bundled
-     * {@code src/main/resources/prism.css}.
-     * <pre>
-     * {@code @import "prism.css"}.
-     * </pre>
+     * @param adoc - formated input to be converted to HTML
      *
-     * @param adoc - formatted input to be converted to HTML
-     * @param options - if {@code null} uses built-in default options
+     * @see <a href="https://prismjs.com/">prismjs.com</a>
      */
     public static String adocToHtml(final @Nullable String adoc, final @Nullable Options options) {
         return _Strings.isEmpty(adoc)

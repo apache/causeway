@@ -39,11 +39,12 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 import lombok.val;
 
 @Service
-@Named("isis.metamodel.ServiceRegistryDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ServiceRegistryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public final class ServiceRegistryDefault implements ServiceRegistry {
@@ -69,7 +70,8 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
-        return isisSystemEnvironment.getIocContainer()
+        val iocContainer = isisSystemEnvironment.getIocContainer();
+        return iocContainer
                 .select(type, qualifiers);
     }
 

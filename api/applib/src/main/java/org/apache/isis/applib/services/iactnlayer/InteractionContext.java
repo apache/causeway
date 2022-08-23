@@ -19,7 +19,9 @@
 package org.apache.isis.applib.services.iactnlayer;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
@@ -100,7 +102,14 @@ public class InteractionContext implements Serializable {
 
     @With @Getter @Builder.Default
     final @NonNull ZoneId timeZone = ZoneId.systemDefault();
-
+    /**
+     * Only override if zoneIdIfAny is present, otherwise acts as identity operation.
+     */
+    public InteractionContext withTimeZoneIfAny(final Optional<ZoneId> zoneIdIfAny) {
+        return zoneIdIfAny
+                .map(this::withTimeZone)
+                .orElse(this);
+    }
 
     /**
      * Convenience method for use with {@link org.apache.isis.applib.services.sudo.SudoService}, returning a
@@ -159,6 +168,14 @@ public class InteractionContext implements Serializable {
      */
     public static <T> UnaryOperator<T> combine(final Stream<UnaryOperator<T>> mappers) {
         return mappers.reduce(t -> t, (a,b) -> a.andThen(b)::apply);
+    }
+
+    /**
+     * Returns the {@link ZoneOffset} at the current time {@link Instant}
+     * (at which {@link ZoneId} rules apply to calculate the offset).
+     */
+    public ZoneOffset getTimeZoneOffsetNow() {
+        return getTimeZone().getRules().getOffset(Instant.now());
     }
 
 }

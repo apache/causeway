@@ -22,7 +22,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.viewer.wicket.ui.IsisModuleViewerWicketUi;
-import org.apache.isis.viewer.wicket.viewer.mixins.Object_clearHints;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
@@ -33,7 +32,6 @@ import org.apache.isis.viewer.wicket.viewer.services.DeepLinkServiceWicket;
 import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
 import org.apache.isis.viewer.wicket.viewer.services.ImageResourceCacheClassPath;
 import org.apache.isis.viewer.wicket.viewer.services.TranslationsResolverWicket;
-import org.apache.isis.viewer.wicket.viewer.services.WicketViewerSettingsDefault;
 import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.config.BootstrapInitWkt;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.config.DebugInitWkt;
@@ -70,10 +68,6 @@ import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WicketViewerCssBund
         PageNavigationServiceDefault.class,
         TranslationsResolverWicket.class,
         WebModuleWicket.class,
-        WicketViewerSettingsDefault.class,
-
-        // @Mixin's
-        Object_clearHints.class,
 
 })
 public class IsisModuleViewerWicketViewer {

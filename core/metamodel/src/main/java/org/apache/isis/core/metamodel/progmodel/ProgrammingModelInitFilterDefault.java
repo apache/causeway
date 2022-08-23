@@ -28,6 +28,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -43,7 +44,7 @@ import lombok.val;
  *
  */
 @Component
-@Named("isis.metamodel.ProgrammingModelInitFilterDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ProgrammingModelInitFilterDefault")
 public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFilter {
 
     @Inject private IsisConfiguration configuration;

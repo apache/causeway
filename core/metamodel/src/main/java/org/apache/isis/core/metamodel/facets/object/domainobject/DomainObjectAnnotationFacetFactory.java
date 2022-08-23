@@ -46,7 +46,6 @@ import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
@@ -127,6 +126,7 @@ implements
      * (eg. ValueTypeRegistry, configuration, ...)
      * TODO instead properly validate by implementing a validator that looks into the facets that are created
      */
+    @SuppressWarnings("removal")
     private void validateConflictingTypeSemantics(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {
@@ -194,18 +194,8 @@ implements
     void processEntityChangePublishing(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
+        //val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
-
-        //
-        // this rule originally implemented only in AuditableFacetFromConfigurationFactory
-        // but think should apply in general
-        //
-        if(HasInteractionId.class.isAssignableFrom(cls)) {
-            // do not install on any implementation of HasInteractionId
-            // (ie commands, audit entries, published events).
-            return;
-        }
 
         // check for @DomainObject(entityChangePublishing=....)
         val entityChangePublishing = domainObjectIfAny

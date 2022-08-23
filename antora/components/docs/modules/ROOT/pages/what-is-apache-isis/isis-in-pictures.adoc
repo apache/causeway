@@ -115,17 +115,11 @@ Similarly the xref:vw:fullcalendar:about.adoc[Fullcalendar2] extension will rend
 image::what-is-apache-isis/isis-in-pictures/090-fullcalendar2-view.png[width="800px"]
 
 
-The xref:vw:exceldownload:about.adoc[Excel Download] component is rather simplier: it simply provides a download button to the table as a spreadsheet:
+The xref:vw:exceldownload:about.adoc[Excel Download] component is rather simple: it simply provides a download button to the table as a spreadsheet:
 
 image::what-is-apache-isis/isis-in-pictures/100-excel-view-and-docx.png[width="800px"]
 
 
-
-
-The screenshot above also shows an "export to Word" action.
-This is _not_ a view but instead is a (contributed) action that uses the xref:subdomains:docx:about.adoc[Docx Library] to perform a "mail-merge":
-
-image::what-is-apache-isis/isis-in-pictures/110-docx.png[width="800px"]
 
 
 == Security, Auditing and more...
@@ -152,10 +146,6 @@ image::what-is-apache-isis/isis-in-pictures/140-i18n.png[width="800px"]
 
 
 
-Thexref:subdomains:settings:about.adoc[Settings] module manages application and user settings.
-Most apps (the todoapp example included) won't expose these services directly, but will usually wrap them in their own app-specific settings service that trivially delegates to the settings module's services:
-
-image::what-is-apache-isis/isis-in-pictures/150-appsettings.png[width="800px"]
 
 === Multi-tenancy support
 

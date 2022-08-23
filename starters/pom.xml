@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.1</version>
+		<version>2.7.2</version>
 		<relativePath />
 	</parent>
 
@@ -41,8 +41,8 @@
 
 		<maven.compiler.release>11</maven.compiler.release>
 
-		<spring-boot.version>2.7.1</spring-boot.version>
-		<approvaltests.version>16.0.0</approvaltests.version>
+		<spring-boot.version>2.7.2</spring-boot.version>
+		<approvaltests.version>18.0.0</approvaltests.version>
 
 		<resteasy.version>4.6.2.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
@@ -69,12 +69,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.12.0</version>
+					<version>3.12.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-project-info-reports-plugin</artifactId>
-					<version>3.3.0</version>
+					<version>3.4.0</version>
 				</plugin>
 
 			</plugins>
@@ -493,7 +493,7 @@
 				<plugins>
 					<plugin>
 					    <artifactId>maven-deploy-plugin</artifactId>
-					    <version>2.8.2</version>
+					    <version>3.0.0</version>
 					    <configuration>
 					        <altDeploymentRepository>
 					            nightly-localfs-repo::default::file://${MVN_SNAPSHOTS_PATH}

@@ -25,27 +25,27 @@ class Command {
 }
 ----
 
-<.> xref:#getUsername__[getUsername()]
+<.> xref:#getUsername_[getUsername()]
 +
 --
 The user that created the command.
 --
-<.> xref:#getTimestamp__[getTimestamp()]
+<.> xref:#getTimestamp_[getTimestamp()]
 +
 --
 The date/time at which this command was created.
 --
-<.> xref:#getTarget__[getTarget()]
+<.> xref:#getTarget_[getTarget()]
 +
 --
 Derived from _#getCommandDto()_ , is the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] of the target object (entity or service) on which this action/edit was performed.
 --
-<.> xref:#getLogicalMemberIdentifier__[getLogicalMemberIdentifier()]
+<.> xref:#getLogicalMemberIdentifier_[getLogicalMemberIdentifier()]
 +
 --
 Derived from _#getCommandDto()_ , holds a string representation of the invoked action, or the edited property.
 --
-<.> xref:#updater__[updater()]
+<.> xref:#updater_[updater()]
 +
 --
  *NOT API* : intended to be called only by the framework.
@@ -53,31 +53,31 @@ Derived from _#getCommandDto()_ , holds a string representation of the invoked a
 
 == Members
 
-[#getUsername__]
+[#getUsername_]
 === getUsername()
 
 The user that created the command.
 
-Derived from _#getCommandDto()_ 's _CommandDto#getUser()_
+Derived from _#getCommandDto()_ 's _CommandDto#getUsername()_ ()}
 
-[#getTimestamp__]
+[#getTimestamp_]
 === getTimestamp()
 
 The date/time at which this command was created.
 
 Derived from _#getCommandDto()_ 's _CommandDto#getTimestamp()_ .
 
-[#getTarget__]
+[#getTarget_]
 === getTarget()
 
 Derived from _#getCommandDto()_ , is the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] of the target object (entity or service) on which this action/edit was performed.
 
-[#getLogicalMemberIdentifier__]
+[#getLogicalMemberIdentifier_]
 === getLogicalMemberIdentifier()
 
 Derived from _#getCommandDto()_ , holds a string representation of the invoked action, or the edited property.
 
-[#updater__]
+[#updater_]
 === updater()
 
  *NOT API* : intended to be called only by the framework.

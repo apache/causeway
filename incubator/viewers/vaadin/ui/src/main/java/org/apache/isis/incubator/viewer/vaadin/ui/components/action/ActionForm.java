@@ -23,7 +23,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
-import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
+import org.apache.isis.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.Getter;
 import lombok.NonNull;

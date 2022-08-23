@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
@@ -47,7 +48,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isis.metamodel.ObjectManagerDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ObjectManagerDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("DEFAULT")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

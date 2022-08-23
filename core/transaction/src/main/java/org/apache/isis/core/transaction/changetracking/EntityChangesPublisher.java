@@ -33,6 +33,6 @@ public interface EntityChangesPublisher {
      * an {@link org.apache.isis.applib.services.iactn.Interaction}, calling
      * the {@link EntityChangesSubscriber#onChanging(EntityChanges)} callback.
      */
-    void publishChangingEntities(HasEnlistedEntityChanges hasEnlistedEntityChanges);
+    void publishChangingEntities(final HasEnlistedEntityChanges hasEnlistedEntityChanges);
 
 }

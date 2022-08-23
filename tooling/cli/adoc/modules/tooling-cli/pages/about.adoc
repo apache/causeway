@@ -228,6 +228,7 @@ For example, in the config example above the sections defined will render "Persi
 
 
 
+[#index-index]
 === Index (`index`)
 
 This command generates the _Document Global Index_ (`.adoc`) files.

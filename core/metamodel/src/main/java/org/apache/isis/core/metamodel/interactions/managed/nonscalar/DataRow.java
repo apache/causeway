@@ -32,8 +32,10 @@ public class DataRow {
     @Getter private final UUID uuid = UUID.randomUUID(); // in support of client side sorting
     private final ManagedObject rowElement;
     @Getter private final BooleanBindable selectToggle;
+    @Getter private final DataTableModel parentTable;
 
     public DataRow(final DataTableModel parentTable, final ManagedObject rowElement) {
+        this.parentTable = parentTable;
         this.rowElement = rowElement;
 
         selectToggle = _Bindables.forBoolean(false);

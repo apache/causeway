@@ -1,4 +1,4 @@
-= Parser _(interface)_
+= Parser
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Provides a mechanism for parsing and rendering string representations of objects.
@@ -33,22 +33,22 @@ interface Parser<T> {
 }
 ----
 
-<.> xref:#parseableTextRepresentation__ValueSemanticsProvider.Context_T[parseableTextRepresentation(ValueSemanticsProvider.Context, T)]
+<.> xref:#parseableTextRepresentation_ValueSemanticsProvider_Context_T[parseableTextRepresentation(ValueSemanticsProvider_Context, T)]
 +
 --
 A title for the object that is valid but which may be easier to edit than the title provided by a `TitleFacet` . (bijective)
 --
-<.> xref:#parseTextRepresentation__ValueSemanticsProvider.Context_String[parseTextRepresentation(ValueSemanticsProvider.Context, String)]
+<.> xref:#parseTextRepresentation_ValueSemanticsProvider_Context_String[parseTextRepresentation(ValueSemanticsProvider_Context, String)]
 +
 --
 Parses a string to an instance of the object. (bijective)
 --
-<.> xref:#typicalLength__[typicalLength()]
+<.> xref:#typicalLength_[typicalLength()]
 +
 --
 The typical length of objects that can be parsed.
 --
-<.> xref:#maxLength__[maxLength()]
+<.> xref:#maxLength_[maxLength()]
 +
 --
 The max length of objects that can be parsed (if any). A return type of -1 corresponds to unlimited.
@@ -56,24 +56,24 @@ The max length of objects that can be parsed (if any). A return type of -1 corre
 
 == Members
 
-[#parseableTextRepresentation__ValueSemanticsProvider.Context_T]
-=== parseableTextRepresentation(ValueSemanticsProvider.Context, T)
+[#parseableTextRepresentation_ValueSemanticsProvider_Context_T]
+=== parseableTextRepresentation(ValueSemanticsProvider_Context, T)
 
 A title for the object that is valid but which may be easier to edit than the title provided by a `TitleFacet` . (bijective)
 
 The idea here is that the viewer can display a parseable title for an existing object when, for example, the user initially clicks in the field. So, a date might be rendered via a `TitleFacet` as `May 2, 2007` , but its editable form might be `20070502` .
 
-[#parseTextRepresentation__ValueSemanticsProvider.Context_String]
-=== parseTextRepresentation(ValueSemanticsProvider.Context, String)
+[#parseTextRepresentation_ValueSemanticsProvider_Context_String]
+=== parseTextRepresentation(ValueSemanticsProvider_Context, String)
 
 Parses a string to an instance of the object. (bijective)
 
-[#typicalLength__]
+[#typicalLength_]
 === typicalLength()
 
 The typical length of objects that can be parsed.
 
-[#maxLength__]
+[#maxLength_]
 === maxLength()
 
 The max length of objects that can be parsed (if any). A return type of -1 corresponds to unlimited.

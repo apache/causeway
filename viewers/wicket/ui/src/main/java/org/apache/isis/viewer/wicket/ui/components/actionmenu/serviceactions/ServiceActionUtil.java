@@ -27,9 +27,9 @@ import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.common.model.menu.MenuItemDto;
-import org.apache.isis.viewer.common.model.menu.MenuUiModel;
-import org.apache.isis.viewer.common.model.menu.MenuVisitor;
+import org.apache.isis.viewer.commons.model.menu.MenuItemDto;
+import org.apache.isis.viewer.commons.model.menu.MenuUiModel;
+import org.apache.isis.viewer.commons.model.menu.MenuVisitor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;

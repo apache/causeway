@@ -269,7 +269,7 @@ public class J2AdocContext {
 
     private static void logIfEmptyOrAmbiguous(final Can<J2AdocUnit> units, final String doingWhat) {
         if(units.isEmpty()) {
-            log.warn("{} yielded no match %n", doingWhat);
+            log.warn("{} yielded no match", doingWhat);
         } else if(units.isCardinalityMultiple()) {
             log.warn("{} was ambiguous with results: ", doingWhat);
             units.forEach(unit->log.warn("\t{}", unit.toString()));

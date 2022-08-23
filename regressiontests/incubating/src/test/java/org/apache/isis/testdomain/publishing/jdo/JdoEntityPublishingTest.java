@@ -40,7 +40,7 @@ import org.apache.isis.testdomain.publishing.stubs.EntityPublishingTestAbstract;
         },
         properties = {
                 "logging.level.org.apache.isis.applib.services.publishing.log.EntityChangesLogger=DEBUG",
-                "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
+                "logging.level.org.apache.isis.persistence.jdo.datanucleus.persistence.IsisTransactionJdo=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
                 "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
                 "logging.level.org.apache.isis.testdomain.util.kv.KVStoreForTesting=DEBUG",

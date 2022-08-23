@@ -22,9 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.FormatStyle;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
+import org.apache.isis.applib.annotation.TimeZoneTranslation;
 import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -37,6 +35,10 @@ import org.apache.isis.core.metamodel.facets.objectvalue.digits.MinFractionalDig
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MinIntegerDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.DateFormatStyleFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.temporalformat.TimeZoneTranslationFacet;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @SuppressWarnings("unused")
 public class ValueSemanticsAnnotationFacetFactoryTest
@@ -260,6 +262,27 @@ extends AbstractFacetFactoryTest {
         assertDateRenderAdjustDays(facetedMethod, -1);
     }
 
+    public void testTimeZoneTranslationPickedUpOnProperty() {
+        // given
+        class Order {
+            @ValueSemantics(timeZoneTranslation = TimeZoneTranslation.NONE)
+            public LocalDateTime getDateTimeA() { return null; }
+
+            @ValueSemantics(timeZoneTranslation = TimeZoneTranslation.TO_LOCAL_TIMEZONE)
+            public LocalDateTime getDateTimeB() { return null; }
+
+        }
+        // when
+        processMethod(newFacetFactory(), Order.class, "getDateTimeA", _Constants.emptyClasses);
+        // then
+        assertTimeZoneTranslation(facetedMethod, TimeZoneTranslation.NONE);
+
+        // when
+        processMethod(newFacetFactory(), Order.class, "getDateTimeB", _Constants.emptyClasses);
+        // then
+        assertTimeZoneTranslation(facetedMethod, TimeZoneTranslation.TO_LOCAL_TIMEZONE);
+    }
+
     public void testDateFormatStylePickedUpOnProperty() {
         // given
         class Order {
@@ -371,5 +394,14 @@ extends AbstractFacetFactoryTest {
         assertNotNull(facet);
         assertThat(facet.getTimeFormatStyle(), is(formatStyle));
     }
+
+    private void assertTimeZoneTranslation(
+            final FacetedMethod facetedMethod, final TimeZoneTranslation timeZoneTranslation) {
+        final TimeZoneTranslationFacet facet = facetedMethod.getFacet(TimeZoneTranslationFacet.class);
+        assertNotNull(facet);
+        assertThat(facet.getTimeZoneTranslation(), is(timeZoneTranslation));
+    }
+
+
 
 }

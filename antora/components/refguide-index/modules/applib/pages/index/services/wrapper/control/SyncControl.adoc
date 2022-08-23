@@ -18,27 +18,27 @@ class SyncControl {
 }
 ----
 
-<.> xref:#withSkipRules__[withSkipRules()]
+<.> xref:#withSkipRules_[withSkipRules()]
 +
 --
 Skip checking business rules (hide/disable/validate) before executing the underlying property or action
 --
-<.> xref:#with__ExceptionHandler[with(ExceptionHandler)]
+<.> xref:#with_ExceptionHandler[with(ExceptionHandler)]
 +
 --
 How to handle exceptions if they occur, using the provided xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
 --
-<.> xref:#withExecute__[withExecute()]
+<.> xref:#withExecute_[withExecute()]
 +
 --
 Explicitly set the action to be executed.
 --
-<.> xref:#withNoExecute__[withNoExecute()]
+<.> xref:#withNoExecute_[withNoExecute()]
 +
 --
 Explicitly set the action to _not_ be executed, in other words a "dry run".
 --
-<.> xref:#getExecutionModes__[getExecutionModes()]
+<.> xref:#getExecutionModes_[getExecutionModes()]
 +
 --
 Not API.
@@ -46,29 +46,29 @@ Not API.
 
 == Members
 
-[#withSkipRules__]
+[#withSkipRules_]
 === withSkipRules()
 
 Skip checking business rules (hide/disable/validate) before executing the underlying property or action
 
-[#with__ExceptionHandler]
+[#with_ExceptionHandler]
 === with(ExceptionHandler)
 
 How to handle exceptions if they occur, using the provided xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
 
 The default behaviour is to rethrow the exception.
 
-[#withExecute__]
+[#withExecute_]
 === withExecute()
 
 Explicitly set the action to be executed.
 
-[#withNoExecute__]
+[#withNoExecute_]
 === withNoExecute()
 
 Explicitly set the action to _not_ be executed, in other words a "dry run".
 
-[#getExecutionModes__]
+[#getExecutionModes_]
 === getExecutionModes()
 
 Not API.

@@ -23,17 +23,17 @@ class IconUiEvent<S> {
 }
 ----
 
-<.> xref:#IconUiEvent__[IconUiEvent()]
+<.> xref:#IconUiEvent_[IconUiEvent()]
 +
 --
 If used then the framework will set state via (non-API) setters.
 --
-<.> xref:#getIconName__[getIconName()]
+<.> xref:#getIconName_[getIconName()]
 +
 --
 The icon name as provided by a subscriber using _#setIconName(String)_ .
 --
-<.> xref:#setIconName__String[setIconName(String)]
+<.> xref:#setIconName_String[setIconName(String)]
 +
 --
 For subscribers to call to provide an icon name for this object.
@@ -41,19 +41,19 @@ For subscribers to call to provide an icon name for this object.
 
 == Members
 
-[#IconUiEvent__]
+[#IconUiEvent_]
 === IconUiEvent()
 
 If used then the framework will set state via (non-API) setters.
 
 Because the _EventObject_ superclass prohibits a null source, a dummy value is temporarily used.
 
-[#getIconName__]
+[#getIconName_]
 === getIconName()
 
 The icon name as provided by a subscriber using _#setIconName(String)_ .
 
-[#setIconName__String]
+[#setIconName_String]
 === setIconName(String)
 
 For subscribers to call to provide an icon name for this object.

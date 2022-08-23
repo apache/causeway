@@ -31,8 +31,8 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
-import org.apache.isis.viewer.common.model.components.UiComponentFactory;
-import org.apache.isis.viewer.common.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
+import org.apache.isis.viewer.commons.model.components.UiComponentFactory;
+import org.apache.isis.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 
 import lombok.Getter;
 import lombok.val;

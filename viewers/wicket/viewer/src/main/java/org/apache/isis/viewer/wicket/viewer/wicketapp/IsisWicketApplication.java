@@ -60,8 +60,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -103,7 +101,6 @@ extends AuthenticatedWebApplication
 implements
     ComponentFactoryRegistryAccessor,
     PageClassRegistryAccessor,
-    WicketViewerSettingsAccessor,
     HasCommonContext {
 
     private static final long serialVersionUID = 1L;
@@ -128,9 +125,6 @@ implements
 
     @Getter(onMethod = @__(@Override))
     @Inject private PageClassRegistry pageClassRegistry;
-
-    @Getter(onMethod = @__(@Override))
-    @Inject private WicketViewerSettings settings;
 
     // -- CONSTRUCTION
 

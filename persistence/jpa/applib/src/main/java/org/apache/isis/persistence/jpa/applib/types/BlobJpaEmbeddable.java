@@ -42,7 +42,7 @@ import lombok.val;
  *
  * <p>
  * EclipseLink <i>does</i> provide its own extension,
- * <a href="https://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/a_transformation.htm>Transformation API</a>,
+ * <a href="https://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/a_transformation.htm">Transformation API</a>,
  * but there's a lot of boilerplate involved even so.
  * </p>
  *
@@ -82,10 +82,10 @@ public final class BlobJpaEmbeddable {
 
     /**
      * Factory method to marshall a {@link Blob} into a {@link BlobJpaEmbeddable}
-     * 
+     *
      * @see #toBlob(BlobJpaEmbeddable)
      */
-    public static BlobJpaEmbeddable fromBlob(Blob blob) {
+    public static BlobJpaEmbeddable fromBlob(final Blob blob) {
         if(blob == null) {
             return null;
         }
@@ -98,7 +98,7 @@ public final class BlobJpaEmbeddable {
 
     /**
      * Reciprocal method to marshall a {@link BlobJpaEmbeddable} into a {@link Blob}
-     * 
+     *
      * @see #fromBlob(Blob)
      */
     public static Blob toBlob(final BlobJpaEmbeddable blobJpaEmbeddable) {
@@ -122,7 +122,7 @@ public final class BlobJpaEmbeddable {
         return new Blob(name, mimeType, bytes);
     }
 
-    
+
     @Override
     public String toString() {
         return asBlob().toString();

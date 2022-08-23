@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import org.apache.poi.util.IOUtils;
@@ -30,8 +31,6 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.extensions.excel.applib.ExcelService;
 import org.apache.isis.extensions.excel.applib.service.ExcelServiceDefault;
-
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -63,21 +62,19 @@ public class ExcelFileBlobConverter {
 
     private byte[] bytes;
 
-    private byte[] getBytes(URL resource) {
+    private byte[] getBytes(final URL resource) {
         if (bytes == null) {
                 bytes = readBytes(resource);
         }
         return bytes;
     }
 
-    private byte[] readBytes(URL resource) {
-        try(val is = resource.openStream()) {
+    private byte[] readBytes(final URL resource) {
+        try(final InputStream is = resource.openStream()) {
             return _Bytes.of(is);
         } catch (Exception e) {
             throw new IllegalArgumentException("Could not read from resource: " + resource);
         }
     }
-
-
 
 }

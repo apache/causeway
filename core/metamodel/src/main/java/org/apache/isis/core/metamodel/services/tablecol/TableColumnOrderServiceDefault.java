@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 /**
  * Used as a identity fallback.
@@ -35,7 +36,7 @@ import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.metamodel.TableColumnOrderServiceDefault")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".TableColumnOrderServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 public class TableColumnOrderServiceDefault implements TableColumnOrderService {

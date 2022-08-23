@@ -96,6 +96,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.isis.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.isis.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler;
@@ -112,10 +113,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.WrapperFactoryDefault")
+@Named(WrapperFactoryDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class WrapperFactoryDefault implements WrapperFactory {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleCoreRuntimeServices.NAMESPACE + ".WrapperFactoryDefault";
 
     @Inject InteractionLayerTracker interactionLayerTracker;
     @Inject FactoryService factoryService;
@@ -368,19 +371,19 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val method = memberAndTarget.getMethod();
 
         val argAdapters = Can.ofArray(WrapperFactoryDefault.this.adaptersFor(args));
-        val targetList = Can.ofSingleton(InteractionHead.regular(targetAdapter));
+        val head = InteractionHead.regular(targetAdapter);
 
         CommandDto commandDto;
         switch (memberAndTarget.getType()) {
             case ACTION:
                 val action = memberAndTarget.getAction();
                 commandDto = commandDtoFactory
-                        .asCommandDto(commandInteractionId, targetList, action, argAdapters);
+                        .asCommandDto(commandInteractionId, head, action, argAdapters);
                 break;
             case PROPERTY:
                 val property = memberAndTarget.getProperty();
                 commandDto = commandDtoFactory
-                        .asCommandDto(commandInteractionId, targetList, property, argAdapters.getElseFail(0));
+                        .asCommandDto(commandInteractionId, head, property, argAdapters.getElseFail(0));
                 break;
             default:
                 // shouldn't happen, already catered for this case previously

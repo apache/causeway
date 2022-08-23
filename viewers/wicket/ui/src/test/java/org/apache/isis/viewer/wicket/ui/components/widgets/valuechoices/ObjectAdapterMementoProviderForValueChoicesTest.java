@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 
@@ -60,7 +59,6 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
     @Mock private ObjectSpecification mockSpec;
     @Mock private ScalarModel mockScalarModel;
     @Mock private IsisAppCommonContext mockCommonContext;
-    @Mock private WicketViewerSettings mockWicketViewerSettings;
 
     @Before
     public void setUp() throws Exception {
@@ -77,9 +75,6 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
 
             allowing(mockScalarModel).getCommonContext();
             will(returnValue(mockCommonContext));
-
-            allowing(mockCommonContext).lookupServiceElseFail(WicketViewerSettings.class);
-            will(returnValue(mockWicketViewerSettings));
 
             allowing(mockCommonContext).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));

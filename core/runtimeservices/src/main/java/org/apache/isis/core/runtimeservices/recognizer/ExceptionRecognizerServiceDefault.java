@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.NonNull;
 import lombok.val;
@@ -45,7 +46,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isis.runtimeservices.ExceptionRecognizerServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ExceptionRecognizerServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerServiceDefault

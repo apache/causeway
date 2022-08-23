@@ -58,6 +58,6 @@ extends ActionParameterChoicesFacetAbstract {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("oneToManyAssociation", coll);
+        visitor.accept("oneToManyAssociation", coll.getId());
     }
 }

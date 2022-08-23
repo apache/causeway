@@ -70,11 +70,18 @@ extends
         LOCAL,
 
         /**
-         * Temporal value type has time-zone data.
+         * Temporal value type has time-zone offset data.
          */
-        OFFSET;
+        OFFSET,
+
+        /**
+         * Temporal value type has time-zone id data.
+         */
+        ZONED;
 
         public boolean isLocal() {return this == LOCAL;}
+        public boolean isOffset() {return this == OFFSET;}
+        public boolean isZoned() {return this == ZONED;}
     }
 
     TemporalCharacteristic getTemporalCharacteristic();
@@ -113,6 +120,9 @@ extends
          * Yielding {@link TimeFormatPrecision#NANO_SECOND}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternNanoSecond = "HH[:mm[:ss][.SSSSSSSSS]]";
@@ -122,6 +132,9 @@ extends
          * Yielding {@link TimeFormatPrecision#MICRO_SECOND}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternMicroSecond = "HH[:mm[:ss][.SSSSSS]]";
@@ -131,6 +144,9 @@ extends
          * Yielding {@link TimeFormatPrecision#MILLI_SECOND}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternMilliSecond = "HH[:mm[:ss][.SSS]]";
@@ -140,6 +156,9 @@ extends
          * Yielding {@link TimeFormatPrecision#SECOND}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternSecond = "HH[:mm[:ss]]";
@@ -149,6 +168,9 @@ extends
          * Yielding {@link TimeFormatPrecision#MINUTE}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternMinute = "HH[:mm]";
@@ -158,6 +180,9 @@ extends
          * Yielding {@link TimeFormatPrecision#HOUR}.
          * <p>
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
+         *
+         * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NotNull @NotEmpty
         private String timePatternHour = "HH";
@@ -166,9 +191,56 @@ extends
 
         /**
          * The locale-independent (canonical) pattern used for editing time-zone in the UI.
+         * <p>
+         * Java time-zone formats<pre>
+         * V       time-zone ID                zone-id           America/Los_Angeles; Z; -08:30
+         * z       time-zone name              zone-name         Pacific Standard Time; PST
+         * O       localized zone-offset       offset-O          GMT+8; GMT+08:00; UTC-08:00;
+         * X       zone-offset 'Z' for zero    offset-X          Z; -08; -0830; -08:30; -083015; -08:30:15;
+         * x       zone-offset                 offset-x          +0000; -08; -0830; -08:30; -083015; -08:30:15;
+         * Z       zone-offset                 offset-Z          +0000; -0800; -08:00;
+         *</pre>
+         *
+         * TODO no <i>tempus-dominus</i> date/time-picker support yet.
          */
         @NotNull @NotEmpty
-        private String zonePattern = "x";
+        private String zoneIdPatternForOutput = "VV";
+
+        /**
+         * TODO no <i>tempus-dominus</i> date/time-picker support yet.
+         */
+        @NotNull @NotEmpty
+        private String zoneIdPatternForInput = "VV";
+
+        /**
+         * The locale-independent (canonical) pattern used for editing time-offset in the UI.
+         * <p>
+         * Java time-zone formats<pre>
+         * V       time-zone ID                zone-id           America/Los_Angeles; Z; -08:30
+         * z       time-zone name              zone-name         Pacific Standard Time; PST
+         * O       localized zone-offset       offset-O          GMT+8; GMT+08:00; UTC-08:00;
+         * X       zone-offset 'Z' for zero    offset-X          Z; -08; -0830; -08:30; -083015; -08:30:15;
+         * x       zone-offset                 offset-x          +0000; -08; -0830; -08:30; -083015; -08:30:15;
+         * Z       zone-offset                 offset-Z          +0000; -0800; -08:00;
+         *</pre>
+         *
+         * @apiNote Yet only tested with {@literal XXX}, as there needs to be a format correspondence with
+         * <i>momentJs</i> for the <i>tempus-dominus</i> date/time-picker to work
+         * (as used by the <i>Wicket Viewer</i>).
+         * {@link org.apache.isis.viewer.wicket.ui.components.scalars.datepicker._TimeFormatUtil}
+         * does the format conversion.
+         */
+        @NotNull @NotEmpty
+        private String offsetPatternForOutput = "XXX";
+
+        /**
+         * Support both forms for parsing, with or without colon.
+         * <p>
+         * (Order of optional blocks matter, eg. {@literal [X][XXX]} would not work.)
+         * @see "https://stackoverflow.com/questions/34637626/java-datetimeformatter-for-time-zone-with-an-optional-colon-separator"
+         */
+        @NotNull @NotEmpty
+        private String offsetPatternForInput = "[XXX][X]";
 
         // -- JOINING PATTERNS
 
@@ -202,20 +274,46 @@ extends
             switch (temporalCharacteristic) {
             case DATE_TIME:
                 val dateTimePattern =
-                    String.format(getDateTimeJoiningPattern(), getDatePattern(), timePattern(timePrecision, direction));
+                    String.format(getDateTimeJoiningPattern(),
+                            getDatePattern(),
+                            timePattern(timePrecision, direction));
                 return offsetCharacteristic.isLocal()
                         ? dateTimePattern
-                        : String.format(getZoneJoiningPattern(), dateTimePattern, getZonePattern());
+                        : String.format(getZoneJoiningPattern(),
+                                dateTimePattern,
+                                zonePattern(offsetCharacteristic, direction));
             case DATE_ONLY:
                 return offsetCharacteristic.isLocal()
                         ? getDatePattern()
-                        : String.format(getZoneJoiningPattern(), getDatePattern(), getZonePattern());
+                        : String.format(getZoneJoiningPattern(),
+                                getDatePattern(),
+                                zonePattern(offsetCharacteristic,direction));
             case TIME_ONLY:
                 return offsetCharacteristic.isLocal()
                         ? timePattern(timePrecision, direction)
-                        : String.format(getZoneJoiningPattern(), timePattern(timePrecision, direction), getZonePattern());
+                        : String.format(getZoneJoiningPattern(),
+                                timePattern(timePrecision, direction),
+                                zonePattern(offsetCharacteristic, direction));
             default:
                 throw _Exceptions.unmatchedCase(temporalCharacteristic);
+            }
+        }
+
+        private String zonePattern(
+                final @NonNull OffsetCharacteristic offsetCharacteristic,
+                final @NonNull EditingFormatDirection direction) {
+
+            switch(offsetCharacteristic) {
+            case OFFSET:
+                return direction.isInput()
+                        ? getOffsetPatternForInput()
+                        : getOffsetPatternForOutput();
+            case ZONED:
+                return direction.isInput()
+                        ? getZoneIdPatternForInput()
+                        : getZoneIdPatternForOutput();
+            default:
+                throw _Exceptions.unexpectedCodeReach();
             }
         }
 

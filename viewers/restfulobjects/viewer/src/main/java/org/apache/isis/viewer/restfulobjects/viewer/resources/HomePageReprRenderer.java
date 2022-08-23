@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.common.model.branding.BrandingUiModelProvider;
+import org.apache.isis.viewer.commons.model.branding.BrandingUiModelProvider;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;

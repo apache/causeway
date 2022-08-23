@@ -33,7 +33,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
-import org.apache.isis.viewer.common.model.StringForRendering;
+import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;

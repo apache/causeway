@@ -1,4 +1,4 @@
-= UrlEncodingService _(interface)_
+= UrlEncodingService
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Defines a consistent way to convert strings to/from a form safe for use within a URL.
@@ -15,33 +15,55 @@ interface UrlEncodingService {
   byte[] decode(String str)     // <.>
   String encodeString(String str)
   String decodeToString(String str)
+  UrlEncodingService forTesting()     // <.>
+  UrlEncodingService forTestingNoCompression()     // <.>
 }
 ----
 
-<.> xref:#encode__byte[][encode(byte[])]
+<.> xref:#encode_byte[encode(byte)]
 +
 --
 Converts the string (eg view model memento) into a string safe for use within an URL
 --
-<.> xref:#decode__String[decode(String)]
+<.> xref:#decode_String[decode(String)]
 +
 --
 Unconverts the string from its URL form into its original form URL.
 --
+<.> xref:#forTesting_[forTesting()]
++
+--
+Uses base64 with compression.
+--
+<.> xref:#forTestingNoCompression_[forTestingNoCompression()]
++
+--
+Uses base64 without compression.
+--
 
 == Members
 
-[#encode__byte[]]
-=== encode(byte[])
+[#encode_byte]
+=== encode(byte)
 
 Converts the string (eg view model memento) into a string safe for use within an URL
 
-[#decode__String]
+[#decode_String]
 === decode(String)
 
 Unconverts the string from its URL form into its original form URL.
 
 Reciprocal of _#encode(byte[])_ .
+
+[#forTesting_]
+=== forTesting()
+
+Uses base64 with compression.
+
+[#forTestingNoCompression_]
+=== forTestingNoCompression()
+
+Uses base64 without compression.
 
 include::hooks/UrlEncodingService_010-implementation.adoc[]
 

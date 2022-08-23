@@ -47,10 +47,13 @@ public class Snippets {
 
     private static String formatFor(final J2AdocUnit unit) {
         switch (unit.getTypeDeclaration().getKind()) {
-            case ANNOTATION: return "@%s";
-            case CLASS: return "%s";
-            case ENUM: return "%s _(enum)_";
-            case INTERFACE: return "%s _(interface)_";
+            case ANNOTATION:
+                return "@%s";
+            case CLASS:
+            case INTERFACE:
+                return "%s";
+            case ENUM:
+                return "%s _(enum)_";
             default:
                 throw new IllegalArgumentException(String.format(
                         "unknown kind: %s", unit.getTypeDeclaration().getKind()));

@@ -32,52 +32,52 @@ class UserService {
 --
 Default returned from _#currentUserNameElseNobody()_ .
 --
-<.> xref:#currentUser__[currentUser()]
+<.> xref:#currentUser_[currentUser()]
 +
 --
 Returns the details about the current user, either the "effective" user (if being _#impersonateUser(String, List, String) impersonated_ ) otherwise the "real" user (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
 --
-<.> xref:#isCurrentUserWithSystemPrivileges__[isCurrentUserWithSystemPrivileges()]
+<.> xref:#isCurrentUserWithSystemPrivileges_[isCurrentUserWithSystemPrivileges()]
 +
 --
 Whether the current user is the _system user_ (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
 --
-<.> xref:#getUser__[getUser()]
+<.> xref:#getUser_[getUser()]
 +
 --
 Gets the details about the _#currentUser()_ current user, if any (and returning `null` if there is none).
 --
-<.> xref:#currentUserElseFail__[currentUserElseFail()]
+<.> xref:#currentUserElseFail_[currentUserElseFail()]
 +
 --
 Gets the details about the _#currentUser()_ current user, throwing an exception if there is none.
 --
-<.> xref:#currentUserName__[currentUserName()]
+<.> xref:#currentUserName_[currentUserName()]
 +
 --
 Optionally gets the _#currentUser() current user_ 's name, obtained from xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
 --
-<.> xref:#currentUserNameElseNobody__[currentUserNameElseNobody()]
+<.> xref:#currentUserNameElseNobody_[currentUserNameElseNobody()]
 +
 --
 Returns either the current user's name or else _#NOBODY_ .
 --
-<.> xref:#isImpersonating__[isImpersonating()]
+<.> xref:#isImpersonating_[isImpersonating()]
 +
 --
 Whether or not the user currently reported (in _#currentUser()_ and similar) is actually an impersonated user.
 --
-<.> xref:#supportsImpersonation__[supportsImpersonation()]
+<.> xref:#supportsImpersonation_[supportsImpersonation()]
 +
 --
 Whether impersonation is available for this request.
 --
-<.> xref:#impersonateUser__String_List_String[impersonateUser(String, List, String)]
+<.> xref:#impersonateUser_String_List_String[impersonateUser(String, List, String)]
 +
 --
 Allows implementations to override the current user with another user.
 --
-<.> xref:#stopImpersonating__[stopImpersonating()]
+<.> xref:#stopImpersonating_[stopImpersonating()]
 +
 --
 For implementations that support impersonation, this is to programmatically stop impersonating a user
@@ -90,49 +90,49 @@ For implementations that support impersonation, this is to programmatically stop
 
 Default returned from _#currentUserNameElseNobody()_ .
 
-[#currentUser__]
+[#currentUser_]
 === currentUser()
 
 Returns the details about the current user, either the "effective" user (if being _#impersonateUser(String, List, String) impersonated_ ) otherwise the "real" user (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
 
-[#isCurrentUserWithSystemPrivileges__]
+[#isCurrentUserWithSystemPrivileges_]
 === isCurrentUserWithSystemPrivileges()
 
 Whether the current user is the _system user_ (as obtained from the xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] of the current thread).
 
-[#getUser__]
+[#getUser_]
 === getUser()
 
 Gets the details about the _#currentUser()_ current user, if any (and returning `null` if there is none).
 
-[#currentUserElseFail__]
+[#currentUserElseFail_]
 === currentUserElseFail()
 
 Gets the details about the _#currentUser()_ current user, throwing an exception if there is none.
 
-[#currentUserName__]
+[#currentUserName_]
 === currentUserName()
 
 Optionally gets the _#currentUser() current user_ 's name, obtained from xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
 
-[#currentUserNameElseNobody__]
+[#currentUserNameElseNobody_]
 === currentUserNameElseNobody()
 
 Returns either the current user's name or else _#NOBODY_ .
 
-[#isImpersonating__]
+[#isImpersonating_]
 === isImpersonating()
 
 Whether or not the user currently reported (in _#currentUser()_ and similar) is actually an impersonated user.
 
-[#supportsImpersonation__]
+[#supportsImpersonation_]
 === supportsImpersonation()
 
 Whether impersonation is available for this request.
 
 The typical implementation uses an HTTP session, which is not guaranteed to be available for all viewers. Specifically, the Wicket viewer _does_ use HTTP sessions and therefore supports impersonation, but the RestfulObjects viewer does _not_ . This means that the result of this call varies on a request-by-request basis.
 
-[#impersonateUser__String_List_String]
+[#impersonateUser_String_List_String]
 === impersonateUser(String, List, String)
 
 Allows implementations to override the current user with another user.
@@ -141,7 +141,7 @@ If this service (for this request) does not _#supportsImpersonation() support im
 
 IMPORTANT: this is intended for non-production environments only, where it can be invaluable (from a support perspective) to be able to quickly use the application "as if" logged in as another user.
 
-[#stopImpersonating__]
+[#stopImpersonating_]
 === stopImpersonating()
 
 For implementations that support impersonation, this is to programmatically stop impersonating a user

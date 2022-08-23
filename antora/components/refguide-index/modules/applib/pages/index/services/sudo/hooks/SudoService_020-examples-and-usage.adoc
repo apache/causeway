@@ -5,7 +5,7 @@
 
 == Usage
 
-This domain service is useful both for xref:testing:integtestsupport:about.adoc[integration testing] and while running xref:fixtures:ROOT:about.adoc[fixture scripts].
+This domain service is useful both for xref:testing:integtestsupport:about.adoc[integration testing] and while running xref:testing:fixtures:about.adoc[fixture scripts].
 
 For example, to integration test a workflow system, whereby objects are moved from one user to another, it is helpful to switch the effective user to verify that the task was assigned correctly.
 

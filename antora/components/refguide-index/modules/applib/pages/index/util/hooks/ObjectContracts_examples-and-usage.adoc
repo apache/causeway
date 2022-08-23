@@ -56,7 +56,7 @@ These should _not_ be use, as they use are not type-safe and also use reflection
 `ObjectContracts` implementation can cause DataNucleus to recursively rehydrate a larger number of associated entities (More detail below).
 
 We therefore recommend that you disable
-xref:refguide:config:sections/jdo-datanucleus-conf.adoc#datanucleus.persistenceByReachabilityAtCommit[persistence-by-reachability] by adding:
+xref:refguide:config:sections/datanucleus.adoc#datanucleus.persistence-by-reachability-at-commit[persistence-by-reachability] by adding:
 
 [source,ini]
 .application.properties

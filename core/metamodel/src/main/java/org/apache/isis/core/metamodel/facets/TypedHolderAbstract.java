@@ -20,14 +20,15 @@ package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 import lombok.Getter;
 
 public abstract class TypedHolderAbstract
-extends FacetHolderAbstract
 implements TypedHolder {
+
+    @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
 
     @Getter(onMethod_ = {@Override}) private final FeatureType featureType;
 
@@ -46,7 +47,7 @@ implements TypedHolder {
             final FeatureType featureType,
             final Class<?> type,
             final Identifier featureIdentifier) {
-        super(mmc, featureIdentifier);
+        this.facetHolder = FacetHolder.simple(mmc, featureIdentifier);
         this.featureType = featureType;
         this.type = type;
     }
@@ -55,7 +56,6 @@ implements TypedHolder {
     public String toString() {
         return type.getSimpleName();
     }
-
 
 
 }

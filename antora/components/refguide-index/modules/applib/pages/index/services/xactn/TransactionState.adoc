@@ -50,32 +50,32 @@ Completed, having successfully committed.
 --
 Completed, having aborted.
 --
-<.> xref:#canFlush__[canFlush()]
+<.> xref:#canFlush_[canFlush()]
 +
 --
 Whether it is valid to flush the transaction (specifically if the transaction is _#IN_PROGRESS in progress_ .
 --
-<.> xref:#canCommit__[canCommit()]
+<.> xref:#canCommit_[canCommit()]
 +
 --
 Whether it is valid to commit the transaction (specifically if the transaction is _#IN_PROGRESS in progress_ .
 --
-<.> xref:#canAbort__[canAbort()]
+<.> xref:#canAbort_[canAbort()]
 +
 --
 Whether it is valid to mark as aborted this transaction.
 --
-<.> xref:#isComplete__[isComplete()]
+<.> xref:#isComplete_[isComplete()]
 +
 --
 Whether the transaction is complete (that is, is either _#COMMITTED committed_ or _#ABORTED aborted_ ), and so a new transaction can be started.
 --
-<.> xref:#isInProgress__[isInProgress()]
+<.> xref:#isInProgress_[isInProgress()]
 +
 --
 Whether the transaction is _#IN_PROGRESS in progress_ .
 --
-<.> xref:#mustAbort__[mustAbort()]
+<.> xref:#mustAbort_[mustAbort()]
 +
 --
 Whether the transaction _#MUST_ABORT must abort_ .
@@ -116,34 +116,34 @@ Completed, having aborted.
 
 May not flush, commit or abort (will throw _IllegalStateException_ ).
 
-[#canFlush__]
+[#canFlush_]
 === canFlush()
 
 Whether it is valid to flush the transaction (specifically if the transaction is _#IN_PROGRESS in progress_ .
 
-[#canCommit__]
+[#canCommit_]
 === canCommit()
 
 Whether it is valid to commit the transaction (specifically if the transaction is _#IN_PROGRESS in progress_ .
 
-[#canAbort__]
+[#canAbort_]
 === canAbort()
 
 Whether it is valid to mark as aborted this transaction.
 
 This is the case if the transaction is either currently _#IN_PROGRESS in progress_ or has already been marked as _#MUST_ABORT must abort_ .
 
-[#isComplete__]
+[#isComplete_]
 === isComplete()
 
 Whether the transaction is complete (that is, is either _#COMMITTED committed_ or _#ABORTED aborted_ ), and so a new transaction can be started.
 
-[#isInProgress__]
+[#isInProgress_]
 === isInProgress()
 
 Whether the transaction is _#IN_PROGRESS in progress_ .
 
-[#mustAbort__]
+[#mustAbort_]
 === mustAbort()
 
 Whether the transaction _#MUST_ABORT must abort_ .

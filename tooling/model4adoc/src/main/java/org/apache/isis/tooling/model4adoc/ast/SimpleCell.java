@@ -26,7 +26,9 @@ import org.asciidoctor.ast.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-public class SimpleCell extends ContentNodeAbstract implements Cell {
+public class SimpleCell
+extends SimpleStructuralNode
+implements Cell {
 
     @Getter @Setter private String style;
     @Getter @Setter private String source;
@@ -47,7 +49,7 @@ public class SimpleCell extends ContentNodeAbstract implements Cell {
     }
 
     @Override
-    public void setHorizontalAlignment(Table.HorizontalAlignment halign) {
+    public void setHorizontalAlignment(final Table.HorizontalAlignment halign) {
         setAttribute("halign", halign.name().toLowerCase(), true);
     }
 
@@ -57,7 +59,7 @@ public class SimpleCell extends ContentNodeAbstract implements Cell {
     }
 
     @Override
-    public void setVerticalAlignment(Table.VerticalAlignment valign) {
+    public void setVerticalAlignment(final Table.VerticalAlignment valign) {
         setAttribute("valign", valign.name().toLowerCase(), true);
     }
 

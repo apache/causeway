@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
@@ -35,10 +35,10 @@ import lombok.val;
 
 /**
  * Contributes a property exposing the logical object type of the domain
- * object, typically as specified by {@link DomainObject#logicalTypeName()}.
+ * object, typically as specified by {@link javax.inject.Named}.
  *
  * <p>
- *     The object type is also accessible from the
+ *     The logical type name is also accessible from the
  *     {@link org.apache.isis.applib.services.bookmark.Bookmark} of the
  *     object.
  * </p>
@@ -52,9 +52,10 @@ import lombok.val;
  */
 @Property
 @PropertyLayout(
+        describedAs = "The logical name of this domain class (as used in persistence, URLs etc).  Intended to be stable/unchanging across time",
         hidden = Where.ALL_TABLES,
-        fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
-        sequence = "700.1"
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
+        sequence = "400.1"
 )
 //mixin's don't need a logicalTypeName
 @RequiredArgsConstructor

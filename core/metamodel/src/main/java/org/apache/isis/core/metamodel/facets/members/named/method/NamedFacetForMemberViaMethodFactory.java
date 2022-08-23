@@ -44,7 +44,7 @@ extends MemberSupportFacetFactoryAbstract {
         .peek(processMethodContext::removeMethod)
         .forEach(namedMethod->{
             addFacet(
-                    new NamedFacetForMemberViaMethod(
+                    new MemberNamedFacetViaMethod(
                             namedMethod, processMethodContext.getFacetHolder()));
         });
     }

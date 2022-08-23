@@ -86,10 +86,10 @@ public abstract class ApplicationUser
 
     @UtilityClass
     public static class Nq {
-        public static final String FIND_BY_USERNAME = ApplicationUser.LOGICAL_TYPE_NAME + ".findByUsername";
-        public static final String FIND_BY_EMAIL_ADDRESS = ApplicationUser.LOGICAL_TYPE_NAME + ".findByEmailAddress";
-        public static final String FIND = ApplicationUser.LOGICAL_TYPE_NAME + ".find";
-        public static final String FIND_BY_ATPATH = ApplicationUser.LOGICAL_TYPE_NAME + ".findByAtPath";
+        public static final String FIND_BY_USERNAME = LOGICAL_TYPE_NAME + ".findByUsername";
+        public static final String FIND_BY_EMAIL_ADDRESS = LOGICAL_TYPE_NAME + ".findByEmailAddress";
+        public static final String FIND = LOGICAL_TYPE_NAME + ".find";
+        public static final String FIND_BY_ATPATH = LOGICAL_TYPE_NAME + ".findByAtPath";
     }
 
     // -- UI & DOMAIN EVENTS
@@ -646,19 +646,17 @@ public abstract class ApplicationUser
     // -- IS FOR SELF OR RUN AS ADMINISTRATOR
 
     @Programmatic
-    public boolean isForSelfOrRunAsAdministrator() {
+    public boolean isForSelf() {
         val currentUser = currentUser();
         val currentUserName = currentUser.getName();
-        // is for self?
         val forSelf = Objects.equals(getUsername(), currentUserName);
-        if(forSelf) {
-            return true;
-        }
+        return forSelf;
+    }
 
-        // is runAsAdministrator?
-
+    @Programmatic
+    public boolean isRunAsAdministrator() {
+        val currentUser = currentUser();
         val adminRoleSuffix = ":" + getAdminRoleName();
-
         for (final RoleMemento role : currentUser.getRoles()) {
             final String roleName = role.getName();
             // format is realmName:roleName.
@@ -671,6 +669,11 @@ public abstract class ApplicationUser
         return false;
     }
 
+    @Programmatic
+    public boolean isForSelfOrRunAsAdministrator() {
+        return isForSelf()
+                || isRunAsAdministrator();
+    }
 
     // -- HELPERS
 

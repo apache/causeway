@@ -36,6 +36,8 @@ import org.apache.isis.applib.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Menu to return a representation (a {@link UserMemento}) of the currently logged-in user.
+ *
  * @since 2.0 {@index}
  */
 @DomainService(
@@ -49,7 +51,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class UserMenu {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".UserMenu";
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".UserMenu";
 
     public static abstract class ActionDomainEvent<T> extends IsisModuleApplib.ActionDomainEvent<T> {}
 
@@ -57,7 +59,7 @@ public class UserMenu {
 
 
     @Action(
-            domainEvent = me.ActionEvent.class,
+            domainEvent = me.ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
@@ -67,7 +69,7 @@ public class UserMenu {
         )
     public class me {
 
-        public class ActionEvent extends ActionDomainEvent<me> {}
+        public class ActionDomainEvent extends UserMenu.ActionDomainEvent<me> {}
 
         @MemberSupport public UserMemento act() { return userService.currentUser().orElse(null); }
         @MemberSupport public String disableAct() {

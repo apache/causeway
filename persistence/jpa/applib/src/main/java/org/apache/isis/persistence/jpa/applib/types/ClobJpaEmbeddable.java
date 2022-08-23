@@ -42,7 +42,7 @@ import lombok.val;
  *
  * <p>
  * EclipseLink <i>does</i> provide its own extension,
- * <a href="https://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/a_transformation.htm>Transformation API</a>,
+ * <a href="https://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/a_transformation.htm">Transformation API</a>,
  * but there's a lot of boilerplate involved even so.
  * </p>
  *
@@ -72,7 +72,7 @@ import lombok.val;
  *     Lastly; note that {@link javax.persistence.AttributeOverrides} and {@link javax.persistence.AttributeOverride}
  *     provide a standardised way of fine-tuning the column definitions.
  * </p>
- * 
+ *
  * @since 2.x {@index}
  */
 @Embeddable
@@ -81,10 +81,10 @@ public final class ClobJpaEmbeddable {
 
     /**
      * Factory method to marshall a {@link Clob} into a {@link ClobJpaEmbeddable}
-     * 
+     *
      * @see #toClob(ClobJpaEmbeddable)
      */
-    public static ClobJpaEmbeddable fromClob(Clob clob) {
+    public static ClobJpaEmbeddable fromClob(final Clob clob) {
         if(clob == null) {
             return null;
         }
@@ -121,7 +121,7 @@ public final class ClobJpaEmbeddable {
         return new Clob(name, mimeType, chars);
     }
 
-    
+
     @Override
     public String toString() {
         return asClob().toString();

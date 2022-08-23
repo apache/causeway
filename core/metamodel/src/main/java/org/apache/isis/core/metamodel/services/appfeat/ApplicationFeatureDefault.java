@@ -25,7 +25,6 @@ import java.util.SortedSet;
 
 import javax.inject.Named;
 
-import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
@@ -37,6 +36,7 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -52,7 +52,7 @@ import lombok.Setter;
  *     {@link ApplicationFeatureRepository}.
  * </p>
  */
-@Named(IsisModuleApplib.NAMESPACE + ".services.appfeat.ApplicationFeature")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".services.appfeat.ApplicationFeature")
 @Value
 public class ApplicationFeatureDefault
 implements

@@ -31,12 +31,12 @@ public interface LayoutService {
     /**
      * Obtains the serialized XML form of the layout (grid) for the specified domain class.
      */
-    String toXml(Class<?> domainClass, Style style);
+    String toXml(Class<?> domainClass, LayoutExportStyle style);
 
     /**
      * Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
      */
-    byte[] toZip(final Style style);
+    byte[] toZip(final LayoutExportStyle style);
 
     /**
      * Obtains the serialized XML form of the menu bars layout ({@link MenuBarsService}).

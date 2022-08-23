@@ -25,7 +25,7 @@ import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.ChangeListener;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.viewer.common.model.binding.BindingConverter;
+import org.apache.isis.viewer.commons.model.binding.BindingConverter;
 
 import lombok.NonNull;
 import lombok.val;

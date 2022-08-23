@@ -20,11 +20,13 @@ package org.apache.isis.core.metamodel.valuesemantics;
 
 import java.util.Locale;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
@@ -38,6 +40,7 @@ import lombok.val;
 
 @Component
 @Named("isis.val.LocaleValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class LocaleValueSemantics
 extends ValueSemanticsAbstract<Locale>
 implements

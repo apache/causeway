@@ -38,10 +38,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.jaxb.PersistentEntityAdapter;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser.Nq;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
@@ -56,9 +58,7 @@ import lombok.Setter;
         schema = ApplicationUser.SCHEMA,
         name = ApplicationUser.TABLE,
         uniqueConstraints =
-            @UniqueConstraint(
-                    name = "ApplicationUser_username_UNQ",
-                    columnNames={"username"})
+            @UniqueConstraint(name = "ApplicationUser__username__UNQ", columnNames = { "username" })
 )
 @NamedQueries({
     @NamedQuery(
@@ -86,11 +86,13 @@ import lombok.Setter;
                   + "    OR u.knownAs LIKE :regex"
                   + "    OR u.emailAddress LIKE :regex")
 })
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @EntityListeners(IsisEntityListener.class)
 @Named(ApplicationUser.LOGICAL_TYPE_NAME)
 @DomainObject(
         autoCompleteRepository = ApplicationUserRepository.class,
-        autoCompleteMethod = "findMatching")
+        autoCompleteMethod = "findMatching"
+        )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )

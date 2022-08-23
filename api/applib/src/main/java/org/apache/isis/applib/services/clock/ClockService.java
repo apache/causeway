@@ -26,6 +26,7 @@ import javax.inject.Provider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
@@ -42,11 +43,13 @@ import lombok.RequiredArgsConstructor;
  * @since 1.x revised for 2.0 {@index}
  */
 @Service
-@Named("isis.applib.ClockService")
+@Named(ClockService.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ClockService {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ClockService";
 
     private final Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
 

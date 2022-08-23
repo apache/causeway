@@ -52,10 +52,6 @@ content:
     - url: .
       start_path: valuetypes/markdown/adoc # valuetypes
       branches: HEAD
-    - url: .
-      start_path: valuetypes/sse/adoc # valuetypes
-      branches: HEAD
-
 
 
 ui:

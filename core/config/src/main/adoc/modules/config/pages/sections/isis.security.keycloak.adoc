@@ -32,7 +32,7 @@ For example, if running a keycloak using Docker container, such as:
 isis.security.keycloak. +
 login-success-url
 
-|  /wicket
+| 
 | Specifies where users will be redirected after authenticating successfully if they have not visited a secured page prior to authenticating or \{@code alwaysUse} is true.
 
 

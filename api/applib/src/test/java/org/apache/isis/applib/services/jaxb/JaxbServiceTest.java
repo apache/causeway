@@ -45,7 +45,7 @@ class JaxbServiceTest {
     void tearDown() throws Exception {
     }
 
-    @Test @Disabled("fails because ActionInvocationDto has no @XmlRootElement annoation")
+    @Test @Disabled("fails because ActionInvocationDto has no @XmlRootElement annonation")
     void roundtrip() {
         val xml = simple.toXml(sampleDto);
         val clone = simple.<ActionInvocationDto>fromXml(ActionInvocationDto.class, xml);
@@ -62,14 +62,12 @@ class JaxbServiceTest {
 
     private ActionInvocationDto getSample() {
         val dto = new ActionInvocationDto();
-        dto.setTitle("hello");
-        dto.setUser("world");
+        dto.setLogicalMemberIdentifier("customer.Customer#placeOrder");
         return dto;
     }
 
     private void assertDtoEquals(final ActionInvocationDto a, final ActionInvocationDto b) {
-        assertEquals(a.getTitle(), b.getTitle());
-        assertEquals(a.getUser(), b.getUser());
+        assertEquals(a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier());
     }
 
 

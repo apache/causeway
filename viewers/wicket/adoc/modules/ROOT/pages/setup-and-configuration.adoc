@@ -186,6 +186,7 @@ These configuration properties enable or disable the mechanisms for locating pre
 * xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.show-drop-down-on-footer[isis.viewer.wicket.bookmarked-pages.show-drop-down-on-footer]
 
 
+[#themes]
 === Themes
 
 These configuration properties control the switching of themes.
@@ -199,7 +200,8 @@ Set this configuration property to different values for different environments (
 ====
 
 * xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.show-chooser[isis.viewer.wicket.themes.show-chooser]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.provider[isis.viewer.wicket.themes.provider]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.enabled[isis.viewer.wicket.themes.enabled]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.initial[isis.viewer.wicket.themes.initial]
 
 
 The Wicket viewer uses link:http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
@@ -211,9 +213,7 @@ You can also develop and install a custom themes (eg to fit your company's look-
 
 These configuration properties influence the way in which date/times are rendered and can be selected using the date/time pickers:
 
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.date-pattern[isis.viewer.wicket.date-pattern]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.date-time-pattern[isis.viewer.wicket.date-time-pattern]
-* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.timestamp-pattern[isis.viewer.wicket.date-picker.timestamp-pattern]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.date-picker.min-date[isis.viewer.wicket.date-picker.min-date]
 * xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.date-picker.max-date[isis.viewer.wicket.date-picker.max-date]
 +
 See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate[datetimepicker reference docs] for further details.

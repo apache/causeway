@@ -1,4 +1,4 @@
-= ValueSemanticsProvider _(interface)_
+= ValueSemanticsProvider
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Provides a mechanism for providing a set of value semantics.
@@ -22,6 +22,7 @@ interface ValueSemanticsProvider<T> {
   Renderer<T> getRenderer()     // <.>
   Parser<T> getParser()     // <.>
   DefaultsProvider<T> getDefaultsProvider()     // <.>
+  IdStringifier<T> getIdStringifier()     // <.>
   ValueSemanticsProvider<X> castTo(Class<X> cls)
   boolean isEnumType()
   boolean isNumberType()
@@ -30,87 +31,97 @@ interface ValueSemanticsProvider<T> {
 }
 ----
 
-<.> xref:#getSchemaValueType__[getSchemaValueType()]
+<.> xref:#getSchemaValueType_[getSchemaValueType()]
 +
 --
 Values might appear within _CommandDto_ , _InteractionDto_ and _ChangesDto_ , where a mapping onto one of _ValueType_ (s) as provided by the XML schema is required.
 --
-<.> xref:#decompose__T[decompose(T)]
+<.> xref:#decompose_T[decompose(T)]
 +
 --
 Converts a value object into either a _ValueWithTypeDto_ or _TypedTupleDto_ .
 --
-<.> xref:#compose__ValueDecomposition[compose(ValueDecomposition)]
+<.> xref:#compose_ValueDecomposition[compose(ValueDecomposition)]
 +
 --
 Converts either a _ValueWithTypeDto_ or a _TypedTupleDto_ to an instance of the object.
 --
-<.> xref:#getOrderRelation__[getOrderRelation()]
+<.> xref:#getOrderRelation_[getOrderRelation()]
 +
 --
 The xref:refguide:applib:index/value/semantics/OrderRelation.adoc[OrderRelation] , if any.
 --
-<.> xref:#getConverter__[getConverter()]
+<.> xref:#getConverter_[getConverter()]
 +
 --
 The xref:refguide:applib:index/value/semantics/Converter.adoc[Converter] , if any.
 --
-<.> xref:#getRenderer__[getRenderer()]
+<.> xref:#getRenderer_[getRenderer()]
 +
 --
 The xref:refguide:applib:index/value/semantics/Renderer.adoc[Renderer] , if any.
 --
-<.> xref:#getParser__[getParser()]
+<.> xref:#getParser_[getParser()]
 +
 --
 The xref:refguide:applib:index/value/semantics/Parser.adoc[Parser] , if any.
 --
-<.> xref:#getDefaultsProvider__[getDefaultsProvider()]
+<.> xref:#getDefaultsProvider_[getDefaultsProvider()]
 +
 --
 The xref:refguide:applib:index/value/semantics/DefaultsProvider.adoc[DefaultsProvider] , if any.
 --
+<.> xref:#getIdStringifier_[getIdStringifier()]
++
+--
+The xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier] , if any.
+--
 
 == Members
 
-[#getSchemaValueType__]
+[#getSchemaValueType_]
 === getSchemaValueType()
 
 Values might appear within _CommandDto_ , _InteractionDto_ and _ChangesDto_ , where a mapping onto one of _ValueType_ (s) as provided by the XML schema is required.
 
-[#decompose__T]
+[#decompose_T]
 === decompose(T)
 
 Converts a value object into either a _ValueWithTypeDto_ or _TypedTupleDto_ .
 
-[#compose__ValueDecomposition]
+[#compose_ValueDecomposition]
 === compose(ValueDecomposition)
 
 Converts either a _ValueWithTypeDto_ or a _TypedTupleDto_ to an instance of the object.
 
-[#getOrderRelation__]
+[#getOrderRelation_]
 === getOrderRelation()
 
 The xref:refguide:applib:index/value/semantics/OrderRelation.adoc[OrderRelation] , if any.
 
-[#getConverter__]
+[#getConverter_]
 === getConverter()
 
 The xref:refguide:applib:index/value/semantics/Converter.adoc[Converter] , if any.
 
-[#getRenderer__]
+[#getRenderer_]
 === getRenderer()
 
 The xref:refguide:applib:index/value/semantics/Renderer.adoc[Renderer] , if any.
 
-[#getParser__]
+[#getParser_]
 === getParser()
 
 The xref:refguide:applib:index/value/semantics/Parser.adoc[Parser] , if any.
 
-[#getDefaultsProvider__]
+[#getDefaultsProvider_]
 === getDefaultsProvider()
 
 The xref:refguide:applib:index/value/semantics/DefaultsProvider.adoc[DefaultsProvider] , if any.
 
 If not `null` , implies that the value has (or may have) a default.
+
+[#getIdStringifier_]
+=== getIdStringifier()
+
+The xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier] , if any.

@@ -18,16 +18,19 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
 @Component
 @Named("isis.val.InteractionDtoValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class InteractionDtoValueSemantics
 extends XmlValueSemanticsAbstract<InteractionDto> {
 

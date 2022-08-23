@@ -22,8 +22,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
 /**

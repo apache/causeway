@@ -107,7 +107,7 @@ public final class J2AdocUnit {
                 .friendlyName(atd.getName().stream()
                         .collect(Collectors.joining(".")))
                 .nameAsString(atd.getName().stream()
-                        .collect(Collectors.joining("~")))
+                        .collect(Collectors.joining("_")))  // we were using '~' as the separator, but Intelli asciidoc plugin complains.
                 .simpleName(atd.getSimpleName())
                 .location(origin.getNamespace()) //originating file location
                 .namespace(PackageDeclarations.namespace(atd.getPackageDeclaration()))

@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.services.schema.SchemaValueMarshallerAbstr
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.schema.common.v2.CollectionDto;
 import org.apache.isis.schema.common.v2.TypedTupleDto;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -46,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.SchemaValueMarshallerDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".SchemaValueMarshallerDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor

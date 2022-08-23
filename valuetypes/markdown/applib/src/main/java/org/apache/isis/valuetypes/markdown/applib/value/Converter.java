@@ -33,30 +33,15 @@ public final class Converter {
 
     /**
      * For syntax highlighting to work, the client/browser needs to load specific
-     * java-script and css.
-     * <p>
-     * 1) In your web-app's {@code scripts/application.js} include the bundled
-     * {@code src/main/resources/prism1.14.js}.
-     * <pre>
-     * function includeJs(jsFilePath) {
-     *     var js = document.createElement("script");
-     *     js.type = "text/javascript";
-     *     js.src = jsFilePath;
-     *     document.body.appendChild(js);
-     * }
-     *
-     * includeJs("/scripts/prism1.14.js");
-     * </pre>
-     * <p>
-     * 2) In your web-app's {@code css/application.css} include the bundled
-     * {@code src/main/resources/prism.css}.
-     * <pre>
-     * {@code @import "prism.css"}.
-     * </pre>
+     * Javascript and CSS.
+     * The framework supports this out of the box with its various viewers,
+     * using <i>Prism</i> web-jars.
      *
      * @param markdown - formated input to be converted to HTML
+     *
+     * @see <a href="https://prismjs.com/">prismjs.com</a>
      */
-    public static String mdToHtml(String markdown) {
+    public static String mdToHtml(final String markdown) {
         if(markdownSupport==null) {
             markdownSupport = new MarkdownSupport();
         }
@@ -86,7 +71,7 @@ public final class Converter {
             renderer = HtmlRenderer.builder(options).build();
         }
 
-        public String toHtml(String markdown) {
+        public String toHtml(final String markdown) {
             return renderer.render(parser.parse(markdown));
         }
     }

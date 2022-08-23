@@ -16,7 +16,7 @@ class PropertyModifyEvent {
 }
 ----
 
-<.> xref:#getProposed__[getProposed()]
+<.> xref:#getProposed_[getProposed()]
 +
 --
 If `null` , then the property was cleared.
@@ -24,7 +24,7 @@ If `null` , then the property was cleared.
 
 == Members
 
-[#getProposed__]
+[#getProposed_]
 === getProposed()
 
 If `null` , then the property was cleared.

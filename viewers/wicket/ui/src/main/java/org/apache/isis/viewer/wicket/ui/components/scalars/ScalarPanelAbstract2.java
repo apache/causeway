@@ -26,16 +26,21 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
-import org.apache.isis.viewer.common.model.StringForRendering;
+import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
+import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.value.OptionsBasedOnValueSemantics;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent.Options;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -137,8 +142,24 @@ extends ScalarPanelAbstract {
         return CompactFragment.LABEL
                     .createFragment(id, this, scalarValueId->
                         getFormatModifiers().contains(FormatModifier.NO_OUTPUT_ESCAPE)
-                            ? Wkt.markup(scalarValueId, this::outputFormatAsString)
+                            ? markupComponent(scalarValueId, this::outputFormatAsString)
                             : Wkt.labelWithDynamicEscaping(scalarValueId, this::obtainOutputFormat));
+    }
+
+
+    // -- SEMANTICS
+
+    private OptionsBasedOnValueSemantics getSemantics(final ScalarModel scalarModel) {
+        return new OptionsBasedOnValueSemantics(scalarModel.getMetaModel(), scalarModel.isEditMode()
+                ? ScalarRepresentation.EDITING
+                : ScalarRepresentation.VIEWING);
+    }
+
+    private MarkupComponent markupComponent(final String id, final IModel<String> model) {
+        return new MarkupComponent(id, model,
+                Options.builder()
+                .syntaxHighlighter(getSemantics(scalarModel()).getSyntaxHighlighter())
+                .build());
     }
 
     private boolean isUsingTextarea() {

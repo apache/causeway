@@ -111,17 +111,18 @@ xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMap
 xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService], and
 xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService].
 
-For example, suppose you wanted to provide your own implementation of xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocaleProvider].
+For example, suppose you wanted to provide your own implementation of xref:refguide:applib:index/services/i18n/LanguageProvider.adoc[LanguageProvider].
 The default implementation has these annotations:
 
 [source,java]
 ----
 @Service
-@Named("isisWicketViewer.LocaleProviderWicket")
+@Named("isis.runtimeservices.LanguageProviderDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Wicket")
-@Log4j2
-public class LocaleProviderWicket implements LocaleProvider { /* ... */ }
+@Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class LanguageProviderDefault
+implements LanguageProvider {/* ... */ }
 ----
 
 To override this, use something like:
@@ -130,7 +131,7 @@ To override this, use something like:
 ----
 @Service
 @Priority(PriorityPrecedence.EARLY)
-public class MyLocaleProvider implements LocaleProvider { /* ... */ }
+public class MyLocaleProvider implements LanguageProvider { /* ... */ }
 ----
 
 It's not necessary to annotate `@Named` or `@Qualifier`, but could be considered good practice.
@@ -148,7 +149,7 @@ image::reference-services/commands-and-events.png[width="960px"]
 
 To explain:
 
-* the (request-scoped) xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] domain service acts as a factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``) of either action invocations or property edits.
+* the (request-scoped) xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] domain service acts as a factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``) of either action invocations or property edits.
 +
 In the majority of cases there is likely to be just a single top-level node of this graph, but for applications that use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] extensively each successive call results in a new child execution.
 
@@ -163,7 +164,7 @@ Whether this occurs depends on whether the action/property has been annotated (u
 Metrics as to which objects are merely loaded into memory are also captured using the xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService] (not shown on the diagram).
 
 * At the end of each execution, details of that execution are published through the (internal)
-xref:core:runtime-services:ExecutionPublisher.adoc[ExecutionPublisher] domain service.
+xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher] domain service.
 This is only done for actions/properties annotated appropriate (with xref:refguide:applib:index/annotation/Action.adoc#executionPublishing[@Action#executionPublishing()] or xref:refguide:applib:index/annotation/Property.adoc#executionPublishing[@Property#executionPublishing()]).
 +
 The internal service delegates in turn to any registered xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]s (there may be more than one).
@@ -179,7 +180,10 @@ Note that it's possible for there to be more than one transaction per top-level 
 * At the end of the entire interaction footnote:[although rare, there can be multiple transactions in a single interaction], details of the top-level xref:refguide:applib:index/services/command/Command.adoc[Command] are sent to each xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber].
 This captures whether the command succeeded or failed.
 +
-The xref:userguide:commandlog:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing or to support regression testing with the xref:userguide:commandreplay:about.adoc[Command Replay] extension.
+The xref:userguide:commandlog:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing.
+
+// moved to incubator for now.
+//or to support regression testing with the xref:userguide:commandreplay:about.adoc[Command Replay] extension.
 
 
 Implementations of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] can use the `Command#getMemento()` method to obtain a XML equivalent of that xref:refguide:applib:index/services/command/Command.adoc[Command], reified using the xref:refguide:schema:cmd.adoc[cmd.xsd] schema.

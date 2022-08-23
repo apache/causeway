@@ -42,30 +42,27 @@ public interface ContentMappingService {
     /**
      * Convenience utilities for implementations of {@link ContentMappingService}.
      */
-    public static class Util {
+    default boolean isSupported(
+            final Class<?> clazz,
+            final List<MediaType> acceptableMediaTypes) {
+        final String domainType = determineDomainType(acceptableMediaTypes);
+        return clazz.getName().equals(domainType);
+    }
 
-        public static String determineDomainType(final List<MediaType> acceptableMediaTypes) {
-            for (MediaType acceptableMediaType : acceptableMediaTypes) {
-                final Map<String, String> parameters = acceptableMediaType.getParameters();
-                final String domainType = parameters.get("x-ro-domain-type");
-                if(domainType != null) {
-                    return domainType;
-                }
+    default String determineDomainType(final List<MediaType> acceptableMediaTypes) {
+        for (MediaType acceptableMediaType : acceptableMediaTypes) {
+            final Map<String, String> parameters = acceptableMediaType.getParameters();
+            final String domainType = parameters.get("x-ro-domain-type");
+            if(domainType != null) {
+                return domainType;
             }
-            throw new IllegalArgumentException(
-                    "Could not locate x-ro-domain-type parameter in any of the provided media types; got: " +
-                            _NullSafe.stream(acceptableMediaTypes)
-                                    .filter(_NullSafe::isPresent)
-                                    .map(Object::toString)
-                                    .collect(Collectors.joining(", ")) );
         }
-
-        public static boolean isSupported(
-                final Class<?> clazz,
-                final List<MediaType> acceptableMediaTypes) {
-            final String domainType = determineDomainType(acceptableMediaTypes);
-            return clazz.getName().equals(domainType);
-        }
+        throw new IllegalArgumentException(
+                "Could not locate x-ro-domain-type parameter in any of the provided media types; got: " +
+                        _NullSafe.stream(acceptableMediaTypes)
+                                .filter(_NullSafe::isPresent)
+                                .map(Object::toString)
+                                .collect(Collectors.joining(", ")) );
     }
 
 }

@@ -24,7 +24,6 @@ import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -33,6 +32,7 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.schema.metamodel.v2.Action;
+import org.apache.isis.schema.metamodel.v2.Member;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -46,44 +46,37 @@ import lombok.ToString;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
-public class ActionNode extends MMNode {
+public class ActionNode extends MemberNode {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ActionNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Action action;
 
-    @Getter @Setter private boolean mixedIn;
-
     @Override
     public String createTitle() {
-        return String.format("%s(...): %s", action.getId(), typeToString(action.getReturnType()));
+        return String.format("%s(...): %s%s",
+                action.getId(),
+                typeToString(action.getReturnType()),
+                titleSuffix());
     }
-
-    @Override
-    protected String iconSuffix() {
-        return isMixedIn() ? "mixedin" : "";
-    }
-
-    // -- TREE NODE STUFF
-
-    @Getter @Setter @XmlTransient
-    private TypeNode parentNode;
 
     @Override
     public Stream<MMNode> streamChildNodes() {
 
         return Stream.<MMNode>concat(
 
-                Stream.of(
-                        MMNodeFactory.facetGroup(action.getFacets(), this)),
+                super.streamChildNodes(),
 
-                action.getParams().getParam()
-                .stream()
-                .map(param->MMNodeFactory.param(param, this))
+                action.getParams().getParam().stream()
+                    .map(param->MMNodeFactory.param(param, this))
 
                 );
+    }
 
+    @Override
+    protected Member member() {
+        return action;
     }
 
 }

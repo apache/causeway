@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -35,7 +36,7 @@ import static org.hamcrest.Matchers.is;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.session.SessionLogService;
+import org.apache.isis.applib.services.session.SessionSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -70,6 +71,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
                 singletonList(mockAuthenticator),
                 new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault(),
+                Optional.empty(),
                 emptyList());
     }
 
@@ -80,7 +82,7 @@ public class AuthenticatedWebSessionForIsis_SignIn {
                 allowing(mockCommonContext).getServiceRegistry();
                 will(returnValue(mockServiceRegistry));
 
-                allowing(mockServiceRegistry).select(SessionLogService.class);
+                allowing(mockServiceRegistry).select(SessionSubscriber.class);
                 will(returnValue(Can.empty()));
 
                 allowing(mockCommonContext).lookupServiceElseFail(InteractionService.class);

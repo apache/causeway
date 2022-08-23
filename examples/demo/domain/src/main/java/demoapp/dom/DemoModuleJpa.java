@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
-import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogJpa;
+import org.apache.isis.extensions.commandlog.jpa.IsisModuleExtCommandLogPersistenceJpa;
 import org.apache.isis.persistence.jpa.eclipselink.IsisModulePersistenceJpaEclipselink;
 
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
@@ -86,7 +86,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
 @Import({
     DemoModuleCommon.class,
     IsisModulePersistenceJpaEclipselink.class,
-    IsisModuleExtCommandLogJpa.class,
+    IsisModuleExtCommandLogPersistenceJpa.class,
 })
 @EntityScan(basePackageClasses = {
 

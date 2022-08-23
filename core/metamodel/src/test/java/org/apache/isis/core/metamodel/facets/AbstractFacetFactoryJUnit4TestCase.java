@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
@@ -80,7 +79,7 @@ implements HasMetaModelContext {
                         .specificationLoader(mockSpecificationLoader)
                         .build();
 
-        facetHolder = FacetHolderAbstract.simple(
+        facetHolder = FacetHolder.simple(
                 metaModelContext,
                 Identifier.propertyIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
         facetedMethod = FacetedMethod.createForProperty(metaModelContext, AbstractFacetFactoryTest.Customer.class, "firstName");

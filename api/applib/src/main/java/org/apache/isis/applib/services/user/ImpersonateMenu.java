@@ -81,7 +81,7 @@ public class ImpersonateMenu {
 
 
     @Action(
-            domainEvent = impersonate.ActionEvent.class,
+            domainEvent = impersonate.ActionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT,
             commandPublishing = Publishing.DISABLED,
             executionPublishing = Publishing.DISABLED,
@@ -90,7 +90,7 @@ public class ImpersonateMenu {
     @ActionLayout(sequence = "100.1", cssClassFa = "fa-mask")
     public class impersonate {
 
-        public class ActionEvent extends ActionDomainEvent<impersonate.ActionEvent> { }
+        public class ActionDomainEvent extends ImpersonateMenu.ActionDomainEvent<ActionDomainEvent> { }
 
         /**
          * Simple implementation that is surfaced if there is no advisor.
@@ -117,7 +117,7 @@ public class ImpersonateMenu {
 
 
     @Action(
-            domainEvent = impersonateWithRoles.ActionEvent.class,
+            domainEvent = impersonateWithRoles.ActionDomainEvent.class,
             semantics = SemanticsOf.IDEMPOTENT,
             commandPublishing = Publishing.DISABLED,
             executionPublishing = Publishing.DISABLED,
@@ -126,7 +126,7 @@ public class ImpersonateMenu {
     @ActionLayout(sequence = "100.2", cssClassFa = "fa-mask")
     public class impersonateWithRoles {
 
-        public class ActionEvent extends ActionDomainEvent<impersonateWithRoles> { }
+        public class ActionDomainEvent extends ImpersonateMenu.ActionDomainEvent<impersonateWithRoles> { }
 
         /**
          * Impersonate a selected user, either using their current roles or

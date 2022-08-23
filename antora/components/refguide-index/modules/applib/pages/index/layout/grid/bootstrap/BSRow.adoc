@@ -24,17 +24,17 @@ class BSRow {
 }
 ----
 
-<.> xref:#getId__[getId()]
+<.> xref:#getId_[getId()]
 +
 --
 As per <div id="...">...</div> : must be unique across entire page.
 --
-<.> xref:#getMetadataError__[getMetadataError()]
+<.> xref:#getMetadataError_[getMetadataError()]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
-<.> xref:#getOwner__[getOwner()]
+<.> xref:#getOwner_[getOwner()]
 +
 --
 Owner.
@@ -42,17 +42,17 @@ Owner.
 
 == Members
 
-[#getId__]
+[#getId_]
 === getId()
 
 As per <div id="...">...</div> : must be unique across entire page.
 
-[#getMetadataError__]
+[#getMetadataError_]
 === getMetadataError()
 
 For diagnostics; populated by the framework if and only if a metadata error.
 
-[#getOwner__]
+[#getOwner_]
 === getOwner()
 
 Owner.

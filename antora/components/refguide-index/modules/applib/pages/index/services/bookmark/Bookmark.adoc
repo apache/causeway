@@ -29,17 +29,17 @@ class Bookmark {
 }
 ----
 
-<.> xref:#parse__String[parse(String)]
+<.> xref:#parse_String[parse(String)]
 +
 --
 Round-trip with _#stringify()_ representation.
 --
-<.> xref:#stringifyHonoringHintIfAny__[stringifyHonoringHintIfAny()]
+<.> xref:#stringifyHonoringHintIfAny_[stringifyHonoringHintIfAny()]
 +
 --
 Analogous to _#stringify()_ , but replaces the _identifier_ string with the _hintId_ if present and not empty.
 --
-<.> xref:#isEmpty__[isEmpty()]
+<.> xref:#isEmpty_[isEmpty()]
 +
 --
 Whether represents _null_ .
@@ -47,17 +47,17 @@ Whether represents _null_ .
 
 == Members
 
-[#parse__String]
+[#parse_String]
 === parse(String)
 
 Round-trip with _#stringify()_ representation.
 
-[#stringifyHonoringHintIfAny__]
+[#stringifyHonoringHintIfAny_]
 === stringifyHonoringHintIfAny()
 
 Analogous to _#stringify()_ , but replaces the _identifier_ string with the _hintId_ if present and not empty.
 
-[#isEmpty__]
+[#isEmpty_]
 === isEmpty()
 
 Whether represents _null_ .

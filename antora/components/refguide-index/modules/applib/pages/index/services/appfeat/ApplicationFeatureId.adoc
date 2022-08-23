@@ -46,37 +46,37 @@ class ApplicationFeatureId {
 }
 ----
 
-<.> xref:#newNamespace__LogicalType[newNamespace(LogicalType)]
+<.> xref:#newNamespace_LogicalType[newNamespace(LogicalType)]
 +
 --
 Creates a new xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] based on the _LogicalType#getNamespace() namespace_ of the provided xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] .
 --
-<.> xref:#title__[title()]
+<.> xref:#title_[title()]
 +
 --
 having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
 --
-<.> xref:#getParentTypeFeatureId__[getParentTypeFeatureId()]
+<.> xref:#getParentTypeFeatureId_[getParentTypeFeatureId()]
 +
 --
 The xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] of the member's logical type.
 --
-<.> xref:#getParentNamespaceFeatureId__[getParentNamespaceFeatureId()]
+<.> xref:#getParentNamespaceFeatureId_[getParentNamespaceFeatureId()]
 +
 --
 The xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] of the parent package of this class or package.
 --
-<.> xref:#parse__String[parse(String)]
+<.> xref:#parse_String[parse(String)]
 +
 --
 Round-trip with _#stringify()_
 --
-<.> xref:#parseEncoded__String[parseEncoded(String)]
+<.> xref:#parseEncoded_String[parseEncoded(String)]
 +
 --
 Round-trip with _#asEncodedString()_
 --
-<.> xref:#withNamespace__String[withNamespace(String)]
+<.> xref:#withNamespace_String[withNamespace(String)]
 +
 --
 Returns a new instance that is a clone of this, except for the namespace, which is taken from the argument.
@@ -84,37 +84,37 @@ Returns a new instance that is a clone of this, except for the namespace, which 
 
 == Members
 
-[#newNamespace__LogicalType]
+[#newNamespace_LogicalType]
 === newNamespace(LogicalType)
 
 Creates a new xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] based on the _LogicalType#getNamespace() namespace_ of the provided xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] .
 
-[#title__]
+[#title_]
 === title()
 
 having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
 
-[#getParentTypeFeatureId__]
+[#getParentTypeFeatureId_]
 === getParentTypeFeatureId()
 
 The xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] of the member's logical type.
 
-[#getParentNamespaceFeatureId__]
+[#getParentNamespaceFeatureId_]
 === getParentNamespaceFeatureId()
 
 The xref:refguide:applib:index/services/appfeat/ApplicationFeatureId.adoc[ApplicationFeatureId] of the parent package of this class or package.
 
-[#parse__String]
+[#parse_String]
 === parse(String)
 
 Round-trip with _#stringify()_
 
-[#parseEncoded__String]
+[#parseEncoded_String]
 === parseEncoded(String)
 
 Round-trip with _#asEncodedString()_
 
-[#withNamespace__String]
+[#withNamespace_String]
 === withNamespace(String)
 
 Returns a new instance that is a clone of this, except for the namespace, which is taken from the argument.

@@ -187,7 +187,7 @@ final class ObjectLoader_builtinHandlers {
             }
 
             val bookmark = objectLoadRequest.getBookmark();
-            val entity = entityFacet.fetchByIdentifier(spec, bookmark);
+            val entity = entityFacet.fetchByIdentifier(bookmark);
             return entity;
         }
 

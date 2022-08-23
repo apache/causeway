@@ -4,7 +4,7 @@
 
 For example, a todo app could use `@HomePage` on a dashboard of todo items to complete:
 
-image::reference-annotations/HomePage/HomePage.png[width="800px"]
+image::refguide:applib-ant:reference-annotations/HomePage/HomePage.png[width="800px"]
 
 
 The corresponding code is:

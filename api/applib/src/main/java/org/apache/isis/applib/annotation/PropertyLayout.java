@@ -204,38 +204,6 @@ public @interface PropertyLayout {
             default PromptStyle.NOT_SPECIFIED;
 
     /**
-     * For date properties (and parameters) only, instructs the viewer that the date should be rendered as one day
-     * prior to the actually stored date.
-     *
-     * <p>
-     * This is intended to be used so that an exclusive end date of an interval
-     * can be rendered as 1 day before the actual value stored.
-     * </p>
-     *
-     * <p>
-     * For example:
-     * </p>
-     * <pre>
-     * public LocalDate getStartDate() { ... }
-     *
-     * &#64;PropertyLayout(renderDay=RenderDay.AS_DAY_BEFORE)
-     * public LocalDate getEndDate() { ... }
-     * </pre>
-     *
-     * <p>
-     * Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates
-     * 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date.  What is stored
-     * In the domain object, itself, however, the value stored is 1-jun-2013.
-     * </p>
-     *
-     * @deprecated instead use {@link ValueSemantics#dateRenderAdjustDays()}
-     * @see ParameterLayout#renderDay()
-     */
-    @Deprecated(forRemoval = true, since = "2.0.0-M7")
-    RenderDay renderDay()
-            default RenderDay.NOT_SPECIFIED;
-
-    /**
      * Indicates that the value held by the property never changes over time, even when other properties of the object
      * do change.
      *

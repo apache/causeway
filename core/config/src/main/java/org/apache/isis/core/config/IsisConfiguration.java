@@ -1941,7 +1941,16 @@ public class IsisConfiguration {
              */
             private int maxTitleLengthInTables = 12;
 
-            private Integer maxTitleLengthInParentedTables;
+            private static boolean isMaxTitleLenghtValid(final int len) {
+                return len>=0;
+            }
+            private int asTitleLenght(final int len) {
+                return isMaxTitleLenghtValid(len)
+                        ? len
+                        : getMaxTitleLengthInTables();
+            }
+
+            private int maxTitleLengthInParentedTables = -1;
 
             /**
              * The maximum number of characters to use to render the title of a domain object (alongside the icon) in a
@@ -1952,18 +1961,18 @@ public class IsisConfiguration {
              * </p>
              *
              * <p>
-             *     If not specified, then the value of {@link #getMaxTitleLengthInTables()} is used.
+             *     If invalid or not specified, then the value of {@link #getMaxTitleLengthInTables()} is used.
              * </p>
              */
             public int getMaxTitleLengthInParentedTables() {
-                return maxTitleLengthInParentedTables != null ? maxTitleLengthInParentedTables : getMaxTitleLengthInTables();
+                return asTitleLenght(maxTitleLengthInParentedTables);
             }
 
             public void setMaxTitleLengthInParentedTables(final int val) {
                 maxTitleLengthInParentedTables = val;
             }
 
-            private Integer maxTitleLengthInStandaloneTables;
+            private int maxTitleLengthInStandaloneTables = -1;
 
             /**
              * The maximum number of characters to use to render the title of a domain object (alongside the icon)
@@ -1974,15 +1983,17 @@ public class IsisConfiguration {
              * </p>
              *
              * <p>
-             *     If not specified, then the value of {@link #getMaxTitleLengthInTables()} is used.
+             *     If invalid or not specified, then the value of {@link #getMaxTitleLengthInTables()} is used.
              * </p>
              */
             public int getMaxTitleLengthInStandaloneTables() {
-                return maxTitleLengthInStandaloneTables != null ? maxTitleLengthInStandaloneTables : getMaxTitleLengthInTables();
+                return asTitleLenght(maxTitleLengthInStandaloneTables);
             }
             /**
              * The maximum length that a title of an object will be shown when rendered in a standalone table;
              * will be truncated beyond this (with ellipses to indicate the truncation).
+             * <p>
+             * If set to negative or zero, sets defaults instead.
              */
             public void setMaxTitleLengthInStandaloneTables(final int val) {
                 maxTitleLengthInStandaloneTables = val;
@@ -2308,16 +2319,17 @@ public class IsisConfiguration {
                 public boolean isDefined() { return (name != null || image != null) && url != null; }
             }
 
+
             private final DatePicker datePicker = new DatePicker();
             @Data
             public static class DatePicker {
 
                 /**
                  * Defines the first date available in the date picker.
-                 *
                  * <p>
                  * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
-                 * </p>
+                 * <p>
+                 * Use time zone 'Z', as the date/time picker UI component is not wired up to support time-zones.
                  */
                 @NotEmpty @NotNull
                 private String minDate = "1900-01-01T00:00:00.000Z";
@@ -2326,10 +2338,27 @@ public class IsisConfiguration {
                  * Defines the first date available in the date picker.
                  * <p>
                  * As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
-                 * </p>
+                 * <p>
+                 * Use time zone 'Z', as the date/time picker UI component is not wired up to support time-zones.
                  */
                 @NotEmpty @NotNull
                 private String maxDate = "2100-01-01T00:00:00.000Z";
+
+//XXX probably needed by TempusDominus 5+
+//                public final java.util.Date minDateAsJavaUtilDate() {
+//                    return asJavaUtilDate(getMinDate());
+//                }
+//
+//                public final java.util.Date maxDateAsJavaUtilDate() {
+//                    return asJavaUtilDate(getMaxDate());
+//                }
+//
+//                private static java.util.Date asJavaUtilDate(final String input) {
+//                    return new Date(
+//                            DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(input, OffsetDateTime::from)
+//                            .toEpochSecond());
+//                }
+
             }
 
             private final DevelopmentUtilities developmentUtilities = new DevelopmentUtilities();
@@ -2743,6 +2772,37 @@ public class IsisConfiguration {
         private final Quartz quartz = new Quartz();
         @Data
         public static class Quartz {
+        }
+
+        private final CommandLog commandLog = new CommandLog();
+        @Data
+        public static class CommandLog {
+
+            public enum PublishPolicy {
+                ALWAYS,
+                ONLY_IF_SYSTEM_CHANGED,
+                ;
+                public boolean isAlways() { return this == ALWAYS; }
+                public boolean isOnlyIfSystemChanged() { return this == ONLY_IF_SYSTEM_CHANGED; }
+
+            }
+            /**
+             * Whether commands should be published always, or only if a change in the system's state has been detected.
+             *
+             * <p>
+             * In general, the default of {@link PublishPolicy#ALWAYS} should be used, <i>unless</i> the
+             * <i>Audit Trail</i> extension is also in use, which is able to advise on whether the systems state has
+             * changed.
+             * </p>
+             *
+             * <p>
+             *     Put another way, if this policy is set to {@link PublishPolicy#ONLY_IF_SYSTEM_CHANGED} but the
+             *     <i>Audit Trail</i> extension is <i>not</i> enabled, then nothing will be logged.
+             * </p>
+             */
+            @Getter @Setter
+            private PublishPolicy publishPolicy = PublishPolicy.ALWAYS;
+
         }
 
         private final CommandReplay commandReplay = new CommandReplay();

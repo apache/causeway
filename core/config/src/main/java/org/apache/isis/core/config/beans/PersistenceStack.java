@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.config.beans;
 
+import org.apache.isis.commons.internal.base._Strings;
+
 public enum PersistenceStack {
     JPA,
     JDO,
@@ -30,5 +32,9 @@ public enum PersistenceStack {
 
     public boolean isJdo() {
         return this == JDO;
+    }
+
+    public String titleCase() {
+        return _Strings.capitalize(_Strings.lower(name()));
     }
 }

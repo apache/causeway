@@ -27,9 +27,10 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.mixins.dto.DtoMixinConstants;
+import org.apache.isis.applib.services.layout.LayoutExportStyle;
 import org.apache.isis.applib.services.layout.LayoutService;
-import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 
@@ -51,8 +52,9 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-download",
+        describedAs = "Downloads the Xxx.layout.xml layout file effective/inferred for this object",
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "700.1"
 )
 //mixin's don't need a logicalTypeName
@@ -69,10 +71,10 @@ public class Object_downloadLayoutXml {
                     named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
                     describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
-            final Style style) {
+            final LayoutExportStyle style) {
 
         val xmlString = layoutService.toXml(holder.getClass(), style);
-        return  Clob.of(fileName, CommonMimeType.XML, xmlString);
+        return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
     /**
@@ -83,10 +85,10 @@ public class Object_downloadLayoutXml {
     }
 
     /**
-     * Default style is {@link Style#NORMALIZED}.
+     * Default style is {@link LayoutExportStyle#MINIMAL}.
      */
-    @MemberSupport public Style default1Act() {
-        return Style.NORMALIZED;
+    @MemberSupport public LayoutExportStyle default1Act() {
+        return LayoutExportStyle.defaults();
     }
 
     @Inject LayoutService layoutService;

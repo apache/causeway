@@ -29,11 +29,12 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 import lombok.NonNull;
 
 @Component
-@Named("isis.metamodel.ClassSubstitutorForCollections")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForCollections")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 10)
 public class ClassSubstitutorForCollections implements ClassSubstitutor {
 

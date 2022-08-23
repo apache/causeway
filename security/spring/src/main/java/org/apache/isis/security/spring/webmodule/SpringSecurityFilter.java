@@ -20,6 +20,7 @@ package org.apache.isis.security.spring.webmodule;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.Filter;
@@ -30,14 +31,17 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.applib.services.user.UserCurrentSessionTimeZoneHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -48,6 +52,7 @@ public class SpringSecurityFilter implements Filter {
 
     @Autowired private InteractionService interactionService;
     @Inject List<AuthenticationConverter> converters;
+    @Inject private UserCurrentSessionTimeZoneHolder userCurrentSessionTimeZoneHolder;
 
     @Override
     public void doFilter(
@@ -55,38 +60,72 @@ public class SpringSecurityFilter implements Filter {
             final ServletResponse servletResponse,
             final FilterChain filterChain) throws IOException, ServletException {
 
-        val httpServletResponse = (HttpServletResponse) servletResponse;
-
-        val springAuthentication = SecurityContextHolder.getContext().getAuthentication();
-        if(springAuthentication==null
-                || !springAuthentication.isAuthenticated()) {
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return; // not authenticated
-        }
-
-        UserMemento userMemento = null;
-        for (final AuthenticationConverter converter : converters) {
-            try {
-                userMemento = converter.convert(springAuthentication);
-                if(userMemento != null) {
-                    break;
-                }
-            } catch(final Exception ignored) {
-            }
-        }
+        val userMemento = springAuthentication()
+                .flatMap(this::userMementoFromSpringAuthentication)
+                .orElse(null);
 
         if (userMemento == null) {
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return; // unknown principal type, not handled
+            setUnauthorized(servletResponse);
+            return; // either not authenticated or unknown principal type (not handled)
         }
 
-        // adds generic authorized user role to indicate 'authorized' (as required by Wicket viewer)
-        userMemento = userMemento.withRoleAdded(UserMemento.AUTHORIZED_USER_ROLE)
-                .withAuthenticationSource(AuthenticationSource.EXTERNAL);
+        val interactionContext = InteractionContext.ofUserWithSystemDefaults(userMemento)
+                .withTimeZoneIfAny(userCurrentSessionTimeZoneHolder.getUserTimeZone());
 
-        interactionService.run(
-                InteractionContext.ofUserWithSystemDefaults(userMemento),
+        val result = interactionService.runAndCatch(
+                interactionContext,
                 ()->filterChain.doFilter(servletRequest, servletResponse));
+
+        result.ifFailure(failure->{
+            failure.printStackTrace(); // debug
+            setUnauthorized(servletResponse);
+        });
+
+        // re-throw
+        result.ifFailureFail();
+    }
+
+    // -- HELPER
+
+    private void setUnauthorized(final ServletResponse servletResponse){
+        ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    }
+
+    /**
+     * Optionally Spring's {@link Authentication}, based on presence
+     * (no matter whether actually authenticated).
+     */
+    private Optional<Authentication> springAuthentication() {
+        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    /**
+     * Optionally an authorized {@link UserMemento} based on presence of an actually
+     * authenticated Spring {@link Authentication}.
+     */
+    private Optional<UserMemento> userMementoFromSpringAuthentication(
+            final @NonNull Authentication springAuthentication) {
+
+        // make sure session is actually authenticated
+        if(!springAuthentication.isAuthenticated()) {
+            return Optional.empty();
+        }
+
+        for (final AuthenticationConverter converter : converters) {
+            try {
+                val userMemento = converter.convert(springAuthentication);
+                if(userMemento != null) {
+                    return Optional.of(
+                            // adds generic authorized user role to indicate 'authorized'
+                            // (as required by Wicket viewer)
+                            userMemento
+                                .withRoleAdded(UserMemento.AUTHORIZED_USER_ROLE)
+                                .withAuthenticationSource(AuthenticationSource.EXTERNAL));
+                }
+            } catch(final Throwable ignored) {
+            }
+        }
+        return Optional.empty();
     }
 
 }

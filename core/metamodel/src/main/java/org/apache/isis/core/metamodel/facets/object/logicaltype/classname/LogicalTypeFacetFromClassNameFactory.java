@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object.logicaltype.classname;
 
-import java.util.Collections;
-
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlType;
 
@@ -30,8 +28,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
-import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
@@ -44,23 +40,17 @@ implements
         ObjectTypeFacetFactory,
         MetaModelRefiner {
 
-    private ClassSubstitutorRegistry classSubstitutorRegistry;
-
     @Inject
     public LogicalTypeFacetFromClassNameFactory(
-            final MetaModelContext mmc,
-            final ClassSubstitutorRegistry classSubstitutorRegistry) {
+            final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
-        this.classSubstitutorRegistry = classSubstitutorRegistry;
     }
 
     // -- JUNIT SUPPORT
 
     public static LogicalTypeFacetFromClassNameFactory forTesting(
             final MetaModelContext mmc) {
-        return new LogicalTypeFacetFromClassNameFactory(
-                mmc,
-                new ClassSubstitutorRegistry(Collections.singletonList(new ClassSubstitutorDefault())));
+        return new LogicalTypeFacetFromClassNameFactory(mmc);
     }
 
     @Override
@@ -143,7 +133,5 @@ implements
         }
         return false; //skip validation
     }
-
-
 
 }

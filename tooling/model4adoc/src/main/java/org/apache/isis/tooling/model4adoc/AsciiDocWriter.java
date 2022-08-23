@@ -19,6 +19,7 @@
 package org.apache.isis.tooling.model4adoc;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -27,10 +28,11 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
-import org.springframework.lang.Nullable;
-
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.ast.Document;
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -77,6 +79,8 @@ public class AsciiDocWriter {
         val adocWriter = new AsciiDocWriter();
         try(FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
             adocWriter.write(doc, writer);
+        } catch (FileNotFoundException e) {
+            throw _Exceptions.unrecoverable(e, "error writing to file %s", file.getAbsolutePath());
         }
     }
 

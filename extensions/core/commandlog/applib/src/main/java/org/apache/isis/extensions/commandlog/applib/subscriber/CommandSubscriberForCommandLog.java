@@ -21,14 +21,13 @@ package org.apache.isis.extensions.commandlog.applib.subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.util.JaxbUtil;
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.commandlog.applib.IsisModuleExtCommandLogApplib;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -48,11 +47,14 @@ import lombok.extern.log4j.Log4j2;
 public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
     final CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    final IsisConfiguration isisConfiguration;
 
     @Override
     public void onCompleted(final Command command) {
 
-        if(!command.isSystemStateChanged()) {
+        // skip if no changes AND skipping is allowed
+        if (isisConfiguration.getExtensions().getCommandLog().getPublishPolicy().isOnlyIfSystemChanged()
+                && !command.isSystemStateChanged()) {
             return;
         }
 
@@ -72,16 +74,14 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
                 log.debug("proposed: \n{}", commandDtoXml);
             }
         } else {
-            val commandLogInstance = commandLogEntryRepository.createCommandLog(command);
             val parent = command.getParent();
-            val parentJdo =
+            val parentEntryIfAny =
                 parent != null
                     ? commandLogEntryRepository
                         .findByInteractionId(parent.getInteractionId())
                         .orElse(null)
                     : null;
-            commandLogInstance.setParent(parentJdo);
-            commandLogEntryRepository.persist(_Casts.uncheckedCast(commandLogInstance));
+            commandLogEntryRepository.createEntryAndPersist(command, parentEntryIfAny);
         }
     }
 

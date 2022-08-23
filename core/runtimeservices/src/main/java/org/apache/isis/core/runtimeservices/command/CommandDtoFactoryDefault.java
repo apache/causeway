@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.schema.cmd.v2.ActionDto;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.ParamDto;
@@ -60,7 +61,7 @@ import lombok.val;
  * @see org.apache.isis.core.runtimeservices.interaction.InteractionDtoFactoryDefault
  */
 @Service
-@Named("isis.runtimeservices.CommandDtoFactoryDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".CommandDtoFactoryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class CommandDtoFactoryDefault implements CommandDtoFactory {
@@ -72,47 +73,47 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
     @Override
     public CommandDto asCommandDto(
             final UUID interactionId,
-            final Can<InteractionHead> targets,
+            final InteractionHead targetHead,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 
-        final CommandDto dto = asCommandDto(interactionId, targets);
+        val commandDto = asCommandDto(interactionId, targetHead);
 
-        final ActionDto actionDto = new ActionDto();
+        val actionDto = new ActionDto();
         actionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
-        dto.setMember(actionDto);
+        commandDto.setMember(actionDto);
 
-        addActionArgs(objectAction, actionDto, argAdapters);
+        addActionArgs(targetHead, objectAction, actionDto, argAdapters);
 
-        return dto;
+        return commandDto;
     }
 
     @Override
     public CommandDto asCommandDto(
             final UUID interactionId,
-            final Can<InteractionHead> targets,
+            final InteractionHead targetHead,
             final OneToOneAssociation property,
             final ManagedObject valueAdapter) {
 
-        final CommandDto dto = asCommandDto(interactionId, targets);
+        final CommandDto dto = asCommandDto(interactionId, targetHead);
 
         final PropertyDto propertyDto = new PropertyDto();
         propertyDto.setInteractionType(InteractionType.PROPERTY_EDIT);
         dto.setMember(propertyDto);
 
-        addPropertyValue(property, propertyDto, valueAdapter);
+        addPropertyValue(targetHead, property, propertyDto, valueAdapter);
 
         return dto;
     }
 
     @Override
     public void addActionArgs(
+            final InteractionHead head,
             final ObjectAction objectAction,
             final ActionDto actionDto,
             final Can<ManagedObject> argAdapters) {
 
-        actionDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(objectAction));
-        actionDto.setMemberIdentifier(IdentifierUtil.memberIdentifierFor(objectAction));
+        actionDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(head, objectAction));
 
         val actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
@@ -146,33 +147,32 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     @Override
     public void addPropertyValue(
+            final InteractionHead interactionHead,
             final OneToOneAssociation property,
             final PropertyDto propertyDto,
             final ManagedObject valueAdapter) {
 
-        propertyDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(property));
-        propertyDto.setMemberIdentifier(IdentifierUtil.memberIdentifierFor(property));
+        propertyDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(interactionHead, property));
 
         valueMarshaller.recordPropertyValue(propertyDto, property, valueAdapter);
     }
 
     // -- HELPER
 
-    private CommandDto asCommandDto(final UUID interactionId, final Can<InteractionHead> targets) {
+    private CommandDto asCommandDto(final UUID interactionId, final InteractionHead targetHead) {
 
         val dto = new CommandDto();
         dto.setMajorVersion("2");
         dto.setMinorVersion("0");
 
         dto.setInteractionId(interactionId.toString());
-        dto.setUser(userService.currentUserNameElseNobody());
+        dto.setUsername(userService.currentUserNameElseNobody());
         dto.setTimestamp(clockService.getClock().nowAsXmlGregorianCalendar());
 
-        for (val targetHead : targets) {
-            final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
-            final OidsDto targetOids = CommandDtoUtils.targetsFor(dto);
-            targetOids.getOid().add(bookmark.toOidDto());
-        }
+        final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
+        final OidsDto targetOids = CommandDtoUtils.targetsFor(dto);
+        targetOids.getOid().add(bookmark.toOidDto());
+
         return dto;
     }
 

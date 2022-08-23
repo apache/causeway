@@ -18,12 +18,13 @@
  */
 package org.apache.isis.core.config.environment;
 
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.ioc._IocContainer;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.ApplicationContext;
@@ -32,12 +33,14 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.ioc._IocContainer;
+import org.apache.isis.core.config.IsisModuleCoreConfig;
+
+import lombok.Getter;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Represents configuration, that is required in an early bootstrapping phase.
@@ -47,7 +50,7 @@ import javax.inject.Singleton;
  * @implNote acts as the framework's bootstrapping entry-point for Spring
  */
 @Service
-@Named("isis.config.IsisSystemEnvironment")
+@Named(IsisModuleCoreConfig.NAMESPACE + "..IsisSystemEnvironment")
 @Priority(0) // same as PriorityPrecedence#FIRST
 @Qualifier("Default")
 @Singleton

@@ -2,6 +2,7 @@
 :page-partial:
 
 
+[#command-processing]
 === Command Processing
 
 Every action invocation (and xref:refguide:applib:index/annotation/Property.adoc#commandPublishing[property edit] for that matter) is normally reified into a concrete xref:refguide:applib:index/services/command/Command.adoc[Command] object, basically a wrapper around the xref:schema:cmd.adoc[CommandDto] that also captures some timing metrics about the execution as well as the outcome.
@@ -16,9 +17,10 @@ The xref:userguide:commandlog:about.adoc[Command Log] extension _does_ provide s
 +
 TIP: Another option to achieve this is to use the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
 
-* to replay commands onto a secondary system, for regression testing.
-+
-This is implemented by the xref:userguide:commandreplay:about.adoc[Command Replay] extension, working in conjunction with the xref:userguide:commandlog:about.adoc[Command Log] extension.
+// commandreplay moved to incubator for the time being
+//* to replay commands onto a secondary system, for regression testing.
+//+
+//This is implemented by the xref:userguide:commandreplay:about.adoc[Command Replay] extension, working in conjunction with the xref:userguide:commandlog:about.adoc[Command Log] extension.
 
 The xref:refguide:applib:index/annotation/Action.adoc#commandPublishing[commandPublishing()] element can be used to explicitly enable or disable command publishing for the action invocation.
 

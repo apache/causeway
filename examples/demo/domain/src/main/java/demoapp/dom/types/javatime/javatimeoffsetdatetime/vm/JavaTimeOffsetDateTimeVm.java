@@ -39,7 +39,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimeoffsetdatetime.holder.JavaTimeOffsetDateTimeHolder3;
+import demoapp.dom.types.javatime.javatimeoffsetdatetime.holder.JavaTimeOffsetDateTimeHolder4;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,7 +50,7 @@ import demoapp.dom.types.javatime.javatimeoffsetdatetime.holder.JavaTimeOffsetDa
         nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaTimeOffsetDateTimeVm
-        implements HasAsciiDocDescription, JavaTimeOffsetDateTimeHolder3 {
+        implements HasAsciiDocDescription, JavaTimeOffsetDateTimeHolder4 {
 
 //end::class[]
     public JavaTimeOffsetDateTimeVm(final java.time.OffsetDateTime initialValue) {
@@ -84,6 +84,10 @@ public class JavaTimeOffsetDateTimeVm
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetDateTimeToStringAdapter.class)
     @Getter @Setter
     private java.time.OffsetDateTime readWriteOptionalProperty;
+
+    @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetDateTimeToStringAdapter.class)
+    @Getter @Setter
+    private java.time.OffsetDateTime readWritePropertyNoTimeZoneTranslation;
 
 }
 //end::class[]

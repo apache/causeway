@@ -173,7 +173,6 @@ public class JpaTestFixtures implements MetamodelListener {
         val bookmark = bookmarkService.bookmarkForElseFail(entity);
         final int id = Integer.parseInt(bookmark.getIdentifier());
         assertTrue(id>0, ()->String.format("expected valid id; got %d", id));
-        //System.err.printf("%s%n", bookmark);
     }
 
     public static Set<String> expectedBookTitles() {

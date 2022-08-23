@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.value;
 
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,6 +27,7 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -53,6 +56,8 @@ import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.isis.commons.functional.Try;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -88,6 +93,37 @@ import lombok.val;
 @TestInstance(Lifecycle.PER_CLASS)
 class ValueSemanticsTest {
 
+    /* debug
+    static class TestEnvironment {
+
+        private Locale systemLocale;
+        private TimeZone systemTimeZone;
+
+        TestEnvironment() {
+            systemLocale = Locale.getDefault();
+            systemTimeZone = TimeZone.getDefault();
+
+            if(!Objects.equals(systemLocale, Locale.US)) {
+                System.err.println("DEBUG: setting test Locale to US");
+                //log.warn("setting test Locale to US");
+                Locale.setDefault(Locale.US);
+            }
+
+            if(!Objects.equals(systemTimeZone, TimeZone.getTimeZone("GMT"))) {
+                System.err.println("DEBUG: setting test TimeZone to GMT");
+                //log.warn("setting test TimeZone to GMT");
+                TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+            }
+        }
+
+        void cleanup() {
+            Locale.setDefault(systemLocale);
+            TimeZone.setDefault(systemTimeZone);
+        }
+
+    }
+     */
+
     @Test
     void fullTypeCoverage() {
 
@@ -121,6 +157,9 @@ class ValueSemanticsTest {
             final String name,
             final Class<T> valueType,
             final ValueTypeExample<T> example) {
+
+        //val env = new TestEnvironment();
+
         assertNotNull(example);
 
         val tester = serviceInjector.injectServicesInto(
@@ -193,21 +232,44 @@ class ValueSemanticsTest {
                     public void testParser(
                             final ValueSemanticsProvider.Context context,
                             final Parser<T> parser) {
+
                         // Parser round-trip test
-                        val stringified = parser.parseableTextRepresentation(context, example.getValue());
+                        for(val value : example.getExamples()) {
 
-                        if(valueType.equals(Password.class)) {
-                            val recoveredValue = (Password)parser.parseTextRepresentation(context, stringified);
-                            assertTrue(recoveredValue.checkPassword(PlaceholderLiteral.SUPPRESSED.getLiteral()));
+                            val stringified = parser.parseableTextRepresentation(context, value);
 
-                        } else {
+                            if(valueType.equals(Password.class)) {
+                                val recoveredValue = (Password)parser.parseTextRepresentation(context, stringified);
+                                assertTrue(recoveredValue.checkPassword(PlaceholderLiteral.SUPPRESSED.getLiteral()));
 
-                            System.err.printf("using %s trying to parse '%s'%n", valueType.getName(), stringified);
+                            } else {
 
-                            tester.assertValueEquals(
-                                    example.getValue(),
-                                    parser.parseTextRepresentation(context, stringified),
-                                    "parser roundtrip failed");
+                                assertValueEqualsParsedValue(context, parser, value, stringified, "parser roundtrip failed");
+
+                                if(valueType.equals(OffsetDateTime.class)
+                                        || valueType.equals(OffsetTime.class)
+                                        //|| valueType.equals(ZonedDateTime.class)
+                                        ) {
+
+                                    if(stringified.endsWith("Z")) {
+                                        // skip format variations on UTC time-zone
+                                        //System.err.printf("DEBUG: skipping stringified: %s%n", stringified);
+                                        return;
+                                    }
+
+                                    val with4digitZone = _Strings.substring(stringified, 0, -3) + "00";
+                                    val with2digitZone = _Strings.substring(stringified, 0, -3);
+
+                                    // test alternative time-zone format with 4 digits +-HHmm
+                                    assertValueEqualsParsedValue(context, parser, value, with4digitZone, "parser roundtrip failed "
+                                            + "(alternative time-zone format with 4 digits +-HHmm)");
+
+                                    // test alternative time-zone format with 2 digits +-HH
+                                    assertValueEqualsParsedValue(context, parser, value, with2digitZone, "parser roundtrip failed "
+                                            + "(alternative time-zone format with 2 digits +-HH)");
+                                }
+
+                            }
                         }
                     }
                     @Override
@@ -242,7 +304,34 @@ class ValueSemanticsTest {
 //                                CommandDtoUtils.toXml(
 //                                        command.getCommandDto()));
                     }
+
+                    private void assertValueEqualsParsedValue(
+                            final ValueSemanticsProvider.Context context,
+                            final Parser<T> parser,
+                            final T value,
+                            final String textRepresentation,
+                            final String failureMessage) {
+
+                        //debug
+                        System.err.printf("using %s trying to parse '%s' to value %s%n",
+                                valueType.getName(), textRepresentation, ""+value);
+
+                        val parsedValue = Try.call(()->
+                            parser.parseTextRepresentation(context, textRepresentation));
+
+                        if(parsedValue.isFailure()) {
+                            Assertions.fail(failureMessage, parsedValue.getFailure().get());
+                        }
+
+                        tester.assertValueEquals(
+                                value,
+                                parsedValue.getValue().orElse(null),
+                                failureMessage);
+                    }
+
                 });
+
+       // env.cleanup();
 
     }
 

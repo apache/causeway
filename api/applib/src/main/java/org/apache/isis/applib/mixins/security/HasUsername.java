@@ -26,14 +26,12 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.updates.OnUpdatedBy;
 
 /**
  * Allows domain objects that were created, updated or are otherwise associated
  * with a named user to act as a mixee in order that other modules may
- * contribute behaviour.
+ * contribute behavior.
  *
  * <p>
  *     The {@link OnUpdatedBy}

@@ -527,7 +527,7 @@ implements ObjectAction {
             final Can<ManagedObject> argumentAdapters) {
 
         return getCommandDtoFactory()
-                .asCommandDto(interactionId, Can.ofSingleton(head), this, argumentAdapters);
+                .asCommandDto(interactionId, head, this, argumentAdapters);
     }
 
     private boolean calculateIsExplicitlyAnnotated() {

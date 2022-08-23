@@ -36,9 +36,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel

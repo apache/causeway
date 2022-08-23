@@ -22,9 +22,11 @@ import java.util.Optional;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.all.named.ObjectNamedFacet;
+import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 
 public interface Facet
 extends
@@ -171,19 +173,28 @@ extends
     public Precedence getPrecedence();
 
     /**
-     * Whether this {@link Facet} can be installed on a mixed-in {@link FacetedMethod},
-     * and hence effectively be shared among multiple (target) <i>Mixee</i> types.
+     * Whether this {@link Facet} acts in a domain-object-type specific manner,
+     * or otherwise is agnostic to the concrete domain-object-type.
+     * <p>
+     * In the type agnostic case this {@link Facet} can be installed on a mixed-in {@link FacetedMethod},
+     * and hence is effectively shared among multiple (target) <i>Mixee</i> types.
+     * <p>
+     * <ul>
+     * <li>type specific facets: probably only ever installed via {@link PostProcessor}(s)</li>
+     * <li>type agnostic facets: probably installed by both regular {@link FacetFactory}(s)
+     * and {@link PostProcessor}(s)</li>
+     * </ul>
      * <p>
      * Regularly {@link Facet}s for <i>Members</i> are installed on the <i>Member's</i> {@link FacetedMethod}.
      * However, for mixed-in <i>Members</i>, the {@link FacetedMethod} is a shared one,
      * which usually shall not receive any {@link Facet}s,
      * that eg. originate from <i>layout.xml</i> file introspection.
      * Those instead would be installed on a synthetic {@link FacetHolder} specifically created
-     * for the associated <i>Mixee</i> type.
+     * for the associated <i>Mixee</i>.
      * @see FacetHolderLayered
      */
-    public default boolean isAllowedToBeSharedWhenMixedIn() {
-        return true;
+    public default boolean isObjectTypeSpecific() {
+        return false;
     }
 
 }

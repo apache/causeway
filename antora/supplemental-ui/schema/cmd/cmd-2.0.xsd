@@ -30,18 +30,6 @@
             <xs:documentation>Collection of commandDto's</xs:documentation>
         </xs:annotation>
         <xs:complexType>
-            <xs:sequence minOccurs="1" maxOccurs="unbounded">
-                <xs:element ref="commandDto"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="commandDto">
-        <xs:annotation>
-            <xs:documentation>Represents v2.0 of this schema (as per majorVersion.minorVersion @default attribute, below).  Adds in 'commandsDto' and extending 'commandDto' to allow additional implementation-specific fields to be attached in 'userData' (a map).
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
             <xs:sequence>
                 <xs:element name="majorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="2">
                     <xs:annotation>
@@ -52,6 +40,35 @@
                 <xs:element name="minorVersion" type="xs:string" minOccurs="1" maxOccurs="1" default="0">
                     <xs:annotation>
                         <xs:documentation>The minor version of the schema that an XML instance was created using.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="commandDto"/>
+                </xs:sequence>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="commandDto">
+        <xs:annotation>
+            <xs:documentation>Represents the intention to invoke an action or to edit a property, usually on one target object but possibly on multiple targets (all of the same type).
+                Commands can also be deferred, which is to say that they can be scheduled to be invoked in the background.  In such cases the originating command/action which schedules the background commands is called the _parent_ of the background commands.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="2">
+                    <xs:annotation>
+                        <xs:documentation>The major version of the schema that an XML instance was created using.
+                            Omit if included within commandsDto.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="0">
+                    <xs:annotation>
+                        <xs:documentation>The minor version of the schema that an XML instance was created using.
+                            Omit if included within commandsDto.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
@@ -67,7 +84,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="user" type="xs:string">
+                <xs:element name="username" type="xs:string">
                     <xs:annotation>
                         <xs:documentation>The name of the user that initiated/created this command.
                         </xs:documentation>
@@ -108,13 +125,7 @@
         <xs:sequence>
             <xs:element name="logicalMemberIdentifier" type="xs:string">
                 <xs:annotation>
-                    <xs:documentation>Logical formal identifier (object type, as per @DomainObject(objectType=), and member name) of the member being interacted with (action or property).
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="memberIdentifier" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>Formal identifier (class name and member name) of the member being interacted with (action or property).
+                    <xs:documentation>Logical formal identifier of the member being interacted with (action or property).  Uses logicalTypeName, abstracts away whether the member is a declared member or a mixin.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -176,8 +187,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:complexContent>
-            <xs:extension base="com:valueWithTypeDto">
-                <xs:attribute name="name" use="required" type="xs:string"/>
+            <xs:extension base="com:namedValueWithTypeDto">
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

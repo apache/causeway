@@ -21,6 +21,7 @@ package demoapp.dom.domain.objects.other.embedded.persistence;
 import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Property;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
@@ -32,5 +33,9 @@ public abstract class NumberConstantEntity
 implements
     HasAsciiDocDescription,
     ValueHolder<ComplexNumber> {
+
+    // enables the 'name' column when rendering List<? extends NumberConstantEntity>
+    @Property
+    public abstract String getName();
 
 }

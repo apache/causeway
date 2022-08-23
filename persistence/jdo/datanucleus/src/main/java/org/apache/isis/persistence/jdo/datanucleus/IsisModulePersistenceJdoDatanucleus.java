@@ -21,7 +21,6 @@ package org.apache.isis.persistence.jdo.datanucleus;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Provider;
 import javax.jdo.JDOException;
 import javax.jdo.PersistenceManagerFactory;
 import javax.sql.DataSource;
@@ -37,14 +36,13 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
+import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
 import org.apache.isis.persistence.jdo.datanucleus.config.DatanucleusSettings;
 import org.apache.isis.persistence.jdo.datanucleus.dialect.DnJdoDialect;
@@ -53,6 +51,23 @@ import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceD
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoByteIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoByteIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoCharIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoCharIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoDatastoreIdImplValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoDatastoreIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoDatastoreUniqueLongIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoIntIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoIntIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoLongIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoLongIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoObjectIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoObjectIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoShortIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoShortIdentityValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoStringIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoStringIdentityValueSemantics;
 import org.apache.isis.persistence.jdo.integration.IsisModulePersistenceJdoIntegration;
 import org.apache.isis.persistence.jdo.provider.config.JdoEntityDiscoveryListener;
 import org.apache.isis.persistence.jdo.spring.integration.JdoDialect;
@@ -74,6 +89,24 @@ import lombok.extern.log4j.Log4j2;
 
     // @Component's
     DnEntityStateProvider.class,
+
+    JdoDatastoreIdImplValueSemantics.class, // datastore identity
+    JdoDatastoreUniqueLongIdValueSemantics.class,
+    JdoDatastoreIdValueSemantics.class,
+    JdoShortIdentityValueSemantics.class, // application-defined PK, javax.jdo.identity
+    JdoLongIdentityValueSemantics.class,
+    JdoIntIdentityValueSemantics.class,
+    JdoByteIdentityValueSemantics.class,
+    JdoCharIdentityValueSemantics.class,
+    JdoStringIdentityValueSemantics.class,
+    JdoObjectIdentityValueSemantics.class,
+    JdoShortIdValueSemantics.class,  // application-defined PK, org.datanucleus.identity
+    JdoLongIdValueSemantics.class,
+    JdoIntIdValueSemantics.class,
+    JdoByteIdValueSemantics.class,
+    JdoCharIdValueSemantics.class,
+    JdoStringIdValueSemantics.class,
+    JdoObjectIdValueSemantics.class,
 
     // @Mixin's
     Persistable_datanucleusVersionLong.class,
@@ -99,14 +132,25 @@ public class IsisModulePersistenceJdoDatanucleus {
         return new DnJdoDialect(dataSource);
     }
 
+//    private static boolean ignore(final Class<?> entityType) {
+//        try {
+//            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass() || entityType.isInterface()) {
+//                return true;
+//            }
+//            val persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);
+//            return persistenceCapable == null; // ignore if doesn't have @PersistenceCapable
+//        } catch (NoClassDefFoundError ex) {
+//            return true;
+//        }
+//    }
+
     @Qualifier("local-pmf-proxy")
     @Bean
     public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
             final IsisConfiguration isisConfiguration,
             final DataSource dataSource,
             final MetaModelContext metaModelContext,
-            final EventBusService eventBusService,
-            final Provider<EntityChangeTracker> entityChangeTrackerProvider,
+            final ObjectLifecyclePublisher objectLifecyclePublisher,
             final IsisBeanTypeRegistry beanTypeRegistry,
             final DatanucleusSettings dnSettings) {
 
@@ -120,14 +164,14 @@ public class IsisModulePersistenceJdoDatanucleus {
                 val pu = createDefaultPersistenceUnit(beanTypeRegistry);
                 val pmf = new JDOPersistenceManagerFactory(pu, props);
                 pmf.setConnectionFactory(dataSource);
-                integrateWithApplicationLayer(metaModelContext, eventBusService, entityChangeTrackerProvider, pmf);
+                integrateWithApplicationLayer(metaModelContext, objectLifecyclePublisher, pmf);
                 return pmf;
             }
             @Override
             protected PersistenceManagerFactory newPersistenceManagerFactory(final String name) {
                 val pmf = super.newPersistenceManagerFactory(name);
                 pmf.setConnectionFactory(dataSource); //might be too late, anyway, not sure if this is ever called
-                integrateWithApplicationLayer(metaModelContext, eventBusService, entityChangeTrackerProvider, pmf);
+                integrateWithApplicationLayer(metaModelContext, objectLifecyclePublisher, pmf);
                 return pmf;
             }
         };
@@ -241,16 +285,19 @@ public class IsisModulePersistenceJdoDatanucleus {
 
         if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
 
+            val createSchemaSqlTemplate = persistenceSchemaConf.getCreateSchemaSqlTemplate();
+
             log.info("About to create db schema(s) {} with template '{}'",
                     persistenceSchemaConf.getAutoCreateSchemas(),
-                    persistenceSchemaConf.getCreateSchemaSqlTemplate());
+                    createSchemaSqlTemplate);
 
             try(val con = dataSource.getConnection()){
 
                 val s = con.createStatement();
 
                 for(val schema : persistenceSchemaConf.getAutoCreateSchemas()) {
-                    val sql = String.format(persistenceSchemaConf.getCreateSchemaSqlTemplate(), schema);
+                    // in case there are multiple placeholders, we specify the string multiple times.
+                    val sql = String.format(createSchemaSqlTemplate, schema, schema, schema, schema, schema, schema, schema);
                     log.info("SQL '{}'", sql);
                     s.execute(sql);
                 }
@@ -274,14 +321,13 @@ public class IsisModulePersistenceJdoDatanucleus {
 
     private static void integrateWithApplicationLayer(
             final MetaModelContext metaModelContext,
-            final EventBusService eventBusService,
-            final Provider<EntityChangeTracker> entityChangeTrackerProvider,
+            final ObjectLifecyclePublisher objectLifecyclePublisher,
             final PersistenceManagerFactory pmf) {
 
         // install JDO specific entity change listeners ...
 
         val jdoLifecycleListener =
-                new JdoLifecycleListener(metaModelContext, eventBusService, entityChangeTrackerProvider);
+                new JdoLifecycleListener(metaModelContext, objectLifecyclePublisher);
         pmf.addInstanceLifecycleListener(jdoLifecycleListener, (Class[]) null);
 
     }

@@ -19,31 +19,37 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.datepicker;
 
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.model.converter.ConverterBasedOnValueSemantics;
-
-import de.agilecoders.wicket.core.util.Attributes;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
+
+import de.agilecoders.wicket.core.util.Attributes;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6IconType;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerCssReference;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerJsReference;
+import de.agilecoders.wicket.jquery.Config;
+import lombok.val;
 
 /**
  * A text input field that is used as a date or date/time picker.
  * It uses <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime picker</a>
- * JavaScript widget
+ * JavaScript widget.
+ * For options (5.39.0) see <a href="https://getdatepicker.com/5-4/Options/">https://getdatepicker.com/5-4/Options/</a>
  *
  * @param <T> The type of the date/time
  */
@@ -58,46 +64,44 @@ implements IConverter<T> {
     private final DateTimeConfig config;
 
     public TextFieldWithDateTimePicker(
-            final IsisAppCommonContext commonContext,
             final String id,
-            final IModel<T> model,
+            final ScalarModel scalarModel,
             final Class<T> type,
             final IConverter<T> converter) {
-
-        super(id, model, type);
-
-        DateTimeConfig config = new DateTimeConfig();
-
+        super(id, scalarModel.unwrapped(type), type);
         setOutputMarkupId(true);
+
+        this.config = createDatePickerConfig(
+                scalarModel.getCommonContext(),
+                ((ConverterBasedOnValueSemantics<T>) converter).getEditingPattern(),
+                !scalarModel.isRequired());
 
         this.converter = converter;
 
-        // if this text field is for a LocalDate, then the pattern obtained will just be a simple date format
-        // (with no hour/minute components).
-        final String dateTimePattern = ((ConverterBasedOnValueSemantics<T>)this.converter).getEditingPattern();
-        final String pattern = convertToMomentJsFormat(dateTimePattern);
-        config.withFormat(pattern);
+        /* debug
+                new IConverter<T>() {
 
-//        boolean patternContainsTimeComponent = pattern.contains("HH");
-//        if (patternContainsTimeComponent) {
-//            // no longer do this, since for sidebar actions takes up too much real estate.
-//            //config.sideBySide(true);
-//        }
+            @Override
+            public T convertToObject(final String value, final Locale locale) throws ConversionException {
+                System.err.printf("convertToObject %s%n", value);
+                try {
+                    val obj = converter.convertToObject(value, locale);
+                    System.err.printf("convertedToObject %s%n", obj);
+                    return obj;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
 
-        config.calendarWeeks(true);
-        config.useCurrent(false);
-
-        // seems not to do anything...
-        //config.allowKeyboardNavigation(true);
-
-        final String datePickerMinDate = commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMinDate();
-        final String datePickerMaxDate = commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMaxDate();
-
-        config.minDate(datePickerMinDate);
-        config.maxDate(datePickerMaxDate);
-        config.readonly(!this.isEnabled());
-
-        this.config = config;
+            @Override
+            public String convertToString(final T value, final Locale locale) {
+                val s =  converter.convertToString(value, locale);
+                System.err.printf("convertedToString %s%n", s);
+                return s;
+            }
+        };
+        */
 
         //XXX ISIS-2834
         //Adding OnChangeAjaxBehavior registers a JavaScript event listener on change event.
@@ -111,13 +115,6 @@ implements IConverter<T> {
                 // nothing to do
             }
         });
-    }
-
-    private String convertToMomentJsFormat(final String javaDateTimeFormat) {
-        String momentJsFormat = javaDateTimeFormat;
-        momentJsFormat = momentJsFormat.replace('d', 'D');
-        momentJsFormat = momentJsFormat.replace('y', 'Y');
-        return momentJsFormat;
     }
 
     @Override
@@ -152,9 +149,8 @@ implements IConverter<T> {
         }
 
         checkComponentTag(tag, "input");
-        Attributes.set(tag, "type", "text");
-
         Attributes.addClass(tag, "datetimepicker-input");
+        Attributes.set(tag, "type", "text");
         Attributes.set(tag, "data-toggle", "datetimepicker");
         Attributes.set(tag, "data-target", getMarkupId());
         Attributes.set(tag, "autocomplete", "off");
@@ -168,26 +164,76 @@ implements IConverter<T> {
             return;
         }
 
-        response.render(CssHeaderItem.forReference(new CssResourceReference(TextFieldWithDateTimePicker.class, "css/fa-patch.css")));
-        response.render(CssHeaderItem.forReference(new CssResourceReference(TextFieldWithDateTimePicker.class, "css/tempusdominus-bootstrap-4.css")));
-
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/moment-with-locales.js")));
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(TextFieldWithDateTimePicker.class, "js/tempusdominus-bootstrap-4.js")));
-
-        config.readonly(!isEnabled());
-
+        response.render(DatetimePickerCssReference.asHeaderItem());
+        response.render(DatetimePickerJsReference.asHeaderItem());
         response.render(OnDomReadyHeaderItem.forScript(createScript(config)));
     }
 
+    // -- HELPER
 
-    /**
-     * creates the initializer script.
-     *
-     * @return initializer script
-     */
-    private CharSequence createScript(final DateTimeConfig config) {
-        return $(this).chain("datetimepicker", config).get();
+    private DateTimeConfig createDatePickerConfig(
+            final IsisAppCommonContext commonContext,
+            final String temporalPattern,
+            final boolean isInputNullable) {
+        val config = new DateTimeConfig();
+
+        config.useLocale(commonContext.currentUserLocale()
+                .map(UserLocale::getLanguageLocale)
+                .orElse(Locale.US));
+
+        config.withFormat(_TimeFormatUtil.convertToMomentJsFormat(temporalPattern));
+        config.useCalendarWeeks(true);
+        config.useCurrent(false);
+
+        config.withButtons(Map.of(
+                DatetimePickerConfig.BTN_SHOW_TODAY, true,
+                DatetimePickerConfig.BTN_SHOW_CLEAR, isInputNullable,
+                DatetimePickerConfig.BTN_SHOW_CLOSE, true));
+
+        //config.highlightToday(true);
+
+        /*
+        time: 'far fa-clock',
+        date: 'far fa-calendar',
+        up: 'far fa-arrow-up',
+        down: 'far fa-arrow-down',
+        previous: 'far fa-chevron-left',
+        next: 'far fa-chevron-right',
+        today: 'far fa-calendar-check-o',
+        clear: 'far fa-trash',
+        close: 'far fa-times'
+         */
+
+        config.withIcons(new DatetimePickerIconConfig()
+                .useTimeIcon(FontAwesome6IconType.clock_r)
+                .useDateIcon(FontAwesome6IconType.calendar_r)
+                .useUpIcon(FontAwesome6IconType.arrow_up_s)
+                .useDownIcon(FontAwesome6IconType.arrow_down_s)
+                .usePreviousIcon(FontAwesome6IconType.chevron_left_s)
+                .useNextIcon(FontAwesome6IconType.chevron_right_s)
+                .useTodayIcon(FontAwesome6IconType.calendar_check_r)
+                .useClearIcon(FontAwesome6IconType.trash_can_r)
+                .useCloseIcon(FontAwesome6IconType.check_s)
+                );
+
+        //XXX future extensions might allow to set bounds on a per member basis (via ValueSemantics annotation)
+        //config.withMinDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().minDateAsJavaUtilDate());
+        //config.withMaxDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().maxDateAsJavaUtilDate());
+        config.minDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMinDate());
+        config.maxDate(commonContext.getConfiguration().getViewer().getWicket().getDatePicker().getMaxDate());
+        return config;
     }
 
+    /**
+     * Returns the initializer script.
+     */
+    private CharSequence createScript(final Config config) {
+
+        val script = $(this).chain("datetimepicker", config).get();
+        //debug
+        //System.err.printf("script: %s%n", script);
+
+        return script;
+    }
 
 }

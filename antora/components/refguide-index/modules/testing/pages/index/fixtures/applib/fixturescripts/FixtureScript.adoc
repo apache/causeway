@@ -18,17 +18,17 @@ class FixtureScript {
 }
 ----
 
-<.> xref:#FixtureScript__[FixtureScript()]
+<.> xref:#FixtureScript_[FixtureScript()]
 +
 --
 Initializes a fixture, with _#getFriendlyName()_ and _#getLocalName()_ derived from the class name.
 --
-<.> xref:#FixtureScript__String_String[FixtureScript(String, String)]
+<.> xref:#FixtureScript_String_String[FixtureScript(String, String)]
 +
 --
 Initializes a fixture.
 --
-<.> xref:#validateRun__String[validateRun(String)]
+<.> xref:#validateRun_String[validateRun(String)]
 +
 --
 Optional hook to validate parameters.
@@ -36,17 +36,17 @@ Optional hook to validate parameters.
 
 == Members
 
-[#FixtureScript__]
+[#FixtureScript_]
 === FixtureScript()
 
 Initializes a fixture, with _#getFriendlyName()_ and _#getLocalName()_ derived from the class name.
 
-[#FixtureScript__String_String]
+[#FixtureScript_String_String]
 === FixtureScript(String, String)
 
 Initializes a fixture.
 
-[#validateRun__String]
+[#validateRun_String]
 === validateRun(String)
 
 Optional hook to validate parameters.

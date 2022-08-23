@@ -145,7 +145,7 @@ public interface ObjectManager {
     public default ManagedObject adapt(
             final @Nullable Object pojo,
             final @NonNull Supplier<ObjectSpecification> fallbackElementType,
-            final EntityAdaptingMode bookmarking) {
+            final EntityAdaptingMode entityAdaptingMode) {
         if(pojo==null) {
             return ManagedObject.unspecified();
         }
@@ -159,11 +159,11 @@ public interface ObjectManager {
             return ManagedObject.unspecified();
         }
         return spec.isScalar()
-                ? autoBookmarked(spec, pojo, bookmarking)
+                ? managedObjectEagerlyBookmarkedIfRequired(spec, pojo, entityAdaptingMode)
                 : PackedManagedObject.pack(
                         spec.getElementSpecification().orElseGet(fallbackElementType),
                         _NullSafe.streamAutodetect(pojo)
-                        .map(element->adapt(element, bookmarking))
+                        .map(element->adapt(element, entityAdaptingMode))
                         .collect(Can.toCan()));
     }
 
@@ -190,7 +190,8 @@ public interface ObjectManager {
                 || pojo.getClass().equals(proposedSpec.getCorrespondingClass()))
             // if actual type matches spec's, we assume, that we don't need to reload,
             // so this is a shortcut for performance reasons
-            ? autoBookmarked(proposedSpec, pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK)
+            ? managedObjectEagerlyBookmarkedIfRequired(
+                    proposedSpec, pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK)
             // fallback, ignoring proposedSpec
             : adapt(pojo);
         return adapter;
@@ -198,17 +199,23 @@ public interface ObjectManager {
 
     // -- HELPER
 
-    private static ManagedObject autoBookmarked(
+    /**
+     * {@link ManagedObject} factory, that in case of given pojo representing an entity
+     * and the entityAdaptingMode equals {@link EntityAdaptingMode#isMemoize()},
+     * then tries to memoize its {@link Bookmark} eagerly
+     * (otherwise its {@link Bookmark} is lazily resolved).
+     */
+    private static ManagedObject managedObjectEagerlyBookmarkedIfRequired(
             final ObjectSpecification spec,
             final Object pojo,
-            final EntityAdaptingMode bookmarking) {
+            final EntityAdaptingMode entityAdaptingMode) {
 
-        if(bookmarking.isMemoize()
+        if(entityAdaptingMode.isMemoize()
                 && spec.isEntity()) {
             val entityFacet = spec.getFacet(EntityFacet.class);
             val state = entityFacet.getEntityState(pojo);
             if(state.isAttached()) {
-                val id = entityFacet.identifierFor(spec, pojo);
+                val id = entityFacet.identifierFor(pojo);
                 val bookmark = Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), id);
                 return ManagedObject.bookmarked(spec, pojo, bookmark);
             }

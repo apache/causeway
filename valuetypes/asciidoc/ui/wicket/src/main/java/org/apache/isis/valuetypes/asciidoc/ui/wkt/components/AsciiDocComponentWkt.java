@@ -18,55 +18,20 @@
  */
 package org.apache.isis.valuetypes.asciidoc.ui.wkt.components;
 
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.valuetypes.prism.wkt.PrismResourcesWkt;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ValueModel;
+import org.apache.isis.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
-import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent_reloadJs;
-
-import lombok.val;
 
 public class AsciiDocComponentWkt extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
 
-    public AsciiDocComponentWkt(final String id, final ScalarModel model){
-        super(id, model);
-    }
-
-    public AsciiDocComponentWkt(final String id, final ValueModel model){
-        super(id, model);
-    }
-
-    public AsciiDocComponentWkt(final String id, final IModel<String> model){
-        super(id, model);
-    }
-
-    @Override
-    public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
-        val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
-        replaceComponentTagBody(markupStream, openTag,
-                MarkupComponent_reloadJs.decorate(htmlContent, jsRef()));
-    }
-
-    @Override
-    public void renderHead(final IHeaderResponse response) {
-        super.renderHead(response);
-
-        response.render(CssHeaderItem.forReference(PrismResourcesWkt.getCssResourceReferenceWkt()));
-        response.render(JavaScriptHeaderItem.forReference(jsRef()));
-    }
-
-    private static final ResourceReference jsRef() {
-        return PrismResourcesWkt.getJsResourceReferenceWkt();
+    public AsciiDocComponentWkt(final String id, final IModel<?> model){
+        super(id, model,
+                Options.builder()
+                .syntaxHighlighter(SyntaxHighlighter.PRISM_COY)
+                .build());
     }
 
 }

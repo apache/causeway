@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -46,6 +47,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -58,7 +60,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isis.runtimeservices.ObjectMementoServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ObjectMementoServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ObjectMementoServiceDefault implements ObjectMementoService {
@@ -161,6 +163,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         throw _Exceptions.unrecoverable("unsupported ObjectMemento type %s", memento.getClass());
     }
 
+    @Domain.Exclude
     @RequiredArgsConstructor(staticName = "of")
     private static class ObjectMementoAdapter implements ObjectMemento {
 

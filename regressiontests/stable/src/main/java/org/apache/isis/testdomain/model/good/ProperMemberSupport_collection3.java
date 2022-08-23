@@ -27,6 +27,9 @@ import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * For (test) mixin descriptions see {@link ProperMemberSupport}.
+ */
 @Collection
 @CollectionLayout(named = "foo", describedAs = "bar") // <-- overruled by imperative naming
 @RequiredArgsConstructor

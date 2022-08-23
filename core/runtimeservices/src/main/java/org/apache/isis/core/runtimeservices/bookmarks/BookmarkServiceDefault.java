@@ -18,10 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.bookmarks;
 
-import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -33,23 +30,19 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
-import org.apache.isis.applib.graph.tree.TreeState;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.val;
 
@@ -57,10 +50,10 @@ import lombok.val;
  * This service enables a serializable 'bookmark' to be created for an entity.
  */
 @Service
-@Named("isis.runtimeservices.BookmarkServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".BookmarkServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class BookmarkServiceDefault implements BookmarkService, SerializingAdapter {
+public class BookmarkServiceDefault implements BookmarkService {
 
     @Inject private SpecificationLoader specificationLoader;
     @Inject private WrapperFactory wrapperFactory;
@@ -104,13 +97,6 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
                 objectManager.bookmarkObject(adapter));
     }
 
-    private Object unwrapped(final Object domainObject) {
-        return wrapperFactory != null
-                ? wrapperFactory.unwrap(domainObject)
-                : domainObject;
-    }
-
-
     @Override
     public Optional<Bookmark> bookmarkFor(
             final @Nullable Class<?> cls,
@@ -128,7 +114,8 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     @Override
     public Bookmark bookmarkForElseFail(final @Nullable Object domainObject) {
         return bookmarkFor(domainObject)
-                .orElseThrow(()->_Exceptions.illegalArgument(
+                .orElseThrow(
+                        ()->_Exceptions.illegalArgument(
                         "cannot create bookmark for type %s",
                         domainObject!=null
                             ? specificationLoader.specForType(domainObject.getClass())
@@ -137,76 +124,12 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
                             : "<null>"));
     }
 
-    // -- SERIALIZING ADAPTER IMPLEMENTATION
-
-    @Override
-    public <T> T read(final Class<T> cls, final Serializable value) {
-
-        if(Bookmark.class.equals(cls)) {
-            return _Casts.uncheckedCast(value);
-        }
-
-        if(Bookmark.class.isAssignableFrom(value.getClass())) {
-            final Bookmark valueBookmark = (Bookmark) value;
-            return _Casts.uncheckedCast(lookup(valueBookmark).orElse(null));
-        }
-
-        return _Casts.uncheckedCast(value);
-    }
-
-    @Override
-    public Serializable write(final Object value) {
-        if(isPredefinedSerializable(value.getClass())) {
-            return (Serializable) value;
-        } else {
-            return bookmarkForElseFail(value);
-        }
-    }
-
     // -- HELPER
 
-    private static final Set<Class<? extends Serializable>> serializableFinalTypes = _Sets.of(
-            String.class, String[].class,
-            Class.class, Class[].class,
-            Character.class, Character[].class, char[].class,
-            Boolean.class, Boolean[].class, boolean[].class,
-            // Numbers
-            Byte[].class, byte[].class,
-            Short[].class, short[].class,
-            Integer[].class, int[].class,
-            Long[].class, long[].class,
-            Float[].class, float[].class,
-            Double[].class, double[].class
-            );
-
-    private static final List<Class<? extends Serializable>> serializableTypes = _Lists.of(
-            java.util.Date.class,
-            java.sql.Date.class,
-            Enum.class,
-            Bookmark.class,
-            TreeState.class
-            );
-
-    private static boolean isPredefinedSerializable(final Class<?> cls) {
-        if(!Serializable.class.isAssignableFrom(cls)) {
-            return false;
-        }
-        // primitive ... boolean, byte, char, short, int, long, float, and double.
-        if(cls.isPrimitive() || Number.class.isAssignableFrom(cls)) {
-            return true;
-        }
-        //[ahuber] any non-scalar values could be problematic, so we are careful with wild-cards here
-        if(cls.getName().startsWith("java.time.")) {
-            return true;
-        }
-        if(cls.getName().startsWith("org.joda.time.")) {
-            return true;
-        }
-        if(serializableFinalTypes.contains(cls)) {
-            return true;
-        }
-        return serializableTypes.stream().anyMatch(t->t.isAssignableFrom(cls));
+    private Object unwrapped(final Object domainObject) {
+        return wrapperFactory != null
+                ? wrapperFactory.unwrap(domainObject)
+                : domainObject;
     }
-
 
 }

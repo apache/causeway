@@ -21,11 +21,14 @@ package org.apache.isis.core.metamodel.valuesemantics;
 import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -36,6 +39,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -43,12 +47,14 @@ import lombok.val;
  */
 @Component
 @Named("isis.val.LongValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class LongValueSemantics
 extends ValueSemanticsAbstract<Long>
 implements
     DefaultsProvider<Long>,
     Parser<Long>,
-    Renderer<Long> {
+    Renderer<Long>,
+    IdStringifier<Long>{
 
     @Override
     public Class<Long> getCorrespondingClass() {
@@ -76,6 +82,19 @@ implements
     public Long compose(final ValueDecomposition decomposition) {
         return composeFromNullable(
                 decomposition, ValueWithTypeDto::getLong, UnaryOperator.identity(), ()->null);
+    }
+
+    // -- ID STRINGIFIER
+
+    @Override
+    public String enstring(final @NonNull Long value) {
+        return value.toString();
+    }
+
+    @Override
+    public Long destring(
+            final @NonNull String stringified) {
+        return Long.parseLong(stringified);
     }
 
     // -- RENDERER

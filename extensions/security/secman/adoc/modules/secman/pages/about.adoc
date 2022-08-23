@@ -19,11 +19,11 @@ This guide explains these concepts in more detail, and describes how to configur
 
 As described in the introduction, the primary purpose of SecMan is to provide an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, to determine whether the currently logged-in user has access to a given object member:
 
-* the logged-in user is represented as an xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication]
+* the logged-in user is represented as an xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext]
 
 * by "object member" we mean either an action, property or collection,as represented by an xref:refguide:applib:index/Identifier.adoc[Identifier]
 
-* by "access", we mean whether the object member is xref:refguide:core:index/security/authorization/Authorizor.adoc#isVisible__Authentication_Identifier[visible] to the user, and if so whether it is xref:refguide:core:index/security/authorization/Authorizor.adoc#isUsable__Authentication_Identifier[usable] (not disabled) by the user.
+* by "access", we mean whether the object member is xref:refguide:core:index/security/authorization/Authorizor.adoc#isVisible__InteractionContext_Identifier] to the user, and if so whether it is xref:refguide:core:index/security/authorization/Authorizor.adoc#isUsable_InteractionContext_Identifier[usable] (not disabled) by the user.
 
 SecMan's xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] implementation uses domain entities to model users, roles and permissions.
 Each permission relates to an "object feature".
@@ -255,7 +255,7 @@ Configuring the delegate realm is performed using Shiro's "poor man's dependency
 
 == Password encryption
 
-Secman provides the xref:refguide:extensions:index/secman/applib/user/spi/PasswordEncryptionService.adoc[PasswordEncryptionService] SPI to allow different algorithms to encrypt the user's password.
+Secman leverages Spring's `org.springframework.security.crypto.password.PasswordEncoder` SPI to allow different algorithms to encrypt the user's password.
 
 The `encryption-jbcrypt` module provides an implementation using the link:https://www.mindrot.org/projects/jBCrypt/[jBCrypt] library.
 
@@ -274,5 +274,5 @@ As you might expect, they are intended for use with xref:pjpa:ROOT:about.adoc[JP
 
 * the Shiro realm module (`isis-extensions-secman-shiro-realm`) provides the Shiro realm interface that delegates to the Secman database (see discussion <<shiro-integration,above>>)
 
-* the jbcrypt encryption module (`isis-extensions-secman-encryption-jbcrypt`) provides an implementation of Secman's xref:refguide:extensions:index/secman/applib/user/spi/PasswordEncryptionService.adoc[PasswordEncryptionService] so that passwords are persisted securely using link:https://www.mindrot.org/projects/jBCrypt/[jBCrypt].
+* the jbcrypt encryption module (`isis-extensions-secman-encryption-jbcrypt`) provides an implementation of Spring's `org.springframework.security.crypto.password.PasswordEncoder` SPI so that passwords are persisted securely using link:https://www.mindrot.org/projects/jBCrypt/[jBCrypt].
 

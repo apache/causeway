@@ -66,7 +66,7 @@
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.moxy</artifactId>
-				<version>2.7.10</version>
+				<version>2.7.11</version>
 				<exclusions>
 					<exclusion>
 						<groupId>org.ow2.asm</groupId>
@@ -85,7 +85,7 @@
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.sdo</artifactId>
-				<version>2.7.10</version>
+				<version>2.7.11</version>
 			</dependency>
 			<dependency>
 				<groupId>org.ow2.asm</groupId>

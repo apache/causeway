@@ -21,9 +21,11 @@ package org.apache.isis.core.metamodel.context;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.locale.UserLocale;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
+import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -128,6 +130,11 @@ public interface HasMetaModelContext {
 
     default WrapperFactory getWrapperFactory() {
         return getMetaModelContext().getWrapperFactory();
+    }
+
+    default Optional<UserLocale> currentUserLocale() {
+        return getInteractionProvider().currentInteractionContext()
+                .map(InteractionContext::getLocale);
     }
 
     // -- ADVANCED SHORTCUTS

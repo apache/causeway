@@ -43,7 +43,7 @@ public class FacetAbstractTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        facetHolder = FacetHolderAbstract.forTesting(MetaModelContext_forTesting.buildDefault());
+        facetHolder = FacetHolder.forTesting(MetaModelContext_forTesting.buildDefault());
         fooFacet = new ConcreteFacet(FooFacet.class, facetHolder);
         new ConcreteFacet(BarFacet.class, facetHolder);
         facetHolder.addFacet(fooFacet);

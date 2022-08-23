@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.metamodel.MetamodelListener;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
@@ -46,6 +48,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -64,19 +67,24 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.metamodel.ApplicationFeatureRepositoryDefault")
+@Named(ApplicationFeatureRepositoryDefault.LOGICAL_TYPE_NAME)
 @Log4j2
 public class ApplicationFeatureRepositoryDefault
 implements ApplicationFeatureRepository, MetamodelListener {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleCoreMetamodel.NAMESPACE + ".ApplicationFeatureRepositoryDefault";
 
     // -- caches
     private Map<String, ApplicationFeatureId> featureIdentifiersByName;
     final SortedMap<ApplicationFeatureId, ApplicationFeature> namespaceFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> typeFeatures = _Maps.newTreeMap();
+    private final SortedMap<LogicalType, ApplicationFeatureId> typeFeatureIdByLogicalType = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> memberFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = _Maps.newTreeMap();
+    // apparently not used
+    //private final ListMultimap<String, ApplicationFeature> memberFeaturesByLogicalTypeName = _Multimaps.newListTreeMultimap();
 
     private final IsisConfiguration configuration;
     private final SpecificationLoader specificationLoader;
@@ -127,6 +135,8 @@ implements ApplicationFeatureRepository, MetamodelListener {
         visitFeatureIdentifierByName(typeFeatures, featuresByName::put);
         visitFeatureIdentifierByName(memberFeatures, featuresByName::put);
         this.featureIdentifiersByName = Collections.unmodifiableMap(featuresByName);
+//        memberFeatures.forEach((key, value) ->
+//            memberFeaturesByLogicalTypeName.putElement(key.getLogicalTypeName(), value));
     }
 
     private void visitFeatureIdentifierByName(
@@ -153,14 +163,16 @@ implements ApplicationFeatureRepository, MetamodelListener {
         }
 
 
-        final String logicalTypeName = spec.getLogicalTypeName();
-        final ApplicationFeatureId typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
+        val logicalType = spec.getLogicalType();
+        val logicalTypeName = logicalType.getLogicalTypeName();
+        val typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
 
         // add class to our map
         // (later on it may get removed if the class turns out to have no features,
         // but we require it in the map for the next bit).
         final ApplicationFeature typeFeature = newApplicationFeature(typeFeatureId);
         typeFeatures.put(typeFeatureId, typeFeature);
+        typeFeatureIdByLogicalType.put(logicalType, typeFeatureId);
 
         // add members
         boolean addedMembers = false;
@@ -434,6 +446,16 @@ implements ApplicationFeatureRepository, MetamodelListener {
     public Collection<ApplicationFeature> allMembers() {
         initializeIfRequired();
         return memberFeatures.values();
+    }
+
+    @Override
+    public SortedSet<ApplicationFeatureId> propertyIdsFor(final LogicalType logicalType) {
+        ApplicationFeatureId typeFeatureId = typeFeatureIdByLogicalType.get(logicalType);
+        if (typeFeatureId == null) {
+            return Collections.emptySortedSet();
+        }
+        ApplicationFeature applicationFeature = typeFeatures.get(typeFeatureId);
+        return applicationFeature.getProperties();
     }
 
     @Override

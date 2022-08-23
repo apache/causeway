@@ -18,10 +18,12 @@
  */
 package org.apache.isis.core.metamodel.valuesemantics;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.semantics.OrderRelation;
 import org.apache.isis.applib.value.semantics.Parser;
@@ -37,6 +39,7 @@ import lombok.val;
 
 @Component
 @Named("isis.val.BookmarkValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class BookmarkValueSemantics
 extends ValueSemanticsAbstract<Bookmark>
 implements

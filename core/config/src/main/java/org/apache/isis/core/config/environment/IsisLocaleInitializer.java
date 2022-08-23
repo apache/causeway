@@ -27,9 +27,8 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.config.IsisConfiguration;
 
-import lombok.extern.log4j.Log4j2;
-
 import jakarta.annotation.PostConstruct;
+import lombok.extern.log4j.Log4j2;
 
 @Component
 @Log4j2

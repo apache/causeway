@@ -13,7 +13,7 @@ class JaxbMatchers {
 }
 ----
 
-<.> xref:#isEquivalentTo__T[isEquivalentTo(T)]
+<.> xref:#isEquivalentTo_T[isEquivalentTo(T)]
 +
 --
 Performs an equality comparison of a _javax.xml.bind.annotation.XmlRootElement_ -annotated class to another by converting into XML first.
@@ -21,7 +21,7 @@ Performs an equality comparison of a _javax.xml.bind.annotation.XmlRootElement_ 
 
 == Members
 
-[#isEquivalentTo__T]
+[#isEquivalentTo_T]
 === isEquivalentTo(T)
 
 Performs an equality comparison of a _javax.xml.bind.annotation.XmlRootElement_ -annotated class to another by converting into XML first.

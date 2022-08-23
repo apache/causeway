@@ -24,7 +24,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.Markup;
-import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -104,11 +105,12 @@ public class MarkupPanelFactories {
 
             val valueModel = (ValueModel) model;
             val objectAdapter = valueModel.getObject();
-            if(objectAdapter==null) {
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
 
-            return appliesIf( valueType.isAssignableFrom(objectAdapter.getSpecification().getCorrespondingClass()) );
+            return appliesIf(valueType.isAssignableFrom(
+                    objectAdapter.getSpecification().getCorrespondingClass()) );
         }
 
         @Override

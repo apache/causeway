@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -57,12 +58,12 @@ implements ApplicationUserRepository {
     @Inject private RepositoryService repository;
 	@Inject protected IsisConfiguration config;
     @Inject private EventBusService eventBusService;
-    @Inject RegexReplacer regexReplacer;
+    @Inject private RegexReplacer regexReplacer;
+    @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 
     // empty if no candidate is available
     @Autowired(required = false) @Qualifier("secman") PasswordEncoder passwordEncoder;
 
-    @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
 
     private final Class<U> applicationUserClass;
 

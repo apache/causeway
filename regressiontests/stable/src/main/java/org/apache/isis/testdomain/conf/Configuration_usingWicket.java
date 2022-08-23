@@ -57,8 +57,6 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.testdomain.util.dto.BookDto;
 import org.apache.isis.testdomain.util.dto.IBook;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -300,7 +298,6 @@ public class Configuration_usingWicket {
     extends WebApplication
     implements
         ComponentFactoryRegistryAccessor,
-        WicketViewerSettingsAccessor,
         HasCommonContext {
         private static final long serialVersionUID = 1L;
 
@@ -327,10 +324,6 @@ public class Configuration_usingWicket {
         @Getter(lazy=true)
         private final PageClassRegistry pageClassRegistry =
                 getCommonContext().lookupServiceElseFail(PageClassRegistry.class);
-
-        @Getter(lazy=true)
-        private final WicketViewerSettings settings =
-                getCommonContext().lookupServiceElseFail(WicketViewerSettings.class);
 
         @Override
         public Class<? extends Page> getHomePage() {

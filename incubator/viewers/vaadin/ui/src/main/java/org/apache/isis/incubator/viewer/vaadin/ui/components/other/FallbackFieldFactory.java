@@ -32,8 +32,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.debug.DebugField;
-import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
-import org.apache.isis.viewer.common.model.debug.DebugUiModel;
+import org.apache.isis.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
+import org.apache.isis.viewer.commons.model.debug.DebugUiModel;
 
 import lombok.val;
 

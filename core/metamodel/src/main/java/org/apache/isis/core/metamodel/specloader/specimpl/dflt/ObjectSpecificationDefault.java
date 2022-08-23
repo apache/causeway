@@ -94,7 +94,6 @@ implements FacetHolder {
             final IsisBeanMetaData typeMeta,
             final MetaModelContext mmc,
             final FacetProcessor facetProcessor,
-
             final PostProcessor postProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 

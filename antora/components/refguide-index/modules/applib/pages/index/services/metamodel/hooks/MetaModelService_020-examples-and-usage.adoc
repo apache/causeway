@@ -6,7 +6,7 @@
 
 * xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu]
 +
-exposes xref:refguide:applib:index/services/metamodel/MetaModelService.adoc#exportMetaModel__Config[exportMetaModel] as an action in the user interface.
+exposes xref:refguide:applib:index/services/metamodel/MetaModelService.adoc#exportMetaModel_Config[exportMetaModel] as an action in the user interface.
 
 * xref:refguide:applib:index/services/metamodel/BeanSort.adoc[BeanSort]
 * xref:refguide:applib:index/services/metamodel/DomainMember.adoc[DomainMember]

@@ -21,10 +21,12 @@ package org.apache.isis.core.metamodel.valuesemantics;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
@@ -40,6 +42,7 @@ import lombok.val;
 
 @Component
 @Named("isis.val.URLValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class URLValueSemantics
 extends ValueSemanticsAbstract<java.net.URL>
 implements

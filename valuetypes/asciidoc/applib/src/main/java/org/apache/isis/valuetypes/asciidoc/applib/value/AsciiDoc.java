@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.value.Markup;
+import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
 import org.apache.isis.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
 import lombok.AccessLevel;
@@ -38,7 +39,7 @@ import lombok.experimental.Accessors;
  *
  * @since 2.0 {@index}
  */
-@Named(IsisModuleApplib.NAMESPACE + ".value.AsciiDoc")
+@Named(IsisModuleValAsciidocApplib.NAMESPACE + ".AsciiDoc")
 @org.apache.isis.applib.annotation.Value
 @EqualsAndHashCode
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support

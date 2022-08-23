@@ -36,7 +36,6 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel._testing.MethodRemover_forTesting;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderAbstract;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
@@ -102,7 +101,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
             will(returnValue(Optional.of(iaContext)));
         }});
 
-        facetHolder = FacetHolderAbstract.simple(
+        facetHolder = FacetHolder.simple(
                 metaModelContext,
                 Identifier.propertyIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
 
@@ -163,7 +162,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
                 return null;
             }
             @Override
-            public EntityFacet createEntityFacet(final FacetHolder facetHolder) {
+            public EntityFacet createEntityFacet(final FacetHolder facetHolder, Class<?> entityClass) {
                 return EntityFacet.forTesting(PersistenceStack.JDO, facetHolder);
             }
         };

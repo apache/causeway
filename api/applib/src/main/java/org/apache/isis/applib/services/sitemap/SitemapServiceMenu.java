@@ -35,8 +35,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
- * Simply provides a UI to allow a site-map (obtained from {@link SitemapService}
- * to be downloaded within the UI.
+ * Simply provides a UI to allow a site-map (obtained from {@link SitemapService}) to be downloaded.
  *
  * @since 2.x {@index}
  */
@@ -60,7 +59,7 @@ public class SitemapServiceMenu {
     }
 
     @Action(
-            domainEvent = downloadSitemap.ActionEvent.class,
+            domainEvent = downloadSitemap.ActionDomainEvent.class,
             semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -70,7 +69,7 @@ public class SitemapServiceMenu {
             sequence="500.450.1")
     public class downloadSitemap{
 
-        public class ActionEvent extends ActionDomainEvent<downloadSitemap> {}
+        public class ActionDomainEvent extends SitemapServiceMenu.ActionDomainEvent<downloadSitemap> {}
 
         @MemberSupport public Clob act(
                 @Parameter(optionality = Optionality.MANDATORY) final String title,

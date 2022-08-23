@@ -29,7 +29,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.viewer.common.model.components.ComponentType;
+import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -63,7 +63,8 @@ implements CancelHintRequired  {
 
     private void buildGui() {
 
-        val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(getModel().getObject());
+        val objectModelForLink = getModel();
+        val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(objectModelForLink.getObject());
 
         if(isEmpty) {
             // represent null reference by a simple markup displaying '(none)'
@@ -73,7 +74,6 @@ implements CancelHintRequired  {
 
         } else {
 
-            val objectModelForLink = getModel();
             val componentFactory = getComponentFactoryRegistry()
                     .findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, objectModelForLink);
 

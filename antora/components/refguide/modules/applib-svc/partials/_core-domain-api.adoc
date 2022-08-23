@@ -22,12 +22,20 @@ The core/domain APIs provide general-purpose services to the domain objects, for
 
 
 |xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService]
-|Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain, UI and lifecycle events.
+|Programmatically post events to the internal event bus.
+Also used by Apache Isis itself to broadcast domain, UI and lifecycle events.
 
 
 |xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService]
 |Methods to instantiate and initialize domain objects
 
+|xref:refguide:applib:index/services/i18n/LanguageProvider.adoc[LanguageProvider]
+|Obtain the preferred language of the current user.
+
+|xref:refguide:applib:index/services/locale/LocaleChoiceProvider.adoc[LocaleChoiceProvider]
+|Provides a list of the available locales.
+
+Used by the framework itself, eg to prompt the list of locales when a user logs in through the xref:vw:ROOT:about.adoc[Wicket viewer].
 
 |xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad]
 |Request-scoped service for interchanging information between and aggregating over multiple method calls.
@@ -41,8 +49,9 @@ The core/domain APIs provide general-purpose services to the domain objects, for
 |Registry of all domain services, for service locator pattern.
 
 
-|xref:refguide:applib:index/services/user/UserService.adoc[UserService]
+|xref:refguide:applib:index/services/user/UserService.adoc[UserService] and xref:refguide:applib:index/services/userui/UserMenu.adoc[UserMenu]
 |Methods to access the currently-logged on user.
+
 
 
 

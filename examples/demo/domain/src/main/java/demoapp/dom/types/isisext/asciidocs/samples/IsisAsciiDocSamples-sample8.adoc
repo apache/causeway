@@ -1,5 +1,4 @@
-Getting Literal [[literally]]
------------------------------
+== Getting Literal [[literally]]
 
  Want to get literal? Just prefix a line with a space (just one will do).
 

@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -50,7 +51,6 @@ import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
 import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
 import org.apache.isis.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.isis.applib.layout.grid.bootstrap.Size;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -61,6 +61,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -84,7 +85,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isis.metamodel.GridSystemServiceBootstrap")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".GridSystemServiceBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Bootstrap")
 @Log4j2
@@ -270,7 +271,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                 Set<String> boundAssociationIds =
                         boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
                 boundAssociationIds.add(oneToOneAssociation.getId());
-            } else if(id.equals(LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME)) {
+            } else if(id.equals(LayoutConstants.FieldSetId.METADATA)) {
                 unboundMetadataContributingIds.add(oneToOneAssociation.getId());
             }
         }
@@ -435,7 +436,15 @@ extends GridSystemServiceAbstract<BSGrid> {
 
                 final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
 
-                actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
+                // since the action is to be associated with a fieldSet, the only available positions are PANEL and PANEL_DROPDOWN.
+                // if the action already has a preference for PANEL, then preserve it, otherwise default to PANEL_DROPDOWN
+                val actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
+                if(actionPositionFacet != null && actionPositionFacet.position() == ActionLayout.Position.PANEL) {
+                    actionLayoutData.setPosition(ActionLayout.Position.PANEL);
+                } else {
+                    actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
+                }
+
                 final FieldSet fieldSet = gridModel.getFieldSet(layoutGroupName);
                 addActionTo(fieldSet, actionLayoutData);
             }

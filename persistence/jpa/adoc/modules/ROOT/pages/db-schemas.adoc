@@ -17,7 +17,7 @@ Its `ApplicationUser` entity is defined as:
 ----
 @Entity
 @Table(
-        schema = "isisExtensionsSecman",
+        schema = "isisExtSecman",
         name = "ApplicationUser",
         ...
 )
@@ -28,7 +28,7 @@ which results in a `CREATE TABLE` statement of:
 
 [source,sql]
 ----
-CREATE TABLE isisExtensionsSecman."ApplicationUser" (
+CREATE TABLE isisExtSecman."ApplicationUser" (
     ...
 )
 ----

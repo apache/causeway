@@ -1,0 +1,70 @@
+= KeyValueSessionStore
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Defines a mechanism for viewers to store arbitrary key value pairs on a per-session basis. That is usually a _HttpSession_ .
+
+This store _is_ used by the Wicket viewer. For example, the viewer remembers which time-zone the user has logged in. Or when impersonating.
+
+== API
+
+[source,java]
+.KeyValueSessionStore.java
+----
+interface KeyValueSessionStore {
+  boolean isSessionAvailable()     // <.>
+  void put(String key, Serializable value)     // <.>
+  Optional<T> lookupAs(String key, Class<T> requiredType)     // <.>
+  void clear(String key)     // <.>
+  Optional<String> lookupAsString(String key)
+  boolean getAsBoolean(String key)
+}
+----
+
+<.> xref:#isSessionAvailable_[isSessionAvailable()]
++
+--
+Whether a session is available, for storing/retrieving key/value pairs.
+--
+<.> xref:#put_String_Serializable[put(String, Serializable)]
++
+--
+Puts given value onto the session store, overriding any existing value. If value is null, removes the entry from the store.
+--
+<.> xref:#lookupAs_String_Class[lookupAs(String, Class)]
++
+--
+Optionally returns the value that is stored under given key, based on whether a corresponding entry exists.
+--
+<.> xref:#clear_String[clear(String)]
++
+--
+Removes the entry from the store.
+--
+
+== Members
+
+[#isSessionAvailable_]
+=== isSessionAvailable()
+
+Whether a session is available, for storing/retrieving key/value pairs.
+
+[#put_String_Serializable]
+=== put(String, Serializable)
+
+Puts given value onto the session store, overriding any existing value. If value is null, removes the entry from the store.
+
+In case there is no session for storing available, acts as a no-op.
+
+[#lookupAs_String_Class]
+=== lookupAs(String, Class)
+
+Optionally returns the value that is stored under given key, based on whether a corresponding entry exists.
+
+In case there is no session for storing available, will return _Optional#empty()_ .
+
+[#clear_String]
+=== clear(String)
+
+Removes the entry from the store.
+
+In case there is no session for storing available, acts as a no-op.

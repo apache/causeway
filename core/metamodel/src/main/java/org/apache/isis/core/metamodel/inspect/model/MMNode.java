@@ -38,6 +38,7 @@ import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import lombok.Setter;
 
 @XmlSeeAlso({
+    MemberNode.class,
     ActionNode.class,
     CollectionNode.class,
     FacetAttrNode.class,

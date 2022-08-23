@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
+import org.apache.isis.applib.layout.LayoutConstants;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
@@ -47,8 +47,9 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
         cssClassFa = "fa-sync",
+        describedAs = "Rebuilds the framework's internal metamodel of this object's domain class",
+        fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
         sequence = "800.1"
 )
 //mixin's don't need a logicalTypeName

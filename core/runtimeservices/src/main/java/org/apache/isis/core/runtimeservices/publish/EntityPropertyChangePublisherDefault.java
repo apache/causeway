@@ -33,6 +33,8 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
 import org.apache.isis.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.core.security.util.XrayUtil;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,10 +45,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
+
 import java.util.List;
 
 @Service
-@Named("isis.runtimeservices.EntityPropertyChangePublisherDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".EntityPropertyChangePublisherDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -58,6 +62,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
     private final ClockService clockService;
     private final TransactionService transactionService;
     private final InteractionLayerTracker iaTracker;
+    private final Provider<HasEnlistedEntityPropertyChanges> hasEnlistedEntityPropertyChangesProvider;
 
     private Can<EntityPropertyChangeSubscriber> enabledSubscribers = Can.empty();
 
@@ -67,46 +72,49 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
                 .filter(HasEnabling::isEnabled);
     }
 
-    @Override
-    public void publishChangedProperties(
-            final HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges) {
-
-        val payload = getPayload(hasEnlistedEntityPropertyChanges);
-        val xrayHandle = _Xray.enterEntityPropertyChangePublishing(
-                iaTracker,
-                payload,
-                enabledSubscribers,
-                ()->getCannotPublishReason(payload)
-                );
-
-        payload.forEach(propertyChange->{
-            for (val subscriber : enabledSubscribers) {
-                subscriber.onChanging(propertyChange);
-            }
-        });
-
-        _Xray.exitPublishing(xrayHandle);
+    private HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges() {
+        return hasEnlistedEntityPropertyChangesProvider.get();
     }
 
-    // -- HELPER
+    @Override
+    public void publishChangedProperties() {
 
-    private Can<EntityPropertyChange> getPayload(
-            HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges) {
+        transactionService.flushTransaction();
 
         if(enabledSubscribers.isEmpty()) {
-            return Can.empty();
+            return;
         }
 
         val currentTime = clockService.getClock().nowAsJavaSqlTimestamp();
         val currentUser = userService.currentUserNameElseNobody();
-        val currentTransactionId = transactionService.currentTransactionId()
-                .orElse(TransactionId.empty());
+        val currentTransactionId = transactionService.currentTransactionId().orElse(TransactionId.empty());
 
-        return hasEnlistedEntityPropertyChanges.getPropertyChanges(
+        val propertyChanges = hasEnlistedEntityPropertyChanges().getPropertyChanges(
                 currentTime,
                 currentUser,
                 currentTransactionId);
+
+        XrayUtil.SequenceHandle xrayHandle = null;
+        try {
+            xrayHandle = _Xray.enterEntityPropertyChangePublishing(
+                    iaTracker,
+                    propertyChanges,
+                    enabledSubscribers,
+                    () -> getCannotPublishReason(propertyChanges)
+            );
+
+            propertyChanges.forEach(propertyChange->{
+                for (val subscriber : enabledSubscribers) {
+                    subscriber.onChanging(propertyChange);
+                }
+            });
+        } finally {
+            _Xray.exitPublishing(xrayHandle);
+        }
     }
+
+
+    // -- HELPER
 
     // x-ray support
     private @Nullable String getCannotPublishReason(final @NonNull Can<EntityPropertyChange> payload) {

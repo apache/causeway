@@ -22,11 +22,14 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.value.semantics.DefaultsProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -39,17 +42,20 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
 
 @Component
 @Named("isis.val.BigDecimalValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class BigDecimalValueSemantics
 extends ValueSemanticsAbstract<BigDecimal>
 implements
     DefaultsProvider<BigDecimal>,
     Parser<BigDecimal>,
-    Renderer<BigDecimal> {
+    Renderer<BigDecimal>,
+    IdStringifier<BigDecimal> {
 
     @Setter @Inject
     private SpecificationLoader specificationLoader;
@@ -80,6 +86,19 @@ implements
     public BigDecimal compose(final ValueDecomposition decomposition) {
         return composeFromNullable(
                 decomposition, ValueWithTypeDto::getBigDecimal, UnaryOperator.identity(), ()->null);
+    }
+
+    // -- ID STRINGIFIER
+
+    @Override
+    public String enstring(final @NonNull BigDecimal value) {
+        return value.toString();
+    }
+
+    @Override
+    public BigDecimal destring(
+            final @NonNull String stringified) {
+        return new BigDecimal(stringified);
     }
 
     // -- RENDERER

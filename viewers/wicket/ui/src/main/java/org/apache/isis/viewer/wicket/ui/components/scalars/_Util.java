@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.util.Facets;
@@ -98,7 +99,7 @@ class _Util {
             private static final long serialVersionUID = 1L;
             @Override
             public void validate(final IValidatable<Object> validatable) {
-                recoverProposedValue(validatable, scalarModel)
+                recoverProposedValue(validatable.getValue(), scalarModel)
                 .ifPresent(proposedAdapter->{
                     _Strings.nonEmpty(scalarModel.validate(proposedAdapter))
                     .ifPresent(validationFeedback->
@@ -127,13 +128,21 @@ class _Util {
     }
 
     private Optional<ManagedObject> recoverProposedValue(
-            final IValidatable<Object> validatable,
+            final Object valueObject,
             final ScalarModel scalarModel){
+
+        if(valueObject instanceof ObjectMemento) {
+            // seeing this code-path particularly with enum choices
+            return Optional.ofNullable(
+                    scalarModel
+                        .getCommonContext()
+                        .reconstructObject((ObjectMemento)valueObject));
+        }
 
         return Optional.ofNullable(
                     scalarModel
                         .getObjectManager()
-                        .adapt(validatable.getValue()));
+                        .adapt(valueObject));
     }
 
     // -- HELPER

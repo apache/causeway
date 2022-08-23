@@ -33,6 +33,6 @@ public interface JdoFacetContext {
 
     boolean isMethodProvidedByEnhancement(Method method);
 
-    EntityFacet createEntityFacet(FacetHolder facetHolder);
+    EntityFacet createEntityFacet(FacetHolder facetHolder, Class<?> entityClass);
 
 }

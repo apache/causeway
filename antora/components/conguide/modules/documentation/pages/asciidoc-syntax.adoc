@@ -8,9 +8,9 @@ This page describes the main syntax conventions when writing Asciidoctor/Asciido
 
 For more info, see:
 
-* link:asciidoc-syntax-quick-reference.pdf[asciidoc-syntax-quick-reference.pdf]
-
-* link:asciidoc-writers-guide.pdf[asciidoc-writers-guide.pdf]
+//* link:asciidoc-syntax-quick-reference.pdf[asciidoc-syntax-quick-reference.pdf]
+//
+//* link:asciidoc-writers-guide.pdf[asciidoc-writers-guide.pdf]
 
 * link:https://powerman.name/doc/asciidoc[online cheat sheet]
 
@@ -229,9 +229,9 @@ link:http://ciserver:8080[CI Server^]
 |Link to an external hyperlink, with `target=blank`
 
 |....
-xref:conguide:ROOT:about.adoc#links-and-xrefs[background]
+xref:conguide:ROOT:about.adoc#contributors-guide[background]
 ....
-|xref:conguide:ROOT:about.adoc#links-and-xrefs[background]
+|xref:conguide:ROOT:about.adoc#contributors-guide[background]
 |Cross-reference to section in Antora document
 
 

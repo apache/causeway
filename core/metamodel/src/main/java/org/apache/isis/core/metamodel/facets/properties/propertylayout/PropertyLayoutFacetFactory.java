@@ -53,7 +53,7 @@ extends FacetFactoryAbstract {
                 .create(propertyLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                DescribedAsFacetForPropertyLayoutAnnotation
+                MemberDescribedFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
@@ -84,10 +84,6 @@ extends FacetFactoryAbstract {
                 PromptStyleFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, getConfiguration(), facetHolder));
 
-        addFacetIfPresent(
-                RenderedAdjustedFacetForPropertyLayoutAnnotation
-                .create(propertyLayoutIfAny, facetHolder));
-
         addFacetIfPresent(TypicalLengthFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder));
 
@@ -95,6 +91,5 @@ extends FacetFactoryAbstract {
                 .create(propertyLayoutIfAny, facetHolder));
 
     }
-
 
 }

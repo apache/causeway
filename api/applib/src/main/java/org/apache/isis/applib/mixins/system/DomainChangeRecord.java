@@ -23,10 +23,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.UUID;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -35,11 +38,15 @@ import org.apache.isis.applib.services.bookmark.HasTarget;
 
 /**
  * Allows domain objects that represents some sort of recorded change to a
- * domain object (commands, audit entries, published interactions) to act
+ * domain object (commands, executions, audit entries) to act
  * as a mixee in order that other modules can contribute behaviour.
  *
  * @since 2.0 {@index}
  */
+@DomainObject(
+        editing = Editing.DISABLED,
+        entityChangePublishing = Publishing.DISABLED
+)
 public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTarget {
 
 
@@ -52,7 +59,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     enum ChangeType {
         COMMAND,
         AUDIT_ENTRY,
-        PUBLISHED_INTERACTION;
+        EXECUTION;
         @Override
         public String toString() {
             return name().replace("_", " ");
@@ -64,9 +71,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES,
-            fieldSetId="Identifiers",
-            sequence = "1"
+            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES
     )
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -84,10 +89,6 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
 
     @Property(
             editing = Editing.DISABLED
-    )
-    @PropertyLayout(
-            fieldSetId="Identifiers",
-            sequence = "50"
     )
     @HasInteractionId.InteractionId
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -108,11 +109,11 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
 
 
     @Property(
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            maxLength = Username.MAX_LENGTH
     )
-    @PropertyLayout(
-            fieldSetId="Identifiers",
-            sequence = "10"
+    @Parameter(
+            maxLength = Username.MAX_LENGTH
     )
     @HasUsername.Username
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -133,15 +134,11 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     @Property(
             editing = Editing.DISABLED
     )
-    @PropertyLayout(
-            fieldSetId="Identifiers",
-            sequence = "20"
-    )
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Timestamp {
-        boolean NULLABLE = HasUsername.Username.NULLABLE;
-        String ALLOWS_NULL = HasUsername.Username.ALLOWS_NULL;
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
     }
     /**
      * The time that the change occurred.
@@ -150,27 +147,36 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     java.sql.Timestamp getTimestamp();
 
 
+    @Property(
+            editing = Editing.DISABLED,
+            maxLength = TargetLogicalTypeName.MAX_LENGTH
+    )
+    @Parameter(
+            maxLength = TargetLogicalTypeName.MAX_LENGTH
+    )
+    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface TargetLogicalTypeName {
+        int MAX_LENGTH = 255;
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
+    }
+
     /**
-     * The object type of the domain object being changed.
+     * The logical type name of the domain object being changed.
      */
-    @Property
-    @PropertyLayout(
-            named="Object Type",
-            fieldSetId="Target",
-            sequence = "10")
-    default String getTargetObjectType() {
+    @TargetLogicalTypeName
+    default String getTargetLogicalTypeName() {
         return getTarget().getLogicalTypeName();
     }
 
 
-
     @Property(
-            editing = Editing.DISABLED
+            editing = Editing.DISABLED,
+            maxLength = Target.MAX_LENGTH
     )
-    @PropertyLayout(
-            named="Object",
-            fieldSetId="Target",
-            sequence="30"
+    @Parameter(
+            maxLength = Target.MAX_LENGTH
     )
     @HasTarget.Target
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -189,45 +195,85 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
 
 
     /**
-     * The member interaction (ie action invocation or property edit) which caused the domain object to be changed.
+     * The (logical) member identifier (ie action id or property id) that caused the domain object to be changed.
      *
      * <p>
-     *     Populated for commands and for published events that represent action invocations or property edits.
+     *     Populated only for commands and for executions (action invocations/property edits).
      * </p>
      */
     @Property(
-            optionality = Optionality.OPTIONAL
+            editing = Editing.DISABLED,
+            optionality = Optionality.MANDATORY,
+            maxLength = LogicalMemberIdentifier.MAX_LENGTH
     )
-    @PropertyLayout(
-            named="Member",
-            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES,
-            fieldSetId="Target",
-            sequence = "20"
+    @Parameter(
+            optionality = Optionality.MANDATORY,
+            maxLength = LogicalMemberIdentifier.MAX_LENGTH
     )
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
-    @interface TargetMember {
-        int MAX_LENGTH = HasTarget.Target.MAX_LENGTH;
+    @interface LogicalMemberIdentifier {
+        int MAX_LENGTH = 255;
+        boolean NULLABLE = false;
+        String ALLOWS_NULL = "false";
+    }
+    @LogicalMemberIdentifier
+    String getLogicalMemberIdentifier();
+    default boolean hideLogicalMemberIdentifier() {
+        return getType() != ChangeType.COMMAND && getType() != ChangeType.EXECUTION;
+    }
+
+
+    /**
+     * The property Id whose value has changed.
+     *
+     * <p>
+     *     Populated only for audit entries.
+     * </p>
+     */
+    @Property(
+            editing = Editing.DISABLED,
+            optionality = Optionality.OPTIONAL,
+            maxLength = PropertyId.MAX_LENGTH
+    )
+    @Parameter(
+            optionality = Optionality.OPTIONAL,
+            maxLength = PropertyId.MAX_LENGTH
+    )
+    @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface PropertyId {
+        int MAX_LENGTH = 100;
         boolean NULLABLE = true;
         String ALLOWS_NULL = "true";
     }
-    @TargetMember
-    String getTargetMember();
+    @LogicalMemberIdentifier
+    default String getPropertyId() {
+        return null;
+    }
+    default boolean hidePropertyId() {
+        return getType() != ChangeType.AUDIT_ENTRY;
+    }
 
 
 
 
     @Property(
-            optionality = Optionality.OPTIONAL
+            editing = Editing.DISABLED,
+            optionality = Optionality.OPTIONAL,
+            maxLength = PreValue.MAX_LENGTH
     )
     @PropertyLayout(
-            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES,
-            fieldSetId = "Detail",
-            sequence = "6"
+            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES
+    )
+    @Parameter(
+            optionality = Optionality.OPTIONAL,
+            maxLength = PreValue.MAX_LENGTH
     )
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface PreValue {
+        int MAX_LENGTH = 255;
         boolean NULLABLE = true;
         String ALLOWS_NULL = "true";
     }
@@ -239,22 +285,32 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
      * </p>
      */
     @PreValue
-    String getPreValue();
+    default String getPreValue() {
+        return null;
+    }
+    default boolean hidePreValue() {
+        return getType() != ChangeType.AUDIT_ENTRY;
+    }
 
 
 
 
     @Property(
-            optionality = Optionality.OPTIONAL
+            editing = Editing.DISABLED,
+            optionality = Optionality.OPTIONAL,
+            maxLength = PostValue.MAX_LENGTH
     )
     @PropertyLayout(
-            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES,
-            fieldSetId = "Detail",
-            sequence = "7"
+            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES
+    )
+    @Parameter(
+            optionality = Optionality.OPTIONAL,
+            maxLength = PostValue.MAX_LENGTH
     )
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface PostValue {
+        int MAX_LENGTH = 255;
         boolean NULLABLE = true;
         String ALLOWS_NULL = "true";
     }
@@ -266,7 +322,11 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
      * </p>
      */
     @PostValue
-    String getPostValue();
-
+    default String getPostValue() {
+        return null;
+    }
+    default boolean hidePostValue() {
+        return getType() != ChangeType.AUDIT_ENTRY;
+    }
 
 }

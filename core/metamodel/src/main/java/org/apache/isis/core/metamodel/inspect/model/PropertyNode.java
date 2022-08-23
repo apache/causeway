@@ -18,13 +18,10 @@
  */
 package org.apache.isis.core.metamodel.inspect.model;
 
-import java.util.stream.Stream;
-
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -32,6 +29,7 @@ import org.apache.isis.applib.annotation.Introspection;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.schema.metamodel.v2.Member;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,36 +42,25 @@ import lombok.ToString;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
-public class PropertyNode extends MMNode {
+public class PropertyNode extends MemberNode {
 
     public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".PropertyNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private org.apache.isis.schema.metamodel.v2.Property property;
 
-    @Getter @Setter private boolean mixedIn;
-
     @Override
     public String createTitle() {
-        return String.format("%s: %s", property.getId(), typeToString(property.getType()));
+        return String.format("%s: %s%s",
+                property.getId(),
+                typeToString(property.getType()),
+                titleSuffix());
     }
 
     @Override
-    protected String iconSuffix() {
-        return isMixedIn() ? "mixedin" : "";
+    protected Member member() {
+        return property;
     }
-
-    // -- TREE NODE STUFF
-
-    @Getter @Setter @XmlTransient
-    private TypeNode parentNode;
-
-    @Override
-    public Stream<MMNode> streamChildNodes() {
-        return Stream.of(
-                MMNodeFactory.facetGroup(property.getFacets(), this));
-    }
-
 
 }
 

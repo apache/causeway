@@ -30,7 +30,7 @@
 	<properties>
 		<maven.deploy.skip>true</maven.deploy.skip>
 		<sonar.skip>true</sonar.skip>
-		<spring.profiles.active>demo-jpa</spring.profiles.active> 
+		<spring.profiles.active>demo-jpa</spring.profiles.active>
 	</properties>
 
 	<dependencies>
@@ -42,7 +42,7 @@
 			<artifactId>demo-wicket-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<!-- PERSISTENCE -->
 
 		<dependency>

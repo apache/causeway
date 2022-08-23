@@ -31,15 +31,15 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.viewer.common.model.header.HeaderUiModel;
-import org.apache.isis.viewer.common.model.header.HeaderUiModelProvider;
+import org.apache.isis.viewer.commons.model.header.HeaderUiModel;
+import org.apache.isis.viewer.commons.model.header.HeaderUiModelProvider;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -60,7 +60,6 @@ implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
 
-    private transient WicketViewerSettings wicketViewerSettings;
     private transient WebAppContextPath webAppContextPath;
     private transient IsisConfiguration isisConfiguration;
     private transient PageClassRegistry pageClassRegistry;
@@ -89,8 +88,8 @@ implements HasCommonContext {
         return commonContext = WktContext.computeIfAbsent(commonContext);
     }
 
-    public WicketViewerSettings getWicketViewerSettings() {
-        return wicketViewerSettings = computeIfAbsent(WicketViewerSettings.class, wicketViewerSettings);
+    public Wicket getWicketViewerSettings() {
+        return getIsisConfiguration().getViewer().getWicket();
     }
 
     public WebAppContextPath getWebAppContextPath() {

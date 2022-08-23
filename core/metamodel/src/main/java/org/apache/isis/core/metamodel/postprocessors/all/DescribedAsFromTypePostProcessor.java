@@ -25,13 +25,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacet;
-import org.apache.isis.core.metamodel.facets.members.described.annotprop.DescribedAsFacetOnMemberFromType;
-import org.apache.isis.core.metamodel.facets.param.described.annotderived.DescribedAsFacetOnParameterFromType;
+import org.apache.isis.core.metamodel.facets.members.described.annotprop.MemberDescribedFacetFromType;
+import org.apache.isis.core.metamodel.facets.param.described.annotderived.ParamDescribedFacetFromType;
 import org.apache.isis.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -44,54 +44,49 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
-        if(objectAction.containsNonFallbackFacet(MemberDescribedFacet.class)) {
-            return;
-        }
-        objectAction.getReturnType()
-        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(
-                DescribedAsFacetOnMemberFromType
-                .create(
-                        specFacet,
-                        facetedMethodFor(objectAction))));
+    public void postProcessParameter(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
+        handleParam(parameter);
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
-        if(parameter.containsNonFallbackFacet(ParamDescribedFacet.class)) {
-            return;
-        }
-        final ObjectSpecification paramSpec = parameter.getElementType();
-        paramSpec.lookupNonFallbackFacet(ObjectDescribedFacet.class)
-        .ifPresent(describedAsFacet->{
-            FacetUtil.addFacetIfPresent(
-                    DescribedAsFacetOnParameterFromType
-                    .create(describedAsFacet, peerFor(parameter)));
-        });
+    public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+        handleMember(objectAction);
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
-        handle(prop);
+    public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
+        handleMember(prop);
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
-        handle(coll);
+    public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
+        handleMember(coll);
     }
 
     // -- HELPER
 
-    private void handle(final ObjectAssociation objectAssociation) {
-        if(objectAssociation.containsNonFallbackFacet(MemberDescribedFacet.class)) {
+    private void handleMember(final ObjectMember member) {
+        if(member.containsNonFallbackFacet(MemberDescribedFacet.class)) {
             return;
         }
-        objectAssociation.getElementType()
+        member.getElementType()
         .lookupNonFallbackFacet(ObjectDescribedFacet.class)
-        .ifPresent(specFacet -> FacetUtil.addFacetIfPresent(
-                DescribedAsFacetOnMemberFromType
-                .create(specFacet, facetedMethodFor(objectAssociation))));
+        .ifPresent(objectDescribedFacet ->
+            FacetUtil.addFacetIfPresent(
+                    MemberDescribedFacetFromType
+                    .create(objectDescribedFacet, facetedMethodFor(member))));
+    }
+
+    private void handleParam(final ObjectActionParameter parameter) {
+        if(parameter.containsNonFallbackFacet(ParamDescribedFacet.class)) {
+            return;
+        }
+        parameter.getElementType()
+        .lookupNonFallbackFacet(ObjectDescribedFacet.class)
+        .ifPresent(objectDescribedFacet->
+            FacetUtil.addFacetIfPresent(
+                    ParamDescribedFacetFromType
+                    .create(objectDescribedFacet, peerFor(parameter))));
     }
 
 }

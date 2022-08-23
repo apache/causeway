@@ -7,6 +7,7 @@
 .IsisModuleExtSecmanPersistenceJpa.java
 ----
 class IsisModuleExtSecmanPersistenceJpa {
+  FixtureScript getTeardownFixture()
 }
 ----
 

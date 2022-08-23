@@ -33,6 +33,8 @@ import org.springframework.transaction.interceptor.BeanFactoryTransactionAttribu
 import org.springframework.transaction.interceptor.TransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
+import org.apache.isis.core.config.IsisModuleCoreConfig;
+
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -46,9 +48,11 @@ import lombok.extern.log4j.Log4j2;
  */
 @Configuration(proxyBeanMethods = false)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Named("isis.config.AopPatch")
+@Named(AopPatch.LOGICAL_TYPE_NAME)
 @Log4j2
 public class AopPatch implements ApplicationContextAware {
+
+    static final String LOGICAL_TYPE_NAME = IsisModuleCoreConfig.NAMESPACE + ".AopPatch";
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {

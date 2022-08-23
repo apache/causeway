@@ -43,7 +43,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 )
 public class ApplicationTypeAction extends ApplicationTypeMember {
 
-    public static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeAction";
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE_FEAT + ".ApplicationTypeAction";
 
     public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeAction, T> {}
 

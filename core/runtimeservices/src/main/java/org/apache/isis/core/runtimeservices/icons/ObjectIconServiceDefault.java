@@ -41,6 +41,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.ObjectIconServiceDefault")
+@Named(IsisModuleCoreRuntimeServices.NAMESPACE + ".ObjectIconServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

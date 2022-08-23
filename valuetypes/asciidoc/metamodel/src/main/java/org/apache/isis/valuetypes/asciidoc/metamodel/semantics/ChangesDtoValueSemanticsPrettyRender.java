@@ -20,18 +20,21 @@ package org.apache.isis.valuetypes.asciidoc.metamodel.semantics;
 
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.valuesemantics.ChangesDtoValueSemantics;
+import org.apache.isis.valuetypes.asciidoc.applib.IsisModuleValAsciidocApplib;
 
 import lombok.NonNull;
 
 @Component
-@Named("isis.val.ChangesDtoValueSemanticsPrettyRender")
+@Named(IsisModuleValAsciidocApplib.NAMESPACE + "ChangesDtoValueSemanticsPrettyRender")
 @Order(PriorityPrecedence.EARLY)
+@Qualifier("pretty-render")
 public class ChangesDtoValueSemanticsPrettyRender
 extends ChangesDtoValueSemantics {
 
@@ -39,5 +42,13 @@ extends ChangesDtoValueSemantics {
     protected String renderXml(@NonNull final ValueSemanticsProvider.Context context, @NonNull final String xml) {
         return _XmlToHtml.toHtml(xml);
     }
+
+    // -- RENDERER
+
+    @Override
+    public SyntaxHighlighter syntaxHighlighter() {
+        return SyntaxHighlighter.PRISM_DEFAULT;
+    }
+
 
 }

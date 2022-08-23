@@ -22,11 +22,13 @@ import javax.inject.Inject;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetFromChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
@@ -49,12 +51,7 @@ import lombok.val;
  * as well as
  * {@link PropertyDefaultFacet} and {@link PropertyChoicesFacet}.
  *
- * @deprecated this post-processor should be converted into a facet factory instead,
- * as we now have a notion of facet precedence e.g. install
- * ActionParameterDefaultsFacetFromAssociatedCollection with LOW precedence
- * and everything should just work fine
  */
-@Deprecated
 public class ChoicesAndDefaultsPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
@@ -64,13 +61,27 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(
+    public void postProcessParameter(
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction,
             final ObjectActionParameter param) {
         if(!hasMemberLevelChoices(param)) {
 
-            //TODO not used: ActionParameterChoicesFacetFromChoicesFacetFactory
+            // if available on action, installs as a low precedence facets onto the parameters,
+            // so can be overwritten by member support (imperative) choices
+            val choicesFromFacetIfAny = objectAction
+                    .lookupFacet(ChoicesFromFacet.class);
+
+            if(FacetUtil
+                .addFacetIfPresent(
+                    ActionParameterChoicesFacetFromChoicesFromFacet
+                    .create(choicesFromFacetIfAny, objectSpecification, peerFor(param)))
+                .isPresent()) {
+
+                // ActionParameterChoicesFacetFromChoicesFromFacet has precedence over
+                // ActionParameterChoicesFacetFromChoicesFacet, so stop processing here
+                return;
+            }
 
             val choicesFacetIfAny = param.getElementType()
                     .lookupNonFallbackFacet(ChoicesFacet.class);
@@ -82,7 +93,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(
+    public void postProcessProperty(
             final ObjectSpecification objectSpecification,
             final OneToOneAssociation prop) {
         if(!hasMemberLevelDefaults(prop)) {
@@ -92,8 +103,6 @@ extends ObjectSpecificationPostProcessorAbstract {
                                         specFacet, facetedMethodFor(prop))));
         }
         if(!hasMemberLevelChoices(prop)) {
-
-            //TODO not used: PropertyChoicesFacetFromChoicesFacetFactory
 
             val choicesFacetIfAny = prop.getElementType()
                     .lookupNonFallbackFacet(ChoicesFacet.class);
@@ -105,7 +114,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     @Override
-    protected void doPostProcess(
+    public void postProcessCollection(
             final ObjectSpecification objectSpecification,
             final OneToManyAssociation coll) {
 
@@ -131,7 +140,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             val compatibleCollectionParams = parameters.filter(whetherCollectionParamOfType);
             val compatibleScalarParams = parameters.filter(whetherScalarParamOfType);
 
-            // for collection parameters, install an defaults facet (if there isn't one already)
+            // for collection parameters, install a defaults facet (if there isn't one already)
             // this will cause the UI to render the collection with toggleboxes
             for (final ObjectActionParameter collectionParam : compatibleCollectionParams) {
                 addCollectionParamDefaultsFacetIfNoneAlready(collectionParam);
@@ -181,11 +190,11 @@ extends ObjectSpecificationPostProcessorAbstract {
     }
 
     private static void addCollectionParamChoicesFacetIfNoneAlready(
-            final OneToManyAssociation otma,
+            final OneToManyAssociation coll,
             final ObjectActionParameter param) {
         if(!hasMemberLevelChoices(param)) {
             FacetUtil.addFacet(
-                    new ActionParameterChoicesFacetFromParentedCollection(param, otma));
+                    new ActionParameterChoicesFacetFromParentedCollection(param, coll));
         }
     }
 

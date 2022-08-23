@@ -70,6 +70,8 @@ import lombok.Data;
 })
 public class IsisModuleCoreConfig {
 
+    public static final String NAMESPACE = "isis.config";
+
     @ConfigurationProperties(prefix = "", ignoreUnknownFields = true)
     @Data
     public static class ConfigProps {

@@ -23,9 +23,11 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.HasTranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.NonNull;
 import lombok.val;
@@ -36,6 +38,31 @@ import lombok.val;
  */
 public interface FacetHolder
 extends HasMetaModelContext, HasTranslationContext {
+
+    // -- FACTORIES
+
+    public static FacetHolderAbstract simple(
+            final MetaModelContext mmc,
+            final Identifier featureIdentifier) {
+        return new FacetHolderSimple(mmc, featureIdentifier);
+    }
+
+    public static FacetHolder layered(
+            final Identifier featureIdentifier,
+            final FacetHolder parentLayer) {
+        return new FacetHolderLayered(featureIdentifier, parentLayer);
+    }
+
+    // -- JUNIT SUPPORT
+
+    /**
+     *  Meant for simple JUnit tests, that don't use the FacetHolder's identifier.
+     */
+    public static FacetHolderAbstract forTesting(final MetaModelContext mmc) {
+        return simple(mmc, Identifier.classIdentifier(LogicalType.fqcn(Object.class)));
+    }
+
+    // --
 
     /**
      * Identifier of the feature this holder represents or is associated with.

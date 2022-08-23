@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.incubator.viewer.vaadin.ui.binding.BindingsVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
-import org.apache.isis.viewer.common.model.components.UiComponentFactory.ComponentRequest;
+import org.apache.isis.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
 import lombok.val;
 

@@ -88,38 +88,41 @@ include::../ActionExecutionPublishingEntity_mixinUpdatePropertyMetaAnnotationOve
 <.> \... is overridden by the `@Action` annotation
 
 
-== PublisherService
-
-The demo provides a simple implementation of `PublisherService` that just stores the DTOs in memory:
-
-[source,java]
-----
-include::spiimpl/PublisherServiceSpiForActions.java[tags=class]
-----
-<.> serializes to `InteractionDto`, as defined by the link:https://isis.apache.org/refguide/2.0.0-M3/schema/ixn.html[Apache Isis schema].
-
-The demo implementation also provides a way to query these executions:
-
-[source,java,indent=0]
-----
-include::spiimpl/PublisherServiceSpiForActions.java[tags=demo]
-----
-
-Supporting mixins surface this list as contributions on the object:
-
-* `interactionExecutions` collection:
-+
-[source,java,indent=0]
-----
-include::spiimpl/ActionExecutionPublishingJdo_interactionExecutions.java[tags=class]
-----
-
-* `clearInteractionExecutions` action:
-+
-[source,java,indent=0]
-----
-include::spiimpl/ActionExecutionPublishingJdo_clearInteractionExecutions.java[tags=class]
-----
+//
+// seemingly removed
+//
+//== ExecutionSubscriber
+//
+//The demo provides a simple implementation of `PublisherService` that just stores the DTOs in memory:
+//
+//[source,java]
+//----
+//include::spiimpl/PublisherServiceSpiForActions.java[tags=class]
+//----
+//<.> serializes to `InteractionDto`, as defined by the link:https://isis.apache.org/refguide/2.0.0-M3/schema/ixn.html[Apache Isis schema].
+//
+//The demo implementation also provides a way to query these executions:
+//
+//[source,java,indent=0]
+//----
+//include::spiimpl/PublisherServiceSpiForActions.java[tags=demo]
+//----
+//
+//Supporting mixins surface this list as contributions on the object:
+//
+//* `interactionExecutions` collection:
+//+
+//[source,java,indent=0]
+//----
+//include::spiimpl/ActionExecutionPublishingJdo_interactionExecutions.java[tags=class]
+//----
+//
+//* `clearInteractionExecutions` action:
+//+
+//[source,java,indent=0]
+//----
+//include::spiimpl/ActionExecutionPublishingJdo_clearInteractionExecutions.java[tags=class]
+//----
 
 
 == Configuration

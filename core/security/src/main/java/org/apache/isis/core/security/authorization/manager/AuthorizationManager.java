@@ -18,20 +18,24 @@
  */
 package org.apache.isis.core.security.authorization.manager;
 
-import lombok.val;
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.security.authorization.Authorizor;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
-import org.springframework.lang.Nullable;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.List;
 
 /**
  * Authorizes the user in the current session view and use members of an object.
@@ -44,23 +48,22 @@ import java.util.List;
 @Qualifier("Default")
 public class AuthorizationManager {
 
-    private final List<Authorizor> authorizors;
     private final Authorizor authorizor;
 
     @Inject
     public AuthorizationManager(
             final List<Authorizor> authorizors,
-            // TODO: elsewhere we inject an Optional<X>, should use the same technique throughout...
-            @org.springframework.lang.Nullable final AuthorizorChooser authorizorChooser) {
-        this.authorizors = authorizors;
-        val authorizorPrecedenceChooserToUse = authorizorChooser != null
-                ? authorizorChooser
-                : new AuthorizorChooser() {
-                    @Override public Authorizor chooseFrom(final List<Authorizor> authorizors) {
-                        return authorizors.get(0);
-                    }
-                };
-        this.authorizor = authorizorPrecedenceChooserToUse.chooseFrom(authorizors);
+            final Optional<AuthorizorChooser> authorizorChooserIfAny) {
+
+        _Assert.assertTrue(_NullSafe.size(authorizors)>0, ()->
+            String.format(
+                    "At least one %s is required to be registered for injection.",
+                    Authorizor.class.getName()));
+
+        this.authorizor =
+            authorizorChooserIfAny
+            .map(authorizorChooser->authorizorChooser.chooseFrom(authorizors))
+            .orElseGet(()->authorizors.get(0));
     }
 
     /**

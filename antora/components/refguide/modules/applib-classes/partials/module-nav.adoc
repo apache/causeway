@@ -5,7 +5,6 @@
 
 ** xref:applib-classes:non-persisted-objects.adoc[Non-persisted objects]
 *** xref:applib:index/ViewModel.adoc[ViewModel]
-*** xref:applib:index/RecreatableDomainObject.adoc[RecreatableDomainObject]
 
 ** xref:applib-classes:layout.adoc[Layout]
 
@@ -43,14 +42,21 @@
 *** xref:refguide:applib:index/mixins/dto/Dto_downloadXml.adoc[Dto_downloadXml]
 *** xref:refguide:applib:index/mixins/dto/Dto_downloadXsd.adoc[Dto_downloadXsd]
 
-*** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata]
-*** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusIdLong.adoc[Persistable_datanucleusIdLong] (property)
-*** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong] (property)
-*** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp] (property)
+*** JDO
+**** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata]
+**** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong] (property)
+**** xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp] (property)
 
-*** xref:refguide:extensions:index/commandlog/impl/mixins/HasInteractionId_command.adoc[HasInteractionId_command]
-*** xref:refguide:applib:index/mixins/system/DomainChangeRecord_openTargetObject.adoc[DomainChangeRecord_openTargetObject]
+*** Command Log
+**** xref:refguide:extensions:index/commandlog/applib/contributions/Object_recentCommands.adoc[Object_recentCommands]
+**** xref:refguide:extensions:index/commandlog/applib/contributions/HasInteractionId_commandLogEntry.adoc[HasInteraction_commandLogEntry]
+**** xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[HasUsername_recentCommandsByUser]
 
+*** Execution Log
+**** xref:refguide:extensions:index/executionlog/applib/contributions/Object_recentExecutions.adoc[Object_recentExecutions]
+**** xref:refguide:extensions:index/executionlog/applib/contributions/HasInteractionId_executionLogEntries.adoc[HasInteractionId_executionLogEntries]
+
+*** xref:refguide:applib:index/mixins/system/HasTarget_openTargetObject.adoc[HasTarget_openTargetObject]
 
 ** xref:applib-classes:spec.adoc[Specification pattern]
 

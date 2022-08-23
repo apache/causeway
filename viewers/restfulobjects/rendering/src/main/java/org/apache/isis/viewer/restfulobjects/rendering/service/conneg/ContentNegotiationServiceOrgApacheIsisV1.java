@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
@@ -43,12 +44,13 @@ import lombok.extern.log4j.Log4j2;
  * @since 1.x {@index}
  */
 @Service
-@Named("isis.viewer.ro.ContentNegotiationServiceOrgApacheIsisV1")
+@Named(ContentNegotiationServiceOrgApacheIsisV1.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV1")
 @Log4j2
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 
+    static final String LOGICAL_TYPE_NAME = IsisModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceOrgApacheIsisV1";
     public static final String ACCEPT_PROFILE = "urn:org.apache.isis/v1";
 
     @Override

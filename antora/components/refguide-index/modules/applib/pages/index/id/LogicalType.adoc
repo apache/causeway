@@ -29,47 +29,47 @@ class LogicalType {
 }
 ----
 
-<.> xref:#lazy__Class_Supplier[lazy(Class, Supplier)]
+<.> xref:#lazy_Class_Supplier[lazy(Class, Supplier)]
 +
 --
-Returns a new TypeIdentifier based on the corresponding class and a _logicalNameProvider_ for lazy logical name lookup.
+Returns a new xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] based on the corresponding class and a _logicalNameProvider_ for lazy logical name lookup.
 --
-<.> xref:#eager__Class_String[eager(Class, String)]
+<.> xref:#eager_Class_String[eager(Class, String)]
 +
 --
 Returns a new TypeIdentifier based on the corresponding class and (ahead of time) known _logicalName_ .
 --
-<.> xref:#fqcn__Class[fqcn(Class)]
+<.> xref:#fqcn_Class[fqcn(Class)]
 +
 --
 Use the corresponding class's fully qualified name for the _logicalName_ . Most likely used in testing scenarios.
 --
-<.> xref:#infer__Class[infer(Class)]
+<.> xref:#infer_Class[infer(Class)]
 +
 --
 Infer from annotations.
 --
-<.> xref:#getClassName__[getClassName()]
+<.> xref:#getClassName_[getClassName()]
 +
 --
 Canonical name of the corresponding class.
 --
-<.> xref:#getLogicalTypeName__[getLogicalTypeName()]
+<.> xref:#getLogicalTypeName_[getLogicalTypeName()]
 +
 --
 Returns the logical-type-name (unique amongst non-abstract classes), as per the _LogicalTypeFacet_ .
 --
-<.> xref:#getLogicalTypeSimpleName__[getLogicalTypeSimpleName()]
+<.> xref:#getLogicalTypeSimpleName_[getLogicalTypeSimpleName()]
 +
 --
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ .
 --
-<.> xref:#getNamespace__[getNamespace()]
+<.> xref:#getNamespace_[getNamespace()]
 +
 --
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ .
 --
-<.> xref:#getLogicalTypeNameFormatted__String_String[getLogicalTypeNameFormatted(String, String)]
+<.> xref:#getLogicalTypeNameFormatted_String_String[getLogicalTypeNameFormatted(String, String)]
 +
 --
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ . Returns a concatenation of _namespace_ , _delimiter_ and the _logical simple name_ , whereas in the absence of a _namespace_ returns a concatenation of _root_ and the _logical simple name_ .
@@ -77,32 +77,32 @@ The logical type name consists of 2 parts, the _namespace_ and the _logical simp
 
 == Members
 
-[#lazy__Class_Supplier]
+[#lazy_Class_Supplier]
 === lazy(Class, Supplier)
 
-Returns a new TypeIdentifier based on the corresponding class and a _logicalNameProvider_ for lazy logical name lookup.
+Returns a new xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] based on the corresponding class and a _logicalNameProvider_ for lazy logical name lookup.
 
-[#eager__Class_String]
+[#eager_Class_String]
 === eager(Class, String)
 
 Returns a new TypeIdentifier based on the corresponding class and (ahead of time) known _logicalName_ .
 
-[#fqcn__Class]
+[#fqcn_Class]
 === fqcn(Class)
 
 Use the corresponding class's fully qualified name for the _logicalName_ . Most likely used in testing scenarios.
 
-[#infer__Class]
+[#infer_Class]
 === infer(Class)
 
 Infer from annotations.
 
-[#getClassName__]
+[#getClassName_]
 === getClassName()
 
 Canonical name of the corresponding class.
 
-[#getLogicalTypeName__]
+[#getLogicalTypeName_]
 === getLogicalTypeName()
 
 Returns the logical-type-name (unique amongst non-abstract classes), as per the _LogicalTypeFacet_ .
@@ -111,21 +111,21 @@ This will typically be the value of the _DomainObject#logicalTypeName()_ annotat
 
 The _ObjectSpecification_ can be retrieved using _SpecificationLoader#specForLogicalTypeName(String)_ } passing the logical-type-name as argument.
 
-[#getLogicalTypeSimpleName__]
+[#getLogicalTypeSimpleName_]
 === getLogicalTypeSimpleName()
 
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ .
 
 Returns the _logical simple name_ part.
 
-[#getNamespace__]
+[#getNamespace_]
 === getNamespace()
 
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ .
 
 Returns the _namespace_ part.
 
-[#getLogicalTypeNameFormatted__String_String]
+[#getLogicalTypeNameFormatted_String_String]
 === getLogicalTypeNameFormatted(String, String)
 
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ . Returns a concatenation of _namespace_ , _delimiter_ and the _logical simple name_ , whereas in the absence of a _namespace_ returns a concatenation of _root_ and the _logical simple name_ .

@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
  * allow the current user to be temporarily impersonated.
  *
  * <p>
- *     The intention is that viewers provide an implementation of this service..
+ *     The intention is that viewers provide an implementation of this service.
  *     Note that the Wicket viewer <i>does</i> implement this service and
  *     uses an {@link HttpSession}; this will have the side-effect
  * </p>

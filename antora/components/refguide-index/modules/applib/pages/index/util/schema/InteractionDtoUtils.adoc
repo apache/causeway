@@ -16,8 +16,8 @@ class InteractionDtoUtils {
   void toXml(InteractionDto interactionDto, Writer writer)
   InteractionDto newInteractionDto(Execution<?, ?> execution)     // <.>
   InteractionDto newInteractionDto(Execution<?, ?> execution, Strategy strategy)     // <.>
-  ActionInvocationDto newActionInvocation(int sequence, Bookmark targetBookmark, String targetTitle, String actionIdentifier, List<ParamDto> parameterDtos, String user)
-  PropertyEditDto newPropertyEdit(int sequence, Bookmark targetBookmark, String targetTitle, String propertyIdentifier, ValueWithTypeDto newValueDto, String user)
+  ActionInvocationDto newActionInvocation(int sequence, Bookmark targetBookmark, String actionIdentifier, List<ParamDto> parameterDtos, String user)
+  PropertyEditDto newPropertyEdit(int sequence, Bookmark targetBookmark, String propertyIdentifier, ValueWithTypeDto newValueDto, String user)
   String deriveLogicalMemberId(Bookmark bookmark, String memberId)
   List<ParamDto> getParameters(ActionInvocationDto ai)
   List<String> getParameterNames(ActionInvocationDto ai)
@@ -31,12 +31,12 @@ class InteractionDtoUtils {
 }
 ----
 
-<.> xref:#newInteractionDto__Execution[newInteractionDto(Execution)]
+<.> xref:#newInteractionDto_Execution[newInteractionDto(Execution)]
 +
 --
 Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).
 --
-<.> xref:#newInteractionDto__Execution_Strategy[newInteractionDto(Execution, Strategy)]
+<.> xref:#newInteractionDto_Execution_Strategy[newInteractionDto(Execution, Strategy)]
 +
 --
 Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).
@@ -44,12 +44,12 @@ Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:
 
 == Members
 
-[#newInteractionDto__Execution]
+[#newInteractionDto_Execution]
 === newInteractionDto(Execution)
 
 Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).
 
-[#newInteractionDto__Execution_Strategy]
+[#newInteractionDto_Execution_Strategy]
 === newInteractionDto(Execution, Strategy)
 
 Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).

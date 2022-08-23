@@ -41,10 +41,10 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.util.Facets;
-import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel.HasRenderingHints;
-import org.apache.isis.viewer.common.model.object.ObjectUiModel.RenderingHint;
+import org.apache.isis.viewer.commons.model.feature.ScalarUiModel;
+import org.apache.isis.viewer.commons.model.object.ObjectUiModel;
+import org.apache.isis.viewer.commons.model.object.ObjectUiModel.HasRenderingHints;
+import org.apache.isis.viewer.commons.model.object.ObjectUiModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 

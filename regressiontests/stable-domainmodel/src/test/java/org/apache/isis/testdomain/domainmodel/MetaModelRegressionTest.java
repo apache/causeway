@@ -82,7 +82,7 @@ class MetaModelRegressionTest {
         }
 
         //for maintenance
-        // createReferenceMetaModelFile(new File("d:/tmp/_scratch/metamodel.xml.zip"));
+        //createReferenceMetaModelFile(new File("d:/tmp/_scratch/metamodel.xml.zip"));
     }
 
     @Test

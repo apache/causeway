@@ -24,8 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured extends EntityChangePublishingFacetForDomainObjectAnnotation {
 
-    public EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured(final FacetHolder facetHolder) {
-        super(facetHolder);
+    public EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured(final FacetHolder facetHolder, final boolean enabled) {
+        super(facetHolder, enabled);
     }
 
 }

@@ -7,7 +7,6 @@
 .ApplicationTypeCollection.java
 ----
 class ApplicationTypeCollection {
-  public static final String LOGICAL_TYPE_NAME;
   ApplicationTypeCollection()
   ApplicationTypeCollection(ApplicationFeatureId featureId)
   ApplicationTypeCollection(String memento)

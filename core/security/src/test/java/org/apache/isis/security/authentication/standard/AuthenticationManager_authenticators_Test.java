@@ -19,6 +19,7 @@
 package org.apache.isis.security.authentication.standard;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.Test;
 
@@ -46,6 +47,7 @@ public class AuthenticationManager_authenticators_Test {
                 Collections.emptyList(),
                 new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault(),
+                Optional.empty(),
                 Collections.emptyList());
         authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
     }
@@ -59,6 +61,7 @@ public class AuthenticationManager_authenticators_Test {
                 Collections.singletonList(auth),
                 new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault(),
+                Optional.empty(),
                 Collections.emptyList());
         assertThat(authenticationManager.getAuthenticators().size(), is(1));
         assertThat(authenticationManager.getAuthenticators().getElseFail(0), is(sameInstance(auth)));

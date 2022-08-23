@@ -81,7 +81,7 @@ There are other options for styling, see link:https://docsearch.algolia.com/docs
 The remaining steps are routine and performed each time there is a change to the site:
 
 * xref:post-release-successful.adoc#generate-website[Generate website] and then
-* xref:post-release-successful.adoc#index-the-site[Index the site], and then
+* xref:post-release-successful.adoc#update-index-html-site-yml-generate[Index the site], and then
 * xref:post-release-successful.adoc#publish-website[Publish website].
 
 And you're done.

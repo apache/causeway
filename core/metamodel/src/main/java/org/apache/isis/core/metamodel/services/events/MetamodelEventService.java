@@ -34,6 +34,7 @@ import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
+import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 
 import lombok.Builder;
 
@@ -43,7 +44,7 @@ import lombok.Builder;
  *
  */
 @Service
-@Named("isis.metamodel.MetamodelEventService")
+@Named(IsisModuleCoreMetamodel.NAMESPACE + ".MetamodelEventService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Builder //for JUnit Test support

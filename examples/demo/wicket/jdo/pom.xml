@@ -50,6 +50,8 @@
 			<artifactId>isis-persistence-jdo-datanucleus</artifactId>
 		</dependency>
 
+
+
 	</dependencies>
 
 	<profiles>

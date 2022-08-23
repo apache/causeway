@@ -50,7 +50,7 @@ class FakeDataService {
 }
 ----
 
-<.> xref:#javaFaker__[javaFaker()]
+<.> xref:#javaFaker_[javaFaker()]
 +
 --
 Access to the full API of the underlying javafaker library.
@@ -58,7 +58,7 @@ Access to the full API of the underlying javafaker library.
 
 == Members
 
-[#javaFaker__]
+[#javaFaker_]
 === javaFaker()
 
 Access to the full API of the underlying javafaker library.

@@ -62,7 +62,7 @@ extends FacetFactoryAbstract {
                 new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar));
 
         addFacetIfPresent(
-                NamedFacetForDomainServiceLayoutAnnotation
+                ObjectNamedFacetForDomainServiceLayoutAnnotation
                 .create(domainServiceLayoutIfAny, facetHolder));
     }
 

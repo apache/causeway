@@ -18,18 +18,21 @@
  */
 package org.apache.isis.extensions.secman.integration.facets;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -64,28 +67,30 @@ extends ObjectSpecificationPostProcessorAbstract {
     @Inject @Lazy ApplicationUserRepository userRepository;
     @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
 
+    @Autowired(required=false) List<ApplicationTenancyEvaluator> applicationTenancyEvaluators;
+
     @Inject
     public TenantedAuthorizationPostProcessor(final MetaModelContext metaModelContext) {
         super(metaModelContext);
     }
 
     @Override
-    public void doPostProcess(final ObjectSpecification objectSpecification) {
+    public void postProcessObject(final ObjectSpecification objectSpecification) {
         FacetUtil.addFacetIfPresent(createFacet(objectSpecification.getCorrespondingClass(), objectSpecification));
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final ObjectAction act) {
+    public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction act) {
         addFacetTo(objectSpecification, act);
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
+    public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
         addFacetTo(objectSpecification, prop);
     }
 
     @Override
-    protected void doPostProcess(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
+    public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         addFacetTo(objectSpecification, coll);
     }
 
@@ -95,13 +100,13 @@ extends ObjectSpecificationPostProcessorAbstract {
         FacetUtil.addFacetIfPresent(createFacet(specification.getCorrespondingClass(), objectFeature));
     }
 
+
+
     private Optional<TenantedAuthorizationFacetDefault> createFacet(
             final Class<?> cls,
             final FacetHolder holder) {
 
-        val evaluators = serviceRegistry
-                .select(ApplicationTenancyEvaluator.class)
-                .stream()
+        val evaluators = _NullSafe.stream(applicationTenancyEvaluators)
                 .filter(evaluator -> evaluator.handles(cls))
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 

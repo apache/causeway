@@ -21,11 +21,13 @@ package org.apache.isis.core.metamodel.valuesemantics;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.graph.tree.TreeAdapter;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreeState;
@@ -42,6 +44,7 @@ import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
 @Named("isis.val.TreeNodeValueSemantics")
+@Priority(PriorityPrecedence.LATE)
 public class TreeNodeValueSemantics
 extends ValueSemanticsAbstract<TreeNode<?>>
 implements

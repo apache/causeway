@@ -18,8 +18,18 @@
  */
 package org.apache.isis.applib.services.commanddto.conmap;
 
-import lombok.val;
+import java.util.List;
 
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.ws.rs.core.MediaType;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
@@ -27,29 +37,24 @@ import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProces
 import org.apache.isis.applib.services.conmap.ContentMappingService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import org.springframework.lang.Nullable;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.core.MediaType;
-import java.util.List;
+import lombok.val;
 
 /**
- * 
+ *
  * @since 2.0 {@index}
  */
 @Service
-@Named("isis.applib.ContentMappingServiceForCommandDto")
+@Named(ContentMappingServiceForCommandDto.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("CommandDto")
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
+    static final String LOGICAL_TYPE_NAME = IsisModuleApplib.NAMESPACE + ".ContentMappingServiceForCommandDto";
+
     @Override @Nullable
     public Object map(final Object object, final List<MediaType> acceptableMediaTypes) {
-        final boolean supported = Util.isSupported(CommandDto.class, acceptableMediaTypes);
+        final boolean supported = isSupported(CommandDto.class, acceptableMediaTypes);
         if(!supported) {
             return null;
         }
@@ -80,7 +85,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         if(commandDto == null) {
             return null;
         }
-        
+
         // global processors
         for (val commandDtoProcessorService : commandDtoProcessorServices) {
             commandDto = commandDtoProcessorService.process(domainObject, commandDto);

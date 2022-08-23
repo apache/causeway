@@ -53,7 +53,7 @@ The simple use case (that _doesn't_ require a dependeny on this extension) is de
 @Slf4j
 public class SampleJob implements Job {
 
-    private final InteractionFactory interactionFactory;         // <1>
+    private final InteractionService interactionService;         // <1>
     private final TransactionalProcessor transactionalProcessor; // <1>
 
     @Override
