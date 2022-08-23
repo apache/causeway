@@ -15,8 +15,9 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.isis.extensions.secman.shiro;
+package org.apache.isis.extensions.secman.delegated.shiro.realm;
 
 import java.util.Collection;
 
@@ -27,9 +28,10 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.pam.AllSuccessfulStrategy;
 import org.apache.shiro.realm.Realm;
 
+
 import lombok.val;
 
-public class AuthenticationStrategyForIsisModuleSecurityRealm extends AllSuccessfulStrategy {
+public class AuthenticationStrategyForSecMan extends AllSuccessfulStrategy {
 
     /**
      * Reconfigures the SimpleAuthenticationInfo to use an implementation for storing its PrincipalCollections.

@@ -5,5 +5,42 @@
 
 This section describes how to setup and configure SecMan authorizor combined with xref:security:spring:about.adoc[Spring] being used as the authenticator, configured with xref:security:spring-oauth2:about.adoc[OAuth2].
 
-WARNING: TODO: v2 - to write up...
+In this scenario, we require that SecMan automatically creates any ``ApplicationUser``s as delegated users, meaning that they are defined externally (in the OAuth2 external store).
 
+We use an extension module to register a service that performs this task.
+
+
+== Configuration
+
+Update your pom.xml:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.extensions</groupId>
+        <artifactId>isis-extensions-secman-delegated-spring-oauth2</artifactId>    <!--.-->
+    </dependency>
+</dependencies>
+----
+
+And update your `AppManifest`:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleExtSecmanDelegatedSpringOauth2.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+== ApplicationUsers cannot be DISABLED
+
+This integration has one small limitation: it is not possible to disable delegated ``ApplicationUser``s.
+Or rather, they can be disabled, but this will have no effect; the user will still be able to log in.

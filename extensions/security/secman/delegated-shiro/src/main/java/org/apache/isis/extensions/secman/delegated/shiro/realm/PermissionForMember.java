@@ -15,8 +15,9 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.isis.extensions.secman.shiro;
+package org.apache.isis.extensions.secman.delegated.shiro.realm;
 
 import org.apache.shiro.authz.Permission;
 
@@ -24,7 +25,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 
 /**
- * As created by {@link org.apache.isis.extensions.secman.shiro.PermissionResolverForIsisShiroAuthorizor}, interprets the
+ * As created by {@link PermissionResolverForIsisShiroAuthorizor}, interprets the
  * permission strings formatted by <code>IsisShiroAuthorizor</code>.
  */
 class PermissionForMember implements org.apache.shiro.authz.Permission {

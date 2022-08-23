@@ -15,8 +15,9 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.isis.extensions.secman.shiro;
+package org.apache.isis.extensions.secman.delegated.shiro.realm;
 
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
@@ -50,7 +51,7 @@ import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman.Delegated
 import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.extensions.secman.applib.user.dom.AccountType;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
+import org.apache.isis.extensions.secman.delegated.shiro.util.ShiroUtils;
 
 import lombok.Getter;
 import lombok.Setter;

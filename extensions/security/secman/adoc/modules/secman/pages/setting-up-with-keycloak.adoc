@@ -5,5 +5,8 @@
 
 This section describes how to setup and configure SecMan authorizor combined with xref:security:keycloak:about.adoc[Keycloak] being used as the authenticator.
 
-WARNING: TODO: v2 - to write up...
+In this scenario, we require that SecMan automatically creates any ``ApplicationUser``s as delegated users, meaning that they are defined externally (in keycloak, in fact).
+
+This is actually the exact same scenario as using the xref:security:spring-oauth2:about.adoc[] authenticator (the Keycloak authentication builds on top of Spring Security OAuth2).
+Therefore, perform the same steps as described in xref:setting-up-with-spring-oauth2.adoc[setting up Secman with Spring Oauth2].
 
