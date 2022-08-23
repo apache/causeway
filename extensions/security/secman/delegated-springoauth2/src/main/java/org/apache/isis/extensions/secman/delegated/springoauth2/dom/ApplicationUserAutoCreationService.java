@@ -20,16 +20,27 @@
 
 package org.apache.isis.extensions.secman.delegated.springoauth2.dom;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.springframework.context.ApplicationListener;
+import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
+import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.extensions.secman.applib.role.dom.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_addRole;
+import org.apache.isis.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateEmailAddress;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -40,7 +51,10 @@ public class ApplicationUserAutoCreationService
         implements ApplicationListener<InteractiveAuthenticationSuccessEvent> {
 
     private final ApplicationUserRepository applicationUserRepository;
+    private final ApplicationRoleRepository applicationRoleRepository;
     private final InteractionService interactionService;
+    private final IsisConfiguration isisConfiguration;
+    private final FactoryService factoryService;
 
     @Override
     public void onApplicationEvent(final InteractiveAuthenticationSuccessEvent event) {
@@ -53,8 +67,35 @@ public class ApplicationUserAutoCreationService
         val oidcUser = (DefaultOidcUser) principal;
         val username = oidcUser.getIdToken().getPreferredUsername();
         val email = oidcUser.getIdToken().getEmail();
-        val applicationUser = interactionService.callAnonymous(() -> applicationUserRepository.findOrCreateUserByUsername(username));
-        applicationUser.setEmailAddress(email);
-        applicationUser.setStatus(ApplicationUserStatus.UNLOCKED);  // locking not supported for keycloak
+        interactionService.runAnonymous(() -> {
+            Optional<ApplicationUser> userIfAny = applicationUserRepository.findByUsername(username);
+            if (userIfAny.isEmpty()) {
+                val status = ApplicationUserStatus.UNLOCKED;  // locking not supported for spring delegated accounts
+                val applicationUser = applicationUserRepository.newDelegateUser(username, status);
+                factoryService.mixin(ApplicationUser_updateEmailAddress.class, applicationUser).act(email);
+
+                val initialRoleNames = isisConfiguration.getExtensions().getSecman().getDelegatedUsers().getInitialRoleNames();
+                if (notEmpty(initialRoleNames)) {
+                    for (String initialRoleName : initialRoleNames) {
+                        addRoleIfExists(applicationUser, initialRoleName);
+                    }
+                }
+            }
+        });
     }
+
+    private void addRoleIfExists(ApplicationUser applicationUser, String initialRoleName) {
+        applicationRoleRepository.findByName(initialRoleName).ifPresent(role -> {
+            factoryService.mixin(ApplicationUser_addRole.class, applicationUser).act(role);
+        });
+    }
+
+    private static boolean notEmpty(List<String> initialRoleNames) {
+        return !isEmpty(initialRoleNames);
+    }
+
+    private static boolean isEmpty(@Nullable Collection<?> collection) {
+        return collection == null || collection.isEmpty();
+    }
+
 }

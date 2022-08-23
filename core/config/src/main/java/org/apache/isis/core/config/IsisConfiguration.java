@@ -3105,7 +3105,6 @@ public class IsisConfiguration {
                 public enum AutoCreatePolicy {
                     AUTO_CREATE_AS_LOCKED,
                     AUTO_CREATE_AS_UNLOCKED,
-                    // NO_AUTO_CREATE
                 }
 
                 /**
@@ -3115,9 +3114,25 @@ public class IsisConfiguration {
                  * BE AWARE THAT if any users are auto-created as unlocked, then the set of roles that
                  * they are given should be highly restricted !!!
                  * </p>
+                 *
+                 * <p>
+                 *     NOTE also that this configuration policy is ignored if running secman with Spring OAuth2
+                 *     or Keycloak as the authenticator; users are always auto-created.
+                 * </p>
                  */
                 @Getter @Setter
                 private AutoCreatePolicy autoCreatePolicy = AutoCreatePolicy.AUTO_CREATE_AS_LOCKED;
+
+                /**
+                 * The set of roles that users that have been automatically created are granted automatically.
+                 *
+                 * <p>
+                 *     Typically the regular user role (as per <code>isis.secman.seed.regular-user.role-name</code>
+                 *     will be one of the roles listed here; that will provide the ability for the end-user to logout,
+                 *     among other things (!).
+                 * </p>
+                 */
+                private List<String> initialRoleNames = new ArrayList<>();
 
             }
 
