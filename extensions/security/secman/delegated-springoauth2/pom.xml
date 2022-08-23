@@ -27,8 +27,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-extensions-secman-spring-autocreator</artifactId>
-    <name>Apache Isis Ext - Sec Man Autocreator (for Spring)</name>
+    <artifactId>isis-extensions-secman-delegated-springoauth2</artifactId>
+    <name>Apache Isis Ext - Sec Man Delegated (using Spring Oauth2)</name>
     <description>Provides a domain service to automatically create a delegated ApplicationUser if authentication has been performed externally, eg by Spring OAuth2 or by Keycloak.</description>
 
     <properties>

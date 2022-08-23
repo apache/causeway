@@ -29,7 +29,7 @@
 
     <artifactId>isis-extensions-secman-delegated-shiro</artifactId>
     <name>Apache Isis Ext - Sec Man Delegated (Using Shiro)</name>
-    <description></description>
+    <description>Provides an implementation of a Shiro Realm that will automatically created delegated ApplicationUsers for any users externally authenticated in a delegate realm</description>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.extensions.secman.shiro.realm</jar-plugin.automaticModuleName>
