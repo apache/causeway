@@ -109,8 +109,8 @@ public class LayoutServiceDefault implements LayoutService {
     // -- HELPER
 
     private Try<String> tryGridToXml(final Class<?> domainClass, final LayoutExportStyle style) {
-        final Grid grid = gridService.toGridForExport(domainClass, style);
-        return Try.call(()->gridToXml(grid));
+        return Try.call(()->
+            gridToXml(gridService.toGridForExport(domainClass, style)));
     }
 
     private String gridToXml(final @Nullable Grid grid) {
