@@ -23,13 +23,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
+import org.apache.isis.extensions.secman.delegated.springoauth2.dom.ApplicationUserAutoCreationService;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-        IsisModuleExtSecmanApplib.class
+        IsisModuleExtSecmanApplib.class,
+
+        ApplicationUserAutoCreationService.class
 })
 public class IsisModuleExtSecmanDelegatedSpringOauth2 {
 

@@ -3127,9 +3127,9 @@ public class IsisConfiguration {
                  * The set of roles that users that have been automatically created are granted automatically.
                  *
                  * <p>
-                 *     Typically the regular user role (as per <code>isis.secman.seed.regular-user.role-name</code>
-                 *     will be one of the roles listed here; that will provide the ability for the end-user to logout,
-                 *     among other things (!).
+                 *     Typically the regular user role (as per <code>isis.secman.seed.regular-user.role-name</code>,
+                 *     default value of <code>isis-ext-secman-user</code>) will be one of the roles listed here, to
+                 *     provide the ability for the end-user to logout, among other things (!).
                  * </p>
                  */
                 private List<String> initialRoleNames = new ArrayList<>();
