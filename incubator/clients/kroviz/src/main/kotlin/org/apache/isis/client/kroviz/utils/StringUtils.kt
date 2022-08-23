@@ -37,7 +37,7 @@ object StringUtils {
 
     @OptIn(ExperimentalStdlibApi::class)
     fun capitalize(input: String): String {
-        return if (input != null && input.length > 0) {
+        return if (input.length > 0) {
             val output = input.substring(1, input.length)
             input.first().uppercaseChar() + output
         } else {
@@ -215,9 +215,9 @@ object StringUtils {
         (1..pad.length).forEach { raw += 0.toChar() }
         return StringBuilder().apply {
             (0 until raw.length step 3).forEach {
-                val n: Int = (0xFF.and(raw[it].toInt()) shl 16) +
-                        (0xFF.and(raw[it + 1].toInt()) shl 8) +
-                        0xFF.and(raw[it + 2].toInt())
+                val n: Int = (0xFF.and(raw[it].code) shl 16) +
+                        (0xFF.and(raw[it + 1].code) shl 8) +
+                        0xFF.and(raw[it + 2].code)
                 listOf<Int>(
                     (n shr 18) and 0x3F,
                     (n shr 12) and 0x3F,

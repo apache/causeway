@@ -447,6 +447,7 @@ Country: US
             svg.scaleHorizontally()
             val svgDoc = svg.document
             val svgElement = svgDoc.documentElement
+            console.log("[SvgMap]$svgElement")
 
 //TODO implement extension function  and adopt new version of kvsion.maps
 /*        val bounds = LatLngBounds(

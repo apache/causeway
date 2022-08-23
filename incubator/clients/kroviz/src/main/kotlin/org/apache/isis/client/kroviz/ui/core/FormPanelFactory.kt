@@ -168,8 +168,10 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     private fun createImage(fi: FormItem): VPanel {
         val panel = VPanel {
             when (val fc = fi.content) {
-                fc is Image -> fc
-                fc is String -> {
+                (fc is Image) -> {
+                    console.log(fc)
+                }
+                (fc is String) -> {
                     // interpret as (file) URL and load locally
                     console.log("[FPF.createImage]")
                     console.log(fc)

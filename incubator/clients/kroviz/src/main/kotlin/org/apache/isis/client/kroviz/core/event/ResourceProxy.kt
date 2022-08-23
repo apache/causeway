@@ -118,7 +118,7 @@ class ResourceProxy {
             aggregator.update(le, le.subType)
         }
         le.setCached()
-        es.updateStatus(le)
+        es.updateStatus()
     }
 
     fun invokeKroki(pumlCode: String, aggregator: SvgDispatcher) {

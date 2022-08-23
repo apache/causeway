@@ -23,11 +23,13 @@ package org.apache.isis.client.kroviz.ui.kv.override
  * * add IconMenu to (Ro)Tab
  */
 
-import io.kvision.snabbdom.VNode
-import io.kvision.core.*
+import io.kvision.core.Component
+import io.kvision.core.CssSize
+import io.kvision.core.UNIT
+import io.kvision.core.WidgetWrapper
 import io.kvision.panel.SimplePanel
-import io.kvision.panel.VPanel
 import io.kvision.routing.RoutingManager
+import io.kvision.snabbdom.VNode
 import io.kvision.utils.auto
 import io.kvision.utils.obj
 import org.apache.isis.client.kroviz.ui.core.ViewManager
@@ -74,7 +76,7 @@ open class RoTabPanel(
     val scrollableTabs: Boolean = true,
     val draggableTabs: Boolean = false,
     className: String? = null,
-    init: (RoTabPanel.() -> Unit)? = null
+    init: (RoTabPanel.() -> Unit)? = null,
 ) : SimplePanel((className?.let { "$it " } ?: "") + "kv-tab-panel") {
 
     protected val navClasses = when (tabPosition) {
@@ -149,13 +151,6 @@ open class RoTabPanel(
             SideTabSize.SIZE_5 -> Pair("col-sm-5", "col-sm-7")
             SideTabSize.SIZE_6 -> Pair("col-sm-6", "col-sm-6")
         }
-    }
-
-    /**
-     * Returns the number of tabs.
-     */
-    open fun getSize(): Int {
-        return tabs.size
     }
 
     /**
@@ -301,25 +296,6 @@ open class RoTabPanel(
         return this
     }
 
-    /**
-     * Creates and adds new tab component.
-     * @param title title of the tab
-     * @param panel child component
-     * @param icon icon of the tab
-     * @param image image of the tab
-     * @param closable determines if this tab is closable
-     * @param route JavaScript route to activate given child
-     * @return current container
-     */
-    open fun addTab(
-        title: String, panel: Component, icon: String? = null,
-        image: ResString? = null, closable: Boolean = false, route: String? = null
-    ): RoTabPanel {
-        addTab(RoTab(title, panel, icon, image, closable, route))
-        refresh()
-        return this
-    }
-
     override fun addAll(children: List<Component>): RoTabPanel {
         children.forEach(::addChild)
         refresh()
@@ -367,7 +343,7 @@ open class RoTabPanel(
 
     fun findTab(title: String): Int? {
         getTabs().forEachIndexed { index, component ->
-            if ((component is VPanel) && (component.title == title)) {
+            if (component.title == title) {
                 return index
             }
         }
@@ -401,22 +377,4 @@ open class RoTabPanel(
         }
 
     }
-}
-
-/**
- * DSL builder extension function.
- *
- * It takes the same parameters as the constructor of the built component.
- */
-fun Container.tabPanel(
-    tabPosition: TabPosition = TabPosition.TOP,
-    sideTabSize: SideTabSize = SideTabSize.SIZE_3,
-    scrollableTabs: Boolean = false,
-    draggableTabs: Boolean = false,
-    className: String? = null,
-    init: (RoTabPanel.() -> Unit)? = null
-): RoTabPanel {
-    val tabPanel = RoTabPanel(tabPosition, sideTabSize, scrollableTabs, draggableTabs, className, init)
-    this.add(tabPanel)
-    return tabPanel
 }

@@ -18,14 +18,12 @@
  */
 package org.apache.isis.client.kroviz.core.aggregator
 
-import org.apache.isis.client.kroviz.core.event.CorsHttpRequest
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.Restful
-import org.apache.isis.client.kroviz.ui.core.SessionManager
 
-class RestfulDispatcher() : BaseAggregator() {
+class RestfulDispatcher : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String?) {
         val restful = logEntry.getTransferObject() as Restful
@@ -36,8 +34,8 @@ class RestfulDispatcher() : BaseAggregator() {
                 rel.endsWith("/menuBars") -> invokeNavigation(it)
                 rel.endsWith("/services") -> {}
                 rel.endsWith("/logout") -> {}
-                rel.endsWith("/brand-logo-signin") -> invokeDisgustingCorsWorkaround(it)
-                rel.endsWith("/brand-logo-header") -> invokeDisgustingCorsWorkaround(it)
+//                rel.endsWith("/brand-logo-signin") -> invokeDisgustingCorsWorkaround(it)
+//                rel.endsWith("/brand-logo-header") -> invokeDisgustingCorsWorkaround(it)
                 else -> invokeSystem(it)
             }
         }
@@ -49,11 +47,6 @@ class RestfulDispatcher() : BaseAggregator() {
 
     private fun invokeSystem(link: Link) {
         invoke(link, SystemAggregator(), referrer = "")
-    }
-
-    private fun invokeDisgustingCorsWorkaround(link: Link) {
-        val credentials = SessionManager.getCredentials()!!
-        CorsHttpRequest().invoke(link.href, credentials)
     }
 
 }

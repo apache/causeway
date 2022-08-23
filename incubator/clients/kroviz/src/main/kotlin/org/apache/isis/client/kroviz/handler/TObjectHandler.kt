@@ -28,7 +28,7 @@ class TObjectHandler : BaseHandler() {
     override fun canHandle(response: String): Boolean {
         val urlPath = logEntry.url.split("restful")
         val path = urlPath[1]
-        if (path != null && path.length > 1) {
+        if (path.length > 1) {
             return super.canHandle(response)
         }
         return false

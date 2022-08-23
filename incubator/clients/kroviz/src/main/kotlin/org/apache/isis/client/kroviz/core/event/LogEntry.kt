@@ -202,14 +202,10 @@ data class LogEntry(
                 this.type = Represention.ERROR.type
             }
             is TObject -> {
-                when {
-                    to == null -> {
-                        this.state = EventState.MISSING
-                        this.type = Represention.ERROR.type
-                        console.log("to == null for response:")
-                        console.log(response)
-                    }
-                }
+                this.state = EventState.MISSING
+                this.type = Represention.ERROR.type
+                console.log("to == null for response:")
+                console.log(response)
             }
             else -> {
                 console.log(to)

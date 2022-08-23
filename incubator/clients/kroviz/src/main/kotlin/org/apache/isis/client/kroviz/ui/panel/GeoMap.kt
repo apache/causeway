@@ -23,9 +23,7 @@ import io.kvision.core.UNIT
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
 import io.kvision.maps.Maps
-import io.kvision.maps.maps
 import io.kvision.panel.HPanel
-import io.kvision.utils.pc
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.utils.IconManager
@@ -42,10 +40,10 @@ class GeoMap : HPanel() {
             margin = CssSize(10, UNIT.px)
         }
 
-        val home = LatLng(53.65425, 10.1545)
+//        val home = LatLng(53.65425, 10.1545)
         m.addMarker(s = "Home")
 
-        val office = LatLng(53.5403735, 10.0008355)
+//        val office = LatLng(53.5403735, 10.0008355)
         m.addMarker(s = "Work<br><a href='https://en.wikipedia.org/wiki/Kuehne_%2B_Nagel'>KN</a>")
 
         ViewManager.getRoIconBar().add(createLocationIcon())
@@ -74,22 +72,22 @@ class GeoMap : HPanel() {
     private fun parseMarker(id: String): Marker? {
         val raw = id.split("#")
         return if (raw.isNotEmpty()) {
-            val lat = raw[0].toDouble()
-            val lng = raw[1].toDouble()
+//            val lat = raw[0].toDouble()
+//            val lng = raw[1].toDouble()
 //TODO implement extension function  and adopt new version of kvision.maps
-            val latLng = LatLng(lat, lng)
+            //           val latLng = LatLng(lat, lng)
             val title = if (raw.size >= 2) raw[2] else "no title set"
             Marker(title)
         } else null
     }
 
-    private fun LatLng(lat: Double, lng: Double): Any {
+    private fun LatLng(): Any {
         return { }
     }
 }
 
-private fun Maps.addMarker(latLang: Any? = null, s: String) {
-
+private fun Maps.addMarker(s: String) {
+    this.title = s
 }
 
 class Marker(val title: String)

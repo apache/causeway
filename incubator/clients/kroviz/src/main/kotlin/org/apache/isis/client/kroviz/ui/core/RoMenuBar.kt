@@ -232,7 +232,7 @@ class RoMenuBar : SimplePanel() {
     fun executeAllMenuBarActions() {
         val menuBars = SessionManager.getEventStore().findMenuBars()!!.obj as Menubars
         menuBars.primary.menu.forEach { m ->
-            m.section.forEachIndexed { index, section ->
+            m.section.forEachIndexed { _, section ->
                 section.serviceAction.forEach { sa ->
                     ResourceProxy().fetch(sa.link!!, ActionDispatcher())
                 }
