@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.services.layout;
 
 import java.io.File;
+import java.util.Objects;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -26,6 +27,7 @@ import javax.inject.Named;
 import javax.xml.bind.Marshaller;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -37,6 +39,7 @@ import org.apache.isis.applib.services.layout.LayoutExportStyle;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.util.ZipWriter;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -44,12 +47,14 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named(IsisModuleCoreMetamodel.NAMESPACE + ".LayoutServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Log4j2
 public class LayoutServiceDefault implements LayoutService {
 
     private final SpecificationLoader specificationLoader;
@@ -60,11 +65,7 @@ public class LayoutServiceDefault implements LayoutService {
     @Override
     public String toXml(final Class<?> domainClass, final LayoutExportStyle style) {
         final Grid grid = gridService.toGridForExport(domainClass, style);
-        return jaxbService.toXml(grid,
-                _Maps.unmodifiable(
-                        Marshaller.JAXB_SCHEMA_LOCATION,
-                        grid.getTnsAndSchemaLocation()
-                        ));
+        return gridToXml(grid);
     }
 
     @Override
@@ -78,26 +79,21 @@ public class LayoutServiceDefault implements LayoutService {
 
         for (val objectSpec : domainObjectSpecs) {
             val domainClass = objectSpec.getCorrespondingClass();
-            val grid = gridService.toGridForExport(domainClass, style);
-            if(grid != null) {
-                zipWriter.nextEntry(zipEntryNameFor(objectSpec), writer->{
 
-                    val xmlString = jaxbService.toXml(grid,
-                            _Maps.unmodifiable(
-                                    Marshaller.JAXB_SCHEMA_LOCATION,
-                                    grid.getTnsAndSchemaLocation()
-                                    ));
-                    writer.writeCharactersUtf8(xmlString);
+            tryGridToXml(domainClass, style)
+            .accept(failure->{
+                log.warn("failed to generate layout XML for {}", domainClass);//, failure);
+            },
+            xmlIfAny->{
+                xmlIfAny.ifPresent(xmlString->{
+                    zipWriter.nextEntry(zipEntryNameFor(objectSpec), writer->
+                        writer.writeCharactersUtf8(xmlString)
+                    );
                 });
-            }
+            });
         }
 
         return zipWriter.toBytes();
-    }
-
-    private static String zipEntryNameFor(final ObjectSpecification objectSpec) {
-        final String fqn = objectSpec.getFullIdentifier();
-        return fqn.replace(".", File.separator)+".layout.xml";
     }
 
     @Override
@@ -110,6 +106,27 @@ public class LayoutServiceDefault implements LayoutService {
                 ));
     }
 
+    // -- HELPER
 
+    private Try<String> tryGridToXml(final Class<?> domainClass, final LayoutExportStyle style) {
+        final Grid grid = gridService.toGridForExport(domainClass, style);
+        return Try.call(()->gridToXml(grid));
+    }
+
+    private String gridToXml(final @Nullable Grid grid) {
+        if(grid==null) {
+            return null;
+        }
+        return jaxbService.toXml(grid,
+                _Maps.unmodifiable(
+                        Marshaller.JAXB_SCHEMA_LOCATION,
+                        Objects.requireNonNull(grid.getTnsAndSchemaLocation())
+                        ));
+    }
+
+    private static String zipEntryNameFor(final ObjectSpecification objectSpec) {
+        final String fqn = objectSpec.getFullIdentifier();
+        return fqn.replace(".", File.separator)+".layout.xml";
+    }
 
 }
