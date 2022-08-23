@@ -36,9 +36,10 @@ import org.apache.isis.client.kroviz.utils.IconManager
 class GeoMap : HPanel() {
 
     init {
-        val m = maps(53.65425, 10.1545, 15) {
-            width = 100.pc
-            height = 100.pc
+        val m = Maps {
+            width = CssSize(100, UNIT.pc)
+            height = CssSize(100, UNIT.pc)
+            margin = CssSize(10, UNIT.px)
         }
 
         val home = LatLng(53.65425, 10.1545)

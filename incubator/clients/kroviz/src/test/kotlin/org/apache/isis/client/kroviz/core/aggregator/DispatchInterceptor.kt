@@ -9,7 +9,7 @@ class DispatchInterceptor : BaseAggregator() {
 
     var logEntry: LogEntry? = null
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         this.logEntry = logEntry
         console.log("[DI.update]")
         console.log(logEntry)

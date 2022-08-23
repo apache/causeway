@@ -27,7 +27,7 @@ import org.apache.isis.client.kroviz.utils.StringUtils
 
 class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         val to = logEntry.getTransferObject()
         val referrer = logEntry.url
         when {

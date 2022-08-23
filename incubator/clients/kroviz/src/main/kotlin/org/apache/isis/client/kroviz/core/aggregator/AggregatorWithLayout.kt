@@ -32,7 +32,7 @@ abstract class AggregatorWithLayout : BaseAggregator() {
     var parentUrl: String? = null
     var tree: Tree? = null
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         parentUrl = logEntry.url
     }
 

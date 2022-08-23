@@ -27,7 +27,7 @@ import org.apache.isis.client.kroviz.ui.core.SessionManager
 
 class RestfulDispatcher() : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         val restful = logEntry.getTransferObject() as Restful
         restful.links.forEach {
             val rel = it.rel

@@ -23,7 +23,7 @@ import org.apache.isis.client.kroviz.ui.dialog.UndefinedDialog
 
 class UndefinedDispatcher : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         UndefinedDialog(logEntry).open()
     }
 

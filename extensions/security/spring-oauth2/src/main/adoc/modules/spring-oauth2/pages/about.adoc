@@ -5,9 +5,7 @@
 
 
 This guide describes the integration of Spring security's OAuth2 client.
-
-WARNING: Using this extension with the REST API may fail.
-See <<caveats,below>> for more details.
+Authentication is done via OAuth2 and authorization via Shiro.
 
 include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
 
@@ -30,7 +28,7 @@ In the webapp module of your application, add the following dependency:
 [[_update-appmanifest]]
 == Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleExtSpringSecurityOAuth2` module.
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import `IsisModuleSecuritySpring`, `IsisModuleExtSpringSecurityOAuth2` modules and `AuthorizorShiro`.
 
 [source,java]
 .AppManifest.java
@@ -39,6 +37,7 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 @Import({
         ...
         IsisModuleExtSpringSecurityOAuth2.class,
+        AuthorizorShiro.class,
         ...
 })
 public class AppManifest {
@@ -53,28 +52,6 @@ Make sure though that no other `IsisModuleSecurityXxx` module is imported.
 
 The module brings in a transitive dependency to `org.springframework.boot:spring-boot-starter-oauth2-client`.
 Using this, it provides an implementation of the xref:security:spring:about.adoc#authenticatorconverter-spi[AuthenticatorConverter SPI] that recognises the `OAuth2` principal provided by the Spring OAuth2 client.
-
-[#caveats]
-=== Caveats
-
-Using this extension with the REST API may fail.
-That's because, (at the time of writing) this module has a dependency convergence conflict with `org.jboss.resteasy:resteasy-spring-boot-starter` specifically the `org.ow2.asm:asm` shared dependency:
-
-[source]
-----
-Dependency convergence error for org.ow2.asm:asm:9.0 paths to dependency are:
-+-org.apache.isis.viewer:isis-viewer-restfulobjects-jaxrsresteasy4:2.0.0-SNAPSHOT
-  +-org.jboss.resteasy:resteasy-spring-boot-starter:4.8.0.Final
-    +-org.ow2.asm:asm:9.0
-and
-+-org.apache.isis.extensions:isis-extensions-spring-security-oauth2:2.0.0-SNAPSHOT
-  +-org.springframework.boot:spring-boot-starter-oauth2-client:2.4.4
-    +-org.springframework.security:spring-security-oauth2-client:5.4.5
-      +-com.nimbusds:oauth2-oidc-sdk:8.36.1
-        +-net.minidev:json-smart:2.3
-          +-net.minidev:accessors-smart:1.2
-            +-org.ow2.asm:asm:5.0.4
-----
 
 
 
@@ -137,12 +114,31 @@ public class AppManifest {
 @Configuration
 @Import({
         ...
-        IsisModuleExtSpringOAuth2.class,
+        IsisModuleExtSpringSecurityOAuth2.class,
+        AuthorizorShiro.class,
         LoginController.class,
         ...
 })
 public class AppManifest {
 }
+----
+
+Next configure authenticationStrategy and permissenResolver for realms, and add the userId:
+
+[source,ini]
+.shiro.ini
+----
+[main]
+authenticationStrategy=org.apache.isis.extensions.secman.shiro.AuthenticationStrategyForIsisModuleSecurityRealm
+securityManager.authenticator.authenticationStrategy = $authenticationStrategy
+securityManager.realms = $iniRealm
+permissionResolver = org.apache.isis.security.shiro.authorization.IsisPermissionResolver
+iniRealm.permissionResolver = $permissionResolver
+...
+[users]
+...
+your.id = ,admin_role
+...
 ----
 
 Lastly (and optionally), the swagger/REST API is not configured for oauth2, so we replace the `index.html` page with one to redirect straight to the xref:vw::about.adoc[Wicket Viewer]:
