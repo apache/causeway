@@ -215,6 +215,7 @@ repo_root=https://repository.apache.org/content/repositories/releases/org/apache
 zip="source-release.zip"
 asc="$zip.asc"
 md5="$zip.md5"
+sha512="$zip.sha512"
 
 
 fullname="isis-bom"
@@ -226,6 +227,8 @@ curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$md5
 svn add $fullname-$new_ver-$md5
 curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$zip
 svn add $fullname-$new_ver-$zip
+curl -O $repo_root/$fullname/$new_ver/$fullname-$new_ver-$zip
+svn add $fullname-$new_ver-$sha512
 
 if [ "Z${old_ver}Z" == "ZZ" ]; then
         echo "old_ver not specified, so nothing will be removed"
@@ -233,6 +236,7 @@ else
         svn delete $fullname-$old_ver-$asc
         svn delete $fullname-$old_ver-$md5
         svn delete $fullname-$old_ver-$zip
+        svn delete $fullname-$old_ver-$sha512
 fi
 
 popd
