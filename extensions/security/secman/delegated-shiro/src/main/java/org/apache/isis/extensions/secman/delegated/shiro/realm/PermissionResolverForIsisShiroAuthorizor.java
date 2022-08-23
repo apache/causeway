@@ -15,21 +15,20 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.isis.extensions.secman.shiro;
+package org.apache.isis.extensions.secman.delegated.shiro.realm;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.permission.PermissionResolver;
 
-import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
+class PermissionResolverForIsisShiroAuthorizor implements PermissionResolver {
 
-/**
- * @since 2.0 {@index}
- */
-@Configuration
-@Import({
-        IsisModuleSecurityShiro.class
-})
-public class IsisModuleExtSecmanRealmShiro {
-
+    /**
+     * Expects in format <code>package:className:methodName:r|w</code>
+     */
+    @Override
+    public Permission resolvePermission(String permissionString) {
+        return new PermissionForMember(permissionString);
+    }
 }

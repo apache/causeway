@@ -236,7 +236,7 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-shiro-realm</artifactId>
+				<artifactId>isis-extensions-secman-delegated-shiro</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 

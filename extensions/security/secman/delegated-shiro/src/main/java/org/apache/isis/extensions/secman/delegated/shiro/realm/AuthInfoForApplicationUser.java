@@ -15,8 +15,9 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.isis.extensions.secman.shiro;
+package org.apache.isis.extensions.secman.delegated.shiro.realm;
 
 import java.util.Collection;
 
@@ -27,7 +28,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
+import org.apache.isis.extensions.secman.delegated.shiro.util.ShiroUtils;
 
 import lombok.AccessLevel;
 import lombok.Getter;

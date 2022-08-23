@@ -157,7 +157,7 @@ public class IsisConfiguration {
              *         docker run -p 9090:8080 \
              *             -e KEYCLOAK_USER=admin \
              *             -e KEYCLOAK_PASSWORD=admin \
-             *             quay.io/keycloak/keycloak:14.0.0
+             *             quay.io/keycloak/keycloak:19.0.1
              *     </pre>,
              *
              *     then the URL would be "http://localhost:9090/auth".
@@ -171,10 +171,65 @@ public class IsisConfiguration {
              * true.
              */
             private String loginSuccessUrl = "/wicket";
+
+            /**
+             * Whether to (attempt to) extract realm roles and copy into the <code>DefaultOidcUser</code>.
+             *
+             * <p>
+             *     By default, realm roles are obtained from the token claims using the "User Realm Role" mapping type, into a token claim name "realm_access.roles"
+             * </p>
+             *
+             * <p>
+             *     This has been made a configuration option because some versions of Keycloak seemingly do not correctly extract these roles, see for example
+             *     <a href="https://keycloak.discourse.group/t/resource-access-claim-missing-from-userinfo-until-i-change-the-name/1238/3">this discussion</a> and
+             *     <a href="https://issues.redhat.com/browse/KEYCLOAK-9874">KEYCLOAK-9874</a>.
+             * </p>
+             */
+            private boolean extractRealmRoles = true;
+
+            /**
+             * If {@link #isExtractRealmRoles() realm roles are to be extracted}, this allows the resultant role to be optionally prefixed.
+             */
+            private String realmRolePrefix = null;
+
+            /**
+             * Whether to (attempt to) extract client roles and copy into the <code>DefaultOidcUser</code>.
+             *
+             * <p>
+             *     By default, client roles are extracted using the "User Client Role" mapping type, into a token claim name "resource_access.${client_id}.roles"
+             * </p>
+             *
+             * <p>
+             *     This has been made a configuration option because some versions of Keycloak seemingly do not correctly extract these roles, see for example
+             *     <a href="https://keycloak.discourse.group/t/resource-access-claim-missing-from-userinfo-until-i-change-the-name/1238/3">this discussion</a> and
+             *     <a href="https://issues.redhat.com/browse/KEYCLOAK-9874">KEYCLOAK-9874</a>.
+             * </p>
+             */
+            private boolean extractClientRoles = true;
+            /**
+             * If {@link #isExtractClientRoles()}  client roles are to be extracted}, this allows the resultant role to be optionally prefixed.
+             */
+            private String clientRolePrefix = null;
+
+            /**
+             * Whether to (attempt to) extract any available roles and into the <code>DefaultOidcUser</code>.
+             *
+             * <p>
+             *     This is to support any custom mapping type which maps into a token claim name called simply "roles"
+             * </p>
+             *
+             * <p>
+             *     This has been made a configuration option so that the workaround described in
+             *     <a href="https://keycloak.discourse.group/t/resource-access-claim-missing-from-userinfo-until-i-change-the-name/1238/3">this discussion</a> and
+             *     <a href="https://issues.redhat.com/browse/KEYCLOAK-9874">KEYCLOAK-9874</a> can be implemented.
+             * </p>
+             */
+            private boolean extractRoles = false;
+            /**
+             * If {@link #isExtractRoles()}  roles are to be extracted}, this allows the resultant role to be optionally prefixed.
+             */
+            private String rolePrefix = null;
         }
-
-
-
     }
 
     private final Applib applib = new Applib();
@@ -3050,7 +3105,6 @@ public class IsisConfiguration {
                 public enum AutoCreatePolicy {
                     AUTO_CREATE_AS_LOCKED,
                     AUTO_CREATE_AS_UNLOCKED,
-                    // NO_AUTO_CREATE
                 }
 
                 /**
@@ -3060,9 +3114,25 @@ public class IsisConfiguration {
                  * BE AWARE THAT if any users are auto-created as unlocked, then the set of roles that
                  * they are given should be highly restricted !!!
                  * </p>
+                 *
+                 * <p>
+                 *     NOTE also that this configuration policy is ignored if running secman with Spring OAuth2
+                 *     or Keycloak as the authenticator; users are always auto-created.
+                 * </p>
                  */
                 @Getter @Setter
                 private AutoCreatePolicy autoCreatePolicy = AutoCreatePolicy.AUTO_CREATE_AS_LOCKED;
+
+                /**
+                 * The set of roles that users that have been automatically created are granted automatically.
+                 *
+                 * <p>
+                 *     Typically the regular user role (as per <code>isis.secman.seed.regular-user.role-name</code>,
+                 *     default value of <code>isis-ext-secman-user</code>) will be one of the roles listed here, to
+                 *     provide the ability for the end-user to logout, among other things (!).
+                 * </p>
+                 */
+                private List<String> initialRoleNames = new ArrayList<>();
 
             }
 

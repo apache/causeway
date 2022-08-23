@@ -77,7 +77,6 @@ import lombok.val;
 @EnableWebSecurity
 public class IsisModuleSecurityKeycloak {
 
-
     @Bean
     public WebSecurityConfigurerAdapter webSecurityConfigurer(
             final IsisConfiguration isisConfiguration,
@@ -90,23 +89,9 @@ public class IsisModuleSecurityKeycloak {
         );
     }
 
-//    @RequiredArgsConstructor
-//    public static class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-//
-//        final List<LoginSuccessHandler> loginSuccessHandlers;
-//
-//        @Override
-//        public void onAuthenticationSuccess(
-//                final HttpServletRequest request,
-//                final HttpServletResponse response,
-//                final Authentication authentication) throws ServletException, IOException {
-//            super.onAuthenticationSuccess(request, response, authentication);
-//            loginSuccessHandlers.forEach(LoginSuccessHandler::onSuccess);
-//        }
-//    }
 
     @Bean
-    KeycloakOauth2UserService keycloakOidcUserService(final OAuth2ClientProperties oauth2ClientProperties) {
+    KeycloakOauth2UserService keycloakOidcUserService(final OAuth2ClientProperties oauth2ClientProperties, final IsisConfiguration isisConfiguration) {
 
         val jwtDecoder = createNimbusJwtDecoder(
                 oauth2ClientProperties.getProvider().get("keycloak").getJwkSetUri(),
@@ -115,7 +100,7 @@ public class IsisModuleSecurityKeycloak {
         val authoritiesMapper = new SimpleAuthorityMapper();
         authoritiesMapper.setConvertToUpperCase(true);
 
-        return new KeycloakOauth2UserService(jwtDecoder, authoritiesMapper);
+        return new KeycloakOauth2UserService(jwtDecoder, authoritiesMapper, isisConfiguration);
     }
 
     @RequiredArgsConstructor
