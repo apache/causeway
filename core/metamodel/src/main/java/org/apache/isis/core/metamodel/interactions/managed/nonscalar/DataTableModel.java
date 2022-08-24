@@ -126,7 +126,8 @@ implements MultiselectChoices {
             dataElements.getValue().stream()
                 //XXX future extension: filter by searchArgument
                 .filter(this::ignoreHidden)
-                .sorted(managedMember.getMetaModel().getElementComparator())
+                .sorted(managedMember.getMetaModel().getElementComparator()
+                        .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
                 .map(domainObject->new DataRow(this, domainObject))
                 .collect(Can.toCan()));
 
