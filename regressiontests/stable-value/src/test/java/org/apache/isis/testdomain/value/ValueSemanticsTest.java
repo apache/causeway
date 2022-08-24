@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.value;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.util.Locale;
@@ -36,6 +37,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.graph.tree.TreeNode;
@@ -69,11 +75,6 @@ import org.apache.isis.testdomain.model.valuetypes.ValueTypeExampleService.Scena
 import org.apache.isis.testdomain.value.ValueSemanticsTester.PropertyInteractionProbe;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
@@ -232,8 +233,51 @@ class ValueSemanticsTest {
                             final ValueSemanticsProvider.Context context,
                             final Parser<T> parser) {
 
+                        example.getParseExpectations()
+                        .forEach(parseExpectation->{
+                            val value = parseExpectation.getValue();
+
+                            if(parseExpectation.getExpectedThrows()!=null) {
+
+                                // test parsing that should throw
+                                parseExpectation.getInputSamples()
+                                .forEach(in->{
+                                    Assertions.assertThrows(parseExpectation.getExpectedThrows(), ()->{
+                                        parser.parseTextRepresentation(context, in);
+                                    });
+                                });
+
+                            } else {
+
+                                // test parsing that should not throw
+                                parseExpectation.getInputSamples()
+                                .forEach(in->{
+                                    val parsedValue = parser.parseTextRepresentation(context, in);
+
+                                    if(value instanceof BigDecimal) {
+                                        assertNumberEquals((BigDecimal)value, (BigDecimal)parsedValue);
+                                    } else {
+                                        assertEquals(value, parsedValue);
+                                    }
+
+                                });
+
+                                // test formatting
+                                assertEquals(
+                                        parseExpectation.getExpectedOutput(),
+                                        parser.parseableTextRepresentation(context, value));
+
+                            }
+
+                        });
+
+                        if(example.getParseExpectations().isNotEmpty()) {
+                            return; // skip round-trip test
+                        }
+
+                        //TODO eventually all examples should have their ParseExpectations, so we can remove
                         // Parser round-trip test
-                        for(val value : example.getExamples()) {
+                        for(val value : example.getParserRoundtripExamples()) {
 
                             val stringified = parser.parseableTextRepresentation(context, value);
 
@@ -276,7 +320,14 @@ class ValueSemanticsTest {
                             final ValueSemanticsProvider.Context context,
                             final Renderer<T> renderer) {
 
+                        example.getRenderExpectations()
+                        .forEach(renderExpectation->{
+                            val value = renderExpectation.getValue();
+                            assertEquals(renderExpectation.getTitle(), renderer.titlePresentation(context, value));
+                            assertEquals(renderExpectation.getHtml(), renderer.htmlPresentation(context, value));
+                        });
                     }
+
                     @Override
                     public void testCommand(
                             final ValueSemanticsProvider.Context context,
@@ -335,6 +386,13 @@ class ValueSemanticsTest {
     }
 
     // -- HELPER
+
+    private static void assertNumberEquals(final BigDecimal a, final BigDecimal b) {
+        val maxScale = Math.max(a.scale(), b.scale());
+        assertEquals(
+                a.setScale(maxScale),
+                b.setScale(maxScale));
+    }
 
     private InteractionContext interactionContext() {
         return InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build();

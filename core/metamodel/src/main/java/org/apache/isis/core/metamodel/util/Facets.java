@@ -59,6 +59,7 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -232,9 +233,18 @@ public final class Facets {
         .orElse("label-left");
     }
 
+    public OptionalInt minFractionalDigits(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(MinFractionalDigitsFacet.class)
+        .map(MinFractionalDigitsFacet::getMinFractionalDigits)
+        .filter(digits->digits>-1)
+        .map(OptionalInt::of)
+        .orElseGet(OptionalInt::empty);
+    }
+
     public OptionalInt maxFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MaxFractionalDigitsFacet.class)
         .map(MaxFractionalDigitsFacet::getMaxFractionalDigits)
+        .filter(digits->digits>-1)
         .map(OptionalInt::of)
         .orElseGet(OptionalInt::empty);
     }

@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.ValueSemantics;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -53,6 +54,7 @@ public class JavaMathBigDecimalJdo                                          // <
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
         this.withMax2FractionDigits = initialValue;
+        this.withFixed2FractionDigits = initialValue;
     }
 
 //tag::class[]
@@ -74,6 +76,14 @@ public class JavaMathBigDecimalJdo                                          // <
     @Column(allowsNull = "false", scale = 2)                                // <.>
     @Getter @Setter
     private java.math.BigDecimal withMax2FractionDigits;
+
+    @Property(editing = Editing.ENABLED)
+    @ValueSemantics(minFractionalDigits = 2)
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "3",
+            describedAs = "has 2 fixed fraction digits (scale=2)")
+    @Column(allowsNull = "false", scale = 2)
+    @Getter @Setter
+    private java.math.BigDecimal withFixed2FractionDigits;
 
     @Property(optionality = Optionality.OPTIONAL)                           // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")

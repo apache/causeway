@@ -126,6 +126,7 @@ implements MultiselectChoices {
             dataElements.getValue().stream()
                 //XXX future extension: filter by searchArgument
                 .filter(this::ignoreHidden)
+                //FIXME[ISIS-3167] entities might be detached
                 .sorted(managedMember.getMetaModel().getElementComparator()
                         .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
                 .map(domainObject->new DataRow(this, domainObject))
