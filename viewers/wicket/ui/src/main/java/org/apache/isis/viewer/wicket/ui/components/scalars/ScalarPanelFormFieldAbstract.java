@@ -36,6 +36,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
+import org.apache.isis.viewer.wicket.ui.util.WktXray;
 
 import lombok.val;
 
@@ -135,8 +136,11 @@ extends ScalarPanelAbstract2 {
 
         val renderScenario = getRenderScenario();
 
-        //XXX debug
-        Wkt.labelAdd(fieldFrame, "debugLabel", String.format("%s", renderScenario.name()));
+        //XXX debug (wicket viewer x-ray)
+        WktXray.ifEnabledDo(()->{
+            val debugInfo = String.format("%s", renderScenario.name());
+            Wkt.labelAdd(fieldFrame, "xrayLabel", debugInfo);
+        });
 
         if(renderScenario.isReadonly()) {
             fieldFrame.add(FieldFrame.SCALAR_VALUE_CONTAINER
@@ -215,6 +219,15 @@ extends ScalarPanelAbstract2 {
         formComponentEnable(true);
         clearTooltip();
         target.ifPresent(this::formComponentAddTo);
+    }
+
+    // -- XRAY
+
+    @Override
+    public String getVariation() {
+        return WktXray.isEnabled()
+                ? "xray"
+                : super.getVariation();
     }
 
     // -- HELPER

@@ -115,7 +115,6 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         return this.entityLink;
     }
 
-
     private void addSelect2Semantics(final Select2 select2) {
         val scalarModel = scalarModel();
 

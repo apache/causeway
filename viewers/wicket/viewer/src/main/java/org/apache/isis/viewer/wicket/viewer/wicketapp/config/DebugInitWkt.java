@@ -38,8 +38,7 @@ public class DebugInitWkt implements WicketApplicationInitializer {
     public void init(final WebApplication webApplication) {
 
         webApplication.getDebugSettings()
-            .setAjaxDebugModeEnabled(configuration.getViewer().getWicket().isAjaxDebugMode())
-            .setOutputMarkupContainerClassName(WicketViewerXray.isEnabled());
+            .setAjaxDebugModeEnabled(configuration.getViewer().getWicket().isAjaxDebugMode());
 
         if(systemEnvironment.isPrototyping()
                 && configuration.getViewer().getWicket().getDevelopmentUtilities().isEnable()) {

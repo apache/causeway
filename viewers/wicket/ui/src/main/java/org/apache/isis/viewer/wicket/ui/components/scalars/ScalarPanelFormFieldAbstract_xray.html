@@ -97,6 +97,8 @@
 		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink-editing">
 			<span class="scalarValueInput input-group">
 				<!-- input format (when editing or action dialog) -->
+				<span wicket:id="xrayLabel" 
+					class="badge rounded-pill text-bg-warning">xrayLabel</span>
 				<wicket:container 
 					wicket:id="container-scalarValue"/>
 			
@@ -115,40 +117,47 @@
 		<!-- INPUT FRAGMENTS -->
 
 		<wicket:fragment wicket:id="fragment-input-text">
+			<!-- fragment-input-text -->
 			<input wicket:id="scalarValue"
 				type="text" name="scalarValue"
 				class="form-control form-control-sm scalarValue"/>
 		</wicket:fragment>
 
 		<wicket:fragment wicket:id="fragment-input-textarea">
+			<!-- fragment-input-textarea -->
 			<textarea wicket:id="scalarValue" name="scalarValue"
 				class="form-control form-control-sm scalarValue"
 				data-isis-focus="true" />
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-input-checkbox">
+			<!-- fragment-input-checkbox -->
 	        <input wicket:id="scalarValue" type="checkbox" name="scalarValue"
 	        	class="scalarValue"/>
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-input-file">
+			<!-- fragment-input-file -->
 			<span class="uploadFile form-text">
       			<input wicket:id="scalarValue" type="file" name="scalarValue"/>
          	</span>
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-input-date">
+			<!-- fragment-input-date -->
 			<input wicket:id="scalarValue"
 				type="text" name="scalarValue"
 				class="form-control form-control-sm scalarValue"/>
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-input-select">
+			<!-- fragment-input-select -->
 			<select wicket:id="scalarValue"
 				class="choices form-control-sm select2-remote"/>
 		</wicket:fragment>
 		
 		<wicket:fragment wicket:id="fragment-input-select2">
+			<!-- fragment-input-select2 -->
 			<span wicket:id="entityLink" class="w-100">link or drop down</span>
 			<span wicket:id="entityTitleIfNull">(none)</span>
 		</wicket:fragment>
