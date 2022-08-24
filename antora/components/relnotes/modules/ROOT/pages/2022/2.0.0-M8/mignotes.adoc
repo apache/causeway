@@ -126,6 +126,34 @@ Folder moved `/isis-parent` -> `/bom`
 <artifactId>isis-bom</artifactId>
 ----
 
+=== Extensions
+
+[source, xml]
+.secman
+----
+<!-- renamed
+	<groupId>org.apache.isis.extensions</groupId>
+	<artifactId>isis-extensions-secman-shiro-realm</artifactId>
+-->
+<!-- instead use ... -->
+<artifactId>isis-extensions-secman-delegated-shiro</artifactId>
+----
+
+Classes `IsisModuleExtSecmanShiroRealm` and 
+`AuthenticationStrategyForIsisModuleSecurityRealm` 
+were moved and renamed. (see shiro.ini)
+
+[source, ini]
+.shiro.ini
+----
+## renamed
+#authenticationStrategy=org.apache.isis.extensions.secman.shiro.AuthenticationStrategyForIsisModuleSecurityRealm
+#isisModuleSecurityRealm=org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanShiroRealm
+## instead use
+authenticationStrategy=org.apache.isis.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
+isisModuleSecurityRealm=org.apache.isis.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm
+----
+
 === Restclient
 
 [source, java]
@@ -252,5 +280,5 @@ import org.apache.isis.viewer.restfulobjects.client.RestfulClientConfig;
 IsisModuleValSseApplib renamed to IsisModuleExtSseApplib
 IsisModuleValSseMetaModel renamed to IsisModuleExtSseMetaModel
 IsisModuleValSseUiWkt renamed to IsisModuleExtSseWicket 
-
 ----
+
