@@ -728,7 +728,244 @@ Artifact: demo-domain
 Type: jar
 Directory: /examples/demo/domain
 ----
-|.Dependencies
+|.Components
+****
+demoapp.dom.AppConfiguration +
+demoapp.dom._infra.DefaultTitleProvider +
+demoapp.dom._infra.LibraryPreloadingService +
+demoapp.dom._infra.resources.AsciiDocConverterService +
+demoapp.dom._infra.resources.AsciiDocReaderService +
+demoapp.dom._infra.resources.AsciiDocValueSemanticsWithPreprocessing +
+demoapp.dom._infra.resources.MarkdownReaderService +
+demoapp.dom._infra.resources.MarkupReaderService +
+demoapp.dom._infra.resources.MarkupVariableResolverService +
+demoapp.dom._infra.resources.ResourceReaderService +
+demoapp.dom._infra.samples.NameSamples +
+demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory +
+demoapp.dom.domain._changes.EntityChangesSubscriberToCaptureChangesInMemory +
+demoapp.dom.domain._commands.ExposePersistedCommands$TableColumnOrderDefault +
+demoapp.dom.domain._interactions.ExecutionListenerToCaptureInteractionsInMemory +
+demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingSeeding +
+demoapp.dom.domain.actions.Action.commandPublishing.jdo.ActionCommandPublishingJdoEntities +
+demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpaEntities +
+demoapp.dom.domain.actions.Action.domainEvent.subscribers.ActionDomainEventControlService +
+demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingSeeding +
+demoapp.dom.domain.actions.Action.executionPublishing.jdo.ActionExecutionPublishingJdoEntities +
+demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpaEntities +
+demoapp.dom.domain.collections.Collection.domainEvent.subscribers.CollectionDomainEventControlService +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jdo.DomainObjectEntityChangePublishingDisabledJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jpa.DomainObjectEntityChangePublishingDisabledJpaEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jdo.DomainObjectEntityChangePublishingEnabledJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jpa.DomainObjectEntityChangePublishingEnabledJpaEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpaEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenSeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jdo.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpaEntities +
+demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.JaxbRefSeeding +
+demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jdo.JaxbRefJdoEntities +
+demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa.JaxbRefJpaEntities +
+demoapp.dom.domain.objects.other.embedded.jdo.ComplexNumberJdoValueSemantics +
+demoapp.dom.domain.objects.other.embedded.jdo.NumberConstantJdoRepository +
+demoapp.dom.domain.objects.other.embedded.jpa.ComplexNumberJpaValueSemantics +
+demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpaRepository +
+demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantSeeding +
+demoapp.dom.domain.objects.other.embedded.samples.ComplexNumberSamples +
+demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingSeeding +
+demoapp.dom.domain.properties.Property.commandPublishing.jdo.PropertyCommandPublishingJdoEntities +
+demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpaEntities +
+demoapp.dom.domain.properties.Property.domainEvent.subscribers.PropertyDomainEventControlService +
+demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingSeeding +
+demoapp.dom.domain.properties.Property.executionPublishing.jdo.PropertyExecutionPublishingJdoEntities +
+demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpaEntities +
+demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdoEntities +
+demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpaEntities +
+demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildSeeding +
+demoapp.dom.domain.properties.PropertyLayout.navigable.FileTreeNodeService +
+demoapp.dom.domain.properties.PropertyLayout.repainting.PdfJsViewerAdvisorFallback +
+demoapp.dom.featured.customui.geocoding.GeoapifyClient +
+demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoImplementation +
+demoapp.dom.services.core.eventbusservice.EventLogEntryJdoRepository +
+demoapp.dom.services.core.eventbusservice.EventLogEntryJpaRepository +
+demoapp.dom.services.core.eventbusservice.EventSubscriberDemoImplementation +
+demoapp.dom.services.core.wrapperFactory.WrapperFactorySeeding +
+demoapp.dom.services.core.wrapperFactory.jdo.WrapperFactoryJdoEntities +
+demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpaEntities +
+demoapp.dom.services.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo +
+demoapp.dom.services.extensions.secman.apptenancy.jdo.TenantedJdoEntities +
+demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpaEntities +
+demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedSeeding +
+demoapp.dom.services.extensions.secman.appuser.seed.AppUserSeeding +
+demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoEntities +
+demoapp.dom.types.isis.blobs.jpa.IsisBlobJpaEntities +
+demoapp.dom.types.isis.blobs.persistence.IsisBlobSeeding +
+demoapp.dom.types.isis.blobs.samples.IsisBlobsSamples +
+demoapp.dom.types.isis.clobs.jdo.IsisClobJdoEntities +
+demoapp.dom.types.isis.clobs.jpa.IsisClobJpaEntities +
+demoapp.dom.types.isis.clobs.persistence.IsisClobSeeding +
+demoapp.dom.types.isis.clobs.samples.IsisClobsSamples +
+demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoEntities +
+demoapp.dom.types.isis.localresourcepaths.jpa.IsisLocalResourcePathJpaEntities +
+demoapp.dom.types.isis.localresourcepaths.persistence.IsisLocalResourcePathSeeding +
+demoapp.dom.types.isis.localresourcepaths.samples.IsisLocalResourcePathsSamples +
+demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoEntities +
+demoapp.dom.types.isis.markups.jpa.IsisMarkupJpaEntities +
+demoapp.dom.types.isis.markups.persistence.IsisMarkupSeeding +
+demoapp.dom.types.isis.markups.samples.IsisMarkupSamples +
+demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoEntities +
+demoapp.dom.types.isis.passwords.jpa.IsisPasswordJpaEntities +
+demoapp.dom.types.isis.passwords.persistence.IsisPasswordSeeding +
+demoapp.dom.types.isis.passwords.samples.IsisPasswordsSamples +
+demoapp.dom.types.isisext.asciidocs.jdo.IsisAsciiDocJdoEntities +
+demoapp.dom.types.isisext.asciidocs.jpa.IsisAsciiDocJpaEntities +
+demoapp.dom.types.isisext.asciidocs.persistence.IsisAsciiDocSeeding +
+demoapp.dom.types.isisext.asciidocs.samples.IsisAsciiDocSamples +
+demoapp.dom.types.isisext.cal.jdo.IsisCalendarEventEntities +
+demoapp.dom.types.isisext.cal.jpa.IsisCalendarEventEntities +
+demoapp.dom.types.isisext.cal.persistence.IsisCalendarEventSeeding +
+demoapp.dom.types.isisext.cal.samples.IsisCalendarEventSamples +
+demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoEntities +
+demoapp.dom.types.isisext.markdowns.jpa.IsisMarkdownJpaEntities +
+demoapp.dom.types.isisext.markdowns.persistence.IsisMarkdownSeeding +
+demoapp.dom.types.isisext.markdowns.samples.IsisMarkdownSamples +
+demoapp.dom.types.javaawt.images.jdo.JavaAwtBufferedImageJdoEntities +
+demoapp.dom.types.javaawt.images.jpa.JavaAwtBufferedImageJpaEntities +
+demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageSeeding +
+demoapp.dom.types.javaawt.images.samples.JavaAwtBufferedImageService +
+demoapp.dom.types.javaawt.images.samples.JavaAwtBufferedImagesSamples +
+demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoEntities +
+demoapp.dom.types.javalang.booleans.jpa.WrapperBooleanJpaEntities +
+demoapp.dom.types.javalang.booleans.persistence.WrapperBooleanSeeding +
+demoapp.dom.types.javalang.booleans.samples.WrapperBooleanSamples +
+demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoEntities +
+demoapp.dom.types.javalang.bytes.jpa.WrapperByteJpaEntities +
+demoapp.dom.types.javalang.bytes.persistence.WrapperByteSeeding +
+demoapp.dom.types.javalang.bytes.samples.WrapperByteSamples +
+demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoEntities +
+demoapp.dom.types.javalang.characters.jpa.WrapperCharacterJpaEntities +
+demoapp.dom.types.javalang.characters.persistence.WrapperCharacterSeeding +
+demoapp.dom.types.javalang.characters.samples.WrapperCharacterSamples +
+demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoEntities +
+demoapp.dom.types.javalang.doubles.jpa.WrapperDoubleJpaEntities +
+demoapp.dom.types.javalang.doubles.persistence.WrapperDoubleSeeding +
+demoapp.dom.types.javalang.doubles.samples.WrapperDoubleSamples +
+demoapp.dom.types.javalang.enums.jdo.JavaLangEnumJdoEntities +
+demoapp.dom.types.javalang.enums.jpa.JavaLangEnumJpaEntities +
+demoapp.dom.types.javalang.enums.persistence.JavaLangEnumSeeding +
+demoapp.dom.types.javalang.enums.samples.JavaLangEnumSamples +
+demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoEntities +
+demoapp.dom.types.javalang.floats.jpa.WrapperFloatJpaEntities +
+demoapp.dom.types.javalang.floats.persistence.WrapperFloatSeeding +
+demoapp.dom.types.javalang.floats.samples.WrapperFloatSamples +
+demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoEntities +
+demoapp.dom.types.javalang.integers.jpa.WrapperIntegerJpaEntities +
+demoapp.dom.types.javalang.integers.persistence.WrapperIntegerSeeding +
+demoapp.dom.types.javalang.integers.samples.WrapperIntegerSamples +
+demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoEntities +
+demoapp.dom.types.javalang.longs.jpa.WrapperLongJpaEntities +
+demoapp.dom.types.javalang.longs.persistence.WrapperLongSeeding +
+demoapp.dom.types.javalang.longs.samples.WrapperLongSamples +
+demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoEntities +
+demoapp.dom.types.javalang.shorts.jpa.WrapperShortJpaEntities +
+demoapp.dom.types.javalang.shorts.persistence.WrapperShortSeeding +
+demoapp.dom.types.javalang.shorts.samples.WrapperShortSamples +
+demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoEntities +
+demoapp.dom.types.javalang.strings.jpa.JavaLangStringJpaEntities +
+demoapp.dom.types.javalang.strings.persistence.JavaLangStringSeeding +
+demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoEntities +
+demoapp.dom.types.javamath.bigdecimals.jpa.JavaMathBigDecimalJpaEntities +
+demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalSeeding +
+demoapp.dom.types.javamath.bigdecimals.samples.JavaMathBigDecimalSamples +
+demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoEntities +
+demoapp.dom.types.javamath.bigintegers.jpa.JavaMathBigIntegerJpaEntities +
+demoapp.dom.types.javamath.bigintegers.persistence.JavaMathBigIntegerSeeding +
+demoapp.dom.types.javamath.bigintegers.samples.JavaMathBigIntegerSamples +
+demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities +
+demoapp.dom.types.javanet.urls.jpa.JavaNetUrlJpaEntities +
+demoapp.dom.types.javanet.urls.persistence.JavaNetUrlSeeding +
+demoapp.dom.types.javanet.urls.samples.JavaNetUrlSamples +
+demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoEntities +
+demoapp.dom.types.javasql.javasqldate.jpa.JavaSqlDateJpaEntities +
+demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateSeeding +
+demoapp.dom.types.javasql.javasqldate.samples.JavaSqlDateSamples +
+demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoEntities +
+demoapp.dom.types.javasql.javasqltimestamp.jpa.JavaSqlTimestampJpaEntities +
+demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampSeeding +
+demoapp.dom.types.javasql.javasqltimestamp.samples.JavaSqlTimestampSamples +
+demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoEntities +
+demoapp.dom.types.javatime.javatimelocaldate.jpa.JavaTimeLocalDateJpaEntities +
+demoapp.dom.types.javatime.javatimelocaldate.persistence.JavaTimeLocalDateSeeding +
+demoapp.dom.types.javatime.javatimelocaldate.samples.JavaTimeLocalDateSamples +
+demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimelocaldatetime.jpa.JavaTimeLocalDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimelocaldatetime.persistence.JavaTimeLocalDateTimeSeeding +
+demoapp.dom.types.javatime.javatimelocaldatetime.samples.JavaTimeLocalDateTimeSamples +
+demoapp.dom.types.javatime.javatimelocaltime.jdo.JavaTimeLocalTimeJdoEntities +
+demoapp.dom.types.javatime.javatimelocaltime.jpa.JavaTimeLocalTimeJpaEntities +
+demoapp.dom.types.javatime.javatimelocaltime.persistence.JavaTimeLocalTimeSeeding +
+demoapp.dom.types.javatime.javatimelocaltime.samples.JavaTimeLocalTimeSamples +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.jpa.JavaTimeOffsetDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOffsetDateTimeSeeding +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.samples.JavaTimeOffsetDateTimeSamples +
+demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoEntities +
+demoapp.dom.types.javatime.javatimeoffsettime.jpa.JavaTimeOffsetTimeJpaEntities +
+demoapp.dom.types.javatime.javatimeoffsettime.persistence.JavaTimeOffsetTimeSeeding +
+demoapp.dom.types.javatime.javatimeoffsettime.samples.JavaTimeOffsetTimeSamples +
+demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimezoneddatetime.jpa.JavaTimeZonedDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimezoneddatetime.persistence.JavaTimeZonedDateTimeSeeding +
+demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples +
+demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoEntities +
+demoapp.dom.types.javautil.javautildate.jpa.JavaUtilDateJpaEntities +
+demoapp.dom.types.javautil.javautildate.persistence.JavaUtilDateSeeding +
+demoapp.dom.types.javautil.javautildate.samples.JavaUtilDateSamples +
+demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities +
+demoapp.dom.types.javautil.uuids.jpa.JavaUtilUuidJpaEntities +
+demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidSeeding +
+demoapp.dom.types.javautil.uuids.samples.JavaUtilUuidSamples +
+demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities +
+demoapp.dom.types.jodatime.jodadatetime.persistence.JodaDateTimeJdoSeeding +
+demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples +
+demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoEntities +
+demoapp.dom.types.jodatime.jodalocaldate.persistence.JodaLocalDateJdoSeeding +
+demoapp.dom.types.jodatime.jodalocaldate.samples.JodaLocalDateSamples +
+demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities +
+demoapp.dom.types.jodatime.jodalocaldatetime.persistence.JodaLocalDateTimeSeeding +
+demoapp.dom.types.jodatime.jodalocaldatetime.samples.JodaLocalDateTimeSamples +
+demoapp.dom.types.jodatime.jodalocaltime.jdo.JodaLocalTimeJdoEntities +
+demoapp.dom.types.jodatime.jodalocaltime.persistence.JodaLocalTimeSeeding +
+demoapp.dom.types.jodatime.jodalocaltime.samples.JodaLocalTimeSamples +
+demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntities +
+demoapp.dom.types.primitive.booleans.jpa.PrimitiveBooleanJpaEntities +
+demoapp.dom.types.primitive.booleans.persistence.PrimitiveBooleanSeeding +
+demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities +
+demoapp.dom.types.primitive.bytes.jpa.PrimitiveByteJpaEntities +
+demoapp.dom.types.primitive.bytes.persistence.PrimitiveByteSeeding +
+demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoEntities +
+demoapp.dom.types.primitive.chars.jpa.PrimitiveCharJpaEntities +
+demoapp.dom.types.primitive.chars.persistence.PrimitiveCharSeeding +
+demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoEntities +
+demoapp.dom.types.primitive.doubles.jpa.PrimitiveDoubleJpaEntities +
+demoapp.dom.types.primitive.doubles.persistence.PrimitiveDoubleSeeding +
+demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoEntities +
+demoapp.dom.types.primitive.floats.jpa.PrimitiveFloatJpaEntities +
+demoapp.dom.types.primitive.floats.persistence.PrimitiveFloatSeeding +
+demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoEntities +
+demoapp.dom.types.primitive.ints.jpa.PrimitiveIntJpaEntities +
+demoapp.dom.types.primitive.ints.persistence.PrimitiveIntSeeding +
+demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoEntities +
+demoapp.dom.types.primitive.longs.jpa.PrimitiveLongJpaEntities +
+demoapp.dom.types.primitive.longs.persistence.PrimitiveLongSeeding +
+demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoEntities +
+demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpaEntities +
+demoapp.dom.types.primitive.shorts.persistence.PrimitiveShortSeeding +
+****
+
+.Dependencies
 ****
 com.h2database:h2:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-audittrail-persistence-jdo:jar:<managed> +
@@ -742,11 +979,11 @@ org.apache.isis.extensions:isis-extensions-executionoutbox-persistence-jdo:jar:<
 org.apache.isis.extensions:isis-extensions-executionoutbox-persistence-jpa:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-pdfjs-applib:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-secman-delegated-shiro:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-encryption-spring:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-integration:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-secman-persistence-jpa:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-sessionlog-persistence-jdo:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-sessionlog-persistence-jpa:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-sse-applib:jar:<managed> +
@@ -814,7 +1051,12 @@ Artifact: demo-web
 Type: jar
 Directory: /examples/demo/web
 ----
-|.Dependencies
+|.Components
+****
+demoapp.web._infra.utils.ThereCanBeOnlyOne +
+****
+
+.Dependencies
 ****
 org.apache.isis.examples.apps:demo-domain:jar:<managed> +
 org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed> +
@@ -832,7 +1074,12 @@ Artifact: demo-wicket-common
 Type: jar
 Directory: /examples/demo/wicket/common
 ----
-|.Dependencies
+|.Components
+****
+demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory +
+****
+
+.Dependencies
 ****
 org.apache.isis.examples.apps:demo-web:jar:${project.version} +
 org.apache.isis.extensions:isis-extensions-fullcalendar-wicket-ui:jar:<managed> +
@@ -3602,6 +3849,11 @@ skinparam rectangle<<51>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<52>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -3839,23 +4091,24 @@ package "Extensions\n[Software System]" {
   rectangle "==Apache Isis Ext - FullCalendar Wicket (UI)\n<size:10>[Container: packaging: jar]</size>" <<26>> as 26
   rectangle "==Apache Isis Ext - Sec Man\n<size:10>[Container: packaging: pom]</size>" <<33>> as 33
   rectangle "==Apache Isis Ext - Sec Man Applib\n<size:10>[Container: packaging: jar]</size>" <<34>> as 34
-  rectangle "==Apache Isis Ext - Sec Man Encryption (Using Spring)\n<size:10>[Container: packaging: jar]</size>" <<36>> as 36
-  rectangle "==Apache Isis Ext - Sec Man Encryption (Using jbcrypt)\n<size:10>[Container: packaging: jar]</size>" <<35>> as 35
-  rectangle "==Apache Isis Ext - Sec Man Integration\n<size:10>[Container: packaging: jar]</size>" <<37>> as 37
-  rectangle "==Apache Isis Ext - Sec Man Persistence (Using JDO)\n<size:10>[Container: packaging: jar]</size>" <<38>> as 38
-  rectangle "==Apache Isis Ext - Sec Man Persistence (Using JPA)\n<size:10>[Container: packaging: jar]</size>" <<39>> as 39
-  rectangle "==Apache Isis Ext - Sec Man Realm (Using Shiro)\n<size:10>[Container: packaging: jar]</size>" <<40>> as 40
-  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (impl)\n<size:10>[Container: packaging: jar]</size>" <<46>> as 46
-  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (parent)\n<size:10>[Container: packaging: pom]</size>" <<45>> as 45
-  rectangle "==Apache Isis Ext - Security - Spring Oauth2\n<size:10>[Container: packaging: jar]</size>" <<47>> as 47
-  rectangle "==Apache Isis Ext - Server Sent Events\n<size:10>[Container: packaging: jar]</size>" <<49>> as 49
-  rectangle "==Apache Isis Ext - Server Sent Events (Wicket)\n<size:10>[Container: packaging: jar]</size>" <<51>> as 51
-  rectangle "==Apache Isis Ext - Server Sent Events (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<50>> as 50
-  rectangle "==Apache Isis Ext - Server Sent Events (parent)\n<size:10>[Container: packaging: pom]</size>" <<48>> as 48
-  rectangle "==Apache Isis Ext - Session Log\n<size:10>[Container: packaging: pom]</size>" <<41>> as 41
-  rectangle "==Apache Isis Ext - Session Log Applib\n<size:10>[Container: packaging: jar]</size>" <<42>> as 42
-  rectangle "==Apache Isis Ext - Session Log Persistence (using JDO)\n<size:10>[Container: packaging: jar]</size>" <<43>> as 43
-  rectangle "==Apache Isis Ext - Session Log Persistence (using JPA)\n<size:10>[Container: packaging: jar]</size>" <<44>> as 44
+  rectangle "==Apache Isis Ext - Sec Man Delegated (Using Shiro)\n<size:10>[Container: packaging: jar]</size>" <<35>> as 35
+  rectangle "==Apache Isis Ext - Sec Man Delegated (using Spring Oauth2)\n<size:10>[Container: packaging: jar]</size>" <<36>> as 36
+  rectangle "==Apache Isis Ext - Sec Man Encryption (Using Spring)\n<size:10>[Container: packaging: jar]</size>" <<38>> as 38
+  rectangle "==Apache Isis Ext - Sec Man Encryption (Using jbcrypt)\n<size:10>[Container: packaging: jar]</size>" <<37>> as 37
+  rectangle "==Apache Isis Ext - Sec Man Integration\n<size:10>[Container: packaging: jar]</size>" <<39>> as 39
+  rectangle "==Apache Isis Ext - Sec Man Persistence (Using JDO)\n<size:10>[Container: packaging: jar]</size>" <<40>> as 40
+  rectangle "==Apache Isis Ext - Sec Man Persistence (Using JPA)\n<size:10>[Container: packaging: jar]</size>" <<41>> as 41
+  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (impl)\n<size:10>[Container: packaging: jar]</size>" <<47>> as 47
+  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (parent)\n<size:10>[Container: packaging: pom]</size>" <<46>> as 46
+  rectangle "==Apache Isis Ext - Security - Spring Oauth2\n<size:10>[Container: packaging: jar]</size>" <<48>> as 48
+  rectangle "==Apache Isis Ext - Server Sent Events\n<size:10>[Container: packaging: jar]</size>" <<50>> as 50
+  rectangle "==Apache Isis Ext - Server Sent Events (Wicket)\n<size:10>[Container: packaging: jar]</size>" <<52>> as 52
+  rectangle "==Apache Isis Ext - Server Sent Events (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<51>> as 51
+  rectangle "==Apache Isis Ext - Server Sent Events (parent)\n<size:10>[Container: packaging: pom]</size>" <<49>> as 49
+  rectangle "==Apache Isis Ext - Session Log\n<size:10>[Container: packaging: pom]</size>" <<42>> as 42
+  rectangle "==Apache Isis Ext - Session Log Applib\n<size:10>[Container: packaging: jar]</size>" <<43>> as 43
+  rectangle "==Apache Isis Ext - Session Log Persistence (using JDO)\n<size:10>[Container: packaging: jar]</size>" <<44>> as 44
+  rectangle "==Apache Isis Ext - Session Log Persistence (using JPA)\n<size:10>[Container: packaging: jar]</size>" <<45>> as 45
   rectangle "==Apache Isis Ext - pdf.js - Applib\n<size:10>[Container: packaging: jar]</size>" <<28>> as 28
   rectangle "==Apache Isis Ext - pdf.js - Metamodel\n<size:10>[Container: packaging: jar]</size>" <<29>> as 29
   rectangle "==Apache Isis Ext - pdf.js - Parent\n<size:10>[Container: packaging: pom]</size>" <<27>> as 27
@@ -3882,19 +4135,20 @@ package "Extensions\n[Software System]" {
 24 .[#707070].> 25 : ""
 24 .[#707070].> 26 : ""
 33 .[#707070].> 34 : ""
-33 .[#707070].> 36 : ""
 33 .[#707070].> 35 : ""
-33 .[#707070].> 37 : ""
+33 .[#707070].> 36 : ""
 33 .[#707070].> 38 : ""
+33 .[#707070].> 37 : ""
 33 .[#707070].> 39 : ""
 33 .[#707070].> 40 : ""
-45 .[#707070].> 46 : ""
-48 .[#707070].> 49 : ""
-48 .[#707070].> 51 : ""
-48 .[#707070].> 50 : ""
-41 .[#707070].> 42 : ""
-41 .[#707070].> 43 : ""
-41 .[#707070].> 44 : ""
+33 .[#707070].> 41 : ""
+46 .[#707070].> 47 : ""
+49 .[#707070].> 50 : ""
+49 .[#707070].> 52 : ""
+49 .[#707070].> 51 : ""
+42 .[#707070].> 43 : ""
+42 .[#707070].> 44 : ""
+42 .[#707070].> 45 : ""
 27 .[#707070].> 28 : ""
 27 .[#707070].> 29 : ""
 27 .[#707070].> 30 : ""
@@ -3908,10 +4162,10 @@ package "Extensions\n[Software System]" {
 2 .[#707070].> 20 : ""
 2 .[#707070].> 22 : ""
 2 .[#707070].> 33 : ""
-2 .[#707070].> 45 : ""
-2 .[#707070].> 47 : ""
+2 .[#707070].> 46 : ""
 2 .[#707070].> 48 : ""
-2 .[#707070].> 41 : ""
+2 .[#707070].> 49 : ""
+2 .[#707070].> 42 : ""
 2 .[#707070].> 27 : ""
 @enduml
 ----
@@ -4414,7 +4668,7 @@ org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/fullcalendar/wkt/viewer/IsisModuleExtFullCalendarUi.adoc[IsisModuleExtFullCalendarUi]
+xref:refguide:extensions:index/fullcalendar/wkt/viewer/IsisModuleExtFullCalendarWicketUi.adoc[IsisModuleExtFullCalendarWicketUi]
 ****
 
 |Apache Isis Ext - pdf.js - Parent
@@ -4565,6 +4819,55 @@ org.springframework.security:spring-security-crypto:jar:<managed> +
 xref:refguide:extensions:index/secman/applib/IsisModuleExtSecmanApplib.adoc[IsisModuleExtSecmanApplib], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermission.adoc[ApplicationPermission], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionMode.adoc[ApplicationPermissionMode], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRepository.adoc[ApplicationPermissionRepository], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionRule.adoc[ApplicationPermissionRule], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValue.adoc[ApplicationPermissionValue], xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissionValueSet.adoc[ApplicationPermissionValueSet], xref:refguide:extensions:index/secman/applib/permission/spi/PermissionsEvaluationService.adoc[PermissionsEvaluationService], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRoleRepository.adoc[ApplicationRoleRepository], xref:refguide:extensions:index/secman/applib/role/fixtures/AbstractRoleAndPermissionsFixtureScript.adoc[AbstractRoleAndPermissionsFixtureScript], xref:refguide:extensions:index/secman/applib/role/seed/IsisAppFeatureRoleAndPermissions.adoc[IsisAppFeatureRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisConfigurationRoleAndPermissions.adoc[IsisConfigurationRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtCommandReplayPrimaryRoleAndPermissions.adoc[IsisExtCommandReplayPrimaryRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtCommandReplaySecondaryRoleAndPermissions.adoc[IsisExtCommandReplaySecondaryRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtH2ConsoleRoleAndPermissions.adoc[IsisExtH2ConsoleRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtSecmanAdminRoleAndPermissions.adoc[IsisExtSecmanAdminRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisExtSecmanRegularUserRoleAndPermissions.adoc[IsisExtSecmanRegularUserRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisPersistenceJdoMetaModelRoleAndPermissions.adoc[IsisPersistenceJdoMetaModelRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisSudoImpersonateRoleAndPermissions.adoc[IsisSudoImpersonateRoleAndPermissions], xref:refguide:extensions:index/secman/applib/role/seed/IsisViewerRestfulObjectsSwaggerRoleAndPermissions.adoc[IsisViewerRestfulObjectsSwaggerRoleAndPermissions], xref:refguide:extensions:index/secman/applib/seed/SeedSecurityModuleService.adoc[SeedSecurityModuleService], xref:refguide:extensions:index/secman/applib/seed/scripts/SeedUsersAndRolesFixtureScript.adoc[SeedUsersAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy], xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancyRepository.adoc[ApplicationTenancyRepository], xref:refguide:extensions:index/secman/applib/tenancy/dom/HasAtPath.adoc[HasAtPath], xref:refguide:extensions:index/secman/applib/tenancy/seed/GlobalTenancy.adoc[GlobalTenancy], xref:refguide:extensions:index/secman/applib/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator], xref:refguide:extensions:index/secman/applib/user/dom/AccountType.adoc[AccountType], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserRepository.adoc[ApplicationUserRepository], xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUserStatus.adoc[ApplicationUserStatus], xref:refguide:extensions:index/secman/applib/user/events/UserCreatedEvent.adoc[UserCreatedEvent], xref:refguide:extensions:index/secman/applib/user/fixtures/AbstractUserAndRolesFixtureScript.adoc[AbstractUserAndRolesFixtureScript], xref:refguide:extensions:index/secman/applib/user/menu/MeService.adoc[MeService], xref:refguide:extensions:index/secman/applib/user/seed/IsisExtSecmanAdminUser.adoc[IsisExtSecmanAdminUser]
 ****
 
+|Apache Isis Ext - Sec Man Delegated (Using Shiro)
+[source,yaml]
+----
+Group: org.apache.isis.extensions
+Artifact: isis-extensions-secman-delegated-shiro
+Type: jar
+Directory: /extensions/security/secman/delegated-shiro
+----
+|Provides an implementation of a Shiro Realm that will automatically created delegated ApplicationUsers for any users externally authenticated in a delegate realm
+
+.Dependencies
+****
+org.apache.isis.core:isis-core-runtime:jar:<managed> +
+org.apache.isis.extensions:isis-extensions-secman-applib:jar:2.0.0-SNAPSHOT +
+org.apache.isis.security:isis-security-shiro:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/secman/delegated/shiro/IsisModuleExtSecmanDelegatedShiro.adoc[IsisModuleExtSecmanDelegatedShiro], xref:refguide:extensions:index/secman/delegated/shiro/realm/IsisModuleExtSecmanShiroRealm.adoc[IsisModuleExtSecmanShiroRealm], xref:refguide:extensions:index/secman/delegated/shiro/util/ShiroUtils.adoc[ShiroUtils]
+****
+
+|Apache Isis Ext - Sec Man Delegated (using Spring Oauth2)
+[source,yaml]
+----
+Group: org.apache.isis.extensions
+Artifact: isis-extensions-secman-delegated-springoauth2
+Type: jar
+Directory: /extensions/security/secman/delegated-springoauth2
+----
+|Provides a domain service to automatically create a delegated ApplicationUser if authentication has been performed externally, eg by Spring OAuth2 or by Keycloak.
+
+.Components
+****
+o.a.i.extensions.secman.delegated.springoauth2.dom.ApplicationUserAutoCreationService +
+****
+
+.Dependencies
+****
+org.apache.isis.extensions:isis-extensions-secman-applib:jar:<managed> +
+org.springframework.security:spring-security-core:jar:<managed> +
+org.springframework.security:spring-security-oauth2-core:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/secman/delegated/springoauth2/IsisModuleExtSecmanDelegatedSpringOauth2.adoc[IsisModuleExtSecmanDelegatedSpringOauth2]
+****
+
 |Apache Isis Ext - Sec Man Encryption (Using jbcrypt)
 [source,yaml]
 ----
@@ -4703,26 +5006,6 @@ org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed> +
 .Document Index Entries
 ****
 xref:refguide:extensions:index/secman/jpa/IsisModuleExtSecmanPersistenceJpa.adoc[IsisModuleExtSecmanPersistenceJpa]
-****
-
-|Apache Isis Ext - Sec Man Realm (Using Shiro)
-[source,yaml]
-----
-Group: org.apache.isis.extensions
-Artifact: isis-extensions-secman-shiro-realm
-Type: jar
-Directory: /extensions/security/secman/shiro-realm
-----
-|.Dependencies
-****
-org.apache.isis.core:isis-core-runtime:jar:<managed> +
-org.apache.isis.extensions:isis-extensions-secman-applib:jar:2.0.0-SNAPSHOT +
-org.apache.isis.security:isis-security-shiro:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/secman/shiro/IsisModuleExtSecmanRealmShiro.adoc[IsisModuleExtSecmanRealmShiro], xref:refguide:extensions:index/secman/shiro/IsisModuleExtSecmanShiroRealm.adoc[IsisModuleExtSecmanShiroRealm], xref:refguide:extensions:index/secman/shiro/util/ShiroUtils.adoc[ShiroUtils]
 ****
 
 |Apache Isis Ext - Session Log
@@ -5017,7 +5300,7 @@ package "Applib: Excel\n[Software System]" {
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-excel
 Type: pom
-Directory: /extensions/applib/excel
+Directory: /extensions/core/excel
 ----
 |A domain service for Apache Isis', allowing collections
 of (view model) objects to be exported/imported to/from an
@@ -5029,7 +5312,7 @@ Excel spreadsheet.  Also support for excel-based fixtures.
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-excel-applib
 Type: jar
-Directory: /extensions/applib/excel/applib
+Directory: /extensions/core/excel/applib
 ----
 |.Components
 ****
@@ -5057,7 +5340,7 @@ xref:refguide:extensions:index/excel/applib/AggregationType.adoc[AggregationType
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-excel-fixtures
 Type: jar
-Directory: /extensions/applib/excel/fixture
+Directory: /extensions/core/excel/fixture
 ----
 |.Dependencies
 ****
@@ -5075,7 +5358,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-excel-integtests
 Type: jar
-Directory: /extensions/applib/excel/integtests
+Directory: /extensions/core/excel/integtests
 ----
 |.Dependencies
 ****
@@ -5093,7 +5376,7 @@ org.hsqldb:hsqldb:jar:<managed> +
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-excel-testing
 Type: jar
-Directory: /extensions/applib/excel/testing
+Directory: /extensions/core/excel/testing
 ----
 |.Dependencies
 ****
@@ -5140,7 +5423,7 @@ org.apache.poi:poi-ooxml-lite:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:extensions:index/viewer/wicket/exceldownload/ui/IsisModuleExtExcelDownloadUi.adoc[IsisModuleExtExcelDownloadUi], xref:refguide:extensions:index/viewer/wicket/exceldownload/ui/components/CollectionContentsAsExcelFactory.adoc[CollectionContentsAsExcelFactory]
+xref:refguide:extensions:index/viewer/wicket/exceldownload/ui/IsisModuleExtExcelDownloadWicketUi.adoc[IsisModuleExtExcelDownloadWicketUi], xref:refguide:extensions:index/viewer/wicket/exceldownload/ui/components/CollectionContentsAsExcelFactory.adoc[CollectionContentsAsExcelFactory]
 ****
 |===
 
@@ -5638,12 +5921,12 @@ skinparam {
 }
 hide stereotype
 left to right direction
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -5738,12 +6021,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
