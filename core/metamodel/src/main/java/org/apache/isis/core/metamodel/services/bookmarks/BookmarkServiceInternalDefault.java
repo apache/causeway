@@ -57,7 +57,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService2 {
             final BookmarkHolder bookmarkHolder,
             final FieldResetPolicy fieldResetPolicy) {
         Bookmark bookmark = bookmarkHolder.bookmark();
-        return bookmark != null? Optional.ofNullable(lookup(bookmark, fieldResetPolicy)): Optional.empty();
+        return bookmark != null? lookup(bookmark, fieldResetPolicy): Optional.empty();
     }
 
     @Programmatic
@@ -120,7 +120,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService2 {
     @Programmatic
     @Override
     public <T> Optional<T> lookup(final Bookmark bookmark, Class<T> cls) {
-        return (Optional<T>) lookup(bookmark, FieldResetPolicy.RESET, cls);
+        return lookup(bookmark, FieldResetPolicy.RESET, cls);
     }
 
 
