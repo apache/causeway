@@ -123,7 +123,7 @@ extends ApplicationUserManager_newLocalUserAbstract {
         return null;
     }
 
-    @MemberSupport public ApplicationRole default3Act() {
+    @MemberSupport public ApplicationRole defaultInitialRole() {
         val regularUserRoleName = config.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
         return applicationRoleRepository
                 .findByNameCached(regularUserRoleName)
