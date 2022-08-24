@@ -18,17 +18,17 @@
  */
 package org.apache.isis.viewer.wicket.viewer.wicketapp.config;
 
-import org.springframework.beans.factory.InitializingBean;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
+import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class WicketViewerXray {
-
-    private final String KEY = IsisModuleViewerWicketViewer.NAMESPACE + ".xray";
 
     /**
      * Activates visual debugging mode for the Wicket Viewer.
@@ -37,21 +37,18 @@ public class WicketViewerXray {
      * Not imported by {@link IsisModuleViewerWicketViewer}.
      */
     @Configuration
-    public static class Enable implements InitializingBean {
+    public static class Enable
+        implements WicketApplicationInitializer {
 
         @Override
-        public void afterPropertiesSet() throws Exception {
-            System.setProperty(KEY, "true");
+        public void init(final WebApplication webApplication) {
+            WicketViewerXray.enabled = true;
+            webApplication.getDebugSettings()
+                .setOutputMarkupContainerClassName(true);
         }
-
     }
 
-    public boolean isEnabled() {
-        return "true".equalsIgnoreCase(System.getProperty(KEY));
-    }
-
-    public void setEnabled(final boolean enabled) {
-        System.setProperty(KEY, "" + enabled);
-    }
+    @Getter
+    private boolean enabled = false;
 
 }
