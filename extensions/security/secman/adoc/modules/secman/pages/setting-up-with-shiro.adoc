@@ -115,7 +115,7 @@ The following sets up Shiro _without_ delegation:
 ----
 [main]
 
-authenticationStrategy=org.apache.isis.extensions.secman.shiro.AuthenticationStrategyForIsisModuleSecurityRealm
+authenticationStrategy=org.apache.isis.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
 isisModuleSecurityRealm=org.apache.isis.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm
 
 securityManager.authenticator.authenticationStrategy = $authenticationStrategy

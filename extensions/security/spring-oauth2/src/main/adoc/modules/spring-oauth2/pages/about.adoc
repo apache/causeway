@@ -134,7 +134,7 @@ Next configure authenticationStrategy and permissenResolver for realms, and add 
 .shiro.ini
 ----
 [main]
-authenticationStrategy=org.apache.isis.extensions.secman.shiro.AuthenticationStrategyForIsisModuleSecurityRealm
+authenticationStrategy=org.apache.isis.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
 securityManager.authenticator.authenticationStrategy = $authenticationStrategy
 securityManager.realms = $iniRealm
 permissionResolver = org.apache.isis.security.shiro.authorization.IsisPermissionResolver
