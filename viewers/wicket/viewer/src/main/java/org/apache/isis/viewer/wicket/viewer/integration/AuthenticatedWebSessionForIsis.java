@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.viewer.integration;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
@@ -216,11 +217,15 @@ implements
         if (!isSignedIn()) {
             return null;
         }
-
-        final Roles roles = new Roles();
-        getAuthentication().getUser().streamRoleNames()
-        .forEach(roles::add);
-        return roles;
+        return Optional.ofNullable(getAuthentication())
+            .map(InteractionContext::getUser)
+            .map(user->{
+                val roles = new Roles();
+                user.streamRoleNames()
+                .forEach(roles::add);
+                return roles;
+            })
+            .orElse(null);
     }
 
     @Override
