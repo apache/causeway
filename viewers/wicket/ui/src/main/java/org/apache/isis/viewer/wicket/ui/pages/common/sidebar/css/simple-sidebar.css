@@ -168,6 +168,10 @@ body {
     transition: all 0.5s ease;
 }
 
+#sidebar-wrapper:not(.toggled) {
+	display: table; /* [ISIS-3166] allows child components to escape right boundary */
+}
+
 #page-content-wrapper {
     width: 100%;
     position: absolute;
@@ -237,6 +241,7 @@ body {
 #wrapper.toggled #sidebar-wrapper {
     width: 0;
     border: 0;
+    display: none;
 }
 
 #page-content-wrapper {
