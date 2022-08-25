@@ -26,6 +26,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
 
+// values don't currently support autoComplete - no branch is required
 public class ChoiceProviderForValues
 extends ChoiceProviderAbstactForScalarModel {
 

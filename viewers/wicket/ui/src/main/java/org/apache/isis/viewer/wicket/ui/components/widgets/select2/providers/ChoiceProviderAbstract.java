@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 import org.apache.wicket.util.string.Strings;
 import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.ChoiceProvider;
-import org.wicketstuff.select2.Response;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
@@ -46,22 +45,22 @@ implements HasCommonContext {
 
     // -- EMPTY CHOICE PROVIDER
 
-    public static class EmptyChoiceProvider extends ChoiceProvider<ObjectMemento> {
-        private static final long serialVersionUID = 1L;
-        @Override public String getDisplayValue(final ObjectMemento object) {
-            return null; }
-        @Override public String getIdValue(final ObjectMemento object) {
-            return null; }
-        @Override public void query(
-                final String term, final int page, final Response<ObjectMemento> response) {}
-        @Override public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-            return null;}
-    }
-    private static final EmptyChoiceProvider EMPTY = new EmptyChoiceProvider();
-
-    public static EmptyChoiceProvider empty() {
-        return EMPTY;
-    }
+//    public static class EmptyChoiceProvider extends ChoiceProvider<ObjectMemento> {
+//        private static final long serialVersionUID = 1L;
+//        @Override public String getDisplayValue(final ObjectMemento object) {
+//            return null; }
+//        @Override public String getIdValue(final ObjectMemento object) {
+//            return null; }
+//        @Override public void query(
+//                final String term, final int page, final Response<ObjectMemento> response) {}
+//        @Override public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
+//            return null;}
+//    }
+//    private static final EmptyChoiceProvider EMPTY = new EmptyChoiceProvider();
+//
+//    public static EmptyChoiceProvider empty() {
+//        return EMPTY;
+//    }
 
     // --
 

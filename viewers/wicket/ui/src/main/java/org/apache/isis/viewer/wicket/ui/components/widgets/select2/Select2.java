@@ -30,7 +30,6 @@ import org.wicketstuff.select2.AbstractSelect2Choice;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
-import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -41,8 +40,10 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiChoice;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithSingleChoice;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstactForScalarModel;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -57,14 +58,26 @@ implements
 
     final Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice;
 
-    public static Select2 createSelect2(final String id, final ScalarModel scalarModel) {
-        return new Select2(!scalarModel.isCollection()
+    public static Select2 createSelect2(
+            final String id,
+            final ScalarModel scalarModel,
+            final ChoiceProvider<ObjectMemento> choiceProvider) {
+        val select2 = new Select2(scalarModel.isScalar()
                 ? Either.left(
                         Select2ChoiceExt.create(id,
-                                ScalarModelWithSingleChoice.chain(scalarModel), scalarModel))
+                                ScalarModelWithSingleChoice.chain(scalarModel),
+                                scalarModel,
+                                choiceProvider))
                 : Either.right(
                         Select2MultiChoiceExt.create(id,
-                                ScalarModelWithMultiChoice.chain(scalarModel), scalarModel)));
+                                ScalarModelWithMultiChoice.chain(scalarModel),
+                                scalarModel,
+                                choiceProvider)));
+
+        select2.setLabel(Model.of(scalarModel.getFriendlyName()));
+        select2.getSettings().setWidth("100%");
+
+        return select2;
     }
 
     private Select2(final @NonNull Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice) {
@@ -72,17 +85,28 @@ implements
         asComponent().setOutputMarkupId(true);
     }
 
-    public void setProvider(final ChoiceProvider<ObjectMemento> providerForChoices) {
-        asChoiceExt().setProvider(providerForChoices);
+    public org.wicketstuff.select2.Settings getSettings() {
+        return select2Choice.fold(
+                Select2ChoiceExt::getSettings,
+                Select2MultiChoiceExt::getSettings);
+    }
+
+    // not sure if required any more
+    @SneakyThrows
+    public void rebuildChoiceProvider() {
+        val oldProvider = (ChoiceProviderAbstactForScalarModel)
+                select2Choice.fold(
+                        Select2ChoiceExt::getProvider,
+                        Select2MultiChoiceExt::getProvider);
+        val scalarModel = oldProvider.scalarModel();
+        val constr = oldProvider.getClass().getConstructor(ScalarModel.class);
+        val newProvider = constr.newInstance(scalarModel);
+        select2Choice.accept(
+                single->single.setProvider(newProvider),
+                multi->multi.setProvider(newProvider));
     }
 
     public AbstractSelect2Choice<ObjectMemento, ?> asComponent() {
-        return select2Choice.fold(
-                single->single,
-                multi->multi);
-    }
-
-    public ChoiceExt asChoiceExt() {
         return select2Choice.fold(
                 single->single,
                 multi->multi);
@@ -103,10 +127,6 @@ implements
     }
     public boolean checkRequired() {
         return asComponent().checkRequired();
-    }
-
-    public Settings getSettings() {
-        return asChoiceExt().getSettings();
     }
 
     public ManagedObject getConvertedInputValue() {
