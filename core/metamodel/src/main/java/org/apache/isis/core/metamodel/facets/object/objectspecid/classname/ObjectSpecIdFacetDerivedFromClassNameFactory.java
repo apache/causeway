@@ -24,6 +24,8 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlType;
 
+import org.datanucleus.util.ClassUtils;
+
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -130,7 +132,8 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory
                         ObjectSpecIdFacet objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
                         if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName &&
                                 // as a special case, don't enforce this for fixture scripts... we never invoke actions on fixture scripts anyway
-                                !FixtureScript.class.isAssignableFrom(objectSpec.getCorrespondingClass()) ) {
+                                !ClassUtils.getSuperclasses(objectSpec.getCorrespondingClass()).stream().anyMatch(aClass -> "FixtureScript".equals(aClass.getSimpleName()))
+                        ) {
 
                             validationFailures.add(
                                     "%s: the object type must be specified explicitly ('%s' config property).  Defaulting the object type from the package/class/package name can lead to data migration issues for apps deployed to production (if the class is subsequently refactored).  Use @Discriminator, @DomainObject(objectType=...) or @PersistenceCapable(schema=...) to specify explicitly.",
