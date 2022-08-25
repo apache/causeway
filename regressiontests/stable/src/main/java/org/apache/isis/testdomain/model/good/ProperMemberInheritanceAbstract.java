@@ -33,23 +33,19 @@ import lombok.Setter;
 
 abstract class ProperMemberInheritanceAbstract {
 
-    @ObjectSupport
-    public String title() {
+    @ObjectSupport public String title() {
         return "inherited title";
     }
 
-    @ObjectSupport
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return "inherited icon";
     }
 
-    @ObjectSupport
-    public String cssClass(){
+    @ObjectSupport public String cssClass(){
         return "another-class";
     }
 
-    @ObjectSupport
-    public String layout(){
+    @ObjectSupport public String layout(){
         return "layout";
     }
 

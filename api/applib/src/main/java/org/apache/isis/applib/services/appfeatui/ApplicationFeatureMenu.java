@@ -69,8 +69,7 @@ public class ApplicationFeatureMenu {
 
     // -- ICON NAME
 
-    @ObjectSupport
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return "applicationFeature";
     }
 

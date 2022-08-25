@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.jaxb.JavaTimeJaxbAdapters;
 import org.apache.isis.applib.services.message.MessageService;
@@ -79,7 +80,7 @@ public class BulkUpdateLineItemForDemoToDoItem
         modifyToDoItem(toDoItem);
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         final ExcelDemoToDoItem existingItem = getToDoItem();
         if(existingItem != null) {
             return "EXISTING: " + titleService.titleOf(existingItem);

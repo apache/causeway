@@ -49,7 +49,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 public class DependentArgsActionDemo implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Dependent Arguments Demo";
     }
 

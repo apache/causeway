@@ -34,6 +34,7 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
@@ -129,8 +130,7 @@ public class ApplicationFeatureChoices {
         @Getter
         private ApplicationFeatureId featureId;
 
-        @Title
-        public String title() {
+        @ObjectSupport public String title() {
             return toString();
         }
 

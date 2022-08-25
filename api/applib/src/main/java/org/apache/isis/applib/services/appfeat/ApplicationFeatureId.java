@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
@@ -218,8 +219,8 @@ implements
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
      * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
      */
-    public String title() {
-        final TitleBuffer buf = new TitleBuffer();
+    @ObjectSupport public String title() {
+        val buf = new TitleBuffer();
         buf.append(getFullyQualifiedName());
         return buf.toString();
     }

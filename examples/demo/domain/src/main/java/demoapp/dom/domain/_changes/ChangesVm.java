@@ -53,8 +53,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChangesVm {
 
-    @ObjectSupport
-    public String title() {
+    @ObjectSupport public String title() {
         int numCreated = changesDto.getObjects().getCreated().getOid().size();
         int numUpdated = changesDto.getObjects().getUpdated().getOid().size();
         int numDeleted = changesDto.getObjects().getDeleted().getOid().size();

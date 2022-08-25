@@ -148,8 +148,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
         return buf.toString();
     }
 
-    @ObjectSupport
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return "ExcelModuleDemoToDoItem-" + (!isComplete() ? "todo" : "done");
     }
 
