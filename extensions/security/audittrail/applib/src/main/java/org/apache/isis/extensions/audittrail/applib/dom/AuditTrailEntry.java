@@ -273,7 +273,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            hidden = Where.ALL_TABLES
+            hidden = Where.NOWHERE
     )
     @DomainChangeRecord.PreValue
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -296,7 +296,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            hidden = Where.ALL_TABLES
+            hidden = Where.NOWHERE
     )
     @DomainChangeRecord.PostValue
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
