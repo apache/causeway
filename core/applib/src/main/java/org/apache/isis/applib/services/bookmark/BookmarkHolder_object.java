@@ -44,7 +44,7 @@ public class BookmarkHolder_object {
         contributed = Contributed.AS_ASSOCIATION
     )
     public Object prop() {
-        return bookmarkService.lookup(bookmarkHolder);
+        return bookmarkService.lookup(bookmarkHolder).orElse(null);
     }
 
 

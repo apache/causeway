@@ -205,7 +205,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 for (OidDto targetOidDto : targetOidDtos) {
 
                     final Bookmark bookmark = Bookmark.from(targetOidDto);
-                    final Object targetObject = bookmarkService.lookup(bookmark);
+                    final Object targetObject = bookmarkService.lookup(bookmark).orElse(null);
 
                     final ObjectAdapter targetAdapter = adapterFor(targetObject);
 

@@ -48,7 +48,7 @@ public class Util {
     public static Object lookupBookmark(Bookmark bookmark, final BookmarkService bookmarkService, DomainObjectContainer container) {
         try {
             return bookmarkService != null
-                    ? bookmarkService.lookup(bookmark)
+                    ? bookmarkService.lookup(bookmark).orElse(null)
                     : null;
         } catch(RuntimeException ex) {
             if(ex.getClass().getName().contains("ObjectNotFoundException")) {

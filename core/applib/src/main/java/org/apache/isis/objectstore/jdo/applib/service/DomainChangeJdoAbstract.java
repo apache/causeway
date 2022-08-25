@@ -249,7 +249,7 @@ public abstract class DomainChangeJdoAbstract {
     public Object openTargetObject() {
         try {
             return bookmarkService != null
-                    ? bookmarkService.lookup(getTarget(), BookmarkService2.FieldResetPolicy.DONT_RESET)
+                    ? bookmarkService.lookup(getTarget(), BookmarkService2.FieldResetPolicy.DONT_RESET).orElse(null)
                     : null;
         } catch(RuntimeException ex) {
             if(ex.getClass().getName().contains("ObjectNotFoundException")) {
