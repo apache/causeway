@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.services.swagger.internal;
 
 import java.util.List;
 
+import org.datanucleus.util.ClassUtils;
+
 import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -32,7 +34,9 @@ public class ClassExcluder {
             return false;
         }
         Class<?> correspondingClass = objectSpec.getCorrespondingClass();
-        return correspondingClass == FixtureResult.class || FixtureScript.class.isAssignableFrom(correspondingClass) || correspondingClass == FixtureScript.ExecutionContext.class;
+        return correspondingClass == FixtureResult.class || FixtureScript.class.isAssignableFrom(correspondingClass)
+                || correspondingClass == FixtureScript.ExecutionContext.class
+                || ClassUtils.getSuperclasses(objectSpec.getCorrespondingClass()).stream().anyMatch(aClass -> "FixtureScript".equals(aClass.getSimpleName()));
     }
 
     public boolean exclude(final ObjectAction objectAction) {

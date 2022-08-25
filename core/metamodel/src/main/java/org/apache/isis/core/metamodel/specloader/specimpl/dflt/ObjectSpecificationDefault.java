@@ -28,6 +28,7 @@ import java.util.Properties;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.datanucleus.util.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -284,7 +285,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private boolean isFixtureScript() {
-        return FixtureScript.class.isAssignableFrom(getCorrespondingClass());
+        return FixtureScript.class.isAssignableFrom(getCorrespondingClass())
+                || ClassUtils.getSuperclasses(getCorrespondingClass()).stream().anyMatch(aClass -> "FixtureScript".equals(aClass.getSimpleName()));
     }
 
     //endregion

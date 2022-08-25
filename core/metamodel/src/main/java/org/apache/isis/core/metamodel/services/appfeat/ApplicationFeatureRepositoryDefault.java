@@ -31,6 +31,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.datanucleus.util.ClassUtils;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -338,7 +340,8 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     }
 
     private boolean isFixtureScript(final ObjectSpecification spec) {
-        return FixtureScript.class.isAssignableFrom(spec.getCorrespondingClass());
+        return FixtureScript.class.isAssignableFrom(spec.getCorrespondingClass())
+        || ClassUtils.getSuperclasses(spec.getCorrespondingClass()).stream().anyMatch(aClass -> "FixtureScript".equals(aClass.getSimpleName()));
     }
 
     /**
