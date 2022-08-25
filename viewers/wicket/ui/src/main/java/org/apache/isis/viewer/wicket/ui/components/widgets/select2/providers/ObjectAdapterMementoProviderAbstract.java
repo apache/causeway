@@ -18,78 +18,25 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.wicket.util.string.Strings;
 import org.springframework.lang.Nullable;
-import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
-import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
-import lombok.Getter;
 import lombok.val;
 
 public abstract class ObjectAdapterMementoProviderAbstract
-extends ChoiceProvider<ObjectMemento> {
+extends ChoiceProviderForScalarModel {
 
     private static final long serialVersionUID = 1L;
 
-    protected static final String NULL_PLACEHOLDER = "VGN6r6zKTiLhUsA0WkdQ17LvMU1IYdb0";
-
-    @Getter private final ScalarModel scalarModel;
-    private transient IsisAppCommonContext commonContext;
-
-    public ObjectAdapterMementoProviderAbstract(final ScalarModel scalarModel) {
-        this.scalarModel = scalarModel;
+    protected ObjectAdapterMementoProviderAbstract(final ScalarModel scalarModel) {
+        super(scalarModel);
     }
-
-    @Override
-    public String getDisplayValue(final ObjectMemento choiceMemento) {
-        if (choiceMemento == null
-                || choiceMemento instanceof ObjectMementoForEmpty) {
-            return getPlaceholderRenderService().asText(PlaceholderLiteral.NULL_REPRESENTATION);
-        }
-        return translate(choiceMemento.getTitle());
-    }
-
-    @Override
-    public String getIdValue(final ObjectMemento choiceMemento) {
-        if (choiceMemento == null) {
-            return NULL_PLACEHOLDER;
-        }
-        return choiceMemento.bookmark().stringify();
-    }
-
-    @Override
-    public void query(
-            final String term,
-            final int page,
-            final org.wicketstuff.select2.Response<ObjectMemento> response) {
-
-        final List<ObjectMemento> mementos = _Lists.newArrayList(obtainMementos(term));
-        // if not mandatory, and the list doesn't contain null already, then add it in.
-        if(!scalarModel.isRequired()
-                && !mementos.contains(null)) {
-            mementos.add(0, null);
-        }
-        response.addAll(mementos);
-    }
-
-    protected abstract Can<ObjectMemento> obtainMementos(String term);
 
     /**
      * Filters all choices against a term by using their
@@ -106,64 +53,14 @@ extends ChoiceProvider<ObjectMemento> {
         if (Strings.isEmpty(term)) {
             return choicesMementos;
         }
-
-        val commonContext = getCommonContext();
-
-        return choicesMementos.filter((final ObjectMemento candidate)->{
-            val objectAdapter = commonContext.reconstructObject(candidate);
-            val title = objectAdapter.titleString();
-            return title.toLowerCase().contains(term.toLowerCase());
-        });
-
+        return super.filter(term, choicesMementos);
     }
 
-    @Override
-    public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-
-        return _NullSafe.stream(ids)
-                .map(this::idToMemento)
-                .collect(Collectors.toList());
-    }
-
-    /** whether this adapter is dependent on previous (pending) arguments */
-    public boolean dependsOnPreviousArgs() {
-        return true;
-    }
-
-    // -- DEPENDENCIES
-
-    protected IsisAppCommonContext getCommonContext() {
-        if(commonContext==null) {
-            commonContext = scalarModel.getCommonContext();
-        }
-        return commonContext;
-    }
-
-    protected final Wicket getSettings() {
-        return getCommonContext().getConfiguration().getViewer().getWicket();
-    }
-
-    // -- HELPER
-
-    private @Nullable ObjectMemento idToMemento(final String id) {
-        if(NULL_PLACEHOLDER.equals(id)) {
-            return null;
-        }
+    protected @Nullable ObjectMemento idToMemento(final String id) {
         val memento = Bookmark.parse(id)
                 .map(getCommonContext()::mementoForBookmark)
-                .orElse(null);
+                .orElse(null); //FIXME did something go wrong?
         return memento;
-    }
-
-    /**
-     * Translate without context: Tooltips, Button-Labels, etc.
-     */
-    private String translate(final String input) {
-        return getCommonContext().getTranslationService().translate(TranslationContext.empty(), input);
-    }
-
-    private PlaceholderRenderService getPlaceholderRenderService() {
-        return getCommonContext().getPlaceholderRenderService();
     }
 
 }

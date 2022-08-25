@@ -42,10 +42,10 @@ extends ObjectAdapterMementoProviderAbstract {
     }
 
     @Override
-    protected Can<ObjectMemento> obtainMementos(final String term) {
+    protected Can<ObjectMemento> query(final String term) {
 
         val commonContext = getCommonContext();
-        val scalarModel = getScalarModel();
+        val scalarModel = scalarModel();
         val pendingArgs = scalarModel.isParameter()
                 ? ((ParameterUiModel)scalarModel).getParameterNegotiationModel().getParamValues()
                 : Can.<ManagedObject>empty();

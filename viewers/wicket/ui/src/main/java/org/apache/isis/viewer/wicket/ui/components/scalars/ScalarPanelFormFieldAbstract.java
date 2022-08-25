@@ -151,13 +151,20 @@ extends ScalarPanelAbstract2 {
             xrayDetails.put("scalarModel.disableReasonIfAny", ""+scalarModel().disableReasonIfAny());
             xrayDetails.put("scalarModel.whetherHidden", ""+scalarModel().whetherHidden());
             xrayDetails.put("scalarModel.identifier", ""+scalarModel().getIdentifier());
+            xrayDetails.put("scalarModel.choices (count)", ""+scalarModel().getChoices().size());
+            xrayDetails.put("scalarModel.metaModel.featureIdentifier", ""+scalarModel().getMetaModel().getFeatureIdentifier());
+            xrayDetails.put("scalarModel.scalarTypeSpec", ""+scalarModel().getScalarTypeSpec().toString());
+            xrayDetails.put("scalarModel.pendingValue", ""+scalarModel().getSpecialization()
+                    .fold(
+                            param->""+param.getValue(),
+                            prop->""+prop.getPendingPropertyModel().getValueAsTitle().getValue()));
             Wkt.markupAdd(fieldFrame, ID_XRAY_DETAILS, XrayWkt.formatAsListGroup(xrayDetails));
         });
 
         if(renderScenario.isReadonly()) {
             fieldFrame.add(FieldFrame.SCALAR_VALUE_CONTAINER
                     .createComponent(this::createComponentForOutput));
-        } else if(renderScenario.isCanEditAny()) {
+        } else if(renderScenario.isViewingAndCanEditAny()) {
 
             // this results in a link created;
             // link stuff is handled later in ScalarPanelAbstract2.setupInlinePrompt

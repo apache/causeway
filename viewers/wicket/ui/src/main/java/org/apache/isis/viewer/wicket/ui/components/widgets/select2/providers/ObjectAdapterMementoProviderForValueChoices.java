@@ -27,8 +27,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import lombok.val;
 
 public class ObjectAdapterMementoProviderForValueChoices
-extends ObjectAdapterMementoProviderAbstract
-implements ObjectAdapterMementoProviderForChoices {
+extends ObjectAdapterMementoProviderAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,21 +37,13 @@ implements ObjectAdapterMementoProviderForChoices {
     }
 
     @Override
-    public Can<ObjectMemento> getChoiceMementos() {
-        val commonContext = super.getCommonContext();
-        val choices = getScalarModel().getChoices();
-        return choices.map(commonContext::mementoFor);
-    }
-
-    @Override
-    protected Can<ObjectMemento> obtainMementos(final String term) {
-        return obtainMementos(term, getChoiceMementos());
+    protected Can<ObjectMemento> query(final String term) {
+        return obtainMementos(term, queryAll());
     }
 
     @Override
     public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-
-        return obtainMementos(null)
+        return queryAll()//query(null)
         .filter((final ObjectMemento input) -> {
             val id = getIdValue(input);
             return ids.contains(id);
@@ -60,6 +51,10 @@ implements ObjectAdapterMementoProviderForChoices {
         .toList();
     }
 
-
+    // protected in support of JUnit testing
+    protected Can<ObjectMemento> queryAll() {
+        return scalarModel().getChoices()
+            .map(getCommonContext()::mementoFor);
+    }
 
 }

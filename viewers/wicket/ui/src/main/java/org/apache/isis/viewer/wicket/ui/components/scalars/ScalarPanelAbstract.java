@@ -128,7 +128,7 @@ implements ScalarModelSubscriber {
         public boolean isEditingAny() {
             return this==EDITING
                     || this==CAN_EDIT_INLINE_VIA_ACTION;}
-        public boolean isCanEditAny() {
+        public boolean isViewingAndCanEditAny() {
             return this==CAN_EDIT
                 || this==CAN_EDIT_INLINE
                 || this==CAN_EDIT_INLINE_VIA_ACTION; }

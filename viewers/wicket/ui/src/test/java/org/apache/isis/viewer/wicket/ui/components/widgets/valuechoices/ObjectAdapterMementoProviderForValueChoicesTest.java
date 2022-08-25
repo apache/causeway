@@ -88,7 +88,7 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
 
         provider = new ObjectAdapterMementoProviderForValueChoices(mockScalarModel) {
             private static final long serialVersionUID = 1L;
-            @Override public org.apache.isis.commons.collections.Can<ObjectMemento> getChoiceMementos() {
+            @Override public org.apache.isis.commons.collections.Can<ObjectMemento> queryAll() {
                 return mementos; };
         };
 

@@ -18,28 +18,48 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import org.apache.isis.commons.collections.Can;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.util.Facets;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.experimental.Accessors;
 
-public class ObjectAdapterMementoProviderForReferenceObjectAutoComplete
-extends ObjectAdapterMementoProviderAbstract {
+@RequiredArgsConstructor
+public abstract class ChoiceProviderForScalarModel
+extends ChoiceProviderAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ObjectAdapterMementoProviderForReferenceObjectAutoComplete(final ScalarModel model) {
-        super(model);
+    @Getter @Accessors(fluent = true)
+    private final ScalarModel scalarModel;
+
+    @Override
+    protected final boolean isRequired() {
+        return scalarModel().isRequired();
+    }
+
+    /** whether this adapter is dependent on previous (pending) arguments */
+    public boolean dependsOnPreviousArgs() {
+        return true;
     }
 
     @Override
-    protected Can<ObjectMemento> query(final String term) {
-        val scalarTypeSpec = scalarModel().getScalarTypeSpec();
-        val autoCompleteAdapters = Facets.autoCompleteExecute(scalarTypeSpec, term);
-        return autoCompleteAdapters.map(getCommonContext()::mementoFor);
+    protected ObjectMemento mementoFromId(final String id) {
+        val memento = Bookmark.parse(id)
+                .map(getCommonContext()::mementoForBookmark)
+                .orElse(null); // FIXME if can't recreated from bookmark, there might be a bug
+        return memento;
     }
 
+    // -- DEPS
+
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return scalarModel().getCommonContext();
+    }
 
 }
