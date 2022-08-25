@@ -53,8 +53,7 @@ import lombok.val;
         sequence = "1"
 )
 @RequiredArgsConstructor
-public class ApplicationUserManager_newLocalUser
-extends ApplicationUserManager_newLocalUserAbstract {
+public class ApplicationUserManager_newLocalUser {
 
     public static class DomainEvent
             extends IsisModuleExtSecmanApplib.ActionDomainEvent<ApplicationUserManager_newLocalUser> {}

@@ -40,6 +40,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Objects;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
@@ -297,6 +298,13 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public List<T> toList() {
         return Collections.singletonList(element); // serializable and immutable
+    }
+
+    @Override
+    public List<T> toArrayList() {
+        val list = _Lists.<T>newArrayList();
+        list.add(element);
+        return list;
     }
 
     @Override

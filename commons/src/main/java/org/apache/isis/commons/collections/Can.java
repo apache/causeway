@@ -698,17 +698,22 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     // -- CONVERSIONS
 
     /**
-     * @return a serializable and immutable List, containing the elements of this Can
+     * @return a serializable and immutable {@link List}, containing the elements of this Can
      */
     List<T> toList();
 
     /**
-     * @return a serializable and immutable Set, containing the elements of this Can
+     * @return a (serializable and mutable) {@link ArrayList}, containing the elements of this Can
+     */
+    List<T> toArrayList();
+
+    /**
+     * @return a serializable and immutable {@link Set}, containing the elements of this Can
      */
     Set<T> toSet();
 
     /**
-     * @return a serializable and immutable Set, containing the elements of this Can
+     * @return a serializable and immutable {@link Set}, containing the elements of this Can
      */
     Set<T> toSet(@NonNull Consumer<T> onDuplicated);
 
@@ -739,8 +744,5 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
-
-
-
 
 }
