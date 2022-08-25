@@ -56,17 +56,17 @@ public class EclipselinkConfiguration {
         /**
          * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CHDDIFGE">eclipse.weaving.fetchgroups</a> docs
          */
-        private boolean fetchgroups = false;
+        private boolean fetchgroups = true;
 
         /**
          * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABJICDJ">eclipse.weaving.internal</a> docs
          */
-        private boolean internal = false;
+        private boolean internal = true;
 
         /**
          * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABDBIFE">eclipse.weaving.lazy</a> docs
          */
-        private boolean lazy = false;
+        private boolean lazy = true;
     }
 
     /**
