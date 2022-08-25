@@ -45,7 +45,7 @@ public class BookmarkHolder_lookup {
             cssClassFa = "fa-bookmark"
     )
     public Object act() {
-        return bookmarkService.lookup(bookmarkHolder);
+        return bookmarkService.lookup(bookmarkHolder).orElse(null);
     }
 
 

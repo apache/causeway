@@ -90,7 +90,7 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
                 propertyValue = memento.get(propertyId, propertyType);
             } else if(mementoKeys.contains(propertyId + ".bookmark")) {
                 final Bookmark propertyValueBookmark = memento.get(propertyId + ".bookmark", Bookmark.class);
-                propertyValue = bookmarkService.lookup(propertyValueBookmark);
+                propertyValue = bookmarkService.lookup(propertyValueBookmark).orElse(null);
             }
 
             if(propertyValue != null) {

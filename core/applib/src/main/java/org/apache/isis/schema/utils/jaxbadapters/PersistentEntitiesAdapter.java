@@ -38,7 +38,7 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>>
         List<Object> domainObjects = Lists.newArrayList();
         for (final OidDto oidDto : oidsDto.getOid()) {
             final Bookmark bookmark = Bookmark.from(oidDto);
-            Object domainObject = bookmarkService.lookup(bookmark, BookmarkService2.FieldResetPolicy.DONT_RESET);
+            Object domainObject = bookmarkService.lookup(bookmark, BookmarkService2.FieldResetPolicy.DONT_RESET).orElse(null);
             domainObjects.add(domainObject);
         }
         return domainObjects;
