@@ -18,13 +18,18 @@
  */
 package org.apache.isis.viewer.wicket.ui.util;
 
+import java.util.Map;
+
+import org.springframework.lang.Nullable;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class WktXray {
+public class XrayWkt {
 
     @Getter @Setter
     private boolean enabled = false;
@@ -33,6 +38,25 @@ public class WktXray {
         if(isEnabled()) {
             runnable.run();
         }
+    }
+
+    // -- FORMATTERS
+
+    public String formatAsListGroup(final @Nullable Map<String, String> keyValuePairs) {
+        val sb = new StringBuilder();
+        sb.append("<ul class=\"list-group\">");
+        if(keyValuePairs!=null) {
+            keyValuePairs.forEach((key, value)->{
+                sb
+                .append("<li class=\"list-group-item\">")
+                .append(key)
+                .append(": ")
+                .append("<b>").append(value).append("</b>")
+                .append("</li>");
+            });
+        }
+        sb.append("</ul>");
+        return sb.toString();
     }
 
 }

@@ -22,7 +22,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketApplicationInitializer;
-import org.apache.isis.viewer.wicket.ui.util.WktXray;
+import org.apache.isis.viewer.wicket.ui.util.XrayWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
 
 /**
@@ -37,7 +37,7 @@ implements WicketApplicationInitializer {
 
     @Override
     public void init(final WebApplication webApplication) {
-        WktXray.setEnabled(true);
+        XrayWkt.setEnabled(true);
         webApplication.getDebugSettings()
             .setOutputMarkupContainerClassName(true);
 

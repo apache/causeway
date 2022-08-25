@@ -97,8 +97,12 @@
 		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink-editing">
 			<span class="scalarValueInput input-group">
 				<!-- input format (when editing or action dialog) -->
-				<span wicket:id="xrayLabel" 
-					class="badge rounded-pill text-bg-warning">xrayLabel</span>
+				
+				<details>
+				  <summary><span class="badge bg-info">Xray</span></summary>
+				  <div wicket:id="xrayDetails" style="font-size: 0.75rem;"></div>
+				</details>
+				
 				<wicket:container 
 					wicket:id="container-scalarValue"/>
 			

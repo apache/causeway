@@ -72,7 +72,6 @@ import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
-
 public abstract class ScalarPanelAbstract
 extends PanelAbstract<ManagedObject, ScalarModel>
 implements ScalarModelSubscriber {
@@ -83,6 +82,7 @@ implements ScalarModelSubscriber {
 
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";
+    protected static final String ID_XRAY_DETAILS = "xrayDetails";
 
     public enum FormatModifier {
         MARKUP,
