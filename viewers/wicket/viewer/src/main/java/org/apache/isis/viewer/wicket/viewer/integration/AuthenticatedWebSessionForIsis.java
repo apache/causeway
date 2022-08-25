@@ -86,11 +86,18 @@ implements
     private UUID sessionGuid;
     private String cachedSessionId;
 
-    public String getCachedSessionId() {
-        if (cachedSessionId == null && Session.exists()) {
+    /**
+     * Optionally the current HttpSession's Id,
+     * based on whether such a session is available.
+     * @implNote side-effect free, that is,
+     * must not create a session if there is none yet
+     */
+    public Optional<String> getCachedSessionId() {
+        if (cachedSessionId == null
+                && Session.exists()) {
             cachedSessionId = getId();
         }
-        return cachedSessionId;
+        return Optional.ofNullable(cachedSessionId);
     }
 
     public AuthenticatedWebSessionForIsis(final Request request) {
@@ -252,11 +259,12 @@ implements
         final Runnable loggingTask = ()->{
 
             val now = virtualClock().nowAsJavaUtilDate();
+            val httpSessionId = AuthenticatedWebSessionForIsis.this.getCachedSessionId()
+                    .orElse("(none)");
 
-            String httpSessionId = AuthenticatedWebSessionForIsis.this.getCachedSessionId();
-            sessionLoggingServices.forEach(sessionLoggingService ->
-                sessionLoggingService.log(type, username, now, causedBy, getSessionGuid(), httpSessionId)
-            );
+            sessionLoggingServices
+            .forEach(sessionLoggingService ->
+                sessionLoggingService.log(type, username, now, causedBy, getSessionGuid(), httpSessionId));
         };
 
         if(interactionService!=null) {
