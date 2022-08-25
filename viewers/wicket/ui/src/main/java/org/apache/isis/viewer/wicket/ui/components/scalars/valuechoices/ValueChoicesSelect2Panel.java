@@ -32,7 +32,7 @@ import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
@@ -143,7 +143,7 @@ extends ScalarPanelSelectAbstract {
     // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
     @Override
     protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
-        return new ObjectAdapterMementoProviderForValueChoices(scalarModel());
+        return new ChoiceProviderForValues(scalarModel());
     }
 
 

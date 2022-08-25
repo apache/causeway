@@ -20,30 +20,65 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
 
-public class ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete
-extends ObjectAdapterMementoProviderAbstract {
+public class ChoiceProviderForReferences
+extends ChoiceProviderAbstactForScalarModel {
 
     private static final long serialVersionUID = 1L;
 
-    public ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(final ScalarModel scalarModel) {
-        super(scalarModel);
-        if(!scalarModel.hasAutoComplete()) {
-            throw _Exceptions.illegalArgument("Cannot create auto-complete provider, "
-                    + "when model has no auto-complete %s", scalarModel);
+    static enum Mode {
+        CHOICES,
+        AUTO_COMPLETE,
+        FALLBACK;
+        static Mode valueOf(final ScalarModel scalarModel) {
+            if (scalarModel.hasChoices()) {
+                return Mode.CHOICES;
+            } else if(scalarModel.hasAutoComplete()) {
+                return Mode.AUTO_COMPLETE;
+            } else {
+                return Mode.FALLBACK;
+            }
         }
+    }
+
+    private final Mode mode;
+
+    public ChoiceProviderForReferences(
+            final ScalarModel scalarModel) {
+        super(scalarModel);
+        this.mode = Mode.valueOf(scalarModel);
     }
 
     @Override
     protected Can<ObjectMemento> query(final String term) {
+        switch(mode) {
+        case CHOICES:
+            return super.filter(term, queryAll());
+        case AUTO_COMPLETE:
+            return queryWithAutoComplete(term);
+        case FALLBACK:
+            // fall through
+        }
+        val scalarTypeSpec = scalarModel().getScalarTypeSpec();
+        val autoCompleteAdapters = Facets.autoCompleteExecute(scalarTypeSpec, term);
+        return autoCompleteAdapters.map(getCommonContext()::mementoFor);
+    }
 
+    // -- HELPER
+
+    private Can<ObjectMemento> queryAll() {
+        return scalarModel().getChoices() // must not return detached entities
+                .map(getCommonContext()::mementoForParameter);
+    }
+
+    private Can<ObjectMemento> queryWithAutoComplete(final String term) {
         val commonContext = getCommonContext();
         val scalarModel = scalarModel();
         val pendingArgs = scalarModel.isParameter()
@@ -67,8 +102,6 @@ extends ObjectAdapterMementoProviderAbstract {
                 .map(commonContext::mementoFor);
     }
 
-    // -- HELPER
-
     private Can<ManagedObject> reconstructPendingArgs(
             final ParameterUiModel parameterModel,
             final Can<ObjectMemento> pendingArgMementos) {
@@ -81,5 +114,6 @@ extends ObjectAdapterMementoProviderAbstract {
 
        return pendingArgsList;
     }
+
 
 }

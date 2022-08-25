@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
 
 import lombok.val;
 
@@ -53,7 +53,7 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
 
     private ObjectMemento mockMemento1;
     private ObjectMemento mockMemento2;
-    private ObjectAdapterMementoProviderForValueChoices provider;
+    private ChoiceProviderForValues provider;
 
     @Mock private SpecificationLoader mockSpecificationLoader;
     @Mock private ObjectSpecification mockSpec;
@@ -86,7 +86,7 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
             will(returnValue(true));
         }});
 
-        provider = new ObjectAdapterMementoProviderForValueChoices(mockScalarModel) {
+        provider = new ChoiceProviderForValues(mockScalarModel) {
             private static final long serialVersionUID = 1L;
             @Override public org.apache.isis.commons.collections.Can<ObjectMemento> queryAll() {
                 return mementos; };

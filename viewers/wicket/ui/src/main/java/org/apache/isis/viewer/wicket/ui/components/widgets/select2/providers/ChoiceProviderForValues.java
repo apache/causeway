@@ -18,28 +18,43 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
+import java.util.Collection;
+
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
 
-public class ObjectAdapterMementoProviderForReferenceObjectAutoComplete
-extends ObjectAdapterMementoProviderAbstract {
+public class ChoiceProviderForValues
+extends ChoiceProviderAbstactForScalarModel {
 
     private static final long serialVersionUID = 1L;
 
-    public ObjectAdapterMementoProviderForReferenceObjectAutoComplete(final ScalarModel model) {
-        super(model);
+    public ChoiceProviderForValues(
+            final ScalarModel scalarModel) {
+        super(scalarModel);
     }
 
     @Override
     protected Can<ObjectMemento> query(final String term) {
-        val scalarTypeSpec = scalarModel().getScalarTypeSpec();
-        val autoCompleteAdapters = Facets.autoCompleteExecute(scalarTypeSpec, term);
-        return autoCompleteAdapters.map(getCommonContext()::mementoFor);
+        return filter(term, queryAll());
     }
 
+    @Override
+    public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
+        return queryAll()//query(null)
+        .filter((final ObjectMemento input) -> {
+            val id = getIdValue(input);
+            return ids.contains(id);
+        })
+        .toList();
+    }
+
+    // protected in support of JUnit testing
+    protected Can<ObjectMemento> queryAll() {
+        return scalarModel().getChoices()
+            .map(getCommonContext()::mementoFor);
+    }
 
 }

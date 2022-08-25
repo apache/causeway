@@ -28,7 +28,7 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.EmptyChoiceProvider;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.Getter;
 import lombok.val;
@@ -55,7 +55,7 @@ implements
             final IModel<Collection<ObjectMemento>> model,
             final ScalarModel scalarModel) {
 
-        super(id, model, EmptyChoiceProvider.INSTANCE);
+        super(id, model, ChoiceProviderAbstract.empty());
         logicalType = scalarModel.getScalarTypeSpec().getLogicalType();
 
         getSettings().setCloseOnSelect(true);

@@ -18,49 +18,53 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import org.apache.wicket.util.string.Strings;
-import org.springframework.lang.Nullable;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.experimental.Accessors;
 
-public abstract class ObjectAdapterMementoProviderAbstract
-extends ChoiceProviderForScalarModel {
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+public abstract class ChoiceProviderAbstactForScalarModel
+extends ChoiceProviderAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    protected ObjectAdapterMementoProviderAbstract(final ScalarModel scalarModel) {
-        super(scalarModel);
+    @Getter @Accessors(fluent = true)
+    private final ScalarModel scalarModel;
+
+    @Override
+    protected final boolean isRequired() {
+        return scalarModel().isRequired();
     }
 
-    /**
-     * Filters all choices against a term by using their
-     * {@link ManagedObject#titleString() title string}
-     *
-     * @param term The term entered by the user
-     * @param choicesMementos The collections of choices to filter
-     * @return A list of all matching choices
-     */
-    protected final Can<ObjectMemento> obtainMementos(
-            final String term,
-            final Can<ObjectMemento> choicesMementos) {
-
-        if (Strings.isEmpty(term)) {
-            return choicesMementos;
-        }
-        return super.filter(term, choicesMementos);
+    /** whether this adapter is dependent on previous (pending) arguments */
+    public boolean dependsOnPreviousArgs() {
+        return true;
     }
 
-    protected @Nullable ObjectMemento idToMemento(final String id) {
+    @Override
+    protected ObjectMemento mementoFromId(final String id) {
         val memento = Bookmark.parse(id)
                 .map(getCommonContext()::mementoForBookmark)
-                .orElse(null); //FIXME did something go wrong?
+                .orElseGet(()->{
+                    // FIXME if can't be recreated from bookmark, there might be a bug
+                    System.err.printf("cannot recreate ObjectMemento from id=%s%n", id);
+                    return null;
+                });
         return memento;
+    }
+
+    // -- DEPS
+
+    @Override
+    public IsisAppCommonContext getCommonContext() {
+        return scalarModel().getCommonContext();
     }
 
 }

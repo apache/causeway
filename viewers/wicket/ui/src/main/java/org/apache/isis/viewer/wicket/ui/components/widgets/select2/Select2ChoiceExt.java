@@ -24,7 +24,7 @@ import org.wicketstuff.select2.Select2Choice;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.EmptyChoiceProvider;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.Getter;
 
@@ -47,7 +47,7 @@ implements ChoiceExt {
             final String id,
             final IModel<ObjectMemento> model,
             final ScalarModel scalarModel) {
-        super(id, model, EmptyChoiceProvider.INSTANCE);
+        super(id, model, ChoiceProviderAbstract.empty());
         logicalType = scalarModel.getScalarTypeSpec().getLogicalType();
 
         getSettings().setCloseOnSelect(true);

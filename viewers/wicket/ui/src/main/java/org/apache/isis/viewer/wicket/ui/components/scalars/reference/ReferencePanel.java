@@ -45,9 +45,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceChoices;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceObjectAutoComplete;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForReferences;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.isis.viewer.wicket.ui.util.WktComponents;
@@ -258,16 +256,7 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     @Override
     protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
-
-        val scalarModel = scalarModel();
-
-        if (scalarModel.hasChoices()) {
-            return new ObjectAdapterMementoProviderForReferenceChoices(scalarModel);
-        }
-        if(scalarModel.hasAutoComplete()) {
-            return new ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete(scalarModel);
-        }
-        return new ObjectAdapterMementoProviderForReferenceObjectAutoComplete(scalarModel);
+        return new ChoiceProviderForReferences(scalarModel());
     }
 
     // -- GET INPUT AS TITLE
