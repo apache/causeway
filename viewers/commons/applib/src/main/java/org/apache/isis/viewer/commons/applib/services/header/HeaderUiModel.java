@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.header;
+package org.apache.isis.viewer.commons.applib.services.header;
 
+import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiModel;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuUiModel;
 import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiModel;
-import org.apache.isis.viewer.commons.model.branding.BrandingUiModel;
-import org.apache.isis.viewer.commons.model.menu.MenuUiModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

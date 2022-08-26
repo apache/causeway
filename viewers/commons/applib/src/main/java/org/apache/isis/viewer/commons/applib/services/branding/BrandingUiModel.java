@@ -16,38 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
+package org.apache.isis.viewer.commons.applib.services.branding;
 
-import org.apache.wicket.model.Model;
+import java.io.Serializable;
+import java.util.Optional;
 
-import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiModel;
-import org.apache.isis.viewer.wicket.ui.components.LabelBase;
+import org.apache.isis.commons.internal.base._Strings;
 
-/**
- * A component used as a brand logo in the top-left corner of the navigation bar
- */
-public class BrandName extends LabelBase {
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor(staticName = "of")
+public class BrandingUiModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final BrandingUiModel branding;
+    private final String name;
+    private final String logoHref;
 
-    /**
-     * Constructor.
-     *
-     * @param id - The component id
-     * @param branding
-     */
-    public BrandName(final String id, final BrandingUiModel branding) {
-        super(id);
-        this.branding = branding;
-        setDefaultModel(Model.of(branding.getName().orElse("")));
+    public Optional<String> getName() {
+        return _Strings.isNotEmpty(logoHref)
+                ? Optional.empty()
+                : Optional.ofNullable(name);
     }
 
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        setVisible(branding.getName().isPresent());
+    public Optional<String> getLogoHref() {
+        return Optional.ofNullable(logoHref);
     }
 
 }

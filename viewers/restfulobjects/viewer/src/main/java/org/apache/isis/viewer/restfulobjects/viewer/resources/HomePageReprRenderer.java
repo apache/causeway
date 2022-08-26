@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.commons.model.branding.BrandingUiModelProvider;
+import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiService;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -44,7 +44,7 @@ public class HomePageReprRenderer
 extends ReprRendererAbstract<Void> {
 
     // injection points not directly managed by Spring, instead resolved via constructor
-    @Inject BrandingUiModelProvider brandingUiModelProvider;
+    @Inject BrandingUiService brandingUiService;
 
     HomePageReprRenderer(
             final IResourceContext resourceContext,
@@ -171,7 +171,7 @@ extends ReprRendererAbstract<Void> {
 
     private void addLinksToApplicationLogos() {
 
-        brandingUiModelProvider
+        brandingUiService
         .getSignInBranding()
         .getLogoHref()
         .ifPresent(href->
@@ -183,7 +183,7 @@ extends ReprRendererAbstract<Void> {
                         href)
                 .buildAsApplicationResource()));
 
-        brandingUiModelProvider
+        brandingUiService
         .getHeaderBranding()
         .getLogoHref()
         .ifPresent(href->

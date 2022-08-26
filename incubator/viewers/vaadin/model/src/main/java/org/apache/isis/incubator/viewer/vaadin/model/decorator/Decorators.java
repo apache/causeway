@@ -32,7 +32,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiModel;
-import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiModelProvider;
+import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiService;
 import org.apache.isis.viewer.commons.model.decorators.IconDecorator;
 import org.apache.isis.viewer.commons.model.decorators.TooltipDecorator;
 
@@ -123,7 +123,7 @@ public class Decorators {
                 final Label label,
                 final IsisAppCommonContext commonContext) {
 
-            val profileIfAny = commonContext.lookupServiceElseFail(UserProfileUiModelProvider.class)
+            val profileIfAny = commonContext.lookupServiceElseFail(UserProfileUiService.class)
                     .userProfile();
             return decorateWithAvatar(label, Optional.ofNullable(profileIfAny));
         }

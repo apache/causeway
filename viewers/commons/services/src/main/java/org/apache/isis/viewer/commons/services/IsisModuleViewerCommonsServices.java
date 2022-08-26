@@ -16,31 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model;
+package org.apache.isis.viewer.commons.services;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.viewer.commons.applib.mixins.Object_impersonate;
-import org.apache.isis.viewer.commons.applib.mixins.Object_impersonateWithRoles;
-import org.apache.isis.viewer.commons.model.branding.BrandingUiModelProvider;
-import org.apache.isis.viewer.commons.model.header.HeaderUiModelProvider;
-import org.apache.isis.viewer.commons.model.menu.MenuUiModelProvider;
-import org.apache.isis.viewer.commons.model.userprofile.UserProfileUiModelProviderDefault;
+import org.apache.isis.viewer.commons.services.branding.BrandingUiServiceDefault;
+import org.apache.isis.viewer.commons.services.header.HeaderUiServiceDefault;
+import org.apache.isis.viewer.commons.services.menu.MenuUiServiceDefault;
+import org.apache.isis.viewer.commons.services.userprof.UserProfileUiServiceDefault;
 
 @Configuration
 @Import({
 
     // @Service's
-    BrandingUiModelProvider.class,
-    UserProfileUiModelProviderDefault.class,
-    MenuUiModelProvider.class,
-    HeaderUiModelProvider.class,
-
-    // @Mixin's
-    Object_impersonate.class,
-    Object_impersonateWithRoles.class,
+    BrandingUiServiceDefault.class,
+    UserProfileUiServiceDefault.class,
+    MenuUiServiceDefault.class,
+    HeaderUiServiceDefault.class,
 
 })
-public class IsisModuleViewerCommon {
+public class IsisModuleViewerCommonsServices {
+
+    public static final String NAMESPACE = "isis.viewer.commons";
+
 }

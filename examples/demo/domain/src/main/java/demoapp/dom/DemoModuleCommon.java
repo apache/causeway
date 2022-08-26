@@ -29,11 +29,13 @@ import org.apache.isis.applib.IsisModuleApplibMixins;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
+import org.apache.isis.viewer.commons.applib.IsisModuleViewerCommonsApplibMixins;
 
 @Configuration
 @Import({
     IsisModuleApplibChangeAndExecutionLoggers.class,
     IsisModuleApplibMixins.class,
+    IsisModuleViewerCommonsApplibMixins.class, // basically adds object impersonation mixins
     IsisModuleCoreRuntimeServices.class,
     IsisModuleTestingFixturesApplib.class,
 })

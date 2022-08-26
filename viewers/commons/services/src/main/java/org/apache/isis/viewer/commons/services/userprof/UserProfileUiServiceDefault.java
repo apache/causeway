@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.userprofile;
+package org.apache.isis.viewer.commons.services.userprof;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -31,17 +31,18 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiModel;
-import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiModelProvider;
+import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiService;
+import org.apache.isis.viewer.commons.services.IsisModuleViewerCommonsServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isis.viewer.common.UserProfileServiceDefault")
+@Named(IsisModuleViewerCommonsServices.NAMESPACE + ".UserProfileUiServiceDefault")
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class UserProfileUiModelProviderDefault implements UserProfileUiModelProvider {
+public class UserProfileUiServiceDefault implements UserProfileUiService {
 
     private final UserService userService;
     private final TranslationService translationService;
@@ -57,7 +58,7 @@ public class UserProfileUiModelProviderDefault implements UserProfileUiModelProv
                 .orElse(String.format("<%s>", translated("Anonymous")));
     }
 
-    private String userNameFor(UserMemento x) {
+    private String userNameFor(final UserMemento x) {
         final String username = x.getName();
         if (x.isImpersonating()) {
             return String.format("%s (%s)", username, translated("impersonating"));
@@ -68,11 +69,11 @@ public class UserProfileUiModelProviderDefault implements UserProfileUiModelProv
                 : username;
     }
 
-    private String translated(String str) {
+    private String translated(final String str) {
         return translationService.translate(TranslationContext.forClassName(getClass()), str);
     }
 
-    private static boolean isNullOrEmpty(String realName) {
+    private static boolean isNullOrEmpty(final String realName) {
         return realName == null || realName.equals("");
     }
 

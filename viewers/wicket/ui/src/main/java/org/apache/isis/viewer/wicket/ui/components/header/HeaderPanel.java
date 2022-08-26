@@ -23,11 +23,11 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiModel;
+import org.apache.isis.viewer.commons.applib.services.header.HeaderUiModel;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuUiModel;
 import org.apache.isis.viewer.commons.applib.services.userprof.UserProfileUiModel;
-import org.apache.isis.viewer.commons.model.branding.BrandingUiModel;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
-import org.apache.isis.viewer.commons.model.header.HeaderUiModel;
-import org.apache.isis.viewer.commons.model.menu.MenuUiModel;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.AvatarImage;

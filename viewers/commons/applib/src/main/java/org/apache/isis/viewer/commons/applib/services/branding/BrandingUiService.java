@@ -16,31 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.branding;
+package org.apache.isis.viewer.commons.applib.services.branding;
 
-import java.io.Serializable;
-import java.util.Optional;
+/**
+ * @since 2.0 {@index}}
+ */
+public interface BrandingUiService {
 
-import org.apache.isis.commons.internal.base._Strings;
-
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor(staticName = "of")
-public class BrandingUiModel implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    private final String name;
-    private final String logoHref;
-
-    public Optional<String> getName() {
-        return _Strings.isNotEmpty(logoHref)
-                ? Optional.empty()
-                : Optional.ofNullable(name);
-    }
-
-    public Optional<String> getLogoHref() {
-        return Optional.ofNullable(logoHref);
-    }
+    BrandingUiModel getHeaderBranding();
+    BrandingUiModel getSignInBranding();
 
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.menu;
+package org.apache.isis.viewer.commons.services.menu;
 
 import java.util.concurrent.atomic.LongAdder;
 
@@ -26,9 +26,11 @@ import org.apache.isis.applib.layout.menubars.bootstrap.BSMenu;
 import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBar;
 import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuSection;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.commons.model.userprofile.UserProfileUiModelProviderDefault;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuItemDto;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuVisitor;
+import org.apache.isis.viewer.commons.services.userprof.UserProfileUiServiceDefault;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -36,16 +38,16 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-final class MenuUiModel_buildMenuItems {
+final class _MenuItemBuilder {
 
     public static void buildMenuItems(
-            IsisAppCommonContext commonContext,
-            BSMenuBar menuBar,
-            MenuVisitor menuBuilder) {
+            final MetaModelContext mmc,
+            final BSMenuBar menuBar,
+            final MenuVisitor menuBuilder) {
 
         val itemsPerSectionCounter = new LongAdder();
 
-        val menuVisitor = MenuProcessor.of(commonContext, menuBuilder);
+        val menuVisitor = MenuProcessor.of(mmc, menuBuilder);
 
         for (val menu : menuBar.getMenus()) {
 
@@ -58,7 +60,7 @@ final class MenuUiModel_buildMenuItems {
                 for (val actionLayoutData : menuSection.getServiceActions()) {
                     val serviceBeanName = actionLayoutData.getLogicalTypeName();
 
-                    val serviceAdapter = commonContext.lookupServiceAdapterById(serviceBeanName);
+                    val serviceAdapter = mmc.lookupServiceAdapterById(serviceBeanName);
                     if(serviceAdapter == null) {
                         // service not recognized, presumably the menu layout is out of sync with actual configured modules
                         continue;
@@ -95,25 +97,25 @@ final class MenuUiModel_buildMenuItems {
     @RequiredArgsConstructor(staticName = "of")
     private static class MenuProcessor {
 
-        private final IsisAppCommonContext commonContext;
+        private final MetaModelContext metaModelContext;
         private final MenuVisitor menuVisitor;
 
         private BSMenu currentTopLevel;
         private boolean pushedCurrentTopLevel = false;
 
-        public void addTopLevel(BSMenu menu) {
+        public void addTopLevel(final BSMenu menu) {
             currentTopLevel = menu;
             pushedCurrentTopLevel = false;
         }
 
         public void addSubMenu(
-                @NonNull BSMenuSection menuSection,
-                @NonNull ManagedAction managedAction,
-                boolean isFirstInSection,
-                ServiceActionLayoutData actionLayoutData) {
+                @NonNull final BSMenuSection menuSection,
+                @NonNull final ManagedAction managedAction,
+                final boolean isFirstInSection,
+                final ServiceActionLayoutData actionLayoutData) {
 
             if(!pushedCurrentTopLevel) {
-                val topLevelDto = topLevelDto(commonContext, currentTopLevel);
+                val topLevelDto = topLevelDto(metaModelContext, currentTopLevel);
 
                 menuVisitor.addTopLevel(topLevelDto);
                 pushedCurrentTopLevel = true;
@@ -151,13 +153,13 @@ final class MenuUiModel_buildMenuItems {
      * to the current user's profile name
      */
     private static MenuItemDto topLevelDto(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext mmc,
             final BSMenu menu) {
 
         val menuItemIsUserProfile = _Strings.isNullOrEmpty(menu.getNamed()); // top level menu item name
 
         val menuItemName = menuItemIsUserProfile
-                ? userProfileName(commonContext)
+                ? userProfileName(mmc)
                 : menu.getNamed();
 
         return menuItemIsUserProfile
@@ -167,9 +169,10 @@ final class MenuUiModel_buildMenuItems {
     }
 
     private static String userProfileName(
-            final IsisAppCommonContext commonContext) {
-        val userProfile = commonContext
-                .lookupServiceElseFail(UserProfileUiModelProviderDefault.class)
+            final MetaModelContext mmc) {
+        val userProfile = mmc
+                .getServiceRegistry()
+                .lookupServiceElseFail(UserProfileUiServiceDefault.class)
                 .userProfile();
         return userProfile.getUserProfileName();
     }

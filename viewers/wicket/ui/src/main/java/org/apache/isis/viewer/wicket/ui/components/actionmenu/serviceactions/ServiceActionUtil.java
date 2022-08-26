@@ -27,14 +27,14 @@ import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.commons.model.menu.MenuItemDto;
-import org.apache.isis.viewer.commons.model.menu.MenuUiModel;
-import org.apache.isis.viewer.commons.model.menu.MenuVisitor;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuItemDto;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuUiModel;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuVisitor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktDecorators;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -147,7 +147,7 @@ public final class ServiceActionUtil {
             final MenuUiModel menuUiModel,
             final Consumer<CssMenuItem> onNewMenuItem) {
 
-        menuUiModel.buildMenuItems(commonContext,
+        menuUiModel.buildMenuItems(commonContext.getMetaModelContext(),
                 MenuBuilderWkt.of(
                         commonContext,
                         onNewMenuItem));

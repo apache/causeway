@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.menu;
+package org.apache.isis.viewer.commons.applib.services.menu;
 
 public interface MenuVisitor {
 

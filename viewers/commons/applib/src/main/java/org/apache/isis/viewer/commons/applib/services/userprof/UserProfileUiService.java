@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.user.UserService;
  *
  * @since 2.0 {@index}
  */
-public interface UserProfileUiModelProvider {
+public interface UserProfileUiService {
 
     /**
      * A UI model to represent the currently logged in user.

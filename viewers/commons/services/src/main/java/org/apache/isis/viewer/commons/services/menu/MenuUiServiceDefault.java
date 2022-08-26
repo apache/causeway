@@ -16,29 +16,62 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.menu;
+package org.apache.isis.viewer.commons.services.menu;
 
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBar;
+import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.Facets;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuUiModel;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuUiService;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuVisitor;
+import org.apache.isis.viewer.commons.services.IsisModuleViewerCommonsServices;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Service
-public class MenuUiModelProvider {
+@Named(IsisModuleViewerCommonsServices.NAMESPACE + ".MenuUiServiceDefault")
+@Priority(PriorityPrecedence.LATE)
+@Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class MenuUiServiceDefault
+implements MenuUiService {
 
-    @Inject private MetaModelContext metaModelContext;
+    private final MetaModelContext metaModelContext;
+    private final MenuBarsService menuBarsService;
 
     public MenuUiModel getMenu(final DomainServiceLayout.MenuBar menuBarSelect) {
         return MenuUiModel.of(menuBarSelect, select(menuBarSelect));
+    }
+
+    public void buildMenuItems(
+            final MenuUiModel menuUiModel,
+            final MenuVisitor menuBuilder) {
+
+        val menuBars = menuBarsService.menuBars();
+        val menuBar = (BSMenuBar) menuBars.menuBarFor(menuUiModel.getMenuBarSelect());
+
+        _MenuItemBuilder.buildMenuItems(
+                metaModelContext,
+                menuBar,
+                menuBuilder);
+
     }
 
     // -- HELPER

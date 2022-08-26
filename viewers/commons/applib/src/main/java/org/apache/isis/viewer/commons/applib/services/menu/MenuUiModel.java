@@ -16,20 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.menu;
+package org.apache.isis.viewer.commons.applib.services.menu;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBar;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Getter
 @RequiredArgsConstructor(staticName = "of")
@@ -46,17 +44,15 @@ public class MenuUiModel implements Serializable {
     }
 
     public void buildMenuItems(
-            final IsisAppCommonContext commonContext,
+            final MetaModelContext mmc,
             final MenuVisitor menuBuilder) {
+        buildMenuItems(mmc.getServiceRegistry().lookupServiceElseFail(MenuUiService.class), menuBuilder);
+    }
 
-        val menuBars = commonContext.getMenuBarsService().menuBars();
-        val menuBar = (BSMenuBar) menuBars.menuBarFor(getMenuBarSelect());
-
-        MenuUiModel_buildMenuItems.buildMenuItems(
-                commonContext,
-                menuBar,
-                menuBuilder);
-
+    public void buildMenuItems(
+            final MenuUiService menuUiService,
+            final MenuVisitor menuBuilder) {
+        menuUiService.buildMenuItems(this, menuBuilder);
     }
 
 }

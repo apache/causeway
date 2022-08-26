@@ -16,28 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import org.apache.isis.viewer.commons.services.IsisModuleViewerCommonsServices;
-import org.apache.isis.viewer.wicket.model.IsisModuleViewerWicketModel;
-import org.apache.isis.viewer.wicket.ui.app.logout.LogoutHandlerWkt;
-import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupportDefault;
+package org.apache.isis.viewer.commons.applib.services.header;
 
 /**
- * @since 1.x {@index}
+ * @since 2.0 {@index}}
  */
-@Configuration
-@Import({
-        // Modules
-        IsisModuleViewerCommonsServices.class,
-        IsisModuleViewerWicketModel.class,
+public interface HeaderUiService {
 
-        // @Service's
-        IsisWicketThemeSupportDefault.class,
-        LogoutHandlerWkt.class,
-})
-public class IsisModuleViewerWicketUi {
+    HeaderUiModel getHeader();
+
 }

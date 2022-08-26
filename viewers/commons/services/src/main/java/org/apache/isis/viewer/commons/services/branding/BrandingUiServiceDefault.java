@@ -16,32 +16,46 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.commons.model.branding;
+package org.apache.isis.viewer.commons.services.branding;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket.Application;
+import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiModel;
+import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiService;
+import org.apache.isis.viewer.commons.services.IsisModuleViewerCommonsServices;
 
 @Service
-public class BrandingUiModelProvider {
+@Named(IsisModuleViewerCommonsServices.NAMESPACE + ".BrandingUiServiceDefault")
+@Priority(PriorityPrecedence.LATE)
+@Qualifier("Default")
+public class BrandingUiServiceDefault
+implements BrandingUiService {
 
     private final Application appConfig;
 
     @Inject
-    public BrandingUiModelProvider(IsisConfiguration isisConfiguration) {
-        //TODO application name/logo borrowed from Wicket's configuration, we might generalize this config option to all viewers
+    public BrandingUiServiceDefault(final IsisConfiguration isisConfiguration) {
+        //TODO application name/logo borrowed from Wicket's configuration,
+        // we might generalize this config option to all viewers
         this.appConfig = isisConfiguration.getViewer().getWicket().getApplication();
     }
 
+    @Override
     public BrandingUiModel getHeaderBranding() {
         return BrandingUiModel.of(
                 appConfig.getName(),
                 appConfig.getBrandLogoHeader().orElse(null));
     }
 
+    @Override
     public BrandingUiModel getSignInBranding() {
         return BrandingUiModel.of(
                 appConfig.getName(),

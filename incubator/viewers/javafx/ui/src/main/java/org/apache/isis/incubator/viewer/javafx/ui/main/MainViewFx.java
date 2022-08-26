@@ -27,14 +27,13 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.isis.incubator.viewer.javafx.model.util._fx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.UiComponentFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.collections.TableViewFx;
 import org.apache.isis.incubator.viewer.javafx.ui.components.object.ObjectViewFx;
-import org.apache.isis.viewer.commons.model.header.HeaderUiModelProvider;
+import org.apache.isis.viewer.commons.applib.services.header.HeaderUiService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -57,7 +56,7 @@ public class MainViewFx {
 
     private final JavaFxViewerConfig viewerConfig;
     private final MetaModelContext metaModelContext;
-    private final HeaderUiModelProvider headerUiModelProvider;
+    private final HeaderUiService headerUiModelProvider;
     private final InteractionService interactionService;
     private final UiContextFx uiContext;
     private final UiActionHandlerFx uiActionHandler;
@@ -91,8 +90,6 @@ public class MainViewFx {
     private void buildMenu() {
         val header = headerUiModelProvider.getHeader();
 
-        val commonContext = IsisAppCommonContext.of(metaModelContext);
-
         // adding a top level menu 'Home' decorated with a branding-icon ...
 
         val brandingIcon = new ImageView(viewerConfig.getBrandingIcon());
@@ -108,9 +105,9 @@ public class MainViewFx {
         val leftMenuBuilder = MenuBuilderFx.of(uiContext, menuBarLeft, uiActionHandler::handleActionLinkClicked);
         val rightMenuBuilder = MenuBuilderFx.of(uiContext, menuBarRight, uiActionHandler::handleActionLinkClicked);
 
-        header.getPrimary().buildMenuItems(commonContext, leftMenuBuilder);
-        header.getSecondary().buildMenuItems(commonContext, rightMenuBuilder);
-        header.getTertiary().buildMenuItems(commonContext, rightMenuBuilder);
+        header.getPrimary().buildMenuItems(metaModelContext, leftMenuBuilder);
+        header.getSecondary().buildMenuItems(metaModelContext, rightMenuBuilder);
+        header.getTertiary().buildMenuItems(metaModelContext, rightMenuBuilder);
     }
 
     private void replaceContent(final Node node) {
