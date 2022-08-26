@@ -30,10 +30,13 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.session.SessionSubscriber;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.extensions.sessionlog.applib.IsisModuleExtSessionLogApplib;
 import org.apache.isis.extensions.sessionlog.applib.dom.SessionLogEntry;
 import org.apache.isis.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
@@ -57,21 +60,28 @@ public class SessionSubscriberForSessionLog implements SessionSubscriber {
     static final String LOGICAL_TYPE_NAME = IsisModuleExtSessionLogApplib.NAMESPACE + ".SessionLoggingServiceDefault";
 
     final SessionLogEntryRepository<? extends SessionLogEntry> sessionLogEntryRepository;
+    final TransactionService transactionService;
+    final InteractionService interactionService;
     final ClockService clockService;
 
     @Override
     public void log(final Type type, final String username, final Date date, final CausedBy causedBy, final UUID sessionGuid, final String httpSessionId) {
-        if (type == Type.LOGIN) {
-            sessionLogEntryRepository.create(username, sessionGuid, httpSessionId, causedBy, Timestamp.from(date.toInstant()));
-        } else {
-            val sessionLogEntryIfAny = sessionLogEntryRepository.findBySessionGuid(sessionGuid);
-            sessionLogEntryIfAny
-                    .ifPresent(entry -> {
-                        entry.setLogoutTimestamp(Timestamp.from(date.toInstant()));
-                        entry.setCausedBy(causedBy);
-                    }
-            );
-        }
-    }
+        interactionService.runAnonymous(() -> {
+            transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+                if (type == Type.LOGIN) {
+                    sessionLogEntryRepository.create(username, sessionGuid, httpSessionId, causedBy, Timestamp.from(date.toInstant()));
+                } else {
 
+                    val sessionLogEntryIfAny = sessionLogEntryRepository.findBySessionGuid(sessionGuid);
+                    sessionLogEntryIfAny
+                            .ifPresent(entry -> {
+                                        entry.setLogoutTimestamp(Timestamp.from(date.toInstant()));
+                                        entry.setCausedBy(causedBy);
+                                        transactionService.flushTransaction();
+                                    }
+                            );
+                }
+            });
+        });
+    }
 }

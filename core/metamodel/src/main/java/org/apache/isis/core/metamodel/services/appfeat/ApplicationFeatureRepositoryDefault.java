@@ -450,6 +450,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
 
     @Override
     public SortedSet<ApplicationFeatureId> propertyIdsFor(final LogicalType logicalType) {
+        initializeIfRequired();
         ApplicationFeatureId typeFeatureId = typeFeatureIdByLogicalType.get(logicalType);
         if (typeFeatureId == null) {
             return Collections.emptySortedSet();

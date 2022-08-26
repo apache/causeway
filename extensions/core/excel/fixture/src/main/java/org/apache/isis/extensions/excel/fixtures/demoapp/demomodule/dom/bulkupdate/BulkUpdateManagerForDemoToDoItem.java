@@ -40,6 +40,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -86,7 +87,7 @@ public class BulkUpdateManagerForDemoToDoItem {
     public BulkUpdateManagerForDemoToDoItem(){
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Import/export manager";
     }
 

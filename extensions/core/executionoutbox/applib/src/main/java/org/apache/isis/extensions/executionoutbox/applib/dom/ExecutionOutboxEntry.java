@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -159,7 +160,7 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     private static final DateTimeFormatter formatter =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public String title() {
+    @ObjectSupport public String title() {
         return new TitleBuffer()
                 .append(formatter.format(getTimestamp().toLocalDateTime()))
                 .append(" ")

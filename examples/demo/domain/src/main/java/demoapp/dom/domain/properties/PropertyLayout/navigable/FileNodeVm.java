@@ -69,8 +69,7 @@ public class FileNodeVm implements HasAsciiDocDescription {
 //end::title[]
 
 //tag::iconName[]
-    @ObjectSupport
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return type!=null ? type.name() : "";
     }
 //end::iconName[]

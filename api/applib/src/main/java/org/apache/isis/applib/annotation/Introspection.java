@@ -50,46 +50,67 @@ public enum Introspection {
     AS_CONFIGURED,
 
     /**
-     * Introspect public and non-public members, while
-     * presence of at least one appropriate domain annotation is enforced.
+     * Introspect public and non-public members.
+     *
      * <p>
-     * All methods intended to be part of the meta-model
-     * (whether representing a member or a supporting method) must be annotated.
-     * Members using one of {@link Action}, {@link Property}, {@link Collection},
-     * while supporting methods with {@link Domain.Include}
-     * (usually as a meta-annotation on {@link MemberSupport}).
-     * However, the methods can have any visibility, including private.
+     *      All methods intended to be part of the meta-model
+     *      (whether representing a member or a supporting method) must be annotated.
+     *      Members using one of {@link Action}, {@link Property}, {@link Collection},
+     *      while supporting methods with {@link Domain.Include}
+     *      (usually as a meta-annotation on {@link MemberSupport}).
+     *      However, the methods can have any visibility, including private.
+     * </p>
+     *
+     * <p>
+     *     For mixins (where the mixin class itself is annotated with {@link Action}, {@link Property} or
+     *     {@link Collection}, then the member method should instead be annotated the same as the supporting
+     *     methods, {@link Domain.Include} or {@link MemberSupport}.
+     * </p>
      */
     ENCAPSULATION_ENABLED,
 
     /**
      * Introspect public members only, while
      * presence of at least one appropriate domain annotation is enforced.
+     *
      * <p>
      * All public methods intended to represent members must be annotated (or meta-annotated) with
      * {@link Action}, {@link Property} or {@link Collection}.
+     * </p>
+     *
      * <p>
      * Any non-excluded public methods with a supporting method prefix
      * do not need to be annotated and
      * are automatically associated with their corresponding member method.
      * If no corresponding member method can be found, meta-model validation will
      * fail with an 'orphaned member support' method violation.
+     * </p>
+     *
+     * <p>
+     *     For mixins (where the mixin class itself is annotated with {@link Action}, {@link Property} or
+     *     {@link Collection}, then the member method should instead be annotated the same as the supporting
+     *     methods, {@link Domain.Include} or {@link MemberSupport}.
+     * </p>
      */
     ANNOTATION_REQUIRED,
 
     /**
      * Introspect public members only, while
      * presence of domain annotations is optional.
+     *
      * <p>
      * All public methods are considered as part of the meta-model,
      * unless explicitly excluded using {@link Domain.Exclude}
      * (usually as a meta-annotation on {@link Programmatic}).
+     * </p>
+     *
      * <p>
      * Any non-excluded public methods with a supporting method prefix
      * do not need to be annotated and
      * are automatically associated with their corresponding member method.
      * If no corresponding member method can be found, meta-model validation will
      * fail with an 'orphaned member support' method violation.
+     * </p>
      */
     ANNOTATION_OPTIONAL,
 
@@ -111,8 +132,19 @@ public enum Introspection {
     @RequiredArgsConstructor
     public static enum IntrospectionPolicy {
         /**
-         * Introspect public and non-public members, while
-         * presence of at least one appropriate domain annotation is enforced.
+         * Introspect public and non-public members.
+         *
+         * <p>
+         *     All methods must be annotated.  Typically members will be annotated using one of {@link Action},
+         *     {@link Property}, {@link Collection}, and supporting methods with either {@link Domain.Include} or
+         *     the equivalent meta-annotation, {@link MemberSupport}.
+         * </p>
+         *
+         * <p>
+         *     For mixins (where the mixin class itself is annotated with {@link Action}, {@link Property} or
+         *     {@link Collection}, then the member method should instead be annotated the same as the supporting
+         *     methods, {@link Domain.Include} or {@link MemberSupport}.
+         * </p>
          */
         ENCAPSULATION_ENABLED(
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
@@ -120,8 +152,18 @@ public enum Introspection {
                 SupportMethodAnnotationPolicy.SUPPORT_METHOD_ANNOTATIONS_REQUIRED),
 
         /**
-         * Introspect public members only, while
-         * presence of at least one appropriate domain annotation is enforced.
+         * Introspect public members only, requiring the member to be annotated using an appropriate domain annotation
+         * {@link Action}, {@link Property}, {@link Collection} is required.
+         *
+         * <p>
+         *     Supporting methods do <i>not</i> need to be annotated.
+         * </p>
+         *
+         * <p>
+         *     For mixins (where the mixin class itself is annotated with {@link Action}, {@link Property} or
+         *     {@link Collection}, then the member method should instead be annotated the same as the supporting
+         *     methods, {@link Domain.Include} or {@link MemberSupport}.
+         * </p>
          */
         ANNOTATION_REQUIRED(
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
@@ -129,8 +171,7 @@ public enum Introspection {
                 SupportMethodAnnotationPolicy.SUPPORT_METHOD_ANNOTATIONS_OPTIONAL),
 
         /**
-         * Introspect public members only, while
-         * presence of domain annotations is optional.
+         * Introspect public members only; neither the member not supporting methods need be annotated.
          */
         ANNOTATION_OPTIONAL(
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,

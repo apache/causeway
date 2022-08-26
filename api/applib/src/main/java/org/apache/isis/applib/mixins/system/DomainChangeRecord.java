@@ -151,6 +151,9 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
             editing = Editing.DISABLED,
             maxLength = TargetLogicalTypeName.MAX_LENGTH
     )
+    @PropertyLayout(
+            hidden = Where.ALL_TABLES
+    )
     @Parameter(
             maxLength = TargetLogicalTypeName.MAX_LENGTH
     )

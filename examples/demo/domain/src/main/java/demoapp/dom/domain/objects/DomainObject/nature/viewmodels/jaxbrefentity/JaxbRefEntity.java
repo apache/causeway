@@ -39,8 +39,7 @@ implements
         return getName();
     }
 
-    @ObjectSupport
-    public String title() {
+    @ObjectSupport public String title() {
         return Objects.requireNonNull(getName(), "most likely a serialization or re-attach issue");
     }
 
