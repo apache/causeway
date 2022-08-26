@@ -73,7 +73,7 @@ implements
         log.debug("getObject() as unpackedValue {}", unpackedValue);
 
         val unpackedMemento = unpackedValue.stream()
-        .map(getCommonContext()::mementoFor)
+        .map(getCommonContext()::mementoForSingle)
         .collect(Collectors.toCollection(()->new ArrayList<>(unpackedValue.size())));
 
         log.debug("getObject() as unpackedMemento {}", unpackedMemento);

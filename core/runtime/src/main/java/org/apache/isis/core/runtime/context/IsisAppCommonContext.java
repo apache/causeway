@@ -104,12 +104,12 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         return getMetaModelContext().getServiceInjector().injectServicesInto(pojo);
     }
 
-    public ObjectMemento mementoFor(final ManagedObject adapter) {
-        return getMementoService().mementoForObject(adapter);
+    public ObjectMemento mementoForSingle(final ManagedObject adapter) {
+        return getMementoService().mementoForSingle(adapter);
     }
 
-    public ObjectMemento mementoForParameter(@NonNull final ManagedObject adapter) {
-        return getMementoService().mementoForParameter(adapter);
+    public ObjectMemento mementoForAnyCardinality(@NonNull final ManagedObject adapter) {
+        return getMementoService().mementoForAnyCardinality(adapter);
     }
 
     public ObjectMemento mementoForBookmark(final Bookmark bookmark) {

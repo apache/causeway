@@ -40,7 +40,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiChoice;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithSingleChoice;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstactForScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstractForScalarModel;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -94,7 +94,7 @@ implements
     // not sure if required any more
     @SneakyThrows
     public void rebuildChoiceProvider() {
-        val oldProvider = (ChoiceProviderAbstactForScalarModel)
+        val oldProvider = (ChoiceProviderAbstractForScalarModel)
                 select2Choice.fold(
                         Select2ChoiceExt::getProvider,
                         Select2MultiChoiceExt::getProvider);

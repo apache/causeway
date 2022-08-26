@@ -18,36 +18,52 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.choices;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.wicketstuff.select2.Response;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForReferences;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.val;
 
-class ChoiceProviderForValuesTest extends ChoiceProviderTestAbstract {
+class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
 
     @BeforeEach
     void setup() throws Exception {
         super.setUp();
     }
 
+    @DomainObject(nature = Nature.VIEW_MODEL)
+    @Data
+    @AllArgsConstructor
+    public static class Customer implements ViewModel {
+
+        private String name;
+
+        @Override
+        public String viewModelMemento() {
+            return name;
+        }
+
+    }
+
     @Test
     void roundtrip() {
 
-        val a = new BigDecimal("0.01");
-        val b = UUID.randomUUID();
-        val c = 12345;
+        val a = new Customer("a");
+        val b = new Customer("b");
+        val c = new Customer("c");
 
         val choiceValues = Can.of(a, b, c);
 
@@ -55,7 +71,7 @@ class ChoiceProviderForValuesTest extends ChoiceProviderTestAbstract {
                 .map(mmc.getObjectManager()::adapt);
 
         val isRequired = true;
-        val choiceProvider = new ChoiceProviderForValues(mockScalarModel(choices, isRequired));
+        val choiceProvider = new ChoiceProviderForReferences(mockScalarModel(choices, isRequired));
 
         val response = new Response<ObjectMemento>();
         choiceProvider.query(null, 0, response);

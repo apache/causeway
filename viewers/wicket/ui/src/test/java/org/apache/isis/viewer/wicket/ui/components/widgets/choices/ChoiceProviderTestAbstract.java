@@ -65,6 +65,7 @@ abstract class ChoiceProviderTestAbstract {
         val mockScalarModel = mock(ScalarModel.class);
         when(mockScalarModel.getChoices()).thenReturn(choices);
         when(mockScalarModel.isRequired()).thenReturn(isRequired);
+        when(mockScalarModel.hasChoices()).thenReturn(true);
         when(mockScalarModel.getCommonContext()).thenReturn(IsisAppCommonContext.of(mmc));
         return mockScalarModel;
     }

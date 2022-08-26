@@ -24,7 +24,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 // values don't currently support autoComplete - no branch is required
 public class ChoiceProviderForValues
-extends ChoiceProviderAbstactForScalarModel {
+extends ChoiceProviderAbstractForScalarModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,10 +38,11 @@ extends ChoiceProviderAbstactForScalarModel {
         return filter(term, queryAll());
     }
 
-    // protected in support of JUnit testing
-    protected Can<ObjectMemento> queryAll() {
+    // -- HELPER
+
+    private Can<ObjectMemento> queryAll() {
         return scalarModel().getChoices()
-            .map(getCommonContext()::mementoFor);
+            .map(getCommonContext()::mementoForSingle);
     }
 
 }

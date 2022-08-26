@@ -36,12 +36,12 @@ implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForObject(final ManagedObject adapter) {
+    public ObjectMemento mementoForSingle(final ManagedObject adapter) {
         return null;
     }
 
     @Override
-    public ObjectMemento mementoForObjects(final PackedManagedObject adapter) {
+    public ObjectMemento mementoForMulti(final PackedManagedObject adapter) {
         return null;
     }
 
@@ -61,7 +61,7 @@ implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForParameter(@NonNull final ManagedObject paramAdapter) {
+    public ObjectMemento mementoForAnyCardinality(@NonNull final ManagedObject paramAdapter) {
         return null;
     }
 

@@ -30,7 +30,7 @@ import lombok.val;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class ChoiceProviderAbstactForScalarModel
+public abstract class ChoiceProviderAbstractForScalarModel
 extends ChoiceProviderAbstract {
 
     private static final long serialVersionUID = 1L;
