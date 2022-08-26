@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.executionlog.applib.dom.mixins;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -44,7 +45,7 @@ public class ExecutionLogEntry_siblingExecutions {
 
 
     @MemberSupport public List<? extends ExecutionLogEntry> coll() {
-        val entries = executionLogEntryRepository.findByInteractionId(executionLogEntry.getInteractionId());
+        val entries = new ArrayList<>(executionLogEntryRepository.findByInteractionId(executionLogEntry.getInteractionId()));
         entries.remove(executionLogEntry);
         return entries;
     }
