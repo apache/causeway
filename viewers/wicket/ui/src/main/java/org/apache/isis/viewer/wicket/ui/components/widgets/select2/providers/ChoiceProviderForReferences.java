@@ -33,32 +33,33 @@ extends ChoiceProviderAbstractForScalarModel {
 
     private static final long serialVersionUID = 1L;
 
-    static enum Mode {
+    static enum ChoiceProviderSort {
+        NO_CHOICES,
         CHOICES,
         AUTO_COMPLETE,
         OBJECT_AUTO_COMPLETE;
-        static Mode valueOf(final ScalarModel scalarModel) {
+        static ChoiceProviderSort valueOf(final ScalarModel scalarModel) {
             if (scalarModel.hasChoices()) {
-                return Mode.CHOICES;
+                return ChoiceProviderSort.CHOICES;
             } else if(scalarModel.hasAutoComplete()) {
-                return Mode.AUTO_COMPLETE;
+                return ChoiceProviderSort.AUTO_COMPLETE;
             } else {
-                return Mode.OBJECT_AUTO_COMPLETE;
+                return ChoiceProviderSort.OBJECT_AUTO_COMPLETE;
             }
         }
     }
 
-    private final Mode mode;
+    private final ChoiceProviderSort choiceProviderSort;
 
     public ChoiceProviderForReferences(
             final ScalarModel scalarModel) {
         super(scalarModel);
-        this.mode = Mode.valueOf(scalarModel);
+        this.choiceProviderSort = ChoiceProviderSort.valueOf(scalarModel);
     }
 
     @Override
     protected Can<ObjectMemento> query(final String term) {
-        switch(mode) {
+        switch(choiceProviderSort) {
         case CHOICES:
             return super.filter(term, queryAll());
         case AUTO_COMPLETE:

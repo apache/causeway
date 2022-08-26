@@ -27,7 +27,6 @@ import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidator;
 import org.wicketstuff.select2.AbstractSelect2Choice;
-import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 
@@ -40,6 +39,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithMultiChoice;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithSingleChoice;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstractForScalarModel;
 
 import lombok.NonNull;
@@ -61,7 +61,7 @@ implements
     public static Select2 createSelect2(
             final String id,
             final ScalarModel scalarModel,
-            final ChoiceProvider<ObjectMemento> choiceProvider) {
+            final ChoiceProviderAbstract choiceProvider) {
         val select2 = new Select2(scalarModel.isScalar()
                 ? Either.left(
                         Select2ChoiceExt.create(id,

@@ -535,6 +535,10 @@ public final class ManagedObjects {
 
     // -- SPECIFICATION UTILITIES
 
+    /**
+     * @deprecated introduced for debugging
+     */
+    @Deprecated(forRemoval = false)
     public static ManagedObject resolveActualSpecification(final @Nullable ManagedObject adapter) {
         if(isNullOrUnspecifiedOrEmpty(adapter)) {
             return adapter; // no pojo, no deal

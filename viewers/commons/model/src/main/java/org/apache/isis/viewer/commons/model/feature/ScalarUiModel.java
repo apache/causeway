@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.util.Facets;
 
@@ -61,12 +62,42 @@ public interface ScalarUiModel {
         return !getMetaModel().isOptional();
     }
 
+    default ObjectSpecification getScalarTypeSpec() {
+        return getMetaModel().getElementType();
+    }
+
+    ManagedObject getDefault();
+
     boolean hasChoices();
     boolean hasAutoComplete();
-    ManagedObject getDefault();
+    default boolean hasObjectAutoComplete() {
+        return Facets.autoCompleteIsPresent(getScalarTypeSpec());
+    }
+
     Can<ManagedObject> getChoices();
     Can<ManagedObject> getAutoComplete(final String searchArg);
 
+    default ChoiceProviderSort getChoiceProviderSort() {
+        return ChoiceProviderSort.valueOf(this);
+    }
 
+    static enum ChoiceProviderSort {
+        NO_CHOICES,
+        CHOICES,
+        AUTO_COMPLETE,
+        OBJECT_AUTO_COMPLETE;
+        static ChoiceProviderSort valueOf(final ScalarUiModel scalarModel) {
+            if (scalarModel.hasChoices()) {
+                return ChoiceProviderSort.CHOICES;
+            } else if(scalarModel.hasAutoComplete()) {
+                return ChoiceProviderSort.AUTO_COMPLETE;
+            } else if(scalarModel.hasObjectAutoComplete()) {
+                return ChoiceProviderSort.OBJECT_AUTO_COMPLETE;
+            }
+            return NO_CHOICES;
+        }
+        public boolean isNoChoices() { return this == NO_CHOICES; }
+        public boolean isChoicesAny() { return !isNoChoices(); }
+    }
 
 }

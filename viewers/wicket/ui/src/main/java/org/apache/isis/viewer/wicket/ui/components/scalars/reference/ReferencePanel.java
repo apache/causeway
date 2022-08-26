@@ -28,11 +28,10 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
-import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -42,7 +41,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForReferences;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
@@ -99,40 +97,17 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
 
     @Override
     protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
-
         this.entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getId(), this);
-        entityLink.setRequired(scalarModel().isRequired());
+        entityLink.setRequired(scalarModel.isRequired());
 
+        _Assert.assertTrue(scalarModel.getChoiceProviderSort().isChoicesAny(),
+                ()->String.format("inconsistent metamodel: rendering a select2 while it has no choices"));
         this.select2 = createSelect2(ID_AUTO_COMPLETE);
-        addSelect2Semantics(select2);
 
         entityLink.addOrReplace(select2.asComponent());
         entityLink.setOutputMarkupId(true);
 
         return this.entityLink;
-    }
-
-    private void addSelect2Semantics(final Select2 select2) {
-        val scalarModel = scalarModel();
-
-        final Settings settings = select2.getSettings();
-
-        // one of these three case should be true
-        // (as per the isEditableWithEitherAutoCompleteOrChoices() guard above)
-        if(scalarModel.hasChoices()) {
-
-            settings.setPlaceholder(scalarModel.getFriendlyName());
-
-        } else if(scalarModel.hasAutoComplete()) {
-
-            final int minLength = scalarModel.getAutoCompleteMinLength();
-            settings.setMinimumInputLength(minLength);
-            settings.setPlaceholder(scalarModel.getFriendlyName());
-
-        } else if(hasObjectAutoComplete()) {
-            Facets.autoCompleteMinLength(scalarModel.getScalarTypeSpec())
-            .ifPresent(settings::setMinimumInputLength);
-        }
     }
 
     // -- ON BEFORE RENDER
@@ -304,18 +279,14 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
     // -- HELPERS
 
     private boolean isEditableWithEitherAutoCompleteOrChoices() {
-        if(getModel().getRenderingHint().isInTable()) {
+        if(scalarModel().getRenderingHint().isInTable()) {
             return false;
         }
         // doesn't apply if not editable, either
-        if(getModel().isViewMode()) {
+        if(scalarModel().isViewMode()) {
             return false;
         }
-        return getModel().hasChoices() || getModel().hasAutoComplete() || hasObjectAutoComplete();
-    }
-
-    private boolean hasObjectAutoComplete() {
-        return Facets.autoCompleteIsPresent(scalarModel().getScalarTypeSpec());
+        return scalarModel().getChoiceProviderSort().isChoicesAny();
     }
 
 }

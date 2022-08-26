@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.wicket.model.IModel;
-import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import org.apache.isis.applib.id.HasLogicalType;
@@ -30,6 +29,7 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.Getter;
 import lombok.val;
@@ -44,7 +44,7 @@ implements HasLogicalType {
             final String id,
             final IModel<ArrayList<ObjectMemento>> modelObject,
             final ScalarModel scalarModel,
-            final ChoiceProvider<ObjectMemento> choiceProvider) {
+            final ChoiceProviderAbstract choiceProvider) {
 
         return new Select2MultiChoiceExt(id, _Casts.uncheckedCast(modelObject), scalarModel, choiceProvider);
     }
@@ -55,7 +55,7 @@ implements HasLogicalType {
             final String id,
             final IModel<Collection<ObjectMemento>> model,
             final ScalarModel scalarModel,
-            final ChoiceProvider<ObjectMemento> choiceProvider) {
+            final ChoiceProviderAbstract choiceProvider) {
 
         super(id, model, choiceProvider);
         logicalType = scalarModel.getScalarTypeSpec().getLogicalType();

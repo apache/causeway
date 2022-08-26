@@ -68,6 +68,7 @@ extends ScalarPanelSelectAbstract {
         } else {
             select2.clearInput();
         }
+        @SuppressWarnings("rawtypes") // incompatible generic type parameter cast
         FormComponent formComponent = select2.asComponent();
         return formComponent;
     }

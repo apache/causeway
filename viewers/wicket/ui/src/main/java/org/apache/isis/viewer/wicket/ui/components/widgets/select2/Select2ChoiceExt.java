@@ -19,13 +19,13 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import org.apache.wicket.model.IModel;
-import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Select2Choice;
 
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.Getter;
 
@@ -39,7 +39,7 @@ implements HasLogicalType {
             final String id,
             final IModel<ObjectMemento> modelObject,
             final ScalarModel scalarModel,
-            final ChoiceProvider<ObjectMemento> choiceProvider) {
+            final ChoiceProviderAbstract choiceProvider) {
         return new Select2ChoiceExt(id, modelObject, scalarModel, choiceProvider);
     }
 
@@ -49,8 +49,9 @@ implements HasLogicalType {
             final String id,
             final IModel<ObjectMemento> model,
             final ScalarModel scalarModel,
-            final ChoiceProvider<ObjectMemento> choiceProvider) {
+            final ChoiceProviderAbstract choiceProvider) {
         super(id, model, choiceProvider);
+
         logicalType = scalarModel.getScalarTypeSpec().getLogicalType();
 
         getSettings().setCloseOnSelect(true);

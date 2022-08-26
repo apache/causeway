@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.feature.ScalarUiModel;
@@ -337,10 +336,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     }
 
     protected abstract String toStringOf();
-
-    public final ObjectSpecification getScalarTypeSpec() {
-        return getMetaModel().getElementType();
-    }
 
     public abstract String getIdentifier();
 

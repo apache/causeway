@@ -36,6 +36,7 @@ import org.apache.isis.valuetypes.markdown.metamodel.IsisModuleValMarkdownMetaMo
 import org.apache.isis.valuetypes.markdown.persistence.jpa.IsisModuleValMarkdownPersistenceJpa;
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.isis.viewer.wicket.viewer.wicketapp.config.WicketViewerXrayEnable;
 
 import demoapp.web.DemoAppManifestJpa;
 import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
@@ -68,7 +69,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     IsisModuleValMarkdownPersistenceJpa.class,
 
     //XrayEnable.class // for debugging only
-    //WicketViewerXrayEnable.class // for debugging only
+    WicketViewerXrayEnable.class // for debugging only
 })
 //@Log4j2
 public class DemoAppWicketJpa extends SpringBootServletInitializer {

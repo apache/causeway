@@ -23,8 +23,10 @@ import java.util.Optional;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.springframework.lang.Nullable;
+import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
@@ -49,7 +51,43 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
     }
 
     protected final Select2 createSelect2(final String id) {
-        return Select2.createSelect2(id, scalarModel(), buildChoiceProvider());
+        val select2 = Select2.createSelect2(id, scalarModel(), buildChoiceProvider());
+        addSelect2Semantics(select2.getSettings());
+        return select2;
+    }
+
+    private void addSelect2Semantics(final Settings settings) {
+        val scalarModel = scalarModel();
+
+        //FIXME[ISIS-3172]  why not always render the place holder?
+
+        switch(scalarModel.getChoiceProviderSort()) {
+        case CHOICES:
+            settings.setPlaceholder(scalarModel.getFriendlyName());
+            return;
+        case AUTO_COMPLETE:
+            settings.setPlaceholder(scalarModel.getFriendlyName());
+            settings.setMinimumInputLength(scalarModel.getAutoCompleteMinLength());
+            return;
+        case OBJECT_AUTO_COMPLETE:
+            Facets.autoCompleteMinLength(scalarModel.getScalarTypeSpec())
+            .ifPresent(settings::setMinimumInputLength);
+            return;
+        default:
+            // ignore if no choices
+        }
+    }
+
+    @Override
+    public boolean isVisible() {
+        // TODO Auto-generated method stub
+        //return super.isVisible();
+        return true;
+    }
+
+    @Override
+    public boolean isEnabledInHierarchy() {
+        return true;//return super.isEnabledInHierarchy();
     }
 
     /**
