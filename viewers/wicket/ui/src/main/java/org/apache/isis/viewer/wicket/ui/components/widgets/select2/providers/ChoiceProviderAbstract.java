@@ -43,27 +43,6 @@ extends ChoiceProvider<ObjectMemento>
 implements HasCommonContext {
     private static final long serialVersionUID = 1L;
 
-    // -- EMPTY CHOICE PROVIDER
-
-//    public static class EmptyChoiceProvider extends ChoiceProvider<ObjectMemento> {
-//        private static final long serialVersionUID = 1L;
-//        @Override public String getDisplayValue(final ObjectMemento object) {
-//            return null; }
-//        @Override public String getIdValue(final ObjectMemento object) {
-//            return null; }
-//        @Override public void query(
-//                final String term, final int page, final Response<ObjectMemento> response) {}
-//        @Override public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-//            return null;}
-//    }
-//    private static final EmptyChoiceProvider EMPTY = new EmptyChoiceProvider();
-//
-//    public static EmptyChoiceProvider empty() {
-//        return EMPTY;
-//    }
-
-    // --
-
     /** arbitrary string */
     private static final String NULL_ID = "VGN6r6zKTiLhUsA0WkdQ17LvMU1IYdb0";
 
@@ -116,8 +95,8 @@ implements HasCommonContext {
         response.addAll(mementosIncludingNull);
     }
 
-    @Override // not final, as Value Choices override this, because they don't use idToMemento(..)
-    public /*final*/ Collection<ObjectMemento> toChoices(final Collection<String> ids) {
+    @Override
+    public final Collection<ObjectMemento> toChoices(final Collection<String> ids) {
         return _NullSafe.stream(ids)
                 .map(this::mementoFromIdWithNullHandling)
                 .collect(Collectors.toList());

@@ -56,10 +56,17 @@ public interface ScalarUiModel {
     }
 
     int getAutoCompleteMinLength();
+
+    default boolean isRequired() {
+        return !getMetaModel().isOptional();
+    }
+
     boolean hasChoices();
     boolean hasAutoComplete();
     ManagedObject getDefault();
     Can<ManagedObject> getChoices();
     Can<ManagedObject> getAutoComplete(final String searchArg);
+
+
 
 }

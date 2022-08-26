@@ -344,6 +344,12 @@
 			<artifactId>isis-core-internaltestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-runtimeservices</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>

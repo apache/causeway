@@ -43,13 +43,9 @@ extends ChoiceProviderAbstract {
         return scalarModel().isRequired();
     }
 
-    /** whether this adapter is dependent on previous (pending) arguments */
-    public boolean dependsOnPreviousArgs() {
-        return true;
-    }
-
     @Override
-    protected ObjectMemento mementoFromId(final String id) {
+    protected final ObjectMemento mementoFromId(final String id) {
+        // handles both, strict and pseudo (value) bookmarks
         val memento = Bookmark.parse(id)
                 .map(getCommonContext()::mementoForBookmark)
                 .orElseGet(()->{

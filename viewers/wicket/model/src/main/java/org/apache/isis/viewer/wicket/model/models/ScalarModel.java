@@ -214,10 +214,6 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     public abstract String validate(ManagedObject proposedAdapter);
 
-    public boolean isRequired() {
-        return !getMetaModel().isOptional();
-    }
-
     public abstract String getCssClass();
 
     /**

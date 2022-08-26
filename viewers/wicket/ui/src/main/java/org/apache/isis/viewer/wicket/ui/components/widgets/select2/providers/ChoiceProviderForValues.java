@@ -18,13 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import java.util.Collection;
-
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-
-import lombok.val;
 
 // values don't currently support autoComplete - no branch is required
 public class ChoiceProviderForValues
@@ -40,16 +36,6 @@ extends ChoiceProviderAbstactForScalarModel {
     @Override
     protected Can<ObjectMemento> query(final String term) {
         return filter(term, queryAll());
-    }
-
-    @Override
-    public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
-        return queryAll()//query(null)
-        .filter((final ObjectMemento input) -> {
-            val id = getIdValue(input);
-            return ids.contains(id);
-        })
-        .toList();
     }
 
     // protected in support of JUnit testing
