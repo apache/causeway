@@ -50,8 +50,7 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
         CommandSubscriberForCommandLog.class,
         CommandLogEntry.TableColumnOrderDefault.class,
 })
-public class IsisModuleExtCommandLogApplib
-implements ModuleWithFixtures {
+public class IsisModuleExtCommandLogApplib {
 
     public static final String NAMESPACE = "isis.ext.commandLog";
     public static final String SCHEMA = "isisExtCommandLog";

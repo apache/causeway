@@ -31,8 +31,7 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
         ExecutionSubscriberForExecutionOutbox.class,
         ExecutionOutboxEntry.TableColumnOrderDefault.class,
 })
-public class IsisModuleExtExecutionRepublisherApplib
-implements ModuleWithFixtures {
+public class IsisModuleExtExecutionRepublisherApplib {
 
     public static final String NAMESPACE = "isis.ext.executionRepublisher";
 

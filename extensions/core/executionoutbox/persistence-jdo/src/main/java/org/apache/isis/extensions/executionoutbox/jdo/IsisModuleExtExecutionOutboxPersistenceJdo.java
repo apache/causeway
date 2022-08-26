@@ -27,6 +27,7 @@ import org.apache.isis.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryPK
 import org.apache.isis.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryRepository;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModulePersistenceJdoDatanucleus;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
 /**
@@ -51,10 +52,10 @@ public class IsisModuleExtExecutionOutboxPersistenceJdo {
     public static final String SCHEMA = IsisModuleExtExecutionOutboxApplib.SCHEMA;
 
     /**
-     * For tests that need to delete the command table first.
-     * Should be run in the @BeforeEach of the test.
+     * Note that this is <i>NOT</i> an implementation of the {@link ModuleWithFixtures#getTeardownFixture()} API;
+     * but is provided to allow manual teardown if required.
      */
-    public FixtureScript getTeardownFixtureWillDelete() {
+    public FixtureScript teardownFixture() {
         return new TeardownFixtureJdoAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {

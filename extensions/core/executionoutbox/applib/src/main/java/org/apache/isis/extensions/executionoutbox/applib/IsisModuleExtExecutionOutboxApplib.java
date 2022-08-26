@@ -40,8 +40,7 @@ import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
         ExecutionOutboxEntry.TableColumnOrderDefault.class,
         ContentMappingServiceForOutboxEvents.class
 })
-public class IsisModuleExtExecutionOutboxApplib
-implements ModuleWithFixtures {
+public class IsisModuleExtExecutionOutboxApplib {
 
     public static final String NAMESPACE = "isis.ext.executionOutbox";
     public static final String SCHEMA = "isisExtExecutionOutbox";
