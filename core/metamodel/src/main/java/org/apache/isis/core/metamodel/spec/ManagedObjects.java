@@ -533,6 +533,22 @@ public final class ManagedObjects {
         }
     };
 
+    // -- SPECIFICATION UTILITIES
+
+    public static ManagedObject resolveActualSpecification(final @Nullable ManagedObject adapter) {
+        if(isNullOrUnspecifiedOrEmpty(adapter)) {
+            return adapter; // no pojo, no deal
+        }
+        if(adapter instanceof PackedManagedObject) {
+            return adapter; // don't process non-scalars
+        }
+        val pojo = adapter.getPojo();
+        val actualSpec = adapter.getSpecification().getSpecificationLoader().loadSpecification(pojo.getClass());
+        return adapter.isBookmarkMemoized()
+            ? ManagedObject.bookmarked(actualSpec, pojo, adapter.getBookmark().get())
+            : ManagedObject.of(actualSpec, pojo);
+    }
+
     // -- VIEWMODEL UTILITIES
 
     public static void refreshViewmodel(
@@ -1152,5 +1168,7 @@ public final class ManagedObjects {
         }
 
     }
+
+
 
 }

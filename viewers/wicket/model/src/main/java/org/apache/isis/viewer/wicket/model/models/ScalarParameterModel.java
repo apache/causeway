@@ -23,7 +23,6 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -59,11 +58,6 @@ implements ParameterUiModel {
     @Override
     public ObjectActionParameter getMetaModel() {
         return delegate.getMetaModel();
-    }
-
-    @Override
-    public ObjectSpecification getScalarTypeSpec() {
-        return getMetaModel().getElementType();
     }
 
     @Override

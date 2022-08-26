@@ -338,7 +338,9 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
 
     protected abstract String toStringOf();
 
-    public abstract ObjectSpecification getScalarTypeSpec();
+    public final ObjectSpecification getScalarTypeSpec() {
+        return getMetaModel().getElementType();
+    }
 
     public abstract String getIdentifier();
 

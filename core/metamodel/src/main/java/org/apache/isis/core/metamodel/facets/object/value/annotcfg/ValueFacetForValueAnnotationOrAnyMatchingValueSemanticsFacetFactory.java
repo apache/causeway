@@ -89,7 +89,7 @@ extends FacetFactoryAbstract {
         val logicalType = LogicalType.infer(valueClass);
         val identifier = Identifier.classIdentifier(logicalType);
 
-        val valueFacetIfAny = addAllFacetsForValueSemantics(identifier, valueClass, facetHolder, valueIfAny);
+        addAllFacetsForValueSemantics(identifier, valueClass, facetHolder, valueIfAny);
 
         // optimization
         _Casts.castTo(ObjectSpecificationAbstract.class, facetHolder)

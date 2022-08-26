@@ -31,6 +31,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
@@ -139,9 +140,13 @@ extends ScalarPanelAbstract2 {
 
         val renderScenario = getRenderScenario();
 
+        //FIXME debugging ... resolve actual specification
+        scalarModel.proposedValue().update(ManagedObjects::resolveActualSpecification);
+
         XrayWkt.ifEnabledDo(()->{
             // debug (wicket viewer x-ray)
             val xrayDetails = _Maps.<String, String>newLinkedHashMap();
+            xrayDetails.put("panel", this.getClass().getSimpleName());
             xrayDetails.put("renderScenario", renderScenario.name());
             xrayDetails.put("inputFragmentType", getInputFragmentType().map(x->x.name()).orElse("(none)"));
             xrayDetails.put("formComponent", _Strings.nonEmpty(formComponent.getClass().getSimpleName())
@@ -154,10 +159,12 @@ extends ScalarPanelAbstract2 {
             xrayDetails.put("scalarModel.choices (count)", ""+scalarModel().getChoices().size());
             xrayDetails.put("scalarModel.metaModel.featureIdentifier", ""+scalarModel().getMetaModel().getFeatureIdentifier());
             xrayDetails.put("scalarModel.scalarTypeSpec", ""+scalarModel().getScalarTypeSpec().toString());
-            xrayDetails.put("scalarModel.pendingValue", ""+scalarModel().getSpecialization()
-                    .fold(
-                            param->""+param.getValue(),
-                            prop->""+prop.getPendingPropertyModel().getValueAsTitle().getValue()));
+            xrayDetails.put("scalarModel.proposedValue", ""+scalarModel().proposedValue().getValue().getValue());
+            System.err.printf("%s%n", "XRAY_DONE");
+//                    getSpecialization()
+//                    .fold(
+//                            param->""+param.getValue(),
+//                            prop->""+prop.getPendingPropertyModel().getValueAsTitle().getValue()));
             Wkt.markupAdd(fieldFrame, ID_XRAY_DETAILS, XrayWkt.formatAsListGroup(xrayDetails));
         });
 
