@@ -346,7 +346,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <datanucleus-jdo-query.version>6.0.0-release</datanucleus-jdo-query.version>
         <datanucleus-jodatime.version>6.0.0-release</datanucleus-jodatime.version>
         <datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
-        <datanucleus-rdbms.version>6.0.0-release</datanucleus-rdbms.version>
+        <datanucleus-rdbms.version>6.0.1</datanucleus-rdbms.version>
 
         <docx4j.version>11.3.2</docx4j.version>
 
