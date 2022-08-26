@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactor
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
@@ -103,32 +104,41 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private AbstractLink createLinkWithIconAndTitle() {
 
+        ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
         final ManagedObject targetAdapter = getTargetAdapter();
 
         final AbstractLink link = createDynamicallyVisibleLink(targetAdapter);
 
         if(targetAdapter != null) {
 
-            val spec = targetAdapter.getSpecification();
-
-            final String iconName = spec.getIconName(targetAdapter);
-            final CssClassFaFactory cssClassFaFactory = spec.getCssClassFaFactory().orElse(null);
-            if (iconName != null || cssClassFaFactory == null) {
-                Wkt.imageAddCachable(link, ID_ENTITY_ICON,
-                                getImageResourceCache().resourceReferenceFor(targetAdapter));
-                WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
-            } else {
-                Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
-                Wkt.cssAppend(dummy, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
+            if (ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
                 WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
+                final String title = "(no object)";
+                Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
+
+            } else {
+
+                val spec = targetAdapter.getSpecification();
+
+                final String iconName = spec.getIconName(targetAdapter);
+                final CssClassFaFactory cssClassFaFactory = spec.getCssClassFaFactory().orElse(null);
+                if (iconName != null || cssClassFaFactory == null) {
+                    Wkt.imageAddCachable(link, ID_ENTITY_ICON,
+                                    getImageResourceCache().resourceReferenceFor(targetAdapter));
+                    WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
+                } else {
+                    Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
+                    Wkt.cssAppend(dummy, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
+                    WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
+                }
+
+                final String title = determineTitle();
+                Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
+
+                String entityTypeName = determineFriendlyType() // from actual underlying model
+                        .orElseGet(spec::getSingularName); // not sure if this code path is ever reached
+                WktTooltips.addTooltip(link, entityTypeName, title);
             }
-
-            final String title = determineTitle();
-            Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
-
-            String entityTypeName = determineFriendlyType() // from actual underlying model
-                    .orElseGet(targetAdapter.getSpecification()::getSingularName); // not sure if this code path is ever reached
-            WktTooltips.addTooltip(link, entityTypeName, title);
         }
 
         return link;
