@@ -52,13 +52,16 @@ import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAb
 @EntityScan(basePackageClasses = {
         ExecutionOutboxEntry.class
 })
-public class IsisModuleExtExecutionOutboxPersistenceJpa implements ModuleWithFixtures {
+public class IsisModuleExtExecutionOutboxPersistenceJpa {
 
     public static final String NAMESPACE = IsisModuleExtExecutionOutboxApplib.NAMESPACE;
     public static final String SCHEMA = IsisModuleExtExecutionOutboxApplib.SCHEMA;
 
-    @Override
-    public FixtureScript getTeardownFixture() {
+    /**
+     * Note that this is <i>NOT</i> an implementation of the {@link ModuleWithFixtures#getTeardownFixture()} API;
+     * but is provided to allow manual teardown if required.
+     */
+    public FixtureScript teardownFixture() {
         return new TeardownFixtureJpaAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {

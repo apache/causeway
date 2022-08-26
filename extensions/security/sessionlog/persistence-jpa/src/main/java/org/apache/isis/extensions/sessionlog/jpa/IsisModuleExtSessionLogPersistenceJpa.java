@@ -52,10 +52,13 @@ import org.apache.isis.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAb
 @EntityScan(basePackageClasses = {
         SessionLogEntry.class,
 })
-public class IsisModuleExtSessionLogPersistenceJpa implements ModuleWithFixtures {
+public class IsisModuleExtSessionLogPersistenceJpa {
 
-    @Override
-    public FixtureScript getTeardownFixture() {
+    /**
+     * Note that this is <i>NOT</i> an implementation of the {@link ModuleWithFixtures#getTeardownFixture()} API;
+     * but is provided to allow manual teardown if required.
+     */
+    public FixtureScript teardownFixture() {
         return new TeardownFixtureJpaAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {

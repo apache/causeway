@@ -46,10 +46,13 @@ import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAb
         // entities, eager meta-model introspection
         AuditTrailEntry.class,
 })
-public class IsisModuleExtAuditTrailPersistenceJdo implements ModuleWithFixtures {
+public class IsisModuleExtAuditTrailPersistenceJdo {
 
-    @Override
-    public FixtureScript getTeardownFixture() {
+    /**
+     * Note that this is <i>NOT</i> an implementation of the {@link ModuleWithFixtures#getTeardownFixture()} API;
+     * but is provided to allow manual teardown if required.
+     */
+    public FixtureScript teardownFixture() {
         return new TeardownFixtureJdoAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
