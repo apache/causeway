@@ -108,11 +108,6 @@ import lombok.extern.log4j.Log4j2;
     JdoStringIdValueSemantics.class,
     JdoObjectIdValueSemantics.class,
 
-    // @Mixin's
-    Persistable_datanucleusVersionLong.class,
-    Persistable_datanucleusVersionTimestamp.class,
-    Persistable_downloadJdoMetadata.class,
-
     // @Service's
     JdoSupportServiceDefault.class,
 
@@ -131,18 +126,6 @@ public class IsisModulePersistenceJdoDatanucleus {
     public DnJdoDialect getDnJdoDialect(final DataSource dataSource) {
         return new DnJdoDialect(dataSource);
     }
-
-//    private static boolean ignore(final Class<?> entityType) {
-//        try {
-//            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass() || entityType.isInterface()) {
-//                return true;
-//            }
-//            val persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);
-//            return persistenceCapable == null; // ignore if doesn't have @PersistenceCapable
-//        } catch (NoClassDefFoundError ex) {
-//            return true;
-//        }
-//    }
 
     @Qualifier("local-pmf-proxy")
     @Bean
