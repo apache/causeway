@@ -21,8 +21,15 @@ package org.apache.isis.viewer.commons.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.viewer.commons.applib.mixins.Object_impersonate;
+import org.apache.isis.viewer.commons.applib.mixins.Object_impersonateWithRoles;
+
 @Configuration
 @Import({
+
+    // Mixins (prototyping)
+    Object_impersonate.class,
+    Object_impersonateWithRoles.class,
 
 })
 public class IsisModuleViewerCommonsApplib {

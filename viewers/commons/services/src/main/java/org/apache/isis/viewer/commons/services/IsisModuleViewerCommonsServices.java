@@ -21,6 +21,7 @@ package org.apache.isis.viewer.commons.services;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.viewer.commons.applib.IsisModuleViewerCommonsApplib;
 import org.apache.isis.viewer.commons.services.branding.BrandingUiServiceDefault;
 import org.apache.isis.viewer.commons.services.header.HeaderUiServiceDefault;
 import org.apache.isis.viewer.commons.services.menu.MenuUiServiceDefault;
@@ -28,6 +29,9 @@ import org.apache.isis.viewer.commons.services.userprof.UserProfileUiServiceDefa
 
 @Configuration
 @Import({
+
+    // adds object impersonation mixins
+    IsisModuleViewerCommonsApplib.class,
 
     // @Service's
     BrandingUiServiceDefault.class,
