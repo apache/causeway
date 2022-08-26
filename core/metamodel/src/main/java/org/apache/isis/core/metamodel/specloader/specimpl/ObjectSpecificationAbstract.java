@@ -70,6 +70,7 @@ import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFac
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
@@ -181,6 +182,7 @@ implements ObjectSpecification {
 
     private ObjectSpecification superclassSpec;
 
+    private ValueFacet valueFacet;
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
     private NavigableParentFacet navigableParentFacet;
@@ -264,7 +266,7 @@ implements ObjectSpecification {
                 // set to avoid infinite loops
                 this.introspectionState = IntrospectionState.TYPE_BEING_INTROSPECTED;
                 introspectTypeHierarchy();
-                updateFromFacetValues();
+                invalidateCachedFacets();
                 this.introspectionState = IntrospectionState.TYPE_INTROSPECTED;
             }
             if(isLessThan(upTo)) {
@@ -377,8 +379,9 @@ implements ObjectSpecification {
         }
     }
 
-    private void updateFromFacetValues() {
-        titleFacet = getFacet(TitleFacet.class);
+    public void invalidateCachedFacets() {
+        valueFacet = getFacet(ValueFacet.class);
+        titleFacet = lookupNonFallbackFacet(TitleFacet.class).orElse(null);
         iconFacet = getFacet(IconFacet.class);
         navigableParentFacet = getFacet(NavigableParentFacet.class);
         cssClassFacet = getFacet(CssClassFacet.class);
@@ -387,7 +390,12 @@ implements ObjectSpecification {
 
     protected void postProcess() {
         postProcessor.postProcess(this);
-        updateFromFacetValues();
+        invalidateCachedFacets();
+    }
+
+    @Override
+    public final Optional<ValueFacet> valueFacet() {
+        return Optional.ofNullable(valueFacet);
     }
 
     @Override

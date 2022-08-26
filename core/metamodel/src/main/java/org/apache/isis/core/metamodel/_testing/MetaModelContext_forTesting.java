@@ -72,6 +72,8 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -93,7 +95,7 @@ import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
-import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
@@ -534,8 +536,13 @@ implements MetaModelContext {
         final ValueFacet<T> valueFacet = ValueFacetUsingSemanticsProvider
                 .create(valueClass, Can.of(valueSemantics), valueSpec);
         valueSpec.addFacet(valueFacet);
-        ((ObjectSpecificationDefault)valueSpec).onValueFacetProcessed(Optional.of(valueFacet));
+        valueSpec.addFacet(TitleFacetFromValueFacet.create(valueFacet, valueSpec));
+
+        ((ObjectSpecificationAbstract)valueSpec).invalidateCachedFacets(); // optimization stuff
+
         _Assert.assertTrue(valueSpec.valueFacet().isPresent());
+        _Assert.assertTrue(valueSpec.lookupNonFallbackFacet(TitleFacet.class).isPresent());
+
         return this;
     }
 

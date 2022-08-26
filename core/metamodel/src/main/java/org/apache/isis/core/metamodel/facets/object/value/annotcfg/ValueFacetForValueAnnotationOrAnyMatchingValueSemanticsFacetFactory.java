@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetFromValu
 import org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
-import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -91,7 +91,9 @@ extends FacetFactoryAbstract {
 
         val valueFacetIfAny = addAllFacetsForValueSemantics(identifier, valueClass, facetHolder, valueIfAny);
 
-        emitValueFacetProcessed(facetHolder, _Casts.uncheckedCast(valueFacetIfAny));
+        // optimization
+        _Casts.castTo(ObjectSpecificationAbstract.class, facetHolder)
+        .ifPresent(ObjectSpecificationAbstract::invalidateCachedFacets);
     }
 
     // -- HELPER
@@ -129,13 +131,8 @@ extends FacetFactoryAbstract {
         return Optional.of(valueFacet);
     }
 
-    // optimization
-    private void emitValueFacetProcessed(
-            final FacetHolder holder,
-            final Optional<ValueFacet> valueFacetIfAny) {
-        _Casts.castTo(ObjectSpecificationDefault.class, holder)
-        .ifPresent(receiver->receiver.onValueFacetProcessed(valueFacetIfAny));
-    }
+
+
 
     // -- DEPENDENCIES
 
