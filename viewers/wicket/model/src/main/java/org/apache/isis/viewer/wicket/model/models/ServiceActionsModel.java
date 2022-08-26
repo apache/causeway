@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
-import org.apache.isis.viewer.commons.model.menu.MenuUiModel;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuUiModel;
 /**
  * Backing model for actions of application services menu bar (typically, as
  * displayed along the top or side of the page).

@@ -31,7 +31,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.viewer.commons.model.branding.BrandingUiModelProvider;
+import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiService;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
@@ -99,7 +99,7 @@ public class AccountManagementPageAbstract extends WebPageBase {
 
     private void addApplicationName(final MarkupContainer parent) {
         val branding = super.getCommonContext()
-                .lookupServiceElseFail(BrandingUiModelProvider.class)
+                .lookupServiceElseFail(BrandingUiService.class)
                 .getSignInBranding();
         val brandLogo = new BrandLogo("brandLogo", branding);
         val brandName = new BrandName(ID_APPLICATION_NAME, branding);

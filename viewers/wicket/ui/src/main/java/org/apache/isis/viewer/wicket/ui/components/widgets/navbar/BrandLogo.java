@@ -20,7 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
 import org.apache.wicket.markup.ComponentTag;
 
-import org.apache.isis.viewer.commons.model.branding.BrandingUiModel;
+import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiModel;
 import org.apache.isis.viewer.wicket.ui.components.WebComponentBase;
 
 /**

@@ -38,8 +38,8 @@ import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
-import org.apache.isis.viewer.commons.model.header.HeaderUiModel;
-import org.apache.isis.viewer.commons.model.header.HeaderUiModelProvider;
+import org.apache.isis.viewer.commons.applib.services.header.HeaderUiModel;
+import org.apache.isis.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.util.WktContext;
@@ -74,7 +74,7 @@ implements HasCommonContext {
     private transient EmailNotificationService emailNotificationService;
     private transient EmailVerificationUrlService emailVerificationUrlService;
     private transient PageNavigationService pageNavigationService;
-    private transient HeaderUiModelProvider headerUiModelProvider;
+    private transient HeaderUiService headerUiService;
 
     protected PanelBase(final String id) {
         this(id, null);
@@ -152,8 +152,8 @@ implements HasCommonContext {
     }
 
     protected HeaderUiModel getHeaderModel() {
-        headerUiModelProvider = computeIfAbsent(HeaderUiModelProvider.class, headerUiModelProvider);
-        return headerUiModelProvider.getHeader();
+        headerUiService = computeIfAbsent(HeaderUiService.class, headerUiService);
+        return headerUiService.getHeader();
     }
 
     // -- TRANSLATION
