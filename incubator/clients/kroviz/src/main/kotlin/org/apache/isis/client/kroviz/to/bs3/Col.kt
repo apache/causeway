@@ -36,7 +36,7 @@ class Col(node: Node) {
 
         val nl = node.childNodes.asList()
 
-        val rl = nl.filter { it.nodeName.equals("bs3:row") }
+        val rl = nl.filter { it.nodeName.equals("bs3row") }
         for (n: Node in rl) {
             val row = Row(n)
             rowList.add(row)
@@ -53,7 +53,7 @@ class Col(node: Node) {
             actionList.add(act)
         }
 
-        val tgNodes = nl.filter { it.nodeName.equals("bs3:tabGroup") }
+        val tgNodes = nl.filter { it.nodeName.equals("bs:tabGroup") }
         for (n: Node in tgNodes) {
             val tg = TabGroup(n)
             tabGroupList.add(tg)

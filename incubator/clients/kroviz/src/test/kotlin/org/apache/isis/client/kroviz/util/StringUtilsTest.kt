@@ -11,7 +11,7 @@ class StringUtilsTest {
     @Test
     fun testShortTitle() {
         // given
-        SessionManager.login(Constants.demoUrl, Constants.demoUser, Constants.demoPass)
+        SessionManager.login(Constants.demoUrl8, Constants.demoUser, Constants.demoPass)
         val url = "http://localhost:8080/restful/domain-types/demo.JavaLangStrings/collections/entities"
 
         // when

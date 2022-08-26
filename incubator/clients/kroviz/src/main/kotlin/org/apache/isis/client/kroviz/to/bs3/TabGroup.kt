@@ -29,7 +29,7 @@ class TabGroup(node: Node) {
     init {
         val nodeList = node.childNodes.asList()
 
-        val tnList = nodeList.filter { it.nodeName.equals("bs3:tab") }
+        val tnList = nodeList.filter { it.nodeName.equals("bs:tab") }
         for (n: Node in tnList) {
             val tab =Tab(n)
             tabList.add(tab)

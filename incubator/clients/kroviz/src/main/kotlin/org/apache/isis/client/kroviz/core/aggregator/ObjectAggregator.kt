@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.core.aggregator
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.model.CollectionDM
+import org.apache.isis.client.kroviz.core.model.DisplayModelWithLayout
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
@@ -43,6 +44,11 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     override fun update(logEntry: LogEntry, subType: String?) {
+        if (logEntry.url.contains("object-layout")) {
+            console.log("[OA.update]")
+            console.log(logEntry)
+            console.log(subType)
+        }
         super.update(logEntry, subType)
         if (!logEntry.isUpdatedFromParentedCollection()) {
             val referrer = logEntry.url
@@ -52,7 +58,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
                 is ResultValue -> handleResultValue(obj)
                 is Property -> handleProperty(obj)
                 is Layout -> handleLayout(obj, dpm as ObjectDM, referrer)
-                is Grid -> handleGrid(obj)
+                is Grid -> handleGrid(obj, dpm as ObjectDM, referrer)
                 is HttpError -> ErrorDialog(logEntry).open()
                 else -> log(logEntry)
             }
@@ -115,6 +121,10 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
             val aggregator = CollectionAggregator(key, this)
             collectionMap.put(key, aggregator)
             val link = it.links.first()
+            console.log("[OA.handleCollections]")
+            console.log(link)
+            console.log(aggregator)
+            console.log(referrer)
             ResourceProxy().fetch(link, aggregator, referrer = referrer)
         }
     }
@@ -125,7 +135,11 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
 //        throw Throwable("[ObjectAggregator.handleProperty] not implemented yet")
     }
 
-    private fun handleGrid(grid: Grid) {
+    private fun handleGrid(grid: Grid, dm: DisplayModelWithLayout, referrer: String) {
+        console.log("[AWL.handleGrid]")
+        console.log(grid)
+        console.log(dm)
+        console.log(referrer)
         (dpm as ObjectDM).grid = grid
     }
 

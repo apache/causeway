@@ -62,7 +62,7 @@ class ResourceProxy {
         isRest: Boolean = true,
         referrer: String = "") {
         val rs = ResourceSpecification(link.href, subType = subType, referrerUrl = referrer)
-        val le = findAndSetupLogEntry(rs)
+        val le = findAndSetupLogEntry(rs) //easier to read if outside 'when'
         val isCached = when (le) {
             null -> false
             else -> le.isCached(rs, link.method)

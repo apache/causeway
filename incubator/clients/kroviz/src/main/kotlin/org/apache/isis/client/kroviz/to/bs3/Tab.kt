@@ -31,7 +31,7 @@ class Tab(node: Node) {
 
         val nl = node.childNodes.asList()
 
-        val rNodes = nl.filter { it.nodeName.equals("bs3:row") }
+        val rNodes = nl.filter { it.nodeName.equals("bs:row") }
         for (n: Node in rNodes) {
             val row = Row(n)
             rowList.add(row)

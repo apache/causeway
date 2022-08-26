@@ -180,13 +180,14 @@ data class LogEntry(
     }
 
     fun setTransferObject(to: TransferObject) {
-        console.log("[LE.setTransferObject]")
         this.obj = to
         when (to) {
             is WithLinks -> {
                 this.type = extractType(to)
             }
             is Grid -> {
+                console.log("[LE.setTransferObject]Layout/Grid")
+                console.log(response)
                 this.type = Relation.LAYOUT.type
             }
             is Icon -> {

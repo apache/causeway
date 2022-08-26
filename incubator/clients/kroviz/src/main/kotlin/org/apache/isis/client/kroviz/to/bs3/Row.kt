@@ -32,7 +32,7 @@ class Row(node: Node) {
         }
 
         val nodeList = XmlHelper.nonTextChildren(node)
-        val cl = nodeList.filter { it.nodeName.equals("bs3:col") }
+        val cl = nodeList.filter { it.nodeName.equals("bs:col") }
         for (n: Node in cl) {
             val col = Col(n)
             colList.add(col)

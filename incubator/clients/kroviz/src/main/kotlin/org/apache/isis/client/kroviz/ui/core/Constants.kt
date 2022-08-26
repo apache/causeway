@@ -35,7 +35,9 @@ object Constants {
     //host:port depends on how docker is started
     // docker run -d --name kroki -p 8080:8000 yuzutech/kroki
 
-    const val demoUrl = "http://localhost:8080/"
+    // https://github.com/rjaros/kvision/issues/430 for Editable Combobox
+    const val demoUrl8 = "http://localhost:8080/"
+    const val demoUrl9 = "http://localhost:9090/"
     const val demoUser = "sven"
     const val demoPass = "pass"
     const val demoUrlRemote = "https://demo-wicket.jdo.isis.incode.work/"

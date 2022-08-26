@@ -37,7 +37,7 @@ class Grid(document: Document) : TransferObject {
         val root = document.firstChild!!
         val kids = root.childNodes
         val rowNodes = kids.asList()
-        val rowList = rowNodes.filter { it.nodeName.equals("bs3:row") }
+        val rowList = rowNodes.filter { it.nodeName.equals("bs:row") }
         for (n: Node in rowList) {
             val row = Row(n)
             rows.add(row)

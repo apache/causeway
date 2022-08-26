@@ -30,14 +30,15 @@ import org.apache.isis.client.kroviz.ui.core.*
 class LoginPrompt(val nextController: Controller? = null) : Controller() {
 
     //Default values
-    private var url = Constants.demoUrl
+    private var url = Constants.demoUrl8
     private var username = Constants.demoUser
     private var password = Constants.demoPass
 
     override fun open() {
         val formItems = mutableListOf<FormItem>()
         val urlList = mutableListOf<StringPair>()
-        urlList.add(StringPair(Constants.demoUrl, Constants.demoUrl))
+        urlList.add(StringPair(Constants.demoUrl8, Constants.demoUrl8))
+        urlList.add(StringPair(Constants.demoUrl9, Constants.demoUrl9))
         urlList.add(StringPair(Constants.demoUrlRemote, Constants.demoUrlRemote))
         urlList.add(StringPair(Constants.domoxUrl, Constants.domoxUrl))
         formItems.add(FormItem("Url", ValueType.SIMPLE_SELECT, urlList))
