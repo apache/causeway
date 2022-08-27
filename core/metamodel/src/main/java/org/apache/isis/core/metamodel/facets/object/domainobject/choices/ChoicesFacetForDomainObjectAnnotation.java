@@ -25,7 +25,8 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 
-public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBoundedAbstract {
+public class ChoicesFacetForDomainObjectAnnotation
+extends ChoicesFacetFromBoundedAbstract {
 
     public static Optional<ChoicesFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
@@ -33,7 +34,6 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
 
         return domainObjectIfAny
                 .map(DomainObject::bounding)
-                .filter(bounding -> bounding != Bounding.NOT_SPECIFIED)
                 .map(bounding -> bounding == Bounding.BOUNDED
                         ? new ChoicesFacetForDomainObjectAnnotation(facetHolder)
                         : null);

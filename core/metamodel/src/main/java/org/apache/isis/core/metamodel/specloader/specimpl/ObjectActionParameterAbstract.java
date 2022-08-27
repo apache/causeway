@@ -284,7 +284,7 @@ implements
             // type returned by choices must be an instance of the param type
             // in other words <param type> is assignable from <choices type>
 
-            // TODO: should implement this instead as a MetaModelValidator
+            // TODO: should implement this instead as a MetaModelValidator (subject to [ISIS-3172])
             if (!choiceWrappedSpec.isOfType(paramWrappedSpec)) {
                 throw new DomainModelException(String.format(
                         "Type incompatible with parameter type; expected %s, but was %s",

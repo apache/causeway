@@ -129,5 +129,4 @@ public class ApplicationUserManager_newLocalUser {
                 .orElse(null);
     }
 
-
 }

@@ -460,27 +460,6 @@ implements ObjectSpecification {
 
     // -- HIERARCHICAL
 
-    /**
-     * Determines if this class represents the same class, or a subclass, of the
-     * specified class.
-     *
-     * <p>
-     * cf {@link Class#isAssignableFrom(Class)}, though target and parameter are
-     * the opposite way around, ie:
-     *
-     * <pre>
-     * cls1.isAssignableFrom(cls2);
-     * </pre>
-     * <p>
-     * is equivalent to:
-     *
-     * <pre>
-     * spec2.isOfType(spec1);
-     * </pre>
-     *
-     * @return whether {@code other} is assignable from {@code this}
-     *
-     */
     @Override
     public boolean isOfType(final ObjectSpecification other) {
 

@@ -60,7 +60,7 @@ implements
         return ChoicesFacet.class;
     }
 
-    public ChoicesFacetFromBoundedAbstract(
+    protected ChoicesFacetFromBoundedAbstract(
             final FacetHolder holder) {
         super(type(), holder);
     }
