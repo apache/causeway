@@ -78,7 +78,7 @@ public class JavaMathBigDecimalJdo                                          // <
     private java.math.BigDecimal withMax2FractionDigits;
 
     @Property(editing = Editing.ENABLED)
-    @ValueSemantics(minFractionalDigits = 2)
+    @ValueSemantics(minFractionalDigits = 2, maxFractionalDigits = 2)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "3",
             describedAs = "has 2 fixed fraction digits (scale=2)")
     @Column(allowsNull = "false", scale = 2)
