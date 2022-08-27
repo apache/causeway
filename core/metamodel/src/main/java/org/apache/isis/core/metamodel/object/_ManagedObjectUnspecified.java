@@ -25,9 +25,13 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-final class _ManagedObjectUnspecified extends _ManagedObjectAbstract {
+final class _ManagedObjectUnspecified
+implements ManagedObject {
+
+    static final ManagedObject INSTANCE = new _ManagedObjectUnspecified();
 
     @Override
     public ObjectSpecification getSpecification() {
@@ -56,6 +60,22 @@ final class _ManagedObjectUnspecified extends _ManagedObjectAbstract {
 
     @Override
     public void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
+    }
+
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        throw _Exceptions
+                .illegalArgument("Can only retrieve MetaModelContext from ManagedObjects "
+                        + "that have an ObjectSpecification.");
+    }
+
+    @Override
+    public Supplier<ManagedObject> asSupplier() {
+        return ()->this;
+    }
+
+    @Override
+    public void assertSpecIsInSyncWithPojo() {
     }
 
 }

@@ -20,22 +20,14 @@ package org.apache.isis.core.metamodel.object;
 
 import java.util.function.Supplier;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-abstract class _ManagedObjectAbstract
+abstract class _ManagedObjectSpecified
 implements ManagedObject {
-
-    static final ManagedObject UNSPECIFIED = new _ManagedObjectUnspecified();
 
     @Override
     public final MetaModelContext getMetaModelContext() {
-        return ManagedObjects.spec(this)
-                .map(ObjectSpecification::getMetaModelContext)
-                .orElseThrow(()->_Exceptions
-                        .illegalArgument("Can only retrieve MetaModelContext from ManagedObjects "
-                                + "that have an ObjectSpecification."));
+        return getSpecification().getMetaModelContext();
     }
 
     @Override

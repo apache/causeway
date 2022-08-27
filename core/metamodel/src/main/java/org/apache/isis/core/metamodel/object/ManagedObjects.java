@@ -231,7 +231,6 @@ public final class ManagedObjects {
     public static ManagedObject pack(
             final ObjectSpecification elementSpec,
             final Can<ManagedObject> nonScalar) {
-
         return PackedManagedObject.pack(elementSpec, nonScalar);
     }
 

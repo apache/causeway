@@ -205,7 +205,7 @@ public interface ManagedObject extends HasMetaModelContext {
 
     /** has no ObjectSpecification and no value (pojo) */
     static ManagedObject unspecified() {
-        return _ManagedObjectAbstract.UNSPECIFIED;
+        return _ManagedObjectUnspecified.INSTANCE;
     }
 
     /** has an ObjectSpecification, but no value (pojo) */

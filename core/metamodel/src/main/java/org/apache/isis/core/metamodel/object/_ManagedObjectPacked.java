@@ -30,17 +30,18 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @RequiredArgsConstructor
 @ToString
 final class _ManagedObjectPacked
-extends _ManagedObjectAbstract
+extends _ManagedObjectSpecified
 implements PackedManagedObject {
 
-    final ObjectSpecification elementSpec;
-    final Can<ManagedObject> nonScalar;
+    final @NonNull ObjectSpecification elementSpec;
+    final @NonNull Can<ManagedObject> nonScalar;
 
     @Override
     public ObjectSpecification getSpecification() {
