@@ -19,6 +19,7 @@
 package org.apache.isis.commons.internal.html;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -52,7 +53,7 @@ public class _BootstrapBadge {
         sb
         .append("<span ")
         .append("class=\"")
-        .append(Stream.concat(Stream.of("badge", "bg-light"), _NullSafe.stream(cssClasses)))
+        .append(classesLiteral())
         .append("\"");
 
         // optional tooltip
@@ -77,4 +78,12 @@ public class _BootstrapBadge {
         .append("</span>");
         return sb.toString();
     }
+
+    // -- HELPER
+
+    private String classesLiteral() {
+        return Stream.concat(Stream.of("badge", "bg-light"), _NullSafe.stream(cssClasses))
+                .collect(Collectors.joining(" "));
+    }
+
 }
