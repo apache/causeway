@@ -54,6 +54,7 @@ body {
 
 /* font-size fix for badges inside tables and form-controls */
 td .badge,
+.scalarPlaceholder .badge,
 .form-control-sm .badge {
 	font-size:.90em
 }
