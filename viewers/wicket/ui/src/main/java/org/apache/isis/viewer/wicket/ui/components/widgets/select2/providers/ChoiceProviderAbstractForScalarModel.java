@@ -30,7 +30,7 @@ import lombok.val;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class ChoiceProviderAbstactForScalarModel
+public abstract class ChoiceProviderAbstractForScalarModel
 extends ChoiceProviderAbstract {
 
     private static final long serialVersionUID = 1L;
@@ -43,13 +43,9 @@ extends ChoiceProviderAbstract {
         return scalarModel().isRequired();
     }
 
-    /** whether this adapter is dependent on previous (pending) arguments */
-    public boolean dependsOnPreviousArgs() {
-        return true;
-    }
-
     @Override
-    protected ObjectMemento mementoFromId(final String id) {
+    protected final ObjectMemento mementoFromId(final String id) {
+        // handles both, strict and pseudo (value) bookmarks
         val memento = Bookmark.parse(id)
                 .map(getCommonContext()::mementoForBookmark)
                 .orElseGet(()->{

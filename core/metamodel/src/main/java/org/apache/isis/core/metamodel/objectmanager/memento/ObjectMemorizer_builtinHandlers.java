@@ -47,8 +47,8 @@ final class ObjectMemorizer_builtinHandlers {
         @Override
         public ObjectMemento serialize(final ManagedObject object) {
             return object instanceof PackedManagedObject
-                    ? objectMementoService.mementoForObjects((PackedManagedObject)object)
-                    : objectMementoService.mementoForObject(object);
+                    ? objectMementoService.mementoForMulti((PackedManagedObject)object)
+                    : objectMementoService.mementoForSingle(object);
         }
 
     }

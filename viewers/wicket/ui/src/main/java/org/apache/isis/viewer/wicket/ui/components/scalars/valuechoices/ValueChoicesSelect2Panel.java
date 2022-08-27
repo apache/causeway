@@ -23,15 +23,14 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelectAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
@@ -69,6 +68,7 @@ extends ScalarPanelSelectAbstract {
         } else {
             select2.clearInput();
         }
+        @SuppressWarnings("rawtypes") // incompatible generic type parameter cast
         FormComponent formComponent = select2.asComponent();
         return formComponent;
     }
@@ -139,13 +139,9 @@ extends ScalarPanelSelectAbstract {
 
     // --
 
-    // in corresponding code in ReferencePanelFactory, these is a branch for different types of providers
-    // (choice vs autoComplete).  Here though - because values don't currently support autoComplete - no branch is required
     @Override
-    protected ChoiceProvider<ObjectMemento> buildChoiceProvider() {
+    protected ChoiceProviderAbstract buildChoiceProvider() {
         return new ChoiceProviderForValues(scalarModel());
     }
-
-
 
 }

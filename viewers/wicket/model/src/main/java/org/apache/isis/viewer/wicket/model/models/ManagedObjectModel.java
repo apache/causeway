@@ -86,7 +86,7 @@ extends ModelAbstract<ManagedObject> {
         if(_Collections.isCollectionOrArrayOrCanType(adapter.getPojo().getClass())) {
             setObjectCollection((PackedManagedObject)adapter);
         } else {
-            memento = super.getMementoService().mementoForObject(adapter);
+            memento = super.getMementoService().mementoForSingle(adapter);
         }
     }
 

@@ -76,7 +76,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForObject(@Nullable final ManagedObject adapter) {
+    public ObjectMemento mementoForSingle(@Nullable final ManagedObject adapter) {
         _Assert.assertFalse(adapter instanceof PackedManagedObject);
         val mementoAdapter = _ObjectMemento.createOrNull(adapter);
         if(mementoAdapter==null) {
@@ -90,9 +90,9 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForObjects(@Nullable final PackedManagedObject packedAdapter) {
+    public ObjectMemento mementoForMulti(@Nullable final PackedManagedObject packedAdapter) {
         val listOfMementos = packedAdapter.unpack().stream()
-                .map(this::mementoForObject)
+                .map(this::mementoForSingle)
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
         return ObjectMementoCollection.of(
                 listOfMementos,
@@ -100,9 +100,9 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForParameter(@NonNull final ManagedObject paramAdapter) {
+    public ObjectMemento mementoForAnyCardinality(@NonNull final ManagedObject paramAdapter) {
         if(paramAdapter instanceof PackedManagedObject) {
-            return mementoForObjects((PackedManagedObject) paramAdapter);
+            return mementoForMulti((PackedManagedObject) paramAdapter);
         }
         val mementoAdapter = _ObjectMemento.createOrNull(paramAdapter);
         if(mementoAdapter==null) {
@@ -115,7 +115,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
     @Override
     public ObjectMemento mementoForPojo(final Object pojo) {
         val managedObject = objectManager.adapt(pojo);
-        return mementoForObject(managedObject);
+        return mementoForSingle(managedObject);
     }
 
     @Override

@@ -45,7 +45,7 @@ import lombok.val;
 )
 @ActionLayout(
         associateWith = "allUsers",
-        sequence = "1"
+        sequence = "2"
 )
 @RequiredArgsConstructor
 public class ApplicationUserManager_newDelegateUser {

@@ -142,6 +142,7 @@ extends ScalarPanelAbstract2 {
         XrayWkt.ifEnabledDo(()->{
             // debug (wicket viewer x-ray)
             val xrayDetails = _Maps.<String, String>newLinkedHashMap();
+            xrayDetails.put("panel", this.getClass().getSimpleName());
             xrayDetails.put("renderScenario", renderScenario.name());
             xrayDetails.put("inputFragmentType", getInputFragmentType().map(x->x.name()).orElse("(none)"));
             xrayDetails.put("formComponent", _Strings.nonEmpty(formComponent.getClass().getSimpleName())
@@ -154,11 +155,13 @@ extends ScalarPanelAbstract2 {
             xrayDetails.put("scalarModel.choices (count)", ""+scalarModel().getChoices().size());
             xrayDetails.put("scalarModel.metaModel.featureIdentifier", ""+scalarModel().getMetaModel().getFeatureIdentifier());
             xrayDetails.put("scalarModel.scalarTypeSpec", ""+scalarModel().getScalarTypeSpec().toString());
-            xrayDetails.put("scalarModel.pendingValue", ""+scalarModel().getSpecialization()
-                    .fold(
-                            param->""+param.getValue(),
-                            prop->""+prop.getPendingPropertyModel().getValueAsTitle().getValue()));
+            xrayDetails.put("scalarModel.proposedValue", ""+scalarModel().proposedValue().getValue().getValue());
+//                    getSpecialization()
+//                    .fold(
+//                            param->""+param.getValue(),
+//                            prop->""+prop.getPendingPropertyModel().getValueAsTitle().getValue()));
             Wkt.markupAdd(fieldFrame, ID_XRAY_DETAILS, XrayWkt.formatAsListGroup(xrayDetails));
+
         });
 
         if(renderScenario.isReadonly()) {
@@ -176,6 +179,9 @@ extends ScalarPanelAbstract2 {
         }
 
         onFormGroupCreated(formGroup);
+
+        formComponent.setVisible(true);
+        formComponent.setVisibilityAllowed(true);
 
         return formGroup;
     }

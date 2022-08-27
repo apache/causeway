@@ -27,6 +27,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static java.util.Objects.requireNonNull;
+
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -47,9 +49,11 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
@@ -68,8 +72,13 @@ import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetFromValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
@@ -86,14 +95,13 @@ import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
-
-import static java.util.Objects.requireNonNull;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -219,7 +227,6 @@ implements MetaModelContext {
                 transactionService,
                 transactionState,
                 getValueSemanticsResolver(),
-                new ObjectMementoService_forTesting(),
                 new BigDecimalValueSemantics(),
                 new URLValueSemantics(),
                 new UUIDValueSemantics(),
@@ -234,6 +241,7 @@ implements MetaModelContext {
     Stream<_ManagedBeanAdapter> streamBeanAdapters() {
         return _Streams.concat(
                 streamSingletons().map(_ManagedBeanAdapter::forTesting),
+                singletonProviders.stream(),
                 Stream.of(
                     // support for lazy bean providers,
                     _ManagedBeanAdapter.forTestingLazy(GridLoaderService.class, this::getGridLoaderService),
@@ -241,9 +249,10 @@ implements MetaModelContext {
                     _ManagedBeanAdapter.forTestingLazy(JaxbService.class, this::getJaxbService),
                     _ManagedBeanAdapter.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
                     _ManagedBeanAdapter.forTestingLazy(LayoutService.class, this::getLayoutService),
-                    _ManagedBeanAdapter.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
-                ),
-                singletonProviders.stream());
+                    _ManagedBeanAdapter.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader),
+                    _ManagedBeanAdapter.forTestingLazy(ObjectMementoService.class, this::getObjectMementoService)
+                )
+                );
     }
 
     private static IsisSystemEnvironment newIsisSystemEnvironment() {
@@ -359,6 +368,14 @@ implements MetaModelContext {
 
     @Builder.Default
     private final MessageService messageService = new MessageServiceNoop();
+
+    private ObjectMementoService objectMementoService;
+    private ObjectMementoService getObjectMementoService(){
+        if(objectMementoService==null) {
+            objectMementoService = new ObjectMementoService_forTesting();
+        }
+        return objectMementoService;
+    }
 
     @Override
     public ManagedObject getHomePageAdapter() {
@@ -506,6 +523,27 @@ implements MetaModelContext {
         } finally {
             postConstructRunnables.clear();
         }
+    }
+
+    // -- VALUE SEMANTICS
+
+    /**
+     * Allows to register value-semantics.
+     */
+    public <T> MetaModelContext_forTesting withValueSemantics(final ValueSemanticsAbstract<T> valueSemantics) {
+        val valueClass = valueSemantics.getCorrespondingClass();
+        val valueSpec = getSpecificationLoader().loadSpecification(valueClass);
+        final ValueFacet<T> valueFacet = ValueFacetUsingSemanticsProvider
+                .create(valueClass, Can.of(valueSemantics), valueSpec);
+        valueSpec.addFacet(valueFacet);
+        valueSpec.addFacet(TitleFacetFromValueFacet.create(valueFacet, valueSpec));
+
+        ((ObjectSpecificationAbstract)valueSpec).invalidateCachedFacets(); // optimization stuff
+
+        _Assert.assertTrue(valueSpec.valueFacet().isPresent());
+        _Assert.assertTrue(valueSpec.lookupNonFallbackFacet(TitleFacet.class).isPresent());
+
+        return this;
     }
 
 

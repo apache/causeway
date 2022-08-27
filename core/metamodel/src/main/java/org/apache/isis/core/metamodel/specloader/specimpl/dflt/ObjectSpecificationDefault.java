@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.isis.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ActionScope;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
@@ -362,25 +361,6 @@ implements FacetHolder {
 
         return new _PropertiesAsColumns(getMetaModelContext())
             .streamPropertiesForColumnRendering(this, memberIdentifier, parentObject);
-    }
-
-    // -- VALUE FACET OPTIMIZATION (MEMOIZATION)
-
-    // not thread-safe, but seems ok for caching
-    @SuppressWarnings("rawtypes")
-    private Optional<ValueFacet> valueFacetMemoized = null;
-
-    @SuppressWarnings("rawtypes")
-    public void onValueFacetProcessed(final Optional<ValueFacet> valueFacetIfAny) {
-        valueFacetMemoized = valueFacetIfAny;
-    }
-
-    @SuppressWarnings("rawtypes")
-    @Override
-    public Optional<ValueFacet> valueFacet() {
-        return valueFacetMemoized != null
-                ? valueFacetMemoized
-                : lookupFacet(ValueFacet.class);
     }
 
 }

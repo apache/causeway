@@ -68,7 +68,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     IsisModuleValMarkdownPersistenceJpa.class,
 
     //XrayEnable.class // for debugging only
-    //WicketViewerXrayEnable.class // for debugging only
+    // WicketViewerXrayEnable.class // for debugging only
 })
 //@Log4j2
 public class DemoAppWicketJpa extends SpringBootServletInitializer {

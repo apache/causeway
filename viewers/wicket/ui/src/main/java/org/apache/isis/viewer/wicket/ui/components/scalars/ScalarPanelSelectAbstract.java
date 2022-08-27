@@ -22,15 +22,15 @@ import java.util.Optional;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.Model;
 import org.springframework.lang.Nullable;
-import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
@@ -43,8 +43,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter
-    protected Select2 select2;
+    @Getter protected Select2 select2;
 
     public ScalarPanelSelectAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, ManagedObject.class);
@@ -52,20 +51,37 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
     }
 
     protected final Select2 createSelect2(final String id) {
+        val select2 = Select2.createSelect2(id, scalarModel(), buildChoiceProvider());
+        addSelect2Semantics(select2.getSettings());
+        return select2;
+    }
+
+    private void addSelect2Semantics(final Settings settings) {
         val scalarModel = scalarModel();
 
-        val select2 = Select2.createSelect2(id, scalarModel());
-        select2.setLabel(Model.of(scalarModel.getFriendlyName()));
-        select2.getSettings().setWidth("100%");
+        //FIXME[ISIS-3172]  why not always render the place holder?
 
-        updateChoices(select2);
-        return select2;
+        switch(scalarModel.getChoiceProviderSort()) {
+        case CHOICES:
+            settings.setPlaceholder(scalarModel.getFriendlyName());
+            return;
+        case AUTO_COMPLETE:
+            settings.setPlaceholder(scalarModel.getFriendlyName());
+            settings.setMinimumInputLength(scalarModel.getAutoCompleteMinLength());
+            return;
+        case OBJECT_AUTO_COMPLETE:
+            Facets.autoCompleteMinLength(scalarModel.getScalarTypeSpec())
+            .ifPresent(settings::setMinimumInputLength);
+            return;
+        default:
+            // ignore if no choices
+        }
     }
 
     /**
      * Mandatory hook (is called by {@link #createSelect2(String)})
      */
-    protected abstract ChoiceProvider<ObjectMemento> buildChoiceProvider();
+    protected abstract ChoiceProviderAbstract buildChoiceProvider();
 
     // //////////////////////////////////////
 
@@ -110,7 +126,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         if (select2 == null) {
             return false;
         }
-        select2.setProvider(buildChoiceProvider());
+        select2.rebuildChoiceProvider();
         return true;
     }
 

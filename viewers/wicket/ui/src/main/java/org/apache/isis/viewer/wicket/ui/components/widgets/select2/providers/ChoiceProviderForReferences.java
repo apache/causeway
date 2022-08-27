@@ -29,53 +29,54 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import lombok.val;
 
 public class ChoiceProviderForReferences
-extends ChoiceProviderAbstactForScalarModel {
+extends ChoiceProviderAbstractForScalarModel {
 
     private static final long serialVersionUID = 1L;
 
-    static enum Mode {
+    static enum ChoiceProviderSort {
+        NO_CHOICES,
         CHOICES,
         AUTO_COMPLETE,
-        FALLBACK;
-        static Mode valueOf(final ScalarModel scalarModel) {
+        OBJECT_AUTO_COMPLETE;
+        static ChoiceProviderSort valueOf(final ScalarModel scalarModel) {
             if (scalarModel.hasChoices()) {
-                return Mode.CHOICES;
+                return ChoiceProviderSort.CHOICES;
             } else if(scalarModel.hasAutoComplete()) {
-                return Mode.AUTO_COMPLETE;
+                return ChoiceProviderSort.AUTO_COMPLETE;
             } else {
-                return Mode.FALLBACK;
+                return ChoiceProviderSort.OBJECT_AUTO_COMPLETE;
             }
         }
     }
 
-    private final Mode mode;
+    private final ChoiceProviderSort choiceProviderSort;
 
     public ChoiceProviderForReferences(
             final ScalarModel scalarModel) {
         super(scalarModel);
-        this.mode = Mode.valueOf(scalarModel);
+        this.choiceProviderSort = ChoiceProviderSort.valueOf(scalarModel);
     }
 
     @Override
     protected Can<ObjectMemento> query(final String term) {
-        switch(mode) {
+        switch(choiceProviderSort) {
         case CHOICES:
             return super.filter(term, queryAll());
         case AUTO_COMPLETE:
             return queryWithAutoComplete(term);
-        case FALLBACK:
+        case OBJECT_AUTO_COMPLETE:
             // fall through
         }
         val scalarTypeSpec = scalarModel().getScalarTypeSpec();
         val autoCompleteAdapters = Facets.autoCompleteExecute(scalarTypeSpec, term);
-        return autoCompleteAdapters.map(getCommonContext()::mementoFor);
+        return autoCompleteAdapters.map(getCommonContext()::mementoForSingle);
     }
 
     // -- HELPER
 
     private Can<ObjectMemento> queryAll() {
         return scalarModel().getChoices() // must not return detached entities
-                .map(getCommonContext()::mementoForParameter);
+                .map(getCommonContext()::mementoForAnyCardinality);
     }
 
     private Can<ObjectMemento> queryWithAutoComplete(final String term) {
@@ -85,7 +86,7 @@ extends ChoiceProviderAbstactForScalarModel {
                 ? ((ParameterUiModel)scalarModel).getParameterNegotiationModel().getParamValues()
                 : Can.<ManagedObject>empty();
         val pendingArgMementos = pendingArgs
-                .map(commonContext::mementoForParameter);
+                .map(commonContext::mementoForAnyCardinality);
 
         if(scalarModel.isParameter()) {
             // recover any pendingArgs
@@ -99,7 +100,7 @@ extends ChoiceProviderAbstactForScalarModel {
 
         return scalarModel
                 .getAutoComplete(term)
-                .map(commonContext::mementoFor);
+                .map(commonContext::mementoForSingle);
     }
 
     private Can<ManagedObject> reconstructPendingArgs(
