@@ -101,7 +101,8 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         entityLink.setRequired(scalarModel.isRequired());
 
         _Assert.assertTrue(scalarModel.getChoiceProviderSort().isChoicesAny(),
-                ()->String.format("inconsistent metamodel: rendering a select2 while it has no choices"));
+                ()->String.format("inconsistent metamodel: rendering a select2 while it has no choices; feature %s",
+                    scalarModel.getMetaModel().getFeatureIdentifier()));
         this.select2 = createSelect2(ID_AUTO_COMPLETE);
 
         entityLink.addOrReplace(select2.asComponent());
