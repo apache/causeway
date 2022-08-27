@@ -78,18 +78,6 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         }
     }
 
-    @Override
-    public boolean isVisible() {
-        // TODO Auto-generated method stub
-        //return super.isVisible();
-        return true;
-    }
-
-    @Override
-    public boolean isEnabledInHierarchy() {
-        return true;//return super.isEnabledInHierarchy();
-    }
-
     /**
      * Mandatory hook (is called by {@link #createSelect2(String)})
      */
