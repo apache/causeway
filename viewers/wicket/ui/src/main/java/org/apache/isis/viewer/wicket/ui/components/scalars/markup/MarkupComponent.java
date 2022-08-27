@@ -30,6 +30,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmTitleUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
@@ -105,7 +106,7 @@ public class MarkupComponent extends WebComponent {
         if(modelObject instanceof ManagedObject) {
             val adapter = (ManagedObject) modelObject;
             val feature = lookupObjectFeatureIn(getDefaultModel()).orElse(null);
-            val asHtml = adapter.htmlString(feature);
+            val asHtml = MmTitleUtil.htmlStringForValueType(adapter, feature);
             return asHtml != null
                 ? asHtml
                 : fallback;

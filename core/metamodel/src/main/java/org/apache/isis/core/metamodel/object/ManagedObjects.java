@@ -344,23 +344,6 @@ public final class ManagedObjects {
         return input;
     }
 
-    // -- TITLE UTILITIES
-
-    public static String abbreviatedTitleOf(final ManagedObject adapter, final int maxLength, final String suffix) {
-        return abbreviated(titleOf(adapter), maxLength, suffix);
-    }
-
-    public static String titleOf(final ManagedObject adapter) {
-        return adapter!=null
-                ? adapter.titleString()
-                : "";
-    }
-
-    private static String abbreviated(final String str, final int maxLength, final String suffix) {
-        return str.length() < maxLength
-                ? str
-                : str.substring(0, maxLength - 3) + suffix;
-    }
 
     // -- COMMON SUPER TYPE FINDER
 
@@ -507,8 +490,5 @@ public final class ManagedObjects {
         }
         viewmodel.refreshViewmodel(bookmarkSupplier);
     }
-
-    // -- TITLE UTILITIES
-
 
 }

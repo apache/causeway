@@ -21,6 +21,9 @@ package org.apache.isis.core.metamodel.object;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+/**
+ * 'Collection' of {@link ManagedObject}s.
+ */
 public interface PackedManagedObject
 extends ManagedObject {
 

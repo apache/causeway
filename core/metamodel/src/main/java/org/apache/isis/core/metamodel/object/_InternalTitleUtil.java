@@ -20,12 +20,8 @@ package org.apache.isis.core.metamodel.object;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.NonNull;
 import lombok.val;
@@ -52,31 +48,13 @@ final class _InternalTitleUtil {
                 .trim();
     }
 
-    String htmlString(
-            final @Nullable ManagedObject adapter,
-            final @Nullable ObjectFeature feature) {
-
-        if(!ManagedObjects.isSpecified(adapter)) {
-            return "";
-        }
-
-        val spec = adapter.getSpecification();
-        val valueFacet = spec.valueFacet().orElse(null);
-
-        if(valueFacet==null) {
-            return String.format("missing ValueFacet %s", spec.getCorrespondingClass());
-        }
-
-        @SuppressWarnings("unchecked")
-        val renderer = (Renderer<Object>) valueFacet.selectRendererForFeature(feature).orElse(null);
-        if(renderer==null) {
-            return String.format("missing Renderer %s", spec.getCorrespondingClass());
-        }
-
-        return renderer.htmlPresentation(valueFacet.createValueSemanticsContext(feature), adapter.getPojo());
-    }
-
     // -- HELPER
+
+    String abbreviated(final String str, final int maxLength, final String suffix) {
+        return str.length() < maxLength
+                ? str
+                : str.substring(0, maxLength - 3) + suffix;
+    }
 
     private String objectTitleString(@NonNull final TitleRenderRequest titleRenderRequest) {
         val managedObject = titleRenderRequest.getObject();

@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmTitleUtil;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.commons.model.mixin.HasTitle;
 
@@ -102,7 +103,7 @@ extends HasTitle, HasActionInteraction {
             if(buf.length() > 0) {
                 buf.append(",");
             }
-            buf.append(ManagedObjects.abbreviatedTitleOf(paramValue, 8, "..."));
+            buf.append(MmTitleUtil.abbreviatedTitleOf(paramValue, 8, "..."));
         });
         return owner.titleString() + "." + getFriendlyName()
             + (buf.length()>0

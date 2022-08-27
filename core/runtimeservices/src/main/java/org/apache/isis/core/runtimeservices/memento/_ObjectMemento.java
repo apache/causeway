@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmTitleUtil;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -450,7 +451,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
     private void init(final ManagedObject adapter) {
 
-        titleString = ManagedObjects.titleOf(adapter);
+        titleString = MmTitleUtil.titleOf(adapter);
 
         val spec = adapter.getSpecification();
 

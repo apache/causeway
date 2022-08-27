@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.NonNull;
@@ -40,8 +39,8 @@ import lombok.val;
 
 /**
  * Represents an instance of some element of the meta-model managed by the framework,
- * that is IoC-container provided beans, persistence-stack provided entities or view-models.
- *
+ * that is IoC-container provided beans, persistence-stack provided entities, view-models
+ * or instances of value types.
  */
 public interface ManagedObject extends HasMetaModelContext {
 
@@ -86,13 +85,6 @@ public interface ManagedObject extends HasMetaModelContext {
     @Deprecated
     void assertSpecIsInSyncWithPojo();
 
-    // -- HTML
-
-    public default String htmlString(
-            final @Nullable ObjectFeature feature) {
-        return _InternalTitleUtil.htmlString(this, feature);
-    }
-
     // -- TITLE
 
     public default String titleString(final UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder) {
@@ -122,7 +114,7 @@ public interface ManagedObject extends HasMetaModelContext {
     // -- SHORTCUT - TITLE
 
     default String getTitle() {
-        return ManagedObjects.titleOf(this);
+        return MmTitleUtil.titleOf(this);
     }
 
     // -- SHORTCUT - ICON
