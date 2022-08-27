@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
+import org.apache.isis.commons.internal.html._BootstrapBadge;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.NonNull;
@@ -58,9 +59,11 @@ implements PlaceholderRenderService {
 
     @Override
     public String asHtml(@NonNull final PlaceholderLiteral placeholderLiteral) {
-        return String.format("<span class=\"%s\">%s</span>",
-                "badge bg-light placeholder-literal-" + placeholderLiteral.getLiteral(),
-                asText(placeholderLiteral));
+        return _BootstrapBadge.builder()
+                .caption(asText(placeholderLiteral))
+                .cssClass("placeholder-literal-" + placeholderLiteral.getLiteral())
+                .build()
+                .toHtml();
     }
 
 }
