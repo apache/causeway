@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -146,8 +146,8 @@ implements ImperativeFacet {
 
         val method = methods.getFirstOrFail();
 
-        final Object[] executionParameters = UnwrapUtil.multipleAsArray(arguments);
-        final Object targetPojo = UnwrapUtil.single(head.getTarget());
+        final Object[] executionParameters = MmUnwrapUtil.multipleAsArray(arguments);
+        final Object targetPojo = MmUnwrapUtil.single(head.getTarget());
 
         final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
         final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();

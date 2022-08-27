@@ -70,7 +70,7 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -421,7 +421,7 @@ public class DomainObjectTesterFactory {
                         .get(param.getParamNr())
                         .ifPresent(pojoTest->
                             pojoTest.accept(
-                                    ManagedObjects.UnwrapUtil.single(param.getValue().getValue())
+                                    MmUnwrapUtil.single(param.getValue().getValue())
                                     ));
                 });
 
@@ -460,7 +460,7 @@ public class DomainObjectTesterFactory {
         }
 
         private static List<Object> choicesFor(final ManagedValue param) {
-            return ManagedObjects.UnwrapUtil.multipleAsList(param.getChoices().getValue());
+            return MmUnwrapUtil.multipleAsList(param.getChoices().getValue());
         }
 
         @SuppressWarnings("unchecked")
@@ -548,7 +548,7 @@ public class DomainObjectTesterFactory {
                                     objManager
                                     .adapt(
                                         argMapper
-                                        .apply(ManagedObjects.UnwrapUtil.single(param.getValue().getValue())))));
+                                        .apply(MmUnwrapUtil.single(param.getValue().getValue())))));
                     });
 
                 },

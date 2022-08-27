@@ -23,7 +23,7 @@ import org.apache.isis.applib.services.wrapper.events.ObjectTitleEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -47,7 +47,7 @@ extends AccessContext {
 
     @Override
     public ObjectTitleEvent createInteractionEvent() {
-        return new ObjectTitleEvent(UnwrapUtil.single(getTarget()), getIdentifier(), getTitle());
+        return new ObjectTitleEvent(MmUnwrapUtil.single(getTarget()), getIdentifier(), getTitle());
     }
 
     private String getTitle() {

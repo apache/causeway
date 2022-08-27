@@ -26,8 +26,9 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -59,7 +60,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstOrFail();
-        final Object collectionOrArray = ManagedObjects.InvokeUtil.invoke(method, owningAdapter);
+        final Object collectionOrArray = MmInvokeUtil.invoke(method, owningAdapter);
         if(collectionOrArray == null) {
             return null;
         }
@@ -69,7 +70,7 @@ implements ImperativeFacet {
         final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
 
-            val autofittedObjectContainer = ManagedObjects.VisibilityUtil
+            val autofittedObjectContainer = MmVisibilityUtil
                     .visiblePojosAutofit(collectionAdapter, interactionInitiatedBy, method.getReturnType());
 
             if (autofittedObjectContainer != null) {

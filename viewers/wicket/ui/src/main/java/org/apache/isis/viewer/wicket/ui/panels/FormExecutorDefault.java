@@ -34,7 +34,7 @@ import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
-import org.apache.isis.core.metamodel.object.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
@@ -153,7 +153,7 @@ implements FormExecutor {
 
             if(log.isDebugEnabled()) {
                 log.debug("about to redirect with {} after execution result {}",
-                        EntityUtil.getEntityState(resultAdapter),
+                        MmEntityUtil.getEntityState(resultAdapter),
                         resultAdapter);
             }
 

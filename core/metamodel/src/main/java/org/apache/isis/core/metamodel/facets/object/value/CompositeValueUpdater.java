@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.commons.CanonicalInvoker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
@@ -80,8 +80,8 @@ public abstract class CompositeValueUpdater {
             final InteractionHead head, final Can<ManagedObject> parameters) {
         val method = delegate.getFacetedMethod().getMethod();
 
-        final Object[] executionParameters = UnwrapUtil.multipleAsArray(parameters);
-        final Object targetPojo = UnwrapUtil.single(head.getTarget());
+        final Object[] executionParameters = MmUnwrapUtil.multipleAsArray(parameters);
+        final Object targetPojo = MmUnwrapUtil.single(head.getTarget());
 
         val resultPojo = CanonicalInvoker
                 .invoke(method, targetPojo, executionParameters);

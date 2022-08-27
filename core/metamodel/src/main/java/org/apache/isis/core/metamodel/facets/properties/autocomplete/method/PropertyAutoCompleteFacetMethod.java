@@ -27,8 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacetAbstract;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -69,14 +70,14 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstOrFail();
-        final Object collectionOrArray = ManagedObjects.InvokeUtil.invoke(method, owningAdapter, searchArg);
+        final Object collectionOrArray = MmInvokeUtil.invoke(method, owningAdapter, searchArg);
         if (collectionOrArray == null) {
             return null;
         }
 
         val collectionAdapter = getObjectManager().adapt(collectionOrArray);
 
-        val visiblePojos = ManagedObjects.VisibilityUtil
+        val visiblePojos = MmVisibilityUtil
                 .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
 
         return visiblePojos;

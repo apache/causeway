@@ -23,7 +23,7 @@ import org.apache.isis.applib.services.wrapper.events.ParseValueEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -52,8 +52,8 @@ implements ProposedHolder {
 
     @Override
     public ParseValueEvent createInteractionEvent() {
-        final String proposedPojo = (String) UnwrapUtil.single(getProposed());
-        return new ParseValueEvent(UnwrapUtil.single(getTarget()), getIdentifier(), proposedPojo);
+        final String proposedPojo = (String) MmUnwrapUtil.single(getProposed());
+        return new ParseValueEvent(MmUnwrapUtil.single(getTarget()), getIdentifier(), proposedPojo);
     }
 
 }

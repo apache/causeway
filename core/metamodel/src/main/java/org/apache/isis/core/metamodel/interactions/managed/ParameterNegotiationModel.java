@@ -37,9 +37,9 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.metamodel.object.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -277,7 +277,7 @@ public class ParameterNegotiationModel {
             this.negotiationModel = negotiationModel;
 
             bindableParamValue = _Bindables.forValue(initialValue);
-            bindableParamValue.setValueRefiner(EntityUtil::refetch);
+            bindableParamValue.setValueRefiner(MmEntityUtil::refetch);
             bindableParamValue.setValueGuard(ManagedObjects.assertInstanceOf(metaModel.getElementType()));
             bindableParamValue.addListener((e,o,n)->{
                 if(n==null) {

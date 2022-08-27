@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.object.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -42,7 +42,7 @@ extends UsabilityContext {
 
     @Override
     public PropertyUsabilityEvent createInteractionEvent() {
-        return new PropertyUsabilityEvent(UnwrapUtil.single(getTarget()), getIdentifier());
+        return new PropertyUsabilityEvent(MmUnwrapUtil.single(getTarget()), getIdentifier());
     }
 
 }

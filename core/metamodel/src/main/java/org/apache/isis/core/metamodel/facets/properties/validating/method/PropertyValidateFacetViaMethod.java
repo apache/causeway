@@ -27,8 +27,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacetAbstract;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
 
 public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstract implements ImperativeFacet {
 
@@ -59,7 +59,7 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
 
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final ManagedObject proposedAdapter) {
-        final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter, proposedAdapter);
+        final Object returnValue = MmInvokeUtil.invoke(method, owningAdapter, proposedAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

@@ -41,7 +41,7 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -119,8 +119,8 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
-                final Object[] arguments = UnwrapUtil.multipleAsArray(argumentAdapters);
+                final S source = uncheckedCast(MmUnwrapUtil.single(head.getTarget()));
+                final Object[] arguments = MmUnwrapUtil.multipleAsArray(argumentAdapters);
                 final Identifier identifier = facetHolder.getFeatureIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
@@ -248,7 +248,7 @@ public class DomainEventHelper {
             } else {
                 // all other phases, create a new event
 
-                final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
+                final S source = uncheckedCast(MmUnwrapUtil.single(head.getTarget()));
                 final Identifier identifier = facetHolder.getFeatureIdentifier();
 
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
@@ -344,7 +344,7 @@ public class DomainEventHelper {
         try {
             final CollectionDomainEvent<S, T> event;
 
-            final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
+            final S source = uncheckedCast(MmUnwrapUtil.single(head.getTarget()));
             final Identifier identifier = facetHolder.getFeatureIdentifier();
             event = newCollectionDomainEvent(eventType, phase, identifier, source);
 

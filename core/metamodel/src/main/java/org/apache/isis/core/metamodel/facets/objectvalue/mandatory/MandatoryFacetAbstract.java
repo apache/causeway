@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -72,7 +72,7 @@ implements MandatoryFacet {
     @Override
     public final boolean isRequiredButNull(final ManagedObject adapter) {
         if(getSemantics().isRequired()) {
-            val pojo = UnwrapUtil.single(adapter);
+            val pojo = MmUnwrapUtil.single(adapter);
 
             // special case string handling.
             if(pojo instanceof String) {

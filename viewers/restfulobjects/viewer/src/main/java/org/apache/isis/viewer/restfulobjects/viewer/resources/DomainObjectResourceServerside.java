@@ -53,9 +53,9 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
-import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -150,7 +150,7 @@ implements DomainObjectResource {
                     .createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason()));
         }
 
-        EntityUtil.persistInCurrentTransaction(adapter);
+        MmEntityUtil.persistInCurrentTransaction(adapter);
 
         val domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, adapter);
 

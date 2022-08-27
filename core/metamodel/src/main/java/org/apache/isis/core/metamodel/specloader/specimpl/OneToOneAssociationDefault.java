@@ -49,9 +49,9 @@ import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.metamodel.object.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -203,7 +203,7 @@ implements OneToOneAssociation {
             throw _Exceptions.unexpectedCodeReach();
         }
 
-        EntityUtil.requiresWhenFirstIsBookmarkableSecondIsAttached(ownerAdapter, newReferencedAdapter);
+        MmEntityUtil.requiresWhenFirstIsBookmarkableSecondIsAttached(ownerAdapter, newReferencedAdapter);
 
         return propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }

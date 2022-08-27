@@ -25,7 +25,6 @@ import java.util.function.UnaryOperator;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -91,31 +90,13 @@ public interface ManagedObject extends HasMetaModelContext {
 
     public default String htmlString(
             final @Nullable ObjectFeature feature) {
-
-        if(!ManagedObjects.isSpecified(this)) {
-            return "";
-        }
-
-        val spec = getSpecification();
-        val valueFacet = spec.valueFacet().orElse(null);
-
-        if(valueFacet==null) {
-            return String.format("missing ValueFacet %s", spec.getCorrespondingClass());
-        }
-
-        @SuppressWarnings("unchecked")
-        val renderer = (Renderer<Object>) valueFacet.selectRendererForFeature(feature).orElse(null);
-        if(renderer==null) {
-            return String.format("missing Renderer %s", spec.getCorrespondingClass());
-        }
-
-        return renderer.htmlPresentation(valueFacet.createValueSemanticsContext(feature), this.getPojo());
+        return _InternalTitleUtil.htmlString(this, feature);
     }
 
     // -- TITLE
 
     public default String titleString(final UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder) {
-        return ManagedObjects.TitleUtil
+        return _InternalTitleUtil
                 .titleString(onBuilder.apply(
                         TitleRenderRequest.builder()
                         .object(this))
@@ -123,7 +104,7 @@ public interface ManagedObject extends HasMetaModelContext {
     }
 
     public default String titleString() {
-        return ManagedObjects.TitleUtil.titleString(
+        return _InternalTitleUtil.titleString(
                 TitleRenderRequest.builder()
                 .object(this)
                 .build());

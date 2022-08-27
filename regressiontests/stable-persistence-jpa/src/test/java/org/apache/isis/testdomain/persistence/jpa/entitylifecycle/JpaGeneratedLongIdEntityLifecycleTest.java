@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.entities.JpaEntityGeneratedLongId;
@@ -78,7 +78,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
         assertTrue(entity.getSpecification().isEntity());
         assertEquals(
                 EntityState.PERSISTABLE_DETACHED,
-                ManagedObjects.EntityUtil.getEntityState(entity));
+                MmEntityUtil.getEntityState(entity));
 
         setEntityRef(entity);
 
@@ -93,7 +93,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         assertEquals(
                 EntityState.PERSISTABLE_ATTACHED,
-                ManagedObjects.EntityUtil.getEntityState(entity));
+                MmEntityUtil.getEntityState(entity));
         assertEquals(1, repository.allInstances(JpaEntityGeneratedLongId.class).size());
 
     }
@@ -104,7 +104,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
         // expected post-condition (after persist, and having entered a new transaction)
         assertEquals(
                 EntityState.PERSISTABLE_DETACHED,
-                ManagedObjects.EntityUtil.getEntityState(getEntityRef()));
+                MmEntityUtil.getEntityState(getEntityRef()));
 
         val id = ((JpaEntityGeneratedLongId)getEntityRef().getPojo()).getId();
 
@@ -117,7 +117,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
         // expected pre-condition (before removal)
         assertEquals(
                 EntityState.PERSISTABLE_ATTACHED,
-                ManagedObjects.EntityUtil.getEntityState(entity));
+                MmEntityUtil.getEntityState(entity));
 
         repository.remove(entity.getPojo());
 
@@ -156,7 +156,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
     static void assertDetachedOrDeleted(final ManagedObject entity) {
         assertEquals(
                 EntityState.PERSISTABLE_DETACHED, // if undecidable we currently return PERSISTABLE_DETACHED;
-                ManagedObjects.EntityUtil.getEntityState(entity));
+                MmEntityUtil.getEntityState(entity));
     }
 
 

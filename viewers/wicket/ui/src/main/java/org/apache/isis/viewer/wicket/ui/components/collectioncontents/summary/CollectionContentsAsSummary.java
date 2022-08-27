@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -143,7 +143,7 @@ implements CollectionCountProvider {
                     values.add(null);
                     continue;
                 }
-                final Object valueObj = ManagedObjects.UnwrapUtil.single(valueAdapter);
+                final Object valueObj = MmUnwrapUtil.single(valueAdapter);
                 if (valueObj == null) {
                     values.add(null);
                     continue;

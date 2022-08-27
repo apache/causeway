@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.object.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -41,7 +41,7 @@ public class PropertyVisibilityContext extends VisibilityContext {
 
     @Override
     public PropertyVisibilityEvent createInteractionEvent() {
-        return new PropertyVisibilityEvent(UnwrapUtil.single(getTarget()), getIdentifier());
+        return new PropertyVisibilityEvent(MmUnwrapUtil.single(getTarget()), getIdentifier());
     }
 
 }

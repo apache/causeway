@@ -59,6 +59,7 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
@@ -157,7 +158,7 @@ implements
                 // set post values, which have been left empty up to now
                 .peek(rec -> {
                     // assuming this check correctly detects deleted entities (JDO)
-                    if(ManagedObjects.EntityUtil.isDetachedOrRemoved(rec.getEntity())) {
+                    if(MmEntityUtil.isDetachedOrRemoved(rec.getEntity())) {
                         rec.withPostValueSetToDeleted();
                     } else {
                         rec.withPostValueSetToCurrent();

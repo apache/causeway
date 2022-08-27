@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySettingAccessor;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -194,7 +194,7 @@ implements
 
                 // ... post the executing event
                 val oldValuePojo = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
-                val newValuePojo = UnwrapUtil.single(newValueAdapterMutatable);
+                val newValuePojo = MmUnwrapUtil.single(newValueAdapterMutatable);
 
                 val propertyDomainEvent =
                         domainEventHelper.postEventForProperty(

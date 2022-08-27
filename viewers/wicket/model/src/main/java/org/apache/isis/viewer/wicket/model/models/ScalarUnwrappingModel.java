@@ -24,7 +24,7 @@ import org.springframework.util.ClassUtils;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -73,7 +73,7 @@ extends ChainingModel<T> {
     // -- HELPER
 
     private T unwrap(final ManagedObject objectAdapter) {
-        val pojo = ManagedObjects.UnwrapUtil.single(objectAdapter);
+        val pojo = MmUnwrapUtil.single(objectAdapter);
         if(pojo==null
                 || !ClassUtils.resolvePrimitiveIfNecessary(type)
                         .isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(pojo.getClass()))) {

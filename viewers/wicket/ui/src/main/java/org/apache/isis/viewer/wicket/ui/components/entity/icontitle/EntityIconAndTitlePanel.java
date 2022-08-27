@@ -29,7 +29,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.metamodel.object.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
@@ -65,7 +65,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     }
 
     protected ManagedObject getTargetAdapter() {
-        val targetAdapter = EntityUtil.refetch(getModel().getObject());
+        val targetAdapter = MmEntityUtil.refetch(getModel().getObject());
         return targetAdapter;
     }
 
