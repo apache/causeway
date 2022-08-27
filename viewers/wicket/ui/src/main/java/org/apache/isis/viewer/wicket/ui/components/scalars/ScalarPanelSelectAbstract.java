@@ -34,7 +34,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Cho
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.Wkt.EventTopic;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
@@ -43,7 +42,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter protected Select2 select2;
+    protected Select2 select2;
 
     public ScalarPanelSelectAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, ManagedObject.class);
@@ -59,8 +58,6 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
     private void addSelect2Semantics(final Settings settings) {
         val scalarModel = scalarModel();
 
-        //FIXME[ISIS-3172]  why not always render the place holder?
-
         switch(scalarModel.getChoiceProviderSort()) {
         case CHOICES:
             settings.setPlaceholder(scalarModel.getFriendlyName());
@@ -70,12 +67,17 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
             settings.setMinimumInputLength(scalarModel.getAutoCompleteMinLength());
             return;
         case OBJECT_AUTO_COMPLETE:
+            //TODO render object place holder?
             Facets.autoCompleteMinLength(scalarModel.getScalarTypeSpec())
             .ifPresent(settings::setMinimumInputLength);
             return;
         default:
             // ignore if no choices
         }
+    }
+
+    public final boolean checkSelect2Required() {
+        return select2.checkRequired();
     }
 
     /**

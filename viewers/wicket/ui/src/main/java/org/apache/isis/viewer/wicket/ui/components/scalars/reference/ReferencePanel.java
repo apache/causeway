@@ -30,7 +30,6 @@ import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
@@ -100,9 +99,9 @@ public class ReferencePanel extends ScalarPanelSelectAbstract {
         this.entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getId(), this);
         entityLink.setRequired(scalarModel.isRequired());
 
-        _Assert.assertTrue(scalarModel.getChoiceProviderSort().isChoicesAny(),
-                ()->String.format("inconsistent metamodel: rendering a select2 while it has no choices; feature %s",
-                    scalarModel.getMetaModel().getFeatureIdentifier()));
+//        _Assert.assertTrue(scalarModel.getChoiceProviderSort().isChoicesAny(),
+//                ()->String.format("inconsistent metamodel: rendering a select2 while it has no choices; feature %s",
+//                    scalarModel.getMetaModel().getFeatureIdentifier()));
         this.select2 = createSelect2(ID_AUTO_COMPLETE);
 
         entityLink.addOrReplace(select2.asComponent());

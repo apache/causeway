@@ -49,13 +49,14 @@ implements CancelHintRequired  {
     }
 
     /**
-     * Necessary because {@link FormComponentPanel} overrides this as <tt>true</tt>, whereas we want to
+     * Necessary because {@link FormComponentPanel} overrides this as <tt>true</tt>,
+     * whereas we want to
      * report on the state of the underlying {@link org.wicketstuff.select2.Select2Choice} or
      * {@link Select2MultiChoice}.
      */
     @Override
     public boolean checkRequired() {
-        return owningPanel.getSelect2().checkRequired();
+        return owningPanel.checkSelect2Required();
     }
 
     /**
