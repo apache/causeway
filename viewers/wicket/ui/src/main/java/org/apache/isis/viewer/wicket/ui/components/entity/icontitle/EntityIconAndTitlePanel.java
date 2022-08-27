@@ -29,7 +29,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -175,7 +174,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private String determineTitle() {
         val managedObject = getModel().getObject();
-        return managedObject instanceof PackedManagedObject
+        return ManagedObjects.isPacked(managedObject)
                 ? "(multiple objects)"
                 : managedObject != null
                     ? managedObject.titleString(conf->conf.skipTitlePartEvaluator(this::isContextAdapter))
@@ -217,7 +216,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private static boolean isNonEmptyAbstractScalar(final ManagedObject obj) {
         if(obj==null
                 || obj.getPojo()==null
-                || obj instanceof PackedManagedObject) {
+                || ManagedObjects.isPacked(obj)) {
             return false;
         }
         return obj.getSpecification().isAbstract();

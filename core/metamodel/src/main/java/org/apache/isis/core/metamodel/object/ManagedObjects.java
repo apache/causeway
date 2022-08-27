@@ -62,7 +62,6 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.object.ManagedObject.ManagedObjectWithBookmark;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -150,6 +149,10 @@ public final class ManagedObjects {
     }
 
     // -- INSTANCE-OF CHECKS
+
+    public static boolean isPacked(final @Nullable ManagedObject managedObject) {
+        return managedObject instanceof PackedManagedObject;
+    }
 
     /**
      * Whether given {@code object} is an instance of given {@code elementType}.
@@ -499,41 +502,6 @@ public final class ManagedObjects {
         return result;
     }
 
-    // -- UNSPECIFIED OBJECT
-
-    static final ManagedObject UNSPECIFIED = new ManagedObject() {
-
-        @Override
-        public ObjectSpecification getSpecification() {
-            throw _Exceptions.unsupportedOperation();
-        }
-
-        @Override
-        public Object getPojo() {
-            return null;
-        }
-
-        @Override
-        public Optional<Bookmark> getBookmark() {
-            return Optional.empty();
-        }
-
-        @Override
-        public Optional<Bookmark> getBookmarkRefreshed() {
-            return Optional.empty();
-        }
-
-        @Override
-        public boolean isBookmarkMemoized() {
-            return false;
-        }
-
-        @Override
-        public void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-            // noop; only available for viewmodels
-        }
-    };
-
     // -- SPECIFICATION UTILITIES
 
     /**
@@ -770,7 +738,7 @@ public final class ManagedObjects {
             val newState = EntityUtil.getEntityState(reattached);
             _Assert.assertTrue(newState.isAttached());
 
-            _Casts.castTo(ManagedObjectWithBookmark.class, managedObject)
+            _Casts.castTo(_ManagedObjectWithBookmark.class, managedObject)
             .ifPresent(obj->obj.replacePojo(old->reattached.getPojo()));
 
             return managedObject;

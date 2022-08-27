@@ -355,7 +355,7 @@ public interface ObjectAction extends ObjectMember {
                             hasImperativeFaIcon->
                                 ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)
                                     ? null
-                                    : hasImperativeFaIcon.getCssClassFaFactory(domainObject.asProvider())))
+                                    : hasImperativeFaIcon.getCssClassFaFactory(domainObject.asSupplier())))
             .filter(_NullSafe::isPresent);
         }
 
@@ -410,7 +410,7 @@ public interface ObjectAction extends ObjectMember {
                 val mixinSpec = action.getDeclaringType();
                 val ownerSpec = mixeeAdapter.getSpecification();
                 return ownerSpec.lookupMixedInMember(mixinSpec)
-                        .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter.asProvider()))
+                        .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter.asSupplier()))
                         .orElseThrow(_Exceptions::unexpectedCodeReach);
             }
             return action.getFriendlyName(head::getOwner);

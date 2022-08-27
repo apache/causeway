@@ -147,8 +147,8 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         final JsonRepresentation paramRep = JsonRepresentation.newMap();
         paramRep.mapPutInt("num", paramMeta.getParameterIndex());
         paramRep.mapPutString("id", paramMeta.getId());
-        paramRep.mapPutString("name", paramMeta.getFriendlyName(objectAdapter.asProvider()));
-        paramRep.mapPut("description", paramMeta.getDescription(objectAdapter.asProvider()));
+        paramRep.mapPutString("name", paramMeta.getFriendlyName(objectAdapter.asSupplier()));
+        paramRep.mapPut("description", paramMeta.getDescription(objectAdapter.asSupplier()));
         final Object paramChoices = choicesFor(paramMod, paramNeg);
         if (paramChoices != null) {
             paramRep.mapPut("choices", paramChoices);

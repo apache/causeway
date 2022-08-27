@@ -665,7 +665,7 @@ public class XmlSnapshot implements Snapshot {
 
             // Skip field if we have seen the name already
             for (int j = 0; j < i; j++) {
-                if (Objects.equals(fieldName, fields.get(i).getFriendlyName(adapter.asProvider()))) {
+                if (Objects.equals(fieldName, fields.get(i).getFriendlyName(adapter.asSupplier()))) {
                     log.debug("objectToElement(NO): {} SKIPPED", log("field", fieldName));
                     continue eachField;
                 }

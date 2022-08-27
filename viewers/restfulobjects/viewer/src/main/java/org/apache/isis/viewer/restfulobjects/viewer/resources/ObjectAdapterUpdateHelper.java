@@ -119,9 +119,9 @@ public class ObjectAdapterUpdateHelper {
             // otherwise, is an error.
             final String invalidReason = propertiesMap.getString("x-ro-invalidReason");
             if(invalidReason != null) {
-                propertiesMap.mapPutString("x-ro-invalidReason", invalidReason + "; " + property.getFriendlyName(objectAdapter.asProvider()));
+                propertiesMap.mapPutString("x-ro-invalidReason", invalidReason + "; " + property.getFriendlyName(objectAdapter.asSupplier()));
             } else {
-                propertiesMap.mapPutString("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getFriendlyName(objectAdapter.asProvider()));
+                propertiesMap.mapPutString("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getFriendlyName(objectAdapter.asSupplier()));
             }
             allOk = false;
             return allOk;

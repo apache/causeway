@@ -18,18 +18,44 @@
  */
 package org.apache.isis.core.metamodel.object;
 
-import org.apache.isis.commons.collections.Can;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public interface PackedManagedObject
-extends ManagedObject {
+final class _ManagedObjectUnspecified extends _ManagedObjectAbstract {
 
-    public static ManagedObject pack(
-            final ObjectSpecification elementSpec,
-            final Can<ManagedObject> nonScalar) {
-        return new _ManagedObjectPacked(elementSpec, nonScalar);
+    @Override
+    public ObjectSpecification getSpecification() {
+        throw _Exceptions.unsupportedOperation();
     }
 
-    Can<ManagedObject> unpack();
+    @Override
+    public Object getPojo() {
+        return null;
+    }
+
+    @Override
+    public Optional<Bookmark> getBookmark() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Bookmark> getBookmarkRefreshed() {
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean isBookmarkMemoized() {
+        return false;
+    }
+
+    @Override
+    public void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
+    }
 
 }
