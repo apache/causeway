@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;

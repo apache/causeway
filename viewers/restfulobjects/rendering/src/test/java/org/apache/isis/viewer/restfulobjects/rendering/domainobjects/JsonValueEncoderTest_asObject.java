@@ -25,7 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;

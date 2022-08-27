@@ -21,8 +21,8 @@ package org.apache.isis.viewer.commons.model.object;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 
 import lombok.RequiredArgsConstructor;
 

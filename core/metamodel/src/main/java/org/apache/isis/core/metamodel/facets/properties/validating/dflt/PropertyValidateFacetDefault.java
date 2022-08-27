@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * Non checking property validation facet that provides default behaviour for

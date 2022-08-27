@@ -31,8 +31,8 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import org.apache.isis.commons.functional.Either;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;

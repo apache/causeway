@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 public interface CssClassFaImperativeFacet
 extends CssClassFaFacet {

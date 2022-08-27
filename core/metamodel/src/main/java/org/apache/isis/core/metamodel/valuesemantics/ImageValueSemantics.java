@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.valuesemantics;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 public interface ImageValueSemantics {
 

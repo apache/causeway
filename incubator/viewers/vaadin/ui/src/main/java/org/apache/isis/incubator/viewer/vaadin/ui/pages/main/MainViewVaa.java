@@ -32,7 +32,7 @@ import com.vaadin.flow.router.RouteAlias;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;

@@ -21,7 +21,7 @@ package org.apache.isis.extensions.pdfjs.wkt.ui.components;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

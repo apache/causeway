@@ -29,9 +29,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

@@ -22,7 +22,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 
 public class ObjectValidPropertiesFacetImpl

@@ -27,7 +27,7 @@ import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataColumn;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;

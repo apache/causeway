@@ -31,9 +31,9 @@ import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.Plac
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext.HasCommonContext;
 
 import lombok.val;

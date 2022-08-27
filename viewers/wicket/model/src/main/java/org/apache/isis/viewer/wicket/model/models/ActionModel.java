@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.action.ActionFormUiModel;
 
 import lombok.val;

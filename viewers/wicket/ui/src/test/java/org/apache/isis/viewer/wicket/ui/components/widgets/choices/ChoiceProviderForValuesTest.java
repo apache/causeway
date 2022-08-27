@@ -28,8 +28,8 @@ import org.wicketstuff.select2.Response;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderForValues;
 

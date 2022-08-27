@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.icon;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -30,12 +30,12 @@ import lombok.NonNull;
  * <p>
  * Clients should not use this service directly. Either use
  * {@link ManagedObject#getIcon()} or
- * {@link ObjectSpecification#getIcon(org.apache.isis.core.metamodel.spec.ManagedObject)}.
+ * {@link ObjectSpecification#getIcon(org.apache.isis.core.metamodel.object.ManagedObject)}.
  *
  * @apiNote internal service, used by the metamodel
  *
  * @see ManagedObject#getIcon()
- * @see ObjectSpecification#getIcon(org.apache.isis.core.metamodel.spec.ManagedObject)
+ * @see ObjectSpecification#getIcon(org.apache.isis.core.metamodel.object.ManagedObject)
  * @since 2.0
  */
 public interface ObjectIconService {

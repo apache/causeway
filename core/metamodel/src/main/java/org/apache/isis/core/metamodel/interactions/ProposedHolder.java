@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * Implemented by some of the {@link InteractionContext} subclasses, making it

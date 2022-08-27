@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.core.metamodel.object;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -28,6 +28,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;

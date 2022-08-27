@@ -29,7 +29,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

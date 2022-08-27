@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.util.snapshot;
 
 import org.w3c.dom.Element;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * Represents a place in the graph to be navigated; really just wraps an object

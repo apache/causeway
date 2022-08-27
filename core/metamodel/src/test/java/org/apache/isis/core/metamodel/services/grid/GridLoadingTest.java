@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.MetaModelTestAbstract;
 import org.apache.isis.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.val;
 

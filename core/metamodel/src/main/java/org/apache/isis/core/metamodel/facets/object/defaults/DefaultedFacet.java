@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.defaults;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * Indicates that this class has a default.

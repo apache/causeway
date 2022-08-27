@@ -22,7 +22,7 @@ import java.util.function.BiConsumer;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 public class LayoutFacetFallback extends LayoutFacetAbstract {
 

@@ -23,7 +23,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
 

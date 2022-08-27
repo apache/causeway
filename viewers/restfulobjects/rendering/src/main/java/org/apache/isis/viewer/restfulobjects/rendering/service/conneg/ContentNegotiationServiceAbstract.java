@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;

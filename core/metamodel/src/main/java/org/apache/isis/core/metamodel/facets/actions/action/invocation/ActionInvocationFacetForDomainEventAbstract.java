@@ -41,9 +41,9 @@ import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 

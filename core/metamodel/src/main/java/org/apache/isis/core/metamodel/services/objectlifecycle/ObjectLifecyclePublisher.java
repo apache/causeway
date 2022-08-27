@@ -22,8 +22,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Responsible for collecting and then passing along changes (to the EntityChangeTracker, in persistence commons) so

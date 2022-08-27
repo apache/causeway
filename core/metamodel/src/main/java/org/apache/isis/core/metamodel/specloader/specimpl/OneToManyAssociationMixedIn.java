@@ -34,8 +34,8 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
 import org.apache.isis.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 

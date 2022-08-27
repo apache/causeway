@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.interactions.managed;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 @FunctionalInterface
 public interface MultiselectChoices {

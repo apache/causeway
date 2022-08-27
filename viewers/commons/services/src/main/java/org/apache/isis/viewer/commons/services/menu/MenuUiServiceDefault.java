@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.layout.menubars.bootstrap.BSMenuBar;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.applib.services.menu.MenuUiModel;

@@ -26,7 +26,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.Veto;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.commons.model.mixin.HasTitle;
 

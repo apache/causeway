@@ -24,8 +24,8 @@ import java.util.function.BiConsumer;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;

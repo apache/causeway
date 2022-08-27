@@ -76,6 +76,7 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
@@ -92,7 +93,6 @@ import org.apache.isis.core.metamodel.services.grid.bootstrap.GridSystemServiceB
 import org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.isis.core.metamodel.services.message.MessageServiceNoop;
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;

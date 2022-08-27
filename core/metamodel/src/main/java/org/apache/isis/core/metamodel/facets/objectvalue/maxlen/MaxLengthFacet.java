@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.objectvalue.maxlen;
 
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * Whether the (string) property or a parameter's length must not exceed a

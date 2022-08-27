@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * The mechanism by which the proposed value of a property can be validated,

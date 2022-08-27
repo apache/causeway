@@ -42,7 +42,7 @@ import org.apache.isis.commons.internal.resources._Xml.WriteOptions;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.core.metamodel.object;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -62,8 +62,9 @@ import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.object.ManagedObject.ManagedObjectWithBookmark;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
-import org.apache.isis.core.metamodel.spec.ManagedObject.ManagedObjectWithBookmark;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.NonNull;

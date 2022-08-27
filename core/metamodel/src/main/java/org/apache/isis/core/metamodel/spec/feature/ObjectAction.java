@@ -47,9 +47,9 @@ import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFac
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ActionScope;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;

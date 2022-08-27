@@ -23,7 +23,7 @@ import java.util.function.Function;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
 import lombok.val;

@@ -29,7 +29,7 @@ import com.vaadin.flow.component.Component;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
 
 import lombok.Getter;

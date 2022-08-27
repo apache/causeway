@@ -31,7 +31,7 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;

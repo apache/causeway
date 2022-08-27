@@ -39,7 +39,7 @@ import org.apache.wicket.request.resource.ByteArrayResource;
 
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.isis.extensions.pdfjs.applib.config.Scale;
 import org.apache.isis.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;

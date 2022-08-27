@@ -33,7 +33,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 public class CssClassFacetMethodWithProblemTest {
 

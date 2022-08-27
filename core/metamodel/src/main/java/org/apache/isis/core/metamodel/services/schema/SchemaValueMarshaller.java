@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.services.schema;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;

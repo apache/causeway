@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs.clearfix;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.applib.layout.grid.bootstrap.BSClearFix;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;

@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;

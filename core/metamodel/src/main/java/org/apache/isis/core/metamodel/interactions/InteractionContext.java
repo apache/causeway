@@ -24,7 +24,7 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 

@@ -24,7 +24,7 @@ import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 

@@ -22,8 +22,8 @@ import java.util.UUID;
 
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.binding._Bindables.BooleanBindable;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects.EntityUtil;
 
 import lombok.Getter;
 

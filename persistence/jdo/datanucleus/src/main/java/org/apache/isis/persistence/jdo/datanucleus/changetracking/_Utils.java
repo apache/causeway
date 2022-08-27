@@ -27,9 +27,9 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.NonNull;
 import lombok.val;

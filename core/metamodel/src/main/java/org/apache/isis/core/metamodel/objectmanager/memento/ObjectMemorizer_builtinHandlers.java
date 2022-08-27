@@ -23,9 +23,9 @@ import javax.inject.Inject;
 import org.springframework.context.annotation.Lazy;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 
 final class ObjectMemorizer_builtinHandlers {
 

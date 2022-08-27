@@ -26,7 +26,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.commons.internal.collections._Arrays.toArray;

@@ -26,7 +26,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel.Variant;

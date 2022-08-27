@@ -34,9 +34,9 @@ import org.datanucleus.enhancement.Persistable;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnObjectProviderForIsis;
 
 import lombok.NonNull;

@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.ActionLinkUiComponentFactoryWkt;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;

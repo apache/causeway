@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.members.hidden.method;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * Hide a property, collection or action based on the state of the target

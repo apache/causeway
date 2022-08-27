@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.property;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

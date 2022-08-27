@@ -31,7 +31,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 import lombok.RequiredArgsConstructor;

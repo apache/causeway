@@ -24,8 +24,8 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects.UnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to

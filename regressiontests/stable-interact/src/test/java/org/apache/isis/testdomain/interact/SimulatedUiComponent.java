@@ -22,7 +22,7 @@ import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class SimulatedUiComponent extends HasValueValidation {

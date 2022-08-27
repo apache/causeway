@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.properties.update.modify;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**

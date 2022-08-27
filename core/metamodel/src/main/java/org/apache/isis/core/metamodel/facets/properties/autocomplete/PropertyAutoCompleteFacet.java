@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.properties.autocomplete;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * Provides a set of auto-complete choices for a property.

@@ -41,8 +41,8 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializerDefault;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
 
 import static org.hamcrest.CoreMatchers.is;

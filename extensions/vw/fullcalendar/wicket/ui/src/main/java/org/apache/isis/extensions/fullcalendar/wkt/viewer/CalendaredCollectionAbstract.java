@@ -25,7 +25,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.CalendarConfig;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventProvider;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventSource;

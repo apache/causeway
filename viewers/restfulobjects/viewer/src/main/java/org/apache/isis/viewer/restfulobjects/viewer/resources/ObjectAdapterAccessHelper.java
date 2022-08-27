@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
 import org.apache.isis.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 
 import lombok.NonNull;

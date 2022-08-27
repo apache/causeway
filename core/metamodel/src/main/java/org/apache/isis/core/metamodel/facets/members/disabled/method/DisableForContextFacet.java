@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.members.disabled.method;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * Disable a property, collection or action based on the state of the target

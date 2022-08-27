@@ -24,7 +24,7 @@ import org.apache.isis.applib.layout.grid.bootstrap.BSClearFix;
 import org.apache.isis.applib.layout.grid.bootstrap.BSCol;
 import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
 import org.apache.isis.applib.layout.grid.bootstrap.BSRowContent;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.clearfix.ClearFix;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.col.Col;

@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.title;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * Mechanism for obtaining the title of an instance of a class, used to label

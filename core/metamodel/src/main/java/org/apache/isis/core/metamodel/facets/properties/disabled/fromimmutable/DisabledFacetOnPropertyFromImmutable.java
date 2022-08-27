@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
 import lombok.val;

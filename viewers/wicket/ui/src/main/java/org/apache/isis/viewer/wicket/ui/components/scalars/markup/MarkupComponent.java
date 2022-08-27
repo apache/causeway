@@ -29,7 +29,7 @@ import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.value.semantics.Renderer.SyntaxHighlighter;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarPropertyModel;

@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * Mix-in interface for {@link ObjectAction}s that reference or otherwise

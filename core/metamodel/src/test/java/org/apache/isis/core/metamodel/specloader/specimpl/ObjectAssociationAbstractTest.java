@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.interactions.managed.nonscalar;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 class _ToggleDebug {
 

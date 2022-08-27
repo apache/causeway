@@ -35,7 +35,7 @@ import org.w3c.dom.Element;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;

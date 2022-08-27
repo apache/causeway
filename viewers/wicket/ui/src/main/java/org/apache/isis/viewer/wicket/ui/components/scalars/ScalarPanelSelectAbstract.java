@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.springframework.lang.Nullable;
 import org.wicketstuff.select2.Settings;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.feature.ParameterUiModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;

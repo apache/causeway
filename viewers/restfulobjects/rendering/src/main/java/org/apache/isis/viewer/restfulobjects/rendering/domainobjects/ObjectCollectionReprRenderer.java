@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;

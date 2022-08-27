@@ -25,8 +25,8 @@ import org.apache.isis.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.Getter;

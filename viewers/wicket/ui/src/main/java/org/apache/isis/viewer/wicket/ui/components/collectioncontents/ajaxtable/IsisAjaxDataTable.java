@@ -36,7 +36,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataRowWkt;

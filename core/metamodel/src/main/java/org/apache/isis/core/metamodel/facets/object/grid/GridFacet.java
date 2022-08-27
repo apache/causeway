@@ -24,7 +24,7 @@ import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * Obtain the current grid, derived either from a <code>.layout.xml</code> file, and normalized, or synthesized from

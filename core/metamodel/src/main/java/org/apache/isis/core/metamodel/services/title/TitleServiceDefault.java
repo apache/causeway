@@ -30,9 +30,9 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.IsisModuleCoreMetamodel;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

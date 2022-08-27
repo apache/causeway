@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.NonNull;
 import lombok.val;

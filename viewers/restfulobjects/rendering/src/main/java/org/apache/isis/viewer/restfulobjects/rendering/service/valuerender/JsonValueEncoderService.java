@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 

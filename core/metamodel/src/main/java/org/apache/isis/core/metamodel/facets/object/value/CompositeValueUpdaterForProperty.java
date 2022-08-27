@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.value;
 
 import org.apache.isis.commons.internal.delegate._Delegate;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;

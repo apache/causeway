@@ -33,10 +33,10 @@ import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;

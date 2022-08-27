@@ -20,7 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.HasObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;

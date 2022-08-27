@@ -21,7 +21,7 @@ package org.apache.isis.extensions.fullcalendar.wkt.viewer.calendareventable;
 import java.util.Objects;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.isis.extensions.fullcalendar.wkt.viewer.EventProviderAbstract;

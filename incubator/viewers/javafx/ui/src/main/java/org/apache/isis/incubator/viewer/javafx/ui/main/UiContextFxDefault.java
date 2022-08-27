@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.incubator.viewer.javafx.model.action.ActionUiModelFactoryFx;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
 import org.apache.isis.incubator.viewer.javafx.model.events.JavaFxViewerConfig;

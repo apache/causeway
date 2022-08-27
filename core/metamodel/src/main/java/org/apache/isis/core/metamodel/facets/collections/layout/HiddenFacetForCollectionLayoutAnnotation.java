@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 public class HiddenFacetForCollectionLayoutAnnotation
 extends HiddenFacetAbstract {

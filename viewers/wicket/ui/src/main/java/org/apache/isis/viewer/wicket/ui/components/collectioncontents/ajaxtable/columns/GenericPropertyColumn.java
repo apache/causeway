@@ -29,7 +29,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;

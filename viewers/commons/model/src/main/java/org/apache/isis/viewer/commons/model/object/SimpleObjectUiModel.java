@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.commons.model.object;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;

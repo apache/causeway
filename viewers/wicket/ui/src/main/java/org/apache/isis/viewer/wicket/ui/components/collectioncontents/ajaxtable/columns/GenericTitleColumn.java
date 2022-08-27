@@ -26,7 +26,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.commons.model.object.ObjectUiModel.RenderingHint;

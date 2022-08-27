@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.members.cssclass;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * The CSS class of a class, a property, collection, or an action.

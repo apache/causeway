@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.interactions.CollectionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.CollectionVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 

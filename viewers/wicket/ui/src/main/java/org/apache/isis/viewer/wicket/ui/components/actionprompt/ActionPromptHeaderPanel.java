@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
 import org.apache.isis.commons.internal.base._Blackhole;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

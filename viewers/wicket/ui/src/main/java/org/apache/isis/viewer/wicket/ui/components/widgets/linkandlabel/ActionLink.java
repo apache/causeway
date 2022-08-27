@@ -29,7 +29,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.config.IsisConfiguration.Viewer.Wicket;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.commons.model.components.ComponentType;

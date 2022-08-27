@@ -24,7 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiService;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;

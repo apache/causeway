@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;

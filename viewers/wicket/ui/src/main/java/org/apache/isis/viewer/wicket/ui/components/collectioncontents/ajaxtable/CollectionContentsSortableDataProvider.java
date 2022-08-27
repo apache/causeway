@@ -29,7 +29,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.interaction.coll.DataRowWkt;

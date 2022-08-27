@@ -22,7 +22,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
 import org.apache.isis.applib.layout.grid.bootstrap.BSTab;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.HasUiHintDisambiguator;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs.col.RepeatingViewWithDynamicallyVisibleContent;

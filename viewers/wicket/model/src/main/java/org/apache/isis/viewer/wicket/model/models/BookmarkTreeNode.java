@@ -30,7 +30,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
