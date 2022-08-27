@@ -56,7 +56,12 @@ body {
 td .badge,
 .scalarPlaceholder .badge,
 .form-control-sm .badge {
-	font-size:.90em
+	font-size:.85rem
+}
+td .badge span, 
+.scalarPlaceholder .badge span, 
+.form-control-sm .badge span {
+  padding: 0;
 }
 
 
