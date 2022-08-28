@@ -12,7 +12,7 @@ include::docs:resources:partial$plantuml-stereotypes.puml[]
 
 package metamodel {
 
-    class Object\nSpecId<<value>> {
+    class LogicalType<<value>> {
         +type
     }
 
@@ -59,7 +59,7 @@ package metamodel {
 }
 
 package runtime {
-    class Object\nAdapter<<ppt>> {
+    class Managed\nObject<<ppt>> {
         +getSpecification()
     }
     class Oid<<value>> {
@@ -69,7 +69,7 @@ package runtime {
 
 
 
-Object\nSpecification -up-> Object\nSpecId
+Object\nSpecification -up-> LogicalType
 Object\nSpecification -down-> "*" Object\nMember
 Object\nMember ^-down- Object\nAssociation
 Object\nMember ^-down- Object\nAction
@@ -85,24 +85,19 @@ FacetHolder ^-.down- Object\nActionParameter
 FacetHolder -right-> "*" Facet
 
 
-Object\nAdapter  -up-> Oid
+ManagedObject  -up-> Bookmark
 
-Oid -right-> Object\nSpecId
+Bookmark -right-> LogicalType
 
 ----
 
 where in the `metamodel` package:
 
 `ObjectSpecification`:: is equivalent to `java.lang.Class`
-`ObjectSpecId`:: is a value object equivalent to the `@DomainObject#logicalTypeName` or `@DomainService#logicalTypeName` attribute
+`LogicalType`:: is a value object equivalent to the `@Named#value` attribute
 `OneToOneAssociation`:: represents a scalar property
 `OneToManyAssociation`:: represents a collection
-`ObjectAction`:: represents an action (with multiple parameters, either scalar or list)
+`ObjectAction`:: represents an action (with multiple parameters, either scalar or list) and in the `runtime` package:
+`Bookmark`:: is equivalent to a tuple of `LogicalType` and an _Identifier_, appears in URLs in the Wicket and Restful Objects viewers
 
-and in the `runtime` package:
-
-`Oid`:: is equivalent to the applib `Bookmark`
-+
-and appears in URLs in the Wicket and Restful Objects viewers
-
-`ObjectAdapter`:: is equivalent to `java.lang.Object`
+`ManagedObject`:: is equivalent to `java.lang.Object`
