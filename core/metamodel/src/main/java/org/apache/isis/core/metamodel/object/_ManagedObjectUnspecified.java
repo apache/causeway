@@ -29,8 +29,8 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
- * (package private) specialization corresponding to {@link Specialization#PACKED}
- * @see ManagedObject.Specialization#PACKED
+ * (package private) specialization corresponding to {@link Specialization#UNSPECIFIED}
+ * @see ManagedObject.Specialization#UNSPECIFIED
  */
 final class _ManagedObjectUnspecified
 implements ManagedObject {
