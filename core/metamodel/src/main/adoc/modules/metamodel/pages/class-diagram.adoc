@@ -59,10 +59,11 @@ package metamodel {
 }
 
 package runtime {
-    class Managed\nObject<<ppt>> {
+    class ManagedObject<<ppt>> {
         +getSpecification()
+        +getPojo()
     }
-    class Oid<<value>> {
+    class Bookmark<<value>> {
 
     }
 }
@@ -97,7 +98,10 @@ where in the `metamodel` package:
 `LogicalType`:: is a value object equivalent to the `@Named#value` attribute
 `OneToOneAssociation`:: represents a scalar property
 `OneToManyAssociation`:: represents a collection
-`ObjectAction`:: represents an action (with multiple parameters, either scalar or list) and in the `runtime` package:
+`ObjectAction`:: represents an action (with multiple parameters, either scalar or list)
+
+and in the `runtime` package:
+
 `Bookmark`:: is equivalent to a tuple of `LogicalType` and an _Identifier_, appears in URLs in the Wicket and Restful Objects viewers
 
 `ManagedObject`:: is equivalent to `java.lang.Object`
