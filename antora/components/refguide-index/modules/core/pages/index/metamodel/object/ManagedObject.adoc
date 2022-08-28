@@ -1,0 +1,169 @@
+= ManagedObject
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Represents an instance of some element of the meta-model managed by the framework, that is _Spring_ managed beans, persistence-stack provided entities, view-models or instances of value types.
+
+== API
+
+[source,java]
+.ManagedObject.java
+----
+interface ManagedObject {
+  Specialization getSpecialization()     // <.>
+  ObjectSpecification getSpecification()     // <.>
+  Object getPojo()     // <.>
+  Optional<Bookmark> getBookmark()     // <.>
+  Optional<Bookmark> getBookmarkRefreshed()     // <.>
+  void refreshViewmodel(Supplier<Bookmark> bookmarkSupplier)     // <.>
+  boolean isBookmarkMemoized()
+  Supplier<ManagedObject> asSupplier()
+  void assertSpecIsInSyncWithPojo()
+  String titleString(UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder)
+  String titleString()
+  Optional<ObjectSpecification> getElementSpecification()     // <.>
+  String getTitle()
+  String getIconName()     // <.>
+  ObjectIcon getIcon()
+  ManagedObject notBookmarked(ObjectSpecification spec, Object pojo)
+  ManagedObject of(ObjectSpecification spec, Object pojo)     // <.>
+  ManagedObject bookmarked(ObjectSpecification spec, Object pojo, Bookmark bookmark)     // <.>
+  ManagedObject lazy(SpecificationLoader specLoader, Object pojo)     // <.>
+  ManagedObject unspecified()     // <.>
+  ManagedObject empty(ObjectSpecification spec)     // <.>
+}
+----
+
+<.> xref:#getSpecialization_[getSpecialization()]
++
+--
+Returns the specific _Specialization_ this xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] implements, which governs this object's behavior.
+--
+<.> xref:#getSpecification_[getSpecification()]
++
+--
+Returns the specification that details the structure (meta-model) of this object.
+--
+<.> xref:#getPojo_[getPojo()]
++
+--
+Returns the adapted domain object, the 'plain old java' object this managed object represents with the framework.
+--
+<.> xref:#getBookmark_[getBookmark()]
++
+--
+Returns the object's bookmark as identified by the ObjectManager. Bookmarks are considered immutable, hence will be memoized once fetched.
+--
+<.> xref:#getBookmarkRefreshed_[getBookmarkRefreshed()]
++
+--
+Similar to _#getBookmark()_ , but invalidates any memoized xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] such that the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] returned is recreated, reflecting the object's current state.
+--
+<.> xref:#refreshViewmodel_Supplier[refreshViewmodel(Supplier)]
++
+--
+If the underlying domain object is a viewmodel, refreshes any referenced entities. (Acts as a no-op otherwise.)
+--
+<.> xref:#getElementSpecification_[getElementSpecification()]
++
+--
+Used only for (standalone or parented) collections.
+--
+<.> xref:#getIconName_[getIconName()]
++
+--
+Returns the name of an icon to use if this object is to be displayed graphically.
+--
+<.> xref:#of_ObjectSpecification_Object[of(ObjectSpecification, Object)]
++
+--
+Optimized for cases, when the pojo's specification is already available. If _pojo_ is an entity, automatically memoizes its bookmark.
+--
+<.> xref:#bookmarked_ObjectSpecification_Object_Bookmark[bookmarked(ObjectSpecification, Object, Bookmark)]
++
+--
+Optimized for cases, when the pojo's specification and bookmark are already available.
+--
+<.> xref:#lazy_SpecificationLoader_Object[lazy(SpecificationLoader, Object)]
++
+--
+For cases, when the pojo's specification is not available and needs to be looked up.
+--
+<.> xref:#unspecified_[unspecified()]
++
+--
+has no ObjectSpecification and no value (pojo)
+--
+<.> xref:#empty_ObjectSpecification[empty(ObjectSpecification)]
++
+--
+has an ObjectSpecification, but no value (pojo)
+--
+
+== Members
+
+[#getSpecialization_]
+=== getSpecialization()
+
+Returns the specific _Specialization_ this xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] implements, which governs this object's behavior.
+
+[#getSpecification_]
+=== getSpecification()
+
+Returns the specification that details the structure (meta-model) of this object.
+
+[#getPojo_]
+=== getPojo()
+
+Returns the adapted domain object, the 'plain old java' object this managed object represents with the framework.
+
+[#getBookmark_]
+=== getBookmark()
+
+Returns the object's bookmark as identified by the ObjectManager. Bookmarks are considered immutable, hence will be memoized once fetched.
+
+[#getBookmarkRefreshed_]
+=== getBookmarkRefreshed()
+
+Similar to _#getBookmark()_ , but invalidates any memoized xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] such that the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] returned is recreated, reflecting the object's current state.
+
+[#refreshViewmodel_Supplier]
+=== refreshViewmodel(Supplier)
+
+If the underlying domain object is a viewmodel, refreshes any referenced entities. (Acts as a no-op otherwise.)
+
+[#getElementSpecification_]
+=== getElementSpecification()
+
+Used only for (standalone or parented) collections.
+
+[#getIconName_]
+=== getIconName()
+
+Returns the name of an icon to use if this object is to be displayed graphically.
+
+May return `null` if no icon is specified.
+
+[#of_ObjectSpecification_Object]
+=== of(ObjectSpecification, Object)
+
+Optimized for cases, when the pojo's specification is already available. If _pojo_ is an entity, automatically memoizes its bookmark.
+
+[#bookmarked_ObjectSpecification_Object_Bookmark]
+=== bookmarked(ObjectSpecification, Object, Bookmark)
+
+Optimized for cases, when the pojo's specification and bookmark are already available.
+
+[#lazy_SpecificationLoader_Object]
+=== lazy(SpecificationLoader, Object)
+
+For cases, when the pojo's specification is not available and needs to be looked up.
+
+[#unspecified_]
+=== unspecified()
+
+has no ObjectSpecification and no value (pojo)
+
+[#empty_ObjectSpecification]
+=== empty(ObjectSpecification)
+
+has an ObjectSpecification, but no value (pojo)

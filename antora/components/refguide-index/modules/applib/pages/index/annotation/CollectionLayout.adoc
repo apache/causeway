@@ -17,7 +17,7 @@ Layout hints for collections.
   int paged() default -1;     // <.>
   String sequence() default "";     // <.>
   @SuppressWarnings("rawtypes")
-Class sortedBy() default Comparator.class;     // <.>
+Class<? extends Comparator> sortedBy() default Comparator.class;     // <.>
 }
 ----
 

@@ -731,7 +731,6 @@ Directory: /examples/demo/domain
 |.Components
 ****
 demoapp.dom.AppConfiguration +
-demoapp.dom._infra.DefaultTitleProvider +
 demoapp.dom._infra.LibraryPreloadingService +
 demoapp.dom._infra.resources.AsciiDocConverterService +
 demoapp.dom._infra.resources.AsciiDocReaderService +
@@ -1686,7 +1685,7 @@ org.jmock:jmock:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:core:index/metamodel/services/command/CommandDtoFactory.adoc[CommandDtoFactory], xref:refguide:core:index/metamodel/services/ixn/InteractionDtoFactory.adoc[InteractionDtoFactory], xref:refguide:core:index/metamodel/services/publishing/CommandPublisher.adoc[CommandPublisher], xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher], xref:refguide:core:index/metamodel/services/schema/SchemaValueMarshaller.adoc[SchemaValueMarshaller], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceDefault.adoc[TableColumnOrderServiceDefault], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile]
+xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject], xref:refguide:core:index/metamodel/services/command/CommandDtoFactory.adoc[CommandDtoFactory], xref:refguide:core:index/metamodel/services/ixn/InteractionDtoFactory.adoc[InteractionDtoFactory], xref:refguide:core:index/metamodel/services/publishing/CommandPublisher.adoc[CommandPublisher], xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher], xref:refguide:core:index/metamodel/services/schema/SchemaValueMarshaller.adoc[SchemaValueMarshaller], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceDefault.adoc[TableColumnOrderServiceDefault], xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[TableColumnOrderServiceUsingTxtFile]
 ****
 
 |Apache Isis Core - Runtime
@@ -2149,7 +2148,7 @@ org.springframework.boot:spring-boot-starter-jdbc:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:persistence:index/jdo/datanucleus/IsisModulePersistenceJdoDatanucleus.adoc[IsisModulePersistenceJdoDatanucleus], xref:refguide:persistence:index/jdo/datanucleus/changetracking/JdoLifecycleListener.adoc[JdoLifecycleListener], xref:refguide:persistence:index/jdo/datanucleus/dialect/DnJdoDialect.adoc[DnJdoDialect], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisBookmarkConverter.adoc[IsisBookmarkConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisLocalResourcePathConverter.adoc[IsisLocalResourcePathConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisMarkupConverter.adoc[IsisMarkupConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisPasswordConverter.adoc[IsisPasswordConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/image/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisChangesDtoConverter.adoc[IsisChangesDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisCommandDtoConverter.adoc[IsisCommandDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisInteractionDtoConverter.adoc[IsisInteractionDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisOidDtoConverter.adoc[IsisOidDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/OffsetDateTimeConverterForJdo.adoc[OffsetDateTimeConverterForJdo], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/OffsetTimeConverterForJdo.adoc[OffsetTimeConverterForJdo], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/ZonedDateTimeConverterForJdo.adoc[ZonedDateTimeConverterForJdo], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/ByteArrayBlobRdbmsMapping.adoc[ByteArrayBlobRdbmsMapping], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/IsisBlobMapping.adoc[IsisBlobMapping], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/IsisClobMapping.adoc[IsisClobMapping]
+xref:refguide:persistence:index/jdo/datanucleus/IsisModulePersistenceJdoDatanucleus.adoc[IsisModulePersistenceJdoDatanucleus], xref:refguide:persistence:index/jdo/datanucleus/IsisModulePersistenceJdoDatanucleusMixins.adoc[IsisModulePersistenceJdoDatanucleusMixins], xref:refguide:persistence:index/jdo/datanucleus/changetracking/JdoLifecycleListener.adoc[JdoLifecycleListener], xref:refguide:persistence:index/jdo/datanucleus/dialect/DnJdoDialect.adoc[DnJdoDialect], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisBookmarkConverter.adoc[IsisBookmarkConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisLocalResourcePathConverter.adoc[IsisLocalResourcePathConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisMarkupConverter.adoc[IsisMarkupConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/IsisPasswordConverter.adoc[IsisPasswordConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/image/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisChangesDtoConverter.adoc[IsisChangesDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisCommandDtoConverter.adoc[IsisCommandDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisInteractionDtoConverter.adoc[IsisInteractionDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/IsisOidDtoConverter.adoc[IsisOidDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/OffsetDateTimeConverterForJdo.adoc[OffsetDateTimeConverterForJdo], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/OffsetTimeConverterForJdo.adoc[OffsetTimeConverterForJdo], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/ZonedDateTimeConverterForJdo.adoc[ZonedDateTimeConverterForJdo], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/ByteArrayBlobRdbmsMapping.adoc[ByteArrayBlobRdbmsMapping], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/IsisBlobMapping.adoc[IsisBlobMapping], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/IsisClobMapping.adoc[IsisClobMapping]
 ****
 
 |Apache Isis Persistence - JDO (integration)
@@ -2701,13 +2700,27 @@ skinparam rectangle<<4>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "Common\n[Software System]" {
-  rectangle "==Apache Isis Commons - Prism\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
-  rectangle "==Apache Isis Viewer - Commons\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
-  rectangle "==Apache Isis Viewer - Commons Model\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+skinparam rectangle<<5>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
 }
-2 .[#707070].> 4 : ""
+skinparam rectangle<<6>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "Common\n[Software System]" {
+  rectangle "==Apache Isis Commons - Prism\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
+  rectangle "==Apache Isis Viewer - Commons\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis Viewer - Commons Applib\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+  rectangle "==Apache Isis Viewer - Commons Model\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
+  rectangle "==Apache Isis Viewer - Commons Services\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+}
+2 .[#707070].> 5 : ""
 2 .[#707070].> 3 : ""
+2 .[#707070].> 4 : ""
+2 .[#707070].> 6 : ""
 @enduml
 ----
 .Projects/Modules (Common)
@@ -2725,6 +2738,24 @@ Directory: /viewers/commons
 ----
 |
 
+|Apache Isis Viewer - Commons Applib
+[source,yaml]
+----
+Group: org.apache.isis.viewer
+Artifact: isis-viewer-commons-applib
+Type: jar
+Directory: /viewers/commons/applib
+----
+|.Dependencies
+****
+org.apache.isis.core:isis-core-metamodel:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:viewer:index/commons/applib/mixins/Object_impersonate.adoc[Object_impersonate], xref:refguide:viewer:index/commons/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles], xref:refguide:viewer:index/commons/applib/services/branding/BrandingUiService.adoc[BrandingUiService], xref:refguide:viewer:index/commons/applib/services/header/HeaderUiService.adoc[HeaderUiService], xref:refguide:viewer:index/commons/applib/services/menu/MenuUiService.adoc[MenuUiService], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiModel.adoc[UserProfileUiModel], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiService.adoc[UserProfileUiService]
+****
+
 |Apache Isis Viewer - Commons Model
 [source,yaml]
 ----
@@ -2733,24 +2764,12 @@ Artifact: isis-viewer-commons-model
 Type: jar
 Directory: /viewers/commons/model
 ----
-|.Components
-****
-o.a.i.viewer.commons.model.branding.BrandingUiModelProvider +
-o.a.i.viewer.commons.model.header.HeaderUiModelProvider +
-o.a.i.viewer.commons.model.menu.MenuUiModelProvider +
-o.a.i.viewer.commons.model.userprofile.UserProfileUiModelProviderDefault +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-applib:jar:<managed> +
 org.webjars:font-awesome:jar:6.1.2 +
-****
-
-.Document Index Entries
-****
-xref:refguide:viewer:index/commons/applib/mixins/Object_impersonate.adoc[Object_impersonate], xref:refguide:viewer:index/commons/applib/mixins/Object_impersonateWithRoles.adoc[Object_impersonateWithRoles], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiModel.adoc[UserProfileUiModel], xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiModelProvider.adoc[UserProfileUiModelProvider]
 ****
 
 |Apache Isis Commons - Prism
@@ -2766,6 +2785,28 @@ Directory: /viewers/commons/prism
 .Dependencies
 ****
 org.webjars.bowergithub.prismjs:prism:jar:1.28.0 +
+****
+
+|Apache Isis Viewer - Commons Services
+[source,yaml]
+----
+Group: org.apache.isis.viewer
+Artifact: isis-viewer-commons-services
+Type: jar
+Directory: /viewers/commons/services
+----
+|.Components
+****
+o.a.i.viewer.commons.services.branding.BrandingUiServiceDefault +
+o.a.i.viewer.commons.services.header.HeaderUiServiceDefault +
+o.a.i.viewer.commons.services.menu.MenuUiServiceDefault +
+o.a.i.viewer.commons.services.userprof.UserProfileUiServiceDefault +
+****
+
+.Dependencies
+****
+org.apache.isis.core:isis-core-runtime:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-model:jar:<managed> +
 ****
 |===
 
@@ -3007,7 +3048,7 @@ o.a.i.viewer.restfulobjects.viewer.resources.VersionResourceServerside +
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
-org.apache.isis.viewer:isis-viewer-commons-model:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-services:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-restfulobjects-rendering:jar:<managed> +
 ****
 
@@ -3151,7 +3192,9 @@ de.agilecoders.wicket:wicket-bootstrap-themes:jar:<managed> +
 de.agilecoders.wicket.webjars:wicket-webjars:jar:<managed> +
 javax.servlet:javax.servlet-api:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
-org.apache.isis.viewer:isis-viewer-commons-prism:jar:${project.version} +
+org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-prism:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-services:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-wicket-model:jar:<managed> +
 org.apache.wicket:wicket-auth-roles:jar:<managed> +
 org.apache.wicket:wicket-devutils:jar:<managed> +
@@ -5931,12 +5974,12 @@ skinparam rectangle<<11>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<23>> {
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<23>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -6784,7 +6827,8 @@ com.vaadin:vaadin-spring:jar:<managed> +
 commons-fileupload:commons-fileupload:jar:1.4 +
 org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +
 org.apache.isis.incubator.viewer:isis-viewer-vaadin-model:jar:<managed> +
-org.apache.isis.viewer:isis-viewer-commons-prism:jar:${project.version} +
+org.apache.isis.viewer:isis-viewer-commons-prism:jar:<managed> +
+org.apache.isis.viewer:isis-viewer-commons-services:jar:<managed> +
 ****
 
 |Apache Isis Inc - Viewer Vaadin (Viewer)

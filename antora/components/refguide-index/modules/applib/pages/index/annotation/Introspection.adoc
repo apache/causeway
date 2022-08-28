@@ -34,7 +34,7 @@ Introspection should be handled as per the default introspection policy configur
 <.> xref:#ENCAPSULATION_ENABLED[ENCAPSULATION_ENABLED]
 +
 --
-Introspect public and non-public members, while presence of at least one appropriate domain annotation is enforced.
+Introspect public and non-public members.
 --
 <.> xref:#ANNOTATION_REQUIRED[ANNOTATION_REQUIRED]
 +
@@ -64,9 +64,11 @@ If not configured, then encapsulation is disabled and presence of the _Domain.In
 [#ENCAPSULATION_ENABLED]
 === ENCAPSULATION_ENABLED
 
-Introspect public and non-public members, while presence of at least one appropriate domain annotation is enforced.
+Introspect public and non-public members.
 
 All methods intended to be part of the meta-model (whether representing a member or a supporting method) must be annotated. Members using one of xref:refguide:applib:index/annotation/Action.adoc[Action] , xref:refguide:applib:index/annotation/Property.adoc[Property] , xref:refguide:applib:index/annotation/Collection.adoc[Collection] , while supporting methods with _Domain.Include_ (usually as a meta-annotation on xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport] ). However, the methods can have any visibility, including private.
+
+For mixins (where the mixin class itself is annotated with xref:refguide:applib:index/annotation/Action.adoc[Action] , xref:refguide:applib:index/annotation/Property.adoc[Property] or xref:refguide:applib:index/annotation/Collection.adoc[Collection] , then the member method should instead be annotated the same as the supporting methods, _Domain.Include_ or xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport] .
 
 [#ANNOTATION_REQUIRED]
 === ANNOTATION_REQUIRED
@@ -76,6 +78,8 @@ Introspect public members only, while presence of at least one appropriate domai
 All public methods intended to represent members must be annotated (or meta-annotated) with xref:refguide:applib:index/annotation/Action.adoc[Action] , xref:refguide:applib:index/annotation/Property.adoc[Property] or xref:refguide:applib:index/annotation/Collection.adoc[Collection] .
 
 Any non-excluded public methods with a supporting method prefix do not need to be annotated and are automatically associated with their corresponding member method. If no corresponding member method can be found, meta-model validation will fail with an 'orphaned member support' method violation.
+
+For mixins (where the mixin class itself is annotated with xref:refguide:applib:index/annotation/Action.adoc[Action] , xref:refguide:applib:index/annotation/Property.adoc[Property] or xref:refguide:applib:index/annotation/Collection.adoc[Collection] , then the member method should instead be annotated the same as the supporting methods, _Domain.Include_ or xref:refguide:applib:index/annotation/MemberSupport.adoc[MemberSupport] .
 
 [#ANNOTATION_OPTIONAL]
 === ANNOTATION_OPTIONAL
