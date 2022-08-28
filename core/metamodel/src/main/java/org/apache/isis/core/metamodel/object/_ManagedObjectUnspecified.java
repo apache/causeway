@@ -28,10 +28,19 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+/**
+ * (package private) specialization corresponding to {@link Specialization#PACKED}
+ * @see ManagedObject.Specialization#PACKED
+ */
 final class _ManagedObjectUnspecified
 implements ManagedObject {
 
     static final ManagedObject INSTANCE = new _ManagedObjectUnspecified();
+
+    @Override
+    public Specialization getSpecialization() {
+        return Specialization.UNSPECIFIED;
+    }
 
     @Override
     public ObjectSpecification getSpecification() {

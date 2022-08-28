@@ -25,6 +25,7 @@ import java.util.function.UnaryOperator;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -34,15 +35,211 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
  * Represents an instance of some element of the meta-model managed by the framework,
- * that is IoC-container provided beans, persistence-stack provided entities, view-models
+ * that is <i>Spring</i> managed beans, persistence-stack provided entities, view-models
  * or instances of value types.
+ *
+ * @since 2.0 {@index}}
+ *
  */
 public interface ManagedObject extends HasMetaModelContext {
+
+    /**
+     * ManagedObject specializations have varying contract/behavior.
+     */
+    @Getter
+    @RequiredArgsConstructor
+    enum Specialization {
+        /**
+         * <h1>Contract</h1><ul>
+         * <li>Specification (null, immutable)</li>
+         * <li>Bookmark (n/a)</li>
+         * <li>Pojo (null, immutable)</li>
+         * </ul>
+         * @implNote realized by a singleton (static) {@link ManagedObject} instance;
+         */
+        UNSPECIFIED(TypePolicy.NO_TYPE, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.NO_POJO),
+
+        /**
+         * <h1>Contract</h1><ul>
+         * <li>Specification (immutable,  allowed to correspond to abstract type)</li>
+         * <li>Bookmark (n/a)</li>
+         * <li>Pojo (null, immutable)</li>
+         * </ul>
+         */
+        EMPTY(TypePolicy.ABSTRACT_TYPE_ALLOWED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.NO_POJO),
+
+        /**
+         * <h1>Contract</h1><ul>
+         * <li>Specification (immutable,  NOT allowed to correspond to abstract type)</li>
+         * <li>Bookmark (immutable)</li>
+         * <li>Pojo (immutable)</li>
+         * </ul>
+         */
+        VALUE(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.IMMUTABLE, PojoPolicy.IMMUTABLE),
+
+        /**
+         * <h1>Contract</h1><ul>
+         * <li>Specification (immutable,  NOT allowed to correspond to abstract type)</li>
+         * <li>Bookmark (immutable)</li>
+         * <li>Pojo (immutable)</li>
+         * </ul>
+         */
+        SERVICE(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.IMMUTABLE, PojoPolicy.IMMUTABLE),
+
+        /**
+         * <h1>Contract</h1><ul>
+         * <li>Specification (immutable,  NOT allowed to correspond to abstract type)</li>
+         * <li>Bookmark (refreshable, as VM state changes manifest in change of ID)</li>
+         * <li>Pojo (mutable, but immutable obj. ref.)</li>
+         * </ul>
+         */
+        VIEWMODEL(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.REFRESHABLE, PojoPolicy.STATEFUL),
+
+        /**
+         * <h1>Contract</h1><ul>
+         * <li>Specification (immutable,  NOT allowed to correspond to abstract type)</li>
+         * <li>Bookmark (immutable,  entity must be persistent, it must have an ID,  fail otherwise)</li>
+         * <li>Pojo (refetchable)</li>
+         * </ul>
+         */
+        ENTITY(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.IMMUTABLE, PojoPolicy.REFETCHABLE),
+
+        /**
+         * <h1>Contract</h1><ul>
+         * <li>Element Specification (immutable,  allowed to correspond to abstract type)</li>
+         * <li>Bookmark (n/a)</li>
+         * <li>Pojo (unmod. Collection of pojos)</li>
+         * </ul>
+         */
+        PACKED(TypePolicy.ABSTRACT_TYPE_ALLOWED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.PACKED);
+
+        static enum TypePolicy {
+            /** has no type information */
+            NO_TYPE,
+            /** has type information, abstract types are allowed */
+            ABSTRACT_TYPE_ALLOWED,
+            /** has type information, exact types are required */
+            EXACT_TYPE_REQUIRED;
+            ////
+            /** has no type information */
+            public boolean isNoType() { return this == NO_TYPE; }
+            /** has type information, abstract types are allowed */
+            public boolean isAbstractTypeAllowed() { return this == ABSTRACT_TYPE_ALLOWED; }
+            /** has type information, exact types are required */
+            public boolean isExactTypeRequired() { return this == EXACT_TYPE_REQUIRED; }
+            /** has type information */
+            public boolean isTypeRequiredAny() { return !isNoType(); }
+        }
+        static enum BookmarkPolicy {
+            /** has no {@link Bookmark} */
+            NO_BOOKMARK,
+            /** has an immutable {@link Bookmark} */
+            IMMUTABLE,
+            /** has an refreshable {@link Bookmark}, that is a mutable object reference */
+            REFRESHABLE;
+            ////
+            /** has no {@link Bookmark} */
+            public boolean isNoBookmark() { return this == NO_BOOKMARK; }
+            /** has an immutable {@link Bookmark} */
+            public boolean isImmutable() { return this == IMMUTABLE; }
+            /** has an refreshable {@link Bookmark}, that is a mutable object reference */
+            public boolean isRefreshable() { return this == REFRESHABLE; }
+        }
+        static enum PojoPolicy {
+            /** has no pojo, immutable <code>null</code> */
+            NO_POJO,
+            /** has a non-null pojo, immutable, with immutable object reference */
+            IMMUTABLE,
+            /** has a stateful pojo, with immutable object reference */
+            STATEFUL,
+            /** has a stateful pojo, with mutable object reference */
+            REFETCHABLE,
+            /** has an unmodifiable collection of pojos; the collection's object reference is immutable;
+             * supports unpacking into a {@link Can} of {@link ManagedObject}s;*/
+            PACKED;
+            ////
+            /** has no pojo, immutable <code>null</code> */
+            public boolean isNoPojo() { return this == NO_POJO; }
+            /** has a non-null pojo, immutable, with immutable object reference */
+            public boolean isImmutable() { return this == IMMUTABLE; }
+            /** has a stateful pojo, with immutable object reference */
+            public boolean isStateful() { return this == STATEFUL; }
+            /** has a stateful pojo, with mutable object reference */
+            public boolean isRefetchable() { return this == REFETCHABLE; }
+            /** has an unmodifiable collection of pojos; the collection's object reference is immutable;
+             * supports unpacking into a {@link Can} of {@link ManagedObject}s;*/
+            public boolean isPacked() { return this == PACKED; }
+        }
+
+        private final TypePolicy typePolicy;
+        private final BookmarkPolicy bookmarkPolicy;
+        private final PojoPolicy pojoPolicy;
+
+        /**
+         * UNSPECIFIED
+         * @see TypePolicy#NO_TYPE
+         * @see BookmarkPolicy#NO_BOOKMARK
+         * @see PojoPolicy#NO_POJO
+         */
+        public boolean isUnspecified() { return this == UNSPECIFIED; }
+        /**
+         * EMPTY
+         * @see TypePolicy#ABSTRACT_TYPE_ALLOWED
+         * @see BookmarkPolicy#NO_BOOKMARK
+         * @see PojoPolicy#NO_POJO
+         */
+        public boolean isEmpty() { return this == EMPTY; }
+        /**
+         * VALUE
+         * @see TypePolicy#EXACT_TYPE_REQUIRED
+         * @see BookmarkPolicy#IMMUTABLE
+         * @see PojoPolicy#IMMUTABLE
+         */
+        public boolean isValue() { return this == VALUE; }
+        /**
+         * SERVICE
+         * @see TypePolicy#EXACT_TYPE_REQUIRED
+         * @see BookmarkPolicy#IMMUTABLE
+         * @see PojoPolicy#IMMUTABLE
+         */
+        public boolean isService() { return this == SERVICE; }
+        /**
+         * VIEWMODEL
+         * @see TypePolicy#EXACT_TYPE_REQUIRED
+         * @see BookmarkPolicy#REFRESHABLE
+         * @see PojoPolicy#STATEFUL
+         */
+        public boolean isViewmodel() { return this == VIEWMODEL; }
+        /**
+         * ENTITY
+         * @see TypePolicy#EXACT_TYPE_REQUIRED
+         * @see BookmarkPolicy#IMMUTABLE
+         * @see PojoPolicy#REFETCHABLE
+         */
+        public boolean isEntity() { return this == ENTITY; }
+        /**
+         * PACKED
+         * @see TypePolicy#ABSTRACT_TYPE_ALLOWED
+         * @see BookmarkPolicy#NO_BOOKMARK
+         * @see PojoPolicy#PACKED
+         */
+        public boolean isPacked() { return this == PACKED; }
+
+    }
+
+    /**
+     * Returns the specific {@link Specialization} this {@link ManagedObject} implements,
+     * which governs this object's behavior.
+     * @implNote FIXME[ISIS-3167] not fully implemented yet
+     */
+    Specialization getSpecialization();
 
     /**
      * Returns the specification that details the structure (meta-model) of this object.

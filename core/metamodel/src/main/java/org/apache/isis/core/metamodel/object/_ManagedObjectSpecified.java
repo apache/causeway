@@ -20,10 +20,17 @@ package org.apache.isis.core.metamodel.object;
 
 import java.util.function.Supplier;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 abstract class _ManagedObjectSpecified
 implements ManagedObject {
+
+    @Override
+    public Specialization getSpecialization() {
+        //FIXME[ISIS-3167] implement for various sub types
+        throw _Exceptions.notImplemented();
+    }
 
     @Override
     public final MetaModelContext getMetaModelContext() {

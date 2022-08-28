@@ -23,6 +23,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * 'Collection' of {@link ManagedObject}s.
+ * @see ManagedObject.Specialization#PACKED
  */
 public interface PackedManagedObject
 extends ManagedObject {

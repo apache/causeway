@@ -34,6 +34,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+/**
+ * (package private) specialization corresponding to {@link Specialization#PACKED}
+ * @see ManagedObject.Specialization#PACKED
+ */
 @RequiredArgsConstructor
 @ToString
 final class _ManagedObjectPacked
@@ -44,12 +48,18 @@ implements PackedManagedObject {
     final @NonNull Can<ManagedObject> nonScalar;
 
     @Override
+    public Specialization getSpecialization() {
+        return Specialization.PACKED;
+    }
+
+    @Override
     public ObjectSpecification getSpecification() {
         return elementSpec;
     }
 
     @Override
     public Object getPojo() {
+        // this algorithm preserves null pojos ...
         return Collections.unmodifiableList(
                 nonScalar.stream()
                 .map(ManagedObject::getPojo)
