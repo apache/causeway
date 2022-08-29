@@ -25,18 +25,18 @@ import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermis
 import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
- * Access to the command replay secondary menu.
+ * Access to the command replay primary menu.
  *
  * @since 2.0 {@index}
  */
-public class IsisExtCommandReplaySecondaryRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisExtAuditTrailRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String NAMESPACE = "isis.ext.commandReplaySecondary";
+    public static final String NAMESPACE = "isis.ext.auditTrail";
 
     public static final String ROLE_NAME = NAMESPACE.replace(".","-");
 
-    public IsisExtCommandReplaySecondaryRoleAndPermissions() {
-        super(ROLE_NAME, "Access to the command replay secondary menu");
+    public IsisExtAuditTrailRoleAndPermissions() {
+        super(ROLE_NAME, "Access to the audit trail actions");
     }
 
     @Override
