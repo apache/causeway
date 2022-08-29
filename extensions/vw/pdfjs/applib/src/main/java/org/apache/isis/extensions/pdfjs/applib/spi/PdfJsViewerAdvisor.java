@@ -20,6 +20,11 @@ package org.apache.isis.extensions.pdfjs.applib.spi;
 
 import java.io.Serializable;
 
+import javax.annotation.Priority;
+
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.value.Blob;
@@ -69,8 +74,8 @@ public interface PdfJsViewerAdvisor {
         /**
          * The identifier of the object being rendered.
          * <p>
-         * The {@link TypeKey#getType()} and {@link #getIdentifier()} together constitute the object's
-         * identity (in effect, its {@link Bookmark}).
+         * The {@link TypeKey#getLogicalTypeName() TypeKey#logicalTypeName}  and {@link #getIdentifier() identifier}
+         * together constitute the object's identity (in effect, its {@link Bookmark}).
          */
         private final String identifier;
 
@@ -131,6 +136,32 @@ public interface PdfJsViewerAdvisor {
         private final Integer pageNum;
         private final Scale scale;
         private final Integer height;
+    }
+
+
+    /**
+     * Default implementation.
+     */
+    @Service
+    @Priority(PriorityPrecedence.LATE)
+    public static class Default implements PdfJsViewerAdvisor {
+
+        @Override
+        public Advice advise(InstanceKey instanceKey) {
+            return new Advice(1, Scale._0_75, 800);
+        }
+
+        @Override
+        public void pageNumChangedTo(InstanceKey instanceKey, int pageNum) {
+        }
+
+        @Override
+        public void scaleChangedTo(InstanceKey instanceKey, Scale scale) {
+        }
+
+        @Override
+        public void heightChangedTo(InstanceKey instanceKey, int height) {
+        }
     }
 
 }
