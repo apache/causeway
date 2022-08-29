@@ -32,7 +32,6 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
-import org.apache.isis.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -365,68 +364,123 @@ public interface ManagedObject extends HasMetaModelContext {
 
     /**
      * Factory for Specialization#UNSPECIFIED.
-     * @see Specialization.TypePolicy#NO_TYPE
-     * @see Specialization.BookmarkPolicy#NO_BOOKMARK
-     * @see Specialization.PojoPolicy#NO_POJO
+     * @see ManagedObject.Specialization.TypePolicy#NO_TYPE
+     * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
+     * @see ManagedObject.Specialization.PojoPolicy#NO_POJO
      */
     static ManagedObject unspecified() {
         return _ManagedObjectUnspecified.INSTANCE;
     }
     /**
      * EMPTY
-     * @see Specialization.TypePolicy#ABSTRACT_TYPE_ALLOWED
-     * @see Specialization.BookmarkPolicy#NO_BOOKMARK
-     * @see Specialization.PojoPolicy#NO_POJO
+     * @see ManagedObject.Specialization.TypePolicy#ABSTRACT_TYPE_ALLOWED
+     * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
+     * @see ManagedObject.Specialization.PojoPolicy#NO_POJO
      */
     static ManagedObject empty(final @NonNull ObjectSpecification spec) {
-        return new _ManagedObjectWithEagerSpec(spec, null);
+        return new _ManagedObjectEmpty(spec);
     }
     /**
      * VALUE
-     * @see Specialization.TypePolicy#EXACT_TYPE_REQUIRED
-     * @see Specialization.BookmarkPolicy#IMMUTABLE
-     * @see Specialization.PojoPolicy#IMMUTABLE
+     * @param pojo
+     * @param spec
+     * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
+     * @see ManagedObject.Specialization.BookmarkPolicy#IMMUTABLE
+     * @see ManagedObject.Specialization.PojoPolicy#IMMUTABLE
      */
-    static ManagedObject value() {
-        return null; //FIXME
+    static ManagedObject value(
+            final @NonNull ObjectSpecification spec,
+            final @NonNull Object pojo) {
+        return new _ManagedObjectWithEagerSpec(spec, pojo); //FIXME
     }
     /**
      * SERVICE
-     * @see Specialization.TypePolicy#EXACT_TYPE_REQUIRED
-     * @see Specialization.BookmarkPolicy#IMMUTABLE
-     * @see Specialization.PojoPolicy#IMMUTABLE
+     * @param pojo
+     * @param spec
+     * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
+     * @see ManagedObject.Specialization.BookmarkPolicy#IMMUTABLE
+     * @see ManagedObject.Specialization.PojoPolicy#IMMUTABLE
      */
-    static ManagedObject service() {
-        return null; //FIXME
+    static ManagedObject service(
+            final @NonNull ObjectSpecification spec,
+            final @NonNull Object pojo) {
+        return new _ManagedObjectWithEagerSpec(spec, pojo); //FIXME
     }
     /**
      * VIEWMODEL
-     * @see Specialization.TypePolicy#EXACT_TYPE_REQUIRED
-     * @see Specialization.BookmarkPolicy#REFRESHABLE
-     * @see Specialization.PojoPolicy#STATEFUL
+     * @param pojo
+     * @param spec
+     * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
+     * @see ManagedObject.Specialization.BookmarkPolicy#REFRESHABLE
+     * @see ManagedObject.Specialization.PojoPolicy#STATEFUL
      */
-    static ManagedObject viewmodel() {
-        return null; //FIXME
+    static ManagedObject viewmodel(
+            final @NonNull ObjectSpecification spec,
+            final @NonNull Object pojo) {
+        return new _ManagedObjectWithEagerSpec(spec, pojo); //FIXME
     }
     /**
      * ENTITY
-     * @see Specialization.TypePolicy#EXACT_TYPE_REQUIRED
-     * @see Specialization.BookmarkPolicy#IMMUTABLE
-     * @see Specialization.PojoPolicy#REFETCHABLE
+     * @param pojo
+     * @param spec
+     * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
+     * @see ManagedObject.Specialization.BookmarkPolicy#IMMUTABLE
+     * @see ManagedObject.Specialization.PojoPolicy#REFETCHABLE
      */
-    static ManagedObject entity() {
-        return null; //FIXME
+    static ManagedObject entity(
+            final @NonNull ObjectSpecification spec,
+            final @NonNull Object pojo) {
+        return new _ManagedObjectWithEagerSpec(spec, pojo); //FIXME
     }
     /**
      * PACKED
-     * @see Specialization.TypePolicy#ABSTRACT_TYPE_ALLOWED
-     * @see Specialization.BookmarkPolicy#NO_BOOKMARK
-     * @see Specialization.PojoPolicy#PACKED
+     * @see ManagedObject.Specialization.TypePolicy#ABSTRACT_TYPE_ALLOWED
+     * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
+     * @see ManagedObject.Specialization.PojoPolicy#PACKED
      */
     static PackedManagedObject packed(
             final @NonNull ObjectSpecification elementSpec,
             final @Nullable Can<ManagedObject> nonScalar) {
         return new _ManagedObjectPacked(elementSpec, nonScalar);
+    }
+
+    /**
+     * For cases, when the pojo's specification is not available and needs to be looked up.
+     * <p>
+     * Fails if the pojo is non-scalar.
+     * @param specLoader - required
+     * @param pojo - required, required non-scalar
+     */
+    static ManagedObject wrapScalar(
+            final @NonNull SpecificationLoader specLoader,
+            final @NonNull Object pojo) {
+        if(pojo instanceof ManagedObject) {
+            return (ManagedObject)pojo;
+        }
+        _Assert.assertFalse(_Collections.isCollectionOrArrayOrCanType(pojo.getClass()));
+
+        val spec = specLoader.specForType(pojo.getClass()).orElse(null);
+        val specialization = spec!=null
+                ? Specialization.inferFrom(spec, pojo)
+                : Specialization.UNSPECIFIED;
+
+        switch(specialization) {
+        case UNSPECIFIED:
+            return unspecified();
+        case VALUE:
+            return value(spec, pojo);
+        case SERVICE:
+            return service(spec, pojo);
+        case VIEWMODEL:
+            return viewmodel(spec, pojo);
+        case ENTITY:
+            return entity(spec, pojo);
+        // unreachable (in this context)
+        case EMPTY:
+        case PACKED:
+            throw _Exceptions.unexpectedCodeReach();
+        }
+        throw _Exceptions.unmatchedCase(specialization);
     }
 
     // -- FACTORIES LEGACY

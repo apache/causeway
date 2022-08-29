@@ -34,6 +34,7 @@ import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
 
+@Deprecated
 @EqualsAndHashCode(of = "pojo", callSuper = false)
 @ToString(of = {"specification", "pojo"}) //ISIS-2317 make sure toString() is without side-effects
 @Getter

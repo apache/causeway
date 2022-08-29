@@ -28,6 +28,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 
+@Deprecated
 @EqualsAndHashCode(of = "pojo", callSuper = false)
 final class _ManagedObjectWithLazySpec
 extends _ManagedObjectWithBookmark {
