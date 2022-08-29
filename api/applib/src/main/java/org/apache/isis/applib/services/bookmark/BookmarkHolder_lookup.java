@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class BookmarkHolder_lookup {
 
     public static class ActionDomainEvent extends IsisModuleApplib.ActionDomainEvent<BookmarkHolder_lookup> {}
 
-    public Object act() {
+    @MemberSupport public Object act() {
         return bookmarkService.lookup(bookmarkHolder).orElse(null);
     }
 

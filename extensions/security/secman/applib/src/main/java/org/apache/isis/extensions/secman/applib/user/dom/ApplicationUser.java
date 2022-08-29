@@ -31,6 +31,7 @@ import javax.inject.Named;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
@@ -111,15 +112,15 @@ public abstract class ApplicationUser
     @Inject private transient PermissionsEvaluationService permissionsEvaluationService;
     @Inject private transient IsisConfiguration config;
 
-    protected ApplicationUserRepository getApplicationUserRepository() {
+    @Programmatic protected ApplicationUserRepository getApplicationUserRepository() {
         return applicationUserRepository;
     }
 
-    protected ApplicationPermissionRepository getApplicationPermissionRepository() {
+    @Programmatic protected ApplicationPermissionRepository getApplicationPermissionRepository() {
         return applicationPermissionRepository;
     }
 
-    protected UserService getUserService() {
+    @Programmatic protected UserService getUserService() {
         return userService;
     }
 
@@ -128,11 +129,11 @@ public abstract class ApplicationUser
      * {@link ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
      * else will fallback to a default implementation.
      */
-    protected PermissionsEvaluationService getPermissionsEvaluationService() {
+    @Programmatic protected PermissionsEvaluationService getPermissionsEvaluationService() {
         return permissionsEvaluationService;
     }
 
-    protected Secman getSecmanConfig() {
+    @Programmatic protected Secman getSecmanConfig() {
         return config.getExtensions().getSecman();
     }
 
@@ -627,8 +628,7 @@ public abstract class ApplicationUser
     // short-term caching
     private transient ApplicationPermissionValueSet cachedPermissionSet;
 
-    @Programmatic
-    public ApplicationPermissionValueSet getPermissionSet() {
+    @Programmatic public ApplicationPermissionValueSet getPermissionSet() {
         if(cachedPermissionSet != null) {
             return cachedPermissionSet;
         }
@@ -648,16 +648,14 @@ public abstract class ApplicationUser
 
     // -- IS FOR SELF OR RUN AS ADMINISTRATOR
 
-    @Programmatic
-    public boolean isForSelf() {
+    @Programmatic public boolean isForSelf() {
         val currentUser = currentUser();
         val currentUserName = currentUser.getName();
         val forSelf = Objects.equals(getUsername(), currentUserName);
         return forSelf;
     }
 
-    @Programmatic
-    public boolean isRunAsAdministrator() {
+    @Programmatic public boolean isRunAsAdministrator() {
         val currentUser = currentUser();
         val adminRoleSuffix = ":" + getAdminRoleName();
         for (final RoleMemento role : currentUser.getRoles()) {
@@ -672,26 +670,22 @@ public abstract class ApplicationUser
         return false;
     }
 
-    @Programmatic
-    public boolean isForSelfOrRunAsAdministrator() {
+    @Programmatic public boolean isForSelfOrRunAsAdministrator() {
         return isForSelf()
                 || isRunAsAdministrator();
     }
 
     // -- HELPERS
 
-    @Programmatic
-    public boolean isLocalAccount() {
+    @Programmatic public boolean isLocalAccount() {
         return getAccountType() == org.apache.isis.extensions.secman.applib.user.dom.AccountType.LOCAL;
     }
 
-    @Programmatic
-    private String getAdminRoleName() {
+    @Programmatic private String getAdminRoleName() {
         return getSecmanConfig().getSeed().getAdmin().getRoleName();
     }
 
-    @Programmatic
-    private UserMemento currentUser() {
+    @Programmatic private UserMemento currentUser() {
         return getUserService().currentUserElseFail();
     }
 

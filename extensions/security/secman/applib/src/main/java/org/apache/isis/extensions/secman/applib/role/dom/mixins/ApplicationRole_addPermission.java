@@ -73,7 +73,7 @@ public class ApplicationRole_addPermission {
      * Adds a {@link ApplicationPermission permission} for this role to a
      * {@link ApplicationFeature feature}.
      */
-    public ApplicationRole act(
+    @MemberSupport public ApplicationRole act(
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
             @ParameterLayout(

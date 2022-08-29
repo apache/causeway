@@ -67,7 +67,7 @@ public class Object_impersonateWithRoles {
 
     private final Object holder;
 
-    public Object act(
+    @MemberSupport public Object act(
             final String userName,
             final List<String> roleNames,
             final String multiTenancyToken) {

@@ -136,7 +136,7 @@ public class CommandLogMenu {
     public class truncateLog {
         public class DomainEvent extends ActionDomainEvent { }
 
-        public void act() {
+        @MemberSupport public void act() {
             commandLogEntryRepository.truncateLog();
         }
     }

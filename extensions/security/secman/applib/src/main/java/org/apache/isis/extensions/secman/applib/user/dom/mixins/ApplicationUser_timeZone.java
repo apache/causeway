@@ -48,9 +48,7 @@ public class ApplicationUser_timeZone {
 
     @Inject private UserCurrentSessionTimeZoneHolder userCurrentSessionTimeZoneHolder;
 
-    @MemberSupport
-    @Nullable
-    public String prop() {
+    @MemberSupport @Nullable public String prop() {
         return userCurrentSessionTimeZoneHolder.getUserTimeZone()
             .map(_Temporals::formatZoneId)
             .orElse(null);

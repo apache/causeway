@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.bookmark;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.IsisModuleApplib;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class BookmarkHolder_object {
     public static class PropertyDomainEvent
     extends IsisModuleApplib.PropertyDomainEvent<BookmarkHolder_object, Object> { }
 
-    public Object prop() {
+    @MemberSupport public Object prop() {
         return bookmarkService.lookup(bookmarkHolder).orElse(null);
     }
 
