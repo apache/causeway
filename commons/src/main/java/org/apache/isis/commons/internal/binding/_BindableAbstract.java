@@ -29,6 +29,7 @@ import org.apache.isis.commons.binding.InvalidationListener;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
@@ -50,6 +51,7 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     private Observable<? extends T> observable = null;;
     private InvalidationListener invalidationListener = null;
     private boolean valid = true;
+    @Getter private boolean dirty = false;
     private InternalUtil<T> util = null;
 
     /**
@@ -120,6 +122,7 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
         val newValue = valueGuard.apply(proposedNewValue);
         if (value != newValue) {
             value = newValue;
+            dirty = true;
             markInvalid();
         }
     }
@@ -204,6 +207,10 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
         });
 
         return newBindable;
+    }
+
+    @Override public void clearDirty() {
+        dirty = false;
     }
 
     // -- HELPER

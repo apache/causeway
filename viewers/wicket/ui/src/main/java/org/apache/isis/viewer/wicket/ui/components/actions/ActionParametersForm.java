@@ -27,11 +27,13 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
+import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.viewer.commons.model.PlacementDirection;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
@@ -151,13 +153,17 @@ extends PromptFormAbstract<ActionModel> {
             val pendingArgs = paramModel.getParameterNegotiationModel();
 
             val actionParameter = paramModel.getMetaModel();
-            // reassess defaults
-            val paramDefaultValue = actionParameter.getDefault(pendingArgs);
 
-            if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {
-                pendingArgs.clearParamValue(paramIndex);
-            } else {
-                pendingArgs.setParamValue(paramIndex, paramDefaultValue);
+            val bindableParamValue = pendingArgs.getBindableParamValue(paramIndex);
+            if(! bindableParamValue.isDirty()) {
+                // reassess defaults
+                val paramDefaultValue = actionParameter.getDefault(pendingArgs);
+                if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {
+                    pendingArgs.clearParamValue(paramIndex);
+                } else {
+                    pendingArgs.setParamValue(paramIndex, paramDefaultValue);
+                }
+                bindableParamValue.clearDirty();
             }
 
             val paramPanel = paramPanels.get(paramIndex);

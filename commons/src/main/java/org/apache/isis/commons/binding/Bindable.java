@@ -37,4 +37,7 @@ public interface Bindable<T> extends Observable<T>, Writable<T> {
 
     <R> Bindable<R> mapToBindable(Function<T, R> forwardMapper, Function<R, T> reverseMapper);
 
+    boolean isDirty();
+
+    void clearDirty();
 }
