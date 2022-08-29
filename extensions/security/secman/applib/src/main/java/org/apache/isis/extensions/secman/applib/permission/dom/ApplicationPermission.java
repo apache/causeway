@@ -330,17 +330,16 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     // -- FIND FEATURE
 
-    @Programmatic
-    public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
+    @Programmatic public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
         return featureRepository.findFeature(featureId);
     }
 
-    private Optional<ApplicationMemberSort> getMemberSort() {
+    @Programmatic private Optional<ApplicationMemberSort> getMemberSort() {
         return getFeature()
                 .flatMap(ApplicationFeature::getMemberSort);
     }
 
-    private Optional<ApplicationFeature> getFeature() {
+    @Programmatic private Optional<ApplicationFeature> getFeature() {
         return asFeatureId()
                 .map(this::findFeature);
     }
@@ -348,8 +347,7 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     // -- HELPER
 
-    @Programmatic
-    Optional<ApplicationFeatureId> asFeatureId() {
+    @Programmatic Optional<ApplicationFeatureId> asFeatureId() {
         return Optional.ofNullable(getFeatureSort())
                 .map(featureSort -> ApplicationFeatureId.newFeature(featureSort, getFeatureFqn()));
     }

@@ -21,6 +21,7 @@ package org.apache.isis.extensions.excel.fixtures.demoapp.demomodule.contributio
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.extensions.excel.applib.ExcelService;
 import org.apache.isis.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
@@ -36,7 +37,7 @@ public class ExcelDemoToDoItem_export2 {
         this.toDoItem = toDoItem;
     }
 
-    public Blob act() {
+    @MemberSupport public Blob act() {
         throw new UnsupportedOperationException();
 //        if(actionInvocationContext.isLast()) {
 //            // ie current object only

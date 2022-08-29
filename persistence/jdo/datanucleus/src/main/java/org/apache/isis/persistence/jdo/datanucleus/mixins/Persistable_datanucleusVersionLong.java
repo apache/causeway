@@ -60,7 +60,7 @@ public class Persistable_datanucleusVersionLong {
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusVersionLong, Long> {}
 
-    public Long prop() {
+    @MemberSupport public Long prop() {
         final Object version = JDOHelper.getVersion(persistable);
         return version instanceof Long ? (Long) version : null;
     }

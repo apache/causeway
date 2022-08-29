@@ -60,7 +60,7 @@ public class Persistable_datanucleusVersionTimestamp {
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusVersionTimestamp, java.sql.Timestamp> {}
 
-    public java.sql.Timestamp prop() {
+    @MemberSupport public java.sql.Timestamp prop() {
         final Object version = JDOHelper.getVersion(persistable);
         return version instanceof java.sql.Timestamp ? (java.sql.Timestamp) version : null;
     }

@@ -44,8 +44,7 @@ public class AmbiguousMixinAnnotations {
     public static class InvalidMixinP {
         private final Mixee mixee;
 
-        @Property
-        public String prop() {
+        @Property public String prop() {
             return null;
         }
     }
@@ -55,8 +54,7 @@ public class AmbiguousMixinAnnotations {
     public static class InvalidMixinPL {
         private final Mixee mixee;
 
-        @PropertyLayout
-        public String prop() {
+        @PropertyLayout public String prop() {
             return null;
         }
     }

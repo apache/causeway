@@ -45,8 +45,7 @@ public class CommandLogEntry_siblingCommands {
 
     private final CommandLogEntry commandLogEntry;
 
-    @MemberSupport
-    public List<? extends CommandLogEntry> coll() {
+    @MemberSupport public List<? extends CommandLogEntry> coll() {
         final CommandLogEntry parentJdo = commandLogEntry.getParent();
         if(parentJdo == null) {
             return Collections.emptyList();

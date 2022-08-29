@@ -63,7 +63,7 @@ public class Object_impersonate {
 
     private final Object holder;
 
-    public Object act(final String userName) {
+    @MemberSupport public Object act(final String userName) {
         impersonate().act(userName);
         return holder;
     }
