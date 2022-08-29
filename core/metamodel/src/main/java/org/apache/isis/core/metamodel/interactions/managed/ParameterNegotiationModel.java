@@ -37,9 +37,9 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
-import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -212,13 +212,22 @@ public class ParameterNegotiationModel {
         return paramModels.getElseFail(paramNr).getValue().getValue();
     }
 
-    public void setParamValue(final int paramNr, final @NonNull ManagedObject newParamValue) {
-        //EntityUtil.assertAttachedWhenEntity(newParamValue);
-        paramModels.getElseFail(paramNr).getBindableParamValue().setValue(newParamValue);
+    /**
+     * If newParamValue is null, unspecified or empty,
+     * results in a {@link #clearParamValue(int)} operation;
+     * otherwise sets the new value.
+     */
+    public void setParamValue(final int paramIndex, final @Nullable ManagedObject newParamValue) {
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newParamValue)) {
+            clearParamValue(paramIndex);
+        } else {
+            //EntityUtil.assertAttachedWhenEntity(newParamValue);
+            paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(newParamValue);
+        }
     }
 
-    public void clearParamValue(final int paramNr) {
-        setParamValue(paramNr, adaptParamValuePojo(paramNr, null));
+    public void clearParamValue(final int paramIndex) {
+        setParamValue(paramIndex, adaptParamValuePojo(paramIndex, null));
     }
 
     @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, final @Nullable Object newParamValuePojo) {

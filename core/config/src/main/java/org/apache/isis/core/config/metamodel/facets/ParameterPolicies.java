@@ -38,7 +38,7 @@ public final class ParameterPolicies {
         public boolean isUpdateDependent() { return this == UPDATE_DEPENDENT; }
         public boolean isPreserveChanges() { return this == PRESERVE_CHANGES; }
 
-        public static DependentDefaultsPolicy defaultsIfNotSpecifedOtherwise() {
+        public static DependentDefaultsPolicy defaultsIfNotSpecifiedOtherwise() {
             return UPDATE_DEPENDENT; // backwards compatibility
         }
     }

@@ -32,7 +32,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.PlacementDirection;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
@@ -159,11 +158,7 @@ extends PromptFormAbstract<ActionModel> {
                     || ! bindableParamValue.isDirty()) {
                 // reassess defaults
                 val paramDefaultValue = actionParameter.getDefault(pendingArgs);
-                if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {
-                    pendingArgs.clearParamValue(paramIndex);
-                } else {
-                    pendingArgs.setParamValue(paramIndex, paramDefaultValue);
-                }
+                pendingArgs.setParamValue(paramIndex, paramDefaultValue);
                 bindableParamValue.clearDirty();
             }
 

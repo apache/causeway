@@ -174,7 +174,7 @@ public final class Facets {
             final ObjectAction action) {
         return action.lookupFacet(DependentDefaultsFacet.class)
                 .map(DependentDefaultsFacet::value)
-                .orElseGet(ParameterPolicies.DependentDefaultsPolicy::defaultsIfNotSpecifedOtherwise);
+                .orElseGet(ParameterPolicies.DependentDefaultsPolicy::defaultsIfNotSpecifiedOtherwise);
     }
 
     public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {
