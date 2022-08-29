@@ -538,26 +538,4 @@ public interface ManagedObject extends HasMetaModelContext {
         return _ManagedObjectWithEagerSpec.identified(spec, pojo, bookmark);
     }
 
-    /**
-     * For cases, when the pojo's specification is not available and needs to be looked up.
-     * @param specLoader
-     * @param pojo
-     */
-    @Deprecated
-    static ManagedObject lazy(
-            final SpecificationLoader specLoader,
-            final Object pojo) {
-
-        if(pojo!=null) {
-            _Assert.assertFalse(_Collections.isCollectionOrArrayOrCanType(pojo.getClass()));
-        }
-
-        ManagedObjects.assertPojoNotWrapped(pojo);
-        val adapter = new _ManagedObjectWithLazySpec(cls->specLoader.specForType(cls).orElse(null), pojo);
-        //ManagedObjects.warnIfAttachedEntity(adapter, "consider using ManagedObject.identified(...) for entity");
-        return adapter;
-    }
-
-
-
 }

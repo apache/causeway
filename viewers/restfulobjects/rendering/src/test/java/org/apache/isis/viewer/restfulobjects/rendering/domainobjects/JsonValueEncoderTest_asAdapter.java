@@ -38,6 +38,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -50,11 +55,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 
 import lombok.val;
 
@@ -132,7 +132,7 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(BooleanNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).specForType(((Object)value).getClass());
+                allowing(specLoader).specForType(((Object)value).getClass());
                 will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
@@ -152,7 +152,7 @@ public class JsonValueEncoderTest_asAdapter {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockValueFacet).fromEncodedString(Format.JSON, "aString");
+                allowing(mockValueFacet).fromEncodedString(Format.JSON, "aString");
                 will(throwException(new TextEntryParseException("'aString' cannot be parsed as a boolean value")));
             }
         });
@@ -179,7 +179,7 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(IntNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).specForType(((Object)value).getClass());
+                allowing(specLoader).specForType(((Object)value).getClass());
                 will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
@@ -221,7 +221,7 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(LongNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).specForType(((Object)value).getClass());
+                allowing(specLoader).specForType(((Object)value).getClass());
                 will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
@@ -241,7 +241,7 @@ public class JsonValueEncoderTest_asAdapter {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockValueFacet).fromEncodedString(Format.JSON, "aString");
+                allowing(mockValueFacet).fromEncodedString(Format.JSON, "aString");
                 will(throwException(new TextEntryParseException("'aString' cannot be parsed as a long value")));
             }
         });
@@ -268,7 +268,7 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(DoubleNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).specForType(((Object)value).getClass());
+                allowing(specLoader).specForType(((Object)value).getClass());
                 will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
@@ -301,7 +301,7 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(BigIntegerNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).specForType(value.getClass());
+                allowing(specLoader).specForType(value.getClass());
                 will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
@@ -334,7 +334,7 @@ public class JsonValueEncoderTest_asAdapter {
         representation = new JsonRepresentation(DecimalNode.valueOf(value));
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).specForType(value.getClass());
+                allowing(specLoader).specForType(value.getClass());
                 will(returnValue(Optional.of(mockObjectSpec)));
 
             }
@@ -368,7 +368,7 @@ public class JsonValueEncoderTest_asAdapter {
 
         context.checking(new Expectations() {
             {
-                oneOf(specLoader).specForType(String.class);
+                allowing(specLoader).specForType(String.class);
                 will(returnValue(Optional.of(mockObjectSpec)));
             }
         });
@@ -397,6 +397,9 @@ public class JsonValueEncoderTest_asAdapter {
 
                 allowing(mockValueFacet).getValueClass();
                 will(returnValue(valueClass));
+
+                allowing(mockObjectSpec).isNonScalar();
+                will(returnValue(true));
 
             }
         });

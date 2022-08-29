@@ -33,10 +33,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
@@ -71,56 +73,79 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
 
     @Override
     public ManagedObject asAdapter(
-            final ObjectSpecification objectSpec,
+            final ObjectSpecification spec,
             final JsonRepresentation valueRepr,
             final JsonValueConverter.Context context) {
 
         if(valueRepr == null) {
             return null;
         }
-        if (objectSpec == null) {
+        if (spec == null) {
             throw new IllegalArgumentException("ObjectSpecification is required");
         }
         if (!valueRepr.isValue()) {
             throw new IllegalArgumentException("Representation must be of a value");
         }
 
-        val valueClass = objectSpec.getCorrespondingClass();
+        val valueClass = spec.getCorrespondingClass();
         val valueSerializer =
-                Facets.valueSerializerElseFail(objectSpec, valueClass);
+                Facets.valueSerializerElseFail(spec, valueClass);
 
-        final JsonValueConverter jvc = converterByClass.get(ClassUtils.resolvePrimitiveIfNecessary(valueClass));
-        if(jvc == null) {
-            // best effort
-            if (valueRepr.isString()) {
-                final String argStr = valueRepr.asString();
-                return ManagedObject.of(objectSpec,
-                        valueSerializer.fromEncodedString(Format.JSON, argStr));
-            }
-            throw new IllegalArgumentException("Unable to parse value");
+        final JsonValueConverter jsonValueConverter = converterByClass
+                .get(ClassUtils.resolvePrimitiveIfNecessary(valueClass));
+        if(jsonValueConverter == null) {
+            // best effort: try 'String' type
+            return asStringElseFail(valueRepr, valueSerializer)
+                    .map(string->ManagedObject.value(spec, string))
+                    .orElseGet(()->ManagedObject.empty(spec));
         }
 
-        val valueAsPojo = jvc.recoverValueAsPojo(valueRepr, context);
+        val valueAsPojo = jsonValueConverter.recoverValueAsPojo(valueRepr, context);
         if(valueAsPojo != null) {
-            return ManagedObject.lazy(specificationLoader, valueAsPojo);
+            return ManagedObject.value(spec, valueAsPojo);
         }
 
         // last attempt
         if (valueRepr.isString()) {
-            final String argStr = valueRepr.asString();
-            try {
-                return ManagedObject.of(objectSpec,
-                        valueSerializer.fromEncodedString(Format.JSON, argStr));
-            } catch(TextEntryParseException ex) {
-                throw new IllegalArgumentException(ex.getMessage());
-            }
+            return asStringElseFail(valueRepr, valueSerializer)
+                    .map(string->ManagedObject.value(spec, string))
+                    .orElseGet(()->ManagedObject.empty(spec));
         }
 
         throw new IllegalArgumentException("Could not parse value '"
                 + valueRepr.asString()
                 + "' as a "
-                + objectSpec.getFullIdentifier());
+                + spec.getFullIdentifier());
     }
+
+    /**
+     * Returns the recovered nullable String, wrapped as optional.
+     * @throws IllegalArgumentException if cannot be parsed as String
+     */
+    private static Optional<String> asStringElseFail(
+            final JsonRepresentation valueRepr,
+            final ValueSerializer<?> valueSerializer) {
+        if (valueRepr.isString()) {
+            val recoveredValue = Try.call(()->
+                    valueSerializer.fromEncodedString(Format.JSON, valueRepr.asString()))
+                    .mapFailure(ex->_Exceptions
+                            .illegalArgument(ex, "Unable to parse value %s as String", valueRepr))
+                    .ifFailureFail()
+                    .getValue().orElse(null);
+                    ;
+            if(recoveredValue==null) {
+                return Optional.empty();
+            }
+            val recoveredStringIfAny = _Casts.castTo(String.class, recoveredValue);
+            if(recoveredStringIfAny.isPresent()) {
+                return recoveredStringIfAny;
+            }
+            throw _Exceptions.illegalArgument("Unable to parse value %s as String", recoveredValue.getClass());
+        }
+        throw _Exceptions.illegalArgument("Unable to parse value %s as String"
+                + " (using 'String' as a fallback attempt)", valueRepr);
+    }
+
 
     @Override
     public void appendValueAndFormat(
