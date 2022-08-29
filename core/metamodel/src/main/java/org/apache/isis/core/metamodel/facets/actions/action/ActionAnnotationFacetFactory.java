@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.depdef.DependentDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
@@ -235,7 +236,11 @@ extends FacetFactoryAbstract {
         // check for @Action(executionPublishing=...)
         addFacetIfPresent(
                 ExecutionPublishingActionFacetForActionAnnotation
-                .create(actionIfAny, getConfiguration(), facetedMethod));
+                .create(actionIfAny, getConfiguration(), facetedMethod));        // check for @Action(executionPublishing=...)
+
+        addFacetIfPresent(
+                DependentDefaultsFacet
+                .create(actionIfAny, getConfiguration(), facetedMethod));        // check for @Action(dependentDefaultsPolicy=...)
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {

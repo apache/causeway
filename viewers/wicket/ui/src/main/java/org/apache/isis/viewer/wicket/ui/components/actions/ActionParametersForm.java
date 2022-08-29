@@ -33,6 +33,8 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
+import org.apache.isis.core.metamodel.facets.actions.action.depdef.DependentDefaultsFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.viewer.commons.model.PlacementDirection;
@@ -155,7 +157,9 @@ extends PromptFormAbstract<ActionModel> {
             val actionParameter = paramModel.getMetaModel();
 
             val bindableParamValue = pendingArgs.getBindableParamValue(paramIndex);
-            if(! bindableParamValue.isDirty()) {
+            val dependentDefaultsFacet = actionModel.getAction().getFacet(DependentDefaultsFacet.class);
+            val alwaysUpdate = dependentDefaultsFacet == null || dependentDefaultsFacet.value() == ParameterPolicies.DependentDefaultsPolicy.UPDATE_DEPENDENT;
+            if(alwaysUpdate ||  ! bindableParamValue.isDirty()) {
                 // reassess defaults
                 val paramDefaultValue = actionParameter.getDefault(pendingArgs);
                 if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {

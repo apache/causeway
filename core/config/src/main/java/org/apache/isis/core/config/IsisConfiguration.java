@@ -49,6 +49,7 @@ import org.springframework.validation.annotation.Validated;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DependentDefaultsPolicy;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -62,9 +63,9 @@ import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.IsisConfiguration.Viewer;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.EntityChangePublishingPolicy;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyPublishingPolicy;
@@ -751,12 +752,11 @@ public class IsisConfiguration {
                 private ActionPublishingPolicy commandPublishing = ActionPublishingPolicy.NONE;
 
                 /**
-                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether action invocations should be sent through to the
                  * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Execution) publish}
+                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#onExecution(Execution) onExecution}
                  *     method is called only once per transaction, with
                  *     {@link Execution} collecting details of
                  *     the identity of the target object, the action invoked, the action arguments and the returned
@@ -764,7 +764,7 @@ public class IsisConfiguration {
                  * </p>
                  *
                  * <p>
-                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#executionDispatch()}.
+                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#executionPublishing()  Action#executionPublishing()}.
                  * </p>
                  */
                 private ActionPublishingPolicy executionPublishing = ActionPublishingPolicy.NONE;
@@ -810,6 +810,17 @@ public class IsisConfiguration {
                 }
 
 
+                /**
+                 * Whether dependent parameters should be reset to their default if an earlier parameter changes its
+                 * value, or whether instead a parameter value, once changed by the end-user, should never be
+                 * overwritten even if the end-user changes an earlier parameter value.
+                 *
+                 * <p>
+                 *     This setting can be overridden on a case-by-case basis using
+                 *     {@link org.apache.isis.applib.annotation.Action#dependentDefaultsPolicy() Action#dependentDefaultsPolicy()}.
+                 * </p>
+                 */
+                private ParameterPolicies.DependentDefaultsPolicy dependentDefaultsPolicy = ParameterPolicies.DependentDefaultsPolicy.UPDATE_DEPENDENT;
 
 
             }
