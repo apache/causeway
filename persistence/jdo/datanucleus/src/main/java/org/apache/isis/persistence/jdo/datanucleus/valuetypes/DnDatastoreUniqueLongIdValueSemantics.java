@@ -33,10 +33,10 @@ import lombok.NonNull;
  */
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class JdoDatastoreUniqueLongIdValueSemantics
+public class DnDatastoreUniqueLongIdValueSemantics
 extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<DatastoreUniqueLongId> {
 
-    public JdoDatastoreUniqueLongIdValueSemantics() {
+    public DnDatastoreUniqueLongIdValueSemantics() {
         super(DatastoreUniqueLongId.class);
     }
 

@@ -47,14 +47,14 @@ import lombok.val;
 @Component
 @Priority(PriorityPrecedence.LATE)
 @Builder
-public class JdoObjectIdValueSemantics
+public class DnObjectIdValueSemantics
 extends ValueSemanticsBasedOnIdStringifier<ObjectId> {
 
     private static final String PREFIX_UUID = "u_";
     private static final String PREFIX_LONG = "l_";
     private static final String PREFIX_INT = "i_";
 
-    public JdoObjectIdValueSemantics() {
+    public DnObjectIdValueSemantics() {
         super(ObjectId.class);
     }
 

@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import javax.annotation.Priority;
 
-import org.datanucleus.identity.DatastoreIdImpl;
+import org.datanucleus.identity.LongId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -31,32 +31,29 @@ import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.schema.common.v2.ValueType;
 
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.val;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class JdoDatastoreIdImplValueSemantics
-extends ValueSemanticsBasedOnIdStringifier<DatastoreIdImpl> {
+public class DnLongIdValueSemantics
+extends ValueSemanticsBasedOnIdStringifier<LongId> {
 
-    public static final String STRING_DELIMITER = "[OID]"; // as
-
-    public JdoDatastoreIdImplValueSemantics() {
-        super(DatastoreIdImpl.class);
+    public DnLongIdValueSemantics() {
+        super(LongId.class);
     }
 
     // -- COMPOSER
 
     @Override
-    public ValueDecomposition decompose(final DatastoreIdImpl value) {
+    public ValueDecomposition decompose(final LongId value) {
         return CommonDtoUtils.typedTupleBuilder(value)
-                .addFundamentalType(ValueType.STRING, "targetClassName", DatastoreIdImpl::getTargetClassName)
+                .addFundamentalType(ValueType.STRING, "targetClassName", LongId::getTargetClassName)
                 .addFundamentalType(ValueType.STRING, "key", this::enstring)
                 .buildAsDecomposition();
     }
 
     @Override
-    public DatastoreIdImpl compose(final ValueDecomposition decomposition) {
+    public LongId compose(final ValueDecomposition decomposition) {
         val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
@@ -66,20 +63,9 @@ extends ValueSemanticsBasedOnIdStringifier<DatastoreIdImpl> {
     // -- ID STRINGIFIER
 
     @Override
-    public String enstring(final @NonNull DatastoreIdImpl value) {
-        return value.getKeyAsObject().toString();
-    }
-
-    @SneakyThrows
-    @Override
-    public DatastoreIdImpl destring(
+    public LongId destring(
             final @NonNull Class<?> targetEntityClass,
             final @NonNull String stringified) {
-        // enString invoked toString() on the original key; invoking toString() on its stringified form does not change it
-        val proto = new DatastoreIdImpl(targetEntityClass.getName(), stringified);
-        // now render in the form that the DataStoreImpl constructor expects; it will take it apart itself.
-        val str = proto.toString();
-        return new DatastoreIdImpl(str);
+        return new LongId(targetEntityClass, stringified);
     }
-
 }
