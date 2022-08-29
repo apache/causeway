@@ -21,12 +21,10 @@ package org.apache.isis.core.metamodel.facets.actions.action.depdef;
 
 import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
-public abstract class DependentDefaultsFacetAbstract
+abstract class DependentDefaultsFacetAbstract
 extends SingleValueFacetAbstract<ParameterPolicies.DependentDefaultsPolicy>
 implements DependentDefaultsFacet {
 
@@ -34,7 +32,8 @@ implements DependentDefaultsFacet {
         return DependentDefaultsFacet.class;
     }
 
-    public DependentDefaultsFacetAbstract(final ParameterPolicies.DependentDefaultsPolicy value, final FacetHolder holder) {
+    protected DependentDefaultsFacetAbstract(
+            final ParameterPolicies.DependentDefaultsPolicy value, final FacetHolder holder) {
         super(type(), value, holder);
     }
 }

@@ -27,8 +27,20 @@ public final class ParameterPolicies {
     // -- ACTIONS
 
     public static enum DependentDefaultsPolicy {
+        /**
+         * Allows user provided parameters in the UI to be overwritten via defaults semantics.
+         */
         UPDATE_DEPENDENT,
+        /**
+         * Forbids user provided parameters in the UI to be overwritten via defaults semantics.
+         */
         PRESERVE_CHANGES;
+        public boolean isUpdateDependent() { return this == UPDATE_DEPENDENT; }
+        public boolean isPreserveChanges() { return this == PRESERVE_CHANGES; }
+
+        public static DependentDefaultsPolicy defaultsIfNotSpecifedOtherwise() {
+            return UPDATE_DEPENDENT; // backwards compatibility
+        }
     }
 
 

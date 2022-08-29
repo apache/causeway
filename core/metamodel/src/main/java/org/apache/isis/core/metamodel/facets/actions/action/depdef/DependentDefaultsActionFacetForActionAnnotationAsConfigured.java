@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class DependentDefaultsActionFacetForActionAnnotationAsConfigured
 extends DependentDefaultsActionFacetForActionAnnotation {
 
-    public DependentDefaultsActionFacetForActionAnnotationAsConfigured(
-            ParameterPolicies.DependentDefaultsPolicy value, final FacetHolder holder) {
+    DependentDefaultsActionFacetForActionAnnotationAsConfigured(
+            final ParameterPolicies.DependentDefaultsPolicy value, final FacetHolder holder) {
         super(value, holder);
     }
 

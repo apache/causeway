@@ -26,7 +26,7 @@ public class DependentDefaultsActionFacetForActionAnnotation
 extends DependentDefaultsFacetAbstract {
 
     DependentDefaultsActionFacetForActionAnnotation(
-            ParameterPolicies.DependentDefaultsPolicy value, final FacetHolder holder) {
+            final ParameterPolicies.DependentDefaultsPolicy value, final FacetHolder holder) {
         super(value, holder);
     }
 

@@ -27,16 +27,13 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
-import org.apache.isis.core.metamodel.facets.actions.action.depdef.DependentDefaultsFacet;
-import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.PlacementDirection;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
@@ -157,9 +154,9 @@ extends PromptFormAbstract<ActionModel> {
             val actionParameter = paramModel.getMetaModel();
 
             val bindableParamValue = pendingArgs.getBindableParamValue(paramIndex);
-            val dependentDefaultsFacet = actionModel.getAction().getFacet(DependentDefaultsFacet.class);
-            val alwaysUpdate = dependentDefaultsFacet == null || dependentDefaultsFacet.value() == ParameterPolicies.DependentDefaultsPolicy.UPDATE_DEPENDENT;
-            if(alwaysUpdate ||  ! bindableParamValue.isDirty()) {
+
+            if(Facets.dependentDefaultsPolicy(actionModel.getAction()).isUpdateDependent()
+                    || ! bindableParamValue.isDirty()) {
                 // reassess defaults
                 val paramDefaultValue = actionParameter.getDefault(pendingArgs);
                 if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {

@@ -22,34 +22,30 @@ package org.apache.isis.core.metamodel.facets.actions.action.depdef;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.services.iactn.Execution;
-import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
-import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
-
-import lombok.NonNull;
-import lombok.val;
 
 /**
- * Determines how dependent parameter values should be updated if one of the earlier parameter values is changed.
+ * Determines how dependent parameter values should be updated,
+ * if one of the earlier parameter values is changed.
  * <p>
  * Corresponds to annotating the action method {@link Action#dependentDefaultsPolicy()}.
  *
  * @since 2.0
  */
-public interface DependentDefaultsFacet extends SingleValueFacet<ParameterPolicies.DependentDefaultsPolicy> {
+public interface DependentDefaultsFacet
+extends SingleValueFacet<ParameterPolicies.DependentDefaultsPolicy> {
 
     static Optional<DependentDefaultsFacet> create(
             final Optional<Action> actionsIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        ParameterPolicies.DependentDefaultsPolicy defaultPolicyFromConfig = ParameterPolicies.dependentDefaultsPolicy(configuration);
+        final ParameterPolicies.DependentDefaultsPolicy defaultPolicyFromConfig =
+                ParameterPolicies.dependentDefaultsPolicy(configuration);
 
         return _Optionals.orNullable(
 
@@ -58,9 +54,11 @@ public interface DependentDefaultsFacet extends SingleValueFacet<ParameterPolici
         .<DependentDefaultsFacet>map(policy -> {
             switch (policy) {
             case PRESERVE_CHANGES:
-                return new DependentDefaultsActionFacetForActionAnnotation(ParameterPolicies.DependentDefaultsPolicy.PRESERVE_CHANGES, holder);
+                return new DependentDefaultsActionFacetForActionAnnotation(
+                        ParameterPolicies.DependentDefaultsPolicy.PRESERVE_CHANGES, holder);
             case UPDATE_DEPENDENT:
-                return new DependentDefaultsActionFacetForActionAnnotation(ParameterPolicies.DependentDefaultsPolicy.UPDATE_DEPENDENT, holder);
+                return new DependentDefaultsActionFacetForActionAnnotation(
+                        ParameterPolicies.DependentDefaultsPolicy.UPDATE_DEPENDENT, holder);
             case NOT_SPECIFIED:
             case AS_CONFIGURED:
                 return new DependentDefaultsActionFacetForActionAnnotation(defaultPolicyFromConfig, holder);

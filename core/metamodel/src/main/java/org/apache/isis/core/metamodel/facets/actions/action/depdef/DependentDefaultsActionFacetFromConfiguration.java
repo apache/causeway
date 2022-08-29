@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class DependentDefaultsActionFacetFromConfiguration
 extends DependentDefaultsFacetAbstract {
 
-    public DependentDefaultsActionFacetFromConfiguration(
-            ParameterPolicies.DependentDefaultsPolicy value, final FacetHolder holder) {
+    DependentDefaultsActionFacetFromConfiguration(
+            final ParameterPolicies.DependentDefaultsPolicy value, final FacetHolder holder) {
         super(value, holder);
     }
 
