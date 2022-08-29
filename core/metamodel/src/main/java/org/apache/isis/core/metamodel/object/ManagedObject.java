@@ -70,7 +70,7 @@ public interface ManagedObject extends HasMetaModelContext {
 
         /**
          * <h1>Contract</h1><ul>
-         * <li>Specification (immutable,  allowed to correspond to abstract type)</li>
+         * <li>Specification (immutable, allowed to correspond to abstract type)</li>
          * <li>Bookmark (n/a)</li>
          * <li>Pojo (null, immutable)</li>
          * </ul>
@@ -79,7 +79,7 @@ public interface ManagedObject extends HasMetaModelContext {
 
         /**
          * <h1>Contract</h1><ul>
-         * <li>Specification (immutable,  NOT allowed to correspond to abstract type)</li>
+         * <li>Specification (immutable, NOT allowed to correspond to abstract type)</li>
          * <li>Bookmark (immutable)</li>
          * <li>Pojo (immutable)</li>
          * </ul>
@@ -88,7 +88,7 @@ public interface ManagedObject extends HasMetaModelContext {
 
         /**
          * <h1>Contract</h1><ul>
-         * <li>Specification (immutable,  NOT allowed to correspond to abstract type)</li>
+         * <li>Specification (immutable, NOT allowed to correspond to abstract type)</li>
          * <li>Bookmark (immutable)</li>
          * <li>Pojo (immutable)</li>
          * </ul>
@@ -97,7 +97,7 @@ public interface ManagedObject extends HasMetaModelContext {
 
         /**
          * <h1>Contract</h1><ul>
-         * <li>Specification (immutable,  NOT allowed to correspond to abstract type)</li>
+         * <li>Specification (immutable, NOT allowed to correspond to abstract type)</li>
          * <li>Bookmark (refreshable, as VM state changes manifest in change of ID)</li>
          * <li>Pojo (mutable, but immutable obj. ref.)</li>
          * </ul>
@@ -106,7 +106,7 @@ public interface ManagedObject extends HasMetaModelContext {
 
         /**
          * <h1>Contract</h1><ul>
-         * <li>Specification (immutable,  NOT allowed to correspond to abstract type)</li>
+         * <li>Specification (immutable, NOT allowed to correspond to abstract type)</li>
          * <li>Bookmark (immutable,  entity must be persistent, it must have an ID,  fail otherwise)</li>
          * <li>Pojo (refetchable)</li>
          * </ul>
@@ -115,7 +115,25 @@ public interface ManagedObject extends HasMetaModelContext {
 
         /**
          * <h1>Contract</h1><ul>
-         * <li>Element Specification (immutable,  allowed to correspond to abstract type)</li>
+         * <li>Element Specification (immutable, NOT allowed to correspond to abstract type)</li>
+         * <li>Bookmark (n/a)</li>
+         * <li>Pojo (allowed stateful, immutable obj. ref)</li>
+         * </ul>
+         */
+        MIXIN(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.STATEFUL),
+
+        /**
+         * <h1>Contract</h1><ul>
+         * <li>Element Specification (immutable, NOT allowed to correspond to abstract type)</li>
+         * <li>Bookmark (n/a)</li>
+         * <li>Pojo (allowed stateful, immutable obj. ref)</li>
+         * </ul>
+         */
+        OTHER(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.STATEFUL),
+
+        /**
+         * <h1>Contract</h1><ul>
+         * <li>Element Specification (immutable, NOT allowed to correspond to abstract type)</li>
          * <li>Bookmark (n/a)</li>
          * <li>Pojo (unmod. Collection of pojos)</li>
          * </ul>
@@ -228,6 +246,20 @@ public interface ManagedObject extends HasMetaModelContext {
          */
         public boolean isEntity() { return this == ENTITY; }
         /**
+         * MIXIN
+         * @see TypePolicy#EXACT_TYPE_REQUIRED
+         * @see BookmarkPolicy#NO_BOOKMARK
+         * @see PojoPolicy#STATEFUL
+         */
+        public boolean isMixin() { return this == MIXIN; }
+        /**
+         * OTHER
+         * @see TypePolicy#EXACT_TYPE_REQUIRED
+         * @see BookmarkPolicy#NO_BOOKMARK
+         * @see PojoPolicy#STATEFUL
+         */
+        public boolean isOther() { return this == OTHER; }
+        /**
          * PACKED
          * @see TypePolicy#ABSTRACT_TYPE_ALLOWED
          * @see BookmarkPolicy#NO_BOOKMARK
@@ -258,6 +290,12 @@ public interface ManagedObject extends HasMetaModelContext {
             }
             if(spec.isEntity()) {
                 return ENTITY;
+            }
+            if(spec.isMixin()) {
+                return MIXIN;
+            }
+            if(!spec.isAbstract()) {
+                return OTHER;
             }
             log.warn("failed specialization attempt for {}", spec);
             return UNSPECIFIED;
@@ -391,8 +429,11 @@ public interface ManagedObject extends HasMetaModelContext {
      */
     static ManagedObject value(
             final @NonNull ObjectSpecification spec,
-            final @NonNull Object pojo) {
-        return new _ManagedObjectWithEagerSpec(spec, pojo); //FIXME
+            final @Nullable Object pojo) {
+        return pojo != null
+                ? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
+                //new _ManagedObjectValue(spec, pojo)
+                : empty(spec);
     }
     /**
      * SERVICE
@@ -417,8 +458,10 @@ public interface ManagedObject extends HasMetaModelContext {
      */
     static ManagedObject viewmodel(
             final @NonNull ObjectSpecification spec,
-            final @NonNull Object pojo) {
-        return new _ManagedObjectWithEagerSpec(spec, pojo); //FIXME
+            final @Nullable Object pojo) {
+        return pojo != null
+                ? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
+                : empty(spec);
     }
     /**
      * ENTITY
@@ -430,8 +473,40 @@ public interface ManagedObject extends HasMetaModelContext {
      */
     static ManagedObject entity(
             final @NonNull ObjectSpecification spec,
-            final @NonNull Object pojo) {
-        return new _ManagedObjectWithEagerSpec(spec, pojo); //FIXME
+            final @Nullable Object pojo) {
+        return pojo != null
+                ? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
+                : empty(spec);
+    }
+    /**
+     * MIXIN
+     * @param pojo
+     * @param spec
+     * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
+     * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
+     * @see ManagedObject.Specialization.PojoPolicy#STATEFUL
+     */
+    static ManagedObject mixin(
+            final @NonNull ObjectSpecification spec,
+            final @Nullable Object pojo) {
+        return pojo != null
+                ? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
+                : empty(spec);
+    }
+    /**
+     * OTHER
+     * @param pojo
+     * @param spec
+     * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
+     * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
+     * @see ManagedObject.Specialization.PojoPolicy#STATEFUL
+     */
+    static ManagedObject other(
+            final @NonNull ObjectSpecification spec,
+            final @Nullable Object pojo) {
+        return pojo != null
+                ? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
+                : empty(spec);
     }
     /**
      * PACKED
@@ -476,6 +551,10 @@ public interface ManagedObject extends HasMetaModelContext {
             return viewmodel(spec, pojo);
         case ENTITY:
             return entity(spec, pojo);
+        case MIXIN:
+            return mixin(spec, pojo);
+        case OTHER:
+            return other(spec, pojo);
         // unreachable (in this context)
         case EMPTY:
         case PACKED:

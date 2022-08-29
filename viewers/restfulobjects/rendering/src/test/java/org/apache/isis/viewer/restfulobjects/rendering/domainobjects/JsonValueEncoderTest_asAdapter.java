@@ -386,6 +386,12 @@ public class JsonValueEncoderTest_asAdapter {
         context.checking(new Expectations() {
             {
 
+                allowing(mockObjectSpec).isValue();
+                will(returnValue(true));
+
+                allowing(mockObjectSpec).isAbstract();
+                will(returnValue(false));
+
                 allowing(mockObjectSpec).valueFacet();
                 will(returnValue(Optional.of(mockValueFacet)));
 
