@@ -183,8 +183,12 @@ class MetaModelContext_usingIoc implements MetaModelContext {
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "Cannot get service instance of type '%s'",
                         managedBeanAdapter.getBeanClass()));
-
-        return ManagedObject.lazy(getSpecificationLoader(), servicePojo);
+        return getSpecificationLoader()
+                .specForType(servicePojo.getClass())
+                .map(serviceSpec->ManagedObject.service(serviceSpec, servicePojo))
+                .orElseThrow(()->_Exceptions.unrecoverable(
+                        "Cannot wrap vetoed service of type '%s'",
+                        managedBeanAdapter.getBeanClass()));
     }
 
 }

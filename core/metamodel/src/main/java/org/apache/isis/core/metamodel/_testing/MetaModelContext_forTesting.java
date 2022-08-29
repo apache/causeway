@@ -507,7 +507,9 @@ implements MetaModelContext {
         if(ProgrammingModelConstants.TypeVetoMarker.anyMatchOn(managedBeanAdapter.getBeanClass())) {
             return Optional.empty();
         }
-        return Optional.of(ManagedObject.lazy(getSpecificationLoader(), servicePojo));
+        return getSpecificationLoader()
+            .specForType(servicePojo.getClass())
+            .map(serviceSpec->ManagedObject.service(serviceSpec, servicePojo));
     }
 
     // -- RECURSIVE INITIALIZATION FIX

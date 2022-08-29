@@ -31,7 +31,6 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.applib.services.hint.HintIdProvider;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -123,15 +122,18 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                     final _ObjectMemento memento,
                     final MetaModelContext mmc) {
 
-                final Can<ManagedObject> managedObjects =
-                        _NullSafe.stream(memento.list)
-                        .map(Functions.toManagedObject(mmc))
-                        .collect(Can.toCan());
+                // I believe this code path is no longer reachable
+                throw _Exceptions.unexpectedCodeReach();
 
-                val commonSpec = ManagedObjects.commonSpecification(managedObjects)
-                        .orElseGet(()->mmc.getSpecificationLoader().loadSpecification(Object.class));
-
-                return ManagedObject.packed(commonSpec, managedObjects);
+//                final Can<ManagedObject> managedObjects =
+//                        _NullSafe.stream(memento.list)
+//                        .map(Functions.toManagedObject(mmc))
+//                        .collect(Can.toCan());
+//
+//                val commonSpec = ManagedObjects.commonSpecification(managedObjects)
+//                        .orElseGet(()->mmc.getSpecificationLoader().loadSpecification(Object.class));
+//
+//                return ManagedObject.packed(commonSpec, managedObjects);
             }
 
             @Override

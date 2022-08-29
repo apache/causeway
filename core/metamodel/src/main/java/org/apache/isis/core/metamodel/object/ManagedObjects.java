@@ -343,7 +343,10 @@ public final class ManagedObjects {
     /**
      * Optionally the common {@link ObjectSpecification} based on whether provided {@code objects}
      * have any at all.
+     * @deprecated this is a hack - the MM has strict type-of metadata for non-scalars,
+     * resorting to runtime introspection does not conform with our design decisions
      */
+    @Deprecated
     public static Optional<ObjectSpecification> commonSpecification(
             final @Nullable Can<ManagedObject> objects) {
 
