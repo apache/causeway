@@ -48,17 +48,13 @@ public class _Bindables {
     public static <T> _BindableAbstract<T> forValue(final T initialValue) {
         val bindable = new SimpleBindable<T>();
         bindable.setValue(initialValue);
-        bindable.clearDirty();
         return bindable;
     }
 
     public static BooleanBindable forBoolean(final boolean initialValue) {
         val bindable = new BooleanBindable();
         bindable.setValue(initialValue);
-        bindable.clearDirty();
         return bindable;
     }
-
-
 
 }

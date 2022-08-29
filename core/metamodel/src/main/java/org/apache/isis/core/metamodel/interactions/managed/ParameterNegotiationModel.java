@@ -30,6 +30,7 @@ import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
+import org.apache.isis.commons.internal.binding._Bindables.BooleanBindable;
 import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -152,6 +153,10 @@ public class ParameterNegotiationModel {
         return paramModels.getElseFail(paramNr).getBindableParamValue();
     }
 
+    @NonNull public BooleanBindable getBindableParamValueDirtyFlag(final int paramNr) {
+        return paramModels.getElseFail(paramNr).getBindableParamValueDirtyFlag();
+    }
+
     @NonNull public Observable<Can<ManagedObject>> getObservableParamChoices(final int paramNr) {
         return paramModels.getElseFail(paramNr).getObservableParamChoices();
     }
@@ -227,7 +232,8 @@ public class ParameterNegotiationModel {
     }
 
     public void clearParamValue(final int paramIndex) {
-        setParamValue(paramIndex, adaptParamValuePojo(paramIndex, null));
+        val emptyValue = adaptParamValuePojo(paramIndex, null);
+        paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(emptyValue);
     }
 
     @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, final @Nullable Object newParamValuePojo) {
@@ -267,6 +273,7 @@ public class ParameterNegotiationModel {
         @Getter(onMethod_ = {@Override}) @NonNull private final ObjectActionParameter metaModel;
         @Getter(onMethod_ = {@Override}) @NonNull private final ParameterNegotiationModel negotiationModel;
         @Getter @NonNull private final _BindableAbstract<ManagedObject> bindableParamValue;
+        @Getter @NonNull private final BooleanBindable bindableParamValueDirtyFlag;
         @Getter @NonNull private final LazyObservable<String> observableParamValidation;
         @Getter @NonNull private final _BindableAbstract<String> bindableParamSearchArgument;
         @Getter @NonNull private final LazyObservable<Can<ManagedObject>> observableParamChoices;
@@ -286,15 +293,18 @@ public class ParameterNegotiationModel {
             this.negotiationModel = negotiationModel;
 
             bindableParamValue = _Bindables.forValue(initialValue);
+            bindableParamValueDirtyFlag = _Bindables.forBoolean(false);
+
             bindableParamValue.setValueRefiner(MmEntityUtil::refetch);
             bindableParamValue.setValueGuard(ManagedObjects.assertInstanceOf(metaModel.getElementType()));
-            bindableParamValue.addListener((e,o,n)->{
-                if(n==null) {
+            bindableParamValue.addListener((event, oldValue, newValue)->{
+                if(newValue==null) {
                     // lift null to empty ...
-                    bindableParamValue.setValue(metaModel.getEmpty());
+                    bindableParamValue.setValue(metaModel.getEmpty()); // triggers this event again
                     return;
                 }
                 getNegotiationModel().onNewParamValue();
+                bindableParamValueDirtyFlag.setValue(true); // set dirty whenever an update event happens
             });
 
             // has either autoComplete, choices, or none

@@ -153,13 +153,14 @@ extends PromptFormAbstract<ActionModel> {
             val actionParameter = paramModel.getMetaModel();
 
             val bindableParamValue = pendingArgs.getBindableParamValue(paramIndex);
+            val bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
 
             if(Facets.dependentDefaultsPolicy(actionModel.getAction()).isUpdateDependent()
-                    || ! bindableParamValue.isDirty()) {
+                    || ! bindableParamDirtyFlag.getValue().booleanValue()) {
                 // reassess defaults
                 val paramDefaultValue = actionParameter.getDefault(pendingArgs);
                 pendingArgs.setParamValue(paramIndex, paramDefaultValue);
-                bindableParamValue.clearDirty();
+                bindableParamDirtyFlag.setValue(false);
             }
 
             val paramPanel = paramPanels.get(paramIndex);
