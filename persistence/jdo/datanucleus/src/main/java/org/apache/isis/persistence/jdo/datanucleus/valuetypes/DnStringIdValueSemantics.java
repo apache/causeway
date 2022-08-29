@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
-import org.datanucleus.identity.CharId;
+import org.datanucleus.identity.StringId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -38,36 +38,36 @@ import lombok.val;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class JdoCharIdValueSemantics
-extends ValueSemanticsBasedOnIdStringifier<CharId> {
+public class DnStringIdValueSemantics
+extends ValueSemanticsBasedOnIdStringifier<StringId> {
 
-    @Inject IdStringifier<Character> idStringifierForCharacter;
+    @Inject IdStringifier<String> idStringifierForString;
 
-    public JdoCharIdValueSemantics() {
-        super(CharId.class);
+    public DnStringIdValueSemantics() {
+        super(StringId.class);
     }
 
     /**
      * for testing only
      */
     @Builder
-    JdoCharIdValueSemantics(final IdStringifier<Character> idStringifierForCharacter) {
+    DnStringIdValueSemantics(final IdStringifier<String> idStringifierForString) {
         this();
-        this.idStringifierForCharacter = idStringifierForCharacter;
+        this.idStringifierForString = idStringifierForString;
     }
 
     // -- COMPOSER
 
     @Override
-    public ValueDecomposition decompose(final CharId value) {
+    public ValueDecomposition decompose(final StringId value) {
         return CommonDtoUtils.typedTupleBuilder(value)
-                .addFundamentalType(ValueType.STRING, "targetClassName", CharId::getTargetClassName)
+                .addFundamentalType(ValueType.STRING, "targetClassName", StringId::getTargetClassName)
                 .addFundamentalType(ValueType.STRING, "key", this::enstring)
                 .buildAsDecomposition();
     }
 
     @Override
-    public CharId compose(final ValueDecomposition decomposition) {
+    public StringId compose(final ValueDecomposition decomposition) {
         val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
@@ -77,15 +77,15 @@ extends ValueSemanticsBasedOnIdStringifier<CharId> {
     // -- ID STRINGIFIER
 
     @Override
-    public String enstring(final @NonNull CharId value) {
-        return idStringifierForCharacter.enstring(value.getKey());
+    public String enstring(final @NonNull StringId value) {
+        return idStringifierForString.enstring(value.getKey());
     }
 
     @Override
-    public CharId destring(
+    public StringId destring(
             final @NonNull Class<?> targetEntityClass,
             final @NonNull String stringified) {
-        val idValue = idStringifierForCharacter.destring(targetEntityClass, stringified);
-        return new CharId(targetEntityClass, idValue);
+        val idValue = idStringifierForString.destring(targetEntityClass, stringified);
+        return new StringId(targetEntityClass, idValue);
     }
 }

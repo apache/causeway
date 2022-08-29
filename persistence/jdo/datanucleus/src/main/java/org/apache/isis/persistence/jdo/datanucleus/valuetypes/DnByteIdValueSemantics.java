@@ -19,55 +19,41 @@
 package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.jdo.identity.StringIdentity;
 
+import org.datanucleus.identity.ByteId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsBasedOnIdStringifier;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.schema.common.v2.ValueType;
 
-import lombok.Builder;
 import lombok.NonNull;
 import lombok.val;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class JdoStringIdValueSemantics
-extends ValueSemanticsBasedOnIdStringifier<StringIdentity> {
+public class DnByteIdValueSemantics
+extends ValueSemanticsBasedOnIdStringifier<ByteId> {
 
-    @Inject IdStringifier<String> idStringifierForString;
-
-    public JdoStringIdValueSemantics() {
-        super(StringIdentity.class);
-    }
-
-    /**
-     * for testing only
-     */
-    @Builder
-    JdoStringIdValueSemantics(final IdStringifier<String> idStringifierForString) {
-        this();
-        this.idStringifierForString = idStringifierForString;
+    public DnByteIdValueSemantics() {
+        super(ByteId.class);
     }
 
     // -- COMPOSER
 
     @Override
-    public ValueDecomposition decompose(final StringIdentity value) {
+    public ValueDecomposition decompose(final ByteId value) {
         return CommonDtoUtils.typedTupleBuilder(value)
-                .addFundamentalType(ValueType.STRING, "targetClassName", StringIdentity::getTargetClassName)
+                .addFundamentalType(ValueType.STRING, "targetClassName", ByteId::getTargetClassName)
                 .addFundamentalType(ValueType.STRING, "key", this::enstring)
                 .buildAsDecomposition();
     }
 
     @Override
-    public StringIdentity compose(final ValueDecomposition decomposition) {
+    public ByteId compose(final ValueDecomposition decomposition) {
         val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
@@ -77,15 +63,8 @@ extends ValueSemanticsBasedOnIdStringifier<StringIdentity> {
     // -- ID STRINGIFIER
 
     @Override
-    public String enstring(final @NonNull StringIdentity value) {
-        return idStringifierForString.enstring(value.getKey());
+    public ByteId destring(final @NonNull Class<?> targetEntityClass, final @NonNull String stringified) {
+        return new ByteId(targetEntityClass, stringified);
     }
 
-    @Override
-    public StringIdentity destring(
-            final @NonNull Class<?> targetEntityClass,
-            final @NonNull String stringified) {
-        val idValue = idStringifierForString.destring(targetEntityClass, stringified);
-        return new StringIdentity(targetEntityClass, idValue);
-    }
 }

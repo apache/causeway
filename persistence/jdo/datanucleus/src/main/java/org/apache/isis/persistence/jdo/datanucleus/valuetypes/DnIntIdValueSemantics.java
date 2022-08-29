@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import javax.annotation.Priority;
 
-import org.datanucleus.identity.ShortId;
+import org.datanucleus.identity.IntId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -35,25 +35,25 @@ import lombok.val;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class JdoShortIdValueSemantics
-extends ValueSemanticsBasedOnIdStringifier<ShortId> {
+public class DnIntIdValueSemantics
+extends ValueSemanticsBasedOnIdStringifier<IntId> {
 
-    public JdoShortIdValueSemantics() {
-        super(ShortId.class);
+    public DnIntIdValueSemantics() {
+        super(IntId.class);
     }
 
     // -- COMPOSER
 
     @Override
-    public ValueDecomposition decompose(final ShortId value) {
+    public ValueDecomposition decompose(final IntId value) {
         return CommonDtoUtils.typedTupleBuilder(value)
-                .addFundamentalType(ValueType.STRING, "targetClassName", ShortId::getTargetClassName)
+                .addFundamentalType(ValueType.STRING, "targetClassName", IntId::getTargetClassName)
                 .addFundamentalType(ValueType.STRING, "key", this::enstring)
                 .buildAsDecomposition();
     }
 
     @Override
-    public ShortId compose(final ValueDecomposition decomposition) {
+    public IntId compose(final ValueDecomposition decomposition) {
         val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
@@ -63,9 +63,9 @@ extends ValueSemanticsBasedOnIdStringifier<ShortId> {
     // -- ID STRINGIFIER
 
     @Override
-    public ShortId destring(
+    public IntId destring(
             final @NonNull Class<?> targetEntityClass,
             final @NonNull String stringified) {
-        return new ShortId(targetEntityClass, stringified);
+        return new IntId(targetEntityClass, stringified);
     }
 }

@@ -92,5 +92,4 @@ extends ValueSemanticsBasedOnIdStringifier<DatastoreId> {
         return _Casts.uncheckedCast(dnOid);
     }
 
-
 }

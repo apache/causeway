@@ -44,7 +44,7 @@ implements
     protected ValueSemanticsBasedOnIdStringifierEntityAgnostic(
             final @NonNull Class<T> correspondingClass) {
         _Assert.assertFalse(correspondingClass.isPrimitive(),
-                ()->String.format("not allowed to be initialzed with a primitive class (%s), "
+                ()->String.format("not allowed to be initialized with a primitive class (%s), "
                         + "use the boxed variant instead",
                         correspondingClass));
         this.correspondingClass = correspondingClass;

@@ -20,7 +20,7 @@ package org.apache.isis.persistence.jdo.datanucleus.valuetypes;
 
 import javax.annotation.Priority;
 
-import org.datanucleus.identity.ByteId;
+import org.datanucleus.identity.ShortId;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
@@ -35,25 +35,25 @@ import lombok.val;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
-public class JdoByteIdValueSemantics
-extends ValueSemanticsBasedOnIdStringifier<ByteId> {
+public class DnShortIdValueSemantics
+extends ValueSemanticsBasedOnIdStringifier<ShortId> {
 
-    public JdoByteIdValueSemantics() {
-        super(ByteId.class);
+    public DnShortIdValueSemantics() {
+        super(ShortId.class);
     }
 
     // -- COMPOSER
 
     @Override
-    public ValueDecomposition decompose(final ByteId value) {
+    public ValueDecomposition decompose(final ShortId value) {
         return CommonDtoUtils.typedTupleBuilder(value)
-                .addFundamentalType(ValueType.STRING, "targetClassName", ByteId::getTargetClassName)
+                .addFundamentalType(ValueType.STRING, "targetClassName", ShortId::getTargetClassName)
                 .addFundamentalType(ValueType.STRING, "key", this::enstring)
                 .buildAsDecomposition();
     }
 
     @Override
-    public ByteId compose(final ValueDecomposition decomposition) {
+    public ShortId compose(final ValueDecomposition decomposition) {
         val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
@@ -63,9 +63,9 @@ extends ValueSemanticsBasedOnIdStringifier<ByteId> {
     // -- ID STRINGIFIER
 
     @Override
-    public ByteId destring(final @NonNull Class<?> targetEntityClass, final @NonNull String stringified) {
-        return new ByteId(targetEntityClass, stringified);
+    public ShortId destring(
+            final @NonNull Class<?> targetEntityClass,
+            final @NonNull String stringified) {
+        return new ShortId(targetEntityClass, stringified);
     }
-
-
 }
