@@ -37,10 +37,12 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.depdef.DependentDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
@@ -166,6 +168,13 @@ public final class Facets {
     public Optional<String> defaultViewName(final ObjectFeature feature) {
         return feature.lookupFacet(DefaultViewFacet.class)
         .map(DefaultViewFacet::value);
+    }
+
+    public static ParameterPolicies.DependentDefaultsPolicy dependentDefaultsPolicy(
+            final ObjectAction action) {
+        return action.lookupFacet(DependentDefaultsFacet.class)
+                .map(DependentDefaultsFacet::value)
+                .orElseGet(ParameterPolicies.DependentDefaultsPolicy::defaultsIfNotSpecifiedOtherwise);
     }
 
     public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {

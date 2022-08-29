@@ -58,8 +58,8 @@ import org.apache.isis.applib.value.Clob;
 public @interface Action {
 
     /**
-     * References a collection of a certain element type (by its member-id), 
-     * for an action with scalar or collection parameters of that element type; 
+     * References a collection of a certain element type (by its member-id),
+     * for an action with scalar or collection parameters of that element type;
      * the action's choices will be automatically populated from checkboxes rendered in the collection
      * (multi-select).
      *
@@ -228,5 +228,14 @@ public @interface Action {
      */
     String fileAccept()
             default "";
+
+
+    /**
+     * Whether dependent parameters should be reset to their default if an earlier parameter changes its
+     * value, or whether instead a parameter value, once changed by the end-user, should never be
+     * overwritten even if the end-user changes an earlier parameter value.
+     */
+    DependentDefaultsPolicy dependentDefaultsPolicy()
+            default DependentDefaultsPolicy.AS_CONFIGURED;
 
 }

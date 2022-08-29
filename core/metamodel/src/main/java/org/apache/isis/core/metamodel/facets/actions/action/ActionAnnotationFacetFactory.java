@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.depdef.DependentDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
@@ -74,6 +75,7 @@ extends FacetFactoryAbstract {
         processHidden(processMethodContext, actionIfAny);
         processRestrictTo(processMethodContext, actionIfAny);
         processSemantics(processMethodContext, actionIfAny);
+        processDependentDefaultsPolicy(processMethodContext, actionIfAny);
 
         // must come after processing semantics
         processCommandPublishing(processMethodContext, actionIfAny);
@@ -196,6 +198,16 @@ extends FacetFactoryAbstract {
                 .create(actionIfAny, facetedMethod));
     }
 
+    // check for @Action(dependentDefaultsPolicy=...)
+    void processDependentDefaultsPolicy(
+            final ProcessMethodContext processMethodContext,
+            final Optional<Action> actionIfAny) {
+        val facetedMethod = processMethodContext.getFacetHolder();
+        addFacetIfPresent(
+                DependentDefaultsFacet
+                .create(actionIfAny, getConfiguration(), facetedMethod));
+    }
+
     void processCommandPublishing(
             final ProcessMethodContext processMethodContext,
             final Optional<Action> actionIfAny) {
@@ -223,7 +235,8 @@ extends FacetFactoryAbstract {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         //
-        // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
+        // this rule inspired by a similar rule for auditing and publishing,
+        // see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
         if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
@@ -235,7 +248,9 @@ extends FacetFactoryAbstract {
         // check for @Action(executionPublishing=...)
         addFacetIfPresent(
                 ExecutionPublishingActionFacetForActionAnnotation
-                .create(actionIfAny, getConfiguration(), facetedMethod));
+                .create(actionIfAny, getConfiguration(), facetedMethod));        // check for @Action(executionPublishing=...)
+
+
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {

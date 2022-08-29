@@ -32,7 +32,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.viewer.commons.model.PlacementDirection;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
@@ -151,14 +150,7 @@ extends PromptFormAbstract<ActionModel> {
             val pendingArgs = paramModel.getParameterNegotiationModel();
 
             val actionParameter = paramModel.getMetaModel();
-            // reassess defaults
-            val paramDefaultValue = actionParameter.getDefault(pendingArgs);
-
-            if (ManagedObjects.isNullOrUnspecifiedOrEmpty(paramDefaultValue)) {
-                pendingArgs.clearParamValue(paramIndex);
-            } else {
-                pendingArgs.setParamValue(paramIndex, paramDefaultValue);
-            }
+            actionParameter.reassessDefault(pendingArgs);
 
             val paramPanel = paramPanels.get(paramIndex);
             val repaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
