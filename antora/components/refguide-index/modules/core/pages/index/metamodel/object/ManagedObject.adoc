@@ -24,12 +24,19 @@ interface ManagedObject {
   String getTitle()
   String getIconName()     // <.>
   ObjectIcon getIcon()
+  ManagedObject unspecified()     // <.>
+  ManagedObject empty(ObjectSpecification spec)     // <.>
+  ManagedObject value(ObjectSpecification spec, Object pojo)     // <.>
+  ManagedObject service(ObjectSpecification spec, Object pojo)     // <.>
+  ManagedObject viewmodel(ObjectSpecification spec, Object pojo)     // <.>
+  ManagedObject entity(ObjectSpecification spec, Object pojo)     // <.>
+  ManagedObject mixin(ObjectSpecification spec, Object pojo)     // <.>
+  ManagedObject other(ObjectSpecification spec, Object pojo)     // <.>
+  PackedManagedObject packed(ObjectSpecification elementSpec, Can<ManagedObject> nonScalar)     // <.>
+  ManagedObject wrapScalar(SpecificationLoader specLoader, Object pojo)     // <.>
   ManagedObject notBookmarked(ObjectSpecification spec, Object pojo)
   ManagedObject of(ObjectSpecification spec, Object pojo)     // <.>
   ManagedObject bookmarked(ObjectSpecification spec, Object pojo, Bookmark bookmark)     // <.>
-  ManagedObject lazy(SpecificationLoader specLoader, Object pojo)     // <.>
-  ManagedObject unspecified()     // <.>
-  ManagedObject empty(ObjectSpecification spec)     // <.>
 }
 ----
 
@@ -73,6 +80,56 @@ Used only for (standalone or parented) collections.
 --
 Returns the name of an icon to use if this object is to be displayed graphically.
 --
+<.> xref:#unspecified_[unspecified()]
++
+--
+Factory for Specialization#UNSPECIFIED.
+--
+<.> xref:#empty_ObjectSpecification[empty(ObjectSpecification)]
++
+--
+EMPTY
+--
+<.> xref:#value_ObjectSpecification_Object[value(ObjectSpecification, Object)]
++
+--
+VALUE
+--
+<.> xref:#service_ObjectSpecification_Object[service(ObjectSpecification, Object)]
++
+--
+SERVICE
+--
+<.> xref:#viewmodel_ObjectSpecification_Object[viewmodel(ObjectSpecification, Object)]
++
+--
+VIEWMODEL
+--
+<.> xref:#entity_ObjectSpecification_Object[entity(ObjectSpecification, Object)]
++
+--
+ENTITY
+--
+<.> xref:#mixin_ObjectSpecification_Object[mixin(ObjectSpecification, Object)]
++
+--
+MIXIN
+--
+<.> xref:#other_ObjectSpecification_Object[other(ObjectSpecification, Object)]
++
+--
+OTHER
+--
+<.> xref:#packed_ObjectSpecification_Can[packed(ObjectSpecification, Can)]
++
+--
+PACKED
+--
+<.> xref:#wrapScalar_SpecificationLoader_Object[wrapScalar(SpecificationLoader, Object)]
++
+--
+For cases, when the pojo's specification is not available and needs to be looked up.
+--
 <.> xref:#of_ObjectSpecification_Object[of(ObjectSpecification, Object)]
 +
 --
@@ -82,21 +139,6 @@ Optimized for cases, when the pojo's specification is already available. If _poj
 +
 --
 Optimized for cases, when the pojo's specification and bookmark are already available.
---
-<.> xref:#lazy_SpecificationLoader_Object[lazy(SpecificationLoader, Object)]
-+
---
-For cases, when the pojo's specification is not available and needs to be looked up.
---
-<.> xref:#unspecified_[unspecified()]
-+
---
-has no ObjectSpecification and no value (pojo)
---
-<.> xref:#empty_ObjectSpecification[empty(ObjectSpecification)]
-+
---
-has an ObjectSpecification, but no value (pojo)
 --
 
 == Members
@@ -143,6 +185,58 @@ Returns the name of an icon to use if this object is to be displayed graphically
 
 May return `null` if no icon is specified.
 
+[#unspecified_]
+=== unspecified()
+
+Factory for Specialization#UNSPECIFIED.
+
+[#empty_ObjectSpecification]
+=== empty(ObjectSpecification)
+
+EMPTY
+
+[#value_ObjectSpecification_Object]
+=== value(ObjectSpecification, Object)
+
+VALUE
+
+[#service_ObjectSpecification_Object]
+=== service(ObjectSpecification, Object)
+
+SERVICE
+
+[#viewmodel_ObjectSpecification_Object]
+=== viewmodel(ObjectSpecification, Object)
+
+VIEWMODEL
+
+[#entity_ObjectSpecification_Object]
+=== entity(ObjectSpecification, Object)
+
+ENTITY
+
+[#mixin_ObjectSpecification_Object]
+=== mixin(ObjectSpecification, Object)
+
+MIXIN
+
+[#other_ObjectSpecification_Object]
+=== other(ObjectSpecification, Object)
+
+OTHER
+
+[#packed_ObjectSpecification_Can]
+=== packed(ObjectSpecification, Can)
+
+PACKED
+
+[#wrapScalar_SpecificationLoader_Object]
+=== wrapScalar(SpecificationLoader, Object)
+
+For cases, when the pojo's specification is not available and needs to be looked up.
+
+Fails if the pojo is non-scalar.
+
 [#of_ObjectSpecification_Object]
 === of(ObjectSpecification, Object)
 
@@ -152,18 +246,3 @@ Optimized for cases, when the pojo's specification is already available. If _poj
 === bookmarked(ObjectSpecification, Object, Bookmark)
 
 Optimized for cases, when the pojo's specification and bookmark are already available.
-
-[#lazy_SpecificationLoader_Object]
-=== lazy(SpecificationLoader, Object)
-
-For cases, when the pojo's specification is not available and needs to be looked up.
-
-[#unspecified_]
-=== unspecified()
-
-has no ObjectSpecification and no value (pojo)
-
-[#empty_ObjectSpecification]
-=== empty(ObjectSpecification)
-
-has an ObjectSpecification, but no value (pojo)

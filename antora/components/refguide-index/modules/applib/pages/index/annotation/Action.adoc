@@ -20,6 +20,7 @@ Groups together all domain-specific metadata for an invokable action on a domain
   Class<?> typeOf() default // represents unspecified
 void.class;     // <.>
   String fileAccept() default "";     // <.>
+  DependentDefaultsPolicy dependentDefaultsPolicy() default DependentDefaultsPolicy.AS_CONFIGURED;     // <.>
 }
 ----
 
@@ -72,6 +73,11 @@ If the action returns a collection, then this hints as to the run-time type of t
 +
 --
 For downloading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+--
+<.> xref:#dependentDefaultsPolicy[dependentDefaultsPolicy]
++
+--
+Whether dependent parameters should be reset to their default if an earlier parameter changes its value, or whether instead a parameter value, once changed by the end-user, should never be overwritten even if the end-user changes an earlier parameter value.
 --
 
 == Members
@@ -162,6 +168,11 @@ This is only provided as a fallback; usually the framework can infer the element
 For downloading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+
+[#dependentDefaultsPolicy]
+=== dependentDefaultsPolicy
+
+Whether dependent parameters should be reset to their default if an earlier parameter changes its value, or whether instead a parameter value, once changed by the end-user, should never be overwritten even if the end-user changes an earlier parameter value.
 
 include::hooks/Action_010-examples-and-usage.adoc[]
 
