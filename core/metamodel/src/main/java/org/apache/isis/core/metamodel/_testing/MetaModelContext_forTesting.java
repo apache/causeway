@@ -504,7 +504,7 @@ implements MetaModelContext {
                         "Cannot get service instance of type '%s'",
                         managedBeanAdapter.getBeanClass()));
 
-        if(ProgrammingModelConstants.TypeVetoMarker.anyMatchOn(managedBeanAdapter.getBeanClass())) {
+        if(ProgrammingModelConstants.TypeExcludeMarker.anyMatchOn(managedBeanAdapter.getBeanClass())) {
             return Optional.empty();
         }
         return getSpecificationLoader()
