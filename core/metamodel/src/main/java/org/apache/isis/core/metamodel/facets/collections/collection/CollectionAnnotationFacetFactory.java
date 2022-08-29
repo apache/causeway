@@ -157,7 +157,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         final PostsCollectionAddedToEvent postsCollectionAddedToEvent = Annotations.getAnnotation(method, PostsCollectionAddedToEvent.class);
         final PostsCollectionRemovedFromEvent postsCollectionRemovedFromEvent = Annotations.getAnnotation(method, PostsCollectionRemovedFromEvent.class);
         final CollectionInteraction collectionInteraction = Annotations.getAnnotation(method, CollectionInteraction.class);
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final Collection collection = Annotations.getAnnotationFromMethodOrClass(method, Collection.class);
         final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType;
 
         final CollectionDomainEventFacetAbstract collectionDomainEventFacet;
@@ -299,7 +299,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnCollection.create(hiddenAnnotation, holder), processMethodContext);
 
         // else check for @Collection(hidden=...)
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final Collection collection = Annotations.getAnnotationFromMethodOrClass(method, Collection.class);
         if(facet == null) {
             facet = HiddenFacetForCollectionAnnotation.create(collection, holder);
         }
@@ -316,7 +316,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnCollection.create(annotation, holder), processMethodContext);
 
         // else check for @Collection(editing=...)
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final Collection collection = Annotations.getAnnotationFromMethodOrClass(method, Collection.class);
         if(facet == null) {
             facet = DisabledFacetForCollectionAnnotation.create(collection, holder);
         }
@@ -335,7 +335,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         NotPersistedFacet facet = facet1;
 
         // else search for @Collection(notPersisted=...)
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final Collection collection = Annotations.getAnnotationFromMethodOrClass(method, Collection.class);
         if(facet == null) {
             facet = NotPersistedFacetForCollectionAnnotation.create(collection, holder);
         }
@@ -362,7 +362,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
                 TypeOfFacetOnCollectionFromTypeOfAnnotation.create(annotation, facetHolder, getSpecificationLoader()), processMethodContext);
 
         // else check for @Collection(typeOf=...)
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final Collection collection = Annotations.getAnnotationFromMethodOrClass(method, Collection.class);
         if(facet == null) {
             facet = TypeOfFacetOnCollectionFromCollectionAnnotation.create(collection, facetHolder, getSpecificationLoader());
         }

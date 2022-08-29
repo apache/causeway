@@ -69,6 +69,25 @@ public final class Annotations  {
     }
 
     /**
+     * Searches annotation on method first and when not found look in the declaring class.
+     * Introduced for annoations that moved from method in v1 to class in v2, like @Action, @Property and @Collection
+     *
+     * @param method
+     * @param annotationClass
+     * @return
+     * @param <T>
+     */
+    public static <T extends Annotation> T getAnnotationFromMethodOrClass(final Method method, final Class<T> annotationClass) {
+        if(method==null)
+            return null;
+        T annotation = getAnnotation(method, annotationClass);
+        if(annotation==null){
+            annotation = getAnnotation(method.getDeclaringClass(), annotationClass);
+        }
+        return annotation;
+    }
+
+    /**
      * Searches for annotation on provided class, and if not found for the
      * superclass.
      * 

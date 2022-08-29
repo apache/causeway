@@ -155,7 +155,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
             //
             final PostsActionInvokedEvent postsActionInvokedEvent = Annotations.getAnnotation(actionMethod, PostsActionInvokedEvent.class);
             final ActionInteraction actionInteraction =Annotations.getAnnotation(actionMethod, ActionInteraction.class);
-            final Action action = Annotations.getAnnotation(actionMethod, Action.class);
+            final Action action = Annotations.getAnnotationFromMethodOrClass(actionMethod, Action.class);
             final Class<? extends ActionDomainEvent<?>> actionDomainEventType;
 
             final ActionDomainEventFacetAbstract actionDomainEventFacet;
@@ -263,7 +263,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
                         processMethodContext);
 
         // else search for @Action(hidden=...)
-        final Action action = Annotations.getAnnotation(method, Action.class);
+        final Action action = Annotations.getAnnotationFromMethodOrClass(method, Action.class);
         if(facet == null) {
             facet = HiddenFacetForActionAnnotation.create(action, holder);
         }
@@ -297,7 +297,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         PrototypeFacet facet = facet1;
 
         // else search for @Action(restrictTo=...)
-        final Action action = Annotations.getAnnotation(method, Action.class);
+        final Action action = Annotations.getAnnotationFromMethodOrClass(method, Action.class);
         if(facet == null) {
             facet = PrototypeFacetForActionAnnotation.create(action, holder,
                     getDeploymentCategory());
@@ -329,7 +329,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
         // else check for @Action(semantics=...)
         if(facet == null) {
-            final Action action = Annotations.getAnnotation(method, Action.class);
+            final Action action = Annotations.getAnnotationFromMethodOrClass(method, Action.class);
             facet = ActionSemanticsFacetForActionAnnotation.create(action, holder);
         }
 
@@ -343,7 +343,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
     void processBulk(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
-        final Action action = Annotations.getAnnotation(method, Action.class);
+        final Action action = Annotations.getAnnotationFromMethodOrClass(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         BulkFacet facet;
@@ -367,7 +367,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
         final Class<?> cls = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
-        final Action action = Annotations.getAnnotation(method, Action.class);
+        final Action action = Annotations.getAnnotationFromMethodOrClass(method, Action.class);
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
 
         final FacetHolder holder = facetHolder;
@@ -400,7 +400,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
     void processPublishing(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
-        final Action action = Annotations.getAnnotation(method, Action.class);
+        final Action action = Annotations.getAnnotationFromMethodOrClass(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         //
@@ -447,7 +447,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
         // check for @Action(typeOf=...)
         if(typeOfFacet == null) {
-            final Action action = Annotations.getAnnotation(method, Action.class);
+            final Action action = Annotations.getAnnotationFromMethodOrClass(method, Action.class);
             if (action != null) {
                 final Class<?> typeOf = action.typeOf();
                 if(typeOf != null && typeOf != Object.class) {
@@ -479,7 +479,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
         // check for @Action(associateWith=...)
 
-        final Action action = Annotations.getAnnotation(method, Action.class);
+        final Action action = Annotations.getAnnotationFromMethodOrClass(method, Action.class);
         if (action != null) {
             final String associateWith = action.associateWith();
             if(!Strings.isNullOrEmpty(associateWith)) {

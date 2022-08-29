@@ -168,7 +168,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         //
         final PostsPropertyChangedEvent postsPropertyChangedEvent = Annotations.getAnnotation(method, PostsPropertyChangedEvent.class);
         final PropertyInteraction propertyInteraction = Annotations.getAnnotation(method, PropertyInteraction.class);
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType;
 
         final PropertyDomainEventFacetAbstract propertyDomainEventFacet;
@@ -300,7 +300,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnProperty.create(hiddenAnnotation, holder), processMethodContext);
 
         // else search for @Property(hidden=...)
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        final Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         if(facet == null) {
             facet = HiddenFacetForPropertyAnnotation.create(property, holder);
         }
@@ -318,7 +318,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         DisabledFacet facet = disabledValidator.flagIfPresent(disabledFacet, processMethodContext);
 
         // else search for @Property(editing=...)
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        final Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         if(facet == null) {
             facet = DisabledFacetForPropertyAnnotation.create(property, holder);
         }
@@ -330,7 +330,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         final Class<?> cls = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        final Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
 
         final FacetHolder holder = facetHolder;
@@ -355,7 +355,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         final Class<?> cls = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        final Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
 
         final ProjectingFacet projectingFacet = ProjectingFacetFromPropertyAnnotation
@@ -368,7 +368,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     void processPublishing(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        final Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         //
@@ -399,7 +399,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         MaxLengthFacet facet = maxLengthValidator.flagIfPresent(MaxLengthFacetForMaxLengthAnnotationOnProperty.create(annotation, holder), processMethodContext);
 
         // else search for @Property(maxLength=...)
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        final Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         if(facet == null) {
             facet = MaxLengthFacetForPropertyAnnotation.create(property, holder);
         }
@@ -416,7 +416,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         Facet facet = mustSatisfyValidator.flagIfPresent(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.create(annotation, holder, servicesInjector), processMethodContext);
 
         // else search for @Property(mustSatisfy=...)
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        final Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         if(facet == null) {
             facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(property, holder, servicesInjector);
         }
@@ -433,7 +433,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         NotPersistedFacet facet = notPersistedValidator.flagIfPresent(NotPersistedFacetForNotPersistedAnnotationOnProperty.create(annotation, holder), processMethodContext);
 
         // else search for @Property(notPersisted=...)
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        final Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         if(facet == null) {
             facet = NotPersistedFacetForPropertyAnnotation.create(property, holder);
         }
@@ -473,7 +473,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
                     facet2, "Conflicting @Nullable with other optionality annotation");
 
         // else search for @Property(optional=...)
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        final Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         final MandatoryFacet facet3 = MandatoryFacetForPropertyAnnotation.create(property, method, holder);
         FacetUtil.addFacet(facet3);
         conflictingOptionalityValidator.flagIfConflict(
@@ -496,7 +496,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         }
 
         // else search for @Property(pattern=...)
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        final Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         if (facet == null) {
             facet = RegExFacetForPropertyAnnotation.create(property, returnType, holder);
         }
@@ -511,7 +511,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
 
         // else search for @Property(maxLength=...)
-        final Property property = Annotations.getAnnotation(method, Property.class);
+        final Property property = Annotations.getAnnotationFromMethodOrClass(method, Property.class);
         FileAcceptFacet facet = FileAcceptFacetForPropertyAnnotation.create(property, holder);
 
         FacetUtil.addFacet(facet);
