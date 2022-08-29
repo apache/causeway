@@ -29,14 +29,14 @@ import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPer
  *
  * @since 2.0 {@index}
  */
-public class IsisExtCommandReplayPrimaryRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisExtSessionLogRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    public static final String NAMESPACE = "isis.ext.commandReplayPrimary";
+    public static final String NAMESPACE = "isis.ext.sessionLog";
 
     public static final String ROLE_NAME = NAMESPACE.replace(".","-");
 
-    public IsisExtCommandReplayPrimaryRoleAndPermissions() {
-        super(ROLE_NAME, "Access to the command replay primary menu");
+    public IsisExtSessionLogRoleAndPermissions() {
+        super(ROLE_NAME, "Access to the session log actions");
     }
 
     @Override

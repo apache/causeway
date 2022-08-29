@@ -51,7 +51,7 @@ In the webapp module of your application, add the following dependency:
 </dependencies>
 ----
 <.> specify either `isis-extensions-secman-persistence-jpa` or `isis-extensions-secman-persistence-jdo`, as required
-<.> provides an implementation of `PasswordEncryptionService`
+<.> provides an implementation of `PasswordEncoder`, so that passwords are only persisted in encrypted form.
 
 
 [[_update-appmanifest]]
@@ -113,18 +113,18 @@ isis:
     secman:
       seed:
         admin:
-          user-name: "secman-admin"                     <.>
-          password: "pass"                              <1>
-          role-name: "isis-ext-secman-admin"            <.>
+          user-name: "secman-admin"                     #<.>
+          password: "pass"                              #<1>
+          role-name: "isis-ext-secman-admin"            #<.>
           namespace-permissions:
-            sticky: ...                                 <.>
-            additional: ...                             <.>
+            sticky: ...                                 #<.>
+            additional: ...                             #<.>
         regular-user:
-          role-name: "isis-ext-secman-user"             <.>
-      permissions-evaluation-policy: ALLOW_BEATS_VETO   <.>
-      user-menu-me-action-policy: HIDE                  <.>
+          role-name: "isis-ext-secman-user"             #<.>
+      permissions-evaluation-policy: allow_beats_veto   #<.>
+      user-menu-me-action-policy: hide                  #<.>
       user-registration:
-        initial-role-names: ...                         <.>
+        initial-role-names: ...                         #<.>
 
 ----
 
@@ -293,9 +293,9 @@ When developing the app you will probably be using the H2 in-memory database, an
 Even when running in production with a persistent database, running a default set of fixture scripts may be worthwihle.
 
 One option to setup these users/roles would be to use the xref:refguide:config:sections/isis.testing.adoc#isis.testing.fixtures.initial-script[isis.testing.fixtures.initial-script] configuration property.
-However the purpose of that config property is meant to be to specify a demo scenario for demoing/prototyping, so that's probably not the smartest approach.
+However the purpose of that config property is meant to be to setup an application-specific scenario for demoing/prototyping, so that's probably not the smartest approach.
 
-Better is to write a little domain service to do the seeding of security data for you.
+A better approach is to write a little domain service to do the seeding of security data for you.
 The service below will set up the default roles and permissions for the framework's own modules:
 
 [source,java]
@@ -308,10 +308,11 @@ public class SeedSecurityService {
 
     private final FixtureScripts fixtureScripts;
     private final TransactionService transactionService;
+    private final IsisSystemEnvironment isisSystemEnvironment;
 
     @EventListener(MetamodelEvent.class)
     public void onMetamodelEvent(final MetamodelEvent event) {
-        if (event.isPostMetamodel()) {
+        if (event.isPostMetamodel() && isisSystemEnvironment.isPrototyping()) {
             runScripts();
             transactionService.flushTransaction();
         }
@@ -319,7 +320,6 @@ public class SeedSecurityService {
 
     private void runScripts() {
         fixtureScripts.run(new CustomRolesAndUsers());
-    }
 }
 ----
 
