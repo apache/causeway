@@ -341,10 +341,8 @@ public final class ManagedObjects {
     // -- COMMON SUPER TYPE FINDER
 
     /**
-     * Find an ObjectSpecification that is common to all provided {@code objects}
-     * @param objects
-     * @return optionally the common ObjectSpecification based on whether provided {@code objects}
-     * are not empty
+     * Optionally the common {@link ObjectSpecification} based on whether provided {@code objects}
+     * have any at all.
      */
     public static Optional<ObjectSpecification> commonSpecification(
             final @Nullable Can<ManagedObject> objects) {
@@ -352,26 +350,11 @@ public final class ManagedObjects {
         if (_NullSafe.isEmpty(objects)) {
             return Optional.empty();
         }
-        val firstElement = objects.getFirstOrFail();
-        val firstElementSpec = firstElement.getSpecification();
 
-        if(objects.getCardinality().isOne()) {
-            return Optional.of(firstElementSpec);
-        }
-
-        val commonSuperClassFinder = new ClassExtensions.CommonSuperclassFinder();
-        objects.stream()
-        .map(ManagedObject::getPojo)
-        .filter(_NullSafe::isPresent)
-        .forEach(commonSuperClassFinder::collect);
-
-        val commonSuperClass = commonSuperClassFinder.getCommonSuperclass().orElse(null);
-        if(commonSuperClass!=null && commonSuperClass!=firstElement.getSpecification().getCorrespondingClass()) {
-            val specificationLoader = firstElementSpec.getMetaModelContext().getSpecificationLoader();
-            return specificationLoader.specForType(commonSuperClass);
-        }
-
-        return Optional.of(firstElementSpec);
+        return objects.stream()
+        .filter(obj->obj.getSpecialization().isSpecified())
+        .map(ManagedObject::getSpecification)
+        .reduce(ObjectSpecification::commonSuperType);
     }
 
     // -- ADABT UTILITIES

@@ -36,6 +36,7 @@ import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -575,6 +576,30 @@ extends
         return superclass()!=null
                 ? Stream.concat(Stream.of(this), superclass().streamTypeHierarchy())
                 : Stream.of(this);
+    }
+
+    // -- COMMON SUPER TYPE FINDER
+
+    /**
+     * Lowest common ancestor search within the combined type hierarchy.
+     */
+    public static ObjectSpecification commonSuperType(
+            final @NonNull ObjectSpecification a,
+            final @NonNull ObjectSpecification b) {
+
+        val cls_a = a.getCorrespondingClass();
+        val cls_b = b.getCorrespondingClass();
+        if(cls_a.isAssignableFrom(cls_b)) {
+            return a;
+        }
+        if(cls_b.isAssignableFrom(cls_a)) {
+            return b;
+        }
+        // assuming the algorithm is correct: if non of the above is true,
+        // we must be able to walk up the tree on both branches
+        _Assert.assertNotNull(a.superclass());
+        _Assert.assertNotNull(b.superclass());
+        return commonSuperType(a.superclass(), b.superclass());
     }
 
     // -- VALUE SEMANTICS SUPPORT

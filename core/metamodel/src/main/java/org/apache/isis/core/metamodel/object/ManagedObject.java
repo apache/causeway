@@ -191,6 +191,7 @@ public interface ManagedObject extends HasMetaModelContext {
          * @see PojoPolicy#NO_POJO
          */
         public boolean isUnspecified() { return this == UNSPECIFIED; }
+        public boolean isSpecified() { return this != UNSPECIFIED; }
         /**
          * EMPTY
          * @see TypePolicy#ABSTRACT_TYPE_ALLOWED

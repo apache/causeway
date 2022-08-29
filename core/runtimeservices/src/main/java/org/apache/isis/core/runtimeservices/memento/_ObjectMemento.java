@@ -21,7 +21,6 @@ package org.apache.isis.core.runtimeservices.memento;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -32,9 +31,9 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.applib.services.hint.HintIdProvider;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -124,9 +123,15 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                     final _ObjectMemento memento,
                     final MetaModelContext mmc) {
 
-                final List<Object> listOfPojos =
-                        _Lists.map(memento.list, Functions.toPojo(mmc));
-                return ManagedObject.lazy(mmc.getSpecificationLoader(), listOfPojos);
+                final Can<ManagedObject> managedObjects =
+                        _NullSafe.stream(memento.list)
+                        .map(Functions.toManagedObject(mmc))
+                        .collect(Can.toCan());
+
+                val commonSpec = ManagedObjects.commonSpecification(managedObjects)
+                        .orElseGet(()->mmc.getSpecificationLoader().loadSpecification(Object.class));
+
+                return ManagedObject.packed(commonSpec, managedObjects);
             }
 
             @Override
@@ -576,19 +581,19 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     private static final class Functions {
 
-        private static Function<_ObjectMemento, Object> toPojo(
+        private static Function<_ObjectMemento, ManagedObject> toManagedObject(
                 final MetaModelContext mmc) {
 
             return memento->{
                 if(memento == null) {
-                    return null;
+                    return ManagedObject.unspecified();
                 }
                 val objectAdapter = memento
                         .reconstructObject(mmc);
                 if(objectAdapter == null) {
-                    return null;
+                    return ManagedObject.unspecified();
                 }
-                return objectAdapter.getPojo();
+                return objectAdapter;
             };
         }
 
