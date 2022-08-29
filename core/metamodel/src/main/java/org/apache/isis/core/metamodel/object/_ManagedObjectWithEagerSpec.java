@@ -28,17 +28,12 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
 
-//@Value
-//@RequiredArgsConstructor(staticName="of", access = AccessLevel.PRIVATE)
-@AllArgsConstructor(staticName="of", access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(of = "pojo", callSuper = false)
 @ToString(of = {"specification", "pojo"}) //ISIS-2317 make sure toString() is without side-effects
 @Getter
@@ -54,9 +49,17 @@ extends _ManagedObjectWithBookmark {
             _Assert.assertFalse(_Collections.isCollectionOrArrayOrCanType(pojo.getClass()));
         }
 
-        val managedObject = _ManagedObjectWithEagerSpec.of(spec, pojo);
+        val managedObject = new _ManagedObjectWithEagerSpec(spec, pojo);
         managedObject.bookmarkLazy.set(Optional.of(bookmark));
         return managedObject;
+    }
+
+    _ManagedObjectWithEagerSpec(
+            final ObjectSpecification spec,
+            final Object pojo) {
+        super(ManagedObject.Specialization.inferFrom(spec, pojo));
+        this.specification = spec;
+        this.pojo = pojo;
     }
 
     @NonNull private final ObjectSpecification specification;

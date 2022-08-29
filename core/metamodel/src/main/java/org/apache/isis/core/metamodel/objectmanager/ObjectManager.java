@@ -29,7 +29,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker;
@@ -160,7 +159,7 @@ public interface ObjectManager {
         }
         return spec.isScalar()
                 ? managedObjectEagerlyBookmarkedIfRequired(spec, pojo, entityAdaptingMode)
-                : PackedManagedObject.pack(
+                : ManagedObject.packed(
                         spec.getElementSpecification().orElseGet(fallbackElementType),
                         _NullSafe.streamAutodetect(pojo)
                         .map(element->adapt(element, entityAdaptingMode))

@@ -39,6 +39,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Represents an instance of some element of the meta-model managed by the framework,
@@ -55,6 +56,7 @@ public interface ManagedObject extends HasMetaModelContext {
      */
     @Getter
     @RequiredArgsConstructor
+    @Log4j2
     enum Specialization {
         /**
          * <h1>Contract</h1><ul>
@@ -232,6 +234,34 @@ public interface ManagedObject extends HasMetaModelContext {
          */
         public boolean isPacked() { return this == PACKED; }
 
+        public static Specialization inferFrom(
+                final @Nullable ObjectSpecification spec,
+                final @Nullable Object pojo) {
+            if(spec==null) {
+                return UNSPECIFIED;
+            }
+            if(spec.isNonScalar()) {
+                return PACKED;
+            }
+            if(pojo==null) {
+                return EMPTY;
+            }
+            if(spec.isValue()) {
+                return VALUE;
+            }
+            if(spec.isInjectable()) {
+                return SERVICE;
+            }
+            if(spec.isViewModel()) {
+                return VIEWMODEL;
+            }
+            if(spec.isEntity()) {
+                return ENTITY;
+            }
+            log.warn("failed specialization attempt for {}", spec);
+            return UNSPECIFIED;
+        }
+
     }
 
     /**
@@ -332,10 +362,79 @@ public interface ManagedObject extends HasMetaModelContext {
 
     // -- FACTORIES
 
-    public static ManagedObject notBookmarked(
+    /**
+     * Factory for Specialization#UNSPECIFIED.
+     * @see Specialization.TypePolicy#NO_TYPE
+     * @see Specialization.BookmarkPolicy#NO_BOOKMARK
+     * @see Specialization.PojoPolicy#NO_POJO
+     */
+    static ManagedObject unspecified() {
+        return _ManagedObjectUnspecified.INSTANCE;
+    }
+    /**
+     * EMPTY
+     * @see Specialization.TypePolicy#ABSTRACT_TYPE_ALLOWED
+     * @see Specialization.BookmarkPolicy#NO_BOOKMARK
+     * @see Specialization.PojoPolicy#NO_POJO
+     */
+    static ManagedObject empty(final @NonNull ObjectSpecification spec) {
+        return new _ManagedObjectWithEagerSpec(spec, null);
+    }
+    /**
+     * VALUE
+     * @see Specialization.TypePolicy#EXACT_TYPE_REQUIRED
+     * @see Specialization.BookmarkPolicy#IMMUTABLE
+     * @see Specialization.PojoPolicy#IMMUTABLE
+     */
+    static ManagedObject value() {
+        return null; //FIXME
+    }
+    /**
+     * SERVICE
+     * @see Specialization.TypePolicy#EXACT_TYPE_REQUIRED
+     * @see Specialization.BookmarkPolicy#IMMUTABLE
+     * @see Specialization.PojoPolicy#IMMUTABLE
+     */
+    static ManagedObject service() {
+        return null; //FIXME
+    }
+    /**
+     * VIEWMODEL
+     * @see Specialization.TypePolicy#EXACT_TYPE_REQUIRED
+     * @see Specialization.BookmarkPolicy#REFRESHABLE
+     * @see Specialization.PojoPolicy#STATEFUL
+     */
+    static ManagedObject viewmodel() {
+        return null; //FIXME
+    }
+    /**
+     * ENTITY
+     * @see Specialization.TypePolicy#EXACT_TYPE_REQUIRED
+     * @see Specialization.BookmarkPolicy#IMMUTABLE
+     * @see Specialization.PojoPolicy#REFETCHABLE
+     */
+    static ManagedObject entity() {
+        return null; //FIXME
+    }
+    /**
+     * PACKED
+     * @see Specialization.TypePolicy#ABSTRACT_TYPE_ALLOWED
+     * @see Specialization.BookmarkPolicy#NO_BOOKMARK
+     * @see Specialization.PojoPolicy#PACKED
+     */
+    static PackedManagedObject packed(
+            final @NonNull ObjectSpecification elementSpec,
+            final Can<ManagedObject> nonScalar) {
+        return new _ManagedObjectPacked(elementSpec, nonScalar);
+    }
+
+    // -- FACTORIES LEGACY
+
+    @Deprecated
+    static ManagedObject notBookmarked(
             final ObjectSpecification spec,
             final Object pojo) {
-        return _ManagedObjectWithEagerSpec.of(spec, pojo);
+        return new _ManagedObjectWithEagerSpec(spec, pojo);
     }
 
     /**
@@ -344,7 +443,8 @@ public interface ManagedObject extends HasMetaModelContext {
      * @param spec
      * @param pojo - might also be a collection of pojos (null-able)
      */
-    public static ManagedObject of(
+    @Deprecated
+    static ManagedObject of(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
 
@@ -360,7 +460,8 @@ public interface ManagedObject extends HasMetaModelContext {
     /**
      * Optimized for cases, when the pojo's specification and bookmark are already available.
      */
-    public static ManagedObject bookmarked(
+    @Deprecated
+    static ManagedObject bookmarked(
             final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo,
             final @NonNull Bookmark bookmark) {
@@ -386,7 +487,8 @@ public interface ManagedObject extends HasMetaModelContext {
      * @param specLoader
      * @param pojo
      */
-    public static ManagedObject lazy(
+    @Deprecated
+    static ManagedObject lazy(
             final SpecificationLoader specLoader,
             final Object pojo) {
 
@@ -400,14 +502,6 @@ public interface ManagedObject extends HasMetaModelContext {
         return adapter;
     }
 
-    /** has no ObjectSpecification and no value (pojo) */
-    static ManagedObject unspecified() {
-        return _ManagedObjectUnspecified.INSTANCE;
-    }
 
-    /** has an ObjectSpecification, but no value (pojo) */
-    static ManagedObject empty(final @NonNull ObjectSpecification spec) {
-        return _ManagedObjectWithEagerSpec.of(spec, null);
-    }
 
 }

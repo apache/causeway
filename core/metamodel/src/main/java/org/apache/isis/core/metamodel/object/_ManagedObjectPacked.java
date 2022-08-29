@@ -31,26 +31,27 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#PACKED}
  * @see ManagedObject.Specialization#PACKED
  */
-@RequiredArgsConstructor
 @ToString
 final class _ManagedObjectPacked
 extends _ManagedObjectSpecified
 implements PackedManagedObject {
 
+    public _ManagedObjectPacked(
+            final ObjectSpecification elementSpec,
+            final Can<ManagedObject> nonScalar) {
+        super(Specialization.PACKED);
+        this.elementSpec = elementSpec;
+        this.nonScalar = nonScalar;
+    }
+
     final @NonNull ObjectSpecification elementSpec;
     final @NonNull Can<ManagedObject> nonScalar;
-
-    @Override
-    public Specialization getSpecialization() {
-        return Specialization.PACKED;
-    }
 
     @Override
     public ObjectSpecification getSpecification() {

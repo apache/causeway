@@ -42,6 +42,10 @@ extends _ManagedObjectSpecified {
     protected final _Lazy<Optional<Bookmark>> bookmarkLazy =
             _Lazy.threadSafe(()->bookmark(this));
 
+    protected _ManagedObjectWithBookmark(final Specialization specialization) {
+        super(specialization);
+    }
+
     @Override
     public final Optional<Bookmark> getBookmark() {
         return bookmarkLazy.get();

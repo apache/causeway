@@ -152,7 +152,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
                     .map(this::reconstructObject)
                     .collect(Can.toCan());
 
-            return PackedManagedObject.pack(elementSpec, objects);
+            return ManagedObject.packed(elementSpec, objects);
         }
 
         if(memento instanceof ObjectMementoAdapter) {

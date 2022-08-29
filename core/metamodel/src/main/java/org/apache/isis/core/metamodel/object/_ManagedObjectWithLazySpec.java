@@ -38,9 +38,10 @@ extends _ManagedObjectWithBookmark {
 
     private final _Lazy<ObjectSpecification> specification = _Lazy.threadSafe(this::loadSpec);
 
-    public _ManagedObjectWithLazySpec(
+    _ManagedObjectWithLazySpec(
             final @NonNull Function<Class<?>, ObjectSpecification> specLoader,
             final @NonNull Object pojo) {
+        super(ManagedObject.Specialization.UNSPECIFIED); // FIXME
         this.specLoader = specLoader;
         this.pojo = pojo;
     }

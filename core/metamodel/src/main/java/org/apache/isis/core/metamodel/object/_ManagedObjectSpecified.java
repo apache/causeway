@@ -20,17 +20,18 @@ package org.apache.isis.core.metamodel.object;
 
 import java.util.function.Supplier;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+
+@RequiredArgsConstructor
 abstract class _ManagedObjectSpecified
 implements ManagedObject {
 
-    @Override
-    public Specialization getSpecialization() {
-        //FIXME[ISIS-3167] implement for various sub types
-        throw _Exceptions.notImplemented();
-    }
+    @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
+    private final Specialization specialization;
 
     @Override
     public final MetaModelContext getMetaModelContext() {
