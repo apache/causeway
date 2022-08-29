@@ -65,35 +65,7 @@
 	<dependencyManagement>
 		<dependencies>
 
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-audittrail</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-audittrail-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-audittrail-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-audittrail-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-audittrail-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
+			<!-- core -->
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-commandlog</artifactId>
@@ -125,13 +97,28 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-exceldownload</artifactId>
+				<artifactId>isis-extensions-excel</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-exceldownload-wicket-ui</artifactId>
+				<artifactId>isis-extensions-excel-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-excel-fixtures</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-excel-integtests</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-excel-testing</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
@@ -177,22 +164,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-dto</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-executionoutbox-persistence-jdo</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-executionoutbox-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-executionoutbox-restapi</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -215,33 +192,6 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-excel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-excel-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-excel-testing</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-excel-fixtures</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-excel-integtests</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-flyway</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
@@ -249,6 +199,178 @@
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-flyway-impl</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-quartz</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-quartz-impl</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+
+			<!-- security -->
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-audittrail</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-audittrail-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-audittrail-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-audittrail-persistence-jpa</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-audittrail-persistence-jdo</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman-applib</artifactId>
+				<scope>test</scope>
+				<type>test-jar</type>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman-delegated-shiro</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman-delegated-springoauth2</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman-encryption-spring</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman-integration</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-sessionlog</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-sessionlog-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-sessionlog-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-sessionlog-persistence-jpa</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-sessionlog-persistence-jdo</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-shiro-realm-ldap</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-shiro-realm-ldap-impl</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-spring-security-oauth2</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+
+			<!-- vro -->
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-cors</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-cors-impl</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+
+
+			<!-- vw -->
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-exceldownload</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>isis-extensions-exceldownload-wicket-ui</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
@@ -320,131 +442,6 @@
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-quartz</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-quartz-impl</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-applib</artifactId>
-				<scope>test</scope>
-				<type>test-jar</type>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-integration</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-encryption-jbcrypt</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-encryption-spring</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-delegated-shiro</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-secman-delegated-springoauth2</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-shiro-realm-ldap</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-shiro-realm-ldap-impl</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sessionlog</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sessionlog-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sessionlog-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sessionlog-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-sessionlog-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-cors</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-cors-impl</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>isis-extensions-spring-security-oauth2</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
 				<artifactId>isis-extensions-sse</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>pom</type>
@@ -465,29 +462,8 @@
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
-			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fixtures</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.testing</groupId>
-				<artifactId>isis-testing-fixtures-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-
 		</dependencies>
 	</dependencyManagement>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
 
 	<modules>
 
