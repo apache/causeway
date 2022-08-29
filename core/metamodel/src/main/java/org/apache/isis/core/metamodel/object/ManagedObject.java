@@ -32,6 +32,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -163,7 +164,7 @@ public interface ManagedObject extends HasMetaModelContext {
             STATEFUL,
             /** has a stateful pojo, with mutable object reference */
             REFETCHABLE,
-            /** has an unmodifiable collection of pojos; the collection's object reference is immutable;
+            /** creates an unmodifiable collection of pojos (lazily);
              * supports unpacking into a {@link Can} of {@link ManagedObject}s;*/
             PACKED;
             ////
@@ -175,7 +176,7 @@ public interface ManagedObject extends HasMetaModelContext {
             public boolean isStateful() { return this == STATEFUL; }
             /** has a stateful pojo, with mutable object reference */
             public boolean isRefetchable() { return this == REFETCHABLE; }
-            /** has an unmodifiable collection of pojos; the collection's object reference is immutable;
+            /** creates an unmodifiable collection of pojos (lazily);
              * supports unpacking into a {@link Can} of {@link ManagedObject}s;*/
             public boolean isPacked() { return this == PACKED; }
         }
@@ -424,7 +425,7 @@ public interface ManagedObject extends HasMetaModelContext {
      */
     static PackedManagedObject packed(
             final @NonNull ObjectSpecification elementSpec,
-            final Can<ManagedObject> nonScalar) {
+            final @Nullable Can<ManagedObject> nonScalar) {
         return new _ManagedObjectPacked(elementSpec, nonScalar);
     }
 

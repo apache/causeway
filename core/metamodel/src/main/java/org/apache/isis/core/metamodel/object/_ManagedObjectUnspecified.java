@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.object;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -85,6 +86,21 @@ implements ManagedObject {
 
     @Override
     public void assertSpecIsInSyncWithPojo() {
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        return Objects.equals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public final String toString() {
+        return "ManagedObject(UNSPECIFIED)";
     }
 
 }

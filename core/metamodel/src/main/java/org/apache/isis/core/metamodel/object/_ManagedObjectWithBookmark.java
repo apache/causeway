@@ -37,7 +37,7 @@ import lombok.NonNull;
 import lombok.val;
 
 abstract class _ManagedObjectWithBookmark
-extends _ManagedObjectSpecified {
+extends _ManagedObjectSpecifiedLegacy {
 
     protected final _Lazy<Optional<Bookmark>> bookmarkLazy =
             _Lazy.threadSafe(()->bookmark(this));

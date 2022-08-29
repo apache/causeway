@@ -18,45 +18,26 @@
  */
 package org.apache.isis.core.metamodel.object;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import lombok.Getter;
 
-/**
- * (package private) specialization corresponding to {@link Specialization#PACKED}
- * @see ManagedObject.Specialization#PACKED
- */
-final class _ManagedObjectPacked
-extends _ManagedObjectSpecified
-implements PackedManagedObject {
+@Getter
+final class _ManagedObjectEmpty
+extends _ManagedObjectSpecified {
 
-    private final @NonNull Can<ManagedObject> nonScalar;
-
-    _ManagedObjectPacked(
-            final ObjectSpecification elementSpec,
-            final @Nullable Can<ManagedObject> nonScalar) {
-        super(Specialization.PACKED, elementSpec);
-        this.nonScalar = nonScalar!=null
-                ? nonScalar
-                : Can.empty();
+    _ManagedObjectEmpty(
+            final ObjectSpecification spec) {
+        super(ManagedObject.Specialization.EMPTY, spec);
     }
 
     @Override
     public Object getPojo() {
-        // this algorithm preserves null pojos ...
-        return Collections.unmodifiableList(
-                nonScalar.stream()
-                .map(ManagedObject::getPojo)
-                .collect(Collectors.toList()));
+        return null;
     }
 
     @Override
@@ -70,17 +51,12 @@ implements PackedManagedObject {
     }
 
     @Override
+    public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
+    }
+
+    @Override
     public boolean isBookmarkMemoized() {
         return false;
-    }
-
-    @Override
-    public Can<ManagedObject> unpack(){
-        return nonScalar;
-    }
-
-    @Override
-    public void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
     }
 
 }
