@@ -7,17 +7,44 @@ The PDF.js module integrates with the xref:vw:ROOT:about.adoc[Wicket Viewer], re
 
 == Usage
 
-[WARNING]
-====
-TODO: v2 - to write up...
+To use the extension, annotate an xref:refguide:applib:index/value/Blob.adoc[Blob] property with the xref:refguide:extensions:index/pdfjs/applib/annotations/PdfJsViewer.adoc[@PdfJsViewer] annotation.
 
-need to annotate property using `@PdfJsViewer` and implement the `PdfJsViewerAdvisor` SPI.
-====
+For example:
+
+[source,xml]
+.pom.xml
+----
+@PdfJsViewer
+@Property()
+@PropertyLayout(fieldSetId = "content", sequence = "1")
+public Blob getAttachment() { ... }
+----
+
+IMPORTANT: The `Blob` should only ever return a bytes that correspond to a PDF, with a mime type of "application/pdf".
+
+Optionally, you can also provide an implementation of the xref:refguide:extensions:index/pdfjs/applib/spi/PdfJsViewerAdvisor.adoc[] SPI, which advises on the size of the viewer (and has callbacks to keep track of which page of the PDF is being viewed).
+The framework provides a fallback implementation that sets the height to 800px, and scaled to 75% normal size.
+
 
 == Configuration
 
-Add the following dependency:
+Make the following changes:
 
+* In your domain module (containing the domain class that has a `Blob` PDF type), add in the following dependency:
++
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.isis.extensions</groupId>
+    <artifactId>isis-extensions-pdfjs-applib</artifactId>
+</dependency>
+----
++
+This will provide access to the xref:refguide:extensions:index/pdfjs/applib/annotations/PdfJsViewer.adoc[@PdfJsViewer] annotation.
+
+* And, in the webapp module, add the following dependency:
++
 [source,xml]
 .pom.xml
 ----
@@ -27,8 +54,8 @@ Add the following dependency:
 </dependency>
 ----
 
-Also add the following module to your `AppManifest`:
-
+* In your `AppManifest`:
++
 [source,java]
 .AppManifest.java
 ----
