@@ -69,18 +69,18 @@ import lombok.val;
 
 public final class ProgrammingModelConstants {
 
-    // -- TYPE VETO MARKERS (EXLUDE FROM DOMAIN)
+    // -- TYPE EXCLUDE MARKERS
 
     @Getter
     @RequiredArgsConstructor
-    public enum TypeVetoMarker {
-        DOMAIN_EXLCUDE(Domain.Exclude.class),
+    public enum TypeExcludeMarker {
+        DOMAIN_EXCLUDE(Domain.Exclude.class),
         VETO(Vetoed.class);
         private final Class<? extends Annotation> annotationType;
 
         public static boolean anyMatchOn(final Class<?> type) {
-            for(TypeVetoMarker vetoMarker : TypeVetoMarker.values()) {
-                if(_Annotations.synthesize(type, vetoMarker.getAnnotationType()).isPresent()) {
+            for(TypeExcludeMarker excludeMarker : TypeExcludeMarker.values()) {
+                if(_Annotations.synthesize(type, excludeMarker.getAnnotationType()).isPresent()) {
                     return true;
                 }
             }
@@ -88,12 +88,35 @@ public final class ProgrammingModelConstants {
         }
     }
 
-    // -- METHOD VETO MARKERS (EXLUDE FROM DOMAIN)
+    // -- METHOD INCLUDE MARKERS
+
+    /**
+     * Ensure included.
+     */
+    @Getter
+    @RequiredArgsConstructor
+    public enum MethodIncludeMarker {
+        DOMAIN_INCLUDE(Domain.Include.class),
+        ;
+        private final Class<? extends Annotation> annotationType;
+
+        public static boolean anyMatchOn(final Method method) {
+            for(MethodIncludeMarker includeMarker : MethodIncludeMarker.values()) {
+                if(_Annotations.synthesize(method, includeMarker.getAnnotationType()).isPresent()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+
+    // -- METHOD EXCLUDE MARKERS
 
     @Getter
     @RequiredArgsConstructor
-    public enum MethodVetoMarker {
-        DOMAIN_EXLCUDE(Domain.Exclude.class),
+    public enum MethodExcludeMarker {
+        DOMAIN_EXCLUDE(Domain.Exclude.class),
         PRE_DESTROY_JAVAX(javax.annotation.PreDestroy.class),
         POST_CONSTRUCT_JAVAX(javax.annotation.PostConstruct.class),
         //PRE_DESTROY__JAKARTA(jakarta.annotation.PreDestroy.class),
@@ -102,8 +125,8 @@ public final class ProgrammingModelConstants {
         private final Class<? extends Annotation> annotationType;
 
         public static boolean anyMatchOn(final Method method) {
-            for(MethodVetoMarker vetoMarker : MethodVetoMarker.values()) {
-                if(_Annotations.synthesize(method, vetoMarker.getAnnotationType()).isPresent()) {
+            for(MethodExcludeMarker excludeMarker : MethodExcludeMarker.values()) {
+                if(_Annotations.synthesize(method, excludeMarker.getAnnotationType()).isPresent()) {
                     return true;
                 }
             }
