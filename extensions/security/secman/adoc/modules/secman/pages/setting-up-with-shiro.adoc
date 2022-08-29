@@ -33,7 +33,7 @@ These are called "local" users, as per the xref:refguide:extensions:index/secman
 
 == Delegate Authentication
 
-Local authentication - as described in the previous section - does not actually accomplish much; although Shiro's `Authenticator` implementation is in use, since the Shiro Realm just queries the SecMan database, there is no real difference from simply using SecMan's own `Authenticator` impplementation.
+Local authentication - as described in the previous section - does not actually accomplish much; although Shiro's `Authenticator` implementation is in use, since the Shiro Realm just queries the SecMan database, there is no real difference from simply using SecMan's own `Authenticator` implementation.
 
 Where things become more interesting and useful is that Secman's xref:refguide:extensions:index/secman/delegated/shiro/realm/IsisModuleExtSecmanShiroRealm.adoc[Realm implementation] also allows an alternative "delegate" realm (eg LDAP) to be queried.
 In such cases Shiro can obtain authentication of "delegated" users is performed by the delegate realm rather than locally.
