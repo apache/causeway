@@ -32,7 +32,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.PlacementDirection;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
@@ -151,17 +150,7 @@ extends PromptFormAbstract<ActionModel> {
             val pendingArgs = paramModel.getParameterNegotiationModel();
 
             val actionParameter = paramModel.getMetaModel();
-
-            val bindableParamValue = pendingArgs.getBindableParamValue(paramIndex);
-            val bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
-
-            if(Facets.dependentDefaultsPolicy(actionModel.getAction()).isUpdateDependent()
-                    || ! bindableParamDirtyFlag.getValue().booleanValue()) {
-                // reassess defaults
-                val paramDefaultValue = actionParameter.getDefault(pendingArgs);
-                pendingArgs.setParamValue(paramIndex, paramDefaultValue);
-                bindableParamDirtyFlag.setValue(false);
-            }
+            actionParameter.reassessDefault(pendingArgs);
 
             val paramPanel = paramPanels.get(paramIndex);
             val repaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
