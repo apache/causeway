@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
  * Determines how dependent parameter values should be updated,
  * if one of the earlier parameter values is changed.
  * <p>
- * Corresponds to annotating the action method {@link Action#dependentDefaultsPolicy()}.
+ * Corresponds to annotating the action method {@link Parameter#dependentDefaultsPolicy()}.
  *
  * @since 2.0
  */

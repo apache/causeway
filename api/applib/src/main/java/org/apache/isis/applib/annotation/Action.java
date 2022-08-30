@@ -230,12 +230,4 @@ public @interface Action {
             default "";
 
 
-    /**
-     * Whether dependent parameters should be reset to their default if an earlier parameter changes its
-     * value, or whether instead a parameter value, once changed by the end-user, should never be
-     * overwritten even if the end-user changes an earlier parameter value.
-     */
-    DependentDefaultsPolicy dependentDefaultsPolicy()
-            default DependentDefaultsPolicy.AS_CONFIGURED;
-
 }

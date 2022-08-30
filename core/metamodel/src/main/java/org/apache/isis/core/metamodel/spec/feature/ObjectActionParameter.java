@@ -146,7 +146,7 @@ extends ObjectFeature, CurrentHolder {
      * whenever a parameter this one depends on changes in the UI. Parameters
      * with higher index depend on those with lower index.
      * <p>
-     * Reassessment can be switch off by means of {@link Action#dependentDefaultsPolicy()}.
+     * Reassessment can be switch off by means of {@link org.apache.isis.applib.annotation.Parameter#dependentDefaultsPolicy()}.
      */
     default void reassessDefault(final ParameterNegotiationModel pendingArgs) {
         val paramIndex = getParameterIndex();
