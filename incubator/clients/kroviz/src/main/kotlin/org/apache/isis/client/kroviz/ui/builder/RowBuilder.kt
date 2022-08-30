@@ -22,7 +22,7 @@ import io.kvision.core.*
 import io.kvision.panel.FlexPanel
 import io.kvision.panel.SimplePanel
 import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.to.bs3.Row
+import org.apache.isis.client.kroviz.to.bs.Row
 import org.apache.isis.client.kroviz.ui.core.Constants
 
 class RowBuilder : UiBuilder() {

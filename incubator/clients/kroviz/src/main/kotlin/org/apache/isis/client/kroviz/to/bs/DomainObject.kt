@@ -16,34 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.to.bs3
+package org.apache.isis.client.kroviz.to.bs
 
+import org.apache.isis.client.kroviz.utils.XmlHelper
 import org.w3c.dom.Node
-import org.w3c.dom.asList
 
-class Tab(node: Node) {
-    val rowList = mutableListOf<Row>()
-    var name: String
+class DomainObject(node: Node) {
+    var named = ""
+    var plural = ""
+    lateinit var describedAs: String
+    lateinit var metadataError: String
+    lateinit var link:org.apache.isis.client.kroviz.to.Link
+    lateinit var cssClass: String
+    lateinit var cssClassFa: String
 
     init {
-        val dyNode = node.asDynamic()
-        name = dyNode.getAttribute("name") as String
-
-        val nl = node.childNodes.asList()
-
-        val rNodes = nl.filter { it.nodeName.equals("bs:row") }
-        for (n: Node in rNodes) {
-            val row = Row(n)
-            rowList.add(row)
+        val nn = XmlHelper.firstChildMatching(node, "named")
+        if (nn?.textContent != null) {
+            named = nn.textContent!!.trim()
         }
-    }
 
-    fun getPropertyList(): List<Property> {
-        val list = mutableListOf<Property>()
-        rowList.forEach { r ->
-            list.addAll(r.getPropertyList())
+        val pn = XmlHelper.firstChildMatching(node, "plural")
+        if (pn?.textContent != null) {
+            plural = pn.textContent!!.trim()
         }
-        return list
     }
 
 }

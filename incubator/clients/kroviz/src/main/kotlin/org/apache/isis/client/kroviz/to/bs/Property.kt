@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.to.bs3
+package org.apache.isis.client.kroviz.to.bs
 
 import org.apache.isis.client.kroviz.to.Link
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 
 //IMPROVE class differs in many aspects from org.ro.to.Property - to be refactored?
-class Property(node: Node) {
+class Property(node: Node) : XmlLayout() {
     var id: String
     var named = ""
     var link: Link? = null
@@ -35,26 +35,26 @@ class Property(node: Node) {
 
     init {
         val dn = node.asDynamic()
-        hidden = dn.getAttribute("hidden")
+        hidden = dn.getAttribute("hidden") as String
         id = dn.getAttribute("id") as String
-        typicalLength = dn.getAttribute("typicalLength")
-        multiLine = dn.getAttribute("multiLine")
-        describedAs = dn.getAttribute("describedAs")
+        typicalLength = dn.getAttribute("typicalLength") as Int
+        multiLine = dn.getAttribute("multiLine") as Int
+        describedAs = dn.getAttribute("describedAs") as String
 
         val nodeList = node.childNodes.asList()
-        val namedList = nodeList.filter { it.nodeName.equals("cpt:named") }
+        val namedList = nodeList.filter { it.nodeName == "$nsCpt:named" }
         if (namedList.isNotEmpty()) {
             val n = namedList.first()
             named = n.textContent as String
         }
 
-        val actList = nodeList.filter { it.nodeName.equals("cpt:action") }
+        val actList = nodeList.filter { it.nodeName == "$nsCpt:action" }
         if (actList.isNotEmpty()) {
             val n = actList.first()
             action = Action(n)
         }
 
-        val linkList = nodeList.filter { it.nodeName.equals("cpt:link") }
+        val linkList = nodeList.filter { it.nodeName == "$nsCpt:link" }
         if (linkList.isNotEmpty()) {
             val n = linkList.first()
             val bs3l = Link(n)

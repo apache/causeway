@@ -25,7 +25,7 @@ import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.to.*
-import org.apache.isis.client.kroviz.to.bs3.Grid
+import org.apache.isis.client.kroviz.to.bs.Grid
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.ViewManager
@@ -186,8 +186,6 @@ data class LogEntry(
                 this.type = extractType(to)
             }
             is Grid -> {
-                console.log("[LE.setTransferObject]Layout/Grid")
-                console.log(response)
                 this.type = Relation.LAYOUT.type
             }
             is Icon -> {

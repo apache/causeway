@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.to.bs3
+package org.apache.isis.client.kroviz.to.bs
 
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 
-class Col(node: Node) {
+class Col(node: Node) : XmlLayout() {
     val rowList = mutableListOf<Row>()
     var domainObject: DomainObject? = null
     var actionList = mutableListOf<Action>()
@@ -32,40 +32,40 @@ class Col(node: Node) {
 
     init {
         val dyNode = node.asDynamic()
-        span = dyNode.getAttribute("span")
+        span = dyNode.getAttribute("span") as Int
 
         val nl = node.childNodes.asList()
 
-        val rl = nl.filter { it.nodeName.equals("bs3row") }
+        val rl = nl.filter { it.nodeName == "$nsBs:row" }
         for (n: Node in rl) {
             val row = Row(n)
             rowList.add(row)
         }
 
-        val doNodes = nl.filter { it.nodeName.equals("cpt:domainObject") }
-        if (!doNodes.isEmpty()) {
+        val doNodes = nl.filter { it.nodeName == "$nsCpt:domainObject" }
+        if (doNodes.isNotEmpty()) {
             domainObject = DomainObject(doNodes.first())
         }
 
-        val actNodes = nl.filter { it.nodeName.equals("cpt:action") }
+        val actNodes = nl.filter { it.nodeName == "$nsCpt:action" }
         for (n: Node in actNodes) {
             val act = Action(n)
             actionList.add(act)
         }
 
-        val tgNodes = nl.filter { it.nodeName.equals("bs:tabGroup") }
+        val tgNodes = nl.filter { it.nodeName == "$nsBs:tabGroup" }
         for (n: Node in tgNodes) {
             val tg = TabGroup(n)
             tabGroupList.add(tg)
         }
 
-        val fsNodes = nl.filter { it.nodeName.equals("cpt:fieldSet") }
+        val fsNodes = nl.filter { it.nodeName == "$nsCpt:fieldSet" }
         for (n: Node in fsNodes) {
             val fs = FieldSet(n)
             fieldSetList.add(fs)
         }
 
-        val collNodes = nl.filter { it.nodeName.equals("cpt:collection") }
+        val collNodes = nl.filter { it.nodeName == "$nsCpt:collection" }
         for (n: Node in collNodes) {
             val c = Collection(n)
             collectionList.add(c)
@@ -74,14 +74,28 @@ class Col(node: Node) {
 
     fun getPropertyList(): List<Property> {
         val list = mutableListOf<Property>()
+        rowList.forEach { r ->
+            list.addAll(r.getPropertyList())
+        }
         fieldSetList.forEach { fs ->
             list.addAll(fs.propertyList)
         }
         tabGroupList.forEach { tg ->
             list.addAll(tg.getPropertyList())
         }
-        console.log("[CB.getPropertyList]")
         return list
+    }
+
+    override fun toString(): String {
+        val c = this::class.simpleName!!
+        return c + "\n" +
+                "rowList: " + rowList.size + "\n" +
+                "domainObject: " + domainObject.toString() + "\n" +
+                "actionList: " + actionList.size + "\n" +
+                "tabGroupList: " + tabGroupList.size + "\n" +
+                "fieldSetList: " + fieldSetList.size + "\n" +
+                "collectionList: " + collectionList.size + "\n" +
+                "span: " + span + "\n"
     }
 
 }

@@ -16,32 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.to.bs3
+package org.apache.isis.client.kroviz.to.bs
 
-import org.apache.isis.client.kroviz.to.TransferObject
-import org.w3c.dom.Document
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 
-/**
- * For the Wicket Viewer the following layout is used:
- * * rows[0] (head) contains the object title and actions
- * * rows[1] contains data, tabs, collections, etc.
- * * there may be N other rows as well
- * Please note, that rows may be children of Tab as well (recursive)
- */
-class Grid(document: Document) : TransferObject {
-    var rows = ArrayList<Row>()
+class TabGroup(node: Node) : XmlLayout() {
+    var tabList = mutableListOf<Tab>()
+    lateinit var metadataError: String
+    lateinit var cssClass: String
 
     init {
-        val root = document.firstChild!!
-        val kids = root.childNodes
-        val rowNodes = kids.asList()
-        val rowList = rowNodes.filter { it.nodeName.equals("bs:row") }
-        for (n: Node in rowList) {
-            val row = Row(n)
-            rows.add(row)
+        val nodeList = node.childNodes.asList()
+
+        val tnList = nodeList.filter { it.nodeName == "$nsBs:tab" }
+        for (n: Node in tnList) {
+            val tab = Tab(n)
+            tabList.add(tab)
         }
+    }
+
+    fun getPropertyList(): List<Property> {
+        val list = mutableListOf<Property>()
+        tabList.forEach { t ->
+            list.addAll(t.getPropertyList())
+        }
+        return list
     }
 
 }

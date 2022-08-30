@@ -23,7 +23,7 @@ import org.apache.isis.client.kroviz.layout.RowLt
 import org.apache.isis.client.kroviz.to.Icon
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.TransferObject
-import org.apache.isis.client.kroviz.to.bs3.Grid
+import org.apache.isis.client.kroviz.to.bs.Grid
 
 abstract class DisplayModelWithLayout : BaseDisplayModel() {
 

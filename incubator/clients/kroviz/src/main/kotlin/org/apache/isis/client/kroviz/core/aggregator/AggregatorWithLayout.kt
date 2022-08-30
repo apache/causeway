@@ -19,10 +19,13 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.model.DisplayModelWithLayout
+import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.Represention
 import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.to.bs.Grid
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.diagram.Tree
 
@@ -57,10 +60,18 @@ abstract class AggregatorWithLayout : BaseAggregator() {
         }
     }
 
+    protected fun handleGrid(grid: Grid, dm: DisplayModelWithLayout, referrer: String) {
+        (dpm as ObjectDM).grid = grid
+        grid.getPropertyList().forEach {
+            val link = it.link!!
+            ResourceProxy().fetch(link, this, subType = Constants.subTypeJson, referrer = referrer)
+        }
+    }
+
     protected fun invokeLayoutLink(obj: TObject, aggregator: AggregatorWithLayout, referrer: String) {
         val l = obj.getLayoutLink()
         if (l.representation() == Represention.OBJECT_LAYOUT_BS) {
-            invoke(l, aggregator, Constants.subTypeXml, referrer)
+            invoke(l, aggregator, Constants.subTypeXml, referrer = referrer)
         } else {
             invoke(l, aggregator, referrer = referrer)
         }

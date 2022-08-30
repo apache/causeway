@@ -24,7 +24,7 @@ import io.kvision.panel.FlexPanel
 import io.kvision.panel.HPanel
 import io.kvision.panel.SimplePanel
 import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.to.bs3.Col
+import org.apache.isis.client.kroviz.to.bs.Col
 import org.apache.isis.client.kroviz.ui.core.Constants
 import org.apache.isis.client.kroviz.ui.core.RoTable
 import org.apache.isis.client.kroviz.ui.menu.DropDownMenuBuilder

@@ -16,33 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.to.bs3
+package org.apache.isis.client.kroviz.to.bs
 
-import org.apache.isis.client.kroviz.utils.XmlHelper
+import org.apache.isis.client.kroviz.to.TransferObject
+import org.w3c.dom.Document
 import org.w3c.dom.Node
+import org.w3c.dom.asList
 
-class Row(node: Node) {
-    val colList = mutableListOf<Col>()
-    var id: String = ""
+/**
+ * For the Wicket Viewer the following layout is used:
+ * * rows[0] (head) contains the object title and actions
+ * * rows[1] contains data, tabs, collections, etc.
+ * * there may be N other rows as well
+ * Please note, that rows may be children of Tab as well (recursive)
+ */
+class Grid(document: Document) : XmlLayout(), TransferObject {
+    var rows = ArrayList<Row>()
 
     init {
-        val dyNode = node.asDynamic()
-        if (dyNode.hasOwnProperty("id")) {
-            id = dyNode.getAttribute("id") as String
-        }
-
-        val nodeList = XmlHelper.nonTextChildren(node)
-        val cl = nodeList.filter { it.nodeName.equals("bs:col") }
-        for (n: Node in cl) {
-            val col = Col(n)
-            colList.add(col)
+        val root = document.firstChild!!
+        val kids = root.childNodes
+        val rowNodes = kids.asList()
+        val rowList = rowNodes.filter { it.nodeName == "$nsBs:row" }
+        for (n: Node in rowList) {
+            val row = Row(n)
+            rows.add(row)
         }
     }
 
     fun getPropertyList(): List<Property> {
         val list = mutableListOf<Property>()
-        colList.forEach { c ->
-            list.addAll(c.getPropertyList())
+        rows.forEach { r ->
+            list.addAll(r.getPropertyList())
         }
         return list
     }

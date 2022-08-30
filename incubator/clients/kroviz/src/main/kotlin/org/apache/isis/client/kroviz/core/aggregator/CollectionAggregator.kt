@@ -25,7 +25,7 @@ import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.CollectionDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
-import org.apache.isis.client.kroviz.to.bs3.Grid
+import org.apache.isis.client.kroviz.to.bs.Grid
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 
 /** sequence of operations:
@@ -54,7 +54,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
                 is TObject -> handleObject(obj, referrer)
                 is DomainType -> handleDomainType(obj, referrer)
                 is Layout -> handleLayout(obj, dpm as CollectionDM, referrer)
-                is Grid -> handleGrid(obj)
+                is Grid -> handleGrid(obj, dpm as CollectionDM, referrer)
                 is Property -> handleProperty(obj, referrer)
                 is Collection -> handleCollection(obj, referrer)
                 is Icon -> handleIcon(obj)
@@ -105,10 +105,6 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
         }
     }
 
-    private fun handleGrid(grid: Grid) {
-        (dpm as CollectionDM).grid = grid
-    }
-
     private fun handleProperty(p: Property, referrer: String) {
         val dm = dpm as CollectionDM
         if (p.isPropertyDescription()) {
@@ -128,7 +124,7 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
                 ResourceProxy().fetch(it, this, referrer = referrer)
             }
         }
-        collection.value.forEach {
+        collection.value!!.forEach {
             ResourceProxy().fetch(it, this, referrer = referrer)
         }
     }

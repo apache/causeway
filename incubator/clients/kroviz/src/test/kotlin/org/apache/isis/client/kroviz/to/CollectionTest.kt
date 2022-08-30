@@ -21,10 +21,30 @@ package org.apache.isis.client.kroviz.to
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.handler.CollectionHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.OBJECT_COLLECTION
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.OBJECT_COLLECTION2
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CollectionTest : IntegrationTest() {
+
+    @Test
+    fun testParse2() {
+        //given
+        val jsonStr = OBJECT_COLLECTION2.str
+        //when
+        val collection = CollectionHandler().parse(jsonStr) as Collection
+        //then
+        assertEquals("objects", collection.id)
+        assertEquals("collection", collection.memberType)
+
+        val linkList = collection.links
+        assertEquals(3, linkList.size)
+
+        assertEquals("list", collection.extensions.collectionSemantics)
+
+        val valueList = collection.value
+        assertEquals(0, valueList.size)
+    }
 
     @Test
     fun testParse() {

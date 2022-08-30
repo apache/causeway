@@ -18,9 +18,9 @@
  */
 package org.apache.isis.client.kroviz.ui.diagram
 
-import org.apache.isis.client.kroviz.to.bs3.Col
-import org.apache.isis.client.kroviz.to.bs3.Grid
-import org.apache.isis.client.kroviz.to.bs3.Row
+import org.apache.isis.client.kroviz.to.bs.Col
+import org.apache.isis.client.kroviz.to.bs.Grid
+import org.apache.isis.client.kroviz.to.bs.Row
 
 object LayoutDiagram {
 

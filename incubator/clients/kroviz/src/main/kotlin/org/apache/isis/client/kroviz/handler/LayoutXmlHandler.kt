@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.handler
 
 import org.apache.isis.client.kroviz.to.TransferObject
-import org.apache.isis.client.kroviz.to.bs3.Grid
+import org.apache.isis.client.kroviz.to.bs.Grid
 import org.apache.isis.client.kroviz.utils.UrlUtils
 import org.apache.isis.client.kroviz.utils.XmlHelper
 

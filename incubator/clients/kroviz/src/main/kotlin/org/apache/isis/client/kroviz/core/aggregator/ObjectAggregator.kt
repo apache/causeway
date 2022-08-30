@@ -21,11 +21,10 @@ package org.apache.isis.client.kroviz.core.aggregator
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceProxy
 import org.apache.isis.client.kroviz.core.model.CollectionDM
-import org.apache.isis.client.kroviz.core.model.DisplayModelWithLayout
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
-import org.apache.isis.client.kroviz.to.bs3.Grid
+import org.apache.isis.client.kroviz.to.bs.Grid
 import org.apache.isis.client.kroviz.ui.core.ViewManager
 import org.apache.isis.client.kroviz.ui.dialog.ErrorDialog
 
@@ -44,11 +43,6 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     override fun update(logEntry: LogEntry, subType: String?) {
-        if (logEntry.url.contains("object-layout")) {
-            console.log("[OA.update]")
-            console.log(logEntry)
-            console.log(subType)
-        }
         super.update(logEntry, subType)
         if (!logEntry.isUpdatedFromParentedCollection()) {
             val referrer = logEntry.url
@@ -80,7 +74,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         }
     }
 
-    fun handleObject(obj: TObject, referrer : String) {
+    fun handleObject(obj: TObject, referrer: String) {
         // After ~/action/invoke is called, the actual object instance (containing properties) needs to be invoked as well.
         // Note that rel.self/href is identical and both are of type TObject. logEntry.url is different, though.
         if (obj.getProperties().size == 0) {
@@ -121,10 +115,6 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
             val aggregator = CollectionAggregator(key, this)
             collectionMap.put(key, aggregator)
             val link = it.links.first()
-            console.log("[OA.handleCollections]")
-            console.log(link)
-            console.log(aggregator)
-            console.log(referrer)
             ResourceProxy().fetch(link, aggregator, referrer = referrer)
         }
     }
@@ -133,14 +123,6 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         console.log("[OA.handleProperty]")
         console.log(property)
 //        throw Throwable("[ObjectAggregator.handleProperty] not implemented yet")
-    }
-
-    private fun handleGrid(grid: Grid, dm: DisplayModelWithLayout, referrer: String) {
-        console.log("[AWL.handleGrid]")
-        console.log(grid)
-        console.log(dm)
-        console.log(referrer)
-        (dpm as ObjectDM).grid = grid
     }
 
     override fun reset(): ObjectAggregator {

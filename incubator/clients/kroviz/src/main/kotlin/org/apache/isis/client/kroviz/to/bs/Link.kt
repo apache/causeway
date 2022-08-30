@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.to.bs3
+package org.apache.isis.client.kroviz.to.bs
 
 import org.w3c.dom.Node
 import org.w3c.dom.asList
 
-class Link(node: Node) {
+class Link(node: Node) : XmlLayout() {
     lateinit var rel: String
     lateinit var method: String
     lateinit var href: String
@@ -30,29 +30,38 @@ class Link(node: Node) {
     init {
         val nodeList = node.childNodes.asList()
 
-        val relList = nodeList.filter { it.nodeName.equals("lnk:rel") }
+        val relList = nodeList.filter { it.nodeName == "$nsLnk:rel" }
         if (relList.isNotEmpty()) {
             val n = relList.first()
             rel = n.textContent as String
         }
 
-        val methodList = nodeList.filter { it.nodeName.equals("lnk:method") }
+        val methodList = nodeList.filter { it.nodeName == "$nsLnk:method" }
         if (methodList.isNotEmpty()) {
             val n = methodList.first()
             method = n.textContent as String
         }
 
-        val hrefList = nodeList.filter { it.nodeName.equals("lnk:href") }
+        val hrefList = nodeList.filter { it.nodeName == "$nsLnk:href" }
         if (hrefList.isNotEmpty()) {
             val n = hrefList.first()
             href = n.textContent as String
         }
 
-        val typeList = nodeList.filter { it.nodeName.equals("lnk:type") }
+        val typeList = nodeList.filter { it.nodeName == "$nsLnk:type" }
         if (typeList.isNotEmpty()) {
             val n = typeList.first()
             type = n.textContent as String
         }
+    }
+
+    override fun toString(): String {
+        val c = this::class.simpleName!!
+        return c + "\n" +
+                "rel: " + rel + "\n" +
+                "method: " + method + "\n" +
+                "href: " + href + "\n" +
+                "type: " + type + "\n"
     }
 
 }

@@ -21,7 +21,7 @@ package org.apache.isis.client.kroviz.ui.builder
 import io.kvision.form.FormPanel
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.TypeMapper
-import org.apache.isis.client.kroviz.to.bs3.FieldSet
+import org.apache.isis.client.kroviz.to.bs.FieldSet
 import org.apache.isis.client.kroviz.ui.core.FormItem
 import org.apache.isis.client.kroviz.ui.core.FormPanelFactory
 
