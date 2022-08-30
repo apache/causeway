@@ -810,19 +810,6 @@ public class IsisConfiguration {
                 }
 
 
-                /**
-                 * Whether dependent parameters should be reset to their default if an earlier parameter changes its
-                 * value, or whether instead a parameter value, once changed by the end-user, should never be
-                 * overwritten even if the end-user changes an earlier parameter value.
-                 *
-                 * <p>
-                 *     This setting can be overridden on a case-by-case basis using
-                 *     {@link org.apache.isis.applib.annotation.Action#dependentDefaultsPolicy() Action#dependentDefaultsPolicy()}.
-                 * </p>
-                 */
-                private ParameterPolicies.DependentDefaultsPolicy dependentDefaultsPolicy = ParameterPolicies.DependentDefaultsPolicy.UPDATE_DEPENDENT;
-
-
             }
 
             private final ActionLayout actionLayout = new ActionLayout();
@@ -1280,6 +1267,24 @@ public class IsisConfiguration {
                      */
                     private boolean postForDefault =true;
                 }
+            }
+
+            private final Parameter parameter = new Parameter();
+            @Data
+            public static class Parameter {
+
+                /**
+                 * Whether dependent parameters should be reset to their default if an earlier parameter changes its
+                 * value, or whether instead a parameter value, once changed by the end-user, should never be
+                 * overwritten even if the end-user changes an earlier parameter value.
+                 *
+                 * <p>
+                 *     This setting can be overridden on a case-by-case basis using
+                 *     {@link org.apache.isis.applib.annotation.Parameter#dependentDefaultsPolicy() Parameter#dependentDefaultsPolicy()}.
+                 * </p>
+                 */
+                private ParameterPolicies.DependentDefaultsPolicy dependentDefaultsPolicy = ParameterPolicies.DependentDefaultsPolicy.UPDATE_DEPENDENT;
+
             }
 
             private final ParameterLayout parameterLayout = new ParameterLayout();

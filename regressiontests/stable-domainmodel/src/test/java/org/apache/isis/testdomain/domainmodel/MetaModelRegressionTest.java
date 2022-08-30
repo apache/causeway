@@ -77,12 +77,11 @@ class MetaModelRegressionTest {
 
         val url = _Resources.getResourceUrl(getClass(), "/metamodel.xml.zip");
         if(url==null) {
-            //createReferenceMetaModelFile(new File("/<path to resources>/metamodel.xml.zip"));
             _Exceptions.throwNotImplemented();
         }
 
         //for maintenance
-        //createReferenceMetaModelFile(new File("d:/tmp/_scratch/metamodel.xml.zip"));
+        // createReferenceMetaModelFile(new File("src/test/resources/metamodel.xml.zip"));
     }
 
     @Test

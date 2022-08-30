@@ -146,12 +146,12 @@ extends ObjectFeature, CurrentHolder {
      * whenever a parameter this one depends on changes in the UI. Parameters
      * with higher index depend on those with lower index.
      * <p>
-     * Reassessment can be switch off by means of {@link Action#dependentDefaultsPolicy()}.
+     * Reassessment can be switch off by means of {@link org.apache.isis.applib.annotation.Parameter#dependentDefaultsPolicy()}.
      */
     default void reassessDefault(final ParameterNegotiationModel pendingArgs) {
         val paramIndex = getParameterIndex();
         val bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
-        if(Facets.dependentDefaultsPolicy(getAction()).isUpdateDependent()
+        if(Facets.dependentDefaultsPolicy(this).isUpdateDependent()
                 // always allow when not dirtied by the user (UI)
                 || ! bindableParamDirtyFlag.getValue().booleanValue() ) {
             // reassess defaults honoring defaults semantics

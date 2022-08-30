@@ -48,7 +48,7 @@ public final class ParameterPolicies {
 
     public static DependentDefaultsPolicy dependentDefaultsPolicy(
             final @NonNull IsisConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getAction().getDependentDefaultsPolicy();
+        return configuration.getApplib().getAnnotation().getParameter().getDependentDefaultsPolicy();
     }
 
 
