@@ -151,7 +151,7 @@ extends ObjectFeature, CurrentHolder {
     default void reassessDefault(final ParameterNegotiationModel pendingArgs) {
         val paramIndex = getParameterIndex();
         val bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
-        if(Facets.dependentDefaultsPolicy(getAction()).isUpdateDependent()
+        if(Facets.dependentDefaultsPolicy(this).isUpdateDependent()
                 // always allow when not dirtied by the user (UI)
                 || ! bindableParamDirtyFlag.getValue().booleanValue() ) {
             // reassess defaults honoring defaults semantics

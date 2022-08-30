@@ -17,15 +17,15 @@
  *  under the License.
  *
  */
-package org.apache.isis.core.metamodel.facets.actions.action.depdef;
+package org.apache.isis.core.metamodel.facets.param.parameter.depdef;
 
 import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class DependentDefaultsActionFacetForActionAnnotation
-extends DependentDefaultsFacetAbstract {
+public class ParameterDependentDefaultsFacetFromConfiguration
+extends ParameterDependentDefaultsFacetAbstract {
 
-    DependentDefaultsActionFacetForActionAnnotation(
+    ParameterDependentDefaultsFacetFromConfiguration(
             final ParameterPolicies.DependentDefaultsPolicy value, final FacetHolder holder) {
         super(value, holder);
     }

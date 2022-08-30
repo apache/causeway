@@ -35,12 +35,14 @@ public enum DependentDefaultsPolicy {
     AS_CONFIGURED,
 
     /**
-     * If an end-user has changed a parameter value, then do not overwrite the value.
+     * If an end-user has changed this parameter's value, then do not overwrite the value when an earlier parameter changes.
      */
     PRESERVE_CHANGES,
 
     /**
-     * If the parameter declares a default that is dependent on the value of a previous parameter, and that previous parameter changes its value, then update the dependent, <i>even if</i> the end-user had changed the value of that dependent default.
+     * If this parameter declares a default that is dependent on the value of a previous parameter, and that previous
+     * parameter has been changed by the end-user, then update this dependent parameter with its computed default,
+     * <i>even if</i> the end-user has changed the value of this parameter previously.
      */
     UPDATE_DEPENDENT,
 

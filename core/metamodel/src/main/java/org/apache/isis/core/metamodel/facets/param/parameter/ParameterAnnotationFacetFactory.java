@@ -18,16 +18,20 @@
  */
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 
 import org.springframework.core.MethodParameter;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
@@ -49,12 +53,25 @@ extends FacetFactoryAbstract {
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
+        processParamsDependentDefaultsPolicy(processParameterContext);
         processParamsMaxLength(processParameterContext);
         processParamsMustSatisfy(processParameterContext);
         processParamsRegEx(processParameterContext);
         processParamsOptional(processParameterContext);
         processParamsFileAccept(processParameterContext);
     }
+
+    // check for @Parameter(dependentDefaultsPolicy=...)
+    void processParamsDependentDefaultsPolicy(final ProcessParameterContext processParameterContext) {
+
+        val holder = processParameterContext.getFacetHolder();
+        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
+
+        addFacetIfPresent(
+                ParameterDependentDefaultsFacet
+                        .create(parameterIfAny, getConfiguration(), holder));
+    }
+
 
     void processParamsMaxLength(final ProcessParameterContext processParameterContext) {
 
@@ -79,6 +96,8 @@ extends FacetFactoryAbstract {
     void processParamsRegEx(final ProcessParameterContext processParameterContext) {
 
         val holder = processParameterContext.getFacetHolder();
+        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
+
         val parameterType = processParameterContext.getParameterType();
 
         val patternIfAny = processParameterContext.synthesizeOnParameter(Pattern.class);
@@ -86,7 +105,6 @@ extends FacetFactoryAbstract {
                 RegExFacetForPatternAnnotationOnParameter
                 .create(patternIfAny, parameterType, holder));
 
-        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
         addFacetIfPresent(
                 RegExFacetForParameterAnnotation
                 .create(parameterIfAny, parameterType, holder));
@@ -95,13 +113,14 @@ extends FacetFactoryAbstract {
     void processParamsOptional(final ProcessParameterContext processParameterContext) {
 
         val holder = processParameterContext.getFacetHolder();
+        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
+
         val parameterAnnotations = MethodParameter
                 .forExecutable(processParameterContext.getMethod(), processParameterContext.getParamNum())
                 .getParameterAnnotations();
         val parameterType = processParameterContext.getParameterType();
-        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
-        
-        val hasNullable = 
+
+        val hasNullable =
                 _NullSafe.stream(parameterAnnotations)
                     .map(annot->annot.annotationType().getSimpleName())
                     .anyMatch(name->name.equals("Nullable"));

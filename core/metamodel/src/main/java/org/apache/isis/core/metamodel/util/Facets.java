@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actions.action.depdef.DependentDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
@@ -67,11 +66,13 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.val;
@@ -171,9 +172,9 @@ public final class Facets {
     }
 
     public static ParameterPolicies.DependentDefaultsPolicy dependentDefaultsPolicy(
-            final ObjectAction action) {
-        return action.lookupFacet(DependentDefaultsFacet.class)
-                .map(DependentDefaultsFacet::value)
+            final ObjectActionParameter parameter) {
+        return parameter.lookupFacet(ParameterDependentDefaultsFacet.class)
+                .map(ParameterDependentDefaultsFacet::value)
                 .orElseGet(ParameterPolicies.DependentDefaultsPolicy::defaultsIfNotSpecifiedOtherwise);
     }
 

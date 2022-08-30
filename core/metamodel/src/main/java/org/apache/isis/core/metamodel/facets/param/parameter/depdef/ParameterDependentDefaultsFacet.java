@@ -17,11 +17,12 @@
  *  under the License.
  *
  */
-package org.apache.isis.core.metamodel.facets.actions.action.depdef;
+package org.apache.isis.core.metamodel.facets.param.parameter.depdef;
 
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
@@ -36,11 +37,11 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
  *
  * @since 2.0
  */
-public interface DependentDefaultsFacet
+public interface ParameterDependentDefaultsFacet
 extends SingleValueFacet<ParameterPolicies.DependentDefaultsPolicy> {
 
-    static Optional<DependentDefaultsFacet> create(
-            final Optional<Action> actionsIfAny,
+    static Optional<ParameterDependentDefaultsFacet> create(
+            final Optional<Parameter> parameterIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
@@ -49,24 +50,24 @@ extends SingleValueFacet<ParameterPolicies.DependentDefaultsPolicy> {
 
         return _Optionals.orNullable(
 
-        actionsIfAny
-        .map(Action::dependentDefaultsPolicy)
-        .<DependentDefaultsFacet>map(policy -> {
+        parameterIfAny
+        .map(Parameter::dependentDefaultsPolicy)
+        .<ParameterDependentDefaultsFacet>map(policy -> {
             switch (policy) {
             case PRESERVE_CHANGES:
-                return new DependentDefaultsActionFacetForActionAnnotation(
+                return new ParameterDependentDefaultsFacetForParameterAnnotation(
                         ParameterPolicies.DependentDefaultsPolicy.PRESERVE_CHANGES, holder);
             case UPDATE_DEPENDENT:
-                return new DependentDefaultsActionFacetForActionAnnotation(
+                return new ParameterDependentDefaultsFacetForParameterAnnotation(
                         ParameterPolicies.DependentDefaultsPolicy.UPDATE_DEPENDENT, holder);
             case NOT_SPECIFIED:
             case AS_CONFIGURED:
-                return new DependentDefaultsActionFacetForActionAnnotation(defaultPolicyFromConfig, holder);
+                return new ParameterDependentDefaultsFacetForParameterAnnotation(defaultPolicyFromConfig, holder);
             default:
             }
             throw new IllegalStateException("dependentDefaultsPolicy '" + policy + "' not recognised");
         })
         ,
-        () -> new DependentDefaultsActionFacetFromConfiguration(defaultPolicyFromConfig, holder));
+        () -> new ParameterDependentDefaultsFacetFromConfiguration(defaultPolicyFromConfig, holder));
     }
 }
