@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.interactions.managed._BindingUtil.TargetFo
 import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmAssertionUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -69,7 +70,7 @@ public class PropertyNegotiationModel implements ManagedValue {
 
         proposedValue = _Bindables.forValue(defaultValue);
         proposedValue.setValueRefiner(MmEntityUtil::refetch);
-        proposedValue.setValueGuard(ManagedObjects.assertInstanceOf(propMeta.getElementType()));
+        proposedValue.setValueGuard(MmAssertionUtil.assertInstanceOf(propMeta.getElementType()));
         proposedValue.addListener((e,o,n)->{
             invalidateChoicesAndValidation();
         });

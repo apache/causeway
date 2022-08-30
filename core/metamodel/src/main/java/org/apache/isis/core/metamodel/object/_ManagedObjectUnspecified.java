@@ -29,6 +29,8 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.NonNull;
+
 /**
  * (package private) specialization corresponding to {@link Specialization#UNSPECIFIED}
  * @see ManagedObject.Specialization#UNSPECIFIED
@@ -85,7 +87,8 @@ implements ManagedObject {
     }
 
     @Override
-    public void assertSpecIsInSyncWithPojo() {
+    public <T> T assertCompliance(final @NonNull T pojo) {
+        return pojo; // no-op
     }
 
     @Override

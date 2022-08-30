@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -43,20 +44,9 @@ implements ManagedObject {
         return ()->this;
     }
 
-    /** debug */
     @Override
-    public void assertSpecIsInSyncWithPojo() {
-//        val pojo = getPojo();
-//        val spec = getSpecification();
-//        if(pojo==null
-//                || spec==null) {
-//            return;
-//        }
-//        val actualSpec = spec.getSpecificationLoader().specForType(pojo.getClass()).orElse(null);
-//        if(!Objects.equals(spec,  actualSpec)) {
-//            System.err.printf("spec mismatch %s %s%n", spec, actualSpec);
-//        }
-        //_Assert.assertEquals(spec, actualSpec);
+    public final <T> T assertCompliance(final @NonNull T pojo) {
+        return pojo; // legacy implementation - don't check
     }
 
 }

@@ -52,8 +52,7 @@ extends _ManagedObjectSpecified {
             final Object pojo) {
         super(ManagedObject.Specialization.VALUE, spec);
         _Assert.assertTrue(spec.isValue());
-        _Assert.assertFalse(spec.isAbstract());
-        this.pojo = pojo;
+        this.pojo = assertCompliance(pojo);
     }
 
     @Override
@@ -83,6 +82,8 @@ extends _ManagedObjectSpecified {
     }
 
     private Bookmark createBookmark() {
+        //TODO if value semantics providers are enforced to provide an IdStringifier,
+        // we could use that instead (to generate the second argument)!
         return Bookmark.forLogicalTypeAndIdentifier(
                 getSpecification().getLogicalType(),
                 valueFacet().toEncodedString(Format.JSON, _Casts.uncheckedCast(getPojo())));

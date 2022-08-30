@@ -29,11 +29,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.Accessors;
 
-@RequiredArgsConstructor
 abstract class _ManagedObjectSpecified
 implements ManagedObject {
 
@@ -42,6 +40,13 @@ implements ManagedObject {
 
     @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
     private final @NonNull ObjectSpecification specification;
+
+    protected _ManagedObjectSpecified(
+            final @NonNull Specialization specialization,
+            final @NonNull ObjectSpecification specification) {
+        this.specialization = specialization;
+        this.specification = specification;
+    }
 
     @Override
     public final MetaModelContext getMetaModelContext() {
@@ -53,20 +58,16 @@ implements ManagedObject {
         return ()->this;
     }
 
-    /** debug */
     @Override
-    public final void assertSpecIsInSyncWithPojo() {
-//        val pojo = getPojo();
-//        val spec = getSpecification();
-//        if(pojo==null
-//                || spec==null) {
-//            return;
-//        }
-//        val actualSpec = spec.getSpecificationLoader().specForType(pojo.getClass()).orElse(null);
-//        if(!Objects.equals(spec,  actualSpec)) {
-//            System.err.printf("spec mismatch %s %s%n", spec, actualSpec);
-//        }
-        //_Assert.assertEquals(spec, actualSpec);
+    public final <T> T assertCompliance(final @NonNull T pojo) {
+        MmAssertionUtil.assertPojoNotWrapped(pojo);
+        if(specification.isAbstract()) {
+            _Assert.assertFalse(specialization.getTypePolicy().isExactTypeRequired());
+        }
+        if(specialization.getTypePolicy().isExactTypeRequired()) {
+            MmAssertionUtil.assertExactType(specification, pojo);
+        }
+        return pojo;
     }
 
     //XXX compares pojos by their 'equals' semantics -
@@ -129,6 +130,5 @@ implements ManagedObject {
         _Assert.assertTrue(isBookmarkMemoized());
         return getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach);
     }
-
 
 }

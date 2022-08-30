@@ -348,8 +348,11 @@ public interface ManagedObject extends HasMetaModelContext {
 
     Supplier<ManagedObject> asSupplier();
 
-    @Deprecated
-    void assertSpecIsInSyncWithPojo();
+    /**
+     * Unary operator asserting that {@code pojo} and {@link #getSpecification()} are
+     * compliant with the policies from {@link #getSpecialization()}.
+     */
+    <T> T assertCompliance(@NonNull T pojo);
 
     // -- TITLE
 
@@ -583,12 +586,11 @@ public interface ManagedObject extends HasMetaModelContext {
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
 
-        ManagedObjects.assertPojoNotWrapped(pojo);
+        MmAssertionUtil.assertPojoNotWrapped(pojo);
 
         //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
         //actual type in use (during runtime) might be a sub-class of the above, so re-adapt with hinting spec
         val adapter = spec.getMetaModelContext().getObjectManager().adapt(pojo, spec);
-        adapter.assertSpecIsInSyncWithPojo();
         return adapter;
     }
 
@@ -613,7 +615,7 @@ public interface ManagedObject extends HasMetaModelContext {
                     "pojo.toString() = %s",
                     spec.getCorrespondingClass(), pojo.getClass(), pojo.toString());
         }
-        ManagedObjects.assertPojoNotWrapped(pojo);
+        MmAssertionUtil.assertPojoNotWrapped(pojo);
         return _ManagedObjectWithEagerSpec.identified(spec, pojo, bookmark);
     }
 

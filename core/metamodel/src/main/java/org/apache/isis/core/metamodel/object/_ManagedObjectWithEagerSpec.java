@@ -68,8 +68,7 @@ extends _ManagedObjectWithBookmark {
 
     @Override
     public void replacePojo(final UnaryOperator<Object> replacer) {
-        pojo = replacer.apply(pojo);
-        assertSpecIsInSyncWithPojo();
+        pojo = assertCompliance(replacer.apply(pojo));
     }
 
 }

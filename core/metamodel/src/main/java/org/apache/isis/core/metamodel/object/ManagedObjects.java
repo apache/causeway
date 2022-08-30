@@ -23,7 +23,6 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
@@ -145,23 +144,6 @@ public final class ManagedObjects {
         }
         val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
         return upperBound.isAssignableFrom(objectActualType);
-    }
-
-    /**
-     * Guard against incompatible type.
-     */
-    public static @NonNull UnaryOperator<ManagedObject> assertInstanceOf(final ObjectSpecification elementType) {
-        return object -> {
-            if(isInstanceOf(object, elementType)) {
-                return object;
-            }
-            val upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
-            val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
-            throw _Exceptions.illegalArgument("Object has incompatible type %s, "
-                    + "must be an instance of %s.",
-                    objectActualType.getName(),
-                    upperBound.getName());
-        };
     }
 
     // -- IDENTIFICATION
@@ -386,23 +368,7 @@ public final class ManagedObjects {
         .collect(Can.toCan());
     }
 
-    /**
-     * eg. in order to prevent wrapping an object that is already wrapped
-     */
-    public static void assertPojoNotWrapped(final @Nullable Object pojo) {
-        // can do this check only when the pojo is not null, otherwise is always considered valid
-        if(pojo==null) {
-            return;
-        }
-
-        if(pojo instanceof ManagedObject) {
-            throw _Exceptions.illegalArgument(
-                    "Cannot adapt a pojo of type ManagedObject, " +
-                    "pojo.getClass() = %s, " +
-                    "pojo.toString() = %s",
-                    pojo.getClass(), pojo.toString());
-        }
-    }
+    
 
     // -- IMPERATIVE TEXT UTILITY
 

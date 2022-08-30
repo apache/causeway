@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmAssertionUtil;
 import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -296,7 +297,7 @@ public class ParameterNegotiationModel {
             bindableParamValueDirtyFlag = _Bindables.forBoolean(false);
 
             bindableParamValue.setValueRefiner(MmEntityUtil::refetch);
-            bindableParamValue.setValueGuard(ManagedObjects.assertInstanceOf(metaModel.getElementType()));
+            bindableParamValue.setValueGuard(MmAssertionUtil.assertInstanceOf(metaModel.getElementType()));
             bindableParamValue.addListener((event, oldValue, newValue)->{
                 if(newValue==null) {
                     // lift null to empty ...
