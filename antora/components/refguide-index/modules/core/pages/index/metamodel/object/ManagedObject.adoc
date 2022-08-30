@@ -17,7 +17,7 @@ interface ManagedObject {
   void refreshViewmodel(Supplier<Bookmark> bookmarkSupplier)     // <.>
   boolean isBookmarkMemoized()
   Supplier<ManagedObject> asSupplier()
-  void assertSpecIsInSyncWithPojo()
+  T assertCompliance(T pojo)     // <.>
   String titleString(UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder)
   String titleString()
   Optional<ObjectSpecification> getElementSpecification()     // <.>
@@ -69,6 +69,11 @@ Similar to _#getBookmark()_ , but invalidates any memoized xref:refguide:applib:
 +
 --
 If the underlying domain object is a viewmodel, refreshes any referenced entities. (Acts as a no-op otherwise.)
+--
+<.> xref:#assertCompliance_T[assertCompliance(T)]
++
+--
+Unary operator asserting that _pojo_ and _#getSpecification()_ are compliant with the policies from _#getSpecialization()_ .
 --
 <.> xref:#getElementSpecification_[getElementSpecification()]
 +
@@ -172,6 +177,11 @@ Similar to _#getBookmark()_ , but invalidates any memoized xref:refguide:applib:
 === refreshViewmodel(Supplier)
 
 If the underlying domain object is a viewmodel, refreshes any referenced entities. (Acts as a no-op otherwise.)
+
+[#assertCompliance_T]
+=== assertCompliance(T)
+
+Unary operator asserting that _pojo_ and _#getSpecification()_ are compliant with the policies from _#getSpecialization()_ .
 
 [#getElementSpecification_]
 === getElementSpecification()

@@ -4542,7 +4542,7 @@ Directory: /extensions/vw/pdfjs/wicket/integration
 org.apache.isis.extensions:isis-extensions-pdfjs-applib:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 org.webjars.bowergithub.mozilla:pdfjs-dist:jar:1.10.100 +
-org.webjars.npm:pdfjs-dist:jar:2.14.305 +
+org.webjars.npm:pdfjs-dist:jar:2.15.349 +
 ****
 
 .Document Index Entries

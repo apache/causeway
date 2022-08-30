@@ -24,12 +24,12 @@ The policy to use should be as per the default defaults policy configured in `ap
 <.> xref:#PRESERVE_CHANGES[PRESERVE_CHANGES]
 +
 --
-If an end-user has changed a parameter value, then do not overwrite the value.
+If an end-user has changed this parameter's value, then do not overwrite the value when an earlier parameter changes.
 --
 <.> xref:#UPDATE_DEPENDENT[UPDATE_DEPENDENT]
 +
 --
-If the parameter declares a default that is dependent on the value of a previous parameter, and that previous parameter changes its value, then update the dependent, _even if_ the end-user had changed the value of that dependent default.
+If this parameter declares a default that is dependent on the value of a previous parameter, and that previous parameter has been changed by the end-user, then update this dependent parameter with its computed default, _even if_ the end-user has changed the value of this parameter previously.
 --
 <.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
 +
@@ -49,12 +49,12 @@ If no defaults policy is configured, then default to the _DependentDefaultsPolic
 [#PRESERVE_CHANGES]
 === PRESERVE_CHANGES
 
-If an end-user has changed a parameter value, then do not overwrite the value.
+If an end-user has changed this parameter's value, then do not overwrite the value when an earlier parameter changes.
 
 [#UPDATE_DEPENDENT]
 === UPDATE_DEPENDENT
 
-If the parameter declares a default that is dependent on the value of a previous parameter, and that previous parameter changes its value, then update the dependent, _even if_ the end-user had changed the value of that dependent default.
+If this parameter declares a default that is dependent on the value of a previous parameter, and that previous parameter has been changed by the end-user, then update this dependent parameter with its computed default, _even if_ the end-user has changed the value of this parameter previously.
 
 [#NOT_SPECIFIED]
 === NOT_SPECIFIED
