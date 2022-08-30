@@ -27,11 +27,14 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.Accessors;
 
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 abstract class _ManagedObjectSpecified
 implements ManagedObject {
 
@@ -40,13 +43,6 @@ implements ManagedObject {
 
     @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
     private final @NonNull ObjectSpecification specification;
-
-    protected _ManagedObjectSpecified(
-            final @NonNull Specialization specialization,
-            final @NonNull ObjectSpecification specification) {
-        this.specialization = specialization;
-        this.specification = specification;
-    }
 
     @Override
     public final MetaModelContext getMetaModelContext() {
@@ -62,7 +58,10 @@ implements ManagedObject {
     public final <T> T assertCompliance(final @NonNull T pojo) {
         MmAssertionUtil.assertPojoNotWrapped(pojo);
         if(specification.isAbstract()) {
-            _Assert.assertFalse(specialization.getTypePolicy().isExactTypeRequired());
+            _Assert.assertFalse(specialization.getTypePolicy().isExactTypeRequired(),
+                    ()->String.format("Specialization %s does not allow abstract type %s",
+                            specialization,
+                            specification));
         }
         if(specialization.getTypePolicy().isExactTypeRequired()) {
             MmAssertionUtil.assertExactType(specification, pojo);

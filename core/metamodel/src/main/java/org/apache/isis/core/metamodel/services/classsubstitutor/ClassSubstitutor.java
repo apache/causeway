@@ -79,7 +79,7 @@ public interface ClassSubstitutor {
             return NEVER_INTROSPECT_CLASS;
         }
 
-        public static Substitution replaceWith(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls) {
+        public static Substitution replaceWith(final @NonNull Class<?> cls) {
             return of(Type.REPLACE_WITH_OTHER_CLASS, cls);
         }
 
@@ -116,7 +116,7 @@ public interface ClassSubstitutor {
         // -- OPERATOR
 
         @Override
-        public Class<?> apply(Class<?> cls) {
+        public Class<?> apply(final Class<?> cls) {
             if(isNeverIntrospect()) {
                 return null;
             }
@@ -132,7 +132,7 @@ public interface ClassSubstitutor {
      * @return (non-null) Substitution for given {@code cls}
      * @since 2.0
      */
-    Substitution getSubstitution(@lombok.NonNull @org.springframework.lang.NonNull Class<?> cls);
+    Substitution getSubstitution(@NonNull Class<?> cls);
 
 
 }

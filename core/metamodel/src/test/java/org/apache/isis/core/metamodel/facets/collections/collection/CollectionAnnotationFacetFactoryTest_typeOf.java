@@ -21,16 +21,12 @@ package org.apache.isis.core.metamodel.facets.collections.collection;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromGenerics;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class CollectionAnnotationFacetFactoryTest_typeOf
 extends AbstractFacetFactoryTest {
@@ -61,11 +57,6 @@ extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(Customer.class);
-            will(returnValue(mockCustomerSpec));
-        }});
-
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
@@ -87,11 +78,6 @@ extends AbstractFacetFactoryTest {
             }
         }
 
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(Customer.class);
-            will(returnValue(mockCustomerSpec));
-        }});
-
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
         facetFactory.process(ProcessMethodContext
@@ -105,9 +91,6 @@ extends AbstractFacetFactoryTest {
 
     }
 
-    @Mock
-    ObjectSpecification mockCustomerSpec;
-
     public void testTypeOfFacetIsInferredForCollectionFromOrderArray() {
         class Order {
         }
@@ -118,11 +101,6 @@ extends AbstractFacetFactoryTest {
             }
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
-
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(Customer.class);
-            will(returnValue(mockCustomerSpec));
-        }});
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));

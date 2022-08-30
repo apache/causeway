@@ -41,8 +41,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.InteractionContextFactory;
 
 import junit.framework.TestCase;
@@ -68,7 +66,6 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected TranslationService mockTranslationService;
     protected InteractionProvider mockInteractionProvider;
     protected final InteractionContext iaContext = InteractionContextFactory.testing();
-    protected SpecificationLoader mockSpecificationLoader;
     protected MethodRemover_forTesting methodRemover;
 
     protected FacetHolder facetHolder;
@@ -88,10 +85,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         mockTranslationService = context.mock(TranslationService.class);
 
-        mockSpecificationLoader = context.mock(SpecificationLoader.class);
-
         metaModelContext = MetaModelContext_forTesting.builder()
-                .specificationLoader(mockSpecificationLoader)
                 .translationService(mockTranslationService)
                 .interactionProvider(mockInteractionProvider)
                 .build();
@@ -113,18 +107,8 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
                 );
     }
 
-
-
-    protected void allowing_specificationLoader_loadSpecification_any_willReturn(final ObjectSpecification objectSpecification) {
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(with(any(Class.class)));
-            will(returnValue(objectSpecification));
-        }});
-    }
-
     @Override
     protected void tearDown() throws Exception {
-        mockSpecificationLoader = null;
         methodRemover = null;
         facetedMethod = null;
         super.tearDown();

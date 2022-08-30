@@ -25,6 +25,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -41,7 +42,10 @@ public class MmAssertionUtil {
                 || requiredSpec==null) {
             return;
         }
-        val actualSpec = requiredSpec.getSpecificationLoader().specForType(pojo.getClass()).orElse(null);
+        val actualType = requiredSpec.isPrimitive()
+                ? ClassUtil.unboxPrimitiveIfNecessary(pojo.getClass())
+                : pojo.getClass();
+        val actualSpec = requiredSpec.getSpecificationLoader().specForType(actualType).orElse(null);
         _Assert.assertEquals(requiredSpec, actualSpec, ()->
             String.format("pojo's actual ObjectSpecification %s "
                     + "does not exaclty match %s%n", actualSpec, requiredSpec));

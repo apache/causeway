@@ -412,8 +412,26 @@ extends
         return getBeanSort().isMixin();
     }
 
-    //TODO this predicate can now be answered by getBeanSort().isAbstract(), we can retire any old logic
-    boolean isAbstract();
+    /**
+     * Whether {@link #getCorrespondingClass()} is {@link Void} or void.
+     */
+    default boolean isVoid() {
+        return getCorrespondingClass()==void.class
+                || getCorrespondingClass()==Void.class;
+    }
+
+    /**
+     * Whether {@link #getCorrespondingClass()} is a primitive type,
+     * but not {@link Void} or void.
+     */
+    default boolean isPrimitive() {
+        return !isVoid()
+                && getCorrespondingClass().isPrimitive();
+    }
+
+    default boolean isAbstract() {
+        return getBeanSort().isAbstract();
+    }
 
     default boolean isEntity() {
         return getBeanSort().isEntity()

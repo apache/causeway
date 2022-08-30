@@ -434,8 +434,8 @@ public interface ManagedObject extends HasMetaModelContext {
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
-                ? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
-                //new _ManagedObjectValue(spec, pojo)
+                //? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
+                ? new _ManagedObjectValue(spec, pojo)
                 : empty(spec);
     }
     /**

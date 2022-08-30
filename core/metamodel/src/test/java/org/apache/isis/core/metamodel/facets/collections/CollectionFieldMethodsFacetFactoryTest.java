@@ -23,33 +23,21 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Rule;
-
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
-
-    private ObjectSpecification mockSpecification;
+public class CollectionFieldMethodsFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-
-        // expecting
-        allowing_specificationLoader_loadSpecification_any_willReturn(mockSpecification);
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {

@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoice
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 
 import lombok.val;
 
@@ -60,14 +59,13 @@ extends AbstractFacetFactoryTest {
         super.setUp();
         this.facetFactory =  new ActionAnnotationFacetFactory(metaModelContext);
 
-        voidSpec = new ObjectSpecificationStub(metaModelContext, void.class);
-        stringSpec = new ObjectSpecificationStub(metaModelContext, java.lang.String.class);
-        customerSpec = new ObjectSpecificationStub(metaModelContext, Customer.class);
+        val specLoader = metaModelContext.getSpecificationLoader();
+        voidSpec = specLoader.loadSpecification(void.class);
+        stringSpec = specLoader.loadSpecification(java.lang.String.class);
+        customerSpec = specLoader.loadSpecification(Customer.class);
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
-
-        allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         class Customer {
             public void someAction() {
@@ -89,8 +87,6 @@ extends AbstractFacetFactoryTest {
 
     public void testActionReturnTypeWhenVoid() {
 
-        allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
-
         class Customer {
             public void someAction() {
             }
@@ -106,8 +102,6 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testActionReturnTypeWhenNotVoid() {
-
-        allowing_specificationLoader_loadSpecification_any_willReturn(stringSpec);
 
         class Customer {
             public String someAction() {
@@ -126,26 +120,28 @@ extends AbstractFacetFactoryTest {
 
     public void testActionOnType() {
 
-        allowing_specificationLoader_loadSpecification_any_willReturn(customerSpec);
-
-        class Customer {
+        class LocalCustomer {
             public String someAction() {
                 return null;
             }
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
+
+        val customerSpec = metaModelContext.getSpecificationLoader().loadSpecification(LocalCustomer.class);
+
+        final Method actionMethod = findMethod(LocalCustomer.class, "someAction");
 
         processInvocation(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+                .forTesting(LocalCustomer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
-        assertEquals(customerSpec, actionInvocationFacetViaMethod.getDeclaringType());
+        final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod =
+                (ActionInvocationFacetForDomainEventAbstract) facet;
+        assertEquals(
+                customerSpec,
+                actionInvocationFacetViaMethod.getDeclaringType());
     }
 
     public void testActionsPickedUpFromSuperclass() {
-
-        allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         class Customer {
             public void someAction(final int x, final long y) {
@@ -168,8 +164,6 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testActionsPickedUpFromSuperclassButHelpersFromSubClass() {
-
-        allowing_specificationLoader_loadSpecification_any_willReturn(voidSpec);
 
         val facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory(metaModelContext);
         val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(metaModelContext);

@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel._testing;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +29,7 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 import org.springframework.core.env.AbstractEnvironment;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.grid.GridLoaderService;
@@ -53,7 +53,6 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
@@ -69,13 +68,11 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetFromValueFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
@@ -84,6 +81,8 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
+import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
+import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault;
@@ -95,7 +94,6 @@ import org.apache.isis.core.metamodel.services.message.MessageServiceNoop;
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
@@ -134,7 +132,12 @@ implements MetaModelContext {
     private IsisConfiguration configuration = newIsisConfiguration();
 
     @Builder.Default
-    private ClassSubstitutorRegistry classSubstitutorRegistry = new ClassSubstitutorRegistry(Collections.emptyList());
+    private ClassSubstitutorRegistry classSubstitutorRegistry =
+        new ClassSubstitutorRegistry(List.of(
+                //new ClassSubstitutorForDomainObjects(),
+                new ClassSubstitutorForCollections(),
+                new ClassSubstitutorDefault()
+                ));
 
     private ObjectManager objectManager;
 
@@ -353,6 +356,7 @@ implements MetaModelContext {
             val programmingModel = requireNonNull(getProgrammingModel());
             val isisBeanTypeClassifier = requireNonNull(getIsisBeanTypeClassifier());
             val isisBeanTypeRegistry = requireNonNull(getIsisBeanTypeRegistry());
+            val classSubstitutorRegistry = requireNonNull(getClassSubstitutorRegistry());
 
             specificationLoader = SpecificationLoaderDefault.getInstance(
                     configuration,
@@ -360,7 +364,8 @@ implements MetaModelContext {
                     serviceRegistry,
                     programmingModel,
                     isisBeanTypeClassifier,
-                    isisBeanTypeRegistry);
+                    isisBeanTypeRegistry,
+                    classSubstitutorRegistry);
 
         }
         return specificationLoader;
@@ -535,18 +540,16 @@ implements MetaModelContext {
     public <T> MetaModelContext_forTesting withValueSemantics(final ValueSemanticsAbstract<T> valueSemantics) {
         val valueClass = valueSemantics.getCorrespondingClass();
         val valueSpec = getSpecificationLoader().loadSpecification(valueClass);
-        final ValueFacet<T> valueFacet = ValueFacetUsingSemanticsProvider
-                .create(valueClass, Can.of(valueSemantics), valueSpec);
-        valueSpec.addFacet(valueFacet);
-        valueSpec.addFacet(TitleFacetFromValueFacet.create(valueFacet, valueSpec));
+        ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
+            .installValueFacet(valueClass, Can.of(valueSemantics), valueSpec);
 
-        ((ObjectSpecificationAbstract)valueSpec).invalidateCachedFacets(); // optimization stuff
-
-        _Assert.assertTrue(valueSpec.valueFacet().isPresent());
-        _Assert.assertTrue(valueSpec.lookupNonFallbackFacet(TitleFacet.class).isPresent());
-
+        if(ClassUtils.isPrimitiveWrapper(valueClass)) {
+            val primitiveType = ClassUtil.unboxPrimitiveIfNecessary(valueClass);
+            val primitiveTypeSpec = getSpecificationLoader().loadSpecification(primitiveType);
+            ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
+            .installValueFacet(valueClass, Can.of(valueSemantics), primitiveTypeSpec);
+        }
         return this;
     }
-
 
 }

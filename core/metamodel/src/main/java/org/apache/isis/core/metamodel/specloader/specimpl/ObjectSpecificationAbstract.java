@@ -47,7 +47,6 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -176,7 +175,6 @@ implements ObjectSpecification {
     private final Class<?> correspondingClass;
     private final String fullName;
     private final String shortName;
-    private final boolean isAbstract;
 
     private final LogicalType logicalType;
 
@@ -208,8 +206,6 @@ implements ObjectSpecification {
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;
         this.beanSort = beanSort;
-
-        this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
 
         this.facetProcessor = facetProcessor;
         this.postProcessor = postProcessor;
@@ -615,11 +611,6 @@ implements ObjectSpecification {
     @Override
     public boolean hasSubclasses() {
         return directSubclasses.hasSubclasses();
-    }
-
-    @Override
-    public final boolean isAbstract() {
-        return isAbstract;
     }
 
     // -- ASSOCIATIONS

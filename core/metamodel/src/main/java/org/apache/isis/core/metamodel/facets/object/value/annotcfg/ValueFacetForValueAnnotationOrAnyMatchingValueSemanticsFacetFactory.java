@@ -25,9 +25,11 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
@@ -42,7 +44,9 @@ import org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetFromValu
 import org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
+import org.apache.isis.core.metamodel.util.Facets;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -89,11 +93,9 @@ extends FacetFactoryAbstract {
         val logicalType = LogicalType.infer(valueClass);
         val identifier = Identifier.classIdentifier(logicalType);
 
-        addAllFacetsForValueSemantics(identifier, valueClass, facetHolder, valueIfAny);
-
-        // optimization
-        _Casts.castTo(ObjectSpecificationAbstract.class, facetHolder)
-        .ifPresent(ObjectSpecificationAbstract::invalidateCachedFacets);
+        _Casts.castTo(ObjectSpecification.class, facetHolder)
+        .ifPresent(valueSpec->
+            addAllFacetsForValueSemantics(identifier, valueClass, valueSpec, valueIfAny));
     }
 
     // -- HELPER
@@ -101,7 +103,7 @@ extends FacetFactoryAbstract {
     private <T> Optional<ValueFacet<T>> addAllFacetsForValueSemantics(
             final Identifier identifier,
             final Class<T> valueClass,
-            final FacetHolder holder,
+            final ObjectSpecification valueSpec,
             final Optional<Value> valueIfAny) {
 
         val semanticsProviders = getValueSemanticsResolver().selectValueSemantics(identifier, valueClass);
@@ -118,21 +120,35 @@ extends FacetFactoryAbstract {
             log.debug("found {} ValueSemanticsProvider(s) for value type {}", semanticsProviders.size(), valueClass);
         }
 
-        val valueFacet = ValueFacetUsingSemanticsProvider.create(valueClass, semanticsProviders, holder);
-
-        addFacet(valueFacet);
-        addFacet(new ImmutableFacetViaValueSemantics(holder));
-        addFacet(TitleFacetFromValueFacet.create(valueFacet, holder));
-
-        addFacetIfPresent(TypicalLengthFacetFromValueFacet.create(valueFacet, holder));
-        addFacetIfPresent(MaxLengthFacetFromValueFacet.create(valueFacet, holder));
-        addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, holder));
-
+        val valueFacet = installValueFacet(valueClass, semanticsProviders, valueSpec);
         return Optional.of(valueFacet);
     }
 
+    // JUnit support
+    public static <T> ValueFacet<T> installValueFacet(
+            final Class<T> valueClass,
+            final Can<ValueSemanticsProvider<T>> valueSemanticsProviders,
+            final ObjectSpecification valueSpec) {
 
+        final ValueFacet<T> valueFacet = ValueFacetUsingSemanticsProvider
+                .create(valueClass, valueSemanticsProviders, valueSpec);
 
+        valueSpec.addFacet(valueFacet);
+        valueSpec.addFacet(new ImmutableFacetViaValueSemantics(valueSpec));
+        valueSpec.addFacet(TitleFacetFromValueFacet.create(valueFacet, valueSpec));
+
+        FacetUtil.addFacetIfPresent(TypicalLengthFacetFromValueFacet.create(valueFacet, valueSpec));
+        FacetUtil.addFacetIfPresent(MaxLengthFacetFromValueFacet.create(valueFacet, valueSpec));
+        FacetUtil.addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, valueSpec));
+
+        ((ObjectSpecificationAbstract)valueSpec).invalidateCachedFacets(); // optimization stuff
+
+        _Assert.assertTrue(valueSpec.valueFacet().isPresent());
+        _Assert.assertTrue(valueSpec.lookupNonFallbackFacet(TitleFacet.class).isPresent());
+        _Assert.assertNotNull(Facets.valueSerializerElseFail(valueSpec, valueSpec.getCorrespondingClass()));
+
+        return valueFacet;
+    }
 
     // -- DEPENDENCIES
 

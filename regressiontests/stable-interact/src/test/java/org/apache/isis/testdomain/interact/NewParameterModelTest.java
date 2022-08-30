@@ -137,6 +137,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
         pendingArgs.setParamValues(params);
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+
         assertTrue(resultOrVeto.isSuccess());
 
         assertEquals(5, (int)resultOrVeto.getSuccessElseFail().getPojo());

@@ -20,8 +20,6 @@ package org.apache.isis.core.metamodel.facets.properties;
 
 import java.lang.reflect.Method;
 
-import org.jmock.auto.Mock;
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -55,20 +53,15 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
-
-    @Mock private ObjectSpecification mockSpecification;
+public class PropertyMethodsFacetFactoryTest
+extends AbstractFacetFactoryTest {
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-
-        // expecting
-        allowing_specificationLoader_loadSpecification_any_willReturn(mockSpecification);
     }
 
     public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {

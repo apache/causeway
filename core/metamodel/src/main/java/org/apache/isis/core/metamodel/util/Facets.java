@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar;
@@ -404,7 +405,7 @@ public final class Facets {
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
         return objectSpec.valueFacet()
-        .filter(valueFacet->requiredType.isAssignableFrom(valueFacet.getValueClass()))
+        .filter(typeGuard(requiredType))
         .flatMap(ValueFacet::selectDefaultSemantics)
         .map(_Casts::uncheckedCast);
     }
@@ -414,7 +415,7 @@ public final class Facets {
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
         return objectSpec.valueFacet()
-        .filter(valueFacet->requiredType.isAssignableFrom(valueFacet.getValueClass()))
+        .filter(typeGuard(requiredType))
         .map(valueFacet->(ValueSerializer<X>)valueFacet);
     }
 
@@ -425,6 +426,17 @@ public final class Facets {
         .orElseThrow(()->_Exceptions.illegalArgument(
                 "ObjectSpec is expected to have a ValueFacet<%s>",
                 objectSpec.getCorrespondingClass().getName()));
+    }
+
+    // -- HELPER
+
+    @SuppressWarnings("rawtypes")
+    private Predicate<? super ValueFacet> typeGuard(
+            final Class<?> requiredType) {
+        return valueFacet->
+            ClassUtils.resolvePrimitiveIfNecessary(requiredType)
+            .isAssignableFrom(
+                    ClassUtils.resolvePrimitiveIfNecessary(valueFacet.getValueClass()));
     }
 
 }
