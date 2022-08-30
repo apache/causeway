@@ -32,8 +32,9 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.util._vaa;
-import org.apache.isis.viewer.commons.model.branding.BrandingUiModel;
-import org.apache.isis.viewer.commons.model.header.HeaderUiModel;
+import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiModel;
+import org.apache.isis.viewer.commons.applib.services.header.HeaderUiModel;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuUiService;
 
 import lombok.val;
 
@@ -72,9 +73,11 @@ final class MainView_createHeader {
         val leftMenuBuilder = MenuBuilderVaa.of(commonContext, menuActionEventHandler, leftMenuBar);
         val rightMenuBuilder = MenuBuilderVaa.of(commonContext, menuActionEventHandler, rightMenuBar);
 
-        headerUiModel.getPrimary().buildMenuItems(commonContext, leftMenuBuilder);
-        headerUiModel.getSecondary().buildMenuItems(commonContext, rightMenuBuilder);
-        headerUiModel.getTertiary().buildMenuItems(commonContext, rightMenuBuilder);
+        val menuUiModelProvider = commonContext.lookupServiceElseFail(MenuUiService.class);
+
+        headerUiModel.getPrimary().buildMenuItems(menuUiModelProvider, leftMenuBuilder);
+        headerUiModel.getSecondary().buildMenuItems(menuUiModelProvider, rightMenuBuilder);
+        headerUiModel.getTertiary().buildMenuItems(menuUiModelProvider, rightMenuBuilder);
 
         return menuBarContainer;
 

@@ -37,6 +37,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberSupport;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -114,8 +115,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         setLoginTimestamp(loginTimestamp);
     }
 
-    public String title() {
-
+    @ObjectSupport public String title() {
         return String.format("%s: %s logged %s %s",
                 _Temporals.DEFAULT_LOCAL_DATETIME_FORMATTER
                     .format(getLoginTimestamp().toLocalDateTime()),
@@ -124,11 +124,11 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
                 getCausedBy() == SessionSubscriber.CausedBy.SESSION_EXPIRATION ? "(session expired)" : "");
     }
 
-    public String cssClass() {
+    @ObjectSupport public String cssClass() {
         return "sessionLogEntry-" + iconName();
     }
 
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return getLogoutTimestamp() == null
                 ? "login"
                 :getCausedBy() != SessionSubscriber.CausedBy.SESSION_EXPIRATION

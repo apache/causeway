@@ -27,12 +27,13 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.Facets;
@@ -45,6 +46,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 
 import lombok.val;
 
@@ -177,23 +180,23 @@ extends ReprRendererAbstract<ManagedObject> {
                 }
                 oidIfAny.ifPresent(oid->{
                     val oidStr = oid.stringify();
-                    getExtensions().mapPut("oid", oidStr);
+                    getExtensions().mapPutString("oid", oidStr);
                 });
             }
 
             // title
             final String title = objectAdapter.titleString();
-            representation.mapPut("title", title);
+            representation.mapPutString("title", title);
 
             // serviceId or instance Id
             if (isService) {
-                representation.mapPut("serviceId", ServiceUtil.idOfAdapter(objectAdapter));
+                representation.mapPutString("serviceId", ServiceUtil.idOfAdapter(objectAdapter));
             } else {
                 oidIfAny.ifPresent(oid->{
                     Optional.ofNullable(oid.getLogicalTypeName())
                     .ifPresent(domainType->
-                        representation.mapPut("domainType", domainType));
-                    representation.mapPut("instanceId", oid.getIdentifier());
+                        representation.mapPutString("domainType", domainType));
+                    representation.mapPutString("instanceId", oid.getIdentifier());
                 });
             }
         }
@@ -219,8 +222,8 @@ extends ReprRendererAbstract<ManagedObject> {
             addUpdatePropertiesLinkIfRequired();
 
             // extensions
-            getExtensions().mapPut("isService", isService);
-            getExtensions().mapPut("isPersistent", ManagedObjects.isIdentifiable(objectAdapter));
+            getExtensions().mapPutBoolean("isService", isService);
+            getExtensions().mapPutBoolean("isPersistent", ManagedObjects.isIdentifiable(objectAdapter));
             if(isService) {
 
                 Facets.domainServiceLayoutMenuBar(objectAdapter.getSpecification())
@@ -241,7 +244,7 @@ extends ReprRendererAbstract<ManagedObject> {
             val renderer =
                     new DomainObjectReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap())
                     .with(objectAdapter);
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);
@@ -254,7 +257,7 @@ extends ReprRendererAbstract<ManagedObject> {
         if (linkFollower.matches(link)) {
             final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
             renderer.with(objectAdapter.getSpecification());
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
         getLinks().arrayAdd(link);
     }
@@ -300,7 +303,7 @@ extends ReprRendererAbstract<ManagedObject> {
             }
         }
         if(!mode.isUpdatePropertiesLinkArgs()) {
-            representation.mapPut("members", appendTo);
+            representation.mapPutJsonRepresentation("members", appendTo);
         }
         return this;
     }
@@ -336,7 +339,7 @@ extends ReprRendererAbstract<ManagedObject> {
             final JsonRepresentation propertyRepr = resourceContext.objectPropertyValuesOnly()
                     ? propertyValueRepresentation.getRepresentation("value")
                             : propertyValueRepresentation;
-                    members.mapPut(assoc.getId(), propertyRepr);
+                    members.mapPutJsonRepresentation(assoc.getId(), propertyRepr);
         }
     }
 
@@ -369,7 +372,7 @@ extends ReprRendererAbstract<ManagedObject> {
                 renderer.asEventSerialization();
             }
 
-            members.mapPut(assoc.getId(), renderer.render());
+            members.mapPutJsonRepresentation(assoc.getId(), renderer.render());
         }
     }
 
@@ -392,7 +395,7 @@ extends ReprRendererAbstract<ManagedObject> {
             val where = resourceContext.getWhere();
 
             renderer.with(ManagedAction.of(objectAdapter, action, where)).usingLinkTo(linkToBuilder);
-            members.mapPut(action.getId(), renderer.render());
+            members.mapPutJsonRepresentation(action.getId(), renderer.render());
         });
 
     }
@@ -453,13 +456,14 @@ extends ReprRendererAbstract<ManagedObject> {
 
     public static Object valueOrRef(
             final IResourceContext context,
-            final JsonValueEncoder jsonValueEncoder,
+            final ObjectFeature objectFeature,
+            final JsonValueEncoderService jsonValueEncoder,
             final ManagedObject domainObject) {
 
         val spec = domainObject.getSpecification();
         if(spec.isValue()) {
-            String format = null; // TODO
-            return jsonValueEncoder.asObject(domainObject, format);
+            val context2 = JsonValueConverter.Context.of(objectFeature, context.suppressMemberExtensions());
+            return jsonValueEncoder.asObject(domainObject, context2);
         }
 
         return DomainObjectReprRenderer.newLinkToBuilder(

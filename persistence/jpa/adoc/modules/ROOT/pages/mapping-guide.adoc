@@ -29,7 +29,97 @@ This section shows how to map each (and can be adapted for your own custom types
 
 === Mapping AsciiDoc
 
-TODO: not really sufficient to use `@Lob`; should provide a custom converter.
+The xref:refguide:valuetypes:index/asciidoc/applib/value/AsciiDoc.adoc[] value type is used for documentation written using the link:https://asciidoctor.org/[AsciiDoc] syntax:
+
+* In the domain entity, map `AsciiDoc` type using `@Lob`:
++
+[source,java]
+.MyEntity.java
+----
+public class MyEntity ... {
+
+    @Column(nullable = false) @Lob @Basic(fetch=FetchType.LAZY)
+    @Property
+    @Getter @Setter
+    private AsciiDoc documentation;
+
+}
+----
+
+* in the webapp module, register the JPA specific converter by:
+
+** adding a dependency to this module:
++
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.isis.valuetypes</groupId>
+    <artifactId>isis-valuetypes-asciidoc-persistence-jpa</artifactId>
+</dependency>
+----
+
+** and adding reference the corresponding module in the `AppManifest`:
++
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleValAsciidocPersistenceJpa.java
+        ...
+})
+public class AppManifest {
+}
+----
+
+=== Mapping Markdown
+
+The xref:refguide:valuetypes:index/markdown/applib/value/Markdown.adoc[] value type is used for documentation written using markdown:
+
+* In the domain entity, map `Markdown` type using `@Lob`:
++
+[source,java]
+.MyEntity.java
+----
+public class MyEntity ... {
+
+    @Column(nullable = false) @Lob @Basic(fetch=FetchType.LAZY)
+    @Property
+    @Getter @Setter
+    private Markdown documentation;
+
+}
+----
+
+* in the webapp module, register the JPA specific converter by:
+
+** adding a dependency to this module:
++
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.isis.valuetypes</groupId>
+    <artifactId>isis-valuetypes-markdown-persistence-jpa</artifactId>
+</dependency>
+----
+
+** and adding reference the corresponding module in the `AppManifest`:
++
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleValMarkdownPersistenceJpa.java
+        ...
+})
+public class AppManifest {
+}
+----
 
 
 === Mapping Blobs and Clobs
@@ -49,7 +139,7 @@ The framework provides an `@Embeddable` classes for each of `Blob` and `Clob`, e
 
 To map a xref:refguide:applib:index/value/Blob.adoc[Blob], use the xref:refguide:persistence:index/jpa/applib/types/BlobJpaEmbeddable.adoc[BlobJpaEmbeddable] class:
 
-[source]
+[source,java]
 .MyEntity.java
 ----
 public class MyEntity ... {

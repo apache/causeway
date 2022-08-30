@@ -34,12 +34,6 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import javax.activation.DataSource;
 import javax.inject.Named;
 import javax.validation.Constraint;
@@ -55,6 +49,7 @@ import org.springframework.validation.annotation.Validated;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DependentDefaultsPolicy;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -70,12 +65,19 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.EntityChangePublishingPolicy;
 import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyPublishingPolicy;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.web.DialogMode;
+
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import lombok.Data;
 import lombok.Getter;
@@ -156,7 +158,7 @@ public class IsisConfiguration {
              *         docker run -p 9090:8080 \
              *             -e KEYCLOAK_USER=admin \
              *             -e KEYCLOAK_PASSWORD=admin \
-             *             quay.io/keycloak/keycloak:14.0.0
+             *             quay.io/keycloak/keycloak:19.0.1
              *     </pre>,
              *
              *     then the URL would be "http://localhost:9090/auth".
@@ -170,10 +172,65 @@ public class IsisConfiguration {
              * true.
              */
             private String loginSuccessUrl = "/wicket";
+
+            /**
+             * Whether to (attempt to) extract realm roles and copy into the <code>DefaultOidcUser</code>.
+             *
+             * <p>
+             *     By default, realm roles are obtained from the token claims using the "User Realm Role" mapping type, into a token claim name "realm_access.roles"
+             * </p>
+             *
+             * <p>
+             *     This has been made a configuration option because some versions of Keycloak seemingly do not correctly extract these roles, see for example
+             *     <a href="https://keycloak.discourse.group/t/resource-access-claim-missing-from-userinfo-until-i-change-the-name/1238/3">this discussion</a> and
+             *     <a href="https://issues.redhat.com/browse/KEYCLOAK-9874">KEYCLOAK-9874</a>.
+             * </p>
+             */
+            private boolean extractRealmRoles = true;
+
+            /**
+             * If {@link #isExtractRealmRoles() realm roles are to be extracted}, this allows the resultant role to be optionally prefixed.
+             */
+            private String realmRolePrefix = null;
+
+            /**
+             * Whether to (attempt to) extract client roles and copy into the <code>DefaultOidcUser</code>.
+             *
+             * <p>
+             *     By default, client roles are extracted using the "User Client Role" mapping type, into a token claim name "resource_access.${client_id}.roles"
+             * </p>
+             *
+             * <p>
+             *     This has been made a configuration option because some versions of Keycloak seemingly do not correctly extract these roles, see for example
+             *     <a href="https://keycloak.discourse.group/t/resource-access-claim-missing-from-userinfo-until-i-change-the-name/1238/3">this discussion</a> and
+             *     <a href="https://issues.redhat.com/browse/KEYCLOAK-9874">KEYCLOAK-9874</a>.
+             * </p>
+             */
+            private boolean extractClientRoles = true;
+            /**
+             * If {@link #isExtractClientRoles()}  client roles are to be extracted}, this allows the resultant role to be optionally prefixed.
+             */
+            private String clientRolePrefix = null;
+
+            /**
+             * Whether to (attempt to) extract any available roles and into the <code>DefaultOidcUser</code>.
+             *
+             * <p>
+             *     This is to support any custom mapping type which maps into a token claim name called simply "roles"
+             * </p>
+             *
+             * <p>
+             *     This has been made a configuration option so that the workaround described in
+             *     <a href="https://keycloak.discourse.group/t/resource-access-claim-missing-from-userinfo-until-i-change-the-name/1238/3">this discussion</a> and
+             *     <a href="https://issues.redhat.com/browse/KEYCLOAK-9874">KEYCLOAK-9874</a> can be implemented.
+             * </p>
+             */
+            private boolean extractRoles = false;
+            /**
+             * If {@link #isExtractRoles()}  roles are to be extracted}, this allows the resultant role to be optionally prefixed.
+             */
+            private String rolePrefix = null;
         }
-
-
-
     }
 
     private final Applib applib = new Applib();
@@ -695,12 +752,11 @@ public class IsisConfiguration {
                 private ActionPublishingPolicy commandPublishing = ActionPublishingPolicy.NONE;
 
                 /**
-                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether action invocations should be sent through to the
                  * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Execution) publish}
+                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#onExecution(Execution) onExecution}
                  *     method is called only once per transaction, with
                  *     {@link Execution} collecting details of
                  *     the identity of the target object, the action invoked, the action arguments and the returned
@@ -708,7 +764,7 @@ public class IsisConfiguration {
                  * </p>
                  *
                  * <p>
-                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#executionDispatch()}.
+                 *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#executionPublishing()  Action#executionPublishing()}.
                  * </p>
                  */
                 private ActionPublishingPolicy executionPublishing = ActionPublishingPolicy.NONE;
@@ -752,8 +808,6 @@ public class IsisConfiguration {
                      */
                     private boolean postForDefault = true;
                 }
-
-
 
 
             }
@@ -1213,6 +1267,24 @@ public class IsisConfiguration {
                      */
                     private boolean postForDefault =true;
                 }
+            }
+
+            private final Parameter parameter = new Parameter();
+            @Data
+            public static class Parameter {
+
+                /**
+                 * Whether dependent parameters should be reset to their default if an earlier parameter changes its
+                 * value, or whether instead a parameter value, once changed by the end-user, should never be
+                 * overwritten even if the end-user changes an earlier parameter value.
+                 *
+                 * <p>
+                 *     This setting can be overridden on a case-by-case basis using
+                 *     {@link org.apache.isis.applib.annotation.Parameter#dependentDefaultsPolicy() Parameter#dependentDefaultsPolicy()}.
+                 * </p>
+                 */
+                private ParameterPolicies.DependentDefaultsPolicy dependentDefaultsPolicy = ParameterPolicies.DependentDefaultsPolicy.UPDATE_DEPENDENT;
+
             }
 
             private final ParameterLayout parameterLayout = new ParameterLayout();
@@ -1729,6 +1801,32 @@ public class IsisConfiguration {
              */
             private String createSchemaSqlTemplate = "CREATE SCHEMA IF NOT EXISTS %S";
 
+        }
+    }
+
+    private final Prototyping prototyping = new Prototyping();
+    @Data
+    public static class Prototyping {
+
+        private final H2Console h2Console = new H2Console();
+        @Data
+        public static class H2Console {
+            /**
+             * Whether to allow remote access to the H2 Web-Console,
+             * which is a potential security risk when no web-admin password is set.
+             * <p>
+             * Corresponds to Spring Boot 'spring.h2.console.settings.web-allow-others'.
+             */
+            private boolean webAllowRemoteAccess = false;
+
+            /**
+             * Whether to generate a random password for access to the H2 Web-Console advanced features.
+             * <p>
+             * If a password is generated, it is logged to the logging subsystem (Log4j2).
+             * <p>
+             * Recommended (<code>true</code>) when {@link #isWebAllowRemoteAccess()} is also <code>true</code>.
+             */
+            private boolean generateRandomWebAdminPassword = true;
         }
     }
 
@@ -3023,7 +3121,6 @@ public class IsisConfiguration {
                 public enum AutoCreatePolicy {
                     AUTO_CREATE_AS_LOCKED,
                     AUTO_CREATE_AS_UNLOCKED,
-                    // NO_AUTO_CREATE
                 }
 
                 /**
@@ -3033,9 +3130,25 @@ public class IsisConfiguration {
                  * BE AWARE THAT if any users are auto-created as unlocked, then the set of roles that
                  * they are given should be highly restricted !!!
                  * </p>
+                 *
+                 * <p>
+                 *     NOTE also that this configuration policy is ignored if running secman with Spring OAuth2
+                 *     or Keycloak as the authenticator; users are always auto-created.
+                 * </p>
                  */
                 @Getter @Setter
                 private AutoCreatePolicy autoCreatePolicy = AutoCreatePolicy.AUTO_CREATE_AS_LOCKED;
+
+                /**
+                 * The set of roles that users that have been automatically created are granted automatically.
+                 *
+                 * <p>
+                 *     Typically the regular user role (as per <code>isis.secman.seed.regular-user.role-name</code>,
+                 *     default value of <code>isis-ext-secman-user</code>) will be one of the roles listed here, to
+                 *     provide the ability for the end-user to logout, among other things (!).
+                 * </p>
+                 */
+                private List<String> initialRoleNames = new ArrayList<>();
 
             }
 

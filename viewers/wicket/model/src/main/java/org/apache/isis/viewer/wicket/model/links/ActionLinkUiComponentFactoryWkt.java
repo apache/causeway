@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 
 import lombok.NonNull;

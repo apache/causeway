@@ -33,10 +33,10 @@ import org.apache.isis.core.config.viewer.web.WebAppContextPath;
 import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;
@@ -104,12 +104,12 @@ public class IsisAppCommonContext implements HasMetaModelContext {
         return getMetaModelContext().getServiceInjector().injectServicesInto(pojo);
     }
 
-    public ObjectMemento mementoFor(final ManagedObject adapter) {
-        return getMementoService().mementoForObject(adapter);
+    public ObjectMemento mementoForSingle(final ManagedObject adapter) {
+        return getMementoService().mementoForSingle(adapter);
     }
 
-    public ObjectMemento mementoForParameter(@NonNull final ManagedObject adapter) {
-        return getMementoService().mementoForParameter(adapter);
+    public ObjectMemento mementoForAnyCardinality(@NonNull final ManagedObject adapter) {
+        return getMementoService().mementoForAnyCardinality(adapter);
     }
 
     public ObjectMemento mementoForBookmark(final Bookmark bookmark) {

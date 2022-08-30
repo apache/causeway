@@ -365,6 +365,11 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
+    public List<T> toArrayList() {
+        return _Lists.newArrayList(elements);
+    }
+
+    @Override
     public Set<T> toSet() {
         val set = _Sets.<T>newHashSet(); // serializable
         elements.forEach(set::add);

@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -141,7 +141,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
                 new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, jsonRepresentation)
                 .with(ManagedCollection.of(objectAdapter, objectMember, where))
                 .asFollowed();
-        detailsLink.mapPut("value", objectCollectionReprRenderer.render());
+        detailsLink.mapPutJsonRepresentation("value", objectCollectionReprRenderer.render());
     }
 
     // ///////////////////////////////////////////////////
@@ -171,7 +171,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
     @Override
     protected void putExtensionsIsisProprietary() {
         final CollectionSemantics semantics = CollectionSemantics.determine(objectMember);
-        getExtensions().mapPut("collectionSemantics", semantics.name().toLowerCase());
+        getExtensions().mapPutString("collectionSemantics", semantics.name().toLowerCase());
     }
 
 

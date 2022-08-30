@@ -9,19 +9,19 @@
 class IsisModuleExtCommandLogPersistenceJdo {
   public static final String NAMESPACE;
   public static final String SCHEMA;
-  FixtureScript getTeardownFixtureWillDelete()     // <.>
+  FixtureScript teardownFixture()     // <.>
 }
 ----
 
-<.> xref:#getTeardownFixtureWillDelete_[getTeardownFixtureWillDelete()]
+<.> xref:#teardownFixture_[teardownFixture()]
 +
 --
-For tests that need to delete the command table first. Should be run in the @BeforeEach of the test.
+Note that this is _NOT_ an implementation of the _ModuleWithFixtures#getTeardownFixture()_ API; but is provided to allow manual teardown if required.
 --
 
 == Members
 
-[#getTeardownFixtureWillDelete_]
-=== getTeardownFixtureWillDelete()
+[#teardownFixture_]
+=== teardownFixture()
 
-For tests that need to delete the command table first. Should be run in the @BeforeEach of the test.
+Note that this is _NOT_ an implementation of the _ModuleWithFixtures#getTeardownFixture()_ API; but is provided to allow manual teardown if required.

@@ -102,12 +102,12 @@ extends ReprRendererAbstract<ParentSpecAndFeature<T>> {
         .getStaticOrCanonicalFriendlyName()
         .accept(
                 staticForm->{
-                    getExtensions().mapPut("friendlyName", staticForm);
-                    getExtensions().mapPut("friendlyNameForm", "static");
+                    getExtensions().mapPutString("friendlyName", staticForm);
+                    getExtensions().mapPutString("friendlyNameForm", "static");
                 },
                 canonicalForm->{
-                    getExtensions().mapPut("friendlyName", canonicalForm);
-                    getExtensions().mapPut("friendlyNameForm", "canonical");
+                    getExtensions().mapPutString("friendlyName", canonicalForm);
+                    getExtensions().mapPutString("friendlyNameForm", "canonical");
                 });
     }
 
@@ -118,13 +118,13 @@ extends ReprRendererAbstract<ParentSpecAndFeature<T>> {
             description.accept(
                     staticForm->{
                         if(staticForm.isEmpty()) return;
-                        getExtensions().mapPut("description", staticForm);
-                        getExtensions().mapPut("descriptionForm", "static");
+                        getExtensions().mapPutString("description", staticForm);
+                        getExtensions().mapPutString("descriptionForm", "static");
                     },
                     canonicalForm->{
                         if(canonicalForm.isEmpty()) return;
-                        getExtensions().mapPut("description", canonicalForm);
-                        getExtensions().mapPut("descriptionForm", "canonical");
+                        getExtensions().mapPutString("description", canonicalForm);
+                        getExtensions().mapPutString("descriptionForm", "canonical");
                     });
         });
 

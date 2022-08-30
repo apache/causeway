@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.HasImperativeAspect;
 import org.apache.isis.core.metamodel.facets.ImperativeAspect;
 import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;

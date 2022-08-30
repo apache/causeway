@@ -146,8 +146,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @ObjectSupport public String title() {
         return getFullyQualifiedName();
     }
-    @ObjectSupport
-    public String iconName() {
+    @ObjectSupport public String iconName() {
         return "applicationFeature";
     }
 

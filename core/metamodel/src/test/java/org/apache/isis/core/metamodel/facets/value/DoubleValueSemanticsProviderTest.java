@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.DoubleValueSemantics;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class DoubleValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Double> {
@@ -71,6 +71,16 @@ extends ValueSemanticsProviderAbstractTestCase<Double> {
     public void testParse2() throws Exception {
         final Object newValue = value.parseTextRepresentation(null, "1,20.0");
         assertEquals(120, ((Double) newValue).doubleValue(), 0.0);
+    }
+
+    @Override
+    protected Double getSample() {
+        return doubleObj;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final Double a, final String json) {
+        assertEquals("32.5", json);
     }
 
 }

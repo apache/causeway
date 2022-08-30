@@ -39,8 +39,8 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.IsisModuleViewerRestfulObjectsApplib;
@@ -101,7 +101,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         final JsonRepresentation $$roRepresentation;
         if(!suppressRO) {
             $$roRepresentation = JsonRepresentation.newMap();
-            rootRepresentation.mapPut("$$ro", $$roRepresentation);
+            rootRepresentation.mapPutJsonRepresentation("$$ro", $$roRepresentation);
         } else {
             $$roRepresentation = null;
         }
@@ -152,7 +152,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
             rootRepresentation.arrayAdd($$roContainerRepresentation);
 
             $$roRepresentation = JsonRepresentation.newMap();
-            $$roContainerRepresentation.mapPut("$$ro", $$roRepresentation);
+            $$roContainerRepresentation.mapPutJsonRepresentation("$$ro", $$roRepresentation);
         } else {
             $$roRepresentation = null;
         }
@@ -244,7 +244,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
             if(!suppressRO) {
                 JsonRepresentation $$roContainerRepresentation = JsonRepresentation.newMap();
                 rootRepresentation.arrayAdd($$roContainerRepresentation);
-                $$roContainerRepresentation.mapPut("$$ro", $$roRepresentation);
+                $$roContainerRepresentation.mapPutJsonRepresentation("$$ro", $$roRepresentation);
             }
 
             headerContentType = RepresentationTypeSimplifiedV2.LIST;
@@ -338,7 +338,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         .forEach(collection->{
 
             val collectionRepresentation = JsonRepresentation.newArray();
-            rootRepresentation.mapPut(collection.getId(), collectionRepresentation);
+            rootRepresentation.mapPutJsonRepresentation(collection.getId(), collectionRepresentation);
 
             val interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
             val visibilityConsent = collection.isVisible(owner, interactionInitiatedBy, where);
@@ -380,18 +380,18 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
 
             if(!suppression.contains(SuppressionType.HREF)) {
                 final String upHref = propertyValueRepresentation.getString("links[rel=up].href");
-                rootRepresentation.mapPut("$$href", upHref);
+                rootRepresentation.mapPutString("$$href", upHref);
             }
             if(!suppression.contains(SuppressionType.TITLE)) {
                 final String upTitle = propertyValueRepresentation.getString("links[rel=up].title");
-                rootRepresentation.mapPut("$$title", upTitle);
+                rootRepresentation.mapPutString("$$title", upTitle);
             }
             if(!suppression.contains(SuppressionType.DOMAIN_TYPE)) {
                 final String upHref = propertyValueRepresentation.getString("links[rel=up].href");
                 final String[] parts = upHref.split("[/]");
                 if(parts.length > 2) {
                     final String upObjectType = parts[parts.length - 2];
-                    rootRepresentation.mapPut("$$domainType", upObjectType);
+                    rootRepresentation.mapPutString("$$domainType", upObjectType);
                 }
             }
             if(!suppression.contains(SuppressionType.ID)) {
@@ -399,12 +399,12 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                 final String[] parts = upHref.split("[/]");
                 if(parts.length > 1) {
                     final String upInstanceId = parts[parts.length-1];
-                    rootRepresentation.mapPut("$$instanceId", upInstanceId);
+                    rootRepresentation.mapPutString("$$instanceId", upInstanceId);
                 }
             }
 
             final JsonRepresentation value = propertyValueRepresentation.getRepresentation("value");
-            rootRepresentation.mapPut(property.getId(), value);
+            rootRepresentation.mapPutJsonRepresentation(property.getId(), value);
         });
 
     }

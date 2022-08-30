@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.commons.model;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.object.ObjectUiModel;
 
 public interface HasParentUiModel<T extends ObjectUiModel> {

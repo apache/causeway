@@ -20,28 +20,37 @@ package org.apache.isis.core.runtimeservices.xmlsnapshot;
 
 import java.util.List;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.snapshot.XmlSchema;
 import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Builds an {@link XmlSnapshot} using a fluent use through a builder:
+ * Builds a {@link XmlSnapshot} fluently with a builder:
  *
  * <pre>
- * XmlSnapshot snapshot = XmlSnapshotBuilder.create(customer).includePath(&quot;placeOfBirth&quot;).includePath(&quot;orders/product&quot;).build();
+ * XmlSnapshot snapshot = XmlSnapshotBuilder
+ *     .create(customer)
+ *     .includePath(&quot;placeOfBirth&quot;)
+ *     .includePath(&quot;orders/product&quot;)
+ *     .build();
  * Element customerAsXml = snapshot.toXml();
  * </pre>
  */
 @RequiredArgsConstructor
 public class XmlSnapshotBuilder {
 
-    private final SpecificationLoader specificationLoader;
-    private final Object domainObject;
-    private XmlSchema schema;
+    private final @NonNull SpecificationLoader specificationLoader;
+
+    /** required, must also be a scalar */
+    private final @NonNull Object domainObject;
+    private @Nullable XmlSchema schema;
 
     static class PathAndAnnotation {
         public PathAndAnnotation(final String path, final String annotation) {
@@ -70,8 +79,10 @@ public class XmlSnapshotBuilder {
     }
 
     public XmlSnapshot build() {
-        final ManagedObject adapter = ManagedObject.lazy(specificationLoader, domainObject);
-        final XmlSnapshot snapshot = (schema != null) ? new XmlSnapshot(adapter, schema) : new XmlSnapshot(adapter);
+        final ManagedObject adapter = ManagedObject.wrapScalar(specificationLoader, domainObject);
+        final XmlSnapshot snapshot = (schema != null)
+                ? new XmlSnapshot(adapter, schema)
+                : new XmlSnapshot(adapter);
         for (final XmlSnapshotBuilder.PathAndAnnotation paa : paths) {
             if (paa.annotation != null) {
                 snapshot.include(paa.path, paa.annotation);

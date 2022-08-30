@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacetA
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
-public class SortedByFacetForCollectionLayoutAnnotation extends SortedByFacetAbstract {
+public class SortedByFacetForCollectionLayoutAnnotation
+extends SortedByFacetAbstract {
 
     public static Optional<SortedByFacetForCollectionLayoutAnnotation> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,

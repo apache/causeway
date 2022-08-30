@@ -23,13 +23,15 @@ import java.util.Comparator;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
-public abstract class SortedByFacetAbstract extends SingleValueFacetAbstract<Class<? extends Comparator<?>>> implements SortedByFacet {
+public abstract class SortedByFacetAbstract
+extends SingleValueFacetAbstract<Class<? extends Comparator<?>>>
+implements SortedByFacet {
 
     public static final Class<SortedByFacet> type() {
         return SortedByFacet.class;
     }
 
-    public SortedByFacetAbstract(Class<? extends Comparator<?>> value, final FacetHolder holder) {
+    public SortedByFacetAbstract(final Class<? extends Comparator<?>> value, final FacetHolder holder) {
         super(type(), value, holder);
     }
 

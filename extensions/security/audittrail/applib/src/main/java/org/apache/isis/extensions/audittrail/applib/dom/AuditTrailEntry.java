@@ -30,6 +30,7 @@ import javax.inject.Named;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
@@ -108,7 +109,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         setInteractionId(change.getInteractionId());
     }
 
-    public String title() {
+    @ObjectSupport public String title() {
         val buf = new TitleBuffer();
         buf.append(_Temporals.DEFAULT_LOCAL_DATETIME_FORMATTER
                 .format(getTimestamp().toLocalDateTime()));
@@ -272,7 +273,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            hidden = Where.ALL_TABLES
+            hidden = Where.NOWHERE
     )
     @DomainChangeRecord.PreValue
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -295,7 +296,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
             editing = Editing.DISABLED
     )
     @PropertyLayout(
-            hidden = Where.ALL_TABLES
+            hidden = Where.NOWHERE
     )
     @DomainChangeRecord.PostValue
     @java.lang.annotation.Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })

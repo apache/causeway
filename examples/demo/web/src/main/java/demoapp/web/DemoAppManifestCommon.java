@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.extensions.cors.impl.IsisModuleExtCors;
 import org.apache.isis.extensions.secman.encryption.spring.IsisModuleExtSecmanEncryptionSpring;
 import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
-import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.IsisModuleExtExcelDownloadUi;
+import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.IsisModuleExtExcelDownloadWicketUi;
 import org.apache.isis.testing.h2console.ui.IsisModuleTestingH2ConsoleUi;
 import org.apache.isis.viewer.restfulobjects.jaxrsresteasy4.IsisModuleViewerRestfulObjectsJaxrsResteasy4;
 import org.apache.isis.viewer.restfulobjects.viewer.IsisModuleViewerRestfulObjectsViewer;
@@ -57,7 +57,7 @@ import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
     IsisModuleExtCors.class,
 
     IsisModuleTestingH2ConsoleUi.class, // enables the H2 console menu item
-    IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
+    IsisModuleExtExcelDownloadWicketUi.class, // allows for collection download as excel
 
     // services
     PrototypeActionsVisibilityAdvisor.class,

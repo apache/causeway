@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.AccessLevel;
@@ -238,6 +239,11 @@ final class Can_Empty<T> implements Can<T> {
     @Override
     public List<T> toList() {
         return Collections.emptyList(); // serializable and immutable
+    }
+
+    @Override
+    public List<T> toArrayList() {
+        return _Lists.newArrayList();
     }
 
     @Override

@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
 

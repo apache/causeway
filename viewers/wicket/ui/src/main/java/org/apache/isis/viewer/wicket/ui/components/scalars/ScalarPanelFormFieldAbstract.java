@@ -27,6 +27,9 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
@@ -36,6 +39,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
+import org.apache.isis.viewer.wicket.ui.util.XrayWkt;
 
 import lombok.val;
 
@@ -135,13 +139,35 @@ extends ScalarPanelAbstract2 {
 
         val renderScenario = getRenderScenario();
 
-        //XXX debug
-        Wkt.labelAdd(fieldFrame, "debugLabel", String.format("%s", renderScenario.name()));
+        XrayWkt.ifEnabledDo(()->{
+            // debug (wicket viewer x-ray)
+            val xrayDetails = _Maps.<String, String>newLinkedHashMap();
+            xrayDetails.put("panel", this.getClass().getSimpleName());
+            xrayDetails.put("renderScenario", renderScenario.name());
+            xrayDetails.put("inputFragmentType", getInputFragmentType().map(x->x.name()).orElse("(none)"));
+            xrayDetails.put("formComponent", _Strings.nonEmpty(formComponent.getClass().getSimpleName())
+                    .orElseGet(()->formComponent.getClass().getName()));
+            xrayDetails.put("formComponent.id", formComponent.getId());
+            xrayDetails.put("formComponent.validators (count)", ""+_NullSafe.size(formComponent.getValidators()));
+            xrayDetails.put("scalarModel.disableReasonIfAny", ""+scalarModel().disableReasonIfAny());
+            xrayDetails.put("scalarModel.whetherHidden", ""+scalarModel().whetherHidden());
+            xrayDetails.put("scalarModel.identifier", ""+scalarModel().getIdentifier());
+            xrayDetails.put("scalarModel.choices (count)", ""+scalarModel().getChoices().size());
+            xrayDetails.put("scalarModel.metaModel.featureIdentifier", ""+scalarModel().getMetaModel().getFeatureIdentifier());
+            xrayDetails.put("scalarModel.scalarTypeSpec", ""+scalarModel().getScalarTypeSpec().toString());
+            xrayDetails.put("scalarModel.proposedValue", ""+scalarModel().proposedValue().getValue().getValue());
+//                    getSpecialization()
+//                    .fold(
+//                            param->""+param.getValue(),
+//                            prop->""+prop.getPendingPropertyModel().getValueAsTitle().getValue()));
+            Wkt.markupAdd(fieldFrame, ID_XRAY_DETAILS, XrayWkt.formatAsListGroup(xrayDetails));
+
+        });
 
         if(renderScenario.isReadonly()) {
             fieldFrame.add(FieldFrame.SCALAR_VALUE_CONTAINER
                     .createComponent(this::createComponentForOutput));
-        } else if(renderScenario.isCanEditAny()) {
+        } else if(renderScenario.isViewingAndCanEditAny()) {
 
             // this results in a link created;
             // link stuff is handled later in ScalarPanelAbstract2.setupInlinePrompt
@@ -153,6 +179,9 @@ extends ScalarPanelAbstract2 {
         }
 
         onFormGroupCreated(formGroup);
+
+        formComponent.setVisible(true);
+        formComponent.setVisibilityAllowed(true);
 
         return formGroup;
     }
@@ -215,6 +244,15 @@ extends ScalarPanelAbstract2 {
         formComponentEnable(true);
         clearTooltip();
         target.ifPresent(this::formComponentAddTo);
+    }
+
+    // -- XRAY
+
+    @Override
+    public String getVariation() {
+        return XrayWkt.isEnabled()
+                ? "xray"
+                : super.getVariation();
     }
 
     // -- HELPER

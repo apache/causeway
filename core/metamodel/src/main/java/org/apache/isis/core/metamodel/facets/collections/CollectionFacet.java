@@ -46,10 +46,10 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.PackedManagedObject;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 
 import lombok.NonNull;
 import lombok.val;
@@ -131,7 +131,7 @@ public interface CollectionFacet extends Facet {
     public static Object[] toArrayOfPojos(@Nullable final ManagedObject container) {
         val elementAdapters = streamAdapters(container)
                 .collect(Collectors.toList());
-        return UnwrapUtil.multipleAsArray(elementAdapters);
+        return MmUnwrapUtil.multipleAsArray(elementAdapters);
     }
 
     @UtilityClass

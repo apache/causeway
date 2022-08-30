@@ -2,3 +2,5 @@
 ** xref:security:secman:about.adoc[SecMan]
 *** xref:security:secman:setting-up.adoc[Setting up]
 *** xref:security:secman:setting-up-with-shiro.adoc[Setting up with Shiro]
+*** xref:security:secman:setting-up-with-spring-oauth2.adoc[Setting up with Spring OAuth2]
+*** xref:security:secman:setting-up-with-keycloak.adoc[Setting up with Keycloak]

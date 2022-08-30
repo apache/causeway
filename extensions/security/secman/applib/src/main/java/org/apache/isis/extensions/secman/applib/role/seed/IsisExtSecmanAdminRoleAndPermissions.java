@@ -29,6 +29,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman;
 import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman.Seed.Admin;
 import org.apache.isis.core.config.IsisConfiguration.Extensions.Secman.Seed.Admin.NamespacePermissions;
+import org.apache.isis.extensions.secman.applib.IsisModuleExtSecmanApplib;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
@@ -60,8 +61,9 @@ public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermiss
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                Can.ofCollection(adminInitialPackagePermissions)
-                        .map(ApplicationFeatureId::newNamespace));
+                Can.of(IsisModuleExtSecmanApplib.NAMESPACE).addAll(Can.ofCollection(adminInitialPackagePermissions))
+                    .map(ApplicationFeatureId::newNamespace)
+        );
     }
 
     // -- HELPER

@@ -36,10 +36,9 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
@@ -275,7 +274,7 @@ implements SchemaValueMarshaller {
             final @NonNull Cardinality cardinalityConstraint) {
 
         return cardinalityConstraint.isMultiple()
-                ? PackedManagedObject.pack(
+                ? ManagedObject.packed(
                         valueTypeHelper.getElementType(),
                         recoverCollectionOfValues(valueTypeHelper, valueDto.getCollection()))
                 : recoverScalarValue(valueTypeHelper, valueDto);
@@ -287,7 +286,7 @@ implements SchemaValueMarshaller {
             final @NonNull Cardinality cardinalityConstraint) {
 
         return cardinalityConstraint.isMultiple()
-                ? PackedManagedObject.pack(
+                ? ManagedObject.packed(
                         feature.getElementType(),
                         recoverCollectionOfReferences(valueDto.getCollection()))
                 : recoverReferenceFrom(valueDto.getReference());
@@ -345,7 +344,7 @@ implements SchemaValueMarshaller {
                 || (valueWithTypeDto.isNull()!=null
                     && valueWithTypeDto.isNull())) {
             return cardinalityConstraint.isMultiple()
-                    ? PackedManagedObject.pack(feature.getElementType(), Can.empty())
+                    ? ManagedObject.packed(feature.getElementType(), Can.empty())
                     : ManagedObject.empty(feature.getElementType());
         }
 

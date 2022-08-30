@@ -47,7 +47,7 @@ extends ValueSemanticsAbstract<UUID>
 implements
     Parser<UUID>,
     Renderer<UUID>,
-    IdStringifier<UUID> {
+    IdStringifier.EntityAgnostic<UUID> {
 
     @Override
     public Class<UUID> getCorrespondingClass() {

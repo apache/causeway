@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar;
@@ -37,6 +38,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -59,16 +61,19 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.isis.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.val;
@@ -167,6 +172,13 @@ public final class Facets {
         .map(DefaultViewFacet::value);
     }
 
+    public static ParameterPolicies.DependentDefaultsPolicy dependentDefaultsPolicy(
+            final ObjectActionParameter parameter) {
+        return parameter.lookupFacet(ParameterDependentDefaultsFacet.class)
+                .map(ParameterDependentDefaultsFacet::value)
+                .orElseGet(ParameterPolicies.DependentDefaultsPolicy::defaultsIfNotSpecifiedOtherwise);
+    }
+
     public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {
         return objectSpec.containsFacet(DomainServiceFacet.class);
     }
@@ -232,9 +244,18 @@ public final class Facets {
         .orElse("label-left");
     }
 
+    public OptionalInt minFractionalDigits(final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(MinFractionalDigitsFacet.class)
+        .map(MinFractionalDigitsFacet::getMinFractionalDigits)
+        .filter(digits->digits>-1)
+        .map(OptionalInt::of)
+        .orElseGet(OptionalInt::empty);
+    }
+
     public OptionalInt maxFractionalDigits(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(MaxFractionalDigitsFacet.class)
         .map(MaxFractionalDigitsFacet::getMaxFractionalDigits)
+        .filter(digits->digits>-1)
         .map(OptionalInt::of)
         .orElseGet(OptionalInt::empty);
     }
@@ -384,7 +405,7 @@ public final class Facets {
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
         return objectSpec.valueFacet()
-        .filter(valueFacet->requiredType.isAssignableFrom(valueFacet.getValueClass()))
+        .filter(typeGuard(requiredType))
         .flatMap(ValueFacet::selectDefaultSemantics)
         .map(_Casts::uncheckedCast);
     }
@@ -394,7 +415,7 @@ public final class Facets {
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {
         return objectSpec.valueFacet()
-        .filter(valueFacet->requiredType.isAssignableFrom(valueFacet.getValueClass()))
+        .filter(typeGuard(requiredType))
         .map(valueFacet->(ValueSerializer<X>)valueFacet);
     }
 
@@ -405,6 +426,17 @@ public final class Facets {
         .orElseThrow(()->_Exceptions.illegalArgument(
                 "ObjectSpec is expected to have a ValueFacet<%s>",
                 objectSpec.getCorrespondingClass().getName()));
+    }
+
+    // -- HELPER
+
+    @SuppressWarnings("rawtypes")
+    private Predicate<? super ValueFacet> typeGuard(
+            final Class<?> requiredType) {
+        return valueFacet->
+            ClassUtils.resolvePrimitiveIfNecessary(requiredType)
+            .isAssignableFrom(
+                    ClassUtils.resolvePrimitiveIfNecessary(valueFacet.getValueClass()));
     }
 
 }

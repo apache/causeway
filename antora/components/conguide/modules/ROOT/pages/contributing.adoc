@@ -84,9 +84,9 @@ We therefore recommend that your commit messages are as follows:footnote:[Inspir
 
 [source,other]
 ----
-ISIS-999: Make the example in CONTRIBUTING imperative and concrete
+ISIS-999: Makes the example in CONTRIBUTING imperative and concrete
 
-Without this patch applied the example commit message in the CONTRIBUTING
+Without this patch applied, the example commit message in the CONTRIBUTING
 document is not a concrete example.  This is a problem because the
 contributor is left to imagine what the commit message should look like
 based on a description rather than an example.  This patch fixes the
@@ -97,23 +97,10 @@ from our issue tracker.  The body describes the behavior without the patch,
 why this is a problem, and how the patch fixes the problem when applied.
 ----
 
-== Creating the patch file
-
-If you are working without a GitHub fork of Apache Isis, then you can create the patches from your own local git repository.
-
-As per http://stackoverflow.com/questions/6658313/generate-a-git-patch-for-a-specific-commit[this stackoverflow question], create the patch using `git format-patch`:
-
-[source,bash]
-----
-git format-patch -10 HEAD --stdout > 0001-last-10-commits.patch
-----
-
-Here `-10` is the last 10 commits you have done.
-You need to change that integer according to the commits you need to apply into the patch.
 
 == Sample Contribution Workflow
 
-Assuming you're development environment is all setup, let's walk through how you might make contribute a patch.
+Assuming your development environment is all setup, let's walk through how you might make contribute a patch.
 In this example, suppose that you've decided to work on JIRA ticket #123, an enhancement to support Blob/Clob datatypes.
 
 === Update your master branch

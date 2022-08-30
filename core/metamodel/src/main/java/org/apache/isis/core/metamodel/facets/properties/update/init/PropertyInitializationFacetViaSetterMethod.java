@@ -24,8 +24,8 @@ import java.util.function.BiConsumer;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -52,7 +52,7 @@ implements ImperativeFacet {
     @Override
     public void initProperty(final ManagedObject owningAdapter, final ManagedObject initialAdapter) {
         val method = methods.getFirstOrFail();
-        ManagedObjects.InvokeUtil.invoke(method, owningAdapter, initialAdapter);
+        MmInvokeUtil.invoke(method, owningAdapter, initialAdapter);
     }
 
     @Override

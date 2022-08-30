@@ -23,11 +23,11 @@ import java.math.BigInteger;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.BigIntegerValueSemantics;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class BigIntValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<BigInteger> {
@@ -62,6 +62,16 @@ extends ValueSemanticsProviderAbstractTestCase<BigInteger> {
     @Test
     public void testTitle() throws Exception {
         assertEquals("132,199", value.titlePresentation(null, bigInt));
+    }
+
+    @Override
+    protected BigInteger getSample() {
+        return bigInt;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final BigInteger a, final String json) {
+        assertEquals("132199", json);
     }
 
 }

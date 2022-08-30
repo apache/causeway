@@ -76,19 +76,19 @@ public final class LinkBuilder {
     }
 
     public JsonRepresentation build() {
-        representation.mapPut("rel", rel);
-        representation.mapPut("href", resourceContext.restfulUrlFor(href));
+        representation.mapPutString("rel", rel);
+        representation.mapPutString("href", resourceContext.restfulUrlFor(href));
         representation.mapPut("method", method);
-        representation.mapPut("type", mediaType.toString());
-        representation.mapPut("title", title);
-        representation.mapPut("arguments", arguments);
-        representation.mapPut("value", value);
+        representation.mapPutString("type", mediaType.toString());
+        representation.mapPutString("title", title);
+        representation.mapPutJsonRepresentation("arguments", arguments);
+        representation.mapPutJsonRepresentation("value", value);
         return representation;
     }
 
     public JsonRepresentation buildAsApplicationResource() {
         build();
-        representation.mapPut("href", resourceContext.applicationUrlFor(href));
+        representation.mapPutString("href", resourceContext.applicationUrlFor(href));
         return representation;
     }
 

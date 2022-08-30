@@ -28,7 +28,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import org.apache.isis.persistence.jdo.datanucleus.valuetypes.JdoDatastoreUniqueLongIdValueSemantics;
+import org.apache.isis.persistence.jdo.datanucleus.valuetypes.DnDatastoreUniqueLongIdValueSemantics;
 
 import lombok.val;
 
@@ -53,7 +53,7 @@ class IdStringifierForDatastoreId_DatastoreUniqueLongId_str_Test {
         //val entityType = Customer.class;
 
         String strValue = "" + value;
-        val stringifier = new JdoDatastoreUniqueLongIdValueSemantics();
+        val stringifier = new DnDatastoreUniqueLongIdValueSemantics();
 
         val stringified = stringifier.enstring(new DatastoreUniqueLongId(strValue));
         val parse = stringifier.destring(stringified); // no need to pass entityType

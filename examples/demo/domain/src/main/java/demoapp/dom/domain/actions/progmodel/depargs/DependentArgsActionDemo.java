@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -49,7 +50,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 public class DependentArgsActionDemo implements HasAsciiDocDescription {
 
-    public String title() {
+    @ObjectSupport public String title() {
         return "Dependent Arguments Demo";
     }
 

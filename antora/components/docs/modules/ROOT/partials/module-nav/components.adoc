@@ -3,10 +3,6 @@
 
 * Components
 
-** Overview
-
-*** xref:core:_overview:about.adoc[System Overview]
-
 ** Viewers
 
 *** xref:vw:ROOT:about.adoc[Web UI (Wicket)]
@@ -19,5 +15,7 @@
 
 ** Security
 
-*** xref:security:ROOT:about.adoc[Security Guide]
-
+*** xref:security:bypass:about.adoc[Bypass]
+*** xref:security:shiro:about.adoc[Shiro]
+*** xref:security:spring:about.adoc[Spring]
+*** xref:security:keycloak:about.adoc[Keycloak]

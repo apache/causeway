@@ -53,8 +53,8 @@ extends ReprRendererAbstract<Void> {
             addLinkToUp();
         }
 
-        representation.mapPut("specVersion", RestfulObjectsSpec.SPEC_VERSION);
-        representation.mapPut("implVersion", versionFromManifest());
+        representation.mapPutString("specVersion", RestfulObjectsSpec.SPEC_VERSION);
+        representation.mapPutString("implVersion", versionFromManifest());
 
         putOptionalCapabilities();
         putExtensions();
@@ -68,7 +68,7 @@ extends ReprRendererAbstract<Void> {
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final VersionReprRenderer renderer = new VersionReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);
@@ -80,7 +80,7 @@ extends ReprRendererAbstract<Void> {
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final HomePageReprRenderer renderer = new HomePageReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
         getLinks().arrayAdd(link);
     }
@@ -99,17 +99,17 @@ extends ReprRendererAbstract<Void> {
     private void putOptionalCapabilities() {
         final JsonRepresentation optionalCapabilities = JsonRepresentation.newMap();
 
-        optionalCapabilities.mapPut("blobsClobs", "yes");
-        optionalCapabilities.mapPut("deleteObjects", "yes");
-        optionalCapabilities.mapPut("domainModel", "formal");
-        optionalCapabilities.mapPut("validateOnly", "yes");
-        optionalCapabilities.mapPut("protoPersistentObjects", "yes");
+        optionalCapabilities.mapPutString("blobsClobs", "yes");
+        optionalCapabilities.mapPutString("deleteObjects", "yes");
+        optionalCapabilities.mapPutString("domainModel", "formal");
+        optionalCapabilities.mapPutString("validateOnly", "yes");
+        optionalCapabilities.mapPutString("protoPersistentObjects", "yes");
 
-        representation.mapPut("optionalCapabilities", optionalCapabilities);
+        representation.mapPutJsonRepresentation("optionalCapabilities", optionalCapabilities);
     }
 
     private void putExtensions() {
-        representation.mapPut("extensions", JsonRepresentation.newMap());
+        representation.mapPutJsonRepresentation("extensions", JsonRepresentation.newMap());
     }
 
 }

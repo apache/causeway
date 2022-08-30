@@ -47,8 +47,8 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -665,7 +665,7 @@ public class XmlSnapshot implements Snapshot {
 
             // Skip field if we have seen the name already
             for (int j = 0; j < i; j++) {
-                if (Objects.equals(fieldName, fields.get(i).getFriendlyName(adapter.asProvider()))) {
+                if (Objects.equals(fieldName, fields.get(i).getFriendlyName(adapter.asSupplier()))) {
                     log.debug("objectToElement(NO): {} SKIPPED", log("field", fieldName));
                     continue eachField;
                 }

@@ -30,7 +30,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -82,7 +82,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         val where = resourceContext.getWhere();
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
         renderer.with(ManagedAction.of(objectAdapter, objectMember, where)).usingLinkTo(linkTo).asFollowed();
-        detailsLink.mapPut("value", renderer.render());
+        detailsLink.mapPutJsonRepresentation("value", renderer.render());
     }
 
     // ///////////////////////////////////////////////////
@@ -145,10 +145,10 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     private Object paramDetails(final ManagedParameter paramMod, final ParameterNegotiationModel paramNeg) {
         val paramMeta = paramMod.getMetaModel();
         final JsonRepresentation paramRep = JsonRepresentation.newMap();
-        paramRep.mapPut("num", paramMeta.getParameterIndex());
-        paramRep.mapPut("id", paramMeta.getId());
-        paramRep.mapPut("name", paramMeta.getFriendlyName(objectAdapter.asProvider()));
-        paramRep.mapPut("description", paramMeta.getDescription(objectAdapter.asProvider()));
+        paramRep.mapPutInt("num", paramMeta.getParameterIndex());
+        paramRep.mapPutString("id", paramMeta.getId());
+        paramRep.mapPutString("name", paramMeta.getFriendlyName(objectAdapter.asSupplier()));
+        paramRep.mapPut("description", paramMeta.getDescription(objectAdapter.asSupplier()));
         final Object paramChoices = choicesFor(paramMod, paramNeg);
         if (paramChoices != null) {
             paramRep.mapPut("choices", paramChoices);
@@ -172,7 +172,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         for (val choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = param.getSpecification();
-            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, super.getJsonValueEncoder(), choiceAdapter));
+            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, paramMeta, getJsonValueEncoder(), choiceAdapter));
         }
         return list;
     }
@@ -184,7 +184,8 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         }
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
         // final ObjectSpecification defaultSpec = param.getSpecification();
-        return DomainObjectReprRenderer.valueOrRef(resourceContext, super.getJsonValueEncoder(), defaultAdapter);
+        val paramMeta = paramMod.getMetaModel();
+        return DomainObjectReprRenderer.valueOrRef(resourceContext, paramMeta, getJsonValueEncoder(), defaultAdapter);
     }
 
     // ///////////////////////////////////////////////////
@@ -202,10 +203,10 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
 
     @Override
     protected void putExtensionsIsisProprietary() {
-        getExtensions().mapPut("actionScope", objectMember.getScope().name().toLowerCase());
+        getExtensions().mapPutString("actionScope", objectMember.getScope().name().toLowerCase());
 
         final SemanticsOf semantics = objectMember.getSemantics();
-        getExtensions().mapPut("actionSemantics", semantics.getCamelCaseName());
+        getExtensions().mapPutString("actionSemantics", semantics.getCamelCaseName());
     }
 
 }

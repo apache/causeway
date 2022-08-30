@@ -38,14 +38,14 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoCollection;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
@@ -76,7 +76,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForObject(@Nullable final ManagedObject adapter) {
+    public ObjectMemento mementoForSingle(@Nullable final ManagedObject adapter) {
         _Assert.assertFalse(adapter instanceof PackedManagedObject);
         val mementoAdapter = _ObjectMemento.createOrNull(adapter);
         if(mementoAdapter==null) {
@@ -90,9 +90,9 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForObjects(@Nullable final PackedManagedObject packedAdapter) {
+    public ObjectMemento mementoForMulti(@Nullable final PackedManagedObject packedAdapter) {
         val listOfMementos = packedAdapter.unpack().stream()
-                .map(this::mementoForObject)
+                .map(this::mementoForSingle)
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
         return ObjectMementoCollection.of(
                 listOfMementos,
@@ -100,9 +100,9 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForParameter(@NonNull final ManagedObject paramAdapter) {
+    public ObjectMemento mementoForAnyCardinality(@NonNull final ManagedObject paramAdapter) {
         if(paramAdapter instanceof PackedManagedObject) {
-            return mementoForObjects((PackedManagedObject) paramAdapter);
+            return mementoForMulti((PackedManagedObject) paramAdapter);
         }
         val mementoAdapter = _ObjectMemento.createOrNull(paramAdapter);
         if(mementoAdapter==null) {
@@ -115,7 +115,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
     @Override
     public ObjectMemento mementoForPojo(final Object pojo) {
         val managedObject = objectManager.adapt(pojo);
-        return mementoForObject(managedObject);
+        return mementoForSingle(managedObject);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
                     .map(this::reconstructObject)
                     .collect(Can.toCan());
 
-            return PackedManagedObject.pack(elementSpec, objects);
+            return ManagedObject.packed(elementSpec, objects);
         }
 
         if(memento instanceof ObjectMementoAdapter) {

@@ -32,15 +32,15 @@ import com.vaadin.flow.router.RouteAlias;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.incubator.viewer.vaadin.model.context.UiContextVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.collection.TableViewVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.components.object.ObjectViewVaa;
 import org.apache.isis.incubator.viewer.vaadin.ui.util.LocalResourceUtil;
+import org.apache.isis.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.isis.viewer.commons.model.decorators.IconDecorator;
-import org.apache.isis.viewer.commons.model.header.HeaderUiModelProvider;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -63,7 +63,7 @@ implements BeforeEnterObserver {
     private final transient UiContextVaa uiContext;
     private final transient UiActionHandlerVaa uiActionHandler;
     private final transient UiComponentFactoryVaa uiComponentFactory;
-    private final transient HeaderUiModelProvider headerUiModelProvider;
+    private final transient HeaderUiService headerUiService;
 
 
     private Div pageContent = new Div();
@@ -75,14 +75,14 @@ implements BeforeEnterObserver {
     public MainViewVaa(
             final MetaModelContext metaModelContext,
             final UiActionHandlerVaa uiActionHandler,
-            final HeaderUiModelProvider headerUiModelProvider,
+            final HeaderUiService headerUiService,
             final UiContextVaa uiContext,
             final UiComponentFactoryVaa uiComponentFactory) {
 
         this.metaModelContext = metaModelContext;
         this.commonContext = IsisAppCommonContext.of(metaModelContext);
         this.uiActionHandler = uiActionHandler;
-        this.headerUiModelProvider = headerUiModelProvider;
+        this.headerUiService = headerUiService;
         this.uiContext = uiContext;
         this.uiComponentFactory = uiComponentFactory;
 
@@ -100,7 +100,7 @@ implements BeforeEnterObserver {
 
         val menuBarContainer = MainView_createHeader.createHeader(
                 commonContext,
-                headerUiModelProvider.getHeader(),
+                headerUiService.getHeader(),
                 uiActionHandler::handleActionLinkClicked,
                 this::renderHomepage);
 

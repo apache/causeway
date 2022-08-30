@@ -30,6 +30,7 @@ import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
+import org.apache.isis.commons.internal.binding._Bindables.BooleanBindable;
 import org.apache.isis.commons.internal.binding._Observables;
 import org.apache.isis.commons.internal.binding._Observables.LazyObservable;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -37,9 +38,10 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmAssertionUtil;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -152,6 +154,10 @@ public class ParameterNegotiationModel {
         return paramModels.getElseFail(paramNr).getBindableParamValue();
     }
 
+    @NonNull public BooleanBindable getBindableParamValueDirtyFlag(final int paramNr) {
+        return paramModels.getElseFail(paramNr).getBindableParamValueDirtyFlag();
+    }
+
     @NonNull public Observable<Can<ManagedObject>> getObservableParamChoices(final int paramNr) {
         return paramModels.getElseFail(paramNr).getObservableParamChoices();
     }
@@ -212,13 +218,23 @@ public class ParameterNegotiationModel {
         return paramModels.getElseFail(paramNr).getValue().getValue();
     }
 
-    public void setParamValue(final int paramNr, final @NonNull ManagedObject newParamValue) {
-        //EntityUtil.assertAttachedWhenEntity(newParamValue);
-        paramModels.getElseFail(paramNr).getBindableParamValue().setValue(newParamValue);
+    /**
+     * If newParamValue is null, unspecified or empty,
+     * results in a {@link #clearParamValue(int)} operation;
+     * otherwise sets the new value.
+     */
+    public void setParamValue(final int paramIndex, final @Nullable ManagedObject newParamValue) {
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newParamValue)) {
+            clearParamValue(paramIndex);
+        } else {
+            //EntityUtil.assertAttachedWhenEntity(newParamValue);
+            paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(newParamValue);
+        }
     }
 
-    public void clearParamValue(final int paramNr) {
-        setParamValue(paramNr, adaptParamValuePojo(paramNr, null));
+    public void clearParamValue(final int paramIndex) {
+        val emptyValue = adaptParamValuePojo(paramIndex, null);
+        paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(emptyValue);
     }
 
     @NonNull public ManagedObject adaptParamValuePojo(final int paramNr, final @Nullable Object newParamValuePojo) {
@@ -258,6 +274,7 @@ public class ParameterNegotiationModel {
         @Getter(onMethod_ = {@Override}) @NonNull private final ObjectActionParameter metaModel;
         @Getter(onMethod_ = {@Override}) @NonNull private final ParameterNegotiationModel negotiationModel;
         @Getter @NonNull private final _BindableAbstract<ManagedObject> bindableParamValue;
+        @Getter @NonNull private final BooleanBindable bindableParamValueDirtyFlag;
         @Getter @NonNull private final LazyObservable<String> observableParamValidation;
         @Getter @NonNull private final _BindableAbstract<String> bindableParamSearchArgument;
         @Getter @NonNull private final LazyObservable<Can<ManagedObject>> observableParamChoices;
@@ -277,15 +294,18 @@ public class ParameterNegotiationModel {
             this.negotiationModel = negotiationModel;
 
             bindableParamValue = _Bindables.forValue(initialValue);
-            bindableParamValue.setValueRefiner(EntityUtil::refetch);
-            bindableParamValue.setValueGuard(ManagedObjects.assertInstanceOf(metaModel.getElementType()));
-            bindableParamValue.addListener((e,o,n)->{
-                if(n==null) {
+            bindableParamValueDirtyFlag = _Bindables.forBoolean(false);
+
+            bindableParamValue.setValueRefiner(MmEntityUtil::refetch);
+            bindableParamValue.setValueGuard(MmAssertionUtil.assertInstanceOf(metaModel.getElementType()));
+            bindableParamValue.addListener((event, oldValue, newValue)->{
+                if(newValue==null) {
                     // lift null to empty ...
-                    bindableParamValue.setValue(metaModel.getEmpty());
+                    bindableParamValue.setValue(metaModel.getEmpty()); // triggers this event again
                     return;
                 }
                 getNegotiationModel().onNewParamValue();
+                bindableParamValueDirtyFlag.setValue(true); // set dirty whenever an update event happens
             });
 
             // has either autoComplete, choices, or none

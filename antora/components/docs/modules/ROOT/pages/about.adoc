@@ -32,8 +32,8 @@ link:https://simpleapp.jpa.isis.incode.work[jpa])
 
 _POMs_
 
-* xref:docs:parent-pom:about.adoc[Parent POM]
-* xref:docs:mavendeps:about.adoc[Webapp Aggregator POM]
+* xref:docs:parent-pom:about.adoc[Starter (Parent POM)]
+* xref:docs:mavendeps:about.adoc[Webapp (Aggregator POM)]
 
 |
 [discrete]
@@ -53,21 +53,17 @@ _POMs_
 [discrete]
 == Guides
 
-_Development_
-
-* xref:setupguide:ROOT:about.adoc[Setup Guide]
-
 _Core_
 
 * *xref:userguide:ROOT:about.adoc[User Guide]*
 * *xref:refguide:ROOT:about.adoc[Reference Guide]*
 * *xref:testing:ROOT:about.adoc[Testing Guide]*
+* *xref:security:ROOT:about.adoc[Security Guide]*
 
-_Process_
+_Development_
 
+* xref:setupguide:ROOT:about.adoc[Setup Guide]
 * xref:conguide:ROOT:about.adoc[Contributors' Guide]
-* *xref:comguide:ROOT:about.adoc[Committers' Guide]*
-** xref:tooling:ROOT:about.adoc[Tooling]
 
 |
 [discrete]
@@ -85,20 +81,23 @@ _Persistence_
 
 _Security_
 
-* *xref:security:ROOT:about.adoc[Security Guide]*
+* xref:security:bypass:about.adoc[Bypass]
+* xref:security:shiro:about.adoc[Shiro]
+* xref:security:spring:about.adoc[Spring]
+* xref:security:keycloak:about.adoc[Keycloak]
 
 
 |
 [discrete]
-== Libraries
+== Catalogs
 
-_For Use in Apps_
+_For Use in Domain Apps_
 
-*  xref:valuetypes:ROOT:about.adoc[Value Type Catalog]
+* *xref:valuetypes:ROOT:about.adoc[Value Type Catalog]*
 
 _Extending the framework itself_
 
-*  xref:extensions:ROOT:about.adoc[Extensions Catalog]
+* *xref:extensions:ROOT:about.adoc[Extensions Catalog]*
 
 
 |
@@ -117,31 +116,33 @@ _Releases_
 * xref:docs:ROOT:downloads/how-to.adoc[Downloads]
 * xref:relnotes:ROOT:about.adoc[Release Notes]
 
-_Nightly Builds (not ASF)_
+_Nightly Builds_
 
-* link:https://github.com/apache-isis-committers/isis-nightly[CI]
-* link:https://nexus.incode.work/[Maven Repo] (current)
-* link:https://repo.incode.cloud/[Maven Repo] (v1 only)
-* link:https://apache-isis-committers.github.io/isis-nightly[Website preview]
+* link:https://github.com/apache/isis[Packages] (ASF hosted)
+* link:https://github.com/apache-isis-committers/isis-nightly[Packages] (not ASF hosted)
+* link:https://apache-isis-committers.github.io/isis-nightly[Website preview] (not ASF hosted)
 
 
 |
 [discrete]
 == Framework
 
-_Design_
+_Process_
 
-* xref:core:ROOT:about.adoc[Core Framework]
-** xref:core:_overview:about.adoc[System Overview]
+* *xref:comguide:ROOT:about.adoc[Committers' Guide]*
+* xref:tooling:ROOT:about.adoc[Tooling]
 
-_In Development_
-
-*  xref:incubator:ROOT:about.adoc[Incubator]
-
-_Analysis_
+_Automated Analysis_
 
 * link:https://sonarcloud.io/dashboard?id=apache_isis[SonarCloud.io]
 * link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
+
+_Development_
+
+* xref:core:ROOT:about.adoc[]
+* xref:regressiontests:ROOT:about.adoc[]
+* xref:incubator:ROOT:about.adoc[]
+
 
 _Thanks_
 

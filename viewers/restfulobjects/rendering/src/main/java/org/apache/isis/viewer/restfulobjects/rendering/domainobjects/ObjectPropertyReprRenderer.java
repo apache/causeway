@@ -23,12 +23,10 @@ import java.util.List;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -38,6 +36,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
 
 import lombok.val;
 
@@ -80,7 +79,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     // value
     // ///////////////////////////////////////////////////
 
-    private Object addValue(final LinkFollowSpecs linkFollower) {
+    private void addValue(final LinkFollowSpecs linkFollower) {
         val valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
 
         // use the runtime type if we have a value, otherwise fallback to the compile time type of the member
@@ -91,34 +90,18 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         val spec = valueAdapter.getSpecification();
 
         if (spec.isValue()) {
-            String format = null;
-            final Class<?> valueType = spec.getCorrespondingClass();
-            if(valueType == java.math.BigDecimal.class) {
-                // look for facet on member, else on the value's spec
-
-                val facetHolders = Can.<FacetHolder>of(objectMember, spec);
-
-                final int totalDigits = Facets.maxTotalDigits(facetHolders).orElse(-1);
-                final int scale = Facets.maxFractionalDigits(facetHolders).orElse(-1);
-
-                format = String.format("big-decimal(%d,%d)", totalDigits, scale);
-
-            } else if(valueType == java.math.BigInteger.class) {
-                // look for facet on member, else on the value's spec
-                format = String.format("big-integer");
-            }
-            return jsonValueEncoder
+            jsonValueEncoder
                     .appendValueAndFormat(
                             valueAdapter,
                             representation,
-                            format,
-                            resourceContext.suppressMemberExtensions());
+                            JsonValueConverter.Context.of(objectMember, resourceContext.suppressMemberExtensions()));
+            return;
         }
 
         if(valueAdapter.getPojo() == null) {
             final NullNode value = NullNode.getInstance();
-            representation.mapPut("value", value);
-            return value;
+            representation.mapPutJsonNode("value", value);
+            return;
         }
 
         final boolean eagerlyRender =
@@ -143,8 +126,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         }
 
         final JsonRepresentation valueJsonRepr = valueLinkBuilder.build();
-        representation.mapPut("value", valueJsonRepr);
-        return valueJsonRepr;
+        representation.mapPutJsonRepresentation("value", valueJsonRepr);
 
     }
 
@@ -160,7 +142,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         final JsonRepresentation representation = JsonRepresentation.newMap();
         final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, representation);
         renderer.with(ManagedProperty.of(objectAdapter, objectMember, super.where)).asFollowed();
-        detailsLink.mapPut("value", renderer.render());
+        detailsLink.mapPutJsonRepresentation("value", renderer.render());
     }
 
     // ///////////////////////////////////////////////////
@@ -202,7 +184,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
             // final ObjectSpecification choiceSpec = objectMember.getSpecification();
 
             // REVIEW: check that it works for ToDoItem$Category, though...
-            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, super.getJsonValueEncoder(), choiceAdapter));
+            list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, objectMember, super.getJsonValueEncoder(), choiceAdapter));
         }
         return list;
     }

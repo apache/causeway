@@ -29,6 +29,7 @@ interface Try<T> {
   Try<T> mapFailure(UnaryOperator<Throwable> failureMapper)     // <.>
   Try<T> mapEmptyToFailure()     // <.>
   Either<L, R> map(Function<Throwable, L> failureMapper, Function<Optional<T>, R> successMapper)     // <.>
+  void accept(Consumer<Throwable> failureConsumer, Consumer<Optional<T>> successConsumer)     // <.>
   R fold(Function<Throwable, R> failureMapper, Function<Optional<T>, R> successMapper)     // <.>
   Try<R> thenCall(Callable<R> callable)     // <.>
   Try<Void> thenRun(ThrowingRunnable runnable)     // <.>
@@ -84,6 +85,11 @@ Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if t
 +
 --
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to xref:refguide:commons:index/functional/Either.adoc[Either] using according mapping function _successMapper_ or _failureMapper_ .
+--
+<.> xref:#accept_Consumer_Consumer[accept(Consumer, Consumer)]
++
+--
+Either consumes the success or the failure.
 --
 <.> xref:#fold_Function_Function[fold(Function, Function)]
 +
@@ -152,6 +158,11 @@ Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if t
 === map(Function, Function)
 
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to xref:refguide:commons:index/functional/Either.adoc[Either] using according mapping function _successMapper_ or _failureMapper_ .
+
+[#accept_Consumer_Consumer]
+=== accept(Consumer, Consumer)
+
+Either consumes the success or the failure.
 
 [#fold_Function_Function]
 === fold(Function, Function)

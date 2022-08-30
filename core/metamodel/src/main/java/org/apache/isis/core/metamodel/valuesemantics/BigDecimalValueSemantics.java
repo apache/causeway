@@ -37,8 +37,8 @@ import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
@@ -55,7 +55,7 @@ implements
     DefaultsProvider<BigDecimal>,
     Parser<BigDecimal>,
     Renderer<BigDecimal>,
-    IdStringifier<BigDecimal> {
+    IdStringifier.EntityAgnostic<BigDecimal> {
 
     @Setter @Inject
     private SpecificationLoader specificationLoader;
@@ -96,8 +96,7 @@ implements
     }
 
     @Override
-    public BigDecimal destring(
-            final @NonNull String stringified) {
+    public BigDecimal destring(final @NonNull String stringified) {
         return new BigDecimal(stringified);
     }
 
@@ -135,7 +134,8 @@ implements
     }
 
     @Override
-    protected void configureDecimalFormat(final Context context, final DecimalFormat format) {
+    protected void configureDecimalFormat(
+            final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
         if(context==null) {
             return;
         }
@@ -147,16 +147,26 @@ implements
         }
 
         // evaluate any facets that provide the MaximumFractionDigits
-        feature.lookupFacet(MaxFractionalDigitsFacet.class).stream()
-        .mapToInt(MaxFractionalDigitsFacet::getMaxFractionalDigits)
-        .filter(digits->digits>-1)
-        .forEach(digits-> // cardinality 0 or 1
-            format.setMaximumFractionDigits(digits));
+        Facets.maxFractionalDigits(feature)
+            .ifPresent(format::setMaximumFractionDigits);
+
+        // we skip this when PARSING,
+        // because we want to firstly parse any number value into a BigDecimal,
+        // no matter the minimumFractionDigits, which can always be filled up with '0' digits later
+        if(usedFor.isRendering()) {
+            // evaluate any facets that provide the MinimumFractionDigits
+            Facets.minFractionalDigits(feature)
+                .ifPresent(format::setMinimumFractionDigits);
+        }
     }
 
     @Override
     public Can<BigDecimal> getExamples() {
-        return Can.of(new BigDecimal("-63.1"), BigDecimal.ZERO);
+        return Can.of(
+                new BigDecimal("1001"),
+                new BigDecimal("-63.1"),
+                new BigDecimal("0.001"),
+                BigDecimal.ZERO);
     }
 
 }

@@ -56,7 +56,7 @@ implements
     DefaultsProvider<Character>,
     Parser<Character>,
     Renderer<Character>,
-    IdStringifier<Character> {
+    IdStringifier.EntityAgnostic<Character> {
 
     @Override
     public Class<Character> getCorrespondingClass() {
@@ -99,8 +99,8 @@ implements
             .stream()
             .map(x -> x.charAt(0))
             .collect(Collectors.toList());
-    static final String REGULAR_PREFIX = "c" + IdStringifier.AbstractWithPrefix.SEPARATOR;
-    static final String BASE64_PREFIX = "cbse64" + IdStringifier.AbstractWithPrefix.SEPARATOR;
+    static final String REGULAR_PREFIX = "c" + IdStringifier.SEPARATOR;
+    static final String BASE64_PREFIX = "cbse64" + IdStringifier.SEPARATOR;
 
     @Override
     public String enstring(final @NonNull Character id) {
@@ -111,8 +111,7 @@ implements
     }
 
     @Override
-    public Character destring(
-            final @NonNull String stringified) {
+    public Character destring(final @NonNull String stringified) {
         if(stringified.startsWith(REGULAR_PREFIX)) {
             return stringified.substring(REGULAR_PREFIX.length()).charAt(0);
         }

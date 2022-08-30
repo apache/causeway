@@ -27,7 +27,7 @@ import org.apache.isis.commons.functional.Railway;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -92,7 +92,7 @@ public class ObjectActionArgHelper {
         .forEach(argName->{
             if (action.getParameterById(argName) == null) {
                 String reason = String.format("Argument '%s' found but no such parameter", argName);
-                arguments.mapPut("x-ro-invalidReason", reason);
+                arguments.mapPutString("x-ro-invalidReason", reason);
                 throw RestfulObjectsApplicationException
                     .createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
             }
@@ -108,7 +108,7 @@ public class ObjectActionArgHelper {
             if (argRepr == null
                     && !param.isOptional()) {
                 val reason = String.format("No argument found for (mandatory) parameter '%s'", paramId);
-                arguments.mapPut("x-ro-invalidReason", reason);
+                arguments.mapPutString("x-ro-invalidReason", reason);
                 throw RestfulObjectsApplicationException
                     .createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
             }

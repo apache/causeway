@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel._testing;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +26,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static java.util.Objects.requireNonNull;
+
 import org.springframework.core.env.AbstractEnvironment;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.grid.GridLoaderService;
@@ -40,12 +42,14 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
@@ -64,15 +68,21 @@ import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
+import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMementoService;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
+import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
+import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.services.grid.GridLoaderServiceDefault;
@@ -82,7 +92,6 @@ import org.apache.isis.core.metamodel.services.grid.bootstrap.GridSystemServiceB
 import org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.isis.core.metamodel.services.message.MessageServiceNoop;
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
@@ -91,8 +100,6 @@ import org.apache.isis.core.metamodel.valuesemantics.UUIDValueSemantics;
 import org.apache.isis.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
-
-import static java.util.Objects.requireNonNull;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -125,7 +132,12 @@ implements MetaModelContext {
     private IsisConfiguration configuration = newIsisConfiguration();
 
     @Builder.Default
-    private ClassSubstitutorRegistry classSubstitutorRegistry = new ClassSubstitutorRegistry(Collections.emptyList());
+    private ClassSubstitutorRegistry classSubstitutorRegistry =
+        new ClassSubstitutorRegistry(List.of(
+                //new ClassSubstitutorForDomainObjects(),
+                new ClassSubstitutorForCollections(),
+                new ClassSubstitutorDefault()
+                ));
 
     private ObjectManager objectManager;
 
@@ -164,6 +176,9 @@ implements MetaModelContext {
     private IsisBeanTypeClassifier isisBeanTypeClassifier;
 
     private IsisBeanTypeRegistry isisBeanTypeRegistry;
+
+    @Builder.Default
+    private PlaceholderRenderService placeholderRenderService = PlaceholderRenderService.fallback();
 
     //private Map<String, ManagedObject> serviceAdaptersById;
 
@@ -215,7 +230,6 @@ implements MetaModelContext {
                 transactionService,
                 transactionState,
                 getValueSemanticsResolver(),
-                new ObjectMementoService_forTesting(),
                 new BigDecimalValueSemantics(),
                 new URLValueSemantics(),
                 new UUIDValueSemantics(),
@@ -230,6 +244,7 @@ implements MetaModelContext {
     Stream<_ManagedBeanAdapter> streamBeanAdapters() {
         return _Streams.concat(
                 streamSingletons().map(_ManagedBeanAdapter::forTesting),
+                singletonProviders.stream(),
                 Stream.of(
                     // support for lazy bean providers,
                     _ManagedBeanAdapter.forTestingLazy(GridLoaderService.class, this::getGridLoaderService),
@@ -237,9 +252,10 @@ implements MetaModelContext {
                     _ManagedBeanAdapter.forTestingLazy(JaxbService.class, this::getJaxbService),
                     _ManagedBeanAdapter.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
                     _ManagedBeanAdapter.forTestingLazy(LayoutService.class, this::getLayoutService),
-                    _ManagedBeanAdapter.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
-                ),
-                singletonProviders.stream());
+                    _ManagedBeanAdapter.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader),
+                    _ManagedBeanAdapter.forTestingLazy(ObjectMementoService.class, this::getObjectMementoService)
+                )
+                );
     }
 
     private static IsisSystemEnvironment newIsisSystemEnvironment() {
@@ -340,6 +356,7 @@ implements MetaModelContext {
             val programmingModel = requireNonNull(getProgrammingModel());
             val isisBeanTypeClassifier = requireNonNull(getIsisBeanTypeClassifier());
             val isisBeanTypeRegistry = requireNonNull(getIsisBeanTypeRegistry());
+            val classSubstitutorRegistry = requireNonNull(getClassSubstitutorRegistry());
 
             specificationLoader = SpecificationLoaderDefault.getInstance(
                     configuration,
@@ -347,7 +364,8 @@ implements MetaModelContext {
                     serviceRegistry,
                     programmingModel,
                     isisBeanTypeClassifier,
-                    isisBeanTypeRegistry);
+                    isisBeanTypeRegistry,
+                    classSubstitutorRegistry);
 
         }
         return specificationLoader;
@@ -355,6 +373,14 @@ implements MetaModelContext {
 
     @Builder.Default
     private final MessageService messageService = new MessageServiceNoop();
+
+    private ObjectMementoService objectMementoService;
+    private ObjectMementoService getObjectMementoService(){
+        if(objectMementoService==null) {
+            objectMementoService = new ObjectMementoService_forTesting();
+        }
+        return objectMementoService;
+    }
 
     @Override
     public ManagedObject getHomePageAdapter() {
@@ -483,10 +509,12 @@ implements MetaModelContext {
                         "Cannot get service instance of type '%s'",
                         managedBeanAdapter.getBeanClass()));
 
-        if(ProgrammingModelConstants.TypeVetoMarker.anyMatchOn(managedBeanAdapter.getBeanClass())) {
+        if(ProgrammingModelConstants.TypeExcludeMarker.anyMatchOn(managedBeanAdapter.getBeanClass())) {
             return Optional.empty();
         }
-        return Optional.of(ManagedObject.lazy(getSpecificationLoader(), servicePojo));
+        return getSpecificationLoader()
+            .specForType(servicePojo.getClass())
+            .map(serviceSpec->ManagedObject.service(serviceSpec, servicePojo));
     }
 
     // -- RECURSIVE INITIALIZATION FIX
@@ -504,5 +532,24 @@ implements MetaModelContext {
         }
     }
 
+    // -- VALUE SEMANTICS
+
+    /**
+     * Allows to register value-semantics.
+     */
+    public <T> MetaModelContext_forTesting withValueSemantics(final ValueSemanticsAbstract<T> valueSemantics) {
+        val valueClass = valueSemantics.getCorrespondingClass();
+        val valueSpec = getSpecificationLoader().loadSpecification(valueClass);
+        ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
+            .installValueFacet(valueClass, Can.of(valueSemantics), valueSpec);
+
+        if(ClassUtils.isPrimitiveWrapper(valueClass)) {
+            val primitiveType = ClassUtil.unboxPrimitiveIfNecessary(valueClass);
+            val primitiveTypeSpec = getSpecificationLoader().loadSpecification(primitiveType);
+            ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
+            .installValueFacet(valueClass, Can.of(valueSemantics), primitiveTypeSpec);
+        }
+        return this;
+    }
 
 }

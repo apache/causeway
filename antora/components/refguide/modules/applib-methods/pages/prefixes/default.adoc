@@ -118,6 +118,16 @@ public Integer default2Add(final Integer net, final Integer val) {
 }
 ----
 
+By default, this default will be re-evaluated every time the value of an earlier parameter (parameters #0 or #1 in the above example) are changed.
+
+However, suppose that an end-user changes parameter 0 (which defaults parameter 1), then changes parameter 1 itself, then goes back to change parameter 0.
+This could end up with their changes to parameter 1 being overwritten.
+This is possibly less than desirable.
+
+The xref:refguide:applib:index/annotation/Action.adoc#dependent-defaults-policy[@Action#dependentDefaultsPolicy()] parameter can be used to change this behaviour; if set to `PRESERVE_CHANGES` then the value of a parameter will never be overwritten if the end-user has changed it.
+
+If you prefer, the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action.dependent-defaults-policy[isis.applib.annotation.action.dependent-defaults-policy] configuration property can be used to change the behaviour for _all_ actions.
+
 == Properties
 
 For a property of type `T`, the signature is:

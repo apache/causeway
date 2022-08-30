@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.context;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,6 +29,7 @@ import org.apache.isis.applib.services.homepage.HomePageResolverService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -41,9 +43,9 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
@@ -104,6 +106,11 @@ class MetaModelContext_usingIoc implements MetaModelContext {
     getSingletonElseFail(ObjectIconService.class);
 
     @Getter(lazy=true)
+    private final PlaceholderRenderService placeholderRenderService =
+            getDefault(PlaceholderRenderService.class)
+            .orElseGet(PlaceholderRenderService::fallback);
+
+    @Getter(lazy=true)
     private final TitleService titleService =
     getSingletonElseFail(TitleService.class);
 
@@ -156,6 +163,10 @@ class MetaModelContext_usingIoc implements MetaModelContext {
         return iocContainer.getSingletonElseFail(type);
     }
 
+    private <T> Optional<T> getDefault(final Class<T> type) {
+        return iocContainer.select(type).getFirst();
+    }
+
     private final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =
             _Lazy.threadSafe(this::collectBeansOfKnownSort);
 
@@ -172,8 +183,12 @@ class MetaModelContext_usingIoc implements MetaModelContext {
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "Cannot get service instance of type '%s'",
                         managedBeanAdapter.getBeanClass()));
-
-        return ManagedObject.lazy(getSpecificationLoader(), servicePojo);
+        return getSpecificationLoader()
+                .specForType(servicePojo.getClass())
+                .map(serviceSpec->ManagedObject.service(serviceSpec, servicePojo))
+                .orElseThrow(()->_Exceptions.unrecoverable(
+                        "Cannot wrap vetoed service of type '%s'",
+                        managedBeanAdapter.getBeanClass()));
     }
 
 }

@@ -43,7 +43,7 @@ public class ValueTypeExampleService {
     @Value(staticConstructor = "of")
     public static class Scenario implements Comparable<Scenario> {
         static Scenario of(final ValueTypeExample<?> example) {
-            val name = String.format("%s", example.getValueType().getName());
+            val name = example.getName();
             return Scenario.of(name, Arguments.of(
                     name,
                     example.getValueType(),

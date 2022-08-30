@@ -28,8 +28,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionParameterValidationFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -59,7 +59,7 @@ implements ImperativeFacet {
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final ManagedObject proposedArgumentAdapter) {
         val method = methods.getFirstOrFail();
-        final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter, proposedArgumentAdapter);
+        final Object returnValue = MmInvokeUtil.invoke(method, owningAdapter, proposedArgumentAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

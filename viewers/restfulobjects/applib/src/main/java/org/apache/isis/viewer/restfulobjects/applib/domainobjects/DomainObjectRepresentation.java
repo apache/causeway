@@ -119,7 +119,7 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
 
     private JsonRepresentation getMembersOfType(String memberTypeOf) {
         final JsonRepresentation members = getRepresentation("members");
-        return JsonRepresentation.newMap().mapPut(
+        return JsonRepresentation.newMap().mapPutEntries(
                 members.streamMapEntries()
                 .filter(havingMemberTypeOf(memberTypeOf))
                 .collect(Collectors.toList()) );

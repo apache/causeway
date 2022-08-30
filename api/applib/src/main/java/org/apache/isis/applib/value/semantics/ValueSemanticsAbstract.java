@@ -31,7 +31,6 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -43,6 +42,8 @@ import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.applib.util.schema.CommonDtoUtils;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.EditingFormatDirection;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
@@ -54,9 +55,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -64,24 +63,7 @@ import lombok.val;
  */
 public abstract class ValueSemanticsAbstract<T>
 implements
-    ValueSemanticsProvider<T> {
-
-    @Getter
-    @RequiredArgsConstructor
-    public static enum PlaceholderLiteral {
-        NULL_REPRESENTATION("(none)",       "badge bg-light placeholder-literal-null"),
-        SUPPRESSED(         "(suppressed)", "badge bg-light placeholder-literal-suppressed");
-        private final String literal;
-        private final String cssClass;
-        public String asText(final UnaryOperator<String> translator) {
-            return translator.apply(literal);
-        }
-        public String asHtml(final UnaryOperator<String> translator) {
-            return String.format("<span class=\"%s\">%s</span>",
-                    getCssClass(),
-                    asText(translator));
-        }
-    }
+ValueSemanticsProvider<T> {
 
     @SuppressWarnings("unchecked")
     @Override
@@ -130,21 +112,21 @@ implements
      */
     protected UserLocale getUserLocale(final @Nullable ValueSemanticsProvider.Context context) {
         return Optional.ofNullable(context)
-        .map(ValueSemanticsProvider.Context::getInteractionContext)
-        .map(InteractionContext::getLocale)
-        .orElseGet(UserLocale::getDefault);
+                .map(ValueSemanticsProvider.Context::getInteractionContext)
+                .map(InteractionContext::getLocale)
+                .orElseGet(UserLocale::getDefault);
     }
 
     protected String renderTitle(final T value, final Function<T, String> toString) {
         return Optional.ofNullable(value)
                 .map(toString)
-                .orElse(PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate));
+                .orElseGet(()->getPlaceholderRenderService().asText(PlaceholderLiteral.NULL_REPRESENTATION));
     }
 
     protected String renderHtml(final T value, final Function<T, String> toString) {
         return Optional.ofNullable(value)
                 .map(toString)
-                .orElse(PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
+                .orElseGet(()->getPlaceholderRenderService().asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
     }
 
 
@@ -157,8 +139,8 @@ implements
         _Assert.assertEquals(getSchemaValueType(), ValueType.STRING);
         return CommonDtoUtils.fundamentalTypeAsDecomposition(ValueType.STRING,
                 value!=null
-                    ? toString.apply(value)
-                    : onNull.get());
+                ? toString.apply(value)
+                : onNull.get());
     }
 
     protected T composeFromString(
@@ -167,7 +149,7 @@ implements
             final @NonNull Supplier<T> onNullOrEmpty) {
         val string = decomposition!=null
                 ? decomposition.left().map(ValueWithTypeDto::getString).orElse(null)
-                : null;
+                        : null;
         return _Strings.isNotEmpty(string)
                 ? fromString.apply(string)
                 : onNullOrEmpty.get();
@@ -183,8 +165,8 @@ implements
             final @NonNull Supplier<F> onNull) {
         return CommonDtoUtils.fundamentalTypeAsDecomposition(getSchemaValueType(),
                 value!=null
-                    ? onNonNull.apply(value)
-                    : onNull.get());
+                ? onNonNull.apply(value)
+                : onNull.get());
     }
 
     /**
@@ -209,7 +191,7 @@ implements
 
     /**
      * @param context - nullable in support of JUnit testing
-     * @return {@link NumberFormat} the default from from given context's locale
+     * @return {@link NumberFormat} the default from given context's locale
      * or else system's default locale
      *
      * @implNote the format's MaximumFractionDigits are initialized to 16, as
@@ -217,11 +199,19 @@ implements
      * this is typically overruled later by implementations of
      * {@link #configureDecimalFormat(org.apache.isis.applib.adapters.ValueSemanticsProvider.Context, DecimalFormat) configureDecimalFormat}
      */
-   @SuppressWarnings("javadoc")
-   protected DecimalFormat getNumberFormat(final @Nullable ValueSemanticsProvider.Context context) {
+    @SuppressWarnings("javadoc")
+    protected DecimalFormat getNumberFormat(
+            final @Nullable ValueSemanticsProvider.Context context) {
+        return getNumberFormat(context, FormatUsageFor.RENDERING);
+    }
+
+    protected DecimalFormat getNumberFormat(
+            final @Nullable ValueSemanticsProvider.Context context,
+            final @NonNull FormatUsageFor usedFor) {
         val format = (DecimalFormat)NumberFormat.getNumberInstance(getUserLocale(context).getNumberFormatLocale());
         // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
         format.setMaximumFractionDigits(16);
+        configureDecimalFormat(context, format, usedFor);
         return format;
     }
 
@@ -234,7 +224,7 @@ implements
         }
         try {
             return parseDecimal(context, input)
-            .map(BigDecimal::toBigIntegerExact);
+                    .map(BigDecimal::toBigIntegerExact);
         } catch (final NumberFormatException | ArithmeticException e) {
             throw new TextEntryParseException("Not an integer value " + text, e);
         }
@@ -247,9 +237,9 @@ implements
         if(input==null) {
             return Optional.empty();
         }
-        val format = getNumberFormat(context);
+        val format = getNumberFormat(context, FormatUsageFor.PARSING);
         format.setParseBigDecimal(true);
-        configureDecimalFormat(context, format);
+
 
         val position = new ParsePosition(0);
         try {
@@ -265,7 +255,7 @@ implements
                     && number.scale()>format.getMaximumFractionDigits()) {
                 throw new TextEntryParseException(String.format(
                         "No more than %d digits can be entered after the decimal separator, "
-                        + "got %d in '%s'.", maxFractionDigits, number.scale(), input));
+                                + "got %d in '%s'.", maxFractionDigits, number.scale(), input));
             }
             return Optional.of(number);
         } catch (final NumberFormatException | ParseException e) {
@@ -275,10 +265,18 @@ implements
         }
     }
 
+    protected static enum FormatUsageFor {
+        PARSING,
+        RENDERING;
+        public boolean isParsing() { return this==PARSING; }
+        public boolean isRendering() { return this==RENDERING; }
+    }
+
     /**
-     * Typically overridden by BigDecimalValueSemantics to set MaximumFractionDigits.
+     * Typically overridden by BigDecimalValueSemantics to set min/max fractional digits.
      */
-    protected void configureDecimalFormat(final Context context, final DecimalFormat format) {}
+    protected void configureDecimalFormat(
+            final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {}
 
     // -- TEMPORAL RENDERING
 
@@ -313,7 +311,7 @@ implements
             final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
             final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic) {
 
-             switch (offsetCharacteristic) {
+        switch (offsetCharacteristic) {
         case LOCAL:
             return Optional.empty();
         case OFFSET:
@@ -364,7 +362,7 @@ implements
         }
     }
 
-    // TRANSLATION SUPPORT
+    // -- TRANSLATION SUPPORT
 
     @Autowired(required = false) // nullable (JUnit support)
     protected TranslationService translationService;
@@ -372,6 +370,14 @@ implements
         return translationService!=null
                 ? translationService.translate(TranslationContext.empty(), text)
                 : text;
+    }
+
+    // -- PLACEHOLDER RENDERING
+
+    @Autowired(required = false) // nullable (JUnit support)
+    private Optional<PlaceholderRenderService> placeholderRenderService = Optional.empty();
+    protected PlaceholderRenderService getPlaceholderRenderService() {
+        return placeholderRenderService.orElseGet(PlaceholderRenderService::fallback);
     }
 
 

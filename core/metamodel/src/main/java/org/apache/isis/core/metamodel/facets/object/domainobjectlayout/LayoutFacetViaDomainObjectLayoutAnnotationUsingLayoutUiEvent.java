@@ -30,8 +30,8 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetAbstract;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent

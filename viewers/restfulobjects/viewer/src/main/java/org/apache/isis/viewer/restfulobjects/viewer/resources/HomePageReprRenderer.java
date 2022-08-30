@@ -24,9 +24,9 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.services.iactnlayer.InteractionContext;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.commons.model.branding.BrandingUiModelProvider;
+import org.apache.isis.viewer.commons.applib.services.branding.BrandingUiService;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -44,7 +44,7 @@ public class HomePageReprRenderer
 extends ReprRendererAbstract<Void> {
 
     // injection points not directly managed by Spring, instead resolved via constructor
-    @Inject BrandingUiModelProvider brandingUiModelProvider;
+    @Inject BrandingUiService brandingUiService;
 
     HomePageReprRenderer(
             final IResourceContext resourceContext,
@@ -77,7 +77,7 @@ extends ReprRendererAbstract<Void> {
         addLinkToDomainTypes(getResourceContext().getMetaModelContext().getSpecificationLoader().snapshotSpecifications());
 
         // inks and extensions
-        representation.mapPut("extensions", JsonRepresentation.newMap());
+        representation.mapPutJsonRepresentation("extensions", JsonRepresentation.newMap());
 
         return representation;
     }
@@ -97,7 +97,7 @@ extends ReprRendererAbstract<Void> {
                     linkFollower,
                     JsonRepresentation.newMap());
 
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
         getLinks().arrayAdd(link);
     }
@@ -113,7 +113,7 @@ extends ReprRendererAbstract<Void> {
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final VersionReprRenderer renderer = new VersionReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);
@@ -141,7 +141,7 @@ extends ReprRendererAbstract<Void> {
             .withLink(Rel.SELF, "services")
             .with(serviceAdapters);
 
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);
@@ -163,7 +163,7 @@ extends ReprRendererAbstract<Void> {
                     JsonRepresentation.newMap());
 
             renderer.with(authentication);
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);
@@ -171,7 +171,7 @@ extends ReprRendererAbstract<Void> {
 
     private void addLinksToApplicationLogos() {
 
-        brandingUiModelProvider
+        brandingUiService
         .getSignInBranding()
         .getLogoHref()
         .ifPresent(href->
@@ -183,7 +183,7 @@ extends ReprRendererAbstract<Void> {
                         href)
                 .buildAsApplicationResource()));
 
-        brandingUiModelProvider
+        brandingUiService
         .getHeaderBranding()
         .getLogoHref()
         .ifPresent(href->
@@ -225,7 +225,7 @@ extends ReprRendererAbstract<Void> {
                             JsonRepresentation.newMap());
 
             renderer.withLink(Rel.SELF, "domain-types").with(specifications);
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
         getLinks().arrayAdd(link);

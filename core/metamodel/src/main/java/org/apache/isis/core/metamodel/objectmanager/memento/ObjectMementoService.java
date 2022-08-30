@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.objectmanager.memento;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.PackedManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.PackedManagedObject;
 
 import lombok.NonNull;
 
@@ -32,17 +32,13 @@ public interface ObjectMementoService {
 
     ObjectMemento mementoForBookmark(@NonNull Bookmark bookmark);
 
-    ObjectMemento mementoForObject(ManagedObject adapter);
-
-    ObjectMemento mementoForObjects(PackedManagedObject adapter);
+    ObjectMemento mementoForSingle(ManagedObject adapter);
+    ObjectMemento mementoForMulti(PackedManagedObject adapter);
+    ObjectMemento mementoForAnyCardinality(@NonNull ManagedObject paramAdapter);
 
     ObjectMemento mementoForPojo(Object pojo);
-
     ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, LogicalType logicalType);
 
     ManagedObject reconstructObject(ObjectMemento memento);
-
-    ObjectMemento mementoForParameter(@NonNull ManagedObject paramAdapter);
-
 
 }

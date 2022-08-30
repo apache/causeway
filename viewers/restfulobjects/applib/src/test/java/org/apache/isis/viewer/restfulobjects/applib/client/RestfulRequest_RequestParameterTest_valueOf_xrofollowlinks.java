@@ -43,7 +43,7 @@ public class RestfulRequest_RequestParameterTest_valueOf_xrofollowlinks {
 
     @Test
     public void mapContainsList() {
-        repr.mapPut("x-ro-follow-links", "a,b.c");
+        repr.mapPutString("x-ro-follow-links", "a,b.c");
         final List<List<String>> valueOf = requestParameter.valueOf(repr);
 
         assertThat(valueOf.size(), is(2));
@@ -56,7 +56,7 @@ public class RestfulRequest_RequestParameterTest_valueOf_xrofollowlinks {
 
     @Test
     public void mapHasNoKey() {
-        repr.mapPut("something-else", "a,b.c");
+        repr.mapPutString("something-else", "a,b.c");
         final List<List<String>> valueOf = requestParameter.valueOf(repr);
 
         assertThat(valueOf.size(), is(0));
@@ -79,7 +79,7 @@ public class RestfulRequest_RequestParameterTest_valueOf_xrofollowlinks {
     @Test
     public void mapContainsCommaSeparatedList() {
 
-        repr.mapPut("x-ro-follow-links", "a,b.c");
+        repr.mapPutString("x-ro-follow-links", "a,b.c");
         final List<List<String>> valueOf = requestParameter.valueOf(repr);
 
         assertThat(valueOf.size(), is(2));

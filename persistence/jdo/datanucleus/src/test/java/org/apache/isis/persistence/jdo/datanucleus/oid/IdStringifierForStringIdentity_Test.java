@@ -63,7 +63,7 @@ class IdStringifierForStringIdentity_Test {
                 .idStringifierForString(new StringValueSemantics()).build();
 
         val stringified = stringifier.enstring(new StringIdentity(entityType, value));
-        val parse = stringifier.destring(stringified, entityType);
+        val parse = stringifier.destring(entityType, stringified);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);

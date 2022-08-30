@@ -30,8 +30,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -78,9 +79,9 @@ implements ImperativeFacet {
 
         val method = methods.getFirstOrFail();
         final Object collectionOrArray = patConstructor.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPAT(
+                ? MmInvokeUtil.invokeWithPAT(
                         patConstructor.get(), method, owningAdapter, pendingArgs, Collections.singletonList(searchArg))
-                : ManagedObjects.InvokeUtil.invokeAutofit(
+                : MmInvokeUtil.invokeAutofit(
                         method, owningAdapter, pendingArgs, Collections.singletonList(searchArg));
 
         if (collectionOrArray == null) {

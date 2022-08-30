@@ -1,5 +1,70 @@
-= pdf.js
+= PDF.js
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO
+The PDF.js module integrates with the xref:vw:ROOT:about.adoc[Wicket Viewer], rendering a `Blob` property containing a PDF using the link:https://mozilla.github.io/pdf.js/[pdf.js] library.
+
+
+== Usage
+
+To use the extension, annotate an xref:refguide:applib:index/value/Blob.adoc[Blob] property with the xref:refguide:extensions:index/pdfjs/applib/annotations/PdfJsViewer.adoc[@PdfJsViewer] annotation.
+
+For example:
+
+[source,xml]
+.pom.xml
+----
+@PdfJsViewer
+@Property()
+@PropertyLayout(fieldSetId = "content", sequence = "1")
+public Blob getAttachment() { ... }
+----
+
+IMPORTANT: The `Blob` should only ever return a bytes that correspond to a PDF, with a mime type of "application/pdf".
+
+Optionally, you can also provide an implementation of the xref:refguide:extensions:index/pdfjs/applib/spi/PdfJsViewerAdvisor.adoc[] SPI, which advises on the size of the viewer (and has callbacks to keep track of which page of the PDF is being viewed).
+The framework provides a fallback implementation that sets the height to 800px, and scaled to 75% normal size.
+
+
+== Configuration
+
+Make the following changes:
+
+* In your domain module (containing the domain class that has a `Blob` PDF type), add in the following dependency:
++
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.isis.extensions</groupId>
+    <artifactId>isis-extensions-pdfjs-applib</artifactId>
+</dependency>
+----
++
+This will provide access to the xref:refguide:extensions:index/pdfjs/applib/annotations/PdfJsViewer.adoc[@PdfJsViewer] annotation.
+
+* And, in the webapp module, add the following dependency:
++
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.isis.extensions</groupId>
+    <artifactId>isis-extensions-pdfjs-wicket-ui</artifactId>
+</dependency>
+----
+
+* In your `AppManifest`:
++
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        IsisModuleExtPdfjsWicketUi.class,  // <.>
+        ...
+})
+public class AppManifest {
+}
+----
+

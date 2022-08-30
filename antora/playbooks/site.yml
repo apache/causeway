@@ -99,9 +99,6 @@ content:
     - url: .
       start_path: antora/components/tutorials # tutorials
       branches: HEAD
-    - url: .
-      start_path: regressiontests/adoc # core
-      branches: HEAD
 
 # extensions
     - url: .
@@ -109,19 +106,19 @@ content:
       branches: HEAD
 
     - url: .
-      start_path: extensions/applib/excel/adoc # extensions
+      start_path: extensions/core/commandlog/adoc # userguide
       branches: HEAD
     - url: .
-      start_path: extensions/core/commandlog/adoc # extensions
+      start_path: extensions/core/excel/adoc # userguide
       branches: HEAD
     - url: .
-      start_path: extensions/core/executionlog/adoc # extensions
+      start_path: extensions/core/executionlog/adoc # userguide
       branches: HEAD
     - url: .
-      start_path: extensions/core/executionoutbox/adoc # extensions
+      start_path: extensions/core/executionoutbox/adoc # userguide
       branches: HEAD
     - url: .
-      start_path: extensions/core/executionrepublisher/adoc # extensions
+      start_path: extensions/core/executionrepublisher/adoc # userguide
       branches: HEAD
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
@@ -149,6 +146,7 @@ content:
     - url: .
       start_path: extensions/vro/cors/adoc # vro
       branches: HEAD
+
     - url: .
       start_path: extensions/vw/exceldownload/adoc # vw
       branches: HEAD
@@ -161,9 +159,8 @@ content:
     - url: .
       start_path: extensions/vw/pdfjs/adoc # vw
       branches: HEAD
-
     - url: .
-      start_path: extensions/vw/sse/adoc # extensions
+      start_path: extensions/vw/sse/adoc # vw
       branches: HEAD
 
 # incubator
@@ -197,6 +194,11 @@ content:
       branches: HEAD
     - url: .
       start_path: persistence/jdo/adoc # pjdo
+      branches: HEAD
+
+# regression tests
+    - url: .
+      start_path: regressiontests/adoc # regressiontests
       branches: HEAD
 
 # security

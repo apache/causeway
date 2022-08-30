@@ -24,8 +24,8 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.databind.node.NullNode;
 
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -106,9 +106,9 @@ extends ReprRendererAbstract<ObjectAndActionInvocation> {
         putResultType(representation, resultType);
         if (!resultType.isVoid()) {
             if(returnedAdapter != null) {
-                representation.mapPut("result", result);
+                representation.mapPutJsonRepresentation("result", result);
             } else {
-                representation.mapPut("result", NullNode.getInstance());
+                representation.mapPutJsonNode("result", NullNode.getInstance());
             }
         }
     }
@@ -154,7 +154,7 @@ extends ReprRendererAbstract<ObjectAndActionInvocation> {
         case SCALAR_VALUE:
 
             final ScalarValueReprRenderer scalarValueReprRenderer =
-            new ScalarValueReprRenderer(resourceContext, null, representation);
+            new ScalarValueReprRenderer(resourceContext, action, null, representation);
             scalarValueReprRenderer.with(returnedAdapter)
             .withReturnType(action.getReturnType());
 
@@ -181,12 +181,12 @@ extends ReprRendererAbstract<ObjectAndActionInvocation> {
     }
 
     private void putResultType(final JsonRepresentation representation, final ResultType resultType) {
-        representation.mapPut("resulttype", resultType.getValue());
+        representation.mapPutString("resulttype", resultType.getValue());
     }
 
     private void representationWithSelfFor(final ObjectAction action, final JsonRepresentation bodyArgs) {
         final JsonRepresentation links = JsonRepresentation.newArray();
-        representation.mapPut("links", links);
+        representation.mapPutJsonRepresentation("links", links);
 
         if(selfLink == SelfLink.EXCLUDED) {
             return;
@@ -205,7 +205,7 @@ extends ReprRendererAbstract<ObjectAndActionInvocation> {
         final JsonRepresentation selfLink = selfLinkBuilder.build();
 
         links.arrayAdd(selfLink);
-        selfLink.mapPut("args", bodyArgs);
+        selfLink.mapPutJsonRepresentation("args", bodyArgs);
 
         final LinkBuilder upLinkBuilder = adapterLinkTo.memberBuilder(Rel.UP, MemberType.ACTION, action, RepresentationType.OBJECT_ACTION);
         upLinkBuilder.withHttpMethod(RestfulHttpMethod.GET);

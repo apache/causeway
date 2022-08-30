@@ -21,7 +21,7 @@ package demoapp.webapp.wicket.common.ui;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarUi;
+import org.apache.isis.extensions.fullcalendar.wkt.viewer.IsisModuleExtFullCalendarWicketUi;
 
 import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
 
@@ -31,7 +31,7 @@ import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
 @Configuration
 @Import({
     WhereInTheWorldPanelFactory.class,
-    IsisModuleExtFullCalendarUi.class,
+    IsisModuleExtFullCalendarWicketUi.class,
 })
 public class DemoAppWicketCommon {
 

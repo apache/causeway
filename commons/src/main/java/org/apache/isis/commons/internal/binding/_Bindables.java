@@ -57,6 +57,4 @@ public class _Bindables {
         return bindable;
     }
 
-
-
 }

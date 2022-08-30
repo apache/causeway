@@ -28,8 +28,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -64,8 +64,8 @@ implements ImperativeFacet {
 
         val method = methods.getFirstOrFail();
         final Object returnValue = patConstructor.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, argumentAdapters)
-                : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);
+                ? MmInvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, argumentAdapters)
+                : MmInvokeUtil.invokeAutofit(method, owningAdapter, argumentAdapters);
 
         if(returnValue instanceof Boolean) {
             return (Boolean) returnValue;

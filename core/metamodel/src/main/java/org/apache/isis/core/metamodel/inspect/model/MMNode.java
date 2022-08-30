@@ -77,8 +77,7 @@ public abstract class MMNode {
 
     protected abstract String iconSuffix();
 
-    @ObjectSupport
-    public final String iconName() {
+    @ObjectSupport public final String iconName() {
         return iconSuffix();
     }
 

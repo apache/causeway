@@ -6,3 +6,4 @@ The Session Log extension provides an implementation of the xref:refguide:applib
 
 When a user logs on, a `SessionLogEntry` instance is persisted; when they log off, the same instance is updated.
 
+WARNING: TODO: v2 - to write up...

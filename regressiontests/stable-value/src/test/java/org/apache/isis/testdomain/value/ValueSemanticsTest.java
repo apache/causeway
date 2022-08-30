@@ -18,6 +18,7 @@
  */
 package org.apache.isis.testdomain.value;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.util.Locale;
@@ -53,7 +54,6 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.functional.Try;
@@ -62,8 +62,8 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.services.schema.SchemaValueMarshaller;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.ValueType;
@@ -233,14 +233,57 @@ class ValueSemanticsTest {
                             final ValueSemanticsProvider.Context context,
                             final Parser<T> parser) {
 
+                        example.getParseExpectations()
+                        .forEach(parseExpectation->{
+                            val value = parseExpectation.getValue();
+
+                            if(parseExpectation.getExpectedThrows()!=null) {
+
+                                // test parsing that should throw
+                                parseExpectation.getInputSamples()
+                                .forEach(in->{
+                                    Assertions.assertThrows(parseExpectation.getExpectedThrows(), ()->{
+                                        parser.parseTextRepresentation(context, in);
+                                    });
+                                });
+
+                            } else {
+
+                                // test parsing that should not throw
+                                parseExpectation.getInputSamples()
+                                .forEach(in->{
+                                    val parsedValue = parser.parseTextRepresentation(context, in);
+
+                                    if(value instanceof BigDecimal) {
+                                        assertNumberEquals((BigDecimal)value, (BigDecimal)parsedValue);
+                                    } else {
+                                        assertEquals(value, parsedValue);
+                                    }
+
+                                });
+
+                                // test formatting
+                                assertEquals(
+                                        parseExpectation.getExpectedOutput(),
+                                        parser.parseableTextRepresentation(context, value));
+
+                            }
+
+                        });
+
+                        if(example.getParseExpectations().isNotEmpty()) {
+                            return; // skip round-trip test
+                        }
+
+                        //TODO eventually all examples should have their ParseExpectations, so we can remove
                         // Parser round-trip test
-                        for(val value : example.getExamples()) {
+                        for(val value : example.getParserRoundtripExamples()) {
 
                             val stringified = parser.parseableTextRepresentation(context, value);
 
                             if(valueType.equals(Password.class)) {
                                 val recoveredValue = (Password)parser.parseTextRepresentation(context, stringified);
-                                assertTrue(recoveredValue.checkPassword(PlaceholderLiteral.SUPPRESSED.getLiteral()));
+                                assertTrue(recoveredValue.checkPassword("(suppressed)"));
 
                             } else {
 
@@ -277,7 +320,14 @@ class ValueSemanticsTest {
                             final ValueSemanticsProvider.Context context,
                             final Renderer<T> renderer) {
 
+                        example.getRenderExpectations()
+                        .forEach(renderExpectation->{
+                            val value = renderExpectation.getValue();
+                            assertEquals(renderExpectation.getTitle(), renderer.titlePresentation(context, value));
+                            assertEquals(renderExpectation.getHtml(), renderer.htmlPresentation(context, value));
+                        });
                     }
+
                     @Override
                     public void testCommand(
                             final ValueSemanticsProvider.Context context,
@@ -336,6 +386,13 @@ class ValueSemanticsTest {
     }
 
     // -- HELPER
+
+    private static void assertNumberEquals(final BigDecimal a, final BigDecimal b) {
+        val maxScale = Math.max(a.scale(), b.scale());
+        assertEquals(
+                a.setScale(maxScale),
+                b.setScale(maxScale));
+    }
 
     private InteractionContext interactionContext() {
         return InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build();

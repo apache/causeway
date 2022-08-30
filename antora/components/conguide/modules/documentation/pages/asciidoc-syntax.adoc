@@ -757,7 +757,17 @@ For example, the `setting-up/concepts/concepts.adoc` file starts:
 
 
 
-== UML diagrams
+== Diagrams
+
+Asciidoctor supports numerous diagram types through the link:https://github.com/Mogztter/asciidoctor-kroki[asciidoctor-kroki] plugin.
+
+This calls the link:https://kroki.io/[kroki] online service (it can also be link:https://kroki.io/#install[installed] to run on-prem) which generates diagrams from textual markup.
+
+PlantUml, PlantUML + C4, ditaa, graphviz and numerous other formats are supported.
+The sections below provide examples of some of these.
+
+
+=== UML diagrams
 
 Asciidoctor includes support for the link:http://plantuml.com/[plantuml], allowing simple UML diagrams to be easily sketched.
 
@@ -791,7 +801,7 @@ Car -- Person : < owns
 ----
 
 
-== C4 diagrams
+=== C4 diagrams
 
 Asciidoctor includes support for the link:https://c4model.com//[c4 model].
 
@@ -801,8 +811,6 @@ For example:
 [c4plantuml,c4-demo,svg]
 ----
 @startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4.puml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 !includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
 
 title System Context diagram for Internet Banking System
@@ -844,7 +852,7 @@ Rel(banking_system, mainframe, "Uses")
 ----
 
 
-== Ditaa diagrams
+=== Ditaa diagrams
 
 Asciidoctor includes support for the link:http://ditaa.sourceforge.net/[ditaa], allowing boxes-and-lines diagrams to be easily sketched.
 
@@ -881,7 +889,7 @@ renders as:
 ----
 
 
-== Graphviz diagrams
+=== Graphviz diagrams
 
 
 Asciidoctor includes support for the link:http://ditaa.sourceforge.net/[ditaa], allowing boxes-and-lines diagrams to be easily sketched.
@@ -937,10 +945,13 @@ Alternatively, specify the location, eg using:
 ====
 
 
-== Kroki
+=== diagrams.net (draw.io) diagrams
 
-An alternative to using plantuml etc is link:https://kroki.io/[kroki].
-This is an online service (can also be link:https://kroki.io/#install[installed] to run on-prem) which generates textual markup for any of a number of different formats (including all of plantuml, ditaa and graphviz).
+Rather than describing diagrams in text format, an alternative is to just draw the diagrams using the link:https://www.diagrams.net/[diagrams.net] editor
+(previously called draw.io).
 
-Getting Kroki to work with Antora is possible, but not (at the time of writing) completely smooth.
-But this should become seamless in the future.
+You can find an example of a class diagram drawn this way in the xref:core:metamodel:class-diagram.adoc[internal design docs] for `core/metamodel` module.
+
+If using IntelliJ, the link:https://plugins.jetbrains.com/plugin/15635-diagrams-net-integration[diagrams.net] plugin embeds this within the IDE, and works seamlessly with the Asciidoctor plugin.
+
+Diagrams can be saved in either `.svg` or `.png` format.

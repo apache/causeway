@@ -60,7 +60,7 @@ import demoapp.dom.types.isisext.asciidocs.persistence.IsisAsciiDocEntity;
 @EntityListeners(IsisEntityListener.class)
 @Named("demo.IsisAsciiDocEntity")
 @DomainObject
-@NoArgsConstructor
+@NoArgsConstructor                                                  // <.>
 public class IsisAsciiDocJpa
         extends IsisAsciiDocEntity {
 

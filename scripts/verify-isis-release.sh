@@ -31,9 +31,13 @@
 #    curl
 #    gpg
 #    unzip
-#    jdk 8
+#    jdk 11+ (make sure you have the 'jar' command!)
 #    mvn 3.6.0+
 #
+
+## uncomment for single line step through debugging
+# set -x
+# trap read debug
 
 # shellcheck disable=SC2164
 
@@ -87,8 +91,14 @@ _build(){
     rm -rf ~/.m2/repository/org/apache/isis
 
     echo 'Building'
+    
+	# 2.0.0-M8-RC1 verification build hotfix
+	pushd isis*/supplemental-model
+	_execmustpass mvn clean install -Dskip.git -Preleased,-all
+	popd
+    
     # previously there were multiple directories, now just the one.
-    pushd isis*/bom
+	pushd isis*/bom
     _execmustpass mvn clean install -Dskip.git -Preleased,-all
 	popd
 }

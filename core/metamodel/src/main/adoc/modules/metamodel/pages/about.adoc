@@ -2,6 +2,187 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+This module contains the classes that are used to build the internal metamodel by introspecting the domain classes.
 
-WARNING: TODO
+Many of the services defined (as interfaces) in the applib have implementations defined in this module (the rest are defined in xref:core:runtimeservices:about.adoc[]).
+
+== What makes up the metamodel
+
+The classes in this module are used to build up the metamodel from a variety of inputs sources:
+
+[plantuml,file="metamodel.png"]
+.metamodel inputs
+----
+@startuml
+!include <logos/java>
+!include <tupadr3/font-awesome/at>
+!include <tupadr3/font-awesome/envira>
+!include <office/Databases/database_cube>
+!include <material/xml.puml>
+
+legend top
+|= notation |= explanation |
+| ""__underline__"" | DDD Pattern|
+endlegend
+
+together {
+    rectangle "<$database_cube><$at>\n<<Annotation>>\nORM (JPA/JDO)" as PERS
+    rectangle "<$envira><$at>\n<<Annotation>>\nSpring" as SPRING
+    rectangle "<img:https://isis.apache.org/_/img/home/isis-logo-56x64.png><$at>\n<<Annotation>>\nApache Isis" as FW
+    rectangle "<img:https://isis.apache.org/_/img/home/isis-logo-56x64.png><$java>\n<<Supporting Methods>>\nApache Isis" as SM
+    rectangle "<$java><$ma_xml><$at>\n<<Annotation>>\nJAXB" as JAXB
+
+    SPRING -[hidden]- PERS
+    PERS -[hidden]- FW
+    FW -[hidden]- SM
+    SM -[hidden]- JAXB
+
+    note left of SPRING
+        * __Repository__
+        * Name (@Named)
+        * Service (via FW @DomainService)
+        * Component (via FW @DomainObject)
+    end note
+
+    note left of PERS
+        * Cardinality
+        * TableName
+        * Column
+        ** Name
+        ** Length
+        ** Type
+    end note
+
+    note left of FW
+        * __Entitiy__
+        ** Property
+        ** Collection
+        ** Action
+        * __Factory__
+        * Layout
+        ** Property Sequence
+            (Table and Forms)
+        ** Action Sequence (Menu)
+        ** Styles (cssClass)
+        * ViewModel
+        * Mixin
+    end note
+
+    note left of SM
+        * autoComplete…()
+        * choices…()
+        * default…()
+        * disable…()
+        * get…()
+        * hide…()
+        * iconName()
+        * set…()
+        * title()
+        * validate…()
+    end note
+
+    note left of JAXB
+        * @XmlAccessorType
+        * @XmlJavaTypeAdapter
+        * @XmlRootElement
+    end note
+}
+
+rectangle "<img:https://isis.apache.org/_/img/home/isis-logo-56x64.png>\nMetaModel" as MM
+
+SPRING -> MM
+PERS -> MM
+FW -> MM
+SM -> MM
+JAXB -> MM
+
+(MetaModelValidation) as MMV
+MM <- MMV : perform \n consistency \n check
+
+rectangle "WicketViewer" as UI
+database DB
+interface "Restful\nObjects" as REST
+MM -d-> UI : generate
+MM -d-> DB : generate
+MM -d-> REST : generate
+
+@enduml
+----
+//note left of UI
+//File | Edit | Help
+//end note
+
+
+== Metamodel Concepts
+
+The metamodel itself consists of the following parts:
+
+[plantuml,file="metamodel_concepts.png"]
+.Metamodel Terminology
+----
+@startuml
+
+skinparam nodesep 20
+skinparam ranksep 1
+
+together {
+	(Domain\nObject) as DO
+	(Entity) as E
+	(View\nModel) as VM
+}
+(<i>Apache Isis</i>) as FW
+(Persistence\nLayer) as PL
+together {
+	(Mixin) as M
+	(Mixee) as ME
+}
+(Service) as S
+(Domain\nService) as DS
+(<i>Spring</i>) as SPRING
+together {
+	(Member) as MB
+	(Property) as P
+	(Collection) as C
+	(Action) as A
+}
+
+DO <-d-"is a" VM
+DO <-d-"is a" E
+FW .u.> VM : manages
+PL .u.> E : manages
+
+P "is a"-u-> MB
+C "is a"-u-> MB
+A "is a"-u-> MB
+
+DO --> MB : has 1..*
+
+M "contributes\n a"..> MB
+M "contributes\n to"-> ME
+DO -> ME : can \n act \n as
+
+SPRING ..> S : manages
+DS "is a"-u-> S
+DS --> A : has 1..*
+@enduml
+----
+
+Thus:
+
+* _Domain Objects_ have *_Properties_*, *_Collections_*
+
+* *_Viewmodels_* and *_Entities_* are specializations of *_Domain Objects_*.
+
+** _View Models_ are (lifecycle-) managed by _Apache Isis_
+** _Entities_ are managed by the configured persistence layer
+(either JDO or JPA).
+
+* *_Services_* in general are (lifecycle-) managed by _Spring_.
++
+Some _Services_ are also *_included_* in the metamodel; we call these *_Domain Services_* (annotated with xref:refguide:applib:index/annotation/DomainService.adoc[]).
+Their _Actions_ (like _Domain Objects_') will be visible either _Menu Actions_ in the xref:vw:ROOT:about.adoc[Wicket UI] and/or through the xref:vro:ROOT:about.adoc[REST API].
+
+* *_Mixins_* _contribute_ either a _Property_, a _Collection_
+or an _Action_ to their *_Mixee_* (-type).
+
 

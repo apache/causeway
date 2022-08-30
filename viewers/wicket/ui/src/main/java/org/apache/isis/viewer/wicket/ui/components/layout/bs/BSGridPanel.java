@@ -25,7 +25,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.isis.applib.layout.grid.bootstrap.BSRow;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;

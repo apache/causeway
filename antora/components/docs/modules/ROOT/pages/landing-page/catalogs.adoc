@@ -1,0 +1,22 @@
+= Catalogs
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The framework includes two catalogs:
+
+* xref:valuetypes:ROOT:about.adoc[Value Type Catalog]
++
+The modules in this catalog provide implementations of various value types, for example Markdown.
+They are intended to be consumed by your application.
++
+Each will have an applib submodule (for use within the domain logic) as well as various extension modules to be made available to the framework itself (to teach it how to persist or render the value type).
+
+* xref:extensions:ROOT:about.adoc[Extensions Catalog]
++
+These modules in this catalog extend the capabilities of the framework itself.
+They are generally not consumed directly by your application.
+For example, the "Excel Download" extension allows collections to be downloaded as an Excel `.xlsx` spreadsheet in the Wicket viewer.
++
+That said, some extensions do also provide an applib.
+For example the gmap3 extension provides an applib so that domain objects can expose their location (typically a Java interface to be implemented); this allows the extension to plot them on a map.
+

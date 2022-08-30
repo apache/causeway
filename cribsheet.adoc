@@ -1,6 +1,6 @@
 = Cribsheet
 
-... of sometimes used scripts.
+\... of sometimes used scripts.
 
 == Rebuild documentation from scratch
 

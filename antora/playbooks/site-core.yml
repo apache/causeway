@@ -63,9 +63,6 @@ content:
     - url: .
       start_path: examples/demo/domain/src/main/adoc # docs
       branches: HEAD
-    - url: .
-      start_path: regressiontests/adoc # core
-      branches: HEAD
 
 # mavendeps
     - url: .

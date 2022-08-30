@@ -38,8 +38,8 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.runtime.context.RuntimeContextBase;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -162,9 +162,9 @@ implements IResourceContext {
                 // test whether we can parse as an int
                 val parseResult = _Ints.parseInt(paramValue, 10);
                 if(parseResult.isPresent()) {
-                    map.mapPut(key, parseResult.getAsInt());
+                    map.mapPutInt(key, parseResult.getAsInt());
                 } else {
-                    map.mapPut(key, stripQuotes(paramValue));
+                    map.mapPutString(key, stripQuotes(paramValue));
                 }
 
             }

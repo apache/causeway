@@ -165,6 +165,7 @@ public interface GridService {
         if(grid == null) {
             grid = defaultGridFor(domainClass);
         }
+        grid = normalize(grid); // required so the grid's tns and schema-locations get populated
         if (style == LayoutExportStyle.COMPLETE) {
             return complete(grid);
         }

@@ -29,8 +29,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -71,8 +72,8 @@ implements ImperativeFacet {
 
         val method = methods.getFirstOrFail();
         final Object collectionOrArray = patConstructor.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPAT(patConstructor.get(), method, head.getTarget(), pendingArgs)
-                : ManagedObjects.InvokeUtil.invokeAutofit(method, head.getTarget(), pendingArgs);
+                ? MmInvokeUtil.invokeWithPAT(patConstructor.get(), method, head.getTarget(), pendingArgs)
+                : MmInvokeUtil.invokeAutofit(method, head.getTarget(), pendingArgs);
         if (collectionOrArray == null) {
             return Can.empty();
         }

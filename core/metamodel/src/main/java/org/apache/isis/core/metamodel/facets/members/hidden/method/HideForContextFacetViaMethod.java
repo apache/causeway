@@ -25,8 +25,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -55,7 +55,7 @@ implements ImperativeFacet {
             return null;
         }
         val method = methods.getFirstOrFail();
-        final Boolean isHidden = (Boolean) ManagedObjects.InvokeUtil.invokeAutofit(method, target);
+        final Boolean isHidden = (Boolean) MmInvokeUtil.invokeAutofit(method, target);
         return isHidden.booleanValue() ? "Hidden" : null;
     }
 

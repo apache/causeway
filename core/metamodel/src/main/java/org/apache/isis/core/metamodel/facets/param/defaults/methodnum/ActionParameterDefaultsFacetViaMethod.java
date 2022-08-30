@@ -29,8 +29,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -78,11 +78,11 @@ implements ImperativeFacet {
 
         val defaultValue = patConstructor.isPresent()
             // PAT programming model
-            ? ManagedObjects.InvokeUtil
+            ? MmInvokeUtil
                     .invokeWithPAT(patConstructor.get(), method,
                             pendingArgs.getActionTarget(), pendingArgs.getParamValues())
             // else support legacy programming model, call any-arg defaultNAct(...)
-            : ManagedObjects.InvokeUtil
+            : MmInvokeUtil
                     .invokeAutofit(method,
                         pendingArgs.getActionTarget(), pendingArgs.getParamValues());
 

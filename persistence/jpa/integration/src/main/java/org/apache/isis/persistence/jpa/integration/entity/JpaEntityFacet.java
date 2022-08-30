@@ -44,7 +44,7 @@ import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.idstringifier.IdStringifierService;
 
@@ -276,7 +276,7 @@ public class JpaEntityFacet
                 return EntityState.PERSISTABLE_DETACHED; // an optimization, not strictly required
             }
         } catch (PersistenceException ex) {
-            // horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
+            // horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry) (this was without any weaving)
             Throwable cause = ex.getCause();
             if (cause instanceof DescriptorException) {
                 DescriptorException descriptorException = (DescriptorException) cause;
@@ -284,6 +284,10 @@ public class JpaEntityFacet
                 if (internalException instanceof NullPointerException) {
                     return EntityState.PERSISTABLE_DETACHED;
                 }
+            }
+            if (cause instanceof NullPointerException) {
+                // horrible hack, encountered if using composite key (eg ExecutionLogEntry) with dynamic weaving
+                return EntityState.PERSISTABLE_DETACHED;
             }
             throw ex;
         }

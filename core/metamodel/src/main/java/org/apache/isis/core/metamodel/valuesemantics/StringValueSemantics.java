@@ -47,7 +47,7 @@ extends ValueSemanticsAbstract<String>
 implements
     Parser<String>,
     Renderer<String>,
-    IdStringifier<String> {
+    IdStringifier.EntityAgnostic<String> {
 
     @Override
     public Class<String> getCorrespondingClass() {
@@ -75,8 +75,8 @@ implements
 
     static final List<String> NON_SAFE_URL_CHARS =
             Arrays.asList("/", "\\", "?", ":", "&", "%", "+");
-    static final String REGULAR_PREFIX = "s" + IdStringifier.AbstractWithPrefix.SEPARATOR;
-    static final String BASE64_PREFIX = "base64" + IdStringifier.AbstractWithPrefix.SEPARATOR;
+    static final String REGULAR_PREFIX = "s" + IdStringifier.SEPARATOR;
+    static final String BASE64_PREFIX = "base64" + IdStringifier.SEPARATOR;
 
     @Override
     public String enstring(final @NonNull String id) {
@@ -87,8 +87,7 @@ implements
     }
 
     @Override
-    public String destring(
-            final @NonNull String stringified) {
+    public String destring(final @NonNull String stringified) {
         if(stringified.startsWith(REGULAR_PREFIX)) {
             return stringified.substring(REGULAR_PREFIX.length());
         }

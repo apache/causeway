@@ -20,8 +20,8 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.memento.ObjectMemberMemento;
@@ -56,7 +56,7 @@ extends ModelAbstract<ManagedObject> {
             final @Nullable ManagedObject valueAdapter) {
         super(commonContext);
         this.objectMemberMemento = ObjectMemberMemento.forMember(objectMember);
-        adapterMemento = super.getMementoService().mementoForObject(valueAdapter);
+        adapterMemento = super.getMementoService().mementoForSingle(valueAdapter);
     }
 
     @Override

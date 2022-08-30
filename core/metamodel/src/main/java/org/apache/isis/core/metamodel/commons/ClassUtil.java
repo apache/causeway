@@ -69,7 +69,7 @@ public final class ClassUtil {
             double.class, Double.class,
             void.class, Void.class);
 
-    final Map<Class<?>, Class<?>> primitiveByNameWrapper = Map.of(
+    final Map<Class<?>, Class<?>> primitiveByWrapper = Map.of(
             Boolean.class, boolean.class,
             Byte.class, byte.class,
             Character.class, char.class,
@@ -93,7 +93,7 @@ public final class ClassUtil {
         val firstPass = clazz.isPrimitive()
                 || !clazz.getPackageName().equals("java.lang")
                 ? clazz
-                : primitiveByNameWrapper.get(clazz);
+                : primitiveByWrapper.get(clazz); //null-able
         return firstPass!=null
                 ? firstPass
                 : clazz;

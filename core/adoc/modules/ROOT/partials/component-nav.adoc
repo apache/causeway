@@ -1,10 +1,12 @@
 include::core:ROOT:partial$module-nav.adoc[]
-include::core:archdesign:partial$module-nav.adoc[]
 include::core:commons:partial$module-nav.adoc[]
 include::core:codegen-bytebuddy:partial$module-nav.adoc[]
+include::core:interaction:partial$module-nav.adoc[]
+include::core:internaltestsupport:partial$module-nav.adoc[]
 include::core:metamodel:partial$module-nav.adoc[]
 include::core:runtime:partial$module-nav.adoc[]
 include::core:runtimeservices:partial$module-nav.adoc[]
+include::core:transaction:partial$module-nav.adoc[]
 include::core:webapp:partial$module-nav.adoc[]
-include::core:regressiontests:partial$module-nav.adoc[]
+
 

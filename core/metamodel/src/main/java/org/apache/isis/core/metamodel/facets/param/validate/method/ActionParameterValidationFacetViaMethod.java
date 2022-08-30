@@ -29,8 +29,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -68,8 +68,8 @@ implements ImperativeFacet {
 
         val method = methods.getFirstOrFail();
         final Object returnValue = patConstructor.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, pendingArgs)
-                : ManagedObjects.InvokeUtil.invoke(method, owningAdapter, proposedArgument);
+                ? MmInvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, pendingArgs)
+                : MmInvokeUtil.invoke(method, owningAdapter, proposedArgument);
 
         if(returnValue instanceof String) {
             return (String) returnValue;

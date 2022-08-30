@@ -43,8 +43,8 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
@@ -72,7 +72,6 @@ import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
-
 public abstract class ScalarPanelAbstract
 extends PanelAbstract<ManagedObject, ScalarModel>
 implements ScalarModelSubscriber {
@@ -83,6 +82,7 @@ implements ScalarModelSubscriber {
 
     protected static final String ID_SCALAR_NAME = "scalarName";
     protected static final String ID_SCALAR_VALUE = "scalarValue";
+    protected static final String ID_XRAY_DETAILS = "xrayDetails";
 
     public enum FormatModifier {
         MARKUP,
@@ -128,7 +128,7 @@ implements ScalarModelSubscriber {
         public boolean isEditingAny() {
             return this==EDITING
                     || this==CAN_EDIT_INLINE_VIA_ACTION;}
-        public boolean isCanEditAny() {
+        public boolean isViewingAndCanEditAny() {
             return this==CAN_EDIT
                 || this==CAN_EDIT_INLINE
                 || this==CAN_EDIT_INLINE_VIA_ACTION; }

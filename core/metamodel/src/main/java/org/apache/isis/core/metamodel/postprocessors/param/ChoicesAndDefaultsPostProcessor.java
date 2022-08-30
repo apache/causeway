@@ -75,7 +75,7 @@ extends ObjectSpecificationPostProcessorAbstract {
             if(FacetUtil
                 .addFacetIfPresent(
                     ActionParameterChoicesFacetFromChoicesFromFacet
-                    .create(choicesFromFacetIfAny, objectSpecification, peerFor(param)))
+                    .create(choicesFromFacetIfAny, objectSpecification, param))
                 .isPresent()) {
 
                 // ActionParameterChoicesFacetFromChoicesFromFacet has precedence over
@@ -88,7 +88,7 @@ extends ObjectSpecificationPostProcessorAbstract {
 
             FacetUtil.addFacetIfPresent(
                     ActionParameterChoicesFacetFromChoicesFacet
-                    .create(choicesFacetIfAny, peerFor(param)));
+                    .create(choicesFacetIfAny, param.getFacetHolder()));
         }
     }
 

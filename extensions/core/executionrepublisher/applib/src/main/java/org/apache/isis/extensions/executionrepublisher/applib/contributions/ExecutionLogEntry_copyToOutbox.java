@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.isis.extensions.executionlog.applib.dom.ExecutionLogEntryType;
@@ -52,7 +53,7 @@ public class ExecutionLogEntry_copyToOutbox {
 
     public static class ActionDomainEvent extends IsisModuleExtExecutionRepublisherApplib.ActionDomainEvent<ExecutionLogEntry_copyToOutbox> { }
 
-    public ExecutionLogEntry act() {
+    @MemberSupport public ExecutionLogEntry act() {
 
         outboxRepository.upsert(
                 executionLogEntry.getInteractionId(),

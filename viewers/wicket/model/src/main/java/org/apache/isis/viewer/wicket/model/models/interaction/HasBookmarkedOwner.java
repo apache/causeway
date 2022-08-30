@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.wicket.model.models.interaction;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 public interface HasBookmarkedOwner {
 

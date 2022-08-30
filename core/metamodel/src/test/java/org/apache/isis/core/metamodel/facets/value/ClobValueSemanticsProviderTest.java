@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.valuesemantics.ClobValueSemantics;
+
+import static org.junit.Assert.assertEquals;
 
 public class ClobValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Clob> {
@@ -55,6 +55,18 @@ extends ValueSemanticsProviderAbstractTestCase<Clob> {
     @Override
     public void testParseEmptyString() throws Exception {
         // disabled, clob has no parser
+    }
+
+    @Override
+    protected Clob getSample() {
+        return clob;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final Clob a, final String json) {
+        assertEquals(
+                "{\"name\":\"myfile1.xml\",\"mimeType\":\"application/xml\",\"chars\":\"abcdef\"}",
+                json);
     }
 
 }

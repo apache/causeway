@@ -20,10 +20,13 @@ package org.apache.isis.core.metamodel.facets.object.ignore.annotation;
 
 import javax.inject.Inject;
 
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MethodVetoMarker;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.MethodExcludeMarker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+
+import lombok.val;
 
 public class RemoveAnnotatedMethodsFacetFactory
 extends FacetFactoryAbstract {
@@ -35,13 +38,34 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        getClassCache()
-        .streamPublicMethods(processClassContext.getCls())
-        .forEach(method->{
-            if(MethodVetoMarker.anyMatchOn(method)) {
-                processClassContext.removeMethod(method);
-            }
-        });
+
+        val policy = getMetaModelContext().getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy();
+        switch (policy) {
+            case ENCAPSULATION_ENABLED:
+                getClassCache().streamPublicOrDeclaredMethods(processClassContext.getCls())
+                        .forEach(method -> {
+                            if (!ProgrammingModelConstants.MethodIncludeMarker.anyMatchOn(method)) {
+                                processClassContext.removeMethod(method);
+                            }
+                        });
+                break;
+
+            case ANNOTATION_REQUIRED:
+                // TODO: this could probably be more precise and insist on @Domain.Include for members.
+
+            case ANNOTATION_OPTIONAL:
+
+                getClassCache()
+                        .streamPublicMethods(processClassContext.getCls())
+                        .forEach(method->{
+                            if(MethodExcludeMarker.anyMatchOn(method)) {
+                                processClassContext.removeMethod(method);
+                            }
+                        });
+
+                break;
+        }
+
 
     }
 

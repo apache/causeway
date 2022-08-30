@@ -1,4 +1,4 @@
 
 
 
-* xref:core:codegen-bytebuddy:about.adoc[Byte Buddy Proxy Factory]
+* xref:core:codegen-bytebuddy:about.adoc[Code Gen] (Proxy Factory)

@@ -95,7 +95,7 @@ ProgrammingModelInitFilter ^-d- ProgrammingModelInitFilterDefault
 To summarise:
 
 * To add to the programming model (new facet factories, validators or post processors), create a `@Service` implementing the `MetaModelRefiner` interface
-* to remove from the programming model, create a `@Service` implementing a ProgrammingModelInitFilter` (with an earlier precedence than the default implementation).
+* to remove from the programming model, create a `@Service` implementing a `ProgrammingModelInitFilter` (with an earlier precedence than the default implementation).
 
 
 

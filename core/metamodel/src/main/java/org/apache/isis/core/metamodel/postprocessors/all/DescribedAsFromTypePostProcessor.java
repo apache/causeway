@@ -86,7 +86,7 @@ extends ObjectSpecificationPostProcessorAbstract {
         .ifPresent(objectDescribedFacet->
             FacetUtil.addFacetIfPresent(
                     ParamDescribedFacetFromType
-                    .create(objectDescribedFacet, peerFor(parameter))));
+                    .create(objectDescribedFacet, parameter.getFacetHolder())));
     }
 
 }

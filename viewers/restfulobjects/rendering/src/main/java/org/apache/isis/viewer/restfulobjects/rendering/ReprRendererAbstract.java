@@ -28,14 +28,14 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 
 import lombok.Getter;
 import lombok.val;
@@ -44,7 +44,7 @@ public abstract class ReprRendererAbstract<T>
 implements ReprRenderer<T> {
 
     @Getter protected final IResourceContext resourceContext;
-    @Getter protected final JsonValueEncoder jsonValueEncoder;
+    @Getter protected final JsonValueEncoderService jsonValueEncoder;
 
     private final LinkFollowSpecs linkFollower;
     private final RepresentationType representationType;
@@ -62,7 +62,7 @@ implements ReprRenderer<T> {
             final JsonRepresentation representation) {
         this.resourceContext = resourceContext;
         this.jsonValueEncoder = resourceContext.getMetaModelContext().getServiceRegistry()
-                .lookupServiceElseFail(JsonValueEncoder.class);
+                .lookupServiceElseFail(JsonValueEncoderService.class);
 
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;
@@ -131,7 +131,7 @@ implements ReprRenderer<T> {
         JsonRepresentation links = representation.getArray("links");
         if (links == null) {
             links = JsonRepresentation.newArray();
-            representation.mapPut("links", links);
+            representation.mapPutJsonRepresentation("links", links);
         }
         return links;
     }
@@ -148,7 +148,7 @@ implements ReprRenderer<T> {
         if (linkFollower.matches(link)) {
             final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap())
                     .with(objectSpec);
-            link.mapPut("value", renderer.render());
+            link.mapPutJsonRepresentation("value", renderer.render());
         }
 
     }
@@ -160,7 +160,7 @@ implements ReprRenderer<T> {
         JsonRepresentation extensions = representation.getMap("extensions");
         if (extensions == null) {
             extensions = JsonRepresentation.newMap();
-            representation.mapPut("extensions", extensions);
+            representation.mapPutJsonRepresentation("extensions", extensions);
         }
         return extensions;
     }
@@ -169,7 +169,7 @@ implements ReprRenderer<T> {
         if (!extensions.isMap()) {
             throw new IllegalArgumentException("extensions must be a map");
         }
-        representation.mapPut("extensions", extensions);
+        representation.mapPutJsonRepresentation("extensions", extensions);
         return this;
     }
 
@@ -197,7 +197,7 @@ implements ReprRenderer<T> {
             return;
         }
         final JsonRepresentation adapterList = JsonRepresentation.newArray();
-        getExtensions().mapPut(key, adapterList);
+        getExtensions().mapPutJsonRepresentation(key, adapterList);
         for (val adapter : adapters) {
             adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getResourceContext(), Rel.VALUE, adapter).build());
         }

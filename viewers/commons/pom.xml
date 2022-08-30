@@ -39,10 +39,12 @@
 
     <dependencies>
     </dependencies>
-    
+  
     <modules>
+    	<module>applib</module>
     	<module>model</module>
     	<module>prism</module>
+    	<module>services</module>
     </modules>
 
 </project>

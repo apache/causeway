@@ -39,7 +39,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.Facets;
@@ -213,11 +213,16 @@ implements ContentNegotiationService {
                 final ObjectSpecification actionOwnerSpec = actionOwnerSpecFrom(objectAndActionInvocation);
                 final String actionId = actionIdFrom(objectAndActionInvocation);
                 final String actionArguments = actionArgumentsFrom(objectAndActionInvocation);
-                final DomainObjectList list = domainObjectListFrom(
+                final DomainObjectList listAsViewmodel = domainObjectListFrom(
                         collectionAdapters, elementSpec, actionOwnerSpec, actionId, actionArguments);
 
-                val listAdapter = ManagedObject.lazy(
-                        resourceContext.getMetaModelContext().getSpecificationLoader(), list);
+                val domainObjectListSpec = resourceContext.getMetaModelContext().getSpecificationLoader()
+                    .specForType(DomainObjectList.class)
+                    .filter(ObjectSpecification::isViewModel)
+                    .orElseThrow(()->_Exceptions.unrecoverable(
+                            "framework bug: DomainObjectList should be recognized as viewmodel"));
+
+                val listAdapter = ManagedObject.viewmodel(domainObjectListSpec, listAsViewmodel);
                 return responseBuilder(
                         buildResponse(
                                 resourceContext,

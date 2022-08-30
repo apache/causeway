@@ -48,7 +48,7 @@ implements
     DefaultsProvider<BigInteger>,
     Parser<BigInteger>,
     Renderer<BigInteger>,
-    IdStringifier<BigInteger> {
+    IdStringifier.EntityAgnostic<BigInteger> {
 
     @Override
     public Class<BigInteger> getCorrespondingClass() {
@@ -98,8 +98,7 @@ implements
     }
 
     @Override
-    public BigInteger destring(
-            final @NonNull String stringified) {
+    public BigInteger destring(final @NonNull String stringified) {
         return new BigInteger(stringified);
     }
 

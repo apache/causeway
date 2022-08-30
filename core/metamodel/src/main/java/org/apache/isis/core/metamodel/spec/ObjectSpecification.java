@@ -36,6 +36,7 @@ import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -66,6 +67,7 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -410,8 +412,26 @@ extends
         return getBeanSort().isMixin();
     }
 
-    //TODO this predicate can now be answered by getBeanSort().isAbstract(), we can retire any old logic
-    boolean isAbstract();
+    /**
+     * Whether {@link #getCorrespondingClass()} is {@link Void} or void.
+     */
+    default boolean isVoid() {
+        return getCorrespondingClass()==void.class
+                || getCorrespondingClass()==Void.class;
+    }
+
+    /**
+     * Whether {@link #getCorrespondingClass()} is a primitive type,
+     * but not {@link Void} or void.
+     */
+    default boolean isPrimitive() {
+        return !isVoid()
+                && getCorrespondingClass().isPrimitive();
+    }
+
+    default boolean isAbstract() {
+        return getBeanSort().isAbstract();
+    }
 
     default boolean isEntity() {
         return getBeanSort().isEntity()
@@ -574,6 +594,30 @@ extends
         return superclass()!=null
                 ? Stream.concat(Stream.of(this), superclass().streamTypeHierarchy())
                 : Stream.of(this);
+    }
+
+    // -- COMMON SUPER TYPE FINDER
+
+    /**
+     * Lowest common ancestor search within the combined type hierarchy.
+     */
+    public static ObjectSpecification commonSuperType(
+            final @NonNull ObjectSpecification a,
+            final @NonNull ObjectSpecification b) {
+
+        val cls_a = a.getCorrespondingClass();
+        val cls_b = b.getCorrespondingClass();
+        if(cls_a.isAssignableFrom(cls_b)) {
+            return a;
+        }
+        if(cls_b.isAssignableFrom(cls_a)) {
+            return b;
+        }
+        // assuming the algorithm is correct: if non of the above is true,
+        // we must be able to walk up the tree on both branches
+        _Assert.assertNotNull(a.superclass());
+        _Assert.assertNotNull(b.superclass());
+        return commonSuperType(a.superclass(), b.superclass());
     }
 
     // -- VALUE SEMANTICS SUPPORT

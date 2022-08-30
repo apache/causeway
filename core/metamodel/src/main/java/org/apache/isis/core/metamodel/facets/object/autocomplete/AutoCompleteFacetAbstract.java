@@ -29,9 +29,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -81,7 +81,7 @@ implements AutoCompleteFacet {
                 return getObjectManager().adapt(list);
         });
 
-        return ManagedObjects.VisibilityUtil.streamVisibleAdapters(resultAdapter, interactionInitiatedBy)
+        return MmVisibilityUtil.streamVisibleAdapters(resultAdapter, interactionInitiatedBy)
                 .collect(Can.toCan());
 
     }

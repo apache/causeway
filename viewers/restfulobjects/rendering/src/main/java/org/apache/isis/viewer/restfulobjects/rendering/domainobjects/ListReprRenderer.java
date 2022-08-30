@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -115,11 +115,11 @@ extends ReprRendererAbstract<Stream<ManagedObject>> {
                                 linkFollower,
                                 JsonRepresentation.newMap());
                 final JsonRepresentation domainObject = renderer.with(adapter).render();
-                linkToObject.mapPut("value", domainObject);
+                linkToObject.mapPutJsonRepresentation("value", domainObject);
             }
         });
 
-        representation.mapPut("value", values);
+        representation.mapPutJsonRepresentation("value", values);
     }
 
 

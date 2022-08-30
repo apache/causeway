@@ -45,7 +45,7 @@ import lombok.val;
 )
 @ActionLayout(
         associateWith = "allUsers",
-        sequence = "1"
+        sequence = "2"
 )
 @RequiredArgsConstructor
 public class ApplicationUserManager_newDelegateUser {
@@ -86,7 +86,7 @@ public class ApplicationUserManager_newDelegateUser {
         return target;
     }
 
-    @MemberSupport public ApplicationRole default1Act() {
+    @MemberSupport public ApplicationRole defaultInitialRole() {
         val regularUserRoleName = config.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
         return applicationRoleRepository
                 .findByNameCached(regularUserRoleName)

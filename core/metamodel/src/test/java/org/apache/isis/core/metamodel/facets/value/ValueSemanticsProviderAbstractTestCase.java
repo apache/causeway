@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.value;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -27,18 +28,12 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import org.junit.jupiter.api.Assertions;
 
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -46,9 +41,15 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializerDefault;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import lombok.Getter;
 
@@ -135,6 +136,24 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     }
 
     @Test
+    public void testValueSerializer_usingJson() {
+        final T value = getSample();
+        final String encoded = getValueSerializer().toEncodedString(Format.JSON, value);
+
+        assertValueEncodesToJsonAs(value, encoded);
+
+        T decoded = getValueSerializer().fromEncodedString(Format.JSON, encoded);
+
+        Optional.ofNullable(semantics.getOrderRelation())
+            .ifPresentOrElse(rel->Assertions.assertTrue(rel.equals(value, decoded)),
+                    ()->Assertions.assertEquals(value, decoded));
+    }
+
+    protected abstract T getSample();
+    protected abstract void assertValueEncodesToJsonAs(T a, String json);
+
+
+    @Test
     public void testDecodeNULL() throws Exception {
         assumeValueSemanticsProviderIsSetup();
 
@@ -160,7 +179,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
             assertEquals("",
                     semantics.getRenderer().titlePresentation(null, null));
         } else {
-            assertEquals(PlaceholderLiteral.NULL_REPRESENTATION.getLiteral(),
+            assertEquals("(none)",
                     semantics.getRenderer().titlePresentation(null, null));
         }
 

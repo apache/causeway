@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.extensions.fullcalendar.wkt.fullcalendar.EventProvider;
 import org.apache.isis.extensions.fullcalendar.wkt.viewer.CalendaredCollectionAbstract;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;

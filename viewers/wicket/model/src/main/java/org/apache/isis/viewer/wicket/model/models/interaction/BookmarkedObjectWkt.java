@@ -30,8 +30,8 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
@@ -145,7 +145,7 @@ extends ModelAbstract<ManagedObject> {
     public final ManagedObject getObjectAndRefetch() {
         //EntityUtil.assertAttachedWhenEntity()//guard
         val entityOrViewmodel = super.getObject();
-        return EntityUtil.computeIfDetached(entityOrViewmodel, this::reload);
+        return MmEntityUtil.computeIfDetached(entityOrViewmodel, this::reload);
     }
 
     @Override

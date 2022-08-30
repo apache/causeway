@@ -71,8 +71,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
-import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
-import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
@@ -184,17 +182,14 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             final ServiceRegistry serviceRegistry,
             final ProgrammingModel programmingModel,
             final IsisBeanTypeClassifier isisBeanTypeClassifier,
-            final IsisBeanTypeRegistry isisBeanTypeRegistry) {
+            final IsisBeanTypeRegistry isisBeanTypeRegistry,
+            final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
         val instance = new SpecificationLoaderDefault(
                 programmingModel, isisConfiguration, isisSystemEnvironment,
                 serviceRegistry, isisBeanTypeClassifier, isisBeanTypeRegistry,
                 ()->new ValueSemanticsResolverDefault(List.of(), null),
-                new ClassSubstitutorRegistry(List.of(
-                        //new ClassSubstitutorForDomainObjects(),
-                        new ClassSubstitutorForCollections(),
-                        new ClassSubstitutorDefault()
-                        )));
+                classSubstitutorRegistry);
 
         instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
         instance.facetProcessor = new FacetProcessor(programmingModel, instance.metaModelContext);
@@ -243,11 +238,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             .concat(
                 isisBeanTypeRegistry.getDiscoveredValueTypes().keySet().stream(),
                 valueSemanticsResolver.get().streamClassesWithValueSemantics())
-            .forEach(valueType -> {
-                val valueSpec = loadSpecification(valueType, IntrospectionState.NOT_INTROSPECTED);
+            .forEach(valueClass -> {
+                val valueSpec = loadSpecification(valueClass, IntrospectionState.NOT_INTROSPECTED);
                 if(valueSpec!=null) {
                     knownSpecs.add(valueSpec);
-                    valueTypeSpecs.put(valueType, valueSpec);
+                    valueTypeSpecs.put(valueClass, valueSpec);
                 }
             });
 

@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo;
@@ -65,7 +65,7 @@ class CollectionInteractionTest extends InteractionTestAbstract {
         tester.assertUsabilityIsNotVetoed();
 
         val expectedElements = tester.streamCollectionElements()
-                .map(ManagedObjects.UnwrapUtil::single)
+                .map(MmUnwrapUtil::single)
                 .collect(Collectors.toList());
         assertEquals(4, expectedElements.size());
 

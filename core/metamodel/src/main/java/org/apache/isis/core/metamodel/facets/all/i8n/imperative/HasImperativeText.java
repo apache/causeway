@@ -22,7 +22,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.functional.Try;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 public interface HasImperativeText {
 

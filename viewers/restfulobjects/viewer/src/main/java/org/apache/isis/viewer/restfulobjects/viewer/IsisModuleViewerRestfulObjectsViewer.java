@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
-import org.apache.isis.viewer.commons.model.IsisModuleViewerCommon;
+import org.apache.isis.viewer.commons.services.IsisModuleViewerCommonsServices;
 import org.apache.isis.viewer.restfulobjects.rendering.IsisModuleRestfulObjectsRendering;
 import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.isis.viewer.restfulobjects.viewer.mappers.ExceptionMapperForObjectNotFound;
@@ -45,7 +45,7 @@ import org.apache.isis.viewer.restfulobjects.viewer.resources.VersionResourceSer
 @Import({
         // Modules
         IsisModuleCoreWebapp.class,
-        IsisModuleViewerCommon.class,
+        IsisModuleViewerCommonsServices.class,
         IsisModuleRestfulObjectsRendering.class,
 
         // @Component's

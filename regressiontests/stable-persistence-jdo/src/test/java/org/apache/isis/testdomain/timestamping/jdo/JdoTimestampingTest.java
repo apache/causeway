@@ -24,13 +24,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertNotNull;
-
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testdomain.jdo.entities.JdoProductComment;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import lombok.val;
 
@@ -39,8 +40,7 @@ import lombok.val;
                 Configuration_usingJdo.class
         },
         properties = {
-//                "logging.config=log4j2-debug-persistence.xml",
-//                IsisPresets.DebugPersistence,
+                "logging.level.org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener = DEBUG"
         })
 @Transactional
 class JdoTimestampingTest extends IsisIntegrationTestAbstract {
@@ -61,6 +61,17 @@ class JdoTimestampingTest extends IsisIntegrationTestAbstract {
 
         assertNotNull(comment.getUpdatedAt());
         assertNotNull(comment.getUpdatedBy());
+
+        //[ISIS-3126] see if we can update the persistent entity,
+        // without triggering a nested loop
+        val firstUpdate = comment.getUpdatedAt();
+        comment.setComment("Awesome Book, really!");
+        repository.persist(comment);
+
+        assertNotNull(comment.getUpdatedAt());
+        val secondUpdate = comment.getUpdatedAt();
+
+        assertNotEquals(firstUpdate.getNanos(), secondUpdate.getNanos());
 
     }
 

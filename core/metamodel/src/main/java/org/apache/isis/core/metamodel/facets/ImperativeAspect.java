@@ -25,8 +25,9 @@ import java.util.stream.Collectors;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 
 import lombok.Value;
 import lombok.val;
@@ -57,7 +58,7 @@ public class ImperativeAspect {
 
     public Object invokeSingleMethod(final ManagedObject domainObject) {
         val method = methods.getFirstOrFail();
-        final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, domainObject);
+        final Object returnValue = MmInvokeUtil.invoke(method, domainObject);
         return returnValue;
     }
 

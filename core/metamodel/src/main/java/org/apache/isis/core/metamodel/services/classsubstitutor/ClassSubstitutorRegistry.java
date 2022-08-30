@@ -46,13 +46,12 @@ import lombok.extern.log4j.Log4j2;
 public class ClassSubstitutorRegistry {
 
     private final List<ClassSubstitutor> classSubstitutors;
+    private final Map<Class<?>, Substitution> cache = _Maps.newConcurrentHashMap();
 
     @Inject
     public ClassSubstitutorRegistry(final List<ClassSubstitutor> classSubstitutors) {
         this.classSubstitutors = classSubstitutors;
     }
-
-    private final Map<Class<?>, Substitution> cache = _Maps.newConcurrentHashMap();
 
     /**
      * @param originalClass

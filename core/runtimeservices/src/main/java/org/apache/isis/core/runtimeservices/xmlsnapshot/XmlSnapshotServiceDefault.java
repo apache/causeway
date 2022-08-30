@@ -35,7 +35,7 @@ import org.w3c.dom.Element;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.xml.XmlService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
@@ -60,17 +60,17 @@ public class XmlSnapshotServiceDefault implements XmlSnapshotService {
     static class XmlSnapshotServiceDefaultBuilder implements XmlSnapshotService.Snapshot.Builder{
 
         private final XmlSnapshotBuilder builder;
-        public XmlSnapshotServiceDefaultBuilder(SpecificationLoader specificationLoader, Object domainObject) {
+        public XmlSnapshotServiceDefaultBuilder(final SpecificationLoader specificationLoader, final Object domainObject) {
             builder = new XmlSnapshotBuilder(specificationLoader, domainObject);
         }
 
         @Override
-        public void includePath(String path) {
+        public void includePath(final String path) {
             builder.includePath(path);
         }
 
         @Override
-        public void includePathAndAnnotation(String path, String annotation) {
+        public void includePathAndAnnotation(final String path, final String annotation) {
             builder.includePathAndAnnotation(path, annotation);
         }
 
@@ -86,7 +86,7 @@ public class XmlSnapshotServiceDefault implements XmlSnapshotService {
      */
     @Override
     public XmlSnapshotService.Snapshot snapshotFor(final Object domainObject) {
-        final ManagedObject adapter = ManagedObject.lazy(specificationLoader, domainObject);
+        final ManagedObject adapter = ManagedObject.wrapScalar(specificationLoader, domainObject);
         return new XmlSnapshot(adapter);
     }
 

@@ -4,9 +4,6 @@
 
 This section describes how to install and setup JetBrains' IntelliJ IDEA, then how to import an application into IntelliJ and run it.
 
-NOTE: This material does not constitute an endorsement; JetBrains is not affiliated to Apache Software Foundation in any way.
-JetBrains does however provide complimentary copies of the IntelliJ IDE to Apache committers.
-
 
 == Installing and Importing
 
@@ -38,11 +35,11 @@ image::015-import-project/030-imported.png[width="800px"]
 Start off by creating a new project:
 
 
-Use menu:File[Project Structure] to confirm that JDK 8 is configured:
+Use menu:File[Project Structure] to confirm that JDK 11 is configured:
 
 image::015-import-project/040-project-structure.png[width="600px"]
 
-
+*TODO*: this screenshot is out of date; JDK 11 is now the minimum version required.
 
 == Configuring
 
@@ -105,15 +102,16 @@ You can do this using `File > Settings > Plugins` (or equivalently `File > Other
 
 Highly recommended are:
 
+* Lombok plugin (bundled with the IDE)
++
+If you plan to use link:https://projectlombok.org[Project Lombok] to reduce boilerplate.
+
 * link:https://plugins.jetbrains.com/plugin/7179?pr=idea[Maven Helper] plugin
 
 * link:https://plugins.jetbrains.com/plugin/7391-asciidoc[AsciiDoctor] plugin
 +
 Extremely useful if you are doing any authoring of documents (plugin's git repo is link:https://github.com/asciidoctor/asciidoctor-intellij-plugin[here])
 
-* link:https://plugins.jetbrains.com/plugin/6317-lombok[Lombok] plugin
-+
-If you plan to use link:https://projectlombok.org[Project Lombok] to reduce boilerplate.
 
 
 
@@ -164,7 +162,7 @@ If on Windows you encounter a "The command line is too long" error, then set '-D
 ====
 
 Then, set up the run configuration for the app.
-Note how it runs the enhance configuration first:
+Note how it runs the "enhance" configuration first:
 
 .Run Configuration to run the app
 image::110-running-the-app/010-run-configuration.png[width="700px"]

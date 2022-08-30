@@ -25,8 +25,8 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.RequiredArgsConstructor;

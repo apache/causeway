@@ -62,8 +62,8 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoice
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;

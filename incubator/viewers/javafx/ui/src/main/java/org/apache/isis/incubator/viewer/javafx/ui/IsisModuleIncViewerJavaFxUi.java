@@ -37,11 +37,11 @@ import org.apache.isis.incubator.viewer.javafx.ui.decorator.icon.IconServiceDefa
 import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForButton;
 import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingDecoratorForFormField;
 import org.apache.isis.incubator.viewer.javafx.ui.decorator.prototyping.PrototypingInfoPopupProvider;
+import org.apache.isis.incubator.viewer.javafx.ui.main.MainViewFx;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiActionHandlerFx;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiBuilderFx;
 import org.apache.isis.incubator.viewer.javafx.ui.main.UiContextFxDefault;
-import org.apache.isis.viewer.commons.model.IsisModuleViewerCommon;
-import org.apache.isis.incubator.viewer.javafx.ui.main.MainViewFx;
+import org.apache.isis.viewer.commons.applib.IsisModuleViewerCommonsApplib;
 
 /**
  *
@@ -50,7 +50,7 @@ import org.apache.isis.incubator.viewer.javafx.ui.main.MainViewFx;
 @Configuration
 @Import({
         // Modules
-        IsisModuleViewerCommon.class,
+        IsisModuleViewerCommonsApplib.class,
         IsisModuleIncViewerJavaFxModel.class,
 
         // @Components's

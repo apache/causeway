@@ -45,8 +45,7 @@ public class CommandLogEntry_childCommands {
 
     private final CommandLogEntry commandLogEntry;
 
-    @MemberSupport
-    public List<? extends CommandLogEntry> coll() {
+    @MemberSupport public List<? extends CommandLogEntry> coll() {
         return commandLogEntryRepository.findByParent(commandLogEntry);
     }
 

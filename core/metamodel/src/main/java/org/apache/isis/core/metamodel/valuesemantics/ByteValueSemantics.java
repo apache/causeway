@@ -54,7 +54,7 @@ implements
     DefaultsProvider<Byte>,
     Parser<Byte>,
     Renderer<Byte>,
-    IdStringifier<Byte> {
+    IdStringifier.EntityAgnostic<Byte> {
 
     @Override
     public Class<Byte> getCorrespondingClass() {
@@ -92,8 +92,7 @@ implements
     }
 
     @Override
-    public Byte destring(
-            final @NonNull String stringified) {
+    public Byte destring(final @NonNull String stringified) {
         return Byte.parseByte(stringified);
     }
 

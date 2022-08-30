@@ -58,8 +58,8 @@ import org.apache.isis.applib.value.Clob;
 public @interface Action {
 
     /**
-     * References a collection of a certain element type (by its member-id), 
-     * for an action with scalar or collection parameters of that element type; 
+     * References a collection of a certain element type (by its member-id),
+     * for an action with scalar or collection parameters of that element type;
      * the action's choices will be automatically populated from checkboxes rendered in the collection
      * (multi-select).
      *
@@ -228,5 +228,6 @@ public @interface Action {
      */
     String fileAccept()
             default "";
+
 
 }

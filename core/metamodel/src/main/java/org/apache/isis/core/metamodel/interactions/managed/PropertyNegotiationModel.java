@@ -30,9 +30,10 @@ import org.apache.isis.commons.internal.debug._Debug;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmAssertionUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -68,8 +69,8 @@ public class PropertyNegotiationModel implements ManagedValue {
             : currentValue;
 
         proposedValue = _Bindables.forValue(defaultValue);
-        proposedValue.setValueRefiner(EntityUtil::refetch);
-        proposedValue.setValueGuard(ManagedObjects.assertInstanceOf(propMeta.getElementType()));
+        proposedValue.setValueRefiner(MmEntityUtil::refetch);
+        proposedValue.setValueGuard(MmAssertionUtil.assertInstanceOf(propMeta.getElementType()));
         proposedValue.addListener((e,o,n)->{
             invalidateChoicesAndValidation();
         });

@@ -72,7 +72,7 @@ public class Object_logicalTypeName {
     @Action(
             domainEvent = ActionDomainEvent.class   // this is a workaround to allow the mixin to be subscribed to (ISIS-2650)
     )
-    public String prop() {
+    @MemberSupport public String prop() {
         val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
         return bookmark.getLogicalTypeName();
     }

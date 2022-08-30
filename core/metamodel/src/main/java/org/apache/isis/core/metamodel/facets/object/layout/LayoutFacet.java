@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.layout;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /*
  * Layout for an object.

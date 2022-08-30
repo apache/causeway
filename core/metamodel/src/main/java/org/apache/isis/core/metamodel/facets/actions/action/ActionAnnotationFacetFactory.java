@@ -75,6 +75,7 @@ extends FacetFactoryAbstract {
         processRestrictTo(processMethodContext, actionIfAny);
         processSemantics(processMethodContext, actionIfAny);
 
+
         // must come after processing semantics
         processCommandPublishing(processMethodContext, actionIfAny);
 
@@ -223,7 +224,8 @@ extends FacetFactoryAbstract {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         //
-        // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
+        // this rule inspired by a similar rule for auditing and publishing,
+        // see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
         if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
@@ -235,7 +237,9 @@ extends FacetFactoryAbstract {
         // check for @Action(executionPublishing=...)
         addFacetIfPresent(
                 ExecutionPublishingActionFacetForActionAnnotation
-                .create(actionIfAny, getConfiguration(), facetedMethod));
+                .create(actionIfAny, getConfiguration(), facetedMethod));        // check for @Action(executionPublishing=...)
+
+
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {

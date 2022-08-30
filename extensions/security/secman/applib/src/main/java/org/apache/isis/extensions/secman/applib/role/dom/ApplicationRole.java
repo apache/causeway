@@ -55,7 +55,10 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @Named(ApplicationRole.LOGICAL_TYPE_NAME)
-@DomainObject
+@DomainObject(
+        autoCompleteRepository = ApplicationRoleRepository.class,
+        autoCompleteMethod = "findMatching"
+        )
 @DomainObjectLayout(
         titleUiEvent = ApplicationRole.TitleUiEvent.class,
         iconUiEvent = ApplicationRole.IconUiEvent.class,

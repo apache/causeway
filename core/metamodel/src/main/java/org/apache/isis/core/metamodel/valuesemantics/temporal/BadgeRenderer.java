@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.valuesemantics.temporal;
 
 import java.util.function.Supplier;
 
+import org.apache.isis.commons.internal.html._BootstrapBadge;
+
 /**
  * Provides html rendering for temporals with time-zone or time-offset information.
  *
@@ -42,14 +44,12 @@ public interface BadgeRenderer {
      * Depends on presence of <i>Bootstrap</i>.
      */
     public static BadgeRenderer bootstrapBadgeWithTooltip() {
-        return (text, faIconProvider, tooltipProvider)->String.format("<span "
-                + "class=\"badge bg-light\" "
-                + "data-bs-container=\"body\" "
-                + "data-bs-toggle=\"tooltip\" "
-                + "title=\"%s\">"
-                + "<i class=\"%s\"></i>"
-                + "%s"
-                + "</span>", tooltipProvider.get(), faIconProvider.get(), text);
+        return (text, faIconProvider, tooltipProvider)->_BootstrapBadge.builder()
+                .caption(text)
+                .faIcon(faIconProvider.get())
+                .tooltip(tooltipProvider.get())
+                .build()
+                .toHtml();
     }
 
 }

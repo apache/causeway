@@ -25,6 +25,7 @@ import javax.enterprise.inject.Vetoed;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -33,12 +34,14 @@ import org.apache.isis.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.memento.ActionParameterMemento;
+import org.apache.isis.core.metamodel.util.Facets;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -137,6 +140,26 @@ extends ObjectFeature, CurrentHolder {
      * but non-null {@link ManagedObject}
      */
     @NonNull ManagedObject getDefault(ParameterNegotiationModel pendingArgs);
+
+    /**
+     * Reassesses the current parameter value, that is applying <i>defaults semantics</i>,
+     * whenever a parameter this one depends on changes in the UI. Parameters
+     * with higher index depend on those with lower index.
+     * <p>
+     * Reassessment can be switch off by means of {@link org.apache.isis.applib.annotation.Parameter#dependentDefaultsPolicy()}.
+     */
+    default void reassessDefault(final ParameterNegotiationModel pendingArgs) {
+        val paramIndex = getParameterIndex();
+        val bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
+        if(Facets.dependentDefaultsPolicy(this).isUpdateDependent()
+                // always allow when not dirtied by the user (UI)
+                || ! bindableParamDirtyFlag.getValue().booleanValue() ) {
+            // reassess defaults honoring defaults semantics
+            val paramDefaultValue = this.getDefault(pendingArgs);
+            pendingArgs.setParamValue(paramIndex, paramDefaultValue);
+            bindableParamDirtyFlag.setValue(false); // clear dirty flag
+        }
+    }
 
     @NonNull default ManagedObject getEmpty() {
         return ManagedObject.of(getElementType(), null);

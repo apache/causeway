@@ -52,10 +52,10 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -313,7 +313,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         val spec = targetAdapter.getSpecification();
         if(spec.isEntity()) {
             return runExecutionTask(()->{
-                EntityUtil.persistInCurrentTransaction(targetAdapter);
+                MmEntityUtil.persistInCurrentTransaction(targetAdapter);
                 return null;
             });
         }
@@ -340,7 +340,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = UnwrapUtil.single(currentReferencedAdapter);
+            val currentReferencedObj = MmUnwrapUtil.single(currentReferencedAdapter);
 
 
             val propertyAccessEvent = new PropertyAccessEvent(
@@ -405,7 +405,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = UnwrapUtil.single(currentReferencedAdapter);
+            val currentReferencedObj = MmUnwrapUtil.single(currentReferencedAdapter);
 
             val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
 
@@ -483,7 +483,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             val returnedAdapter = objectAction.execute(
                     head, argAdapters,
                     interactionInitiatedBy);
-            return UnwrapUtil.single(returnedAdapter);
+            return MmUnwrapUtil.single(returnedAdapter);
 
         });
 

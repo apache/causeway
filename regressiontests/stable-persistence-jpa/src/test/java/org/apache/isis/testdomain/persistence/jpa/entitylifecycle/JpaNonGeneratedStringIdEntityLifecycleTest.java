@@ -38,9 +38,9 @@ import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.jpa.entities.JpaEntityNonGeneratedStringId;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
@@ -78,7 +78,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         assertTrue(entity.getSpecification().isEntity());
         assertEquals(
                 EntityState.PERSISTABLE_DETACHED,
-                ManagedObjects.EntityUtil.getEntityState(entity));
+                MmEntityUtil.getEntityState(entity));
 
         setEntityRef(entity);
     }
@@ -92,7 +92,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         assertEquals(
                 EntityState.PERSISTABLE_ATTACHED,
-                ManagedObjects.EntityUtil.getEntityState(entity));
+                MmEntityUtil.getEntityState(entity));
         assertEquals(1, repository.allInstances(JpaEntityNonGeneratedStringId.class).size());
 
     }
@@ -103,7 +103,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         // expected post-condition (after persist, and having entered a new transaction)
         assertEquals(
                 EntityState.PERSISTABLE_DETACHED,
-                ManagedObjects.EntityUtil.getEntityState(getEntityRef()));
+                MmEntityUtil.getEntityState(getEntityRef()));
 
         val id = ((JpaEntityNonGeneratedStringId)getEntityRef().getPojo()).getName();
 
@@ -116,7 +116,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         // expected pre-condition (before removal)
         assertEquals(
                 EntityState.PERSISTABLE_ATTACHED,
-                ManagedObjects.EntityUtil.getEntityState(entity));
+                MmEntityUtil.getEntityState(entity));
 
         repository.remove(entity.getPojo());
 
@@ -155,7 +155,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
     static void assertDetachedOrDeleted(final ManagedObject entity) {
         assertEquals(
                 EntityState.PERSISTABLE_DETACHED, // if undecidable we currently return PERSISTABLE_DETACHED;
-                ManagedObjects.EntityUtil.getEntityState(entity));
+                MmEntityUtil.getEntityState(entity));
     }
 
 

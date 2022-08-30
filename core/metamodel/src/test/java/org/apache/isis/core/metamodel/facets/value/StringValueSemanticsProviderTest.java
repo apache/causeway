@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
+
+import static org.junit.Assert.assertEquals;
 
 public class StringValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<String> {
@@ -47,6 +47,16 @@ extends ValueSemanticsProviderAbstractTestCase<String> {
     public void testParse() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, "tRUe");
         assertEquals("tRUe", parsed.toString());
+    }
+
+    @Override
+    protected String getSample() {
+        return string;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final String a, final String json) {
+        assertEquals("text entry", json);
     }
 
 //    @Test

@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.HasImperativeAspect;
 import org.apache.isis.core.metamodel.facets.ImperativeAspect;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;

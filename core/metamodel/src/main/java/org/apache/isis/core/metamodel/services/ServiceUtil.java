@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.services;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public final class ServiceUtil {

@@ -1,0 +1,51 @@
+= JsonValueEncoderService
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Converts value representing xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] s to their corresponding JSON representation and back.
+
+== API
+
+[source,java]
+.JsonValueEncoderService.java
+----
+interface JsonValueEncoderService {
+  ManagedObject asAdapter(ObjectSpecification valueSpec, JsonRepresentation valueRepr, JsonValueConverter.Context context)     // <.>
+  void appendValueAndFormat(ManagedObject valueAdapter, JsonRepresentation repr, JsonValueConverter.Context context)     // <.>
+  Object asObject(ManagedObject adapter, JsonValueConverter.Context context)     // <.>
+  NullNode appendNullAndFormat(JsonRepresentation repr, boolean suppressExtensions)
+  void appendFormats(JsonRepresentation repr, String format, String extendedFormat, boolean suppressExtensions)
+}
+----
+
+<.> xref:#asAdapter_ObjectSpecification_JsonRepresentation_JsonValueConverter_Context[asAdapter(ObjectSpecification, JsonRepresentation, JsonValueConverter_Context)]
++
+--
+The value recovered from xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] as xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] honoring _Context_ , otherwise `null` .
+--
+<.> xref:#appendValueAndFormat_ManagedObject_JsonRepresentation_JsonValueConverter_Context[appendValueAndFormat(ManagedObject, JsonRepresentation, JsonValueConverter_Context)]
++
+--
+Appends given value type representing xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] to given xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] honoring _Context_ .
+--
+<.> xref:#asObject_ManagedObject_JsonValueConverter_Context[asObject(ManagedObject, JsonValueConverter_Context)]
++
+--
+A _JsonNode_ or otherwise natively supported simple type from given xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] , honoring _Context_ .
+--
+
+== Members
+
+[#asAdapter_ObjectSpecification_JsonRepresentation_JsonValueConverter_Context]
+=== asAdapter(ObjectSpecification, JsonRepresentation, JsonValueConverter_Context)
+
+The value recovered from xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] as xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] honoring _Context_ , otherwise `null` .
+
+[#appendValueAndFormat_ManagedObject_JsonRepresentation_JsonValueConverter_Context]
+=== appendValueAndFormat(ManagedObject, JsonRepresentation, JsonValueConverter_Context)
+
+Appends given value type representing xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] to given xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] honoring _Context_ .
+
+[#asObject_ManagedObject_JsonValueConverter_Context]
+=== asObject(ManagedObject, JsonValueConverter_Context)
+
+A _JsonNode_ or otherwise natively supported simple type from given xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] , honoring _Context_ .

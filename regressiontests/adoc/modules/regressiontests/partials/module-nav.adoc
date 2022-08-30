@@ -1,4 +1,0 @@
-
-* xref:regressiontests:about.adoc[Regression Tests]
-
-

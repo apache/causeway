@@ -24,6 +24,7 @@ import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.appfeatui.ApplicationFeatureViewModel;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.isis.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
@@ -47,7 +48,7 @@ public class ApplicationFeatureViewModel_permissions {
     @Action(
             domainEvent = ApplicationFeatureViewModel_permissions.ActionDomainEvent.class
     )
-    public java.util.Collection<ApplicationPermission> coll() {
+    @MemberSupport public java.util.Collection<ApplicationPermission> coll() {
         return applicationPermissionRepository.findByFeatureCached(viewModel.getFeatureId());
     }
 

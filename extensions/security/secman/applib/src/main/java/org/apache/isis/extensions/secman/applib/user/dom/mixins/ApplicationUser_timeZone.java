@@ -26,13 +26,16 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.user.UserCurrentSessionTimeZoneHolder;
 import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.RequiredArgsConstructor;
 
-@Property(editing = Editing.DISABLED)
+@Property(
+        editing = Editing.DISABLED,
+        hidden = Where.ALL_TABLES)
 @PropertyLayout(
         fieldSetId = "regional",
         describedAs = "Timezone ID as stored in your current session. (Logout/Login to change.)",
@@ -45,9 +48,7 @@ public class ApplicationUser_timeZone {
 
     @Inject private UserCurrentSessionTimeZoneHolder userCurrentSessionTimeZoneHolder;
 
-    @MemberSupport
-    @Nullable
-    public String prop() {
+    @MemberSupport @Nullable public String prop() {
         return userCurrentSessionTimeZoneHolder.getUserTimeZone()
             .map(_Temporals::formatZoneId)
             .orElse(null);

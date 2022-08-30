@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.menubars.bootstrap;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;

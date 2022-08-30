@@ -23,11 +23,14 @@ import javax.inject.Inject;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisAppFeatureRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisConfigurationRoleAndPermissions;
-import org.apache.isis.extensions.secman.applib.role.seed.IsisExtCommandReplayPrimaryRoleAndPermissions;
-import org.apache.isis.extensions.secman.applib.role.seed.IsisExtCommandReplaySecondaryRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.role.seed.IsisExtAuditTrailRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.role.seed.IsisExtCommandLogRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.role.seed.IsisExtExecutionLogRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.role.seed.IsisExtExecutionOutboxRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisExtH2ConsoleRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisExtSecmanAdminRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisExtSecmanRegularUserRoleAndPermissions;
+import org.apache.isis.extensions.secman.applib.role.seed.IsisExtSessionLogRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisPersistenceJdoMetaModelRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisSudoImpersonateRoleAndPermissions;
 import org.apache.isis.extensions.secman.applib.role.seed.IsisViewerRestfulObjectsSwaggerRoleAndPermissions;
@@ -62,23 +65,39 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         // global tenancy
         executionContext.executeChild(this, new GlobalTenancy());
 
-        // secman (admin and regular users)
-        executionContext.executeChildren(this,
-                new IsisExtSecmanAdminRoleAndPermissions(secmanConfig),
-                new IsisExtSecmanAdminUser(secmanConfig),
-                new IsisExtSecmanRegularUserRoleAndPermissions(secmanConfig));
-
-        // other modules
+        // modules
         executionContext.executeChildren(this,
                 new IsisAppFeatureRoleAndPermissions(),
                 new IsisPersistenceJdoMetaModelRoleAndPermissions(),
-                new IsisExtCommandReplayPrimaryRoleAndPermissions(),
-                new IsisExtCommandReplaySecondaryRoleAndPermissions(),
+                new IsisExtAuditTrailRoleAndPermissions(),
+                new IsisExtCommandLogRoleAndPermissions(),
+                new IsisExtExecutionLogRoleAndPermissions(),
+                new IsisExtExecutionOutboxRoleAndPermissions(),
+                new IsisExtSessionLogRoleAndPermissions(),
                 new IsisExtH2ConsoleRoleAndPermissions(),
                 new IsisViewerRestfulObjectsSwaggerRoleAndPermissions(),
                 new IsisSudoImpersonateRoleAndPermissions(),
                 new IsisConfigurationRoleAndPermissions()
                 );
+
+        // secman module (admin and regular users role, and secman-admin superuser)
+        executionContext.executeChildren(this,
+                new IsisExtSecmanAdminRoleAndPermissions(secmanConfig),
+                new IsisExtSecmanRegularUserRoleAndPermissions(secmanConfig),
+                new IsisExtSecmanAdminUser(secmanConfig,
+                        IsisAppFeatureRoleAndPermissions.ROLE_NAME,
+                        IsisPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME,
+                        IsisExtAuditTrailRoleAndPermissions.ROLE_NAME,
+                        IsisExtCommandLogRoleAndPermissions.ROLE_NAME,
+                        IsisExtExecutionLogRoleAndPermissions.ROLE_NAME,
+                        IsisExtExecutionOutboxRoleAndPermissions.ROLE_NAME,
+                        IsisExtSessionLogRoleAndPermissions.ROLE_NAME,
+                        IsisExtH2ConsoleRoleAndPermissions.ROLE_NAME,
+                        IsisViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME,
+                        IsisSudoImpersonateRoleAndPermissions.ROLE_NAME,
+                        IsisConfigurationRoleAndPermissions.ROLE_NAME)
+                );
+
     }
 
 }

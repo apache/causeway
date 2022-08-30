@@ -22,8 +22,8 @@ import java.util.function.Consumer;
 
 import org.apache.isis.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.isis.incubator.viewer.javafx.model.context.UiContextFx;
-import org.apache.isis.viewer.commons.model.menu.MenuItemDto;
-import org.apache.isis.viewer.commons.model.menu.MenuVisitor;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuItemDto;
+import org.apache.isis.viewer.commons.applib.services.menu.MenuVisitor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

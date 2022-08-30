@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.viewer.resources;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -119,9 +119,9 @@ public class ObjectAdapterUpdateHelper {
             // otherwise, is an error.
             final String invalidReason = propertiesMap.getString("x-ro-invalidReason");
             if(invalidReason != null) {
-                propertiesMap.mapPut("x-ro-invalidReason", invalidReason + "; " + property.getFriendlyName(objectAdapter.asProvider()));
+                propertiesMap.mapPutString("x-ro-invalidReason", invalidReason + "; " + property.getFriendlyName(objectAdapter.asSupplier()));
             } else {
-                propertiesMap.mapPut("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getFriendlyName(objectAdapter.asProvider()));
+                propertiesMap.mapPutString("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getFriendlyName(objectAdapter.asSupplier()));
             }
             allOk = false;
             return allOk;
@@ -137,7 +137,7 @@ public class ObjectAdapterUpdateHelper {
                 }
                 if (disabled) {
                     // not allowed to update
-                    propertyRepr.mapPut("invalidReason", usability.getReason());
+                    propertyRepr.mapPutString("invalidReason", usability.getReason());
                     allOk = false;
                     return allOk;
                 }
@@ -149,7 +149,7 @@ public class ObjectAdapterUpdateHelper {
             try {
                 valueAdapter = new JsonParserHelper(resourceContext, propertySpec).objectAdapterFor(propertyRepr);
             } catch(IllegalArgumentException ex) {
-                propertyRepr.mapPut("invalidReason", ex.getMessage());
+                propertyRepr.mapPutString("invalidReason", ex.getMessage());
                 allOk = false;
                 return allOk;
             }
@@ -162,11 +162,11 @@ public class ObjectAdapterUpdateHelper {
                             objectAdapter, valueAdapter,
                             resourceContext.getInteractionInitiatedBy());
                 } catch (final IllegalArgumentException ex) {
-                    propertyRepr.mapPut("invalidReason", ex.getMessage());
+                    propertyRepr.mapPutString("invalidReason", ex.getMessage());
                     allOk = false;
                 }
             } else {
-                propertyRepr.mapPut("invalidReason", validity.getReason());
+                propertyRepr.mapPutString("invalidReason", validity.getReason());
                 allOk = false;
             }
         }

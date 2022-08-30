@@ -23,11 +23,11 @@ import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class BigDecimalValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
@@ -64,6 +64,16 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
     @Test
     public void testTitleOf() {
         assertEquals("34,132.199", value.titlePresentation(null, bigDecimal));
+    }
+
+    @Override
+    protected BigDecimal getSample() {
+        return bigDecimal;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final BigDecimal a, final String json) {
+        assertEquals("34132.199", json);
     }
 
 }

@@ -19,8 +19,8 @@
 package org.apache.isis.viewer.commons.model.binding;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -39,7 +39,7 @@ implements BindingConverter<ManagedObject, T> {
 
     @Override
     public T toRight(final ManagedObject adapter) {
-        return _Casts.uncheckedCast(ManagedObjects.UnwrapUtil.single(adapter));
+        return _Casts.uncheckedCast(MmUnwrapUtil.single(adapter));
     }
 
 }

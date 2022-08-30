@@ -25,8 +25,8 @@ import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
@@ -65,9 +65,9 @@ implements ActionInteractionContext {
     @Override
     public ActionArgumentVisibilityEvent createInteractionEvent() {
         return new ActionArgumentVisibilityEvent(
-                UnwrapUtil.single(getTarget()),
+                MmUnwrapUtil.single(getTarget()),
                 getIdentifier(),
-                UnwrapUtil.multipleAsArray(getArgs().toList()),
+                MmUnwrapUtil.multipleAsArray(getArgs().toList()),
                 getPosition());
     }
 

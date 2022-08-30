@@ -1,5 +1,5 @@
 
 
 
-** xref:vw:pdfjs:about.adoc[pdf.js]
+** xref:vw:pdfjs:about.adoc[PDF.js]
 

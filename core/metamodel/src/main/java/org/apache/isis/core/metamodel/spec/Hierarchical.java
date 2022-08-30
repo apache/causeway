@@ -35,15 +35,15 @@ public interface Hierarchical {
     Can<ObjectSpecification> interfaces();
 
     /**
-     * Determines if this specification represents the same specification, or a
-     * subclass, of the specified specification.
-     *
+     * Whether <code>this</code> specification represents the same specification,
+     * or a subclass of the specified <code>other</code> specification.
      * <p>
      * <tt>subSpec.isOfType(superSpec)</tt> is equivalent to
      * {@link Class#isAssignableFrom(Class) Java's}
      * <tt>superType.isAssignableFrom(subType)</tt>.
+     * @return whether <code>this</code> is <b>instanceof</b> <code>other</code>
      */
-    boolean isOfType(ObjectSpecification specification);
+    boolean isOfType(ObjectSpecification other);
 
     public static enum Depth {
         DIRECT,

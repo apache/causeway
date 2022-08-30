@@ -25,8 +25,8 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmInvokeUtil;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 
@@ -57,7 +57,7 @@ implements CallbackFacet {
     @Override
     public final void invoke(final ManagedObject adapter) {
         // as a side effect memoizes the list of methods and locks it so cannot add any more
-        ManagedObjects.InvokeUtil.invokeAll(getMethods(), adapter);
+        MmInvokeUtil.invokeAll(getMethods(), adapter);
     }
 
 

@@ -66,7 +66,8 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     IsisModuleValAsciidocPersistenceJdoDn.class,
     IsisModuleValMarkdownPersistenceJdoDn.class,
 
-    // XrayEnable.class // for debugging only
+    //XrayEnable.class // for debugging only
+    //WicketViewerXrayEnable.class // for debugging only
 })
 //@Log4j2
 public class DemoAppWicketJdo extends SpringBootServletInitializer {

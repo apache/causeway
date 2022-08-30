@@ -20,26 +20,36 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.HasObjectFeature;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererException;
+import org.apache.isis.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
+
+import lombok.Getter;
+import lombok.val;
 
 public class ScalarValueReprRenderer
-extends ReprRendererAbstract<ManagedObject> {
+extends ReprRendererAbstract<ManagedObject>
+implements HasObjectFeature {
 
     private ObjectSpecification returnType;
+    @Getter(onMethod_ = {@Override}) private ObjectFeature objectFeature;
 
     public ScalarValueReprRenderer(
             final IResourceContext resourceContext,
+            final ObjectFeature objectFeature,
             final LinkFollowSpecs linkFollower,
             final JsonRepresentation representation) {
         // null for representationType (there is none)
         super(resourceContext, linkFollower, null, representation);
+        this.objectFeature = objectFeature;
     }
 
     /**
@@ -58,8 +68,11 @@ extends ReprRendererAbstract<ManagedObject> {
         if (!objectAdapter.getSpecification().isValue()) {
             throw ReprRendererException.create("Not an (encodable) value", objectAdapter.titleString());
         }
-        String format = null; // TODO
-        final Object value = jsonValueEncoder.asObject(objectAdapter, format);
+
+        val context = JsonValueConverter.Context.of(
+                getObjectFeature(),
+                getResourceContext().suppressMemberExtensions());
+        final Object value = jsonValueEncoder.asObject(objectAdapter, context);
 
         representation.mapPut("value", value);
         return this;

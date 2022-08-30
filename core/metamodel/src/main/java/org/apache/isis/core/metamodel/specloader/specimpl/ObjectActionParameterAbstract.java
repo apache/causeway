@@ -44,8 +44,8 @@ import org.apache.isis.core.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -245,7 +245,7 @@ implements
             // post processing each entry
             .map(obj->ManagedObjects.emptyToDefault(paramSpec, !isOptional(), obj));
             // pack up
-            val packed = ManagedObjects.pack(paramSpec, nonScalarDefaults);
+            val packed = ManagedObject.packed(paramSpec, nonScalarDefaults);
             return packed;
         }
 
@@ -284,7 +284,7 @@ implements
             // type returned by choices must be an instance of the param type
             // in other words <param type> is assignable from <choices type>
 
-            // TODO: should implement this instead as a MetaModelValidator
+            // TODO: should implement this instead as a MetaModelValidator (subject to [ISIS-3172])
             if (!choiceWrappedSpec.isOfType(paramWrappedSpec)) {
                 throw new DomainModelException(String.format(
                         "Type incompatible with parameter type; expected %s, but was %s",

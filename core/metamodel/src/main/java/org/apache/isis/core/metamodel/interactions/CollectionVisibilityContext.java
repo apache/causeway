@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.CollectionVisibilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -42,7 +42,7 @@ extends VisibilityContext {
 
     @Override
     public CollectionVisibilityEvent createInteractionEvent() {
-        return new CollectionVisibilityEvent(UnwrapUtil.single(getTarget()), getIdentifier());
+        return new CollectionVisibilityEvent(MmUnwrapUtil.single(getTarget()), getIdentifier());
     }
 
 }

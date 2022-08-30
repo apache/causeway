@@ -24,6 +24,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.semantics.Parser;
 import org.apache.isis.applib.value.semantics.Renderer;
@@ -70,19 +71,19 @@ implements
 
     @Override
     public String titlePresentation(final Context context, final Password value) {
-        return renderTitle(value, v->PlaceholderLiteral.SUPPRESSED.asText(this::translate));
+        return renderTitle(value, v->getPlaceholderRenderService().asText(PlaceholderLiteral.SUPPRESSED));
     }
 
     @Override
     public String htmlPresentation(final Context context, final Password value) {
-        return renderHtml(value, v->PlaceholderLiteral.SUPPRESSED.asHtml(this::translate));
+        return renderHtml(value, v->getPlaceholderRenderService().asHtml(PlaceholderLiteral.SUPPRESSED));
     }
 
     // -- PARSER
 
     @Override
     public String parseableTextRepresentation(final Context context, final Password value) {
-        return renderTitle(value, v->PlaceholderLiteral.SUPPRESSED.asText(this::translate));
+        return renderTitle(value, v->getPlaceholderRenderService().asText(PlaceholderLiteral.SUPPRESSED));
     }
 
     @Override

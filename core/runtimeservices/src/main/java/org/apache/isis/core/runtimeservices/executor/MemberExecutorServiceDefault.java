@@ -55,15 +55,17 @@ import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPubl
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
+import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
-import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
@@ -144,10 +146,10 @@ implements MemberExecutorService {
         log.debug("about to invoke action {}", actionId);
 
         val targetAdapter = head.getTarget();
-        val targetPojo = UnwrapUtil.single(targetAdapter);
+        val targetPojo = MmUnwrapUtil.single(targetAdapter);
 
         val argumentPojos = argumentAdapters.stream()
-                .map(UnwrapUtil::single)
+                .map(MmUnwrapUtil::single)
                 .collect(_Lists.toUnmodifiable());
 
         val actionInvocation =
@@ -217,8 +219,8 @@ implements MemberExecutorService {
         val propertyId = owningProperty.getFeatureIdentifier();
 
         val targetManagedObject = head.getTarget();
-        val target = UnwrapUtil.single(targetManagedObject);
-        val argValue = UnwrapUtil.single(newValueAdapter);
+        val target = MmUnwrapUtil.single(targetManagedObject);
+        val argValue = MmUnwrapUtil.single(newValueAdapter);
 
         val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue);
         val executor = propertyExecutorFactory
@@ -260,8 +262,8 @@ implements MemberExecutorService {
             final InteractionHead head,
             final Can<ManagedObject> arguments) {
 
-        final Object[] executionParameters = UnwrapUtil.multipleAsArray(arguments);
-        final Object targetPojo = UnwrapUtil.single(head.getTarget());
+        final Object[] executionParameters = MmUnwrapUtil.multipleAsArray(arguments);
+        final Object targetPojo = MmUnwrapUtil.single(head.getTarget());
         return CanonicalInvoker.invoke(method, targetPojo, executionParameters);
     }
 
@@ -276,7 +278,7 @@ implements MemberExecutorService {
             return;
         }
 
-        val entityState = ManagedObjects.EntityUtil.getEntityState(resultAdapter);
+        val entityState = MmEntityUtil.getEntityState(resultAdapter);
         if(entityState.isDetached())   {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             getTransactionService().flushTransaction();
@@ -311,7 +313,7 @@ implements MemberExecutorService {
             return resultAdapter;
         }
 
-        return ManagedObjects.VisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy)
+        return MmVisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy)
                 ? resultAdapter
                 : null;
     }

@@ -21,12 +21,11 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
-import org.apache.isis.core.metamodel.valuesemantics.BooleanValueSemantics;
 
 public class BooleanValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Boolean> {
@@ -81,8 +80,18 @@ extends ValueSemanticsProviderAbstractTestCase<Boolean> {
 
     @Test
     public void testTitleWhenNotSet() throws Exception {
-        assertEquals(PlaceholderLiteral.NULL_REPRESENTATION.getLiteral(),
+        assertEquals("(none)",
                 value.titlePresentation(null, null));
+    }
+
+    @Override
+    protected Boolean getSample() {
+        return booleanObj;
+    }
+
+    @Override
+    protected void assertValueEncodesToJsonAs(final Boolean a, final String json) {
+        assertEquals("true", json);
     }
 
 }

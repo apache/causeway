@@ -29,7 +29,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
 import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
@@ -45,11 +45,10 @@ import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
 import org.apache.isis.viewer.wicket.ui.util.WktTooltips;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
-
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 /**
  *  Adds inline prompt logic.
@@ -187,7 +186,9 @@ extends ScalarPanelAbstract {
     protected StringForRendering obtainOutputFormat() {
         val proposedValue = scalarModel().proposedValue();
         if(!proposedValue.isPresent()) {
-            return StringForRendering.markup(PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
+            return StringForRendering.markup(
+                    getPlaceholderRenderService()
+                    .asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
         }
         val useText = isUsingTextarea()
                 || getFormatModifiers().contains(FormatModifier.BADGE);

@@ -164,7 +164,7 @@ public @interface CollectionLayout {
      * may be sorted in an order more suitable to the context.
      */
     @SuppressWarnings("rawtypes")
-    Class sortedBy()
+    Class<? extends Comparator> sortedBy()
             default Comparator.class;
 
 }

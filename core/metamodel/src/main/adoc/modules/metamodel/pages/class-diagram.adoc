@@ -1,8 +1,6 @@
-[#class-diagram]
 = Class Diagram
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
 
 
 The diagram below shows a simplified version of Apache Isis' internal metamodel.
@@ -14,7 +12,7 @@ include::docs:resources:partial$plantuml-stereotypes.puml[]
 
 package metamodel {
 
-    class Object\nSpecId<<value>> {
+    class LogicalType<<value>> {
         +type
     }
 
@@ -61,17 +59,18 @@ package metamodel {
 }
 
 package runtime {
-    class Object\nAdapter<<ppt>> {
+    class ManagedObject<<ppt>> {
         +getSpecification()
+        +getPojo()
     }
-    class Oid<<value>> {
+    class Bookmark<<value>> {
 
     }
 }
 
 
 
-Object\nSpecification -up-> Object\nSpecId
+Object\nSpecification -up-> LogicalType
 Object\nSpecification -down-> "*" Object\nMember
 Object\nMember ^-down- Object\nAssociation
 Object\nMember ^-down- Object\nAction
@@ -87,24 +86,22 @@ FacetHolder ^-.down- Object\nActionParameter
 FacetHolder -right-> "*" Facet
 
 
-Object\nAdapter  -up-> Oid
+ManagedObject  -up-> Bookmark
 
-Oid -right-> Object\nSpecId
+Bookmark -right-> LogicalType
 
 ----
 
 where in the `metamodel` package:
 
 `ObjectSpecification`:: is equivalent to `java.lang.Class`
-`ObjectSpecId`:: is a value object equivalent to the `@DomainObject#logicalTypeName` or `@DomainService#logicalTypeName` attribute
+`LogicalType`:: is a value object equivalent to the `@Named#value` attribute
 `OneToOneAssociation`:: represents a scalar property
 `OneToManyAssociation`:: represents a collection
 `ObjectAction`:: represents an action (with multiple parameters, either scalar or list)
 
 and in the `runtime` package:
 
-`Oid`:: is equivalent to the applib `Bookmark`
-+
-and appears in URLs in the Wicket and Restful Objects viewers
+`Bookmark`:: is equivalent to a tuple of `LogicalType` and an _Identifier_, appears in URLs in the Wicket and Restful Objects viewers
 
-`ObjectAdapter`:: is equivalent to `java.lang.Object`
+`ManagedObject`:: is equivalent to `java.lang.Object`

@@ -29,10 +29,10 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.IResource;
 
+import org.apache.isis.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract.PlaceholderLiteral;
 import org.apache.isis.viewer.commons.model.StringForRendering;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
@@ -89,7 +89,8 @@ extends ScalarPanelFormFieldAbstract<T> {
         val caption = getBlobOrClobFromModel()
                 .map(NamedWithMimeType::getName)
                 .orElseGet(()->
-                    PlaceholderLiteral.NULL_REPRESENTATION.asText(this::translate));
+                    getPlaceholderRenderService()
+                    .asText(PlaceholderLiteral.NULL_REPRESENTATION));
         return StringForRendering.text(caption);
     }
 
@@ -124,7 +125,8 @@ extends ScalarPanelFormFieldAbstract<T> {
             // represent null reference by a simple markup displaying '(none)'
             val linkContainer = Wkt.container(id);
             Wkt.markupAdd(linkContainer, CompactFragment.ID_LINK_LABEL,
-                    PlaceholderLiteral.NULL_REPRESENTATION.asHtml(this::translate));
+                    getPlaceholderRenderService()
+                    .asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
             return linkContainer;
         });
     }

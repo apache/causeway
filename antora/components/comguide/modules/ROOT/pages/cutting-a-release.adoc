@@ -70,10 +70,9 @@ To run the RAT tool, use:
 [source,bash,subs="attributes+"]
 .find unapproved/missing licenses
 ----
-mvn clean
-
 pushd bom
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000 -Dreleased
+mvn -Dapache-release clean
+mvn -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000
 popd
 
 for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt
@@ -105,18 +104,40 @@ This is stored in the `src/main/appended-resources/supplemental-models.xml` file
 
 It's first necessary to have built the framework locally at least once.
 
-In the root directory:
-
+* switch to the `bom` directory:
++
 [source,bash,subs="attributes+"]
 ----
-mvn clean install -o -DskipTests
+pushd bom
 ----
 
-Once this is done, capture the missing license information using:
-
+* build the framework (ok to skip tests):
++
 [source,bash,subs="attributes+"]
 ----
-mvn license:download-licenses
+mvn -Dgithub clean install -DskipTests
+----
++
+NB: the `-Dgithub` activates the "github" profile which references the exact same ``<module>``s as the official "apache-release" profile.
+
+* Capture the missing license information using:
++
+[source,bash,subs="attributes+"]
+----
+mvn -Dgithub license:download-licenses
+----
+
+* Switch back to the root directory:
++
+[source,bash,subs="attributes+"]
+----
+popd
+----
+
+* Report on the missing license information using:
++
+[source,bash,subs="attributes+"]
+----
 groovy scripts/checkmissinglicenses.groovy
 ----
 
@@ -292,15 +313,10 @@ mvn versions:set -DnewVersion=$ISISREL
 +
 [source,bash,subs="attributes+"]
 ----
-mvn install -o -DskipTests -Dreleased
+mvn install -o -DskipTests -T1C -Dgithub
 ----
 +
-[NOTE]
-====
-The `released` system property is set to only sanity check the modules actually to be released (ignores the incubator modules).
-
-Partly that's because there's no need to check the incubator modules, it's also because the incubator modules might require more recent versions of Java than that formally supported by the framework (Java 11 currently).
-====
+The `-Dgithub` property activates the "github" profile that references all modules to be released.
 
 * next we also update the starters (as used by applications built using the framework):
 +
@@ -316,7 +332,6 @@ popd
 +
 [source,bash,subs="attributes+"]
 ----
-
 git add ..
 git commit -m "$ISISJIRA: bumps version to $ISISREL"
 ----
@@ -326,12 +341,14 @@ git commit -m "$ISISJIRA: bumps version to $ISISREL"
 === Sanity check
 
 Perform one last sanity check on the codebase.
-Delete all Isis artifacts from your local Maven repo, then build using the `-o` offline flag:
+Delete all Isis artifacts from your local Maven repo, then build using the `-o` offline flag.
+
+Still in the `bom` directory:
 
 [source,bash,subs="attributes+"]
 ----
 rm -rf ~/.m2/repository/org/apache/isis
-mvn clean install -o -Dreleased
+mvn clean install -o -T1C -Dgithub
 git clean -dfx ..
 ----
 
@@ -341,30 +358,24 @@ git clean -dfx ..
 Since the `<version>` has already been updated, we just use `mvn deploy` to upload the artifacts.
 We activate the (inherited) `apache-release` profile to bring in the `gpg` plugin for code signing.
 
+[WARNING]
+====
+make sure that the version of `gpg` on the `$PATH` is correct.
+
+I hit issues running on Windows under git-bash, as I was picking up git's version of gpg in `/usr/bin/gpg`.
+I sorted the issue eventually by running under Powershell, to pick up my gpg4Win.
+====
+
 The build creates a zip of the directory, so before executing the release we remove any other files.
 
 Still in the `bom` directory, we deploy (upload the artifacts) using:
 
 [source,bash,subs="attributes+"]
 ----
-mvn deploy \
-    -Dapache-release \
-    -Dgit \
-    -Dmaven.javadoc.skip=true    #<.>
+mvn deploy -Dapache-release -Dgit
 ----
-<.> generation of Javadoc is broken as of 2.0.0-M6; see note below.
 
-When prompted, enter your GPG passphrase.
-(Or, it might be sufficient to add just `-Dgpg.passphrase="..."`)
-
-[WARNING]
-.javadoc generation
-====
-As of 2.0.0-M6 javadoc generation is broken, due to link:https://issues.apache.org/jira/browse/MJAVADOC-586[MJAVADOC-586].
-
-Fixing the issue requires performing the build using a more recent version of the JDK than JDK11.
-However, this in turn requires module paths to be properly fixed; see link:https://issues.apache.org/jira/browse/ISIS-2841[ISIS-2841] for some ideas.
-====
+When prompted, enter your GPG passphrase (unless configured in `~/mvn/settings.xml` as the `gpg.passphrase` property)
 
 
 
@@ -383,7 +394,7 @@ git tag $ISISART-$ISISREL-$ISISRC
 
 The `mvn deploy` commands will have uploaded all of the release artifacts into a newly created staging repository on the ASF Nexus repository server.
 
-Log onto http://repository.apache.org[repository.apache.org] (using your ASF LDAP account):
+Log onto https://repository.apache.org[repository.apache.org] (using your ASF LDAP account):
 
 image::release-process/nexus-staging-0.png[width="600px"]
 
@@ -431,17 +442,12 @@ See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
 At the <<bump-code-to-isisrel,beginning>> of the release process we bumped the version to the release version, ie `$ISISREL`.
 With the release now deployed we now need to reset the revision back down to the base snapshot, ie `2.0.0-SNAPSHOT`.
 
-[NOTE]
-====
-Bumping back to `2.0.0-SNAPSHOT` (rather than the next development snapshot) simplifies CI/CD scripts for teams that want to building Apache Isis from source using git submodules.
-====
-
-Therefore (still in the `bom` directory):
+Therefore, still in the `bom` directory:
 
 [source,bash,subs="attributes+"]
 ----
 mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
-mvn install -DskipTests -o -Dreleased
+mvn install -DskipTests -o -T1C -Dgithub
 
 pushd ../starters
 mvn versions:set -DnewVersion=2.0.0-SNAPSHOT

@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.2</version>
+		<version>2.7.3</version>
 		<relativePath />
 	</parent>
 
@@ -41,7 +41,7 @@
 
 		<maven.compiler.release>11</maven.compiler.release>
 
-		<spring-boot.version>2.7.2</spring-boot.version>
+		<spring-boot.version>2.7.3</spring-boot.version>
 		<approvaltests.version>18.0.0</approvaltests.version>
 
 		<resteasy.version>4.6.2.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
@@ -74,7 +74,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-project-info-reports-plugin</artifactId>
-					<version>3.4.0</version>
+					<version>3.4.1</version>
 				</plugin>
 
 			</plugins>
@@ -153,9 +153,9 @@
 			<properties>
 
 				<!-- keep in sync with versions used in Apache Isis -->
-				<datanucleus-api-jdo.version>6.0.0-release</datanucleus-api-jdo.version>
-				<datanucleus-api-jpa.version>6.0.0-release</datanucleus-api-jpa.version>
-				<datanucleus-core.version>6.0.0-release</datanucleus-core.version>
+				<datanucleus-api-jdo.version>6.0.1</datanucleus-api-jdo.version>
+				<datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
+				<datanucleus-core.version>6.0.1</datanucleus-core.version>
 				<datanucleus-jodatime.version>6.0.0-release</datanucleus-jodatime.version>
 				<datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
 

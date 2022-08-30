@@ -1,3 +1,5 @@
 
 * xref:core:metamodel:about.adoc[MetaModel]
-** xref:core:metamodel:class-diagram.adoc[Class Diagram]
+** xref:core:metamodel:class-diagram.adoc[]
+** xref:core:metamodel:managed-object.adoc[]
+** xref:core:metamodel:events.adoc[]

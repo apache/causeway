@@ -76,7 +76,7 @@ public class InteractionFailureHandler {
             final @NonNull JsonRepresentation arguments) {
 
         if(veto!=null) {
-            arguments.mapPut("x-ro-invalidReason", veto.getReason());
+            arguments.mapPutString("x-ro-invalidReason", veto.getReason());
         }
         return RestfulObjectsApplicationException
                 .createWithBody(RestfulResponse.HttpStatusCode.VALIDATION_FAILED,
@@ -92,7 +92,7 @@ public class InteractionFailureHandler {
 
         val paramId = paramMeta.getId();
         val argRepr = arguments.getRepresentation(paramId);
-        argRepr.mapPut("invalidReason", veto.getReason());
+        argRepr.mapPutString("invalidReason", veto.getReason());
     }
 
 

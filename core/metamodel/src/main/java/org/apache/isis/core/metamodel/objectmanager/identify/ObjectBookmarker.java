@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.objectmanager.identify;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
  * @since 2.0

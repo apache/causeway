@@ -25,7 +25,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.h2.server.web.ConnectionInfo;
-import org.h2.server.web.WebServer;
 import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -36,10 +35,11 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.isis.core.config.datasources.DataSourceIntrospectionService.DataSourceInfo;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
+import org.apache.isis.core.security.authentication.standard.RandomCodeGenerator;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
 
@@ -78,12 +78,13 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
         this.applicable = isPrototyping()
                 && isH2MemConnectionUsed(datasourceIntrospector);
-        this.localResourcePathIfEnabled = applicable ? new LocalResourcePath(CONSOLE_PATH) : null;
+        this.localResourcePathIfEnabled = applicable
+                ? new LocalResourcePath(CONSOLE_PATH)
+                : null;
     }
 
     @Getter
     private final String name = "H2Console";
-
 
     @Override
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
@@ -91,14 +92,18 @@ public class WebModuleH2Console extends WebModuleAbstract {
         registerServlet(ctx, SERVLET_NAME, H2WebServlet.class)
             .ifPresent(servletReg -> {
                 servletReg.addMapping(CONSOLE_PATH + "/*");
-                servletReg.setInitParameter("webAllowOthers", "true");
+
+                //[ISIS-3128] presence of "webAllowOthers" is a potential security risk
+                // setting this later based on configuration below ...
+                //servletReg.setInitParameter("webAllowOthers", "true");
+
             });
 
         return Can.empty(); // registers no listeners
     }
 
     @Override
-    public boolean isApplicable(WebModuleContext ctx) {
+    public boolean isApplicable(final WebModuleContext ctx) {
         return applicable;
     }
 
@@ -109,6 +114,9 @@ public class WebModuleH2Console extends WebModuleAbstract {
         private static final long serialVersionUID = 1L;
 
         private static String jdbcUrl;
+
+        @Inject private IsisConfiguration isisConfiguration;
+        @Inject private RandomCodeGenerator randomCodeGenerator;
 
         @Override
         public void init() {
@@ -130,25 +138,30 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
             val webServlet = this;
 
-            try {
-
-                val serverField = WebServlet.class.getDeclaredField("server");
-                val updateSettingMethod = WebServer.class.getDeclaredMethod("updateSetting",
-                        ConnectionInfo.class);
-
-                val webServer = (WebServer) _Reflect.getFieldOn(serverField, webServlet);
-
-                _Reflect.invokeMethodOn(updateSettingMethod, webServer, connectionInfo);
-
-            } catch (Exception ex) {
-                log.error("Unable to set a custom ConnectionInfo for H2 console", ex);
-            }
+            H2WebServerWrapper.withH2WebServerWrapperDo(webServlet, h2WebServerWrapper->{
+                h2WebServerWrapper.setConnectionInfo(connectionInfo);
+                h2WebServerWrapper.setAllowOthers(isWebAllowRemoteAccess());
+                if(isGenerateRandomWebAdminPassword()) {
+                    val webAdminPass = randomCodeGenerator.generateRandomCode();
+                    log.info("webAdminPass: {}", webAdminPass);
+                    h2WebServerWrapper.setAdminPassword(webAdminPass);
+                }
+            });
 
         }
 
-        public static void configure(String jdbcUrl) {
+        public static void configure(final String jdbcUrl) {
             H2WebServlet.jdbcUrl = jdbcUrl;
         }
+
+        private boolean isWebAllowRemoteAccess() {
+            return isisConfiguration.getPrototyping().getH2Console().isWebAllowRemoteAccess();
+        }
+
+        private boolean isGenerateRandomWebAdminPassword() {
+            return isisConfiguration.getPrototyping().getH2Console().isGenerateRandomWebAdminPassword();
+        }
+
     }
 
     // -- HELPER

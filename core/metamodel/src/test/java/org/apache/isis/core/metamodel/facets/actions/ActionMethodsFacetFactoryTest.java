@@ -46,13 +46,13 @@ import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefau
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 
 import lombok.val;
 
 public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    private JUnitRuleMockery2 context =
+            JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private ObjectSpecification voidSpec;
 //    private final ObjectSpecification stringSpec = new ObjectSpecificationStub("java.lang.String");
@@ -65,7 +65,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         super.setUp();
 
-        voidSpec = new ObjectSpecificationStub(metaModelContext, void.class);
+        val specLoader = metaModelContext.getSpecificationLoader();
+        voidSpec = specLoader.loadSpecification(void.class);
 
         context.checking(new Expectations() {{
 
@@ -103,9 +104,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
         val facetFactory = new ActionValidationFacetViaMethodFactory(metaModelContext);
 
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
         @SuppressWarnings("unused")
         class Customer {
 
@@ -134,9 +132,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsValidateMethodSomeArgsFacetAndRemovesMethod() {
         val facetFactory = new ActionValidationFacetViaMethodFactory(metaModelContext);
 
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(final int x, final int y) {
@@ -164,8 +159,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterDefaultsMethodAndRemovesMethod() {
         val facetFactory = new ActionParameterDefaultsFacetViaMethodFactory(metaModelContext);
-
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -213,9 +206,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterChoicesMethodAndRemovesMethod() {
         val facetFactory = new ActionParameterChoicesFacetViaMethodFactory(metaModelContext);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -278,9 +268,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterAutoCompleteMethodAndRemovesMethod() {
         val facetFactory = new ActionParameterAutoCompleteFacetViaMethodFactory(metaModelContext);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")

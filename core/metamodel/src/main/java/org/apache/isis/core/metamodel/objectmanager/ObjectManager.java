@@ -28,6 +28,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker;
@@ -36,9 +37,7 @@ import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemorizer;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
 import org.apache.isis.core.metamodel.objectmanager.refresh.ObjectRefresher;
 import org.apache.isis.core.metamodel.objectmanager.serialize.ObjectSerializer;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.PackedManagedObject;
 
 import lombok.NonNull;
 import lombok.val;
@@ -160,7 +159,7 @@ public interface ObjectManager {
         }
         return spec.isScalar()
                 ? managedObjectEagerlyBookmarkedIfRequired(spec, pojo, entityAdaptingMode)
-                : PackedManagedObject.pack(
+                : ManagedObject.packed(
                         spec.getElementSpecification().orElseGet(fallbackElementType),
                         _NullSafe.streamAutodetect(pojo)
                         .map(element->adapt(element, entityAdaptingMode))

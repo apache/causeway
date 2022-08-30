@@ -33,7 +33,7 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.reflection._Annotations;
-import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.TypeVetoMarker;
+import org.apache.isis.core.config.progmodel.ProgrammingModelConstants.TypeExcludeMarker;
 
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -78,7 +78,7 @@ implements IsisBeanTypeClassifier {
         }
 
         // handle vetoing ...
-        if(TypeVetoMarker.anyMatchOn(type)) {
+        if(TypeExcludeMarker.anyMatchOn(type)) {
             return IsisBeanMetaData.isisManaged(BeanSort.VETOED, type); // reject
         }
 

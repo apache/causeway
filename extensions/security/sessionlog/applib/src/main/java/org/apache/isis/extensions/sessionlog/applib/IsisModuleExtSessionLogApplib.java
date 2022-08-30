@@ -36,7 +36,7 @@ import org.apache.isis.extensions.sessionlog.applib.spiimpl.SessionSubscriberFor
 })
 public class IsisModuleExtSessionLogApplib {
 
-    public static final String NAMESPACE = "isis.ext.sessionlog";
+    public static final String NAMESPACE = "isis.ext.sessionLog";
     public static final String SCHEMA = "isisExtSessionLog";
 
     public abstract static class TitleUiEvent<S>

@@ -38,10 +38,10 @@ import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.extensions.secman.delegated.shiro.realm.IsisModuleExtSecmanShiroRealm;
 import org.apache.isis.extensions.secman.encryption.spring.IsisModuleExtSecmanEncryptionSpring;
 import org.apache.isis.extensions.secman.integration.IsisModuleExtSecmanIntegration;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
-import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanRealmShiro;
 import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
 import org.apache.isis.testdomain.conf.Configuration_usingJdoAndShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
@@ -73,7 +73,7 @@ import lombok.val;
 
     // Security Manager Extension (secman)
     IsisModuleExtSecmanIntegration.class,
-    IsisModuleExtSecmanRealmShiro.class,
+    IsisModuleExtSecmanShiroRealm.class,
     IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionSpring.class,
 })

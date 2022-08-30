@@ -27,8 +27,8 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.security.util.XrayUtil;
@@ -56,7 +56,7 @@ final class _Xray {
                 : String.format("action invocation w/ %d args:\n  %s",
                         argumentAdapters.size(),
                         argumentAdapters.stream()
-                        .map(ManagedObjects.UnwrapUtil::single)
+                        .map(MmUnwrapUtil::single)
                         .map(obj->"" + obj)
                         .collect(Collectors.joining(",\n  ")));
 
@@ -76,7 +76,7 @@ final class _Xray {
 
         val participantLabel = owningProperty.getFeatureIdentifier().getLogicalIdentityString("\n#");
         val enteringLabel = String.format("property edit -> '%s'",
-                ManagedObjects.UnwrapUtil.single(newValueAdapter));
+                MmUnwrapUtil.single(newValueAdapter));
 
         return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
     }

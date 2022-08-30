@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.resource.ByteArrayResource;
 
 import org.apache.isis.core.metamodel.commons.ScalarRepresentation;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.commons.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;

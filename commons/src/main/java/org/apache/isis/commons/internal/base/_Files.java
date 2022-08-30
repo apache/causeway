@@ -23,13 +23,17 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
+import java.nio.file.StandardCopyOption;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
+
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -51,8 +55,7 @@ public class _Files {
             final File dir,
             final Predicate<File> dirFilter,
             final Predicate<File> fileFilter) throws IOException {
-
-        final Set<File> fileList = new HashSet<>();
+        final Set<File> fileList = new LinkedHashSet<>();
         searchFiles(dir, dirFilter, fileFilter, fileList::add);
         return fileList;
     }
@@ -72,7 +75,6 @@ public class _Files {
             final Predicate<File> dirFilter,
             final Predicate<File> fileFilter,
             final Consumer<File> onFileFound) throws IOException {
-
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir.toPath())) {
             for (Path path : stream) {
                 val file = path.toFile();
@@ -144,6 +146,80 @@ public class _Files {
             }
         }
         return directoryToBeDeleted.delete();
+    }
+
+    /**
+     * Returns a temp directory with delete-on-exit policy.
+     */
+    @SneakyThrows
+    public static File tempDir(final String name) {
+        val tempDir =  Files.createTempDirectory(name).toFile();
+        tempDir.deleteOnExit();
+        return tempDir;
+    }
+
+    public static String realtiveFileName(final File root, final File file) {
+        return file.getAbsolutePath().substring(root.getAbsolutePath().length()+1);
+    }
+
+    public static Function<File, String> realtiveFileName(final File root) {
+        return file->realtiveFileName(root, file);
+    }
+
+    /**
+     * Creates the given directory if it does not already exist.
+     * If directory is null acts as a no-op.
+     * @return
+     * @throws IllegalArgumentException if any pre-existing file is in conflict
+     */
+    public static File makeDir(final @Nullable File directory) {
+        if(directory==null) {
+            return directory; // no-op
+        }
+        if(directory.exists()) {
+            if(directory.isDirectory()) {
+                return directory; // nothing to do
+            }
+            throw _Exceptions.illegalArgument(
+                    "cannot create directory over pre-existing file of same name %s",
+                    directory.getAbsolutePath());
+        }
+        if(!directory.mkdirs()) {
+            throw _Exceptions.unrecoverable(
+                    "failed to create directory %s",
+                    directory.getAbsolutePath());
+        }
+        return directory;
+    }
+
+    /**
+     * Optionally given file, based on whether non-null and exists and is a file (not a directory).
+     */
+    public static Optional<File> existingFile(final @Nullable File file) {
+        return file!=null
+                && file.isFile()
+                ? Optional.of(file)
+                : Optional.empty();
+    }
+
+    /**
+     * Optionally given file, based on whether non-null and exists and is a directory (not a file).
+     */
+    public static Optional<File> existingDirectory(final @Nullable File file) {
+        return file!=null
+                && file.isDirectory()
+                ? Optional.of(file)
+                : Optional.empty();
+    }
+
+    /**
+     * Copy {@code from} file {@code to} file, replacing existing.
+     * @param from
+     * @param to
+     */
+    @SneakyThrows
+    public static void copy(final @NonNull File from, final @NonNull File to) {
+        Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
 }

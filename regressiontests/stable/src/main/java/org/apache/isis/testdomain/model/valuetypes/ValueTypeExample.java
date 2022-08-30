@@ -45,6 +45,8 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.ValueSemantics;
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.graph.tree.TreeAdapter;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreeState;
@@ -58,6 +60,7 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Temporals;
 import org.apache.isis.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
 import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
@@ -67,9 +70,12 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.common.v2.OidDto;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Singular;
 import lombok.SneakyThrows;
+import lombok.val;
 
 public abstract class ValueTypeExample<T> {
 
@@ -85,9 +91,21 @@ public abstract class ValueTypeExample<T> {
         setValue(value);
     }
 
+    /**
+     * Name of the value-type plus suffix if any, as extracted from the implementing example name.
+     */
+    @Programmatic
+    public final String getName() {
+        val nameSuffix = extractSuffix(getClass().getSimpleName())
+                .map(s->"_" + s)
+                .orElse("");
+        val name = String.format("%s%s", getValueType().getName(), nameSuffix);
+        return name;
+    }
+
     @Autowired(required = false) List<ValueSemanticsAbstract<T>> semanticsList;
     @Programmatic
-    public Can<T> getExamples() {
+    public Can<T> getParserRoundtripExamples() {
         return Can.ofCollection(semanticsList)
         .getFirst()
         .map(semantics->semantics.getExamples())
@@ -103,6 +121,47 @@ public abstract class ValueTypeExample<T> {
     @Programmatic
     public final Class<T> getValueType() {
         return (Class<T>) getValue().getClass();
+    }
+
+    // -- PARSING
+
+    @lombok.Value @Builder
+    public static class ParseExpectation<T> {
+        final T value;
+        @Singular
+        final List<String> inputSamples;
+        final String expectedOutput;
+        final Class<? extends Throwable> expectedThrows;
+    }
+
+    public Can<ParseExpectation<T>> getParseExpectations() {
+        System.err.printf("skipping parsing test for %s%n", getName());
+        return Can.empty();
+    }
+
+    // -- RENDERING
+
+    @lombok.Value @Builder
+    public static class RenderExpectation<T> {
+        final T value;
+        final String title;
+        final String html;
+    }
+
+    public Can<RenderExpectation<T>> getRenderExpectations() {
+        System.err.printf("skipping rendering test for %s%n", getName());
+        return Can.empty();
+    }
+
+    // -- HELPER
+
+    private static Optional<String> extractSuffix(final String name) {
+        if(!name.contains("_")) {
+            return Optional.empty();
+        }
+        val ref = _Refs.stringRef(name);
+        ref.cutAtIndexOfAndDrop("_");
+        return Optional.of(ref.getValue());
     }
 
     // -- EXAMPLES - BASIC
@@ -302,7 +361,7 @@ public abstract class ValueTypeExample<T> {
 
         //FIXME does not handle example Float.MIN_VALUE well
         @Deprecated // remove override once fixed
-        @Override public Can<Float> getExamples() {
+        @Override public Can<Float> getParserRoundtripExamples() {
             return Can.of(value, updateValue);
         }
     }
@@ -319,10 +378,12 @@ public abstract class ValueTypeExample<T> {
 
         //FIXME does not handle example Double.MIN_VALUE well
         @Deprecated // remove override once fixed
-        @Override public Can<Double> getExamples() {
+        @Override public Can<Double> getParserRoundtripExamples() {
             return Can.of(value, updateValue);
         }
     }
+
+    // -- BIG INTEGER
 
     @Named("isis.testdomain.valuetypes.ValueTypeExampleBigInteger")
     @DomainObject(
@@ -335,15 +396,72 @@ public abstract class ValueTypeExample<T> {
         private BigInteger updateValue = BigInteger.ZERO;
     }
 
-    @Named("isis.testdomain.valuetypes.ValueTypeExampleBigDecimal")
+    // -- BIG DECIMAL
+
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleBigDecimal_default")
     @DomainObject(
             nature = Nature.BEAN)
-    public static class ValueTypeExampleBigDecimal
+    public static class ValueTypeExampleBigDecimal_default
     extends ValueTypeExample<BigDecimal> {
         @Property @Getter @Setter
-        private BigDecimal value = new BigDecimal("-63.1");
+        private BigDecimal value = new BigDecimal("-63.123456");
         @Getter
         private BigDecimal updateValue = BigDecimal.ZERO;
+    }
+
+    @Named("isis.testdomain.valuetypes.ValueTypeExampleBigDecimal_fixedFractionalDigits")
+    @DomainObject(
+            nature = Nature.BEAN)
+    public static class ValueTypeExampleBigDecimal_fixedFractionalDigits
+    extends ValueTypeExample<BigDecimal> {
+        @Property @ValueSemantics(minFractionalDigits = 2, maxFractionalDigits = 2)
+        @Getter @Setter
+        private BigDecimal value = new BigDecimal("-63.12");
+        @Getter
+        private BigDecimal updateValue = BigDecimal.ZERO;
+
+        // with this example maxFractionalDigits = 2 must not be exceeded
+        @Override public Can<BigDecimal> getParserRoundtripExamples() {
+            return Can.of(value, updateValue, new BigDecimal("0.1"));
+        }
+
+        @Override
+        public Can<ParseExpectation<BigDecimal>> getParseExpectations() {
+            return Can.of(
+                    ParseExpectation.<BigDecimal>builder()
+                        .value(new BigDecimal("123"))
+                        .inputSample("123")
+                        .inputSample("123.0")
+                        .inputSample("123.00")
+                        .expectedOutput("123.00")
+                        .build(),
+                    ParseExpectation.<BigDecimal>builder()
+                        .value(new BigDecimal("123.45"))
+                        .inputSample("123.45")
+                        .expectedOutput("123.45")
+                        .build(),
+                    ParseExpectation.<BigDecimal>builder()
+                        .value(new BigDecimal("123.45"))
+                        .inputSample("123.456")
+                        //org.apache.isis.applib.exceptions.recoverable.TextEntryParseException:
+                        // No more than 2 digits can be entered after the decimal separator, got 3 in '123.456'.
+                        .expectedThrows(TextEntryParseException.class)
+                        .build()
+                );
+        }
+
+        @Override
+        public Can<RenderExpectation<BigDecimal>> getRenderExpectations() {
+            return Can.of(
+                    RenderExpectation.<BigDecimal>builder()
+                        .value(new BigDecimal("123")).title("123.00").html("123.00").build(),
+                    RenderExpectation.<BigDecimal>builder()
+                        .value(new BigDecimal("0")).title("0.00").html("0.00").build(),
+                    RenderExpectation.<BigDecimal>builder()
+                        .value(new BigDecimal("123.456")).title("123.46").html("123.46").build()
+                );
+        }
+
     }
 
     // -- EXAMPLES - TEMPORAL - LEGACY

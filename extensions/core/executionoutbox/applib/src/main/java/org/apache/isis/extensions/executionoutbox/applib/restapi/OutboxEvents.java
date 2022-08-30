@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ObjectSupport;
 import org.apache.isis.extensions.executionoutbox.applib.IsisModuleExtExecutionOutboxApplib;
 import org.apache.isis.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 
@@ -56,7 +57,7 @@ public class OutboxEvents  {
 
     static final String LOGICAL_TYPE_NAME = IsisModuleExtExecutionOutboxApplib.NAMESPACE + ".OutboxEvents";
 
-    public String title() {
+    @ObjectSupport public String title() {
         return String.format("%d executions", executions.size());
     }
 

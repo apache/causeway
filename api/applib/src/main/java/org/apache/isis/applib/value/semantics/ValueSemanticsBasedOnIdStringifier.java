@@ -28,7 +28,8 @@ import lombok.experimental.Accessors;
 
 /**
  * Convenient base class for value-semantics,
- * that are basically inferred from an {@link IdStringifier}.
+ * that are inferred from an {@link IdStringifier}.
+ * @see IdStringifier
  * @since 2.0
  */
 public abstract class ValueSemanticsBasedOnIdStringifier<T>
@@ -58,18 +59,6 @@ implements
     @Override
     public String enstring(@NonNull final T value) {
         return value.toString();
-    }
-
-    // -- COMPOSER
-
-    @Override
-    public final ValueDecomposition decompose(final T value) {
-        return decomposeAsString(value, this::enstring, ()->null);
-    }
-
-    @Override
-    public final T compose(final ValueDecomposition decomposition) {
-        return composeFromString(decomposition, this::destring, ()->null);
     }
 
 }

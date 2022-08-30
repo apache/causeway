@@ -18,12 +18,16 @@
  */
 package org.apache.isis.security.keycloak.services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -40,6 +44,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.util.CollectionUtils;
 
+import org.apache.isis.core.config.IsisConfiguration;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -50,6 +56,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
 
     final JwtDecoder jwtDecoder;
     final GrantedAuthoritiesMapper authoritiesMapper;
+    final IsisConfiguration isisConfiguration;
 
     /**
      * Augments {@link OidcUserService#loadUser(OidcUserRequest)} to add authorities
@@ -82,32 +89,78 @@ public class KeycloakOauth2UserService extends OidcUserService {
 
         Jwt token = parseJwt(userRequest.getAccessToken().getTokenValue());
 
-        // Would be great if Spring Security would provide something like a pluggable
-        // OidcUserRequestAuthoritiesExtractor interface to hide the junk below...
+        List<String> combinedRoles = new ArrayList<>();
 
-        @SuppressWarnings("unchecked")
-        val resourceMap = (Map<String, Object>) token.getClaims().get("resource_access");
-        String clientId = userRequest.getClientRegistration().getClientId();
+        if(isisConfiguration.getSecurity().getKeycloak().isExtractClientRoles()) {
 
-        @SuppressWarnings("unchecked")
-        val clientResource = (Map<String, Map<String, Object>>) resourceMap.get(clientId);
-        if (CollectionUtils.isEmpty(clientResource)) {
-            return Collections.emptyList();
+            // attempt to parse out 'resource_access.${client_id}.roles'
+
+            val resourceObj = token.getClaims().get("resource_access");
+            if (resourceObj instanceof Map) {
+                @SuppressWarnings("rawtypes")
+                val resourceMap = (Map) resourceObj;
+
+                val clientId = userRequest.getClientRegistration().getClientId();
+                val clientResourceObj = resourceMap.get(clientId);
+                if(clientResourceObj instanceof Map) {
+                    @SuppressWarnings("rawtypes")
+                    val clientResource = (Map) clientResourceObj;
+                    if (!CollectionUtils.isEmpty(clientResource)) {
+                        val clientRolesObj = clientResource.get("roles");
+                        if (clientResourceObj instanceof List) {
+                            @SuppressWarnings("unchecked")
+                            val clientRoles = (List<Object>) clientRolesObj;
+                            if (!CollectionUtils.isEmpty(clientRoles)) {
+                                val prefix = Optional.ofNullable(isisConfiguration.getSecurity().getKeycloak().getClientRolePrefix()).orElse("");
+                                clientRoles.stream()
+                                        .filter(Objects::nonNull)
+                                        .map(clientRole -> prefix + clientRole)
+                                        .forEach(combinedRoles::add);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        @SuppressWarnings("unchecked")
-        List<String> clientRoles = (List<String>) clientResource.get("roles");
-        if (CollectionUtils.isEmpty(clientRoles)) {
-            return Collections.emptyList();
+        if (isisConfiguration.getSecurity().getKeycloak().isExtractRealmRoles()) {
+            // attempt to parse out 'realm_access.roles'
+            val realmAccessObj = token.getClaims().get("realm_access");
+            if (realmAccessObj instanceof Map) {
+                @SuppressWarnings("rawtypes")
+                val realmAccessMap = (Map)realmAccessObj;
+                Object realmRolesObj = realmAccessMap.get("roles");
+                if (realmRolesObj instanceof List) {
+                    @SuppressWarnings("unchecked")
+                    val realmRoles = (List<Object>) realmRolesObj;
+                    val prefix = Optional.ofNullable(isisConfiguration.getSecurity().getKeycloak().getRealmRolePrefix()).orElse("");
+                    realmRoles.stream()
+                            .filter(Objects::nonNull)
+                            .map(realmRole -> prefix + realmRole)
+                            .forEach(combinedRoles::add);
+                }
+            }
         }
 
-        Collection<? extends GrantedAuthority> authorities = AuthorityUtils
-                .createAuthorityList(clientRoles.toArray(new String[0]));
-        if (authoritiesMapper == null) {
-            return authorities;
+        if (isisConfiguration.getSecurity().getKeycloak().isExtractRoles()) {
+            // attempt to parse out 'roles'
+            val rolesObj = token.getClaims().get("roles");
+            if (rolesObj instanceof List) {
+                @SuppressWarnings("unchecked")
+                val roles = (List<Object>) rolesObj;
+                val prefix = Optional.ofNullable(isisConfiguration.getSecurity().getKeycloak().getRolePrefix()).orElse("");
+                roles.stream()
+                        .filter(Objects::nonNull)
+                        .map(role -> prefix + role)
+                        .forEach(combinedRoles::add);
+            }
         }
 
-        return authoritiesMapper.mapAuthorities(authorities);
+        Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(combinedRoles.toArray(new String[]{}));
+        return authoritiesMapper == null
+                ? authorities
+                : authoritiesMapper.mapAuthorities(authorities);
+
     }
 
     private Jwt parseJwt(String accessTokenValue) {

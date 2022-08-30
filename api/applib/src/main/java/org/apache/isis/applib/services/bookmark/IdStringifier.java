@@ -21,7 +21,6 @@
 package org.apache.isis.applib.services.bookmark;
 
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -40,7 +39,7 @@ import lombok.val;
  *
  * <p>
  *     The framework provides default implementations of this SPI for JDO (data store and application identity) and
- *     for JPA. Because this is an SPI, other modules or application code can provide their own implementations.
+ *     for JPA. Because this is a SPI, other modules or application code can provide their own implementations.
  *     An example of such is the JPA implementation of the <code>commandlog</code> extension.
  * </p>
  *
@@ -50,13 +49,15 @@ import lombok.val;
  */
 public interface IdStringifier<T> {
 
+    public final static char SEPARATOR = '_';
+
     Class<T> getCorrespondingClass();
 
     /**
      * Convert the value (which will be of the same type as returned by {@link #getCorrespondingClass()}
      * into a string representation.
      *
-     * @see #destring(String)
+     * @see #destring(Class, String)
      */
     String enstring(@NonNull T value);
 
@@ -64,27 +65,31 @@ public interface IdStringifier<T> {
      * Convert a string representation of the identifier (as returned by {@link #enstring(Object)}) into an object
      * that can be used to retrieve.
      *
+     * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
+     *          we always have this information available, and is needed (at least) by the JDO
+     *          implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
      * @param stringified - as returned by {@link #enstring(Object)}
      */
-    T destring(@NonNull String stringified);
+    T destring(@NonNull Class<?> targetEntityClass, @NonNull String stringified);
 
+    /**
+     * Entity agnostic variant of {@link IdStringifier}.
+     */
+    interface EntityAgnostic<T> extends IdStringifier<T> {
 
-    interface SupportingTargetEntityClass<T> extends IdStringifier<T> {
         /**
          * Convert a string representation of the identifier (as returned by {@link #enstring(Object)}) into an object
          * that can be used to retrieve.
          *
          * @param stringified - as returned by {@link #enstring(Object)}
-         * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
-         *                                 we always have this information available, and is needed (at least) by the JDO
-         *                                 implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
          */
-        T destring(@NonNull String stringified, @NonNull Class<?> targetEntityClass);
+        T destring(@NonNull String stringified);
 
         @Override
-        default T destring(@NonNull final String stringified) {
-            throw _Exceptions.unsupportedOperation();
+        default T destring(@NonNull final Class<?> targetEntityClass, @NonNull final String stringified) {
+            return destring(stringified);
         }
+
     }
 
     /**
@@ -98,9 +103,7 @@ public interface IdStringifier<T> {
      * @deprecated not used within the framework; eventually remove
      */
     @Deprecated
-    abstract class AbstractWithPrefix<T> implements SupportingTargetEntityClass<T> {
-
-        public final static char SEPARATOR = '_';
+    abstract class AbstractWithPrefix<T> implements IdStringifier<T> {
 
         /**
          * eg <code>Integer.class</code>, or JDO-specific <code>DatastoreId</code>,
@@ -126,11 +129,6 @@ public interface IdStringifier<T> {
             return prefix + doEnstring(value);
         }
 
-        @Override
-        public final T destring(@NonNull final String stringified) {
-            throw _Exceptions.unsupportedOperation();
-        }
-
         /**
          * Overridable hook
          */
@@ -140,8 +138,8 @@ public interface IdStringifier<T> {
 
         @Override
         public final T destring(
-                final @NonNull String stringified,
-                final @NonNull Class<?> targetEntityClass) {
+                final @NonNull Class<?> targetEntityClass,
+                final @NonNull String stringified) {
             val suffix = removePrefix(stringified);
             return doDestring(suffix, targetEntityClass);
         }

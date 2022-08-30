@@ -19,13 +19,35 @@
 package org.apache.isis.applib.services.metamodel;
 
 import java.util.List;
+import java.util.function.BiConsumer;
+
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.commons.internal.collections._Multimaps;
+
+import lombok.val;
 
 /**
- * 
+ *
  * @since 1.x {@index}
  */
 public interface DomainModel {
 
     List<DomainMember> getDomainMembers();
+
+    // -- SHORTCUTS
+
+    default void forEachLogicalType(final @Nullable BiConsumer<? super String, ? super List<DomainMember>> consumer) {
+        if(consumer==null) {
+            return;
+        }
+
+        val membersByLogicalType = _Multimaps.<String, DomainMember>newListMultimap();
+
+        getDomainMembers().forEach(member->
+            membersByLogicalType.putElement(member.getLogicalTypeName(), member));
+
+        membersByLogicalType.forEach(consumer);
+    }
 
 }

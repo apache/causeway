@@ -137,6 +137,16 @@ public interface Try<T> {
             final @NonNull Function<Throwable, L> failureMapper,
             final @NonNull Function<Optional<T>, R> successMapper);
 
+    // -- TERMINATE
+
+    /**
+     * Either consumes the success or the failure.
+     * @apiNote Order of arguments conforms to {@link #map(Function, Function)}
+     */
+    void accept(
+            final @NonNull Consumer<Throwable> failureConsumer,
+            final @NonNull Consumer<Optional<T>> successConsumer);
+
     // -- FOLDING
 
     /**
@@ -226,6 +236,13 @@ public interface Try<T> {
         }
 
         @Override
+        public void accept(
+                final @NonNull Consumer<Throwable> failureConsumer,
+                final @NonNull Consumer<Optional<T>> successConsumer) {
+            successConsumer.accept(getValue());
+        }
+
+        @Override
         public <R> R fold(
                 final @NonNull Function<Throwable, R> failureMapper,
                 final @NonNull Function<Optional<T>, R> successMapper) {
@@ -304,6 +321,13 @@ public interface Try<T> {
         @Override
         public Try<Void> thenRun(final @NonNull ThrowingRunnable runnable) {
             return new Failure<>(throwable);
+        }
+
+        @Override
+        public void accept(
+                final @NonNull Consumer<Throwable> failureConsumer,
+                final @NonNull Consumer<Optional<T>> successConsumer) {
+            failureConsumer.accept(throwable);
         }
 
         @Override

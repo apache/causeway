@@ -29,8 +29,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.core.metamodel.valuesemantics.ImageValueSemantics;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;

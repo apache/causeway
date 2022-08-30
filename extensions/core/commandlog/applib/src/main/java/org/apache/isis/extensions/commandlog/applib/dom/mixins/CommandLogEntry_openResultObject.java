@@ -45,8 +45,7 @@ public class CommandLogEntry_openResultObject {
 
     private final CommandLogEntry commandLogEntry;
 
-    @MemberSupport
-    public Object act() {
+    @MemberSupport public Object act() {
         val targetBookmark = bookmarkService.lookup(commandLogEntry.getResult()).orElse(null);
         if(targetBookmark == null) {
             messageService.warnUser("Object not found - has it since been deleted?");

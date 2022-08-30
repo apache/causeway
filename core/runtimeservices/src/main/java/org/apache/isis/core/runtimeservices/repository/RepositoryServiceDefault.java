@@ -46,11 +46,11 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.query.ObjectBulkLoader;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.NonNull;
@@ -82,7 +82,7 @@ public class RepositoryServiceDefault implements RepositoryService {
     @Override
     public EntityState getEntityState(final @Nullable Object object) {
         val adapter = objectManager.adapt(unwrapped(object));
-        return EntityUtil.getEntityState(adapter);
+        return MmEntityUtil.getEntityState(adapter);
     }
 
     @Override
@@ -98,12 +98,12 @@ public class RepositoryServiceDefault implements RepositoryService {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
         // only persist detached entities, otherwise skip
-        val entityState = EntityUtil.getEntityState(adapter);
+        val entityState = MmEntityUtil.getEntityState(adapter);
         if(!entityState.isPersistable()
                 || entityState.isAttached()) {
             return domainObject;
         }
-        EntityUtil.persistInCurrentTransaction(adapter);
+        MmEntityUtil.persistInCurrentTransaction(adapter);
         return domainObject;
     }
 
@@ -121,8 +121,8 @@ public class RepositoryServiceDefault implements RepositoryService {
             return; // noop
         }
         val adapter = objectManager.adapt(unwrapped(domainObject));
-        if(EntityUtil.isAttached(adapter)) {
-            EntityUtil.destroyInCurrentTransaction(adapter);
+        if(MmEntityUtil.isAttached(adapter)) {
+            MmEntityUtil.destroyInCurrentTransaction(adapter);
         }
     }
 
@@ -179,7 +179,7 @@ public class RepositoryServiceDefault implements RepositoryService {
 
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
         val allMatching = objectManager.queryObjects(queryRequest);
-        final List<T> resultList = _Casts.uncheckedCast(UnwrapUtil.multipleAsList(allMatching));
+        final List<T> resultList = _Casts.uncheckedCast(MmUnwrapUtil.multipleAsList(allMatching));
         return resultList;
     }
 

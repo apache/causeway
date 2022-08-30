@@ -46,12 +46,18 @@ import com.fasterxml.jackson.databind.node.POJONode;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
+import org.springframework.lang.Nullable;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonNodeUtils;
 import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
+
+import lombok.val;
 
 /**
  * A wrapper around {@link JsonNode} that provides some additional helper
@@ -119,12 +125,25 @@ public class JsonRepresentation {
         return transformer;
     }
 
+    public static JsonRepresentation jsonAsMap(final @Nullable String keyValuePairsAsJson) {
+        val repr = JsonRepresentation.newMap();
+        if(_Strings.isNotEmpty(keyValuePairsAsJson)) {
+            final Map<Object, Object> keyValuePairs = _Casts.uncheckedCast(
+                    _Json.readJson(Map.class, keyValuePairsAsJson).getValue().orElseThrow());
+
+            keyValuePairs.forEach((key, value)->{
+                repr.mapPutString(""+key, ""+value);
+            });
+        }
+        return repr;
+    }
+
     public static JsonRepresentation newMap(final String... keyValuePairs) {
         final JsonRepresentation repr = new JsonRepresentation(new ObjectNode(JsonNodeFactory.instance));
         String key = null;
         for (final String keyOrValue : keyValuePairs) {
             if (key != null) {
-                repr.mapPut(key, keyOrValue);
+                repr.mapPutString(key, keyOrValue);
                 key = null;
             } else {
                 key = keyOrValue;
@@ -1352,7 +1371,7 @@ public class JsonRepresentation {
         for (final Object v : value) {
             array.arrayAdd(v);
         }
-        mapPut(key, array);
+        mapPutJsonRepresentation(key, array);
         return this;
     }
 
@@ -1366,7 +1385,7 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final JsonRepresentation value) {
+    public JsonRepresentation mapPutJsonRepresentation(final String key, final JsonRepresentation value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -1379,7 +1398,7 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final String value) {
+    public JsonRepresentation mapPutString(final String key, final String value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -1392,7 +1411,7 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final JsonNode value) {
+    public JsonRepresentation mapPutJsonNode(final String key, final JsonNode value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -1405,23 +1424,23 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final byte value) {
-        return mapPut(key, (int)value);
+    public JsonRepresentation mapPutByte(final String key, final byte value) {
+        return mapPutInt(key, value);
     }
 
-    public JsonRepresentation mapPut(final String key, final Byte value) {
-        return value != null ? mapPut(key, value.byteValue()) : mapPut(key, (Object) value);
+    public JsonRepresentation mapPutByteNullable(final String key, final Byte value) {
+        return value != null ? mapPutByte(key, value.byteValue()) : mapPut(key, value);
     }
 
-    public JsonRepresentation mapPut(final String key, final short value) {
-        return mapPut(key, (int)value);
+    public JsonRepresentation mapPutShort(final String key, final short value) {
+        return mapPutInt(key, value);
     }
 
-    public JsonRepresentation mapPut(final String key, final Short value) {
-        return value != null ? mapPut(key, value.shortValue()) : mapPut(key, (Object) value);
+    public JsonRepresentation mapPutShortNullable(final String key, final Short value) {
+        return value != null ? mapPutShort(key, value.shortValue()) : mapPut(key, value);
     }
 
-    public JsonRepresentation mapPut(final String key, final int value) {
+    public JsonRepresentation mapPutInt(final String key, final int value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -1431,11 +1450,11 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final Integer value) {
-        return value != null ? mapPut(key, value.intValue()) : mapPut(key, (Object) value);
+    public JsonRepresentation mapPutIntNullable(final String key, final Integer value) {
+        return value != null ? mapPutInt(key, value.intValue()) : mapPut(key, value);
     }
 
-    public JsonRepresentation mapPut(final String key, final long value) {
+    public JsonRepresentation mapPutLong(final String key, final long value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -1445,11 +1464,11 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final Long value) {
-        return value != null ? mapPut(key, value.longValue()) : mapPut(key, (Object) value);
+    public JsonRepresentation mapPutLongNullable(final String key, final Long value) {
+        return value != null ? mapPutLong(key, value.longValue()) : mapPut(key, value);
     }
 
-    public JsonRepresentation mapPut(final String key, final float value) {
+    public JsonRepresentation mapPutFloat(final String key, final float value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -1459,11 +1478,11 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final Float value) {
-        return value != null ? mapPut(key, value.floatValue()) : mapPut(key, (Object) value);
+    public JsonRepresentation mapPutFloatNullable(final String key, final Float value) {
+        return value != null ? mapPutFloat(key, value.floatValue()) : mapPut(key, value);
     }
 
-    public JsonRepresentation mapPut(final String key, final double value) {
+    public JsonRepresentation mapPutDouble(final String key, final double value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -1473,11 +1492,11 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final Double value) {
-        return value != null ? mapPut(key, value.doubleValue()) : mapPut(key, (Object) value);
+    public JsonRepresentation mapPutDoubleNullable(final String key, final Double value) {
+        return value != null ? mapPutDouble(key, value.doubleValue()) : mapPut(key, value);
     }
 
-    public JsonRepresentation mapPut(final String key, final boolean value) {
+    public JsonRepresentation mapPutBoolean(final String key, final boolean value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -1487,19 +1506,19 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final Boolean value) {
-        return value != null ? mapPut(key, value.booleanValue()) : mapPut(key, (Object) value);
+    public JsonRepresentation mapPutBooleanNullable(final String key, final Boolean value) {
+        return value != null ? mapPutBoolean(key, value.booleanValue()) : mapPut(key, value);
     }
 
-    public JsonRepresentation mapPut(final String key, final char value) {
-        return mapPut(key, ""+value);
+    public JsonRepresentation mapPutChar(final String key, final char value) {
+        return mapPutString(key, ""+value);
     }
 
-    public JsonRepresentation mapPut(final String key, final Character value) {
-        return value != null ? mapPut(key, value.charValue()) : mapPut(key, (Object) value);
+    public JsonRepresentation mapPutCharNullable(final String key, final Character value) {
+        return value != null ? mapPutChar(key, value.charValue()) : mapPut(key, value);
     }
 
-    public JsonRepresentation mapPut(final String key, final BigInteger value) {
+    public JsonRepresentation mapPutBigInteger(final String key, final BigInteger value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -1513,19 +1532,19 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final Iterable<Entry<String, JsonRepresentation>> entries) {
+    public JsonRepresentation mapPutEntries(final Iterable<Entry<String, JsonRepresentation>> entries) {
         for (Entry<String, JsonRepresentation> entry : entries) {
-            mapPut(entry);
+            mapPutEntry(entry);
         }
         return this;
     }
 
-    public JsonRepresentation mapPut(final Entry<String, JsonRepresentation> entry) {
-        mapPut(entry.getKey(), entry.getValue());
+    public JsonRepresentation mapPutEntry(final Entry<String, JsonRepresentation> entry) {
+        mapPutJsonRepresentation(entry.getKey(), entry.getValue());
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final BigDecimal value) {
+    public JsonRepresentation mapPutBigDecimal(final String key, final BigDecimal value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -1538,6 +1557,24 @@ public class JsonRepresentation {
         }
         return this;
     }
+
+    // -- FORMATS
+
+    public JsonRepresentation putFormat(final @Nullable String format) {
+        if(format != null) {
+            mapPutString("format", format);
+        }
+        return this;
+    }
+
+    public JsonRepresentation putExtendedFormat(final @Nullable String format) {
+        if(format != null) {
+            mapPutString("extensions.x-isis-format", format);
+        }
+        return this;
+    }
+
+    // -- PATH
 
     private static class Path {
         private final List<String> head;
@@ -1740,9 +1777,7 @@ public class JsonRepresentation {
     }
 
 
-    // ///////////////////////////////////////////////////////////////////////
-    // equals and hashcode
-    // ///////////////////////////////////////////////////////////////////////
+    // -- OBJECT CONTRACT (NO SEMANTIC EQUALITY) ... use toString() to check for semantic equality
 
     @Override
     public int hashCode() {
@@ -1763,15 +1798,12 @@ public class JsonRepresentation {
         JsonRepresentation other = (JsonRepresentation) obj;
         if (jsonNode == null) {
             if (other.jsonNode != null)
-                return false;
+            return false;
         } else if (!jsonNode.equals(other.jsonNode))
             return false;
         return true;
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // toString
-    // ///////////////////////////////////////////////////////////////////////
 
     @Override
     public String toString() {

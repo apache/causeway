@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class TitleAnnotationFacetFactoryTest
@@ -154,6 +154,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
             allowing(mockStringSpec).getCorrespondingClass();
             will(returnValue(String.class));
 
+            allowing(mockStringSpec).isValue();
+            will(returnValue(true));
+
             allowing(mockStringSpec).isScalar();
             will(returnValue(true));
 
@@ -257,6 +260,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 allowing(mockStringSpec).isEntity();
                 will(returnValue(false));
 
+                allowing(mockStringSpec).isValue();
+                will(returnValue(true));
+
                 ignoring(mockStringSpec).assertPojoCompatible(with(any(String.class)));
 
                 allowing(mockSpecificationLoader).specForType(Integer.class);
@@ -264,6 +270,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
                 allowing(mockIntegerSpec).getCorrespondingClass();
                 will(returnValue(Integer.class));
+
+                allowing(mockIntegerSpec).isValue();
+                will(returnValue(true));
 
                 allowing(mockIntegerSpec).isNonScalar();
                 will(returnValue(false));

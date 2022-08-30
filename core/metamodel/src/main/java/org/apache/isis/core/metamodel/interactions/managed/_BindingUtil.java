@@ -27,8 +27,8 @@ import org.apache.isis.commons.internal.binding._BindableAbstract;
 import org.apache.isis.commons.internal.binding._Bindables;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -153,7 +153,7 @@ class _BindingUtil {
         case TITLE: {
             val renderer = eitherRendererOrParser.left().orElseThrow();
             return bindableValue.map(value->{
-                        val pojo = ManagedObjects.UnwrapUtil.single(value);
+                        val pojo = MmUnwrapUtil.single(value);
                         val title = renderer.titlePresentation(context, pojo);
                         return title;
                     });
@@ -161,7 +161,7 @@ class _BindingUtil {
         case HTML: {
             val renderer = eitherRendererOrParser.left().orElseThrow();
             return bindableValue.map(value->{
-                        val pojo = ManagedObjects.UnwrapUtil.single(value);
+                        val pojo = MmUnwrapUtil.single(value);
                         val html = renderer.htmlPresentation(context, pojo);
                         return html;
                     });
@@ -170,7 +170,7 @@ class _BindingUtil {
             val parser = eitherRendererOrParser.right().orElseThrow();
             return bindableValue.mapToBindable(
                     value->{
-                        val pojo = ManagedObjects.UnwrapUtil.single(value);
+                        val pojo = MmUnwrapUtil.single(value);
                         val text = parser.parseableTextRepresentation(context, pojo);
                         //System.err.printf("toText: %s -> '%s'%n", ""+value, text);
                         return text;

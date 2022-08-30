@@ -24,8 +24,7 @@ import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyNegotiationModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -82,11 +81,6 @@ implements PropertyUiModel {
     @Override
     public PropertyNegotiationModel getPendingPropertyModel() {
         return delegate.getPendingPropertyModel();
-    }
-
-    @Override
-    public ObjectSpecification getScalarTypeSpec() {
-        return getMetaModel().getElementType();
     }
 
     @Override

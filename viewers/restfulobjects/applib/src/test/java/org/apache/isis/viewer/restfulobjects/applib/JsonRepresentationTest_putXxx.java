@@ -41,21 +41,21 @@ class JsonRepresentationTest_putXxx {
 
     @Test
     void putInt() throws IOException {
-        jsonRepresentation.mapPut("a", 123);
+        jsonRepresentation.mapPutInt("a", 123);
         assertThat(jsonRepresentation.getInt("a"), is(123));
     }
 
     @Test
     void putInt_multipart() throws IOException {
-        jsonRepresentation.mapPut("a.b", 456);
+        jsonRepresentation.mapPutInt("a.b", 456);
         assertThat(jsonRepresentation.getInt("a.b"), is(456));
     }
 
     @Test
     void putInt_pathBlockedByValue() throws IOException {
-        jsonRepresentation.mapPut("a", 123);
+        jsonRepresentation.mapPutInt("a", 123);
         assertThrows(IllegalArgumentException.class, ()->
-            jsonRepresentation.mapPut("a.b", 456));
+            jsonRepresentation.mapPutInt("a.b", 456));
     }
 
     @Test
@@ -64,7 +64,7 @@ class JsonRepresentationTest_putXxx {
         {
             int index = 0;
             for(int value : values) {
-                jsonRepresentation.mapPut("i" + index, value);
+                jsonRepresentation.mapPutInt("i" + index, value);
                 ++index;
             }
         }

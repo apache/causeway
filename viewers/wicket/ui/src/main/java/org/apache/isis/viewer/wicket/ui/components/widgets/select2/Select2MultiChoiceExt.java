@@ -24,28 +24,29 @@ import java.util.Collection;
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.Select2MultiChoice;
 
+import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.EmptyChoiceProvider;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.Getter;
 import lombok.val;
 
 public class Select2MultiChoiceExt
 extends Select2MultiChoice<ObjectMemento>
-implements
-    ChoiceExt {
+implements HasLogicalType {
 
     private static final long serialVersionUID = 1L;
 
     public static Select2MultiChoiceExt create(
             final String id,
             final IModel<ArrayList<ObjectMemento>> modelObject,
-            final ScalarModel scalarModel) {
+            final ScalarModel scalarModel,
+            final ChoiceProviderAbstract choiceProvider) {
 
-        return new Select2MultiChoiceExt(id, _Casts.uncheckedCast(modelObject), scalarModel);
+        return new Select2MultiChoiceExt(id, _Casts.uncheckedCast(modelObject), scalarModel, choiceProvider);
     }
 
     @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
@@ -53,9 +54,10 @@ implements
     Select2MultiChoiceExt(
             final String id,
             final IModel<Collection<ObjectMemento>> model,
-            final ScalarModel scalarModel) {
+            final ScalarModel scalarModel,
+            final ChoiceProviderAbstract choiceProvider) {
 
-        super(id, model, EmptyChoiceProvider.INSTANCE);
+        super(id, model, choiceProvider);
         logicalType = scalarModel.getScalarTypeSpec().getLogicalType();
 
         getSettings().setCloseOnSelect(true);

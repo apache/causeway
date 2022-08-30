@@ -47,7 +47,6 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -70,13 +69,14 @@ import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFac
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ActionScope;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -175,12 +175,12 @@ implements ObjectSpecification {
     private final Class<?> correspondingClass;
     private final String fullName;
     private final String shortName;
-    private final boolean isAbstract;
 
     private final LogicalType logicalType;
 
     private ObjectSpecification superclassSpec;
 
+    private ValueFacet valueFacet;
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
     private NavigableParentFacet navigableParentFacet;
@@ -206,8 +206,6 @@ implements ObjectSpecification {
         this.fullName = introspectedClass.getName();
         this.shortName = shortName;
         this.beanSort = beanSort;
-
-        this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
 
         this.facetProcessor = facetProcessor;
         this.postProcessor = postProcessor;
@@ -264,7 +262,7 @@ implements ObjectSpecification {
                 // set to avoid infinite loops
                 this.introspectionState = IntrospectionState.TYPE_BEING_INTROSPECTED;
                 introspectTypeHierarchy();
-                updateFromFacetValues();
+                invalidateCachedFacets();
                 this.introspectionState = IntrospectionState.TYPE_INTROSPECTED;
             }
             if(isLessThan(upTo)) {
@@ -377,8 +375,9 @@ implements ObjectSpecification {
         }
     }
 
-    private void updateFromFacetValues() {
-        titleFacet = getFacet(TitleFacet.class);
+    public void invalidateCachedFacets() {
+        valueFacet = getFacet(ValueFacet.class);
+        titleFacet = lookupNonFallbackFacet(TitleFacet.class).orElse(null);
         iconFacet = getFacet(IconFacet.class);
         navigableParentFacet = getFacet(NavigableParentFacet.class);
         cssClassFacet = getFacet(CssClassFacet.class);
@@ -387,7 +386,12 @@ implements ObjectSpecification {
 
     protected void postProcess() {
         postProcessor.postProcess(this);
-        updateFromFacetValues();
+        invalidateCachedFacets();
+    }
+
+    @Override
+    public final Optional<ValueFacet> valueFacet() {
+        return Optional.ofNullable(valueFacet);
     }
 
     @Override
@@ -452,27 +456,6 @@ implements ObjectSpecification {
 
     // -- HIERARCHICAL
 
-    /**
-     * Determines if this class represents the same class, or a subclass, of the
-     * specified class.
-     *
-     * <p>
-     * cf {@link Class#isAssignableFrom(Class)}, though target and parameter are
-     * the opposite way around, ie:
-     *
-     * <pre>
-     * cls1.isAssignableFrom(cls2);
-     * </pre>
-     * <p>
-     * is equivalent to:
-     *
-     * <pre>
-     * spec2.isOfType(spec1);
-     * </pre>
-     *
-     * @return whether {@code other} is assignable from {@code this}
-     *
-     */
     @Override
     public boolean isOfType(final ObjectSpecification other) {
 
@@ -628,11 +611,6 @@ implements ObjectSpecification {
     @Override
     public boolean hasSubclasses() {
         return directSubclasses.hasSubclasses();
-    }
-
-    @Override
-    public final boolean isAbstract() {
-        return isAbstract;
     }
 
     // -- ASSOCIATIONS

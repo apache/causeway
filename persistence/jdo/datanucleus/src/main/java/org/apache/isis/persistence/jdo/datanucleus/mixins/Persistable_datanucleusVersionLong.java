@@ -15,6 +15,7 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
 package org.apache.isis.persistence.jdo.datanucleus.mixins;
 
@@ -59,7 +60,7 @@ public class Persistable_datanucleusVersionLong {
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusVersionLong, Long> {}
 
-    public Long prop() {
+    @MemberSupport public Long prop() {
         final Object version = JDOHelper.getVersion(persistable);
         return version instanceof Long ? (Long) version : null;
     }

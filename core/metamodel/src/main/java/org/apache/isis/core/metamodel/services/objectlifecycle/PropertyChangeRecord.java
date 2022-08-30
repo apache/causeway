@@ -24,8 +24,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.EqualsAndHashCode;
@@ -136,7 +136,7 @@ public final class PropertyChangeRecord {
 
     private Object getPropertyValue() {
         val referencedAdapter = getProperty().get(getEntity(), InteractionInitiatedBy.FRAMEWORK);
-        return ManagedObjects.UnwrapUtil.single(referencedAdapter);
+        return MmUnwrapUtil.single(referencedAdapter);
     }
 
 

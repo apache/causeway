@@ -22,7 +22,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
+import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -39,7 +39,7 @@ public class CollectionAccessContext extends AccessContext {
 
     @Override
     public CollectionAccessEvent createInteractionEvent() {
-        return new CollectionAccessEvent(UnwrapUtil.single(getTarget()), getIdentifier());
+        return new CollectionAccessEvent(MmUnwrapUtil.single(getTarget()), getIdentifier());
     }
 
 }

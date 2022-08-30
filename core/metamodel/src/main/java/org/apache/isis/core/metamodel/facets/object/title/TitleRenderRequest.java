@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.functions._Predicates;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.Builder;

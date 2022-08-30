@@ -25,8 +25,8 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.managed.ManagedMember;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -170,11 +170,11 @@ extends ReprRendererAbstract<ManagedMember> {
     protected void renderMemberContent() {
 
         if(!resourceContext.suppressMemberId()) {
-            representation.mapPut("id", objectMember.getId());
+            representation.mapPutString("id", objectMember.getId());
         }
 
         if(!mode.isArguments()) {
-            representation.mapPut("memberType", objectMemberType.getName());
+            representation.mapPutString("memberType", objectMemberType.getName());
         }
 
         if (mode.isInline() && !resourceContext.suppressMemberLinks()) {
@@ -249,7 +249,7 @@ extends ReprRendererAbstract<ManagedMember> {
         }
         if (mutatorSpec.arguments.isOne()) {
             final JsonRepresentation repr = JsonRepresentation.newMap();
-            repr.mapPut("value", NullNode.getInstance()); // force a null into
+            repr.mapPutJsonNode("value", NullNode.getInstance()); // force a null into
             // the map
             return repr;
         }
@@ -269,7 +269,7 @@ extends ReprRendererAbstract<ManagedMember> {
 
         // create a temporary map that looks the same as the member map we'll be following
         final JsonRepresentation memberMap = JsonRepresentation.newMap();
-        memberMap.mapPut(getMemberId(), representation);
+        memberMap.mapPutJsonRepresentation(getMemberId(), representation);
         if (membersLinkFollower.matches(memberMap) && detailsLinkFollower.matches(link)) {
             followDetailsLink(link);
         }
@@ -283,7 +283,7 @@ extends ReprRendererAbstract<ManagedMember> {
             return;
         }
         final String disabledReasonRep = usability().getReason();
-        representation.mapPut("disabledReason", disabledReasonRep);
+        representation.mapPutString("disabledReason", disabledReasonRep);
     }
 
     protected abstract void putExtensionsIsisProprietary();

@@ -33,7 +33,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.all.described.ParamDescribedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.isis.testdomain.model.interaction.InteractionDemo_biArgEnabled;
@@ -137,6 +137,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
         pendingArgs.setParamValues(params);
 
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+
         assertTrue(resultOrVeto.isSuccess());
 
         assertEquals(5, (int)resultOrVeto.getSuccessElseFail().getPojo());

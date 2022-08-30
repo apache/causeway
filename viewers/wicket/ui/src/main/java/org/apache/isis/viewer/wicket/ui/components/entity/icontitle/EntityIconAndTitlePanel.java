@@ -27,10 +27,10 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
-import org.apache.isis.core.metamodel.spec.PackedManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmEntityUtil;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -65,7 +65,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     }
 
     protected ManagedObject getTargetAdapter() {
-        val targetAdapter = EntityUtil.refetch(getModel().getObject());
+        val targetAdapter = MmEntityUtil.refetch(getModel().getObject());
         return targetAdapter;
     }
 
@@ -103,32 +103,41 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private AbstractLink createLinkWithIconAndTitle() {
 
+        ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
         final ManagedObject targetAdapter = getTargetAdapter();
 
         final AbstractLink link = createDynamicallyVisibleLink(targetAdapter);
 
         if(targetAdapter != null) {
 
-            val spec = targetAdapter.getSpecification();
-
-            final String iconName = spec.getIconName(targetAdapter);
-            final CssClassFaFactory cssClassFaFactory = spec.getCssClassFaFactory().orElse(null);
-            if (iconName != null || cssClassFaFactory == null) {
-                Wkt.imageAddCachable(link, ID_ENTITY_ICON,
-                                getImageResourceCache().resourceReferenceFor(targetAdapter));
-                WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
-            } else {
-                Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
-                Wkt.cssAppend(dummy, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
+            if (ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
                 WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
+                final String title = "(no object)";
+                Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
+
+            } else {
+
+                val spec = targetAdapter.getSpecification();
+
+                final String iconName = spec.getIconName(targetAdapter);
+                final CssClassFaFactory cssClassFaFactory = spec.getCssClassFaFactory().orElse(null);
+                if (iconName != null || cssClassFaFactory == null) {
+                    Wkt.imageAddCachable(link, ID_ENTITY_ICON,
+                                    getImageResourceCache().resourceReferenceFor(targetAdapter));
+                    WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
+                } else {
+                    Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
+                    Wkt.cssAppend(dummy, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
+                    WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
+                }
+
+                final String title = determineTitle();
+                Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
+
+                String entityTypeName = determineFriendlyType() // from actual underlying model
+                        .orElseGet(spec::getSingularName); // not sure if this code path is ever reached
+                WktTooltips.addTooltip(link, entityTypeName, title);
             }
-
-            final String title = determineTitle();
-            Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
-
-            String entityTypeName = determineFriendlyType() // from actual underlying model
-                    .orElseGet(targetAdapter.getSpecification()::getSingularName); // not sure if this code path is ever reached
-            WktTooltips.addTooltip(link, entityTypeName, title);
         }
 
         return link;
@@ -165,7 +174,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private String determineTitle() {
         val managedObject = getModel().getObject();
-        return managedObject instanceof PackedManagedObject
+        return ManagedObjects.isPacked(managedObject)
                 ? "(multiple objects)"
                 : managedObject != null
                     ? managedObject.titleString(conf->conf.skipTitlePartEvaluator(this::isContextAdapter))
@@ -207,7 +216,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private static boolean isNonEmptyAbstractScalar(final ManagedObject obj) {
         if(obj==null
                 || obj.getPojo()==null
-                || obj instanceof PackedManagedObject) {
+                || ManagedObjects.isPacked(obj)) {
             return false;
         }
         return obj.getSpecification().isAbstract();

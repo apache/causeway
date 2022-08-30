@@ -26,8 +26,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.val;
@@ -38,12 +39,15 @@ extends ActionParameterChoicesFacetAbstract {
     public static Optional<ActionParameterChoicesFacet> create(
             final Optional<ChoicesFromFacet> choicesFromFacetIfAny,
             final ObjectSpecification actionOwnerSpec,
-            final FacetHolder facetHolder) {
+            final ObjectActionParameter param) {
+
         return choicesFromFacetIfAny
                 .map(ChoicesFromFacet::value)
                 .flatMap(actionOwnerSpec::getCollection)
+                // param type must be assignable from types returned by choices
+                .filter(coll->coll.getElementType().isOfType(param.getElementType()))
                 .map(coll->
-                    new ActionParameterChoicesFacetFromChoicesFromFacet(coll, facetHolder));
+                    new ActionParameterChoicesFacetFromChoicesFromFacet(coll, param.getFacetHolder()));
     }
 
     private final OneToManyAssociation choicesFromCollection;
