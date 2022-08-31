@@ -25,13 +25,17 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.domain.DomainObjectList;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 class ManagedObjectTest {
@@ -84,6 +88,40 @@ class ManagedObjectTest {
         assertEquals(Specialization.VALUE, presentObject.getSpecialization());
 
         presentObject.assertCompliance(6);
+
+        assertThrows(AssertionError.class, ()->{
+            presentObject.assertCompliance("incompatible");
+        });
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {DomainObjectList.class})
+    @SneakyThrows
+    void someTypesShouldMapToViewmodel(final Class<?> cls) {
+        val spec = specLoader.specForTypeElseFail(cls);
+        assertFalse(spec.isVoid(), ()->"isVoid()");
+        assertTrue(spec.isViewModel(), ()->"isViewModel()");
+        assertFalse(spec.isAbstract(), ()->"isAbstract()");
+        assertFalse(spec.isInjectable(), ()->"isInjectable()");
+
+        val emptySpez = Specialization.inferFrom(spec, null);
+        assertEquals(Specialization.EMPTY, emptySpez);
+
+        val emptyObject = ManagedObject.empty(spec);
+        assertNotNull(emptyObject);
+
+        val constructor = cls.getConstructor(_Constants.emptyClasses);
+        val pojo = constructor.newInstance(_Constants.emptyObjects);
+
+        val presentObject = ManagedObject.wrapScalar(specLoader, pojo);
+        assertEquals(Specialization.VIEWMODEL, presentObject.getSpecialization());
+
+        presentObject.assertCompliance(pojo);
+
+        //TODO
+//        assertThrows(AssertionError.class, ()->{
+//            presentObject.assertCompliance("incompatible");
+//        });
     }
 
 }

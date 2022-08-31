@@ -403,8 +403,12 @@ extends
     boolean isHidden();
 
     /**
-     * Whether this specification represents a bean, that is a managed bean
+     * Whether represents a bean, that is a managed bean
      * with scoped life-cycle, available for dependency injection.
+     * <p>
+     * DANGER: don't call during MM introspection
+     * @apiNote this predicate might not be valid until all services
+     *      have been discovered and the application context has settled
      */
     boolean isInjectable();
 
