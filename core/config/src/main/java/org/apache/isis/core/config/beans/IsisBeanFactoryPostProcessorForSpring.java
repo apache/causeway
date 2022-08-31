@@ -100,7 +100,7 @@ implements
 
             isisComponentScanInterceptor.intercept(typeMetaData);
 
-            if(typeMetaData.isInjectable()) {
+            if(!typeMetaData.isVetoedForInjection()) {
 
                 val beanNameOverride = typeMetaData.getBeanNameOverride();
                 if(_Strings.isNotEmpty(beanNameOverride)) {

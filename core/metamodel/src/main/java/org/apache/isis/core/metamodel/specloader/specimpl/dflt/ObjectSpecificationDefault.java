@@ -101,7 +101,17 @@ implements FacetHolder {
                 typeMeta.getLogicalType().getLogicalTypeSimpleName(),
                 typeMeta.getBeanSort(), facetProcessor, postProcessor);
 
-        this.injectable = typeMeta.getManagedBy().isInjectable();
+        this.injectable = !typeMeta.getManagedBy().isVetoedForInjection()
+                && !typeMeta.getBeanSort().isAbstract()
+                && !typeMeta.getBeanSort().isValue()
+                && !typeMeta.getBeanSort().isEntity()
+                && !typeMeta.getBeanSort().isViewModel()
+                && !typeMeta.getBeanSort().isMixin()
+                && (typeMeta.getBeanSort().isManagedBeanAny()
+                        || mmc.getServiceRegistry()
+                                .lookupRegisteredBeanById(typeMeta.getLogicalType().getLogicalTypeName())
+                                .isPresent());
+
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)

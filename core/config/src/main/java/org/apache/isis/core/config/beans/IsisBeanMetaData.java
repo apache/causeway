@@ -45,9 +45,9 @@ public class IsisBeanMetaData {
          * Whether Spring should make that underlying bean injectable.
          * @implNote if not managed by Isis, let ultimately Spring decide
          */
-        public boolean isInjectable() {
-            return !isIsis()
-                    && !isNone();
+        public boolean isVetoedForInjection() {
+            return isIsis()
+                    || isNone();
         }
         /**
          * Whether we interfere with Spring's naming strategy.

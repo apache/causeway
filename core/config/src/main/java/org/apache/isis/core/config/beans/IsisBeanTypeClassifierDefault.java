@@ -50,12 +50,16 @@ implements IsisBeanTypeClassifier {
     private final Can<String> activeProfiles;
     private final Can<IsisBeanTypeClassifier> classifierPlugins = IsisBeanTypeClassifier.get();
 
+    // handle arbitrary types ...
     @SuppressWarnings("deprecation")
     @Override
     public IsisBeanMetaData classify(
             final @NonNull Class<?> type) {
 
-        // handle arbitrary types ...
+        //debug
+//        _Debug.onClassSimpleNameMatch(type, "class of interest", ()->{
+//            System.err.printf("classifying %s%n", type);
+//        });
 
         if(ClassUtils.isPrimitiveOrWrapper(type)
                 || type.isEnum()) {
