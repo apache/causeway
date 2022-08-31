@@ -49,10 +49,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
         }});
     }
 
-    void allowingLoadSpecificationRequestsFor(final Class<?> cls, final Class<?> returnType) {
-
-    }
-
     @Before
     public void setUp() throws Exception {
 
