@@ -101,7 +101,7 @@ implements FacetHolder {
                 typeMeta.getLogicalType().getLogicalTypeSimpleName(),
                 typeMeta.getBeanSort(), facetProcessor, postProcessor);
 
-        this.injectable = typeMeta.getManagedBy().isSpring();
+        this.injectable = typeMeta.getManagedBy().isInjectable();
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)

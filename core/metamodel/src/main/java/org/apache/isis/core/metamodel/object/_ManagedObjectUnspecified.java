@@ -92,6 +92,11 @@ implements ManagedObject {
     }
 
     @Override
+    public String getTitle() {
+        return "unspecified object";
+    }
+
+    @Override
     public boolean equals(final Object other) {
         return Objects.equals(this, other);
     }

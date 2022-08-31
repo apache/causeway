@@ -421,7 +421,7 @@ implements ActionPromptProvider {
         }
 
         val dialogMode =
-                sort.isManagedBean()
+                sort.isManagedBeanAny()
                         ? getCommonContext().getConfiguration().getViewer().getWicket().getDialogModeForMenu()
                         : getCommonContext().getConfiguration().getViewer().getWicket().getDialogMode();
         switch (dialogMode) {

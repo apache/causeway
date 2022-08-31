@@ -33,6 +33,12 @@ import lombok.Value;
 @Value @Builder
 public class TitleRenderRequest {
 
+    public static TitleRenderRequest forObject(final ManagedObject object) {
+        return TitleRenderRequest.builder()
+        .object(object)
+        .build();
+    }
+
     private final @Nullable ObjectFeature feature;
     private final @NonNull ManagedObject object;
 

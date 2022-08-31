@@ -93,7 +93,7 @@ public enum BeanSort {
         return this == MANAGED_BEAN_NOT_CONTRIBUTING;
     }
 
-    public boolean isManagedBean() {
+    public boolean isManagedBeanAny() {
         return this == MANAGED_BEAN_CONTRIBUTING
                 || this == MANAGED_BEAN_NOT_CONTRIBUTING;
     }
@@ -146,7 +146,7 @@ public enum BeanSort {
     }
 
     public boolean isWrappingSupported() {
-        return isMixin() || isViewModel() || isEntity() || isManagedBean();
+        return isMixin() || isViewModel() || isEntity() || isManagedBeanAny();
     }
 
 

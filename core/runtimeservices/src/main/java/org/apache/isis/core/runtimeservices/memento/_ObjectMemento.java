@@ -561,7 +561,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
         }
 
         // intercept when managed by IoCC
-        if(spec.getBeanSort().isManagedBean()) {
+        if(spec.getBeanSort().isManagedBeanAny()) {
             return spec.getMetaModelContext().lookupServiceAdapterById(getLogicalTypeName());
         }
 

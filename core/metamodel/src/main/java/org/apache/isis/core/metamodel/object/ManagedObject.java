@@ -306,7 +306,6 @@ public interface ManagedObject extends HasMetaModelContext {
     /**
      * Returns the specific {@link Specialization} this {@link ManagedObject} implements,
      * which governs this object's behavior.
-     * @implNote FIXME[ISIS-3167] not fully implemented yet
      */
     Specialization getSpecialization();
 
@@ -356,7 +355,17 @@ public interface ManagedObject extends HasMetaModelContext {
 
     // -- TITLE
 
-    public default String titleString(final UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder) {
+    /**
+     * The (TODO translated ?) title of the wrapped pojo.
+     */
+    String getTitle();
+
+    @Deprecated
+    default String titleString() {
+        return getTitle();
+    }
+
+    default String titleString(final UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder) {
         return _InternalTitleUtil
                 .titleString(onBuilder.apply(
                         TitleRenderRequest.builder()
@@ -364,12 +373,6 @@ public interface ManagedObject extends HasMetaModelContext {
                         .build());
     }
 
-    public default String titleString() {
-        return _InternalTitleUtil.titleString(
-                TitleRenderRequest.builder()
-                .object(this)
-                .build());
-    }
 
     // -- SHORTCUT - ELEMENT SPECIFICATION
 
@@ -378,12 +381,6 @@ public interface ManagedObject extends HasMetaModelContext {
      */
     default Optional<ObjectSpecification> getElementSpecification() {
         return getSpecification().getElementSpecification();
-    }
-
-    // -- SHORTCUT - TITLE
-
-    default String getTitle() {
-        return MmTitleUtil.titleOf(this);
     }
 
     // -- SHORTCUT - ICON
@@ -434,7 +431,6 @@ public interface ManagedObject extends HasMetaModelContext {
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
-                //? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
                 ? new _ManagedObjectValue(spec, pojo)
                 : empty(spec);
     }
@@ -449,7 +445,7 @@ public interface ManagedObject extends HasMetaModelContext {
     static ManagedObject service(
             final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo) {
-        return new _ManagedObjectWithEagerSpec(spec, pojo); //FIXME
+        return new _ManagedObjectService(spec, pojo);
     }
     /**
      * VIEWMODEL
@@ -536,9 +532,17 @@ public interface ManagedObject extends HasMetaModelContext {
         if(pojo instanceof ManagedObject) {
             return (ManagedObject)pojo;
         }
-        _Assert.assertFalse(_Collections.isCollectionOrArrayOrCanType(pojo.getClass()));
-
         val spec = specLoader.specForType(pojo.getClass()).orElse(null);
+        return wrapScalarInternal(spec, pojo);
+    }
+
+    private static ManagedObject wrapScalarInternal(
+            final @Nullable ObjectSpecification spec,
+            final @NonNull Object pojo) {
+
+        _Assert.assertTrue(!_Collections.isCollectionOrArrayOrCanType(pojo.getClass()),
+                ()->String.format("is scalar %s", pojo.getClass()));
+
         val specialization = spec!=null
                 ? Specialization.inferFrom(spec, pojo)
                 : Specialization.UNSPECIFIED;
@@ -572,7 +576,12 @@ public interface ManagedObject extends HasMetaModelContext {
     static ManagedObject notBookmarked(
             final ObjectSpecification spec,
             final Object pojo) {
-        return new _ManagedObjectWithEagerSpec(spec, pojo);
+        if(pojo instanceof ManagedObject) {
+            return (ManagedObject)pojo;
+        }
+        return !_Collections.isCollectionOrArrayOrCanType(pojo.getClass())
+                ? wrapScalarInternal(spec, pojo)
+                : new _ManagedObjectWithEagerSpec(spec, pojo);
     }
 
     /**

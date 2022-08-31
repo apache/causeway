@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
@@ -97,20 +96,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     void expectRemoveMethod(final Method actionMethod) {
         context.checking(new Expectations() {{
             oneOf(mockMethodRemover).removeMethod(actionMethod);
-        }});
-    }
-
-    void allowingLoadSpecificationRequestsFor(final Class<?> cls, final Class<?> returnType) {
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(cls);
-            will(returnValue(mockTypeSpec));
-
-            allowing(mockSpecificationLoader).loadSpecification(returnType);
-            will(returnValue(mockReturnTypeSpec));
-
-            allowing(mockTypeSpec).getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            will(returnValue(null));
-
         }});
     }
 
@@ -236,14 +221,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             addSetterFacet(facetedMethod);
             addClearFacet(facetedMethod);
 
-            // expect
-            allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
-            context.checking(new Expectations() {{
-
-                allowing(mockTypeSpec).getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
-                will(returnValue(null));
-            }});
-
             // when
             val processMethodContext = ProcessMethodContext
                     .forTesting(cls, null,
@@ -290,14 +267,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             addGetterFacet(facetedMethod);
             addSetterFacet(facetedMethod);
             addClearFacet(facetedMethod);
-
-            // expect
-            allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
-
-            context.checking(new Expectations() {{
-                allowing(mockTypeSpec).getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
-                will(returnValue(null));
-            }});
 
             // when
             val processMethodContext = ProcessMethodContext
@@ -346,13 +315,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             addSetterFacet(facetedMethod);
             addClearFacet(facetedMethod);
 
-            // expect
-            allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
-
-            context.checking(new Expectations() {{
-                allowing(mockTypeSpec).getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
-                will(returnValue(null));
-            }});
             // when
             val processMethodContext = ProcessMethodContext
                     .forTesting(cls, null,
@@ -399,9 +361,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             addGetterFacet(facetedMethod);
             addSetterFacet(facetedMethod);
             addClearFacet(facetedMethod);
-
-            // expect
-            allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
 
             // when
             val processMethodContext = ProcessMethodContext

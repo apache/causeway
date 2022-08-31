@@ -28,27 +28,27 @@ import lombok.Value;
 public class IsisBeanMetaData {
 
     public enum ManagedBy {
-        UNSPECIFIED,
+        NONE,
         ISIS,
         SPRING,
+        /** other Spring managed component, or not managed at all */
+        INDIFFERENT,
         /** @deprecated in support of deprecated {@code @DomainService(logicalTypeName=...)}*/
         @Deprecated
         SPRING_NAMED_BY_ISIS,
         ;
-        public boolean isUnspecified() {return this == UNSPECIFIED; }
+        public boolean isNone() { return this == NONE; }
         public boolean isIsis() { return this == ISIS; }
-        public boolean isSpring() {
-            return this == SPRING
-                || this == SPRING_NAMED_BY_ISIS;
-        }
+        public boolean isSpring() { return this == SPRING; }
+
         /**
          * Whether Spring should make that underlying bean injectable.
          * @implNote if not managed by Isis, let ultimately Spring decide
          */
         public boolean isInjectable() {
-            return !isIsis();
+            return !isIsis()
+                    && !isNone();
         }
-
         /**
          * Whether we interfere with Spring's naming strategy.
          */
@@ -72,6 +72,18 @@ public class IsisBeanMetaData {
 
     // -- FACTORIES
 
+    public static IsisBeanMetaData notManaged(
+            final @NonNull BeanSort beanSort,
+            final @NonNull LogicalType logicalType) {
+        return of(beanSort, logicalType, ManagedBy.NONE);
+    }
+
+    public static IsisBeanMetaData notManaged(
+            final @NonNull BeanSort beanSort,
+            final @NonNull Class<?> type) {
+        return notManaged(beanSort, LogicalType.infer(type));
+    }
+
     public static IsisBeanMetaData injectable(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
@@ -92,7 +104,8 @@ public class IsisBeanMetaData {
     public static IsisBeanMetaData indifferent(
             final @NonNull BeanSort beanSort,
             final @NonNull Class<?> type) {
-        return of(beanSort, LogicalType.infer(type), ManagedBy.UNSPECIFIED);
+        return of(beanSort, LogicalType.infer(type),
+                ManagedBy.INDIFFERENT);
     }
 
     public static IsisBeanMetaData isisManaged(

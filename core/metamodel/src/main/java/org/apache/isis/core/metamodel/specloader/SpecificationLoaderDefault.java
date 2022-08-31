@@ -264,7 +264,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
             val sort = typeMeta.getBeanSort();
 
-            if(sort.isManagedBean() || sort.isEntity() || sort.isViewModel() ) {
+            if(sort.isManagedBeanAny() || sort.isEntity() || sort.isViewModel() ) {
                 domainObjectSpecs.add(spec);
             } else if(sort.isMixin()) {
                 mixinSpecs.add(spec);

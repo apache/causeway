@@ -25,6 +25,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.AccessLevel;
@@ -67,6 +68,12 @@ implements ManagedObject {
             MmAssertionUtil.assertExactType(specification, pojo);
         }
         return pojo;
+    }
+
+    @Override
+    public final String getTitle() {
+        return _InternalTitleUtil.titleString(
+                TitleRenderRequest.forObject(this));
     }
 
     //XXX compares pojos by their 'equals' semantics -

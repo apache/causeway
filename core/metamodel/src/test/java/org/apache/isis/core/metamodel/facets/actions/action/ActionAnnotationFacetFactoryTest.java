@@ -50,13 +50,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
     }
 
     void allowingLoadSpecificationRequestsFor(final Class<?> cls, final Class<?> returnType) {
-        context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).loadSpecification(cls);
-            will(returnValue(mockTypeSpec));
 
-            allowing(mockSpecificationLoader).loadSpecification(returnType);
-            will(returnValue(mockReturnTypeSpec));
-        }});
     }
 
     @Before

@@ -35,7 +35,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.Cho
 
 import lombok.val;
 
-class ChoiceProviderForValuesTest extends ChoiceProviderTestAbstract {
+class ChoiceProviderForValuesTest
+extends ChoiceProviderTestAbstract {
 
     @BeforeEach
     void setup() throws Exception {

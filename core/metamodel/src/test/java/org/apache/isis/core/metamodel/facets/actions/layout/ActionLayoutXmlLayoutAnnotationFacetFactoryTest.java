@@ -18,7 +18,6 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.lang.reflect.Method;
 
-import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,8 +36,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 
 public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest
 extends AbstractFacetFactoryJUnit4TestCase {
@@ -62,19 +59,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
         final Method method = findMethod(Customer.class, "foz");
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockSpecificationLoader).loadSpecification(Customer.class);
-                will(returnValue(mockObjSpec));
-
-                allowing(mockObjSpec).getFacet(MixinFacet.class);
-                will(returnValue(null));
-
-                allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(null));
-            }
-        });
-
         facetFactory.process(ProcessMethodContext.forTesting(Customer.class, null, method, mockMethodRemover,
                 facetedMethod));
 
@@ -97,20 +81,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
         }
         final Method method = findMethod(Customer.class, "foo");
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockSpecificationLoader).loadSpecification(Customer.class);
-                will(returnValue(mockObjSpec));
-
-                allowing(mockObjSpec).getFacet(MixinFacet.class);
-                will(returnValue(null));
-
-                allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                will(returnValue(null));
-
-            }
-        });
-
         facetFactory.process(ProcessMethodContext.forTesting(Customer.class, null, method, mockMethodRemover,
                 facetedMethod));
 
@@ -131,19 +101,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 }
             }
             final Method method = findMethod(Customer.class, "foz");
-
-            context.checking(new Expectations() {
-                {
-                    allowing(mockSpecificationLoader).loadSpecification(Customer.class);
-                    will(returnValue(mockObjSpec));
-
-                    allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                    will(returnValue(null));
-
-                    allowing(mockObjSpec).getFacet(MixinFacet.class);
-                    will(returnValue(null));
-                }
-            });
 
             facetFactory.process(ProcessMethodContext
                     .forTesting(Customer.class, null, method, mockMethodRemover, facetedMethod));
@@ -166,19 +123,6 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 }
             }
             final Method method = findMethod(Customer.class, "foz");
-
-            context.checking(new Expectations() {
-                {
-                    allowing(mockSpecificationLoader).loadSpecification(Customer.class);
-                    will(returnValue(mockObjSpec));
-
-                    allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-                    will(returnValue(null));
-
-                    allowing(mockObjSpec).getFacet(MixinFacet.class);
-                    will(returnValue(null));
-                }
-            });
 
             facetFactory.process(ProcessMethodContext
                     .forTesting(Customer.class, null, method, mockMethodRemover, facetedMethod));

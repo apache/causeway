@@ -35,7 +35,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class MmAssertionUtil {
 
-    public static void assertExactType(
+    public void assertExactType(
             final @Nullable ObjectSpecification requiredSpec,
             final @Nullable Object pojo) {
         if(pojo==null
@@ -54,7 +54,7 @@ public class MmAssertionUtil {
     /**
      * Guard against incompatible type.
      */
-    public static @NonNull UnaryOperator<ManagedObject> assertInstanceOf(
+    public @NonNull UnaryOperator<ManagedObject> assertInstanceOf(
             final ObjectSpecification elementType) {
         return object -> {
             if(ManagedObjects.isInstanceOf(object, elementType)) {
@@ -72,7 +72,7 @@ public class MmAssertionUtil {
     /**
      * eg. in order to prevent wrapping an object that is already wrapped
      */
-    public static void assertPojoNotWrapped(final @Nullable Object pojo) {
+    public void assertPojoNotWrapped(final @Nullable Object pojo) {
         // can do this check only when the pojo is not null, otherwise is always considered valid
         if(pojo==null) {
             return;

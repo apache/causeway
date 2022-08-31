@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.valuesemantics.IntValueSemantics;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -54,7 +55,7 @@ implements HasMetaModelContext {
 
     @Mock protected MethodRemover mockMethodRemover;
     @Mock protected FacetHolder mockFacetHolder;
-    @Mock protected SpecificationLoader mockSpecificationLoader;
+    protected SpecificationLoader specificationLoader;
 
     @Mock protected ObjectSpecification mockOnType;
     @Mock protected ObjectSpecification mockObjSpec;
@@ -76,8 +77,10 @@ implements HasMetaModelContext {
     public void setUpFacetedMethodAndParameter() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.builder()
-                        .specificationLoader(mockSpecificationLoader)
+                        .valueSemantic(new IntValueSemantics())
                         .build();
+
+        specificationLoader = metaModelContext.getSpecificationLoader();
 
         facetHolder = FacetHolder.simple(
                 metaModelContext,

@@ -472,14 +472,21 @@ implements ObjectSpecification {
     public String getSingularName() {
         return lookupFacet(ObjectNamedFacet.class)
             .flatMap(textFacet->textFacet.translated(NounForm.SINGULAR))
-            .orElseGet(this::getFullIdentifier); // unexpected code reach, however keep for JUnit testing
+            // unexpected code reach, however keep for JUnit testing
+            .orElseGet(()->String.format(
+                    "(%s has neither title- nor object-named-facet)",
+                    getFullIdentifier()));
     }
 
     @Override
     public String getPluralName() {
         return lookupFacet(ObjectNamedFacet.class)
             .flatMap(textFacet->textFacet.translated(NounForm.PLURAL))
-            .orElseGet(this::getFullIdentifier); // unexpected code reach, however keep for JUnit testing
+            // unexpected code reach, however keep for JUnit testing
+            .orElseGet(()->String.format(
+                    "(%s has neither title- nor object-named-facet)",
+                    getFullIdentifier()));
+
     }
 
     /**

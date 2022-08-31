@@ -26,6 +26,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.EqualsAndHashCode;
@@ -59,6 +60,9 @@ extends _ManagedObjectWithBookmark {
             final ObjectSpecification spec,
             final Object pojo) {
         super(ManagedObject.Specialization.inferFrom(spec, pojo));
+        //_Assert.assertFalse(getSpecialization().isValue()); // VALUE already migrated
+        _Assert.assertFalse(getSpecialization().isService()); // SERVICE already migrated
+
         this.specification = spec;
         this.pojo = pojo;
     }
@@ -69,6 +73,12 @@ extends _ManagedObjectWithBookmark {
     @Override
     public void replacePojo(final UnaryOperator<Object> replacer) {
         pojo = assertCompliance(replacer.apply(pojo));
+    }
+
+    @Override
+    public final String getTitle() {
+        return _InternalTitleUtil.titleString(
+                TitleRenderRequest.forObject(this));
     }
 
 }
