@@ -457,9 +457,11 @@ public interface ManagedObject extends HasMetaModelContext {
      */
     static ManagedObject viewmodel(
             final @NonNull ObjectSpecification spec,
-            final @Nullable Object pojo) {
+            final @Nullable Object pojo,
+            final Optional<Bookmark> bookmarkIfAny) {
         return pojo != null
-                ? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
+                ? bookmarkIfAny.map(bookmark->bookmarked(spec, pojo, bookmark)) //FIXME
+                        .orElseGet(()->new _ManagedObjectWithEagerSpec(spec, pojo)) //FIXME
                 : empty(spec);
     }
     /**
@@ -555,7 +557,7 @@ public interface ManagedObject extends HasMetaModelContext {
         case SERVICE:
             return service(spec, pojo);
         case VIEWMODEL:
-            return viewmodel(spec, pojo);
+            return viewmodel(spec, pojo, Optional.empty());
         case ENTITY:
             return entity(spec, pojo);
         case MIXIN:

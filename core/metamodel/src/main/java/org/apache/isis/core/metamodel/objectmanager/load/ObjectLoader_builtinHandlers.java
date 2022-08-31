@@ -156,8 +156,7 @@ final class ObjectLoader_builtinHandlers {
             }
 
             val bookmark = objectLoadRequest.getBookmark();
-            val viewModel = viewModelFacet.instantiate(spec, Optional.of(bookmark));
-            return ManagedObject.bookmarked(spec, viewModel.getPojo(), bookmark);
+            return viewModelFacet.instantiate(spec, Optional.of(bookmark));
         }
 
     }

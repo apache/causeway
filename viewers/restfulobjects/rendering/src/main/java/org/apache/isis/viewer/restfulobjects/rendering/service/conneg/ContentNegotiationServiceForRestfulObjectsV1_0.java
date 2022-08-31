@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.Priority;
@@ -222,7 +223,7 @@ implements ContentNegotiationService {
                     .orElseThrow(()->_Exceptions.unrecoverable(
                             "framework bug: DomainObjectList should be recognized as viewmodel"));
 
-                val listAdapter = ManagedObject.viewmodel(domainObjectListSpec, listAsViewmodel);
+                val listAdapter = ManagedObject.viewmodel(domainObjectListSpec, listAsViewmodel, Optional.empty());
                 return responseBuilder(
                         buildResponse(
                                 resourceContext,
