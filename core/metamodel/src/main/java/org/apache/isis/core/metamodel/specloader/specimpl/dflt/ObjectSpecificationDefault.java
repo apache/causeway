@@ -101,17 +101,7 @@ implements FacetHolder {
                 typeMeta.getLogicalType().getLogicalTypeSimpleName(),
                 typeMeta.getBeanSort(), facetProcessor, postProcessor);
 
-        this.injectable = !typeMeta.getManagedBy().isVetoedForInjection()
-                && !typeMeta.getBeanSort().isAbstract()
-                && !typeMeta.getBeanSort().isValue()
-                && !typeMeta.getBeanSort().isEntity()
-                && !typeMeta.getBeanSort().isViewModel()
-                && !typeMeta.getBeanSort().isMixin()
-                && (typeMeta.getBeanSort().isManagedBeanAny()
-                        || mmc.getServiceRegistry()
-                                .lookupRegisteredBeanById(typeMeta.getLogicalType().getLogicalTypeName())
-                                .isPresent());
-
+        this.isVetoedForInjection = typeMeta.getManagedBy().isVetoedForInjection();
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)
@@ -131,8 +121,22 @@ implements FacetHolder {
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
     }
 
-    @Getter(onMethod_ = {@Override})
-    private final boolean injectable;
+    private boolean isVetoedForInjection;
+
+    @Override
+    public boolean isInjectable() {
+        return !isVetoedForInjection
+        && !getBeanSort().isAbstract()
+        && !getBeanSort().isValue()
+        && !getBeanSort().isEntity()
+        && !getBeanSort().isViewModel()
+        && !getBeanSort().isMixin()
+        && (getBeanSort().isManagedBeanAny()
+                //|| typeMeta.getBeanSort().isUnknown());
+                || getServiceRegistry()
+                        .lookupRegisteredBeanById(getLogicalType())
+                        .isPresent());
+    }
 
     @Override
     protected void introspectTypeHierarchy() {

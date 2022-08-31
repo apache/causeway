@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -55,9 +56,9 @@ import org.apache.isis.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
@@ -92,6 +93,7 @@ import org.apache.isis.core.metamodel.services.grid.bootstrap.GridSystemServiceB
 import org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.isis.core.metamodel.services.message.MessageServiceNoop;
 import org.apache.isis.core.metamodel.services.title.TitleServiceDefault;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.isis.core.metamodel.valuesemantics.BigDecimalValueSemantics;
@@ -245,6 +247,7 @@ implements MetaModelContext {
         return _Streams.concat(
                 streamSingletons().map(_ManagedBeanAdapter::forTesting),
                 singletonProviders.stream(),
+                discoveredServices.stream(),
                 Stream.of(
                     // support for lazy bean providers,
                     _ManagedBeanAdapter.forTestingLazy(GridLoaderService.class, this::getGridLoaderService),
@@ -491,18 +494,49 @@ implements MetaModelContext {
         objectAdaptersForBeansOfKnownSort.clear();
     }
 
+    @lombok.Value(staticConstructor = "of")
+    static class ServiceInstance {
+        final ObjectSpecification specification;
+        final Object pojo;
+    }
+
+    @Builder.Default
+    private final Set<_ManagedBeanAdapter> discoveredServices = _Sets.newHashSet();
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private void registerAsService(final ServiceInstance serviceInstance) {
+        val spec = serviceInstance.getSpecification();
+        discoveredServices.add(_ManagedBeanAdapter.forTestingLazy(
+                spec.getLogicalTypeName(),
+                (Class)spec.getCorrespondingClass(),
+                serviceInstance::getPojo));
+    }
+
     private final Map<String, ManagedObject> collectBeansOfKnownSort() {
+
         val map = _Maps.<String, ManagedObject>newLinkedHashMap();
-        getServiceRegistry()
+
+        // first pass: introspect them all
+        val services = getServiceRegistry()
             .streamRegisteredBeans()
-            .filter(bean->_Strings.isNotEmpty(bean.getId()))
-            .forEach(bean->
-                toManagedObject(bean)
-                .ifPresent(serviceAdapter->map.put(bean.getId(), serviceAdapter)));
+            .map(this::toServiceInstance)
+            .map(op->op.orElse(null))
+            .filter(_NullSafe::isPresent)
+            .peek(this::registerAsService)
+            .collect(Can.<ServiceInstance>toCan());
+
+        // reload registered beans
+        ((ServiceRegistry_forTesting)getServiceRegistry()).invalidateRegisteredBeans();
+
+        // second pass: adapt service objects
+        services.stream()
+        .map(service->ManagedObject.service(service.specification, service.pojo))
+        .forEach(serviceAdapter->
+            map.put(serviceAdapter.getSpecification().getLogicalTypeName(), serviceAdapter));
         return map;
     }
 
-    private final Optional<ManagedObject> toManagedObject(final _ManagedBeanAdapter managedBeanAdapter) {
+    private final Optional<ServiceInstance> toServiceInstance(final _ManagedBeanAdapter managedBeanAdapter) {
         val servicePojo = managedBeanAdapter.getInstance().getFirst()
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "Cannot get service instance of type '%s'",
@@ -513,7 +547,7 @@ implements MetaModelContext {
         }
         return getSpecificationLoader()
             .specForType(servicePojo.getClass())
-            .map(serviceSpec->ManagedObject.service(serviceSpec, servicePojo));
+            .map(serviceSpec->ServiceInstance.of(serviceSpec, servicePojo));
     }
 
     // -- RECURSIVE INITIALIZATION FIX

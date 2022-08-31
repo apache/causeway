@@ -89,15 +89,15 @@ final class ObjectLoader_builtinHandlers {
         public ManagedObject handle(final ObjectLoader.Request objectLoadRequest) {
 
             val spec = objectLoadRequest.getObjectSpecification();
-            val logicalTypeName = spec.getLogicalTypeName();
+            val logicalType = spec.getLogicalType();
 
             val servicePojo = metaModelContext.getServiceRegistry()
-                .lookupRegisteredBeanById(logicalTypeName)
+                .lookupRegisteredBeanById(logicalType)
                 .map(_ManagedBeanAdapter::getInstance)
                 .flatMap(Can::getFirst)
                 .orElseThrow(()->_Exceptions.noSuchElement(
-                        "loader: %s loading beanName %s",
-                        this.getClass().getName(), logicalTypeName));
+                        "loader: %s loading logicalType %s",
+                        this.getClass().getName(), logicalType));
 
             return ManagedObject.of(spec, servicePojo);
         }

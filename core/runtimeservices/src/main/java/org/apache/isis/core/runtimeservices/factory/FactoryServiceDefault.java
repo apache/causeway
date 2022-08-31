@@ -75,7 +75,7 @@ public class FactoryServiceDefault implements FactoryService {
     public <T> T get(final @NonNull Class<T> requiredType) {
         return isisSystemEnvironment.getIocContainer()
                 .get(requiredType)
-                .orElseThrow(()->_Exceptions.noSuchElement("no an injectable type %s", requiredType));
+                .orElseThrow(()->_Exceptions.noSuchElement("not an injectable type %s", requiredType));
     }
 
     @Override

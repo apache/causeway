@@ -19,15 +19,20 @@
 package org.apache.isis.core.metamodel._testing;
 
 import java.lang.annotation.Annotation;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -81,19 +86,28 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         return Can.empty();
     }
 
+    private final Map<String, _ManagedBeanAdapter> registeredBeanById = _Maps.newHashMap();
+
     @Override
     public Stream<_ManagedBeanAdapter> streamRegisteredBeans() {
         return registeredBeans().stream();
     }
 
     @Override
-    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(final String id) {
-        throw _Exceptions.notImplemented();
+    public Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(final LogicalType id) {
+        return Optional.ofNullable(registeredBeanById.get(id.getLogicalTypeName()));
     }
 
     @Override
     public Optional<?> lookupBeanById(final String id) {
         throw _Exceptions.notImplemented();
+    }
+
+    void invalidateRegisteredBeans() {
+        synchronized(registeredBeans) {
+            registeredBeans.clear();
+        }
+        streamRegisteredBeans().count();
     }
 
     // -- HELPER
@@ -106,7 +120,11 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
             if(registeredBeans.isEmpty()) {
                 streamBeans()
                 .filter(_NullSafe::isPresent)
-                .forEach(registeredBeans::add);
+                .peek(bean->_Assert.assertTrue(_Strings.isNotEmpty(bean.getId())))
+                .forEach(bean->{
+                    registeredBeans.add(bean);
+                    registeredBeanById.put(bean.getId(), bean);
+                });
                 triggerPostInit.set(true);
             }
         }

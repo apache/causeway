@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Priority;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Reduction;
@@ -83,14 +84,14 @@ public interface ServiceRegistry {
      *
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
-    Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(String id);
+    Optional<_ManagedBeanAdapter> lookupRegisteredBeanById(LogicalType id);
 
     /**
      * Returns a registered bean of given {@code name}, or throws when no such bean.
      *
      * @param id - corresponds to the ObjectSpecificationId of the bean's type
      */
-    default _ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(final String id) {
+    default _ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(final LogicalType id) {
         return lookupRegisteredBeanById(id).orElseThrow(
                 ()->_Exceptions.unrecoverable(
                         "Failed to lookup BeanAdapter by id '" + id + "'"));

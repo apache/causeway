@@ -100,19 +100,16 @@ implements
 
             isisComponentScanInterceptor.intercept(typeMetaData);
 
-            if(!typeMetaData.isVetoedForInjection()) {
-
+            if(typeMetaData.isVetoedForInjection()) {
+                registry.removeBeanDefinition(beanDefinitionName);
+                log.debug("vetoing bean {}", beanDefinitionName);
+            } else {
                 val beanNameOverride = typeMetaData.getBeanNameOverride();
                 if(_Strings.isNotEmpty(beanNameOverride)) {
                     registry.removeBeanDefinition(beanDefinitionName);
                     registry.registerBeanDefinition(beanNameOverride, beanDefinition);
                     log.debug("renaming bean {} -> {}", beanDefinitionName, beanNameOverride);
                 }
-
-
-            } else {
-                registry.removeBeanDefinition(beanDefinitionName);
-                log.debug("vetoing bean {}", beanDefinitionName);
             }
 
         }
