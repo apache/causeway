@@ -24,6 +24,7 @@ import org.apache.isis.client.kroviz.to.Icon
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.to.bs.Grid
+import org.apache.isis.client.kroviz.to.bs.Row
 
 abstract class DisplayModelWithLayout : BaseDisplayModel() {
 
@@ -35,8 +36,7 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
     override fun canBeDisplayed(): Boolean {
         return when {
             isRendered -> false
-            layout == null -> false
-            grid == null -> false
+            layout == null && grid == null -> false
             else -> properties.readyForDisplay()
         }
     }
@@ -46,6 +46,11 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
         initPropertyLayoutList(layout)
     }
 
+    fun addGrid(grid: Grid) {
+        this.grid = grid
+        initPropertyGridList(grid)
+    }
+
     fun addIcon(obj: TransferObject?) {
         icon = obj as Icon
     }
@@ -53,6 +58,12 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
     private fun initPropertyLayoutList(layout: Layout) {
         layout.row.forEach { r ->
             initLayout4Row(r)
+        }
+    }
+
+    private fun initPropertyGridList(grid: Grid) {
+        grid.rows.forEach { r ->
+            initGrid4Row(r)
         }
     }
 
@@ -66,6 +77,21 @@ abstract class DisplayModelWithLayout : BaseDisplayModel() {
                 tg.tab.forEach { t ->
                     t.row.forEach { r2 ->
                         initLayout4Row(r2)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun initGrid4Row(r: Row) {
+        r.colList.forEach { c ->
+            c.fieldSetList.forEach { fs ->
+                //FIXME         properties.addAllPropertiesFromGrid(fs.propertyList)
+            }
+            c.tabGroupList.forEach { tg ->
+                tg.tabList.forEach { t ->
+                    t.rowList.forEach { r2 ->
+                        initGrid4Row(r2)
                     }
                 }
             }

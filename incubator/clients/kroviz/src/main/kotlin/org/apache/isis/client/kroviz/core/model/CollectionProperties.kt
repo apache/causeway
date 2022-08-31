@@ -101,4 +101,14 @@ class ColumnProperties(val key: String) {
         }
     }
 
+    fun initGrid(property: Property) {
+        //  this.layout = layout
+//FIXME        hidden = (property.hidden != null)
+        // properties without labelPosition will be hidden - is that correct?
+        // example: Demo -> Strings -> Description
+        //  if (!hidden && property.labelPosition == null) {
+        //     hidden = true
+        // }
+    }
+
 }

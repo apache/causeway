@@ -35,11 +35,11 @@ class Property(node: Node) : XmlLayout() {
 
     init {
         val dn = node.asDynamic()
-        hidden = dn.getAttribute("hidden") as String
-        id = dn.getAttribute("id") as String
-        typicalLength = dn.getAttribute("typicalLength") as Int
-        multiLine = dn.getAttribute("multiLine") as Int
-        describedAs = dn.getAttribute("describedAs") as String
+        hidden = dn.getAttribute("hidden") //as String
+        id = dn.getAttribute("id") //as String
+        typicalLength = dn.getAttribute("typicalLength") //as Int
+        multiLine = dn.getAttribute("multiLine") //as Int
+        describedAs = dn.getAttribute("describedAs") //as String
 
         val nodeList = node.childNodes.asList()
         val namedList = nodeList.filter { it.nodeName == "$nsCpt:named" }

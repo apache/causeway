@@ -32,7 +32,7 @@ class Col(node: Node) : XmlLayout() {
 
     init {
         val dyNode = node.asDynamic()
-        span = dyNode.getAttribute("span") as Int
+        span = dyNode.getAttribute("span") //as Int
 
         val nl = node.childNodes.asList()
 

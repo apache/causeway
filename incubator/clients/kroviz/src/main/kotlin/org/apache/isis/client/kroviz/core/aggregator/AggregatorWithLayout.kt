@@ -66,6 +66,23 @@ abstract class AggregatorWithLayout : BaseAggregator() {
             val link = it.link!!
             ResourceProxy().fetch(link, this, subType = Constants.subTypeJson, referrer = referrer)
         }
+ //FIXME
+        if (dm.grid == null) {
+            dm.addGrid(grid)
+            dm.properties.propertyLayoutList.forEach { p ->
+                val l = p.link
+                if (l == null) {
+                    console.log(p.id + " link empty")  // ISIS-2846
+                    console.log(p)
+                } else {
+                    val isDn = l.href.contains("datanucleus")
+                    if (!isDn) {
+                        //invoking DN links leads to an error
+                        invoke(l, this, referrer = referrer)
+                    }
+                }
+            }
+        }
     }
 
     protected fun invokeLayoutLink(obj: TObject, aggregator: AggregatorWithLayout, referrer: String) {

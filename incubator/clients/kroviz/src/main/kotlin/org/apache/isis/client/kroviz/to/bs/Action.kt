@@ -35,15 +35,15 @@ class Action(node: Node) : XmlLayout() {
 
     init {
         val dyNode = node.asDynamic()
-        bookmarking = dyNode.getAttribute("bookmarking") as String
-        cssClass = dyNode.getAttribute("cssClass") as String
-        cssClassFa = dyNode.getAttribute("cssClassFa") as String
-        cssClassFaPosition = dyNode.getAttribute("cssClassFaPosition") as String
-        hidden = dyNode.getAttribute("hidden") as String
-        id = dyNode.getAttribute("id") as String
-        position = dyNode.getAttribute("position") as String
-        named = dyNode.getAttribute("named") as String
-        describedAs = dyNode.getAttribute("describedAs") as String
+        bookmarking = dyNode.getAttribute("bookmarking") // as String
+        cssClass = dyNode.getAttribute("cssClass") // as String
+        cssClassFa = dyNode.getAttribute("cssClassFa") // as String
+        cssClassFaPosition = dyNode.getAttribute("cssClassFaPosition") // as String
+        hidden = dyNode.getAttribute("hidden") // as String
+        id = dyNode.getAttribute("id") // as String
+        position = dyNode.getAttribute("position") // as String
+        named = dyNode.getAttribute("named") // as String
+        describedAs = dyNode.getAttribute("describedAs") // as String
 
         val nodeList = node.childNodes.asList()
         val namedList = nodeList.filter { it.nodeName == "$nsCpt:named" }
