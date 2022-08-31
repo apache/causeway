@@ -75,8 +75,6 @@ public class ObjectSpecificationDefault
 extends ObjectSpecificationAbstract
 implements FacetHolder {
 
-    // -- constructor, fields
-
     /**
      * Lazily built by {@link #getMember(Method)}.
      */
@@ -119,23 +117,6 @@ implements FacetHolder {
 
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
-    }
-
-    private boolean isVetoedForInjection;
-
-    @Override
-    public boolean isInjectable() {
-        return !isVetoedForInjection
-        && !getBeanSort().isAbstract()
-        && !getBeanSort().isValue()
-        && !getBeanSort().isEntity()
-        && !getBeanSort().isViewModel()
-        && !getBeanSort().isMixin()
-        && (getBeanSort().isManagedBeanAny()
-                //|| typeMeta.getBeanSort().isUnknown());
-                || getServiceRegistry()
-                        .lookupRegisteredBeanById(getLogicalType())
-                        .isPresent());
     }
 
     @Override
@@ -339,18 +320,6 @@ implements FacetHolder {
         });
     }
 
-
-    // -- toString
-
-    @Override
-    public String toString() {
-        final ToString str = new ToString(this);
-        str.append("class", getFullIdentifier());
-        str.append("type", getBeanSort().name());
-        str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
-        return str.toString();
-    }
-
     // -- ELEMENT SPECIFICATION
 
     private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
@@ -375,6 +344,39 @@ implements FacetHolder {
 
         return new _PropertiesAsColumns(getMetaModelContext())
             .streamPropertiesForColumnRendering(this, memberIdentifier, parentObject);
+    }
+
+    // -- DETERMINE INJECTABILITY
+
+    private boolean isVetoedForInjection;
+
+    private _Lazy<Boolean> isInjectableLazy = _Lazy.threadSafe(()->
+        !isVetoedForInjection
+                && !getBeanSort().isAbstract()
+                && !getBeanSort().isValue()
+                && !getBeanSort().isEntity()
+                && !getBeanSort().isViewModel()
+                && !getBeanSort().isMixin()
+                && (getBeanSort().isManagedBeanAny()
+                        || getServiceRegistry()
+                                .lookupRegisteredBeanById(getLogicalType())
+                                .isPresent())
+                );
+
+    @Override
+    public boolean isInjectable() {
+        return isInjectableLazy.get();
+    }
+
+    // -- TO STRING
+
+    @Override
+    public String toString() {
+        final ToString str = new ToString(this);
+        str.append("class", getFullIdentifier());
+        str.append("type", getBeanSort().name());
+        str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
+        return str.toString();
     }
 
 }
