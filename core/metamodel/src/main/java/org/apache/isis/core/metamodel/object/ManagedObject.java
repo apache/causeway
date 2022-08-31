@@ -489,10 +489,8 @@ public interface ManagedObject extends HasMetaModelContext {
      */
     static ManagedObject mixin(
             final @NonNull ObjectSpecification spec,
-            final @Nullable Object pojo) {
-        return pojo != null
-                ? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
-                : empty(spec);
+            final @NonNull Object pojo) {
+        return new _ManagedObjectMixin(spec, pojo);
     }
     /**
      * OTHER

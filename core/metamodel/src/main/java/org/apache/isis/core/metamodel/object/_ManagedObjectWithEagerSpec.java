@@ -62,6 +62,7 @@ extends _ManagedObjectWithBookmark {
         super(ManagedObject.Specialization.inferFrom(spec, pojo));
         //_Assert.assertFalse(getSpecialization().isValue()); // VALUE already migrated
         _Assert.assertFalse(getSpecialization().isService()); // SERVICE already migrated
+        _Assert.assertFalse(getSpecialization().isMixin()); // MIXIN already migrated
 
         this.specification = spec;
         this.pojo = pojo;

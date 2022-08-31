@@ -71,7 +71,7 @@ implements ManagedObject {
     }
 
     @Override
-    public final String getTitle() {
+    public String getTitle() {
         return _InternalTitleUtil.titleString(
                 TitleRenderRequest.forObject(this));
     }
