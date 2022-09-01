@@ -61,7 +61,7 @@ public class DatatablesJavaScriptResourceReferenceInit extends JavaScriptContent
     }
 
     private static String readScript() {
-        return asString(new ClassPathResource("dataTables.init.js", DatatablesJavaScriptResourceReferenceInit.class));
+        return asString(new ClassPathResource("dataTables.init.js.template", DatatablesJavaScriptResourceReferenceInit.class));
     }
 
     private static String asString(Resource resource) {
