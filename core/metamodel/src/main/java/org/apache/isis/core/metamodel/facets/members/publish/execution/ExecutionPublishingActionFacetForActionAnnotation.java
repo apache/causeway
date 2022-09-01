@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
+import org.apache.isis.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
@@ -38,7 +38,7 @@ extends ExecutionPublishingFacetAbstract {
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        val publishingPolicy = PublishingPolicies.actionExecutionPublishingPolicy(configuration);
+        val publishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
 
         return _Optionals.orNullable(
 

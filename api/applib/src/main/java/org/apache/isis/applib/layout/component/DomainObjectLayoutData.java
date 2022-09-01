@@ -43,6 +43,10 @@ import org.apache.isis.applib.layout.links.Link;
                 "named"
                 , "describedAs"
                 , "plural"
+                , "cssClass"
+                , "cssClassFa"
+                , "cssClassFaPosition"
+                , "tableDecoration"
                 , "metadataError"
                 , "link"
         }
@@ -155,6 +159,20 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     public void setPlural(final String plural) {
         this.plural = plural;
     }
+
+
+
+    private TableDecoration tableDecoration;
+
+    @XmlElement(required = false)
+    public TableDecoration getTableDecoration() {
+        return tableDecoration;
+    }
+
+    public void setTableDecoration(final TableDecoration tableDecoration) {
+        this.tableDecoration = tableDecoration;
+    }
+
 
 
 

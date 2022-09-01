@@ -19,14 +19,14 @@
  */
 package org.apache.isis.core.metamodel.facets.param.parameter.depdef;
 
-import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
+import org.apache.isis.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class ParameterDependentDefaultsActionFacetForActionAnnotationAsConfigured
 extends ParameterDependentDefaultsFacetForParameterAnnotation {
 
     ParameterDependentDefaultsActionFacetForActionAnnotationAsConfigured(
-            final ParameterPolicies.DependentDefaultsPolicy value, final FacetHolder holder) {
+            final ParameterConfigOptions.DependentDefaultsPolicy value, final FacetHolder holder) {
         super(value, holder);
     }
 

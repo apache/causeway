@@ -23,14 +23,24 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecorationFacet;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
+
+import lombok.val;
 
 
 public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstract {
 
-    public static Optional<PagedFacetForDomainObjectLayoutAnnotation> create(
+    public static Optional<PagedFacet> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
+
+
+        val tableDecorationFacet = holder.getFacet(DomainObjectLayoutTableDecorationFacet.class);
+        if (tableDecorationFacet.value().isDataTablesNet()) {
+            return Optional.of(new PagedFacetOverriddenByDataTablesDecoration(holder));
+        }
 
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::paged)

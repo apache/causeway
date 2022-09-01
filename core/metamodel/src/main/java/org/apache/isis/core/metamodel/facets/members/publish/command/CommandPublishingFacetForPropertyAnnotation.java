@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
+import org.apache.isis.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.val;
@@ -39,7 +39,7 @@ public class CommandPublishingFacetForPropertyAnnotation extends CommandPublishi
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
 
-        val publishingPolicy = PublishingPolicies.propertyCommandPublishingPolicy(configuration);
+        val publishingPolicy = PropertyConfigOptions.propertyCommandPublishingPolicy(configuration);
 
         return _Optionals.orNullable(
 

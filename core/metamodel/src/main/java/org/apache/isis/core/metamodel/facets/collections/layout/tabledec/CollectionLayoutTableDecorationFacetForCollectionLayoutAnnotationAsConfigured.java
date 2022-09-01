@@ -15,10 +15,19 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.isis.core.config.metamodel.facets;
+package org.apache.isis.core.metamodel.facets.collections.layout.tabledec;
 
-public enum EditingObjectsConfiguration {
-    TRUE,
-    FALSE;
+import org.apache.isis.core.config.metamodel.facets.CollectionLayoutConfigOptions;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+public class CollectionLayoutTableDecorationFacetForCollectionLayoutAnnotationAsConfigured
+extends CollectionLayoutTableDecorationFacetForCollectionLayoutAnnotation {
+
+    CollectionLayoutTableDecorationFacetForCollectionLayoutAnnotationAsConfigured(
+            final CollectionLayoutConfigOptions.TableDecoration value, final FacetHolder holder) {
+        super(value, holder);
+    }
+
 }

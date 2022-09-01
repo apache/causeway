@@ -27,6 +27,8 @@ class CollectionLayoutData {
   void setPaged(Integer paged)
   String getSortedBy()
   void setSortedBy(String sortedBy)
+  TableDecoration getTableDecoration()
+  void setTableDecoration(TableDecoration tableDecoration)
   List<ActionLayoutData> getActions()
   void setActions(List<ActionLayoutData> actionLayoutDatas)
   CollectionLayoutDataOwner getOwner()     // <.>

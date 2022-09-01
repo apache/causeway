@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.commons.internal.base._Blackhole;
-import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
+import org.apache.isis.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
@@ -64,7 +64,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andSafeSemantics_thenNone() {
 
         // given
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
@@ -82,7 +82,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNonSafeSemantics_thenAdded() {
 
         // given
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
@@ -103,7 +103,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     public void given_noAnnotation_and_configurationSetToIgnoreQueryOnly_andNoSemantics_thenException() {
 
         // given
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         // when
@@ -117,7 +117,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     public void given_noAnnotation_and_configurationSetToNone_thenNone() {
 
         // given
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.NONE);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
         // when
@@ -138,7 +138,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         // given
         final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
 
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.ALL);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.ALL);
 
         // when
         processExecutionPublishing(facetFactory, ProcessMethodContext
@@ -160,7 +160,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
             }
         }
 
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
@@ -185,7 +185,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
             }
         }
 
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
@@ -212,7 +212,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
             }
         }
 
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.IGNORE_QUERY_ONLY);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         processExecutionPublishing(facetFactory, ProcessMethodContext
@@ -228,7 +228,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
             }
         }
 
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.NONE);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         processExecutionPublishing(facetFactory, ProcessMethodContext
@@ -253,7 +253,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.ALL);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.ALL);
 
         // when
         processExecutionPublishing(facetFactory, ProcessMethodContext
@@ -281,7 +281,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         // even though configuration is disabled
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.NONE);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
 
         // when
         processExecutionPublishing(facetFactory, ProcessMethodContext
@@ -307,7 +307,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
         // even though configuration is disabled
-        allowingPublishingConfigurationToReturn(PublishingPolicies.ActionPublishingPolicy.NONE);
+        allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
 
         // when
         processExecutionPublishing(facetFactory, ProcessMethodContext

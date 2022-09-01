@@ -21,11 +21,10 @@ package org.apache.isis.core.metamodel.facets.param.parameter.depdef;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
+import org.apache.isis.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
@@ -38,15 +37,15 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacet;
  * @since 2.0
  */
 public interface ParameterDependentDefaultsFacet
-extends SingleValueFacet<ParameterPolicies.DependentDefaultsPolicy> {
+extends SingleValueFacet<ParameterConfigOptions.DependentDefaultsPolicy> {
 
     static Optional<ParameterDependentDefaultsFacet> create(
             final Optional<Parameter> parameterIfAny,
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final ParameterPolicies.DependentDefaultsPolicy defaultPolicyFromConfig =
-                ParameterPolicies.dependentDefaultsPolicy(configuration);
+        final ParameterConfigOptions.DependentDefaultsPolicy defaultPolicyFromConfig =
+                ParameterConfigOptions.dependentDefaultsPolicy(configuration);
 
         return _Optionals.orNullable(
 
@@ -56,10 +55,10 @@ extends SingleValueFacet<ParameterPolicies.DependentDefaultsPolicy> {
             switch (policy) {
             case PRESERVE_CHANGES:
                 return new ParameterDependentDefaultsFacetForParameterAnnotation(
-                        ParameterPolicies.DependentDefaultsPolicy.PRESERVE_CHANGES, holder);
+                        ParameterConfigOptions.DependentDefaultsPolicy.PRESERVE_CHANGES, holder);
             case UPDATE_DEPENDENT:
                 return new ParameterDependentDefaultsFacetForParameterAnnotation(
-                        ParameterPolicies.DependentDefaultsPolicy.UPDATE_DEPENDENT, holder);
+                        ParameterConfigOptions.DependentDefaultsPolicy.UPDATE_DEPENDENT, holder);
             case NOT_SPECIFIED:
             case AS_CONFIGURED:
                 return new ParameterDependentDefaultsFacetForParameterAnnotation(defaultPolicyFromConfig, holder);

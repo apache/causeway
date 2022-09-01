@@ -19,13 +19,13 @@
  */
 package org.apache.isis.core.metamodel.facets.param.parameter.depdef;
 
-import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
+import org.apache.isis.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
 abstract class ParameterDependentDefaultsFacetAbstract
-extends SingleValueFacetAbstract<ParameterPolicies.DependentDefaultsPolicy>
+extends SingleValueFacetAbstract<ParameterConfigOptions.DependentDefaultsPolicy>
 implements ParameterDependentDefaultsFacet {
 
     private static final Class<? extends Facet> type() {
@@ -33,7 +33,7 @@ implements ParameterDependentDefaultsFacet {
     }
 
     protected ParameterDependentDefaultsFacetAbstract(
-            final ParameterPolicies.DependentDefaultsPolicy value, final FacetHolder holder) {
+            final ParameterConfigOptions.DependentDefaultsPolicy value, final FacetHolder holder) {
         super(type(), value, holder);
     }
 }

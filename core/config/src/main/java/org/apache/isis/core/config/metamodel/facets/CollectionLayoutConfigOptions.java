@@ -22,34 +22,47 @@ import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.NonNull;
 
-public final class ParameterPolicies {
+public final class CollectionLayoutConfigOptions {
 
-    // -- ACTIONS
+    public enum TableDecoration {
 
-    public static enum DependentDefaultsPolicy {
         /**
-         * Allows user provided parameters in the UI to be overwritten via defaults semantics.
+         * If this option declares that the collection's table representation should not be decorated.
          */
-        UPDATE_DEPENDENT,
-        /**
-         * Forbids user provided parameters in the UI to be overwritten via defaults semantics.
-         */
-        PRESERVE_CHANGES;
-        public boolean isUpdateDependent() { return this == UPDATE_DEPENDENT; }
-        public boolean isPreserveChanges() { return this == PRESERVE_CHANGES; }
+        NONE,
 
-        public static DependentDefaultsPolicy defaultsIfNotSpecifiedOtherwise() {
-            return UPDATE_DEPENDENT; // backwards compatibility
-        }
+        /**
+         * If this option declares that the collection's table representation be decorated using
+         * <a href="https://datatables.net>datatables.net</a> for client-side paging and filtering.
+         */
+        DATATABLES_NET;
+
+        public boolean isNone() { return this == NONE; }
+        public boolean isDataTablesNet() { return this == DATATABLES_NET; }
+
     }
 
 
     // -- FACTORIES
 
-    public static DependentDefaultsPolicy dependentDefaultsPolicy(
+    public static TableDecoration tableDecoration(
             final @NonNull IsisConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getParameter().getDependentDefaultsPolicy();
+        return configuration.getApplib().getAnnotation().getCollectionLayout().getTableDecoration();
     }
 
 
+    public enum DefaultView {
+        HIDDEN(),
+        TABLE();
+
+        public String toNameLower() {
+            return name().toLowerCase();
+        }
+
+        public static DefaultView from(IsisConfiguration configuration) {
+            return configuration.getApplib().getAnnotation().getCollectionLayout().getDefaultView();
+        }
+
+
+    }
 }

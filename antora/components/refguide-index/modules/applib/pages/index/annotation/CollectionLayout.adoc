@@ -18,6 +18,7 @@ Layout hints for collections.
   String sequence() default "";     // <.>
   @SuppressWarnings("rawtypes")
 Class<? extends Comparator> sortedBy() default Comparator.class;     // <.>
+  TableDecoration tableDecoration() default TableDecoration.NOT_SPECIFIED;     // <.>
 }
 ----
 
@@ -60,6 +61,11 @@ The order of this member relative to other members in the same (layout) group, g
 +
 --
 Indicates that the elements in a ( _java.util.SortedSet_ ) collection should be sorted according to a different order than the natural sort order, as defined by the specified _java.util.Comparator_ .
+--
+<.> xref:#tableDecoration[tableDecoration]
++
+--
+Whether a parented collection when represented in a table form should additionally be "decorated" with client-side (javascript) enhancements, for example to enable paging and filtering.
 --
 
 == Members
@@ -123,6 +129,11 @@ Whenever there is a collection of type _java.util.SortedSet_ , the domain entity
 However, in some circumstances the ordering of collection may be different to the entity's natural ordering. For example, the entity may represent an interval of time sorted by its _startDate_ ascending, but the collection may wish to sort by _startDate_ .
 
 The purpose of this annotation is to provide a _java.util.Comparator_ such that the collection may be sorted in an order more suitable to the context.
+
+[#tableDecoration]
+=== tableDecoration
+
+Whether a parented collection when represented in a table form should additionally be "decorated" with client-side (javascript) enhancements, for example to enable paging and filtering.
 
 include::hooks/CollectionLayout_010-examples-and-usage.adoc[]
 

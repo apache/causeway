@@ -32,6 +32,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStrin
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
 
+import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
+
 @Configuration
 public class WicketViewerCssBundleInit implements WicketApplicationInitializer {
 

@@ -39,8 +39,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
+import org.apache.isis.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -92,14 +91,14 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
     }
 
-    void allowingEntityChangePublishingToReturn(final PublishingPolicies.EntityChangePublishingPolicy value) {
+    void allowingEntityChangePublishingToReturn(final DomainObjectConfigOptions.EntityChangePublishingPolicy value) {
         if(value!=null) {
             val config = super.metaModelContext.getConfiguration();
             config.getApplib().getAnnotation().getDomainObject().setEntityChangePublishing(value);
         }
     }
 
-    void allowingObjectsEditingToReturn(final EditingObjectsConfiguration value) {
+    void allowingObjectsEditingToReturn(final DomainObjectConfigOptions.EditingObjectsConfiguration value) {
         if(value!=null) {
             final IsisConfiguration config = super.metaModelContext.getConfiguration();
             config.getApplib().getAnnotation().getDomainObject().setEditing(value);
@@ -129,7 +128,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             @Test
             public void configured_value_set_to_all() {
-                allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
+                allowingEntityChangePublishingToReturn(DomainObjectConfigOptions.EntityChangePublishingPolicy.ALL);
 
                 val context = ProcessClassContext
                         .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder);
@@ -145,7 +144,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             @Test
             public void configured_value_set_to_none() {
-                allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.NONE);
+                allowingEntityChangePublishingToReturn(DomainObjectConfigOptions.EntityChangePublishingPolicy.NONE);
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
@@ -163,7 +162,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             @Test
             public void configured_value_set_to_all() {
-                allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
+                allowingEntityChangePublishingToReturn(DomainObjectConfigOptions.EntityChangePublishingPolicy.ALL);
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
@@ -178,7 +177,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             @Test
             public void configured_value_set_to_none() {
-                allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.NONE);
+                allowingEntityChangePublishingToReturn(DomainObjectConfigOptions.EntityChangePublishingPolicy.NONE);
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
@@ -214,7 +213,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
+                allowingEntityChangePublishingToReturn(DomainObjectConfigOptions.EntityChangePublishingPolicy.ALL);
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(CustomerWithDomainObjectAndAuditingSetToDisabled.class, mockMethodRemover, facetHolder));
@@ -421,7 +420,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             @Test
             public void configured_value_set_to_true() {
-                allowingObjectsEditingToReturn(EditingObjectsConfiguration.TRUE);
+                allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.TRUE);
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
@@ -434,7 +433,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             @Test
             public void configured_value_set_to_false() {
-                allowingObjectsEditingToReturn(EditingObjectsConfiguration.FALSE);
+                allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.FALSE);
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
@@ -467,7 +466,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             @Test
             public void configured_value_set_to_true() {
-                allowingObjectsEditingToReturn(EditingObjectsConfiguration.TRUE);
+                allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.TRUE);
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
@@ -480,7 +479,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             @Test
             public void configured_value_set_to_false() {
-                allowingObjectsEditingToReturn(EditingObjectsConfiguration.FALSE);
+                allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.FALSE);
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
@@ -511,7 +510,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingObjectsEditingToReturn(EditingObjectsConfiguration.FALSE);
+                allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.FALSE);
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(
@@ -529,7 +528,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
 
             @Test
             public void irrespective_of_configured_value() {
-                allowingObjectsEditingToReturn(EditingObjectsConfiguration.TRUE);
+                allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.TRUE);
 
                 facetFactory.process(ProcessClassContext
                         .forTesting(

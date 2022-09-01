@@ -45,7 +45,12 @@ import org.apache.isis.applib.layout.links.Link;
         , propOrder = {
                 "named"
                 ,"describedAs"
+                ,"cssClass"
+                ,"defaultView"
+                ,"hidden"
+                ,"paged"
                 ,"sortedBy"
+                ,"tableDecoration"
                 , "actions"
                 , "metadataError"
                 , "link"
@@ -155,6 +160,8 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         this.named = named;
     }
 
+
+
     private Integer paged;
 
     @XmlAttribute(required = false)
@@ -177,6 +184,19 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
 
     public void setSortedBy(final String sortedBy) {
         this.sortedBy = sortedBy;
+    }
+
+
+
+    private TableDecoration tableDecoration;
+
+    @XmlElement(required = false)
+    public TableDecoration getTableDecoration() {
+        return tableDecoration;
+    }
+
+    public void setTableDecoration(final TableDecoration tableDecoration) {
+        this.tableDecoration = tableDecoration;
     }
 
 

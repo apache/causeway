@@ -108,9 +108,9 @@ $(function() {
             let el = $('#'+elementId).find('.inputFormTable.parameters')
             	.find('input,textarea,div.cbx,select').filter(':visible:first');
             if(el) {
-	
+
 				//console.log('Isis.Topic.FOCUS_FIRST_PARAMETER: elementId=' + elementId);
-	
+
                 let elNodeName = $(el).prop('nodeName')
                 if (elNodeName) {
                     let x = elNodeName.toLowerCase()
@@ -213,7 +213,7 @@ $(function() {
 	    });
 	}
 	$(document, '.wkt-component-with-tooltip').on('click', hidePopover);
-	
+
 	/* stop event bubbling on html links that have a container with onClick event already */
 	$('.no-click-bubbling').click(function(event){
 	    event.stopImmediatePropagation();
@@ -275,6 +275,7 @@ $(function() {
 	});
 
 });
+
 
 /**
  * enables 'maxlength' to work as an attribute on 'textarea'
