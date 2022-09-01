@@ -33,7 +33,6 @@ import lombok.experimental.Accessors;
  * (package private) specialization corresponding to {@link Specialization#MIXIN}
  * @see ManagedObject.Specialization#MIXIN
  */
-@Getter
 final class _ManagedObjectMixin
 extends _ManagedObjectSpecified
 implements Bookmarkable.NoBookmark {

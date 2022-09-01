@@ -18,44 +18,65 @@
  */
 package org.apache.isis.core.metamodel.object;
 
+import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
 
 /**
- * (package private) specialization corresponding to {@link Specialization#OTHER}
- * @see ManagedObject.Specialization#OTHER
+ * (package private) specialization corresponding to {@link Specialization#ENTITY}
+ * @see ManagedObject.Specialization#ENTITY
  */
-final class _ManagedObjectOther
-extends _ManagedObjectSpecified
-implements Bookmarkable.NoBookmark {
+final class _ManagedObjectEntity
+extends _ManagedObjectSpecified {
 
-    @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
-    private final @NonNull Object pojo;
+    private /*final*/ @Nullable Object pojo;
+    private final @NonNull Bookmark bookmark;
 
-    _ManagedObjectOther(
+    _ManagedObjectEntity(
             final ObjectSpecification spec,
-            final Object pojo) {
-        super(ManagedObject.Specialization.OTHER, spec);
-        //_Assert.assertTrue(spec.isOther()); //TODO later
-        //this.pojo = assertCompliance(pojo); //TODO later
-        this.pojo = pojo;
+            final Object pojo,
+            final @NonNull Bookmark bookmark) {
+        super(ManagedObject.Specialization.ENTITY, spec);
+        this.pojo = assertCompliance(pojo);
+        this.bookmark = bookmark;
+    }
+
+    @Override
+    public Optional<Bookmark> getBookmark() {
+        return Optional.of(bookmark);
+    }
+
+    @Override
+    public Optional<Bookmark> getBookmarkRefreshed() {
+        return getBookmark(); // no-op for entities
+    }
+
+    @Override
+    public boolean isBookmarkMemoized() {
+        return true;
     }
 
     @Override
     public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
-        // no-op for other
+        // no-op for entities
     }
 
-    //TODO to use or not to use?
-//    @Override
-//    public String getTitle() {
-//        return "other object";
+    @Override
+    public Object getPojo() {
+        // TODO refetch if required
+        return pojo;
+    }
+
+    // -- HELPER
+
+//    private EntityFacet entityFacet() {
+//        return getSpecification().entityFacet().orElseThrow();
 //    }
 
 }

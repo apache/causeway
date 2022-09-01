@@ -34,7 +34,6 @@ import lombok.experimental.Accessors;
  * (package private) specialization corresponding to {@link Specialization#SERVICE}
  * @see ManagedObject.Specialization#SERVICE
  */
-@Getter
 final class _ManagedObjectService
 extends _ManagedObjectSpecified {
 

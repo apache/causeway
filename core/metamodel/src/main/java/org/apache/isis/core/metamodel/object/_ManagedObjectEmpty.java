@@ -23,13 +23,10 @@ import java.util.function.Supplier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import lombok.Getter;
-
 /**
  * (package private) specialization corresponding to {@link Specialization#EMPTY}
  * @see ManagedObject.Specialization#EMPTY
  */
-@Getter
 final class _ManagedObjectEmpty
 extends _ManagedObjectSpecified
 implements Bookmarkable.NoBookmark {
