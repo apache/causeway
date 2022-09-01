@@ -361,7 +361,7 @@ public final class BindingsVaa {
         //SETTER
         @Override
         public void accept(@NonNull final Bindable<ManagedObject> target, final V fieldValue) {
-            target.setValue(ManagedObject.adaptScalar(valueSpec, fieldValue));
+            target.setValue(ManagedObject.of(valueSpec, fieldValue));
         }
 
 

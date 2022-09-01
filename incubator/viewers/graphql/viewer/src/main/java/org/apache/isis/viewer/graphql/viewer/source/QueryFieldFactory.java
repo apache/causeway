@@ -133,7 +133,7 @@ public class QueryFieldFactory {
                                     Object argumentValue = arguments.get(oap.getId());
                                     ObjectSpecification elementType = oap.getElementType();
 
-                                    return ManagedObject.adaptScalar(elementType, argumentValue);
+                                    return ManagedObject.of(elementType, argumentValue);
 
                                 }).collect(Can.toCan());
 
