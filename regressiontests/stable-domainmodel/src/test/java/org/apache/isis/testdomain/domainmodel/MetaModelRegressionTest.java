@@ -75,13 +75,13 @@ class MetaModelRegressionTest {
     void setUp() {
         assertNotNull(metaModelServiceMenu);
 
+        //for maintenance
+         createReferenceMetaModelFile(new File("src/test/resources/metamodel.xml.zip"));
+
         val url = _Resources.getResourceUrl(getClass(), "/metamodel.xml.zip");
         if(url==null) {
             _Exceptions.throwNotImplemented();
         }
-
-        //for maintenance
-        // createReferenceMetaModelFile(new File("src/test/resources/metamodel.xml.zip"));
     }
 
     @Test
