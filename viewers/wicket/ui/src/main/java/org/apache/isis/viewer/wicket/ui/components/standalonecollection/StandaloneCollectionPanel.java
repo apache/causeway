@@ -24,6 +24,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecorationFacet;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -72,6 +73,11 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
 
         Wkt.cssAppend(outerDiv, featureId);
         Wkt.cssAppend(outerDiv, collectionModel.getElementType().getFeatureIdentifier());
+
+        val decorationFacet = collectionModel.getMetaModel().getElementType().getFacet(DomainObjectLayoutTableDecorationFacet.class);
+        if (decorationFacet != null && decorationFacet.value().isDataTablesNet()) {
+            Wkt.cssAppend(outerDiv, "table-decoration");
+        }
 
         // selector
         final CollectionPresentationSelectorHelper selectorHelper = new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry());

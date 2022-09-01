@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
+import org.apache.isis.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
@@ -42,7 +42,7 @@ extends ImmutableFacetAbstract {
 
         final boolean editingDisabledByDefault =
                 configuration.getApplib().getAnnotation().getDomainObject().getEditing()
-                == EditingObjectsConfiguration.FALSE;
+                == DomainObjectConfigOptions.EditingObjectsConfiguration.FALSE;
 
         if(domainObjectIfAny.isPresent()) {
             val domainObject = domainObjectIfAny.get();

@@ -38,7 +38,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
+import org.apache.isis.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -172,11 +172,11 @@ public final class Facets {
         .map(DefaultViewFacet::value);
     }
 
-    public static ParameterPolicies.DependentDefaultsPolicy dependentDefaultsPolicy(
+    public static ParameterConfigOptions.DependentDefaultsPolicy dependentDefaultsPolicy(
             final ObjectActionParameter parameter) {
         return parameter.lookupFacet(ParameterDependentDefaultsFacet.class)
                 .map(ParameterDependentDefaultsFacet::value)
-                .orElseGet(ParameterPolicies.DependentDefaultsPolicy::defaultsIfNotSpecifiedOtherwise);
+                .orElseGet(ParameterConfigOptions.DependentDefaultsPolicy::defaultsIfNotSpecifiedOtherwise);
     }
 
     public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {

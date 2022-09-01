@@ -348,6 +348,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
         <datanucleus-rdbms.version>6.0.1</datanucleus-rdbms.version>
 
+        <datatables.version>1.12.1</datatables.version>
+
         <docx4j.version>11.3.2</docx4j.version>
 
         <easymock.version>4.3</easymock.version>

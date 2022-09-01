@@ -16,17 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.paged;
+package org.apache.isis.core.config.metamodel.facets;
 
-import org.springframework.lang.Nullable;
+import org.apache.isis.core.config.IsisConfiguration;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import lombok.NonNull;
 
-/**
- * Mechanism for obtaining the page sizes for tables showing instances of a class.
- */
-public interface PagedFacet extends Facet {
+public final class ActionConfigOptions {
 
-    int value();
+    public static PublishingPolicy actionCommandPublishingPolicy(
+            final @NonNull IsisConfiguration configuration) {
+        return configuration.getApplib().getAnnotation().getAction().getCommandPublishing();
+    }
 
+    public static PublishingPolicy actionExecutionPublishingPolicy(
+            final @NonNull IsisConfiguration configuration) {
+        return configuration.getApplib().getAnnotation().getAction().getExecutionPublishing();
+    }
+
+    public static enum PublishingPolicy {
+        ALL,
+        IGNORE_SAFE,
+        /**
+         * Alias for {@link #IGNORE_SAFE}
+         */
+        IGNORE_QUERY_ONLY,
+        NONE;
+    }
 }

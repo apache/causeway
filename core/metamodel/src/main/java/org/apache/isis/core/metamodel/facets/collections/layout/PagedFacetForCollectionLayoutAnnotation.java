@@ -22,13 +22,22 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
+
+import lombok.val;
 
 public class PagedFacetForCollectionLayoutAnnotation extends PagedFacetAbstract {
 
-    public static Optional<PagedFacetForCollectionLayoutAnnotation> create(
+    public static Optional<PagedFacet> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
+
+        val tableDecorationFacet = holder.getFacet(CollectionLayoutTableDecorationFacet.class);
+        if (tableDecorationFacet.value().isDataTablesNet()) {
+            return Optional.of(new PagedFacetOverriddenByDataTablesDecoration(holder));
+        }
 
         return collectionLayoutIfAny
                 .map(CollectionLayout::paged)

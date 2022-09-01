@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
+import org.apache.isis.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacetAbstract;
@@ -45,7 +45,7 @@ extends EntityChangePublishingFacetAbstract {
         case NOT_SPECIFIED:
         case AS_CONFIGURED:
 
-            val publishingPolicy = PublishingPolicies.entityChangePublishingPolicy(configuration);
+            val publishingPolicy = DomainObjectConfigOptions.entityChangePublishingPolicy(configuration);
             switch (publishingPolicy) {
             case NONE:
                 return Optional.of(entityChangePublishingIfAny.isPresent()

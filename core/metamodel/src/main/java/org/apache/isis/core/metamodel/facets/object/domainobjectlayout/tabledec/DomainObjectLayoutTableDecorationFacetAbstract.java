@@ -15,18 +15,25 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
+ *
  */
-package org.apache.isis.core.metamodel.facets.object.paged;
+package org.apache.isis.core.metamodel.facets.object.domainobjectlayout.tabledec;
 
-import org.springframework.lang.Nullable;
-
+import org.apache.isis.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
-/**
- * Mechanism for obtaining the page sizes for tables showing instances of a class.
- */
-public interface PagedFacet extends Facet {
+abstract class DomainObjectLayoutTableDecorationFacetAbstract
+extends SingleValueFacetAbstract<DomainObjectLayoutConfigOptions.TableDecoration>
+implements DomainObjectLayoutTableDecorationFacet {
 
-    int value();
+    private static final Class<? extends Facet> type() {
+        return DomainObjectLayoutTableDecorationFacet.class;
+    }
 
+    protected DomainObjectLayoutTableDecorationFacetAbstract(
+            final DomainObjectLayoutConfigOptions.TableDecoration value, final FacetHolder holder) {
+        super(type(), value, holder);
+    }
 }

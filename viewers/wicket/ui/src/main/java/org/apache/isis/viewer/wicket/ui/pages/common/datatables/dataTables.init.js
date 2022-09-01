@@ -16,17 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.paged;
+(function($) {
 
-import org.springframework.lang.Nullable;
+  $(document).ready( function () {
+       $('div.table-decoration table.contents').DataTable({
+            $PLACEHOLDER$
+       });
+  } );
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+})(jQuery);
 
-/**
- * Mechanism for obtaining the page sizes for tables showing instances of a class.
- */
-public interface PagedFacet extends Facet {
-
-    int value();
-
-}

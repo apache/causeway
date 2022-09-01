@@ -16,17 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.paged;
+package org.apache.isis.core.metamodel.facets.collections.layout;
 
-import org.springframework.lang.Nullable;
+import java.util.Optional;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
-/**
- * Mechanism for obtaining the page sizes for tables showing instances of a class.
- */
-public interface PagedFacet extends Facet {
+public class PagedFacetOverriddenByDataTablesDecoration extends PagedFacetAbstract {
 
-    int value();
+    PagedFacetOverriddenByDataTablesDecoration(final FacetHolder holder) {
+        super(Integer.MAX_VALUE, holder);
+    }
 
 }
