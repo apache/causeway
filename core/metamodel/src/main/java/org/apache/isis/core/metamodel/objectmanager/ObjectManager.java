@@ -27,7 +27,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
 import org.apache.isis.core.metamodel.objectmanager.detach.ObjectDetacher;
@@ -115,26 +114,12 @@ public interface ObjectManager {
 
     // -- ADAPTING POJOS
 
-    enum EntityAdaptingMode {
-        MEMOIZE_BOOKMARK,
-        SKIP_MEMOIZATION;
-        public boolean isMemoize() { return this == MEMOIZE_BOOKMARK;}
-    }
-
     /**
      * Not suitable for adapting a non-scalar
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
      */
     public default ManagedObject adapt(final @Nullable Object pojo) {
-        return adapt(pojo, ()->specForType(Object.class).orElseThrow(), EntityAdaptingMode.MEMOIZE_BOOKMARK);
-    }
-
-    /**
-     * Not suitable for adapting a non-scalar.
-     * If {@code pojo} is an entity, memoizes its bookmark based on policy {@code bookmarking}.
-     */
-    public default ManagedObject adapt(final @Nullable Object pojo, final EntityAdaptingMode bookmarking) {
-        return adapt(pojo, ()->specForType(Object.class).orElseThrow(), bookmarking);
+        return adapt(pojo, ()->specForType(Object.class).orElseThrow());
     }
 
     /**
@@ -143,8 +128,7 @@ public interface ObjectManager {
      */
     public default ManagedObject adapt(
             final @Nullable Object pojo,
-            final @NonNull Supplier<ObjectSpecification> fallbackElementType,
-            final EntityAdaptingMode entityAdaptingMode) {
+            final @NonNull Supplier<ObjectSpecification> fallbackElementType) {
         if(pojo==null) {
             return ManagedObject.unspecified();
         }
@@ -158,11 +142,11 @@ public interface ObjectManager {
             return ManagedObject.unspecified();
         }
         return spec.isScalar()
-                ? managedObjectEagerlyBookmarkedIfRequired(spec, pojo, entityAdaptingMode)
+                ? managedObjectEagerlyBookmarkedIfRequired(spec, pojo)
                 : ManagedObject.packed(
                         spec.getElementSpecification().orElseGet(fallbackElementType),
                         _NullSafe.streamAutodetect(pojo)
-                        .map(element->adapt(element, entityAdaptingMode))
+                        .map(element->adapt(element))
                         .collect(Can.toCan()));
     }
 
@@ -190,7 +174,7 @@ public interface ObjectManager {
             // if actual type matches spec's, we assume, that we don't need to reload,
             // so this is a shortcut for performance reasons
             ? managedObjectEagerlyBookmarkedIfRequired(
-                    proposedSpec, pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK)
+                    proposedSpec, pojo)
             // fallback, ignoring proposedSpec
             : adapt(pojo);
         return adapter;
@@ -200,26 +184,14 @@ public interface ObjectManager {
 
     /**
      * {@link ManagedObject} factory, that in case of given pojo representing an entity
-     * and the entityAdaptingMode equals {@link EntityAdaptingMode#isMemoize()},
+     * and the entityAdaptingMode equals {@link EntityAdaptingMode#isBookmarkable()},
      * then tries to memoize its {@link Bookmark} eagerly
      * (otherwise its {@link Bookmark} is lazily resolved).
      */
     private static ManagedObject managedObjectEagerlyBookmarkedIfRequired(
             final ObjectSpecification spec,
-            final Object pojo,
-            final EntityAdaptingMode entityAdaptingMode) {
-
-        if(entityAdaptingMode.isMemoize()
-                && spec.isEntity()) {
-            val entityFacet = spec.getFacet(EntityFacet.class);
-            val state = entityFacet.getEntityState(pojo);
-            if(state.isAttached()) {
-                val id = entityFacet.identifierFor(pojo);
-                val bookmark = Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), id);
-                return ManagedObject.bookmarked(spec, pojo, bookmark);
-            }
-        }
-        return ManagedObject.notBookmarked(spec, pojo);
+            final Object pojo) {
+        return ManagedObject.adaptScalar(spec, pojo);
     }
 
 }

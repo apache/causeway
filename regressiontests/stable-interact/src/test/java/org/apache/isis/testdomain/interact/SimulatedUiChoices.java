@@ -74,13 +74,9 @@ public class SimulatedUiChoices extends HasValueValidation {
      * @param choiceIndices
      */
     public void simulateMultiChoiceSelect(final int ... choiceIndices) {
-        val newValuePojos = choiceBox.getValue()
-                .pickByIndex(choiceIndices)
-                .map(ManagedObject::getPojo);
-        val newValue = ManagedObject.of(
-                valueSpecification,
-                newValuePojos.toList());
-        selectedItem.setValue(newValue);
+        val newValues = choiceBox.getValue()
+                .pickByIndex(choiceIndices);
+        selectedItem.setValue(ManagedObject.packed(valueSpecification, newValues));
     }
 
     public ManagedObject getValue() {

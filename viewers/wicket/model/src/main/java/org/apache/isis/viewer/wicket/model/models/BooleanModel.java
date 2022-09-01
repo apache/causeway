@@ -59,7 +59,7 @@ extends ChainingModel<Boolean> {
 
     @Override
     public void setObject(final Boolean value) {
-        val adaptedValue = ManagedObject.of(
+        val adaptedValue = ManagedObject.value(
                 scalarModel().getScalarTypeSpec(),
                 (value==null
                     && isPrimitive)

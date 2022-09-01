@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.entity;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.isis.applib.query.Query;
@@ -55,12 +56,12 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override
-    public String identifierFor(final Object pojo) {
+    public Optional<String> identifierFor(final Object pojo) {
         throw _Exceptions.unsupportedOperation();
     }
 
     @Override
-    public ManagedObject fetchByIdentifier(final Bookmark bookmark) {
+    public Optional<Object> fetchByBookmark(final Bookmark bookmark) {
         throw _Exceptions.unsupportedOperation();
     }
 

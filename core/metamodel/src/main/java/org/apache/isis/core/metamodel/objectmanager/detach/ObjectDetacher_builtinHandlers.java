@@ -18,9 +18,7 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.detach;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Data;
@@ -41,7 +39,7 @@ final class ObjectDetacher_builtinHandlers {
         private MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ManagedObject managedObject) {
+        public boolean isHandling(final ManagedObject managedObject) {
 
             if(managedObject==null || managedObject.getPojo()==null) {
                 return true;
@@ -51,7 +49,7 @@ final class ObjectDetacher_builtinHandlers {
         }
 
         @Override
-        public ManagedObject handle(ManagedObject managedObject) {
+        public ManagedObject handle(final ManagedObject managedObject) {
             return null; // noop
         }
 
@@ -63,20 +61,16 @@ final class ObjectDetacher_builtinHandlers {
         private final MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ManagedObject request) {
+        public boolean isHandling(final ManagedObject request) {
             val spec = request.getSpecification();
             return spec.isEntity();
         }
 
         @Override
-        public ManagedObject handle(ManagedObject request) {
+        public ManagedObject handle(final ManagedObject request) {
 
             val spec = request.getSpecification();
-            val entityFacet = spec.getFacet(EntityFacet.class);
-            if(entityFacet==null) {
-                throw _Exceptions.illegalArgument(
-                        "ObjectSpecification is missing an EntityFacet: %s", spec);
-            }
+            val entityFacet = spec.entityFacetElseFail();
 
             Object detachedPojo = entityFacet.detach(request.getPojo());
 
@@ -92,13 +86,13 @@ final class ObjectDetacher_builtinHandlers {
     public static class DetachOther implements ObjectDetacher.Handler {
 
         @Override
-        public boolean isHandling(ManagedObject request) {
+        public boolean isHandling(final ManagedObject request) {
             // if no one else feels responsible, we do
             return true;
         }
 
         @Override
-        public ManagedObject handle(ManagedObject request) {
+        public ManagedObject handle(final ManagedObject request) {
             return request;
         }
 

@@ -18,65 +18,63 @@
  */
 package org.apache.isis.core.metamodel.object;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.repository.EntityState;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
- * (package private) specialization corresponding to {@link Specialization#ENTITY}
+ * (package private) specialization corresponding to a detached {@link Specialization#ENTITY}
  * @see ManagedObject.Specialization#ENTITY
  */
-final class _ManagedObjectEntity
-extends _ManagedObjectSpecified {
+final class _ManagedObjectEntityDetached
+extends _ManagedObjectSpecified
+implements Bookmarkable.NoBookmark, Refetchable {
 
-    private /*final*/ @Nullable Object pojo;
-    private final @NonNull Bookmark bookmark;
+    @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
+    private final @NonNull Object pojo;
 
-    _ManagedObjectEntity(
+    _ManagedObjectEntityDetached(
             final ObjectSpecification spec,
-            final Object pojo,
-            final @NonNull Bookmark bookmark) {
+            final Object pojo) {
         super(ManagedObject.Specialization.ENTITY, spec);
+        _Assert.assertTrue(spec.isEntity());
         this.pojo = assertCompliance(pojo);
-        this.bookmark = bookmark;
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmark() {
-        return Optional.of(bookmark);
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmarkRefreshed() {
-        return getBookmark(); // no-op for entities
-    }
-
-    @Override
-    public boolean isBookmarkMemoized() {
-        return true;
     }
 
     @Override
     public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
-        // no-op for entities
+        // no-op for other
     }
 
     @Override
-    public Object getPojo() {
-        // TODO refetch if required
+    public String getTitle() {
+        return "detached entity object";
+    }
+
+    @Override
+    public Object peekAtPojo() {
         return pojo;
+    }
+
+    @Override
+    public @NonNull EntityState getEntityState() {
+        val entityFacet = entityFacet();
+        return entityFacet.getEntityState(pojo);
     }
 
     // -- HELPER
 
-//    private EntityFacet entityFacet() {
-//        return getSpecification().entityFacet().orElseThrow();
-//    }
+    private EntityFacet entityFacet() {
+        return getSpecification().entityFacetElseFail();
+    }
 
 }

@@ -62,7 +62,6 @@ import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
@@ -177,7 +176,7 @@ implements MemberExecutorService {
 
         val returnedPojo = priorExecution.getReturned();
         val returnedAdapter = objectManager.adapt(
-                returnedPojo, owningAction::getElementType, EntityAdaptingMode.MEMOIZE_BOOKMARK);
+                returnedPojo, owningAction::getElementType);
 
         // sync DTO with result
         interactionDtoFactory
@@ -279,6 +278,7 @@ implements MemberExecutorService {
         }
 
         val entityState = MmEntityUtil.getEntityState(resultAdapter);
+        //FIXME what to do with new state
         if(entityState.isDetached())   {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             getTransactionService().flushTransaction();

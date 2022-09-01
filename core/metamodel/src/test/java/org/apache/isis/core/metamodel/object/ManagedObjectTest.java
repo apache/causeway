@@ -84,7 +84,7 @@ class ManagedObjectTest {
         val emptyObject = ManagedObject.empty(spec);
         assertNotNull(emptyObject);
 
-        val presentObject = ManagedObject.wrapScalar(specLoader, 3);
+        val presentObject = ManagedObject.adaptScalar(specLoader, 3);
         assertEquals(Specialization.VALUE, presentObject.getSpecialization());
 
         presentObject.assertCompliance(6);
@@ -113,7 +113,7 @@ class ManagedObjectTest {
         val constructor = cls.getConstructor(_Constants.emptyClasses);
         val pojo = constructor.newInstance(_Constants.emptyObjects);
 
-        val presentObject = ManagedObject.wrapScalar(specLoader, pojo);
+        val presentObject = ManagedObject.adaptScalar(specLoader, pojo);
         assertEquals(Specialization.VIEWMODEL, presentObject.getSpecialization());
 
         presentObject.assertCompliance(pojo);

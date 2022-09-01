@@ -121,7 +121,7 @@ public abstract class EventProviderAbstract implements EventProvider {
             final Object dereferencedObject = dereference(commonContext, domainObjectPojo);
 
             val dereferencedManagedObject =
-                    ManagedObject.wrapScalar(commonContext.getSpecificationLoader(), dereferencedObject);
+                    ManagedObject.adaptScalar(commonContext.getSpecificationLoader(), dereferencedObject);
 
             val oid = ManagedObjects.bookmark(dereferencedManagedObject).orElse(null);
             if(oid!=null) {

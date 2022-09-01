@@ -90,6 +90,8 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         repository.persist(entity.getPojo());
 
+        System.err.printf("entity %s%n", entity);
+
         assertEquals(
                 EntityState.PERSISTABLE_ATTACHED,
                 MmEntityUtil.getEntityState(entity));

@@ -262,7 +262,7 @@ class DomainModelTest_usingGoodDomain {
             assertEquals("inherited title", titleService.titleOf(instance));
             assertEquals("inherited icon", titleService.iconNameOf(instance));
 
-            val domainObject = ManagedObject.of(spec, instance);
+            val domainObject = ManagedObject.adaptScalar(spec, instance);
             assertEquals("inherited title", domainObject.getTitle());
             assertEquals("inherited icon", iconFacet.iconName(domainObject));
         }
@@ -538,7 +538,7 @@ class DomainModelTest_usingGoodDomain {
 
         val objectSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
         val member = objectSpec.getMemberElseFail(memberId);
-        val sampleObject = ManagedObject.of(objectSpec, new ProperMemberSupport());
+        val sampleObject = ManagedObject.adaptScalar(objectSpec, new ProperMemberSupport());
 
         assertEquals(named, member.getFriendlyName(()->sampleObject));
         assertEquals(described, member.getDescription(()->sampleObject).orElse(null));

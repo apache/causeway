@@ -33,7 +33,6 @@ import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactnlayer.InteractionService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
@@ -56,7 +55,6 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Inject InteractionService interactionService; // dependsOn
     @Inject private SpecificationLoader specificationLoader;
-    @Inject private ServiceInjector serviceInjector;
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private Provider<ObjectLifecyclePublisher> objectLifecyclePublisherProvider;
     private ObjectLifecyclePublisher objectLifecyclePublisher() { return objectLifecyclePublisherProvider.get(); }
@@ -95,8 +93,7 @@ public class FactoryServiceDefault implements FactoryService {
             throw _Exceptions.illegalArgument("Type '%s' is not recogniced as an entity type by the framework.",
                     entityClass);
         }
-        serviceInjector.injectServicesInto(entityPojo);
-        objectLifecyclePublisher().onPostCreate(ManagedObject.of(spec, entityPojo));
+        objectLifecyclePublisher().onPostCreate(ManagedObject.entityDetached(spec, entityPojo));
         return entityPojo;
     }
 
@@ -124,8 +121,7 @@ public class FactoryServiceDefault implements FactoryService {
             throw _Exceptions.illegalArgument("Type '%s' is not recogniced as a ViewModel by the framework.",
                     viewModelClass);
         }
-        serviceInjector.injectServicesInto(viewModelPojo);
-        objectLifecyclePublisher().onPostCreate(ManagedObject.of(spec, viewModelPojo));
+        objectLifecyclePublisher().onPostCreate(ManagedObject.viewmodel(spec, viewModelPojo, Optional.empty()));
         return viewModelPojo;
     }
 

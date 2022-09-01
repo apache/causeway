@@ -440,13 +440,13 @@ extends
     default boolean isEntity() {
         return getBeanSort().isEntity()
                 || (getBeanSort().isAbstract()
-                        && lookupFacet(EntityFacet.class).isPresent());
+                        && entityFacet().isPresent());
     }
 
     default boolean isViewModel() {
         return getBeanSort().isViewModel()
                 || (getBeanSort().isAbstract()
-                        && lookupFacet(ViewModelFacet.class).isPresent());
+                        && viewmodelFacet().isPresent());
     }
 
     default boolean isEntityOrViewModel() {
@@ -629,5 +629,24 @@ extends
     /** introduced for lookup optimization / allow memoization */
     @SuppressWarnings("rawtypes")
     Optional<ValueFacet> valueFacet();
+    @SuppressWarnings("rawtypes")
+    default ValueFacet valueFacetElseFail() {
+        return valueFacet().orElseThrow(()->
+            _Exceptions.unrecoverable("Value type %s must have a ValueFacet", toString()));
+    }
+
+    /** introduced for lookup optimization / allow memoization */
+    Optional<EntityFacet> entityFacet();
+    default EntityFacet entityFacetElseFail() {
+        return entityFacet().orElseThrow(()->
+            _Exceptions.unrecoverable("Entity type %s must have an EntityFacet", toString()));
+    }
+
+    /** introduced for lookup optimization / allow memoization */
+    Optional<ViewModelFacet> viewmodelFacet();
+    default ViewModelFacet viewmodelFacetElseFail() {
+        return viewmodelFacet().orElseThrow(()->
+            _Exceptions.unrecoverable("ViewModel type %s must have a ViewModelFacet", toString()));
+    }
 
 }

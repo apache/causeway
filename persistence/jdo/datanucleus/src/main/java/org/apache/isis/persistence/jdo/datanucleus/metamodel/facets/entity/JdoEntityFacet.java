@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
@@ -46,8 +47,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.debug._Debug;
-import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -56,7 +55,6 @@ import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.idstringifier.IdStringifierService;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
@@ -98,48 +96,22 @@ implements EntityFacet {
     }
 
     @Override
-    public String identifierFor(final Object pojo) {
+    public Optional<String> identifierFor(final Object pojo) {
 
-        if(pojo==null) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer cannot identify a pojo that is null (given type %s)",
-                    entityClass.getName());
-        }
-
-        if(!isPersistableType(pojo.getClass())) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer does not recognize given type %s",
-                    pojo.getClass().getName());
+        if (!getEntityState(pojo).isAttached()) {
+            return Optional.empty();
         }
 
         val pm = getPersistenceManager();
-        var primaryKey = pm.getObjectId(pojo);
+        var primaryKeyIfAny = pm.getObjectId(pojo);
 
-//        if(primaryKey==null) {
-//            pm.makePersistent(pojo);
-//            primaryKey = pm.getObjectId(pojo);
-//        }
-
-        if(primaryKey==null) {
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("detached entity detected %s", pojo);
-            });
-
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer does not recognize given object of type %s, "
-                    + "meaning the object has no identifier that associates it with the persistence layer. "
-                    + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
-                    pojo.getClass().getName());
-        }
-
-        return idStringifierService.enstringPrimaryKey(primaryKey.getClass(), primaryKey);
+        return Optional.ofNullable(primaryKeyIfAny)
+                .map(primaryKey->
+                    idStringifierService.enstringPrimaryKey(primaryKey.getClass(), primaryKey));
     }
 
-
     @Override
-    public ManagedObject fetchByIdentifier(
-            final @NonNull Bookmark bookmark) {
+    public Optional<Object> fetchByBookmark(final @NonNull Bookmark bookmark) {
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
@@ -166,14 +138,7 @@ implements EntityFacet {
             throw e;
         }
 
-        if (entityPojo == null) {
-            throw new ObjectNotFoundException(""+bookmark);
-        }
-
-        val actualEntitySpec = getSpecificationLoader().specForTypeElseFail(entityPojo.getClass());
-        getServiceInjector().injectServicesInto(entityPojo); // might be redundant
-        //TODO integrate with entity change tracking
-        return ManagedObject.bookmarked(actualEntitySpec, entityPojo, bookmark);
+        return Optional.ofNullable(entityPojo);
     }
 
     private Map<Class<?>, Class<?>> primaryKeyClassByEntityClass = new ConcurrentHashMap<>();
@@ -207,11 +172,6 @@ implements EntityFacet {
                         "JdoEntityFacet has been incorrectly installed on '%s' which has an supported identityType of '%s'",
                         entityClass.getName(), identityType));
         }
-    }
-
-    private ObjectSpecification getEntitySpec() {
-        return getSpecificationLoader().specForType(entityClass)
-                .orElseThrow(() -> new IllegalStateException(String.format("Could not load specification for entity class '%s'", entityClass)));
     }
 
     @Override
@@ -294,7 +254,7 @@ implements EntityFacet {
 
         if(pojo==null
                 || !isPersistableType(pojo.getClass())
-                || DnEntityStateProvider.entityState(pojo).isAttached()) {
+                || DnEntityStateProvider.entityState(pojo).isAttachedOrNew()) {
             return; // nothing to do
         }
 
@@ -404,7 +364,8 @@ implements EntityFacet {
 
     private Can<ManagedObject> fetchWithinTransaction(final Supplier<List<?>> fetcher) {
 
-        val objectLifecyclePublisher = getFacetHolder().getServiceRegistry().lookupServiceElseFail(ObjectLifecyclePublisher.class);
+        val objectLifecyclePublisher = getFacetHolder().getServiceRegistry()
+                .lookupServiceElseFail(ObjectLifecyclePublisher.class);
 
         return getTransactionalProcessor().callWithinCurrentTransactionElseCreateNew(
                 ()->_NullSafe.stream(fetcher.get())
@@ -413,7 +374,9 @@ implements EntityFacet {
                 .getValue().orElseThrow();
     }
 
-    private ManagedObject adopt(final ObjectLifecyclePublisher objectLifecyclePublisher, final Object fetchedObject) {
+    private ManagedObject adopt(
+            final ObjectLifecyclePublisher objectLifecyclePublisher,
+            final Object fetchedObject) {
         // handles lifecycle callbacks and injects services
 
         // ought not to be necessary, however for some queries it seems that the

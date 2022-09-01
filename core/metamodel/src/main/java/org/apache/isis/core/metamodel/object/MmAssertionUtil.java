@@ -24,6 +24,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ClassUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -49,6 +50,23 @@ public class MmAssertionUtil {
         _Assert.assertEquals(requiredSpec, actualSpec, ()->
             String.format("pojo's actual ObjectSpecification %s "
                     + "does not exaclty match %s%n", actualSpec, requiredSpec));
+    }
+
+    /**
+     * Guard against incompatible type.
+     */
+    public @NonNull UnaryOperator<ObjectSpecification> assertTypeOf(
+            final @NonNull ObjectSpecification requiredSpec) {
+        return specUnderInvestigation -> {
+            _Assert.assertNotNull(specUnderInvestigation);
+            if(specUnderInvestigation.isOfTypeResolvePrimitive(requiredSpec)) {
+                return specUnderInvestigation;
+            }
+            throw _Exceptions.illegalArgument("Object has incompatible type %s, "
+                    + "must be an instance of %s.",
+                    specUnderInvestigation,
+                    requiredSpec);
+        };
     }
 
     /**
@@ -85,6 +103,14 @@ public class MmAssertionUtil {
                             "pojo.toString() = %s",
                             pojo.getClass(), pojo.toString());
         }
+    }
+
+    public void assertPojoIsScalar(final @Nullable Object pojo) {
+        if(pojo==null) {
+            return;
+        }
+        _Assert.assertTrue(!_Collections.isCollectionOrArrayOrCanType(pojo.getClass()),
+                ()->String.format("is scalar %s", pojo.getClass()));
     }
 
 }

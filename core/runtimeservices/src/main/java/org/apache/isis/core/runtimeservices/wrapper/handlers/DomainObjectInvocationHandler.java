@@ -127,8 +127,7 @@ extends DelegatingInvocationHandlerDefault<T> {
                     nsme);
         }
 
-        entityFacet = targetAdapter.getSpecification()
-                .getFacet(EntityFacet.class);
+        entityFacet = targetAdapter.getSpecification().entityFacet().orElse(null);
 
         this.mixeeAdapter = mixeeAdapter;
     }

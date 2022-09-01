@@ -223,7 +223,7 @@ extends PublishingTestFactoryAbstract {
                     val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
                     val propertyModel = managedProperty.startNegotiation();
                     val propertySpec = managedProperty.getElementType();
-                    propertyModel.getValue().setValue(ManagedObject.of(propertySpec, "Book #2"));
+                    propertyModel.getValue().setValue(ManagedObject.value(propertySpec, "Book #2"));
                     propertyModel.submit();
 
                 });

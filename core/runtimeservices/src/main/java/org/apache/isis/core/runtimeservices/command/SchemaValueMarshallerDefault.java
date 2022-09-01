@@ -146,13 +146,7 @@ extends SchemaValueMarshallerAbstract {
                 ? fromTypedTuple(context, valueDto.getComposite())
                 : context.getSemantics().compose(ValueDecomposition.ofFundamental(valueDto));
 
-        if(recoveredValueAsPojo==null) {
-            return ManagedObject.empty(context.getElementType());
-        }
-
-        val recoveredValue = recoveredValueAsPojo!=null
-                ? ManagedObject.of(elementSpec, recoveredValueAsPojo)
-                : ManagedObject.empty(context.getElementType());
+        val recoveredValue = ManagedObject.value(elementSpec, recoveredValueAsPojo);
         return recoveredValue;
     }
 

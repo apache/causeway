@@ -229,7 +229,7 @@ public class PageParameterUtils {
         }
 
         if(objSpec.isValue()) {
-            return ManagedObject.of(objSpec,
+            return ManagedObject.value(objSpec,
                     Facets.valueSerializerElseFail(objSpec, objSpec.getCorrespondingClass())
                         .fromEncodedString(Format.JSON, encoded));
         }

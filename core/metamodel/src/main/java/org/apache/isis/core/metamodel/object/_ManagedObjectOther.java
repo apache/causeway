@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.object;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -42,9 +43,9 @@ implements Bookmarkable.NoBookmark {
             final ObjectSpecification spec,
             final Object pojo) {
         super(ManagedObject.Specialization.OTHER, spec);
-        //_Assert.assertTrue(spec.isOther()); //TODO later
-        //this.pojo = assertCompliance(pojo); //TODO later
-        this.pojo = pojo;
+        _Assert.assertTrue(!spec.isValue());
+        _Assert.assertTrue(!spec.isEntityOrViewModel());
+        this.pojo = assertCompliance(pojo);
     }
 
     @Override

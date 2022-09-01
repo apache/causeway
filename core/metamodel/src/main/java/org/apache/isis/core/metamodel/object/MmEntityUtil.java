@@ -24,13 +24,10 @@ import java.util.function.UnaryOperator;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.repository.EntityState;
-import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 
 import lombok.NonNull;
 import lombok.val;
@@ -49,45 +46,28 @@ public final class MmEntityUtil {
             return Optional.empty();
         }
 
-        val entityFacet = spec.getFacet(EntityFacet.class);
-        if(entityFacet==null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(entityFacet.getPersistenceStack());
+        return spec.entityFacet()
+                .map(EntityFacet::getPersistenceStack);
     }
 
     @NonNull
     public static EntityState getEntityState(final @Nullable ManagedObject adapter) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
-            return EntityState.NOT_PERSISTABLE;
-        }
-        val spec = adapter.getSpecification();
-        val pojo = adapter.getPojo();
-
-        if(!spec.isEntity()) {
-            return EntityState.NOT_PERSISTABLE;
-        }
-
-        val entityFacet = spec.getFacet(EntityFacet.class);
-        if(entityFacet==null) {
-            throw _Exceptions.unrecoverable("Entity types must have an EntityFacet");
-        }
-
-        return entityFacet.getEntityState(pojo);
+        return adapter!=null
+             ? adapter.getEntityState()
+             : EntityState.NOT_PERSISTABLE;
     }
 
     public static void persistInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
         val spec = managedObject.getSpecification();
-        val entityFacet = spec.getFacet(EntityFacet.class);
+        val entityFacet = spec.entityFacetElseFail();
         entityFacet.persist(managedObject.getPojo());
     }
 
     public static void destroyInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
         val spec = managedObject.getSpecification();
-        val entityFacet = spec.getFacet(EntityFacet.class);
+        val entityFacet = spec.entityFacetElseFail();
         entityFacet.delete(managedObject.getPojo());
     }
 
@@ -126,53 +106,8 @@ public final class MmEntityUtil {
         return managedObject;
     }
 
+    @Deprecated
     public static ManagedObject refetch(final @Nullable ManagedObject managedObject) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) {
-            return managedObject;
-        }
-        if(managedObject instanceof PackedManagedObject) {
-            ((PackedManagedObject)managedObject).unpack().forEach(MmEntityUtil::refetch);
-            return managedObject;
-        }
-        val entityState = MmEntityUtil.getEntityState(managedObject);
-        if(!entityState.isPersistable()) {
-            return managedObject;
-        }
-        if(!entityState.isDetached()) {
-            return managedObject;
-        }
-
-        val spec = managedObject.getSpecification();
-        val objectManager = managedObject.getObjectManager();
-
-        val reattached = ManagedObjects.bookmark(managedObject)
-        .map(bookmark->
-                ObjectLoader.Request.of(
-                                spec,
-                                bookmark))
-        .map(loadRequest->Try.call(
-                ()->objectManager.loadObject(loadRequest)))
-        .map(loadResult->
-                // a valid scenario for entities: not found eg. after deletion,
-                // which will fail the load request
-                loadResult.isFailure()
-                        ? ManagedObject.empty(managedObject.getSpecification())
-                        : loadResult.getValue().get()
-        )
-        .orElse(managedObject);
-
-        // handles deleted entities
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(reattached)) {
-            // returns the 'emptied' ManagedObject from above
-            return reattached;
-        }
-
-        val newState = MmEntityUtil.getEntityState(reattached);
-        _Assert.assertTrue(newState.isAttached());
-
-        _Casts.castTo(_ManagedObjectWithBookmark.class, managedObject)
-        .ifPresent(obj->obj.replacePojo(old->reattached.getPojo()));
-
         return managedObject;
     }
 
@@ -235,5 +170,6 @@ public final class MmEntityUtil {
         }
         return adapter;
     }
+
 
 }

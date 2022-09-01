@@ -24,9 +24,8 @@ import java.util.function.Supplier;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
@@ -41,9 +40,9 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Represents an instance of some element of the meta-model managed by the framework,
- * that is <i>Spring</i> managed beans, persistence-stack provided entities, view-models
- * or instances of value types.
+ * Represents an instance of some element of the meta-model recognized by the framework,
+ * that is <i>Spring</i> managed beans, persistence-stack provided entities, view-models,
+ * mixins or instances of value types.
  *
  * @since 2.0 {@index}}
  *
@@ -325,6 +324,11 @@ extends
      */
     Object getPojo();
 
+    @NonNull
+    default EntityState getEntityState() {
+        return EntityState.NOT_PERSISTABLE;
+    }
+
     /**
      * If the underlying domain object is a viewmodel, refreshes any referenced entities.
      * (Acts as a no-op otherwise.)
@@ -434,23 +438,48 @@ extends
             final @Nullable Object pojo,
             final Optional<Bookmark> bookmarkIfKnown) {
         return pojo != null
-                ? bookmarkIfKnown.map(bookmark->bookmarked(spec, pojo, bookmark)) //FIXME
-                        .orElseGet(()->new _ManagedObjectWithEagerSpec(spec, pojo)) //FIXME
+                ? new _ManagedObjectViewmodel(spec, pojo, bookmarkIfKnown)
                 : empty(spec);
     }
     /**
      * ENTITY
      * @param spec - required
      * @param pojo - if <code>null</code> maps to {@link #empty(ObjectSpecification)}
+     * @param bookmark
      * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
      * @see ManagedObject.Specialization.BookmarkPolicy#IMMUTABLE
      * @see ManagedObject.Specialization.PojoPolicy#REFETCHABLE
      */
     static ManagedObject entity(
             final @NonNull ObjectSpecification spec,
+            final @Nullable Object pojo,
+            final @NonNull Optional<Bookmark> bookmarkIfKnown) {
+        if(pojo == null) {
+            return empty(spec);
+        }
+        val bookmarkIfAny = bookmarkIfKnown
+                .or(()->spec.entityFacetElseFail().bookmarkFor(pojo));
+        if(bookmarkIfAny.isPresent()) {
+            return entityAttached(spec, pojo, bookmarkIfAny);
+        } else {
+            return entityDetached(spec, pojo);
+        }
+    }
+    //FIXME java-doc
+    static ManagedObject entityAttached(
+            final @NonNull ObjectSpecification spec,
+            final @NonNull Object pojo,
+            final @NonNull Optional<Bookmark> bookmarkIfKnown) {
+        return new _ManagedObjectEntityHybrid(
+                        new _ManagedObjectEntityAttached(spec, pojo, bookmarkIfKnown));
+    }
+    //FIXME java-doc
+    static ManagedObject entityDetached(
+            final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
-                ? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
+                ? new _ManagedObjectEntityHybrid(
+                        new _ManagedObjectEntityDetached(spec, pojo))
                 : empty(spec);
     }
     /**
@@ -502,23 +531,44 @@ extends
      * @param specLoader - required
      * @param pojo - required, required non-scalar
      */
-    static ManagedObject wrapScalar(
+    static ManagedObject adaptScalar(
             final @NonNull SpecificationLoader specLoader,
             final @NonNull Object pojo) {
         if(pojo instanceof ManagedObject) {
             return (ManagedObject)pojo;
         }
         val spec = specLoader.specForType(pojo.getClass()).orElse(null);
-        return wrapScalarInternal(spec, pojo, Optional.empty());
+        return adaptScalarInternal(spec, pojo, Optional.empty());
     }
 
-    private static ManagedObject wrapScalarInternal(
-            final @Nullable ObjectSpecification spec,
+    static ManagedObject adaptScalar(
+            final @NonNull ObjectSpecification guess,
+            final @Nullable Object pojo) {
+        if(pojo instanceof ManagedObject) {
+            return (ManagedObject)pojo;
+        }
+        return adaptScalarInternal(guess, pojo, Optional.empty());
+    }
+
+    static ManagedObject identified(
+            final @NonNull  ObjectSpecification spec,
+            final @Nullable Object pojo,
+            final @NonNull  Bookmark bookmark) {
+        return adaptScalarInternal(spec, pojo, Optional.of(bookmark));
+    }
+
+    // -- HELPER
+
+    /**
+     * spec and pojo don't need to be strictly in sync, we adapt if required
+     */
+    private static ManagedObject adaptScalarInternal(
+            final @Nullable ObjectSpecification guess,
             final @NonNull Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfAny) {
 
-        _Assert.assertTrue(!_Collections.isCollectionOrArrayOrCanType(pojo.getClass()),
-                ()->String.format("is scalar %s", pojo.getClass()));
+        MmAssertionUtil.assertPojoIsScalar(pojo);
+        val spec = MmSpecUtil.quicklyResolveObjectSpecificationFor(guess, pojo.getClass());
 
         val specialization = spec!=null
                 ? Specialization.inferFrom(spec, pojo)
@@ -534,7 +584,7 @@ extends
         case VIEWMODEL:
             return viewmodel(spec, pojo, bookmarkIfAny);
         case ENTITY:
-            return entity(spec, pojo);
+            return entity(spec, pojo, bookmarkIfAny);
         case MIXIN:
             return mixin(spec, pojo);
         case OTHER:
@@ -549,18 +599,6 @@ extends
 
     // -- FACTORIES LEGACY
 
-    @Deprecated
-    static ManagedObject notBookmarked(
-            final ObjectSpecification spec,
-            final Object pojo) {
-        if(pojo instanceof ManagedObject) {
-            return (ManagedObject)pojo;
-        }
-        return !_Collections.isCollectionOrArrayOrCanType(pojo.getClass())
-                ? wrapScalarInternal(spec, pojo, Optional.empty())
-                : new _ManagedObjectWithEagerSpec(spec, pojo);
-    }
-
     /**
      * Optimized for cases, when the pojo's specification is already available.
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
@@ -572,7 +610,9 @@ extends
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
 
-        MmAssertionUtil.assertPojoNotWrapped(pojo);
+        if(pojo instanceof ManagedObject) {
+            return (ManagedObject)pojo;
+        }
 
         //ISIS-2430 Cannot assume Action Param Spec to be correct when eagerly loaded
         //actual type in use (during runtime) might be a sub-class of the above, so re-adapt with hinting spec
@@ -589,9 +629,7 @@ extends
             final @NonNull Object pojo,
             final @NonNull Bookmark bookmark) {
 
-        if(pojo!=null) {
-            _Assert.assertFalse(_Collections.isCollectionOrArrayOrCanType(pojo.getClass()));
-        }
+        MmAssertionUtil.assertPojoIsScalar(pojo);
 
         if(!spec.getCorrespondingClass().isAssignableFrom(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
@@ -602,7 +640,7 @@ extends
                     spec.getCorrespondingClass(), pojo.getClass(), pojo.toString());
         }
         MmAssertionUtil.assertPojoNotWrapped(pojo);
-        return _ManagedObjectWithEagerSpec.identified(spec, pojo, bookmark);
+        return ManagedObject.identified(spec, pojo, bookmark);
     }
 
 }

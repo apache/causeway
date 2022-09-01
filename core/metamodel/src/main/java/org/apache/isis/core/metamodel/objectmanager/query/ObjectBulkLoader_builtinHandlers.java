@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.objectmanager.query;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
@@ -85,11 +84,7 @@ final class ObjectBulkLoader_builtinHandlers {
         public Can<ManagedObject> handle(final ObjectBulkLoader.Request objectQuery) {
 
             val spec = objectQuery.getObjectSpecification();
-            val entityFacet = spec.getFacet(EntityFacet.class);
-            if(entityFacet==null) {
-                throw _Exceptions.illegalArgument(
-                        "ObjectSpecification is missing an EntityFacet: %s", spec.getCorrespondingClass());
-            }
+            val entityFacet = spec.entityFacetElseFail();
 
             val entities = entityFacet.fetchByQuery(objectQuery.getQuery());
             val serviceInjector = metaModelContext.getServiceInjector();

@@ -132,7 +132,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         }
 
         final Customer2 customer = new Customer2();
-        val objectAdapter = ManagedObject.wrapScalar(specificationLoader, customer);
+        val objectAdapter = ManagedObject.adaptScalar(specificationLoader, customer);
 
         final String title = titleFacetViaTitleAnnotation.title(objectAdapter);
         assertThat(title, is("titleElement1. titleElement3,titleElement2"));
@@ -198,9 +198,9 @@ extends AbstractFacetFactoryJUnit4TestCase {
     public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
         { // check prerequisites
-            val wThree = ManagedObject.wrapScalar(specificationLoader, Integer.valueOf(3));
+            val wThree = ManagedObject.adaptScalar(specificationLoader, Integer.valueOf(3));
             assertEquals("3", wThree.getTitle());
-            val pThree = ManagedObject.wrapScalar(specificationLoader, 3);
+            val pThree = ManagedObject.adaptScalar(specificationLoader, 3);
             assertEquals("3", pThree.getTitle());
         }
 
@@ -208,7 +208,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
                 .forTesting(Customer4.class, mockMethodRemover, facetedMethod));
 
         final Customer4 customer = new Customer4();
-        val objectAdapter = ManagedObject.wrapScalar(specificationLoader, customer);
+        val objectAdapter = ManagedObject.adaptScalar(specificationLoader, customer);
 
         assertThat(objectAdapter.getTitle(),
                 is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));

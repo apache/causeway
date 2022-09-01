@@ -67,6 +67,9 @@ implements ManagedObject {
         if(specialization.getTypePolicy().isExactTypeRequired()) {
             MmAssertionUtil.assertExactType(specification, pojo);
         }
+        if(getSpecification().isEntityOrViewModel()) {
+            getServiceInjector().injectServicesInto(pojo); // might be redundant
+        }
         return pojo;
     }
 
@@ -94,16 +97,22 @@ implements ManagedObject {
         if(!this.getSpecification().equals(other.getSpecification())) {
             return false;
         }
-        val canGetPojosWithoutSideeffect = !this.getSpecialization().getPojoPolicy().isRefetchable();
+        val canGetPojosWithoutSideeffect = !getSpecialization().getPojoPolicy().isRefetchable();
         if(canGetPojosWithoutSideeffect) {
             // expected to work for packed variant just fine, as it compares lists
             return Objects.equals(this.getPojo(), other.getPojo());
         }
-        // objects are considered equal if their bookmarks match
-        _Assert.assertTrue(other.isBookmarkMemoized()); // guarantee no side-effects on other
-        return Objects.equals(
-                sideEffectFreeBookmark(),
-                other.getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach));
+
+        if(this.isBookmarkMemoized()
+                && other.isBookmarkMemoized()) {
+            return Objects.equals(
+                    sideEffectFreeBookmark(),
+                    other.getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach));
+        }
+
+        val a = (Refetchable) this;
+        val b = (Refetchable) this;
+        return Objects.equals(a.peekAtPojo(), b.peekAtPojo());
     }
 
     @Override
@@ -124,7 +133,7 @@ implements ManagedObject {
                 getSpecification(),
                 !getSpecialization().getPojoPolicy().isRefetchable()
                     ? getPojo() // its safe to get pojo side-effect free
-                    : !getSpecialization().getBookmarkPolicy().isNoBookmark()
+                    : isBookmarkMemoized()
                         ? String.format("(refetchable, %s)", sideEffectFreeBookmark())
                         : "(refetchable, suppressed to not cause side effects)");
     }
@@ -132,7 +141,6 @@ implements ManagedObject {
     // -- HELPER
 
     private Bookmark sideEffectFreeBookmark() {
-        _Assert.assertFalse(getSpecialization().getBookmarkPolicy().isNoBookmark());
         _Assert.assertTrue(isBookmarkMemoized());
         return getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach);
     }

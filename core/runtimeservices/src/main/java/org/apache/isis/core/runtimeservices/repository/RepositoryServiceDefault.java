@@ -97,7 +97,7 @@ public class RepositoryServiceDefault implements RepositoryService {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
-        // only persist detached entities, otherwise skip
+        // only persist detached or new entities, otherwise skip
         val entityState = MmEntityUtil.getEntityState(adapter);
         if(!entityState.isPersistable()
                 || entityState.isAttached()) {

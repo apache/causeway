@@ -31,11 +31,11 @@ import javax.jdo.listener.StoreLifecycleListener;
 
 import org.datanucleus.enhancement.Persistable;
 
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnObjectProviderForIsis;
 
@@ -89,7 +89,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     public void postLoad(final InstanceLifecycleEvent event) {
         log.debug("postLoad {}", ()->_Utils.debug(event));
         final Persistable pojo = _Utils.persistableFor(event);
-        val entity = adaptEntityAndInjectServices(pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK);
+        val entity = adaptEntity(pojo);
 
         objectLifecyclePublisher.onPostLoad(entity);
 
@@ -101,10 +101,11 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
         final Persistable pojo = _Utils.persistableFor(event);
 
-        /* Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate
+        /* Called either when an entity is initially persisted,
+         * or when an entity is updated; fires the appropriate
          * lifecycle callback. So filter for those events when initially persisting. */
         if(pojo.dnGetStateManager().isNew(pojo)) {
-            val entity = adaptEntity(pojo, EntityAdaptingMode.SKIP_MEMOIZATION);
+            val entity = adaptEntity(pojo);
             objectLifecyclePublisher.onPrePersist(entity);
         }
     }
@@ -114,7 +115,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("postStore {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
-        val entity = adaptEntityAndInjectServices(pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK);
+        val entity = adaptEntity(pojo);
 
         if(EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
 
@@ -150,7 +151,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     }
 
     private final void doPreDirty(final Persistable pojo) {
-        val entity = adaptEntity(pojo, EntityAdaptingMode.MEMOIZE_BOOKMARK);
+        val entity = adaptEntity(pojo);
         objectLifecyclePublisher.onPreUpdate(entity, null);
     }
 
@@ -164,7 +165,10 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("preDelete {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
-        val entity = adaptEntity(pojo, EntityAdaptingMode.SKIP_MEMOIZATION);
+
+        _Assert.assertNotNull(pojo.dnGetObjectId());
+        //val entity = adaptEntity(pojo, EntityAdaptingMode.NOT_YET_BOOKMARKABLE);
+        val entity = adaptEntity(pojo);
 
         objectLifecyclePublisher.onPreRemove(entity);
     }
@@ -204,15 +208,8 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     // -- HELPER
 
     private ManagedObject adaptEntity(
-            final @NonNull Persistable pojo,
-            final @NonNull EntityAdaptingMode bookmarking) {
-        return _Utils.adaptEntity(metaModelContext, pojo, bookmarking);
-    }
-
-    private ManagedObject adaptEntityAndInjectServices(
-            final @NonNull Persistable pojo,
-            final @NonNull EntityAdaptingMode bookmarking) {
-        return _Utils.adaptEntityAndInjectServices(metaModelContext, pojo, bookmarking);
+            final @NonNull Persistable pojo) {
+        return _Utils.adaptEntity(metaModelContext, pojo);
     }
 
 }

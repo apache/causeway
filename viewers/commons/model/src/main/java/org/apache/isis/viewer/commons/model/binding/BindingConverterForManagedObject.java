@@ -34,7 +34,7 @@ implements BindingConverter<ManagedObject, T> {
 
     @Override
     public ManagedObject toLeft(final T pojo) {
-        return ManagedObject.of(getValueSpecification(), pojo);
+        return ManagedObject.value(getValueSpecification(), pojo);
     }
 
     @Override

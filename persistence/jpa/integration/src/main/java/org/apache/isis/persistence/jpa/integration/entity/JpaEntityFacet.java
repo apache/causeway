@@ -28,8 +28,8 @@ import javax.persistence.metamodel.EntityType;
 
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.data.jpa.repository.JpaContext;
+import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
@@ -45,7 +45,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.idstringifier.IdStringifierService;
 
 import lombok.NonNull;
@@ -80,32 +79,23 @@ public class JpaEntityFacet
     }
 
     @Override
-    public String identifierFor(final Object pojo) {
+    public Optional<String> identifierFor(final @Nullable Object pojo) {
 
-        if (pojo == null) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer cannot identify a pojo that is null (given type %s)",
-                    entityClass.getName());
+        if (!getEntityState(pojo).isAttached()) {
+            return Optional.empty();
         }
 
         val entityManager = getEntityManager();
         val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
-        val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
+        val primaryKeyIfAny = persistenceUnitUtil.getIdentifier(pojo);
 
-        if (primaryKey == null) {
-            throw _Exceptions.illegalArgument(
-                    "The persistence layer does not recognize given object of type %s, "
-                            + "meaning the object has no identifier that associates it with the persistence layer. "
-                            + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
-                    pojo.getClass().getName());
-        }
-
-        return idStringifierService.enstringPrimaryKey(getPrimaryKeyType(), primaryKey);
+        return Optional.ofNullable(primaryKeyIfAny)
+                .map(primaryKey->
+                    idStringifierService.enstringPrimaryKey(getPrimaryKeyType(), primaryKey));
     }
 
     @Override
-    public ManagedObject fetchByIdentifier(
-            final @NonNull Bookmark bookmark) {
+    public Optional<Object> fetchByBookmark(final @NonNull Bookmark bookmark) {
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
@@ -114,18 +104,7 @@ public class JpaEntityFacet
 
         val entityManager = getEntityManager();
         val entityPojo = entityManager.find(entityClass, primaryKey);
-
-        if (entityPojo == null) {
-            throw new ObjectNotFoundException("" + bookmark);
-        }
-
-        final ObjectSpecification entitySpec = getEntitySpec();
-        return ManagedObject.bookmarked(entitySpec, entityPojo, bookmark);
-    }
-
-    private ObjectSpecification getEntitySpec() {
-        return getSpecificationLoader().specForType(entityClass)
-                            .orElseThrow(() -> new IllegalStateException(String.format("Could not load specification for entity class '%s'", entityClass)));
+        return Optional.ofNullable(entityPojo);
     }
 
     private Class<?> getPrimaryKeyType() {
@@ -164,10 +143,10 @@ public class JpaEntityFacet
                 typedQuery.setMaxResults(range.getLimitAsInt());
             }
 
-            val spec = getEntitySpec();
+            val entitySpec = getEntitySpecification();
             return Can.ofStream(
                     typedQuery.getResultStream()
-                            .map(entity -> ManagedObject.of(spec, entity)));
+                            .map(entity -> ManagedObject.adaptScalar(entitySpec, entity)));
 
         } else if (query instanceof NamedQuery) {
 
@@ -191,10 +170,10 @@ public class JpaEntityFacet
                     .forEach((paramName, paramValue) ->
                             namedQuery.setParameter(paramName, paramValue));
 
-            val spec = getEntitySpec();
+            val entitySpec = getEntitySpecification();
             return Can.ofStream(
                     namedQuery.getResultStream()
-                            .map(entity -> ManagedObject.of(spec, entity)));
+                            .map(entity -> ManagedObject.adaptScalar(entitySpec, entity)));
 
         }
 

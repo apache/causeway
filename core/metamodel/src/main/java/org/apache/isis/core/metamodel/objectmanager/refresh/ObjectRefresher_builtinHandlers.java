@@ -18,9 +18,7 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.refresh;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Data;
@@ -41,7 +39,7 @@ final class ObjectRefresher_builtinHandlers {
         private MetaModelContext metaModelContext;
 
         @Override
-        public boolean isHandling(ManagedObject managedObject) {
+        public boolean isHandling(final ManagedObject managedObject) {
 
             if(managedObject==null || managedObject.getPojo()==null) {
                 return true;
@@ -51,7 +49,7 @@ final class ObjectRefresher_builtinHandlers {
         }
 
         @Override
-        public Void handle(ManagedObject managedObject) {
+        public Void handle(final ManagedObject managedObject) {
             return null; // noop
         }
 
@@ -61,20 +59,16 @@ final class ObjectRefresher_builtinHandlers {
     public static class RefreshEntity implements ObjectRefresher.Handler {
 
         @Override
-        public boolean isHandling(ManagedObject request) {
+        public boolean isHandling(final ManagedObject request) {
             val spec = request.getSpecification();
             return spec.isEntity();
         }
 
         @Override
-        public Void handle(ManagedObject request) {
+        public Void handle(final ManagedObject request) {
 
             val spec = request.getSpecification();
-            val entityFacet = spec.getFacet(EntityFacet.class);
-            if(entityFacet==null) {
-                throw _Exceptions.illegalArgument(
-                        "ObjectSpecification is missing an EntityFacet: %s", spec);
-            }
+            val entityFacet = spec.entityFacetElseFail();
 
             entityFacet.refresh(request.getPojo());
 
@@ -90,13 +84,13 @@ final class ObjectRefresher_builtinHandlers {
     public static class RefreshOther implements ObjectRefresher.Handler {
 
         @Override
-        public boolean isHandling(ManagedObject request) {
+        public boolean isHandling(final ManagedObject request) {
             // if no one else feels responsible, we do
             return true;
         }
 
         @Override
-        public Void handle(ManagedObject request) {
+        public Void handle(final ManagedObject request) {
             return null; // noop
         }
 

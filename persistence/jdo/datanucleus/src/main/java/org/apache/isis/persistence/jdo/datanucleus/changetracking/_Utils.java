@@ -29,7 +29,6 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.metamodel.objectmanager.ObjectManager.EntityAdaptingMode;
 
 import lombok.NonNull;
 import lombok.val;
@@ -64,40 +63,36 @@ final class _Utils {
 
     ManagedObject adaptEntity(
             final @NonNull MetaModelContext mmc,
-            final @NonNull Object entityPojo,
-            final @NonNull EntityAdaptingMode bookmarking) {
+            final @NonNull Object entityPojo) {
 
         val objectManager = mmc.getObjectManager();
-        val entity = objectManager.adapt(entityPojo, bookmarking);
+        val entity = objectManager.adapt(entityPojo);
         _Assert.assertTrue(entity.getSpecification().isEntity());
         return entity;
     }
 
     ManagedObject adaptNullableEntity(
             final @NonNull MetaModelContext mmc,
-            final @Nullable Object entityPojo,
-            final @NonNull EntityAdaptingMode bookmarking) {
+            final @Nullable Object entityPojo) {
 
         return entityPojo == null
                 ? ManagedObject.unspecified()
-                : adaptEntity(mmc, entityPojo, bookmarking);
+                : adaptEntity(mmc, entityPojo);
     }
 
     ManagedObject adaptNullableAndInjectServices(
             final @NonNull MetaModelContext mmc,
-            final @Nullable Object entityPojo,
-            final @NonNull EntityAdaptingMode bookmarking) {
+            final @Nullable Object entityPojo) {
 
         return entityPojo == null
                 ? ManagedObject.unspecified()
-                : adaptEntityAndInjectServices(mmc, entityPojo, bookmarking);
+                : adaptEntityAndInjectServices(mmc, entityPojo);
     }
 
     ManagedObject adaptEntityAndInjectServices(
             final @NonNull MetaModelContext mmc,
-            final @NonNull Object entityPojo,
-            final @NonNull EntityAdaptingMode bookmarking) {
-        return injectServices(mmc, adaptEntity(mmc, entityPojo, bookmarking));
+            final @NonNull Object entityPojo) {
+        return injectServices(mmc, adaptEntity(mmc, entityPojo));
     }
 
 

@@ -123,7 +123,7 @@ public class QueryFieldFactory {
                                 ObjectSpecification specification = specificationLoader
                                         .loadSpecification(domainObjectInstanceClass);
 
-                                ManagedObject owner = ManagedObject.of(specification, domainObjectInstance);
+                                ManagedObject owner = ManagedObject.adaptScalar(specification, domainObjectInstance);
 
                                 ActionInteractionHead actionInteractionHead = objectAction.interactionHead(owner);
 
@@ -133,10 +133,7 @@ public class QueryFieldFactory {
                                     Object argumentValue = arguments.get(oap.getId());
                                     ObjectSpecification elementType = oap.getElementType();
 
-                                    if (argumentValue == null)
-                                        return ManagedObject.empty(elementType);
-                                    return ManagedObject.of(elementType, argumentValue);
-
+                                    return ManagedObject.adaptScalar(elementType, argumentValue);
 
                                 }).collect(Can.toCan());
 

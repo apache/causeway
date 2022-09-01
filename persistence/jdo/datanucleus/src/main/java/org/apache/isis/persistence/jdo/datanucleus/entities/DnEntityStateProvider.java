@@ -21,9 +21,8 @@ package org.apache.isis.persistence.jdo.datanucleus.entities;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import org.springframework.lang.Nullable;
-
 import org.datanucleus.enhancement.Persistable;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.services.repository.EntityState;
@@ -76,7 +75,9 @@ public class DnEntityStateProvider implements JdoFacetContext {
             }
             val isPersistent = persistable.dnIsPersistent();
             if(isPersistent) {
-                return EntityState.PERSISTABLE_ATTACHED;
+                return persistable.dnGetObjectId()!=null
+                        ? EntityState.PERSISTABLE_ATTACHED
+                        : EntityState.PERSISTABLE_NEW;
             }
             return EntityState.PERSISTABLE_DETACHED;
         }
@@ -100,7 +101,7 @@ public class DnEntityStateProvider implements JdoFacetContext {
     }
 
     @Override
-    public EntityFacet createEntityFacet(final FacetHolder facetHolder, Class<?> entityClass) {
+    public EntityFacet createEntityFacet(final FacetHolder facetHolder, final Class<?> entityClass) {
         return new JdoEntityFacet(facetHolder, entityClass);
     }
 

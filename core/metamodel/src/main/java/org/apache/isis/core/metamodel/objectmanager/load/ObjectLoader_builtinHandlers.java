@@ -24,7 +24,6 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
@@ -179,15 +178,14 @@ final class ObjectLoader_builtinHandlers {
         public ManagedObject handle(final ObjectLoader.Request objectLoadRequest) {
 
             val spec = objectLoadRequest.getObjectSpecification();
-            val entityFacet = spec.getFacet(EntityFacet.class);
-            if(entityFacet==null) {
-                throw _Exceptions.illegalArgument(
-                        "ObjectSpecification is missing an EntityFacet: %s", spec);
-            }
+            val entityFacet = spec.entityFacetElseFail();
 
             val bookmark = objectLoadRequest.getBookmark();
-            val entity = entityFacet.fetchByIdentifier(bookmark);
-            return entity;
+            val entityPojoIfAny = entityFacet.fetchByBookmark(bookmark);
+
+            return entityPojoIfAny
+                    .map(entityPojo->ManagedObject.entity(spec, entityPojo, Optional.of(bookmark)))
+                    .orElseGet(()->ManagedObject.empty(spec));
         }
 
     }

@@ -205,7 +205,7 @@ class ValueSemanticsTest {
 
                                 val spec = specLoader.specForTypeElseFail(valueMixin.getClass());
                                 val interaction = ActionInteraction
-                                        .start(ManagedObject.of(spec,  valueMixin), "act", Where.ANYWHERE);
+                                        .start(ManagedObject.mixin(spec,  valueMixin), "act", Where.ANYWHERE);
 
                                 val pendingParams = interaction
                                         .startParameterNegotiation()

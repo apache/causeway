@@ -38,6 +38,12 @@ public enum EntityState {
      * the database.
      */
     PERSISTABLE_ATTACHED,
+
+    /**
+     * DN/JDO specific on pre-store. Is attached, has no OID yet.
+     */
+    PERSISTABLE_NEW,
+
     /**
      * Object with this state is an entity but that is detached from a
      * persistence session, in other words changes to the entity will <i>not</i>
@@ -64,6 +70,12 @@ public enum EntityState {
      */
     public boolean isAttached() {
         return this == PERSISTABLE_ATTACHED;
+    }
+    /**
+     * DN/JDO specific on pre-store. Is attached, has no OID yet.
+     */
+    public boolean isNew() {
+        return this == PERSISTABLE_NEW;
     }
     /**
      * Object with this state is an entity but that is detached from a
@@ -95,9 +107,16 @@ public enum EntityState {
      * @apiNote 'removed' is only supported by JDO.
      */
     public boolean isAttachedOrRemoved() {
-        return this == PERSISTABLE_ATTACHED
-                || this == PERSISTABLE_REMOVED;
+        return isAttached()
+                || isRemoved();
     }
 
+    /**
+     * @apiNote 'new' is only supported by JDO.
+     */
+    public boolean isAttachedOrNew() {
+        return isAttached()
+                || isNew();
+    }
 
 }
