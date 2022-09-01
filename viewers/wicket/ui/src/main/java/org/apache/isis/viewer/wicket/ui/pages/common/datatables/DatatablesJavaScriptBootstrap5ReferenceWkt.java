@@ -45,5 +45,6 @@ public class DatatablesJavaScriptBootstrap5ReferenceWkt extends WebjarsJavaScrip
         super(RESOURCE);
     }
 
-    private static final String RESOURCE = "datatables/1.12.1/js/dataTables.bootstrap5.min.js";
+    private static final String RESOURCE = DatatablesDotNet.formatWithVersion(
+            "datatables/%s/js/dataTables.bootstrap5.min.js");
 }

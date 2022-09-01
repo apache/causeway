@@ -25,7 +25,6 @@ import java.io.Reader;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.FileCopyUtils;
@@ -43,7 +42,8 @@ public class DatatablesJavaScriptResourceReferenceInit extends JavaScriptContent
 
     private static DatatablesJavaScriptResourceReferenceInit instance = null;
 
-    public static final DatatablesJavaScriptResourceReferenceInit instance(IsisConfiguration configuration) {
+    public static final DatatablesJavaScriptResourceReferenceInit instance(
+            final IsisConfiguration configuration) {
         if (instance == null) {
             String javascript = readResource(configuration);
             instance = new DatatablesJavaScriptResourceReferenceInit(javascript, ID);
@@ -51,20 +51,22 @@ public class DatatablesJavaScriptResourceReferenceInit extends JavaScriptContent
         return instance;
     }
 
-    private DatatablesJavaScriptResourceReferenceInit(CharSequence javaScript, String id) {
+    private DatatablesJavaScriptResourceReferenceInit(final CharSequence javaScript, final String id) {
         super(javaScript, id);
     }
 
-    private static String readResource(IsisConfiguration configuration) {
-        String options = configuration.getViewer().getWicket().getTable().getDecoration().getDataTablesNet().getOptions().orElse("");
+    private static String readResource(final IsisConfiguration configuration) {
+        String options = configuration.getViewer().getWicket().getTable().getDecoration()
+                .getDataTablesNet().getOptions().orElse("");
         return readScript().replace("$PLACEHOLDER$", options);
     }
 
     private static String readScript() {
-        return asString(new ClassPathResource("dataTables.init.js.template", DatatablesJavaScriptResourceReferenceInit.class));
+        return asString(new ClassPathResource("dataTables.init.js.template",
+                DatatablesJavaScriptResourceReferenceInit.class));
     }
 
-    private static String asString(Resource resource) {
+    private static String asString(final Resource resource) {
         try (Reader reader = new InputStreamReader(resource.getInputStream(), UTF_8)) {
             return FileCopyUtils.copyToString(reader);
         } catch (IOException e) {

@@ -15,35 +15,23 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
 package org.apache.isis.viewer.wicket.ui.pages.common.datatables;
 
-import org.apache.wicket.markup.head.CssHeaderItem;
-
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
+@RequiredArgsConstructor
+enum DatatablesDotNet {
 
-public class DatatablesCssBootstrap5ReferenceWkt extends WebjarsCssResourceReference {
-    private static final long serialVersionUID = 1L;
+    VERSION("1.12.1");
 
-    @Getter(lazy = true) @Accessors(fluent = true)
-    private static final DatatablesCssBootstrap5ReferenceWkt instance =
-        new DatatablesCssBootstrap5ReferenceWkt();
+    @Getter @Accessors(fluent = true)
+    private final String literal;
 
-    public static CssHeaderItem asHeaderItem() {
-        return CssHeaderItem.forReference(DatatablesCssBootstrap5ReferenceWkt.instance());
+    public static String formatWithVersion(final String format) {
+        return String.format(format, VERSION.literal());
     }
 
-    /**
-     * Private constructor.
-     */
-    private DatatablesCssBootstrap5ReferenceWkt() {
-        super(RESOURCE);
-    }
-
-    private static final String RESOURCE = DatatablesDotNet.formatWithVersion(
-            "datatables/%s/css/dataTables.bootstrap5.min.css");
 }
