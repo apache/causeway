@@ -11,14 +11,17 @@ Enumerates the state of an entity.
 enum EntityState {
   NOT_PERSISTABLE     // <.>
   PERSISTABLE_ATTACHED     // <.>
+  PERSISTABLE_NEW     // <.>
   PERSISTABLE_DETACHED     // <.>
   PERSISTABLE_REMOVED     // <.>
   boolean isPersistable()     // <.>
   boolean isAttached()     // <.>
+  boolean isNew()     // <.>
   boolean isDetached()     // <.>
   boolean isRemoved()     // <.>
   boolean isDetachedOrRemoved()     // <.>
   boolean isAttachedOrRemoved()     // <.>
+  boolean isAttachedOrNew()     // <.>
 }
 ----
 
@@ -31,6 +34,11 @@ Object with this state is not an entity (for example it might be a view model, v
 +
 --
 Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
+--
+<.> xref:#PERSISTABLE_NEW[PERSISTABLE_NEW]
++
+--
+DN/JDO specific on pre-store. Is attached, has no OID yet.
 --
 <.> xref:#PERSISTABLE_DETACHED[PERSISTABLE_DETACHED]
 +
@@ -52,6 +60,11 @@ Object is an entity so is _potentially_ persistable ot the database.
 --
 Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
 --
+<.> xref:#isNew_[isNew()]
++
+--
+DN/JDO specific on pre-store. Is attached, has no OID yet.
+--
 <.> xref:#isDetached_[isDetached()]
 +
 --
@@ -64,6 +77,7 @@ Object with this state is an entity that has been removed from the database. Obj
 --
 <.> xref:#isDetachedOrRemoved_[isDetachedOrRemoved()]
 <.> xref:#isAttachedOrRemoved_[isAttachedOrRemoved()]
+<.> xref:#isAttachedOrNew_[isAttachedOrNew()]
 
 == Members
 
@@ -76,6 +90,11 @@ Object with this state is not an entity (for example it might be a view model, v
 === PERSISTABLE_ATTACHED
 
 Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
+
+[#PERSISTABLE_NEW]
+=== PERSISTABLE_NEW
+
+DN/JDO specific on pre-store. Is attached, has no OID yet.
 
 [#PERSISTABLE_DETACHED]
 === PERSISTABLE_DETACHED
@@ -97,6 +116,11 @@ Object is an entity so is _potentially_ persistable ot the database.
 
 Object with this state is an entity that is attached to a persistence session, in other words changes to the entity will be flushed back to the database.
 
+[#isNew_]
+=== isNew()
+
+DN/JDO specific on pre-store. Is attached, has no OID yet.
+
 [#isDetached_]
 === isDetached()
 
@@ -114,3 +138,6 @@ Only supported by JDO. Will always return false with JPA.
 
 [#isAttachedOrRemoved_]
 === isAttachedOrRemoved()
+
+[#isAttachedOrNew_]
+=== isAttachedOrNew()

@@ -1,7 +1,7 @@
 = ManagedObject
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Represents an instance of some element of the meta-model managed by the framework, that is _Spring_ managed beans, persistence-stack provided entities, view-models or instances of value types.
+Represents an instance of some element of the meta-model recognized by the framework, that is _Spring_ managed beans, persistence-stack provided entities, view-models, mixins or instances of value types.
 
 == API
 
@@ -13,6 +13,7 @@ interface ManagedObject {
   BookmarkPolicy getBookmarkPolicy()
   ObjectSpecification getSpecification()     // <.>
   Object getPojo()     // <.>
+  EntityState getEntityState()
   void refreshViewmodel(Supplier<Bookmark> bookmarkSupplier)     // <.>
   Supplier<ManagedObject> asSupplier()
   T assertCompliance(T pojo)     // <.>
@@ -25,13 +26,16 @@ interface ManagedObject {
   ManagedObject value(ObjectSpecification spec, Object pojo)     // <.>
   ManagedObject service(ObjectSpecification spec, Object pojo)     // <.>
   ManagedObject viewmodel(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)     // <.>
-  ManagedObject entity(ObjectSpecification spec, Object pojo)     // <.>
+  ManagedObject entity(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)     // <.>
+  ManagedObject entityAttached(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfKnown)
+  ManagedObject entityDetached(ObjectSpecification spec, Object pojo)
   ManagedObject mixin(ObjectSpecification spec, Object pojo)     // <.>
   ManagedObject other(ObjectSpecification spec, Object pojo)     // <.>
   PackedManagedObject packed(ObjectSpecification elementSpec, Can<ManagedObject> nonScalar)     // <.>
-  ManagedObject wrapScalar(SpecificationLoader specLoader, Object pojo)     // <.>
-  ManagedObject wrapScalarInternal(ObjectSpecification spec, Object pojo, Optional<Bookmark> bookmarkIfAny)
-  ManagedObject notBookmarked(ObjectSpecification spec, Object pojo)
+  ManagedObject adaptScalar(SpecificationLoader specLoader, Object pojo)     // <.>
+  ManagedObject adaptScalar(ObjectSpecification guess, Object pojo)
+  ManagedObject identified(ObjectSpecification spec, Object pojo, Bookmark bookmark)
+  ManagedObject adaptScalarInternal(ObjectSpecification guess, Object pojo, Optional<Bookmark> bookmarkIfAny)     // <.>
   ManagedObject of(ObjectSpecification spec, Object pojo)     // <.>
   ManagedObject bookmarked(ObjectSpecification spec, Object pojo, Bookmark bookmark)     // <.>
 }
@@ -102,7 +106,7 @@ SERVICE
 --
 VIEWMODEL
 --
-<.> xref:#entity_ObjectSpecification_Object[entity(ObjectSpecification, Object)]
+<.> xref:#entity_ObjectSpecification_Object_Optional[entity(ObjectSpecification, Object, Optional)]
 +
 --
 ENTITY
@@ -122,10 +126,15 @@ OTHER
 --
 PACKED
 --
-<.> xref:#wrapScalar_SpecificationLoader_Object[wrapScalar(SpecificationLoader, Object)]
+<.> xref:#adaptScalar_SpecificationLoader_Object[adaptScalar(SpecificationLoader, Object)]
 +
 --
 For cases, when the pojo's specification is not available and needs to be looked up.
+--
+<.> xref:#adaptScalarInternal_ObjectSpecification_Object_Optional[adaptScalarInternal(ObjectSpecification, Object, Optional)]
++
+--
+spec and pojo don't need to be strictly in sync, we adapt if required
 --
 <.> xref:#of_ObjectSpecification_Object[of(ObjectSpecification, Object)]
 +
@@ -207,8 +216,8 @@ SERVICE
 
 VIEWMODEL
 
-[#entity_ObjectSpecification_Object]
-=== entity(ObjectSpecification, Object)
+[#entity_ObjectSpecification_Object_Optional]
+=== entity(ObjectSpecification, Object, Optional)
 
 ENTITY
 
@@ -227,12 +236,17 @@ OTHER
 
 PACKED
 
-[#wrapScalar_SpecificationLoader_Object]
-=== wrapScalar(SpecificationLoader, Object)
+[#adaptScalar_SpecificationLoader_Object]
+=== adaptScalar(SpecificationLoader, Object)
 
 For cases, when the pojo's specification is not available and needs to be looked up.
 
 Fails if the pojo is non-scalar.
+
+[#adaptScalarInternal_ObjectSpecification_Object_Optional]
+=== adaptScalarInternal(ObjectSpecification, Object, Optional)
+
+spec and pojo don't need to be strictly in sync, we adapt if required
 
 [#of_ObjectSpecification_Object]
 === of(ObjectSpecification, Object)
