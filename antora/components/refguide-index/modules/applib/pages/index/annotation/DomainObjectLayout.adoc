@@ -17,6 +17,7 @@ Layout hints for domain objects.
   String named() default "";     // <.>
   int paged() default -1;     // <.>
   String plural() default "";     // <.>
+  TableDecoration tableDecoration() default TableDecoration.NOT_SPECIFIED;     // <.>
   Class<? extends CssClassUiEvent<?>> cssClassUiEvent() default CssClassUiEvent.Default.class;     // <.>
   Class<? extends IconUiEvent<?>> iconUiEvent() default IconUiEvent.Default.class;     // <.>
   Class<? extends LayoutUiEvent<?>> layoutUiEvent() default LayoutUiEvent.Default.class;     // <.>
@@ -63,6 +64,11 @@ The page size for instances of this class when rendered within a table.
 +
 --
 The plural name of the class.
+--
+<.> xref:#tableDecoration[tableDecoration]
++
+--
+Whether a standalone collection when represented in a table form should additionally be "decorated" with client-side (javascript) enhancements, for example to enable paging and filtering.
 --
 <.> xref:#cssClassUiEvent[cssClassUiEvent]
 +
@@ -134,6 +140,11 @@ If annotated on a type, then the page size refers to standalone collections (eg 
 === plural
 
 The plural name of the class.
+
+[#tableDecoration]
+=== tableDecoration
+
+Whether a standalone collection when represented in a table form should additionally be "decorated" with client-side (javascript) enhancements, for example to enable paging and filtering.
 
 [#cssClassUiEvent]
 === cssClassUiEvent
