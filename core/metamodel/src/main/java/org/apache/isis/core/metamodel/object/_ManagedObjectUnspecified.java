@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
@@ -36,7 +35,7 @@ import lombok.NonNull;
  * @see ManagedObject.Specialization#UNSPECIFIED
  */
 final class _ManagedObjectUnspecified
-implements ManagedObject {
+implements ManagedObject, Bookmarkable.NoBookmark {
 
     static final ManagedObject INSTANCE = new _ManagedObjectUnspecified();
 
@@ -53,21 +52,6 @@ implements ManagedObject {
     @Override
     public Object getPojo() {
         return null;
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmark() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmarkRefreshed() {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean isBookmarkMemoized() {
-        return false;
     }
 
     @Override

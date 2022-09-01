@@ -32,6 +32,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.isis.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -49,7 +50,10 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}}
  *
  */
-public interface ManagedObject extends HasMetaModelContext {
+public interface ManagedObject
+extends
+    Bookmarkable,
+    HasMetaModelContext {
 
     /**
      * ManagedObject specializations have varying contract/behavior.
@@ -308,6 +312,9 @@ public interface ManagedObject extends HasMetaModelContext {
      * which governs this object's behavior.
      */
     Specialization getSpecialization();
+    @Override default BookmarkPolicy getBookmarkPolicy() {
+        return getSpecialization().getBookmarkPolicy();
+    }
 
     /**
      * Returns the specification that details the structure (meta-model) of this object.
@@ -321,29 +328,11 @@ public interface ManagedObject extends HasMetaModelContext {
     Object getPojo();
 
     /**
-     * Returns the object's bookmark as identified by the ObjectManager.
-     * Bookmarks are considered immutable, hence will be memoized once fetched.
-     */
-    Optional<Bookmark> getBookmark();
-
-    /**
-     * Similar to {@link #getBookmark()}, but invalidates any memoized {@link Bookmark}
-     * such that the {@link Bookmark} returned is recreated, reflecting the object's current state.
-     * @implNote
-     * As this is not required, in fact not recommended for entities,
-     * (but might be necessary for viewmodels, when their state has changed),
-     * we silently ignore bookmark invalidation attempts for entities.
-     */
-    Optional<Bookmark> getBookmarkRefreshed();
-
-    /**
      * If the underlying domain object is a viewmodel, refreshes any referenced entities.
      * (Acts as a no-op otherwise.)
      * @apiNote usually should be sufficient to refresh once per interaction.
      */
     void refreshViewmodel(@Nullable Supplier<Bookmark> bookmarkSupplier);
-
-    boolean isBookmarkMemoized();
 
     Supplier<ManagedObject> asSupplier();
 
@@ -412,6 +401,7 @@ public interface ManagedObject extends HasMetaModelContext {
     }
     /**
      * EMPTY
+     * @param spec - required
      * @see ManagedObject.Specialization.TypePolicy#ABSTRACT_TYPE_ALLOWED
      * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
      * @see ManagedObject.Specialization.PojoPolicy#NO_POJO
@@ -421,8 +411,8 @@ public interface ManagedObject extends HasMetaModelContext {
     }
     /**
      * VALUE
-     * @param pojo
-     * @param spec
+     * @param spec - required
+     * @param pojo - if <code>null</code> maps to {@link #empty(ObjectSpecification)}
      * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
      * @see ManagedObject.Specialization.BookmarkPolicy#IMMUTABLE
      * @see ManagedObject.Specialization.PojoPolicy#IMMUTABLE
@@ -436,8 +426,8 @@ public interface ManagedObject extends HasMetaModelContext {
     }
     /**
      * SERVICE
-     * @param pojo
-     * @param spec
+     * @param spec - required
+     * @param pojo - required
      * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
      * @see ManagedObject.Specialization.BookmarkPolicy#IMMUTABLE
      * @see ManagedObject.Specialization.PojoPolicy#IMMUTABLE
@@ -449,8 +439,8 @@ public interface ManagedObject extends HasMetaModelContext {
     }
     /**
      * VIEWMODEL
-     * @param pojo
-     * @param spec
+     * @param spec - required
+     * @param pojo - if <code>null</code> maps to {@link #empty(ObjectSpecification)}
      * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
      * @see ManagedObject.Specialization.BookmarkPolicy#REFRESHABLE
      * @see ManagedObject.Specialization.PojoPolicy#STATEFUL
@@ -466,8 +456,8 @@ public interface ManagedObject extends HasMetaModelContext {
     }
     /**
      * ENTITY
-     * @param pojo
-     * @param spec
+     * @param spec - required
+     * @param pojo - if <code>null</code> maps to {@link #empty(ObjectSpecification)}
      * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
      * @see ManagedObject.Specialization.BookmarkPolicy#IMMUTABLE
      * @see ManagedObject.Specialization.PojoPolicy#REFETCHABLE
@@ -481,8 +471,8 @@ public interface ManagedObject extends HasMetaModelContext {
     }
     /**
      * MIXIN
-     * @param pojo
-     * @param spec
+     * @param spec - required
+     * @param pojo - required
      * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
      * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
      * @see ManagedObject.Specialization.PojoPolicy#STATEFUL
@@ -494,8 +484,8 @@ public interface ManagedObject extends HasMetaModelContext {
     }
     /**
      * OTHER
-     * @param pojo
-     * @param spec
+     * @param spec - required
+     * @param pojo - if <code>null</code> maps to {@link #empty(ObjectSpecification)}
      * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
      * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
      * @see ManagedObject.Specialization.PojoPolicy#STATEFUL
@@ -509,6 +499,8 @@ public interface ManagedObject extends HasMetaModelContext {
     }
     /**
      * PACKED
+     * @param elementSpec - required
+     * @param nonScalar - if <code>null</code> uses {@link Can#empty()} instead
      * @see ManagedObject.Specialization.TypePolicy#ABSTRACT_TYPE_ALLOWED
      * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
      * @see ManagedObject.Specialization.PojoPolicy#PACKED

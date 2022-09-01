@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -37,7 +36,9 @@ import lombok.NonNull;
  */
 final class _ManagedObjectPacked
 extends _ManagedObjectSpecified
-implements PackedManagedObject {
+implements
+    Bookmarkable.NoBookmark,
+    PackedManagedObject {
 
     private final @NonNull Can<ManagedObject> nonScalar;
 
@@ -57,21 +58,6 @@ implements PackedManagedObject {
                 nonScalar.stream()
                 .map(ManagedObject::getPojo)
                 .collect(Collectors.toList()));
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmark() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmarkRefreshed() {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean isBookmarkMemoized() {
-        return false;
     }
 
     @Override

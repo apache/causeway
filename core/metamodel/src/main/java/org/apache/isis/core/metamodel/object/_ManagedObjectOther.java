@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.object;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -30,34 +28,29 @@ import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 /**
- * (package private) specialization corresponding to {@link Specialization#MIXIN}
+ * (package private) specialization corresponding to {@link Specialization#OTHER}
  * @see ManagedObject.Specialization#MIXIN
  */
 @Getter
-final class _ManagedObjectMixin
+final class _ManagedObjectOther
 extends _ManagedObjectSpecified
 implements Bookmarkable.NoBookmark {
 
     @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
     private final @NonNull Object pojo;
 
-    _ManagedObjectMixin(
+    _ManagedObjectOther(
             final ObjectSpecification spec,
             final Object pojo) {
-        super(ManagedObject.Specialization.MIXIN, spec);
-        _Assert.assertTrue(spec.isMixin());
-        this.pojo = assertCompliance(pojo);
+        super(ManagedObject.Specialization.OTHER, spec);
+        //_Assert.assertTrue(spec.isOther()); //TODO later
+        //this.pojo = assertCompliance(pojo); //TODO later
+        this.pojo = pojo;
     }
 
     @Override
     public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
-        // no-op for mixins
-    }
-
-    @Override
-    public final String getTitle() {
-        // mixins have no title
-        throw _Exceptions.unexpectedCodeReach();
+        // no-op for other
     }
 
 }

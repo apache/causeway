@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.object;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -32,7 +31,8 @@ import lombok.Getter;
  */
 @Getter
 final class _ManagedObjectEmpty
-extends _ManagedObjectSpecified {
+extends _ManagedObjectSpecified
+implements Bookmarkable.NoBookmark {
 
     _ManagedObjectEmpty(
             final ObjectSpecification spec) {
@@ -45,22 +45,7 @@ extends _ManagedObjectSpecified {
     }
 
     @Override
-    public Optional<Bookmark> getBookmark() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmarkRefreshed() {
-        return Optional.empty();
-    }
-
-    @Override
     public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
-    }
-
-    @Override
-    public boolean isBookmarkMemoized() {
-        return false;
     }
 
 }
