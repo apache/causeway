@@ -494,7 +494,7 @@ extends
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
-                ? new _ManagedObjectWithEagerSpec(spec, pojo) //FIXME
+                ? new _ManagedObjectOther(spec, pojo)
                 : empty(spec);
     }
     /**

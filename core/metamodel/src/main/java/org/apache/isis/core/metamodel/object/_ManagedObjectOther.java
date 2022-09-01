@@ -29,7 +29,7 @@ import lombok.experimental.Accessors;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#OTHER}
- * @see ManagedObject.Specialization#MIXIN
+ * @see ManagedObject.Specialization#OTHER
  */
 @Getter
 final class _ManagedObjectOther
@@ -51,6 +51,11 @@ implements Bookmarkable.NoBookmark {
     @Override
     public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
         // no-op for other
+    }
+
+    @Override
+    public String getTitle() {
+        return "other object";
     }
 
 }
