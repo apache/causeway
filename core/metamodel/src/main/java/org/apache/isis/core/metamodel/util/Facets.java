@@ -38,6 +38,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.isis.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -46,6 +47,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
+import org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
@@ -325,6 +327,12 @@ public final class Facets {
             ? fallback
             : promptStyle)
         .orElse(fallback);
+    }
+
+    public Optional<CollectionLayoutConfigOptions.TableDecoration> tableDecoration(
+            final FacetHolder facetHolder) {
+        return facetHolder.lookupFacet(CollectionLayoutTableDecorationFacet.class)
+                .map(CollectionLayoutTableDecorationFacet::value);
     }
 
     public Optional<ObjectSpecification> typeOf(final FacetHolder facetHolder) {

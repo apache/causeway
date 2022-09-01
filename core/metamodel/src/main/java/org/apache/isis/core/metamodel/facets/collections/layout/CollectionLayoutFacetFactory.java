@@ -75,7 +75,7 @@ extends FacetFactoryAbstract {
 
         addFacetIfPresent(
                 CollectionLayoutTableDecorationFacet
-                        .create(collectionLayoutIfAny, getConfiguration(), facetHolder));
+                        .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
                 PagedFacetForCollectionLayoutAnnotation

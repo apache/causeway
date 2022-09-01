@@ -18,30 +18,37 @@
  */
 package org.apache.isis.core.config.metamodel.facets;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.core.config.IsisConfiguration;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 public final class CollectionLayoutConfigOptions {
 
+    @RequiredArgsConstructor
     public enum TableDecoration {
 
         /**
          * If this option declares that the collection's table representation should not be decorated.
          */
-        NONE,
+        NONE(null),
 
         /**
          * If this option declares that the collection's table representation be decorated using
          * <a href="https://datatables.net>datatables.net</a> for client-side paging and filtering.
          */
-        DATATABLES_NET;
+        DATATABLES_NET("table-decoration");
+
+        @Getter @Accessors(fluent = true)
+        private final @Nullable String cssClass;
 
         public boolean isNone() { return this == NONE; }
         public boolean isDataTablesNet() { return this == DATATABLES_NET; }
-
     }
-
 
     // -- FACTORIES
 
@@ -59,7 +66,7 @@ public final class CollectionLayoutConfigOptions {
             return name().toLowerCase();
         }
 
-        public static DefaultView from(IsisConfiguration configuration) {
+        public static DefaultView from(final IsisConfiguration configuration) {
             return configuration.getApplib().getAnnotation().getCollectionLayout().getDefaultView();
         }
 

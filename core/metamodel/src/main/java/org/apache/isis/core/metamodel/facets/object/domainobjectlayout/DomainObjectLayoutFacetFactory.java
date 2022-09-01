@@ -45,19 +45,19 @@ extends FacetFactoryAbstract {
 
         addFacetIfPresent(
                 TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
         addFacetIfPresent(
                 IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
         addFacetIfPresent(
                 CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
         addFacetIfPresent(
                 LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, getConfiguration(), facetHolder));
+                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
         addFacetIfPresent(
                 CssClassFacetForDomainObjectLayoutAnnotation
@@ -77,7 +77,7 @@ extends FacetFactoryAbstract {
 
         addFacetIfPresent(
                 DomainObjectLayoutTableDecorationFacet
-                        .create(domainObjectLayoutIfAny, getConfiguration(), facetHolder));
+                        .create(domainObjectLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
                 PagedFacetForDomainObjectLayoutAnnotation

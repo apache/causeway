@@ -24,9 +24,7 @@ import java.util.Optional;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.commons.internal.base._Optionals;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.CollectionLayoutConfigOptions;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
@@ -43,11 +41,10 @@ extends SingleValueFacet<CollectionLayoutConfigOptions.TableDecoration> {
 
     static Optional<CollectionLayoutTableDecorationFacet> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,
-            final IsisConfiguration configuration,
             final FacetHolder holder) {
 
         final CollectionLayoutConfigOptions.TableDecoration defaultPolicyFromConfig =
-                CollectionLayoutConfigOptions.tableDecoration(configuration);
+                CollectionLayoutConfigOptions.tableDecoration(holder.getConfiguration());
 
         return _Optionals.orNullable(
 

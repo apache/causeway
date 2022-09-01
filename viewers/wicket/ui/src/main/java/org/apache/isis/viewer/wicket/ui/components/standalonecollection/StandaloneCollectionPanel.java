@@ -24,8 +24,9 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecorationFacet;
+import org.apache.isis.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.isis.core.metamodel.interactions.managed.nonscalar.DataTableModel;
+import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.commons.model.components.ComponentType;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModelStandalone;
@@ -35,8 +36,8 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 import org.apache.isis.viewer.wicket.ui.util.Wkt;
+import org.apache.isis.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
@@ -74,10 +75,9 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
         Wkt.cssAppend(outerDiv, featureId);
         Wkt.cssAppend(outerDiv, collectionModel.getElementType().getFeatureIdentifier());
 
-        val decorationFacet = collectionModel.getMetaModel().getElementType().getFacet(DomainObjectLayoutTableDecorationFacet.class);
-        if (decorationFacet != null && decorationFacet.value().isDataTablesNet()) {
-            Wkt.cssAppend(outerDiv, "table-decoration");
-        }
+        Facets.tableDecoration(collectionModel.getElementType())
+            .map(CollectionLayoutConfigOptions.TableDecoration::cssClass)
+            .ifPresent(tableDecorationCssClass->Wkt.cssAppend(outerDiv, tableDecorationCssClass));
 
         // selector
         final CollectionPresentationSelectorHelper selectorHelper = new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry());

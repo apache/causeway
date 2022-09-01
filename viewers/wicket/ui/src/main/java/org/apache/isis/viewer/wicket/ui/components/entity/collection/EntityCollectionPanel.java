@@ -24,10 +24,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet;
-import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecorationFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.util.Facets;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -128,10 +127,9 @@ implements HasDynamicallyVisibleContent {
             Facets.cssClass(collectionMetaModel, objectAdapter)
             .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
-            val decorationFacet = collectionMetaModel.getFacet(CollectionLayoutTableDecorationFacet.class);
-            if (decorationFacet != null && decorationFacet.value().isDataTablesNet()) {
-                Wkt.cssAppend(div, "table-decoration");
-            }
+            Facets.tableDecoration(collectionMetaModel)
+                .map(CollectionLayoutConfigOptions.TableDecoration::cssClass)
+                .ifPresent(tableDecorationCssClass->Wkt.cssAppend(div, tableDecorationCssClass));
 
             val collectionPanel = new CollectionPanel(ID_COLLECTION, collectionModel);
             div.addOrReplace(collectionPanel);

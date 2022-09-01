@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
@@ -29,27 +27,19 @@ import javax.inject.Inject;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
-import org.approvaltests.core.Scrubber;
 import org.approvaltests.reporters.DiffReporter;
-import org.approvaltests.reporters.TextWebReporter;
 import org.approvaltests.reporters.UseReporter;
-import org.assertj.core.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
@@ -89,16 +79,18 @@ class MetaModelRegressionTest {
     @UseReporter(DiffReporter.class)
     void verify() {
 
-        // Assumptions.assumeThat(getClass().getName()).contains("isis");  // disable if rename, as the .zip file needs to be updated.
+        // disable if rename, as the .zip file needs to be updated.
+        // Assumptions.assumeThat(getClass().getName()).contains("isis");
 
-        Blob metaModelZip = factoryService.mixin(MetaModelServiceMenu.downloadMetaModelXml.class, metaModelServiceMenu).act("metamodel.xml", namespaces(), true);
+        Blob metaModelZip = factoryService.mixin(MetaModelServiceMenu.downloadMetaModelXml.class,
+                metaModelServiceMenu).act("metamodel.xml", namespaces(), true);
         val xml = asXml(metaModelZip);
 
         Approvals.verify(xml, options());
 
     }
 
-    private static String asXml(Blob zip) throws IOException {
+    private static String asXml(final Blob zip) throws IOException {
         val clob = zip.unZip(CommonMimeType.XML).toClob(StandardCharsets.UTF_8);
         val sw = new StringWriter();
         clob.writeCharsTo(sw);

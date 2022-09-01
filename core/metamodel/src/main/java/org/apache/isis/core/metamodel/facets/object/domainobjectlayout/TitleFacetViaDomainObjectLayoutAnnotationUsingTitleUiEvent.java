@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
@@ -48,10 +47,9 @@ extends TitleFacetAbstract {
     public static Optional<TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
-            final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
-        val isPostForDefault = configuration
+        val isPostForDefault = facetHolder.getConfiguration()
                 .getApplib()
                 .getAnnotation()
                 .getDomainObjectLayout()

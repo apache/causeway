@@ -21,11 +21,9 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout.tabledec
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.commons.internal.base._Optionals;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
@@ -43,11 +41,10 @@ extends SingleValueFacet<DomainObjectLayoutConfigOptions.TableDecoration> {
 
     static Optional<DomainObjectLayoutTableDecorationFacet> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
-            final IsisConfiguration configuration,
             final FacetHolder holder) {
 
         final DomainObjectLayoutConfigOptions.TableDecoration defaultPolicyFromConfig =
-                DomainObjectLayoutConfigOptions.tableDecoration(configuration);
+                DomainObjectLayoutConfigOptions.tableDecoration(holder.getConfiguration());
 
         return _Optionals.orNullable(
 

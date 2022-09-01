@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetAbstract;
@@ -41,7 +40,6 @@ implements LayoutFacet {
     public static Optional<LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
-            final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
         return domainObjectLayoutIfAny
@@ -50,7 +48,8 @@ implements LayoutFacet {
                         layoutUiEvent,
                         LayoutUiEvent.Noop.class,
                         LayoutUiEvent.Default.class,
-                        configuration.getApplib().getAnnotation().getDomainObjectLayout().getLayoutUiEvent().isPostForDefault()))
+                        facetHolder.getConfiguration().getApplib().getAnnotation()
+                            .getDomainObjectLayout().getLayoutUiEvent().isPostForDefault()))
                 .map(layoutUiEvent -> {
 
                     return new LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(
