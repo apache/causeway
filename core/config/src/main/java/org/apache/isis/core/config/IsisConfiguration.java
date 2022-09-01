@@ -49,7 +49,8 @@ import org.springframework.validation.annotation.Validated;
 
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.DependentDefaultsPolicy;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -63,12 +64,12 @@ import org.apache.isis.applib.services.userui.UserMenu;
 import org.apache.isis.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.config.metamodel.facets.DefaultViewConfiguration;
-import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
-import org.apache.isis.core.config.metamodel.facets.ParameterPolicies;
-import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.ActionPublishingPolicy;
-import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.EntityChangePublishingPolicy;
-import org.apache.isis.core.config.metamodel.facets.PublishingPolicies.PropertyPublishingPolicy;
+import org.apache.isis.core.config.metamodel.facets.ActionConfigOptions;
+import org.apache.isis.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
+import org.apache.isis.core.config.metamodel.facets.CollectionLayoutConfigOptions;
+import org.apache.isis.core.config.metamodel.facets.DomainObjectConfigOptions;
+import org.apache.isis.core.config.metamodel.facets.ParameterConfigOptions;
+import org.apache.isis.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.viewer.web.DialogMode;
@@ -133,7 +134,7 @@ public class IsisConfiguration {
              * Setting this option to {@literal true} allows {@code CsrfFilter}(s) to be
              * configured. Yet EXPERIMENTAL.
              *
-             * @see org.springframework.security.web.csrf.CsrfFilter
+             * @see <code>org.springframework.security.web.csrf.CsrfFilter</code>
              * @see "https://www.baeldung.com/spring-security-registered-filters"
              */
             private boolean allowCsrfFilters = false;
@@ -272,7 +273,7 @@ public class IsisConfiguration {
                  *     Note: this applies only to domain entities, not view models.
                  * </p>
                  */
-                private EntityChangePublishingPolicy entityChangePublishing = EntityChangePublishingPolicy.NONE;
+                private DomainObjectConfigOptions.EntityChangePublishingPolicy entityChangePublishing = DomainObjectConfigOptions.EntityChangePublishingPolicy.NONE;
 
                 /**
                  * The default for whether the properties of domain objects can be edited, or whether instead they
@@ -282,7 +283,7 @@ public class IsisConfiguration {
                  * This setting can be overridden on a case-by-case basis using {@link DomainObject#getEditing()  DomainObject#getEditing()}
                  * </p>
                  */
-                private EditingObjectsConfiguration editing = EditingObjectsConfiguration.FALSE;
+                private DomainObjectConfigOptions.EditingObjectsConfiguration editing = DomainObjectConfigOptions.EditingObjectsConfiguration.FALSE;
 
                 private final CreatedLifecycleEvent createdLifecycleEvent = new CreatedLifecycleEvent();
                 @Data
@@ -561,6 +562,12 @@ public class IsisConfiguration {
                  */
                 private int paged = 25;
 
+                /**
+                 * Defines whether the table representation of a standalone collection of this domain class should be
+                 * decorated using a client-side Javascript library, eg for client-side paging and filtering.
+                 */
+                private DomainObjectLayoutConfigOptions.TableDecoration tableDecoration = DomainObjectLayoutConfigOptions.TableDecoration.NONE;
+
                 private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
                 @Data
                 public static class CssClassUiEvent {
@@ -749,7 +756,7 @@ public class IsisConfiguration {
                  *  {@link org.apache.isis.applib.annotation.Action#commandPublishing()}.
                  * </p>
                  */
-                private ActionPublishingPolicy commandPublishing = ActionPublishingPolicy.NONE;
+                private ActionConfigOptions.PublishingPolicy commandPublishing = ActionConfigOptions.PublishingPolicy.NONE;
 
                 /**
                  * The default for whether action invocations should be sent through to the
@@ -767,7 +774,7 @@ public class IsisConfiguration {
                  *  This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.Action#executionPublishing()  Action#executionPublishing()}.
                  * </p>
                  */
-                private ActionPublishingPolicy executionPublishing = ActionPublishingPolicy.NONE;
+                private ActionConfigOptions.PublishingPolicy executionPublishing = ActionConfigOptions.PublishingPolicy.NONE;
 
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data
@@ -840,6 +847,7 @@ public class IsisConfiguration {
 
                     @Getter(lazy = true)
                     private final Map<Pattern, String> patternsAsMap = asMap(getPatterns());
+
 
                 }
 
@@ -919,7 +927,6 @@ public class IsisConfiguration {
             public static class Property {
 
                 /**
-                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether property edits should be reified
                  * as a {@link org.apache.isis.applib.services.command.Command},
                  * to be sent to any registered
@@ -929,18 +936,17 @@ public class IsisConfiguration {
                  *
                  * <p>
                  *  This setting can be overridden on a case-by-case basis using
-                 *  {@link org.apache.isis.applib.annotation.Property#commandDispatch()}.
+                 *  {@link org.apache.isis.applib.annotation.Property#commandPublishing()}.
                  * </p>
                  */
-                private PropertyPublishingPolicy commandPublishing = PropertyPublishingPolicy.NONE;
+                private PropertyConfigOptions.PublishingPolicy commandPublishing = PropertyConfigOptions.PublishingPolicy.NONE;
 
                 /**
-                 * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether property edits should be sent through to the
                  * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 * The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Execution) publish}
+                 * The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#onExecution(Execution)}  publish}
                  * method is called only once per transaction, with
                  * {@link Execution} collecting details of
                  * the identity of the target object, the property edited, and the new value of the property.
@@ -948,10 +954,10 @@ public class IsisConfiguration {
                  *
                  * <p>
                  * This setting can be overridden on a case-by-case basis using
-                 * {@link org.apache.isis.applib.annotation.Property#publishing()}.
+                 * {@link org.apache.isis.applib.annotation.Property#executionPublishing()}.
                  * </p>
                  */
-                private PropertyPublishingPolicy executionPublishing = PropertyPublishingPolicy.NONE;
+                private PropertyConfigOptions.PublishingPolicy executionPublishing = PropertyConfigOptions.PublishingPolicy.NONE;
 
                 private final DomainEvent domainEvent = new DomainEvent();
                 @Data
@@ -1076,7 +1082,7 @@ public class IsisConfiguration {
                  *     view.
                  * </p>
                  */
-                private DefaultViewConfiguration defaultView = DefaultViewConfiguration.TABLE;
+                private CollectionLayoutConfigOptions.DefaultView defaultView = CollectionLayoutConfigOptions.DefaultView.TABLE;
 
                 /**
                  * Defines the default number of objects that are shown in a &quot;parented&quot; collection of a
@@ -1089,6 +1095,13 @@ public class IsisConfiguration {
                  * </p>
                  */
                 private int paged = 12;
+
+                /**
+                 * Defines whether the table representation of a collection should be decorated using a client-side
+                 * Javascript library, eg for client-side paging and filtering.
+                 */
+                private CollectionLayoutConfigOptions.TableDecoration tableDecoration = CollectionLayoutConfigOptions.TableDecoration.NONE;
+
             }
 
             private final ViewModel viewModel = new ViewModel();
@@ -1102,10 +1115,8 @@ public class IsisConfiguration {
                     public static class SemanticChecking {
                         /**
                          * Whether to check for inconsistencies between the usage of
-                         * {@link org.apache.isis.applib.annotation.DomainObject},
-                         * {@link org.apache.isis.applib.annotation.ViewModel},
-                         * {@link org.apache.isis.applib.annotation.DomainObjectLayout} and
-                         * {@link org.apache.isis.applib.annotation.ViewModelLayout}.
+                         * {@link org.apache.isis.applib.annotation.DomainObject} and
+                         * {@link org.apache.isis.applib.annotation.DomainObjectLayout}.
                           */
                         private boolean enable = false;
                     }
@@ -1123,15 +1134,16 @@ public class IsisConfiguration {
                      * Influences whether an {@link org.apache.isis.applib.events.ui.CssClassUiEvent} should
                      * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
                      * whenever a view model (annotated with
-                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * {@link org.apache.isis.applib.annotation.DomainObject#nature() @DomainObject#nature} of
+                     * {@link org.apache.isis.applib.annotation.Nature#VIEW_MODEL}) is about to be rendered in the
                      * UI - thereby allowing subscribers to optionally
                      * {@link org.apache.isis.applib.events.ui.CssClassUiEvent#setCssClass(String)} change) the CSS
                      * classes that are used.
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#cssClassUiEvent()}  @ViewModelLayout(cssClassEvent=...)} for the
-                     *     domain object in question:
+                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#cssClassUiEvent() @DomainObjectLayout(cssClassEvent=...)}
+                     *     for the domain object in question:
                      * </p>
                      *
                      * <ul>
@@ -1160,15 +1172,16 @@ public class IsisConfiguration {
                      * Influences whether an {@link org.apache.isis.applib.events.ui.IconUiEvent} should
                      * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
                      * whenever a view model (annotated with
-                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * {@link org.apache.isis.applib.annotation.DomainObject#nature() @DomainObject#nature} of
+                     * {@link org.apache.isis.applib.annotation.Nature#VIEW_MODEL})  is about to be rendered in the
                      * UI - thereby allowing subscribers to optionally
                      * {@link org.apache.isis.applib.events.ui.IconUiEvent#setIconName(String)} change) the icon that
                      * is used.
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#iconUiEvent()}  @ViewModelLayout(iconEvent=...)} for the
-                     *     domain object in question:
+                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent() @ViewModelLayout(iconEvent=...)}
+                     *     for the domain object in question:
                      * </p>
                      *
                      * <ul>
@@ -1197,7 +1210,8 @@ public class IsisConfiguration {
                      * Influences whether an {@link org.apache.isis.applib.events.ui.LayoutUiEvent} should
                      * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
                      * whenever a view model (annotated with
-                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * {@link org.apache.isis.applib.annotation.DomainObject#nature() @DomainObject#nature} of
+                     * {@link org.apache.isis.applib.annotation.Nature#VIEW_MODEL})  is about to be rendered in the
                      * UI - thereby allowing subscribers to optionally
                      * {@link org.apache.isis.applib.events.ui.LayoutUiEvent#setLayout(String)} change) the layout that is used.
                      *
@@ -1208,8 +1222,8 @@ public class IsisConfiguration {
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#layoutUiEvent()}  @ViewModelLayout(layoutEvent=...)} for the
-                     *     domain object in question:
+                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#layoutUiEvent() @DomainObjectLayout(layoutEvent=...)}
+                     *     for the domain object in question:
                      * </p>
                      *
                      * <ul>
@@ -1238,14 +1252,15 @@ public class IsisConfiguration {
                      * Influences whether an {@link org.apache.isis.applib.events.ui.TitleUiEvent} should
                      * be published (on the internal {@link org.apache.isis.applib.services.eventbus.EventBusService})
                      * whenever a view model (annotated with
-                     * {@link org.apache.isis.applib.annotation.ViewModel @ViewModel}) is about to be rendered in the
+                     * {@link org.apache.isis.applib.annotation.DomainObject#nature() @DomainObject#nature} of
+                     * {@link org.apache.isis.applib.annotation.Nature#VIEW_MODEL})  is about to be rendered in the
                      * UI - thereby allowing subscribers to
                      * optionally {@link org.apache.isis.applib.events.ui.TitleUiEvent#setTitle(String)} change)
                      * the title that is used.
                      *
                      * <p>
                      *     The algorithm for determining whether (and what type of) an event is sent depends on the value of the
-                     *     {@link org.apache.isis.applib.annotation.ViewModelLayout#titleUiEvent()}  @ViewModelLayout(titleEvent=...)} for the
+                     *     {@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent() @DomainObjectLayout(titleEvent=...)} for the
                      *     domain object in question:
                      * </p>
                      *
@@ -1283,7 +1298,7 @@ public class IsisConfiguration {
                  *     {@link org.apache.isis.applib.annotation.Parameter#dependentDefaultsPolicy() Parameter#dependentDefaultsPolicy()}.
                  * </p>
                  */
-                private ParameterPolicies.DependentDefaultsPolicy dependentDefaultsPolicy = ParameterPolicies.DependentDefaultsPolicy.UPDATE_DEPENDENT;
+                private ParameterConfigOptions.DependentDefaultsPolicy dependentDefaultsPolicy = ParameterConfigOptions.DependentDefaultsPolicy.UPDATE_DEPENDENT;
 
             }
 
@@ -1791,7 +1806,7 @@ public class IsisConfiguration {
             /**
              * Vendor specific SQL syntax to create a DB schema.
              * <p>
-             * This template is passed through {@link String#format(String, schemaName)} to
+             * This template is passed through {@link String#format(String, Object...)} to
              * make the actual SQL statement thats to be used against the configured data-source.
              * <p>
              * Default template is {@literal CREATE SCHEMA IF NOT EXISTS %S} with the schema name
@@ -2622,6 +2637,49 @@ public class IsisConfiguration {
                 }
             }
 
+            private final Table table = new Table();
+            @Data
+            public static class Table {
+
+                private final Decoration decoration = new Decoration();
+                @Data
+                public static class Decoration {
+
+                    private final DataTablesNet dataTablesNet = new DataTablesNet();
+                    @Data
+                    public static class DataTablesNet {
+
+                        /**
+                         * If specified, then the string is passed verbatim as the initialization options for the
+                         * <a href="https://datatables.net">https://datatables.net</a> table decoration
+                         * (as defined by {@link DomainObjectLayout#tableDecoration()} or by
+                         * {@link CollectionLayout#tableDecoration()}).
+                         *
+                         * <p>
+                         *     For example, a value of "info: false, pagingType: 'numbers'" will result in
+                         *     datatables.net being initialized using:
+                         *
+                         *     <pre>
+                         *     $(document).ready(function () {
+                         *       $('table.table-decoration').DataTable({
+                         *         info: false, pagingType: 'numbers'
+                         *       });
+                         *     });
+                         *     </pre>
+                         *     thus switching off the info panel and using the simple 'numbers' paging type.
+                         * </p>
+                         *
+                         * @see <a href="https://datatables.net/examples/basic_init/index.html">https://datatables.net/examples/basic_init/index.html</a>
+                         */
+                        private Optional<String> options = Optional.empty();
+
+                    }
+
+                }
+
+
+            }
+
         }
     }
 
@@ -2684,9 +2742,8 @@ public class IsisConfiguration {
 
 
                 /**
-                 * How to handle objects that are to be
-                 * {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added}
-                 * into a {@link FixtureResult} but which are not yet persisted.
+                 * How to handle objects that are to be added into a <code>FixtureResult</code> but which are not yet
+                 * persisted.
                  */
                 public enum NonPersistedObjectsStrategy {
                     PERSIST,
@@ -2697,11 +2754,10 @@ public class IsisConfiguration {
                  * How to handle fixture scripts that are submitted to be executed more than once.
                  *
                  * <p>
-                 *     Note that this is a {@link FixtureScripts#getMultipleExecutionStrategy() global setting} of the
-                 *     {@link FixtureScripts} service; there isn't (currently) any way to mix-and-match fixture scripts that are
-                 *     written with differing semantics in mind.  Ideally it should be the responsibility of the fixture script
-                 *     itself to determine whether it should be run.  As a partial solution to this, the
-                 *
+                 *     Note that this is a global setting of the <code>FixtureScripts</code> service; there isn't
+                 *     (currently) any way to mix-and-match fixture scripts that are written with differing semantics
+                 *     in mind.  Ideally it should be the responsibility of the fixture script itself to determine
+                 *     whether it should be run.
                  * </p>
                  */
                 public enum MultipleExecutionStrategy {
@@ -2776,7 +2832,7 @@ public class IsisConfiguration {
                  *
                  * <p>
                  * Note that this policy can be overridden on a fixture-by-fixture basis if the fixture implements
-                 * {@link FixtureScriptWithExecutionStrategy}.
+                 * <code>FixtureScriptWithExecutionStrategy</code>.
                  * </p>
                  */
                 private MultipleExecutionStrategy multipleExecutionStrategy = MultipleExecutionStrategy.EXECUTE_ONCE_BY_CLASS;
@@ -3162,7 +3218,8 @@ public class IsisConfiguration {
              * whether to prefer to allow the permission or to veto it.
              *
              * <p>
-             *     This is only used if a {@link org.apache.isis.extensions.secman.applib.permission.spi.PermissionsEvaluationService} has not been declared explicitly.
+             *     This is only used an implementation of secman's <code>PermissionsEvaluationService</code> SPI has
+             *     not been provided explicitly.
              * </p>
              */
             private PermissionsEvaluationPolicy permissionsEvaluationPolicy = PermissionsEvaluationPolicy.ALLOW_BEATS_VETO;
@@ -3190,12 +3247,12 @@ public class IsisConfiguration {
             }
 
             /**
-             * Whether the presence of SecMan should result in the automatic suppression of the {@link org.apache.isis.applib.services.userui.UserMenu}'s
-             * {@link UserMenu#me() me} action.
+             * Whether the presence of SecMan should result in the automatic suppression of the
+             * {@link org.apache.isis.applib.services.userui.UserMenu}'s {@link UserMenu.me#act() me()} action.
              *
              * <p>
              *     This is normally what is required as SecMan's <code>ApplicationUser</code> is a more comprehensive
-             *     representation of the current user.  If the default {@link UserMenu#me() me} action is not
+             *     representation of the current user.  If the default {@link UserMenu.me#act() me()} action is not
              *     suppressed, then the end-user will see two actions with the name &quot;me&quot; in the tertiary menu.
              * </p>
              */

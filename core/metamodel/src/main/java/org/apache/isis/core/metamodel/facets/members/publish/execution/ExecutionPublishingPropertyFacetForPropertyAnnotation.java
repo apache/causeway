@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.commons.internal.base._Optionals;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.config.metamodel.facets.PublishingPolicies;
+import org.apache.isis.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.val;
@@ -37,7 +37,7 @@ extends ExecutionPublishingFacetAbstract {
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        val publishingPolicy = PublishingPolicies.propertyExecutionPublishingPolicy(configuration);
+        val publishingPolicy = PropertyConfigOptions.propertyExecutionPublishingPolicy(configuration);
 
         return _Optionals.orNullable(
 
