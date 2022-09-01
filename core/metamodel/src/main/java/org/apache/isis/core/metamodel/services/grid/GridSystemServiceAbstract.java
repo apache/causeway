@@ -55,6 +55,7 @@ import org.apache.isis.core.metamodel.facets.collections.layout.MemberDescribedF
 import org.apache.isis.core.metamodel.facets.collections.layout.MemberNamedFacetForCollectionLayoutXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.PagedFacetForCollectionLayoutXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.SortedByFacetForCollectionLayoutXml;
+import org.apache.isis.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacetForCollectionLayoutXml;
 import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetForLayoutXml;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml;
@@ -63,6 +64,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassF
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectLayoutXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.ObjectDescribedFacetForDomainObjectLayoutXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.ObjectNamedFacetForDomainObjectLayoutXml;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyLayoutXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyLayoutXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyLayoutXml;
@@ -183,6 +185,11 @@ implements GridSystemService<G> {
                         ObjectNamedFacetForDomainObjectLayoutXml.type(),
                         ObjectNamedFacetForDomainObjectLayoutXml.class::isInstance,
                         ObjectNamedFacetForDomainObjectLayoutXml.create(domainObjectLayoutData, objectSpec),
+                        objectSpec);
+                updateFacet(
+                        DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml.type(),
+                        DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml.class::isInstance,
+                        DomainObjectLayoutTableDecorationFacetForDomainObjectLayoutXml.create(domainObjectLayoutData, objectSpec),
                         objectSpec);
             }
 
@@ -402,6 +409,12 @@ implements GridSystemService<G> {
                         DefaultViewFacetForCollectionLayoutXml.type(),
                         DefaultViewFacetForCollectionLayoutXml.class::isInstance,
                         DefaultViewFacetForCollectionLayoutXml.create(collectionLayoutData, oneToManyAssociation),
+                        oneToManyAssociation);
+
+                updateFacet(
+                        CollectionLayoutTableDecorationFacetForCollectionLayoutXml.type(),
+                        CollectionLayoutTableDecorationFacetForCollectionLayoutXml.class::isInstance,
+                        CollectionLayoutTableDecorationFacetForCollectionLayoutXml.create(collectionLayoutData, oneToManyAssociation),
                         oneToManyAssociation);
 
                 updateFacet(

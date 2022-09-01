@@ -45,6 +45,7 @@
     <xs:attribute name="cssClassFa" type="xs:string"/>
     <xs:attribute name="cssClassFaPosition" type="tns:cssClassFaPosition"/>
     <xs:attribute name="namedEscaped" type="xs:boolean"/>
+    <xs:attribute name="tableDecoration" type="tns:tableDecoration"/>
   </xs:complexType>
 
   <xs:complexType name="action">
@@ -128,6 +129,7 @@
     <xs:attribute name="id" type="xs:string" use="required"/>
     <xs:attribute name="namedEscaped" type="xs:boolean"/>
     <xs:attribute name="paged" type="xs:int"/>
+    <xs:attribute name="tableDecoration" type="tns:tableDecoration"/>
   </xs:complexType>
 
 
@@ -196,6 +198,13 @@
       <xs:enumeration value="RIGHT"/>
       <xs:enumeration value="TOP"/>
       <xs:enumeration value="NONE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="tableDecoration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NONE"/>
+      <xs:enumeration value="DATATABLES_NET"/>
     </xs:restriction>
   </xs:simpleType>
 
