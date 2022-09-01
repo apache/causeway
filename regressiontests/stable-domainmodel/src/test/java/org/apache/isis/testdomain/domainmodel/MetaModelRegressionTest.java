@@ -20,12 +20,19 @@ package org.apache.isis.testdomain.domainmodel;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.approvaltests.Approvals;
+import org.approvaltests.core.Options;
+import org.approvaltests.core.Scrubber;
+import org.approvaltests.reporters.DiffReporter;
+import org.approvaltests.reporters.TextWebReporter;
+import org.approvaltests.reporters.UseReporter;
 import org.assertj.core.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +45,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -74,61 +82,36 @@ class MetaModelRegressionTest {
     @BeforeEach
     void setUp() {
         assertNotNull(metaModelServiceMenu);
-
-        //for maintenance
-         createReferenceMetaModelFile(new File("src/test/resources/metamodel.xml.zip"));
-
-        val url = _Resources.getResourceUrl(getClass(), "/metamodel.xml.zip");
-        if(url==null) {
-            _Exceptions.throwNotImplemented();
-        }
     }
 
     @Test
     @SneakyThrows
-    void metaModelDiff_compareWithLastKnownGood() {
+    @UseReporter(DiffReporter.class)
+    void verify() {
 
-        Assumptions.assumeThat(getClass().getName()).contains("isis");  // disable if rename, as the .zip file needs to be updated.
+        // Assumptions.assumeThat(getClass().getName()).contains("isis");  // disable if rename, as the .zip file needs to be updated.
 
-        val downloadMetaModelDiff =
-                factoryService.mixin(MetaModelServiceMenu.downloadMetaModelDiff.class, metaModelServiceMenu);
-        val metamodelExport =
-                downloadMetaModelDiff.act("metamodel.xml", namespaces(), true,
-                        referenceMetaModelAsZippedBlob())
-                .unZip(CommonMimeType.XML)
-                .toClob(StandardCharsets.UTF_8);
+        Blob metaModelZip = factoryService.mixin(MetaModelServiceMenu.downloadMetaModelXml.class, metaModelServiceMenu).act("metamodel.xml", namespaces(), true);
+        val xml = asXml(metaModelZip);
 
+        Approvals.verify(xml, options());
+
+    }
+
+    private static String asXml(Blob zip) throws IOException {
+        val clob = zip.unZip(CommonMimeType.XML).toClob(StandardCharsets.UTF_8);
         val sw = new StringWriter();
-        metamodelExport.writeCharsTo(sw);
+        clob.writeCharsTo(sw);
+        return sw.toString();
+    }
 
-        val diff = sw.toString();
+    private Options options() {
+        return new Options().withScrubber(s -> s).forFile().withExtension(".xml");
 
-        if(!diff.isBlank()) {
-            System.err.printf("%s%n", diff);
-            fail("Reference meta-model and current do differ.");
-        }
     }
 
     // -- HELPER
 
-    @SneakyThrows
-    private void createReferenceMetaModelFile(final File file) {
-        try(val fos = new FileOutputStream(file)){
-            currentMetaModelAsZippedBlob().writeBytesTo(fos);
-        }
-    }
-
-    @SneakyThrows
-    private Blob referenceMetaModelAsZippedBlob() {
-        val bytes = _Bytes.of(_Resources.load(getClass(), "/metamodel.xml.zip"));
-        return Blob.of("metamodel.xml", CommonMimeType.ZIP, bytes);
-    }
-
-    private Blob currentMetaModelAsZippedBlob() {
-        val downloadMetaModelXml =
-                factoryService.mixin(MetaModelServiceMenu.downloadMetaModelXml.class, metaModelServiceMenu);
-        return downloadMetaModelXml.act("metamodel.xml", namespaces(), true);
-    }
 
     private List<String> namespaces() {
         return List.of("org.apache.isis.testdomain.model.good");

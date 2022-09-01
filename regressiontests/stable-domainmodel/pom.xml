@@ -25,12 +25,28 @@
 
 	<name>Apache Isis - Regression Tests (stable) - Domain Model</name>
 
+	<build>
+		<testResources>
+			<testResource>
+				<directory>src/test/java</directory>
+				<filtering>false</filtering>
+			</testResource>
+		</testResources>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.regressiontests</groupId>
 			<artifactId>isis-regressiontests-stable</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.approvaltests</groupId>
+			<artifactId>approvaltests</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 </project>
