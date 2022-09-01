@@ -56,7 +56,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
                         relElseDefault(rel).getName(),
                         RepresentationType.DOMAIN_OBJECT,
                         linkRef(new StringBuilder()).toString());
-        linkBuilder.withTitle(objectAdapter.titleString());
+        linkBuilder.withTitle(objectAdapter.getTitle());
         return linkBuilder;
     }
 

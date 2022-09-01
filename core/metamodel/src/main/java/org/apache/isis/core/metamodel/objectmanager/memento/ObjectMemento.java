@@ -36,9 +36,10 @@ public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializa
 
     /**
      * The object's title for rendering (before translation).
-     * Corresponds to {@link ManagedObject#titleString()}.
+     * Corresponds to {@link ManagedObject#getTitle()}.
      * <p>
      * Directly support choice rendering, without the need to (re-)fetch entire object graphs.
+     * (TODO translated or not?)
      */
     String getTitle();
 

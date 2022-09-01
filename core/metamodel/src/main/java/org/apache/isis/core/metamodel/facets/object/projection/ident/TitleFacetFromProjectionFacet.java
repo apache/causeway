@@ -44,7 +44,7 @@ extends TitleFacetAbstract {
     public String title(final TitleRenderRequest titleRenderRequest) {
         final ManagedObject targetAdapter = titleRenderRequest.getObject();
         val projectedAdapter = projectionFacet.projected(targetAdapter);
-        return projectedAdapter.titleString();
+        return projectedAdapter.getTitle();
     }
 
     @Override

@@ -44,13 +44,12 @@ public class TitleRenderRequest {
 
     /**
      * Provide a title for the target object, possibly abbreviated (according to supplied predicate)
-     *
      * <p>
-     * One reason why the title might be abbreviated is if it is being evaluated in the context of another object,
-     * for example as a child object of a parented collection of some parent object. In such a context, the
-     * title might be shortened so that it does not needlessly incorporate the title of the parent (context)
-     * object.
-     * </p>
+     * One reason why the title might be abbreviated is if it is being evaluated in the context
+     * of another object.
+     * For example as a child object of a parented collection of some parent object.
+     * In such a context, the title might be shortened so that it does not needlessly incorporate
+     * the title of the parent (context) object.
      */
     @Builder.Default
     private final @NonNull Predicate<ManagedObject> skipTitlePartEvaluator =

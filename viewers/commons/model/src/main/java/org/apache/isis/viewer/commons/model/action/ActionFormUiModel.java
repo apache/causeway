@@ -105,7 +105,7 @@ extends HasTitle, HasActionInteraction {
             }
             buf.append(MmTitleUtil.abbreviatedTitleOf(paramValue, 8, "..."));
         });
-        return owner.titleString() + "." + getFriendlyName()
+        return owner.getTitle() + "." + getFriendlyName()
             + (buf.length()>0
                     ?"(" + buf.toString() + ")"
                     :"");

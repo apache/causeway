@@ -175,7 +175,7 @@ public class DomainObjectTesterFactory {
             assertEquals(expectedResult,
                     super.objectSpecification.getTitleService().titleOf(vm.getPojo()));
             assertEquals(expectedResult,
-                    vm.titleString());
+                    vm.getTitle());
         }
 
         public void assertIcon(final @Nullable String expectedResult) {

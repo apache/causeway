@@ -106,7 +106,7 @@ implements HasCommonContext {
 
     /**
      * Filters all choices against a term by using their
-     * {@link ManagedObject#titleString() title string}
+     * {@link ManagedObject#getTitle() title string}
      *
      * @param term The term entered by the user
      * @param choiceMementos The collections of choices to filter

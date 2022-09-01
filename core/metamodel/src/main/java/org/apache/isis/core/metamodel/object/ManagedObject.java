@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.object;
 
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 
@@ -31,7 +30,6 @@ import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
-import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -345,28 +343,14 @@ extends
     // -- TITLE
 
     /**
-     * The (TODO translated ?) title of the wrapped pojo.
+     * The (untranslated) title of the wrapped pojo.
      */
     String getTitle();
-
-    @Deprecated
-    default String titleString() {
-        return getTitle();
-    }
-
-    default String titleString(final UnaryOperator<TitleRenderRequest.TitleRenderRequestBuilder> onBuilder) {
-        return _InternalTitleUtil
-                .titleString(onBuilder.apply(
-                        TitleRenderRequest.builder()
-                        .object(this))
-                        .build());
-    }
-
 
     // -- SHORTCUT - ELEMENT SPECIFICATION
 
     /**
-     * Used only for (standalone or parented) collections.
+     * As used for the element type of collections.
      */
     default Optional<ObjectSpecification> getElementSpecification() {
         return getSpecification().getElementSpecification();
@@ -448,9 +432,9 @@ extends
     static ManagedObject viewmodel(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo,
-            final Optional<Bookmark> bookmarkIfAny) {
+            final Optional<Bookmark> bookmarkIfKnown) {
         return pojo != null
-                ? bookmarkIfAny.map(bookmark->bookmarked(spec, pojo, bookmark)) //FIXME
+                ? bookmarkIfKnown.map(bookmark->bookmarked(spec, pojo, bookmark)) //FIXME
                         .orElseGet(()->new _ManagedObjectWithEagerSpec(spec, pojo)) //FIXME
                 : empty(spec);
     }
@@ -525,12 +509,13 @@ extends
             return (ManagedObject)pojo;
         }
         val spec = specLoader.specForType(pojo.getClass()).orElse(null);
-        return wrapScalarInternal(spec, pojo);
+        return wrapScalarInternal(spec, pojo, Optional.empty());
     }
 
     private static ManagedObject wrapScalarInternal(
             final @Nullable ObjectSpecification spec,
-            final @NonNull Object pojo) {
+            final @NonNull Object pojo,
+            final @NonNull Optional<Bookmark> bookmarkIfAny) {
 
         _Assert.assertTrue(!_Collections.isCollectionOrArrayOrCanType(pojo.getClass()),
                 ()->String.format("is scalar %s", pojo.getClass()));
@@ -547,7 +532,7 @@ extends
         case SERVICE:
             return service(spec, pojo);
         case VIEWMODEL:
-            return viewmodel(spec, pojo, Optional.empty());
+            return viewmodel(spec, pojo, bookmarkIfAny);
         case ENTITY:
             return entity(spec, pojo);
         case MIXIN:
@@ -572,7 +557,7 @@ extends
             return (ManagedObject)pojo;
         }
         return !_Collections.isCollectionOrArrayOrCanType(pojo.getClass())
-                ? wrapScalarInternal(spec, pojo)
+                ? wrapScalarInternal(spec, pojo, Optional.empty())
                 : new _ManagedObjectWithEagerSpec(spec, pojo);
     }
 

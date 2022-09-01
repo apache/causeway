@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFactor
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmEntityUtil;
+import org.apache.isis.core.metamodel.object.MmTitleUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
@@ -174,11 +175,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private String determineTitle() {
         val managedObject = getModel().getObject();
-        return ManagedObjects.isPacked(managedObject)
-                ? "(multiple objects)"
-                : managedObject != null
-                    ? managedObject.titleString(conf->conf.skipTitlePartEvaluator(this::isContextAdapter))
-                    : "(no object)";
+        return MmTitleUtil.getTitleHonoringTitlePartSkipping(managedObject, this::isContextAdapter);
     }
 
     private int abbreviateTo(final ObjectAdapterModel model, final String titleString) {

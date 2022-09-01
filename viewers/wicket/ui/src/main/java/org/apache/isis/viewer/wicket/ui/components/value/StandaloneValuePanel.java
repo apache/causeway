@@ -56,7 +56,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
         } else {
             // resort to (textual) title rendering
             Wkt.labelAdd(this, ID_STANDALONE_VALUE, ()->
-                getModel().getObject().titleString());
+                getModel().getObject().getTitle());
         }
     }
 

@@ -232,7 +232,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             return;
         }
 
-        final String objectAsStr = cellValue.titleString();
+        final String objectAsStr = cellValue.getTitle();
         cell.setCellValue(objectAsStr);
         return;
     }

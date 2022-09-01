@@ -192,7 +192,7 @@ public final class MmEntityUtil {
             throw _Exceptions.illegalArgument(
                     "can't set a reference to a transient object [%s] from a persistent one [%s]",
                     second,
-                    first.titleString());
+                    first.getTitle());
         }
     }
 

@@ -296,7 +296,7 @@ implements ContentNegotiationService {
     }
 
     private static String titleOf(final ManagedObject argumentAdapter) {
-        return argumentAdapter!=null?argumentAdapter.titleString():"";
+        return argumentAdapter!=null?argumentAdapter.getTitle():"";
     }
 
     private static String abbreviated(final String str, final int maxLength) {

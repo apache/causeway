@@ -566,7 +566,8 @@ implements ObjectSpecification {
             final ManagedObject targetObjectAdapter,
             final InteractionInitiatedBy interactionMethod) {
 
-        return new ObjectTitleContext(targetObjectAdapter, getFeatureIdentifier(), targetObjectAdapter.titleString(),
+        return new ObjectTitleContext(targetObjectAdapter, getFeatureIdentifier(),
+                targetObjectAdapter.getTitle(),
                 interactionMethod);
     }
 

@@ -39,13 +39,13 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
                 relElseDefault(rel).andParam("serviceId", serviceId),
                 RepresentationType.DOMAIN_OBJECT,
                 linkRef(new StringBuilder()).toString());
-        linkBuilder.withTitle(objectAdapter.titleString());
+        linkBuilder.withTitle(objectAdapter.getTitle());
         return linkBuilder;
     }
 
 
     @Override
-    protected StringBuilder linkRef(StringBuilder buf) {
+    protected StringBuilder linkRef(final StringBuilder buf) {
         return buf.append("services/").append(serviceId);
     }
 

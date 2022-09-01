@@ -66,7 +66,7 @@ implements HasObjectFeature {
     @Override
     public ScalarValueReprRenderer with(final ManagedObject objectAdapter) {
         if (!objectAdapter.getSpecification().isValue()) {
-            throw ReprRendererException.create("Not an (encodable) value", objectAdapter.titleString());
+            throw ReprRendererException.create("Not an (encodable) value", objectAdapter.getTitle());
         }
 
         val context = JsonValueConverter.Context.of(

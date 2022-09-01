@@ -547,7 +547,7 @@ public class XmlSnapshot implements Snapshot {
     }
 
     private String log(final String label, final ManagedObject adapter) {
-        return log(label, (adapter == null ? "(null)" : adapter.titleString() + "[" + oidAsString(adapter) + "]"));
+        return log(label, (adapter == null ? "(null)" : adapter.getTitle() + "[" + oidAsString(adapter) + "]"));
     }
 
     private String log(final String label, final Object pojo) {
@@ -634,7 +634,7 @@ public class XmlSnapshot implements Snapshot {
         }
         final Element element = schema.createElement(getXmlDocument(), spec.getShortIdentifier(),
                 spec.getFullIdentifier(), spec.getSingularName(), spec.getPluralName());
-        isisMetaModel.appendIsisTitle(element, adapter.titleString());
+        isisMetaModel.appendIsisTitle(element, adapter.getTitle());
 
         if (log.isDebugEnabled()) {
             log.debug("objectToElement(NO): create XS element for Isis class");
@@ -712,7 +712,7 @@ public class XmlSnapshot implements Snapshot {
                     if (valueFacet != null) {
                         valueStr = valueFacet.toEncodedString(Format.JSON, value.getPojo());
                     } else {
-                        valueStr = value.titleString();
+                        valueStr = value.getTitle();
                     }
 
                     final boolean notEmpty = (valueStr.length() > 0);
@@ -751,7 +751,7 @@ public class XmlSnapshot implements Snapshot {
                             fullyQualifiedClassName);
 
                     if (referencedObjectAdapter != null) {
-                        isisMetaModel.appendIsisTitle(xmlReferenceElement, referencedObjectAdapter.titleString());
+                        isisMetaModel.appendIsisTitle(xmlReferenceElement, referencedObjectAdapter.getTitle());
                     } else {
                         isisMetaModel.setIsEmptyAttribute(xmlReferenceElement, true);
                     }

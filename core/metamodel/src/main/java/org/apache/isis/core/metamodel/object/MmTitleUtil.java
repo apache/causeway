@@ -18,9 +18,12 @@
  */
 package org.apache.isis.core.metamodel.object;
 
+import java.util.function.Predicate;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.value.semantics.Renderer;
+import org.apache.isis.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.val;
@@ -35,7 +38,7 @@ public class MmTitleUtil {
 
     public String titleOf(final ManagedObject adapter) {
         return adapter!=null
-                ? adapter.titleString()
+                ? adapter.getTitle()
                 : "";
     }
 
@@ -61,6 +64,20 @@ public class MmTitleUtil {
         }
 
         return renderer.htmlPresentation(valueFacet.createValueSemanticsContext(feature), adapter.getPojo());
+    }
+
+    public String getTitleHonoringTitlePartSkipping(
+            final ManagedObject managedObject,
+            final Predicate<ManagedObject> skipTitlePart) {
+        return ManagedObjects.isPacked(managedObject)
+                ? "(multiple objects)"
+                : managedObject != null
+                    ? _InternalTitleUtil.titleString(
+                            TitleRenderRequest.builder()
+                            .object(managedObject)
+                            .skipTitlePartEvaluator(skipTitlePart)
+                            .build())
+                    : "(no object)";
     }
 
 }

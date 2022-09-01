@@ -136,7 +136,7 @@ implements CollectionCountProvider {
             this.propertyName = propertyName;
             int nonNullCount = 0;
             for (val adapter : adapters) {
-                titles.add(adapter.titleString());
+                titles.add(adapter.getTitle());
                 final ManagedObject valueAdapter =
                         numberAssociation.get(adapter, InteractionInitiatedBy.USER);
                 if (valueAdapter == null) {

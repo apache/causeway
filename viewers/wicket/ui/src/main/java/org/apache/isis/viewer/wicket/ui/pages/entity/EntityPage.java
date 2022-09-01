@@ -156,7 +156,7 @@ public class EntityPage extends PageAbstract {
 
         Facets.gridPreload(objectSpec, objectAdapter);
 
-        final String titleStr = objectAdapter.titleString();
+        final String titleStr = objectAdapter.getTitle();
         setTitle(titleStr);
 
         WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");

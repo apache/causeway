@@ -173,7 +173,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
                                 val decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
                                 // amend emums with "enumTitle"
                                 if(simple.getType() == ValueType.ENUM) {
-                                    decompRepr.mapPutString("enumTitle", valueAdapter.titleString());
+                                    decompRepr.mapPutString("enumTitle", valueAdapter.getTitle());
                                 }
                                 repr.mapPutJsonRepresentation("value", decompRepr);
                                 appendFormats(repr, null, simple.getType().value(), context.isSuppressExtensions());

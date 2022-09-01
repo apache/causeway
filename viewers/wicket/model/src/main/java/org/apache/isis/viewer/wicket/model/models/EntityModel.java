@@ -170,7 +170,7 @@ implements
 
     @Override
     public String getTitle() {
-        return getObject().titleString();
+        return getObject().getTitle();
     }
 
     @Override

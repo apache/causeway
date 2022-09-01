@@ -63,7 +63,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
         final String objectRef = ManagedObjects.stringifyElseFail(objectAdapter, "/");
         final String url = "objects/" + objectRef;
-        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.titleString());
+        return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.DOMAIN_OBJECT, url).withTitle(objectAdapter.getTitle());
     }
 
     public static LinkBuilder newLinkToObjectLayoutBuilder(
@@ -185,7 +185,7 @@ extends ReprRendererAbstract<ManagedObject> {
             }
 
             // title
-            final String title = objectAdapter.titleString();
+            final String title = objectAdapter.getTitle();
             representation.mapPutString("title", title);
 
             // serviceId or instance Id

@@ -74,7 +74,7 @@ extends PanelAbstract<Void, IModel<Void>> {
             }
 
             private String titleFor(final EntityModel model) {
-                return model.getManagedObject().titleString();
+                return model.getManagedObject().getTitle();
             }
 
             @Override
