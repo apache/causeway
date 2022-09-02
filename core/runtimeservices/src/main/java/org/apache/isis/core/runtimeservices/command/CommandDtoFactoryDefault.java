@@ -169,7 +169,8 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         dto.setUsername(userService.currentUserNameElseNobody());
         dto.setTimestamp(clockService.getClock().nowAsXmlGregorianCalendar());
 
-        final Bookmark bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
+        // transient entities have no bookmark, so fallback to UUID
+        final Bookmark bookmark = ManagedObjects.bookmarkElseUUID(targetHead.getOwner());
         final OidsDto targetOids = CommandDtoUtils.targetsFor(dto);
         targetOids.getOid().add(bookmark.toOidDto());
 

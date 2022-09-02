@@ -18,21 +18,26 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value;
 
+import org.springframework.lang.Nullable;
+
+import lombok.NonNull;
+
 public interface ValueSerializer<T> {
 
     public enum Format {
         JSON,
+        URL_SAFE,
         //XML
     }
 
     /**
      * Converts a string of provided {@link Format} to an instance of the object.
      */
-    T fromEncodedString(Format format, String encodedData);
+    T destring(@NonNull Format format, @NonNull String encodedData);
 
     /**
      * Converts the provided object into provided {@link Format}.
      */
-    String toEncodedString(Format format, T value);
+    String enstring(@NonNull Format format, @Nullable T value);
 
 }

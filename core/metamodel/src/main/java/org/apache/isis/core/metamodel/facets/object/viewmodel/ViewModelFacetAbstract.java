@@ -101,9 +101,7 @@ implements ViewModelFacet {
 
     @Override
     public final Bookmark serializeToBookmark(final @NonNull ManagedObject managedObject) {
-        return Bookmark.forLogicalTypeAndIdentifier(
-                managedObject.getSpecification().getLogicalType(),
-                serialize(managedObject));
+        return managedObject.createBookmark(serialize(managedObject));
     }
 
     protected abstract @NonNull String serialize(@NonNull ManagedObject managedObject);

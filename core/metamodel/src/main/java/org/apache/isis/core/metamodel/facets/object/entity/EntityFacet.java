@@ -20,13 +20,17 @@ package org.apache.isis.core.metamodel.facets.object.entity;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.PersistenceStack;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -35,11 +39,43 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.MmSpecUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.NonNull;
+
 /**
  * Indicates that this class is managed by a persistence context.
  * @since 2.0
  */
 public interface EntityFacet extends Facet {
+
+    @lombok.Value(staticConstructor = "of")
+    static class PrimaryKeyType<T> {
+        private final @NonNull Class<?> owningEntityClass;
+        private final @NonNull IdStringifier<T> idStringifier;
+        private final @NonNull Class<T> primaryKeyClass;
+        public String enstring(final T primaryKey) {
+            return idStringifier.enstring(primaryKey);
+        }
+        public String enstringWithCast(final Object primaryKey) {
+            return _Casts.castTo(primaryKeyClass, primaryKey)
+            .map(idStringifier::enstring)
+            .orElseThrow(()->_Exceptions.illegalArgument(
+                    "failed to cast primary-key '%s' to expected type %s",
+                        ""+primaryKey,
+                        primaryKeyClass.getName()));
+        }
+        public T destring(final String stringifiedPrimaryKey) {
+            return idStringifier.destring(owningEntityClass, stringifiedPrimaryKey);
+        }
+        public static <T> PrimaryKeyType<T> getInstance(
+                final @NonNull Class<?> owningEntityClass,
+                final @NonNull Function<Class<T>, IdStringifier<T>> stringifierLookup,
+                final @NonNull Class<T> primaryKeyClass){
+            return of(
+                    owningEntityClass,
+                    stringifierLookup.apply(primaryKeyClass),
+                    _Casts.uncheckedCast(ClassUtils.resolvePrimitiveIfNecessary(primaryKeyClass)));
+        }
+    }
 
     /**
      * The {@link ObjectSpecification} of the entity type this

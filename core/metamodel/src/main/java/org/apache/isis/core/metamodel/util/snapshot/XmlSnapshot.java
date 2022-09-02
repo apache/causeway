@@ -41,6 +41,7 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.codec._DocumentFactories;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -682,12 +683,12 @@ public class XmlSnapshot implements Snapshot {
                     log.debug("objectToElement(NO): {} is value", log("field", fieldName));
                 }
 
-                final ObjectSpecification fieldNos = field.getElementType();
+                final ObjectSpecification fieldSpec = field.getElementType();
                 // skip fields of type XmlValue
-                if (fieldNos == null) {
+                if (fieldSpec == null) {
                     continue eachField;
                 }
-                if (fieldNos.getFullIdentifier() != null && fieldNos.getFullIdentifier().endsWith("XmlValue")) {
+                if (fieldSpec.getFullIdentifier() != null && fieldSpec.getFullIdentifier().endsWith("XmlValue")) {
                     continue eachField;
                 }
 
@@ -701,22 +702,17 @@ public class XmlSnapshot implements Snapshot {
                 try {
                     value = valueAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
 
-                    final ObjectSpecification valueNos = value.getSpecification();
+                    val valueSpec = value.getSpecification();
 
                     // XML
-                    isisMetaModel.setAttributesForValue(xmlValueElement, valueNos.getShortIdentifier());
+                    isisMetaModel.setAttributesForValue(xmlValueElement, valueSpec.getShortIdentifier());
 
-                    // return encoded string, else title.
-                    String valueStr;
-                    val valueFacet = fieldNos.valueFacet().orElse(null);
-                    if (valueFacet != null) {
-                        valueStr = valueFacet.toEncodedString(Format.JSON, value.getPojo());
-                    } else {
-                        valueStr = value.getTitle();
-                    }
+                    // value as JSON
+                    @SuppressWarnings("unchecked")
+                    val valueStr = fieldSpec.valueFacetElseFail()
+                            .enstring(Format.JSON, value.getPojo());
 
-                    final boolean notEmpty = (valueStr.length() > 0);
-                    if (notEmpty) {
+                    if (_Strings.isNotEmpty(valueStr)) {
                         xmlValueElement.appendChild(getXmlDocument().createTextNode(valueStr));
                     } else {
                         isisMetaModel.setIsEmptyAttribute(xmlValueElement, true);

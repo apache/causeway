@@ -75,19 +75,19 @@ public final class Bookmark implements Oid {
 
     public static Bookmark forLogicalTypeNameAndIdentifier(
             final @NonNull String logicalTypeName,
-            final @NonNull String identifier) {
+            final @NonNull String urlSafeIdentifier) {
         return new Bookmark(
                 logicalTypeName,
-                identifier,
+                urlSafeIdentifier,
                 /*hintId*/null);
     }
 
     public static Bookmark forLogicalTypeAndIdentifier(
             final @NonNull LogicalType logicalType,
-            final @NonNull String identifier) {
+            final @NonNull String urlSafeIdentifier) {
         return Bookmark.forLogicalTypeNameAndIdentifier(
                 logicalType.getLogicalTypeName(),
-                identifier);
+                urlSafeIdentifier);
     }
 
     public static Bookmark forOidDto(final @NonNull OidDto oidDto) {
@@ -104,12 +104,12 @@ public final class Bookmark implements Oid {
 
     private Bookmark(
             final String logicalTypeName,
-            final String identifier,
+            final String urlSafeIdentifier,
             final String hintId) {
         this.logicalTypeName = logicalTypeName;
-        this.identifier = identifier;
+        this.identifier = urlSafeIdentifier;
         this.hintId = hintId;
-        this.hashCode = Objects.hash(logicalTypeName, identifier);
+        this.hashCode = Objects.hash(logicalTypeName, urlSafeIdentifier);
     }
 
     // -- PARSE

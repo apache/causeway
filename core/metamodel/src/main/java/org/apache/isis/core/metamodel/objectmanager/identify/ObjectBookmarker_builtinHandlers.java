@@ -18,16 +18,11 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.identify;
 
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
-import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.isis.commons.internal.base._Bytes;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.identify.ObjectBookmarker.Handler;
@@ -36,8 +31,6 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 class ObjectBookmarker_builtinHandlers {
-
-    public static final String SERVICE_IDENTIFIER = "1";
 
     static class GuardAgainstOid implements Handler {
 
@@ -51,6 +44,20 @@ class ObjectBookmarker_builtinHandlers {
             throw new IllegalArgumentException("Cannot create a Bookmark for pojo, "
                     + "when pojo is instance of Bookmark. You might want to ask "
                     + "ObjectAdapterByIdProvider for an ObjectAdapter instead.");
+        }
+
+    }
+
+    static class BookmarkForNonScalar implements Handler {
+
+        @Override
+        public boolean isHandling(final ManagedObject managedObject) {
+            return managedObject instanceof PackedManagedObject;
+        }
+
+        @Override
+        public Bookmark handle(final ManagedObject managedObject) {
+            return bookmarkWithRandomUUID(managedObject);
         }
 
     }
@@ -77,7 +84,8 @@ class ObjectBookmarker_builtinHandlers {
 
         @Override
         public Bookmark handle(final ManagedObject managedObject) {
-            return managedObject.getBookmark().orElseThrow();
+            return managedObject.getBookmark()
+                    .orElseGet(()->bookmarkWithRandomUUID(managedObject)); // transient
         }
 
     }
@@ -86,33 +94,14 @@ class ObjectBookmarker_builtinHandlers {
 
         @Override
         public boolean isHandling(final ManagedObject managedObject) {
-            return managedObject.getSpecification().isValue();
+            return managedObject.getSpecialization().isValue();
         }
 
         @SneakyThrows
         @Override
         public Bookmark handle(final ManagedObject managedObject) {
-            val spec = managedObject.getSpecification();
-            val valuePojo = managedObject.getPojo();
-            if(valuePojo==null) {
-                return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), "{}");
-            }
-
-            val valueFacet = spec.valueFacet().orElse(null);
-            ValueSemanticsProvider<Object> composer = (ValueSemanticsProvider) valueFacet.selectDefaultSemantics()
-                    .orElseThrow(()->_Exceptions.illegalArgument(
-                            "Cannot create a bookmark for the value type %s, "
-                          + "as no appropriate ValueSemanticsProvider could be found.",
-                          managedObject.getSpecification().getCorrespondingClass().getName()));
-
-            val valueAsJson = composer.decompose(managedObject.getPojo())
-                    .toJson();
-
-            val identifier = _Strings.ofBytes(
-                    _Bytes.asUrlBase64.apply(valueAsJson.getBytes()),
-                    StandardCharsets.UTF_8);
-
-            return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
+            _Assert.assertTrue(managedObject.isBookmarkSupported(), ()->"is bookmarkable");
+            return managedObject.getBookmark().orElseThrow();
         }
 
     }
@@ -121,9 +110,7 @@ class ObjectBookmarker_builtinHandlers {
 
         @Override
         public boolean isHandling(final ManagedObject managedObject) {
-            return (managedObject instanceof PackedManagedObject)
-                    ? false
-                    : managedObject.getSpecification().containsFacet(ViewModelFacet.class);
+            return managedObject.getSpecialization().isViewmodel();
         }
 
         @Override
@@ -134,8 +121,7 @@ class ObjectBookmarker_builtinHandlers {
             }
 
             val spec = managedObject.getSpecification();
-            val recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
-            return recreatableObjectFacet.serializeToBookmark(managedObject);
+            return spec.viewmodelFacetElseFail().serializeToBookmark(managedObject);
         }
 
     }
@@ -149,10 +135,16 @@ class ObjectBookmarker_builtinHandlers {
 
         @Override
         public Bookmark handle(final ManagedObject managedObject) {
-            val spec = managedObject.getSpecification();
-            val identifier = UUID.randomUUID().toString();
-            return Bookmark.forLogicalTypeAndIdentifier(spec.getLogicalType(), identifier);
+            return bookmarkWithRandomUUID(managedObject);
         }
+    }
+
+    // -- HELPER
+
+    private static Bookmark bookmarkWithRandomUUID(final ManagedObject managedObject) {
+        val uuid = UUID.randomUUID().toString();
+        System.err.printf("called bookmarkWithRandomUUID %s [%s]%n", managedObject.getSpecification(), uuid);
+        return managedObject.createBookmark(UUID.randomUUID().toString());
     }
 
 }

@@ -30,6 +30,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.HasMetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.isis.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
+import org.apache.isis.core.metamodel.spec.HasObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -50,7 +51,8 @@ import lombok.extern.log4j.Log4j2;
 public interface ManagedObject
 extends
     Bookmarkable,
-    HasMetaModelContext {
+    HasMetaModelContext,
+    HasObjectSpecification {
 
     /**
      * ManagedObject specializations have varying contract/behavior.
@@ -316,6 +318,7 @@ extends
     /**
      * Returns the specification that details the structure (meta-model) of this object.
      */
+    @Override
     ObjectSpecification getSpecification();
 
     /**
@@ -350,15 +353,6 @@ extends
      * The (untranslated) title of the wrapped pojo.
      */
     String getTitle();
-
-    // -- SHORTCUT - ELEMENT SPECIFICATION
-
-    /**
-     * As used for the element type of collections.
-     */
-    default Optional<ObjectSpecification> getElementSpecification() {
-        return getSpecification().getElementSpecification();
-    }
 
     // -- SHORTCUT - ICON
 

@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
 
@@ -45,9 +44,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.Facets;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -112,55 +109,56 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                 return memento.recreateStrategy.equals(memento, otherMemento);
             }
         },
-        /**
-         * represents a list of objects
-         */
-        VECTOR {
-
-            @Override
-            public ManagedObject asAdapter(
-                    final _ObjectMemento memento,
-                    final MetaModelContext mmc) {
-
-                // I believe this code path is no longer reachable
-                throw _Exceptions.unexpectedCodeReach();
-
-//                final Can<ManagedObject> managedObjects =
-//                        _NullSafe.stream(memento.list)
-//                        .map(Functions.toManagedObject(mmc))
-//                        .collect(Can.toCan());
+//        /**
+//         * represents a list of objects
+//         */
+//        VECTOR {
 //
-//                val commonSpec = ManagedObjects.commonSpecification(managedObjects)
-//                        .orElseGet(()->mmc.getSpecificationLoader().loadSpecification(Object.class));
+//            @Override
+//            public ManagedObject asAdapter(
+//                    final _ObjectMemento memento,
+//                    final MetaModelContext mmc) {
 //
-//                return ManagedObject.packed(commonSpec, managedObjects);
-            }
-
-            @Override
-            public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
-                return Bookmark.forLogicalTypeNameAndIdentifier(
-                        memento.getLogicalTypeName(),
-                        memento.list.toString());
-            }
-
-            @Override
-            public int hashCode(final _ObjectMemento memento) {
-                return memento.list.hashCode();
-            }
-
-            @Override
-            public boolean equals(final _ObjectMemento memento, final Object other) {
-                if (!(other instanceof _ObjectMemento)) {
-                    return false;
-                }
-                final _ObjectMemento otherMemento = (_ObjectMemento) other;
-                if(otherMemento.cardinality != VECTOR) {
-                    return false;
-                }
-                return memento.list.equals(otherMemento.list);
-            }
-
-        };
+//                // I believe this code path is no longer reachable
+//                throw _Exceptions.unexpectedCodeReach();
+//
+////                final Can<ManagedObject> managedObjects =
+////                        _NullSafe.stream(memento.list)
+////                        .map(Functions.toManagedObject(mmc))
+////                        .collect(Can.toCan());
+////
+////                val commonSpec = ManagedObjects.commonSpecification(managedObjects)
+////                        .orElseGet(()->mmc.getSpecificationLoader().loadSpecification(Object.class));
+////
+////                return ManagedObject.packed(commonSpec, managedObjects);
+//            }
+//
+//            @Override
+//            public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
+//                return Bookmark.forLogicalTypeNameAndIdentifier(
+//                        memento.getLogicalTypeName(),
+//                        memento.list.toString());
+//            }
+//
+//            @Override
+//            public int hashCode(final _ObjectMemento memento) {
+//                return memento.list.hashCode();
+//            }
+//
+//            @Override
+//            public boolean equals(final _ObjectMemento memento, final Object other) {
+//                if (!(other instanceof _ObjectMemento)) {
+//                    return false;
+//                }
+//                final _ObjectMemento otherMemento = (_ObjectMemento) other;
+//                if(otherMemento.cardinality != VECTOR) {
+//                    return false;
+//                }
+//                return memento.list.equals(otherMemento.list);
+//            }
+//
+//        }
+        ;
 
         void ensure(final Cardinality sort) {
             if(this == sort) {
@@ -192,14 +190,17 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                     final _ObjectMemento memento,
                     final MetaModelContext mmc) {
 
-                val valueSerializer = mmc.getSpecificationLoader()
+                val valueSpec = mmc.getSpecificationLoader()
                         .specForLogicalType(memento.logicalType)
-                        .flatMap(spec->Facets.valueSerializer(spec, spec.getCorrespondingClass()))
                         .orElseThrow(()->_Exceptions.unrecoverable(
-                                "logical type %s is expected to have a ValueFacet", memento.logicalType));
+                                "logical type %s is not recognized", memento.logicalType));
 
-                return mmc.getObjectManager().adapt(
-                        valueSerializer.fromEncodedString(Format.JSON, memento.encodableValue));
+                val valueSerializer = Facets.valueSerializer(valueSpec, valueSpec.getCorrespondingClass())
+                        .orElseThrow(()->_Exceptions.unrecoverable(
+                                "logical type %s is expected to have a value semantics", memento.logicalType));
+
+                return ManagedObject.value(valueSpec,
+                        valueSerializer.destring(Format.URL_SAFE, memento.encodableValue));
             }
 
             @Override
@@ -413,9 +414,11 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
             final ArrayList<_ObjectMemento> list,
             final LogicalType logicalType) {
 
-        this.cardinality = Cardinality.VECTOR;
-        this.list = list;
-        this.logicalType = logicalType;
+        throw _Exceptions.unexpectedCodeReach();
+
+        //this.cardinality = Cardinality.VECTOR;
+//        this.list = list;
+//        this.logicalType = logicalType;
     }
 
     private _ObjectMemento(final Bookmark bookmark, final SpecificationLoader specificationLoader) {
@@ -482,7 +485,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                 .orElse(null);
         val isEncodable = valueSerializer != null;
         if (isEncodable) {
-            encodableValue = valueSerializer.toEncodedString(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
+            encodableValue = valueSerializer.enstring(Format.URL_SAFE, _Casts.uncheckedCast(adapter.getPojo()));
             recreateStrategy = RecreateStrategy.VALUE;
             return;
         }
@@ -576,29 +579,6 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
     @Override
     public boolean equals(final Object obj) {
         return cardinality.equals(this, obj);
-    }
-
-    // -- FUNCTIONS
-
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    private static final class Functions {
-
-        private static Function<_ObjectMemento, ManagedObject> toManagedObject(
-                final MetaModelContext mmc) {
-
-            return memento->{
-                if(memento == null) {
-                    return ManagedObject.unspecified();
-                }
-                val objectAdapter = memento
-                        .reconstructObject(mmc);
-                if(objectAdapter == null) {
-                    return ManagedObject.unspecified();
-                }
-                return objectAdapter;
-            };
-        }
-
     }
 
     private void ensureScalar() {

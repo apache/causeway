@@ -142,7 +142,7 @@ public interface ObjectManager {
             return ManagedObject.unspecified();
         }
         return spec.isScalar()
-                ? managedObjectEagerlyBookmarkedIfRequired(spec, pojo)
+                ? ManagedObject.adaptScalar(spec, pojo)
                 : ManagedObject.packed(
                         spec.getElementSpecification().orElseGet(fallbackElementType),
                         _NullSafe.streamAutodetect(pojo)
@@ -173,25 +173,11 @@ public interface ObjectManager {
                 || pojo.getClass().equals(proposedSpec.getCorrespondingClass()))
             // if actual type matches spec's, we assume, that we don't need to reload,
             // so this is a shortcut for performance reasons
-            ? managedObjectEagerlyBookmarkedIfRequired(
-                    proposedSpec, pojo)
+            ? ManagedObject.adaptScalar(proposedSpec, pojo)
             // fallback, ignoring proposedSpec
             : adapt(pojo);
         return adapter;
     }
 
-    // -- HELPER
-
-    /**
-     * {@link ManagedObject} factory, that in case of given pojo representing an entity
-     * and the entityAdaptingMode equals {@link EntityAdaptingMode#isBookmarkable()},
-     * then tries to memoize its {@link Bookmark} eagerly
-     * (otherwise its {@link Bookmark} is lazily resolved).
-     */
-    private static ManagedObject managedObjectEagerlyBookmarkedIfRequired(
-            final ObjectSpecification spec,
-            final Object pojo) {
-        return ManagedObject.adaptScalar(spec, pojo);
-    }
 
 }

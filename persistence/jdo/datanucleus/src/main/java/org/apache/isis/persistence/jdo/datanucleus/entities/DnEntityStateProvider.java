@@ -67,7 +67,8 @@ public class DnEntityStateProvider implements JdoFacetContext {
             return EntityState.NOT_PERSISTABLE;
         }
 
-        if (pojo!=null && pojo instanceof Persistable) {
+        if (pojo!=null
+                && pojo instanceof Persistable) {
             val persistable = (Persistable) pojo;
             val isDeleted = persistable.dnIsDeleted();
             if(isDeleted) {
@@ -75,8 +76,11 @@ public class DnEntityStateProvider implements JdoFacetContext {
             }
             val isPersistent = persistable.dnIsPersistent();
             if(isPersistent) {
-                return persistable.dnGetObjectId()!=null
-                        ? EntityState.PERSISTABLE_ATTACHED
+                val oid = persistable.dnGetObjectId();
+                return oid!=null
+                        ? persistable.dnGetStateManager().isNew(persistable)
+                                ? EntityState.PERSISTABLE_NEW
+                                : EntityState.PERSISTABLE_ATTACHED
                         : EntityState.PERSISTABLE_NEW;
             }
             return EntityState.PERSISTABLE_DETACHED;

@@ -82,7 +82,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         if(mementoAdapter==null) {
             // sonar-ignore-on (fails to detect this as null guard)
             return ManagedObjects.isSpecified(adapter)
-                    ? new ObjectMementoForEmpty(adapter.getSpecification().getLogicalType())
+                    ? new ObjectMementoForEmpty(adapter.getLogicalType())
                     : null;
             // sonar-ignore-on
         }
@@ -96,7 +96,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
         return ObjectMementoCollection.of(
                 listOfMementos,
-                packedAdapter.getSpecification().getLogicalType());
+                packedAdapter.getLogicalType());
     }
 
     @Override
@@ -106,7 +106,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         }
         val mementoAdapter = _ObjectMemento.createOrNull(paramAdapter);
         if(mementoAdapter==null) {
-            return new ObjectMementoForEmpty(paramAdapter.getSpecification().getLogicalType());
+            return new ObjectMementoForEmpty(paramAdapter.getLogicalType());
         }
         return ObjectMementoAdapter.of(mementoAdapter);
     }

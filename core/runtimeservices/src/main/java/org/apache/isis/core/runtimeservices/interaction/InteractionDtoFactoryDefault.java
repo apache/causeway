@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.user.UserService;
@@ -36,7 +35,6 @@ import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -86,8 +84,10 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
         val owner = head.getOwner();
-        final Bookmark targetBookmark = owner.getBookmark()
-                .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", owner));
+
+        // transient entities have no bookmark, so fallback to UUID
+        val targetBookmark = ManagedObjects.bookmarkElseUUID(owner);
+                //.orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", owner));
 
         final String currentUser = userService.currentUserNameElseNobody();
 
@@ -132,8 +132,9 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final Interaction interaction = interactionProviderProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
-        final Bookmark targetBookmark = targetAdapter.getBookmark()
-                .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
+        // transient entities have no bookmark, so fallback to UUID
+        val targetBookmark = ManagedObjects.bookmarkElseUUID(targetAdapter);
+                //.orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", owner));
 
         final String currentUser = userService.currentUserNameElseNobody();
 

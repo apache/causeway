@@ -18,10 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets.object.value;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.value.semantics.ValueDecomposition;
 import org.apache.isis.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -35,21 +38,34 @@ implements ValueSerializer<T> {
     private final @NonNull ValueSemanticsProvider<T> semantics;
 
     @Override
-    public T fromEncodedString(final Format format, final String encodedData) {
-        _Assert.assertNotNull(encodedData);
+    public T destring(final @NonNull Format format, final @NonNull String encodedData) {
         if (ENCODED_NULL.equals(encodedData)) {
             return null;
-        } else {
+        }
+        switch(format) {
+        case JSON:
             return semantics.compose(
                     ValueDecomposition.fromJson(semantics.getSchemaValueType(), encodedData));
+        case URL_SAFE:
+            //TODO could use IdStringifiers instead
+            return destring(Format.JSON, _Strings.base64UrlDecode(encodedData));
         }
+        throw _Exceptions.unmatchedCase(format);
     }
 
     @Override
-    public String toEncodedString(final Format format, final T value) {
-        return value == null
-                ? ENCODED_NULL
-                : semantics.decompose(_Casts.uncheckedCast(value)).toJson();
+    public String enstring(final @NonNull Format format, final @Nullable T value) {
+        if(value == null) {
+            return ENCODED_NULL;
+        }
+        switch(format) {
+        case JSON:
+            return semantics.decompose(_Casts.uncheckedCast(value)).toJson();
+        case URL_SAFE:
+            //TODO could use IdStringifiers instead
+            return _Strings.base64UrlEncode(enstring(Format.JSON, value));
+        }
+        throw _Exceptions.unmatchedCase(format);
     }
 
 }

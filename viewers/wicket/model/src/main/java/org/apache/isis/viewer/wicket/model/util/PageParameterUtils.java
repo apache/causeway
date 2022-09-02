@@ -33,10 +33,8 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -210,13 +208,6 @@ public class PageParameterUtils {
         if(adapter == null) {
             return NULL_ARG;
         }
-
-        final ObjectSpecification objSpec = adapter.getSpecification();
-        if(objSpec.isValue()) {
-            return Facets.valueSerializerElseFail(objSpec, objSpec.getCorrespondingClass())
-            .toEncodedString(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
-        }
-
         return ManagedObjects.stringify(adapter).orElse(null);
     }
 
@@ -227,13 +218,6 @@ public class PageParameterUtils {
         if(NULL_ARG.equals(encoded)) {
             return null;
         }
-
-        if(objSpec.isValue()) {
-            return ManagedObject.value(objSpec,
-                    Facets.valueSerializerElseFail(objSpec, objSpec.getCorrespondingClass())
-                        .fromEncodedString(Format.JSON, encoded));
-        }
-
         try {
             return Bookmark.parseUrlEncoded(encoded)
                     .flatMap(mmc::loadObject)

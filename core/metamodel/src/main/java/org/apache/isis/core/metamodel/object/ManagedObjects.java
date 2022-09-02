@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
@@ -159,6 +160,14 @@ public final class ManagedObjects {
     public static Bookmark bookmarkElseFail(final @Nullable ManagedObject managedObject) {
         return bookmark(managedObject)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", managedObject));
+    }
+
+    /**
+     * eg. transient entities have no bookmark, so can fallback to UUID
+     */
+    public static Bookmark bookmarkElseUUID(final @Nullable ManagedObject managedObject) {
+        return bookmark(managedObject)
+                .orElseGet(()->managedObject.createBookmark(UUID.randomUUID().toString()));
     }
 
     /**
@@ -368,7 +377,7 @@ public final class ManagedObjects {
         .collect(Can.toCan());
     }
 
-    
+
 
     // -- IMPERATIVE TEXT UTILITY
 
