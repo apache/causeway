@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
@@ -169,8 +168,8 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         dto.setUsername(userService.currentUserNameElseNobody());
         dto.setTimestamp(clockService.getClock().nowAsXmlGregorianCalendar());
 
-        // transient entities have no bookmark, so fallback to UUID
-        final Bookmark bookmark = ManagedObjects.bookmarkElseUUID(targetHead.getOwner());
+        // transient/detached entities have no bookmark, fail early
+        val bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
         final OidsDto targetOids = CommandDtoUtils.targetsFor(dto);
         targetOids.getOid().add(bookmark.toOidDto());
 

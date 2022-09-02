@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.identify;
 
-import java.util.UUID;
+import java.util.Optional;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
@@ -40,7 +40,7 @@ class ObjectBookmarker_builtinHandlers {
         }
 
         @Override
-        public Bookmark handle(final ManagedObject managedObject) {
+        public Optional<Bookmark> handle(final ManagedObject managedObject) {
             throw new IllegalArgumentException("Cannot create a Bookmark for pojo, "
                     + "when pojo is instance of Bookmark. You might want to ask "
                     + "ObjectAdapterByIdProvider for an ObjectAdapter instead.");
@@ -56,8 +56,8 @@ class ObjectBookmarker_builtinHandlers {
         }
 
         @Override
-        public Bookmark handle(final ManagedObject managedObject) {
-            return bookmarkWithRandomUUID(managedObject);
+        public Optional<Bookmark> handle(final ManagedObject managedObject) {
+            return Optional.empty();
         }
 
     }
@@ -70,8 +70,8 @@ class ObjectBookmarker_builtinHandlers {
         }
 
         @Override
-        public Bookmark handle(final ManagedObject managedObject) {
-            return managedObject.getBookmark().orElseThrow();
+        public Optional<Bookmark> handle(final ManagedObject managedObject) {
+            return managedObject.getBookmark();
         }
     }
 
@@ -83,9 +83,8 @@ class ObjectBookmarker_builtinHandlers {
         }
 
         @Override
-        public Bookmark handle(final ManagedObject managedObject) {
-            return managedObject.getBookmark()
-                    .orElseGet(()->bookmarkWithRandomUUID(managedObject)); // transient
+        public Optional<Bookmark> handle(final ManagedObject managedObject) {
+            return managedObject.getBookmark(); // could be empty that is detached or transient
         }
 
     }
@@ -99,9 +98,9 @@ class ObjectBookmarker_builtinHandlers {
 
         @SneakyThrows
         @Override
-        public Bookmark handle(final ManagedObject managedObject) {
+        public Optional<Bookmark> handle(final ManagedObject managedObject) {
             _Assert.assertTrue(managedObject.isBookmarkSupported(), ()->"is bookmarkable");
-            return managedObject.getBookmark().orElseThrow();
+            return managedObject.getBookmark();
         }
 
     }
@@ -114,14 +113,14 @@ class ObjectBookmarker_builtinHandlers {
         }
 
         @Override
-        public Bookmark handle(final ManagedObject managedObject) {
+        public Optional<Bookmark> handle(final ManagedObject managedObject) {
 
             if(managedObject.isBookmarkMemoized()) {
-                return managedObject.getBookmark().get();
+                return managedObject.getBookmark();
             }
 
             val spec = managedObject.getSpecification();
-            return spec.viewmodelFacetElseFail().serializeToBookmark(managedObject);
+            return Optional.ofNullable(spec.viewmodelFacetElseFail().serializeToBookmark(managedObject));
         }
 
     }
@@ -134,17 +133,9 @@ class ObjectBookmarker_builtinHandlers {
         }
 
         @Override
-        public Bookmark handle(final ManagedObject managedObject) {
-            return bookmarkWithRandomUUID(managedObject);
+        public Optional<Bookmark> handle(final ManagedObject managedObject) {
+            return Optional.empty();
         }
-    }
-
-    // -- HELPER
-
-    private static Bookmark bookmarkWithRandomUUID(final ManagedObject managedObject) {
-        val uuid = UUID.randomUUID().toString();
-        System.err.printf("called bookmarkWithRandomUUID %s [%s]%n", managedObject.getSpecification(), uuid);
-        return managedObject.createBookmark(UUID.randomUUID().toString());
     }
 
 }

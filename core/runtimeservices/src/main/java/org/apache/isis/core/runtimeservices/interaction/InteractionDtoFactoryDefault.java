@@ -85,9 +85,8 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
         val owner = head.getOwner();
 
-        // transient entities have no bookmark, so fallback to UUID
-        val targetBookmark = ManagedObjects.bookmarkElseUUID(owner);
-                //.orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", owner));
+        // transient/detached entities have no bookmark, fail early
+        val targetBookmark = ManagedObjects.bookmarkElseFail(owner);
 
         final String currentUser = userService.currentUserNameElseNobody();
 
@@ -132,9 +131,8 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final Interaction interaction = interactionProviderProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
-        // transient entities have no bookmark, so fallback to UUID
-        val targetBookmark = ManagedObjects.bookmarkElseUUID(targetAdapter);
-                //.orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", owner));
+        // transient/detached entities have no bookmark, fail early
+        val targetBookmark = ManagedObjects.bookmarkElseFail(targetAdapter);
 
         final String currentUser = userService.currentUserNameElseNobody();
 

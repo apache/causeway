@@ -26,6 +26,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
@@ -89,8 +90,14 @@ public interface ObjectManager {
      * Returns an object identifier for the instance.
      * @param managedObject
      */
-    public default Bookmark bookmarkObject(final ManagedObject managedObject) {
+    public default Optional<Bookmark> bookmarkObject(final ManagedObject managedObject) {
         return getObjectBookmarker().bookmarkObject(managedObject);
+    }
+
+    public default Bookmark bookmarkObjectElseFail(final ManagedObject managedObject) {
+        return bookmarkObject(managedObject)
+                .orElseThrow(()->
+                    _Exceptions.unrecoverable("failed to bookmark %s", managedObject.getSpecification()));
     }
 
     /**

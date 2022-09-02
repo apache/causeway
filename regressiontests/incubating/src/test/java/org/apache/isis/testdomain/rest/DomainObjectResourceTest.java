@@ -92,7 +92,7 @@ class DomainObjectResourceTest {
         val objectAdapter = objectManager.adapt(layoutDemo);
         val spec = objectAdapter.getSpecification();
         val domainType = spec.getLogicalTypeName();
-        val instanceId = objectManager.bookmarkObject(objectAdapter).getIdentifier(); //TODO also needs URL encoding
+        val instanceId = objectManager.bookmarkObjectElseFail(objectAdapter).getIdentifier(); //TODO also needs URL encoding
 
         val layoutResourceDescriptor =
                 ResourceDescriptor
@@ -128,7 +128,7 @@ class DomainObjectResourceTest {
         val objectAdapter = objectManager.adapt(blobDemo);
         val spec = objectAdapter.getSpecification();
         val domainType = spec.getLogicalTypeName();
-        val instanceId = objectManager.bookmarkObject(objectAdapter).getIdentifier(); //TODO also needs URL encoding
+        val instanceId = objectManager.bookmarkObjectElseFail(objectAdapter).getIdentifier(); //TODO also needs URL encoding
 
         val layoutResourceDescriptor =
                 ResourceDescriptor

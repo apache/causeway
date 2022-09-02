@@ -99,10 +99,8 @@ extends ModelAbstract<ManagedObject> {
     public static BookmarkedObjectWkt ofAdapter(
             final @NonNull IsisAppCommonContext commonContext,
             final @Nullable ManagedObject domainObject) {
-        val bookmark = commonContext
-                .getObjectManager()
-                .getObjectBookmarker()
-                .bookmarkObject(domainObject);
+        val bookmark = commonContext.getObjectManager()
+                .bookmarkObjectElseFail(domainObject);
         return new BookmarkedObjectWkt(commonContext, bookmark, domainObject);
     }
 

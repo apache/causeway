@@ -74,6 +74,9 @@ implements HasCommonContext {
     }
 
     protected final @Nullable ObjectMemento mementoFromId(final @Nullable String id) {
+        if(NULL_ID.equals(id)) {
+            return null;
+        }
         return ObjectMemento.destringFromUrlBase64(id);
     }
 

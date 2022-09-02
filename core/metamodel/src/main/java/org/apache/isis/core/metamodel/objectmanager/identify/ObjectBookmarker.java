@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.metamodel.objectmanager.identify;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.handler.ChainOfResponsibility;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -28,11 +31,11 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
  */
 public interface ObjectBookmarker {
 
-    Bookmark bookmarkObject(ManagedObject managedObject);
+    Optional<Bookmark> bookmarkObject(ManagedObject managedObject);
 
     // -- HANDLER
 
-    public interface Handler extends ChainOfResponsibility.Handler<ManagedObject, Bookmark> {}
+    public interface Handler extends ChainOfResponsibility.Handler<ManagedObject, Optional<Bookmark>> {}
 
     // -- FACTORY
 
@@ -40,15 +43,18 @@ public interface ObjectBookmarker {
         return managedObject ->
             ChainOfResponsibility.named(
                     "ObjectBookmarker",
-                    _Lists.of(
-                            new ObjectBookmarker_builtinHandlers.GuardAgainstOid(),
-                            new ObjectBookmarker_builtinHandlers.BookmarkForNonScalar(),
-                            new ObjectBookmarker_builtinHandlers.BookmarkForServices(),
-                            new ObjectBookmarker_builtinHandlers.BookmarkForValues(),
-                            new ObjectBookmarker_builtinHandlers.BookmarkForViewModels(),
-                            new ObjectBookmarker_builtinHandlers.BookmarkForEntities(),
-                            new ObjectBookmarker_builtinHandlers.BookmarkForOthers()))
+                    handlers)
             .handle(managedObject);
     }
+
+    static final List<Handler> handlers =
+            _Lists.of(
+                    new ObjectBookmarker_builtinHandlers.GuardAgainstOid(),
+                    new ObjectBookmarker_builtinHandlers.BookmarkForNonScalar(),
+                    new ObjectBookmarker_builtinHandlers.BookmarkForServices(),
+                    new ObjectBookmarker_builtinHandlers.BookmarkForValues(),
+                    new ObjectBookmarker_builtinHandlers.BookmarkForViewModels(),
+                    new ObjectBookmarker_builtinHandlers.BookmarkForEntities(),
+                    new ObjectBookmarker_builtinHandlers.BookmarkForOthers());
 
 }
