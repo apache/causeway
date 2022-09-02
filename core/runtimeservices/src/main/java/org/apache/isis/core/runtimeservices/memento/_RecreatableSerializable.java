@@ -21,7 +21,6 @@ package org.apache.isis.core.runtimeservices.memento;
 import java.util.Arrays;
 import java.util.Objects;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -49,20 +48,8 @@ class _RecreatableSerializable implements _Recreatable{
 
     @Override
     public int hashCode(final _ObjectMemento memento) {
-        return Arrays.hashCode(memento.serializedObject); // potentially expensive, unfortunately cannot be cached in enum
+        //FIXME potentially expensive, unfortunately cannot be cached in enum
+        return Arrays.hashCode(memento.serializedObject);
     }
 
-    @Override
-    public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
-        return Bookmark.forLogicalTypeNameAndIdentifier(
-                memento.getLogicalTypeName(),
-                "SERIALIZABLE");
-    }
-
-    @Override
-    public void resetVersion(
-            final _ObjectMemento memento,
-            final MetaModelContext mmc) {
-        // nope
-    }
 }

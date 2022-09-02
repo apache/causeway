@@ -162,8 +162,8 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
         }
 
         @Override
-        public Bookmark bookmark() {
-            return delegate.asBookmark();
+        public Bookmark getBookmark() {
+            return delegate.getBookmark();
         }
 
         @Override

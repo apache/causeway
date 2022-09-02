@@ -65,7 +65,7 @@ public class BookmarkServiceDefault implements BookmarkService {
         if(bookmarkHolder == null) {
             return Optional.empty();
         }
-        val bookmark = bookmarkHolder.bookmark();
+        val bookmark = bookmarkHolder.getBookmark();
         return bookmark != null
                 ? lookup(bookmark)
                 : Optional.empty();

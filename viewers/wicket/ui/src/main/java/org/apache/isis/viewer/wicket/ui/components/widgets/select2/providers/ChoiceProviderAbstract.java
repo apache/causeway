@@ -72,7 +72,7 @@ implements HasCommonContext {
         if (choiceMemento == null) {
             return NULL_ID;
         }
-        return choiceMemento.bookmark().stringify();
+        return choiceMemento.getBookmark().stringify();
     }
 
     @Override

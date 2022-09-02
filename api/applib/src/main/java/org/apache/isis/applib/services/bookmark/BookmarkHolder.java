@@ -34,5 +34,5 @@ public interface BookmarkHolder {
     /**
      * A reference to an arbitrary domain object, as a {@link Bookmark}.
      */
-    Bookmark bookmark();
+    Bookmark getBookmark();
 }

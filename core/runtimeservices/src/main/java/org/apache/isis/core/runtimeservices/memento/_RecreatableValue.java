@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.memento;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -44,11 +43,6 @@ class _RecreatableValue implements _Recreatable{
     }
 
     @Override
-    public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
-        return memento.bookmark;
-    }
-
-    @Override
     public boolean equals(
             final _ObjectMemento memento,
             final _ObjectMemento otherMemento) {
@@ -62,9 +56,4 @@ class _RecreatableValue implements _Recreatable{
         return memento.bookmark.hashCode();
     }
 
-    @Override
-    public void resetVersion(
-            final _ObjectMemento memento,
-            final MetaModelContext mmc) {
-    }
 }

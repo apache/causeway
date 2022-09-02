@@ -49,7 +49,7 @@ public final class ObjectMementoCollection implements ObjectMemento {
     }
 
     @Override
-    public Bookmark bookmark() {
+    public Bookmark getBookmark() {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
 

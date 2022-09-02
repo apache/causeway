@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.memento;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -64,15 +63,6 @@ interface _Recreatable {
             return delegate.hashCode();
         }
 
-        @Override
-        public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
-            return delegate.asPseudoBookmark(memento);
-        }
-
-        @Override
-        public void resetVersion(final _ObjectMemento memento, final MetaModelContext mmc) {
-            delegate.resetVersion(memento, mmc);
-        }
     }
 
     ManagedObject recreateObject(_ObjectMemento memento, MetaModelContext mmc);
@@ -80,9 +70,5 @@ interface _Recreatable {
     boolean equals(_ObjectMemento memento, _ObjectMemento otherMemento);
 
     int hashCode(_ObjectMemento memento);
-
-    Bookmark asPseudoBookmark(_ObjectMemento memento);
-
-    void resetVersion(_ObjectMemento memento, MetaModelContext mmc);
 
 }

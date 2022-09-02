@@ -63,10 +63,10 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
     _Recreatable.RecreateStrategy recreateStrategy;
 
-    byte[] serializedObject;
+    @Getter private String titleString;
+    @Getter Bookmark bookmark;
 
-    Bookmark bookmark;
-    private String titleString;
+    byte[] serializedObject;
 
     private _ObjectMemento(final Bookmark bookmark, final SpecificationLoader specLoader) {
 
@@ -125,6 +125,9 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
             val serializer = spec.getMetaModelContext().getObjectManager().getObjectSerializer();
             serializedObject = serializer.serialize(adapter);
             recreateStrategy = _Recreatable.RecreateStrategy.SERIALIZABLE;
+            // pseudo bookmark
+            bookmark = Bookmark.forLogicalTypeNameAndIdentifier(
+                    getLogicalTypeName(), "SERIALIZABLE");
             return;
         }
 
@@ -137,27 +140,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
     }
 
-    public String getTitleString() {
-        return titleString;
-    }
-
-    public Bookmark asBookmark() {
-        val bookmark = asStrictBookmark();
-        return bookmark!=null
-                ? bookmark
-                : asPseudoBookmark();
-    }
-
-    private Bookmark asStrictBookmark() {
-        return bookmark;
-    }
-
-    private Bookmark asPseudoBookmark() {
-        return recreateStrategy.asPseudoBookmark(this);
-    }
-
     ManagedObject reconstructObject(final MetaModelContext mmc) {
-
         val specificationLoader = mmc.getSpecificationLoader();
         val spec = specificationLoader.specForLogicalType(logicalType).orElse(null);
         if(spec==null) {

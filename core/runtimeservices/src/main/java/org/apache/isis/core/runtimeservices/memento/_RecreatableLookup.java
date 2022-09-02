@@ -20,11 +20,9 @@ package org.apache.isis.core.runtimeservices.memento;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -44,36 +42,8 @@ class _RecreatableLookup implements _Recreatable{
 
         val bookmark = memento.bookmark;
 
-        //FIXME remove silent swallower
-        try {
-
-            log.debug("lookup by oid [{}]", bookmark);
-            return mmc.loadObject(bookmark).orElse(null);
-
-        } finally {
-            // possibly out-dated insight ...
-            // a side-effect of AdapterManager#adapterFor(...) is that it will update the oid
-            // with the correct version, even when there is a concurrency exception
-            // we copy this updated oid string into our memento so that, if we retry,
-            // we will succeed second time around
-        }
-    }
-
-    @Override
-    public void resetVersion(
-            final _ObjectMemento memento,
-            final MetaModelContext mmc) {
-
-        //FIXME remove
-        //XXX REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
-        ManagedObject adapter = recreateObject(memento, mmc);
-
-        memento.bookmark = ManagedObjects.bookmarkElseFail(adapter);
-    }
-
-    @Override
-    public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
-        return memento.bookmark;
+        log.debug("lookup by {}", bookmark);
+        return mmc.loadObject(bookmark).orElse(null);
     }
 
     @Override
