@@ -20,20 +20,20 @@ package org.apache.isis.core.runtimeservices.memento;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Optional;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintIdProvider;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmTitleUtil;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.util.Facets;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -45,17 +45,15 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
     // -- FACTORIES
 
-    public static _ObjectMemento createOrNull(final ManagedObject adapter) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
-            return null;
-        }
-        return new _ObjectMemento(adapter);
+    public static Optional<_ObjectMemento> create(final @Nullable ManagedObject adapter) {
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+                ? Optional.empty()
+                : Optional.of(new _ObjectMemento(adapter));
     }
 
     static _ObjectMemento createPersistent(
             final Bookmark bookmark,
             final SpecificationLoader specificationLoader) {
-
         return new _ObjectMemento(bookmark, specificationLoader);
     }
 
@@ -63,32 +61,30 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
     @Getter(onMethod_ = {@Override}) final LogicalType logicalType;
 
-    _Recreatable.RecreateStrategy recreateStrategy;
-    String encodableValue;
+    transient _Recreatable.RecreateStrategy recreateStrategy;
+
     byte[] serializedObject;
-    String persistentOidStr;
+    String stringifiedBookmark;
 
     private Bookmark bookmark;
     private String titleString;
 
-    private _ObjectMemento(final Bookmark bookmark, final SpecificationLoader specificationLoader) {
+    private _ObjectMemento(final Bookmark bookmark, final SpecificationLoader specLoader) {
 
-        // -- // TODO[2112] do we ever need to create ENCODEABLE here?
         val logicalTypeName = bookmark.getLogicalTypeName();
-        val spec = specificationLoader.specForLogicalTypeName(logicalTypeName)
+        val spec = specLoader.specForLogicalTypeName(logicalTypeName)
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "cannot recreate spec from logicalTypeName %s", logicalTypeName));
 
         this.logicalType = spec.getLogicalType();
+        this.stringifiedBookmark = bookmark.stringify();
+        Objects.requireNonNull(stringifiedBookmark, "stringifiedBookmark");
+
 
         if(spec.isValue()) {
-            this.encodableValue = bookmark.getIdentifier();
             this.recreateStrategy = _Recreatable.RecreateStrategy.VALUE;
             return;
         }
-
-        this.persistentOidStr = bookmark.stringify();
-        Objects.requireNonNull(persistentOidStr, "persistentOidStr");
 
         this.bookmark = bookmark;
         this.recreateStrategy = _Recreatable.RecreateStrategy.LOOKUP;
@@ -98,12 +94,6 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
         val spec = adapter.getSpecification();
         this.logicalType = spec.getLogicalType();
         init(adapter);
-    }
-
-    private _ObjectMemento(final LogicalType logicalType, final String encodableValue) {
-        this.logicalType = logicalType;
-        this.encodableValue = encodableValue;
-        this.recreateStrategy = _Recreatable.RecreateStrategy.VALUE;
     }
 
     private void init(final ManagedObject adapter) {
@@ -123,16 +113,14 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                         ? bookmark.withHintId(hintId)
                         : bookmark;
 
-            persistentOidStr = bookmark.stringify();
+            stringifiedBookmark = bookmark.stringify();
             recreateStrategy = _Recreatable.RecreateStrategy.LOOKUP;
             return;
         }
 
-        val valueSerializer = Facets.valueSerializer(spec, spec.getCorrespondingClass())
-                .orElse(null);
-        val isEncodable = valueSerializer != null;
-        if (isEncodable) {
-            encodableValue = valueSerializer.enstring(Format.URL_SAFE, _Casts.uncheckedCast(adapter.getPojo()));
+        if (spec.isValue()) {
+            bookmark = ManagedObjects.bookmarkElseFail(adapter);
+            stringifiedBookmark = bookmark.stringify();
             recreateStrategy = _Recreatable.RecreateStrategy.VALUE;
             return;
         }
@@ -199,8 +187,7 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
         if (!(other instanceof _ObjectMemento)) {
             return false;
         }
-        final _ObjectMemento otherMemento = (_ObjectMemento) other;
-        return recreateStrategy.equals(this, otherMemento);
+        return recreateStrategy.equals(this, (_ObjectMemento) other);
     }
 
 }

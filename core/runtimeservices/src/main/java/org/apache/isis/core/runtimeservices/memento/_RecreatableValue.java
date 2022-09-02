@@ -21,9 +21,8 @@ package org.apache.isis.core.runtimeservices.memento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.util.Facets;
+import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 
 import lombok.val;
 
@@ -39,19 +38,22 @@ class _RecreatableValue implements _Recreatable{
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "logical type %s is not recognized", memento.logicalType));
 
-        val valueSerializer = Facets.valueSerializer(valueSpec, valueSpec.getCorrespondingClass())
-                .orElseThrow(()->_Exceptions.unrecoverable(
-                        "logical type %s is expected to have a value semantics", memento.logicalType));
+        val bookmark = Bookmark.parseElseFail(memento.stringifiedBookmark);
 
-        return ManagedObject.value(valueSpec,
-                valueSerializer.destring(Format.URL_SAFE, memento.encodableValue));
+        return mmc.getObjectManager().loadObject(ObjectLoader.Request.of(valueSpec, bookmark));
+
+//
+//        val valueSerializer = Facets.valueSerializer(valueSpec, valueSpec.getCorrespondingClass())
+//                .orElseThrow(()->_Exceptions.unrecoverable(
+//                        "logical type %s is expected to have a value semantics", memento.logicalType));
+//
+//        return ManagedObject.value(valueSpec,
+//                valueSerializer.destring(Format.URL_SAFE, memento.stringifiedBookmark));
     }
 
     @Override
     public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
-        return Bookmark.forLogicalTypeNameAndIdentifier(
-                memento.getLogicalTypeName(),
-                memento.encodableValue);
+        return memento.asBookmark();
     }
 
     @Override
@@ -60,12 +62,12 @@ class _RecreatableValue implements _Recreatable{
             final _ObjectMemento otherMemento) {
 
         return otherMemento.recreateStrategy == RecreateStrategy.VALUE
-                && memento.encodableValue.equals(otherMemento.encodableValue);
+                && memento.stringifiedBookmark.equals(otherMemento.stringifiedBookmark);
     }
 
     @Override
     public int hashCode(final _ObjectMemento memento) {
-        return memento.encodableValue.hashCode();
+        return memento.stringifiedBookmark.hashCode();
     }
 
     @Override

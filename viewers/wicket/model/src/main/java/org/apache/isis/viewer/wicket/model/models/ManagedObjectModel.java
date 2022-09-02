@@ -101,8 +101,9 @@ extends ModelAbstract<ManagedObject> {
 
         val pojos = adapter.getPojo();
         memento = super.getMementoService()
-                .mementoForPojos(_Casts.uncheckedCast(pojos), getLogicalElementType()
-                        .orElseGet(()->adapter.getElementSpecification().get().getLogicalType()));
+                .mementoForPojos(getLogicalElementType()
+                            .orElseGet(()->adapter.getElementSpecification().get().getLogicalType()),
+                        _Casts.uncheckedCast(pojos));
     }
 
     public final Bookmark asBookmarkIfSupported() {

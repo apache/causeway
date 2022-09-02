@@ -37,12 +37,12 @@ class _RecreatableLookup implements _Recreatable{
             final _ObjectMemento memento,
             final MetaModelContext mmc) {
 
-        if(_NullSafe.isEmpty(memento.persistentOidStr)) {
+        if(_NullSafe.isEmpty(memento.stringifiedBookmark)) {
             throw _Exceptions.illegalArgument(
                     "need an id to lookup an object, got logical-type %s", memento.logicalType);
         }
 
-        final Bookmark bookmark = Bookmark.parseElseFail(memento.persistentOidStr);
+        final Bookmark bookmark = Bookmark.parseElseFail(memento.stringifiedBookmark);
 
         try {
 
@@ -56,7 +56,7 @@ class _RecreatableLookup implements _Recreatable{
             // we copy this updated oid string into our memento so that, if we retry,
             // we will succeed second time around
 
-            memento.persistentOidStr = bookmark.stringify();
+            memento.stringifiedBookmark = bookmark.stringify();
         }
     }
 
@@ -68,7 +68,7 @@ class _RecreatableLookup implements _Recreatable{
         //XXX REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
         ManagedObject adapter = recreateObject(memento, mmc);
 
-        memento.persistentOidStr = ManagedObjects.stringifyElseFail(adapter);
+        memento.stringifiedBookmark = ManagedObjects.stringifyElseFail(adapter);
     }
 
     @Override
@@ -79,11 +79,11 @@ class _RecreatableLookup implements _Recreatable{
     @Override
     public boolean equals(final _ObjectMemento oam, final _ObjectMemento other) {
         return other.recreateStrategy == RecreateStrategy.LOOKUP
-                && oam.persistentOidStr.equals(other.persistentOidStr);
+                && oam.stringifiedBookmark.equals(other.stringifiedBookmark);
     }
 
     @Override
     public int hashCode(final _ObjectMemento oam) {
-        return oam.persistentOidStr.hashCode();
+        return oam.stringifiedBookmark.hashCode();
     }
 }
