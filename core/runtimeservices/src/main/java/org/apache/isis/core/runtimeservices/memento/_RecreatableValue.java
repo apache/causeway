@@ -38,22 +38,14 @@ class _RecreatableValue implements _Recreatable{
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "logical type %s is not recognized", memento.logicalType));
 
-        val bookmark = Bookmark.parseElseFail(memento.stringifiedBookmark);
+        val bookmark = memento.bookmark;
 
         return mmc.getObjectManager().loadObject(ObjectLoader.Request.of(valueSpec, bookmark));
-
-//
-//        val valueSerializer = Facets.valueSerializer(valueSpec, valueSpec.getCorrespondingClass())
-//                .orElseThrow(()->_Exceptions.unrecoverable(
-//                        "logical type %s is expected to have a value semantics", memento.logicalType));
-//
-//        return ManagedObject.value(valueSpec,
-//                valueSerializer.destring(Format.URL_SAFE, memento.stringifiedBookmark));
     }
 
     @Override
     public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
-        return memento.asBookmark();
+        return memento.bookmark;
     }
 
     @Override
@@ -62,12 +54,12 @@ class _RecreatableValue implements _Recreatable{
             final _ObjectMemento otherMemento) {
 
         return otherMemento.recreateStrategy == RecreateStrategy.VALUE
-                && memento.stringifiedBookmark.equals(otherMemento.stringifiedBookmark);
+                && memento.bookmark.equals(otherMemento.bookmark);
     }
 
     @Override
     public int hashCode(final _ObjectMemento memento) {
-        return memento.stringifiedBookmark.hashCode();
+        return memento.bookmark.hashCode();
     }
 
     @Override

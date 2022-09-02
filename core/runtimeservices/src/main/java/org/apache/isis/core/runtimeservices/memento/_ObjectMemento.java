@@ -61,12 +61,11 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
     @Getter(onMethod_ = {@Override}) final LogicalType logicalType;
 
-    transient _Recreatable.RecreateStrategy recreateStrategy;
+    _Recreatable.RecreateStrategy recreateStrategy;
 
     byte[] serializedObject;
-    String stringifiedBookmark;
 
-    private Bookmark bookmark;
+    Bookmark bookmark;
     private String titleString;
 
     private _ObjectMemento(final Bookmark bookmark, final SpecificationLoader specLoader) {
@@ -77,9 +76,8 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                         "cannot recreate spec from logicalTypeName %s", logicalTypeName));
 
         this.logicalType = spec.getLogicalType();
-        this.stringifiedBookmark = bookmark.stringify();
-        Objects.requireNonNull(stringifiedBookmark, "stringifiedBookmark");
-
+        this.bookmark = bookmark;
+        Objects.requireNonNull(bookmark, "bookmark");
 
         if(spec.isValue()) {
             this.recreateStrategy = _Recreatable.RecreateStrategy.VALUE;
@@ -113,14 +111,12 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                         ? bookmark.withHintId(hintId)
                         : bookmark;
 
-            stringifiedBookmark = bookmark.stringify();
             recreateStrategy = _Recreatable.RecreateStrategy.LOOKUP;
             return;
         }
 
         if (spec.isValue()) {
             bookmark = ManagedObjects.bookmarkElseFail(adapter);
-            stringifiedBookmark = bookmark.stringify();
             recreateStrategy = _Recreatable.RecreateStrategy.VALUE;
             return;
         }

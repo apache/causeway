@@ -21,12 +21,12 @@ package org.apache.isis.core.runtimeservices.memento;
 import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -37,13 +37,14 @@ class _RecreatableLookup implements _Recreatable{
             final _ObjectMemento memento,
             final MetaModelContext mmc) {
 
-        if(_NullSafe.isEmpty(memento.stringifiedBookmark)) {
+        if(memento.bookmark==null) {
             throw _Exceptions.illegalArgument(
                     "need an id to lookup an object, got logical-type %s", memento.logicalType);
         }
 
-        final Bookmark bookmark = Bookmark.parseElseFail(memento.stringifiedBookmark);
+        val bookmark = memento.bookmark;
 
+        //FIXME remove silent swallower
         try {
 
             log.debug("lookup by oid [{}]", bookmark);
@@ -55,8 +56,6 @@ class _RecreatableLookup implements _Recreatable{
             // with the correct version, even when there is a concurrency exception
             // we copy this updated oid string into our memento so that, if we retry,
             // we will succeed second time around
-
-            memento.stringifiedBookmark = bookmark.stringify();
         }
     }
 
@@ -65,25 +64,26 @@ class _RecreatableLookup implements _Recreatable{
             final _ObjectMemento memento,
             final MetaModelContext mmc) {
 
+        //FIXME remove
         //XXX REVIEW: this may be redundant because recreateAdapter also guarantees the version will be reset.
         ManagedObject adapter = recreateObject(memento, mmc);
 
-        memento.stringifiedBookmark = ManagedObjects.stringifyElseFail(adapter);
+        memento.bookmark = ManagedObjects.bookmarkElseFail(adapter);
     }
 
     @Override
     public Bookmark asPseudoBookmark(final _ObjectMemento memento) {
-        return memento.asBookmark();
+        return memento.bookmark;
     }
 
     @Override
     public boolean equals(final _ObjectMemento oam, final _ObjectMemento other) {
         return other.recreateStrategy == RecreateStrategy.LOOKUP
-                && oam.stringifiedBookmark.equals(other.stringifiedBookmark);
+                && oam.bookmark.equals(other.bookmark);
     }
 
     @Override
     public int hashCode(final _ObjectMemento oam) {
-        return oam.stringifiedBookmark.hashCode();
+        return oam.bookmark.hashCode();
     }
 }
