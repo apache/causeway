@@ -28,7 +28,7 @@ class _RecreatableSerializable implements _Recreatable{
 
     @Override
     public ManagedObject recreateObject(
-            final _ObjectMementoForSingleton memento,
+            final _ObjectMementoForScalar memento,
             final MetaModelContext mmc) {
         ObjectSpecification spec = mmc.getSpecificationLoader()
                 .specForLogicalTypeElseFail(memento.logicalType);
@@ -38,15 +38,15 @@ class _RecreatableSerializable implements _Recreatable{
 
     @Override
     public boolean equals(
-            final _ObjectMementoForSingleton memento,
-            final _ObjectMementoForSingleton otherMemento) {
+            final _ObjectMementoForScalar memento,
+            final _ObjectMementoForScalar otherMemento) {
         return otherMemento.recreateStrategy == RecreateStrategy.SERIALIZABLE
                 && Objects.equals(memento.logicalType, otherMemento.logicalType)
                 && Objects.equals(memento.serializedPayload, otherMemento.serializedPayload);
     }
 
     @Override
-    public int hashCode(final _ObjectMementoForSingleton memento) {
+    public int hashCode(final _ObjectMementoForScalar memento) {
         // thats where we stored the hash of the originating pojo
         return memento.bookmark.getIdentifier().hashCode();
     }

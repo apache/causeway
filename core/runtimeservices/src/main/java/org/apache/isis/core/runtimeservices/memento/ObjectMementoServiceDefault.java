@@ -69,14 +69,14 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
 
     @Override
     public ObjectMemento mementoForBookmark(@NonNull final Bookmark bookmark) {
-        return _ObjectMementoForSingleton.createPersistent(bookmark, specificationLoader);
+        return _ObjectMementoForScalar.createPersistent(bookmark, specificationLoader);
     }
 
     @Override
     public ObjectMemento mementoForSingle(@Nullable final ManagedObject adapter) {
         MmAssertionUtil.assertPojoIsScalar(adapter);
 
-        return _ObjectMementoForSingleton.create(adapter)
+        return _ObjectMementoForScalar.create(adapter)
             .map(ObjectMemento.class::cast)
             .orElseGet(()->
                 ManagedObjects.isSpecified(adapter)
@@ -137,8 +137,8 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
             return ManagedObject.packed(elementSpec, objects);
         }
 
-        if(memento instanceof _ObjectMementoForSingleton) {
-            val objectMementoAdapter = (_ObjectMementoForSingleton) memento;
+        if(memento instanceof _ObjectMementoForScalar) {
+            val objectMementoAdapter = (_ObjectMementoForScalar) memento;
             return objectMementoAdapter.reconstructObject(mmc);
         }
 

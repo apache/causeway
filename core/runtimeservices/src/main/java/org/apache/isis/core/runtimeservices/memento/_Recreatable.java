@@ -49,26 +49,26 @@ interface _Recreatable {
         private final _Recreatable delegate;
 
         @Override
-        public ManagedObject recreateObject(final _ObjectMementoForSingleton memento, final MetaModelContext mmc) {
+        public ManagedObject recreateObject(final _ObjectMementoForScalar memento, final MetaModelContext mmc) {
             return delegate.recreateObject(memento, mmc);
         }
 
         @Override
-        public boolean equals(final _ObjectMementoForSingleton memento, final _ObjectMementoForSingleton otherMemento) {
+        public boolean equals(final _ObjectMementoForScalar memento, final _ObjectMementoForScalar otherMemento) {
             return delegate.equals(memento, otherMemento);
         }
 
         @Override
-        public int hashCode(final _ObjectMementoForSingleton memento) {
+        public int hashCode(final _ObjectMementoForScalar memento) {
             return delegate.hashCode();
         }
 
     }
 
-    ManagedObject recreateObject(_ObjectMementoForSingleton memento, MetaModelContext mmc);
+    ManagedObject recreateObject(_ObjectMementoForScalar memento, MetaModelContext mmc);
 
-    boolean equals(_ObjectMementoForSingleton memento, _ObjectMementoForSingleton otherMemento);
+    boolean equals(_ObjectMementoForScalar memento, _ObjectMementoForScalar otherMemento);
 
-    int hashCode(_ObjectMementoForSingleton memento);
+    int hashCode(_ObjectMementoForScalar memento);
 
 }

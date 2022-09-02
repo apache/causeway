@@ -32,7 +32,7 @@ class _RecreatableLookup implements _Recreatable{
 
     @Override
     public @Nullable ManagedObject recreateObject(
-            final _ObjectMementoForSingleton memento,
+            final _ObjectMementoForScalar memento,
             final MetaModelContext mmc) {
 
         if(memento.bookmark==null) {
@@ -47,13 +47,13 @@ class _RecreatableLookup implements _Recreatable{
     }
 
     @Override
-    public boolean equals(final _ObjectMementoForSingleton oam, final _ObjectMementoForSingleton other) {
+    public boolean equals(final _ObjectMementoForScalar oam, final _ObjectMementoForScalar other) {
         return other.recreateStrategy == RecreateStrategy.LOOKUP
                 && oam.bookmark.equals(other.bookmark);
     }
 
     @Override
-    public int hashCode(final _ObjectMementoForSingleton oam) {
+    public int hashCode(final _ObjectMementoForScalar oam) {
         return oam.bookmark.hashCode();
     }
 }
