@@ -25,6 +25,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.base._Blackhole;
 
 import lombok.NonNull;
 import lombok.Synchronized;
@@ -65,18 +66,23 @@ implements Refetchable {
 
     @Override
     public Optional<Bookmark> getBookmark() {
+
+        triggerReassessment();
+
         return eitherDetachedOrAttached
                 .fold(ManagedObject::getBookmark, ManagedObject::getBookmark);
     }
 
     @Override
     public Optional<Bookmark> getBookmarkRefreshed() {
-        return eitherDetachedOrAttached
-                .fold(ManagedObject::getBookmarkRefreshed, ManagedObject::getBookmarkRefreshed);
+        return getBookmark(); // identity op
     }
 
     @Override
     public boolean isBookmarkMemoized() {
+
+        triggerReassessment();
+
         return eitherDetachedOrAttached
                 .fold(ManagedObject::isBookmarkMemoized, ManagedObject::isBookmarkMemoized);
     }
@@ -91,7 +97,7 @@ implements Refetchable {
             log.debug("about to morph {} -> {}", this.entityState, entityState);
             this.entityState = entityState;
             reassessVariant(entityState, peekAtPojo());
-            if(entityState.isAttached()) {
+            if(entityState.isAttachedOrNew()) {
                 _Assert.assertTrue(eitherDetachedOrAttached.isRight());
             } else {
                 _Assert.assertTrue(eitherDetachedOrAttached.isLeft());
@@ -110,11 +116,11 @@ implements Refetchable {
     public Object getPojo() {
         val pojo = eitherDetachedOrAttached
                 .fold(ManagedObject::getPojo, ManagedObject::getPojo);
-        getEntityState(); // triggers reassessment
+
+        triggerReassessment();
+
         return pojo;
     }
-
-    // -- HELPER
 
     @Override
     public Object peekAtPojo() {
@@ -122,10 +128,16 @@ implements Refetchable {
             .fold(Refetchable::peekAtPojo, Refetchable::peekAtPojo);
     }
 
+    // -- HELPER
+
+    private void triggerReassessment() {
+        _Blackhole.consume(getEntityState());
+    }
+
     @Synchronized
     private void reassessVariant(final EntityState entityState, final Object pojo) {
         if(eitherDetachedOrAttached.isLeft()
-                && entityState.isAttached()) {
+                && entityState.isAttachedOrNew()) {
             // morph into attached
             val bookmark = getSpecification().entityFacetElseFail().bookmarkFor(pojo);
             eitherDetachedOrAttached = Either.right(
@@ -133,7 +145,7 @@ implements Refetchable {
             return;
         }
         if(eitherDetachedOrAttached.isRight()
-                && !entityState.isAttached()) {
+                && !entityState.isAttachedOrNew()) {
             // morph into detached
             eitherDetachedOrAttached = Either.left(
                     new _ManagedObjectEntityDetached(getSpecification(), pojo));

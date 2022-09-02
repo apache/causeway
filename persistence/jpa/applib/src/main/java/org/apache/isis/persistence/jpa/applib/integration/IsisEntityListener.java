@@ -38,10 +38,8 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
-import org.apache.isis.core.metamodel.services.objectlifecycle.PreAndPostValue;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.isis.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
-import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 import org.apache.isis.persistence.jpa.applib.services.JpaSupportService;
 
 import lombok.val;

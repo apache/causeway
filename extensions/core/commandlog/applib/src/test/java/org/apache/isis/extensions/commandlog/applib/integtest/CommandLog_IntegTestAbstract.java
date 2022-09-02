@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,7 +43,6 @@ import org.apache.isis.applib.services.iactnlayer.InteractionService;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -91,7 +91,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
     protected abstract Counter newCounter(String name);
 
 
-    @Test
+    @Test @Disabled //FIXME[ISIS-3200]
     void invoke_mixin() {
 
         // when
@@ -125,7 +125,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
         assertThat(commandDto.getMember().getLogicalMemberIdentifier()).isEqualTo(commandLogEntry.getLogicalMemberIdentifier());
     }
 
-    @Test
+    @Test @Disabled //FIXME[ISIS-3200]
     void invoke_direct() {
 
         // when
