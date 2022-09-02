@@ -97,7 +97,7 @@ implements Refetchable {
             log.debug("about to morph {} -> {}", this.entityState, entityState);
             this.entityState = entityState;
             reassessVariant(entityState, peekAtPojo());
-            if(entityState.isAttachedOrNew()) {
+            if(entityState.isAttached()) {
                 _Assert.assertTrue(eitherDetachedOrAttached.isRight());
             } else {
                 _Assert.assertTrue(eitherDetachedOrAttached.isLeft());
@@ -137,7 +137,7 @@ implements Refetchable {
     @Synchronized
     private void reassessVariant(final EntityState entityState, final Object pojo) {
         if(eitherDetachedOrAttached.isLeft()
-                && entityState.isAttachedOrNew()) {
+                && entityState.isAttached()) {
             // morph into attached
             val bookmark = getSpecification().entityFacetElseFail().bookmarkFor(pojo);
             eitherDetachedOrAttached = Either.right(
@@ -145,7 +145,7 @@ implements Refetchable {
             return;
         }
         if(eitherDetachedOrAttached.isRight()
-                && !entityState.isAttachedOrNew()) {
+                && !entityState.isAttached()) {
             // morph into detached
             eitherDetachedOrAttached = Either.left(
                     new _ManagedObjectEntityDetached(getSpecification(), pojo));

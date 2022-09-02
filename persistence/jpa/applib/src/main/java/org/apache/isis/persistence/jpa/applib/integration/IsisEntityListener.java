@@ -34,6 +34,7 @@ import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
@@ -72,15 +73,15 @@ public class IsisEntityListener {
 
     @PrePersist void onPrePersist(final Object entityPojo) {
         log.debug("onPrePersist: {}", entityPojo);
-        serviceInjector.injectServicesInto(entityPojo);
+        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
 
-        objectLifecyclePublisher.onPrePersist(entity);
+        objectLifecyclePublisher.onPrePersist(Either.left(entity));
     }
 
     @PostLoad void onPostLoad(final Object entityPojo) {
         log.debug("onPostLoad: {}", entityPojo);
-        serviceInjector.injectServicesInto(entityPojo);
+        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPostLoad(entity);
     }
@@ -89,7 +90,7 @@ public class IsisEntityListener {
     @PreUpdate void onPreUpdate(final Object entityPojo) {
         log.debug("onPreUpdate: {}", entityPojo);
 
-        serviceInjector.injectServicesInto(entityPojo);
+        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
 
         val entityManagerResult = jpaSupportServiceProvider.get().getEntityManager(entityPojo.getClass());
@@ -127,7 +128,7 @@ public class IsisEntityListener {
 
     @PreRemove void onPreRemove(final Object entityPojo) {
         log.debug("onAnyRemove: {}", entityPojo);
-        serviceInjector.injectServicesInto(entityPojo);
+        //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
         objectLifecyclePublisher.onPreRemove(entity);
     }

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.publish;
 
+import java.util.function.UnaryOperator;
+
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,6 +30,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
@@ -53,6 +56,8 @@ import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
 import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Calls lifecycle callbacks for entities, ensuring that any given entity is only ever called once.
@@ -63,7 +68,7 @@ import lombok.RequiredArgsConstructor;
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Qualifier("Default")
-//@Log4j2
+@Log4j2
 public class LifecycleCallbackNotifier {
 
     final EventBusService eventBusService;
@@ -78,10 +83,22 @@ public class LifecycleCallbackNotifier {
         postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);
     }
 
-    public void prePersist(final ManagedObject entity) {
-        eventBusService.post(PreStoreEvent.of(entity.getPojo()));
-        CallbackFacet.callCallback(entity, PersistingCallbackFacet.class);
-        postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
+    /**
+     * @param either - either the adapted entity with OID to the <i>left</i>,
+     *      otherwise if no OID available the entity pojo <i>right</i>
+     */
+    public void prePersist(final Either<ManagedObject, Object> either) {
+        val pojo = either.fold(ManagedObject::getPojo, UnaryOperator.identity());
+        eventBusService.post(PreStoreEvent.of(pojo));
+        either.accept(
+                entity->{
+                    CallbackFacet.callCallback(entity, PersistingCallbackFacet.class);
+                    postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
+                },
+                right->{
+                    log.warn("call of 'persisting callbacks' "
+                            + "not implemented for the case when there is no OID");
+                });
     }
 
     public void postPersist(final ManagedObject entity) {

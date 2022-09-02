@@ -122,26 +122,12 @@ implements EntityFacet {
     @Override
     public Optional<String> identifierFor(final Object pojo) {
 
-        if (!getEntityState(pojo).isAttachedOrNew()) {
+        if (!getEntityState(pojo).isAttached()) {
             return Optional.empty();
         }
 
         val pm = getPersistenceManager();
         var primaryKeyIfAny = Optional.ofNullable(pm.getObjectId(pojo));
-
-        if(!primaryKeyIfAny.isPresent()) {
-            System.err.printf("%s%n", "what to do?");
-            pm.getObjectId(pojo);
-
-            //val dtCopy = pm.detachCopy(pojo);
-
-            val persistable = ((Persistable)pojo);
-            val stm = persistable.dnGetStateManager();
-
-            val toid = ((Persistable)pojo).dnGetObjectId();
-            System.err.printf("toid %s%n", toid);
-
-        }
 
         _Assert.assertTrue(primaryKeyIfAny.isPresent(), ()->
             String.format("failed to get OID even though entity is attached %s", pojo.getClass().getName()));

@@ -30,7 +30,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.clock.VirtualClock;
 import org.apache.isis.applib.mixins.system.DomainChangeRecord;
@@ -158,9 +157,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
     @Test
     void invoke_direct_disabled() {
 
-        // prerequisites
-        assertTrue(entityState(counter1).isAttachedOrNew());
-
         // when
         wrapperFactory.wrap(counter1).bumpUsingDeclaredActionWithExecutionPublishingDisabled();
 
@@ -168,8 +164,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         List<? extends ExecutionLogEntry> all = executionLogEntryRepository.findMostRecent();
         assertThat(all).isEmpty();
     }
-
-
 
     @Test
     void edit() {

@@ -132,7 +132,7 @@ implements Refetchable {
 //                && EntityUtil.getPersistenceStandard(managedObject)
 //                    .map(PersistenceStandard::isJdo)
 //                    .orElse(false)
-                !entityFacet.getEntityState(pojo).isAttachedOrNew()) {
+                !entityFacet.getEntityState(pojo).isAttached()) {
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                 _Debug.log("detached entity detected %s", pojo);

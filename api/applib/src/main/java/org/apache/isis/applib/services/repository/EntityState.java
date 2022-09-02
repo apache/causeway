@@ -42,7 +42,7 @@ public enum EntityState {
     /**
      * DN/JDO specific on pre-store. Is attached, has no OID yet.
      */
-    PERSISTABLE_NEW,
+    PERSISTABLE_NO_OID,
 
     /**
      * Object with this state is an entity but that is detached from a
@@ -74,8 +74,8 @@ public enum EntityState {
     /**
      * DN/JDO specific on pre-store. Is attached, has no OID yet.
      */
-    public boolean isNew() {
-        return this == PERSISTABLE_NEW;
+    public boolean isNoOid() {
+        return this == PERSISTABLE_NO_OID;
     }
     /**
      * Object with this state is an entity but that is detached from a
@@ -111,12 +111,9 @@ public enum EntityState {
                 || isRemoved();
     }
 
-    /**
-     * @apiNote 'new' is only supported by JDO.
-     */
     public boolean isAttachedOrNew() {
         return isAttached()
-                || isNew();
+                || isNoOid();
     }
 
 }

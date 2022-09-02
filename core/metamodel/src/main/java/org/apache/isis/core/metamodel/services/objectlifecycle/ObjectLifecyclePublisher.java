@@ -22,6 +22,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 
@@ -67,7 +68,7 @@ public interface ObjectLifecyclePublisher {
      *
      * @param entity
      */
-    void onPrePersist(ManagedObject entity);
+    void onPrePersist(Either<ManagedObject, Object> entity);
 
     /**
      * Called by both JPA and JDO, just after an entity has been inserted into the database.

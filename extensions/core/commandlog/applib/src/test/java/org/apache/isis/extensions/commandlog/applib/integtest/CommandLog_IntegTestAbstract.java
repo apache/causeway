@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -91,7 +90,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
     protected abstract Counter newCounter(String name);
 
 
-    @Test @Disabled //FIXME[ISIS-3200]
+    @Test
     void invoke_mixin() {
 
         // when
@@ -125,7 +124,7 @@ public abstract class CommandLog_IntegTestAbstract extends IsisIntegrationTestAb
         assertThat(commandDto.getMember().getLogicalMemberIdentifier()).isEqualTo(commandLogEntry.getLogicalMemberIdentifier());
     }
 
-    @Test @Disabled //FIXME[ISIS-3200]
+    @Test
     void invoke_direct() {
 
         // when
