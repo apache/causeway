@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -62,15 +63,15 @@ implements Refetchable {
         super(ManagedObject.Specialization.ENTITY, attached.getSpecification());
         this.eitherDetachedOrAttached = Either.right(attached);
         this.entityState = EntityState.PERSISTABLE_ATTACHED;
+        this.bookmarkRef.set(attached.getBookmark().orElseThrow());
     }
 
     @Override
     public Optional<Bookmark> getBookmark() {
-
-        triggerReassessment();
-
-        return eitherDetachedOrAttached
-                .fold(ManagedObject::getBookmark, ManagedObject::getBookmark);
+        if(!isBookmarkMemoized()) {
+            triggerReassessment();
+        }
+        return Optional.ofNullable(bookmarkRef.get());
     }
 
     @Override
@@ -80,11 +81,7 @@ implements Refetchable {
 
     @Override
     public boolean isBookmarkMemoized() {
-
-        triggerReassessment();
-
-        return eitherDetachedOrAttached
-                .fold(ManagedObject::isBookmarkMemoized, ManagedObject::isBookmarkMemoized);
+        return bookmarkRef.get()!=null;
     }
 
     @Override
@@ -98,9 +95,9 @@ implements Refetchable {
             this.entityState = entityState;
             reassessVariant(entityState, peekAtPojo());
             if(entityState.isAttached()) {
-                _Assert.assertTrue(eitherDetachedOrAttached.isRight());
+                _Assert.assertTrue(isVariantAttached());
             } else {
-                _Assert.assertTrue(eitherDetachedOrAttached.isLeft());
+                _Assert.assertTrue(isVariantDetached());
             }
         }
 
@@ -134,23 +131,45 @@ implements Refetchable {
         _Blackhole.consume(getEntityState());
     }
 
+    private final AtomicReference<Bookmark> bookmarkRef = new AtomicReference<Bookmark>();
+
+    private boolean isVariantAttached() {
+        return eitherDetachedOrAttached.isRight();
+    }
+
+    private boolean isVariantDetached() {
+        return eitherDetachedOrAttached.isLeft();
+    }
+
     @Synchronized
     private void reassessVariant(final EntityState entityState, final Object pojo) {
-        if(eitherDetachedOrAttached.isLeft()
+        if(isVariantDetached()
                 && entityState.isAttached()) {
-            // morph into attached
-            val bookmark = getSpecification().entityFacetElseFail().bookmarkFor(pojo);
-            eitherDetachedOrAttached = Either.right(
-                    new _ManagedObjectEntityAttached(getSpecification(), pojo, bookmark));
-            return;
+            attach(pojo);
         }
-        if(eitherDetachedOrAttached.isRight()
+        // only run when the above has not run!
+        else if(isVariantAttached()
                 && !entityState.isAttached()) {
-            // morph into detached
-            eitherDetachedOrAttached = Either.left(
-                    new _ManagedObjectEntityDetached(getSpecification(), pojo));
-            return;
+            detach(pojo);
         }
     }
+
+    // morph into attached
+    private void attach(final Object pojo) {
+        val bookmark = isBookmarkMemoized()
+                ? Optional.ofNullable(bookmarkRef.get())
+                : getSpecification().entityFacetElseFail().bookmarkFor(pojo);
+        val attached = new _ManagedObjectEntityAttached(getSpecification(), pojo, bookmark);
+        eitherDetachedOrAttached = Either.right(attached);
+        // set in any case
+        bookmarkRef.set(attached.getBookmark().orElseThrow());
+    }
+
+    // morph into detached
+    private void detach(final Object pojo) {
+        eitherDetachedOrAttached = Either.left(
+                new _ManagedObjectEntityDetached(getSpecification(), pojo));
+    }
+
 
 }
