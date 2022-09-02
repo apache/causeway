@@ -50,18 +50,18 @@ import lombok.NonNull;
  * Memento default implementation.
  *
  */
-class _Mementos_MementoDefault implements _Mementos.Memento {
+class _MementoDefault implements _Mementos.Memento {
 
     private final EncoderDecoder codec;
     private final SerializingAdapter serializer;
 
     private final HashMap<String, Serializable> valuesByKey; // we need a Serializable Map
 
-    _Mementos_MementoDefault(final EncoderDecoder codec, final SerializingAdapter serializer) {
+    _MementoDefault(final EncoderDecoder codec, final SerializingAdapter serializer) {
         this(codec, serializer, _Maps.newHashMap());
     }
 
-    private _Mementos_MementoDefault(
+    private _MementoDefault(
             final @NonNull EncoderDecoder codec,
             final @NonNull SerializingAdapter serializer,
             final @NonNull HashMap<String, Serializable> valuesByKey) { // we need a Serializable Map
@@ -126,7 +126,7 @@ class _Mementos_MementoDefault implements _Mementos.Memento {
         }) {
             // read in the entire map
             final HashMap<String, Serializable> valuesByKey = _Casts.uncheckedCast(ois.readObject());
-            return new _Mementos_MementoDefault(codec, serializer, valuesByKey);
+            return new _MementoDefault(codec, serializer, valuesByKey);
         } catch (Exception e) {
             throw _Exceptions.illegalArgument(e,
                     "failed to parse memento from serialized string '%s'",
