@@ -18,15 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,19 +38,6 @@ extends ChoiceProviderAbstract {
     @Override
     protected final boolean isRequired() {
         return scalarModel().isRequired();
-    }
-
-    @Override
-    protected final ObjectMemento mementoFromId(final String id) {
-        // handles both, strict and pseudo (value) bookmarks
-        val memento = Bookmark.parse(id)
-                .map(getCommonContext()::mementoForBookmark)
-                .orElseGet(()->{
-                    // FIXME if can't be recreated from bookmark, there might be a bug
-                    System.err.printf("cannot recreate ObjectMemento from id=%s%n", id);
-                    return null;
-                });
-        return memento;
     }
 
     // -- DEPS

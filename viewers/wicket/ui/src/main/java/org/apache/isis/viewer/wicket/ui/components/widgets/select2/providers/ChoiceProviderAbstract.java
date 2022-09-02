@@ -56,8 +56,6 @@ implements HasCommonContext {
      */
     protected abstract Can<ObjectMemento> query(@Nullable String term);
 
-    protected abstract @Nullable ObjectMemento mementoFromId(final String id);
-
     @Override
     public final String getDisplayValue(final ObjectMemento choiceMemento) {
         if (choiceMemento == null
@@ -72,7 +70,11 @@ implements HasCommonContext {
         if (choiceMemento == null) {
             return NULL_ID;
         }
-        return choiceMemento.getBookmark().stringify();
+        return ObjectMemento.enstringToUrlBase64(choiceMemento);
+    }
+
+    protected final @Nullable ObjectMemento mementoFromId(final @Nullable String id) {
+        return ObjectMemento.destringFromUrlBase64(id);
     }
 
     @Override

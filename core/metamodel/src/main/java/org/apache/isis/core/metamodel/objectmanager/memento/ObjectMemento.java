@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
@@ -71,7 +73,8 @@ public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializa
         return Optional.ofNullable(((ObjectMementoCollection)memento).unwrapList());
     }
 
-    static String enstringToUrlBase64(final ObjectMemento memento) {
+    @Nullable
+    static String enstringToUrlBase64(final @Nullable ObjectMemento memento) {
         return memento!=null
                 ? _Strings.ofBytes(
                     _Bytes.asUrlBase64.apply(
@@ -80,7 +83,8 @@ public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializa
                 : null;
     }
 
-    static ObjectMemento destringFromUrlBase64(final String base64UrlEncodedMemento) {
+    @Nullable
+    static ObjectMemento destringFromUrlBase64(final @Nullable String base64UrlEncodedMemento) {
         return _Strings.isNotEmpty(base64UrlEncodedMemento)
                 ? _Serializables.read(
                         ObjectMemento.class,
