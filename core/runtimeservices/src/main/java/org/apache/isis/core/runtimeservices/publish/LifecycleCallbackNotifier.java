@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtimeservices.publish;
 
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import javax.annotation.Priority;
@@ -50,14 +51,14 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEv
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
 import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Calls lifecycle callbacks for entities, ensuring that any given entity is only ever called once.
@@ -68,10 +69,11 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Qualifier("Default")
-@Log4j2
+//@Log4j2
 public class LifecycleCallbackNotifier {
 
     final EventBusService eventBusService;
+    final SpecificationLoader specLoader;
 
     public void postCreate(final ManagedObject entity) {
         CallbackFacet.callCallback(entity, CreatedCallbackFacet.class);
@@ -89,15 +91,17 @@ public class LifecycleCallbackNotifier {
      */
     public void prePersist(final Either<ManagedObject, Object> either) {
         val pojo = either.fold(ManagedObject::getPojo, UnaryOperator.identity());
+        if(pojo==null) {return;}
         eventBusService.post(PreStoreEvent.of(pojo));
         either.accept(
                 entity->{
                     CallbackFacet.callCallback(entity, PersistingCallbackFacet.class);
                     postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
                 },
-                right->{
-                    log.warn("call of 'persisting callbacks' "
-                            + "not implemented for the case when there is no OID");
+                _pojo->{
+                    val spec = specLoader.specForTypeElseFail(pojo.getClass());
+                    // calling PersistingCallbackFacet not supported if we have no OID
+                    postLifecycleEventIfRequired(spec, ()->pojo, PersistingLifecycleEventFacet.class);
                 });
     }
 
@@ -125,18 +129,32 @@ public class LifecycleCallbackNotifier {
 
     //  -- HELPER
 
-    protected void postLifecycleEventIfRequired(
-            final ManagedObject object,
+    private void postLifecycleEventIfRequired(
+            final ObjectSpecification spec,
+            final Supplier<Object> pojo,
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
 
-        ManagedObjects.whenNonEmpty(object)
-        .map(ManagedObject::getSpecification)
-        .flatMap(spec->spec.lookupFacet(lifecycleEventFacetClass))
+        spec.lookupFacet(lifecycleEventFacetClass)
         .map(LifecycleEventFacet::getEventType)
         .map(_InstanceUtil::createInstance)
         .ifPresent(eventInstance->{
-            postEvent(_Casts.uncheckedCast(eventInstance), object.getPojo());
+            postEvent(_Casts.uncheckedCast(eventInstance), pojo);
         });
+    }
+
+    private void postLifecycleEventIfRequired(
+            final ManagedObject object,
+            final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
+
+        // getPojo has side-effects, don't call if not needed
+        if(object==null
+                || object.getSpecialization().isEmpty()) {
+            return;
+        }
+        postLifecycleEventIfRequired(
+                object.getSpecification(),
+                object::getPojo,
+                lifecycleEventFacetClass);
     }
 
     protected void postEvent(final AbstractLifecycleEvent<Object> event, final Object pojo) {
