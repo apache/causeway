@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.memento;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -29,27 +28,27 @@ class _RecreatableSerializable implements _Recreatable{
 
     @Override
     public ManagedObject recreateObject(
-            final _ObjectMemento memento,
+            final _ObjectMementoForSingleton memento,
             final MetaModelContext mmc) {
         ObjectSpecification spec = mmc.getSpecificationLoader()
                 .specForLogicalTypeElseFail(memento.logicalType);
         return mmc.getObjectManager().getObjectSerializer()
-                .deserialize(spec, memento.serializedObject);
+                .deserialize(spec, memento.serializedPayload);
     }
 
     @Override
     public boolean equals(
-            final _ObjectMemento memento,
-            final _ObjectMemento otherMemento) {
+            final _ObjectMementoForSingleton memento,
+            final _ObjectMementoForSingleton otherMemento) {
         return otherMemento.recreateStrategy == RecreateStrategy.SERIALIZABLE
                 && Objects.equals(memento.logicalType, otherMemento.logicalType)
-                && Objects.equals(memento.serializedObject, otherMemento.serializedObject);
+                && Objects.equals(memento.serializedPayload, otherMemento.serializedPayload);
     }
 
     @Override
-    public int hashCode(final _ObjectMemento memento) {
-        //FIXME potentially expensive, unfortunately cannot be cached in enum
-        return Arrays.hashCode(memento.serializedObject);
+    public int hashCode(final _ObjectMementoForSingleton memento) {
+        // thats where we stored the hash of the originating pojo
+        return memento.bookmark.getIdentifier().hashCode();
     }
 
 }

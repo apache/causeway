@@ -19,7 +19,6 @@
 package org.apache.isis.core.runtimeservices.memento;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
@@ -33,28 +32,30 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.object.MmTitleUtil;
+import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
-final class _ObjectMemento implements HasLogicalType, Serializable {
+final class _ObjectMementoForSingleton
+implements HasLogicalType, Serializable, ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 
     // -- FACTORIES
 
-    public static Optional<_ObjectMemento> create(final @Nullable ManagedObject adapter) {
+    public static Optional<_ObjectMementoForSingleton> create(final @Nullable ManagedObject adapter) {
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? Optional.empty()
-                : Optional.of(new _ObjectMemento(adapter));
+                : Optional.of(new _ObjectMementoForSingleton(adapter));
     }
 
-    static _ObjectMemento createPersistent(
+    static _ObjectMementoForSingleton createPersistent(
             final Bookmark bookmark,
             final SpecificationLoader specificationLoader) {
-        return new _ObjectMemento(bookmark, specificationLoader);
+        return new _ObjectMementoForSingleton(bookmark, specificationLoader);
     }
 
     // --
@@ -63,12 +64,16 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
     _Recreatable.RecreateStrategy recreateStrategy;
 
-    @Getter private String titleString;
-    @Getter Bookmark bookmark;
+    @Getter(onMethod_ = {@Override}) private final String title;
+    @Getter final Bookmark bookmark;
 
-    byte[] serializedObject;
+    byte[] serializedPayload;
 
-    private _ObjectMemento(final Bookmark bookmark, final SpecificationLoader specLoader) {
+    private _ObjectMementoForSingleton(
+            final @NonNull Bookmark bookmark,
+            final @NonNull SpecificationLoader specLoader) {
+
+        this.bookmark = bookmark;
 
         val logicalTypeName = bookmark.getLogicalTypeName();
         val spec = specLoader.specForLogicalTypeName(logicalTypeName)
@@ -76,27 +81,18 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                         "cannot recreate spec from logicalTypeName %s", logicalTypeName));
 
         this.logicalType = spec.getLogicalType();
-        this.bookmark = bookmark;
-        Objects.requireNonNull(bookmark, "bookmark");
 
-        if(spec.isValue()) {
-            this.recreateStrategy = _Recreatable.RecreateStrategy.VALUE;
-            return;
-        }
+        this.title = "?memento?"; // TODO can we do better?
 
-        this.bookmark = bookmark;
-        this.recreateStrategy = _Recreatable.RecreateStrategy.LOOKUP;
+        this.recreateStrategy = spec.isValue()
+                ? _Recreatable.RecreateStrategy.VALUE
+                : _Recreatable.RecreateStrategy.LOOKUP;
     }
 
-    private _ObjectMemento(final @NonNull ManagedObject adapter) {
-        val spec = adapter.getSpecification();
-        this.logicalType = spec.getLogicalType();
-        init(adapter);
-    }
+    private _ObjectMementoForSingleton(final @NonNull ManagedObject adapter) {
 
-    private void init(final ManagedObject adapter) {
-
-        titleString = MmTitleUtil.titleOf(adapter);
+        this.logicalType = adapter.getLogicalType();
+        this.title = MmTitleUtil.titleOf(adapter);
 
         val spec = adapter.getSpecification();
 
@@ -105,8 +101,8 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
                  ? ((HintIdProvider) adapter.getPojo()).hintId()
                  : null;
 
-            bookmark = ManagedObjects.bookmarkElseFail(adapter);
-            bookmark = hintId != null
+            val bookmark = ManagedObjects.bookmarkElseFail(adapter);
+            this.bookmark = hintId != null
                     && bookmark != null
                         ? bookmark.withHintId(hintId)
                         : bookmark;
@@ -123,11 +119,14 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
         if(spec.isSerializable()) {
             val serializer = spec.getMetaModelContext().getObjectManager().getObjectSerializer();
-            serializedObject = serializer.serialize(adapter);
+
+            final int hashCode = adapter.getPojo().hashCode();
+
+            serializedPayload = serializer.serialize(adapter);
             recreateStrategy = _Recreatable.RecreateStrategy.SERIALIZABLE;
             // pseudo bookmark
             bookmark = Bookmark.forLogicalTypeNameAndIdentifier(
-                    getLogicalTypeName(), "SERIALIZABLE");
+                    getLogicalTypeName(), "" + hashCode);
             return;
         }
 
@@ -141,14 +140,14 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
     }
 
     ManagedObject reconstructObject(final MetaModelContext mmc) {
-        val specificationLoader = mmc.getSpecificationLoader();
-        val spec = specificationLoader.specForLogicalType(logicalType).orElse(null);
+        val spec = mmc.getSpecificationLoader()
+                .specForLogicalType(logicalType).orElse(null);
         if(spec==null) {
             // eg. ill-formed request
             return null;
         }
 
-        // intercept when managed by IoCC
+        // intercept when managed by Spring
         if(spec.getBeanSort().isManagedBeanAny()) {
             return spec.getMetaModelContext().lookupServiceAdapterById(getLogicalTypeName());
         }
@@ -163,10 +162,10 @@ final class _ObjectMemento implements HasLogicalType, Serializable {
 
     @Override
     public boolean equals(final Object other) {
-        if (!(other instanceof _ObjectMemento)) {
+        if (!(other instanceof _ObjectMementoForSingleton)) {
             return false;
         }
-        return recreateStrategy.equals(this, (_ObjectMemento) other);
+        return recreateStrategy.equals(this, (_ObjectMementoForSingleton) other);
     }
 
 }

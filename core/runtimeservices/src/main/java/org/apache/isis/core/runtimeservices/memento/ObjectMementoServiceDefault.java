@@ -29,7 +29,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -51,7 +50,6 @@ import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -71,20 +69,19 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
 
     @Override
     public ObjectMemento mementoForBookmark(@NonNull final Bookmark bookmark) {
-        val mementoAdapter = _ObjectMemento.createPersistent(bookmark, specificationLoader);
-        return ObjectMementoAdapter.of(mementoAdapter);
+        return _ObjectMementoForSingleton.createPersistent(bookmark, specificationLoader);
     }
 
     @Override
     public ObjectMemento mementoForSingle(@Nullable final ManagedObject adapter) {
         MmAssertionUtil.assertPojoIsScalar(adapter);
 
-        return _ObjectMemento.create(adapter)
-        .<ObjectMemento>map(ObjectMementoAdapter::of)
-        .orElseGet(()->
-            ManagedObjects.isSpecified(adapter)
-                    ? new ObjectMementoForEmpty(adapter.getLogicalType())
-                    : null);
+        return _ObjectMementoForSingleton.create(adapter)
+            .map(ObjectMemento.class::cast)
+            .orElseGet(()->
+                ManagedObjects.isSpecified(adapter)
+                        ? new ObjectMementoForEmpty(adapter.getLogicalType())
+                        : null);
     }
 
     @Override
@@ -140,41 +137,12 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
             return ManagedObject.packed(elementSpec, objects);
         }
 
-        if(memento instanceof ObjectMementoAdapter) {
-            val objectMementoAdapter = (ObjectMementoAdapter) memento;
+        if(memento instanceof _ObjectMementoForSingleton) {
+            val objectMementoAdapter = (_ObjectMementoForSingleton) memento;
             return objectMementoAdapter.reconstructObject(mmc);
         }
 
         throw _Exceptions.unrecoverable("unsupported ObjectMemento type %s", memento.getClass());
-    }
-
-    @Domain.Exclude
-    @RequiredArgsConstructor(staticName = "of")
-    private static class ObjectMementoAdapter implements ObjectMemento {
-
-        private static final long serialVersionUID = 1L;
-
-        private final _ObjectMemento delegate;
-
-        @Override
-        public String getTitle() {
-            return delegate.getTitleString();
-        }
-
-        @Override
-        public Bookmark getBookmark() {
-            return delegate.getBookmark();
-        }
-
-        @Override
-        public LogicalType getLogicalType() {
-            return delegate.getLogicalType();
-        }
-
-        ManagedObject reconstructObject(final MetaModelContext mmc) {
-            return delegate.reconstructObject(mmc);
-        }
-
     }
 
 }

@@ -29,7 +29,7 @@ class _RecreatableValue implements _Recreatable{
 
     @Override
     public ManagedObject recreateObject(
-            final _ObjectMemento memento,
+            final _ObjectMementoForSingleton memento,
             final MetaModelContext mmc) {
 
         val valueSpec = mmc.getSpecificationLoader()
@@ -44,15 +44,15 @@ class _RecreatableValue implements _Recreatable{
 
     @Override
     public boolean equals(
-            final _ObjectMemento memento,
-            final _ObjectMemento otherMemento) {
+            final _ObjectMementoForSingleton memento,
+            final _ObjectMementoForSingleton otherMemento) {
 
         return otherMemento.recreateStrategy == RecreateStrategy.VALUE
                 && memento.bookmark.equals(otherMemento.bookmark);
     }
 
     @Override
-    public int hashCode(final _ObjectMemento memento) {
+    public int hashCode(final _ObjectMementoForSingleton memento) {
         return memento.bookmark.hashCode();
     }
 
