@@ -150,6 +150,9 @@ public final class Bookmark implements Oid {
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot parse Bookmark %s", input));
     }
 
+    /**
+     * there is only one use-case, that is, if a bookmark itself needs to be encoded (eg. page params)
+     */
     public static Optional<Bookmark> parseUrlEncoded(@Nullable final String urlEncodedStr) {
         return _Strings.isEmpty(urlEncodedStr)
                 ? Optional.empty()

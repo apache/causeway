@@ -377,7 +377,7 @@ implements
     protected IConverterLocator newConverterLocator() {
         final ConverterLocator converterLocator = new ConverterLocator();
         converterLocator.set(ManagedObject.class, new ConverterForObjectAdapter());
-        converterLocator.set(ObjectMemento.class, new ConverterForObjectAdapterMemento(commonContext));
+        converterLocator.set(ObjectMemento.class, new ConverterForObjectAdapterMemento());
         return converterLocator;
     }
 

@@ -24,55 +24,36 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.Oid;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Implementation of a Wicket {@link IConverter} for
- * {@link ObjectMemento}s, converting to-and-from their {@link Oid}'s
- * string representation.
+ * {@link ObjectMemento}s, converting to-and-from their stringified {@link Bookmark}s.
  */
 @RequiredArgsConstructor
 public class ConverterForObjectAdapterMemento implements IConverter<ObjectMemento> {
 
     private static final long serialVersionUID = 1L;
 
-    private final transient IsisAppCommonContext commonContext;
-
     /**
      * Converts string representation of {@link Oid} to
      * {@link ObjectMemento}.
      */
     @Override
-    public ObjectMemento convertToObject(final String value, final Locale locale) {
-        if (_Strings.isNullOrEmpty(value)) {
-            return null;
-        }
-        return Bookmark.parseUrlEncoded(value)
-        .map(commonContext::mementoForBookmark)
-        .orElse(null);
+    public ObjectMemento convertToObject(
+            final String base64UrlEncodedMemento, final Locale locale) {
+        return ObjectMemento.destringFromUrlBase64(base64UrlEncodedMemento);
     }
 
     /**
      * Converts {@link ObjectMemento} to string representation of
-     * {@link Oid}.
+     * {@link Bookmark}.
      */
     @Override
     public String convertToString(final ObjectMemento memento, final Locale locale) {
-        if (memento == null) {
-            return null;
-        }
-        val adapter = commonContext.reconstructObject(memento);
-        val spec = adapter.getSpecification();
-        if(spec!=null && spec.isValue()) {
-            return memento.toString();
-        }
-        return ManagedObjects.stringifyElseFail(adapter);
+        return ObjectMemento.enstringToUrlBase64(memento);
     }
 
 }
