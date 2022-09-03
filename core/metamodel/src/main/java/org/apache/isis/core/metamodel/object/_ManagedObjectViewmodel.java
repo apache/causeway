@@ -31,7 +31,6 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.debug._XrayEvent;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -111,29 +110,22 @@ implements RefreshableViewmodel {
 
     @Override
     public final void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-        val spec = getSpecification();
-        if(spec.isViewModel()) {
-            val viewModelFacet = spec.getFacet(ViewModelFacet.class);
-            if(viewModelFacet.containsEntities()) {
+        val shouldRefresh = getMetaModelContext().getInteractionProvider().getInteractionId()
+        .map(this::shouldRefresh)
+        .orElse(true); // if there is no current interaction, refresh regardless; unexpected state, might fail later
 
-                val shouldRefresh = spec.getMetaModelContext().getInteractionProvider().getInteractionId()
-                .map(this::shouldRefresh)
-                .orElse(true); // if there is no current interaction, refresh regardless; unexpected state, might fail later
+        if(!shouldRefresh) {
+            return;
+        }
 
-                if(!shouldRefresh) {
-                    return;
-                }
-
-                if(isBookmarkMemoized()) {
-                    reloadViewmodelFromMemoizedBookmark();
-                } else {
-                    val bookmark = bookmarkSupplier!=null
-                            ? bookmarkSupplier.get()
-                            : null;
-                    if(bookmark!=null) {
-                        reloadViewmodelFromBookmark(bookmark);
-                    }
-                }
+        if(isBookmarkMemoized()) {
+            reloadViewmodelFromMemoizedBookmark();
+        } else {
+            val bookmark = bookmarkSupplier!=null
+                    ? bookmarkSupplier.get()
+                    : null;
+            if(bookmark!=null) {
+                reloadViewmodelFromBookmark(bookmark);
             }
         }
     }
@@ -152,35 +144,26 @@ implements RefreshableViewmodel {
      * Reload current viewmodel object from memoized bookmark, otherwise does nothing.
      */
     private void reloadViewmodelFromMemoizedBookmark() {
-        val spec = getSpecification();
-        if(isBookmarkMemoized()
-                && spec.isViewModel()) {
+        val bookmark = getBookmark().get();
+        val viewModelClass = getCorrespondingClass();
 
-            val bookmark = getBookmark().get();
-            val viewModelClass = spec.getCorrespondingClass();
+        val recreatedViewmodel =
+                getFactoryService().viewModel(viewModelClass, bookmark);
 
-            val recreatedViewmodel =
-                    getMetaModelContext().getFactoryService().viewModel(viewModelClass, bookmark);
+        _XrayEvent.event("Viewmodel '%s' recreated from memoized bookmark.", viewModelClass.getName());
 
-            _XrayEvent.event("Viewmodel '%s' recreated from memoized bookmark.", viewModelClass.getName());
-
-            replacePojo(old->recreatedViewmodel);
-        }
+        replacePojo(old->recreatedViewmodel);
     }
 
     private void reloadViewmodelFromBookmark(final @NonNull Bookmark bookmark) {
-        val spec = getSpecification();
-        if(spec.isViewModel()) {
-            val viewModelClass = spec.getCorrespondingClass();
+        val viewModelClass = getCorrespondingClass();
+        val recreatedViewmodel =
+                getFactoryService().viewModel(viewModelClass, bookmark);
 
-            val recreatedViewmodel =
-                    getMetaModelContext().getFactoryService().viewModel(viewModelClass, bookmark);
+        _XrayEvent.event("Viewmodel '%s' recreated from provided bookmark.", viewModelClass.getName());
 
-            _XrayEvent.event("Viewmodel '%s' recreated from provided bookmark.", viewModelClass.getName());
-
-            replacePojo(old->recreatedViewmodel);
-            replaceBookmark(old->bookmark);
-        }
+        replacePojo(old->recreatedViewmodel);
+        replaceBookmark(old->bookmark);
     }
 
     private void replacePojo(final UnaryOperator<Object> replacer) {

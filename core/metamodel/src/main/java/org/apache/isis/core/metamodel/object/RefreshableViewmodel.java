@@ -24,6 +24,10 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
+/**
+ * @deprecated this refreshing stuff is a hack - remove eventually
+ */
+@Deprecated
 public interface RefreshableViewmodel {
 
     /**
@@ -31,6 +35,7 @@ public interface RefreshableViewmodel {
      * (Acts as a no-op otherwise.)
      * @apiNote usually should be sufficient to refresh once per interaction.
      */
+    @Deprecated
     void refreshViewmodel(@Nullable Supplier<Bookmark> bookmarkSupplier);
 
 }
