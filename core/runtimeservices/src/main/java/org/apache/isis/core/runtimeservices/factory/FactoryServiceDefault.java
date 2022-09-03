@@ -92,8 +92,7 @@ public class FactoryServiceDefault implements FactoryService {
         if(!spec.isEntity()) {
             throw _Exceptions.illegalArgument("Type '%s' is not recogniced as an entity type by the framework.",
                     entityClass);
-        }
-        objectLifecyclePublisher().onPostCreate(ManagedObject.entityDetached(spec, entityPojo));
+        }        objectLifecyclePublisher().onPostCreate(ManagedObject.entity(spec, entityPojo, Optional.empty()));
         return entityPojo;
     }
 

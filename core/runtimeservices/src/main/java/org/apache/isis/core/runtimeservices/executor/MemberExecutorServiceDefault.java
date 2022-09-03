@@ -57,7 +57,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
-import org.apache.isis.core.metamodel.object.MmEntityUtil;
 import org.apache.isis.core.metamodel.object.MmUnwrapUtil;
 import org.apache.isis.core.metamodel.object.MmVisibilityUtil;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
@@ -178,6 +177,14 @@ implements MemberExecutorService {
         val returnedAdapter = objectManager.adapt(
                 returnedPojo, owningAction::getElementType);
 
+        // assert has bookmark, unless non-scalar
+        ManagedObjects.asScalarNonEmpty(returnedAdapter)
+        .filter(scalarNonEmpty->!scalarNonEmpty.getSpecialization().isOther()) // don't care
+        .ifPresent(scalarNonEmpty->{
+            _Assert.assertTrue(scalarNonEmpty.getBookmark().isPresent(), ()->String.format(
+                    "bookmark required for non-empty scalars %s", scalarNonEmpty.getSpecification()));
+        });
+
         // sync DTO with result
         interactionDtoFactory
         .updateResult(priorExecution.getDto(), owningAction, returnedAdapter);
@@ -276,27 +283,22 @@ implements MemberExecutorService {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
             return;
         }
-
-        val entityState = MmEntityUtil.getEntityState(resultAdapter);
-        //FIXME what to do with new state
+        val entityState = resultAdapter.getEntityState();
+        if(!entityState.isPersistable()) {
+            return;
+        }
         if(entityState.isDetached())   {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             getTransactionService().flushTransaction();
         }
-        if(entityState.isAttached()) {
-            resultAdapter.getBookmark()
-            .ifPresent(bookmark->
-                command.updater().setResult(Try.success(bookmark))
-            );
-        } else {
-            if(entityState.isPersistable()) {
-                log.warn("was unable to get a bookmark for the command result, "
-                        + "which is an entity: {}", resultAdapter);
-            }
+        val entityState2 = resultAdapter.getEntityState();
+        if(!entityState2.isDetached()) {
+            val bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
+            command.updater().setResult(Try.success(bookmark));
+            return;
         }
-
-        // ignore all other sorts of objects
-
+        log.warn("was unable to get a bookmark for the command result, "
+                + "which is an entity: {}", resultAdapter);
     }
 
     private ManagedObject resultFilteredHonoringVisibility(
