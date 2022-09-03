@@ -18,12 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.memento;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
-
-import lombok.val;
 
 class _RecreatableValue implements _Recreatable{
 
@@ -32,14 +28,7 @@ class _RecreatableValue implements _Recreatable{
             final _ObjectMementoForScalar memento,
             final MetaModelContext mmc) {
 
-        val valueSpec = mmc.getSpecificationLoader()
-                .specForLogicalType(memento.logicalType)
-                .orElseThrow(()->_Exceptions.unrecoverable(
-                        "logical type %s is not recognized", memento.logicalType));
-
-        val bookmark = memento.bookmark;
-
-        return mmc.getObjectManager().loadObject(ObjectLoader.Request.of(valueSpec, bookmark));
+        return mmc.getObjectManager().loadObjectElseFail(memento.bookmark);
     }
 
     @Override

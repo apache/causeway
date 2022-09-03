@@ -108,7 +108,7 @@ public interface IResourceContext {
     default Optional<ManagedObject> getObjectAdapterForOidFromHref(final String oidFromHref) {
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidFromHref);
         return Bookmark.parse(oidStrUnencoded)
-        .flatMap(getMetaModelContext()::loadObject);
+        .flatMap(getMetaModelContext().getObjectManager()::loadObject);
     }
 
 }

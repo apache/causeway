@@ -77,7 +77,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         assertTrue(entity.getSpecification().isEntity());
         assertEquals(
-                EntityState.PERSISTABLE_DETACHED,
+                EntityState.PERSISTABLE_DETACHED_WITH_OID,
                 MmEntityUtil.getEntityState(entity));
 
         setEntityRef(entity);
@@ -102,7 +102,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         // expected post-condition (after persist, and having entered a new transaction)
         assertEquals(
-                EntityState.PERSISTABLE_DETACHED,
+                EntityState.PERSISTABLE_DETACHED_WITH_OID,
                 MmEntityUtil.getEntityState(getEntityRef()));
 
         val id = ((JpaEntityNonGeneratedStringId)getEntityRef().getPojo()).getName();
@@ -121,7 +121,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         repository.remove(entity.getPojo());
 
         // expected post-condition (after removal)
-        assertDetachedOrDeleted(entity);
+        assertDetachedOrRemoved(entity);
 
         setEntityRef(entity);
     }
@@ -131,7 +131,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         val entity = getEntityRef();
 
-        assertDetachedOrDeleted(entity);
+        assertDetachedOrRemoved(entity);
         assertEquals(0, repository.allInstances(JpaEntityNonGeneratedStringId.class).size());
 
     }
@@ -152,11 +152,9 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         return entity;
     }
 
-    static void assertDetachedOrDeleted(final ManagedObject entity) {
-        assertEquals(
-                EntityState.PERSISTABLE_DETACHED, // if undecidable we currently return PERSISTABLE_DETACHED;
-                MmEntityUtil.getEntityState(entity));
+    static void assertDetachedOrRemoved(final ManagedObject entity) {
+        val entityState = MmEntityUtil.getEntityState(entity);
+        assertTrue(entityState.isDetachedOrRemoved());
     }
-
 
 }

@@ -212,6 +212,7 @@ public class PageParameterUtils {
         return ManagedObjects.stringify(adapter).orElse(null);
     }
 
+    //FIXME don't silently ignore failures
     private @Nullable ManagedObject decodeArg(
             final @NonNull MetaModelContext mmc,
             final ObjectSpecification objSpec,
@@ -221,7 +222,7 @@ public class PageParameterUtils {
         }
         try {
             return Bookmark.parseUrlEncoded(encoded)
-                    .flatMap(mmc::loadObject)
+                    .flatMap(mmc.getObjectManager()::loadObject)
                     .orElse(null);
         } catch (final Exception e) {
             e.printStackTrace(); // I suppose useful when in prototyping mode only

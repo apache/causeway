@@ -121,7 +121,7 @@ public class RepositoryServiceDefault implements RepositoryService {
             return; // noop
         }
         val adapter = objectManager.adapt(unwrapped(domainObject));
-        if(MmEntityUtil.isAttached(adapter)) {
+        if(MmEntityUtil.hasOid(adapter)) {
             MmEntityUtil.destroyInCurrentTransaction(adapter);
         }
     }

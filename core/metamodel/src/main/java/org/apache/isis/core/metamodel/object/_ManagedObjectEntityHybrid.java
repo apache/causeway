@@ -94,7 +94,7 @@ implements Refetchable {
             log.debug("about to morph {} -> {}", this.entityState, entityState);
             this.entityState = entityState;
             reassessVariant(entityState, peekAtPojo());
-            if(entityState.isAttached()) {
+            if(entityState.hasOid()) {
                 _Assert.assertTrue(isVariantAttached());
             } else {
                 _Assert.assertTrue(isVariantDetached());
@@ -144,12 +144,12 @@ implements Refetchable {
     @Synchronized
     private void reassessVariant(final EntityState entityState, final Object pojo) {
         if(isVariantDetached()
-                && entityState.isAttached()) {
+                && entityState.hasOid()) {
             attach(pojo);
         }
         // only run when the above has not run!
         else if(isVariantAttached()
-                && !entityState.isAttached()) {
+                && !entityState.hasOid()) {
             detach(pojo);
         }
     }

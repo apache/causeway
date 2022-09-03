@@ -422,7 +422,7 @@ class IsisToWicketTreeAdapter {
             commonContext = WktContext.computeIfAbsent(commonContext);
 
             val oid = bookmark;
-            val objAdapter = commonContext.getMetaModelContext()
+            val objAdapter = commonContext.getMetaModelContext().getObjectManager()
                     .loadObject(oid)
                     .orElseThrow(()->new NoSuchElementException(
                             String.format("Tree creation: could not recreate TreeModel from Bookmark: '%s'", bookmark)));

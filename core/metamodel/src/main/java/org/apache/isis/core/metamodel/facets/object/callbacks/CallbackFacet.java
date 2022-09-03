@@ -37,7 +37,7 @@ extends ImperativeFacet {
             final ManagedObject object,
             final Class<? extends CallbackFacet> callbackFacetType) {
 
-        ManagedObjects.whenSpecified(object)
+        ManagedObjects.asSpecified(object)
         .map(ManagedObject::getSpecification)
         .flatMap(spec->spec.lookupFacet(callbackFacetType))
         .ifPresent(callbackFacet->{

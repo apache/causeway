@@ -103,7 +103,7 @@ implements Refetchable {
                 .orElseThrow(()->{
                     return new ObjectNotFoundException(""+bookmark);});
 
-        if(!entityFacet.getEntityState(reattached).isAttached()) {
+        if(!entityFacet.getEntityState(reattached).hasOid()) {
             throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
         }
 
@@ -132,7 +132,7 @@ implements Refetchable {
 //                && EntityUtil.getPersistenceStandard(managedObject)
 //                    .map(PersistenceStandard::isJdo)
 //                    .orElse(false)
-                !entityFacet.getEntityState(pojo).isAttached()) {
+                !entityFacet.getEntityState(pojo).hasOid()) {
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                 _Debug.log("detached entity detected %s", pojo);

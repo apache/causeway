@@ -49,7 +49,7 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
     public ManagedObject convertToObject(final String value, final Locale locale) {
 
         val obj = Bookmark.parse(value)
-            .flatMap(objectManager.getMetaModelContext()::loadObject)
+            .flatMap(objectManager.getMetaModelContext().getObjectManager()::loadObject)
             .orElse(null);
 
         //XXX ever used ?

@@ -78,17 +78,39 @@ public final class ManagedObjects {
 
     /** whether has at least a spec */
     public static boolean isSpecified(final @Nullable ManagedObject adapter) {
-        return adapter!=null && adapter!=ManagedObject.unspecified();
+        return adapter!=null
+                && adapter!=ManagedObject.unspecified();
     }
 
     /**
      * Optionally given adapter, based on whether it is specified
      * (even if empty, that is, representing null.)
+     * @return SPECIFIED
      */
-    public static Optional<ManagedObject> whenSpecified(final ManagedObject adapter) {
+    public static Optional<ManagedObject> asSpecified(final @Nullable ManagedObject adapter) {
         return isSpecified(adapter)
                 ? Optional.of(adapter)
                 : Optional.empty();
+    }
+
+    /**
+     * Optionally given adapter, based on whether it is specified and scalar (not packed)
+     * (even if empty, that is, representing null.)
+     * @return SCALAR or EMTPY
+     */
+    public static Optional<ManagedObject> asScalar(final @Nullable ManagedObject adapter) {
+        return asSpecified(adapter)
+                .filter(obj->!obj.getSpecialization().isPacked());
+    }
+
+    /**
+     * Optionally given adapter, based on whether it is specified
+     * (even if empty, that is, representing null.)
+     * @return SCALAR and NOT_EMTPY
+     */
+    public static Optional<ManagedObject> asScalarNonEmpty(final @Nullable ManagedObject adapter) {
+        return asScalar(adapter)
+                .filter(obj->!obj.getSpecialization().isEmpty());
     }
 
     /**

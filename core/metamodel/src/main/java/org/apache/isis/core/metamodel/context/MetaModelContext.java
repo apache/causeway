@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.iactn.InteractionProvider;
@@ -40,13 +39,10 @@ import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
-import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
-
-import lombok.val;
 
 /**
  *
@@ -113,25 +109,6 @@ public interface MetaModelContext {
 
     // cannot move to ServiceRegistry, because applib does not know ManagedObject
     ManagedObject lookupServiceAdapterById(String serviceId);
-
-    /**
-     * Recovers an object (graph) from given {@code bookmark}.
-     * <p>
-     * Resolves injection-points for the result.
-     * <p>
-     * Supports alias lookup.
-     */
-    default Optional<ManagedObject> loadObject(final @Nullable Bookmark bookmark) {
-        if(bookmark==null) {
-            return Optional.empty();
-        }
-        val specLoader = getSpecificationLoader();
-        val objManager = getObjectManager();
-        return specLoader
-                .specForLogicalTypeName(bookmark.getLogicalTypeName())
-                .map(spec->objManager.loadObject(
-                        ObjectLoader.Request.of(spec, bookmark)));
-    }
 
     // -- EXTRACTORS
 

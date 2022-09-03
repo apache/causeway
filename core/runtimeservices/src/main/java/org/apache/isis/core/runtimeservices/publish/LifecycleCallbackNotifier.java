@@ -123,7 +123,7 @@ public class LifecycleCallbackNotifier {
     private void postLifecycleEventIfRequired(
             final ManagedObject object,
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
-        ManagedObjects.whenSpecified(object)
+        ManagedObjects.asSpecified(object)
         .map(ManagedObject::getSpecification)
         .ifPresent(spec->{
 

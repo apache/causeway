@@ -42,24 +42,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-@EqualsAndHashCode(of = {"sessionGuid"})
-@NoArgsConstructor
-@AllArgsConstructor
 @Embeddable
+@AllArgsConstructor @NoArgsConstructor
+@EqualsAndHashCode
 public class SessionLogEntryPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Convert(converter = JavaUtilUuidConverter.class)
-    @Column(name = SessionLogEntry.SessionGuid.NAME, nullable = SessionLogEntry.SessionGuid.NULLABLE, length = SessionLogEntry.SessionGuid.MAX_LENGTH)
+    @Column(
+            name = SessionLogEntry.SessionGuid.NAME,
+            nullable = SessionLogEntry.SessionGuid.NULLABLE,
+            length = SessionLogEntry.SessionGuid.MAX_LENGTH)
     @Getter(AccessLevel.PACKAGE)
     private UUID sessionGuid;
 
     @Override
     public String toString() {
-        return sessionGuid != null ? sessionGuid.toString() : null;
+        return sessionGuid != null
+                ? sessionGuid.toString()
+                : null;
     }
-
 
     @Component
     @Priority(PriorityPrecedence.MIDPOINT)
@@ -72,12 +75,13 @@ public class SessionLogEntryPK implements Serializable {
 
         @Override
         public String enstring(final SessionLogEntryPK value) {
+            // fails if no guid
             return value.getSessionGuid().toString();
         }
 
         @Override
-        public SessionLogEntryPK destring(@NonNull final String stringified) {
-            return new SessionLogEntryPK(UUID.fromString(stringified));
+        public SessionLogEntryPK destring(final @NonNull String stringifiedUuid) {
+            return new SessionLogEntryPK(UUID.fromString(stringifiedUuid));
         }
     }
 }

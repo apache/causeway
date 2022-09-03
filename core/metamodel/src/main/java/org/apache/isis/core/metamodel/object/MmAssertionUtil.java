@@ -126,5 +126,12 @@ public class MmAssertionUtil {
                 ()->String.format("object %s does not provide a bookmark", adapter));
     }
 
+    /** check is NOT free of side-effects */
+    public static void assertHasBookmark(final @Nullable ManagedObject adapter) {
+        assertSpecifiedAndNotEmpty(adapter);
+        _Assert.assertTrue(adapter.getBookmark().isPresent(),
+                ()->String.format("object %s does not provide a bookmark", adapter));
+    }
+
 
 }

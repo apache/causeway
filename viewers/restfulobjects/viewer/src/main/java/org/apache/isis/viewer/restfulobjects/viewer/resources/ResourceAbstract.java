@@ -157,7 +157,7 @@ public abstract class ResourceAbstract {
         final String instanceIdDecoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
 
         val bookmark = Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceIdDecoded);
-        return metaModelContext.loadObject(bookmark)
+        return metaModelContext.getObjectManager().loadObject(bookmark)
                 .orElseThrow(()->onRoException.apply(
                         RestfulObjectsApplicationException
                         .createWithMessage(HttpStatusCode.NOT_FOUND,

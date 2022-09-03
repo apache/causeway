@@ -79,7 +79,7 @@ public class DnEntityStateProvider implements JdoFacetContext {
                 val oid = persistable.dnGetObjectId();
                 return oid!=null
                         ? EntityState.PERSISTABLE_ATTACHED
-                        : EntityState.PERSISTABLE_NO_OID;
+                        : EntityState.PERSISTABLE_ATTACHED_NO_OID;
             }
             return EntityState.PERSISTABLE_DETACHED;
         }
