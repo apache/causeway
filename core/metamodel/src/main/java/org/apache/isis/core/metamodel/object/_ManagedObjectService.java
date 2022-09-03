@@ -80,9 +80,7 @@ extends _ManagedObjectSpecified {
     // -- HELPER
 
     private Bookmark createBookmark() {
-        return Bookmark.forLogicalTypeAndIdentifier(
-                getSpecification().getLogicalType(),
-                "1");
+        return createBookmark("1");
     }
 
 }

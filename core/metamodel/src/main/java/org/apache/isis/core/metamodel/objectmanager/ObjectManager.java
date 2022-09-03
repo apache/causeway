@@ -26,6 +26,7 @@ import org.springframework.lang.Nullable;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.create.ObjectCreator;
@@ -89,8 +90,14 @@ public interface ObjectManager {
      * Returns an object identifier for the instance.
      * @param managedObject
      */
-    public default Bookmark bookmarkObject(final ManagedObject managedObject) {
+    public default Optional<Bookmark> bookmarkObject(final ManagedObject managedObject) {
         return getObjectBookmarker().bookmarkObject(managedObject);
+    }
+
+    public default Bookmark bookmarkObjectElseFail(final ManagedObject managedObject) {
+        return bookmarkObject(managedObject)
+                .orElseThrow(()->
+                    _Exceptions.unrecoverable("failed to bookmark %s", managedObject.getSpecification()));
     }
 
     /**
@@ -142,7 +149,7 @@ public interface ObjectManager {
             return ManagedObject.unspecified();
         }
         return spec.isScalar()
-                ? managedObjectEagerlyBookmarkedIfRequired(spec, pojo)
+                ? ManagedObject.adaptScalar(spec, pojo)
                 : ManagedObject.packed(
                         spec.getElementSpecification().orElseGet(fallbackElementType),
                         _NullSafe.streamAutodetect(pojo)
@@ -173,25 +180,11 @@ public interface ObjectManager {
                 || pojo.getClass().equals(proposedSpec.getCorrespondingClass()))
             // if actual type matches spec's, we assume, that we don't need to reload,
             // so this is a shortcut for performance reasons
-            ? managedObjectEagerlyBookmarkedIfRequired(
-                    proposedSpec, pojo)
+            ? ManagedObject.adaptScalar(proposedSpec, pojo)
             // fallback, ignoring proposedSpec
             : adapt(pojo);
         return adapter;
     }
 
-    // -- HELPER
-
-    /**
-     * {@link ManagedObject} factory, that in case of given pojo representing an entity
-     * and the entityAdaptingMode equals {@link EntityAdaptingMode#isBookmarkable()},
-     * then tries to memoize its {@link Bookmark} eagerly
-     * (otherwise its {@link Bookmark} is lazily resolved).
-     */
-    private static ManagedObject managedObjectEagerlyBookmarkedIfRequired(
-            final ObjectSpecification spec,
-            final Object pojo) {
-        return ManagedObject.adaptScalar(spec, pojo);
-    }
 
 }

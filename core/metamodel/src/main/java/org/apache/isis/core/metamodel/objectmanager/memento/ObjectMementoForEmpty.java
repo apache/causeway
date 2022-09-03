@@ -41,7 +41,7 @@ public class ObjectMementoForEmpty implements ObjectMemento {
     }
 
     @Override
-    public Bookmark bookmark() {
+    public Bookmark getBookmark() {
         return Bookmark.empty(logicalType);
     }
 

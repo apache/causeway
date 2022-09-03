@@ -29,6 +29,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.value.semantics.Parser;
@@ -41,15 +49,9 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
-import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.facets.object.value.ValueSerializerDefault;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.valuesemantics.StringValueSemantics;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import lombok.Getter;
 
@@ -135,14 +137,17 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     }
 
-    @Test
-    public void testValueSerializer_usingJson() {
+    @ParameterizedTest
+    @EnumSource(Format.class)
+    public void testValueSerializer(final Format format) {
+        assumeValueSemanticsProviderIsSetup();
+
         final T value = getSample();
-        final String encoded = getValueSerializer().toEncodedString(Format.JSON, value);
+        final String encoded = getValueSerializer().enstring(format, value);
 
         assertValueEncodesToJsonAs(value, encoded);
 
-        T decoded = getValueSerializer().fromEncodedString(Format.JSON, encoded);
+        T decoded = getValueSerializer().destring(format, encoded);
 
         Optional.ofNullable(semantics.getOrderRelation())
             .ifPresentOrElse(rel->Assertions.assertTrue(rel.equals(value, decoded)),
@@ -153,21 +158,23 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     protected abstract void assertValueEncodesToJsonAs(T a, String json);
 
 
-    @Test
-    public void testDecodeNULL() throws Exception {
+    @ParameterizedTest
+    @EnumSource(Format.class)
+    public void testDecodeNULL(final Format format) throws Exception {
         assumeValueSemanticsProviderIsSetup();
 
         final Object newValue = getValueSerializer()
-                .fromEncodedString(Format.JSON, ValueSerializerDefault.ENCODED_NULL);
+                .destring(format, ValueSerializerDefault.ENCODED_NULL);
         assertNull(newValue);
     }
 
-    @Test
-    public void testEmptyEncoding() {
+    @ParameterizedTest
+    @EnumSource(Format.class)
+    public void testEmptyEncoding(final Format format) {
         assumeValueSemanticsProviderIsSetup();
 
         assertEquals(ValueSerializerDefault.ENCODED_NULL, getValueSerializer()
-                .toEncodedString(Format.JSON, null));
+                .enstring(format, null));
     }
 
     @Test

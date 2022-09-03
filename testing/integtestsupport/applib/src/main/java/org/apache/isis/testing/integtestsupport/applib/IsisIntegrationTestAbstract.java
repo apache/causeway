@@ -31,10 +31,12 @@ import org.apache.isis.applib.services.iactn.InteractionProvider;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -112,6 +114,13 @@ public abstract class IsisIntegrationTestAbstract {
         return wrapperFactory.unwrap(obj);
     }
 
+    /**
+     * Get the current {@link EntityState} of given pojo.
+     */
+    protected EntityState entityState(final Object obj) {
+        return objectManager.adapt(obj).getEntityState();
+    }
+
     // -- DEPENDENCIES
 
     @Getter(AccessLevel.PACKAGE) // share with _Helper
@@ -124,5 +133,6 @@ public abstract class IsisIntegrationTestAbstract {
     @Inject protected UserService userService;
     @Inject protected WrapperFactory wrapperFactory;
     @Inject protected TransactionService transactionService;
-
+    // internal framework debugging
+    @Inject private ObjectManager objectManager;
 }

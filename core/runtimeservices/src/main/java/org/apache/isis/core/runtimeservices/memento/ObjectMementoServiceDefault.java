@@ -29,17 +29,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.annotation.Domain;
 import org.apache.isis.applib.annotation.PriorityPrecedence;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.core.metamodel.object.MmAssertionUtil;
 import org.apache.isis.core.metamodel.object.PackedManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -51,7 +50,6 @@ import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -71,22 +69,19 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
 
     @Override
     public ObjectMemento mementoForBookmark(@NonNull final Bookmark bookmark) {
-        val mementoAdapter = _ObjectMemento.createPersistent(bookmark, specificationLoader);
-        return ObjectMementoAdapter.of(mementoAdapter);
+        return _ObjectMementoForScalar.createPersistent(bookmark, specificationLoader);
     }
 
     @Override
     public ObjectMemento mementoForSingle(@Nullable final ManagedObject adapter) {
-        _Assert.assertFalse(adapter instanceof PackedManagedObject);
-        val mementoAdapter = _ObjectMemento.createOrNull(adapter);
-        if(mementoAdapter==null) {
-            // sonar-ignore-on (fails to detect this as null guard)
-            return ManagedObjects.isSpecified(adapter)
-                    ? new ObjectMementoForEmpty(adapter.getSpecification().getLogicalType())
-                    : null;
-            // sonar-ignore-on
-        }
-        return ObjectMementoAdapter.of(mementoAdapter);
+        MmAssertionUtil.assertPojoIsScalar(adapter);
+
+        return _ObjectMementoForScalar.create(adapter)
+            .map(ObjectMemento.class::cast)
+            .orElseGet(()->
+                ManagedObjects.isSpecified(adapter)
+                        ? new ObjectMementoForEmpty(adapter.getLogicalType())
+                        : null);
     }
 
     @Override
@@ -96,21 +91,8 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
         return ObjectMementoCollection.of(
                 listOfMementos,
-                packedAdapter.getSpecification().getLogicalType());
+                packedAdapter.getLogicalType());
     }
-
-    @Override
-    public ObjectMemento mementoForAnyCardinality(@NonNull final ManagedObject paramAdapter) {
-        if(paramAdapter instanceof PackedManagedObject) {
-            return mementoForMulti((PackedManagedObject) paramAdapter);
-        }
-        val mementoAdapter = _ObjectMemento.createOrNull(paramAdapter);
-        if(mementoAdapter==null) {
-            return new ObjectMementoForEmpty(paramAdapter.getSpecification().getLogicalType());
-        }
-        return ObjectMementoAdapter.of(mementoAdapter);
-    }
-
 
     @Override
     public ObjectMemento mementoForPojo(final Object pojo) {
@@ -119,7 +101,7 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForPojos(final Iterable<Object> iterablePojos, final LogicalType logicalType) {
+    public ObjectMemento mementoForPojos(final LogicalType logicalType, final Iterable<Object> iterablePojos) {
         val listOfMementos = _NullSafe.stream(iterablePojos)
                 .map(pojo->mementoForPojo(pojo))
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
@@ -155,41 +137,12 @@ public class ObjectMementoServiceDefault implements ObjectMementoService {
             return ManagedObject.packed(elementSpec, objects);
         }
 
-        if(memento instanceof ObjectMementoAdapter) {
-            val objectMementoAdapter = (ObjectMementoAdapter) memento;
+        if(memento instanceof _ObjectMementoForScalar) {
+            val objectMementoAdapter = (_ObjectMementoForScalar) memento;
             return objectMementoAdapter.reconstructObject(mmc);
         }
 
         throw _Exceptions.unrecoverable("unsupported ObjectMemento type %s", memento.getClass());
-    }
-
-    @Domain.Exclude
-    @RequiredArgsConstructor(staticName = "of")
-    private static class ObjectMementoAdapter implements ObjectMemento {
-
-        private static final long serialVersionUID = 1L;
-
-        private final _ObjectMemento delegate;
-
-        @Override
-        public String getTitle() {
-            return delegate.getTitleString();
-        }
-
-        @Override
-        public Bookmark bookmark() {
-            return delegate.asBookmark();
-        }
-
-        @Override
-        public LogicalType getLogicalType() {
-            return delegate.getLogicalType();
-        }
-
-        ManagedObject reconstructObject(final MetaModelContext mmc) {
-            return delegate.reconstructObject(mmc);
-        }
-
     }
 
 }

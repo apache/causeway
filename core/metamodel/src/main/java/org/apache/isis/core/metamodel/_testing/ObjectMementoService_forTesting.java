@@ -51,17 +51,12 @@ implements ObjectMementoService {
     }
 
     @Override
-    public ObjectMemento mementoForPojos(final Iterable<Object> iterablePojos, final LogicalType logicalType) {
+    public ObjectMemento mementoForPojos(final LogicalType logicalType, final Iterable<Object> iterablePojos) {
         return null;
     }
 
     @Override
     public ManagedObject reconstructObject(final ObjectMemento memento) {
-        return null;
-    }
-
-    @Override
-    public ObjectMemento mementoForAnyCardinality(@NonNull final ManagedObject paramAdapter) {
         return null;
     }
 

@@ -132,16 +132,16 @@ implements ValueFacet<T> {
                 iaProvider.currentInteractionContext().orElse(null));
     }
 
-    // -- TO STRING SERIALIZATION
+    // -- TO/FROM STRING SERIALIZATION
 
     @Override
-    public T fromEncodedString(final Format format, final String encodedData) {
-        return valueSerializer.fromEncodedString(format, encodedData);
+    public final T destring(final Format format, final String encodedData) {
+        return valueSerializer.destring(format, encodedData);
     }
 
     @Override
-    public String toEncodedString(final Format format, final T value) {
-        return valueSerializer.toEncodedString(format, value);
+    public final String enstring(final Format format, final T value) {
+        return valueSerializer.enstring(format, value);
     }
 
     // -- ORDER RELATION

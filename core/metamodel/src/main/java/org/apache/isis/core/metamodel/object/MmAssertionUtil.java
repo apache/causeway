@@ -113,4 +113,18 @@ public class MmAssertionUtil {
                 ()->String.format("is scalar %s", pojo.getClass()));
     }
 
+    /** check is free of side-effects */
+    public void assertSpecifiedAndNotEmpty(final @Nullable ManagedObject adapter) {
+        _Assert.assertFalse(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter),
+                ()->"object is null unspecified or empty");
+    }
+
+    /** check is free of side-effects - also fails on non-attached entities */
+    public void assertIsBookmarkSupported(final @Nullable ManagedObject adapter) {
+        assertSpecifiedAndNotEmpty(adapter);
+        _Assert.assertFalse(adapter.getSpecialization().getBookmarkPolicy().isNoBookmark(),
+                ()->String.format("object %s does not provide a bookmark", adapter));
+    }
+
+
 }

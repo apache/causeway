@@ -35,14 +35,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import org.apache.isis.applib.annotation.PriorityPrecedence;
-import org.apache.isis.applib.annotation.ValueSemantics;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet.PrimaryKeyType;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 
-import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -51,24 +50,19 @@ import lombok.val;
  * <p>
  * This is intended for framework use, there is little reason to call it or override it.
  *
- * @implNote yet does not support per member ValueSemantics selection;
- *      future work would look for {@link ValueSemantics} annotations on primary key members and
- *      would then honor {@link ValueSemantics#provider()} attribute,
- *      to narrow the {@link IdStringifier} search
- *
  * @since 2.0
  */
 @Service
-@Named(IsisModuleCoreRuntime.NAMESPACE + ".IdStringifierService")
+@Named(IsisModuleCoreRuntime.NAMESPACE + ".IdStringifierLookupService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class IdStringifierService {
+public class IdStringifierLookupService {
 
     private final Can<IdStringifier<?>> idStringifiers;
     private final Map<Class<?>, IdStringifier<?>> stringifierByClass = new ConcurrentHashMap<>();
 
     @Inject
-    public IdStringifierService(
+    public IdStringifierLookupService(
             final List<IdStringifier<?>> idStringifiers,
             final Optional<IdStringifier<Serializable>> idStringifierForSerializableIfAny) {
         // IdStringifierForSerializable is enforced to go last, so any custom IdStringifier(s)
@@ -82,31 +76,23 @@ public class IdStringifierService {
         this.idStringifiers = Can.ofCollection(idStringifiers);
     }
 
-    public <T> String enstringPrimaryKey(final @NonNull Class<T> primaryKeyType, final @NonNull Object primaryKey) {
-        val idStringifier = lookupElseFail(ClassUtils.resolvePrimitiveIfNecessary(primaryKeyType));
-        return idStringifier.enstring(_Casts.uncheckedCast(primaryKey));
+    public <T> PrimaryKeyType<T> primaryKeyTypeFor(
+            final Class<?> entityClass, final Class<T> primaryKeyType) {
+        return PrimaryKeyType.getInstance(entityClass,
+                this::lookupIdStringifierElseFail,
+                primaryKeyType);
     }
 
-    public <T> T destringPrimaryKey(
-            final @NonNull Class<T> primaryKeyType,
-            final @NonNull Class<?> entityClass,
-            final @NonNull String stringifiedId) {
-        val idStringifier = lookupElseFail(ClassUtils.resolvePrimitiveIfNecessary(primaryKeyType));
-        val primaryKey = idStringifier.destring(entityClass, stringifiedId);
-        return _Casts.uncheckedCast(primaryKey);
-    }
-
-    // -- HELPER
-
-    private <T> IdStringifier<T> lookupElseFail(final Class<T> candidateValueClass) {
-        return lookup(candidateValueClass)
+    public <T> IdStringifier<T> lookupIdStringifierElseFail(final Class<T> candidateValueClass) {
+        return lookupIdStringifier(candidateValueClass)
             .orElseThrow(() -> _Exceptions.noSuchElement(
                     "Could not locate an IdStringifier to handle '%s'",
                     candidateValueClass));
     }
 
-    private <T> Optional<IdStringifier<T>> lookup(final Class<T> candidateValueClass) {
-        val idStringifier = stringifierByClass.computeIfAbsent(candidateValueClass, aClass -> {
+    public <T> Optional<IdStringifier<T>> lookupIdStringifier(final Class<T> candidateValueClass) {
+        val idStringifier = stringifierByClass.computeIfAbsent(
+                ClassUtils.resolvePrimitiveIfNecessary(candidateValueClass), aClass -> {
             for (val candidateStringifier : idStringifiers) {
                 if (candidateStringifier.getCorrespondingClass().isAssignableFrom(candidateValueClass)) {
                     return candidateStringifier;

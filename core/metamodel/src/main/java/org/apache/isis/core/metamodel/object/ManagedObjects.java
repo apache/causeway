@@ -158,8 +158,16 @@ public final class ManagedObjects {
 
     public static Bookmark bookmarkElseFail(final @Nullable ManagedObject managedObject) {
         return bookmark(managedObject)
-                .orElseThrow(()->_Exceptions.illegalArgument("cannot identify %s", managedObject));
+                .orElseThrow(()->_Exceptions.illegalArgument("Object provides no Bookmark: %s", managedObject));
     }
+
+//    /**
+//     * eg. transient entities have no bookmark, so can fallback to UUID
+//     */
+//    public static Bookmark bookmarkElseUUID(final @Nullable ManagedObject managedObject) {
+//        return bookmark(managedObject)
+//                .orElseGet(()->managedObject.createBookmark(UUID.randomUUID().toString()));
+//    }
 
     /**
      * @param managedObject
@@ -368,7 +376,7 @@ public final class ManagedObjects {
         .collect(Can.toCan());
     }
 
-    
+
 
     // -- IMPERATIVE TEXT UTILITY
 

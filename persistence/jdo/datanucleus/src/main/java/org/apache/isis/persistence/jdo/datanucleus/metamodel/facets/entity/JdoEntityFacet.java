@@ -55,14 +55,17 @@ import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
-import org.apache.isis.core.runtime.idstringifier.IdStringifierService;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -80,9 +83,17 @@ implements EntityFacet {
     @Inject private ObjectManager objectManager;
     @Inject private ExceptionRecognizerService exceptionRecognizerService;
     @Inject private JdoFacetContext jdoFacetContext;
-    @Inject private IdStringifierService idStringifierService;
+    @Inject private ObjectLifecyclePublisher objectLifecyclePublisher;
+
+    @Getter(value = AccessLevel.PROTECTED) @Accessors(fluent = true)
+    @Inject private IdStringifierLookupService idStringifierLookupService;
 
     private final Class<?> entityClass;
+
+    // lazily looks up the primaryKeyTypeFor (needs a PersistenceManager)
+    @Getter(lazy=true, value = AccessLevel.PROTECTED) @Accessors(fluent = true)
+    private final PrimaryKeyType<?> primaryKeyTypeForDecoding = idStringifierLookupService()
+            .primaryKeyTypeFor(entityClass, primaryKeyTypeFor(entityClass));
 
     public JdoEntityFacet(
             final FacetHolder holder, final Class<?> entityClass) {
@@ -95,6 +106,19 @@ implements EntityFacet {
         return PersistenceStack.JDO;
     }
 
+    /* OPTIMIZATION
+     * even though the IdStringifierLookupService already holds a lookup map,
+     * for performance reasons,
+     * we define another one local to the context of the associated entity class */
+    private final Map<Class<?>, PrimaryKeyType<?>> primaryKeyTypesForEncoding = new ConcurrentHashMap<>();
+    private final PrimaryKeyType<?> primaryKeyTypeForEncoding(final @NonNull Object oid) {
+        val actualPrimaryKeyClass = oid.getClass();
+        val primaryKeyType = primaryKeyTypesForEncoding.computeIfAbsent(actualPrimaryKeyClass, key->
+            idStringifierLookupService()
+                .primaryKeyTypeFor(entityClass, actualPrimaryKeyClass));
+        return primaryKeyType;
+    }
+
     @Override
     public Optional<String> identifierFor(final Object pojo) {
 
@@ -103,11 +127,15 @@ implements EntityFacet {
         }
 
         val pm = getPersistenceManager();
-        var primaryKeyIfAny = pm.getObjectId(pojo);
+        var primaryKeyIfAny = Optional.ofNullable(pm.getObjectId(pojo));
 
-        return Optional.ofNullable(primaryKeyIfAny)
+        _Assert.assertTrue(primaryKeyIfAny.isPresent(), ()->
+            String.format("failed to get OID even though entity is attached %s", pojo.getClass().getName()));
+
+        val idIfAny = primaryKeyIfAny
                 .map(primaryKey->
-                    idStringifierService.enstringPrimaryKey(primaryKey.getClass(), primaryKey));
+                    primaryKeyTypeForEncoding(primaryKey).enstringWithCast(primaryKey));
+        return idIfAny;
     }
 
     @Override
@@ -119,8 +147,7 @@ implements EntityFacet {
         try {
 
             val persistenceManager = getPersistenceManager();
-            val primaryKey = idStringifierService
-                    .destringPrimaryKey(primaryKeyTypeFor(entityClass), entityClass, bookmark.getIdentifier());
+            val primaryKey = primaryKeyTypeForDecoding().destring(bookmark.getIdentifier());
 
             val fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
@@ -364,13 +391,11 @@ implements EntityFacet {
 
     private Can<ManagedObject> fetchWithinTransaction(final Supplier<List<?>> fetcher) {
 
-        val objectLifecyclePublisher = getFacetHolder().getServiceRegistry()
-                .lookupServiceElseFail(ObjectLifecyclePublisher.class);
-
         return getTransactionalProcessor().callWithinCurrentTransactionElseCreateNew(
                 ()->_NullSafe.stream(fetcher.get())
                     .map(fetchedObject->adopt(objectLifecyclePublisher, fetchedObject))
                     .collect(Can.toCan()))
+                .ifFailureFail()
                 .getValue().orElseThrow();
     }
 
@@ -392,6 +417,5 @@ implements EntityFacet {
             return objectManager.adapt(fetchedObject);
         }
     }
-
 
 }

@@ -101,7 +101,7 @@ extends _ManagedObjectSpecified {
         return ManagedObjects.spec(adapter)
                 .map(ObjectSpecification::getMetaModelContext)
                 .map(MetaModelContext::getObjectManager)
-                .map(objectManager->objectManager.bookmarkObject(adapter));
+                .flatMap(objectManager->objectManager.bookmarkObject(adapter));
     }
 
     // -- REFRESH OPTIMIZATION

@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
 
@@ -86,11 +85,9 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
             return;
         }
 
-        val bookmark = objectManager.bookmarkObject(adapter);
-
-        val loadRequest = ObjectLoader.Request.of(adapter.getSpecification(), bookmark);
-
-        objectManager.loadObject(loadRequest);
+        objectManager.bookmarkObject(adapter)
+            .map(bookmark->ObjectLoader.Request.of(adapter.getSpecification(), bookmark))
+            .ifPresent(objectManager::loadObject);
     }
 
     protected void resolveIfRequired(final Object domainObject) {

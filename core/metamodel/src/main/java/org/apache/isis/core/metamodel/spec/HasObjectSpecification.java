@@ -16,45 +16,45 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.objectmanager.memento;
+package org.apache.isis.core.metamodel.spec;
 
-import java.util.ArrayList;
+import java.util.Optional;
 
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
 
 /**
- *
- * @since 2.0
- *
+ * Introduced as a shortcut provider.
  */
-@Value(staticConstructor = "of")
-public final class ObjectMementoCollection implements ObjectMemento {
+public interface HasObjectSpecification {
 
-    private static final long serialVersionUID = 1L;
+    ObjectSpecification getSpecification();
 
-    private final ArrayList<ObjectMemento> container;
+    // -- SHORTCUTS
 
-    @Getter(onMethod_ = {@Override})
-    @NonNull private final LogicalType logicalType;
-
-    @Override
-    public String getTitle() {
-        throw _Exceptions.notImplemented(); // please unwrap at call-site
+    default Class<?> getCorrespondingClass() {
+        return getSpecification().getCorrespondingClass();
     }
 
-    @Override
-    public Bookmark getBookmark() {
-        throw _Exceptions.notImplemented(); // please unwrap at call-site
+    default LogicalType getLogicalType() {
+        return getSpecification().getLogicalType();
     }
 
-    public ArrayList<ObjectMemento> unwrapList() {
-        return getContainer();
+    default String getLogicalTypeName() {
+        return getSpecification().getLogicalTypeName();
+    }
+
+    /**
+     * As used for the element type of collections.
+     */
+    default Optional<ObjectSpecification> getElementSpecification() {
+        return getSpecification().getElementSpecification();
+    }
+
+    default Bookmark createBookmark(final @NonNull String urlSafeIdentifier) {
+        return Bookmark.forLogicalTypeAndIdentifier(getLogicalType(), urlSafeIdentifier);
     }
 
 }

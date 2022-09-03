@@ -34,10 +34,17 @@ public interface ObjectMementoService {
 
     ObjectMemento mementoForSingle(ManagedObject adapter);
     ObjectMemento mementoForMulti(PackedManagedObject adapter);
-    ObjectMemento mementoForAnyCardinality(@NonNull ManagedObject paramAdapter);
+
+    default ObjectMemento mementoForAnyCardinality(@NonNull final ManagedObject adapterAny) {
+        if(adapterAny instanceof PackedManagedObject) {
+            return mementoForMulti((PackedManagedObject) adapterAny);
+        }
+        return mementoForSingle(adapterAny);
+    }
 
     ObjectMemento mementoForPojo(Object pojo);
-    ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, LogicalType logicalType);
+
+    ObjectMemento mementoForPojos(LogicalType logicalType, Iterable<Object> iterablePojos);
 
     ManagedObject reconstructObject(ObjectMemento memento);
 

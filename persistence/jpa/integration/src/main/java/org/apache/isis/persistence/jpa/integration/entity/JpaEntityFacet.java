@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jpa.integration.entity;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.PersistenceUnitUtil;
@@ -34,7 +35,6 @@ import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
@@ -45,7 +45,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.runtime.idstringifier.IdStringifierService;
+import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 
 import lombok.NonNull;
 import lombok.val;
@@ -56,19 +56,22 @@ public class JpaEntityFacet
         extends FacetAbstract
         implements EntityFacet {
 
+    // self managed injections via constructor
+    @Inject private JpaContext jpaContext;
+    @Inject private IdStringifierLookupService idStringifierLookupService;
+
     private final Class<?> entityClass;
-    private final ServiceRegistry serviceRegistry;
-    private final IdStringifierService idStringifierService;
+    private PrimaryKeyType<?> primaryKeyType;
 
     protected JpaEntityFacet(
             final FacetHolder holder,
-            final Class<?> entityClass,
-            final @NonNull ServiceRegistry serviceRegistry) {
-
+            final Class<?> entityClass) {
         super(EntityFacet.class, holder, Precedence.HIGH);
+        getServiceInjector().injectServicesInto(this);
+
         this.entityClass = entityClass;
-        this.serviceRegistry = serviceRegistry;
-        this.idStringifierService = serviceRegistry.lookupServiceElseFail(IdStringifierService.class);
+        this.primaryKeyType = idStringifierLookupService
+                .primaryKeyTypeFor(entityClass, getPrimaryKeyType());
     }
 
     // -- ENTITY FACET
@@ -91,7 +94,7 @@ public class JpaEntityFacet
 
         return Optional.ofNullable(primaryKeyIfAny)
                 .map(primaryKey->
-                    idStringifierService.enstringPrimaryKey(getPrimaryKeyType(), primaryKey));
+                    primaryKeyType.enstringWithCast(primaryKey));
     }
 
     @Override
@@ -99,8 +102,7 @@ public class JpaEntityFacet
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
-        val primaryKey = idStringifierService
-                .destringPrimaryKey(getPrimaryKeyType(), entityClass, bookmark.getIdentifier());
+        val primaryKey = primaryKeyType.destring(bookmark.getIdentifier());
 
         val entityManager = getEntityManager();
         val entityPojo = entityManager.find(entityClass, primaryKey);
@@ -311,12 +313,8 @@ public class JpaEntityFacet
 
     // -- DEPENDENCIES
 
-    protected JpaContext getJpaContext() {
-        return serviceRegistry.lookupServiceElseFail(JpaContext.class);
-    }
-
     protected EntityManager getEntityManager() {
-        return getJpaContext().getEntityManagerByManagedType(entityClass);
+        return jpaContext.getEntityManagerByManagedType(entityClass);
     }
 
     protected PersistenceUnitUtil getPersistenceUnitUtil(final EntityManager entityManager) {

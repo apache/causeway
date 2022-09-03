@@ -24,6 +24,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.ioc._ManagedBeanAdapter;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
+import org.apache.isis.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
@@ -70,7 +71,7 @@ final class ObjectLoader_builtinHandlers {
 
     }
 
-    // -- MANAGED BEANS
+    // -- SERVICES / MANAGED BEANS
 
     @Value
     public static class LoadService implements ObjectLoader.Handler {
@@ -98,7 +99,7 @@ final class ObjectLoader_builtinHandlers {
                         "loader: %s loading logicalType %s",
                         this.getClass().getName(), logicalType));
 
-            return ManagedObject.of(spec, servicePojo);
+            return ManagedObject.service(spec, servicePojo);
         }
 
     }
@@ -120,12 +121,13 @@ final class ObjectLoader_builtinHandlers {
         @Override
         public ManagedObject handle(final ObjectLoader.Request objectLoadRequest) {
 
-            // cannot load a value
-
             val spec = objectLoadRequest.getObjectSpecification();
-            throw _Exceptions.illegalArgument(
-                    "cannot load a value, loader: %s loading ObjectSpecification %s",
-                        this.getClass().getName(), spec);
+            val valueFacet = spec.valueFacetElseFail();
+
+            val bookmark = objectLoadRequest.getBookmark();
+            val valuePojoIfAny = valueFacet.destring(Format.URL_SAFE, bookmark.getIdentifier());
+
+            return ManagedObject.value(spec, valuePojoIfAny);
         }
 
     }

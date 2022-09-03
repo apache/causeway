@@ -77,15 +77,12 @@ extends _ManagedObjectSpecified {
     // -- HELPER
 
     private ValueFacet<?> valueFacet() {
-        return getSpecification().valueFacet().orElseThrow();
+        return getSpecification().valueFacetElseFail();
     }
 
     private Bookmark createBookmark() {
-        //TODO if value semantics providers are enforced to provide an IdStringifier,
-        // we could use that instead (to generate the second argument)!
-        return Bookmark.forLogicalTypeAndIdentifier(
-                getSpecification().getLogicalType(),
-                valueFacet().toEncodedString(Format.JSON, _Casts.uncheckedCast(getPojo())));
+        return createBookmark(
+                valueFacet().enstring(Format.URL_SAFE, _Casts.uncheckedCast(getPojo())));
     }
 
 }

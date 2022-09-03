@@ -19,14 +19,20 @@
 package org.apache.isis.core.metamodel.objectmanager.memento;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.resources._Serializables;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
 /**
@@ -65,6 +71,26 @@ public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializa
             return Optional.empty();
         }
         return Optional.ofNullable(((ObjectMementoCollection)memento).unwrapList());
+    }
+
+    @Nullable
+    static String enstringToUrlBase64(final @Nullable ObjectMemento memento) {
+        return memento!=null
+                ? _Strings.ofBytes(
+                    _Bytes.asUrlBase64.apply(
+                            _Serializables.write(memento)),
+                    StandardCharsets.US_ASCII)
+                : null;
+    }
+
+    @Nullable
+    static ObjectMemento destringFromUrlBase64(final @Nullable String base64UrlEncodedMemento) {
+        return _Strings.isNotEmpty(base64UrlEncodedMemento)
+                ? _Serializables.read(
+                        ObjectMemento.class,
+                        _Bytes.ofUrlBase64.apply(
+                                base64UrlEncodedMemento.getBytes(StandardCharsets.US_ASCII)))
+                : null;
     }
 
 
