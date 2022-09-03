@@ -29,8 +29,10 @@ import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.state.ReferentialStateManagerImpl;
 import org.datanucleus.store.FieldValues;
+import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -54,65 +56,66 @@ extends ReferentialStateManagerImpl {
         this.serviceInjector = extractServiceInjectorFrom(ec).orElse(null);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public void initialiseForHollow(final Object id, final FieldValues fv, final Class pcClass) {
         super.initialiseForHollow(id, fv, pcClass);
-        injectServices(myPC);
+        injectServicesIfNotAlready();
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({ "deprecation", "rawtypes" })
     @Override
     public void initialiseForHollowAppId(final FieldValues fv, final Class pcClass) {
         super.initialiseForHollowAppId(fv, pcClass);
-        injectServices(myPC);
+        injectServicesIfNotAlready();
     }
 
     @Override
     public void initialiseForHollowPreConstructed(final Object id, final Persistable pc) {
         super.initialiseForHollowPreConstructed(id, pc);
-        injectServices(myPC);
+        injectServicesIfNotAlready();
     }
 
     @Override
     public void initialiseForPersistentClean(final Object id, final Persistable pc) {
         super.initialiseForPersistentClean(id, pc);
-        injectServices(myPC);
+        injectServicesIfNotAlready();
     }
 
     @Override
     public void initialiseForEmbedded(final Persistable pc, final boolean copyPc) {
         super.initialiseForEmbedded(pc, copyPc);
-        injectServices(myPC);
+        injectServicesIfNotAlready();
     }
 
     @Override
     public void initialiseForPersistentNew(final Persistable pc, final FieldValues preInsertChanges) {
         super.initialiseForPersistentNew(pc, preInsertChanges);
-        injectServices(myPC);
+        injectServicesIfNotAlready();
     }
 
     @Override
     public void initialiseForTransactionalTransient(final Persistable pc) {
         super.initialiseForTransactionalTransient(pc);
-        injectServices(myPC);
+        injectServicesIfNotAlready();
     }
 
     @Override
     public void initialiseForDetached(final Persistable pc, final Object id, final Object version) {
         super.initialiseForDetached(pc, id, version);
-        injectServices(myPC);
+        injectServicesIfNotAlready();
     }
 
     @Override
     public void initialiseForPNewToBeDeleted(final Persistable pc) {
         super.initialiseForPNewToBeDeleted(pc);
-        injectServices(myPC);
+        injectServicesIfNotAlready();
     }
 
     @Override
     public void initialiseForCachedPC(final CachedPC cachedPC, final Object id) {
         super.initialiseForCachedPC(cachedPC, id);
-        injectServices(myPC);
+        injectServicesIfNotAlready();
     }
 
     // -- HELPER
@@ -143,17 +146,29 @@ extends ReferentialStateManagerImpl {
         return Optional.of(serviceInjector);
     }
 
-    private void injectServices(final Persistable entity) {
-        if(entity==null) {
-            return;
+    private boolean injectionPointsResolved = false;
+
+    /**
+     * Returns whether injection points are resolved for myPC.
+     */
+    public boolean injectServicesIfNotAlready() {
+        if(myPC==null) {
+            this.injectionPointsResolved = false; // reset
+            return true;
+        }
+        if(injectionPointsResolved) {
+            //XXX would be nice count as a metric
+            return true;
         }
         if(serviceInjector!=null) {
-            serviceInjector.injectServicesInto(entity);
+            serviceInjector.injectServicesInto(myPC);
+            this.injectionPointsResolved = true;
         } else {
             log.warn("cannot inject services into entity of type {}, "
                     + "as there is no ServiceInjector available",
-                    entity.getClass());
+                    myPC.getClass());
         }
+        return injectionPointsResolved;
     }
 
     // -- [ISIS-3126] PRE-DIRTY NESTED LOOP PREVENTION
@@ -175,6 +190,7 @@ extends ReferentialStateManagerImpl {
     private final Map<Object, PreDirtyPropagationLock> preDirtyPropagationLocks =
             _Maps.newHashMap();
 
+    //TODO there is probably only ever one id per instance: verify an simplify
     private final PreDirtyPropagationLock createPreDirtyPropagationLock(final Object id) {
         return ()->preDirtyPropagationLocks.remove(id);
     }
@@ -200,6 +216,14 @@ extends ReferentialStateManagerImpl {
         }
 
         return lockIfGranted;
+    }
+
+    // -- UTILITY
+
+    public static Optional<DnObjectProviderForIsis> extractFrom(final @Nullable Persistable pojo) {
+        return pojo!=null
+                ? _Casts.castTo(DnObjectProviderForIsis.class, pojo.dnGetStateManager())
+                : Optional.empty();
     }
 
     // --

@@ -34,17 +34,18 @@ import javax.enterprise.inject.spi.InjectionTarget;
 import javax.inject.Provider;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.SneakyThrows;
 
 final class _Util {
 
-    static <T> CreationalContext<T> createCreationalContext(Contextual<T> contextual) {
+    static <T> CreationalContext<T> createCreationalContext(final Contextual<T> contextual) {
         return new CreationalContext<T>() {
 
             @Override
-            public void push(T incompleteInstance) {
+            public void push(final T incompleteInstance) {
                 // silently ignore
             }
 
@@ -56,7 +57,7 @@ final class _Util {
         };
     }
 
-    static <T> AnnotatedType<T> createAnnotatedType(Class<T> type) {
+    static <T> AnnotatedType<T> createAnnotatedType(final Class<T> type) {
 
         return new AnnotatedType<T>() {
 
@@ -78,7 +79,7 @@ final class _Util {
             }
 
             @Override
-            public <X extends Annotation> X getAnnotation(Class<X> annotationType) {
+            public <X extends Annotation> X getAnnotation(final Class<X> annotationType) {
                 _Exceptions.throwNotImplemented();
                 return null;
             }
@@ -90,7 +91,7 @@ final class _Util {
             }
 
             @Override
-            public boolean isAnnotationPresent(Class<? extends Annotation> annotationType) {
+            public boolean isAnnotationPresent(final Class<? extends Annotation> annotationType) {
                 _Exceptions.throwNotImplemented();
                 return false;
             }
@@ -122,17 +123,17 @@ final class _Util {
         return new InjectionTarget<T>() {
 
             @Override @SneakyThrows
-            public T produce(CreationalContext<T> ctx) {
-                return type.getJavaClass().newInstance();
+            public T produce(final CreationalContext<T> ctx) {
+                return type.getJavaClass().getConstructor(_Constants.emptyClasses).newInstance();
             }
 
             @Override
-            public void inject(T instance, CreationalContext<T> ctx) {
+            public void inject(final T instance, final CreationalContext<T> ctx) {
                 serviceInjectorProvider.get().injectServicesInto(instance);
             }
 
             @Override
-            public void dispose(T instance) {
+            public void dispose(final T instance) {
                 // silently ignore
             }
 
@@ -143,12 +144,12 @@ final class _Util {
             }
 
             @Override
-            public void postConstruct(T instance) {
+            public void postConstruct(final T instance) {
                 // silently ignore
             }
 
             @Override
-            public void preDestroy(T instance) {
+            public void preDestroy(final T instance) {
                 // silently ignore
             }
         };

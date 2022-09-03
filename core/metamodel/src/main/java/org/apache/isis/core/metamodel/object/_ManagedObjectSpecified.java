@@ -67,11 +67,19 @@ implements ManagedObject {
         if(specialization.getTypePolicy().isExactTypeRequired()) {
             MmAssertionUtil.assertExactType(specification, pojo);
         }
-        if(getSpecification().isEntityOrViewModel()) {
-            getServiceInjector().injectServicesInto(pojo); // might be redundant
+        if(getSpecialization().getInjectionPolicy().isAlwaysInject()) {
+            if(!isInjectionPointsResolved()) {
+                getServiceInjector().injectServicesInto(pojo); // might be redundant
+            }
         }
         return pojo;
     }
+
+    /**
+     * override if there is optimization available
+     * @apiNote must only be called by {@link #assertCompliance(Object)}
+     */
+    protected boolean isInjectionPointsResolved() { return false; }
 
     @Override
     public String getTitle() {

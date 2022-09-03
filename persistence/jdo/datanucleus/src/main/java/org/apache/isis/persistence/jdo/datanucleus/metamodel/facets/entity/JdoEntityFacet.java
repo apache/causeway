@@ -57,6 +57,7 @@ import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.isis.core.runtime.idstringifier.IdStringifierLookupService;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
+import org.apache.isis.persistence.jdo.datanucleus.entities.DnObjectProviderForIsis;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -78,6 +79,7 @@ public class JdoEntityFacet
 extends FacetAbstract
 implements EntityFacet {
 
+    // self managed injections via getPersistenceManager or getTransactionalProcessor
     @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;
     @Inject private TransactionService txService;
     @Inject private ObjectManager objectManager;
@@ -117,6 +119,16 @@ implements EntityFacet {
             idStringifierLookupService()
                 .primaryKeyTypeFor(entityClass, actualPrimaryKeyClass));
         return primaryKeyType;
+    }
+
+    @Override
+    public boolean isInjectionPointsResolved(final Object pojo) {
+        if(pojo instanceof Persistable) {
+            DnObjectProviderForIsis.extractFrom((Persistable) pojo)
+            .map(DnObjectProviderForIsis::injectServicesIfNotAlready)
+            .orElse(false);
+        }
+        return pojo==null;
     }
 
     @Override
@@ -292,8 +304,6 @@ implements EntityFacet {
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.makePersistent(pojo))
         .ifFailureFail();
-
-        //TODO integrate with entity change tracking
     }
 
     @Override
@@ -314,8 +324,6 @@ implements EntityFacet {
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.deletePersistent(pojo))
         .ifFailureFail();
-
-        //TODO integrate with entity change tracking
     }
 
     @Override
@@ -334,8 +342,6 @@ implements EntityFacet {
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
         .ifFailureFail();
-
-        //TODO integrate with entity change tracking
     }
 
     @Override
@@ -359,12 +365,6 @@ implements EntityFacet {
         return jdoFacetContext.isMethodProvidedByEnhancement(method);
     }
 
-    // -- INTERACTION TRACKER LAZY LOOKUP
-
-    // memoizes the lookup, just an optimization
-//    private final _Lazy<InteractionLayerTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(
-//            ()->getServiceRegistry().lookupServiceElseFail(InteractionLayerTracker.class));
-
     // -- DEPENDENCIES
 
     private PersistenceManager getPersistenceManager() {
@@ -381,25 +381,18 @@ implements EntityFacet {
         return txService;
     }
 
-//    private JdoPersistenceSession getJdoPersistenceSession() {
-//        return isisInteractionTrackerLazy.get().currentInteractionSession()
-//                .map(interactionSession->interactionSession.getAttribute(JdoPersistenceSession.class))
-//                .orElseThrow(()->_Exceptions.illegalState("no JdoPersistenceSession on current thread"));
-//    }
-
     // -- HELPER
 
     private Can<ManagedObject> fetchWithinTransaction(final Supplier<List<?>> fetcher) {
-
         return getTransactionalProcessor().callWithinCurrentTransactionElseCreateNew(
                 ()->_NullSafe.stream(fetcher.get())
-                    .map(fetchedObject->adopt(objectLifecyclePublisher, fetchedObject))
+                    .map(fetchedObject->adapt(objectLifecyclePublisher, fetchedObject))
                     .collect(Can.toCan()))
                 .ifFailureFail()
                 .getValue().orElseThrow();
     }
 
-    private ManagedObject adopt(
+    private ManagedObject adapt(
             final ObjectLifecyclePublisher objectLifecyclePublisher,
             final Object fetchedObject) {
         // handles lifecycle callbacks and injects services
@@ -409,7 +402,6 @@ implements EntityFacet {
         if(fetchedObject instanceof Persistable) {
             // an entity
             val entity = objectManager.adapt(fetchedObject);
-
             objectLifecyclePublisher.onPostLoad(entity);
             return entity;
         } else {

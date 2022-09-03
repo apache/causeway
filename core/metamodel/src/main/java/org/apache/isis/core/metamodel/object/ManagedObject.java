@@ -69,7 +69,8 @@ extends
          * </ul>
          * @implNote realized by a singleton (static) {@link ManagedObject} instance;
          */
-        UNSPECIFIED(TypePolicy.NO_TYPE, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.NO_POJO),
+        UNSPECIFIED(TypePolicy.NO_TYPE, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.NO_POJO,
+                InjectionPolicy.NEVER_INJECT),
 
         /**
          * <h1>Contract</h1><ul>
@@ -78,7 +79,8 @@ extends
          * <li>Pojo (null, immutable)</li>
          * </ul>
          */
-        EMPTY(TypePolicy.ABSTRACT_TYPE_ALLOWED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.NO_POJO),
+        EMPTY(TypePolicy.ABSTRACT_TYPE_ALLOWED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.NO_POJO,
+                InjectionPolicy.NEVER_INJECT),
 
         /**
          * <h1>Contract</h1><ul>
@@ -87,7 +89,8 @@ extends
          * <li>Pojo (immutable)</li>
          * </ul>
          */
-        VALUE(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.IMMUTABLE, PojoPolicy.IMMUTABLE),
+        VALUE(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.IMMUTABLE, PojoPolicy.IMMUTABLE,
+                InjectionPolicy.NEVER_INJECT),
 
         /**
          * <h1>Contract</h1><ul>
@@ -96,7 +99,8 @@ extends
          * <li>Pojo (immutable)</li>
          * </ul>
          */
-        SERVICE(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.IMMUTABLE, PojoPolicy.IMMUTABLE),
+        SERVICE(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.IMMUTABLE, PojoPolicy.IMMUTABLE,
+                InjectionPolicy.NEVER_INJECT),
 
         /**
          * <h1>Contract</h1><ul>
@@ -105,7 +109,8 @@ extends
          * <li>Pojo (mutable, but immutable obj. ref.)</li>
          * </ul>
          */
-        VIEWMODEL(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.REFRESHABLE, PojoPolicy.STATEFUL),
+        VIEWMODEL(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.REFRESHABLE, PojoPolicy.STATEFUL,
+                InjectionPolicy.ALWAYS_INJECT),
 
         /**
          * <h1>Contract</h1><ul>
@@ -114,7 +119,8 @@ extends
          * <li>Pojo (refetchable)</li>
          * </ul>
          */
-        ENTITY(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.IMMUTABLE, PojoPolicy.REFETCHABLE),
+        ENTITY(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.IMMUTABLE, PojoPolicy.REFETCHABLE,
+                InjectionPolicy.ALWAYS_INJECT),
 
         /**
          * <h1>Contract</h1><ul>
@@ -123,7 +129,8 @@ extends
          * <li>Pojo (allowed stateful, immutable obj. ref)</li>
          * </ul>
          */
-        MIXIN(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.STATEFUL),
+        MIXIN(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.STATEFUL,
+                InjectionPolicy.ALWAYS_INJECT),
 
         /**
          * <h1>Contract</h1><ul>
@@ -132,7 +139,8 @@ extends
          * <li>Pojo (allowed stateful, immutable obj. ref)</li>
          * </ul>
          */
-        OTHER(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.STATEFUL),
+        OTHER(TypePolicy.EXACT_TYPE_REQUIRED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.STATEFUL,
+                InjectionPolicy.NEVER_INJECT),
 
         /**
          * <h1>Contract</h1><ul>
@@ -141,7 +149,8 @@ extends
          * <li>Pojo (unmod. Collection of pojos)</li>
          * </ul>
          */
-        PACKED(TypePolicy.ABSTRACT_TYPE_ALLOWED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.PACKED);
+        PACKED(TypePolicy.ABSTRACT_TYPE_ALLOWED, BookmarkPolicy.NO_BOOKMARK, PojoPolicy.PACKED,
+                InjectionPolicy.NEVER_INJECT);
 
         static enum TypePolicy {
             /** has no type information */
@@ -200,10 +209,22 @@ extends
              * supports unpacking into a {@link Can} of {@link ManagedObject}s;*/
             public boolean isPacked() { return this == PACKED; }
         }
+        static enum InjectionPolicy {
+            /** don't inject services into accompanied pojo */
+            NEVER_INJECT,
+            /** always inject services into accompanied pojo */
+            ALWAYS_INJECT;
+            ////
+            /** don't inject services into accompanied pojo */
+            public boolean isNeverInject() { return this == NEVER_INJECT; }
+            /** always inject services into accompanied pojo */
+            public boolean isAlwaysInject() { return this == ALWAYS_INJECT; }
+        }
 
         private final TypePolicy typePolicy;
         private final BookmarkPolicy bookmarkPolicy;
         private final PojoPolicy pojoPolicy;
+        private final InjectionPolicy injectionPolicy;
 
         /**
          * UNSPECIFIED
@@ -273,37 +294,18 @@ extends
         public static Specialization inferFrom(
                 final @Nullable ObjectSpecification spec,
                 final @Nullable Object pojo) {
-            if(spec==null) {
-                return UNSPECIFIED;
-            }
-            if(spec.isNonScalar()) {
-                return PACKED;
-            }
-            if(pojo==null) {
-                return EMPTY;
-            }
-            if(spec.isValue()) {
-                return VALUE;
-            }
-            if(spec.isInjectable()) {
-                return SERVICE;
-            }
-            if(spec.isViewModel()) {
-                return VIEWMODEL;
-            }
-            if(spec.isEntity()) {
-                return ENTITY;
-            }
-            if(spec.isMixin()) {
-                return MIXIN;
-            }
-            if(!spec.isAbstract()) {
-                return OTHER;
-            }
+            if(spec==null) { return UNSPECIFIED; }
+            if(spec.isNonScalar()) { return PACKED; }
+            if(pojo==null) { return EMPTY; }
+            if(spec.isValue()) { return VALUE; }
+            if(spec.isInjectable()) { return SERVICE; }
+            if(spec.isViewModel()) { return VIEWMODEL; }
+            if(spec.isEntity()) { return ENTITY; }
+            if(spec.isMixin()) { return MIXIN; }
+            if(!spec.isAbstract()) { return OTHER; }
             log.warn("failed specialization attempt for {}", spec);
             return UNSPECIFIED;
         }
-
     }
 
     /**

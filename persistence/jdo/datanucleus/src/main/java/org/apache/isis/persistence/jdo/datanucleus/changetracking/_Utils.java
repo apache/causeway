@@ -23,12 +23,11 @@ import javax.jdo.ObjectState;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.datanucleus.enhancement.Persistable;
-import org.springframework.lang.Nullable;
 
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.object.ManagedObjects;
+import org.apache.isis.persistence.jdo.datanucleus.entities.DnObjectProviderForIsis;
 
 import lombok.NonNull;
 import lombok.val;
@@ -46,19 +45,11 @@ final class _Utils {
             final @NonNull InstanceLifecycleEvent event) {
         final Persistable pojo = _Utils.persistableFor(event);
         if(pojo!=null) {
-            mmc.getServiceInjector().injectServicesInto(pojo);
-        }
-    }
-
-    String debug(final InstanceLifecycleEvent event) {
-        // try to be side-effect free here ...
-        final Persistable pojo = _Utils.persistableFor(event);
-        ObjectState state = JDOHelper.getObjectState(pojo);
-        //if(state == ObjectState.PERSISTENT_CLEAN) {
-            //return String.format("entity: %s", pojo);
-        //} else {
-            return String.format("entity: %s (%s)", pojo.getClass().getSimpleName(), state);
-        //}
+            DnObjectProviderForIsis.extractFrom(pojo)
+            .ifPresentOrElse(
+                    DnObjectProviderForIsis::injectServicesIfNotAlready,
+                    ()->mmc.getServiceInjector().injectServicesInto(pojo));
+            }
     }
 
     ManagedObject adaptEntity(
@@ -71,45 +62,15 @@ final class _Utils {
         return entity;
     }
 
-    ManagedObject adaptNullableEntity(
-            final @NonNull MetaModelContext mmc,
-            final @Nullable Object entityPojo) {
-
-        return entityPojo == null
-                ? ManagedObject.unspecified()
-                : adaptEntity(mmc, entityPojo);
+    String debug(final InstanceLifecycleEvent event) {
+        // try to be side-effect free here ...
+        final Persistable pojo = _Utils.persistableFor(event);
+        ObjectState state = JDOHelper.getObjectState(pojo);
+        //if(state == ObjectState.PERSISTENT_CLEAN) {
+            //return String.format("entity: %s", pojo);
+        //} else {
+            return String.format("entity: %s (%s)", pojo.getClass().getSimpleName(), state);
+        //}
     }
-
-    ManagedObject adaptNullableAndInjectServices(
-            final @NonNull MetaModelContext mmc,
-            final @Nullable Object entityPojo) {
-
-        return entityPojo == null
-                ? ManagedObject.unspecified()
-                : adaptEntityAndInjectServices(mmc, entityPojo);
-    }
-
-    ManagedObject adaptEntityAndInjectServices(
-            final @NonNull MetaModelContext mmc,
-            final @NonNull Object entityPojo) {
-        return injectServices(mmc, adaptEntity(mmc, entityPojo));
-    }
-
-
-    private static ManagedObject injectServices(
-            final @NonNull MetaModelContext mmc,
-            final @NonNull ManagedObject adapter) {
-
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
-            return adapter;
-        }
-
-        if(adapter.getSpecification().isValue()) {
-            return adapter; // guard against value objects
-        }
-        mmc.getServiceInjector().injectServicesInto(adapter.getPojo());
-        return adapter;
-    }
-
 
 }

@@ -33,7 +33,6 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
@@ -91,9 +90,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("postLoad {}", ()->_Utils.debug(event));
         final Persistable pojo = _Utils.persistableFor(event);
         val entity = adaptEntity(pojo);
-
         objectLifecyclePublisher.onPostLoad(entity);
-
     }
 
     @Override
@@ -153,10 +150,10 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
         // [ISIS-3126] pre-dirty nested loop prevention,
         // assuming we can cast the DN StateManager to the custom one as provided by the framework
-        _Casts.castTo(DnObjectProviderForIsis.class, pojo.dnGetStateManager())
-        .ifPresentOrElse(stateManager->
-                stateManager.acquirePreDirtyPropagationLock(pojo.dnGetObjectId())
-                .ifPresent(lock->lock.releaseAfter(doPreDirty)),
+        DnObjectProviderForIsis.extractFrom(pojo).ifPresentOrElse(
+                stateManager->
+                    stateManager.acquirePreDirtyPropagationLock(pojo.dnGetObjectId())
+                    .ifPresent(lock->lock.releaseAfter(doPreDirty)),
                 doPreDirty);
     }
 

@@ -125,6 +125,14 @@ implements Refetchable {
             .fold(Refetchable::peekAtPojo, Refetchable::peekAtPojo);
     }
 
+    @Override
+    protected boolean isInjectionPointsResolved() {
+        // overriding the default for optimization, let the EntityFacet handle injection
+        // as a side-effect potentially injects if required
+        return getSpecification().entityFacetElseFail()
+                .isInjectionPointsResolved(peekAtPojo());
+    }
+
     // -- HELPER
 
     private void triggerReassessment() {

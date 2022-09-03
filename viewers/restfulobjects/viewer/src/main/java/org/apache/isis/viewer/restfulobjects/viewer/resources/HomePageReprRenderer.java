@@ -43,7 +43,7 @@ import lombok.val;
 public class HomePageReprRenderer
 extends ReprRendererAbstract<Void> {
 
-    // injection points not directly managed by Spring, instead resolved via constructor
+    // self managed injections via constructor
     @Inject BrandingUiService brandingUiService;
 
     HomePageReprRenderer(

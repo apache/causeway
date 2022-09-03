@@ -93,6 +93,16 @@ public interface EntityFacet extends Facet {
     }
 
     /**
+     * Introduced purely for optimization purposes.
+     * @implNote if possible memoizes the fact as to whether
+     *      services were already injected into given pojo,
+     *      and if so allows to skip any consecutive injection attempts
+     */
+    default boolean isInjectionPointsResolved(final @Nullable Object pojo) {
+        return pojo==null;
+    }
+
+    /**
      * Optionally the stringified OID,
      * based on whether the entity has one associated.
      * @throws IllegalArgumentException if the pojo's class is not recognized
@@ -157,7 +167,5 @@ public interface EntityFacet extends Facet {
             final FacetHolder facetHolder) {
         return new _EntityFacetForTesting(persistenceStandard, facetHolder);
     }
-
-
 
 }
