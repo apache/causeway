@@ -19,12 +19,10 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Collections;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -63,10 +61,6 @@ implements
     @Override
     public Can<ManagedObject> unpack(){
         return nonScalar;
-    }
-
-    @Override
-    public void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
     }
 
 }

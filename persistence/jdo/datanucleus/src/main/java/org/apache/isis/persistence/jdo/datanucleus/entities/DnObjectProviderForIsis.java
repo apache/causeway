@@ -157,7 +157,7 @@ extends ReferentialStateManagerImpl {
             return true;
         }
         if(injectionPointsResolved) {
-            //XXX would be nice count as a metric
+            //XXX would be nice to count as a metric
             return true;
         }
         if(serviceInjector!=null) {

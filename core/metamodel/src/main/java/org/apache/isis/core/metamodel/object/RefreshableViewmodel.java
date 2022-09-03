@@ -18,10 +18,19 @@
  */
 package org.apache.isis.core.metamodel.object;
 
-/** don't expose outside this package */
-interface Refetchable {
+import java.util.function.Supplier;
 
-    /** side-effect free for toString, equals and hashCode */
-    Object peekAtPojo();
+import org.springframework.lang.Nullable;
+
+import org.apache.isis.applib.services.bookmark.Bookmark;
+
+public interface RefreshableViewmodel {
+
+    /**
+     * If the underlying domain object is a viewmodel, refreshes any referenced entities.
+     * (Acts as a no-op otherwise.)
+     * @apiNote usually should be sufficient to refresh once per interaction.
+     */
+    void refreshViewmodel(@Nullable Supplier<Bookmark> bookmarkSupplier);
 
 }

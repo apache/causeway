@@ -118,8 +118,8 @@ implements ManagedObject {
                     other.getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach));
         }
 
-        val a = (Refetchable) this;
-        val b = (Refetchable) this;
+        val a = (_Refetchable) this;
+        val b = (_Refetchable) this;
         return Objects.equals(a.peekAtPojo(), b.peekAtPojo());
     }
 

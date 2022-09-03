@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
@@ -43,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 final class _ManagedObjectEntityAttached
 extends _ManagedObjectSpecified
-implements Refetchable {
+implements _Refetchable {
 
     private /*final*/ @Nullable Object pojo;
     private final @NonNull Bookmark bookmark;
@@ -71,11 +70,6 @@ implements Refetchable {
     @Override
     public boolean isBookmarkMemoized() {
         return true;
-    }
-
-    @Override
-    public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
-        // no-op for entities
     }
 
     @Override

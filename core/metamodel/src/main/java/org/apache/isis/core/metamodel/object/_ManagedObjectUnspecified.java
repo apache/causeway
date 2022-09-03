@@ -21,9 +21,6 @@ package org.apache.isis.core.metamodel.object;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -52,10 +49,6 @@ implements ManagedObject, Bookmarkable.NoBookmark {
     @Override
     public Object getPojo() {
         return null;
-    }
-
-    @Override
-    public void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
     }
 
     @Override

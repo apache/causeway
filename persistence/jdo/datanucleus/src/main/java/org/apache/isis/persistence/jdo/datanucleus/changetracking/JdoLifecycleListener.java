@@ -105,11 +105,11 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         if(pojo.dnGetStateManager().isNew(pojo)) {
             // well but then we need an OID
             if(pojo.dnGetObjectId()!=null) {
-                // adapts to mutable entity hybrid
+                // adapts to initially attached entity hybrid
                 val entityWithOid = adaptEntity(pojo);
                 objectLifecyclePublisher.onPrePersist(Either.left(entityWithOid));
             } else {
-                // adapts to immutable non-attached entity
+                // adapts to initially non-attached entity hybrid
                 val spec = metaModelContext.getSpecificationLoader().specForTypeElseFail(pojo.getClass());
                 val entityWithoutOid = ManagedObject.entityDetached(spec, pojo);
                 objectLifecyclePublisher.onPrePersist(Either.right(entityWithoutOid));

@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.metamodel.object;
 
-import java.util.function.Supplier;
-
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
@@ -37,7 +34,7 @@ import lombok.experimental.Accessors;
  */
 final class _ManagedObjectEntityDetached
 extends _ManagedObjectSpecified
-implements Bookmarkable.NoBookmark, Refetchable {
+implements Bookmarkable.NoBookmark, _Refetchable {
 
     @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
     private final @NonNull Object pojo;
@@ -48,11 +45,6 @@ implements Bookmarkable.NoBookmark, Refetchable {
         super(ManagedObject.Specialization.ENTITY, spec);
         _Assert.assertTrue(spec.isEntity());
         this.pojo = assertCompliance(pojo);
-    }
-
-    @Override
-    public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
-        // no-op for other
     }
 
     @Override

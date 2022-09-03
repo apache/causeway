@@ -18,24 +18,10 @@
  */
 package org.apache.isis.core.metamodel.object;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+/** don't expose outside this package */
+interface _Refetchable {
 
-/**
- * (package private) specialization corresponding to {@link Specialization#EMPTY}
- * @see ManagedObject.Specialization#EMPTY
- */
-final class _ManagedObjectEmpty
-extends _ManagedObjectSpecified
-implements Bookmarkable.NoBookmark {
-
-    _ManagedObjectEmpty(
-            final ObjectSpecification spec) {
-        super(ManagedObject.Specialization.EMPTY, spec);
-    }
-
-    @Override
-    public Object getPojo() {
-        return null;
-    }
+    /** side-effect free for toString, equals and hashCode */
+    Object peekAtPojo();
 
 }

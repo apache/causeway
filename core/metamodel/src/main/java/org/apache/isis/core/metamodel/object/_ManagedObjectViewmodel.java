@@ -43,7 +43,8 @@ import lombok.val;
  * @see ManagedObject.Specialization#VIEWMODEL
  */
 final class _ManagedObjectViewmodel
-extends _ManagedObjectSpecified {
+extends _ManagedObjectSpecified
+implements RefreshableViewmodel {
 
     @Getter(onMethod_ = {@Override})
     @Nullable private /*final*/ Object pojo;

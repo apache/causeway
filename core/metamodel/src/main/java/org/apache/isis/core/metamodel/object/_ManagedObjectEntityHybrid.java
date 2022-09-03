@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.object;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -40,7 +39,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 final class _ManagedObjectEntityHybrid
 extends _ManagedObjectSpecified
-implements Refetchable {
+implements _Refetchable {
 
     /**
      * dynamically mutates from one to the other based on pojos persistent state;
@@ -105,11 +104,6 @@ implements Refetchable {
     }
 
     @Override
-    public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
-        // no-op for entities
-    }
-
-    @Override
     public Object getPojo() {
         val pojo = eitherDetachedOrAttached
                 .fold(ManagedObject::getPojo, ManagedObject::getPojo);
@@ -122,7 +116,7 @@ implements Refetchable {
     @Override
     public Object peekAtPojo() {
         return eitherDetachedOrAttached
-            .fold(Refetchable::peekAtPojo, Refetchable::peekAtPojo);
+            .fold(_Refetchable::peekAtPojo, _Refetchable::peekAtPojo);
     }
 
     @Override

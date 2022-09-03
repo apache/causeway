@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.metamodel.object;
 
-import java.util.function.Supplier;
-
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -46,11 +43,6 @@ implements Bookmarkable.NoBookmark {
         super(ManagedObject.Specialization.MIXIN, spec);
         _Assert.assertTrue(spec.isMixin());
         this.pojo = assertCompliance(pojo);
-    }
-
-    @Override
-    public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
-        // no-op for mixins
     }
 
     @Override

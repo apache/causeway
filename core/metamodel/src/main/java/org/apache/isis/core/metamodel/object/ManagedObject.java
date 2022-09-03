@@ -334,13 +334,6 @@ extends
         return EntityState.NOT_PERSISTABLE;
     }
 
-    /**
-     * If the underlying domain object is a viewmodel, refreshes any referenced entities.
-     * (Acts as a no-op otherwise.)
-     * @apiNote usually should be sufficient to refresh once per interaction.
-     */
-    void refreshViewmodel(@Nullable Supplier<Bookmark> bookmarkSupplier);
-
     Supplier<ManagedObject> asSupplier();
 
     /**

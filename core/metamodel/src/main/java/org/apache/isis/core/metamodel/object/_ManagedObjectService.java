@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -65,11 +64,6 @@ extends _ManagedObjectSpecified {
     @Override
     public Optional<Bookmark> getBookmarkRefreshed() {
         return getBookmark(); // no-op for services
-    }
-
-    @Override
-    public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
-        // no-op for services
     }
 
     @Override

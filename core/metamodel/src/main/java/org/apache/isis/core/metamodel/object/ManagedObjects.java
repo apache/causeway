@@ -32,6 +32,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Try;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Objects;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -460,10 +461,10 @@ public final class ManagedObjects {
     public static void refreshViewmodel(
             final @Nullable ManagedObject viewmodel,
             final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-        if(isNullOrUnspecifiedOrEmpty(viewmodel)) {
-            return; // do nothing
-        }
-        viewmodel.refreshViewmodel(bookmarkSupplier);
+
+        _Casts.castTo(RefreshableViewmodel.class, viewmodel)
+        .ifPresent(refreshableViewmodel->
+            refreshableViewmodel.refreshViewmodel(bookmarkSupplier));
     }
 
 }

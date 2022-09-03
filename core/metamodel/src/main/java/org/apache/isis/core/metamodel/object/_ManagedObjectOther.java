@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.metamodel.object;
 
-import java.util.function.Supplier;
-
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -49,14 +46,8 @@ implements Bookmarkable.NoBookmark {
     }
 
     @Override
-    public void refreshViewmodel(final Supplier<Bookmark> bookmarkSupplier) {
-        // no-op for other
+    public String getTitle() {
+        return "other object, not recognized by the framework's meta-model";
     }
-
-    //TODO to use or not to use?
-//    @Override
-//    public String getTitle() {
-//        return "other object";
-//    }
 
 }
