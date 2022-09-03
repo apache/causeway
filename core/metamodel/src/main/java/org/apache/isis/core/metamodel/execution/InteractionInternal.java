@@ -30,6 +30,9 @@ import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
+import lombok.NonNull;
+import lombok.val;
+
 /**
  * @since 2.0
  */
@@ -130,6 +133,22 @@ extends Interaction {
         final int counter = getTransactionSequence().intValue();
         getTransactionSequence().increment();
         return counter;
+    }
+
+    /**
+     * throws if there was any exception, otherwise returns the prior execution
+     */
+    default Execution<?, ?> getPriorExecutionOrThrowIfAnyException(
+            final @NonNull ActionInvocation actionInvocation) {
+        val priorExecution = getPriorExecution();
+        val executionExceptionIfAny = getPriorExecution().getThrew();
+        actionInvocation.setThrew(executionExceptionIfAny);
+        if(executionExceptionIfAny != null) {
+            throw executionExceptionIfAny instanceof RuntimeException
+                ? ((RuntimeException)executionExceptionIfAny)
+                : new RuntimeException(executionExceptionIfAny);
+        }
+        return priorExecution;
     }
 
 

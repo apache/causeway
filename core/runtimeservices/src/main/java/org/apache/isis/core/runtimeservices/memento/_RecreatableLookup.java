@@ -43,7 +43,7 @@ class _RecreatableLookup implements _Recreatable{
         val bookmark = memento.bookmark;
 
         log.debug("lookup by {}", bookmark);
-        return mmc.loadObject(bookmark).orElse(null);
+        return mmc.getObjectManager().loadObjectElseFail(bookmark);
     }
 
     @Override

@@ -42,7 +42,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -150,28 +149,15 @@ implements MemberExecutorService {
                 .map(MmUnwrapUtil::single)
                 .collect(_Lists.toUnmodifiable());
 
-        val actionInvocation =
-                new ActionInvocation(
-                        interaction, actionId, targetPojo, argumentPojos
-                );
+        val actionInvocation = new ActionInvocation(
+                        interaction, actionId, targetPojo, argumentPojos);
         val memberExecutor = actionExecutorFactory.createExecutor(owningAction, head, argumentAdapters);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         interaction.execute(memberExecutor, actionInvocation, clockService, metricsService(), command);
 
         // handle any exceptions
-        final Execution<ActionInvocationDto, ?> priorExecution =
-                _Casts.uncheckedCast(interaction.getPriorExecution());
-
-        val executionExceptionIfAny = priorExecution.getThrew();
-
-        actionInvocation.setThrew(executionExceptionIfAny);
-
-        if(executionExceptionIfAny != null) {
-            throw executionExceptionIfAny instanceof RuntimeException
-                ? ((RuntimeException)executionExceptionIfAny)
-                : new RuntimeException(executionExceptionIfAny);
-        }
+        val priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
 
         val returnedPojo = priorExecution.getReturned();
         val returnedAdapter = objectManager.adapt(
@@ -187,7 +173,7 @@ implements MemberExecutorService {
 
         // sync DTO with result
         interactionDtoFactory
-        .updateResult(priorExecution.getDto(), owningAction, returnedAdapter);
+        .updateResult((ActionInvocationDto)priorExecution.getDto(), owningAction, returnedAdapter);
 
         // update Command (if required)
         setCommandResultIfEntity(command, returnedAdapter);
@@ -292,7 +278,7 @@ implements MemberExecutorService {
             getTransactionService().flushTransaction();
         }
         val entityState2 = resultAdapter.getEntityState();
-        if(!entityState2.isDetached()) {
+        if(entityState2.hasOid()) {
             val bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
             command.updater().setResult(Try.success(bookmark));
             return;

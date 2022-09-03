@@ -25,6 +25,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -80,6 +81,34 @@ public interface ObjectManager {
      */
     public default ManagedObject loadObject(final ObjectLoader.Request objectLoadRequest) {
         return getObjectLoader().loadObject(objectLoadRequest);
+    }
+
+    /**
+     * Recovers an object (graph) from given {@code bookmark}.
+     * <p>
+     * Resolves injection-points for the result.
+     * <p>
+     * Supports alias lookup.
+     */
+    default Optional<ManagedObject> loadObject(final @Nullable Bookmark bookmark) {
+        if(bookmark==null) {
+            return Optional.empty();
+        }
+        val specLoader = getMetaModelContext().getSpecificationLoader();
+        val objManager = this;
+        return specLoader
+                .specForLogicalTypeName(bookmark.getLogicalTypeName())
+                .map(spec->objManager.loadObject(
+                        ObjectLoader.Request.of(spec, bookmark)));
+    }
+
+    default ManagedObject loadObjectElseFail(final @NonNull Bookmark bookmark) {
+        val adapter = loadObject(bookmark)
+                .orElseThrow(()->
+                    _Exceptions.unrecoverable("failed to restore object from bookmark %s", bookmark));
+        _Assert.assertEquals(bookmark, adapter.getBookmark().orElse(null),
+                ()->"object loaded from bookmark must itself return an equal bookmark");
+        return adapter;
     }
 
     public default Can<ManagedObject> queryObjects(final ObjectBulkLoader.Request objectQuery) {

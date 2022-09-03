@@ -75,7 +75,7 @@ public class BookmarkServiceDefault implements BookmarkService {
     @Override
     public Optional<Object> lookup(final @Nullable Bookmark bookmark) {
         try {
-            return mmc.loadObject(bookmark)
+            return mmc.getObjectManager().loadObject(bookmark)
                     .map(ManagedObject::getPojo);
         } catch(ObjectNotFoundException ex) {
             return Optional.empty();

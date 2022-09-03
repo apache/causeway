@@ -122,7 +122,7 @@ implements EntityFacet {
     @Override
     public Optional<String> identifierFor(final Object pojo) {
 
-        if (!getEntityState(pojo).isAttached()) {
+        if (!getEntityState(pojo).hasOid()) {
             return Optional.empty();
         }
 
@@ -281,7 +281,7 @@ implements EntityFacet {
 
         if(pojo==null
                 || !isPersistableType(pojo.getClass())
-                || DnEntityStateProvider.entityState(pojo).isAttachedOrNew()) {
+                || DnEntityStateProvider.entityState(pojo).hasOid()) {
             return; // nothing to do
         }
 
@@ -303,7 +303,7 @@ implements EntityFacet {
             return; // nothing to do
         }
 
-        if (!DnEntityStateProvider.entityState(pojo).isAttached()) {
+        if (!DnEntityStateProvider.entityState(pojo).hasOid()) {
             throw _Exceptions.illegalArgument("can only delete an attached entity");
         }
 

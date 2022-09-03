@@ -84,7 +84,7 @@ public class JpaEntityFacet
     @Override
     public Optional<String> identifierFor(final @Nullable Object pojo) {
 
-        if (!getEntityState(pojo).isAttached()) {
+        if (!getEntityState(pojo).hasOid()) {
             return Optional.empty();
         }
 
@@ -254,7 +254,9 @@ public class JpaEntityFacet
         try {
             val primaryKey = getPersistenceUnitUtil(entityManager).getIdentifier(pojo);
             if (primaryKey == null) {
-                return EntityState.PERSISTABLE_DETACHED; // an optimization, not strictly required
+                return EntityState.PERSISTABLE_DETACHED;
+            } else {
+                return EntityState.PERSISTABLE_DETACHED_WITH_OID;
             }
         } catch (PersistenceException ex) {
             // horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry) (this was without any weaving)
@@ -272,9 +274,6 @@ public class JpaEntityFacet
             }
             throw ex;
         }
-
-        //XXX whether DETACHED or REMOVED is currently undecidable (JPA)
-        return EntityState.PERSISTABLE_DETACHED;
     }
 
     @Override

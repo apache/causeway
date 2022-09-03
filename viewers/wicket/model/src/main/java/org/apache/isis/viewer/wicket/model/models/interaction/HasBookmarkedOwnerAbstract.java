@@ -44,7 +44,7 @@ implements
 
     @Override
     public final ManagedObject getBookmarkedOwner() {
-        return bookmarkedObject.getObjectAndRefetch();
+        return bookmarkedObject.asManagedObject();
     }
 
     public final BookmarkedObjectWkt bookmarkedObjectModel() {

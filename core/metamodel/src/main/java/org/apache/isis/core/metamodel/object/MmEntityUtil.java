@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.object;
 
 import java.util.Optional;
-import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 
@@ -111,7 +110,7 @@ public final class MmEntityUtil {
         return managedObject;
     }
 
-    public static void requiresWhenFirstIsBookmarkableSecondIsAttached(
+    public static void requiresWhenFirstIsBookmarkableSecondIsAlso(
             final ManagedObject first,
             final ManagedObject second) {
 
@@ -123,7 +122,7 @@ public final class MmEntityUtil {
             return;
         }
 
-        if(!MmEntityUtil.isAttached(second)) {
+        if(!MmEntityUtil.hasOid(second)) {
             throw _Exceptions.illegalArgument(
                     "can't set a reference to a transient object [%s] from a persistent one [%s]",
                     second,
@@ -133,8 +132,8 @@ public final class MmEntityUtil {
 
     // -- SHORTCUTS
 
-    public static boolean isAttached(final @Nullable ManagedObject adapter) {
-        return MmEntityUtil.getEntityState(adapter).isAttached();
+    public static boolean hasOid(final @Nullable ManagedObject adapter) {
+        return MmEntityUtil.getEntityState(adapter).hasOid();
     }
 
     public static boolean isDetachedOrRemoved(final @Nullable ManagedObject adapter) {
@@ -145,31 +144,5 @@ public final class MmEntityUtil {
     public static boolean isRemoved(final @Nullable ManagedObject adapter) {
         return MmEntityUtil.getEntityState(adapter).isRemoved();
     }
-
-    public static ManagedObject assertAttachedWhenEntity(final @Nullable ManagedObject adapter) {
-        if(adapter instanceof PackedManagedObject) {
-            for(val element : ((PackedManagedObject)adapter).unpack()) {
-                assertAttachedWhenEntity(element);
-            }
-        }
-        val state = MmEntityUtil.getEntityState(adapter);
-        if(state.isPersistable()) {
-            _Assert.assertEquals(EntityState.PERSISTABLE_ATTACHED, state,
-                    ()->String.format("detached entity %s", adapter));
-        }
-        return adapter;
-    }
-
-    public static ManagedObject computeIfDetached(
-            final @Nullable ManagedObject adapter,
-            final UnaryOperator<ManagedObject> onDetachedEntity) {
-        val state = MmEntityUtil.getEntityState(adapter);
-        if(state.isPersistable()
-                &&!state.isAttached()) {
-            return onDetachedEntity.apply(adapter);
-        }
-        return adapter;
-    }
-
 
 }
