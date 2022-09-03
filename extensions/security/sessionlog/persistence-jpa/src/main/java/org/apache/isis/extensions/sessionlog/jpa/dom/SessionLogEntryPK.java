@@ -83,5 +83,10 @@ public class SessionLogEntryPK implements Serializable {
         public SessionLogEntryPK destring(final @NonNull String stringifiedUuid) {
             return new SessionLogEntryPK(UUID.fromString(stringifiedUuid));
         }
+
+        @Override
+        public boolean isValid(@NonNull final SessionLogEntryPK value) {
+            return value.getSessionGuid()!=null;
+        }
     }
 }

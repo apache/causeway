@@ -73,6 +73,22 @@ public interface IdStringifier<T> {
     T destring(@NonNull Class<?> targetEntityClass, @NonNull String stringified);
 
     /**
+     * Whether the non-null primary key object is valid,
+     * that is, in the case of a composite, whether it is fully populated.
+     * @implNote in the invalid case, the default implementation generates a stacktrace;
+     * @apiNote override for performance reasons if applicable
+     */
+    default boolean isValid(final @NonNull T value) {
+        try {
+            return enstring(value)!=null;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
+    // Try.call(()->enstringWithCast(primaryKey)).isSuccess();
+
+    /**
      * Entity agnostic variant of {@link IdStringifier}.
      */
     interface EntityAgnostic<T> extends IdStringifier<T> {

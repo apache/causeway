@@ -79,5 +79,10 @@ public class ExecutionOutboxEntryPK implements Serializable {
                 final @NonNull String stringified) {
             return new ExecutionOutboxEntryPK(stringified);
         }
+
+        @Override
+        public boolean isValid(@NonNull final ExecutionOutboxEntryPK value) {
+            return value.getInteractionId()!=null;
+        }
     }
 }
