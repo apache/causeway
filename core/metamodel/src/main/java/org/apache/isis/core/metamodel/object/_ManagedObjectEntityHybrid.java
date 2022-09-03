@@ -49,30 +49,20 @@ implements Refetchable {
     private @NonNull Either<_ManagedObjectEntityDetached, _ManagedObjectEntityAttached>
         eitherDetachedOrAttached;
 
-    private MorphState morphState;
-
-    private enum MorphState {
-        ATTACHED,
-        DETACHED;
-        static MorphState valueOf(final EntityState entityState) {
-            return entityState.isDetached()
-                    ? DETACHED
-                    : ATTACHED;
-        }
-    };
+    private EntityState entityState;
 
     _ManagedObjectEntityHybrid(
             final @NonNull _ManagedObjectEntityDetached detached) {
         super(ManagedObject.Specialization.ENTITY, detached.getSpecification());
         this.eitherDetachedOrAttached = Either.left(detached);
-        this.morphState = MorphState.DETACHED;
+        this.entityState = EntityState.PERSISTABLE_DETACHED;
     }
 
     _ManagedObjectEntityHybrid(
             final @NonNull _ManagedObjectEntityAttached attached) {
         super(ManagedObject.Specialization.ENTITY, attached.getSpecification());
         this.eitherDetachedOrAttached = Either.right(attached);
-        this.morphState = MorphState.ATTACHED;
+        this.entityState = EntityState.PERSISTABLE_ATTACHED;
         this.bookmarkRef.set(attached.getBookmark().orElseThrow());
     }
 
@@ -100,15 +90,11 @@ implements Refetchable {
         val entityState = eitherDetachedOrAttached
                 .fold(ManagedObject::getEntityState, ManagedObject::getEntityState);
 
-        val reassessedMorphState = MorphState.valueOf(entityState);
-
-        if(this.morphState!=reassessedMorphState) {
-            log.debug("about to morph {} -> {}", this.morphState, reassessedMorphState);
-            this.morphState = reassessedMorphState;
-
+        if(this.entityState!=entityState) {
+            log.debug("about to morph {} -> {}", this.entityState, entityState);
+            this.entityState = entityState;
             reassessVariant(entityState, peekAtPojo());
-
-            if(this.morphState == MorphState.ATTACHED) {
+            if(entityState.isAttached()) {
                 _Assert.assertTrue(isVariantAttached());
             } else {
                 _Assert.assertTrue(isVariantDetached());
