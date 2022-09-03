@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.publish;
 
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -51,8 +48,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEv
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.object.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.core.transaction.changetracking.events.PostStoreEvent;
 import org.apache.isis.core.transaction.changetracking.events.PreStoreEvent;
@@ -73,7 +69,7 @@ import lombok.val;
 public class LifecycleCallbackNotifier {
 
     final EventBusService eventBusService;
-    final SpecificationLoader specLoader;
+    //final SpecificationLoader specLoader;
 
     public void postCreate(final ManagedObject entity) {
         CallbackFacet.callCallback(entity, CreatedCallbackFacet.class);
@@ -86,22 +82,21 @@ public class LifecycleCallbackNotifier {
     }
 
     /**
-     * @param either - either the adapted entity with OID to the <i>left</i>,
-     *      otherwise if no OID available the entity pojo <i>right</i>
+     * @param eitherWithOrWithoutOid - either the adapted entity with OID <i>left</i>,
+     *      otherwise adapted entity without OID <i>right</i>
      */
-    public void prePersist(final Either<ManagedObject, Object> either) {
-        val pojo = either.fold(ManagedObject::getPojo, UnaryOperator.identity());
+    public void prePersist(final Either<ManagedObject, ManagedObject> eitherWithOrWithoutOid) {
+        val pojo = eitherWithOrWithoutOid.fold(ManagedObject::getPojo, ManagedObject::getPojo);
         if(pojo==null) {return;}
         eventBusService.post(PreStoreEvent.of(pojo));
-        either.accept(
-                entity->{
-                    CallbackFacet.callCallback(entity, PersistingCallbackFacet.class);
-                    postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
+        eitherWithOrWithoutOid.accept(
+                entityWithOid->{
+                    CallbackFacet.callCallback(entityWithOid, PersistingCallbackFacet.class);
+                    postLifecycleEventIfRequired(entityWithOid, PersistingLifecycleEventFacet.class);
                 },
-                _pojo->{
-                    val spec = specLoader.specForTypeElseFail(pojo.getClass());
-                    // calling PersistingCallbackFacet not supported if we have no OID
-                    postLifecycleEventIfRequired(spec, ()->pojo, PersistingLifecycleEventFacet.class);
+                entityWithOid->{
+                    CallbackFacet.callCallback(entityWithOid, PersistingCallbackFacet.class);
+                    postLifecycleEventIfRequired(entityWithOid, PersistingLifecycleEventFacet.class);
                 });
     }
 
@@ -130,31 +125,20 @@ public class LifecycleCallbackNotifier {
     //  -- HELPER
 
     private void postLifecycleEventIfRequired(
-            final ObjectSpecification spec,
-            final Supplier<Object> pojo,
-            final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
-
-        spec.lookupFacet(lifecycleEventFacetClass)
-        .map(LifecycleEventFacet::getEventType)
-        .map(_InstanceUtil::createInstance)
-        .ifPresent(eventInstance->{
-            postEvent(_Casts.uncheckedCast(eventInstance), pojo);
-        });
-    }
-
-    private void postLifecycleEventIfRequired(
             final ManagedObject object,
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
+        ManagedObjects.whenSpecified(object)
+        .map(ManagedObject::getSpecification)
+        .ifPresent(spec->{
 
-        // getPojo has side-effects, don't call if not needed
-        if(object==null
-                || object.getSpecialization().isEmpty()) {
-            return;
-        }
-        postLifecycleEventIfRequired(
-                object.getSpecification(),
-                object::getPojo,
-                lifecycleEventFacetClass);
+            spec.lookupFacet(lifecycleEventFacetClass)
+            .map(LifecycleEventFacet::getEventType)
+            .map(_InstanceUtil::createInstance)
+            .ifPresent(eventInstance->{
+                postEvent(_Casts.uncheckedCast(eventInstance), object.getPojo());
+            });
+
+        });
     }
 
     protected void postEvent(final AbstractLifecycleEvent<Object> event, final Object pojo) {

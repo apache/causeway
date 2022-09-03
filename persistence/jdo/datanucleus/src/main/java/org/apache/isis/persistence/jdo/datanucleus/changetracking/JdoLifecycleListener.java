@@ -102,17 +102,20 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
         final Persistable pojo = _Utils.persistableFor(event);
 
-
         /* Called either when an entity is initially persisted,
          * or when an entity is updated; fires the appropriate
          * lifecycle callback. So filter for those events when initially persisting. */
         if(pojo.dnGetStateManager().isNew(pojo)) {
             // well but then we need an OID
             if(pojo.dnGetObjectId()!=null) {
-                val entity = adaptEntity(pojo);
-                objectLifecyclePublisher.onPrePersist(Either.left(entity));
+                // adapts to mutable entity hybrid
+                val entityWithOid = adaptEntity(pojo);
+                objectLifecyclePublisher.onPrePersist(Either.left(entityWithOid));
             } else {
-                objectLifecyclePublisher.onPrePersist(Either.right(pojo));
+                // adapts to immutable non-attached entity
+                val spec = metaModelContext.getSpecificationLoader().specForTypeElseFail(pojo.getClass());
+                val entityWithoutOid = ManagedObject.entityDetached(spec, pojo);
+                objectLifecyclePublisher.onPrePersist(Either.right(entityWithoutOid));
             }
         }
     }

@@ -81,8 +81,8 @@ public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher
     }
 
     @Override
-    public void onPrePersist(final Either<ManagedObject, Object> entity) {
-        lifecycleCallbackNotifier().prePersist(entity);
+    public void onPrePersist(final Either<ManagedObject, ManagedObject> eitherWithOrWithoutOid) {
+        lifecycleCallbackNotifier().prePersist(eitherWithOrWithoutOid);
     }
 
     @Override

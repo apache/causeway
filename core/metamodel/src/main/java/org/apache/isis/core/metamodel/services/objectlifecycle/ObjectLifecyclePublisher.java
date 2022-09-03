@@ -66,9 +66,10 @@ public interface ObjectLifecyclePublisher {
      *     by the <code>TimestampService</code>.
      * </p>
      *
-     * @param entity
+     * @param eitherWithOrWithoutOid - either the adapted entity with OID <i>left</i>,
+     *      otherwise adapted entity without OID <i>right</i>
      */
-    void onPrePersist(Either<ManagedObject, Object> entity);
+    void onPrePersist(Either<ManagedObject, ManagedObject> eitherWithOrWithoutOid);
 
     /**
      * Called by both JPA and JDO, just after an entity has been inserted into the database.

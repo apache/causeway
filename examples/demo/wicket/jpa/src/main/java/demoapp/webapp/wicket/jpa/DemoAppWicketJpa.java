@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.commons.internal.os._OsUtil;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.config.util.SpringProfileUtil;
@@ -67,7 +68,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     IsisModuleValAsciidocPersistenceJpa.class,
     IsisModuleValMarkdownPersistenceJpa.class,
 
-    //XrayEnable.class // for debugging only
+    XrayEnable.class // for debugging only
     // WicketViewerXrayEnable.class // for debugging only
 })
 //@Log4j2
