@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.IdStringifier;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.functional.Try;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.PersistenceStack;
@@ -61,10 +62,15 @@ public interface EntityFacet extends Facet {
             .orElseThrow(()->_Exceptions.illegalArgument(
                     "failed to cast primary-key '%s' to expected type %s",
                         ""+primaryKey,
-                        primaryKeyClass.getName()));
+                        primaryKeyClass.getName()))
+            ;
         }
         public T destring(final String stringifiedPrimaryKey) {
             return idStringifier.destring(owningEntityClass, stringifiedPrimaryKey);
+        }
+        /** shallow PK detection */
+        public boolean isValid(final Object primaryKey) {
+            return Try.call(()->enstringWithCast(primaryKey)).isSuccess();
         }
         public static <T> PrimaryKeyType<T> getInstance(
                 final @NonNull Class<?> owningEntityClass,

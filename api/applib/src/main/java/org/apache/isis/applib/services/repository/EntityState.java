@@ -99,7 +99,7 @@ public enum EntityState {
      * @apiNote 'removed' is only supported by JDO.
      */
     public boolean isAttachedOrRemoved() {
-        return hasOid()
+        return isAttached()
                 || isRemoved();
     }
 

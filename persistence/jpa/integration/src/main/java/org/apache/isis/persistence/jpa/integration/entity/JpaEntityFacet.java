@@ -256,7 +256,10 @@ public class JpaEntityFacet
             if (primaryKey == null) {
                 return EntityState.PERSISTABLE_DETACHED;
             } else {
-                return EntityState.PERSISTABLE_DETACHED_WITH_OID;
+                // detect shallow primary key
+                return primaryKeyType.isValid(primaryKey)
+                    ? EntityState.PERSISTABLE_DETACHED_WITH_OID
+                    : EntityState.PERSISTABLE_DETACHED;
             }
         } catch (PersistenceException ex) {
             // horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry) (this was without any weaving)
