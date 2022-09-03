@@ -223,8 +223,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends IsisIntegrationTest
         Bookmark eleBookmark = eleBookmarkIfAny.get();
         String identifier = eleBookmark.getIdentifier();
 
-        System.err.printf("eleBookmark: %s%n", eleBookmark);
-
         UUID.fromString(identifier.substring(0, identifier.indexOf("_"))); // should not fail, ie check the format is as we expect
         Integer.parseInt(identifier.substring(identifier.indexOf("_")+1)); // should not fail, ie check the format is as we expect
 
