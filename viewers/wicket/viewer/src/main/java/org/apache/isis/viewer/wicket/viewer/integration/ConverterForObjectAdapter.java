@@ -29,6 +29,8 @@ import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.core.metamodel.object.ManagedObjects;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 
+import lombok.val;
+
 /**
  * Implementation of a <i>Wicket</i> {@link IConverter} for {@link ManagedObject}s,
  * converting to-and-from their {@link Bookmark}'s string representation.
@@ -45,9 +47,15 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
      */
     @Override
     public ManagedObject convertToObject(final String value, final Locale locale) {
-        return Bookmark.parse(value)
+
+        val obj = Bookmark.parse(value)
             .flatMap(objectManager.getMetaModelContext()::loadObject)
             .orElse(null);
+
+        //XXX ever used ?
+        System.err.printf("ConverterForObjectAdapter: convertTo ManagedObject %s->%s%n", value, obj);
+
+        return obj;
     }
 
     /**
@@ -55,8 +63,13 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
      */
     @Override
     public String convertToString(final ManagedObject adapter, final Locale locale) {
-        return ManagedObjects.stringify(adapter)
+        val string =  ManagedObjects.stringify(adapter)
                 .orElse(null);
+
+        //XXX ever used ?
+        System.err.printf("ConverterForObjectAdapter: convertFrom ManagedObject %s->%s%n", adapter, string);
+
+        return string;
     }
 
 
