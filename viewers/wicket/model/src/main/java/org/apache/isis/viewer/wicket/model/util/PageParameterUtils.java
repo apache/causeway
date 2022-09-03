@@ -172,7 +172,8 @@ public class PageParameterUtils {
 
     // -- HELPERS
 
-    private static PageParameters createPageParameters(final ManagedObject adapter, final ObjectAction objectAction) {
+    private static PageParameters createPageParameters(
+            final ManagedObject adapter, final ObjectAction objectAction) {
 
         val pageParameters = PageParameterUtils.newPageParameters();
 
@@ -223,6 +224,7 @@ public class PageParameterUtils {
                     .flatMap(mmc::loadObject)
                     .orElse(null);
         } catch (final Exception e) {
+            e.printStackTrace(); // I suppose useful when in prototyping mode only
             return null;
         }
     }
