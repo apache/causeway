@@ -462,7 +462,7 @@ public final class ManagedObjects {
             final @Nullable ManagedObject viewmodel,
             final @Nullable Supplier<Bookmark> bookmarkSupplier) {
 
-        _Casts.castTo(RefreshableViewmodel.class, viewmodel)
+        _Casts.castTo(_RefreshableViewmodel.class, viewmodel)
         .ifPresent(refreshableViewmodel->
             refreshableViewmodel.refreshViewmodel(bookmarkSupplier));
     }

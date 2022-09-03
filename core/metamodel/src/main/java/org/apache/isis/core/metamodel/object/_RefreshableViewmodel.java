@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
  * @deprecated this refreshing stuff is a hack - remove eventually
  */
 @Deprecated
-public interface RefreshableViewmodel {
+interface _RefreshableViewmodel {
 
     /**
      * If the underlying domain object is a viewmodel, refreshes any referenced entities.
