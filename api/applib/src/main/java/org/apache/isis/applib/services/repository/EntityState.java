@@ -38,7 +38,6 @@ public enum EntityState {
      * the database.
      */
     PERSISTABLE_ATTACHED,
-
     /**
      * Object with this state is an entity but that is detached from a
      * persistence session, in other words changes to the entity will <i>not</i>
@@ -50,12 +49,10 @@ public enum EntityState {
      * database. Objects in this state may no longer be interacted with.
      */
     PERSISTABLE_REMOVED,
-
     /**
      * DN/JDO specific on pre-store. Is attached, has no OID yet.
      */
     PERSISTABLE_ATTACHED_NO_OID,
-
     /**
      * JPA specific. Is detached, but has an OID.
      */
@@ -87,12 +84,15 @@ public enum EntityState {
      */
     public boolean isRemoved() { return this == PERSISTABLE_REMOVED; }
 
+    // -- SPECIAL STATES
+
     /**
      * @apiNote 'removed' is only supported by JDO.
      */
     public boolean isDetachedOrRemoved() {
         return isDetached()
-                || isRemoved();
+                || isRemoved()
+                || isSpecicalJpaDetachedWithOid();
     }
 
     /**
@@ -103,7 +103,7 @@ public enum EntityState {
                 || isRemoved();
     }
 
-    // -- SPECIAL STATES
+    // -- JDO/JPA SPECIFIC STATES
 
     /**
      * @apiNote DN/JDO specific on pre-store. Is attached, has no OID yet.
