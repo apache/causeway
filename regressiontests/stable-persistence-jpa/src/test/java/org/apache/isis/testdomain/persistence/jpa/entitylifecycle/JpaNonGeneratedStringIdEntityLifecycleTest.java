@@ -121,7 +121,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         repository.remove(entity.getPojo());
 
         // expected post-condition (after removal)
-        assertDetachedOrRemoved(entity);
+        assertTrue(MmEntityUtil.isDeleted(entity));
 
         setEntityRef(entity);
     }
@@ -131,7 +131,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         val entity = getEntityRef();
 
-        assertDetachedOrRemoved(entity);
+        assertTrue(MmEntityUtil.isDeleted(entity));
         assertEquals(0, repository.allInstances(JpaEntityNonGeneratedStringId.class).size());
 
     }
@@ -150,11 +150,6 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
     ManagedObject getEntityRef() {
         val entity = (ManagedObject) kvStore.get(this, "entity").get();
         return entity;
-    }
-
-    static void assertDetachedOrRemoved(final ManagedObject entity) {
-        val entityState = MmEntityUtil.getEntityState(entity);
-        assertTrue(entityState.isDetachedOrRemoved());
     }
 
 }

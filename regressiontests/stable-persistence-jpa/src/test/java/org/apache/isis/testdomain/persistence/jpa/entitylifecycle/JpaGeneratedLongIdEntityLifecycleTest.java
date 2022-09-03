@@ -122,7 +122,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
         repository.remove(entity.getPojo());
 
         // expected post-condition (after removal)
-        assertDetachedOrRemoved(entity);
+        assertTrue(MmEntityUtil.isDeleted(entity));
 
         setEntityRef(entity);
     }
@@ -132,7 +132,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         val entity = getEntityRef();
 
-        assertDetachedOrRemoved(entity);
+        assertTrue(MmEntityUtil.isDeleted(entity));
         assertEquals(0, repository.allInstances(JpaEntityGeneratedLongId.class).size());
 
     }
@@ -151,11 +151,6 @@ class JpaGeneratedLongIdEntityLifecycleTest {
     ManagedObject getEntityRef() {
         val entity = (ManagedObject) kvStore.get(this, "entity").get();
         return entity;
-    }
-
-    static void assertDetachedOrRemoved(final ManagedObject entity) {
-        val entityState = MmEntityUtil.getEntityState(entity);
-        assertTrue(entityState.isDetachedOrRemoved());
     }
 
 }

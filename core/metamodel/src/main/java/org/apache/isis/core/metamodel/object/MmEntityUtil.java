@@ -136,13 +136,16 @@ public final class MmEntityUtil {
         return MmEntityUtil.getEntityState(adapter).hasOid();
     }
 
-    public static boolean isDetachedOrRemoved(final @Nullable ManagedObject adapter) {
-        return MmEntityUtil.getEntityState(adapter).isDetachedOrRemoved();
+    public static boolean isDetachedCannotReattach(final @Nullable ManagedObject adapter) {
+        return MmEntityUtil.getEntityState(adapter).isDetachedCannotReattach();
     }
 
-    /** only supported by JDO - always false with JPA */
-    public static boolean isRemoved(final @Nullable ManagedObject adapter) {
-        return MmEntityUtil.getEntityState(adapter).isRemoved();
+    /** TODO very strange logic */
+    public static boolean isDeleted(final @Nullable ManagedObject entity) {
+        val state = MmEntityUtil.getEntityState(entity);
+        return state.isDetached()
+                || state.isRemoved()
+                || state.isSpecicalJpaDetachedWithOid();
     }
 
 }

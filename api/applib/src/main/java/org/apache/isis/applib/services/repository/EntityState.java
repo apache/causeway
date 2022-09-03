@@ -86,18 +86,17 @@ public enum EntityState {
 
     // -- SPECIAL STATES
 
-    /**
-     * @apiNote 'removed' is only supported by JDO.
-     */
-    public boolean isDetachedOrRemoved() {
-        return isDetached()
-                || isRemoved()
-                || isSpecicalJpaDetachedWithOid();
+    public boolean isDetachedCannotReattach() {
+        return (isDetached()
+                || isRemoved())
+                && !isSpecicalJpaDetachedWithOid();
     }
 
     /**
      * @apiNote 'removed' is only supported by JDO.
+     * @deprecated not supported by JPA
      */
+    @Deprecated
     public boolean isAttachedOrRemoved() {
         return isAttached()
                 || isRemoved();

@@ -273,7 +273,8 @@ implements MemberExecutorService {
         if(!entityState.isPersistable()) {
             return;
         }
-        if(entityState.isDetached())   {
+        if(entityState.isDetached()
+                || entityState.isSpecicalJpaDetachedWithOid()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             getTransactionService().flushTransaction();
         }

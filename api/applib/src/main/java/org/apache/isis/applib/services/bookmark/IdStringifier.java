@@ -47,6 +47,7 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
+@SuppressWarnings("javadoc")
 public interface IdStringifier<T> {
 
     public final static char SEPARATOR = '_';
@@ -85,8 +86,6 @@ public interface IdStringifier<T> {
             return false;
         }
     }
-
-    // Try.call(()->enstringWithCast(primaryKey)).isSuccess();
 
     /**
      * Entity agnostic variant of {@link IdStringifier}.

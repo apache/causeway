@@ -99,7 +99,7 @@ public final class MmVisibilityUtil {
         }
         val spec = adapter.getSpecification();
         if(spec.isEntity()) {
-            if(MmEntityUtil.isDetachedOrRemoved(adapter)) {
+            if(MmEntityUtil.isDetachedCannotReattach(adapter)) {
                 return false;
             }
         }
