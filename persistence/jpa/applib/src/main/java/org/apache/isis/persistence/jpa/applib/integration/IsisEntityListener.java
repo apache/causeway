@@ -73,7 +73,6 @@ public class IsisEntityListener {
         log.debug("onPrePersist: {}", entityPojo);
         //serviceInjector.injectServicesInto(entityPojo);
         val entity = objectManager.adapt(entityPojo);
-
         objectLifecyclePublisher.onPrePersist(Either.left(entity));
     }
 
