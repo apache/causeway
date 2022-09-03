@@ -31,8 +31,6 @@ import javax.persistence.PreUpdate;
 import org.eclipse.persistence.sessions.UnitOfWork;
 import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 
-import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Either;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
@@ -65,11 +63,11 @@ import lombok.extern.log4j.Log4j2;
 public class IsisEntityListener {
 
     // not managed by Spring (directly)
-    @Inject private ServiceInjector serviceInjector;
+    //@Inject private ServiceInjector serviceInjector;
     @Inject private ObjectLifecyclePublisher objectLifecyclePublisher;
     @Inject private Provider<JpaSupportService> jpaSupportServiceProvider;
     @Inject private ObjectManager objectManager;
-    @Inject private EventBusService eventBusService;
+    //@Inject private EventBusService eventBusService;
 
     @PrePersist void onPrePersist(final Object entityPojo) {
         log.debug("onPrePersist: {}", entityPojo);

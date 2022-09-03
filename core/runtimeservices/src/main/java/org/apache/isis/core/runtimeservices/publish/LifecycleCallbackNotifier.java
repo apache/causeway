@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.publish;
 
+import java.util.function.UnaryOperator;
+
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -89,15 +91,9 @@ public class LifecycleCallbackNotifier {
         val pojo = eitherWithOrWithoutOid.fold(ManagedObject::getPojo, ManagedObject::getPojo);
         if(pojo==null) {return;}
         eventBusService.post(PreStoreEvent.of(pojo));
-        eitherWithOrWithoutOid.accept(
-                entityWithOid->{
-                    CallbackFacet.callCallback(entityWithOid, PersistingCallbackFacet.class);
-                    postLifecycleEventIfRequired(entityWithOid, PersistingLifecycleEventFacet.class);
-                },
-                entityWithOid->{
-                    CallbackFacet.callCallback(entityWithOid, PersistingCallbackFacet.class);
-                    postLifecycleEventIfRequired(entityWithOid, PersistingLifecycleEventFacet.class);
-                });
+        val entity = eitherWithOrWithoutOid.fold(UnaryOperator.identity(), UnaryOperator.identity());
+        CallbackFacet.callCallback(entity, PersistingCallbackFacet.class);
+        postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
     }
 
     public void postPersist(final ManagedObject entity) {
