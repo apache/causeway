@@ -31,6 +31,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -150,6 +152,7 @@ extends AbstractFacetFactoryJUnit4TestCase {
         Assert.assertNull(facetedMethod.getFacet(TitleFacet.class));
     }
 
+    @DomainObject(nature = Nature.VIEW_MODEL)
     public static class Customer4 {
 
         @Title(sequence = "1")
