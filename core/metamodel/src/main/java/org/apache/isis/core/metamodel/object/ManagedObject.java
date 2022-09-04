@@ -536,9 +536,6 @@ extends
     static ManagedObject adaptScalar(
             final @NonNull ObjectSpecification guess,
             final @Nullable Object pojo) {
-        if(pojo instanceof ManagedObject) {
-            return (ManagedObject)pojo;
-        }
         return adaptScalarInternal(guess, pojo, Optional.empty());
     }
 
