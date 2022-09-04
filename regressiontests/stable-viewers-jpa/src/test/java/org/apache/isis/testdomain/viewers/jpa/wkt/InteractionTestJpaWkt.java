@@ -28,8 +28,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.metamodel.object.ManagedObject;
 import org.apache.isis.testdomain.RegressionTestAbstract;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
 import org.apache.isis.testdomain.conf.Configuration_usingWicket;
@@ -53,6 +57,8 @@ import lombok.val;
                 Configuration_usingWicket.class
         },
         properties = {
+                "spring.jpa.show-sql=true",
+                "logging.level.org.springframework.orm.jpa=DEBUG"
         })
 @TestPropertySource({
     IsisPresets.SilenceMetaModel,
@@ -168,8 +174,11 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
 
     }
 
+    private ManagedObject bookAdapter;
+
     @Test
     void loadBookPage_Dune_then_change_Isbn() {
+
         val pageParameters = call(()->{
 
             val jpaBook = repositoryService.allInstances(JpaBook.class).stream()
@@ -177,10 +186,16 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
             .findFirst()
             .orElseThrow();
 
+            System.err.printf("--- adapt %n");
+            bookAdapter = super.objectManager.adapt(jpaBook);
+
             return wktTester.createPageParameters(jpaBook);
         });
 
         //System.err.printf("pageParameters %s%n", pageParameters);
+
+        assertEquals(ManagedObject.Specialization.ENTITY, bookAdapter.getSpecialization());
+        assertTrue(bookAdapter.isBookmarkMemoized(), "bookAdapter should be bookmarked");
 
         // open Dune page
         run(()->{
@@ -206,12 +221,21 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
             val form = wktTester.newFormTester(bookIsbn.editInlinePromptForm());
             form.setValue(bookIsbn.scalarField(), "ISBN-XXXX");
             form.submit();
+
+            val jpaBook = (JpaBook)bookAdapter.getPojo();
+            assertEquals("ISBN-A", jpaBook.getIsbn());
         });
 
         // simulate click on form OK button -> expected to trigger the framework's property change execution
         run(()->{
             wktTester.assertComponent(bookIsbn.editInlinePromptFormOk(), IndicatingAjaxButton.class);
             wktTester.executeAjaxEvent(bookIsbn.editInlinePromptFormOk(), "click");
+
+            System.err.printf("bookAdapter state %s%n", bookAdapter.getEntityState());
+
+            System.err.printf("--- verify %n");
+            val jpaBook = (JpaBook)bookAdapter.getPojo();
+            assertEquals("ISBN-XXXX", jpaBook.getIsbn());
         });
 
         // ... should yield a new Title containing 'Dune [ISBN-XXXX]'

@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -58,6 +59,11 @@ class _EntityFacetForTesting implements EntityFacet {
     @Override
     public Optional<String> identifierFor(final Object pojo) {
         throw _Exceptions.unsupportedOperation();
+    }
+
+    @Override
+    public Bookmark validateBookmark(@NonNull final Bookmark bookmark) {
+        return bookmark;
     }
 
     @Override

@@ -110,6 +110,8 @@ public interface EntityFacet extends Facet {
      */
     Optional<String> identifierFor(@Nullable Object pojo);
 
+    Bookmark validateBookmark(@NonNull Bookmark bookmark);
+
     /**
      * Optionally the {@link Bookmark},
      * based on whether the entity has an OID associated.
@@ -167,5 +169,7 @@ public interface EntityFacet extends Facet {
             final FacetHolder facetHolder) {
         return new _EntityFacetForTesting(persistenceStandard, facetHolder);
     }
+
+
 
 }

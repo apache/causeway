@@ -53,8 +53,9 @@ implements _Refetchable {
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
         super(ManagedObject.Specialization.ENTITY, spec);
         this.pojo = assertCompliance(pojo);
-        this.bookmark = bookmarkIfKnown
-                .orElseGet(this::createBookmark);
+        //sanity check bookmark
+        this.bookmark = entityFacet().validateBookmark(bookmarkIfKnown
+                .orElseGet(this::createBookmark));
     }
 
     @Override
@@ -83,20 +84,27 @@ implements _Refetchable {
         if(!entityState.isPersistable()) {
             throw _Exceptions.illegalState("not persistable %s", getSpecification());
         }
-        if(!entityState.isDetached()) {
+        if(entityState.isAttached()) {
             return pojo; // is attached
         }
 
+        if(entityState.isSpecicalJpaDetachedWithOid()) {
+            return entityFacet.fetchByBookmark(bookmark)
+                    .orElse(pojo);
+        }
+
         // throws on deleted entity
-        val reattached = entityFacet.fetchByBookmark(bookmark)
+        val reattachedPojo = entityFacet.fetchByBookmark(bookmark)
                 .orElseThrow(()->{
                     return new ObjectNotFoundException(""+bookmark);});
 
-        if(!entityFacet.getEntityState(reattached).hasOid()) {
+        if(!entityFacet.getEntityState(reattachedPojo).hasOid()) {
             throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
         }
 
-        return this.pojo = assertCompliance(reattached);
+        System.err.printf("[%d]reattached%n", reattachedPojo.hashCode());
+
+        return this.pojo = assertCompliance(reattachedPojo);
     }
 
     @Override

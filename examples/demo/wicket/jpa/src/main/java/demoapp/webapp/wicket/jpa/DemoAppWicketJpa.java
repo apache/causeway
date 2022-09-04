@@ -89,7 +89,7 @@ public class DemoAppWicketJpa extends SpringBootServletInitializer {
         //IsisPresets.logging(ComponentFactoryRegistryDefault.class, "debug");
         //IsisPresets.logging(EntityModel.class, "debug");
         //IsisPresets.logging(FormExecutorDefault.class, "debug");
-    	System.setProperty("spring.jpa.show-sql", "true");
+    	//System.setProperty("spring.jpa.show-sql", "true");
 
         SpringProfileUtil.removeActiveProfile("demo-jdo"); // just in case
     	SpringProfileUtil.addActiveProfile("demo-jpa");

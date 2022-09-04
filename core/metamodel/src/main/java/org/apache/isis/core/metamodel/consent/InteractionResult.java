@@ -138,7 +138,8 @@ public class InteractionResult {
 
     @Override
     public String toString() {
-        return String.format("%s: %s: %s (%d facets advised)", interactionEvent, state, toStringInterpret(reasonBuf), advisors.size());
+        return String.format("%s: %s: %s (%d facets advised)",
+                interactionEvent, state, toStringInterpret(reasonBuf), advisors.size());
     }
 
     private String toStringInterpret(final StringBuilder reasonBuf) {
